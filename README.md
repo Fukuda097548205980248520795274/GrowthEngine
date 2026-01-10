@@ -1,1 +1,2 @@
 [![Debug](https://github.com/Fukuda097548205980248520795274/GrowthEngine/actions/workflows/Debug.yml/badge.svg)](https://github.com/Fukuda097548205980248520795274/GrowthEngine/actions/workflows/Debug.yml)
+[![Development](https://github.com/Fukuda097548205980248520795274/GrowthEngine/actions/workflows/Development.yml/badge.svg)](https://github.com/Fukuda097548205980248520795274/GrowthEngine/actions/workflows/Development.yml)
