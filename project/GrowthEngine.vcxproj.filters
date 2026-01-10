@@ -13,10 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{752a21ee-e7de-4a16-b438-674621483b78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{26d7425f-63e8-482f-86fa-f7112f6cc3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include">
+      <UniqueIdentifier>{a47b6f5d-04e7-4049-a36c-f9f17a92a060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\WinApp">
+      <UniqueIdentifier>{b4065c34-3f76-48ac-b5f2-e3c24fccabea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Func">
+      <UniqueIdentifier>{177d7a04-8e27-4275-aee5-032afac81a6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Func\ConvertString">
+      <UniqueIdentifier>{555cc1e8-023f-47bb-923d-b9379f5e2179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GrowthEngine.cpp">
+      <Filter>Engine\Include</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WinApp\WinApp.cpp">
+      <Filter>Engine\Include\WinApp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp">
+      <Filter>Engine\Include\Func\ConvertString</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\GrowthEngine.h">
+      <Filter>Engine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WinApp\WinApp.h">
+      <Filter>Engine\Include\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\ConvertString\ConvertString.h">
+      <Filter>Engine\Include\Func\ConvertString</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
