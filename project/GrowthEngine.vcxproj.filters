@@ -34,6 +34,9 @@
     <Filter Include="Game\ContextEngine">
       <UniqueIdentifier>{0eccba16-05ea-4eac-8f82-954c0d7aaaf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Log">
+      <UniqueIdentifier>{d3347417-8f9d-4ab0-b3e8-a57269f8a103}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="Game\ContextEngine\ContextEngine.cpp">
       <Filter>Game\ContextEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Log\Log.cpp">
+      <Filter>Engine\Include\Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -70,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Game\ContextEngine\ContextEngine.h">
       <Filter>Game\ContextEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Log\Log.h">
+      <Filter>Engine\Include\Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\GrowthEngine.cpp" />
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
+    <ClCompile Include="Engine\Log\Log.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
     <ClCompile Include="Game\ContextEngine\ContextEngine.cpp" />
     <ClCompile Include="Game\Game.cpp" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h" />
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
+    <ClInclude Include="Engine\Log\Log.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Game\ContextEngine\ContextEngine.h" />
     <ClInclude Include="Game\Game.h" />
