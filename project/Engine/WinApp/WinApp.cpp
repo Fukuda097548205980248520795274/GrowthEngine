@@ -30,7 +30,8 @@ Engine::WinApp::~WinApp()
 	timeEndPeriod(1);
 
 	// ウィンドウハンドルを破棄する
-	DestroyWindow(hwnd_);
+	if (hwnd_)
+		DestroyWindow(hwnd_);
 }
 
 
@@ -93,16 +94,12 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 		// ウィンドウスタイル
 		WS_OVERLAPPEDWINDOW,
 
-		// 表示X座標
+		// 表示座標
+		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 
-		// 表示Y座標
-		CW_USEDEFAULT,
-
-		// ウィンドウ横幅
+		// ウィンドウの大きさ
 		wrc.right - wrc.left,
-
-		// ウィンドウ縦幅
 		wrc.bottom - wrc.top,
 
 		// 親ウィンドウハンドル

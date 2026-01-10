@@ -31,6 +31,9 @@
     <Filter Include="Engine\Include\Func\ConvertString">
       <UniqueIdentifier>{555cc1e8-023f-47bb-923d-b9379f5e2179}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ContextEngine">
+      <UniqueIdentifier>{0eccba16-05ea-4eac-8f82-954c0d7aaaf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +48,12 @@
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp">
       <Filter>Engine\Include\Func\ConvertString</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ContextEngine\ContextEngine.cpp">
+      <Filter>Game\ContextEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -55,6 +64,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h">
       <Filter>Engine\Include\Func\ConvertString</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ContextEngine\ContextEngine.h">
+      <Filter>Game\ContextEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
