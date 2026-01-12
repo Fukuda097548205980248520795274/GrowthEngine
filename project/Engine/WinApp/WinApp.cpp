@@ -1,7 +1,8 @@
 #include "WinApp.h"
 #include "Func/ConvertString/ConvertString.h"
 
-#include "GrowthEngine.h"
+#include <format>
+#include "Log/Log.h"
 
 // ウィンドウプロシージャ
 LRESULT CALLBACK Engine::WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -40,7 +41,7 @@ Engine::WinApp::~WinApp()
 /// <summary>
 /// 初期化
 /// </summary>
-void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title)
+void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title, Log* log)
 {
 
 	// 引数を受け取る
@@ -71,6 +72,11 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 	RegisterClass(&wc_);
 
 
+	// ログ
+	if (log)log->Logging("lpszClassName : Growth");
+	if (log)log->Logging("RegisterClass \n");
+
+
 	/*---------------------------
 		ウィンドウサイズを決める
 	---------------------------*/
@@ -80,6 +86,11 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 
 	// クライアント領域をもとに、実際のサイズにwrcを変更してもらう
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
+
+
+	// ログ
+	if (log)log->Logging(std::format("clientSize : width = {} , height = {}",clientWidth_, clientHeight_));
+	if (log)log->Logging("AdjustWindowRect \n");
 
 
 	/*---------------------------
@@ -120,6 +131,10 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 
 	// ウィンドウを表示する
 	ShowWindow(hwnd_, SW_SHOW);
+
+
+	// ログ
+	if (log)log->Logging("ShowWindow \n");
 }
 
 /// <summary>

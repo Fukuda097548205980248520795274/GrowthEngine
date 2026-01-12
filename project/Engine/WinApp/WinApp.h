@@ -5,6 +5,8 @@
 
 namespace Engine
 {
+	class Log;
+
 	class WinApp
 	{
 	public:
@@ -30,7 +32,7 @@ namespace Engine
 		/// <summary>
 		/// 初期化
 		/// </summary>
-		void Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title);
+		void Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title, Log* log);
 
 		/// <summary>
 		/// ウィンドウにメッセージを渡して応答する

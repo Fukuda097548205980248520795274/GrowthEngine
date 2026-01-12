@@ -44,7 +44,7 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 
 	// ウィンドウアプリケーションの生成と初期化
 	winApp_ = std::make_unique<Engine::WinApp>();
-	winApp_->Initialize(screenWidth, screenHeight, title);
+	winApp_->Initialize(screenWidth, screenHeight, title , log_.get());
 }
 
 /// @brief デストラクタ

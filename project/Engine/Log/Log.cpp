@@ -45,7 +45,7 @@ void Engine::Log::Initialize()
 		assert(false);
 	}
 
-	Logging("Create Log File");
+	Logging("Create Log File \n");
 }
 
 /// @brief ロギング
