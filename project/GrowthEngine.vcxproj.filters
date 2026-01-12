@@ -31,9 +31,6 @@
     <Filter Include="Engine\Include\Func\ConvertString">
       <UniqueIdentifier>{555cc1e8-023f-47bb-923d-b9379f5e2179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\ContextEngine">
-      <UniqueIdentifier>{0eccba16-05ea-4eac-8f82-954c0d7aaaf7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Log">
       <UniqueIdentifier>{d3347417-8f9d-4ab0-b3e8-a57269f8a103}</UniqueIdentifier>
     </Filter>
@@ -54,9 +51,6 @@
     <ClCompile Include="Game\Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ContextEngine\ContextEngine.cpp">
-      <Filter>Game\ContextEngine</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Log\Log.cpp">
       <Filter>Engine\Include\Log</Filter>
     </ClCompile>
@@ -73,9 +67,6 @@
     </ClInclude>
     <ClInclude Include="Game\Game.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ContextEngine\ContextEngine.h">
-      <Filter>Game\ContextEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Log\Log.h">
       <Filter>Engine\Include\Log</Filter>

@@ -135,7 +135,6 @@
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Engine\Log\Log.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
-    <ClCompile Include="Game\ContextEngine\ContextEngine.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -147,7 +146,6 @@
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
     <ClInclude Include="Engine\Log\Log.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
-    <ClInclude Include="Game\ContextEngine\ContextEngine.h" />
     <ClInclude Include="Game\Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

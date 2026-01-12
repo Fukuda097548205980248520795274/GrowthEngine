@@ -11,11 +11,16 @@ class GrowthEngine
 {
 public:
 
-	/// @brief コンストラクタ
-	/// @param screenWidth 
-	/// @param screenHeight 
-	/// @param title 
-	GrowthEngine(int32_t screenWidth, int32_t screenHeight, const std::string& title);
+	/// @brief インスタンスを取得する
+	/// @param screenWidth スクリーン横幅
+	/// @param screenHeight スクリーン縦幅
+	/// @param title タイトル
+	/// @return 
+	static GrowthEngine* GetInstance(int32_t screenWidth, int32_t screenHeight, const std::string& title);
+
+	/// @brief インスタンスを取得する
+	/// @return 
+	static GrowthEngine* GetInstance();
 
 	/// @brief デストラクタ
 	~GrowthEngine();
@@ -23,6 +28,23 @@ public:
 	/// @brief ゲームループ
 	/// @return 
 	bool GameLoop() { return winApp_->ProcessMessage(); }
+
+
+private:
+
+	// 生成できないようにする
+	GrowthEngine() = default;
+	GrowthEngine(GrowthEngine&) = delete;
+	GrowthEngine& operator=(GrowthEngine&) = delete;
+
+	// インスタンス
+	static std::unique_ptr<GrowthEngine> instance_;
+
+	/// @brief 初期化
+	/// @param screenWidth 
+	/// @param screenHeight 
+	/// @param title 
+	void Initialize(int32_t screenWidth, int32_t screenHeight, const std::string& title);
 
 
 private:

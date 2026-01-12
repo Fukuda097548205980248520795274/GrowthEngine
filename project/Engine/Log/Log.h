@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <memory>
 
 namespace Engine
 {
@@ -18,8 +19,11 @@ namespace Engine
 
 	private:
 
-		/// @brief ファイルを生成する
-		std::ofstream CreateLogFile();
+		/// @brief 初期化
+		void Initialize();
+
+
+	private:
 
 		/// @brief 出力ファイルストリーム
 		std::ofstream os;

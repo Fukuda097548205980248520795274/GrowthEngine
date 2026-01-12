@@ -6,15 +6,20 @@
 /// @brief コンストラクタ
 Engine::Log::Log()
 {
+	Initialize();
+}
+
+/// @brief 初期化
+void Engine::Log::Initialize()
+{
 	// ディレクトリを掘る
-	if (!CreateDirectory(L"../build/logs", nullptr)) 
+	if (!CreateDirectory(L"../build/logs", nullptr))
 	{
-		if (GetLastError() != ERROR_ALREADY_EXISTS) 
+		if (GetLastError() != ERROR_ALREADY_EXISTS)
 		{
 			assert(false);
 		}
 	}
-
 
 	// 現在時刻（UTC時刻）を取得
 	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
@@ -40,6 +45,7 @@ Engine::Log::Log()
 		assert(false);
 	}
 
+	Logging("Create Log File");
 }
 
 /// @brief ロギング
