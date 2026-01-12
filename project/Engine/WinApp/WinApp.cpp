@@ -1,6 +1,8 @@
 #include "WinApp.h"
 #include "Func/ConvertString/ConvertString.h"
 
+#include "GrowthEngine.h"
+
 // ウィンドウプロシージャ
 LRESULT CALLBACK Engine::WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -40,6 +42,7 @@ Engine::WinApp::~WinApp()
 /// </summary>
 void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title)
 {
+
 	// 引数を受け取る
 	clientWidth_ = clientWidth;
 	clientHeight_ = clientHeight;

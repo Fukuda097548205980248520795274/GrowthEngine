@@ -39,6 +39,9 @@ GrowthEngine* GrowthEngine::GetInstance()
 /// @param title 
 void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const std::string& title)
 {
+	// ログの生成
+	log_ = std::make_unique<Engine::Log>();
+
 	// ウィンドウアプリケーションの生成と初期化
 	winApp_ = std::make_unique<Engine::WinApp>();
 	winApp_->Initialize(screenWidth, screenHeight, title);
@@ -47,7 +50,11 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 /// @brief デストラクタ
 GrowthEngine::~GrowthEngine()
 {
-	// ウィンドウアプリケーション
+	// ウィンドウアプリケーションの終了
 	winApp_.reset();
 	winApp_ = nullptr;
+
+	// ログの終了
+	log_.reset();
+	log_ = nullptr;
 }

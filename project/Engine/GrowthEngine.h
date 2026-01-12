@@ -6,6 +6,7 @@
 #include <Windows.h>
 
 #include "WinApp/WinApp.h"
+#include "Log/Log.h"
 
 class GrowthEngine
 {
@@ -48,6 +49,9 @@ private:
 
 
 private:
+
+	// ログ
+	std::unique_ptr<Engine::Log> log_ = nullptr;
 
 	// ウィンドウアプリケーション
 	std::unique_ptr<Engine::WinApp> winApp_ = nullptr;
