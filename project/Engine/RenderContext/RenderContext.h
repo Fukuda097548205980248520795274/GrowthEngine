@@ -1,4 +1,6 @@
 #pragma once
+#include "D3D12Core/D3D12Core.h"
+#include <memory>
 
 namespace Engine
 {
@@ -15,6 +17,7 @@ namespace Engine
 
 	private:
 
-
+		// D3D12Core
+		std::unique_ptr<D3D12Core> core_ = nullptr;
 	};
 }

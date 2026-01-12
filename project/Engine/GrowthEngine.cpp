@@ -5,6 +5,8 @@
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"Dbghelp.lib")
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
 
 // インスタンス
 std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
