@@ -34,6 +34,12 @@
     <Filter Include="Engine\Include\Log">
       <UniqueIdentifier>{d3347417-8f9d-4ab0-b3e8-a57269f8a103}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\RenderContext">
+      <UniqueIdentifier>{96d202da-4bba-4cfc-86ed-7ccd845430ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\CrushHandler">
+      <UniqueIdentifier>{405e70ae-c904-49b2-9342-dbc05e93cbff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +60,9 @@
     <ClCompile Include="Engine\Log\Log.cpp">
       <Filter>Engine\Include\Log</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\RenderContext.cpp">
+      <Filter>Engine\Include\RenderContext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -70,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Log\Log.h">
       <Filter>Engine\Include\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\RenderContext.h">
+      <Filter>Engine\Include\RenderContext</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h">
+      <Filter>Engine\Include\CrushHandler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

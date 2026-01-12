@@ -5,8 +5,9 @@
 #include <memory>
 #include <Windows.h>
 
-#include "WinApp/WinApp.h"
 #include "Log/Log.h"
+#include "WinApp/WinApp.h"
+#include "RenderContext/RenderContext.h"
 
 class GrowthEngine
 {
@@ -55,5 +56,8 @@ private:
 
 	// ウィンドウアプリケーション
 	std::unique_ptr<Engine::WinApp> winApp_ = nullptr;
+
+	// 描画統括
+	std::unique_ptr<Engine::RenderContext> renderContext_ = nullptr;
 };
 

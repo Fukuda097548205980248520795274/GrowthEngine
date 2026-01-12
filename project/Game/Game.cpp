@@ -26,7 +26,7 @@ int Game::Run()
 	// ゲームループ
 	while (engine->GameLoop())
 	{
-
+		
 	}
 
 	return 0;

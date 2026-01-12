@@ -134,6 +134,7 @@
     <ClCompile Include="Engine\GrowthEngine.cpp" />
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Engine\Log\Log.cpp" />
+    <ClCompile Include="Engine\RenderContext\RenderContext.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="main.cpp">
@@ -142,9 +143,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
     <ClInclude Include="Engine\GrowthEngine.h" />
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
     <ClInclude Include="Engine\Log\Log.h" />
+    <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Game\Game.h" />
   </ItemGroup>

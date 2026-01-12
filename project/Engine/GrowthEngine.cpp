@@ -1,8 +1,10 @@
 #include "GrowthEngine.h"
 #include <cassert>
 #include "Log/Log.h"
+#include "Func/CrushHandler/CrushHandler.h"
 
 #pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"Dbghelp.lib")
 
 // インスタンス
 std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
@@ -39,17 +41,28 @@ GrowthEngine* GrowthEngine::GetInstance()
 /// @param title 
 void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const std::string& title)
 {
+	// 例外が発生したときに起動する
+	SetUnhandledExceptionFilter(Engine::ExportDump);
+
 	// ログの生成
 	log_ = std::make_unique<Engine::Log>();
 
 	// ウィンドウアプリケーションの生成と初期化
 	winApp_ = std::make_unique<Engine::WinApp>();
 	winApp_->Initialize(screenWidth, screenHeight, title , log_.get());
+
+	// 描画統括の生成と初期化
+	renderContext_ = std::make_unique<Engine::RenderContext>();
+	renderContext_->Initialize(log_.get());
 }
 
 /// @brief デストラクタ
 GrowthEngine::~GrowthEngine()
 {
+	// 描画統括の終了
+	renderContext_.reset();
+	renderContext_ = nullptr;
+
 	// ウィンドウアプリケーションの終了
 	winApp_.reset();
 	winApp_ = nullptr;
