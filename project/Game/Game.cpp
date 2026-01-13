@@ -26,7 +26,12 @@ int Game::Run()
 	// ゲームループ
 	while (engine->GameLoop())
 	{
-		
+		// 描画前処理
+		engine->PreDraw();
+
+
+		// 描画後処理
+		engine->PostDraw();
 	}
 
 	return 0;

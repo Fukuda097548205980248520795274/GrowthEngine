@@ -52,6 +52,15 @@
     <Filter Include="Engine\Include\RenderContext\DX12Buffering">
       <UniqueIdentifier>{dc1bdf8e-9a1b-4ba7-b647-9a01b89afd0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Fence">
+      <UniqueIdentifier>{da7c87a1-b8f2-4ffd-8fd9-d1037f881610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Debug">
+      <UniqueIdentifier>{985323d0-6e1b-4c47-bc7e-e52ab80e76b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Func\ResourceFunc">
+      <UniqueIdentifier>{54355554-433a-4786-b735-9f1595b0698c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,6 +96,15 @@
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp">
       <Filter>Engine\Include\RenderContext\DX12Buffering</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Fence\DX12Fence.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Fence</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Debug\DX12Debug.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Func\ResourceFunc\ResourceFunc.cpp">
+      <Filter>Engine\Include\Func\ResourceFunc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -121,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h">
       <Filter>Engine\Include\RenderContext\DX12Buffering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Fence\DX12Fence.h">
+      <Filter>Engine\Include\RenderContext\DX12Fence</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Debug\DX12Debug.h">
+      <Filter>Engine\Include\RenderContext\DX12Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\ResourceFunc\ResourceFunc.h">
+      <Filter>Engine\Include\Func\ResourceFunc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

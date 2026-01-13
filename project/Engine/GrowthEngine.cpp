@@ -73,3 +73,16 @@ GrowthEngine::~GrowthEngine()
 	log_.reset();
 	log_ = nullptr;
 }
+
+
+/// @brief 描画前処理
+void GrowthEngine::PreDraw() 
+{
+	renderContext_->PreDraw();
+}
+
+/// @brief 描画後処理
+void GrowthEngine::PostDraw()
+{
+	renderContext_->PostDraw();
+}

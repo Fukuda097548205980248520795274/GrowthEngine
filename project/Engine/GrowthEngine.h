@@ -31,6 +31,12 @@ public:
 	/// @return 
 	bool GameLoop() { return winApp_->ProcessMessage(); }
 
+	/// @brief 描画前処理
+	void PreDraw();
+
+	/// @brief 描画後処理
+	void PostDraw();
+
 
 private:
 

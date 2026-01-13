@@ -73,7 +73,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEVELOPMENT;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -114,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;DEVELOPMENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -131,12 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Func\ResourceFunc\ResourceFunc.cpp" />
     <ClCompile Include="Engine\GrowthEngine.cpp" />
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Engine\Log\Log.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Command\DX12Command.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Core\DX12Core.cpp" />
+    <ClCompile Include="Engine\RenderContext\DX12Debug\DX12Debug.cpp" />
+    <ClCompile Include="Engine\RenderContext\DX12Fence\DX12Fence.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Heap\DX12Heap.cpp" />
     <ClCompile Include="Engine\RenderContext\RenderContext.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
@@ -148,12 +151,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
+    <ClInclude Include="Engine\Func\ResourceFunc\ResourceFunc.h" />
     <ClInclude Include="Engine\GrowthEngine.h" />
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
     <ClInclude Include="Engine\Log\Log.h" />
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h" />
     <ClInclude Include="Engine\RenderContext\DX12Command\DX12Command.h" />
     <ClInclude Include="Engine\RenderContext\DX12Core\DX12Core.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Debug\DX12Debug.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Fence\DX12Fence.h" />
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
