@@ -7,7 +7,7 @@ namespace Engine
 {
 	class Log;
 
-	class D3D12Core
+	class DX12Core
 	{
 	public:
 
@@ -21,7 +21,7 @@ namespace Engine
 
 		/// @brief DXGIファクトリーを取得する
 		/// @return 
-		IDXGIFactory7* GetDXGIfactory()const { return dxgiFactory_.Get(); }
+		IDXGIFactory7* GetDXGIFactory()const { return dxgiFactory_.Get(); }
 
 		// Microsoft::WRL 省略
 		template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;

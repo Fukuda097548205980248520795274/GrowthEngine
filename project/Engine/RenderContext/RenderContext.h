@@ -1,5 +1,8 @@
 #pragma once
-#include "D3D12Core/D3D12Core.h"
+#include "DX12Core/DX12Core.h"
+#include "DX12Command/DX12Command.h"
+#include "DX12Heap/DX12Heap.h"
+#include "DX12Buffering/DX12Buffering.h"
 #include <memory>
 
 namespace Engine
@@ -12,12 +15,21 @@ namespace Engine
 
 		/// @brief 初期化
 		/// @param log 
-		void Initialize(Log* log);
+		void Initialize(WinApp* winApp, Log* log);
 
 
 	private:
 
-		// D3D12Core
-		std::unique_ptr<D3D12Core> core_ = nullptr;
+		// DX12Core
+		std::unique_ptr<DX12Core> core_ = nullptr;
+
+		// DX12Command
+		std::unique_ptr<DX12Command> command_ = nullptr;
+
+		// DX12Heap
+		std::unique_ptr<DX12Heap> heap_ = nullptr;
+
+		// DX12Buffering
+		std::unique_ptr<DX12Buffering> buffering_ = nullptr;
 	};
 }

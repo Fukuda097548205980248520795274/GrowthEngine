@@ -40,8 +40,17 @@
     <Filter Include="Engine\Include\Func\CrushHandler">
       <UniqueIdentifier>{405e70ae-c904-49b2-9342-dbc05e93cbff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\RenderContext\D3D12Core">
+    <Filter Include="Engine\Include\RenderContext\DX12Core">
       <UniqueIdentifier>{2163670b-41eb-4ba9-a4c9-55540703ae9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Command">
+      <UniqueIdentifier>{071b5edf-23df-4601-916e-bc0fd0b1deaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Heap">
+      <UniqueIdentifier>{1d03d300-fbd9-4aea-96ce-4c173600d31f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Buffering">
+      <UniqueIdentifier>{dc1bdf8e-9a1b-4ba7-b647-9a01b89afd0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,8 +75,17 @@
     <ClCompile Include="Engine\RenderContext\RenderContext.cpp">
       <Filter>Engine\Include\RenderContext</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\RenderContext\D3D12Core\D3D12Core.cpp">
-      <Filter>Engine\Include\RenderContext\D3D12Core</Filter>
+    <ClCompile Include="Engine\RenderContext\DX12Core\DX12Core.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Command\DX12Command.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Heap\DX12Heap.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Heap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Buffering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +110,17 @@
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h">
       <Filter>Engine\Include\Func\CrushHandler</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\RenderContext\D3D12Core\D3D12Core.h">
-      <Filter>Engine\Include\RenderContext\D3D12Core</Filter>
+    <ClInclude Include="Engine\RenderContext\DX12Core\DX12Core.h">
+      <Filter>Engine\Include\RenderContext\DX12Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Command\DX12Command.h">
+      <Filter>Engine\Include\RenderContext\DX12Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h">
+      <Filter>Engine\Include\RenderContext\DX12Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h">
+      <Filter>Engine\Include\RenderContext\DX12Buffering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

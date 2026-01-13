@@ -1,4 +1,4 @@
-#include "D3D12Core.h"
+#include "DX12Core.h"
 #include "Log/Log.h"
 #include <cassert>
 #include <format>
@@ -8,7 +8,7 @@
 /// 初期化
 /// </summary>
 /// <param name="logfile"></param>
-void Engine::D3D12Core::Initialize(Log* log)
+void Engine::DX12Core::Initialize(Log* log)
 {
 	// nullptrチェック
 	assert(log);
