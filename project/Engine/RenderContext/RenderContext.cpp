@@ -105,7 +105,6 @@ void Engine::RenderContext::PostDraw()
 	// 次のフレーム用のコマンドリストを準備
 	hr = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr));
-
 	hr = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr));
 }

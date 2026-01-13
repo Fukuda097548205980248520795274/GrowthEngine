@@ -56,11 +56,11 @@ void Engine::DX12Buffering::Initialize(Log* log, DX12Heap* heap, WinApp* winApp,
 	if (log)
 	{
 		log->Logging(std::format("clientSize : width = {} , height = {}", swapChainDesc_.Width, swapChainDesc_.Height));
-		log->Logging("format : DXGI_FORMAT_R8G8B8A8_UNORM");
+		log->Logging("format : R8G8B8A8_UNORM");
 		log->Logging(std::format("SampleDesc Count : {}", swapChainDesc_.SampleDesc.Count));
-		log->Logging("BufferUsage : DXGI_USAGE_RENDER_TARGET_OUTPUT");
+		log->Logging("BufferUsage : RENDER_TARGET_OUTPUT");
 		log->Logging(std::format("BufferCount : {}", swapChainDesc_.BufferCount));
-		log->Logging("SwapEffect : DXGI_SWAP_EFFECT_FLIP_DISCARD");
+		log->Logging("SwapEffect : FLIP_DISCARD");
 		log->Logging("CreateSwapChainForHwnd \n");
 	}
 
@@ -96,8 +96,8 @@ void Engine::DX12Buffering::Initialize(Log* log, DX12Heap* heap, WinApp* winApp,
 	// ログ出力
 	if (log)
 	{
-		log->Logging("RTV Format : DXGI_FORMAT_R8G8B8A8_UNORM_SRGB");
-		log->Logging("RTV ViewDimension : D3D12_RTV_DIMENSION_TEXTURE2D");
+		log->Logging("RTV Format : R8G8B8A8_UNORM_SRGB");
+		log->Logging("RTV ViewDimension : DIMENSION_TEXTURE2D");
 		log->Logging("CreateRenderTargetView \n");
 	}
 

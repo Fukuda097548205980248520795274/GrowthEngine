@@ -148,15 +148,15 @@ Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> Engine::DX12Heap::CreateDescriptorH
 	{
 		if (heapType == D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
 		{
-			log_->Logging(std::format("HeapType : D3D12_DESCRIPTOR_HEAP_TYPE_RTV"));
+			log_->Logging(std::format("HeapType : RTV"));
 		}
 		else if (heapType == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
 		{
-			log_->Logging(std::format("HeapType : D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV"));
+			log_->Logging(std::format("HeapType : CBV_SRV_UAV"));
 		}
 		else if (heapType == D3D12_DESCRIPTOR_HEAP_TYPE_DSV)
 		{
-			log_->Logging(std::format("HeapType : D3D12_DESCRIPTOR_HEAP_TYPE_DSV"));
+			log_->Logging(std::format("HeapType : DSV"));
 		}
 
 		log_->Logging(std::format("NumDescriptors : {}", descriptorNum));
