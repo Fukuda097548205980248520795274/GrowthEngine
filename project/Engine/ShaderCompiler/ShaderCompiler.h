@@ -2,6 +2,7 @@
 #include <wrl.h>
 #include <string>
 #include <dxcapi.h>
+// dxcapi.hのインクルードは最後に行うこと
 
 namespace Engine
 {
