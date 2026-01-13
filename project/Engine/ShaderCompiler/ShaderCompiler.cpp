@@ -39,18 +39,25 @@ Microsoft::WRL::ComPtr<IDxcBlob> Engine::ShaderCompiler::Compile(const std::wstr
 	----------------------*/
 
 	// コンパイルをするシェーダの情報をログに出力する
-	if(log_)log_->Logging(ConvertString(std::format(L"Begin CompileShader , path : {} , profile : {} \n", filePath, profile)));
+	if(log_)log_->Logging(ConvertString(std::format(L"Begin CompileShader , path : {} , profile : {}", filePath, profile)));
 
 	// HLSLファイルを読む
 	IDxcBlobEncoding* shaderSource = nullptr;
 	HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, &shaderSource);
 	assert(SUCCEEDED(hr));
+	if (log_)log_->Logging("Succeeded Load");
 
 	// 読み込んだファイルの内容を設定する
 	DxcBuffer shaderSourceBuffer;
 	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
 	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
 	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
+	if (log_)
+	{
+		log_->Logging(std::format("ShaderSource Ptr : {}", shaderSourceBuffer.Ptr));
+		log_->Logging(std::format("ShaderSource Size : {} bytes", shaderSourceBuffer.Size));
+		log_->Logging("ShaderSource Encoding : DXC_CP_UTF8");
+	}
 
 
 	/*------------------
@@ -123,8 +130,8 @@ Microsoft::WRL::ComPtr<IDxcBlob> Engine::ShaderCompiler::Compile(const std::wstr
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 
-	// コンパイルをするシェーダの情報をログに出力する
-	if (log_)log_->Logging(ConvertString(std::format(L"Succeded CompileShader , path : {} , profile : {} \n", filePath, profile)));
+	// コンパイル成功ログ
+	if (log_)log_->Logging("Succeeded Compiler \n");
 
 	// リソースを解放
 	shaderSource->Release();

@@ -41,6 +41,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// DX12Fenceの生成と初期化
 	fence_ = std::make_unique<DX12Fence>();
 	fence_->Initialize(log, core_->GetDevice());
+
+	// シェーダコンパイラの生成と初期化
+	shaderCompiler_ = std::make_unique<ShaderCompiler>();
+	shaderCompiler_->Initialize(log);
 }
 
 /// @brief 描画前処理

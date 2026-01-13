@@ -5,6 +5,7 @@
 #include "DX12Heap/DX12Heap.h"
 #include "DX12Buffering/DX12Buffering.h"
 #include "DX12Fence/DX12Fence.h"
+#include "ShaderCompiler/ShaderCompiler.h"
 #include <memory>
 
 namespace Engine
@@ -47,6 +48,9 @@ namespace Engine
 
 		// DX12Fence
 		std::unique_ptr<DX12Fence> fence_ = nullptr;
+
+		// シェーダコンパイラ
+		std::unique_ptr<ShaderCompiler> shaderCompiler_ = nullptr;
 
 
 	private:
