@@ -28,4 +28,7 @@ namespace Engine
 		// デバッグコントローラ
 		ComPtr<ID3D12Debug1> debugController_ = nullptr;
 	};
+
+	/// @brief 解放漏れを検知する
+	void LeakChecker();
 }

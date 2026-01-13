@@ -7,6 +7,7 @@
 #pragma comment(lib,"Dbghelp.lib")
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
 
 // インスタンス
 std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
@@ -72,6 +73,11 @@ GrowthEngine::~GrowthEngine()
 	// ログの終了
 	log_.reset();
 	log_ = nullptr;
+
+	// 解放漏れを検知する
+#ifdef _DEBUG
+	Engine::LeakChecker();
+#endif
 }
 
 

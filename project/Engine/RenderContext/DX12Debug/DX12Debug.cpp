@@ -1,6 +1,7 @@
 #include "DX12Debug.h"
 #include <cassert>
 #include "Log/Log.h"
+#include <dxgidebug.h>
 
 /// @brief 初期化
 /// @param log 
@@ -54,5 +55,19 @@ void Engine::DX12Debug::Stop(ID3D12Device* device)
 
 		// 指定したメッセージの表示を抑制
 		infoQueue->PushStorageFilter(&filter);
+	}
+}
+
+/// @brief 解放漏れを検知する
+void Engine::LeakChecker()
+{
+	// 解放漏れを検知する
+	IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug))))
+	{
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
 	}
 }
