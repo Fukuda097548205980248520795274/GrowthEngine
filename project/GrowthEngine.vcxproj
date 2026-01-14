@@ -156,7 +156,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\RenderContext\DX12Heap\DX12Heap.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp" />
     <ClCompile Include="Engine\RenderContext\RenderContext.cpp" />
-    <ClCompile Include="Engine\Resource\OffscreenResource.cpp" />
+    <ClCompile Include="Engine\Resource\DepthResource\DepthResource.cpp" />
+    <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
     <ClCompile Include="Game\Game.cpp" />
@@ -180,7 +181,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
-    <ClInclude Include="Engine\Resource\OffscreenResource.h" />
+    <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
+    <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Game\Game.h" />

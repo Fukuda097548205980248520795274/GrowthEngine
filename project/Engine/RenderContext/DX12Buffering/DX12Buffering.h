@@ -65,6 +65,7 @@ namespace Engine
 		// CPUハンドル
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvCPUHandle_[2]{};
 
+
 		// RTV
 		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	};

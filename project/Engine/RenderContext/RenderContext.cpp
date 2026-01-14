@@ -45,6 +45,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// シェーダコンパイラの生成と初期化
 	shaderCompiler_ = std::make_unique<ShaderCompiler>();
 	shaderCompiler_->Initialize(log);
+
+	// DX12Offscreenの生成と初期化
+	offscreen_ = std::make_unique<DX12Offscreen>();
+	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), log);
 }
 
 /// @brief 描画前処理
@@ -52,6 +56,9 @@ void Engine::RenderContext::PreDraw()
 {
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
+
+	// オフスクリーンのクリア
+	offscreen_->Clear(commandList_);
 }
 
 /// @brief 描画後処理

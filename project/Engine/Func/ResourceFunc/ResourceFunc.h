@@ -41,5 +41,12 @@ namespace Engine
 	/// @param clearColor 
 	/// @return 
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height,
-		DXGI_FORMAT swapChainFormat, DXGI_FORMAT rtvFormat, Vector4 clearColor);
+		DXGI_FORMAT swapChainFormat, DXGI_FORMAT rtvFormat, Vector4 clearColor, Log* log);
+
+	/// @brief 深度テクスチャリソースを生成する
+	/// @param device 
+	/// @param width 
+	/// @param height 
+	/// @return 
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log);
 }

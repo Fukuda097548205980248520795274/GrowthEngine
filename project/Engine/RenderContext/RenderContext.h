@@ -6,6 +6,7 @@
 #include "DX12Buffering/DX12Buffering.h"
 #include "DX12Fence/DX12Fence.h"
 #include "ShaderCompiler/ShaderCompiler.h"
+#include "DX12Offscreen/DX12Offscreen.h"
 #include <memory>
 
 namespace Engine
@@ -51,6 +52,9 @@ namespace Engine
 
 		// シェーダコンパイラ
 		std::unique_ptr<ShaderCompiler> shaderCompiler_ = nullptr;
+
+		// DX12Offscreen
+		std::unique_ptr<DX12Offscreen> offscreen_ = nullptr;
 
 
 	private:

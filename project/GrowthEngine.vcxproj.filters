@@ -79,6 +79,9 @@
     <Filter Include="Engine\Include\Math\Vector4">
       <UniqueIdentifier>{7b7a9462-edb4-4d78-aaae-2c261b542aa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\DepthResource">
+      <UniqueIdentifier>{8117933b-3eb3-4b14-8749-4fe99f9e96eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -129,11 +132,14 @@
     <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp">
       <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\OffscreenResource.cpp">
+    <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Vector4\Vector4.cpp">
       <Filter>Engine\Include\Math\Vector4</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\DepthResource\DepthResource.cpp">
+      <Filter>Engine\Include\Resource\DepthResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,11 +191,14 @@
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h">
       <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\OffscreenResource.h">
+    <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector4\Vector4.h">
       <Filter>Engine\Include\Math\Vector4</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h">
+      <Filter>Engine\Include\Resource\DepthResource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
