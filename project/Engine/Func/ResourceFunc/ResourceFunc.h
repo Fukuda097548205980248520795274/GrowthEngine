@@ -2,7 +2,7 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
-#include "Math/Vector4/Vector4.h"
+#include "Math/Vector/Vector4/Vector4.h"
 #include <cstdint>
 
 struct Vector4;

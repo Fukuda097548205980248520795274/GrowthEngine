@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief 4次元ベクトル
 struct Vector4
 {
 	float x;

@@ -9,6 +9,8 @@
 #include "WinApp/WinApp.h"
 #include "RenderContext/RenderContext.h"
 
+#include "Math/Vector/Vector3/Vector3.h"
+
 class GrowthEngine
 {
 public:

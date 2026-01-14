@@ -76,9 +76,6 @@
     <Filter Include="Engine\Include\Math">
       <UniqueIdentifier>{d13ee944-a3eb-4a26-9227-08ac7fcc613a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Math\Vector4">
-      <UniqueIdentifier>{7b7a9462-edb4-4d78-aaae-2c261b542aa9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Resource\DepthResource">
       <UniqueIdentifier>{8117933b-3eb3-4b14-8749-4fe99f9e96eb}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,24 @@
     </Filter>
     <Filter Include="Engine\Include\PSO">
       <UniqueIdentifier>{32654d02-54f6-43f7-a903-978e1a5745ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect">
+      <UniqueIdentifier>{107ff5f9-3acc-491b-9a87-6f197d52f300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOCopyImage">
+      <UniqueIdentifier>{f0687372-a2e8-4b3e-95fc-fe9d83e0e04b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Vector">
+      <UniqueIdentifier>{58573b24-c78f-46ce-856a-ea8f0a252364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Vector\Vector3">
+      <UniqueIdentifier>{3b472aef-9434-457e-8d9b-f462e4b3a749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Vector\Vector2">
+      <UniqueIdentifier>{63ea2a94-05d8-4ab4-b48d-d588d91dbb74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Vector\Vector4">
+      <UniqueIdentifier>{7b7a9462-edb4-4d78-aaae-2c261b542aa9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -147,11 +162,23 @@
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Vector4\Vector4.cpp">
-      <Filter>Engine\Include\Math\Vector4</Filter>
+    <ClCompile Include="Engine\Math\Vector\Vector4\Vector4.cpp">
+      <Filter>Engine\Include\Math\Vector\Vector4</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\DepthResource\DepthResource.cpp">
       <Filter>Engine\Include\Resource\DepthResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\Vector2\Vector2.cpp">
+      <Filter>Engine\Include\Math\Vector\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImage</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\Vector3\Vector3.cpp">
+      <Filter>Engine\Include\Math\Vector\Vector3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,11 +233,23 @@
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Math\Vector4\Vector4.h">
-      <Filter>Engine\Include\Math\Vector4</Filter>
+    <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h">
+      <Filter>Engine\Include\Math\Vector\Vector4</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h">
       <Filter>Engine\Include\Resource\DepthResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h">
+      <Filter>Engine\Include\Math\Vector\Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h">
+      <Filter>Engine\Include\Math\Vector\Vector3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
