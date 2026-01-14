@@ -34,7 +34,7 @@ VertexShaderOutput main(uint vertexID : SV_VertexID)
     VertexShaderOutput output;
     
     output.position = kPosition[vertexID];
-    output.texcoord = kPosition[vertexID];
+    output.texcoord = kTexcoord[vertexID];
     
     return output;
 }

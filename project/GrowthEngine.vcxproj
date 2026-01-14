@@ -148,6 +148,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Engine\Log\Log.cpp" />
     <ClCompile Include="Engine\Math\Vector4\Vector4.cpp" />
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.cpp" />
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Command\DX12Command.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Core\DX12Core.cpp" />
@@ -173,6 +175,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
     <ClInclude Include="Engine\Log\Log.h" />
     <ClInclude Include="Engine\Math\Vector4\Vector4.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h" />
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h" />
     <ClInclude Include="Engine\RenderContext\DX12Command\DX12Command.h" />
     <ClInclude Include="Engine\RenderContext\DX12Core\DX12Core.h" />

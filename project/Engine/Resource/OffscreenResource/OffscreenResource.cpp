@@ -83,10 +83,25 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* 
 /// @param dsvHandle 
 void Engine::OffscreenResource::ClearRenderTarget(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle)
 {
+	// nullptrチェック
+	assert(commandList);
+
 	// 設定
 	commandList->OMSetRenderTargets(1, &rtvCpuHandle_, false, &dsvHandle);
 
 	// クリア
 	float clearColor[] = { 0.1f, 0.1f ,0.1f, 1.0f };
 	commandList->ClearRenderTargetView(rtvCpuHandle_, clearColor, 0, nullptr);
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::OffscreenResource::Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	// nullptrチェック
+	assert(commandList);
+
+	// テクスチャ
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
 }

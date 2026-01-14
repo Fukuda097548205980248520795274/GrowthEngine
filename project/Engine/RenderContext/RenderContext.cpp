@@ -2,6 +2,7 @@
 #include "Log/Log.h"
 #include <cassert>
 #include "Func/ResourceFunc/ResourceFunc.h"
+#include "WinApp/WinApp.h"
 
 /// @brief 初期化
 /// @param log 
@@ -48,7 +49,22 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Offscreenの生成と初期化
 	offscreen_ = std::make_unique<DX12Offscreen>();
-	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), log);
+	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
+
+
+	// ビューポートの設定
+	viewport_.Width = static_cast<float>(winApp->GetClientWidth());
+	viewport_.Height = static_cast<float>(winApp->GetClientHeight());
+	viewport_.TopLeftX = 0;
+	viewport_.TopLeftY = 0;
+	viewport_.MinDepth = 0.0f;
+	viewport_.MaxDepth = 1.0f;
+
+	// シザー矩形の設定
+	scissorRect_.left = 0;
+	scissorRect_.right = winApp->GetClientWidth();
+	scissorRect_.top = 0;
+	scissorRect_.bottom = winApp->GetClientHeight();
 }
 
 /// @brief 描画前処理
@@ -57,8 +73,16 @@ void Engine::RenderContext::PreDraw()
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
 
+	// ビューポート、シザー矩形の設定
+	commandList_->RSSetViewports(1, &viewport_);
+	commandList_->RSSetScissorRects(1, &scissorRect_);
+
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
+
+	// 描画用のディスクリプタヒープを設定
+	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
+	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 /// @brief 描画後処理
@@ -84,6 +108,9 @@ void Engine::RenderContext::PostDraw()
 	// 指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f , 0.1f , 0.1f , 0.0f };
 	commandList_->ClearRenderTargetView(backBufferCPUHandle, clearColor, 0, nullptr);
+
+	// スワップチェインのリソースにオフスクリーンテクスチャを書き込む
+	offscreen_->RenderSwapChain(commandList_);
 
 	// バックバッファリソース RenderTarget -> Present
 	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, commandList_);

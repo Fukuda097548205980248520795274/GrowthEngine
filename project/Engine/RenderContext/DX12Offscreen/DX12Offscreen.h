@@ -7,10 +7,13 @@
 #include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Resource/DepthResource/DepthResource.h"
 
+#include "PSO/PSOPostEffect/BasePSOPostEffect/PSOCopyImage/PSOCopyImage.h"
+
 namespace Engine
 {
 	class DX12Heap;
 	class DX12Buffering;
+	class ShaderCompiler;
 	class Log;
 
 	class DX12Offscreen
@@ -21,12 +24,17 @@ namespace Engine
 		/// @param device 
 		/// @param heap 
 		/// @param buffering 
+		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, Log* log);
+		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, Log* log);
 
 		/// @brief クリア
 		/// @param commandList 
 		void Clear(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief スワップチェインのRTVリソースにオフクリーンリソースを書き込む
+		/// @param commandList 
+		void RenderSwapChain(ID3D12GraphicsCommandList* commandList);
 
 
 		template<typename T>
@@ -60,5 +68,15 @@ namespace Engine
 
 		// 深度リソース
 		std::unique_ptr<DepthResource> depthResource_ = nullptr;
+
+
+	private:
+
+		// 頂点シェーダ
+		ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
+
+
+		// CopyImage PSO
+		std::unique_ptr<PSOCopyImage> psoCopyImage_ = nullptr;
 	};
 }

@@ -26,6 +26,11 @@ namespace Engine
 		/// @param dsvHandle 
 		void ClearRenderTarget(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void Register(ID3D12GraphicsCommandList* commandList , UINT rootParameterIndex);
+
 		/// @brief RTV用CPUハンドルを取得する
 		/// @return 
 		D3D12_CPU_DESCRIPTOR_HANDLE GetRtvCpuHandle() { return rtvCpuHandle_; }
@@ -33,6 +38,10 @@ namespace Engine
 		/// @brief SRV用GPUハンドルを取得する
 		/// @return 
 		D3D12_GPU_DESCRIPTOR_HANDLE GetSrvGpuHandle() { return srvHandle_.second; }
+
+		/// @brief リソースを取得する
+		/// @return 
+		ID3D12Resource* GetResource() { return resource_.Get(); }
 
 
 		template<typename T>

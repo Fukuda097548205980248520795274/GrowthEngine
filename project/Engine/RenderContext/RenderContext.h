@@ -59,6 +59,15 @@ namespace Engine
 
 	private:
 
+		/// @brief ビューポート
+		D3D12_VIEWPORT viewport_{};
+
+		/// @brief シザー矩形
+		D3D12_RECT scissorRect_{};
+
+
+	private:
+
 		// コマンドリスト
 		ID3D12GraphicsCommandList* commandList_ = nullptr;
 
