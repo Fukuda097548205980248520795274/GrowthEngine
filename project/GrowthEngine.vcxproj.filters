@@ -109,6 +109,9 @@
     <Filter Include="Engine\Include\Math\Vector\Vector4">
       <UniqueIdentifier>{7b7a9462-edb4-4d78-aaae-2c261b542aa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Math\Quaternion">
+      <UniqueIdentifier>{982f213f-5c91-49b0-b071-b9f9db30cb91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -180,6 +183,9 @@
     <ClCompile Include="Engine\Math\Vector\Vector3\Vector3.cpp">
       <Filter>Engine\Include\Math\Vector\Vector3</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Math\Quaternion\Quaternion.cpp">
+      <Filter>Engine\Include\Math\Quaternion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -250,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h">
       <Filter>Engine\Include\Math\Vector\Vector3</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Quaternion\Quaternion.h">
+      <Filter>Engine\Include\Math\Quaternion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
