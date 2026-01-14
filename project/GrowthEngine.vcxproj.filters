@@ -82,6 +82,18 @@
     <Filter Include="Engine\Include\Resource\DepthResource">
       <UniqueIdentifier>{8117933b-3eb3-4b14-8749-4fe99f9e96eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader">
+      <UniqueIdentifier>{07fc7440-bdd2-4906-aff3-3f22ca13e8aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Fullscreen">
+      <UniqueIdentifier>{05262db1-77f6-44b0-818b-b46c6e17a34f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\PostEffect">
+      <UniqueIdentifier>{f9649a2e-7199-4822-a26a-908fe34d61d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO">
+      <UniqueIdentifier>{32654d02-54f6-43f7-a903-978e1a5745ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -200,5 +212,18 @@
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h">
       <Filter>Engine\Include\Resource\DepthResource</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shader\Fullscreen\Fullscreen.hlsli">
+      <Filter>Engine\Shader\Fullscreen</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\Fullscreen\Fullscreen.VS.hlsl">
+      <Filter>Engine\Shader\Fullscreen</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\PostEffect\CopyImage.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
