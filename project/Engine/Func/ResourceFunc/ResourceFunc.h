@@ -2,6 +2,10 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+#include "Math/Vector4/Vector4.h"
+#include <cstdint>
+
+struct Vector4;
 
 namespace Engine
 {
@@ -27,4 +31,15 @@ namespace Engine
 	/// @param log 
 	/// @return 
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateUAVResource(ID3D12Device* device, size_t sizeInBytes, Log* log);
+
+	/// @brief 書き込み可能なテクスチャリソースを生成する
+	/// @param device 
+	/// @param width 
+	/// @param height 
+	/// @param swapChainFormat 
+	/// @param rtvFormat 
+	/// @param clearColor 
+	/// @return 
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height,
+		DXGI_FORMAT swapChainFormat, DXGI_FORMAT rtvFormat, Vector4 clearColor);
 }

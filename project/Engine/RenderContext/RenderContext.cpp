@@ -57,19 +57,13 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// コマンドリストの取得
+	// コマンドリスト・アロケータの取得
 	commandList_ = command_->GetCommandList();
-
-	// コマンドアロケータの取得
 	commandAllocator_ = command_->GetCommandAllocator();
 
-	// バックバッファのインデックスを取得する
+	// バックバッファのインデックス・リソース・RTV用CPUハンドルを取得
 	UINT backBufferIndex = buffering_->GetSwapChain()->GetCurrentBackBufferIndex();
-
-	// バックバッファのリソースを取得する
 	ID3D12Resource* backBufferResource = buffering_->GetSwapChainResource(backBufferIndex);
-
-	// バックバッファのCPUハンドルを取得する
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferCPUHandle = buffering_->GetSwapChainRtvCPUHandle(backBufferIndex);
 
 

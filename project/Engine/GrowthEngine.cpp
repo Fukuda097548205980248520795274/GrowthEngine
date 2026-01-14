@@ -66,19 +66,22 @@ GrowthEngine::~GrowthEngine()
 	// 描画統括の終了
 	renderContext_.reset();
 	renderContext_ = nullptr;
+	if (log_)log_->Logging("RenderContext released \n");
 
 	// ウィンドウアプリケーションの終了
 	winApp_.reset();
 	winApp_ = nullptr;
-
-	// ログの終了
-	log_.reset();
-	log_ = nullptr;
+	if (log_)log_->Logging("WinApp released \n");
 
 	// 解放漏れを検知する
 #ifdef _DEBUG
 	Engine::LeakChecker();
+	if (log_)log_->Logging("LeakChecker executed \n");
 #endif
+
+	// ログの終了
+	log_.reset();
+	log_ = nullptr;
 }
 
 

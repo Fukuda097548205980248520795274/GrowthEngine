@@ -64,6 +64,21 @@
     <Filter Include="Engine\Include\ShaderCompiler">
       <UniqueIdentifier>{1ba9a574-79a6-4f0d-ab3e-92319349d734}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Offscreen">
+      <UniqueIdentifier>{997cf30e-719e-4eb4-9062-d1089326c5c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource">
+      <UniqueIdentifier>{a7f90c2c-642e-4a36-ae1d-1feb98b16259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\OffscreenResource">
+      <UniqueIdentifier>{55ffed72-e33c-45de-9444-266e7edc9b79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math">
+      <UniqueIdentifier>{d13ee944-a3eb-4a26-9227-08ac7fcc613a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Vector4">
+      <UniqueIdentifier>{7b7a9462-edb4-4d78-aaae-2c261b542aa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -111,6 +126,15 @@
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp">
       <Filter>Engine\Include\ShaderCompiler</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\OffscreenResource.cpp">
+      <Filter>Engine\Include\Resource\OffscreenResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector4\Vector4.cpp">
+      <Filter>Engine\Include\Math\Vector4</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -157,6 +181,15 @@
     </ClInclude>
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h">
       <Filter>Engine\Include\ShaderCompiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\OffscreenResource.h">
+      <Filter>Engine\Include\Resource\OffscreenResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector4\Vector4.h">
+      <Filter>Engine\Include\Math\Vector4</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
