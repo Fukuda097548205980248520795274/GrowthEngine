@@ -55,6 +55,15 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2)
 Vector3 Project(const Vector3& line, const Vector3& point)
 {
 	Vector3 normal = line.Normalize();
-	Vector3 project = Dot(normal, point) * normal;
-	return project;
+	return Dot(normal, point) * normal;
+}
+
+/// @brief 反射ベクトル
+/// @param input 入射ベクトル
+/// @param normal 法線
+/// @return 
+Vector3 Reflect(const Vector3& input, const Vector3& normal)
+{
+	Vector3 normal2 = normal.Normalize();
+	return input - (2.0f * (Dot(input, normal2) * normal2));
 }
