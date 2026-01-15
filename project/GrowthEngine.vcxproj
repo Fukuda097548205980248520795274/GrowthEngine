@@ -147,6 +147,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GrowthEngine.cpp" />
     <ClCompile Include="Engine\Func\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Engine\Log\Log.cpp" />
+    <ClCompile Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.cpp" />
+    <ClCompile Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.cpp" />
     <ClCompile Include="Engine\Math\Quaternion\Quaternion.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector2\Vector2.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector3\Vector3.cpp" />
@@ -177,6 +179,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\GrowthEngine.h" />
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
     <ClInclude Include="Engine\Log\Log.h" />
+    <ClInclude Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.h" />
+    <ClInclude Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.h" />
     <ClInclude Include="Engine\Math\Quaternion\Quaternion.h" />
     <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />

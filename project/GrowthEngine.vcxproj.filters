@@ -112,6 +112,15 @@
     <Filter Include="Engine\Include\Math\Quaternion">
       <UniqueIdentifier>{982f213f-5c91-49b0-b071-b9f9db30cb91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Math\Matrix">
+      <UniqueIdentifier>{b590c4b1-a06d-4d36-8c4e-2c43b694f1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Matrix\Matrix4x4">
+      <UniqueIdentifier>{cdc68e37-ca53-4e5c-b093-f2aef5d09706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Math\Matrix\Matrix3x3">
+      <UniqueIdentifier>{b6caceac-04d8-4b1e-aa37-149acfd3ef20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -186,6 +195,12 @@
     <ClCompile Include="Engine\Math\Quaternion\Quaternion.cpp">
       <Filter>Engine\Include\Math\Quaternion</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.cpp">
+      <Filter>Engine\Include\Math\Matrix\Matrix3x3</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.cpp">
+      <Filter>Engine\Include\Math\Matrix\Matrix4x4</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -259,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Quaternion\Quaternion.h">
       <Filter>Engine\Include\Math\Quaternion</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.h">
+      <Filter>Engine\Include\Math\Matrix\Matrix3x3</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.h">
+      <Filter>Engine\Include\Math\Matrix\Matrix4x4</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
