@@ -1,5 +1,6 @@
 #pragma once
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Vector/Vector4/Vector4.h"
 #include "Math/Quaternion/Quaternion.h"
 #include <cstdint>
 
@@ -171,15 +172,58 @@ namespace
 }
 
 
+/// @brief 座標変換
+/// @param vector ベクトル
+/// @param matrix 行列
+/// @return 
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
+/// @brief 座標変換
+/// @param vector ベクトル
+/// @param matrix 行列
+/// @return 
+Vector4 Transform(const Vector4& vector, const Matrix4x4& matrix);
+
+/// @brief 法線方向の座標変換
+/// @param vector ベクトル
+/// @param matrix 行列
+/// @return 
+Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
+
+
+/// @brief 単位行列
+/// @return 
+Matrix4x4 MakeIdentityMatrix4x4();
+
 /// @brief 拡大縮小行列
 /// @param scale 大きさ
 /// @return 
 Matrix4x4 MakeScaleMatrix4x4(const Vector3& scale);
 
+/// @brief X軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateXMatrix4x4(float radian);
+
+/// @brief Y軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateYMatrix4x4(float radian);
+
+/// @brief Z軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateZMatrix4x4(float radian);
+
+/// @brief 回転行列
+/// @param rotation オイラー角
+/// @return 
+Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation);
+
 /// @brief 回転行列
 /// @param quaternion クォータニオン
 /// @return 
-Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
+Matrix4x4 MakeRotateMatrix4x4(const Quaternion& quaternion);
 
 /// @brief 平行移動行列
 /// @param translate 平行移動

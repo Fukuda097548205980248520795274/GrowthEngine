@@ -1,5 +1,6 @@
 #include "Matrix4x4.h"
 #include <cmath>
+#include <cassert>
 
 /// @brief 逆行列
 /// @return 
@@ -125,6 +126,82 @@ Matrix4x4 Matrix4x4::Transpose() const
 	return transpose;
 }
 
+
+/// @brief 座標変換
+/// @param vector ベクトル
+/// @param matrix 行列
+/// @return 
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix)
+{
+	// 座標変換した結果
+	Vector3 transform;
+
+	transform.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
+	transform.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
+	transform.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + 1.0f * matrix.m[3][2];
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + 1.0f * matrix.m[3][3];
+
+	assert(w != 0.0f);
+	transform /= w;
+
+	return transform;
+}
+
+/// @brief 座標変換
+/// @param vector ベクトル
+/// @param matrix 行列
+/// @return 
+Vector4 Transform(const Vector4& vector, const Matrix4x4& matrix)
+{
+	// 座標変換した結果
+	Vector4 transform;
+
+	transform.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + vector.w * matrix.m[3][0];
+	transform.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + vector.w * matrix.m[3][1];
+	transform.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] + vector.w * matrix.m[3][2];
+	transform.w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] + vector.w * matrix.m[3][3];
+
+	assert(transform.w != 0.0f);
+	transform.x /= transform.w;
+	transform.y /= transform.w;
+	transform.z /= transform.w;
+	transform.w /= transform.w;
+
+	return transform;
+}
+
+/// @brief 法線方向の座標変換
+/// @param vector 
+/// @param matrix 
+/// @return 
+Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix)
+{
+	// 座標変換した結果
+	Vector3 transform;
+
+	transform.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0];
+	transform.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1];
+	transform.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2];
+
+	return transform;
+}
+
+
+/// @brief 単位行列
+/// @return 
+Matrix4x4 MakeIdentityMatrix4x4()
+{
+	Matrix4x4 matrix;
+
+	for (int i = 0; i < 4; ++i)for (int j = 0; j < 4; ++j)
+	{
+		if (i == j) matrix.m[i][j] = 1.0f;
+		else if (i != j) matrix.m[i][j] = 0.0f;
+	}
+
+	return matrix;
+}
+
 /// @brief 拡大縮小行列
 /// @param scale 大きさ
 /// @return 
@@ -155,10 +232,110 @@ Matrix4x4 MakeScaleMatrix4x4(const Vector3& scale)
 	return matrix;
 }
 
+/// @brief X軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateXMatrix4x4(float radian)
+{
+	Matrix4x4 matrix;
+
+	matrix.m[0][0] = 1.0f;
+	matrix.m[0][1] = 0.0f;
+	matrix.m[0][2] = 0.0f;
+	matrix.m[0][3] = 0.0f;
+
+	matrix.m[1][0] = 0.0f;
+	matrix.m[1][1] = std::cos(radian);
+	matrix.m[1][2] = std::sin(radian);
+	matrix.m[1][3] = 0.0f;
+
+	matrix.m[2][0] = 0.0f;
+	matrix.m[2][1] = -std::sin(radian);
+	matrix.m[2][2] = std::cos(radian);
+	matrix.m[2][3] = 0.0f;
+
+	matrix.m[3][0] = 0.0f;
+	matrix.m[3][1] = 0.0f;
+	matrix.m[3][2] = 0.0f;
+	matrix.m[3][3] = 1.0f;
+
+	return matrix;
+}
+
+/// @brief Y軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateYMatrix4x4(float radian)
+{
+	// Y軸回転行列
+	Matrix4x4 matrix;
+
+	matrix.m[0][0] = std::cos(radian);
+	matrix.m[0][1] = 0.0f;
+	matrix.m[0][2] = -std::sin(radian);
+	matrix.m[0][3] = 0.0f;
+
+	matrix.m[1][0] = 0.0f;
+	matrix.m[1][1] = 1.0f;
+	matrix.m[1][2] = 0.0f;
+	matrix.m[1][3] = 0.0f;
+
+	matrix.m[2][0] = std::sin(radian);
+	matrix.m[2][1] = 0.0f;
+	matrix.m[2][2] = std::cos(radian);
+	matrix.m[2][3] = 0.0f;
+
+	matrix.m[3][0] = 0.0f;
+	matrix.m[3][1] = 0.0f;
+	matrix.m[3][2] = 0.0f;
+	matrix.m[3][3] = 1.0f;
+
+	return matrix;
+}
+
+/// @brief Z軸回転行列
+/// @param radian 
+/// @return 
+Matrix4x4 Make3DRotateZMatrix4x4(float radian)
+{
+	// Z軸回転行列
+	Matrix4x4 matrix;
+
+	matrix.m[0][0] = std::cos(radian);
+	matrix.m[0][1] = std::sin(radian);
+	matrix.m[0][2] = 0.0f;
+	matrix.m[0][3] = 0.0f;
+
+	matrix.m[1][0] = -std::sin(radian);
+	matrix.m[1][1] = std::cos(radian);
+	matrix.m[1][2] = 0.0f;
+	matrix.m[1][3] = 0.0f;
+
+	matrix.m[2][0] = 0.0f;
+	matrix.m[2][1] = 0.0f;
+	matrix.m[2][2] = 1.0f;
+	matrix.m[2][3] = 0.0f;
+
+	matrix.m[3][0] = 0.0f;
+	matrix.m[3][1] = 0.0f;
+	matrix.m[3][2] = 0.0f;
+	matrix.m[3][3] = 1.0f;
+
+	return matrix;
+}
+
+/// @brief 回転行列
+/// @param rotation オイラー角
+/// @return 
+Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation)
+{
+	return Make3DRotateXMatrix4x4(rotation.x) * Make3DRotateYMatrix4x4(rotation.y) * Make3DRotateZMatrix4x4(rotation.z);
+}
+
 /// @brief 回転行列
 /// @param quaternion クォータニオン
 /// @return 
-Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion)
+Matrix4x4 MakeRotateMatrix4x4(const Quaternion& quaternion)
 {
 	Matrix4x4 matrix;
 
@@ -222,7 +399,7 @@ Matrix4x4 MakeTranslateMatrix4x4(const Vector3& translate)
 /// @return 
 Matrix4x4 MakeAffineMatrix4x4(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate)
 {
-	return MakeScaleMatrix4x4(scale) * MakeRotateMatrix(quaternion) * MakeTranslateMatrix4x4(translate);
+	return MakeScaleMatrix4x4(scale) * MakeRotateMatrix4x4(quaternion) * MakeTranslateMatrix4x4(translate);
 }
 
 /// @brief 透視投影行列 3D
