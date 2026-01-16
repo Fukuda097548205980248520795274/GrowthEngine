@@ -121,6 +121,9 @@
     <Filter Include="Engine\Include\Math\Matrix\Matrix3x3">
       <UniqueIdentifier>{b6caceac-04d8-4b1e-aa37-149acfd3ef20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Func\TextureFurnc">
+      <UniqueIdentifier>{b80a281c-1caf-497f-b378-80ac4299d4d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -201,6 +204,9 @@
     <ClCompile Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.cpp">
       <Filter>Engine\Include\Math\Matrix\Matrix4x4</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Func\TextureFunc\TextureFunc.cpp">
+      <Filter>Engine\Include\Func\TextureFurnc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -280,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.h">
       <Filter>Engine\Include\Math\Matrix\Matrix4x4</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\TextureFunc\TextureFunc.h">
+      <Filter>Engine\Include\Func\TextureFurnc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

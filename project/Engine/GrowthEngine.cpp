@@ -48,6 +48,9 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	// 例外が発生したときに起動する
 	SetUnhandledExceptionFilter(Engine::ExportDump);
 
+	// COM初期化
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+
 	// ログの生成
 	log_ = std::make_unique<Engine::Log>();
 
@@ -82,6 +85,9 @@ GrowthEngine::~GrowthEngine()
 	// ログの終了
 	log_.reset();
 	log_ = nullptr;
+
+	// COM終了
+	CoUninitialize();
 }
 
 
