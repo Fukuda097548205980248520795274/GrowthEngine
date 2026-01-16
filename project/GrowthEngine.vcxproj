@@ -80,7 +80,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,7 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,7 +134,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\assimp;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
