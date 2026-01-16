@@ -1,12 +1,23 @@
 #include "WinApp.h"
-#include "Func/ConvertString/ConvertString.h"
 
 #include <format>
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
+#include "Func/ConvertString/ConvertString.h"
 #include "Log/Log.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // ウィンドウプロシージャ
 LRESULT CALLBACK Engine::WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	// ImGuiを操作すると途中で打ち切ることができる
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
+
 	// メッセージに応じて固有の処理を行う
 	switch (msg)
 	{

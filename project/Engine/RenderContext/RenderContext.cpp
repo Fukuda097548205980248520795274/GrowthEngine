@@ -65,11 +65,23 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	scissorRect_.right = winApp->GetClientWidth();
 	scissorRect_.top = 0;
 	scissorRect_.bottom = winApp->GetClientHeight();
+
+
+	// ImGuiの初期設定
+#ifdef _DEVELOPMENT
+	imguiRender_ = std::make_unique<ImGuiRender>();
+	imguiRender_->Initialize(core_->GetDevice(), winApp, heap_.get(), buffering_.get(), log);
+#endif
 }
 
 /// @brief 描画前処理
 void Engine::RenderContext::PreDraw()
 {
+#ifdef _DEVELOPMENT
+	// フレームの開始をImGuiに伝える
+	imguiRender_->FrameStart();
+#endif
+
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
 
@@ -83,6 +95,11 @@ void Engine::RenderContext::PreDraw()
 	// 描画用のディスクリプタヒープを設定
 	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+
+#ifdef _DEVELOPMENT
+	// Dockスペースを作成する
+	imguiRender_->CreateDockSpace();
+#endif 
 }
 
 /// @brief 描画後処理
@@ -111,6 +128,12 @@ void Engine::RenderContext::PostDraw()
 
 	// スワップチェインのリソースにオフスクリーンテクスチャを書き込む
 	offscreen_->RenderSwapChain(commandList_);
+
+	// ImGuiDockingに最終的なオフスクリーンを描画する
+#ifdef _DEVELOPMENT
+	// ImGuiに表示するスクリーンを描画する
+	imguiRender_->DrawImGuiScreen(offscreen_->GetCurrentResource(), offscreen_->GetCurrentResourceSrvHandle(), commandList_);
+#endif
 
 	// バックバッファリソース RenderTarget -> Present
 	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, commandList_);

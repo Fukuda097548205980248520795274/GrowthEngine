@@ -36,6 +36,14 @@ namespace Engine
 		/// @param commandList 
 		void RenderSwapChain(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief 現在使用中のオフスクリーンを取得する
+		/// @return 
+		ID3D12Resource* GetCurrentResource() { return offscreenResource_[currentOffscreen_]->GetResource(); }
+
+		/// @brief 現在使用中のオフスクリーンのSRV用GPUハンドルを取得する
+		/// @return 
+		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return offscreenResource_[currentOffscreen_]->GetSrvGpuHandle(); }
+
 
 		template<typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

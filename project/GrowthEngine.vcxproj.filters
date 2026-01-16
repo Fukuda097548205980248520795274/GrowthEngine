@@ -124,6 +124,9 @@
     <Filter Include="Engine\Include\Func\TextureFurnc">
       <UniqueIdentifier>{b80a281c-1caf-497f-b378-80ac4299d4d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\RenderContext\ImGuiRender">
+      <UniqueIdentifier>{c903f1c1-eb09-48cd-b729-e2aa63df6228}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +210,9 @@
     <ClCompile Include="Engine\Func\TextureFunc\TextureFunc.cpp">
       <Filter>Engine\Include\Func\TextureFurnc</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\ImGuiRender\ImGuiRender.cpp">
+      <Filter>Engine\Include\RenderContext\ImGuiRender</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -289,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Func\TextureFunc\TextureFunc.h">
       <Filter>Engine\Include\Func\TextureFurnc</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h">
+      <Filter>Engine\Include\RenderContext\ImGuiRender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

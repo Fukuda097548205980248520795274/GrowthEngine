@@ -7,6 +7,7 @@
 #include "DX12Fence/DX12Fence.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
+#include "ImGuiRender/ImGuiRender.h"
 #include <memory>
 
 namespace Engine
@@ -73,5 +74,13 @@ namespace Engine
 
 		// コマンドアロケータ
 		ID3D12CommandAllocator* commandAllocator_ = nullptr;
+
+
+	private:
+
+		// ImGui用SRVハンドル
+#ifdef _DEVELOPMENT
+		std::unique_ptr<ImGuiRender> imguiRender_ = nullptr;
+#endif
 	};
 }
