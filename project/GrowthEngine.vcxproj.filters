@@ -127,6 +127,18 @@
     <Filter Include="Engine\Include\RenderContext\ImGuiRender">
       <UniqueIdentifier>{c903f1c1-eb09-48cd-b729-e2aa63df6228}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Func\ModelFunc">
+      <UniqueIdentifier>{5308e489-03c7-4d3b-a28e-667f5c7e4aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data">
+      <UniqueIdentifier>{22ba9e1d-2c83-4280-96c8-07cdfab290cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\ModelData">
+      <UniqueIdentifier>{abc4fd21-8032-4689-9c5a-5f813bfaa504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\TransformData">
+      <UniqueIdentifier>{f43b7ffb-746e-4a00-9fcb-c43611a3ce4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -213,6 +225,9 @@
     <ClCompile Include="Engine\RenderContext\ImGuiRender\ImGuiRender.cpp">
       <Filter>Engine\Include\RenderContext\ImGuiRender</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp">
+      <Filter>Engine\Include\Func\ModelFunc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -298,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h">
       <Filter>Engine\Include\RenderContext\ImGuiRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\ModelFunc\ModelFunc.h">
+      <Filter>Engine\Include\Func\ModelFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\ModelData\ModelData.h">
+      <Filter>Engine\Include\Data\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\TransformData\TransformData.h">
+      <Filter>Engine\Include\Data\TransformData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

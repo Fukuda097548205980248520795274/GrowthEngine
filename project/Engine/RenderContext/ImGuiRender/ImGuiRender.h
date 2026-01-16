@@ -28,9 +28,6 @@ namespace Engine
 		/// @brief フレーム開始
 		void FrameStart();
 
-		/// @brief 終了処理
-		void Finalize();
-
 		/// @brief Dockスペースを作成する
 		void CreateDockSpace();
 
