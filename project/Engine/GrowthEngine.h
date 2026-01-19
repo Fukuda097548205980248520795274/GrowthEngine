@@ -11,6 +11,8 @@
 
 #include "Math/Vector/Vector3/Vector3.h"
 
+#include "Application/Framework/Framework.h"
+
 class GrowthEngine
 {
 public:

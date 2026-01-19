@@ -139,16 +139,22 @@
     <Filter Include="Engine\Include\Data\TransformData">
       <UniqueIdentifier>{f43b7ffb-746e-4a00-9fcb-c43611a3ce4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\WorldTransform">
+    <Filter Include="Engine\Include\Application">
+      <UniqueIdentifier>{cbd2def3-55ef-4a0e-abc3-4e9c519d108c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Framework">
+      <UniqueIdentifier>{28a11f44-7230-499b-914e-50d8699ab992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\WorldTransform">
       <UniqueIdentifier>{0ad18073-ba3c-494e-b0c6-9496ce2e47ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\WorldTransform\WorldTransform3D">
+    <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform3D">
       <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Camera">
+    <Filter Include="Engine\Include\Application\Camera">
       <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Camera\Camera3D">
+    <Filter Include="Engine\Include\Application\Camera\Camera3D">
       <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -240,11 +246,14 @@
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp">
       <Filter>Engine\Include\Func\ModelFunc</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
-      <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
+    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
+      <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Camera\Camera3D.cpp">
-      <Filter>Engine\Include\Camera\Camera3D</Filter>
+    <ClCompile Include="Engine\Application\Camera\Camera3D.cpp">
+      <Filter>Engine\Include\Application\Camera\Camera3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Framework\Framework.cpp">
+      <Filter>Engine\Include\Application\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,11 +350,14 @@
     <ClInclude Include="Engine\Data\TransformData\TransformData.h">
       <Filter>Engine\Include\Data\TransformData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.h">
-      <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
+    <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h">
+      <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Camera\Camera3D.h">
-      <Filter>Engine\Include\Camera\Camera3D</Filter>
+    <ClInclude Include="Engine\Application\Camera\Camera3D.h">
+      <Filter>Engine\Include\Application\Camera\Camera3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Framework\Framework.h">
+      <Filter>Engine\Include\Application\Framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -146,7 +146,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Camera\Camera3D.cpp" />
+    <ClCompile Include="Engine\Application\Framework\Framework.cpp" />
+    <ClCompile Include="Engine\Application\Camera\Camera3D.cpp" />
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp" />
     <ClCompile Include="Engine\Func\ResourceFunc\ResourceFunc.cpp" />
     <ClCompile Include="Engine\Func\TextureFunc\TextureFunc.cpp" />
@@ -174,7 +175,7 @@
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
-    <ClCompile Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.cpp" />
+    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -182,7 +183,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Camera\Camera3D.h" />
+    <ClInclude Include="Engine\Application\Framework\Framework.h" />
+    <ClInclude Include="Engine\Application\Camera\Camera3D.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
@@ -213,7 +215,7 @@
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
-    <ClInclude Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
+    <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
   </ItemGroup>
   <ItemGroup>

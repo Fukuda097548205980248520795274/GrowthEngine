@@ -1,7 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
-class Game
+class Game : public Framework
 {
 public:
 
@@ -9,13 +9,16 @@ public:
 	/// @param screenWidth 
 	/// @param screenHeight 
 	/// @param title 
-	Game(int32_t screenWidth, int32_t screenHeight,const std::string& title);
+	Game(int32_t screenWidth, int32_t screenHeight, const std::string& title)
+		: Framework(screenWidth, screenHeight, title){}
 
-	/// @brief デストラクタ
-	~Game();
+	/// @brief 初期化
+	void Initialize() override;
 
-	/// @brief 実行
-	/// @return 
-	int Run();
+	/// @brief 更新処理
+	void Update() override;
+
+	/// @brief 描画処理
+	void Draw() override;
 };
 
