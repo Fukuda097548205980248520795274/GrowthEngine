@@ -81,5 +81,15 @@ private:
 
 	// 描画統括
 	std::unique_ptr<Engine::RenderContext> renderContext_ = nullptr;
+
+
+private:
+
+	/// @brief シーン追加
+	void AddScene();
+
+	/// @brief シーンファイルを作成する
+	/// @param fileName 
+	void CreateSceneFile(const std::string& fileName);
 };
 

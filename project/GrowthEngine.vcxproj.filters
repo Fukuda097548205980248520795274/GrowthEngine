@@ -258,6 +258,9 @@
     <ClCompile Include="Engine\Application\Framework\Framework.cpp">
       <Filter>Engine\Include\Application\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Scene\Scene.cpp">
+      <Filter>Engine\Include\Application\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -361,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Framework\Framework.h">
       <Filter>Engine\Include\Application\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Scene\Scene.h">
+      <Filter>Engine\Include\Application\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -136,7 +136,7 @@ void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DE
 	TransitionBarrier(resource,
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
-	ImGui::Begin("Scene");
+	ImGui::Begin("View");
 
 	ImTextureID texId = (ImTextureID)(gpuHandle.ptr);
 
