@@ -145,6 +145,12 @@
     <Filter Include="Engine\Include\WorldTransform\WorldTransform3D">
       <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Camera">
+      <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera\Camera3D">
+      <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -236,6 +242,9 @@
     </ClCompile>
     <ClCompile Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
       <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Camera\Camera3D.cpp">
+      <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.h">
       <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera\Camera3D.h">
+      <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

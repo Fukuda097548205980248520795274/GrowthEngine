@@ -303,7 +303,7 @@ Matrix4x4 MakeAffineMatrix4x4(const Vector3& scale, const Quaternion& quaternion
 }
 
 /// @brief 透視投影行列 3D
-/// @param fovY 画角
+/// @param fovY 有効視野
 /// @param aspectRatio アスペクト比
 /// @param nearClip 近平面の距離
 /// @param farClip 遠平面の距離

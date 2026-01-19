@@ -40,6 +40,18 @@ public:
 	void PostDraw();
 
 
+public:
+
+	/// @brief 画面の横幅を取得する
+	/// @return 
+	int32_t GetScreenWidth()const { return winApp_->GetClientWidth(); }
+
+	/// @brief 画面の縦幅を取得する
+	/// @return 
+	int32_t GetScreenHeight()const { return winApp_->GetClientHeight(); }
+
+
+
 private:
 
 	// 生成できないようにする

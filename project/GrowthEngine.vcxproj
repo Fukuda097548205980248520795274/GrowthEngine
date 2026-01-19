@@ -146,6 +146,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Camera\Camera3D.cpp" />
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp" />
     <ClCompile Include="Engine\Func\ResourceFunc\ResourceFunc.cpp" />
     <ClCompile Include="Engine\Func\TextureFunc\TextureFunc.cpp" />
@@ -181,6 +182,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Camera\Camera3D.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
