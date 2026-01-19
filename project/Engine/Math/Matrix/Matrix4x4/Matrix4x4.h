@@ -200,30 +200,10 @@ Matrix4x4 MakeIdentityMatrix4x4();
 /// @return 
 Matrix4x4 MakeScaleMatrix4x4(const Vector3& scale);
 
-/// @brief X軸回転行列
-/// @param radian 角度
-/// @return 
-Matrix4x4 Make3DRotateXMatrix4x4(float radian);
-
-/// @brief Y軸回転行列
-/// @param radian 角度
-/// @return 
-Matrix4x4 Make3DRotateYMatrix4x4(float radian);
-
-/// @brief Z軸回転行列
-/// @param radian 角度
-/// @return 
-Matrix4x4 Make3DRotateZMatrix4x4(float radian);
-
-/// @brief 回転行列
-/// @param rotation オイラー角
-/// @return 
-Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation);
-
 /// @brief 回転行列
 /// @param quaternion クォータニオン
 /// @return 
-Matrix4x4 MakeRotateMatrix4x4(const Quaternion& quaternion);
+Matrix4x4 Make3DRotateMatrix4x4(const Quaternion& quaternion);
 
 /// @brief 平行移動行列
 /// @param translate 平行移動

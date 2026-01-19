@@ -232,110 +232,10 @@ Matrix4x4 MakeScaleMatrix4x4(const Vector3& scale)
 	return matrix;
 }
 
-/// @brief X軸回転行列
-/// @param radian 角度
-/// @return 
-Matrix4x4 Make3DRotateXMatrix4x4(float radian)
-{
-	Matrix4x4 matrix;
-
-	matrix.m[0][0] = 1.0f;
-	matrix.m[0][1] = 0.0f;
-	matrix.m[0][2] = 0.0f;
-	matrix.m[0][3] = 0.0f;
-
-	matrix.m[1][0] = 0.0f;
-	matrix.m[1][1] = std::cos(radian);
-	matrix.m[1][2] = std::sin(radian);
-	matrix.m[1][3] = 0.0f;
-
-	matrix.m[2][0] = 0.0f;
-	matrix.m[2][1] = -std::sin(radian);
-	matrix.m[2][2] = std::cos(radian);
-	matrix.m[2][3] = 0.0f;
-
-	matrix.m[3][0] = 0.0f;
-	matrix.m[3][1] = 0.0f;
-	matrix.m[3][2] = 0.0f;
-	matrix.m[3][3] = 1.0f;
-
-	return matrix;
-}
-
-/// @brief Y軸回転行列
-/// @param radian 角度
-/// @return 
-Matrix4x4 Make3DRotateYMatrix4x4(float radian)
-{
-	// Y軸回転行列
-	Matrix4x4 matrix;
-
-	matrix.m[0][0] = std::cos(radian);
-	matrix.m[0][1] = 0.0f;
-	matrix.m[0][2] = -std::sin(radian);
-	matrix.m[0][3] = 0.0f;
-
-	matrix.m[1][0] = 0.0f;
-	matrix.m[1][1] = 1.0f;
-	matrix.m[1][2] = 0.0f;
-	matrix.m[1][3] = 0.0f;
-
-	matrix.m[2][0] = std::sin(radian);
-	matrix.m[2][1] = 0.0f;
-	matrix.m[2][2] = std::cos(radian);
-	matrix.m[2][3] = 0.0f;
-
-	matrix.m[3][0] = 0.0f;
-	matrix.m[3][1] = 0.0f;
-	matrix.m[3][2] = 0.0f;
-	matrix.m[3][3] = 1.0f;
-
-	return matrix;
-}
-
-/// @brief Z軸回転行列
-/// @param radian 
-/// @return 
-Matrix4x4 Make3DRotateZMatrix4x4(float radian)
-{
-	// Z軸回転行列
-	Matrix4x4 matrix;
-
-	matrix.m[0][0] = std::cos(radian);
-	matrix.m[0][1] = std::sin(radian);
-	matrix.m[0][2] = 0.0f;
-	matrix.m[0][3] = 0.0f;
-
-	matrix.m[1][0] = -std::sin(radian);
-	matrix.m[1][1] = std::cos(radian);
-	matrix.m[1][2] = 0.0f;
-	matrix.m[1][3] = 0.0f;
-
-	matrix.m[2][0] = 0.0f;
-	matrix.m[2][1] = 0.0f;
-	matrix.m[2][2] = 1.0f;
-	matrix.m[2][3] = 0.0f;
-
-	matrix.m[3][0] = 0.0f;
-	matrix.m[3][1] = 0.0f;
-	matrix.m[3][2] = 0.0f;
-	matrix.m[3][3] = 1.0f;
-
-	return matrix;
-}
-
-/// @brief 回転行列
-/// @param rotation オイラー角
-/// @return 
-Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation)
-{
-	return Make3DRotateXMatrix4x4(rotation.x) * Make3DRotateYMatrix4x4(rotation.y) * Make3DRotateZMatrix4x4(rotation.z);
-}
-
 /// @brief 回転行列
 /// @param quaternion クォータニオン
 /// @return 
-Matrix4x4 MakeRotateMatrix4x4(const Quaternion& quaternion)
+Matrix4x4 Make3DRotateMatrix4x4(const Quaternion& quaternion)
 {
 	Matrix4x4 matrix;
 
@@ -399,7 +299,7 @@ Matrix4x4 MakeTranslateMatrix4x4(const Vector3& translate)
 /// @return 
 Matrix4x4 MakeAffineMatrix4x4(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate)
 {
-	return MakeScaleMatrix4x4(scale) * MakeRotateMatrix4x4(quaternion) * MakeTranslateMatrix4x4(translate);
+	return MakeScaleMatrix4x4(scale) * Make3DRotateMatrix4x4(quaternion) * MakeTranslateMatrix4x4(translate);
 }
 
 /// @brief 透視投影行列 3D

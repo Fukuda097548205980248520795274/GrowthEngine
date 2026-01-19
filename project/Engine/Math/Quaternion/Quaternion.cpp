@@ -56,6 +56,22 @@ float Dot(const Quaternion& q1 , const Quaternion& q2)
 	return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
+/// @brief 角度をクォータニオンに変換する
+/// @param angle 角度
+/// @param axis 軸
+/// @return 
+Quaternion ToQuaternion(float angle , const Vector3& axis)
+{
+	Vector3 n = axis.Normalize();
+
+	Quaternion q;
+	q.w = std::cos(angle / 2.0f);
+	q.x = n.x * std::sin(angle / 2.0f);
+	q.y = n.y * std::sin(angle / 2.0f);
+	q.z = n.z * std::sin(angle / 2.0f);
+	return q;
+}
+
 /// @brief 球面線形補間
 /// @param q1 
 /// @param q2 

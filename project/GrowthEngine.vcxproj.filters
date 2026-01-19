@@ -139,6 +139,12 @@
     <Filter Include="Engine\Include\Data\TransformData">
       <UniqueIdentifier>{f43b7ffb-746e-4a00-9fcb-c43611a3ce4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\WorldTransform">
+      <UniqueIdentifier>{0ad18073-ba3c-494e-b0c6-9496ce2e47ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\WorldTransform\WorldTransform3D">
+      <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -227,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp">
       <Filter>Engine\Include\Func\ModelFunc</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
+      <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\TransformData\TransformData.h">
       <Filter>Engine\Include\Data\TransformData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.h">
+      <Filter>Engine\Include\WorldTransform\WorldTransform3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -173,6 +173,7 @@
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
+    <ClCompile Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -210,6 +211,7 @@
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
+    <ClInclude Include="Engine\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
   </ItemGroup>
   <ItemGroup>

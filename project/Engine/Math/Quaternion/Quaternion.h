@@ -162,6 +162,12 @@ namespace
 /// @return 
 Quaternion MakeIdentityQuaternion();
 
+/// @brief 角度をクォータニオンに変換する
+/// @param angle 角度
+/// @param axis 軸
+/// @return 
+Quaternion ToQuaternion(float angle, const Vector3& axis);
+
 /// @brief 内積
 /// @param q1 
 /// @param q2 
