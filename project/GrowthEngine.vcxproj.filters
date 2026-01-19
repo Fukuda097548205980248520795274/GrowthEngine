@@ -157,6 +157,9 @@
     <Filter Include="Engine\Include\Application\Camera\Camera3D">
       <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Scene">
+      <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

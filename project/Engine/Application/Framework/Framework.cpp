@@ -23,11 +23,11 @@ int32_t Framework::Run()
 	// ゲームループ
 	while (engine->GameLoop())
 	{
-		// 更新処理
-		Update();
-
 		// 描画前処理
 		engine->PreDraw();
+
+		// 更新処理
+		Update();
 
 		// 描画処理
 		Draw();

@@ -9,7 +9,7 @@ void Game::Initialize()
 /// @brief 更新処理
 void Game::Update()
 {
-
+	
 }
 
 /// @brief 描画処理
