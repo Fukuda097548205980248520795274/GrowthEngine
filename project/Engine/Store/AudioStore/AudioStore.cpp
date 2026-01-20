@@ -3,6 +3,7 @@
 #include "Log/Log.h"
 #include "Func/ConvertString/ConvertString.h"
 #include "Func/RandomFunc/RandomFunc.h"
+#include <format>
 
 
 /// <summary>
@@ -79,23 +80,32 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 	ComPtr<IMFSourceReader> pMFSourceReader{ nullptr };
 	HRESULT hr = MFCreateSourceReaderFromURL(filePathW.c_str(), NULL, &pMFSourceReader);
 	assert(SUCCEEDED(hr));
+	if (log)log->Logging(std::format("MFCreateSourceReaderFromURL : {}", filePath.c_str()));
 
 
 	// メディアタイプの作成
 	ComPtr<IMFMediaType> pReader{ nullptr };
 	hr = MFCreateMediaType(&pReader);
 	assert(SUCCEEDED(hr));
+	if (log)log->Logging("MFCreateMediaType");
 
 	// ソースレーダとメディアタイプの設定
 	pReader->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
 	pReader->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
 	hr = pMFSourceReader->SetCurrentMediaType((DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, nullptr, pReader.Get());
 	assert(SUCCEEDED(hr));
+	if (log)
+	{
+		log->Logging("Set GUID : MF_MT_MAJOR_TYPE , MFMediaType_Audio");
+		log->Logging("Set GUID : MF_MT_SUBTYPE , MFAudioFormat_PCM");
+		log->Logging("SetCurrentMediaType : MF_SOURCE_READER_FIRST_AUDIO_STREAM");
+	}
 
 	// メディアタイプを解放し、再度作成する
 	ComPtr<IMFMediaType> pOutType;
 	hr = pMFSourceReader->GetCurrentMediaType(MF_SOURCE_READER_FIRST_AUDIO_STREAM, &pOutType);
 	assert(SUCCEEDED(hr));
+	if (log)log->Logging("GetCurrentMediaType : MF_SOURCE_READER_FIRST_AUDIO_STREAM");
 
 
 	// オーディオデータを作成する
@@ -143,17 +153,16 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 
 	// 配列に登録する
 	audioData_.push_back(std::move(audioDatum));
+	if (log)log->Logging("Success : Load Audio \n");
 
 	return soundHandle;
 }
 
 
-/// <summary>
-/// オーディオを流す
-/// </summary>
-/// <param name="soundHandle"></param>
-/// <param name="volume"></param>
-/// <returns></returns>
+/// @brief オーディオを流す
+/// @param handle 
+/// @param volume 
+/// @return 
 PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 {
 	// プレイデータを生成する
@@ -205,10 +214,8 @@ PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 }
 
 
-/// <summary>
-/// 音声を停止する
-/// </summary>
-/// <param name="playHandle"></param>
+/// @brief オーディオを停止する
+/// @param handle 
 void Engine::AudioStore::StopAudio(PlayHandle handle)
 {
 	for (std::unique_ptr<PlayData>& playDatum : playData_)
@@ -226,10 +233,9 @@ void Engine::AudioStore::StopAudio(PlayHandle handle)
 	return;
 }
 
-/// <summary>
-/// 音楽が再生されているかどうか
-/// </summary>
-/// <param name="playHandle"></param>
+/// @brief オーディオを再生されているかどうか
+/// @param handle 
+/// @return 
 bool Engine::AudioStore::IsAudioPlay(PlayHandle handle)
 {
 	for (std::unique_ptr<PlayData>& playDatum : playData_)
@@ -244,11 +250,9 @@ bool Engine::AudioStore::IsAudioPlay(PlayHandle handle)
 }
 
 
-/// <summary>
-/// 音量を設定する
-/// </summary>
-/// <param name="playHandle"></param>
-/// <param name="setVolume"></param>
+/// @brief ボリュームを設定する
+/// @param handle 
+/// @param volume 
 void Engine::AudioStore::SetVolume(PlayHandle handle, float volume)
 {
 	const float kMaxSoundVolume = 1.0f;
@@ -272,11 +276,9 @@ void Engine::AudioStore::SetVolume(PlayHandle handle, float volume)
 	return;
 }
 
-/// <summary>
-/// ピッチを設定する
-/// </summary>
-/// <param name="playHandle"></param>
-/// <param name="pitch"></param>
+/// @brief ピッチを設定する
+/// @param handle 
+/// @param pitch 
 void Engine::AudioStore::SetPitch(PlayHandle handle, float pitch)
 {
 	// ハンドルが一致する構造体を探す
@@ -294,9 +296,7 @@ void Engine::AudioStore::SetPitch(PlayHandle handle, float pitch)
 }
 
 
-/// <summary>
-/// 流れているオーディオを削除する
-/// </summary>
+/// @brief 流れているオーディオを削除する
 void Engine::AudioStore::DeletePlayAudio()
 {
 	playData_.remove_if([](std::unique_ptr<PlayData>& playDatum)

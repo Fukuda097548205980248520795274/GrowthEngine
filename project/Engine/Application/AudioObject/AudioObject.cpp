@@ -1,6 +1,13 @@
 #include "AudioObject.h"
 #include "GrowthEngine.h"
 
+/// @brief デストラクタ
+AudioObject::~AudioObject()
+{
+	// 流れている曲を停止する
+	if (engine_->IsPlayAudio(ph_))engine_->StopAudio(ph_);
+}
+
 /// @brief コンストラクタ
 /// @param filePath 
 /// @param volume 
@@ -18,16 +25,11 @@ AudioObject::AudioObject(const std::string& filePath, float volume, bool isLoop)
 	ph_ = 0;
 }
 
-/// <summary>
-/// 更新処理
-/// </summary>
+/// @brief 更新処理
 void AudioObject::Update()
 {
 	if (isPlay_ == false)
 		return;
-
-	engine_->SetVolume(ph_, volume_);
-	engine_->SetPitch(ph_, pitch_);
 
 	// ループ再生
 	if (isLoop_)
@@ -38,7 +40,8 @@ void AudioObject::Update()
 		}
 
 		return;
-	} else
+	}
+	else
 	{
 		if (!engine_->IsPlayAudio(ph_) || ph_ == 0)
 		{
@@ -47,9 +50,7 @@ void AudioObject::Update()
 	}
 }
 
-/// <summary>
-/// サウンドを流す
-/// </summary>
+/// @brief オーディオを流す
 void AudioObject::PlayAudio()
 {
 	engine_->StopAudio(ph_);
@@ -57,38 +58,31 @@ void AudioObject::PlayAudio()
 	isPlay_ = true;
 }
 
-/// <summary>
-/// オーディオを止める
-/// </summary>
+/// @brief オーディオを止める
 void AudioObject::StopAudio()
 {
 	engine_->StopAudio(ph_);
 	isPlay_ = false;
 }
 
-/// <summary>
-/// ピッチを設定する
-/// </summary>
+/// @brief ピッチを設定する
+/// @param pitch 
 void AudioObject::SetPitch(float pitch)
 {
 	pitch_ = pitch;
 	engine_->SetPitch(ph_, pitch_);
 }
 
-/// <summary>
-/// ボリュームを設定する
-/// </summary>
-/// <param name="volume"></param>
+/// @brief ボリュームを設定する
+/// @param volume 
 void AudioObject::SetVolume(float volume)
 {
 	volume_ = volume;
 	engine_->SetVolume(ph_, volume_);
 }
 
-/// <summary>
-/// ループの設定
-/// </summary>
-/// <param name="isLoop"></param>
+/// @brief ループの設定
+/// @param isLoop 
 void AudioObject::SetLoop(bool isLoop)
 {
 	isLoop_ = isLoop;

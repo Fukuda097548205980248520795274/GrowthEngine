@@ -8,6 +8,9 @@ class GrowthEngine;
 class AudioObject
 {
 public:
+
+	/// @brief デストラクタ
+	~AudioObject();
 	
 	/// @brief コンストラクタ
 	/// @param filePath 
@@ -15,36 +18,25 @@ public:
 	/// @param isLoop 
 	AudioObject(const std::string& filePath, float volume, bool isLoop);
 
-	/// <summary>
-	/// 更新処理
-	/// </summary>
+	/// @brief 更新処理
 	void Update();
 
-	/// <summary>
-	/// オーディオを流す
-	/// </summary>
+	/// @brief オーディオを流す
 	void PlayAudio();
 
-	/// <summary>
-	/// オーディオを止める
-	/// </summary>
+	/// @brief オーディオを止める
 	void StopAudio();
 
-	/// <summary>
-	/// ピッチを設定する
-	/// </summary>
+	/// @brief ピッチを設定する
+	/// @param pitch 
 	void SetPitch(float pitch);
 
-	/// <summary>
-	/// ボリュームを設定する
-	/// </summary>
-	/// <param name="volume"></param>
+	/// @brief ボリュームを設定する
+	/// @param volume 
 	void SetVolume(float volume);
 
-	/// <summary>
-	/// ループの設定
-	/// </summary>
-	/// <param name="isLoop"></param>
+	/// @brief ループの設定
+	/// @param isLoop 
 	void SetLoop(bool isLoop);
 
 

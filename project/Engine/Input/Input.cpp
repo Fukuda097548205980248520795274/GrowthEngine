@@ -63,9 +63,7 @@ void Engine::Input::Initialize(const WinApp* winApp, Log* log)
 	if (log)log->Logging("Create Mouse \n");
 }
 
-/// <summary>
-/// 全ての入力情報をコピーする
-/// </summary>
+/// @brief 全ての入力情報を取得する
 void Engine::Input::CheckInputInfo()
 {
 	/*--------------
@@ -115,9 +113,7 @@ void Engine::Input::CheckInputInfo()
 	}
 }
 
-/// <summary>
-/// 全ての入力情報をコピーする
-/// </summary>
+/// @brief 全ての入力情報をコピーする
 void Engine::Input::CopyInputInfo()
 {
 	memcpy(preKeys_, keys_, 256 * sizeof(BYTE));
@@ -126,15 +122,9 @@ void Engine::Input::CopyInputInfo()
 }
 
 
-
-
-
-
-
-/// <summary>
-/// キーの入力情報（Press）
-/// </summary>
-/// <param name="key"></param>
+/// @brief キーの入力情報（Press）
+/// @param key 
+/// @return 
 bool Engine::Input::GetKeyPress(BYTE key)
 {
 	if (keys_[key])
@@ -145,11 +135,9 @@ bool Engine::Input::GetKeyPress(BYTE key)
 	return false;
 }
 
-/// <summary>
-/// キーの入力情報（Trigger）
-/// </summary>
-/// <param name="key">キー</param>
-/// <returns></returns>
+/// @brief キーの入力情報（Trigger）
+/// @param key 
+/// @return 
 bool Engine::Input::GetKeyTrigger(BYTE key)
 {
 	if (!preKeys_[key] && keys_[key])
@@ -160,11 +148,9 @@ bool Engine::Input::GetKeyTrigger(BYTE key)
 	return false;
 }
 
-/// <summary>
-/// キーの入力情報（Release）
-/// </summary>
-/// <param name="key">キー</param>
-/// <returns></returns>
+/// @brief キーの入力情報（Release）
+/// @param key 
+/// @return 
 bool Engine::Input::GetKeyRelease(BYTE key)
 {
 	if (preKeys_[key] && !keys_[key])
@@ -176,10 +162,9 @@ bool Engine::Input::GetKeyRelease(BYTE key)
 }
 
 
-/// <summary>
-/// マウスボタンの入力情報（Press）
-/// </summary>
-/// <returns></returns>
+/// @brief マウスボタンの入力情報（Press）
+/// @param mouseButtonNumber 
+/// @return 
 bool Engine::Input::GetMousePress(uint32_t mouseButtonNumber)
 {
 	if (isPushButton_[mouseButtonNumber])
@@ -190,10 +175,9 @@ bool Engine::Input::GetMousePress(uint32_t mouseButtonNumber)
 	return false;
 }
 
-/// <summary>
-/// マウスボタンの入力情報（Trigger）
-/// </summary>
-/// <returns></returns>
+/// @brief マウスボタンの入力情報（Trigger）
+/// @param mouseButtonNumber 
+/// @return 
 bool Engine::Input::GetMouseTrigger(uint32_t mouseButtonNumber)
 {
 	if (!prevIsPushButton_[mouseButtonNumber] && isPushButton_[mouseButtonNumber])
@@ -204,10 +188,9 @@ bool Engine::Input::GetMouseTrigger(uint32_t mouseButtonNumber)
 	return false;
 }
 
-/// <summary>
-/// マウスボタンの入力情報（Release）
-/// </summary>
-/// <returns></returns>
+/// @brief マウスボタンの入力情報（Release）
+/// @param mouseButtonNumber 
+/// @return 
 bool Engine::Input::GetMouseRelease(uint32_t mouseButtonNumber)
 {
 	if (prevIsPushButton_[mouseButtonNumber] && !isPushButton_[mouseButtonNumber])
@@ -219,10 +202,8 @@ bool Engine::Input::GetMouseRelease(uint32_t mouseButtonNumber)
 }
 
 
-/// <summary>
-/// マウスホイールが上回転したかどうか
-/// </summary>
-/// <returns></returns>
+/// @brief マウスホイールが上開店したかどうか
+/// @return 
 bool Engine::Input::GetMouseWheelUp()
 {
 	if (static_cast<float>(mouseState_.lZ) > 0.0f)
@@ -233,10 +214,8 @@ bool Engine::Input::GetMouseWheelUp()
 	return false;
 }
 
-/// <summary>
-/// マウスホイールが下回転したかどうか
-/// </summary>
-/// <returns></returns>
+/// @brief マウスホイールが下回転したかどうか
+/// @return 
 bool Engine::Input::GetMouseWheelDown()
 {
 	if (static_cast<float>(mouseState_.lZ) < 0.0f)
@@ -248,11 +227,9 @@ bool Engine::Input::GetMouseWheelDown()
 }
 
 
-/// <summary>
-/// ゲームパッドが有効化を判断する
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <returns></returns>
+/// @brief ゲームパッドが有効かどうか
+/// @param gamepadNumber 
+/// @return 
 bool Engine::Input::IsGamepadEnable(DWORD gamepadNumber)
 {
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
@@ -263,12 +240,10 @@ bool Engine::Input::IsGamepadEnable(DWORD gamepadNumber)
 	return false;
 }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="controllerNumber"></param>
-/// <param name="wButtons"></param>
-/// <returns></returns>
+/// @brief ゲームパッドボタンの入力情報（Press）
+/// @param gamepadNumber 
+/// @param wButtons 
+/// @return 
 bool Engine::Input::GetGamepadButtonPress(DWORD gamepadNumber, DWORD wButtons)
 {
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
@@ -282,12 +257,10 @@ bool Engine::Input::GetGamepadButtonPress(DWORD gamepadNumber, DWORD wButtons)
 	return false;
 }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="controllerNumber"></param>
-/// <param name="wButtons"></param>
-/// <returns></returns>
+/// @brief ゲームパッドボタンの入力情報（Trigger）
+/// @param gamepadNumber 
+/// @param wButtons 
+/// @return 
 bool Engine::Input::GetGamepadButtonTrigger(DWORD gamepadNumber, DWORD wButtons)
 {
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
@@ -301,13 +274,10 @@ bool Engine::Input::GetGamepadButtonTrigger(DWORD gamepadNumber, DWORD wButtons)
 
 	return false;
 }
-
-/// <summary>
-/// 
-/// </summary>
-/// <param name="controllerNumber"></param>
-/// <param name="wButtons"></param>
-/// <returns></returns>
+/// @brief ゲームパッドボタンの入力情報（Release）
+/// @param gamepadNumber 
+/// @param wButtons 
+/// @return 
 bool Engine::Input::GetGamepadButtonRelease(DWORD gamepadNumber, DWORD wButtons)
 {
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
@@ -322,11 +292,9 @@ bool Engine::Input::GetGamepadButtonRelease(DWORD gamepadNumber, DWORD wButtons)
 	return false;
 }
 
-/// <summary>
-/// ゲームパッドのスティックの入力情報
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <returns></returns>
+/// @brief ゲームパッドの左スティックの入力情報
+/// @param gamepadNumber 
+/// @return 
 Vector2 Engine::Input::GetGamepadLeftStick(DWORD gamepadNumber)
 {
 	Vector2 thumbL = { 0.0f , 0.0f };
@@ -359,11 +327,9 @@ Vector2 Engine::Input::GetGamepadLeftStick(DWORD gamepadNumber)
 	return thumbL;
 }
 
-/// <summary>
-/// ゲームパッドの右スティックの入力情報
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <returns></returns>
+/// @brief ゲームパッドの右スティックの入力情報
+/// @param gamepadNumber 
+/// @return 
 Vector2 Engine::Input::GetGamepadRightStick(DWORD gamepadNumber)
 {
 	Vector2 thumbR = { 0.0f , 0.0f };
@@ -396,11 +362,9 @@ Vector2 Engine::Input::GetGamepadRightStick(DWORD gamepadNumber)
 	return thumbR;
 }
 
-/// <summary>
-/// ゲームパッドの左トリガーの入力情報
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <returns></returns>
+/// @brief ゲームパッドの左トリガーの入力情報
+/// @param gamepadNumber 
+/// @return 
 float Engine::Input::GetGamepadLeftTrigger(DWORD gamepadNumber)
 {
 	float triggerL = 0.0f;
@@ -413,11 +377,9 @@ float Engine::Input::GetGamepadLeftTrigger(DWORD gamepadNumber)
 	return triggerL;
 }
 
-/// <summary>
-/// ゲームパッドの右トリガーの入力情報
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <returns></returns>
+/// @brief ゲームパッドの右トリガーの入力情報
+/// @param gamepadNumber 
+/// @return 
 float Engine::Input::GetGamepadRightTrigger(DWORD gamepadNumber)
 {
 	float triggerR = 0.0f;
@@ -431,12 +393,10 @@ float Engine::Input::GetGamepadRightTrigger(DWORD gamepadNumber)
 }
 
 
-/// <summary>
-/// ゲームパッドを振動させる
-/// </summary>
-/// <param name="gamepadNumber"></param>
-/// <param name="leftMotorPower"></param>
-/// <param name="rightMotorPower"></param>
+/// @brief ゲームパッドを振動させる
+/// @param gamepadNumber 
+/// @param leftMotorPower 
+/// @param rightMotorPower 
 void Engine::Input::GamepadVibration(DWORD gamepadNumber, float leftMotorPower, float rightMotorPower)
 {
 	leftMotorPower = std::clamp(leftMotorPower, 0.0f, 1.0f);
