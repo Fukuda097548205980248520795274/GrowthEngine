@@ -173,6 +173,7 @@
     <ClCompile Include="Engine\RenderContext\ImGuiRender\ImGuiRender.cpp" />
     <ClCompile Include="Engine\RenderContext\RenderContext.cpp" />
     <ClCompile Include="Engine\Resource\DepthResource\DepthResource.cpp" />
+    <ClCompile Include="Engine\Resource\IndexResource\IndexResource.cpp" />
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp" />
     <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
+    <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
