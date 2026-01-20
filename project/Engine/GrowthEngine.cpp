@@ -95,11 +95,33 @@ GrowthEngine::~GrowthEngine()
 /// @brief 描画前処理
 void GrowthEngine::PreDraw() 
 {
+	// 描画前処理
 	renderContext_->PreDraw();
 
-	
+	// メニューバー
+#ifdef _DEVELOPMENT
+	MenuBer();
+#endif
+}
+
+/// @brief 描画後処理
+void GrowthEngine::PostDraw()
+{
+	// 描画後処理
+	renderContext_->PostDraw();
+}
+
+
+// メニューバーの生成
+#ifdef _DEVELOPMENT
+
+/// @brief メニューバー
+void GrowthEngine::MenuBer()
+{
+	// メニューバー
 	if (ImGui::BeginMainMenuBar())
 	{
+		// ファイル
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("New")) { /* ... */ }
@@ -107,6 +129,15 @@ void GrowthEngine::PreDraw()
 			ImGui::EndMenu();
 		}
 
+		// 生成
+		if (ImGui::BeginMenu("Create"))
+		{
+			// シーン
+			if (ImGui::MenuItem("Scene")) { isSceneCreate_ = true; }
+			ImGui::EndMenu();
+		}
+
+		// ヘルプ
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("About")) { /* ... */ }
@@ -116,25 +147,17 @@ void GrowthEngine::PreDraw()
 		ImGui::EndMainMenuBar();
 	}
 
-
-
-	// シーン追加
-	AddScene();
+	// シーン生成
+	CreateScene();
 }
-
-/// @brief 描画後処理
-void GrowthEngine::PostDraw()
-{
-	renderContext_->PostDraw();
-}
-
-
 
 /// @brief シーン追加
-void GrowthEngine::AddScene()
+void GrowthEngine::CreateScene()
 {
 	// シーン追加操作
-#ifdef _DEVELOPMENT
+
+	// 生成時のみ
+	if (isSceneCreate_ == false)return;
 
 	// 追加するかどうか
 	static bool isAdd = false;
@@ -142,16 +165,11 @@ void GrowthEngine::AddScene()
 	// シーン名
 	static char sceneName[24] = "";
 
-	ImGui::Begin("Scene");
-
 	// 追加ボタン
-	if (ImGui::Button("Add Scene"))
-	{
-		ImGui::OpenPopup("Add Scene Option");
-	}
+	ImGui::OpenPopup("Scene Create");
 
 	// モーダルウィンドウ
-	if (ImGui::BeginPopupModal("Add Scene Option", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginPopupModal("Scene Create", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		// シーン名入力
 		ImGui::InputText("scene Name : ", sceneName, IM_ARRAYSIZE(sceneName));
@@ -171,6 +189,7 @@ void GrowthEngine::AddScene()
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
 			isAdd = true;
+			isSceneCreate_ = false;
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -186,13 +205,12 @@ void GrowthEngine::AddScene()
 		// キャンセル
 		if (ImGui::Button("Cancel", ImVec2(120, 0)))
 		{
+			isSceneCreate_ = false;
 			ImGui::CloseCurrentPopup();
 		}
 
 		ImGui::EndPopup();
 	}
-
-	ImGui::End();
 
 	// 追加処理
 	if (isAdd)
@@ -206,7 +224,6 @@ void GrowthEngine::AddScene()
 	}
 
 
-#endif
 }
 
 
@@ -262,3 +279,5 @@ void GrowthEngine::CreateSceneFile(const std::string& className)
 	}
 
 }
+
+#endif

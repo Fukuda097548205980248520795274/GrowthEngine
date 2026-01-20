@@ -85,11 +85,23 @@ private:
 
 private:
 
+
+#ifdef _DEVELOPMENT
+
+	/// @brief メニューバー
+	void MenuBer();
+
 	/// @brief シーン追加
-	void AddScene();
+	void CreateScene();
 
 	/// @brief シーンファイルを作成する
 	/// @param fileName 
 	void CreateSceneFile(const std::string& fileName);
+
+
+	// シーン生成フラグ
+	bool isSceneCreate_ = false;
+
+#endif
 };
 
