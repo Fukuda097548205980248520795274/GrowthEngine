@@ -184,6 +184,15 @@
     <Filter Include="Engine\Include\Application\AudioObject">
       <UniqueIdentifier>{b1fede05-3cae-4912-8f69-edb5b3d2d7ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Skinning">
+      <UniqueIdentifier>{88f2bace-352c-425f-a40c-860d7e1bbb41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO">
+      <UniqueIdentifier>{5fd6ac47-8fa6-4ce5-9da6-c20846bc8c84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOSkinning">
+      <UniqueIdentifier>{41d53366-bbcb-44b2-bfec-35e3ab604f90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -299,6 +308,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp">
       <Filter>Engine\Include\Application\AudioObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\BaseComputePSO.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOSkinning</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +443,12 @@
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h">
       <Filter>Engine\Include\Application\AudioObject</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h">
+      <Filter>Engine\Include\PSO\ComputePSO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOSkinning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Fullscreen\Fullscreen.hlsli">
@@ -440,6 +461,9 @@
     </FxCompile>
     <FxCompile Include="Resources\Shader\PostEffect\CopyImage.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Skinning\Skinning.CS.hlsl">
+      <Filter>Engine\Shader\Skinning</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
