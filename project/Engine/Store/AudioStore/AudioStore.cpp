@@ -63,7 +63,7 @@ void Engine::AudioStore::Initialize(Log* log)
 /// @brief ファイルを読む
 /// @param filePath 
 /// @return 
-SoundHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
+AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 {
 	// 同じファイルパスを見つけたら、そのハンドルを返す
 	for (std::unique_ptr<AudioData>& data : audioData_)
@@ -103,7 +103,7 @@ SoundHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 	audioDatum->filePath = filePath;
 
 	// サウンドハンドルを取得する
-	SoundHandle soundHandle;
+	AudioHandle soundHandle;
 	soundHandle = static_cast<uint32_t>(audioData_.size());
 	audioDatum->handle = soundHandle;
 
@@ -154,7 +154,7 @@ SoundHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 /// <param name="soundHandle"></param>
 /// <param name="volume"></param>
 /// <returns></returns>
-PlayHandle Engine::AudioStore::PlayAudio(SoundHandle handle, float volume)
+PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 {
 	// プレイデータを生成する
 	std::unique_ptr<PlayData> playDatum = std::make_unique<PlayData>();

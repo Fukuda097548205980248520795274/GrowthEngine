@@ -46,7 +46,37 @@ public:
 	/// @brief テクスチャを読み込む
 	/// @param filePath 
 	/// @return 
-	TextureHandle LoadTexture(const std::string& filePath) {return renderContext_->LoadTexture(filePath, log_.get()); }
+	TextureHandle LoadTexture(const std::string& filePath) const {return renderContext_->LoadTexture(filePath, log_.get()); }
+
+	/// @brief オーディオを読み込む
+	/// @param filePath 
+	/// @return 
+	AudioHandle LoadAudio(const std::string& filePath) const { return audioStore_->Load(filePath, log_.get()); }
+
+	/// @brief オーディオを再生する
+	/// @param ah 
+	/// @param volume 
+	/// @return 
+	PlayHandle PlayAudio(AudioHandle ah , float volume)const { return audioStore_->PlayAudio(ah , volume); }
+
+	/// @brief オーディオを停止する
+	/// @param ph 
+	void StopAudio(PlayHandle ph)const { audioStore_->StopAudio(ph); }
+
+	/// @brief オーディオが再生されているかどうか
+	/// @param ph 
+	/// @return 
+	bool IsPlayAudio(PlayHandle ph)const { return audioStore_->IsAudioPlay(ph); }
+
+	/// @brief ボリュームの設定
+	/// @param ph 
+	/// @param volume 
+	void SetVolume(PlayHandle ph, float volume)const { audioStore_->SetVolume(ph, volume); }
+
+	/// @brief ピッチの設定
+	/// @param ph 
+	/// @param pitch 
+	void SetPitch(PlayHandle ph, float pitch)const { return audioStore_->SetPitch(ph, pitch); }
 
 
 public:

@@ -34,7 +34,7 @@ namespace Engine
 		std::vector<BYTE> mediaData;
 
 		// サウンドハンドル
-		SoundHandle handle;
+		AudioHandle handle;
 	};
 
 	// プレイデータ
@@ -63,13 +63,13 @@ namespace Engine
 		/// @brief ファイルを読む
 		/// @param filePath 
 		/// @return 
-		SoundHandle Load(const std::string& filePath, Log* log);
+		AudioHandle Load(const std::string& filePath, Log* log);
 
 		/// @brief 音声を流す
 		/// @param handle 
 		/// @param volume 
 		/// @return 
-		PlayHandle PlayAudio(SoundHandle handle, float volume);
+		PlayHandle PlayAudio(AudioHandle handle, float volume);
 
 		/// @brief 音声を停止する
 		/// @param handle 

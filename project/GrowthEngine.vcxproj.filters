@@ -181,6 +181,9 @@
     <Filter Include="Engine\Include\Func\RandomFunc">
       <UniqueIdentifier>{2d5e846d-c381-4c08-9eaa-f1fdf2b301ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\AudioObject">
+      <UniqueIdentifier>{b1fede05-3cae-4912-8f69-edb5b3d2d7ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -293,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\AudioStore\AudioStore.cpp">
       <Filter>Engine\Include\Store\AudioStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp">
+      <Filter>Engine\Include\Application\AudioObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Func\RandomFunc\RandomFunc.h">
       <Filter>Engine\Include\Func\RandomFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\AudioObject\AudioObject.h">
+      <Filter>Engine\Include\Application\AudioObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

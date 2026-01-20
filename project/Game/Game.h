@@ -1,6 +1,8 @@
 #pragma once
 #include "GrowthEngine.h"
 
+#include "Application/AudioObject/AudioObject.h"
+
 class Game : public Framework
 {
 public:
@@ -20,5 +22,10 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
+
+
+private:
+
+	std::unique_ptr<AudioObject> object_ = nullptr;
 };
 

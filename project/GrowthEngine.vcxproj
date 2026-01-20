@@ -146,6 +146,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp" />
     <ClCompile Include="Engine\Application\Framework\Framework.cpp" />
     <ClCompile Include="Engine\Application\Camera\Camera3D.cpp" />
     <ClCompile Include="Engine\Application\Scene\Scene.cpp" />
@@ -188,6 +189,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
     <ClInclude Include="Engine\Application\Camera\Camera3D.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
