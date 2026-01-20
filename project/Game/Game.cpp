@@ -3,7 +3,7 @@
 /// @brief 初期化
 void Game::Initialize()
 {
-
+	GrowthEngine::GetInstance()->LoadTexture("./Resources/Textures/white2x2.png");
 }
 
 /// @brief 更新処理

@@ -41,6 +41,11 @@ public:
 	/// @brief 描画後処理
 	void PostDraw();
 
+	/// @brief テクスチャを読み込む
+	/// @param filePath 
+	/// @return 
+	TextureHandle LoadTexture(const std::string& filePath) {return renderContext_->LoadTexture(filePath, log_.get()); }
+
 
 public:
 

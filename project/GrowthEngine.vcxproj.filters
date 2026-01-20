@@ -160,6 +160,15 @@
     <Filter Include="Engine\Include\Application\Scene">
       <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Handle">
+      <UniqueIdentifier>{8d8048e8-594f-4a10-aa6c-4de57edcf1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store">
+      <UniqueIdentifier>{cbafcb67-723c-4a87-b94b-18f6bdbb3baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\TextureStore">
+      <UniqueIdentifier>{42441166-4c82-4f35-9d1b-56d62a18374c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -260,6 +269,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Scene\Scene.cpp">
       <Filter>Engine\Include\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp">
+      <Filter>Engine\Include\Store\TextureStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +379,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Scene\Scene.h">
       <Filter>Engine\Include\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Handle\Handle.h">
+      <Filter>Engine\Include\Handle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\TextureStore\TextureStore.h">
+      <Filter>Engine\Include\Store\TextureStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

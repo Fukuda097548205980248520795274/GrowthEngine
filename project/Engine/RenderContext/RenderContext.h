@@ -10,6 +10,8 @@
 #include "ImGuiRender/ImGuiRender.h"
 #include <memory>
 
+#include "Store/TextureStore/TextureStore.h"
+
 namespace Engine
 {
 	class Log;
@@ -27,6 +29,11 @@ namespace Engine
 
 		/// @brief 描画後処理
 		void PostDraw();
+
+		/// @brief テクスチャを読み込む
+		/// @param filePath 
+		/// @param log 
+		TextureHandle LoadTexture(const std::string& filePath, Log* log) { return textureStore_->Load(filePath, heap_.get(), core_->GetDevice(), command_->GetCommandList(), log); }
 
 
 	private:
@@ -56,6 +63,12 @@ namespace Engine
 
 		// DX12Offscreen
 		std::unique_ptr<DX12Offscreen> offscreen_ = nullptr;
+
+
+	private:
+
+		// テクスチャストア
+		std::unique_ptr<TextureStore> textureStore_ = nullptr;
 
 
 	private:

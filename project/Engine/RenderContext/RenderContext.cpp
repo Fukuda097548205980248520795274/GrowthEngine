@@ -52,6 +52,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	offscreen_ = std::make_unique<DX12Offscreen>();
 	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
 
+	// テクスチャストアの生成
+	textureStore_ = std::make_unique<TextureStore>();
+
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp->GetClientWidth());

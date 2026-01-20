@@ -175,6 +175,7 @@
     <ClCompile Include="Engine\Resource\DepthResource\DepthResource.cpp" />
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp" />
+    <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp" />
     <ClCompile Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.cpp" />
     <ClCompile Include="Game\Game.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Engine\Func\TextureFunc\TextureFunc.h" />
     <ClInclude Include="Engine\GrowthEngine.h" />
     <ClInclude Include="Engine\Func\ConvertString\ConvertString.h" />
+    <ClInclude Include="Engine\Handle\Handle.h" />
     <ClInclude Include="Engine\Log\Log.h" />
     <ClInclude Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.h" />
     <ClInclude Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.h" />
@@ -216,6 +218,7 @@
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
+    <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
