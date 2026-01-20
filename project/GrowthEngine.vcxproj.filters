@@ -172,6 +172,15 @@
     <Filter Include="Engine\Include\Resource\IndexResource">
       <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Input">
+      <UniqueIdentifier>{4b7da7d8-9a89-476e-83bb-74f9a04be64f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\AudioStore">
+      <UniqueIdentifier>{bad58b82-aea1-4ac7-ba72-606674d54735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Func\RandomFunc">
+      <UniqueIdentifier>{2d5e846d-c381-4c08-9eaa-f1fdf2b301ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -278,6 +287,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\IndexResource\IndexResource.cpp">
       <Filter>Engine\Include\Resource\IndexResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Input\Input.cpp">
+      <Filter>Engine\Include\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\AudioStore\AudioStore.cpp">
+      <Filter>Engine\Include\Store\AudioStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +409,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h">
       <Filter>Engine\Include\Resource\IndexResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Input\Input.h">
+      <Filter>Engine\Include\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\AudioStore\AudioStore.h">
+      <Filter>Engine\Include\Store\AudioStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\RandomFunc\RandomFunc.h">
+      <Filter>Engine\Include\Func\RandomFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

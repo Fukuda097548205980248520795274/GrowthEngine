@@ -7,6 +7,8 @@
 
 #include "Log/Log.h"
 #include "WinApp/WinApp.h"
+#include "Input/Input.h"
+#include "Store/AudioStore/AudioStore.h"
 #include "RenderContext/RenderContext.h"
 
 #include "Math/Vector/Vector3/Vector3.h"
@@ -83,6 +85,12 @@ private:
 
 	// ウィンドウアプリケーション
 	std::unique_ptr<Engine::WinApp> winApp_ = nullptr;
+
+	// 入力
+	std::unique_ptr<Engine::Input> input_ = nullptr;
+
+	// オーディオストア
+	std::unique_ptr<Engine::AudioStore> audioStore_ = nullptr;
 
 	// 描画統括
 	std::unique_ptr<Engine::RenderContext> renderContext_ = nullptr;

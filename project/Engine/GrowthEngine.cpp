@@ -10,6 +10,13 @@
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "xinput.lib")
+#pragma comment(lib, "Mf.lib")
+#pragma comment(lib, "mfplat.lib")
+#pragma comment(lib, "Mfreadwrite.lib")
+#pragma comment(lib, "mfuuid.lib")
+#pragma comment(lib, "xaudio2.lib")
 
 // インスタンス
 std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
@@ -59,6 +66,14 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	winApp_ = std::make_unique<Engine::WinApp>();
 	winApp_->Initialize(screenWidth, screenHeight, title , log_.get());
 
+	// 入力の生成と初期化
+	input_ = std::make_unique<Engine::Input>();
+	input_->Initialize(winApp_.get(), log_.get());
+
+	// オーディオストアの生成と初期化
+	audioStore_ = std::make_unique<Engine::AudioStore>();
+	audioStore_->Initialize(log_.get());
+
 	// 描画統括の生成と初期化
 	renderContext_ = std::make_unique<Engine::RenderContext>();
 	renderContext_->Initialize(winApp_.get(), log_.get());
@@ -71,6 +86,16 @@ GrowthEngine::~GrowthEngine()
 	renderContext_.reset();
 	renderContext_ = nullptr;
 	if (log_)log_->Logging("RenderContext released \n");
+
+	// オーディオストアの終了
+	audioStore_.reset();
+	audioStore_ = nullptr;
+	if (log_)log_->Logging("AudioStore released \n");
+
+	// 入力の終了
+	input_.reset();
+	input_ = nullptr;
+	if (log_)log_->Logging("Input released \n");
 
 	// ウィンドウアプリケーションの終了
 	winApp_.reset();
@@ -95,6 +120,12 @@ GrowthEngine::~GrowthEngine()
 /// @brief 描画前処理
 void GrowthEngine::PreDraw() 
 {
+	// 全ての入力情報を取得する
+	input_->CheckInputInfo();
+
+	// 流れていない音楽を削除する
+	audioStore_->DeletePlayAudio();
+
 	// 描画前処理
 	renderContext_->PreDraw();
 
@@ -109,6 +140,9 @@ void GrowthEngine::PostDraw()
 {
 	// 描画後処理
 	renderContext_->PostDraw();
+
+	// 全ての入力情報をコピーする
+	input_->CopyInputInfo();
 }
 
 
