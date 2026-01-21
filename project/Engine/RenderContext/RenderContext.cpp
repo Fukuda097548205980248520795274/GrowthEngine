@@ -162,9 +162,6 @@ void Engine::RenderContext::PostDraw()
 	// フェンスの値を確認してGPUを待つ
 	fence_->WaitGPU();
 
-	// サブリソース解放
-	textureStore_->ReleaseSubResource();
-
 	// 次のフレーム用のコマンドリストを準備
 	hr = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr));

@@ -46,8 +46,7 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	textureData->resource = CreateTextureResource(device, metadata,log);
 
 	// 中間リソースを取得する
-	Microsoft::WRL::ComPtr<ID3D12Resource> subResource = UploadTextureData(textureData->resource.Get(), textureData->mipImages, device, commandList , log);
-	subResources_.push_back(subResource);
+	textureData->subResource = UploadTextureData(textureData->resource.Get(), textureData->mipImages, device, commandList , log);
 
 	// SRVを設定する
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -107,19 +106,6 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	dataTable_.push_back(std::move(textureData));
 
 	return handle;
-}
-
-/// @brief 中間リソースを解放する
-void Engine::TextureStore::ReleaseSubResource()
-{
-	// 解放
-	for (auto& subResource : subResources_)
-	{
-		subResource->Release();
-	}
-
-	// リストをクリア
-	subResources_.clear();
 }
 
 /// @brief テクスチャのハッシュ値を計算する
