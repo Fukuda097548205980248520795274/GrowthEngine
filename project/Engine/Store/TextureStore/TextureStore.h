@@ -21,9 +21,6 @@ namespace Engine
 			// テクスチャリソース
 			Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 
-			// 中間リソース
-			Microsoft::WRL::ComPtr<ID3D12Resource> subResource = nullptr;
-
 			// ミップイメージ
 			DirectX::ScratchImage mipImages{};
 
@@ -45,6 +42,9 @@ namespace Engine
 		/// @param commandList 
 		/// @param log 
 		TextureHandle Load(const std::string& filePath, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log);
+
+		/// @brief 中間リソースを解放する
+		void ReleaseSubResource();
 
 		/// @brief SRV用GPUハンドルを取得する
 		/// @param handle 
@@ -75,5 +75,8 @@ namespace Engine
 		
 		// データテーブル
 		std::vector<std::unique_ptr<TextureData>> dataTable_;
+
+		// 中間リソースリスト
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> subResources_;
 	};
 }
