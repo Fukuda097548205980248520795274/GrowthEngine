@@ -53,6 +53,13 @@ public:
 	/// @return 
 	AudioHandle LoadAudio(const std::string& filePath) const { return audioStore_->Load(filePath, log_.get()); }
 
+	/// @brief モデルを読み込む
+	/// @param directory 
+	/// @param fileName 
+	/// @return 
+	ModelHandle LoadModel(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadModel(directory, fileName, log_.get()); }
+
+
 	/// @brief オーディオを再生する
 	/// @param ah 
 	/// @param volume 

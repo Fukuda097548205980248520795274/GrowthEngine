@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "Store/TextureStore/TextureStore.h"
+#include "Store/ModelStore/ModelStore.h"
 
 namespace Engine
 {
@@ -34,6 +35,13 @@ namespace Engine
 		/// @param filePath 
 		/// @param log 
 		TextureHandle LoadTexture(const std::string& filePath, Log* log) { return textureStore_->Load(filePath, heap_.get(), core_->GetDevice(), command_->GetCommandList(), log); }
+
+		/// @brief モデルを読み込む
+		/// @param directory 
+		/// @param fileName 
+		/// @param log 
+		/// @return 
+		ModelHandle LoadModel(const std::string& directory, const std::string& fileName, Log* log) { return modelStore_->Load(directory, fileName, core_->GetDevice(), log); }
 
 
 	private:
@@ -69,6 +77,9 @@ namespace Engine
 
 		// テクスチャストア
 		std::unique_ptr<TextureStore> textureStore_ = nullptr;
+
+		// モデルストア
+		std::unique_ptr<ModelStore> modelStore_ = nullptr;
 
 
 	private:

@@ -12,3 +12,9 @@ using AudioHandle = uint32_t;
 
 // プレイハンドル
 using PlayHandle = uint32_t;
+
+// スケルトンハンドル
+using SkeletonHandle = uint32_t;
+
+// アニメーションハンドル
+using AnimationHandle = uint32_t;

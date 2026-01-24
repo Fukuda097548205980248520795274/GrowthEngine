@@ -10,17 +10,11 @@
 namespace Engine
 {
 
-	/// @brief ジオメトリを読み込む
-	/// @param modelData 
+	/// @brief モデルを読み込む
 	/// @param directory 
 	/// @param fileName 
-	void LoadGeometry(ModelData& modelData, const std::string& directory, const std::string& fileName);
-
-	/// @brief マテリアルを読み込む
-	/// @param modelData 
-	/// @param directory 
-	/// @param fileName 
-	void LoadMaterial(ModelData& modelData, const std::string& directory, const std::string& fileName);
+	/// @return 
+	ModelData LoadModel(const std::string& directory, const std::string& fileName);
 
 	/// @brief ノードを読み込む
 	/// @param modelData 

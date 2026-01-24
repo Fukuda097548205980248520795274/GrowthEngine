@@ -4,11 +4,11 @@
 #include <list>
 
 
-/// @brief ジオメトリを読み込む
-/// @param modelData 
+/// @brief モデルを読み込む
 /// @param directory 
 /// @param fileName 
-void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, const std::string& fileName)
+/// @return 
+Engine::ModelData Engine::LoadModel(const std::string& directory, const std::string& fileName)
 {
 	// assimpでファイルを開く
 	Assimp::Importer importer;
@@ -26,20 +26,23 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 	Vector3 normal = Vector3(0.0f, 0.0f, 0.0f);
 	Vector2 texcoord = Vector2(0.0f, 0.0f);
 
-	// メッシュ数が決まっていなかったら確保する
-	if (modelData.meshes.empty())
-	{
-		modelData.meshes.resize(scene->mNumMeshes);
-	}
+	// モデルデータ
+	ModelData modelData;
+
+	// メッシュの数を確保する
+	modelData.meshes.resize(scene->mNumMeshes);
 
 	// メッシュ
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
 	{
+		// メッシュのデータ
+		aiMesh* mesh = scene->mMeshes[meshIndex];
+
 		// メッシュデータ
 		MeshData meshData;
 
-		// メッシュのデータ
-		aiMesh* mesh = scene->mMeshes[meshIndex];
+		// 頂点の数を確保する
+		meshData.vertices.resize(static_cast<size_t>(mesh->mNumVertices));
 
 
 		// 法線がないメッシュは非対応
@@ -53,12 +56,12 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 		std::string meshName = mesh->mName.C_Str();
 
 		// 頂点データを登録する
-		for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
+		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex)
 		{
 			// 頂点データを取得する
-			aiVector3D& position = mesh->mVertices[i];
-			aiVector3D& normal = mesh->mNormals[i];
-			aiVector3D& texcoord = mesh->mTextureCoords[0][i];
+			aiVector3D& position = mesh->mVertices[vertexIndex];
+			aiVector3D& normal = mesh->mNormals[vertexIndex];
+			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
 			// 値を取得する
 			ModelVertexData vertex;
@@ -71,7 +74,7 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 			vertex.normal.x *= -1.0f;
 
 			// データに登録
-			meshData.vertices.push_back(vertex);
+			meshData.vertices[vertexIndex] = vertex;
 		}
 
 		// インデックスデータを登録する
@@ -90,70 +93,24 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 			}
 		}
 
-		// 登録する
-		modelData.meshes[meshIndex] = meshData;
-		modelData.meshIndices[meshName] = meshIndex;
-	}
-}
-
-/// @brief マテリアルを読み込む
-/// @param modelData 
-/// @param directory 
-/// @param fileName 
-void Engine::LoadMaterial(ModelData& modelData, const std::string& directory, const std::string& fileName)
-{
-	// assimpでファイルを開く
-	Assimp::Importer importer;
-	std::string filePath = directory + "/" + fileName;
-
-	// シーンのデータ
-	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices |
-		aiProcess_RemoveRedundantMaterials | aiProcess_CalcTangentSpace);
-
-	// メッシュがないのは対応しない
-	assert(scene->HasMeshes());
-
-	// メッシュ数が決まっていなかったら確保する
-	if (modelData.meshes.empty())
-	{
-		modelData.meshes.resize(scene->mNumMeshes);
-	}
-
-	// メッシュ
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
-	{
-		// メッシュデータ
-		MeshData meshData;
-
-		// メッシュのデータ
-		aiMesh* mesh = scene->mMeshes[meshIndex];
-
-		// 法線がないメッシュは非対応
-		assert(mesh->HasNormals());
-
-		// UV座標がないのは非対応
-		assert(mesh->HasTextureCoords(0));
-
-
-		// マテリアルインデックス
-		uint32_t materialIndex = mesh->mMaterialIndex;
 
 		// マテリアルデータ
-		aiMaterial* material = scene->mMaterials[materialIndex];
-
-		// ファイルパス
-		std::string filePath = "";
+		aiMaterial* material = scene->mMaterials[meshIndex];
 
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0)
 		{
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			filePath = directory + "/" + textureFilePath.C_Str();
+			meshData.material.filePath = directory + "/" + textureFilePath.C_Str();
 		}
 
-		// ファイルパスを渡す
-		modelData.meshes[meshIndex].material.filePath = filePath;
+
+		// 登録する
+		modelData.meshes[meshIndex] = meshData;
+		modelData.meshIndices[meshName] = meshIndex;
 	}
+
+	return modelData;
 }
 
 /// @brief ノードの読み込み

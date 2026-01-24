@@ -55,6 +55,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// テクスチャストアの生成
 	textureStore_ = std::make_unique<TextureStore>();
 
+	// モデルストアの生成
+	modelStore_ = std::make_unique<ModelStore>();
+
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp->GetClientWidth());
