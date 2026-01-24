@@ -193,11 +193,20 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOSkinning">
       <UniqueIdentifier>{41d53366-bbcb-44b2-bfec-35e3ab604f90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Data\BoneData">
-      <UniqueIdentifier>{62c69e80-3e91-439e-8d58-17a1bbee1b62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Data\AnimationData">
       <UniqueIdentifier>{5d8e7282-6ed3-42ff-8ce5-69b38eca8542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\SkeletonData">
+      <UniqueIdentifier>{62c69e80-3e91-439e-8d58-17a1bbee1b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ModelStore">
+      <UniqueIdentifier>{53409d2f-1aa8-41f0-b8ea-b9932f325212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\AnimationStore">
+      <UniqueIdentifier>{25a47b71-f79e-4365-88fc-92cade5491ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SkeletonStore">
+      <UniqueIdentifier>{c9901146-24d7-41c6-b802-1a69cacfc4a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -320,6 +329,15 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOSkinning</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ModelStore\ModelStore.cpp">
+      <Filter>Engine\Include\Store\ModelStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\AnimationStore\AnimationStore.cpp">
+      <Filter>Engine\Include\Store\AnimationStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SkeletonStore\SkeletonStore.cpp">
+      <Filter>Engine\Include\Store\SkeletonStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,11 +473,20 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOSkinning</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Data\BoneData\BoneData.h">
-      <Filter>Engine\Include\Data\BoneData</Filter>
+    <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h">
+      <Filter>Engine\Include\Data\SkeletonData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h">
       <Filter>Engine\Include\Data\AnimationData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\ModelStore\ModelStore.h">
+      <Filter>Engine\Include\Store\ModelStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h">
+      <Filter>Engine\Include\Store\AnimationStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h">
+      <Filter>Engine\Include\Store\SkeletonStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

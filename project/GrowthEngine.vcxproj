@@ -282,7 +282,19 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\AnimationStore\AnimationStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\AudioStore\AudioStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ModelStore\ModelStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SkeletonStore\SkeletonStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -313,7 +325,7 @@
     <ClInclude Include="Engine\Application\Camera\Camera3D.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
-    <ClInclude Include="Engine\Data\BoneData\BoneData.h" />
+    <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
@@ -349,7 +361,10 @@
     <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
+    <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />
     <ClInclude Include="Engine\Store\AudioStore\AudioStore.h" />
+    <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
+    <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />

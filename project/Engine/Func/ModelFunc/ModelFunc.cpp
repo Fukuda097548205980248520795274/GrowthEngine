@@ -30,7 +30,6 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 	if (modelData.meshes.empty())
 	{
 		modelData.meshes.resize(scene->mNumMeshes);
-		modelData.meshNames.resize(scene->mNumMeshes);
 	}
 
 	// メッシュ
@@ -52,9 +51,6 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 
 		// メッシュの名前を取得する
 		std::string meshName = mesh->mName.C_Str();
-
-		// メッシュの番号を取得する
-		meshData.number = meshIndex;
 
 		// 頂点データを登録する
 		for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
@@ -96,7 +92,7 @@ void Engine::LoadGeometry(ModelData& modelData, const std::string& directory, co
 
 		// 登録する
 		modelData.meshes[meshIndex] = meshData;
-		modelData.meshNames[meshIndex] = meshName;
+		modelData.meshIndices[meshName] = meshIndex;
 	}
 }
 

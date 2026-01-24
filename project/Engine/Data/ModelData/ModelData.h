@@ -6,6 +6,7 @@
 #include <array>
 #include <d3d12.h>
 #include <dxgi1_6.h>
+#include <unordered_map>
 #include <wrl.h>
 #include <span>
 
@@ -163,7 +164,7 @@ namespace Engine
 		std::vector<MeshData> meshes;
 
 		// メッシュインデックス
-		std::vector<std::string> meshIndices;
+		std::unordered_map<std::string, int32_t> meshIndices;
 
 		// ノード
 		std::vector<ModelNode> nodes;
