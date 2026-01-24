@@ -21,7 +21,7 @@ namespace Engine
 			// テクスチャリソース
 			Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 
-			// 中間リソース
+			/// @brief 中間リソース
 			Microsoft::WRL::ComPtr<ID3D12Resource> subResource = nullptr;
 
 			// ミップイメージ
