@@ -104,6 +104,9 @@ void Engine::RenderContext::PreDraw()
 	// Dockスペースを作成する
 	imguiRender_->CreateDockSpace();
 	ImGui::ShowDemoWindow();
+
+	// テクスチャストアのUI
+	textureStore_->DrawUI();
 #endif 
 }
 

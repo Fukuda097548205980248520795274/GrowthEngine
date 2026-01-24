@@ -32,6 +32,9 @@ namespace Engine
 
 			// ハンドル
 			TextureHandle handle{};
+
+			// 名前
+			std::string name{};
 		};
 
 
@@ -61,6 +64,9 @@ namespace Engine
 		/// @return 
 		size_t GetTextureHeight(TextureHandle handle)const { return dataTable_[handle]->mipImages.GetMetadata().height; }
 
+		/// @brief UIを描画する
+		void DrawUI();
+
 
 	private:
 
@@ -75,5 +81,8 @@ namespace Engine
 		
 		// データテーブル
 		std::vector<std::unique_ptr<TextureData>> dataTable_;
+
+		// テクスチャ数
+		int numTexture_ = 0;
 	};
 }

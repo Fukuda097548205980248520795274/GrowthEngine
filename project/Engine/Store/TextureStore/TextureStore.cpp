@@ -4,6 +4,10 @@
 #include "Log//Log.h"
 #include <format>
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief 読み込み
 /// @param filePath 
 /// @param heap 
@@ -21,6 +25,9 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	// テクスチャデータ
 	std::unique_ptr<TextureData> textureData = nullptr;
 	textureData = std::make_unique<TextureData>();
+
+	// 名前
+	textureData->name = filePath;
 
 	// ミップイメージを取得する
 	textureData->mipImages = LoadTextureGetMipImages(filePath,log);
@@ -120,4 +127,67 @@ size_t Engine::TextureStore::CalculateTextureHash(const DirectX::Image& image)
 		hash = (hash * 31) + data[i];
 	}
 	return hash;
+}
+
+
+/// @brief UIを描画する
+void Engine::TextureStore::DrawUI()
+{
+	static int selected = -1;
+
+	const int thumbSize = 32;
+	const int padding = 8;
+	const int columns = 4;
+
+	int count = 0;
+
+	ImGui::Begin("Texture");
+
+	for (int i = 0; i < dataTable_.size(); i++)
+	{
+		const auto& tex = dataTable_[i];
+
+		ImGui::PushID(i);
+
+		bool clicked = ImGui::ImageButton(
+			tex->name.c_str(),
+			tex->srvHandle.second.ptr,
+			ImVec2((float)thumbSize, (float)thumbSize),
+			ImVec2(0, 0),
+			ImVec2(1, 1),
+			ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
+			ImVec4(1, 1, 1, 1)
+		);
+
+		if (clicked)
+		{
+			selected = i;
+		}
+
+		// --- ここからドラッグ元処理 ---
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+		{
+			// ペイロードとして index を渡す
+			ImGui::SetDragDropPayload("TEXTURE_ID", &i, sizeof(int));
+
+			// ドラッグ中に表示されるプレビュー
+			ImGui::Image(
+				tex->srvHandle.second.ptr,
+				ImVec2((float)thumbSize, (float)thumbSize)
+			);
+			ImGui::TextUnformatted(tex->name.c_str());
+
+			ImGui::EndDragDropSource();
+		}
+		// --- ここまで ---
+
+		ImGui::PopID();
+
+		count++;
+		if (count % columns != 0)
+			ImGui::SameLine();
+	}
+
+
+	ImGui::End();
 }
