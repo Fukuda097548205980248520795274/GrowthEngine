@@ -193,6 +193,12 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOSkinning">
       <UniqueIdentifier>{41d53366-bbcb-44b2-bfec-35e3ab604f90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Data\BoneData">
+      <UniqueIdentifier>{62c69e80-3e91-439e-8d58-17a1bbee1b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\AnimationData">
+      <UniqueIdentifier>{5d8e7282-6ed3-42ff-8ce5-69b38eca8542}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -448,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOSkinning</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\BoneData\BoneData.h">
+      <Filter>Engine\Include\Data\BoneData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\AnimationData\AnimationData.h">
+      <Filter>Engine\Include\Data\AnimationData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

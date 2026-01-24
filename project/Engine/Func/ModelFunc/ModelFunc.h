@@ -1,5 +1,6 @@
 #pragma once
 #include "Data/ModelData/ModelData.h"
+#include "Data/BoneData/BoneData.h"
 #include <string>
 
 #include <assimp/scene.h>

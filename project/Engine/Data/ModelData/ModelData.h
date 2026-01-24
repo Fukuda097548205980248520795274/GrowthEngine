@@ -74,36 +74,6 @@ namespace Engine
 	};
 
 
-	// ジョイント
-	struct Joint
-	{
-		// 名前
-		std::string name;
-
-		// Transform情報
-		QuaternionTransform3D transform;
-
-		// ローカル行列
-		Matrix4x4 localMatrix;
-
-		// SkeletonSpaceでの変換行列
-		Matrix4x4 skeletonSpaceMatrix;
-
-		/// @brief 
-		Matrix4x4 offsetMatrix;
-
-
-		// 自身のインデックス
-		int32_t index;
-
-		// 子jointのインデックスのリスト
-		std::vector<int32_t> children;
-
-		// 親joint
-		std::optional<int32_t> parent;
-	};
-
-
 
 	// 頂点ウェイトデータ
 	struct VertexWeightData
@@ -146,6 +116,7 @@ namespace Engine
 		// 法線用
 		Matrix4x4 skeletonSpaceInverseTransposeMatrix;
 	};
+
 
 	// スキンクラスター
 	struct SkinCluster
@@ -199,13 +170,5 @@ namespace Engine
 
 		// ノード
 		std::vector<ModelNode> nodes;
-	};
-
-	/// @brief スケルトン
-	struct Skeleton
-	{
-		int32_t root;
-		std::vector<Joint> joints;
-		std::unordered_map<std::string, int32_t> jointMap;
 	};
 }

@@ -17,6 +17,11 @@ void Engine::IndexResource::Initialize(ID3D12Device* device, uint32_t numSurface
 	// リソースを生成する
 	resource_ = CreateBufferResource(device, sizeof(uint32_t) * numVertex_, log);
 
+	// ビューの設定
+	view_.BufferLocation = resource_->GetGPUVirtualAddress();
+	view_.Format = DXGI_FORMAT_R32_UINT;
+	view_.SizeInBytes = sizeof(uint32_t);
+
 	// データを割り当てる
 	resource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
 }
