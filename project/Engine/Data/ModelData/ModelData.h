@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <unordered_map>
 #include <cstdint>
 #include <optional>
 #include <array>
@@ -146,10 +145,8 @@ namespace Engine
 		// マテリアルデータ
 		MaterialData material;
 
-		// 番号
-		int32_t number;
 
-
+		// ジョイントウェイト
 		std::vector<JointWeightData> jointWeights;
 
 		// スキニングデータ
@@ -165,8 +162,8 @@ namespace Engine
 		// メッシュデータ
 		std::vector<MeshData> meshes;
 
-		// メッシュ名
-		std::vector<std::string> meshNames;
+		// メッシュインデックス
+		std::vector<std::string> meshIndices;
 
 		// ノード
 		std::vector<ModelNode> nodes;
