@@ -12,6 +12,9 @@ Engine::ModelResource::ModelResource(const std::string& directory, const std::st
 	// モデルデータを取得する
 	modelData_ = LoadModel(directory, fileName);
 
+	// モデルノードを読み取る
+	LoadNode(modelData_, directory, fileName);
+
 	// ファイルパス
 	filePath_ = directory + "/" + fileName;
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Data/ModelData/ModelData.h"
 #include "Data/SkeletonData/SkeletonData.h"
+#include "Data/AnimationData/AnimationData.h"
 #include <string>
 
 #include <assimp/scene.h>
@@ -27,6 +28,17 @@ namespace Engine
 	/// @param parentIndex 
 	/// @param modelData 
 	void ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelData& modelData);
+
+	/// @brief ノードの更新処理
+	/// @param modelData 
+	/// @param nodeIndex 
+	void UpdateWorldMatrix(ModelData& modelData, int32_t nodeIndex);
+
+	/// @brief アニメーションの読み込み
+	/// @param directoryPath 
+	/// @param filename 
+	/// @return 
+	Animation LoadAnimationFile(const std::string& directoryPath, const std::string& filename);
 
 	/// @brief ボーンを読み込む
 	/// @param modelData 

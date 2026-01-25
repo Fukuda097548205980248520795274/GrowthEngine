@@ -65,11 +65,13 @@ namespace Engine
 		// クォータニオン用のトランスフォーム
 		QuaternionTransform3D transform;
 
-		
+		// 子ノードインデックス
 		std::vector<int32_t> children;
 
+		// 親ノードインデックス
 		std::optional<int32_t> parent;
 
+		// メッシュインデックス
 		std::optional<int32_t> meshIndex;
 	};
 

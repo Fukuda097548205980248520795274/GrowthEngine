@@ -211,6 +211,9 @@
     <Filter Include="Engine\Include\Store\ModelStore\ModelResource">
       <UniqueIdentifier>{b7a39319-e119-46e5-893e-275e6e2753a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\AnimationStore\AnimationResource">
+      <UniqueIdentifier>{2acef22d-1174-47d8-82dd-4bb87ef89cfb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -344,6 +347,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\ModelStore\ModelResource\ModelResource.cpp">
       <Filter>Engine\Include\Store\ModelStore\ModelResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.cpp">
+      <Filter>Engine\Include\Store\AnimationStore\AnimationResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h">
       <Filter>Engine\Include\Store\ModelStore\ModelResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h">
+      <Filter>Engine\Include\Store\AnimationStore\AnimationResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

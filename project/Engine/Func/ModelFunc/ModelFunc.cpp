@@ -10,7 +10,7 @@
 /// @return 
 Engine::ModelData Engine::LoadModel(const std::string& directory, const std::string& fileName)
 {
-	// assimpでファイルを開く
+	// AssImpでファイルを開く
 	Assimp::Importer importer;
 	std::string filePath = directory + "/" + fileName;
 
@@ -94,8 +94,11 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 		}
 
 
+		// マテリアルインデックス
+		uint32_t materialIndex = mesh->mMaterialIndex;
+
 		// マテリアルデータ
-		aiMaterial* material = scene->mMaterials[meshIndex];
+		aiMaterial* material = scene->mMaterials[materialIndex];
 
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0)
 		{
@@ -119,7 +122,7 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 /// @param fileName 
 void Engine::LoadNode(ModelData& modelData, const std::string& directory, const std::string& fileName)
 {
-	// assimpでファイルを開く
+	// AssImpでファイルを開く
 	Assimp::Importer importer;
 	std::string filePath = directory + "/" + fileName;
 
@@ -148,16 +151,13 @@ void Engine::ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelD
 	aiQuaternion rotate;
 	aiNode->mTransformation.Decompose(scale, rotate, translate);
 
-	// 総括
-	ModelNode result;
-
-	result.transform.scale = Vector3(scale.x, scale.y, scale.z);
+	node.transform.scale = Vector3(scale.x, scale.y, scale.z);
 
 	// 右手 -> 左手
-	result.transform.translate = Vector3(-translate.x, translate.y, translate.z);
+	node.transform.translate = Vector3(-translate.x, translate.y, translate.z);
 
 	// X軸を反転　回転方向が逆なので軸を反転させる
-	result.transform.rotate = Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w);
+	node.transform.rotate = Quaternion(rotate.x, -rotate.y, -rotate.z, rotate.w);
 
 
 
@@ -165,7 +165,7 @@ void Engine::ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelD
 	node.name = aiNode->mName.C_Str();
 
 	// ローカル行列
-	node.localMatrix = MakeAffineMatrix4x4(result.transform.scale, result.transform.rotate, result.transform.translate);
+	node.localMatrix = MakeAffineMatrix4x4(node.transform.scale, node.transform.rotate, node.transform.translate);
 
 
 	// 親インデックス
@@ -185,6 +185,117 @@ void Engine::ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelD
 	}
 }
 
+/// @brief ノードの更新処理
+/// @param modelData 
+/// @param nodeIndex 
+void Engine::UpdateWorldMatrix(ModelData& modelData, int32_t nodeIndex)
+{
+	ModelNode& node = modelData.nodes[nodeIndex];
+
+	if (node.parent.has_value()) {
+		node.worldMatrix = modelData.nodes[*node.parent].worldMatrix * node.localMatrix;
+	}
+	else 
+	{
+		node.worldMatrix = node.localMatrix;
+	}
+
+	// 自身の子ノードを更新
+	for (int32_t child : node.children) 
+	{
+		UpdateWorldMatrix(modelData, child);
+	}
+}
+
+
+/// @brief アニメーションの読み込み
+/// @param directoryPath 
+/// @param filename 
+/// @return 
+Engine::Animation Engine::LoadAnimationFile(const std::string& directoryPath, const std::string& filename)
+{
+	Animation animation;
+
+	Assimp::Importer importer;
+	std::string filePath = directoryPath + "/" + filename;
+	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
+
+	// アニメーションがないといけいない
+	if (scene->mNumAnimations == 0)
+	{
+		return animation;
+	}
+
+	// 最初のアニメーションだけ採用
+	aiAnimation* animationAssImp = scene->mAnimations[0];
+
+	// 時間の単位を秒に変換
+	animation.duration = float(animationAssImp->mDuration / animationAssImp->mTicksPerSecond);
+
+	// 領域確保
+	animation.nodes.resize(animationAssImp->mNumChannels);
+
+	for (uint32_t channelIndex = 0; channelIndex < animationAssImp->mNumChannels; ++channelIndex)
+	{
+		aiNodeAnim* nodeAnimationAssImp = animationAssImp->mChannels[channelIndex];
+
+		// インデックスを記録する
+		std::string animationName = nodeAnimationAssImp->mNodeName.C_Str();
+		animation.indices[animationName] = channelIndex;
+
+		// ノードを取得する
+		NodeAnimation& node = animation.nodes[channelIndex];
+
+
+		// 位置
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssImp->mNumPositionKeys; ++keyIndex)
+		{
+			aiVectorKey& keyAssImp = nodeAnimationAssImp->mPositionKeys[keyIndex];
+
+			KeyFrameVector3 keyframe;
+
+			// 秒に変換
+			keyframe.time = float(keyAssImp.mTime / animationAssImp->mTicksPerSecond);
+
+			// 右手 -> 左手
+			keyframe.value = { -keyAssImp.mValue.x, keyAssImp.mValue.y,keyAssImp.mValue.z };
+			node.translate.push_back(keyframe);
+		}
+
+		// 回転
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssImp->mNumRotationKeys; ++keyIndex)
+		{
+			aiQuatKey& keyAssImp = nodeAnimationAssImp->mRotationKeys[keyIndex];
+
+			KeyFrameQuaternion keyframe;
+
+			// 秒に変換
+			keyframe.time = float(keyAssImp.mTime / animationAssImp->mTicksPerSecond);
+
+			// 右手 -> 左手
+			keyframe.value = { keyAssImp.mValue.x, -keyAssImp.mValue.y, -keyAssImp.mValue.z , keyAssImp.mValue.w };
+			node.rotate.push_back(keyframe);
+		}
+
+		// 拡縮
+		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssImp->mNumScalingKeys; ++keyIndex)
+		{
+			aiVectorKey& keyAssImp = nodeAnimationAssImp->mScalingKeys[keyIndex];
+
+			KeyFrameVector3 keyframe;
+
+			// 秒に変換
+			keyframe.time = float(keyAssImp.mTime / animationAssImp->mTicksPerSecond);
+
+			// そのまま
+			keyframe.value = { keyAssImp.mValue.x, keyAssImp.mValue.y,keyAssImp.mValue.z };
+			node.scale.push_back(keyframe);
+		}
+	}
+
+	return animation;
+}
+
 
 /// @brief ボーンを読み込む
 /// @param modelData 
@@ -193,7 +304,7 @@ void Engine::ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelD
 /// @param skeleton 
 void Engine::LoadBone(ModelData& modelData, const std::string& directory, const std::string& fileName, const Skeleton& skeleton)
 {
-	// assimpでファイルを開く
+	// AssImpでファイルを開く
 	Assimp::Importer importer;
 	std::string filePath = directory + "/" + fileName;
 
@@ -236,7 +347,7 @@ void Engine::LoadBone(ModelData& modelData, const std::string& directory, const 
 			// Skeleton の jointMap から jointIndex を取得
 			auto it = skeleton.jointMap.find(boneName);
 			if (it == skeleton.jointMap.end()) {
-				// Skeleton に存在しないボーンは無視（Assimp では稀にある）
+				// Skeleton に存在しないボーンは無視（AssImp では稀にある）
 				continue;
 			}
 

@@ -46,9 +46,9 @@ namespace Engine
 		float duration = 0.0f;
 
 		// ノードアニメーションの集合体
-		std::map<std::string, NodeAnimation> nodeAnimations;
+		std::vector<NodeAnimation> nodes;
 
-		// 名前テーブル
-		std::vector<std::string> nameTable;
+		// ノードアニメーションインデックス
+		std::map<std::string, int32_t> indices;
 	};
 }

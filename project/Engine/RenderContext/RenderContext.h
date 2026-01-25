@@ -12,6 +12,7 @@
 
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
+#include "Store/AnimationStore/AnimationStore.h"
 
 namespace Engine
 {
@@ -42,6 +43,12 @@ namespace Engine
 		/// @param log 
 		/// @return 
 		ModelHandle LoadModel(const std::string& directory, const std::string& fileName, Log* log) { return modelStore_->Load(directory, fileName, core_->GetDevice(), log); }
+
+		/// @brief アニメーションを読み込む
+		/// @param directory 
+		/// @param fileName 
+		/// @return 
+		AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName) { return animationStore_->Load(directory, fileName); }
 
 
 	private:
@@ -80,6 +87,9 @@ namespace Engine
 
 		// モデルストア
 		std::unique_ptr<ModelStore> modelStore_ = nullptr;
+
+		/// @brief アニメーションストア
+		std::unique_ptr<AnimationStore> animationStore_ = nullptr;
 
 
 	private:

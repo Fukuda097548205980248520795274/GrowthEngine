@@ -8,13 +8,25 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0
+				1
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
+			"name":"\u7acb\u65b9\u4f53",
+			"translation":[
+				2.512573003768921,
+				3.037452459335327,
+				-1.041114091873169
+			]
+		},
+		{
+			"children":[
+				0
+			],
+			"mesh":1,
 			"name":"\u30b9\u30b6\u30f3\u30cc"
 		}
 	],
@@ -33,7 +45,7 @@
 	],
 	"meshes":[
 		{
-			"name":"\u30b9\u30b6\u30f3\u30cc",
+			"name":"\u7acb\u65b9\u4f53.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -42,6 +54,20 @@
 						"TEXCOORD_0":2
 					},
 					"indices":3,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"\u30b9\u30b6\u30f3\u30cc",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":4,
+						"NORMAL":5,
+						"TEXCOORD_0":6
+					},
+					"indices":7,
 					"material":0
 				}
 			]
@@ -64,6 +90,40 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
+			"count":24,
+			"max":[
+				1,
+				1,
+				1
+			],
+			"min":[
+				-1,
+				-1,
+				-1
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":1,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":2,
+			"componentType":5126,
+			"count":24,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":3,
+			"componentType":5123,
+			"count":36,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
 			"count":1966,
 			"max":[
 				1.3671875,
@@ -78,19 +138,19 @@
 			"type":"VEC3"
 		},
 		{
-			"bufferView":1,
+			"bufferView":5,
 			"componentType":5126,
 			"count":1966,
 			"type":"VEC3"
 		},
 		{
-			"bufferView":2,
+			"bufferView":6,
 			"componentType":5126,
 			"count":1966,
 			"type":"VEC2"
 		},
 		{
-			"bufferView":3,
+			"bufferView":7,
 			"componentType":5123,
 			"count":2904,
 			"type":"SCALAR"
@@ -99,26 +159,50 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":23592,
+			"byteLength":288,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
+			"byteLength":288,
+			"byteOffset":288,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":192,
+			"byteOffset":576,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":72,
+			"byteOffset":768,
+			"target":34963
+		},
+		{
+			"buffer":0,
 			"byteLength":23592,
-			"byteOffset":23592,
+			"byteOffset":840,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":23592,
+			"byteOffset":24432,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":15728,
-			"byteOffset":47184,
+			"byteOffset":48024,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":5808,
-			"byteOffset":62912,
+			"byteOffset":63752,
 			"target":34963
 		}
 	],
@@ -130,7 +214,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":68720,
+			"byteLength":69560,
 			"uri":"suzanne.bin"
 		}
 	]

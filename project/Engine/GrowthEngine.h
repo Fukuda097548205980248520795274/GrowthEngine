@@ -59,6 +59,12 @@ public:
 	/// @return 
 	ModelHandle LoadModel(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadModel(directory, fileName, log_.get()); }
 
+	/// @brief アニメーションを読み込む
+	/// @param directory 
+	/// @param fileName 
+	/// @return 
+	AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadAnimation(directory, fileName); }
+
 
 	/// @brief オーディオを再生する
 	/// @param ah 
