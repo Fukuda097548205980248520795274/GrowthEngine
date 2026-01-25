@@ -214,6 +214,9 @@
     <Filter Include="Engine\Include\Store\AnimationStore\AnimationResource">
       <UniqueIdentifier>{2acef22d-1174-47d8-82dd-4bb87ef89cfb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\SkeletonStore\SkeletonResource">
+      <UniqueIdentifier>{7d6b0525-3ae4-45b8-a2c0-6d1886d5eed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -350,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.cpp">
       <Filter>Engine\Include\Store\AnimationStore\AnimationResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.cpp">
+      <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h">
       <Filter>Engine\Include\Store\AnimationStore\AnimationResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h">
+      <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
