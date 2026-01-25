@@ -7,6 +7,7 @@
 #include "DX12Fence/DX12Fence.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
+#include "DX12Primitive/DX12Primitive.h"
 #include "ImGuiRender/ImGuiRender.h"
 #include <memory>
 
@@ -78,6 +79,9 @@ namespace Engine
 
 		// DX12Offscreen
 		std::unique_ptr<DX12Offscreen> offscreen_ = nullptr;
+
+		// DX12Primitive
+		std::unique_ptr<DX12Primitive> primitive_ = nullptr;
 
 
 	private:

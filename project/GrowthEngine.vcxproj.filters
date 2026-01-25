@@ -250,6 +250,18 @@
     <Filter Include="Engine\Shader\PrimitiveModel">
       <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel">
+      <UniqueIdentifier>{43a94fc8-0b82-4019-b8b3-cdc0d5c03a60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrimitiveModel">
+      <UniqueIdentifier>{56c22e12-b7ef-4b16-b363-fb15b4d450e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\EnumBlendMode">
+      <UniqueIdentifier>{51fd534c-e67b-4ca7-af9f-c41cba8ac1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Primitive">
+      <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -407,6 +419,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.cpp">
       <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\BasePSOModel.cpp">
+      <Filter>Engine\Include\PSO\PSOModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitiveModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp">
+      <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Primitive\DX12Primitive.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -589,6 +613,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h">
       <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h">
+      <Filter>Engine\Include\PSO\PSOModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitiveModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h">
+      <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h">
+      <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

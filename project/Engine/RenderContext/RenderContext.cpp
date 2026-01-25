@@ -52,6 +52,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	offscreen_ = std::make_unique<DX12Offscreen>();
 	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
 
+	// DX12Primitiveの生成と初期化
+	primitive_ = std::make_unique<DX12Primitive>();
+	primitive_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
+
 	// テクスチャストアの生成
 	textureStore_ = std::make_unique<TextureStore>();
 

@@ -223,6 +223,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp" />
+    <ClCompile Include="Engine\PSO\PSOModel\BasePSOModel.cpp" />
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -259,6 +262,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Primitive\DX12Primitive.cpp" />
     <ClCompile Include="Engine\RenderContext\ImGuiRender\ImGuiRender.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -358,6 +362,9 @@
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
+    <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h" />
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h" />
@@ -367,6 +374,7 @@
     <ClInclude Include="Engine\RenderContext\DX12Fence\DX12Fence.h" />
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h" />
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
