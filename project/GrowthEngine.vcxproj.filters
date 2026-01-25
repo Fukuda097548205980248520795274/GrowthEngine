@@ -262,6 +262,9 @@
     <Filter Include="Engine\Include\RenderContext\DX12Primitive">
       <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\CameraStore">
+      <UniqueIdentifier>{1e486c89-32cf-4000-a018-a36eebdd40a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -431,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Primitive\DX12Primitive.cpp">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\CameraStore\CameraStore.cpp">
+      <Filter>Engine\Include\Store\CameraStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -625,6 +631,9 @@
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\CameraStore\CameraStore.h">
+      <Filter>Engine\Include\Store\CameraStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

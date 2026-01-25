@@ -18,3 +18,6 @@ using SkeletonHandle = uint32_t;
 
 // アニメーションハンドル
 using AnimationHandle = uint32_t;
+
+// カメラハンドル
+using CameraHandle = uint32_t;

@@ -63,12 +63,39 @@ void Engine::PrimitiveStaticModelData::Update()
 /// @param meshIndex 
 void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, int32_t meshIndex)
 {
+	Quaternion modelQuaternion = 
+		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0f, 0.0f)) * 
+		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0f, 0.0f)) * 
+		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0f, 1.0f));
+
+	Matrix4x4 worldMatrix = MakeAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
+
+
+	Quaternion meshQuaternion =
+		ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
+		ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
+		ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0f, 1.0f));
+
+	Matrix4x4 localMatrix = MakeAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+
+
+
+
+
+	/*-----------------------
+	    コマンドリスト登録
+	-----------------------*/
+
 	// 頂点の設定
 	modelStore_->Register(commandList, hModel_, meshIndex);
 
 	// 座標変換の設定
+	meshTransformationResources_[meshIndex]->data_->worldMatrix = worldMatrix * localMatrix;
+	meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix = meshTransformationResources_[meshIndex]->data_->worldMatrix;
+	meshTransformationResources_[meshIndex]->data_->worldInverseTransposeMatrix = meshTransformationResources_[meshIndex]->data_->worldMatrix.Transpose().Inverse();
 	meshTransformationResources_[meshIndex]->Register(commandList, 0);
 
 	// マテリアルの設定
-	meshTransformationResources_[meshIndex]->Register(commandList, 1);
+	meshMaterialResources_[meshIndex]->data_->color = *meshMaterials_[meshIndex].color;
+	meshMaterialResources_[meshIndex]->Register(commandList, 1);
 }
