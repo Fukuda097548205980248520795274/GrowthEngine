@@ -23,6 +23,11 @@ namespace Engine
 		/// @param meshIndex 
 		void Register(ID3D12GraphicsCommandList* commandList, ModelHandle modelHandle, int32_t meshIndex);
 
+		/// @brief モデルデータを取得する
+		/// @param handle 
+		/// @return 
+		ModelData GetModelData(ModelHandle handle) { return dataTable_[handle]->GetModelData(); }
+
 
 	private:
 

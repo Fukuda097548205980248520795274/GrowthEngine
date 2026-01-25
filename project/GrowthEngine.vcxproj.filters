@@ -217,6 +217,39 @@
     <Filter Include="Engine\Include\Store\SkeletonStore\SkeletonResource">
       <UniqueIdentifier>{7d6b0525-3ae4-45b8-a2c0-6d1886d5eed9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PrimitiveStore">
+      <UniqueIdentifier>{a6f61fef-b2fb-478c-85fd-dce5b6a1eb56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData">
+      <UniqueIdentifier>{c990878f-d72c-45c7-847a-dfbe423ddf36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData">
+      <UniqueIdentifier>{962bc7ea-8fa7-4d4e-a6f8-09c77250b2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Primitive">
+      <UniqueIdentifier>{f36c5669-5b0c-4b43-9eb6-3d03ff6f8422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Primitive\PrimitiveStaticModel">
+      <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU">
+      <UniqueIdentifier>{42dbadc8-5139-421c-a6eb-14b6e080ef8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\MaterialDataForGPU">
+      <UniqueIdentifier>{4b81dcb5-4eb4-422d-9b95-6b32a12f5974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\TransformationDataForGPU">
+      <UniqueIdentifier>{7acbd6bf-1615-401a-8dcd-2497529b2dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\PrimitiveModelMaterialResource">
+      <UniqueIdentifier>{d3808a20-8c12-42ef-9125-886da45968db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\PrimitiveModelTransformationResource">
+      <UniqueIdentifier>{6f931649-dd39-4e4e-b03a-79984bce9f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\PrimitiveModel">
+      <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -356,6 +389,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.cpp">
       <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveStore.cpp">
+      <Filter>Engine\Include\Store\PrimitiveStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.cpp">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.cpp">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveStaticModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.cpp">
+      <Filter>Engine\Include\Resource\PrimitiveModelMaterialResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.cpp">
+      <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -515,10 +566,37 @@
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h">
       <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveStore.h">
+      <Filter>Engine\Include\Store\PrimitiveStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.h">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveStaticModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\MaterialDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\TransformationDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.h">
+      <Filter>Engine\Include\Resource\PrimitiveModelMaterialResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h">
+      <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Fullscreen\Fullscreen.hlsli">
       <Filter>Engine\Shader\Fullscreen</Filter>
+    </None>
+    <None Include="Resources\Shader\PrimitiveModel\PrimitiveModel.hlsli">
+      <Filter>Engine\Shader\PrimitiveModel</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +608,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shader\Skinning\Skinning.CS.hlsl">
       <Filter>Engine\Shader\Skinning</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\PrimitiveModel\PrimitiveModel.VS.hlsl">
+      <Filter>Engine\Shader\PrimitiveModel</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\PrimitiveModel\PrimitiveModel.PS.hlsl">
+      <Filter>Engine\Shader\PrimitiveModel</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
