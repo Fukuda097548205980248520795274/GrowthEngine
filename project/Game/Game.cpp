@@ -3,6 +3,8 @@
 /// @brief 初期化
 void Game::Initialize()
 {
+	gameCamera_ = std::make_unique<GameCamera>("Test");
+
 	GrowthEngine::GetInstance()->LoadTexture("./Resources/Textures/white2x2.png");
 	GrowthEngine::GetInstance()->LoadTexture("./Resources/Textures/uvChecker.png");
 	GrowthEngine::GetInstance()->LoadAnimation("./Resources/Models/AnimatedCube", "AnimatedCube.gltf");
@@ -14,7 +16,7 @@ void Game::Initialize()
 /// @brief 更新処理
 void Game::Update()
 {
-	
+	gameCamera_->transform_.translate->x = 20.0f;
 }
 
 /// @brief 描画処理

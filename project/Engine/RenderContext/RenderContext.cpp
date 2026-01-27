@@ -56,6 +56,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	primitive_ = std::make_unique<DX12Primitive>();
 	primitive_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
+	// カメラストア
+	cameraStore_ = std::make_unique<CameraStore>();
+
 	// テクスチャストアの生成
 	textureStore_ = std::make_unique<TextureStore>();
 
@@ -109,6 +112,9 @@ void Engine::RenderContext::PreDraw()
 	// 描画用のディスクリプタヒープを設定
 	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+
+	// カメラストアの更新
+	cameraStore_->Update();
 
 #ifdef _DEVELOPMENT
 	// Dockスペースを作成する

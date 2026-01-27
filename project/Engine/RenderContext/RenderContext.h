@@ -11,9 +11,12 @@
 #include "ImGuiRender/ImGuiRender.h"
 #include <memory>
 
+#include "Store/CameraStore/CameraStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
+
+class GameCamera;
 
 namespace Engine
 {
@@ -32,6 +35,16 @@ namespace Engine
 
 		/// @brief 描画後処理
 		void PostDraw();
+
+		/// @brief カメラ切り替え
+		/// @param hCamera 
+		void CameraSwitch(CameraHandle hCamera) { cameraStore_->Switch(hCamera); }
+
+		/// @brief カメラを読み込む
+		/// @param gameCamera 
+		/// @param name 
+		/// @return 
+		CameraHandle LoadCamera(GameCamera* gameCamera, const std::string& name) { return cameraStore_->Load(gameCamera, name); }
 
 		/// @brief テクスチャを読み込む
 		/// @param filePath 
@@ -85,6 +98,9 @@ namespace Engine
 
 
 	private:
+
+		// カメラストア
+		std::unique_ptr<CameraStore> cameraStore_ = nullptr;
 
 		// テクスチャストア
 		std::unique_ptr<TextureStore> textureStore_ = nullptr;

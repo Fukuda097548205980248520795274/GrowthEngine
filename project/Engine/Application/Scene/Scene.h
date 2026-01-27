@@ -1,6 +1,6 @@
 #pragma once
 #include "GrowthEngine.h"
-#include "Application/Camera/Camera3D.h"
+#include "Application/Camera/Camera3D/Camera3D.h"
 
 class Scene
 {

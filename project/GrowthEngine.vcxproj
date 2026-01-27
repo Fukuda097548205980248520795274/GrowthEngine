@@ -150,11 +150,12 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Camera\GameCamera\GameCamera.cpp" />
     <ClCompile Include="Engine\Application\Framework\Framework.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Camera\Camera3D.cpp">
+    <ClCompile Include="Engine\Application\Camera\Camera3D\Camera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -298,6 +299,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\CameraStore\CameraResource\CameraResource.cpp" />
     <ClCompile Include="Engine\Store\CameraStore\CameraStore.cpp" />
     <ClCompile Include="Engine\Store\ModelStore\ModelResource\ModelResource.cpp" />
     <ClCompile Include="Engine\Store\ModelStore\ModelStore.cpp">
@@ -335,8 +337,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
+    <ClInclude Include="Engine\Application\Camera\GameCamera\GameCamera.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
-    <ClInclude Include="Engine\Application\Camera\Camera3D.h" />
+    <ClInclude Include="Engine\Application\Camera\Camera3D\Camera3D.h" />
     <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
@@ -387,6 +390,7 @@
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />
     <ClInclude Include="Engine\Store\AudioStore\AudioStore.h" />
+    <ClInclude Include="Engine\Store\CameraStore\CameraResource\CameraResource.h" />
     <ClInclude Include="Engine\Store\CameraStore\CameraStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />

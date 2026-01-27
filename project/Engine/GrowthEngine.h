@@ -14,6 +14,7 @@
 #include "Math/Vector/Vector3/Vector3.h"
 
 #include "Application/Framework/Framework.h"
+#include "Application/Camera/GameCamera/GameCamera.h"
 
 class GrowthEngine
 {
@@ -42,6 +43,16 @@ public:
 
 	/// @brief 描画後処理
 	void PostDraw();
+
+	/// @brief カメラの切り替え
+	/// @param hCamera 
+	void CameraSwitch(CameraHandle hCamera) const { renderContext_->CameraSwitch(hCamera); }
+
+	/// @brief カメラを読み込む
+	/// @param gameCamera 
+	/// @param name 
+	/// @return 
+	CameraHandle LoadCamera(GameCamera* gameCamera, const std::string& name)const { return renderContext_->LoadCamera(gameCamera, name); }
 
 	/// @brief テクスチャを読み込む
 	/// @param filePath 

@@ -27,5 +27,7 @@ public:
 private:
 
 	std::unique_ptr<AudioObject> object_ = nullptr;
+
+	std::unique_ptr<GameCamera> gameCamera_ = nullptr;
 };
 
