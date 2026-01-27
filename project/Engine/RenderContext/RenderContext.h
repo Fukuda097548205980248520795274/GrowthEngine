@@ -66,6 +66,28 @@ namespace Engine
 		AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName) { return animationStore_->Load(directory, fileName); }
 
 
+		/// @brief 静的モデル読み込み
+		/// @param model 
+		/// @param hModel 
+		/// @param name 
+		/// @param log 
+		/// @return 
+		PrimitiveStaticModelHandle LoadPrimitive(PrimitiveStaticModel* model, ModelHandle hModel, const std::string& name, Log* log)
+		{
+			return primitive_->Load(model, modelStore_.get(), core_->GetDevice(), hModel, name, log);
+		}
+
+
+
+
+	public:
+
+		/// @brief 静的モデルの描画処理
+		/// @param commandList 
+		/// @param handle 
+		void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle) { primitive_->DrawStaticModel(commandList_, handle); }
+
+
 	private:
 
 #ifdef _DEBUG

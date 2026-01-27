@@ -31,7 +31,7 @@ namespace Engine
 
 		/// @brief 3Dカメラデータを取得する
 		/// @return 
-		const Camera3D& GetCamera3D() { return dataTable_[selectHCamera_]->GetCamera3D(); }
+		const Camera3D& GetCamera3D() const { return dataTable_[selectHCamera_]->GetCamera3D(); }
 
 
 	private:

@@ -119,6 +119,9 @@ void Engine::RenderContext::PreDraw()
 	// カメラストアの更新
 	cameraStore_->Update();
 
+	// プリミティブストアの更新
+	primitive_->Update(cameraStore_->GetCamera3D().GetViewProjectionMatrix());
+
 #ifdef _DEVELOPMENT
 	// Dockスペースを作成する
 	imguiRender_->CreateDockSpace();

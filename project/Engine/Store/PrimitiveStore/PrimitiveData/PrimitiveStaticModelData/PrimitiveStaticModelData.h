@@ -14,6 +14,7 @@
 namespace Engine
 {
 	class ModelStore;
+	class BasePSOModel;
 	class Log;
 
 	class PrimitiveStaticModelData : public PrimitiveBaseData
@@ -23,7 +24,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveStaticModelData(const std::string& name , ModelHandle hModel) : hModel_(hModel), PrimitiveBaseData(name) { typeName_ = "StaticModel"; }
+		PrimitiveStaticModelData(const std::string& name , ModelHandle hModel, PrimitiveStaticModelHandle hPrimitiveStaticModel) 
+			: hModel_(hModel), hPrimitiveStaticModel_(hPrimitiveStaticModel), PrimitiveBaseData(name) { typeName_ = "StaticModel"; }
 
 		/// @brief 初期化
 		/// @param modelStore 
@@ -31,18 +33,26 @@ namespace Engine
 		void Initialize(ModelStore* modelStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
-		void Update() override;
+		/// @param viewProjection 
+		void Update(const Matrix4x4& viewProjection) override;
+
+		/// @brief ハンドルを取得する
+		/// @return 
+		PrimitiveStaticModelHandle GetHandle()const { return hPrimitiveStaticModel_; }
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
-		/// @param meshIndex 
-		void Register(ID3D12GraphicsCommandList* commandList, int32_t meshIndex);
+		/// @param pso 
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 
 	private:
 
 		// モデルハンドル
 		ModelHandle hModel_ = 0;
+
+		// 静的モデルハンドル
+		PrimitiveStaticModelHandle hPrimitiveStaticModel_ = 0;
 
 
 	private:

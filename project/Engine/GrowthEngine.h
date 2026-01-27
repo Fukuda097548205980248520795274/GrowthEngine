@@ -16,6 +16,8 @@
 #include "Application/Framework/Framework.h"
 #include "Application/Camera/GameCamera/GameCamera.h"
 
+#include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
+
 class GrowthEngine
 {
 public:
@@ -112,6 +114,24 @@ public:
 	/// @brief 画面の縦幅を取得する
 	/// @return 
 	int32_t GetScreenHeight()const { return winApp_->GetClientHeight(); }
+
+
+
+public:
+
+	/// @brief 静的モデル読み込み
+	/// @param model 
+	/// @param hModel 
+	/// @param name 
+	/// @return 
+	PrimitiveStaticModelHandle LoadPrimitive(PrimitiveStaticModel* model, ModelHandle hModel, const std::string& name) const
+	{
+		return renderContext_->LoadPrimitive(model, hModel, name, log_.get());
+	}
+
+	/// @brief プリミティブ : 静的モデル
+	/// @param handle 
+	void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle)const { renderContext_->DrawPrimitiveStaticModel(handle); }
 
 
 

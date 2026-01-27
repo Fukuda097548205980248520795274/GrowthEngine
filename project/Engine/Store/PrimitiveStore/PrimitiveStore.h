@@ -1,24 +1,48 @@
 #pragma once
 #include "PrimitiveData/PrimitiveStaticModelData/PrimitiveStaticModelData.h"
 
+class PrimitiveStaticModel;
+
 namespace Engine
 {
+	class BasePSOModel;
+
+	class ModelStore;
+	class Log;
+
 	class PrimitiveStore
 	{
 	public:
 
-		/// @brief 読み込み
-		/// @param name 
-		/// @param typeName 
-		void Load(const std::string& name, const std::string& typeName);
-
 		/// @brief 更新処理
-		void Update();
+		/// @param viewProjection 
+		void Update(const Matrix4x4& viewProjection);
+
+
+	public:
+
+		/// @brief 静的モデル読み込み
+		/// @param model 
+		/// @param modelStore 
+		/// @param device 
+		/// @param hModel 
+		/// @param name 
+		/// @param log 
+		/// @return 
+		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore, ID3D12Device* device, 
+			ModelHandle hModel, const std::string& name , Log* log);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param handle 
+		/// @param meshIndex 
+		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, BasePSOModel* pso) { staticModelTable_[handle]->Register(commandList, pso); }
 
 
 	private:
 
 
-		
+		// 静的モデルテーブル
+		std::vector<std::unique_ptr<PrimitiveStaticModelData>> staticModelTable_;
 	};
 }

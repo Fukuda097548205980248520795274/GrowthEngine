@@ -9,9 +9,9 @@ class PrimitiveStaticModel
 public:
 
 	/// @brief コンストラクタ
-	/// @param modelHandle 
+	/// @param hModel
 	/// @param name 
-	PrimitiveStaticModel(ModelHandle modelHandle, const std::string& name);
+	PrimitiveStaticModel(ModelHandle hModel, const std::string& name);
 
 	/// @brief 描画処理
 	void Draw();
@@ -30,11 +30,13 @@ private:
 	std::string name_{};
 
 	// モデルハンドル
-	ModelHandle modelHandle_ = 0;
+	ModelHandle hModel_ = 0;
 
 
 private:
 
 
+	// プリミティブハンドル
+	PrimitiveStaticModelHandle hPrimitive_ = 0;
 };
 

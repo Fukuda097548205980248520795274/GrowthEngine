@@ -3,7 +3,7 @@
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::BasePSOModel::Register(ID3D12GraphicsCommandList* commandList)
+void Engine::BasePSOModel::Register(ID3D12GraphicsCommandList* commandList) const
 {
 	// nullptrチェック
 	assert(commandList);

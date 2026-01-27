@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 namespace Engine
 {
@@ -15,7 +16,12 @@ namespace Engine
 		virtual ~PrimitiveBaseData() = default;
 
 		/// @brief 更新処理
-		virtual void Update() = 0;
+		/// @param viewProjection 
+		virtual void Update(const Matrix4x4& viewProjection) = 0;
+
+		/// @brief 名前を取得する
+		/// @return 
+		std::string GetName()const { return name_; }
 		
 
 	protected:

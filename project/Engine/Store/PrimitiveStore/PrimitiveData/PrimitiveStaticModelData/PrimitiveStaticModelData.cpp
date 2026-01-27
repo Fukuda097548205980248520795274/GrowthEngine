@@ -1,6 +1,7 @@
 #include "PrimitiveStaticModelData.h"
 #include "Store/ModelStore/ModelStore.h"
 #include <cassert>
+#include "PSO/PSOModel/BasePSOModel.h"
 
 /// @brief 初期化
 /// @param modelStore 
@@ -53,49 +54,68 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, ID3D12
 }
 
 /// @brief 更新処理
-void Engine::PrimitiveStaticModelData::Update()
+void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 {
-
-}
-
-/// @brief コマンドリストに登録する
-/// @param commandList 
-/// @param meshIndex 
-void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, int32_t meshIndex)
-{
-	Quaternion modelQuaternion = 
-		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0f, 0.0f)) * 
-		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0f, 0.0f)) * 
+	Quaternion modelQuaternion =
+		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
+		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
 		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0f, 1.0f));
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
 
 
-	Quaternion meshQuaternion =
-		ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
-		ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
-		ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0f, 1.0f));
+	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		Quaternion meshQuaternion =
+			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
+			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
+			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0f, 1.0f));
 
-	Matrix4x4 localMatrix = MakeAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+		Matrix4x4 localMatrix = MakeAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+
+
+		// ワールド座標
+		meshTransformationResources_[meshIndex]->data_->worldMatrix =
+			worldMatrix * localMatrix;
+
+		// ワールドビュー正射影行列
+		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
+			meshTransformationResources_[meshIndex]->data_->worldMatrix * viewProjection;
+
+		// 逆転置ワールド行列
+		meshTransformationResources_[meshIndex]->data_->worldInverseTransposeMatrix =
+			meshTransformationResources_[meshIndex]->data_->worldMatrix.Transpose().Inverse();
 
 
 
+		// 色
+		meshMaterialResources_[meshIndex]->data_->color = *meshMaterials_[meshIndex].color;
+	}
+}
 
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	// PSOの設定
+	pso->Register(commandList);
 
-	/*-----------------------
-	    コマンドリスト登録
-	-----------------------*/
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
 
-	// 頂点の設定
-	modelStore_->Register(commandList, hModel_, meshIndex);
+		// 座標変換の設定
+		meshTransformationResources_[meshIndex]->Register(commandList, 0);
 
-	// 座標変換の設定
-	meshTransformationResources_[meshIndex]->data_->worldMatrix = worldMatrix * localMatrix;
-	meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix = meshTransformationResources_[meshIndex]->data_->worldMatrix;
-	meshTransformationResources_[meshIndex]->data_->worldInverseTransposeMatrix = meshTransformationResources_[meshIndex]->data_->worldMatrix.Transpose().Inverse();
-	meshTransformationResources_[meshIndex]->Register(commandList, 0);
+		// マテリアルの設定
+		meshMaterialResources_[meshIndex]->Register(commandList, 1);
 
-	// マテリアルの設定
-	meshMaterialResources_[meshIndex]->data_->color = *meshMaterials_[meshIndex].color;
-	meshMaterialResources_[meshIndex]->Register(commandList, 1);
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+	}
 }

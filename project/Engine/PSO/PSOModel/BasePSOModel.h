@@ -31,7 +31,7 @@ namespace Engine
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
-		void Register(ID3D12GraphicsCommandList* commandList);
+		void Register(ID3D12GraphicsCommandList* commandList) const;
 
 		/// @brief ブレンドモードを初期化する
 		virtual void ResetBlendMode() = 0;

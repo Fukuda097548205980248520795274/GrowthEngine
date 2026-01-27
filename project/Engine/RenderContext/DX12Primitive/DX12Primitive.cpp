@@ -12,6 +12,10 @@ void Engine::DX12Primitive::Initialize(ID3D12Device* device, ShaderCompiler* sha
 	assert(shaderCompiler);
 
 
+	// プリミティブストアの生成
+	primitiveStore_ = std::make_unique<PrimitiveStore>();
+
+
 	// モデル用プリミティブ頂点シェーダ
 	primitiveModelVS_ = shaderCompiler->Compile(L"./Resources/Shader/PrimitiveModel/PrimitiveModel.VS.hlsl", L"vs_6_0");
 	assert(primitiveModelVS_);
@@ -25,4 +29,12 @@ void Engine::DX12Primitive::Initialize(ID3D12Device* device, ShaderCompiler* sha
 	// モデル用プリミティブPSOの生成と初期化
 	psoPrimitiveModel_ = std::make_unique<PSOPrimitiveModel>();
 	psoPrimitiveModel_->Initialize(device, primitiveModelVS_.Get(), primitiveModelPS_.Get(), log);
+}
+
+/// @brief 更新処理
+/// @param viewProjection 
+void Engine::DX12Primitive::Update(const Matrix4x4& viewProjection)
+{
+	// プリミティブストアの更新
+	primitiveStore_->Update(viewProjection);
 }
