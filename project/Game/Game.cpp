@@ -16,7 +16,7 @@ void Game::Initialize()
 /// @brief 更新処理
 void Game::Update()
 {
-	gameCamera_->transform_.translate->x = 20.0f;
+	gameCamera_->transform_.translate->z = -20.0f;
 }
 
 /// @brief 描画処理

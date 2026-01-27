@@ -9,7 +9,8 @@
 #include "DX12Offscreen/DX12Offscreen.h"
 #include "DX12Primitive/DX12Primitive.h"
 #include "ImGuiRender/ImGuiRender.h"
-#include <memory>
+#include <chrono>
+#include <thread>
 
 #include "Store/CameraStore/CameraStore.h"
 #include "Store/TextureStore/TextureStore.h"
@@ -95,6 +96,18 @@ namespace Engine
 
 		// DX12Primitive
 		std::unique_ptr<DX12Primitive> primitive_ = nullptr;
+
+
+	private:
+
+		/// @brief FPS固定初期化
+		void InitializeFixFPS();
+
+		/// @brief FPS固定更新処理
+		void UpdateFixFPS();
+
+		/// @brief 記録時間（FPS固定用）
+		std::chrono::steady_clock::time_point reference_;
 
 
 	private:
