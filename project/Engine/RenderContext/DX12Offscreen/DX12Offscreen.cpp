@@ -31,7 +31,7 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 
 
 	// 頂点シェーダを読み込む
-	vertexShaderBlob_ = compiler->Compile(L"./Resources/Shader/Fullscreen/Fullscreen.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob_ = compiler->Compile(L"./Assets/Shader/Fullscreen/Fullscreen.VS.hlsl", L"vs_6_0");
 
 	// PSO CopyImage の生成と初期化
 	psoCopyImage_ = std::make_unique<PSOCopyImage>();

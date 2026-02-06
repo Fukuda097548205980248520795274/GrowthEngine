@@ -17,7 +17,7 @@ void Engine::PSOCopyImage::Initialize(ID3D12Device* device, ShaderCompiler* comp
 
 
 	// ピクセルシェーダのバイナリデータを取得する
-	pixelShaderBlob_ = compiler->Compile(L"./Resources/Shader/PostEffect/CopyImage.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/PostEffect/CopyImage.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob_ != nullptr);
 
 

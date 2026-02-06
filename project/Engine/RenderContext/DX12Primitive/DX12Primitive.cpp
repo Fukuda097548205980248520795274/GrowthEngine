@@ -17,11 +17,11 @@ void Engine::DX12Primitive::Initialize(ID3D12Device* device, ShaderCompiler* sha
 
 
 	// モデル用プリミティブ頂点シェーダ
-	primitiveModelVS_ = shaderCompiler->Compile(L"./Resources/Shader/PrimitiveModel/PrimitiveModel.VS.hlsl", L"vs_6_0");
+	primitiveModelVS_ = shaderCompiler->Compile(L"./Assets/Shader/PrimitiveModel/PrimitiveModel.VS.hlsl", L"vs_6_0");
 	assert(primitiveModelVS_);
 
 	// モデル用プリミティブピクセルシェーダ
-	primitiveModelPS_ = shaderCompiler->Compile(L"./Resources/Shader/PrimitiveModel/PrimitiveModel.PS.hlsl", L"ps_6_0");
+	primitiveModelPS_ = shaderCompiler->Compile(L"./Assets/Shader/PrimitiveModel/PrimitiveModel.PS.hlsl", L"ps_6_0");
 	assert(primitiveModelPS_);
 
 
