@@ -8,6 +8,7 @@ void Game::Initialize()
 	
 
 	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Resources/Models/suzanne", "suzanne.obj"), "Suzanne");
+	GrowthEngine::GetInstance()->LoadTexture("./Resources/Textures/uvChecker.png");
 	
 	object_ = std::make_unique<AudioObject>("./Resources/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
