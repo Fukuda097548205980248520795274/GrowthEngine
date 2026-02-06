@@ -14,23 +14,43 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 	assert(vertexShaderBlob);
 	assert(pixelShaderBlob);
 
+
+	/*------------------------
+	    ディスクリプタレンジ
+	------------------------*/
+
+	// SRV t0 テクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorTexture[1];
+	descriptorTexture[0].BaseShaderRegister = 0;
+	descriptorTexture[0].RegisterSpace = 0;
+	descriptorTexture[0].NumDescriptors = 1;
+	descriptorTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[2];
+	D3D12_ROOT_PARAMETER rootParameter[3];
 
-	// CBV VertexShader b0
+	// CBV VertexShader b0 座標変換
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	rootParameter[0].Descriptor.RegisterSpace = 0;
 	rootParameter[0].Descriptor.ShaderRegister = 0;
 
-	// CBV PixelShader b0
+	// CBV PixelShader b0 マテリアル
 	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[1].Descriptor.RegisterSpace = 0;
 	rootParameter[1].Descriptor.ShaderRegister = 0;
+
+	// DescriptorTable PixelShader テクスチャ
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorTexture;
+	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
 
 
 	/*--------------------

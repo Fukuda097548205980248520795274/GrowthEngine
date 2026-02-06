@@ -14,6 +14,12 @@ struct Material
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
+// テクスチャ
+Texture2D<float4> gTexture : register(t0);
+
+// サンプラー
+SamplerState gSampler : register(s0);
+
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;

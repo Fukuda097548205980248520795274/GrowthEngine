@@ -655,27 +655,27 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shader\Fullscreen\Fullscreen.hlsli">
+    <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
       <Filter>Engine\Shader\Fullscreen</Filter>
     </None>
-    <None Include="Resources\Shader\PrimitiveModel\PrimitiveModel.hlsli">
+    <None Include="Assets\Shader\PrimitiveModel\PrimitiveModel.hlsli">
       <Filter>Engine\Shader\PrimitiveModel</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\Fullscreen\Fullscreen.VS.hlsl">
+    <FxCompile Include="Assets\Shader\Fullscreen\Fullscreen.VS.hlsl">
       <Filter>Engine\Shader\Fullscreen</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\PostEffect\CopyImage.PS.hlsl">
+    <FxCompile Include="Assets\Shader\PostEffect\CopyImage.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Skinning\Skinning.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Skinning\Skinning.CS.hlsl">
       <Filter>Engine\Shader\Skinning</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\PrimitiveModel\PrimitiveModel.VS.hlsl">
+    <FxCompile Include="Assets\Shader\PrimitiveModel\PrimitiveModel.VS.hlsl">
       <Filter>Engine\Shader\PrimitiveModel</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\PrimitiveModel\PrimitiveModel.PS.hlsl">
+    <FxCompile Include="Assets\Shader\PrimitiveModel\PrimitiveModel.PS.hlsl">
       <Filter>Engine\Shader\PrimitiveModel</Filter>
     </FxCompile>
   </ItemGroup>
