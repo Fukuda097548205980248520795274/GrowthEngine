@@ -57,7 +57,7 @@ namespace Engine
 		/// @param fileName 
 		/// @param log 
 		/// @return 
-		ModelHandle LoadModel(const std::string& directory, const std::string& fileName, Log* log) { return modelStore_->Load(directory, fileName, core_->GetDevice(), log); }
+		ModelHandle LoadModel(const std::string& directory, const std::string& fileName, Log* log) { return modelStore_->Load(directory, fileName, textureStore_.get(), heap_.get(), core_->GetDevice(), commandList_, log); }
 
 		/// @brief アニメーションを読み込む
 		/// @param directory 
@@ -74,7 +74,7 @@ namespace Engine
 		/// @return 
 		PrimitiveStaticModelHandle LoadPrimitive(PrimitiveStaticModel* model, ModelHandle hModel, const std::string& name, Log* log)
 		{
-			return primitive_->Load(model, modelStore_.get(), core_->GetDevice(), hModel, name, log);
+			return primitive_->Load(model, modelStore_.get(), textureStore_.get(), core_->GetDevice(), hModel, name, log);
 		}
 
 

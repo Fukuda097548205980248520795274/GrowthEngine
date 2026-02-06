@@ -6,19 +6,17 @@
 namespace Engine
 {
 	class Log;
+	class TextureStore;
+	class DX12Heap;
 
 	class ModelResource
 	{
 	public:
 
-		/// @brief コンストラクタ
-		/// @param directory 
-		/// @param fileName 
-		ModelResource(const std::string& directory, const std::string& fileName);
-
 		/// @brief 初期化
 		/// @param device 
-		void Initialize(ID3D12Device* device, ModelHandle handle, Log* log);
+		void Initialize(const std::string& directory, const std::string& fileName, ModelHandle handle,
+			TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* lo);
 
 
 		/// @brief モデルデータを取得する

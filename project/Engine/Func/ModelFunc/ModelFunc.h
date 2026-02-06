@@ -10,12 +10,21 @@
 
 namespace Engine
 {
+	class TextureStore;
+	class DX12Heap;
+	class Log;
 
 	/// @brief モデルを読み込む
 	/// @param directory 
 	/// @param fileName 
+	/// @param textureStore 
+	/// @param heap 
+	/// @param device 
+	/// @param commandList 
+	/// @param log 
 	/// @return 
-	ModelData LoadModel(const std::string& directory, const std::string& fileName);
+	ModelData LoadModel(const std::string& directory, const std::string& fileName,
+		TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log);
 
 	/// @brief ノードを読み込む
 	/// @param modelData 

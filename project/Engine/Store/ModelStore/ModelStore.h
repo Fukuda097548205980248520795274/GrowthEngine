@@ -3,7 +3,9 @@
 
 namespace Engine
 {
+	class TextureStore;
 	class Log;
+	class DX12Heap;
 
 	class ModelStore
 	{
@@ -15,7 +17,8 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		/// @return 
-		ModelHandle Load(const std::string& directory, const std::string& fileName, ID3D12Device* device, Log* log);
+		ModelHandle Load(const std::string& directory, const std::string& fileName,
+			TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 

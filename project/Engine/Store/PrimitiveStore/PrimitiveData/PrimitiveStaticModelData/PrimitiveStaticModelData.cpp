@@ -1,19 +1,22 @@
 #include "PrimitiveStaticModelData.h"
 #include "Store/ModelStore/ModelStore.h"
+#include "Store/TextureStore/TextureStore.h"
 #include <cassert>
 #include "PSO/PSOModel/BasePSOModel.h"
 
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, ID3D12Device* device, Log* log)
+void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(modelStore);
+	assert(textureStore);
 	assert(device);
 
 	// 引数を受け取る
 	modelStore_ = modelStore;
+	textureStore_ = textureStore;
 
 
 
@@ -41,6 +44,7 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, ID3D12
 		meshTransforms_[meshIndex].translate = std::make_unique<Vector3>(0.0f, 0.0f, 0.0f);
 
 		// マテリアルトランスフォーム
+		meshMaterials_[meshIndex].hTexture_ = std::make_unique<TextureHandle>(modelData.meshes[meshIndex].material.handle);
 		meshMaterials_[meshIndex].color = std::make_unique<Vector4>(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// 座標変換リソース
@@ -96,6 +100,7 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
+/// @param textureStore 
 void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// PSOの設定
@@ -111,6 +116,9 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 
 		// マテリアルの設定
 		meshMaterialResources_[meshIndex]->Register(commandList, 1);
+
+		// テクスチャの設定
+		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(*meshMaterials_[meshIndex].hTexture_));
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

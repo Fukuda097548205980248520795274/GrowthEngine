@@ -1,4 +1,5 @@
 #include "ModelFunc.h"
+#include "Store/TextureStore/TextureStore.h"
 
 #include <cassert>
 #include <list>
@@ -7,9 +8,17 @@
 /// @brief モデルを読み込む
 /// @param directory 
 /// @param fileName 
+/// @param textureStore 
 /// @return 
-Engine::ModelData Engine::LoadModel(const std::string& directory, const std::string& fileName)
+Engine::ModelData Engine::LoadModel(const std::string& directory, const std::string& fileName,
+	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 {
+	// nullptrチェック
+	assert(textureStore);
+	assert(heap);
+	assert(device);
+	assert(commandList);
+
 	// AssImpでファイルを開く
 	Assimp::Importer importer;
 	std::string filePath = directory + "/" + fileName;
@@ -104,7 +113,16 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 		{
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			meshData.material.filePath = directory + "/" + textureFilePath.C_Str();
+			
+			// テクスチャファイルパス
+			if (textureFilePath.C_Str() == "")
+			{
+				meshData.material.handle = textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log);
+			}
+			else
+			{
+				meshData.material.handle = textureStore->Load(directory + "/" + textureFilePath.C_Str(), heap, device, commandList, log);
+			}
 		}
 
 

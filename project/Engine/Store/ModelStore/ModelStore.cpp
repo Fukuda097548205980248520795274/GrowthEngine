@@ -5,7 +5,8 @@
 /// @param directory 
 /// @param fileName 
 /// @return 
-ModelHandle Engine::ModelStore::Load(const std::string& directory, const std::string& fileName, ID3D12Device* device, Log* log)
+ModelHandle Engine::ModelStore::Load(const std::string& directory, const std::string& fileName,
+	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -21,8 +22,8 @@ ModelHandle Engine::ModelStore::Load(const std::string& directory, const std::st
 	ModelHandle handle = static_cast<ModelHandle>(dataTable_.size());
 
 	// リソース生成と初期化
-	std::unique_ptr<ModelResource> modelResource = std::make_unique<ModelResource>(directory, fileName);
-	modelResource->Initialize(device, handle, log);
+	std::unique_ptr<ModelResource> modelResource = std::make_unique<ModelResource>();
+	modelResource->Initialize(directory, fileName, handle, textureStore, heap, device, commandList, log);
 
 	// テーブルに追加
 	dataTable_.push_back(std::move(modelResource));

@@ -35,10 +35,10 @@ namespace Engine
 		/// @param name 
 		/// @param log 
 		/// @return 
-		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore, ID3D12Device* device,
+		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
 			ModelHandle hModel, const std::string& name, Log* log)
 		{
-			return primitiveStore_->Load(model, modelStore, device, hModel, name, log);
+			return primitiveStore_->Load(model, modelStore, textureStore, device, hModel, name, log);
 		}
 
 

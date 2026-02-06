@@ -24,12 +24,13 @@ namespace Engine
 		/// @brief 静的モデル読み込み
 		/// @param model 
 		/// @param modelStore 
+		/// @param textureStore 
 		/// @param device 
 		/// @param hModel 
 		/// @param name 
 		/// @param log 
 		/// @return 
-		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore, ID3D12Device* device, 
+		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore,TextureStore* textureStore, ID3D12Device* device, 
 			ModelHandle hModel, const std::string& name , Log* log);
 
 		/// @brief コマンドリストに登録する

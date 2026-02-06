@@ -3,14 +3,21 @@
 #include <cassert>
 #include "Func/ResourceFunc/ResourceFunc.h"
 
-/// @brief コンストラクタ
-/// @param directory 
-/// @param fileName 
-/// @param name 
-Engine::ModelResource::ModelResource(const std::string& directory, const std::string& fileName)
+/// @brief 初期化
+/// @param device 
+void Engine::ModelResource::Initialize(const std::string& directory, const std::string& fileName,ModelHandle handle,
+	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 {
+	// nullptrチェック
+	assert(device);
+	assert(textureStore);
+	assert(heap);
+	assert(device);
+	assert(commandList);
+
+
 	// モデルデータを取得する
-	modelData_ = LoadModel(directory, fileName);
+	modelData_ = LoadModel(directory, fileName, textureStore, heap, device, commandList, log);
 
 	// モデルノードを読み取る
 	LoadNode(modelData_, directory, fileName);
@@ -21,14 +28,8 @@ Engine::ModelResource::ModelResource(const std::string& directory, const std::st
 	// 領域を確保する
 	vertexTable_.resize(modelData_.meshes.size());
 	indexTable_.resize(modelData_.meshes.size());
-}
 
-/// @brief 初期化
-/// @param device 
-void Engine::ModelResource::Initialize(ID3D12Device* device, ModelHandle handle, Log* log)
-{
-	// nullptrチェック
-	assert(device);
+
 
 	// ハンドルを取得する
 	handle_ = handle;

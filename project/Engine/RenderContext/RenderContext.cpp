@@ -34,6 +34,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	command_ = std::make_unique<DX12Command>();
 	command_->Initialize(core_->GetDevice(), log);
 
+	// コマンドリストの取得
+	commandList_ = command_->GetCommandList();
+
 	// DX12Heapの生成と初期化
 	heap_ = std::make_unique<DX12Heap>();
 	heap_->Initialize(core_->GetDevice(), log);

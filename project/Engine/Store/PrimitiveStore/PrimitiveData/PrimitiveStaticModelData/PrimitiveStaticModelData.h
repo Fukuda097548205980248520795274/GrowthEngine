@@ -16,6 +16,7 @@ namespace Engine
 	class ModelStore;
 	class BasePSOModel;
 	class Log;
+	class TextureStore;
 
 	class PrimitiveStaticModelData : public PrimitiveBaseData
 	{
@@ -30,7 +31,7 @@ namespace Engine
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, ID3D12Device* device, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		/// @param viewProjection 
@@ -40,9 +41,10 @@ namespace Engine
 		/// @return 
 		PrimitiveStaticModelHandle GetHandle()const { return hPrimitiveStaticModel_; }
 
-		/// @brief コマンドリストに登録する
+		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
+		/// @param textureStore 
 		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 
@@ -60,8 +62,13 @@ namespace Engine
 		// モデル用トランスフォーム
 		struct Transform
 		{
+			/// @brief 拡縮
 			std::unique_ptr<Vector3> scale = nullptr;
+
+			/// @brief 回転
 			std::unique_ptr<Vector3> rotation = nullptr;
+
+			/// @brief 移動
 			std::unique_ptr<Vector3> translate = nullptr;
 		};
 
@@ -80,6 +87,10 @@ namespace Engine
 		// メッシュ用マテリアル
 		struct MeshMaterial
 		{
+			/// @brief テクスチャハンドル
+			std::unique_ptr<TextureHandle> hTexture_ = nullptr;
+
+			/// @brief 色
 			std::unique_ptr<Vector4> color = nullptr;
 		};
 
@@ -94,5 +105,8 @@ namespace Engine
 
 		/// @brief モデルストア
 		ModelStore* modelStore_ = nullptr;
+
+		/// @brief テクスチャストア
+		TextureStore* textureStore_ = nullptr;
 	};
 }

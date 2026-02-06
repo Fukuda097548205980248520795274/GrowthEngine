@@ -10,6 +10,7 @@
 #include <wrl.h>
 #include <span>
 
+#include "Handle/Handle.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Math/Vector/Vector4/Vector4.h"
 
@@ -45,8 +46,8 @@ namespace Engine
 	/// @brief マテリアルデータ
 	struct MaterialData
 	{
-		// ファイルパパス
-		std::string filePath;
+		// テクスチャハンドル
+		TextureHandle handle;
 	};
 
 
