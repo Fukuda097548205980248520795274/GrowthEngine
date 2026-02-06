@@ -28,7 +28,7 @@ void Camera3D::Update()
 	quaternion_.Normalize();
 
 	// ワールド行列を生成する
-	worldMatrix_ = Make3DRotateMatrix4x4(quaternion_) * MakeTranslateMatrix4x4(translate_);
+	worldMatrix_ = Make3DRotateMatrix4x4(quaternion_) * Make3DTranslateMatrix4x4(translate_);
 
 	// 正射影行列を作成する
 	projectionMatrix_ = MakePerspectiveFovMatrix4x4(fov_, width_ / height_, nearClip_, farClip_);

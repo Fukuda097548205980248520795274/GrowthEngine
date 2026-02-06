@@ -3,6 +3,7 @@
 #include "Handle/Handle.h"
 #include <memory>
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Vector/Vector2/Vector2.h"
 #include <vector>
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -84,6 +85,22 @@ namespace Engine
 
 	private:
 
+		/// @brief UVトランスフォーム
+		struct UVTransform
+		{
+			/// @brief 拡縮
+			std::unique_ptr<Vector2> scale = nullptr;
+
+			/// @brief 回転
+			std::unique_ptr<float> rotation = nullptr;
+
+			/// @brief 移動
+			std::unique_ptr<Vector2> translate = nullptr;
+		};
+
+
+	private:
+
 		// メッシュ用マテリアル
 		struct MeshMaterial
 		{
@@ -92,6 +109,9 @@ namespace Engine
 
 			/// @brief 色
 			std::unique_ptr<Vector4> color = nullptr;
+
+			/// @brief UV
+			UVTransform uv{};
 		};
 
 		// メッシュマテリアル

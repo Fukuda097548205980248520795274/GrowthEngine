@@ -11,6 +11,9 @@ struct Material
 {
     // 色
     float4 color;
+    
+    // uv行列
+    float4x4 uvMatrix;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -24,8 +27,11 @@ PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
     
-    // テクスチャ
-    float4 textureColor = gTexture.Sample(gSampler, input.texcoord);
+    // UV座標を座標変換する
+    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvMatrix);
+    
+    // テクスチャの色
+    float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     
     // 色
     output.color = textureColor * gMaterial.color;

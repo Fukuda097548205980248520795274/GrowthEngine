@@ -1,4 +1,5 @@
 #pragma once
+#include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
 #include "Math/Quaternion/Quaternion.h"
@@ -198,7 +199,17 @@ Matrix4x4 MakeIdentityMatrix4x4();
 /// @brief 拡大縮小行列
 /// @param scale 大きさ
 /// @return 
-Matrix4x4 MakeScaleMatrix4x4(const Vector3& scale);
+Matrix4x4 Make2DScaleMatrix4x4(const Vector2& scale);
+
+/// @brief 拡大縮小行列
+/// @param scale 大きさ
+/// @return 
+Matrix4x4 Make3DScaleMatrix4x4(const Vector3& scale);
+
+/// @brief 回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make2DRotateMatrix4x4(float radian);
 
 /// @brief 回転行列
 /// @param quaternion クォータニオン
@@ -208,14 +219,26 @@ Matrix4x4 Make3DRotateMatrix4x4(const Quaternion& quaternion);
 /// @brief 平行移動行列
 /// @param translate 平行移動
 /// @return 
-Matrix4x4 MakeTranslateMatrix4x4(const Vector3& translate);
+Matrix4x4 Make2DTranslateMatrix4x4(const Vector2& translate);
+
+/// @brief 平行移動行列
+/// @param translate 平行移動
+/// @return 
+Matrix4x4 Make3DTranslateMatrix4x4(const Vector3& translate);
+
+/// @brief アフィン変換行列
+/// @param scale 拡縮
+/// @param float クォータニオン
+/// @param translate 平行移動
+/// @return 
+Matrix4x4 Make2DAffineMatrix4x4(const Vector2& scale, float radian, const Vector2& translate);
 
 /// @brief アフィン変換行列
 /// @param scale 拡縮
 /// @param quaternion クォータニオン
 /// @param translate 平行移動
 /// @return 
-Matrix4x4 MakeAffineMatrix4x4(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate);
+Matrix4x4 Make3DAffineMatrix4x4(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate);
 
 /// @brief 透視投影行列 3D
 /// @param fovY 画角

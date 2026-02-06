@@ -13,7 +13,7 @@ void WorldTransform3D::Update()
 	quaternion_.Normalize();
 
 	// ワールド行列を生成する
-	worldMatrix_ = MakeAffineMatrix4x4(scale_, quaternion_, translate_);
+	worldMatrix_ = Make3DAffineMatrix4x4(scale_, quaternion_, translate_);
 
 	// 親
 	if (parent_)

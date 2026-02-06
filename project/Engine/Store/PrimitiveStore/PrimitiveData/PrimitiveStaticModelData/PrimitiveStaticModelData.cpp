@@ -46,6 +46,9 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		// マテリアルトランスフォーム
 		meshMaterials_[meshIndex].hTexture_ = std::make_unique<TextureHandle>(modelData.meshes[meshIndex].material.handle);
 		meshMaterials_[meshIndex].color = std::make_unique<Vector4>(1.0f, 1.0f, 1.0f, 1.0f);
+		meshMaterials_[meshIndex].uv.scale = std::make_unique<Vector2>(1.0f, 1.0f);
+		meshMaterials_[meshIndex].uv.rotation = std::make_unique<float>(0.0f);
+		meshMaterials_[meshIndex].uv.translate = std::make_unique<Vector2>(0.0f, 0.0f);
 
 		// 座標変換リソース
 		meshTransformationResources_[meshIndex] = std::make_unique<PrimitiveModelTransformationResource>();
@@ -65,7 +68,7 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
 		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0f, 1.0f));
 
-	Matrix4x4 worldMatrix = MakeAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
 
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
@@ -75,7 +78,7 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
 			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0f, 1.0f));
 
-		Matrix4x4 localMatrix = MakeAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
 
 
 		// ワールド座標
@@ -94,6 +97,10 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 		// 色
 		meshMaterialResources_[meshIndex]->data_->color = *meshMaterials_[meshIndex].color;
+
+		// UV行列
+		meshMaterialResources_[meshIndex]->data_->uvMatrix =
+			Make2DAffineMatrix4x4(*meshMaterials_[meshIndex].uv.scale, *meshMaterials_[meshIndex].uv.rotation, *meshMaterials_[meshIndex].uv.translate);
 	}
 }
 

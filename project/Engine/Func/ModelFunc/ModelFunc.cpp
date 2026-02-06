@@ -183,7 +183,7 @@ void Engine::ReadNodeRecursive(const aiNode* aiNode, int32_t parentIndex, ModelD
 	node.name = aiNode->mName.C_Str();
 
 	// ローカル行列
-	node.localMatrix = MakeAffineMatrix4x4(node.transform.scale, node.transform.rotate, node.transform.translate);
+	node.localMatrix = Make3DAffineMatrix4x4(node.transform.scale, node.transform.rotate, node.transform.translate);
 
 
 	// 親インデックス
