@@ -39,14 +39,5 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 void* Engine::LightStore::GetParam(LightHandle handle)
 {
 	BaseLightData* data = dataTable_[handle].get();
-
-	// 平行光源
-	if (data->GetTypeName() == "Directional")
-	{
-		auto* p = static_cast<DirectionalLightData*>(data->GetParam());
-		return p;
-	}
-
-	assert(false);
-	return nullptr;
+	return data->GetParam();
 }
