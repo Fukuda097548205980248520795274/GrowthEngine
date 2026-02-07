@@ -147,7 +147,8 @@ public:
 	/// @brief ライトのパラメータを取得する
 	/// @param handle 
 	/// @return 
-	void* GetLightParam(LightHandle handle) const { return renderContext_->GetLightParam(handle); }
+	template <typename T>
+	T* GetLightParam(LightHandle handle) const { return renderContext_->GetLightParam<T>(handle); }
 
 
 private:

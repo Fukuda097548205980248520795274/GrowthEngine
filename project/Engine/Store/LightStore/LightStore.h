@@ -18,9 +18,15 @@ namespace Engine
 		LightHandle Load(const std::string& name, const std::string& type);
 
 		/// @brief パラメータを取得する
+		/// @tparam T 
 		/// @param handle 
 		/// @return 
-		void* GetParam(LightHandle handle);
+		template <typename T>
+		T* GetParam(LightHandle handle)
+		{
+			BaseLightData* data = dataTable_[handle].get();
+			return static_cast<T*>(data->GetParam());
+		}
 
 
 	private:

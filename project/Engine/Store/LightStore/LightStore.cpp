@@ -32,12 +32,3 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 	return 0;
 	
 }
-
-/// @brief パラメータを取得する
-/// @param handle 
-/// @return 
-void* Engine::LightStore::GetParam(LightHandle handle)
-{
-	BaseLightData* data = dataTable_[handle].get();
-	return data->GetParam();
-}

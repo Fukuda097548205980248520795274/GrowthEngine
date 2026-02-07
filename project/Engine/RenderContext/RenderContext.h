@@ -74,9 +74,11 @@ namespace Engine
 
 
 		/// @brief ライトのパラメータを取得する
+		/// @tparam T 
 		/// @param handle 
 		/// @return 
-		void* GetLightParam(LightHandle handle) { return lightStore_->GetParam(handle); }
+		template <typename T>
+		T* GetLightParam(LightHandle handle) { return lightStore_->GetParam<T>(handle); }
 
 
 
