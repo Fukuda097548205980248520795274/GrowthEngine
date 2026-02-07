@@ -22,6 +22,9 @@ using AnimationHandle = uint32_t;
 // カメラハンドル
 using CameraHandle = uint32_t;
 
+// ライトハンドル
+using LightHandle = uint32_t;
+
 
 // プリミティブ静的モデルハンドル
 using PrimitiveStaticModelHandle = uint32_t;

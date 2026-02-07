@@ -74,6 +74,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// アニメーションストアの生成
 	animationStore_ = std::make_unique<AnimationStore>();
 
+	// ライトストアの生成と初期化
+	lightStore_ = std::make_unique<LightStore>();
+
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp->GetClientWidth());

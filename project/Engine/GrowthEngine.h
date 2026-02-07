@@ -78,6 +78,13 @@ public:
 	/// @return 
 	AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadAnimation(directory, fileName); }
 
+	/// @brief ライトを読み込む
+	/// @param name 
+	/// @param type 
+	/// @return 
+	LightHandle LoadLight(const std::string& name, const std::string& type) const { return renderContext_->LoadLight(name, type); }
+
+
 
 	/// @brief オーディオを再生する
 	/// @param ah 
@@ -133,6 +140,14 @@ public:
 	/// @param handle 
 	void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle)const { renderContext_->DrawPrimitiveStaticModel(handle); }
 
+
+
+public:
+
+	/// @brief ライトのパラメータを取得する
+	/// @param handle 
+	/// @return 
+	void* GetLightParam(LightHandle handle) const { return renderContext_->GetLightParam(handle); }
 
 
 private:

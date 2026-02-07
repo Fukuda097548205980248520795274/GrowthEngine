@@ -16,6 +16,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
+#include "Store/LightStore/LightStore.h"
 
 class GameCamera;
 
@@ -64,6 +65,19 @@ namespace Engine
 		/// @param fileName 
 		/// @return 
 		AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName) { return animationStore_->Load(directory, fileName); }
+
+		/// @brief ライトを読み込む
+		/// @param name 
+		/// @param type 
+		/// @return 
+		LightHandle LoadLight(const std::string& name, const std::string& type) { return lightStore_->Load(name, type); }
+
+
+		/// @brief ライトのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		void* GetLightParam(LightHandle handle) { return lightStore_->GetParam(handle); }
+
 
 
 		/// @brief 静的モデル読み込み
@@ -145,6 +159,9 @@ namespace Engine
 
 		/// @brief アニメーションストア
 		std::unique_ptr<AnimationStore> animationStore_ = nullptr;
+
+		/// @brief ライトストア
+		std::unique_ptr<LightStore> lightStore_ = nullptr;
 
 
 	private:

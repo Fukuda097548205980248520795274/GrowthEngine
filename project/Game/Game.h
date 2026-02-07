@@ -31,5 +31,7 @@ private:
 	std::unique_ptr<PrimitiveStaticModel> model_ = nullptr;
 
 	std::unique_ptr<GameCamera> gameCamera_ = nullptr;
+
+	std::unique_ptr<LightDirectional> light_ = nullptr;
 };
 

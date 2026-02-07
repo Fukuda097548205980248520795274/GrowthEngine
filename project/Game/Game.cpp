@@ -5,7 +5,7 @@ void Game::Initialize()
 {
 	gameCamera_ = std::make_unique<GameCamera>("Test");
 
-	
+	light_ = std::make_unique<LightDirectional>("TEST");
 
 	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.obj"), "Suzanne");
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");

@@ -271,6 +271,21 @@
     <Filter Include="Engine\Include\Store\CameraStore\CameraResource">
       <UniqueIdentifier>{b223b0d1-8f8d-4176-8ba0-094dc06f8ca1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\LightStore">
+      <UniqueIdentifier>{2461ffb0-e5f3-45bc-aaa5-9a362fd70cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\LightStore\LightData">
+      <UniqueIdentifier>{d5b0e812-8203-477d-ba3a-2c933e15203e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\LightStore\LightData\DirectionalLightData">
+      <UniqueIdentifier>{a0af1495-ffd8-496c-b020-f06457883a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Light">
+      <UniqueIdentifier>{68563ec2-f748-4625-a305-962723fa95f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Light\LightDirectional">
+      <UniqueIdentifier>{b3de79f3-1152-41bf-8686-93cfbffbf4b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -449,6 +464,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\CameraStore\CameraResource\CameraResource.cpp">
       <Filter>Engine\Include\Store\CameraStore\CameraResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightStore.cpp">
+      <Filter>Engine\Include\Store\LightStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightData\BaseLightData.cpp">
+      <Filter>Engine\Include\Store\LightStore\LightData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.cpp">
+      <Filter>Engine\Include\Store\LightStore\LightData\DirectionalLightData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Light\LightDirectional\LightDirectional.cpp">
+      <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -652,6 +679,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\CameraStore\CameraResource\CameraResource.h">
       <Filter>Engine\Include\Store\CameraStore\CameraResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightStore.h">
+      <Filter>Engine\Include\Store\LightStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h">
+      <Filter>Engine\Include\Store\LightStore\LightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h">
+      <Filter>Engine\Include\Store\LightStore\LightData\DirectionalLightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h">
+      <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
