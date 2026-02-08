@@ -206,10 +206,25 @@ Matrix4x4 Make2DScaleMatrix4x4(const Vector2& scale);
 /// @return 
 Matrix4x4 Make3DScaleMatrix4x4(const Vector3& scale);
 
-/// @brief 回転行列
+/// @brief X軸回転行列
 /// @param radian 角度
 /// @return 
-Matrix4x4 Make2DRotateMatrix4x4(float radian);
+Matrix4x4 Make3DRotateXMatrix4x4(float radian);
+
+/// @brief Y軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateYMatrix4x4(float radian);
+
+/// @brief Z軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateZMatrix4x4(float radian);
+
+/// @brief 回転行列
+/// @param rotation オイラー角
+/// @return 
+Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation);
 
 /// @brief 回転行列
 /// @param quaternion クォータニオン
@@ -228,10 +243,10 @@ Matrix4x4 Make3DTranslateMatrix4x4(const Vector3& translate);
 
 /// @brief アフィン変換行列
 /// @param scale 拡縮
-/// @param float クォータニオン
+/// @param rotation オイラー角
 /// @param translate 平行移動
 /// @return 
-Matrix4x4 Make2DAffineMatrix4x4(const Vector2& scale, float radian, const Vector2& translate);
+Matrix4x4 Make3DAffineMatrix4x4(const Vector2& scale, const Vector3& rotation, const Vector2& translate);
 
 /// @brief アフィン変換行列
 /// @param scale 拡縮

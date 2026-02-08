@@ -6,6 +6,13 @@ Engine::CameraStore::CameraStore()
 {
 	// 初期カメラを読み込む
 	selectHCamera_ = InitialLoad("Initial");
+
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラの生成
+	debugCamera_ = std::make_unique<DebugCameraResource>();
+
+#endif
 }
 
 /// @brief 読み込み
@@ -45,6 +52,28 @@ void Engine::CameraStore::Update()
 {
 	// 指定されたカメラの更新
 	dataTable_[selectHCamera_]->Update();
+
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラ更新
+	debugCamera_->Update();
+
+#endif
+}
+
+/// @brief 3Dカメラデータを取得する
+/// @return 
+const Camera3D& Engine::CameraStore::GetCamera3D() const
+{
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラ有効時
+	if (debugCamera_->IsEnable())
+		return debugCamera_->GetCamera3D();
+
+#endif
+
+	return dataTable_[selectHCamera_]->GetCamera3D(); 
 }
 
 

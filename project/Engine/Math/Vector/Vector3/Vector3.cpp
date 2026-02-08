@@ -67,3 +67,18 @@ Vector3 Reflect(const Vector3& input, const Vector3& normal)
 	Vector3 normal2 = normal.Normalize();
 	return input - (2.0f * (Dot(input, normal2) * normal2));
 }
+
+/// @brief 球面座標系
+/// @param radius 半径
+/// @param theta 
+/// @param phi 
+/// @return 
+Vector3 SphericalCoordinate(float radius, float theta, float phi)
+{
+	// 座標
+	Vector3 coordinate = { 0.0f , 0.0f , 0.0f };
+	coordinate.x = radius * (std::cos(theta) * std::cos(phi));
+	coordinate.y = radius * std::sin(theta);
+	coordinate.z = radius * (std::cos(theta) * std::sin(phi));
+	return coordinate;
+}

@@ -286,6 +286,27 @@
     <Filter Include="Engine\Include\Application\Light\LightDirectional">
       <UniqueIdentifier>{b3de79f3-1152-41bf-8686-93cfbffbf4b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Light\LightPoint">
+      <UniqueIdentifier>{cb69b633-a23b-47e5-b581-77671f6881ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Light\LightSpot">
+      <UniqueIdentifier>{a46a55ba-b53d-4754-9807-374562128a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Light\LightArea">
+      <UniqueIdentifier>{8f9e916c-e66e-49fb-b0a2-d485b949d68f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\LightStore\LightData\PointLightData">
+      <UniqueIdentifier>{d03df424-c5af-4457-a1db-a8c245d02818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\LightStore\LightData\SpotLightData">
+      <UniqueIdentifier>{6264abfb-aeb8-4fd1-ad71-253c6a0e2377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\LightStore\LightData\AreaLightData">
+      <UniqueIdentifier>{17a26997-b8f3-45b2-a869-b3ce00d46b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\CameraStore\DebugCameraResource">
+      <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -476,6 +497,27 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Light\LightDirectional\LightDirectional.cpp">
       <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Light\LightPoint\LightPoint.cpp">
+      <Filter>Engine\Include\Application\Light\LightPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Light\LightSpot\LightSpot.cpp">
+      <Filter>Engine\Include\Application\Light\LightSpot</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Light\LightArea\LightArea.cpp">
+      <Filter>Engine\Include\Application\Light\LightArea</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.cpp">
+      <Filter>Engine\Include\Store\LightStore\LightData\PointLightData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightData\SpotLightData\SpotLightData.cpp">
+      <Filter>Engine\Include\Store\LightStore\LightData\SpotLightData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
+      <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.cpp">
+      <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -691,6 +733,27 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h">
       <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h">
+      <Filter>Engine\Include\Application\Light\LightPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h">
+      <Filter>Engine\Include\Application\Light\LightSpot</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Light\LightArea\LightArea.h">
+      <Filter>Engine\Include\Application\Light\LightArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.h">
+      <Filter>Engine\Include\Store\LightStore\LightData\PointLightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightData\SpotLightData\SpotLightData.h">
+      <Filter>Engine\Include\Store\LightStore\LightData\SpotLightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h">
+      <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.h">
+      <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

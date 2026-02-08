@@ -262,10 +262,72 @@ Matrix4x4 Make3DScaleMatrix4x4(const Vector3& scale)
 	return matrix;
 }
 
-/// @brief 回転行列
+/// @brief X軸回転行列
 /// @param radian 角度
 /// @return 
-Matrix4x4 Make2DRotateMatrix4x4(float radian)
+Matrix4x4 Make3DRotateXMatrix4x4(float radian)
+{
+	// X軸回転行列
+	Matrix4x4 rotateXMatrix;
+
+	rotateXMatrix.m[0][0] = 1.0f;
+	rotateXMatrix.m[0][1] = 0.0f;
+	rotateXMatrix.m[0][2] = 0.0f;
+	rotateXMatrix.m[0][3] = 0.0f;
+
+	rotateXMatrix.m[1][0] = 0.0f;
+	rotateXMatrix.m[1][1] = std::cos(radian);
+	rotateXMatrix.m[1][2] = std::sin(radian);
+	rotateXMatrix.m[1][3] = 0.0f;
+
+	rotateXMatrix.m[2][0] = 0.0f;
+	rotateXMatrix.m[2][1] = -std::sin(radian);
+	rotateXMatrix.m[2][2] = std::cos(radian);
+	rotateXMatrix.m[2][3] = 0.0f;
+
+	rotateXMatrix.m[3][0] = 0.0f;
+	rotateXMatrix.m[3][1] = 0.0f;
+	rotateXMatrix.m[3][2] = 0.0f;
+	rotateXMatrix.m[3][3] = 1.0f;
+
+	return rotateXMatrix;
+}
+
+/// @brief Y軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateYMatrix4x4(float radian)
+{
+	// Y軸回転行列
+	Matrix4x4 rotateYMatrix;
+
+	rotateYMatrix.m[0][0] = std::cos(radian);
+	rotateYMatrix.m[0][1] = 0.0f;
+	rotateYMatrix.m[0][2] = -std::sin(radian);
+	rotateYMatrix.m[0][3] = 0.0f;
+
+	rotateYMatrix.m[1][0] = 0.0f;
+	rotateYMatrix.m[1][1] = 1.0f;
+	rotateYMatrix.m[1][2] = 0.0f;
+	rotateYMatrix.m[1][3] = 0.0f;
+
+	rotateYMatrix.m[2][0] = std::sin(radian);
+	rotateYMatrix.m[2][1] = 0.0f;
+	rotateYMatrix.m[2][2] = std::cos(radian);
+	rotateYMatrix.m[2][3] = 0.0f;
+
+	rotateYMatrix.m[3][0] = 0.0f;
+	rotateYMatrix.m[3][1] = 0.0f;
+	rotateYMatrix.m[3][2] = 0.0f;
+	rotateYMatrix.m[3][3] = 1.0f;
+
+	return rotateYMatrix;
+}
+
+/// @brief Z軸回転行列
+/// @param radian 角度
+/// @return 
+Matrix4x4 Make3DRotateZMatrix4x4(float radian)
 {
 	// Z軸回転行列
 	Matrix4x4 rotateZMatrix;
@@ -291,6 +353,17 @@ Matrix4x4 Make2DRotateMatrix4x4(float radian)
 	rotateZMatrix.m[3][3] = 1.0f;
 
 	return rotateZMatrix;
+}
+
+/// @brief 回転行列
+/// @param rotation オイラー角
+/// @return 
+Matrix4x4 Make3DRotateMatrix4x4(const Vector3& rotation)
+{
+	// 回転行列
+	Matrix4x4 rotateMatrix;
+	rotateMatrix = Make3DRotateXMatrix4x4(rotation.x) * Make3DRotateYMatrix4x4(rotation.y) * Make3DRotateZMatrix4x4(rotation.z);
+	return rotateMatrix;
 }
 
 /// @brief 回転行列
@@ -385,12 +458,12 @@ Matrix4x4 Make3DTranslateMatrix4x4(const Vector3& translate)
 
 /// @brief アフィン変換行列
 /// @param scale 拡縮
-/// @param float クォータニオン
+/// @param rotation オイラー角
 /// @param translate 平行移動
 /// @return 
-Matrix4x4 Make2DAffineMatrix4x4(const Vector2& scale, float radian, const Vector2& translate)
+Matrix4x4 Make3DAffineMatrix4x4(const Vector2& scale, const Vector3& rotation, const Vector2& translate)
 {
-	return  Make2DScaleMatrix4x4(scale) * Make2DRotateMatrix4x4(radian) * Make2DTranslateMatrix4x4(translate);
+	return  Make2DScaleMatrix4x4(scale) * Make3DRotateMatrix4x4(rotation) * Make2DTranslateMatrix4x4(translate);
 }
 
 /// @brief アフィン変換行列

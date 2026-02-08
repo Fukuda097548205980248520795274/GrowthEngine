@@ -3,23 +3,9 @@
 #include <memory>
 #include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
-#include "Math/Vector/Vector4/Vector4.h"
 
 namespace Engine
 {
-	/// @brief 平行光源パラメータ
-	struct DirectionalLightParam
-	{
-		// 向き
-		std::unique_ptr<Vector3> direction = nullptr;
-
-		// 輝度
-		std::unique_ptr<float> intensity = nullptr;
-
-		// 色
-		std::unique_ptr<Vector4> color = nullptr;
-	};
-
 	class BaseLightData
 	{
 	public:

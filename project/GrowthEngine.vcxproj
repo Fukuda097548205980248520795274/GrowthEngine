@@ -159,7 +159,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Light\LightArea\LightArea.cpp" />
     <ClCompile Include="Engine\Application\Light\LightDirectional\LightDirectional.cpp" />
+    <ClCompile Include="Engine\Application\Light\LightPoint\LightPoint.cpp" />
+    <ClCompile Include="Engine\Application\Light\LightSpot\LightSpot.cpp" />
     <ClCompile Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.cpp" />
     <ClCompile Include="Engine\Application\Scene\Scene.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -302,8 +305,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\CameraStore\CameraResource\CameraResource.cpp" />
     <ClCompile Include="Engine\Store\CameraStore\CameraStore.cpp" />
+    <ClCompile Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.cpp" />
+    <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp" />
     <ClCompile Include="Engine\Store\LightStore\LightData\BaseLightData.cpp" />
     <ClCompile Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.cpp" />
+    <ClCompile Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.cpp" />
+    <ClCompile Include="Engine\Store\LightStore\LightData\SpotLightData\SpotLightData.cpp" />
     <ClCompile Include="Engine\Store\LightStore\LightStore.cpp" />
     <ClCompile Include="Engine\Store\ModelStore\ModelResource\ModelResource.cpp" />
     <ClCompile Include="Engine\Store\ModelStore\ModelStore.cpp">
@@ -344,7 +351,10 @@
     <ClInclude Include="Engine\Application\Camera\GameCamera\GameCamera.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
     <ClInclude Include="Engine\Application\Camera\Camera3D\Camera3D.h" />
+    <ClInclude Include="Engine\Application\Light\LightArea\LightArea.h" />
     <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h" />
+    <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h" />
+    <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h" />
     <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
@@ -397,8 +407,12 @@
     <ClInclude Include="Engine\Store\AudioStore\AudioStore.h" />
     <ClInclude Include="Engine\Store\CameraStore\CameraResource\CameraResource.h" />
     <ClInclude Include="Engine\Store\CameraStore\CameraStore.h" />
+    <ClInclude Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.h" />
+    <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h" />
+    <ClInclude Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.h" />
+    <ClInclude Include="Engine\Store\LightStore\LightData\SpotLightData\SpotLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />

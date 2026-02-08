@@ -18,6 +18,21 @@
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
 
+
+// マウスボタン
+enum MouseButton
+{
+	// 左ボタン
+	kMouseButtonLeft,
+
+	// 右ボタン
+	kMouseButtonRight,
+
+	// 中央ボタン
+	kMouseButtonCenter
+};
+
+
 class GrowthEngine
 {
 public:
@@ -122,6 +137,153 @@ public:
 	/// @return 
 	int32_t GetScreenHeight()const { return winApp_->GetClientHeight(); }
 
+
+
+#pragma region キーボード入力
+
+	/// <summary>
+	/// キー入力（Press）
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <returns></returns>
+	bool GetKeyPress(BYTE key) const { return input_->GetKeyPress(key); }
+
+	/// <summary>
+	/// キー入力（Trigger）
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <returns></returns>
+	bool GetKeyTrigger(BYTE key) const { return input_->GetKeyTrigger(key); }
+
+	/// <summary>
+	/// キー入力（Release）
+	/// </summary>
+	/// <param name="key">キー</param>
+	/// <returns></returns>
+	bool GetKeyRelease(BYTE key) const { return input_->GetKeyRelease(key); }
+
+#pragma endregion
+
+#pragma region マウス入力
+
+	/// <summary>
+	/// マウスボタン（Press）
+	/// </summary>
+	/// <param name=""></param>
+	/// <returns></returns>
+	bool GetMouseButtonPress(MouseButton mouseButton) const { return input_->GetMousePress(static_cast<uint32_t>(mouseButton)); };
+
+	/// <summary>
+	/// マウスボタン（Trigger）
+	/// </summary>
+	/// <param name=""></param>
+	/// <returns></returns>
+	bool GetMouseButtonTrigger(MouseButton mouseButton) const { return input_->GetMouseTrigger(static_cast<uint32_t>(mouseButton)); };
+
+	/// <summary>
+	/// マウスボタン（Release）
+	/// </summary>
+	/// <param name=""></param>
+	/// <returns></returns>
+	bool GetMouseButtonRelease(MouseButton mouseButton) const { return input_->GetMouseRelease(static_cast<uint32_t>(mouseButton)); };
+
+	/// <summary>
+	/// マウスの移動量のGetter
+	/// </summary>
+	/// <returns></returns>
+	Vector2 GetMouseVelocity() const { return input_->GetMouseVelocity(); }
+
+	/// <summary>
+	/// マウスホイールが上回転しているかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool GetMouseWheelUp() const { return input_->GetMouseWheelUp(); }
+
+	/// <summary>
+	/// マウスホイールが下回転しているかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool GetMouseWheelDown()  const { return input_->GetMouseWheelDown(); }
+
+	/// <summary>
+	/// マウスホイールの回転量のGetter
+	/// </summary>
+	/// <returns></returns>
+	float GetMouseWheelVelocity() const { return input_->GetMouseWheelVelocity(); }
+
+#pragma endregion
+
+#pragma region ゲームパッド入力
+
+	/// <summary>
+	/// ゲームパッドが有効かどうか
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <returns></returns>
+	bool IsGamepadEnable(DWORD gamepadNumber) const { return input_->IsGamepadEnable(gamepadNumber); }
+
+	/// <summary>
+	/// ゲームパッドのボタンの入力情報（Press）
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <param name="wButtons">指定のボタン</param>
+	/// <returns></returns>
+	bool GetGamepadButtonPress(DWORD gamepadNumber, DWORD wButtons) const { return input_->GetGamepadButtonPress(gamepadNumber, wButtons); }
+
+	/// <summary>
+	/// ゲームパッドのボタンの入力情報（Press）
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <param name="wButtons">指定のボタン</param>
+	/// <returns></returns>
+	bool GetGamepadButtonTrigger(DWORD gamepadNumber, DWORD wButtons) const { return input_->GetGamepadButtonTrigger(gamepadNumber, wButtons); }
+
+	/// <summary>
+	/// ゲームパッドのボタンの入力情報（Press）
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <param name="wButtons">指定のボタン</param>
+	/// <returns></returns>
+	bool GetGamepadButtonRelease(DWORD gamepadNumber, DWORD wButtons) const { return input_->GetGamepadButtonRelease(gamepadNumber, wButtons); }
+
+	/// <summary>
+	/// ゲームパッドの左スティックの入力情報
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <returns></returns>
+	Vector2 GetGamepadLeftStick(DWORD gamepadNumber) const { return input_->GetGamepadLeftStick(gamepadNumber); }
+
+	/// <summary>
+	/// ゲームパッドの右スティックの入力情報
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <returns></returns>
+	Vector2 GetGamepadRightStick(DWORD gamepadNumber) const { return input_->GetGamepadRightStick(gamepadNumber); }
+
+	/// <summary>
+	/// ゲームパッドの左トリガーボタンの入力情報
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <returns></returns>
+	float GetGamepadLeftTrigger(DWORD gamepadNumber) const { return input_->GetGamepadLeftTrigger(gamepadNumber); }
+
+	/// <summary>
+	/// ゲームパッドの右トリガーボタンの入力情報
+	/// </summary>
+	/// <param name="gamepadNumber">ゲームパッドの番号</param>
+	/// <returns></returns>
+	float GetGamepadRightTrigger(DWORD gamepadNumber) const { return input_->GetGamepadRightTrigger(gamepadNumber); }
+
+	/// <summary>
+	/// ゲームパッドを振動させる
+	/// </summary>
+	/// <param name="gamepadNumber"></param>
+	/// <param name="leftVibrationPower"></param>
+	/// <param name="rightVibrationPower"></param>
+	void GamepadVibration(DWORD gamepadNumber, float leftVibrationPower, float rightVibrationPower) const { input_->GamepadVibration(gamepadNumber, leftVibrationPower, rightVibrationPower); }
+
+
+#pragma endregion
 
 
 public:

@@ -181,3 +181,10 @@ Vector3 Project(const Vector3& line, const Vector3& point);
 /// @param normal 法線
 /// @return 
 Vector3 Reflect(const Vector3& input, const Vector3& normal);
+
+/// @brief 球面座標系
+/// @param radius 半径
+/// @param theta 
+/// @param phi 
+/// @return 
+Vector3 SphericalCoordinate(float radius, float theta, float phi);

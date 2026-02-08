@@ -18,7 +18,7 @@ private:
 		float* intensity = nullptr;
 
 		// 色
-		Vector4* color = nullptr;
+		Vector3* color = nullptr;
 	};
 
 public:

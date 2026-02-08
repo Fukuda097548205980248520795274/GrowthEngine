@@ -4,6 +4,8 @@
 #include <cassert>
 #include "PSO/PSOModel/BasePSOModel.h"
 
+#include <numbers>
+
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
@@ -64,19 +66,18 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 {
 	Quaternion modelQuaternion =
-		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
-		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
-		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0f, 1.0f));
+		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
+		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
-
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
 		Quaternion meshQuaternion =
-			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0f, 0.0f)) *
-			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0f, 0.0f)) *
-			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0f, 1.0f));
+			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
+			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
 
@@ -100,7 +101,9 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 		// UV行列
 		meshMaterialResources_[meshIndex]->data_->uvMatrix =
-			Make2DAffineMatrix4x4(*meshMaterials_[meshIndex].uv.scale, *meshMaterials_[meshIndex].uv.rotation, *meshMaterials_[meshIndex].uv.translate);
+			Make3DScaleMatrix4x4(Vector3(meshMaterials_[meshIndex].uv.scale->x, meshMaterials_[meshIndex].uv.scale->y, 1.0f)) *
+			Make3DRotateZMatrix4x4(*meshMaterials_[meshIndex].uv.rotation) *
+			Make3DTranslateMatrix4x4(Vector3(meshMaterials_[meshIndex].uv.translate->x, meshMaterials_[meshIndex].uv.translate->y, 0.0f));
 	}
 }
 

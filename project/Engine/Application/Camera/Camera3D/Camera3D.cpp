@@ -20,9 +20,9 @@ void Camera3D::Update()
 {
 	// 3軸の回転を合成する
 	quaternion_ =
-		ToQuaternion(rotate_.x, Vector3(1.0f, 0.0, 0.0f)).Normalize() *
+		ToQuaternion(rotate_.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(rotate_.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-		ToQuaternion(rotate_.z, Vector3(0.0f, 0.0, 1.0f)).Normalize();
+		ToQuaternion(rotate_.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	// 正規化する
 	quaternion_.Normalize();

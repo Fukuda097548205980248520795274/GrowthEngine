@@ -3,6 +3,7 @@
 #include <vector>
 #include "Handle/Handle.h"
 #include "CameraResource/CameraResource.h"
+#include "DebugCameraResource/DebugCameraResource.h"
 
 class GameCamera;
 
@@ -31,7 +32,7 @@ namespace Engine
 
 		/// @brief 3Dカメラデータを取得する
 		/// @return 
-		const Camera3D& GetCamera3D() const { return dataTable_[selectHCamera_]->GetCamera3D(); }
+		const Camera3D& GetCamera3D() const;
 
 
 	private:
@@ -49,5 +50,15 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<CameraResource>> dataTable_;
+
+
+	private:
+
+#ifdef _DEVELOPMENT
+
+		// デバッグカメラ
+		std::unique_ptr<DebugCameraResource> debugCamera_ = nullptr;
+
+#endif
 	};
 }
