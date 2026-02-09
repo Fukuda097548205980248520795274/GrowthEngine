@@ -26,6 +26,10 @@ namespace Engine
 		/// @return 
 		LightHandle Load(const std::string& name, const std::string& type, DX12Heap* heap, ID3D12Device* device, Log* log);
 
+		/// @brief 深度ステンシルをクリア
+		/// @param commandList 
+		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
+
 		/// @brief パラメータを取得する
 		/// @tparam T 
 		/// @param handle 

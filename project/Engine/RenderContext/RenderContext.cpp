@@ -120,7 +120,8 @@ void Engine::RenderContext::PreDraw()
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 
-
+	// ライトストアの深度ステンシルをクリア
+	lightStore_->ClearDepthStencil(commandList_);
 
 
 	// オフスクリーンのクリア

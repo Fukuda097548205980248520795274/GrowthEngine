@@ -23,6 +23,10 @@ namespace Engine
 		/// @param log 
 		void Initialize(DX12Heap* heap, ID3D12Device* device, Log* log);
 
+		/// @brief 深度ステンシルをクリア
+		/// @param commandList 
+		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->ClearDepthStencil(commandList); }
+
 		/// @brief 
 		/// @return 
 		void* GetParam() override { return param_.get(); }

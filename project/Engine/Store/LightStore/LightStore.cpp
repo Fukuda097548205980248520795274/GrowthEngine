@@ -38,3 +38,21 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 	return 0;
 	
 }
+
+
+/// @brief 深度ステンシルをクリア
+/// @param commandList 
+void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)
+{
+	// 平行光源を探す
+	for (auto& light : dataTable_)
+	{
+		if (light->GetTypeName() != "Directional")
+			continue;
+
+		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
+
+		// 深度をクリアする
+		directionalLightData->ClearDepthStencil(commandList);
+	}
+}
