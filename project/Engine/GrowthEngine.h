@@ -97,7 +97,7 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	LightHandle LoadLight(const std::string& name, const std::string& type) const { return renderContext_->LoadLight(name, type); }
+	LightHandle LoadLight(const std::string& name, const std::string& type) const { return renderContext_->LoadLight(name, type, log_.get()); }
 
 
 

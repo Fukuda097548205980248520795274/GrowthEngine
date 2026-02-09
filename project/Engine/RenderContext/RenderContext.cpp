@@ -115,12 +115,16 @@ void Engine::RenderContext::PreDraw()
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 
-	// オフスクリーンのクリア
-	offscreen_->Clear(commandList_);
-
 	// 描画用のディスクリプタヒープを設定
 	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+
+
+
+
+
+	// オフスクリーンのクリア
+	offscreen_->Clear(commandList_);
 
 	// カメラストアの更新
 	cameraStore_->Update();

@@ -313,6 +313,9 @@
     <Filter Include="Engine\Include\DataForGPU\LightDataForGPU">
       <UniqueIdentifier>{a08f2f0b-2fc3-4775-8627-42591c7d18ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\ShadowMapTextureResource">
+      <UniqueIdentifier>{e963306f-f538-42d2-963a-afab7433f821}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -524,6 +527,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.cpp">
       <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp">
+      <Filter>Engine\Include\Resource\ShadowMapTextureResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -766,6 +772,9 @@
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\LightDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h">
+      <Filter>Engine\Include\Resource\ShadowMapTextureResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

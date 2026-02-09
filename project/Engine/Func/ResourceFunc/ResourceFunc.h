@@ -49,4 +49,12 @@ namespace Engine
 	/// @param height 
 	/// @return 
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log);
+
+	/// @brief シャドウマップテクスチャリソースを生成する
+	/// @param device 
+	/// @param width 
+	/// @param height 
+	/// @param log 
+	/// @return 
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateShadowMapTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log);
 }

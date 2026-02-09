@@ -248,11 +248,11 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateDepthStencilTextureResource
 		深度値のクリア設定
 	----------------------*/
 
-	D3D12_CLEAR_VALUE depthCalerValue{};
+	D3D12_CLEAR_VALUE depthClearValue{};
 
 	// 1.0fでクリアする
-	depthCalerValue.DepthStencil.Depth = 1.0f;
-	depthCalerValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthClearValue.DepthStencil.Depth = 1.0f;
+	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 
 	if (log)
@@ -266,7 +266,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateDepthStencilTextureResource
 		log->Logging(std::format("SampleDesc.Count : {}", resourceDesc.SampleDesc.Count));
 		log->Logging("Format : D24_UNORM_S8_UINT");
 		log->Logging("Flags : ALLOW_DEPTH_STENCIL");
-		log->Logging(std::format("Clear DepthStencilDepth : {}", depthCalerValue.DepthStencil.Depth));
+		log->Logging(std::format("Clear DepthStencilDepth : {}", depthClearValue.DepthStencil.Depth));
 		log->Logging("Clear Format : D24_UNORM_S8_UINT");
 	}
 
@@ -290,7 +290,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateDepthStencilTextureResource
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
 
 		// クリア最適地
-		&depthCalerValue,
+		&depthClearValue,
 
 		IID_PPV_ARGS(&resource)
 	);
@@ -298,6 +298,95 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateDepthStencilTextureResource
 
 	// 生成成功ログ
 	if (log)log->Logging("CreateCommitted DepthStencilTextureResource \n");
+
+	return resource;
+}
+
+/// @brief シャドウマップテクスチャリソースを生成する
+/// @param device 
+/// @param width 
+/// @param height 
+/// @param log 
+/// @return 
+Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateShadowMapTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log)
+{
+	/*------------------
+		リソースの設定
+	------------------*/
+
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Width = width;
+	resourceDesc.Height = height;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+
+	/*----------------
+		ヒープの設定
+	----------------*/
+
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+
+	/*----------------------
+		深度値のクリア設定
+	----------------------*/
+
+	D3D12_CLEAR_VALUE depthClearValue{};
+
+	// 1.0fでクリアする
+	depthClearValue.DepthStencil.Depth = 1.0f;
+	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+
+	if (log)
+	{
+		log->Logging("Heap : DEFAULT");
+		log->Logging("Dimension : TEXTURE2D");
+		log->Logging(std::format("Width : {}", resourceDesc.Width));
+		log->Logging(std::format("Height : {}", resourceDesc.Height));
+		log->Logging(std::format("DepthOrArraySize : {}", resourceDesc.DepthOrArraySize));
+		log->Logging(std::format("MipLevels : {}", resourceDesc.MipLevels));
+		log->Logging(std::format("SampleDesc.Count : {}", resourceDesc.SampleDesc.Count));
+		log->Logging("Format : R24G8_TYPELESS");
+		log->Logging("Flags : ALLOW_DEPTH_STENCIL");
+		log->Logging(std::format("Clear DepthStencilDepth : {}", depthClearValue.DepthStencil.Depth));
+		log->Logging("Clear Format : D24_UNORM_S8_UINT");
+	}
+
+
+	/*----------------------
+		リソースを生成する
+	----------------------*/
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(
+		// ヒープの設定
+		&heapProperties,
+
+		// ヒープの特殊な設定
+		D3D12_HEAP_FLAG_NONE,
+
+		// リソースの設定
+		&resourceDesc,
+
+		// 深度値を書き込む設定
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+
+		// クリア最適地
+		&depthClearValue,
+
+		IID_PPV_ARGS(&resource)
+	);
+	assert(SUCCEEDED(hr));
+
+	// 生成成功ログ
+	if (log)log->Logging("CreateCommitted ShadowMapTextureResource \n");
 
 	return resource;
 }

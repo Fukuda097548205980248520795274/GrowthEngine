@@ -6,8 +6,13 @@
 /// @param name 
 /// @param type 
 /// @return 
-LightHandle Engine::LightStore::Load(const std::string& name, const std::string& type)
+LightHandle Engine::LightStore::Load(const std::string& name, const std::string& type,
+	DX12Heap* heap, ID3D12Device* device, Log* log)
 {
+	// nullptrチェック
+	assert(heap);
+	assert(device);
+
 	// 同じライトデータがあるかどうか
 	for (auto& data : dataTable_)
 	{
@@ -22,6 +27,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 	if (type == "Directional")
 	{
 		std::unique_ptr<DirectionalLightData> data = std::make_unique<DirectionalLightData>(name, handle);
+		data->Initialize(heap, device, log);
 		dataTable_.push_back(std::move(data));
 
 		return handle;
