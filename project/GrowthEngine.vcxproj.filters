@@ -307,6 +307,9 @@
     <Filter Include="Engine\Include\Store\CameraStore\DebugCameraResource">
       <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Data\LightData">
+      <UniqueIdentifier>{3bc111b1-7079-4792-9149-78e64ba1ee0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -754,6 +757,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.h">
       <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\LightData\LightData.h">
+      <Filter>Engine\Include\Data\LightData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
