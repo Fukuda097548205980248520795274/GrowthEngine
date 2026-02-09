@@ -310,6 +310,9 @@
     <Filter Include="Engine\Include\Data\LightData">
       <UniqueIdentifier>{3bc111b1-7079-4792-9149-78e64ba1ee0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\DataForGPU\LightDataForGPU">
+      <UniqueIdentifier>{a08f2f0b-2fc3-4775-8627-42591c7d18ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -760,6 +763,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\LightData\LightData.h">
       <Filter>Engine\Include\Data\LightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\LightDataForGPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

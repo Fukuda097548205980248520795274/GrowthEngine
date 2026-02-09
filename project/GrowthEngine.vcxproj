@@ -357,6 +357,7 @@
     <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h" />
     <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
+    <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
