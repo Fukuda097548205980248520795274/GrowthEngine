@@ -13,10 +13,8 @@ LightDirectional::LightDirectional(const std::string& name)
 	// ライトを読み込む
 	handle_ = engine->LoadLight(name, "Directional");
 
-	auto* param = engine->GetLightParam<Engine::DirectionalLightParam>(handle_);
-	param_.directional = param->direction.get();
-	param_.intensity = param->intensity.get();
-	param_.color = param->color.get();
+	auto param = engine->GetLightParam<Engine::DirectionalLightParam>(handle_);
+	param_ = param;
 }
 
 /// @brief 設置

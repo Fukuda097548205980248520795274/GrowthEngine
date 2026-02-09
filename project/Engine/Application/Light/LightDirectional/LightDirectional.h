@@ -1,25 +1,10 @@
 #pragma once
-#include "Math/Vector/Vector3/Vector3.h"
-#include "Math/Vector/Vector4/Vector4.h"
+#include "Data/LightData/LightData.h"
 #include "Handle/Handle.h"
 #include <string>
 
 class LightDirectional
 {
-private:
-
-	// パラメータ
-	struct Param
-	{
-		// 方向
-		Vector3* directional = nullptr;
-
-		// 輝度
-		float* intensity = nullptr;
-
-		// 色
-		Vector3* color = nullptr;
-	};
 
 public:
 
@@ -32,7 +17,7 @@ public:
 
 
 	/// @brief パラメータ
-	Param param_{};
+	Engine::DirectionalLightParam* param_{};
 
 
 private:

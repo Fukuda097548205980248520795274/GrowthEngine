@@ -1,20 +1,9 @@
 #pragma once
 #include "../BaseLightData.h"
+#include "Data/LightData/LightData.h"
 
 namespace Engine
 {
-	/// @brief 平行光源パラメータ
-	struct DirectionalLightParam
-	{
-		// 向き
-		std::unique_ptr<Vector3> direction = nullptr;
-
-		// 輝度
-		std::unique_ptr<float> intensity = nullptr;
-
-		// 色
-		std::unique_ptr<Vector3> color = nullptr;
-	};
 
 	class DirectionalLightData : public BaseLightData
 	{
@@ -27,7 +16,7 @@ namespace Engine
 
 		/// @brief 
 		/// @return 
-		void* GetParam() override { return &param_; }
+		void* GetParam() override { return param_.get(); }
 
 		/// @brief 種別名を取得する
 		/// @return 
@@ -37,6 +26,6 @@ namespace Engine
 	private:
 
 		// パラメータ
-		DirectionalLightParam param_{};
+		std::unique_ptr<DirectionalLightParam> param_ = nullptr;
 	};
 }
