@@ -9,6 +9,7 @@
 #include "Application/Light/LightDirectional/LightDirectional.h"
 
 #include "PSO/PSOShadowMap/PSOShadowMapPrimitive/PSOShadowMapPrimitive.h"
+#include "PSO/ComputePSO/ComputePSOLightCulling/ComputePSOLightCulling.h"
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
 #include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
@@ -73,6 +74,12 @@ namespace Engine
 
 		// プリミティブ用シャドウマップPSO
 		std::unique_ptr<PSOShadowMapPrimitive> psoShadowMapPrimitive_ = nullptr;
+		
+		// ライトカリングPSO
+		std::unique_ptr<ComputePSOLightCulling> psoLightCulling_ = nullptr;
+
+
+	private:
 
 		// シャドウマップ用座標変換リソース
 		std::unique_ptr<ShadowMapTransformationResource> shadowMapTransformationResource_ = nullptr;

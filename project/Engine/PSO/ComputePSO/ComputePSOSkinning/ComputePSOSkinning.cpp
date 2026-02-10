@@ -6,9 +6,8 @@
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
-/// @param vertexShaderBlob 
 /// @param log 
-void Engine::ComputePSOSkinning::Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, Log* log)
+void Engine::ComputePSOSkinning::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
 {
 	// シェーダのバイナリデータを取得する
 	computeShaderBlob_ = compiler->Compile(L"./Assets/Shader/Skinning/Skinning.CS.hlsl", L"cs_6_0");

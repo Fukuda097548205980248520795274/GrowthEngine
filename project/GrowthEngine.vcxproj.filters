@@ -328,6 +328,12 @@
     <Filter Include="Engine\Include\Resource\ShadowMapTransformationResource">
       <UniqueIdentifier>{fa6323c9-37ad-46a7-85cb-ab72e65d82e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\LightCulling">
+      <UniqueIdentifier>{6092de8f-1c78-440f-b0fb-ebd04ceb732b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOLightCulling">
+      <UniqueIdentifier>{8c8da7b7-3e57-4c30-b288-19fc43982e1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -551,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.cpp">
       <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -806,6 +815,9 @@
     <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h">
       <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -833,6 +845,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapPrimitive.VS.hlsl">
       <Filter>Engine\Shader\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\LightCulling\LightCulling.CS.hlsl">
+      <Filter>Engine\Shader\LightCulling</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

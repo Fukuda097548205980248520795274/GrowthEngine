@@ -17,6 +17,10 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ShaderCompiler* compil
 	psoShadowMapPrimitive_ = std::make_unique<PSOShadowMapPrimitive>();
 	psoShadowMapPrimitive_->Initialize(device, compiler, log);
 
+	// ライトカリングPSOの生成と初期化
+	psoLightCulling_ = std::make_unique<ComputePSOLightCulling>();
+	psoLightCulling_->Initialize(device, compiler, log);
+
 	// 座標変換用シャドウマップリソース
 	shadowMapTransformationResource_ = std::make_unique<ShadowMapTransformationResource>();
 	shadowMapTransformationResource_->Initialize(device, log);

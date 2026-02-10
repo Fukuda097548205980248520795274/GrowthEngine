@@ -30,6 +30,7 @@ void Engine::DirectionalLightData::Initialize(DX12Heap* heap, ID3D12Device* devi
 	assert(heap);
 	assert(device);
 
+	// エンジンのインスタンスを取得する
 	const GrowthEngine* engine = GrowthEngine::GetInstance();
 
 	// シャドウマップ用テクスチャリソースの生成と初期化

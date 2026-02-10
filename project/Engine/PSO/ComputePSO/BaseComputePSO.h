@@ -19,9 +19,8 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param compiler 
-		/// @param vertexShaderBlob 
 		/// @param log 
-		virtual void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, Log* log) = 0;
+		virtual void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log) = 0;
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
