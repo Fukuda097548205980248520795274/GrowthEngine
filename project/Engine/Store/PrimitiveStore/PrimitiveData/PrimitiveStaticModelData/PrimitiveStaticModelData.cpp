@@ -4,6 +4,7 @@
 #include <cassert>
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "PSO/PSOShadowMap/BasePSOShadowMap.h"
+#include "Store/LightStore/LightStore.h"
 
 #include <numbers>
 
@@ -143,7 +144,7 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 /// @param commandList 
 /// @param pso 
 /// @param textureStore 
-void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
 {
 	// PSOの設定
 	pso->Register(commandList);
@@ -161,6 +162,12 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 
 		// テクスチャの設定
 		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(*meshMaterials_[meshIndex].hTexture_));
+
+		// シャドウマップテクスチャの設定
+		lightStore->GetShadowMapTextureResource()->Register(commandList, 3);
+
+		// シャドウ用座標変換の設定
+		lightStore->GetShadowMapTransformationResource()->Register(commandList, 4);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

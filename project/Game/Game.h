@@ -29,6 +29,7 @@ private:
 	std::unique_ptr<AudioObject> object_ = nullptr;
 
 	std::unique_ptr<PrimitiveStaticModel> model_ = nullptr;
+	std::unique_ptr<PrimitiveStaticModel> plane_ = nullptr;
 
 	std::unique_ptr<GameCamera> gameCamera_ = nullptr;
 

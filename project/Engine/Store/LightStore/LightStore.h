@@ -10,6 +10,9 @@
 
 #include "PSO/PSOShadowMap/PSOShadowMapPrimitive/PSOShadowMapPrimitive.h"
 
+#include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
+#include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
+
 namespace Engine
 {
 	class DX12Heap;
@@ -40,6 +43,14 @@ namespace Engine
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList , DX12Primitive* primitive);
 
+		/// @brief シャドウマップ用座標変換リソースを取得する
+		/// @return 
+		ShadowMapTransformationResource* GetShadowMapTransformationResource() { return shadowMapTransformationResource_.get(); }
+
+		/// @brief シャドウマップテクスチャリソースを取得する
+		/// @return 
+		ShadowMapTextureResource* GetShadowMapTextureResource();
+
 		/// @brief パラメータを取得する
 		/// @tparam T 
 		/// @param handle 
@@ -62,5 +73,8 @@ namespace Engine
 
 		// プリミティブ用シャドウマップPSO
 		std::unique_ptr<PSOShadowMapPrimitive> psoShadowMapPrimitive_ = nullptr;
+
+		// シャドウマップ用座標変換リソース
+		std::unique_ptr<ShadowMapTransformationResource> shadowMapTransformationResource_ = nullptr;
 	};
 }

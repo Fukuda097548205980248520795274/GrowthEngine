@@ -47,7 +47,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param meshIndex 
-		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, BasePSOModel* pso) { staticModelTable_[handle]->Register(commandList, pso); }
+		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, BasePSOModel* pso, LightStore* lightStore) { staticModelTable_[handle]->Register(commandList, pso, lightStore); }
 
 
 	private:

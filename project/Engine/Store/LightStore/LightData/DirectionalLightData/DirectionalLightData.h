@@ -36,6 +36,10 @@ namespace Engine
 		/// @return 
 		Matrix4x4 GetViewProjectionMatrix() const;
 
+		/// @brief シャドウマップテクスチャリソースを取得する
+		/// @return 
+		ShadowMapTextureResource* GetShadowMapTextureResource() { return shadowMapTextureResource_.get(); }
+
 		/// @brief 
 		/// @return 
 		void* GetParam() override { return param_.get(); }

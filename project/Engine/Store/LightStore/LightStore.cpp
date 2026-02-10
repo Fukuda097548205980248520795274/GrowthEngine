@@ -16,6 +16,10 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ShaderCompiler* compil
 	// プリミティブ用シャドウマップPSOの生成と初期化
 	psoShadowMapPrimitive_ = std::make_unique<PSOShadowMapPrimitive>();
 	psoShadowMapPrimitive_->Initialize(device, compiler, log);
+
+	// 座標変換用シャドウマップリソース
+	shadowMapTransformationResource_ = std::make_unique<ShadowMapTransformationResource>();
+	shadowMapTransformationResource_->Initialize(device, log);
 }
 
 /// @brief 読み込み
@@ -81,6 +85,27 @@ void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandLis
 		// シャドウマップ用に描画
 		primitive->ShadowMapDraw(commandList, psoShadowMapPrimitive_.get());
 
+		// データを渡す
+		*shadowMapTransformationResource_->data_ = viewProjectionMatrix;
+
 		break;
 	}
+}
+
+/// @brief シャドウマップテクスチャリソースを取得する
+/// @return 
+Engine::ShadowMapTextureResource* Engine::LightStore::GetShadowMapTextureResource()
+{
+	// 平行光源を探す
+	for (auto& light : dataTable_)
+	{
+		if (light->GetTypeName() != "Directional")
+			continue;
+
+		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
+
+		return directionalLightData->GetShadowMapTextureResource();
+	}
+
+	return nullptr;
 }

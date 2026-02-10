@@ -8,6 +8,8 @@ void Game::Initialize()
 	light_ = std::make_unique<LightDirectional>("TEST");
 
 	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.obj"), "Suzanne");
+	plane_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/plane", "plame.obj"), "Plane");
+
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");
 	
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
@@ -17,11 +19,15 @@ void Game::Initialize()
 /// @brief 更新処理
 void Game::Update()
 {
-	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 }
 
 /// @brief 描画処理
 void Game::Draw()
 {
+	ImGui::Begin("a");
+	ImGui::DragFloat3("position", &light_->param_->position.x, 0.1f);
+	ImGui::End();
+
 	model_->Draw();
+	plane_->Draw();
 }

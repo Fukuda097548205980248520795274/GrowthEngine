@@ -115,14 +115,11 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
 			
 			// テクスチャファイルパス
-			if (textureFilePath.C_Str() == "")
-			{
-				meshData.material.handle = textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log);
-			}
-			else
-			{
-				meshData.material.handle = textureStore->Load(directory + "/" + textureFilePath.C_Str(), heap, device, commandList, log);
-			}
+			meshData.material.handle = textureStore->Load(directory + "/" + textureFilePath.C_Str(), heap, device, commandList, log);
+		}
+		else
+		{
+			meshData.material.handle = textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log);
 		}
 
 

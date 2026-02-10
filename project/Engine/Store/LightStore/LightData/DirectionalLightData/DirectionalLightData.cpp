@@ -31,7 +31,7 @@ void Engine::DirectionalLightData::Initialize(DX12Heap* heap, ID3D12Device* devi
 
 	// シャドウマップ用テクスチャリソースの生成と初期化
 	shadowMapTextureResource_ = std::make_unique<ShadowMapTextureResource>();
-	shadowMapTextureResource_->Initialize(heap, device, 1536, 1536, log);
+	shadowMapTextureResource_->Initialize(heap, device, 1280, 720, log);
 }
 
 /// @brief ビュープロジェクション行列を取得する

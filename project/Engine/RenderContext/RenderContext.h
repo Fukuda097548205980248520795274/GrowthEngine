@@ -102,7 +102,7 @@ namespace Engine
 		/// @brief 静的モデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle) { primitive_->DrawStaticModel(commandList_, handle); }
+		void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle) { primitive_->DrawStaticModel(commandList_, handle, lightStore_.get()); }
 
 
 	private:

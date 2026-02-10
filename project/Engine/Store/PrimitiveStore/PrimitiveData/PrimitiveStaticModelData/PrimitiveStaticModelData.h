@@ -20,6 +20,7 @@ namespace Engine
 	class BasePSOShadowMap;
 	class Log;
 	class TextureStore;
+	class LightStore;
 
 	class PrimitiveStaticModelData : public PrimitiveBaseData
 	{
@@ -51,7 +52,7 @@ namespace Engine
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore);
 
 		/// @brief コマンドリスト
 		/// @param commandList 

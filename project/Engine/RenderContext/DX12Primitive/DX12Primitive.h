@@ -54,7 +54,7 @@ namespace Engine
 		/// @brief 静的モデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawStaticModel(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get()); }
+		void DrawStaticModel(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, LightStore* lightStore) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get() , lightStore); }
 
 
 

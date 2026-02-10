@@ -123,6 +123,7 @@ void Engine::RenderContext::PreDraw()
 
 	// ライトストアの深度ステンシルをクリア
 	lightStore_->ClearDepthStencil(commandList_, primitive_.get());
+	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 
 	// オフスクリーンのクリア
@@ -156,7 +157,7 @@ void Engine::RenderContext::PostDraw()
 	ID3D12Resource* backBufferResource = buffering_->GetSwapChainResource(backBufferIndex);
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferCPUHandle = buffering_->GetSwapChainRtvCPUHandle(backBufferIndex);
 
-
+	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_,D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 	// バックバッファリソース Present -> RenderTarget
 	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList_);

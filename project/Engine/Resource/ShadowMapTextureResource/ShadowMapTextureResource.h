@@ -27,9 +27,15 @@ namespace Engine
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief バリアを張る
+		/// @param device 
+		/// @param before 
+		/// @param after 
+		void Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+
 		/// @brief SRVのGPUハンドルを取得する
 		/// @return 
-		D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandleSRV() { return srvHandle_.second; }
+		void Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 	private:
 

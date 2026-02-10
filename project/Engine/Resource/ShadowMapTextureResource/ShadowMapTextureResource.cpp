@@ -90,3 +90,19 @@ void Engine::ShadowMapTextureResource::ClearDepthStencil(ID3D12GraphicsCommandLi
 {
 	commandList->ClearDepthStencilView(dsvHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
+
+/// @brief バリアを張る
+/// @param device 
+/// @param before 
+/// @param after 
+void Engine::ShadowMapTextureResource::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+	TransitionBarrier(resource_.Get(), before, after, commandList);
+}
+
+/// @brief SRVのGPUハンドルを取得する
+/// @return 
+void Engine::ShadowMapTextureResource::Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
