@@ -24,9 +24,6 @@ void Game::Update()
 /// @brief 描画処理
 void Game::Draw()
 {
-	ImGui::Begin("a");
-	ImGui::DragFloat3("position", &light_->param_->position.x, 0.1f);
-	ImGui::End();
 
 	model_->Draw();
 	plane_->Draw();
