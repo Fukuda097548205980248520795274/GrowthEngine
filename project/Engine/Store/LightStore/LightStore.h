@@ -39,9 +39,9 @@ namespace Engine
 		/// @return 
 		LightHandle Load(const std::string& name, const std::string& type, DX12Heap* heap, ID3D12Device* device, Log* log);
 
-		/// @brief 深度ステンシルをクリア
+		/// @brief 更新処理
 		/// @param commandList 
-		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList , DX12Primitive* primitive);
+		void Update(ID3D12GraphicsCommandList* commandList , DX12Primitive* primitive);
 
 		/// @brief シャドウマップ用座標変換リソースを取得する
 		/// @return 

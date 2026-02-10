@@ -121,8 +121,10 @@ void Engine::RenderContext::PreDraw()
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 
-	// ライトストアの深度ステンシルをクリア
-	lightStore_->ClearDepthStencil(commandList_, primitive_.get());
+	// ライトストアの更新
+	lightStore_->Update(commandList_, primitive_.get());
+
+	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 
@@ -157,6 +159,7 @@ void Engine::RenderContext::PostDraw()
 	ID3D12Resource* backBufferResource = buffering_->GetSwapChainResource(backBufferIndex);
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferCPUHandle = buffering_->GetSwapChainRtvCPUHandle(backBufferIndex);
 
+	// シャドウマップを深度テクスチャに戻す
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_,D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 	// バックバッファリソース Present -> RenderTarget

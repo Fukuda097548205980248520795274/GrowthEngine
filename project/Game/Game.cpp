@@ -19,6 +19,7 @@ void Game::Initialize()
 /// @brief 更新処理
 void Game::Update()
 {
+	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 }
 
 /// @brief 描画処理

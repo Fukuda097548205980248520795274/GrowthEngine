@@ -1,6 +1,7 @@
 #include "DirectionalLightData.h"
 #include <cassert>
 #include <cmath>
+#include "GrowthEngine.h"
 
 /// @brief コンストラクタ
 /// @param name 
@@ -16,7 +17,7 @@ Engine::DirectionalLightData::DirectionalLightData(const std::string& name, Ligh
 	param_->position = Vector3(0.0f, 0.0f, 0.0f);
 	param_->size = Vector2(20.0f, 20.0f);
 	param_->minDepth = 0.1f;
-	param_->maxDepth = 10.0f;
+	param_->maxDepth = 15.0f;
 }
 
 /// @brief 初期化
@@ -29,9 +30,11 @@ void Engine::DirectionalLightData::Initialize(DX12Heap* heap, ID3D12Device* devi
 	assert(heap);
 	assert(device);
 
+	const GrowthEngine* engine = GrowthEngine::GetInstance();
+
 	// シャドウマップ用テクスチャリソースの生成と初期化
 	shadowMapTextureResource_ = std::make_unique<ShadowMapTextureResource>();
-	shadowMapTextureResource_->Initialize(heap, device, 1280, 720, log);
+	shadowMapTextureResource_->Initialize(heap, device, engine->GetScreenWidth(), engine->GetScreenHeight(), log);
 }
 
 /// @brief ビュープロジェクション行列を取得する

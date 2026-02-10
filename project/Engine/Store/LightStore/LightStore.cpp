@@ -60,9 +60,9 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 }
 
 
-/// @brief 深度ステンシルをクリア
+/// @brief 更新処理
 /// @param commandList 
-void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive)
+void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
