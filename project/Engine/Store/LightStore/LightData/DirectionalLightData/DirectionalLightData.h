@@ -24,6 +24,10 @@ namespace Engine
 		/// @param log 
 		void Initialize(DX12Heap* heap, ID3D12Device* device, Log* log);
 
+		/// @brief レンダーターゲットの設定
+		/// @param commandList 
+		void SetRenderTarget(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->SetRenderTarget(commandList); }
+
 		/// @brief 深度ステンシルをクリア
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->ClearDepthStencil(commandList); }

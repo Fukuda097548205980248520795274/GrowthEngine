@@ -38,3 +38,19 @@ void Engine::DX12Primitive::Update(const Matrix4x4& viewProjection)
 	// プリミティブストアの更新
 	primitiveStore_->Update(viewProjection);
 }
+
+/// @brief シャドウマップ用更新処理
+/// @param viewProjection 
+void Engine::DX12Primitive::ShadowMapUpdate(const Matrix4x4& viewProjection)
+{
+	// プリミティブストアの更新
+	primitiveStore_->ShadowMapUpdate(viewProjection);
+}
+
+/// @brief シャドウアップ用描画処理
+/// @param commandList 
+void Engine::DX12Primitive::ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+{
+	// プリミティブストアの描画
+	primitiveStore_->ShadowMapDraw(commandList, pso);
+}

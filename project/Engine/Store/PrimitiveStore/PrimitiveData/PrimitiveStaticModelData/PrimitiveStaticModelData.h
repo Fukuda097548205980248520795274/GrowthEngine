@@ -11,11 +11,13 @@
 
 #include "Resource/PrimitiveModelMaterialResource/PrimitiveModelMaterialResource.h"
 #include "Resource/PrimitiveModelTransformationResource/PrimitiveModelTransformationResource.h"
+#include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
 
 namespace Engine
 {
 	class ModelStore;
 	class BasePSOModel;
+	class BasePSOShadowMap;
 	class Log;
 	class TextureStore;
 
@@ -38,6 +40,10 @@ namespace Engine
 		/// @param viewProjection 
 		void Update(const Matrix4x4& viewProjection) override;
 
+		/// @brief シャドウマップ用更新処理
+		/// @param viewProjection 
+		void ShadowMapUpdate(const Matrix4x4& viewProjection) override;
+
 		/// @brief ハンドルを取得する
 		/// @return 
 		PrimitiveStaticModelHandle GetHandle()const { return hPrimitiveStaticModel_; }
@@ -45,8 +51,12 @@ namespace Engine
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		/// @param textureStore 
 		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief コマンドリスト
+		/// @param commandList 
+		/// @param pso 
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
 	private:
@@ -119,6 +129,12 @@ namespace Engine
 
 		// マテリアルリソース
 		std::vector<std::unique_ptr<PrimitiveModelMaterialResource>> meshMaterialResources_;
+
+
+	private:
+
+		// シャドウマップ用座標変換リソース
+		std::vector<std::unique_ptr<ShadowMapTransformationResource>> shadowMapTransformationResource_;
 
 
 	private:

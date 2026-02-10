@@ -7,6 +7,7 @@ namespace Engine
 {
 	class ShaderCompiler;
 	class Log;
+	class BasePSOShadowMap;
 
 	class DX12Primitive
 	{
@@ -21,6 +22,14 @@ namespace Engine
 		/// @brief 更新処理
 		/// @param viewProjection 
 		void Update(const Matrix4x4& viewProjection);
+
+		/// @brief シャドウマップ用更新処理
+		/// @param viewProjection 
+		void ShadowMapUpdate(const Matrix4x4& viewProjection);
+
+		/// @brief シャドウアップ用描画処理
+		/// @param commandList 
+		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
 		template <typename T>

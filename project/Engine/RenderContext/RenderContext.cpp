@@ -122,7 +122,7 @@ void Engine::RenderContext::PreDraw()
 
 
 	// ライトストアの深度ステンシルをクリア
-	lightStore_->ClearDepthStencil(commandList_);
+	lightStore_->ClearDepthStencil(commandList_, primitive_.get());
 
 
 	// オフスクリーンのクリア

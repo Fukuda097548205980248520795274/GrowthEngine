@@ -15,6 +15,7 @@ namespace Engine
 	class DX12Heap;
 	class Log;
 	class ShaderCompiler;
+	class DX12Primitive;
 
 	class LightStore
 	{
@@ -37,7 +38,7 @@ namespace Engine
 
 		/// @brief 深度ステンシルをクリア
 		/// @param commandList 
-		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
+		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList , DX12Primitive* primitive);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

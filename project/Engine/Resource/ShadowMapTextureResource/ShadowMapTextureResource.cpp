@@ -77,6 +77,13 @@ void Engine::ShadowMapTextureResource::Initialize(DX12Heap* heap, ID3D12Device* 
 	}
 }
 
+/// @brief レンダーターゲットの設定
+/// @param commandList 
+void Engine::ShadowMapTextureResource::SetRenderTarget(ID3D12GraphicsCommandList* commandList)
+{
+	commandList->OMSetRenderTargets(0, nullptr, FALSE, &dsvHandle_);
+}
+
 /// @brief デプスステンシルのクリア
 /// @param commandList 
 void Engine::ShadowMapTextureResource::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)

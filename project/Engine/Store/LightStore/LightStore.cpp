@@ -1,5 +1,6 @@
 #include "LightStore.h"
 #include "LightData/DirectionalLightData/DirectionalLightData.h"
+#include "RenderContext/DX12Primitive/DX12Primitive.h"
 #include <cassert>
 
 /// @brief 初期化
@@ -57,7 +58,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 
 /// @brief 深度ステンシルをクリア
 /// @param commandList 
-void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)
+void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
@@ -68,10 +69,17 @@ void Engine::LightStore::ClearDepthStencil(ID3D12GraphicsCommandList* commandLis
 		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
 
 		// 深度をクリアする
+		directionalLightData->SetRenderTarget(commandList);
 		directionalLightData->ClearDepthStencil(commandList);
 
 		// 平行光源のビュープロジェクション行列を取得する
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
+
+		// シャドウマップ用にプリミティブ更新
+		primitive->ShadowMapUpdate(viewProjectionMatrix);
+
+		// シャドウマップ用に描画
+		primitive->ShadowMapDraw(commandList, psoShadowMapPrimitive_.get());
 
 		break;
 	}

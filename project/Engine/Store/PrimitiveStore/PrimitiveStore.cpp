@@ -8,6 +8,23 @@ void Engine::PrimitiveStore::Update(const Matrix4x4& viewProjection)
 	for (auto& data : staticModelTable_)data->Update(viewProjection);
 }
 
+/// @brief シャドウマップ用の更新処理
+/// @param viewProjection 
+void Engine::PrimitiveStore::ShadowMapUpdate(const Matrix4x4& viewProjection)
+{
+	// 静的モデルデータ
+	for (auto& data : staticModelTable_)data->ShadowMapUpdate(viewProjection);
+}
+
+/// @brief シャドウマップ用の描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+{
+	// 静的モデルデータ
+	for (auto& data : staticModelTable_)data->Register(commandList, pso);
+}
+
 
 /// @brief 静的モデル読み込み
 /// @param model 

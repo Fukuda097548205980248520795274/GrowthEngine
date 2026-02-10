@@ -3,6 +3,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include <cassert>
 #include "PSO/PSOModel/BasePSOModel.h"
+#include "PSO/PSOShadowMap/BasePSOShadowMap.h"
 
 #include <numbers>
 
@@ -37,6 +38,7 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterials_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
@@ -59,6 +61,10 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		// マテリアルリソース
 		meshMaterialResources_[meshIndex] = std::make_unique<PrimitiveModelMaterialResource>();
 		meshMaterialResources_[meshIndex]->Initialize(device, log);
+
+		// シャドウマップ用座標変換リソース
+		shadowMapTransformationResource_[meshIndex] = std::make_unique<ShadowMapTransformationResource>();
+		shadowMapTransformationResource_[meshIndex]->Initialize(device, log);
 	}
 }
 
@@ -107,6 +113,32 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 	}
 }
 
+/// @brief シャドウマップ用更新処理
+/// @param viewProjection 
+void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProjection)
+{
+	Quaternion modelQuaternion =
+		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
+
+	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		Quaternion meshQuaternion =
+			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+
+
+		// ワールド座標
+		*shadowMapTransformationResource_[meshIndex]->data_ = worldMatrix * localMatrix * viewProjection;
+	}
+}
+
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
@@ -129,6 +161,30 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 
 		// テクスチャの設定
 		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(*meshMaterials_[meshIndex].hTexture_));
+
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+	}
+}
+
+/// @brief コマンドリスト
+/// @param commandList 
+/// @param pso 
+void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+{
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		// 座標変換の設定
+		shadowMapTransformationResource_[meshIndex]->Register(commandList, 0);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

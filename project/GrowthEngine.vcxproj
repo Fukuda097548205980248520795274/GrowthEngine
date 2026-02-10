@@ -293,6 +293,7 @@
     <ClCompile Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.cpp" />
     <ClCompile Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.cpp" />
     <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp" />
+    <ClCompile Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -409,6 +410,7 @@
     <ClInclude Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.h" />
     <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
+    <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />

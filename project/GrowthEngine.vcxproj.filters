@@ -325,6 +325,9 @@
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive">
       <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\ShadowMapTransformationResource">
+      <UniqueIdentifier>{fa6323c9-37ad-46a7-85cb-ab72e65d82e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -545,6 +548,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.cpp">
+      <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -796,6 +802,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.h">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h">
+      <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@ class PrimitiveStaticModel;
 namespace Engine
 {
 	class BasePSOModel;
+	class BasePSOShadowMap;
 
 	class ModelStore;
 	class Log;
@@ -17,6 +18,15 @@ namespace Engine
 		/// @brief 更新処理
 		/// @param viewProjection 
 		void Update(const Matrix4x4& viewProjection);
+
+		/// @brief シャドウマップ用の更新処理
+		/// @param viewProjection 
+		void ShadowMapUpdate(const Matrix4x4& viewProjection);
+
+		/// @brief シャドウマップ用の描画処理
+		/// @param commandList 
+		/// @param pso 
+		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
 	public:

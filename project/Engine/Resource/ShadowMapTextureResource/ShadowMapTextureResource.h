@@ -19,6 +19,10 @@ namespace Engine
 		/// @param device 
 		void Initialize(DX12Heap* heap, ID3D12Device* device, int32_t width, int32_t height, Log* log);
 
+		/// @brief レンダーターゲットの設定
+		/// @param commandList 
+		void SetRenderTarget(ID3D12GraphicsCommandList* commandList);
+
 		/// @brief デプスステンシルのクリア
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
