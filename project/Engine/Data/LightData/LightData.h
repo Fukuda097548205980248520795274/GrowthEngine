@@ -1,5 +1,6 @@
 #pragma once
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Vector/Vector2/Vector2.h"
 
 namespace Engine
 {
@@ -8,6 +9,15 @@ namespace Engine
 	{
 		// 位置
 		Vector3 position;
+
+		// サイズ
+		Vector2 size;
+
+		// 最小深度値
+		float minDepth;
+
+		// 最大深度値
+		float maxDepth;
 
 		// 向き
 		Vector3 direction;

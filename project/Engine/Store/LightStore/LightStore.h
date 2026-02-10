@@ -8,14 +8,23 @@
 
 #include "Application/Light/LightDirectional/LightDirectional.h"
 
+#include "PSO/PSOShadowMap/PSOShadowMapPrimitive/PSOShadowMapPrimitive.h"
+
 namespace Engine
 {
 	class DX12Heap;
 	class Log;
+	class ShaderCompiler;
 
 	class LightStore
 	{
 	public:
+
+		/// @brief 初期化
+		/// @param device 
+		/// @param compiler 
+		/// @param log 
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log);
 
 		/// @brief 読み込み
 		/// @param name 
@@ -46,5 +55,11 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<BaseLightData>> dataTable_;
+
+
+	private:
+
+		// プリミティブ用シャドウマップPSO
+		std::unique_ptr<PSOShadowMapPrimitive> psoShadowMapPrimitive_ = nullptr;
 	};
 }

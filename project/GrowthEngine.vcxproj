@@ -239,6 +239,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.cpp" />
+    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -389,6 +391,8 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h" />
+    <ClInclude Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.h" />
+    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.h" />
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h" />
     <ClInclude Include="Engine\RenderContext\DX12Command\DX12Command.h" />
     <ClInclude Include="Engine\RenderContext\DX12Core\DX12Core.h" />
@@ -468,6 +472,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PrimitiveModel\PrimitiveModel.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapPrimitive.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>

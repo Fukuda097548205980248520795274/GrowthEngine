@@ -2,6 +2,7 @@
 #include "../BaseLightData.h"
 #include "Data/LightData/LightData.h"
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 namespace Engine
 {
@@ -26,6 +27,10 @@ namespace Engine
 		/// @brief 深度ステンシルをクリア
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->ClearDepthStencil(commandList); }
+
+		/// @brief ビュープロジェクション行列を取得する
+		/// @return 
+		Matrix4x4 GetViewProjectionMatrix() const;
 
 		/// @brief 
 		/// @return 

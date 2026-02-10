@@ -76,6 +76,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// ライトストアの生成と初期化
 	lightStore_ = std::make_unique<LightStore>();
+	lightStore_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
 
 	// ビューポートの設定
