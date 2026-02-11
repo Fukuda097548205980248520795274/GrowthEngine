@@ -121,8 +121,11 @@ void Engine::RenderContext::PreDraw()
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 
+	// カメラストアの更新
+	cameraStore_->Update();
+
 	// ライトストアの更新
-	lightStore_->Update(commandList_, primitive_.get());
+	lightStore_->Update(commandList_, primitive_.get(), cameraStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -130,9 +133,6 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
-
-	// カメラストアの更新
-	cameraStore_->Update();
 
 	// プリミティブストアの更新
 	primitive_->Update(cameraStore_->GetCamera3D().GetViewProjectionMatrix());

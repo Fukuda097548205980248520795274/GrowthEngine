@@ -20,30 +20,11 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	psoShadowMapPrimitive_ = std::make_unique<PSOShadowMapPrimitive>();
 	psoShadowMapPrimitive_->Initialize(device, compiler, log);
 
-	// ライトカリングPSOの生成と初期化
-	psoLightCulling_ = std::make_unique<ComputePSOLightCulling>();
-	psoLightCulling_->Initialize(device, compiler, log);
-
 
 	// 座標変換用シャドウマップリソース
 	shadowMapTransformationResource_ = std::make_unique<ShadowMapTransformationResource>();
 	shadowMapTransformationResource_->Initialize(device, log);
 
-	// ライトデータリソース
-	lightDataResource_ = std::make_unique<LightDataResource>();
-	lightDataResource_->Initialize(device, heap, 256, log);
-
-	// タイルインデックスリソース
-	tileIndicesResource_ = std::make_unique<TileLightResource>();
-	tileIndicesResource_->Initialize(device, commandList, heap, 16 * 16 * 64, log);
-
-	// タイル数カウントリソース
-	tileCountResource_ = std::make_unique<TileLightResource>();
-	tileCountResource_->Initialize(device, commandList, heap, 16 * 16, log);
-
-	// ライトカリングリソース
-	lightCullingResource_ = std::make_unique<LightCullingParamResource>();
-	lightCullingResource_->Initialize(device, log);
 }
 
 /// @brief 読み込み
@@ -86,11 +67,12 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 
 /// @brief 更新処理
 /// @param commandList 
-void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive)
+void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive, const Matrix4x4& projectionMatrix)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
 	{
+
 		if (light->GetTypeName() != "Directional")
 			continue;
 
@@ -114,23 +96,6 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Prim
 
 		break;
 	}
-
-
-	psoLightCulling_->Register(commandList);
-
-	lightDataResource_->Register(commandList, 0);
-
-	tileIndicesResource_->Register(commandList, 1);
-
-	tileCountResource_->Register(commandList, 2);
-
-	lightCullingResource_->Register(commandList, 3);
-
-
-	UINT tilesX = (GrowthEngine::GetInstance()->GetScreenWidth() + 16 - 1) / 16;
-	UINT tilesY = (GrowthEngine::GetInstance()->GetScreenWidth() + 16 - 1) / 16;
-
-	commandList->Dispatch(tilesX, tilesY, 1);
 }
 
 /// @brief シャドウマップテクスチャリソースを取得する

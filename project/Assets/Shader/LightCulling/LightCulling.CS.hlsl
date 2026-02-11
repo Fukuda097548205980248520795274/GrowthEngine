@@ -76,7 +76,7 @@ bool PointLightIntersectsTile(
 }
 
 [numthreads(1, 1, 1)]
-void main( uint3 DTid : SV_DispatchThreadID )
+void main(uint3 DTid : SV_DispatchThreadID)
 {
     uint tileX = DTid.x;
     uint tileY = DTid.y;
@@ -104,17 +104,26 @@ void main( uint3 DTid : SV_DispatchThreadID )
 
     // タイル四隅（Near / Far）
     float depths[2] = { 0.0f, 1.0f };
+    
+    float2 corners[4] =
+    {
+        tileMinUV,
+        float2(tileMaxUV.x, tileMinUV.y),
+        float2(tileMinUV.x, tileMaxUV.y),
+        tileMaxUV
+    };
 
-    [unroll]
     for (uint z = 0; z < 2; ++z)
     {
         float d = depths[z];
 
-        float3 v0 = ScreenToView(tileMinUV, d);
-        float3 v1 = ScreenToView(tileMaxUV, d);
-
-        frustumMin = min(frustumMin, min(v0, v1));
-        frustumMax = max(frustumMax, max(v0, v1));
+        [unroll]
+        for (uint i = 0; i < 4; ++i)
+        {
+            float3 v = ScreenToView(corners[i], d);
+            frustumMin = min(frustumMin, v);
+            frustumMax = max(frustumMax, v);
+        }
     }
 
     // ライトカリング
@@ -123,10 +132,9 @@ void main( uint3 DTid : SV_DispatchThreadID )
         Light light = gLight[lightID];
 
         // Directional Light は全タイルに影響
-        if (light.type == 0)
+        if (light.type == DIRECTIONAL_LIGHT)
         {
-            uint index;
-            InterlockedAdd(gTileLightCount[tileID], 1, index);
+            uint index = gTileLightCount[tileID]++;
             if (index < MAX_LIGHTS_PER_TILE)
                 gTileLightIndices[tileID * MAX_LIGHTS_PER_TILE + index] = lightID;
             continue;
@@ -134,8 +142,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
 
         if (PointLightIntersectsTile(light, frustumMin, frustumMax))
         {
-            uint index;
-            InterlockedAdd(gTileLightCount[tileID], 1, index);
+            uint index = gTileLightCount[tileID]++;
             if (index < MAX_LIGHTS_PER_TILE)
                 gTileLightIndices[tileID * MAX_LIGHTS_PER_TILE + index] = lightID;
         }

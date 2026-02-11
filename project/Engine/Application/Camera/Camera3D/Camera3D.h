@@ -21,6 +21,10 @@ public:
 	/// @return 
 	Matrix4x4 GetViewProjectionMatrix()const { return viewProjectionMatrix_; }
 
+	/// @brief 正射影行列を取得する
+	/// @return 
+	Matrix4x4 GetProjectionMatrix()const { return projectionMatrix_; }
+
 	/// @brief ワールド行列を取得する
 	/// @return 
 	Matrix4x4 GetWorldMatrix()const { return worldMatrix_; }
