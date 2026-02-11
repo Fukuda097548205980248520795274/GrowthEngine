@@ -80,11 +80,11 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateBufferResource(ID3D12Device
 /// @param sizeInBytes 
 /// @param log 
 /// @return 
-Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateUAVResource(ID3D12Device* device, size_t sizeInBytes, Log* log)
+Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateUAVResource(ID3D12Device* device, size_t sizeInBytes, Log* log, ID3D12GraphicsCommandList* commandList)
 {
 	// ヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+	D3D12_HEAP_PROPERTIES defaultHeapProperties{};
+	defaultHeapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 
 	// 頂点リソースの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -115,12 +115,15 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateUAVResource(ID3D12Device* d
 
 	// 頂点リソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-	HRESULT hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
+	HRESULT hr = device->CreateCommittedResource(&defaultHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&resourceDesc, D3D12_RESOURCE_STATE_COMMON, nullptr, IID_PPV_ARGS(&resource));
 	assert(SUCCEEDED(hr));
 
 	// 生成成功ログ
 	if (log)log->Logging("CreateCommitted UAVResource \n");
+
+	// リソースステート遷移
+	Engine::TransitionBarrier(resource.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
 
 	return resource;
 }

@@ -30,7 +30,7 @@ namespace Engine
 	/// @param sizeInBytes 
 	/// @param log 
 	/// @return 
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateUAVResource(ID3D12Device* device, size_t sizeInBytes, Log* log);
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateUAVResource(ID3D12Device* device, size_t sizeInBytes, Log* log, ID3D12GraphicsCommandList* commandList);
 
 	/// @brief 書き込み可能なテクスチャリソースを生成する
 	/// @param device 

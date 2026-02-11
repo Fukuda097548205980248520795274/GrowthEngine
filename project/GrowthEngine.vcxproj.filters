@@ -334,6 +334,15 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOLightCulling">
       <UniqueIdentifier>{8c8da7b7-3e57-4c30-b288-19fc43982e1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\LightDataResource">
+      <UniqueIdentifier>{089a2df5-38a3-45bc-bbce-695928e381bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\LightCullingParamResource">
+      <UniqueIdentifier>{79099238-6dc8-4c85-8699-cc6cfbd9409e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\TileLightResource">
+      <UniqueIdentifier>{1be739a0-98db-4238-bca4-be250d5e2e50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -560,6 +569,15 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\LightDataResource\LightDataResource.cpp">
+      <Filter>Engine\Include\Resource\LightDataResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\TileLightResource\TileLightResource.cpp">
+      <Filter>Engine\Include\Resource\TileLightResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.cpp">
+      <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -817,6 +835,15 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\LightDataResource\LightDataResource.h">
+      <Filter>Engine\Include\Resource\LightDataResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h">
+      <Filter>Engine\Include\Resource\TileLightResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.h">
+      <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

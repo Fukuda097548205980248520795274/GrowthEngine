@@ -13,6 +13,9 @@
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
 #include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
+#include "Resource/LightDataResource/LightDataResource.h"
+#include "Resource/TileLightResource/TileLightResource.h"
+#include "Resource/LightCullingParamResource/LightCullingParamResource.h"
 
 namespace Engine
 {
@@ -29,7 +32,7 @@ namespace Engine
 		/// @param device 
 		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log);
+		void Initialize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Heap* heap, ShaderCompiler* compiler, Log* log);
 
 		/// @brief 読み込み
 		/// @param name 
@@ -83,5 +86,17 @@ namespace Engine
 
 		// シャドウマップ用座標変換リソース
 		std::unique_ptr<ShadowMapTransformationResource> shadowMapTransformationResource_ = nullptr;
+
+		// ライトデータリソース
+		std::unique_ptr<LightDataResource> lightDataResource_ = nullptr;
+
+		// タイルインデックスリソース
+		std::unique_ptr<TileLightResource> tileIndicesResource_ = nullptr;
+
+		// タイル数カウントリソース
+		std::unique_ptr<TileLightResource> tileCountResource_ = nullptr;
+
+		// ライトカリングパラメータリソース
+		std::unique_ptr<LightCullingParamResource> lightCullingResource_ = nullptr;
 	};
 }

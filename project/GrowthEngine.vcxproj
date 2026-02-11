@@ -323,6 +323,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.cpp" />
+    <ClCompile Include="Engine\Resource\LightDataResource\LightDataResource.cpp" />
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -343,6 +345,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Resource\TileLightResource\TileLightResource.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -492,11 +495,14 @@
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h" />
+    <ClInclude Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.h" />
+    <ClInclude Include="Engine\Resource\LightDataResource\LightDataResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
     <ClInclude Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.h" />
     <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h" />
+    <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />
