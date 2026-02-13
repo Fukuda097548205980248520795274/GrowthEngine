@@ -186,6 +186,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp" />
+    <ClCompile Include="Engine\Func\Interpolation\Interpolation.cpp" />
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -458,8 +460,10 @@
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
+    <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
+    <ClInclude Include="Engine\Func\Interpolation\Interpolation.h" />
     <ClInclude Include="Engine\Func\ModelFunc\ModelFunc.h" />
     <ClInclude Include="Engine\Func\RandomFunc\RandomFunc.h" />
     <ClInclude Include="Engine\Func\ResourceFunc\ResourceFunc.h" />

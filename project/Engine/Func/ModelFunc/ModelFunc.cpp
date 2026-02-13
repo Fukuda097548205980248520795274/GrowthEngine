@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <list>
+#include "Func/Interpolation/Interpolation.h"
 
 
 /// @brief モデルを読み込む
@@ -391,4 +392,137 @@ Engine::ModelBoneData Engine::LoadBone(const std::string& directory, const std::
 	}
 
 	return modelData;
+}
+
+/// @brief スケルトンを作成する
+/// @param rootNode 
+/// @return 
+Engine::Skeleton Engine::CreateSkeleton(const std::vector<ModelNode>& nodes)
+{
+	Skeleton skeleton;
+	skeleton.root = Engine::CreateJoint(nodes, nodes[0], {}, skeleton.joints);
+
+	// 名前とインデックスのマッピングを行いアクセスしやすくする
+	for (const Joint& joint : skeleton.joints)
+	{
+		skeleton.jointMap.emplace(joint.name, joint.index);
+	}
+
+	// スケルトンを更新する
+	UpdateSkeleton(skeleton);
+
+	return skeleton;
+}
+
+/// @brief ジョイントを作成する
+/// @param node 
+/// @param parent 
+/// @param joints 
+/// @return 
+int32_t Engine::CreateJoint(const std::vector<ModelNode>& nodes, const ModelNode& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints)
+{
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeletonSpaceMatrix = MakeIdentityMatrix4x4();
+	joint.transform = node.transform;
+	joint.index = int32_t(joints.size());
+	joint.parent = parent;
+	joints.push_back(joint);
+
+	for (int32_t child : node.children)
+	{
+		// 子jointを作成し、そのインデックスを登録
+		int32_t childIndex = CreateJoint(nodes, nodes[child], joint.index, joints);
+		joints[joint.index].children.push_back(childIndex);
+	}
+
+	return joint.index;
+}
+
+/// @brief スケルトンを更新する
+/// @param skeleton 
+void Engine::UpdateSkeleton(Skeleton& skeleton)
+{
+	// 全てのjointを更新する
+	for (Joint& joint : skeleton.joints)
+	{
+		// ローカル行列
+		joint.localMatrix = Make3DAffineMatrix4x4(joint.transform.scale, joint.transform.rotate, joint.transform.translate);
+
+		// 親がいれば行列をかける
+		if (joint.parent)
+		{
+			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton.joints[*joint.parent].skeletonSpaceMatrix;
+		}
+		else
+		{
+			// 親がいないので、ローカル行列とSkeletonSpaceMatrixは一致する
+			joint.skeletonSpaceMatrix = joint.localMatrix;
+		}
+	}
+}
+
+/// @brief 任意の時刻の値を取得する
+/// @param keyframe 
+/// @param time 
+/// @return 
+Vector3 Engine::CalculateValue(const std::vector<KeyFrameVector3>& keyframe, float time)
+{
+	// キーがないと返す値が内のでアウト
+	assert(!keyframe.empty());
+
+	// キーが一つか、時刻がキーフレーム前なら最初の値とする
+	if (keyframe.size() == 1 || time <= keyframe[0].time)
+	{
+		return keyframe[0].value;
+	}
+
+	for (size_t index = 0; index < keyframe.size() - 1; ++index)
+	{
+		size_t nextIndex = index + 1;
+
+		// index と nextIndex
+		if (keyframe[index].time <= time && time <= keyframe[nextIndex].time)
+		{
+			// 範囲内を補完する
+			float t = (time - keyframe[index].time) / (keyframe[nextIndex].time - keyframe[index].time);
+			return Lerp<Vector3>(keyframe[index].value, keyframe[nextIndex].value, t);
+		}
+	}
+
+	// ここまで来たら、時刻より後ろなので、最後の値を返す
+	return (*keyframe.rbegin()).value;
+}
+
+/// @brief 任意の時刻の値を取得する
+/// @param keyframe 
+/// @param time 
+/// @return 
+Quaternion Engine::CalculateValue(const std::vector<KeyFrameQuaternion>& keyframe, float time)
+{
+	// キーがないと返す値が内のでアウト
+	assert(!keyframe.empty());
+
+	// キーが一つか、時刻がキーフレーム前なら最初の値とする
+	if (keyframe.size() == 1 || time <= keyframe[0].time)
+	{
+		return keyframe[0].value;
+	}
+
+	for (size_t index = 0; index < keyframe.size() - 1; ++index)
+	{
+		size_t nextIndex = index + 1;
+
+		// index と nextIndex
+		if (keyframe[index].time <= time && time <= keyframe[nextIndex].time)
+		{
+			// 範囲内を補完する
+			float t = (time - keyframe[index].time) / (keyframe[nextIndex].time - keyframe[index].time);
+			return Slerp(keyframe[index].value, keyframe[nextIndex].value, t);
+		}
+	}
+
+	// ここまで来たら、時刻より後ろなので、最後の値を返す
+	return (*keyframe.rbegin()).value;
 }

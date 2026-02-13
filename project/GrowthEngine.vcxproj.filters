@@ -349,6 +349,12 @@
     <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData">
       <UniqueIdentifier>{6525448e-7018-4101-9ec1-a7ec5a198006}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Func\Interpolation">
+      <UniqueIdentifier>{8c61aac0-7c65-49f2-ac89-74abaea3b158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\SkinCluster">
+      <UniqueIdentifier>{a04600f1-6aa3-4e0c-9d8d-bcf0b26d7c5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -590,6 +596,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Func\Interpolation\Interpolation.cpp">
+      <Filter>Engine\Include\Func\Interpolation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp">
+      <Filter>Engine\Include\Data\SkinCluster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -862,6 +874,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\Interpolation\Interpolation.h">
+      <Filter>Engine\Include\Func\Interpolation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h">
+      <Filter>Engine\Include\Data\SkinCluster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
