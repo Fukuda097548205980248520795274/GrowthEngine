@@ -84,6 +84,7 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// ノード行列
 		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
 
@@ -136,6 +137,7 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// ノード行列
 		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
 
