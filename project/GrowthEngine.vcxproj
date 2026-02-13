@@ -406,7 +406,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp" />
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -518,7 +520,9 @@
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h" />
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveStore.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />

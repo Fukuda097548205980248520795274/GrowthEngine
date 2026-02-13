@@ -2,6 +2,9 @@
 #include "Data/ModelData/ModelData.h"
 #include "Handle/Handle.h"
 #include <memory>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <wrl.h>
 
 namespace Engine
 {

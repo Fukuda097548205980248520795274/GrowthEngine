@@ -50,10 +50,10 @@ namespace Engine
 	Animation LoadAnimationFile(const std::string& directoryPath, const std::string& filename);
 
 	/// @brief ボーンを読み込む
-	/// @param modelData 
 	/// @param directory 
 	/// @param fileName 
 	/// @param skeleton 
-	void LoadBone(ModelData& modelData, const std::string& directory, const std::string& fileName, const Skeleton& skeleton);
+	/// @return 
+	ModelBoneData LoadBone(const std::string& directory, const std::string& fileName, const Skeleton& skeleton);
 
 }

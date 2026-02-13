@@ -313,11 +313,11 @@ Engine::Animation Engine::LoadAnimationFile(const std::string& directoryPath, co
 
 
 /// @brief ボーンを読み込む
-/// @param modelData 
 /// @param directory 
 /// @param fileName 
 /// @param skeleton 
-void Engine::LoadBone(ModelData& modelData, const std::string& directory, const std::string& fileName, const Skeleton& skeleton)
+/// @return 
+Engine::ModelBoneData Engine::LoadBone(const std::string& directory, const std::string& fileName, const Skeleton& skeleton)
 {
 	// AssImpでファイルを開く
 	Assimp::Importer importer;
@@ -329,6 +329,9 @@ void Engine::LoadBone(ModelData& modelData, const std::string& directory, const 
 
 	// メッシュがないのは対応しない
 	assert(scene->HasMeshes());
+
+	// モデルボーンデータ
+	ModelBoneData modelData;
 
 	// メッシュ数が決まっていなかったら確保する
 	if (modelData.meshes.empty())
@@ -386,4 +389,6 @@ void Engine::LoadBone(ModelData& modelData, const std::string& directory, const 
 		}
 
 	}
+
+	return modelData;
 }

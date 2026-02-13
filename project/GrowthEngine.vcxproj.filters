@@ -343,6 +343,12 @@
     <Filter Include="Engine\Include\Resource\TileLightResource">
       <UniqueIdentifier>{1be739a0-98db-4238-bca4-be250d5e2e50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData">
+      <UniqueIdentifier>{671be303-0741-47f1-8ef1-187a3d8c1368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData">
+      <UniqueIdentifier>{6525448e-7018-4101-9ec1-a7ec5a198006}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -578,6 +584,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.cpp">
       <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -844,6 +856,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.h">
       <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h">
+      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

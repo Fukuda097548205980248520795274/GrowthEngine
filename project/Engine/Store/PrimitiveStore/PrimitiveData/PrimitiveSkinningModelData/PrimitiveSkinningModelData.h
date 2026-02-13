@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	class SkeletonStore
+	class PrimitiveSkinningModelData
 	{
 	public:
 

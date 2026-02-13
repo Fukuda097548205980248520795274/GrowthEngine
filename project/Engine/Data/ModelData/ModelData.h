@@ -3,12 +3,8 @@
 #include <vector>
 #include <cstdint>
 #include <optional>
-#include <array>
-#include <d3d12.h>
-#include <dxgi1_6.h>
 #include <unordered_map>
 #include <wrl.h>
-#include <span>
 
 #include "Handle/Handle.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
@@ -78,65 +74,6 @@ namespace Engine
 
 
 
-	// 頂点ウェイトデータ
-	struct VertexWeightData
-	{
-		float weight;
-		uint32_t vertexIndex;
-	};
-
-	// ジョイントウェイトデータ
-	struct JointWeightData
-	{
-		int32_t jointIndex;
-		std::vector<VertexWeightData> vertexWeights;
-	};
-
-
-
-	/// @brief 頂点インフルエンス
-	struct VertexInfluence
-	{
-		std::array<float, 4> weights;
-		std::array<int32_t, 4> jointIndices;
-	};
-
-	/// @brief スキニングデータ
-	struct SkinningData
-	{
-		uint32_t jointCount;
-		std::vector<VertexInfluence> influence;
-	};
-
-
-
-	// GPUに送るウェル
-	struct WellForGPU
-	{
-		// 位置用
-		Matrix4x4 skeletonSpaceMatrix;
-
-		// 法線用
-		Matrix4x4 skeletonSpaceInverseTransposeMatrix;
-	};
-
-
-	// スキンクラスター
-	struct SkinCluster
-	{
-		std::vector<Matrix4x4> inverseBindPoseMatrices;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
-		D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
-		std::span<VertexInfluence> mappedInfluence;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
-		std::span<WellForGPU> mappedPalette;
-		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
-	};
-
-
-
 	/// @brief メッシュデータ
 	struct MeshData
 	{
@@ -148,15 +85,7 @@ namespace Engine
 
 		// マテリアルデータ
 		MaterialData material;
-
-
-		// ジョイントウェイト
-		std::vector<JointWeightData> jointWeights;
-
-		// スキニングデータ
-		std::optional<SkinningData> skinning;
 	};
-
 
 
 	
