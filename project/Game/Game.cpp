@@ -7,7 +7,7 @@ void Game::Initialize()
 
 	light_ = std::make_unique<LightDirectional>("TEST");
 
-	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.obj"), "Suzanne");
+	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.gltf"), "Suzanne");
 	plane_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/plane", "plame.obj"), "Plane");
 
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");

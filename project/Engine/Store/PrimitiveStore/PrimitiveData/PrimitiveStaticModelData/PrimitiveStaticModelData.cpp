@@ -72,6 +72,9 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 /// @brief 更新処理
 void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 {
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
 	Quaternion modelQuaternion =
 		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
 		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
@@ -81,6 +84,9 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
+		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
+
 		Quaternion meshQuaternion =
 			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
 			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
@@ -91,7 +97,7 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
-			worldMatrix * localMatrix;
+			localMatrix * worldMatrix * nodeMatrix;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -118,6 +124,9 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 /// @param viewProjection 
 void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProjection)
 {
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
 	Quaternion modelQuaternion =
 		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -127,6 +136,9 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
+		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
+
 		Quaternion meshQuaternion =
 			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -136,7 +148,7 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 
 
 		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = worldMatrix * localMatrix * viewProjection;
+		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * worldMatrix *  nodeMatrix * viewProjection;
 	}
 }
 

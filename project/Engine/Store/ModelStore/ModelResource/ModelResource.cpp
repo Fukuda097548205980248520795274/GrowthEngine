@@ -22,6 +22,9 @@ void Engine::ModelResource::Initialize(const std::string& directory, const std::
 	// モデルノードを読み取る
 	LoadNode(modelData_, directory, fileName);
 
+	// ノード更新
+	if (!modelData_.nodes.empty())UpdateWorldMatrix(modelData_, 0);
+
 	// ファイルパス
 	filePath_ = directory + "/" + fileName;
 
