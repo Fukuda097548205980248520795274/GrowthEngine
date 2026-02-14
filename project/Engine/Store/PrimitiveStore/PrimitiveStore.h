@@ -15,6 +15,7 @@ namespace Engine
 
 	class ModelStore;
 	class TextureStore;
+	class AnimationStore;
 	class LightStore;
 	class Log;
 
@@ -44,8 +45,8 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore,TextureStore* textureStore, ID3D12Device* device, 
-			ModelHandle hModel, const std::string& name , const std::string& type, Log* log);
+		PrimitiveHandle Load(ModelStore* modelStore,TextureStore* textureStore,AnimationStore* animationStore, ID3D12Device* device, 
+			ModelHandle hModel,AnimationHandle hAnimation, const std::string& name , const std::string& type, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 

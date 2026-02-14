@@ -17,6 +17,7 @@
 #include "Application/Camera/GameCamera/GameCamera.h"
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
+#include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
 
 
 // マウスボタン
@@ -299,9 +300,9 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	PrimitiveHandle LoadPrimitive(ModelHandle hModel, const std::string& name, const std::string& type) const
+	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type) const
 	{
-		return renderContext_->LoadPrimitive(hModel, name,type, log_.get());
+		return renderContext_->LoadPrimitive(hModel, hAnimation, name, type, log_.get());
 	}
 
 	/// @brief プリミティブ : モデル

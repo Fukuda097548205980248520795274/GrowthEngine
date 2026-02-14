@@ -21,6 +21,10 @@ namespace Engine
 		/// @return 
 		std::string GetFilePath()const { return filePath_; }
 
+		/// @brief アニメーションを取得する
+		/// @return 
+		Animation GetAnimation()const { return animation_; }
+
 
 	private:
 

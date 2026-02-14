@@ -20,6 +20,7 @@ namespace Engine
 	class Log;
 	class TextureStore;
 	class LightStore;
+	class AnimationStore;
 
 	class PrimitiveAnimationModelData : public PrimitiveBaseData
 	{
@@ -28,15 +29,15 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveAnimationModelData(const std::string& name, ModelHandle hModel, PrimitiveHandle hPrimitive)
-			: hModel_(hModel), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
+		PrimitiveAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, PrimitiveHandle hPrimitive)
+			: hModel_(hModel),hAnimation_(hAnimation), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
 			typeName_ = "AnimationModel";
 		}
 
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore,AnimationStore* animationStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		/// @param viewProjection 
@@ -69,6 +70,9 @@ namespace Engine
 		// プリミティブハンドル
 		PrimitiveHandle hPrimitive_ = 0;
 
+		/// @brief アニメーションハンドル
+		AnimationHandle hAnimation_ = 0;
+
 
 	private:
 
@@ -96,5 +100,8 @@ namespace Engine
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
+
+		/// @brief アニメーションストア
+		AnimationStore* animationStore_ = nullptr;
 	};
 }

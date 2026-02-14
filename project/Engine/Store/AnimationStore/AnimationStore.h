@@ -13,6 +13,11 @@ namespace Engine
 		/// @param fileName 
 		AnimationHandle Load(const std::string& directory, const std::string& fileName);
 
+		/// @brief アニメーションを取得する
+		/// @param handle 
+		/// @return 
+		Animation GetAnimation(AnimationHandle handle) { return dataTable_[handle]->GetAnimation(); }
+
 
 	private:
 

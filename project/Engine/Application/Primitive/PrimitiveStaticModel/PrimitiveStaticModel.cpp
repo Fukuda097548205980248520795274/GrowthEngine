@@ -14,7 +14,7 @@ PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string
 	type_ = "StaticModel";
 
 	// 読み込み
-	hPrimitive_ = engine_->LoadPrimitive(hModel_, name_, type_);
+	hPrimitive_ = engine_->LoadPrimitive(hModel_,0, name_, type_);
 	param_ = engine_->GetPrimitiveParam<Engine::StaticModel::Param>(hPrimitive_);
 }
 

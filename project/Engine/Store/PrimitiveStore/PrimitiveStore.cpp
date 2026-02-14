@@ -1,5 +1,6 @@
 #include "PrimitiveStore.h"
 #include "PrimitiveData/PrimitiveStaticModelData/PrimitiveStaticModelData.h"
+#include "PrimitiveData/PrimitiveAnimationModelData/PrimitiveAnimationModelData.h"
 
 /// @brief 更新処理
 /// @param viewProjection 
@@ -31,6 +32,13 @@ void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandLis
 			auto p = static_cast<PrimitiveStaticModelData*>(data.get());
 			p->Register(commandList, pso);
 		}
+
+		// アニメーションモデル
+		if (data->GetTypeName() == "AnimationModel")
+		{
+			auto p = static_cast<PrimitiveAnimationModelData*>(data.get());
+			p->Register(commandList, pso);
+		}
 	}
 }
 
@@ -44,8 +52,8 @@ void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandLis
 /// @param type 
 /// @param log 
 /// @return 
-PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
-	ModelHandle hModel, const std::string& name, const std::string& type, Log* log)
+PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, ID3D12Device* device,
+	ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -57,11 +65,21 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	// ハンドル
 	PrimitiveHandle handle = static_cast<PrimitiveHandle>(dataTable_.size());
 
+
 	// 静的モデル
 	if (type == "StaticModel")
 	{
 		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
 		data->Initialize(modelStore, textureStore, device, log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// アニメーションモデル
+	if (type == "AnimationModel")
+	{
+		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
+		data->Initialize(modelStore, textureStore, animationStore, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -80,6 +98,13 @@ void Engine::PrimitiveStore::Register(ID3D12GraphicsCommandList* commandList, Pr
 	if (dataTable_[handle]->GetTypeName() == "StaticModel")
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
+		p->Register(commandList, pso, lightStore);
+	}
+
+	// アニメーションモデル
+	if (dataTable_[handle]->GetTypeName() == "AnimationModel")
+	{
+		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
 		p->Register(commandList, pso, lightStore);
 	}
 }

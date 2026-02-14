@@ -585,6 +585,9 @@
     <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp">
       <Filter>Engine\Include\Data\SkinCluster</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.cpp">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -856,6 +859,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h">
       <Filter>Engine\Include\Data\PrimitiveData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.h">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

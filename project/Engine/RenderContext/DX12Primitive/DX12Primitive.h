@@ -49,10 +49,10 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
-			ModelHandle hModel, const std::string& name, const std::string& type, Log* log)
+		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, ID3D12Device* device,
+			ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type, Log* log)
 		{
-			return primitiveStore_->Load(modelStore, textureStore, device, hModel, name, type, log);
+			return primitiveStore_->Load(modelStore, textureStore,animationStore, device, hModel,hAnimation, name, type, log);
 		}
 
 

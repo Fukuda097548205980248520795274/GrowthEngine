@@ -5,22 +5,26 @@
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "PSO/PSOShadowMap/BasePSOShadowMap.h"
 #include "Store/LightStore/LightStore.h"
+#include "Store/AnimationStore/AnimationStore.h"
+#include "Func/ModelFunc/ModelFunc.h"
 
 #include <numbers>
 
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log)
+void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(modelStore);
 	assert(textureStore);
+	assert(animationStore);
 	assert(device);
 
 	// 引数を受け取る
 	modelStore_ = modelStore;
 	textureStore_ = textureStore;
+	animationStore_ = animationStore;
 
 
 	// パラメータの生成
@@ -32,7 +36,8 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
 	param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
 
-
+	// アニメーション
+	param_->animation.timer = 0.0f;
 
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -80,6 +85,14 @@ void Engine::PrimitiveAnimationModelData::Update(const Matrix4x4& viewProjection
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
+	// アニメーションデータを取得する
+	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
+	NodeAnimation rootNodeAnimation = animation.nodes[0];
+	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
+	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
+	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
+	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
+
 	Quaternion modelQuaternion =
 		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -103,7 +116,7 @@ void Engine::PrimitiveAnimationModelData::Update(const Matrix4x4& viewProjection
 
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
-			localMatrix * worldMatrix * nodeMatrix;
+			localMatrix * animationMatrix * worldMatrix * nodeMatrix;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -133,6 +146,14 @@ void Engine::PrimitiveAnimationModelData::ShadowMapUpdate(const Matrix4x4& viewP
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
+	// アニメーションデータを取得する
+	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
+	NodeAnimation rootNodeAnimation = animation.nodes[0];
+	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
+	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
+	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
+	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
+
 	Quaternion modelQuaternion =
 		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -155,7 +176,7 @@ void Engine::PrimitiveAnimationModelData::ShadowMapUpdate(const Matrix4x4& viewP
 
 
 		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * worldMatrix * nodeMatrix * viewProjection;
+		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * worldMatrix * nodeMatrix) * viewProjection;
 	}
 }
 

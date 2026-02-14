@@ -106,11 +106,20 @@ namespace Engine
 			UVTransform uv;
 		};
 
+		/// @brief アニメーション
+		struct Animation
+		{
+			float timer;
+		};
+
 		/// @brief パラメータ
 		struct Param
 		{
 			/// @brief モデルトランスフォーム
 			Transform modelTransform;
+
+			/// @brief アニメーション
+			Animation animation;
 
 
 			/// @brief メッシュトランスフォーム

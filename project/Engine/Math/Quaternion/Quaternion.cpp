@@ -79,11 +79,11 @@ Quaternion ToQuaternion(float angle , const Vector3& axis)
 /// @return 
 Quaternion Slerp(const Quaternion& q1, const Quaternion& q2 , float t)
 {
-	// 片方のクォータニオンのコピー
+	// q1 のコピー
 	Quaternion q0Copy = q1;
 
-	// 内積
-	float dot = Dot(q0Copy, q1);
+	// 内積（q1 と q2 の内積を取る必要がある）
+	float dot = Dot(q0Copy, q2);
 
 	// 最短経路を確保
 	if (dot < 0.0f)
@@ -92,32 +92,21 @@ Quaternion Slerp(const Quaternion& q1, const Quaternion& q2 , float t)
 		dot = -dot;
 	}
 
-	// 許容誤差（イプシロン）を定義。例えば 1e-6f など。
-	const float DOT_THRESHOLD = 1.0f - 1e-4f; // 例として 0.9999f
+	const float DOT_THRESHOLD = 1.0f - 1e-4f;
 
-	// クォータニオンが非常に近い場合（thetaが非常に小さい場合）
-	// 線形補間（Lerp）にフォールバックして、ゼロ除算を防ぐ
+	// 非常に近い場合は Lerp
 	if (dot > DOT_THRESHOLD)
 	{
-		// 単純な線形補間を実行（後で正規化が必要）
-		Quaternion result = (1.0f - t) * q0Copy + t * q1;
-		// 結果を正規化して返却
-		return result.Normalize(); // Normalize関数があるとして
+		Quaternion result = (1.0f - t) * q0Copy + t * q2;
+		return result.Normalize();
 	}
 
-	// --- 通常の Slerp 処理 ---
-
-	// なす角を求める
+	// 通常の Slerp
 	float theta = std::acos(dot);
+	float sinTheta = std::sin(theta);
 
-	// std::sin(theta) がゼロになることは、上の Lerp 処理で回避済み
+	float scale0 = std::sin((1.0f - t) * theta) / sinTheta;
+	float scale1 = std::sin(t * theta) / sinTheta;
 
-	// 補間 0.0f
-	float scale0 = std::sin((1.0f - t) * theta) / std::sin(theta);
-
-	// 補間 1.0f
-	float scale1 = std::sin(t * theta) / std::sin(theta);
-
-	// 補間した値を返却する
-	return scale0 * q0Copy + scale1 * q1;
+	return scale0 * q0Copy + scale1 * q2;
 }

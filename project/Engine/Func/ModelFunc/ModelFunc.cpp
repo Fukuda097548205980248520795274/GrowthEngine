@@ -521,6 +521,8 @@ Quaternion Engine::CalculateValue(const std::vector<KeyFrameQuaternion>& keyfram
 			float t = (time - keyframe[index].time) / (keyframe[nextIndex].time - keyframe[index].time);
 			return Slerp(keyframe[index].value, keyframe[nextIndex].value, t);
 		}
+
+		int a = 0;
 	}
 
 	// ここまで来たら、時刻より後ろなので、最後の値を返す
