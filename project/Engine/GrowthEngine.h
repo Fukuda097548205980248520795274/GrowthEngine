@@ -308,6 +308,13 @@ public:
 	/// @param handle 
 	void DrawPrimitiveModel(PrimitiveHandle handle)const { renderContext_->DrawPrimitiveModel(handle); }
 
+	/// @brief プリミティブのパラメータを取得する
+	/// @tparam T 
+	/// @param handle 
+	/// @return 
+	template<typename T>
+	T* GetPrimitiveParam(PrimitiveHandle handle)const { return renderContext_->GetPrimitiveParam<T>(handle); }
+
 
 
 public:

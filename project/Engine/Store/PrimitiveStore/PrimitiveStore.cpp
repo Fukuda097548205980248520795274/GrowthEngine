@@ -1,4 +1,5 @@
 #include "PrimitiveStore.h"
+#include "PrimitiveData/PrimitiveStaticModelData/PrimitiveStaticModelData.h"
 
 /// @brief 更新処理
 /// @param viewProjection 
@@ -34,9 +35,14 @@ void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandLis
 }
 
 
-/// @brief 静的モデル読み込み
-/// @param model 
+/// @brief 読み込み
+/// @param modelStore 
+/// @param textureStore 
+/// @param device 
+/// @param hModel 
 /// @param name 
+/// @param type 
+/// @param log 
 /// @return 
 PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
 	ModelHandle hModel, const std::string& name, const std::string& type, Log* log)

@@ -20,6 +20,8 @@ void Game::Initialize()
 void Game::Update()
 {
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
+
+	model_->param_->modelTransform.rotate.y += 0.01f;
 }
 
 /// @brief 描画処理

@@ -349,6 +349,9 @@
     <Filter Include="Engine\Include\Data\PrimitiveData">
       <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Primitive\PrimitiveAnimationModel">
+      <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

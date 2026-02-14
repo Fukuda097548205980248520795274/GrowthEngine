@@ -1,5 +1,10 @@
 #pragma once
-#include "PrimitiveData/PrimitiveStaticModelData/PrimitiveStaticModelData.h"
+#include "PrimitiveData/PrimitiveBaseData.h"
+#include <memory>
+#include <vector>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <wrl.h>
 
 class PrimitiveStaticModel;
 
@@ -9,6 +14,8 @@ namespace Engine
 	class BasePSOShadowMap;
 
 	class ModelStore;
+	class TextureStore;
+	class LightStore;
 	class Log;
 
 	class PrimitiveStore
@@ -28,9 +35,6 @@ namespace Engine
 		/// @param pso 
 		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
-
-	public:
-
 		/// @brief プリミティブを読み込む
 		/// @param modelStore 
 		/// @param textureStore 
@@ -48,6 +52,17 @@ namespace Engine
 		/// @param handle 
 		/// @param meshIndex 
 		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore);
+
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param handle 
+		/// @return 
+		template<typename T>
+		T* GetParam(PrimitiveHandle handle)
+		{
+			PrimitiveBaseData* data = dataTable_[handle].get();
+			return static_cast<T*>(data->GetParam());
+		}
 
 
 	private:

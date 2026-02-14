@@ -89,6 +89,13 @@ namespace Engine
 		template <typename T>
 		T* GetLightParam(LightHandle handle) { return lightStore_->GetParam<T>(handle); }
 
+		/// @brief プリミティブのパラメータを取得する
+		/// @tparam T 
+		/// @param handle 
+		/// @return 
+		template<typename T>
+		T* GetPrimitiveParam(PrimitiveHandle handle) { return primitive_->GetParam<T>(handle); }
+
 
 
 		/// @brief プリミティブ読み込み

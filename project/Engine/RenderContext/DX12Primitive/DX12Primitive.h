@@ -8,6 +8,8 @@ namespace Engine
 	class ShaderCompiler;
 	class Log;
 	class BasePSOShadowMap;
+	class ModelStore;
+	class TextureStore;
 
 	class DX12Primitive
 	{
@@ -31,10 +33,12 @@ namespace Engine
 		/// @param commandList 
 		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
-
-		template <typename T>
-		using ComPtr = Microsoft::WRL::ComPtr<T>;
-
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param handle 
+		/// @return 
+		template<typename T>
+		T* GetParam(PrimitiveHandle handle) { return primitiveStore_->GetParam<T>(handle); }
 
 		/// @brief プリミティブ読み込み
 		/// @param modelStore 
@@ -58,6 +62,8 @@ namespace Engine
 		void DrawModel(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get() , lightStore); }
 
 
+		template <typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 	private:
 

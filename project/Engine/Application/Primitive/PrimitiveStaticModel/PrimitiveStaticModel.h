@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Handle/Handle.h"
+#include "Data/PrimitiveData/PrimitiveData.h"
 
 class GrowthEngine;
 
@@ -15,6 +16,11 @@ public:
 
 	/// @brief 描画処理
 	void Draw();
+
+
+
+	/// @brief パラメータ
+	Engine::StaticModel::Param* param_ = nullptr;
 
 
 private:
