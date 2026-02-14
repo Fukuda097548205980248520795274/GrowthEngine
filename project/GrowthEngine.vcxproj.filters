@@ -346,6 +346,9 @@
     <Filter Include="Engine\Include\Resource\StructuredBufferResource">
       <UniqueIdentifier>{192573e5-5bdd-49e1-8ac0-ec3dd532fdcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Data\PrimitiveData">
+      <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -847,6 +850,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h">
       <Filter>Engine\Include\Resource\StructuredBufferResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h">
+      <Filter>Engine\Include\Data\PrimitiveData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

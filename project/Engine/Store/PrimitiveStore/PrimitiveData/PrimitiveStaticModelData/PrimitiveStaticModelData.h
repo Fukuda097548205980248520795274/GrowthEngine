@@ -8,6 +8,7 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+#include "Data/PrimitiveData/PrimitiveData.h"
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
@@ -71,62 +72,12 @@ namespace Engine
 
 	private:
 
-		// モデル用トランスフォーム
-		struct Transform
-		{
-			/// @brief 拡縮
-			std::unique_ptr<Vector3> scale = nullptr;
+		/// @brief パラメータ
+		std::unique_ptr<StaticModel::Param> param_ = nullptr;
 
-			/// @brief 回転
-			std::unique_ptr<Vector3> rotation = nullptr;
-
-			/// @brief 移動
-			std::unique_ptr<Vector3> translate = nullptr;
-		};
-
-		// モデルトランスフォーム
-		Transform modelTransform_{};
-
-		// メッシュトランスフォーム
-		std::vector<Transform> meshTransforms_;
-
+		
 		// 座標変換リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>> meshTransformationResources_;
-
-
-	private:
-
-		/// @brief UVトランスフォーム
-		struct UVTransform
-		{
-			/// @brief 拡縮
-			std::unique_ptr<Vector2> scale = nullptr;
-
-			/// @brief 回転
-			std::unique_ptr<float> rotation = nullptr;
-
-			/// @brief 移動
-			std::unique_ptr<Vector2> translate = nullptr;
-		};
-
-
-	private:
-
-		// メッシュ用マテリアル
-		struct MeshMaterial
-		{
-			/// @brief テクスチャハンドル
-			std::unique_ptr<TextureHandle> hTexture_ = nullptr;
-
-			/// @brief 色
-			std::unique_ptr<Vector4> color = nullptr;
-
-			/// @brief UV
-			UVTransform uv{};
-		};
-
-		// メッシュマテリアル
-		std::vector<MeshMaterial> meshMaterials_;
 
 		// マテリアルリソース
 		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>> meshMaterialResources_;

@@ -23,37 +23,42 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 	textureStore_ = textureStore;
 
 
+	// パラメータの生成
+	param_ = std::make_unique<StaticModel::Param>();
+
 
 	// モデルトランスフォーム
-	modelTransform_.scale = std::make_unique<Vector3>(1.0f, 1.0f, 1.0f);
-	modelTransform_.rotation = std::make_unique<Vector3>(0.0f, 0.0f, 0.0f);
-	modelTransform_.translate = std::make_unique<Vector3>(0.0f, 0.0f, 0.0f);
+	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
+	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+	param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
 
 
 
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
-	// 領域確保
-	meshTransforms_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	// パラメータ領域確保
+	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
+	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
+
+	// リソース領域確保
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
-	meshMaterials_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
 		// メッシュトランスフォーム
-		meshTransforms_[meshIndex].scale = std::make_unique<Vector3>(1.0f, 1.0f, 1.0f);
-		meshTransforms_[meshIndex].rotation = std::make_unique<Vector3>(0.0f, 0.0f, 0.0f);
-		meshTransforms_[meshIndex].translate = std::make_unique<Vector3>(0.0f, 0.0f, 0.0f);
+		param_->meshTransforms[meshIndex].scale = Vector3(1.0f, 1.0f, 1.0f);
+		param_->meshTransforms[meshIndex].rotate = Vector3(0.0f, 0.0f, 0.0f);
+		param_->meshTransforms[meshIndex].translate = Vector3(0.0f, 0.0f, 0.0f);
 
 		// マテリアルトランスフォーム
-		meshMaterials_[meshIndex].hTexture_ = std::make_unique<TextureHandle>(modelData.meshes[meshIndex].material.handle);
-		meshMaterials_[meshIndex].color = std::make_unique<Vector4>(1.0f, 1.0f, 1.0f, 1.0f);
-		meshMaterials_[meshIndex].uv.scale = std::make_unique<Vector2>(1.0f, 1.0f);
-		meshMaterials_[meshIndex].uv.rotation = std::make_unique<float>(0.0f);
-		meshMaterials_[meshIndex].uv.translate = std::make_unique<Vector2>(0.0f, 0.0f);
+		param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
+		param_->meshMaterial[meshIndex].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->meshMaterial[meshIndex].uv.scale = Vector2(1.0f, 1.0f);
+		param_->meshMaterial[meshIndex].uv.radius = 0.0f;
+		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 
 		// 座標変換リソース
 		meshTransformationResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
@@ -76,11 +81,11 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	Quaternion modelQuaternion =
-		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
-		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
-		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
-	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
@@ -89,11 +94,11 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
 
 		Quaternion meshQuaternion =
-			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
-			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
-			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
-		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
 
 
 		// ワールド座標
@@ -111,13 +116,13 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 
 
 		// 色
-		meshMaterialResources_[meshIndex]->data_->color = *meshMaterials_[meshIndex].color;
+		meshMaterialResources_[meshIndex]->data_->color = param_->meshMaterial[meshIndex].color;
 
 		// UV行列
 		meshMaterialResources_[meshIndex]->data_->uvMatrix =
-			Make3DScaleMatrix4x4(Vector3(meshMaterials_[meshIndex].uv.scale->x, meshMaterials_[meshIndex].uv.scale->y, 1.0f)) *
-			Make3DRotateZMatrix4x4(*meshMaterials_[meshIndex].uv.rotation) *
-			Make3DTranslateMatrix4x4(Vector3(meshMaterials_[meshIndex].uv.translate->x, meshMaterials_[meshIndex].uv.translate->y, 0.0f));
+			Make3DScaleMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.scale.x, param_->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
+			Make3DRotateZMatrix4x4(param_->meshMaterial[meshIndex].uv.radius) *
+			Make3DTranslateMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.translate.x, param_->meshMaterial[meshIndex].uv.translate.y, 0.0f));
 	}
 }
 
@@ -129,11 +134,11 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	Quaternion modelQuaternion =
-		ToQuaternion(modelTransform_.rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-		ToQuaternion(modelTransform_.rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-		ToQuaternion(modelTransform_.rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
-	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(*modelTransform_.scale, modelQuaternion, *modelTransform_.translate);
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
@@ -142,11 +147,11 @@ void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProj
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
 
 		Quaternion meshQuaternion =
-			ToQuaternion(meshTransforms_[meshIndex].rotation->z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(meshTransforms_[meshIndex].rotation->y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(meshTransforms_[meshIndex].rotation->x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
-		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(*meshTransforms_[meshIndex].scale, meshQuaternion, *meshTransforms_[meshIndex].translate);
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
 
 
 		// ワールド座標
@@ -175,7 +180,7 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 		meshMaterialResources_[meshIndex]->RegisterGraphics(commandList, 1);
 
 		// テクスチャの設定
-		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(*meshMaterials_[meshIndex].hTexture_));
+		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture));
 
 		// シャドウマップテクスチャの設定
 		lightStore->GetShadowMapTextureResource()->Register(commandList, 3);
