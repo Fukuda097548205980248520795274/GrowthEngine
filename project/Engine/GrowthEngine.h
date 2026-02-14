@@ -93,6 +93,12 @@ public:
 	/// @return 
 	AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadAnimation(directory, fileName); }
 
+	/// @brief スケルトンを読み込む
+	/// @param directory 
+	/// @param fileName 
+	/// @return 
+	SkeletonHandle LoadSkeleton(const std::string& directory, const std::string& fileName)const { return renderContext_->LoadSkeleton(directory, fileName, log_.get()); }
+
 	/// @brief ライトを読み込む
 	/// @param name 
 	/// @param type 

@@ -14,7 +14,19 @@ namespace Engine
 		/// @param fileName 
 		/// @param modelNode 
 		/// @param handle 
-		SkeletonResource(const std::string& directory, const std::string& fileName,const ModelNode& modelNode, SkeletonHandle handle);
+		SkeletonResource(const std::string& directory, const std::string& fileName,const std::vector<ModelNode>& nodes, SkeletonHandle handle);
+
+		/// @brief ファイルパスを取得する
+		/// @return 
+		std::string GetFilePath()const { return filePath_; }
+
+		/// @brief ハンドルを取得する
+		/// @return 
+		SkeletonHandle GetHandle()const { return handle_; }
+
+		/// @brief スケルトンを取得する
+		/// @return 
+		Skeleton GetSkeleton()const { return skeleton_; }
 
 
 	private:

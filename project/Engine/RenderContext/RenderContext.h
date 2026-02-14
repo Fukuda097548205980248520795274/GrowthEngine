@@ -16,6 +16,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
+#include "Store/SkeletonStore/SkeletonStore.h"
 #include "Store/LightStore/LightStore.h"
 
 class GameCamera;
@@ -65,6 +66,13 @@ namespace Engine
 		/// @param fileName 
 		/// @return 
 		AnimationHandle LoadAnimation(const std::string& directory, const std::string& fileName) { return animationStore_->Load(directory, fileName); }
+
+		/// @brief スケルトンを読み込む
+		/// @param directory 
+		/// @param fileName 
+		/// @param log 
+		/// @return 
+		SkeletonHandle LoadSkeleton(const std::string& directory, const std::string& fileName, Log* log);
 
 		/// @brief ライトを読み込む
 		/// @param name 
@@ -162,6 +170,9 @@ namespace Engine
 
 		/// @brief アニメーションストア
 		std::unique_ptr<AnimationStore> animationStore_ = nullptr;
+
+		/// @brief スケルトンストア
+		std::unique_ptr<SkeletonStore> skeletonStore_ = nullptr;
 
 		/// @brief ライトストア
 		std::unique_ptr<LightStore> lightStore_ = nullptr;

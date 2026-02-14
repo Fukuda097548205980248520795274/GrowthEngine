@@ -74,6 +74,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// アニメーションストアの生成
 	animationStore_ = std::make_unique<AnimationStore>();
 
+	// スケルトンストアの生成
+	skeletonStore_ = std::make_unique<SkeletonStore>();
+
 	// ライトストアの生成と初期化
 	lightStore_ = std::make_unique<LightStore>();
 	lightStore_->Initialize(core_->GetDevice(), commandList_, heap_.get(), shaderCompiler_.get(), log);
@@ -213,6 +216,21 @@ void Engine::RenderContext::PostDraw()
 	assert(SUCCEEDED(hr));
 }
 
+
+/// @brief スケルトンを読み込む
+/// @param directory 
+/// @param fileName 
+/// @return 
+SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory, const std::string& fileName, Log* log)
+{
+	// モデルハンドルを取得する
+	ModelHandle modelHandle = modelStore_->Load(directory, fileName, textureStore_.get(), heap_.get(), core_->GetDevice(), commandList_, log);
+	ModelData modelData = modelStore_->GetModelData(modelHandle);
+
+	// スケルトンハンドルを取得する
+	SkeletonHandle skeletonHandle = skeletonStore_->Load(directory, fileName, modelData.nodes);
+	return skeletonHandle;
+}
 
 
 /// @brief FPS固定初期化

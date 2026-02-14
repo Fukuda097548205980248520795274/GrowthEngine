@@ -5,11 +5,12 @@
 /// @param directory 
 /// @param fileName 
 /// @param handle 
-Engine::SkeletonResource::SkeletonResource(const std::string& directory, const std::string& fileName, const ModelNode& modelNode, SkeletonHandle handle)
+Engine::SkeletonResource::SkeletonResource(const std::string& directory, const std::string& fileName, const std::vector<ModelNode>& nodes, SkeletonHandle handle)
 	: handle_(handle)
 {
+	// スケルトンを作成する
+	skeleton_ = CreateSkeleton(nodes);
+
 	// ファイルパス
 	filePath_ = directory + "/" + fileName;
-
-	
 }
