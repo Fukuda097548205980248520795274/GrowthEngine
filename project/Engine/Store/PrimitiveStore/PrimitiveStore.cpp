@@ -4,16 +4,16 @@
 /// @param viewProjection 
 void Engine::PrimitiveStore::Update(const Matrix4x4& viewProjection)
 {
-	// 静的モデルデータ
-	for (auto& data : staticModelTable_)data->Update(viewProjection);
+	// 全てのプリミティブ
+	for (auto& data : dataTable_)data->Update(viewProjection);
 }
 
 /// @brief シャドウマップ用の更新処理
 /// @param viewProjection 
 void Engine::PrimitiveStore::ShadowMapUpdate(const Matrix4x4& viewProjection)
 {
-	// 静的モデルデータ
-	for (auto& data : staticModelTable_)data->ShadowMapUpdate(viewProjection);
+	// 全てのプリミティブ
+	for (auto& data : dataTable_)data->ShadowMapUpdate(viewProjection);
 }
 
 /// @brief シャドウマップ用の描画処理
@@ -22,7 +22,15 @@ void Engine::PrimitiveStore::ShadowMapUpdate(const Matrix4x4& viewProjection)
 void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	// 静的モデルデータ
-	for (auto& data : staticModelTable_)data->Register(commandList, pso);
+	for (auto& data : dataTable_)
+	{
+		// 静的モデル
+		if (data->GetTypeName() == "StaticModel")
+		{
+			auto p = static_cast<PrimitiveStaticModelData*>(data.get());
+			p->Register(commandList, pso);
+		}
+	}
 }
 
 
@@ -30,25 +38,42 @@ void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandLis
 /// @param model 
 /// @param name 
 /// @return 
-PrimitiveStaticModelHandle Engine::PrimitiveStore::Load(PrimitiveStaticModel* model, ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
-	ModelHandle hModel, const std::string& name, Log* log)
+PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
+	ModelHandle hModel, const std::string& name, const std::string& type, Log* log)
 {
 	// 同じデータがあるかどうか
-	for (auto& data : staticModelTable_)
+	for (auto& data : dataTable_)
 	{
-		if (data->GetName() == name)
-		{
+		if (data->GetName() == name && data->GetTypeName() == type)
 			return data->GetHandle();
-		}
 	}
 
 	// ハンドル
-	PrimitiveStaticModelHandle handle = static_cast<PrimitiveStaticModelHandle>(staticModelTable_.size());
+	PrimitiveHandle handle = static_cast<PrimitiveHandle>(dataTable_.size());
 
-	std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
-	data->Initialize(modelStore, textureStore, device, log);
+	// 静的モデル
+	if (type == "StaticModel")
+	{
+		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
+		data->Initialize(modelStore, textureStore, device, log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
 
-	staticModelTable_.push_back(std::move(data));
-
+	assert(false);
 	return handle;
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param handle 
+/// @param meshIndex 
+void Engine::PrimitiveStore::Register(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore)
+{
+	// 静的モデル
+	if (dataTable_[handle]->GetTypeName() == "StaticModel")
+	{
+		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
+		p->Register(commandList, pso, lightStore);
+	}
 }

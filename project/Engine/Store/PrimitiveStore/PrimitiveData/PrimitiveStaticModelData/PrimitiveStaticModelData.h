@@ -2,8 +2,6 @@
 #include "../PrimitiveBaseData.h"
 #include "Handle/Handle.h"
 #include <memory>
-#include "Math/Vector/Vector3/Vector3.h"
-#include "Math/Vector/Vector2/Vector2.h"
 #include <vector>
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -30,8 +28,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveStaticModelData(const std::string& name , ModelHandle hModel, PrimitiveStaticModelHandle hPrimitiveStaticModel) 
-			: hModel_(hModel), hPrimitiveStaticModel_(hPrimitiveStaticModel), PrimitiveBaseData(name) { typeName_ = "StaticModel"; }
+		PrimitiveStaticModelData(const std::string& name , ModelHandle hModel, PrimitiveHandle hPrimitive) 
+			: hModel_(hModel), hPrimitive_(hPrimitive), PrimitiveBaseData(name) { typeName_ = "StaticModel"; }
 
 		/// @brief 初期化
 		/// @param modelStore 
@@ -46,9 +44,9 @@ namespace Engine
 		/// @param viewProjection 
 		void ShadowMapUpdate(const Matrix4x4& viewProjection) override;
 
-		/// @brief ハンドルを取得する
+		/// @brief パラメータを取得する
 		/// @return 
-		PrimitiveStaticModelHandle GetHandle()const { return hPrimitiveStaticModel_; }
+		void* GetParam()override { return param_.get(); }
 
 		/// @brief コマンドリスト
 		/// @param commandList 
@@ -67,7 +65,7 @@ namespace Engine
 		ModelHandle hModel_ = 0;
 
 		// 静的モデルハンドル
-		PrimitiveStaticModelHandle hPrimitiveStaticModel_ = 0;
+		PrimitiveHandle hPrimitive_ = 0;
 
 
 	private:

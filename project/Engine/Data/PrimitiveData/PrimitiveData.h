@@ -63,4 +63,61 @@ namespace Engine
 			std::vector<Material> meshMaterial;
 		};
 	}
+
+	/// @brief アニメーションモデル
+	namespace AnimationModel
+	{
+		/// @brief トランスフォーム
+		struct Transform
+		{
+			// 拡縮
+			Vector3 scale;
+
+			// 回転
+			Vector3 rotate;
+
+			// 移動
+			Vector3 translate;
+		};
+
+		/// @brief UVトランスフォーム
+		struct UVTransform
+		{
+			// 拡縮
+			Vector2 scale;
+
+			// 回転
+			float radius;
+
+			// 移動
+			Vector2 translate;
+		};
+
+		/// @brief マテリアル
+		struct Material
+		{
+			/// @brief テクスチャハンドル
+			TextureHandle hTexture;
+
+			/// @brief 色
+			Vector4 color;
+
+			/// @brief UV
+			UVTransform uv;
+		};
+
+		/// @brief パラメータ
+		struct Param
+		{
+			/// @brief モデルトランスフォーム
+			Transform modelTransform;
+
+
+			/// @brief メッシュトランスフォーム
+			std::vector<Transform> meshTransforms;
+
+			/// @brief メッシュマテリアル
+			std::vector<Material> meshMaterial;
+		};
+	}
 }

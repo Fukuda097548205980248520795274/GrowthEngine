@@ -36,25 +36,26 @@ namespace Engine
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 
-		/// @brief 静的モデル読み込み
-		/// @param model 
+		/// @brief プリミティブ読み込み
 		/// @param modelStore 
+		/// @param textureStore 
 		/// @param device 
 		/// @param hModel 
 		/// @param name 
+		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
-			ModelHandle hModel, const std::string& name, Log* log)
+		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device,
+			ModelHandle hModel, const std::string& name, const std::string& type, Log* log)
 		{
-			return primitiveStore_->Load(model, modelStore, textureStore, device, hModel, name, log);
+			return primitiveStore_->Load(modelStore, textureStore, device, hModel, name, type, log);
 		}
 
 
-		/// @brief 静的モデルの描画処理
+		/// @brief モデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawStaticModel(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, LightStore* lightStore) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get() , lightStore); }
+		void DrawModel(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get() , lightStore); }
 
 
 

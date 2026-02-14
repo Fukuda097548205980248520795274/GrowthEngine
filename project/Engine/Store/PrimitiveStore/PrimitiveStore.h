@@ -31,29 +31,29 @@ namespace Engine
 
 	public:
 
-		/// @brief 静的モデル読み込み
-		/// @param model 
+		/// @brief プリミティブを読み込む
 		/// @param modelStore 
 		/// @param textureStore 
 		/// @param device 
 		/// @param hModel 
 		/// @param name 
+		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveStaticModelHandle Load(PrimitiveStaticModel* model, ModelStore* modelStore,TextureStore* textureStore, ID3D12Device* device, 
-			ModelHandle hModel, const std::string& name , Log* log);
+		PrimitiveHandle Load(ModelStore* modelStore,TextureStore* textureStore, ID3D12Device* device, 
+			ModelHandle hModel, const std::string& name , const std::string& type, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param handle 
 		/// @param meshIndex 
-		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveStaticModelHandle handle, BasePSOModel* pso, LightStore* lightStore) { staticModelTable_[handle]->Register(commandList, pso, lightStore); }
+		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore);
 
 
 	private:
 
 
-		// 静的モデルテーブル
-		std::vector<std::unique_ptr<PrimitiveStaticModelData>> staticModelTable_;
+		// データテーブル
+		std::vector<std::unique_ptr<PrimitiveBaseData>> dataTable_;
 	};
 }

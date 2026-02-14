@@ -26,5 +26,5 @@ using CameraHandle = uint32_t;
 using LightHandle = uint32_t;
 
 
-// プリミティブ静的モデルハンドル
-using PrimitiveStaticModelHandle = uint32_t;
+// プリミティブハンドル
+using PrimitiveHandle = uint32_t;

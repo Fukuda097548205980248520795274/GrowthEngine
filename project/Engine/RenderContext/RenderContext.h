@@ -91,15 +91,15 @@ namespace Engine
 
 
 
-		/// @brief 静的モデル読み込み
-		/// @param model 
+		/// @brief プリミティブ読み込み
 		/// @param hModel 
 		/// @param name 
+		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveStaticModelHandle LoadPrimitive(PrimitiveStaticModel* model, ModelHandle hModel, const std::string& name, Log* log)
+		PrimitiveHandle LoadPrimitive(ModelHandle hModel, const std::string& name, const std::string& type, Log* log)
 		{
-			return primitive_->Load(model, modelStore_.get(), textureStore_.get(), core_->GetDevice(), hModel, name, log);
+			return primitive_->Load(modelStore_.get(), textureStore_.get(), core_->GetDevice(), hModel, name, type, log);
 		}
 
 
@@ -107,10 +107,10 @@ namespace Engine
 
 	public:
 
-		/// @brief 静的モデルの描画処理
+		/// @brief プリミティブモデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle) { primitive_->DrawStaticModel(commandList_, handle, lightStore_.get()); }
+		void DrawPrimitiveModel(PrimitiveHandle handle) { primitive_->DrawModel(commandList_, handle, lightStore_.get()); }
 
 
 	private:

@@ -29,6 +29,9 @@ private:
 	// 名前
 	std::string name_{};
 
+	// 種別名
+	std::string type_{};
+
 	// モデルハンドル
 	ModelHandle hModel_ = 0;
 
@@ -37,6 +40,6 @@ private:
 
 
 	// プリミティブハンドル
-	PrimitiveStaticModelHandle hPrimitive_ = 0;
+	PrimitiveHandle hPrimitive_ = 0;
 };
 

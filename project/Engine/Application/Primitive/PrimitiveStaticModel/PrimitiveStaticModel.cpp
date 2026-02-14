@@ -10,11 +10,14 @@ PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-	hPrimitive_ = engine_->LoadPrimitive(this, hModel_, name_);
+	// 種別名
+	type_ = "StaticModel";
+
+	hPrimitive_ = engine_->LoadPrimitive(hModel_, name_, type_);
 }
 
 /// @brief 描画処理
 void PrimitiveStaticModel::Draw()
 {
-	engine_->DrawPrimitiveStaticModel(hPrimitive_);
+	engine_->DrawPrimitiveModel(hPrimitive_);
 }

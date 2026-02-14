@@ -294,19 +294,19 @@ public:
 
 public:
 
-	/// @brief 静的モデル読み込み
-	/// @param model 
+	/// @brief プリミティブを読み込む
 	/// @param hModel 
 	/// @param name 
+	/// @param type 
 	/// @return 
-	PrimitiveStaticModelHandle LoadPrimitive(PrimitiveStaticModel* model, ModelHandle hModel, const std::string& name) const
+	PrimitiveHandle LoadPrimitive(ModelHandle hModel, const std::string& name, const std::string& type) const
 	{
-		return renderContext_->LoadPrimitive(model, hModel, name, log_.get());
+		return renderContext_->LoadPrimitive(hModel, name,type, log_.get());
 	}
 
-	/// @brief プリミティブ : 静的モデル
+	/// @brief プリミティブ : モデル
 	/// @param handle 
-	void DrawPrimitiveStaticModel(PrimitiveStaticModelHandle handle)const { renderContext_->DrawPrimitiveStaticModel(handle); }
+	void DrawPrimitiveModel(PrimitiveHandle handle)const { renderContext_->DrawPrimitiveModel(handle); }
 
 
 
