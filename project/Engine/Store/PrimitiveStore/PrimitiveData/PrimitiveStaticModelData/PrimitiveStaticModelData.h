@@ -9,9 +9,9 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
-#include "Resource/PrimitiveModelMaterialResource/PrimitiveModelMaterialResource.h"
-#include "Resource/PrimitiveModelTransformationResource/PrimitiveModelTransformationResource.h"
-#include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
+#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+#include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
+#include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
 
 namespace Engine
 {
@@ -91,7 +91,7 @@ namespace Engine
 		std::vector<Transform> meshTransforms_;
 
 		// 座標変換リソース
-		std::vector<std::unique_ptr<PrimitiveModelTransformationResource>> meshTransformationResources_;
+		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>> meshTransformationResources_;
 
 
 	private:
@@ -129,13 +129,13 @@ namespace Engine
 		std::vector<MeshMaterial> meshMaterials_;
 
 		// マテリアルリソース
-		std::vector<std::unique_ptr<PrimitiveModelMaterialResource>> meshMaterialResources_;
+		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>> meshMaterialResources_;
 
 
 	private:
 
 		// シャドウマップ用座標変換リソース
-		std::vector<std::unique_ptr<ShadowMapTransformationResource>> shadowMapTransformationResource_;
+		std::vector<std::unique_ptr<ConstantBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
 
 
 	private:

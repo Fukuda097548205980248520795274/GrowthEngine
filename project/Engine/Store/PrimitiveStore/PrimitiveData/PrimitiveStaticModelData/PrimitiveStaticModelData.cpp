@@ -56,15 +56,15 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		meshMaterials_[meshIndex].uv.translate = std::make_unique<Vector2>(0.0f, 0.0f);
 
 		// 座標変換リソース
-		meshTransformationResources_[meshIndex] = std::make_unique<PrimitiveModelTransformationResource>();
+		meshTransformationResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
 		meshTransformationResources_[meshIndex]->Initialize(device, log);
 
 		// マテリアルリソース
-		meshMaterialResources_[meshIndex] = std::make_unique<PrimitiveModelMaterialResource>();
+		meshMaterialResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>();
 		meshMaterialResources_[meshIndex]->Initialize(device, log);
 
 		// シャドウマップ用座標変換リソース
-		shadowMapTransformationResource_[meshIndex] = std::make_unique<ShadowMapTransformationResource>();
+		shadowMapTransformationResource_[meshIndex] = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, log);
 	}
 }
@@ -169,10 +169,10 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 		modelStore_->Register(commandList, hModel_, meshIndex);
 
 		// 座標変換の設定
-		meshTransformationResources_[meshIndex]->Register(commandList, 0);
+		meshTransformationResources_[meshIndex]->RegisterGraphics(commandList, 0);
 
 		// マテリアルの設定
-		meshMaterialResources_[meshIndex]->Register(commandList, 1);
+		meshMaterialResources_[meshIndex]->RegisterGraphics(commandList, 1);
 
 		// テクスチャの設定
 		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(*meshMaterials_[meshIndex].hTexture_));
@@ -181,7 +181,7 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 		lightStore->GetShadowMapTextureResource()->Register(commandList, 3);
 
 		// シャドウ用座標変換の設定
-		lightStore->GetShadowMapTransformationResource()->Register(commandList, 4);
+		lightStore->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 4);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -205,7 +205,7 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 		modelStore_->Register(commandList, hModel_, meshIndex);
 
 		// 座標変換の設定
-		shadowMapTransformationResource_[meshIndex]->Register(commandList, 0);
+		shadowMapTransformationResource_[meshIndex]->RegisterGraphics(commandList, 0);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

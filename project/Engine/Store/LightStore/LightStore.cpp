@@ -22,7 +22,7 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 
 
 	// 座標変換用シャドウマップリソース
-	shadowMapTransformationResource_ = std::make_unique<ShadowMapTransformationResource>();
+	shadowMapTransformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 	shadowMapTransformationResource_->Initialize(device, log);
 
 }

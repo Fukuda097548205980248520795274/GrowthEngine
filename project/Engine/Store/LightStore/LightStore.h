@@ -3,6 +3,8 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
+
 #include "Handle/Handle.h"
 #include "LightData/BaseLightData.h"
 
@@ -12,10 +14,8 @@
 #include "PSO/ComputePSO/ComputePSOLightCulling/ComputePSOLightCulling.h"
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
-#include "Resource/ShadowMapTransformationResource/ShadowMapTransformationResource.h"
-#include "Resource/LightDataResource/LightDataResource.h"
+#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "Resource/TileLightResource/TileLightResource.h"
-#include "Resource/LightCullingParamResource/LightCullingParamResource.h"
 
 namespace Engine
 {
@@ -49,7 +49,7 @@ namespace Engine
 
 		/// @brief シャドウマップ用座標変換リソースを取得する
 		/// @return 
-		ShadowMapTransformationResource* GetShadowMapTransformationResource() { return shadowMapTransformationResource_.get(); }
+		ConstantBufferResource<Matrix4x4>* GetShadowMapTransformationResource() { return shadowMapTransformationResource_.get(); }
 
 		/// @brief シャドウマップテクスチャリソースを取得する
 		/// @return 
@@ -85,6 +85,6 @@ namespace Engine
 	private:
 
 		// シャドウマップ用座標変換リソース
-		std::unique_ptr<ShadowMapTransformationResource> shadowMapTransformationResource_ = nullptr;
+		std::unique_ptr<ConstantBufferResource<Matrix4x4>> shadowMapTransformationResource_ = nullptr;
 	};
 }

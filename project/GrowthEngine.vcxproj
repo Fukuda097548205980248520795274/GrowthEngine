@@ -325,25 +325,11 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.cpp" />
-    <ClCompile Include="Engine\Resource\LightDataResource\LightDataResource.cpp" />
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -499,15 +485,12 @@
     <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h" />
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
+    <ClInclude Include="Engine\Resource\ConstantBufferResource\ConstantBufferResource.h" />
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h" />
-    <ClInclude Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.h" />
-    <ClInclude Include="Engine\Resource\LightDataResource\LightDataResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
-    <ClInclude Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.h" />
-    <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
-    <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h" />
+    <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />

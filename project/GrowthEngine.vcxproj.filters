@@ -241,12 +241,6 @@
     <Filter Include="Engine\Include\DataForGPU\TransformationDataForGPU">
       <UniqueIdentifier>{7acbd6bf-1615-401a-8dcd-2497529b2dd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Resource\PrimitiveModelMaterialResource">
-      <UniqueIdentifier>{d3808a20-8c12-42ef-9125-886da45968db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Resource\PrimitiveModelTransformationResource">
-      <UniqueIdentifier>{6f931649-dd39-4e4e-b03a-79984bce9f7a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\PrimitiveModel">
       <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
     </Filter>
@@ -325,20 +319,11 @@
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive">
       <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Resource\ShadowMapTransformationResource">
-      <UniqueIdentifier>{fa6323c9-37ad-46a7-85cb-ab72e65d82e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\LightCulling">
       <UniqueIdentifier>{6092de8f-1c78-440f-b0fb-ebd04ceb732b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOLightCulling">
       <UniqueIdentifier>{8c8da7b7-3e57-4c30-b288-19fc43982e1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Resource\LightDataResource">
-      <UniqueIdentifier>{089a2df5-38a3-45bc-bbce-695928e381bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Resource\LightCullingParamResource">
-      <UniqueIdentifier>{79099238-6dc8-4c85-8699-cc6cfbd9409e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Resource\TileLightResource">
       <UniqueIdentifier>{1be739a0-98db-4238-bca4-be250d5e2e50}</UniqueIdentifier>
@@ -354,6 +339,12 @@
     </Filter>
     <Filter Include="Engine\Include\Data\SkinCluster">
       <UniqueIdentifier>{a04600f1-6aa3-4e0c-9d8d-bcf0b26d7c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\ConstantBufferResource">
+      <UniqueIdentifier>{50213e0a-98de-47e7-ae47-d6c0ecf09049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\StructuredBufferResource">
+      <UniqueIdentifier>{192573e5-5bdd-49e1-8ac0-ec3dd532fdcf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -507,12 +498,6 @@
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.cpp">
-      <Filter>Engine\Include\Resource\PrimitiveModelMaterialResource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.cpp">
-      <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\BasePSOModel.cpp">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
     </ClCompile>
@@ -576,20 +561,11 @@
     <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.cpp">
-      <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\LightDataResource\LightDataResource.cpp">
-      <Filter>Engine\Include\Resource\LightDataResource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Resource\TileLightResource\TileLightResource.cpp">
       <Filter>Engine\Include\Resource\TileLightResource</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.cpp">
-      <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
@@ -779,12 +755,6 @@
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\PrimitiveModelMaterialResource\PrimitiveModelMaterialResource.h">
-      <Filter>Engine\Include\Resource\PrimitiveModelMaterialResource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\PrimitiveModelTransformationResource\PrimitiveModelTransformationResource.h">
-      <Filter>Engine\Include\Resource\PrimitiveModelTransformationResource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
     </ClInclude>
@@ -854,20 +824,11 @@
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.h">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\ShadowMapTransformationResource\ShadowMapTransformationResource.h">
-      <Filter>Engine\Include\Resource\ShadowMapTransformationResource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\LightDataResource\LightDataResource.h">
-      <Filter>Engine\Include\Resource\LightDataResource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h">
       <Filter>Engine\Include\Resource\TileLightResource</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\LightCullingParamResource\LightCullingParamResource.h">
-      <Filter>Engine\Include\Resource\LightCullingParamResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
@@ -880,6 +841,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h">
       <Filter>Engine\Include\Data\SkinCluster</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\ConstantBufferResource\ConstantBufferResource.h">
+      <Filter>Engine\Include\Resource\ConstantBufferResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h">
+      <Filter>Engine\Include\Resource\StructuredBufferResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
