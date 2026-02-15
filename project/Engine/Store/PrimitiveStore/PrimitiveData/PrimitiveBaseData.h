@@ -17,12 +17,7 @@ namespace Engine
 		virtual ~PrimitiveBaseData() = default;
 
 		/// @brief 更新処理
-		/// @param viewProjection 
-		virtual void Update(const Matrix4x4& viewProjection) = 0;
-
-		/// @brief シャドウマップ用の更新処理
-		/// @param viewProjection 
-		virtual void ShadowMapUpdate(const Matrix4x4& viewProjection) = 0;
+		virtual void Update() = 0;
 
 		/// @brief 名前を取得する
 		/// @return 

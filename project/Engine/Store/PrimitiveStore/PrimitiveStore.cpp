@@ -3,25 +3,16 @@
 #include "PrimitiveData/PrimitiveAnimationModelData/PrimitiveAnimationModelData.h"
 
 /// @brief 更新処理
-/// @param viewProjection 
-void Engine::PrimitiveStore::Update(const Matrix4x4& viewProjection)
+void Engine::PrimitiveStore::Update()
 {
-	// 全てのプリミティブ
-	for (auto& data : dataTable_)data->Update(viewProjection);
-}
-
-/// @brief シャドウマップ用の更新処理
-/// @param viewProjection 
-void Engine::PrimitiveStore::ShadowMapUpdate(const Matrix4x4& viewProjection)
-{
-	// 全てのプリミティブ
-	for (auto& data : dataTable_)data->ShadowMapUpdate(viewProjection);
+	// データ更新
+	for (auto& data : dataTable_)data->Update();
 }
 
 /// @brief シャドウマップ用の描画処理
 /// @param commandList 
 /// @param pso 
-void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	// 静的モデルデータ
 	for (auto& data : dataTable_)
@@ -30,14 +21,14 @@ void Engine::PrimitiveStore::ShadowMapDraw(ID3D12GraphicsCommandList* commandLis
 		if (data->GetTypeName() == "StaticModel")
 		{
 			auto p = static_cast<PrimitiveStaticModelData*>(data.get());
-			p->Register(commandList, pso);
+			p->Register(viewProjection, commandList, pso);
 		}
 
 		// アニメーションモデル
 		if (data->GetTypeName() == "AnimationModel")
 		{
 			auto p = static_cast<PrimitiveAnimationModelData*>(data.get());
-			p->Register(commandList, pso);
+			p->Register(viewProjection, commandList, pso);
 		}
 	}
 }
@@ -92,19 +83,19 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 /// @param commandList 
 /// @param handle 
 /// @param meshIndex 
-void Engine::PrimitiveStore::Register(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore)
+void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore)
 {
 	// 静的モデル
 	if (dataTable_[handle]->GetTypeName() == "StaticModel")
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
-		p->Register(commandList, pso, lightStore);
+		p->Register(viewProjection, commandList, pso, lightStore);
 	}
 
 	// アニメーションモデル
 	if (dataTable_[handle]->GetTypeName() == "AnimationModel")
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
-		p->Register(commandList, pso, lightStore);
+		p->Register(viewProjection, commandList, pso, lightStore);
 	}
 }

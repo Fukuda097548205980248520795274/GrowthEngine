@@ -75,27 +75,45 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 }
 
 /// @brief 更新処理
-void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
+void Engine::PrimitiveStaticModelData::Update()
+{
+
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+/// @param textureStore 
+void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	Quaternion modelQuaternion =
-		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
-		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
 		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 
-	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		/*-----------------
+		    データを渡す
+		-----------------*/
+
 		// ノード行列
 		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
 
 		Quaternion meshQuaternion =
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize()*
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize()*
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
 			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
@@ -123,53 +141,13 @@ void Engine::PrimitiveStaticModelData::Update(const Matrix4x4& viewProjection)
 			Make3DScaleMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.scale.x, param_->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
 			Make3DRotateZMatrix4x4(param_->meshMaterial[meshIndex].uv.radius) *
 			Make3DTranslateMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.translate.x, param_->meshMaterial[meshIndex].uv.translate.y, 0.0f));
-	}
-}
-
-/// @brief シャドウマップ用更新処理
-/// @param viewProjection 
-void Engine::PrimitiveStaticModelData::ShadowMapUpdate(const Matrix4x4& viewProjection)
-{
-	// モデルデータを取得する
-	const ModelData& modelData = modelStore_->GetModelData(hModel_);
-
-	Quaternion modelQuaternion =
-		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
-
-	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
-	{
-		// ノード行列
-		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
-		Quaternion meshQuaternion =
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
 
 
-		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * worldMatrix *  nodeMatrix * viewProjection;
-	}
-}
 
-/// @brief コマンドリストに登録する
-/// @param commandList 
-/// @param pso 
-/// @param textureStore 
-void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
-{
-	// PSOの設定
-	pso->Register(commandList);
+		/*------------------------
+		    コマンドリストに登録
+		------------------------*/
 
-	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
-	{
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
 
@@ -199,13 +177,50 @@ void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* comma
 /// @brief コマンドリスト
 /// @param commandList 
 /// @param pso 
-void Engine::PrimitiveStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	Quaternion modelQuaternion =
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
+
+
+
 	// PSOの設定
 	pso->Register(commandList);
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		/*-----------------
+		    データを渡す
+		-----------------*/
+
+
+		// ノード行列
+		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
+		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
+
+		Quaternion meshQuaternion =
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
+
+
+		// ワールド座標
+		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * worldMatrix * nodeMatrix * viewProjection;
+
+
+		/*------------------------
+		    コマンドリストに登録
+		------------------------*/
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
 

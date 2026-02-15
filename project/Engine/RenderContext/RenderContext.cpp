@@ -124,6 +124,9 @@ void Engine::RenderContext::PreDraw()
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 
+	// プリミティブストアの更新
+	primitive_->Update();
+
 	// カメラストアの更新
 	cameraStore_->Update();
 
@@ -136,9 +139,6 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
-
-	// プリミティブストアの更新
-	primitive_->Update(cameraStore_->GetCamera3D().GetViewProjectionMatrix());
 
 #ifdef _DEVELOPMENT
 	// Dockスペースを作成する

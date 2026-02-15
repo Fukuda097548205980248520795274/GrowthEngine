@@ -37,26 +37,24 @@ namespace Engine
 		void Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
-		/// @param viewProjection 
-		void Update(const Matrix4x4& viewProjection) override;
-
-		/// @brief シャドウマップ用更新処理
-		/// @param viewProjection 
-		void ShadowMapUpdate(const Matrix4x4& viewProjection) override;
+		void Update() override;
 
 		/// @brief パラメータを取得する
 		/// @return 
 		void* GetParam()override { return param_.get(); }
 
-		/// @brief コマンドリスト
+		/// @brief コマンドリストに登録
+		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore);
+		/// @param lightStore 
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore);
 
-		/// @brief コマンドリスト
+		/// @brief コマンドリストに登録
+		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
 	private:

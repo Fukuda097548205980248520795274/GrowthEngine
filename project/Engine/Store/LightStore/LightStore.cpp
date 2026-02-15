@@ -85,11 +85,8 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Prim
 		// 平行光源のビュープロジェクション行列を取得する
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
 
-		// シャドウマップ用にプリミティブ更新
-		primitive->ShadowMapUpdate(viewProjectionMatrix);
-
 		// シャドウマップ用に描画
-		primitive->ShadowMapDraw(commandList, psoShadowMapPrimitive_.get());
+		primitive->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapPrimitive_.get());
 
 		// データを渡す
 		*shadowMapTransformationResource_->data_ = viewProjectionMatrix;

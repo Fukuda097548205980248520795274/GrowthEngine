@@ -179,6 +179,7 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.cpp" />
+    <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp" />
     <ClCompile Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -439,6 +440,7 @@
     <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h" />
     <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h" />
     <ClInclude Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.h" />
+    <ClInclude Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.h" />
     <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />

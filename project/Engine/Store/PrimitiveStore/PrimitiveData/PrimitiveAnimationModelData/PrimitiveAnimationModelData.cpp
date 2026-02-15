@@ -80,7 +80,16 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 }
 
 /// @brief 更新処理
-void Engine::PrimitiveAnimationModelData::Update(const Matrix4x4& viewProjection)
+void Engine::PrimitiveAnimationModelData::Update()
+{
+
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+/// @param textureStore 
+void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -100,8 +109,16 @@ void Engine::PrimitiveAnimationModelData::Update(const Matrix4x4& viewProjection
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 
-	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		/*----------------
+		    データを渡す
+		----------------*/
+
 		// ノード行列
 		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
 		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
@@ -136,61 +153,12 @@ void Engine::PrimitiveAnimationModelData::Update(const Matrix4x4& viewProjection
 			Make3DScaleMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.scale.x, param_->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
 			Make3DRotateZMatrix4x4(param_->meshMaterial[meshIndex].uv.radius) *
 			Make3DTranslateMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.translate.x, param_->meshMaterial[meshIndex].uv.translate.y, 0.0f));
-	}
-}
-
-/// @brief シャドウマップ用更新処理
-/// @param viewProjection 
-void Engine::PrimitiveAnimationModelData::ShadowMapUpdate(const Matrix4x4& viewProjection)
-{
-	// モデルデータを取得する
-	const ModelData& modelData = modelStore_->GetModelData(hModel_);
-
-	// アニメーションデータを取得する
-	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
-	NodeAnimation rootNodeAnimation = animation.nodes[0];
-	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
-	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
-	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
-	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
-
-	Quaternion modelQuaternion =
-		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
-
-	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
-	{
-		// ノード行列
-		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
-		Quaternion meshQuaternion =
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
 
 
-		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * worldMatrix * nodeMatrix) * viewProjection;
-	}
-}
+		/*------------------------
+		    コマンドリストに登録
+		------------------------*/
 
-/// @brief コマンドリストに登録する
-/// @param commandList 
-/// @param pso 
-/// @param textureStore 
-void Engine::PrimitiveAnimationModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
-{
-	// PSOの設定
-	pso->Register(commandList);
-
-	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
-	{
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
 
@@ -220,13 +188,56 @@ void Engine::PrimitiveAnimationModelData::Register(ID3D12GraphicsCommandList* co
 /// @brief コマンドリスト
 /// @param commandList 
 /// @param pso 
-void Engine::PrimitiveAnimationModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	// アニメーションデータを取得する
+	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
+	NodeAnimation rootNodeAnimation = animation.nodes[0];
+	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
+	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
+	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
+	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
+
+	Quaternion modelQuaternion =
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
+
+
 	// PSOの設定
 	pso->Register(commandList);
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		/*-----------------
+		    データを渡す
+		-----------------*/
+
+		// ノード行列
+		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
+		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
+
+		Quaternion meshQuaternion =
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(param_->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
+
+
+		// ワールド座標
+		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * worldMatrix * nodeMatrix) * viewProjection;
+
+
+		/*------------------------
+		    コマンドリストに登録
+		------------------------*/
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
 

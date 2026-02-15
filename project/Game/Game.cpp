@@ -7,8 +7,7 @@ void Game::Initialize()
 
 	light_ = std::make_unique<LightDirectional>("TEST");
 
-	model_ = std::make_unique<PrimitiveAnimationModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),
-		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"), "AnimationCube");
+	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.gltf"), "suzanne");
 
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");
 	
@@ -21,8 +20,7 @@ void Game::Update()
 {
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 
-	model_->param_->animation.timer += 1.0f / 60.0f;
-	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 4.0f);
+	model_->param_->modelTransform.rotate.z += 0.01f;
 }
 
 /// @brief 描画処理

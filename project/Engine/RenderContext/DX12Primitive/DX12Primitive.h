@@ -23,15 +23,11 @@ namespace Engine
 
 		/// @brief 更新処理
 		/// @param viewProjection 
-		void Update(const Matrix4x4& viewProjection);
-
-		/// @brief シャドウマップ用更新処理
-		/// @param viewProjection 
-		void ShadowMapUpdate(const Matrix4x4& viewProjection);
+		void Update();
 
 		/// @brief シャドウアップ用描画処理
 		/// @param commandList 
-		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
+		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -59,7 +55,10 @@ namespace Engine
 		/// @brief モデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawModel(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) { primitiveStore_->Register(commandList, handle, psoPrimitiveModel_.get() , lightStore); }
+		void DrawModel(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) 
+		{
+			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitiveModel_.get() , lightStore); 
+		}
 
 
 		template <typename T>

@@ -24,17 +24,12 @@ namespace Engine
 	public:
 
 		/// @brief 更新処理
-		/// @param viewProjection 
-		void Update(const Matrix4x4& viewProjection);
-
-		/// @brief シャドウマップ用の更新処理
-		/// @param viewProjection 
-		void ShadowMapUpdate(const Matrix4x4& viewProjection);
+		void Update();
 
 		/// @brief シャドウマップ用の描画処理
 		/// @param commandList 
 		/// @param pso 
-		void ShadowMapDraw(ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
+		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 		/// @brief プリミティブを読み込む
 		/// @param modelStore 
@@ -52,7 +47,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param meshIndex 
-		void Register(ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

@@ -352,6 +352,9 @@
     <Filter Include="Engine\Include\Application\Primitive\PrimitiveAnimationModel">
       <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Primitive\PrimitiveSkinningModel">
+      <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -587,6 +590,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.cpp">
       <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -862,6 +868,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.h">
       <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.h">
+      <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

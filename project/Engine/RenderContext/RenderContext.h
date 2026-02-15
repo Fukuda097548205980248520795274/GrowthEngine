@@ -117,7 +117,10 @@ namespace Engine
 		/// @brief プリミティブモデルの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitiveModel(PrimitiveHandle handle) { primitive_->DrawModel(commandList_, handle, lightStore_.get()); }
+		void DrawPrimitiveModel(PrimitiveHandle handle)
+		{
+			primitive_->DrawModel(cameraStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+		}
 
 
 	private:
