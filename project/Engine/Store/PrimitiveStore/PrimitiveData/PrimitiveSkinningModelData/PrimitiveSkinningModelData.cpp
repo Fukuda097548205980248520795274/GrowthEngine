@@ -6,15 +6,17 @@
 #include "PSO/PSOShadowMap/BasePSOShadowMap.h"
 #include "Store/LightStore/LightStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
+#include "Store/SkeletonStore/SkeletonStore.h"
 #include "Func/ModelFunc/ModelFunc.h"
+#include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
 
 #include <numbers>
 
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore,
-	ID3D12Device* device, Log* log)
+void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+	DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 {
 	// nullptrチェック
 	assert(modelStore);
@@ -45,6 +47,12 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
+	// スケルトンデータを取得する
+	const ModelBoneData& modelBoneData = skeletonStore_->GetBoneData(hSkeleton_);
+
+	// プリミティブ専用スケルトンを用意する
+	skeleton_ = skeletonStore_->GetSkeleton(hSkeleton_);
+
 	// パラメータ領域確保
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -53,6 +61,10 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	inputVertexResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	outputVertexResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	vertexNumResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	skinClusters_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
@@ -76,6 +88,30 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 		meshMaterialResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>();
 		meshMaterialResources_[meshIndex]->Initialize(device, log);
 
+		// 入力頂点リソース
+		inputVertexResource_[meshIndex] = std::make_unique<StructuredBufferResource<VertexDataForGPU>>();
+		inputVertexResource_[meshIndex]->Initialize(device, heap, UINT(modelData.meshes[meshIndex].vertices.size()), log);
+
+		for (int32_t i = 0; i < int32_t(modelData.meshes[meshIndex].vertices.size()); ++i)
+		{
+			inputVertexResource_[meshIndex]->data_[i].position = modelData.meshes[meshIndex].vertices[i].position;
+			inputVertexResource_[meshIndex]->data_[i].texcoord = modelData.meshes[meshIndex].vertices[i].texcoord;
+			inputVertexResource_[meshIndex]->data_[i].normal = modelData.meshes[meshIndex].vertices[i].normal;
+		}
+
+		// 出力頂点リソース
+		outputVertexResource_[meshIndex] = std::make_unique<RWStructuredBufferResource<VertexDataForGPU>>();
+		outputVertexResource_[meshIndex]->Initialize(device,commandList, heap, UINT(modelData.meshes[meshIndex].vertices.size()), log);
+
+		// 頂点数リソース
+		vertexNumResource_[meshIndex] = std::make_unique<ConstantBufferResource<uint32_t>>();
+		vertexNumResource_[meshIndex]->Initialize(device, log);
+		*vertexNumResource_[meshIndex]->data_ = static_cast<uint32_t>(modelData.meshes[meshIndex].vertices.size());
+
+		// スキンクラスター
+		skinClusters_[meshIndex] = std::make_unique<SkinCluster>();
+		skinClusters_[meshIndex]->Initialize(heap, device, modelData.meshes[meshIndex], modelBoneData.meshes[meshIndex], skeleton_, log);
+
 		// シャドウマップ用座標変換リソース
 		shadowMapTransformationResource_[meshIndex] = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, log);
@@ -85,7 +121,45 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 /// @brief 更新処理
 void Engine::PrimitiveSkinningModelData::Update()
 {
+	// スケルトンの更新
+	UpdateSkeleton(skeleton_);
 
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
+	{
+		skinClusters_[meshIndex]->Update(skeleton_);
+	}
+}
+
+/// @brief スキニングを行う
+/// @param commandList 
+/// @param pso 
+void Engine::PrimitiveSkinningModelData::Skinning(ID3D12GraphicsCommandList* commandList, ComputePSOSkinning* pso)
+{
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
+	{
+		// 入力頂点
+		inputVertexResource_[meshIndex]->RegisterCompute(commandList, 1);
+
+		// スキンクラスター
+		skinClusters_[meshIndex]->Register(commandList, 0, 2);
+
+		// 出力頂点リソース
+		outputVertexResource_[meshIndex]->RegisterCompute(commandList, 3);
+
+		// 頂点数
+		vertexNumResource_[meshIndex]->RegisterCompute(commandList, 4);
+
+		commandList->Dispatch(UINT(modelData.meshes[meshIndex].vertices.size() + 1023) / 1024, 1, 1);
+	}
 }
 
 /// @brief コマンドリストに登録する

@@ -104,9 +104,10 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type, Log* log)
+		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, const std::string& type, Log* log)
 		{
-			return primitive_->Load(modelStore_.get(), textureStore_.get(), animationStore_.get(), core_->GetDevice(), hModel, hAnimation, name, type, log);
+			return primitive_->Load(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
+				core_->GetDevice(),commandList_, hModel, hAnimation, hSkeleton, heap_.get(), name, type, log);
 		}
 
 

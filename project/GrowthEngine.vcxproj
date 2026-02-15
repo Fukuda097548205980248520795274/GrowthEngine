@@ -446,6 +446,7 @@
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
+    <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h" />
@@ -494,6 +495,7 @@
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
+    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
     <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h" />

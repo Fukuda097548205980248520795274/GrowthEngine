@@ -20,6 +20,11 @@ namespace Engine
 		/// @return 
 		Skeleton GetSkeleton(SkeletonHandle handle) { return dataTable_[handle]->GetSkeleton(); }
 
+		/// @brief ボーンデータを取得する
+		/// @param handle 
+		/// @return 
+		ModelBoneData GetBoneData(SkeletonHandle handle) { return dataTable_[handle]->GetBoneData(); }
+
 
 	private:
 

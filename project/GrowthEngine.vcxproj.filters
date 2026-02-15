@@ -355,6 +355,12 @@
     <Filter Include="Engine\Include\Application\Primitive\PrimitiveSkinningModel">
       <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\DataForGPU\VertexDataForGPU">
+      <UniqueIdentifier>{200baf1f-7a84-4899-a658-c2c1094d38cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
+      <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -871,6 +877,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.h">
       <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\VertexDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
+      <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

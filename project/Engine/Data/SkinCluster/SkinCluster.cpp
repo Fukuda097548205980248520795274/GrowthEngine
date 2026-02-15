@@ -10,27 +10,23 @@
 /// @param device 
 /// @param meshData 
 /// @param skeleton 
-void Engine::SkinCluster::Initialize(DX12Heap* heap, ID3D12Device* device, 
-	const MeshData& meshData, const MeshBoneData& meshBoneData, const Skeleton& skeleton, Log* log)
+void Engine::SkinCluster::Initialize(DX12Heap* heap, ID3D12Device* device,
+	const MeshData& meshData, const MeshBoneData& meshBoneData, Skeleton& skeleton, Log* log)
 {
 	/*------------------------------
 		Palette用のリソースを確保
 	------------------------------*/
 
-	paletteResource = CreateBufferResource(device, sizeof(WellForGPU) * skeleton.joints.size(), log);
+	paletteResource_ = CreateBufferResource(device, sizeof(WellForGPU) * skeleton.joints.size(), log);
 	WellForGPU* mappedPaletteData = nullptr;
-	paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPaletteData));
+	paletteResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedPaletteData));
 
 	// spanを使ってアクセスするようにする
-	mappedPalette = { mappedPaletteData, skeleton.joints.size() };
-	paletteSrvHandle.first = heap->GetSrvCPUDescriptorHandle();
-	paletteSrvHandle.second = heap->GetSrvGPUDescriptorHandle();
+	mappedPalette_ = { mappedPaletteData, skeleton.joints.size() };
+	paletteSrvHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	paletteSrvHandle_.second = heap->GetSrvGPUDescriptorHandle();
 
-
-	/*--------------------------
-		Palette用のSRVを作成
-	--------------------------*/
-
+	// SRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC paletteSrvDesc{};
 	paletteSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	paletteSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -40,47 +36,64 @@ void Engine::SkinCluster::Initialize(DX12Heap* heap, ID3D12Device* device,
 	paletteSrvDesc.Buffer.NumElements = UINT(skeleton.joints.size());
 	paletteSrvDesc.Buffer.StructureByteStride = sizeof(WellForGPU);
 
-	device->CreateShaderResourceView(paletteResource.Get(), &paletteSrvDesc, paletteSrvHandle.first);
+	// ビューの生成
+	device->CreateShaderResourceView(paletteResource_.Get(), &paletteSrvDesc, paletteSrvHandle_.first);
 
 
 	/*-------------------------------
 		Influence用のリソースを確保
 	-------------------------------*/
 
-	influenceResource = CreateBufferResource(device, sizeof(VertexInfluence) * meshData.vertices.size(), log);
+	influenceResource_ = CreateBufferResource(device, sizeof(VertexInfluence) * meshData.vertices.size(), log);
 	VertexInfluence* mappedInfluenceData = nullptr;
-	influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluenceData));
+	influenceResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluenceData));
+
+	// SRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC influenceSrvDesc{};
+	influenceSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	influenceSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	influenceSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	influenceSrvDesc.Buffer.FirstElement = 0;
+	influenceSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	influenceSrvDesc.Buffer.NumElements = UINT(meshData.vertices.size());
+	influenceSrvDesc.Buffer.StructureByteStride = sizeof(VertexInfluence);
 
 	// 0埋め
 	std::memset(mappedInfluenceData, 0, sizeof(VertexInfluence) * meshData.vertices.size());
-	mappedInfluence = { mappedInfluenceData, meshData.vertices.size() };
+	mappedInfluence_ = { mappedInfluenceData, meshData.vertices.size() };
 
+	// SRVハンドルを取得する
+	influenceSrvHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	influenceSrvHandle_.second = heap->GetSrvGPUDescriptorHandle();
 
-	/*---------------------------
-		Influence用のVBVを設定
-	---------------------------*/
-
-	influenceBufferView.BufferLocation = influenceResource->GetGPUVirtualAddress();
-	influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * meshData.vertices.size());
-	influenceBufferView.StrideInBytes = sizeof(VertexInfluence);
-
-	inverseBindPoseMatrices.resize(skeleton.joints.size());
-	std::generate(inverseBindPoseMatrices.begin(), inverseBindPoseMatrices.end(), MakeIdentityMatrix4x4);
+	// ビューの生成
+	device->CreateShaderResourceView(influenceResource_.Get(), &influenceSrvDesc, influenceSrvHandle_.first);
 
 
 	/*----------------------------------------------
 		SkinClusterの情報を解析してInfluenceを格納する
 	----------------------------------------------*/
 
-	for (const auto& joint : skeleton.joints)
-	{
-		// 該当のIndexのInverseBindPoseMatrixを代入する
-		inverseBindPoseMatrices[joint.index] = joint.offsetMatrix;
+	inverseBindPoseMatrices_.resize(skeleton.joints.size());
+	std::generate(inverseBindPoseMatrices_.begin(), inverseBindPoseMatrices_.end(), MakeIdentityMatrix4x4);
 
-		for (const auto& vertexWeight : meshBoneData.jointWeights[joint.index].vertexWeights)
+
+	for (const auto& jointWeight : meshBoneData.jointWeights)
+	{
+		// skeletonに対象となるjointが含まれているか判断する
+		auto it = skeleton.jointMap.find(jointWeight.first);
+
+		// 存在しない名前のJointは後回し
+		if (it == skeleton.jointMap.end())
+			continue;
+
+		// 該当のIndexのInverseBindPoseMatrixを代入する
+		inverseBindPoseMatrices_[(*it).second] = jointWeight.second.inverseBindPoseMatrix;
+
+		for (const auto& vertexWeight : jointWeight.second.vertexWeights)
 		{
 			// 該当のvertexIndexのInfluence情報を参照しておく
-			auto& currentInfluence = mappedInfluence[vertexWeight.vertexIndex];
+			auto& currentInfluence = mappedInfluence_[vertexWeight.vertexIndex];
 
 			// 空いているところ (Weight == 0.0f) に入れる
 			for (uint32_t index = 0; index < kNumMaxInfluence; ++index)
@@ -88,7 +101,7 @@ void Engine::SkinCluster::Initialize(DX12Heap* heap, ID3D12Device* device,
 				if (currentInfluence.weights[index] == 0.0f)
 				{
 					currentInfluence.weights[index] = vertexWeight.weight;
-					currentInfluence.jointIndices[index] = joint.index;
+					currentInfluence.jointIndices[index] = (*it).second;
 					break;
 				}
 			}
@@ -102,11 +115,21 @@ void Engine::SkinCluster::Update(const Skeleton& skeleton)
 {
 	for (size_t jointIndex = 0; jointIndex < skeleton.joints.size(); ++jointIndex)
 	{
-		assert(jointIndex < inverseBindPoseMatrices.size());
+		assert(jointIndex < inverseBindPoseMatrices_.size());
 
-		mappedPalette[jointIndex].skeletonSpaceMatrix =
-			inverseBindPoseMatrices[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
+		mappedPalette_[jointIndex].skeletonSpaceMatrix =
+			inverseBindPoseMatrices_[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
 
-		mappedPalette[jointIndex].skeletonSpaceInverseTransposeMatrix = (mappedPalette[jointIndex].skeletonSpaceMatrix).Inverse().Transpose();
+		mappedPalette_[jointIndex].skeletonSpaceInverseTransposeMatrix = (mappedPalette_[jointIndex].skeletonSpaceMatrix).Inverse().Transpose();
 	}
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param wellRootParameterIndex 
+/// @param influenceRootParameterIndex 
+void Engine::SkinCluster::Register(ID3D12GraphicsCommandList* commandList, UINT wellRootParameterIndex, UINT influenceRootParameterIndex)
+{
+	commandList->SetComputeRootDescriptorTable(wellRootParameterIndex, paletteSrvHandle_.second);
+	commandList->SetComputeRootDescriptorTable(influenceRootParameterIndex, influenceSrvHandle_.second);
 }

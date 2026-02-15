@@ -9,8 +9,14 @@
 #include "Data/PrimitiveData/PrimitiveData.h"
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+#include "Resource/StructuredBufferResource/StructuredBufferResource.h"
+#include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
+
 #include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
 #include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
+#include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
+
+#include "Data/SkinCluster/SkinCluster.h"
 
 namespace Engine
 {
@@ -22,6 +28,8 @@ namespace Engine
 	class LightStore;
 	class AnimationStore;
 	class SkeletonStore;
+	class DX12Heap;
+	class ComputePSOSkinning;
 
 	class PrimitiveSkinningModelData : public PrimitiveBaseData
 	{
@@ -30,15 +38,16 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, PrimitiveHandle hPrimitive, SkeletonHandle hSkeleton)
-			: hModel_(hModel), hAnimation_(hAnimation), hSkeleton_(hSkeleton), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
+		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, PrimitiveHandle hPrimitive)
+			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
 			typeName_ = "SkinningModel";
 		}
 
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, ID3D12Device* device, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore,
+			DX12Heap* heap,ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -46,6 +55,11 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @return 
 		void* GetParam()override { return param_.get(); }
+
+		/// @brief スキニングを行う
+		/// @param commandList 
+		/// @param pso 
+		void Skinning(ID3D12GraphicsCommandList* commandList, ComputePSOSkinning* pso);
 
 		/// @brief コマンドリスト
 		/// @param commandList 
@@ -86,10 +100,26 @@ namespace Engine
 		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>> meshMaterialResources_;
 
 
-	private:
-
 		// シャドウマップ用座標変換リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
+
+
+	private:
+
+		/// @brief 入力頂点リソース
+		std::vector<std::unique_ptr<StructuredBufferResource<VertexDataForGPU>>> inputVertexResource_;
+
+		/// @brief 出力頂点リソース
+		std::vector<std::unique_ptr<RWStructuredBufferResource<VertexDataForGPU>>> outputVertexResource_;
+
+		/// @brief 頂点数リソース
+		std::vector<std::unique_ptr<ConstantBufferResource<uint32_t>>> vertexNumResource_;
+
+		/// @brief スキンクラスター
+		std::vector<std::unique_ptr<SkinCluster>> skinClusters_;
+
+		/// @brief スケルトン
+		Skeleton skeleton_{};
 
 
 	private:

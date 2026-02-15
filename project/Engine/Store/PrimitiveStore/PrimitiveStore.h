@@ -6,6 +6,8 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
+#include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
+
 class PrimitiveStaticModel;
 
 namespace Engine
@@ -16,15 +18,24 @@ namespace Engine
 	class ModelStore;
 	class TextureStore;
 	class AnimationStore;
+	class SkeletonStore;
 	class LightStore;
 	class Log;
+	class DX12Heap;
+	class ShaderCompiler;
 
 	class PrimitiveStore
 	{
 	public:
 
+		/// @brief 初期化
+		/// @param device 
+		/// @param compiler 
+		/// @param log 
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log);
+
 		/// @brief 更新処理
-		void Update();
+		void Update(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief シャドウマップ用の描画処理
 		/// @param commandList 
@@ -40,8 +51,9 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore,TextureStore* textureStore,AnimationStore* animationStore, ID3D12Device* device, 
-			ModelHandle hModel,AnimationHandle hAnimation, const std::string& name , const std::string& type, Log* log);
+		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+			DX12Heap* heap, const std::string& name, const std::string& type, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -66,5 +78,9 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<PrimitiveBaseData>> dataTable_;
+
+		
+		// スキニングPSO
+		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
 	};
 }

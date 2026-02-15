@@ -12,8 +12,9 @@ void Engine::DX12Primitive::Initialize(ID3D12Device* device, ShaderCompiler* sha
 	assert(shaderCompiler);
 
 
-	// プリミティブストアの生成
+	// プリミティブストアの生成と初期化
 	primitiveStore_ = std::make_unique<PrimitiveStore>();
+	primitiveStore_->Initialize(device, shaderCompiler, log);
 
 
 	// モデル用プリミティブ頂点シェーダ
@@ -33,9 +34,9 @@ void Engine::DX12Primitive::Initialize(ID3D12Device* device, ShaderCompiler* sha
 
 /// @brief 更新処理
 /// @param viewProjection 
-void Engine::DX12Primitive::Update()
+void Engine::DX12Primitive::Update(ID3D12GraphicsCommandList* commandList)
 {
-	primitiveStore_->Update();
+	primitiveStore_->Update(commandList);
 }
 
 /// @brief シャドウアップ用描画処理

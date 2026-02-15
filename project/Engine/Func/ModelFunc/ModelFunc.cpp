@@ -354,27 +354,27 @@ Engine::ModelBoneData Engine::LoadBone(const std::string& directory, const std::
 
 
 		modelData.meshes[meshIndex].jointWeights.clear();
-		modelData.meshes[meshIndex].jointWeights.resize(mesh->mNumBones);
 
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
 		{
 			aiBone* aiBone = mesh->mBones[boneIndex];
+			std::string jointName = aiBone->mName.C_Str();
+			JointWeightData& jointWeight = modelData.meshes[meshIndex].jointWeights[jointName];
 
-			// ボーン名を取得
-			std::string boneName = aiBone->mName.C_Str();
 
-			// Skeleton の jointMap から jointIndex を取得
-			auto it = skeleton.jointMap.find(boneName);
-			if (it == skeleton.jointMap.end()) {
-				// Skeleton に存在しないボーンは無視（AssImp では稀にある）
-				continue;
-			}
+			aiMatrix4x4 bindPoseMatrixAssimp = aiBone->mOffsetMatrix.Inverse();
+			aiVector3D scaleAssimp, translateAssimp;
+			aiQuaternion rotateAssimp;
+			bindPoseMatrixAssimp.Decompose(scaleAssimp, rotateAssimp, translateAssimp);
 
-			int32_t jointIndex = it->second;
+			// トランスフォームに変える
+			Vector3 scale = Vector3(scaleAssimp.x, scaleAssimp.y, scaleAssimp.z);
+			Quaternion rotate = Quaternion(rotateAssimp.x, -rotateAssimp.y, -rotateAssimp.z, rotateAssimp.w);
+			Vector3 translate = Vector3(-translateAssimp.x, translateAssimp.y, translateAssimp.z);
 
-			// JointWeightData を取得
-			JointWeightData& jointWeight = modelData.meshes[meshIndex].jointWeights[boneIndex];
-			jointWeight.jointIndex = jointIndex;
+			// 行列にする
+			jointWeight.inverseBindPoseMatrix = Make3DAffineMatrix4x4(scale, rotate, translate).Inverse();
+
 
 			// 頂点ウェイトを追加
 			for (uint32_t w = 0; w < aiBone->mNumWeights; ++w)

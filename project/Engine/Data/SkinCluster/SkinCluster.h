@@ -17,24 +17,30 @@ namespace Engine
 		/// @param meshData 
 		/// @param skeleton 
 		/// @param log 
-		void Initialize(DX12Heap* heap, ID3D12Device* device, const MeshData& meshData,const MeshBoneData& meshBoneData, const Skeleton& skeleton, Log* log);
+		void Initialize(DX12Heap* heap, ID3D12Device* device, const MeshData& meshData, const MeshBoneData& meshBoneData, Skeleton& skeleton, Log* log);
 
 		/// @brief 更新処理
 		/// @param skeleton 
 		void Update(const Skeleton& skeleton);
 
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param wellRootParameterIndex 
+		/// @param influenceRootParameterIndex 
+		void Register(ID3D12GraphicsCommandList* commandList, UINT wellRootParameterIndex, UINT influenceRootParameterIndex);
+
 
 	private:
 
-		std::vector<Matrix4x4> inverseBindPoseMatrices;
+		std::vector<Matrix4x4> inverseBindPoseMatrices_;
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
-		D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
-		std::span<VertexInfluence> mappedInfluence;
+		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource_;
+		std::span<VertexInfluence> mappedInfluence_;
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> influenceSrvHandle_;
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
-		std::span<WellForGPU> mappedPalette;
-		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
+		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource_;
+		std::span<WellForGPU> mappedPalette_;
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle_;
 
 
 	private:

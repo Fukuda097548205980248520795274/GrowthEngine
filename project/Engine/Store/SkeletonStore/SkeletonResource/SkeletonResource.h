@@ -28,11 +28,18 @@ namespace Engine
 		/// @return 
 		Skeleton GetSkeleton()const { return skeleton_; }
 
+		/// @brief ボーンデータを取得する
+		/// @return 
+		ModelBoneData GetBoneData()const { return boneData_; }
+
 
 	private:
 
 		// スケルトン
 		Skeleton skeleton_{};
+
+		// ボーンデータ
+		ModelBoneData boneData_{};
 
 		// ハンドル
 		SkeletonHandle handle_ = 0;

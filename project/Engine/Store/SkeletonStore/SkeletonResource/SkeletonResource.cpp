@@ -11,6 +11,9 @@ Engine::SkeletonResource::SkeletonResource(const std::string& directory, const s
 	// スケルトンを作成する
 	skeleton_ = CreateSkeleton(nodes);
 
+	// ボーンデータを取得する
+	boneData_ = LoadBone(directory, fileName, skeleton_);
+
 	// ファイルパス
 	filePath_ = directory + "/" + fileName;
 }

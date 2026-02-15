@@ -1,12 +1,34 @@
 #include "PrimitiveStore.h"
 #include "PrimitiveData/PrimitiveStaticModelData/PrimitiveStaticModelData.h"
 #include "PrimitiveData/PrimitiveAnimationModelData/PrimitiveAnimationModelData.h"
+#include "PrimitiveData/PrimitiveSkinningModelData/PrimitiveSkinningModelData.h"
+
+/// @brief 初期化
+/// @param device 
+/// @param compiler 
+/// @param log 
+void Engine::PrimitiveStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
+{
+	// スキニングPSOの生成と初期化
+	psoSkinning_ = std::make_unique<ComputePSOSkinning>();
+	psoSkinning_->Initialize(device, compiler, log);
+}
 
 /// @brief 更新処理
-void Engine::PrimitiveStore::Update()
+void Engine::PrimitiveStore::Update(ID3D12GraphicsCommandList* commandList)
 {
 	// データ更新
-	for (auto& data : dataTable_)data->Update();
+	for (auto& data : dataTable_)
+	{
+		data->Update();
+
+		// スキニングモデル
+		if (data->GetTypeName() == "SkinningModel")
+		{
+			auto p = static_cast<PrimitiveSkinningModelData*>(data.get());
+			p->Skinning(commandList, psoSkinning_.get());
+		}
+	}
 }
 
 /// @brief シャドウマップ用の描画処理
@@ -30,6 +52,8 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 			auto p = static_cast<PrimitiveAnimationModelData*>(data.get());
 			p->Register(viewProjection, commandList, pso);
 		}
+
+
 	}
 }
 
@@ -43,8 +67,9 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 /// @param type 
 /// @param log 
 /// @return 
-PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, ID3D12Device* device,
-	ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type, Log* log)
+PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+	DX12Heap* heap, const std::string& name, const std::string& type, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -71,6 +96,15 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	{
 		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
 		data->Initialize(modelStore, textureStore, animationStore, device, log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// スキニングモデル
+	if (type == "SkinningModel")
+	{
+		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
+		data->Initialize(modelStore, textureStore, animationStore, skeletonStore, heap, device,commandList, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

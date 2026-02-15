@@ -71,6 +71,8 @@ namespace Engine
 	{
 		int32_t jointIndex;
 		std::vector<VertexWeightData> vertexWeights;
+
+		Matrix4x4 inverseBindPoseMatrix;
 	};
 
 
@@ -105,10 +107,7 @@ namespace Engine
 	struct MeshBoneData
 	{
 		// ジョイントウェイト
-		std::vector<JointWeightData> jointWeights;
-
-		// スキニングデータ
-		std::optional<SkinningData> skinning;
+		std::unordered_map<std::string, JointWeightData> jointWeights;
 	};
 
 	/// @brief モデルボーンデータ

@@ -7,7 +7,11 @@ void Game::Initialize()
 
 	light_ = std::make_unique<LightDirectional>("TEST");
 
-	model_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/suzanne", "suzanne.gltf"), "suzanne");
+	model_ = std::make_unique<PrimitiveSkinningModel>(
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/CharacterPreset", "bone.gltf"),
+		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/CharacterPreset", "bone.gltf"), 
+		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/CharacterPreset", "bone.gltf"),
+		"suzanne");
 
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");
 	
@@ -20,11 +24,11 @@ void Game::Update()
 {
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 
-	model_->param_->modelTransform.rotate.z += 0.01f;
+	//model_->param_->modelTransform.rotate.z += 0.01f;
 }
 
 /// @brief 描画処理
 void Game::Draw()
 {
-	model_->Draw();
+	//model_->Draw();
 }

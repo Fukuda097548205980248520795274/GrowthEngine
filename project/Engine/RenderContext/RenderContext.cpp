@@ -125,7 +125,7 @@ void Engine::RenderContext::PreDraw()
 
 
 	// プリミティブストアの更新
-	primitive_->Update();
+	primitive_->Update(commandList_);
 
 	// カメラストアの更新
 	cameraStore_->Update();

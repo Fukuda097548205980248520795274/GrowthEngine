@@ -84,9 +84,6 @@ namespace Engine
 		// マテリアルリソース
 		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>> meshMaterialResources_;
 
-
-	private:
-
 		// シャドウマップ用座標変換リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
 

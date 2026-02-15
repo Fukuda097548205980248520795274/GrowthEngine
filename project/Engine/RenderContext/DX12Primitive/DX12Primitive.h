@@ -23,7 +23,7 @@ namespace Engine
 
 		/// @brief 更新処理
 		/// @param viewProjection 
-		void Update();
+		void Update(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief シャドウアップ用描画処理
 		/// @param commandList 
@@ -45,10 +45,11 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, ID3D12Device* device,
-			ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type, Log* log)
+		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, 
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, DX12Heap* heap, const std::string& name, const std::string& type, Log* log)
 		{
-			return primitiveStore_->Load(modelStore, textureStore,animationStore, device, hModel,hAnimation, name, type, log);
+			return primitiveStore_->Load(modelStore, textureStore, animationStore, skeletonStore, device,commandList, hModel, hAnimation, hSkeleton, heap, name, type, log);
 		}
 
 

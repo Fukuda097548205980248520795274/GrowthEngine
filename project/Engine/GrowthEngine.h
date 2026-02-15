@@ -18,6 +18,7 @@
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
+#include "Application/Primitive/PrimitiveSkinningModel/PrimitiveSkinningModel.h"
 
 
 // マウスボタン
@@ -300,9 +301,9 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name, const std::string& type) const
+	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, const std::string& type) const
 	{
-		return renderContext_->LoadPrimitive(hModel, hAnimation, name, type, log_.get());
+		return renderContext_->LoadPrimitive(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}
 
 	/// @brief プリミティブ : モデル

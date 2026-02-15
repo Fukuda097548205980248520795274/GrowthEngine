@@ -11,7 +11,6 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param hModel 
-	/// @param hAnimation 
 	/// @param hSkeleton 
 	/// @param name 
 	PrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name);
