@@ -534,9 +534,11 @@ Quaternion Engine::CalculateValue(const std::vector<KeyFrameQuaternion>& keyfram
 /// @param skeleton 
 /// @param animation 
 /// @param animationTime 
-void Engine::ApplyBoneAnimation(Skeleton& skeleton, Animation& animation, float animationTime)
+Engine::Skeleton Engine::ApplyBoneAnimation(const Skeleton& skeleton, const Animation& animation, float animationTime)
 {
-	for (Joint& joint : skeleton.joints)
+	Skeleton skeleton1 = skeleton;
+
+	for (Joint& joint : skeleton1.joints)
 	{
 		// 対象のjointのアニメーションがあれば、値の適用を行う
 		if (auto it = animation.indices.find(joint.name); it != animation.indices.end())
@@ -547,4 +549,41 @@ void Engine::ApplyBoneAnimation(Skeleton& skeleton, Animation& animation, float 
 			joint.transform.scale = CalculateValue(rootNodeAnimation.scale, animationTime);
 		}
 	}
+
+	return skeleton1;
+}
+
+/// <summary>
+/// スケルトンを補間する
+/// </summary>
+/// <param name="skeleton"></param>
+/// <param name="endSkeleton"></param>
+/// <param name="t"></param>
+void Engine::LerpSkeleton(Skeleton& skeleton, Skeleton& endSkeleton, float t)
+{
+	std::vector<Joint>::iterator itrSkeleton = skeleton.joints.begin();
+	std::vector<Joint>::iterator itrEndSkeleton = endSkeleton.joints.begin();
+
+	while (itrSkeleton != skeleton.joints.end() || itrEndSkeleton != endSkeleton.joints.end())
+	{
+		LerpJoint(*itrSkeleton, *itrEndSkeleton, t);
+
+		++itrSkeleton;
+		++itrEndSkeleton;
+	}
+}
+
+/// <summary>
+/// ジョイントを補完する
+/// </summary>
+/// <param name="joint"></param>
+/// <param name="endJoint"></param>
+/// <param name="t"></param>
+void Engine::LerpJoint(Joint& joint, Joint& endJoint, float t)
+{
+	joint.transform.scale = Lerp<Vector3>(joint.transform.scale, endJoint.transform.scale, t);
+	joint.transform.rotate = Slerp(joint.transform.rotate, endJoint.transform.rotate, t);
+	joint.transform.translate = Lerp<Vector3>(joint.transform.translate, endJoint.transform.translate, t);
+
+	return;
 }

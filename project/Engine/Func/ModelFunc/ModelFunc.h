@@ -88,5 +88,21 @@ namespace Engine
 	/// @param skeleton 
 	/// @param animation 
 	/// @param animationTime 
-	void ApplyBoneAnimation(Skeleton& skeleton, Animation& animation, float animationTime);
+	Skeleton ApplyBoneAnimation(const Skeleton& skeleton,const Animation& animation, float animationTime);
+
+	/// <summary>
+	/// スケルトンを補間する
+	/// </summary>
+	/// <param name="skeleton"></param>
+	/// <param name="endSkeleton"></param>
+	/// <param name="t"></param>
+	void LerpSkeleton(Skeleton& skeleton, Skeleton& endSkeleton, float t);
+
+	/// <summary>
+	/// ジョイントを補完する
+	/// </summary>
+	/// <param name="joint"></param>
+	/// <param name="endJoint"></param>
+	/// <param name="t"></param>
+	void LerpJoint(Joint& joint, Joint& endJoint, float t);
 }

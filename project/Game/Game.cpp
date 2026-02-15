@@ -8,9 +8,9 @@ void Game::Initialize()
 	light_ = std::make_unique<LightDirectional>("TEST");
 
 	model_ = std::make_unique<PrimitiveSkinningModel>(
-		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/walk", "walk.gltf"),
-		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/walk", "walk.gltf"), 
-		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/walk", "walk.gltf"),
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/sneakWalk", "sneakWalk.gltf"),
+		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/sneakWalk", "sneakWalk.gltf"), 
+		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/sneakWalk", "sneakWalk.gltf"),
 		"suzanne");
 
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");

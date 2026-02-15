@@ -123,7 +123,11 @@ void Engine::PrimitiveSkinningModelData::Update()
 {
 	Animation animation = animationStore_->GetAnimation(hAnimation_);
 
-	ApplyBoneAnimation(skeleton_, animation, param_->animation.timer);
+	// 現在の時間に合わせたスケルトンを取得する
+	Skeleton endSkeleton = ApplyBoneAnimation(skeleton_, animation, param_->animation.timer);
+
+	// スケルトンを補間
+	LerpSkeleton(skeleton_, endSkeleton, 0.3f);
 
 	// スケルトンの更新
 	UpdateSkeleton(skeleton_);
