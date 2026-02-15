@@ -16,7 +16,7 @@ namespace Engine
 		/// @brief アニメーションを取得する
 		/// @param handle 
 		/// @return 
-		Animation GetAnimation(AnimationHandle handle) { return dataTable_[handle]->GetAnimation(); }
+		Animation GetAnimation(AnimationHandle handle)const { return dataTable_[handle]->GetAnimation(); }
 
 
 	private:

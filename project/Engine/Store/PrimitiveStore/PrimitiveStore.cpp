@@ -53,7 +53,12 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 			p->Register(viewProjection, commandList, pso);
 		}
 
-
+		// スキニングモデル
+		if (data->GetTypeName() == "SkinningModel")
+		{
+			auto p = static_cast<PrimitiveSkinningModelData*>(data.get());
+			p->Register(viewProjection, commandList, pso);
+		}
 	}
 }
 
@@ -130,6 +135,13 @@ void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12Gra
 	if (dataTable_[handle]->GetTypeName() == "AnimationModel")
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
+		p->Register(viewProjection, commandList, pso, lightStore);
+	}
+
+	// スキニングモデル
+	if (dataTable_[handle]->GetTypeName() == "SkinningModel")
+	{
+		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
 		p->Register(viewProjection, commandList, pso, lightStore);
 	}
 }

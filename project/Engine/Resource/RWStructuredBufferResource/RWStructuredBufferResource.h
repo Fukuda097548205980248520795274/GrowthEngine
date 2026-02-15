@@ -33,6 +33,16 @@ namespace Engine
 		/// @param rootParameterIndex 
 		void RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
+		/// @brief バリアを張る
+		/// @param commandList 
+		/// @param before 
+		/// @param after 
+		void Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+
+		/// @brief リソースを取得する
+		/// @return 
+		ID3D12Resource* GetResource() { return resource_.Get(); }
+
 	private:
 
 		/// @brief リソース
@@ -105,4 +115,14 @@ template <typename T>
 void Engine::RWStructuredBufferResource<T>::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
+
+/// @brief バリアを張る
+/// @param commandList 
+/// @param before 
+/// @param after
+template <typename T>
+void Engine::RWStructuredBufferResource<T>::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+	TransitionBarrier(resource_.Get(), before, after , commandList);
 }

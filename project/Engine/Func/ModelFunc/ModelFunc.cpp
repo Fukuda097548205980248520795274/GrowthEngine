@@ -528,3 +528,23 @@ Quaternion Engine::CalculateValue(const std::vector<KeyFrameQuaternion>& keyfram
 	// ここまで来たら、時刻より後ろなので、最後の値を返す
 	return (*keyframe.rbegin()).value;
 }
+
+
+/// @brief ボーンアニメーションを再生する
+/// @param skeleton 
+/// @param animation 
+/// @param animationTime 
+void Engine::ApplyBoneAnimation(Skeleton& skeleton, Animation& animation, float animationTime)
+{
+	for (Joint& joint : skeleton.joints)
+	{
+		// 対象のjointのアニメーションがあれば、値の適用を行う
+		if (auto it = animation.indices.find(joint.name); it != animation.indices.end())
+		{
+			const NodeAnimation& rootNodeAnimation = animation.nodes[it->second];
+			joint.transform.translate = CalculateValue(rootNodeAnimation.translate, animationTime);
+			joint.transform.rotate = CalculateValue(rootNodeAnimation.rotate, animationTime);
+			joint.transform.scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+		}
+	}
+}

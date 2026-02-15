@@ -83,4 +83,10 @@ namespace Engine
 	/// @param time 
 	/// @return 
 	Quaternion CalculateValue(const std::vector<KeyFrameQuaternion>& keyframe, float time);
+
+	/// @brief ボーンアニメーションを再生する
+	/// @param skeleton 
+	/// @param animation 
+	/// @param animationTime 
+	void ApplyBoneAnimation(Skeleton& skeleton, Animation& animation, float animationTime);
 }

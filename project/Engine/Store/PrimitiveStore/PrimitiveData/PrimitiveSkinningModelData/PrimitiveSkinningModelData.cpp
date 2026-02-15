@@ -121,6 +121,10 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 /// @brief 更新処理
 void Engine::PrimitiveSkinningModelData::Update()
 {
+	Animation animation = animationStore_->GetAnimation(hAnimation_);
+
+	ApplyBoneAnimation(skeleton_, animation, param_->animation.timer);
+
 	// スケルトンの更新
 	UpdateSkeleton(skeleton_);
 
@@ -171,14 +175,6 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
-	// アニメーションデータを取得する
-	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
-	NodeAnimation rootNodeAnimation = animation.nodes[0];
-	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
-	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
-	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
-	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
-
 	Quaternion modelQuaternion =
 		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -197,10 +193,6 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 		    データを渡す
 		-----------------*/
 
-		// ノード行列
-		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
 		Quaternion meshQuaternion =
 			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -211,7 +203,7 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
-			localMatrix * animationMatrix * worldMatrix * nodeMatrix;
+			localMatrix * worldMatrix;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -237,8 +229,18 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 		    コマンドリストに登録
 		------------------------*/
 
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		D3D12_VERTEX_BUFFER_VIEW vbv = {};
+		vbv.BufferLocation = outputVertexResource_[meshIndex]->GetResource()->GetGPUVirtualAddress();
+		vbv.SizeInBytes = UINT(modelData.meshes[meshIndex].vertices.size()) * sizeof(VertexDataForGPU);
+		vbv.StrideInBytes = sizeof(VertexDataForGPU);
+
+		commandList->IASetVertexBuffers(0, 1, &vbv);
+
 
 		// 座標変換の設定
 		meshTransformationResources_[meshIndex]->RegisterGraphics(commandList, 0);
@@ -260,6 +262,8 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	}
 }
 
@@ -270,14 +274,6 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
-
-	// アニメーションデータを取得する
-	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
-	NodeAnimation rootNodeAnimation = animation.nodes[0];
-	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
-	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
-	Vector3 animationScale = CalculateValue(rootNodeAnimation.scale, param_->animation.timer);
-	Matrix4x4 animationMatrix = Make3DAffineMatrix4x4(animationScale, animationRotate, animationTranslate);
 
 	Quaternion modelQuaternion =
 		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
@@ -296,10 +292,6 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 		    データを渡す
 		-----------------*/
 
-		// ノード行列
-		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
 		Quaternion meshQuaternion =
 			ToQuaternion(param_->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 			ToQuaternion(param_->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
@@ -309,15 +301,24 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 
 
 		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * worldMatrix * nodeMatrix) * viewProjection;
+		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * worldMatrix) * viewProjection;
 
 
 		/*------------------------
 		    コマンドリストに登録
 		------------------------*/
 
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		D3D12_VERTEX_BUFFER_VIEW vbv = {};
+		vbv.BufferLocation = outputVertexResource_[meshIndex]->GetResource()->GetGPUVirtualAddress();
+		vbv.SizeInBytes = UINT(modelData.meshes[meshIndex].vertices.size()) * sizeof(VertexDataForGPU);
+		vbv.StrideInBytes = sizeof(VertexDataForGPU);
+
+		commandList->IASetVertexBuffers(0, 1, &vbv);
 
 		// 座標変換の設定
 		shadowMapTransformationResource_[meshIndex]->RegisterGraphics(commandList, 0);
@@ -327,5 +328,7 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	}
 }
