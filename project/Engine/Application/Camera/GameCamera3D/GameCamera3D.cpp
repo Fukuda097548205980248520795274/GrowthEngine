@@ -5,12 +5,12 @@
 GameCamera3D::GameCamera3D(const std::string& name) : name_(name)
 {
 	// カメラハンドルを取得する
-	hCamera_ = GrowthEngine::GetInstance()->LoadCamera(name_);
+	hCamera_ = GrowthEngine::GetInstance()->LoadCamera3D(name_);
 }
 
 /// @brief カメラを切り替える
 void GameCamera3D::Switch()
 {
 	// 切り替え
-	GrowthEngine::GetInstance()->CameraSwitch(hCamera_);
+	GrowthEngine::GetInstance()->Camera3DSwitch(hCamera_);
 }

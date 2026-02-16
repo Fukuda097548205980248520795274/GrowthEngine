@@ -14,7 +14,9 @@
 #include "Math/Vector/Vector3/Vector3.h"
 
 #include "Application/Framework/Framework.h"
+
 #include "Application/Camera/GameCamera3D/GameCamera3D.h"
+#include "Application/Camera/GameCamera2D/GameCamera2D.h"
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
@@ -63,14 +65,23 @@ public:
 	/// @brief 描画後処理
 	void PostDraw();
 
-	/// @brief カメラの切り替え
+	/// @brief 3Dカメラの切り替え
 	/// @param hCamera 
-	void CameraSwitch(Camera3DHandle hCamera) const { renderContext_->CameraSwitch(hCamera); }
+	void Camera3DSwitch(Camera3DHandle hCamera) const { renderContext_->Camera3DSwitch(hCamera); }
 
-	/// @brief カメラを読み込む
+	/// @brief 2Dカメラの切り替え
+	/// @param hCamera 
+	void Camera2DSwitch(Camera2DHandle hCamera)const { renderContext_->Camera2DSwitch(hCamera); }
+
+	/// @brief 3Dカメラを読み込む
 	/// @param name 
 	/// @return 
-	Camera3DHandle LoadCamera(const std::string& name)const { return renderContext_->LoadCamera(name); }
+	Camera3DHandle LoadCamera3D(const std::string& name)const { return renderContext_->LoadCamera3D(name); }
+
+	/// @brief 2Dカメラを読み込む
+	/// @param name 
+	/// @return 
+	Camera2DHandle LoadCamera2D(const std::string& name)const { return renderContext_->LoadCamera2D(name); }
 
 	/// @brief テクスチャを読み込む
 	/// @param filePath 

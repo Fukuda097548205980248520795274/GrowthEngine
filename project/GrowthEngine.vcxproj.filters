@@ -382,6 +382,18 @@
     <Filter Include="Engine\Include\Camera\Camera3D">
       <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Camera\Camera2D">
+      <UniqueIdentifier>{0b07ddf6-1b2d-4768-bca2-5475f66f419d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Camera\GameCamera2D">
+      <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera2DStore">
+      <UniqueIdentifier>{14c7b516-5725-43f3-a652-caf223e07a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera2DStore\Camera2DResource">
+      <UniqueIdentifier>{977c6dbf-0a4c-4346-9ed8-87583d505965}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -632,6 +644,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
       <Filter>Engine\Include\Store\SkyboxStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp">
+      <Filter>Engine\Include\Camera\Camera2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.cpp">
+      <Filter>Engine\Include\Application\Camera\GameCamera2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Camera2DStore\Camera2DStore.cpp">
+      <Filter>Engine\Include\Store\Camera2DStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.cpp">
+      <Filter>Engine\Include\Store\Camera2DStore\Camera2DResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -937,6 +961,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Camera\BaseCamera.h">
       <Filter>Engine\Include\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h">
+      <Filter>Engine\Include\Camera\Camera2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.h">
+      <Filter>Engine\Include\Application\Camera\GameCamera2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Camera2DStore\Camera2DStore.h">
+      <Filter>Engine\Include\Store\Camera2DStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.h">
+      <Filter>Engine\Include\Store\Camera2DStore\Camera2DResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

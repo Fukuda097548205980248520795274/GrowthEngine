@@ -150,6 +150,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.cpp" />
     <ClCompile Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -158,6 +159,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp" />
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -352,6 +354,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.cpp" />
+    <ClCompile Include="Engine\Store\Camera2DStore\Camera2DStore.cpp" />
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -436,9 +440,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
+    <ClInclude Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
+    <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h" />
     <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h" />
     <ClInclude Include="Engine\Application\Light\LightArea\LightArea.h" />
     <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h" />
@@ -510,6 +516,8 @@
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />
     <ClInclude Include="Engine\Store\AudioStore\AudioStore.h" />
+    <ClInclude Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.h" />
+    <ClInclude Include="Engine\Store\Camera2DStore\Camera2DStore.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h" />

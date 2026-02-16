@@ -3,6 +3,8 @@
 /// @brief 初期化
 void Game::Initialize()
 {
+	gameCamera2D_ = std::make_unique<GameCamera2D>("TEST");
+
 	gameCamera_ = std::make_unique<GameCamera3D>("Test");
 
 	light_ = std::make_unique<LightDirectional>("TEST");

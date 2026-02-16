@@ -20,11 +20,15 @@ namespace Engine
 		/// @return 
 		Quaternion GetQuaternion()const { return quaternion_; }
 
-		/// @brief パラメータ
-		std::unique_ptr<Camera3DData::Param> param_ = nullptr;
+		/// @brief パラメータを取得する
+		/// @return 
+		Camera3DData::Param* GetParam() { return param_.get(); }
 
 
 	private:
+
+		/// @brief パラメータ
+		std::unique_ptr<Camera3DData::Param> param_ = nullptr;
 
 		// クォータニオン
 		Quaternion quaternion_ = MakeIdentityQuaternion();

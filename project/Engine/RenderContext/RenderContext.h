@@ -13,6 +13,7 @@
 #include <thread>
 
 #include "Store/Camera3DStore/Camera3DStore.h"
+#include "Store/Camera2DStore/Camera2DStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
@@ -37,14 +38,23 @@ namespace Engine
 		/// @brief 描画後処理
 		void PostDraw();
 
-		/// @brief カメラ切り替え
+		/// @brief 3Dカメラ切り替え
 		/// @param hCamera 
-		void CameraSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera); }
+		void Camera3DSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera); }
 
-		/// @brief カメラを読み込む
+		/// @brief 2Dカメラ切り替え
+		/// @param hCamera 
+		void Camera2DSwitch(Camera2DHandle hCamera) { camera2DStore_->Switch(hCamera); }
+
+		/// @brief 3Dカメラを読み込む
 		/// @param name 
 		/// @return 
-		Camera3DHandle LoadCamera(const std::string& name) { return camera3DStore_->Load(name); }
+		Camera3DHandle LoadCamera3D(const std::string& name) { return camera3DStore_->Load(name); }
+
+		/// @brief 2Dカメラを読み込む
+		/// @param name 
+		/// @return 
+		Camera2DHandle LoadCamera2D(const std::string& name) { return camera2DStore_->Load(name); }
 
 		/// @brief テクスチャを読み込む
 		/// @param filePath 
@@ -169,6 +179,9 @@ namespace Engine
 
 		// 3Dカメラストア
 		std::unique_ptr<Camera3DStore> camera3DStore_ = nullptr;
+
+		// 2Dカメラストア
+		std::unique_ptr<Camera2DStore> camera2DStore_ = nullptr;
 
 		// テクスチャストア
 		std::unique_ptr<TextureStore> textureStore_ = nullptr;

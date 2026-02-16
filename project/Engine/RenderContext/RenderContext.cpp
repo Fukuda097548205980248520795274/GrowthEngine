@@ -65,6 +65,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
 
+	// 2Dカメラストア
+	camera2DStore_ = std::make_unique<Camera2DStore>();
+
 	// テクスチャストアの生成
 	textureStore_ = std::make_unique<TextureStore>();
 
@@ -127,8 +130,9 @@ void Engine::RenderContext::PreDraw()
 	// プリミティブストアの更新
 	primitive_->Update(commandList_);
 
-	// 3Dカメラストアの更新
+	// カメラストアの更新
 	camera3DStore_->Update();
+	camera2DStore_->Update();
 
 	// ライトストアの更新
 	lightStore_->Update(commandList_, primitive_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
