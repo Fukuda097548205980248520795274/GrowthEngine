@@ -11,7 +11,7 @@ PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string
 	engine_ = GrowthEngine::GetInstance();
 
 	// 種別名
-	type_ = "StaticModel";
+	type_ = Engine::Primitive::Type::StaticModel;
 
 	// 読み込み
 	hPrimitive_ = engine_->LoadPrimitive(hModel_,0,0, name_, type_);

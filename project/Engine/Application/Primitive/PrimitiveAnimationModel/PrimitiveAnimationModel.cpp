@@ -11,7 +11,7 @@ PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHa
 	engine_ = GrowthEngine::GetInstance();
 
 	// 種別名
-	type_ = "AnimationModel";
+	type_ = Engine::Primitive::Type::AnimationModel;
 
 	// 読み込み
 	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_,0, name_, type_);

@@ -36,8 +36,8 @@ private:
 	// 名前
 	std::string name_{};
 
-	// 種別名
-	std::string type_{};
+	// 種類
+	Engine::Primitive::Type type_;
 
 
 	// モデルハンドル

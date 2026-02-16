@@ -301,7 +301,7 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, const std::string& type) const
+	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Engine::Primitive::Type type) const
 	{
 		return renderContext_->LoadPrimitive(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}

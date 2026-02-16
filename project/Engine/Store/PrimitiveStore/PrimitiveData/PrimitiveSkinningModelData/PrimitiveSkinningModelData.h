@@ -40,7 +40,7 @@ namespace Engine
 		/// @param hModel 
 		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, PrimitiveHandle hPrimitive)
 			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
-			typeName_ = "SkinningModel";
+			type_ = Primitive::Type::SkinningModel;
 		}
 
 		/// @brief 初期化

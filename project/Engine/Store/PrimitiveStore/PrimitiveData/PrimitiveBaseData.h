@@ -2,6 +2,7 @@
 #include <string>
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Handle/Handle.h"
+#include "Data/PrimitiveData/PrimitiveData.h"
 
 namespace Engine
 {
@@ -23,9 +24,9 @@ namespace Engine
 		/// @return 
 		std::string GetName()const { return name_; }
 
-		/// @brief 種別名を取得する
+		/// @brief 種類を取得する
 		/// @return 
-		std::string GetTypeName()const { return typeName_; }
+		Primitive::Type GetType()const { return type_; }
 
 		/// @brief ハンドルを取得する
 		/// @return 
@@ -42,7 +43,7 @@ namespace Engine
 		std::string name_{};
 
 		// 種別名
-		std::string typeName_{};
+		Primitive::Type type_;
 
 		// ハンドル
 		PrimitiveHandle hPrimitive_ = 0;

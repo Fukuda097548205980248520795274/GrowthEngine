@@ -2,6 +2,7 @@
 #include <memory>
 #include "PSO/PSOModel/PSOPrimitiveModel/PSOPrimitiveModel.h"
 #include "Store/PrimitiveStore/PrimitiveStore.h"
+#include "Data/PrimitiveData/PrimitiveData.h"
 
 namespace Engine
 {
@@ -47,7 +48,7 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, 
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, DX12Heap* heap, const std::string& name, const std::string& type, Log* log)
+			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
 		{
 			return primitiveStore_->Load(modelStore, textureStore, animationStore, skeletonStore, device,commandList, hModel, hAnimation, hSkeleton, heap, name, type, log);
 		}

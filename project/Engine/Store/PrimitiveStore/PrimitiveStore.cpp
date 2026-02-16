@@ -23,7 +23,7 @@ void Engine::PrimitiveStore::Update(ID3D12GraphicsCommandList* commandList)
 		data->Update();
 
 		// スキニングモデル
-		if (data->GetTypeName() == "SkinningModel")
+		if (data->GetType() == Primitive::Type::SkinningModel)
 		{
 			auto p = static_cast<PrimitiveSkinningModelData*>(data.get());
 			p->Skinning(commandList, psoSkinning_.get());
@@ -40,21 +40,21 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 	for (auto& data : dataTable_)
 	{
 		// 静的モデル
-		if (data->GetTypeName() == "StaticModel")
+		if (data->GetType() == Primitive::Type::StaticModel)
 		{
 			auto p = static_cast<PrimitiveStaticModelData*>(data.get());
 			p->Register(viewProjection, commandList, pso);
 		}
 
 		// アニメーションモデル
-		if (data->GetTypeName() == "AnimationModel")
+		if (data->GetType() == Primitive::Type::AnimationModel)
 		{
 			auto p = static_cast<PrimitiveAnimationModelData*>(data.get());
 			p->Register(viewProjection, commandList, pso);
 		}
 
 		// スキニングモデル
-		if (data->GetTypeName() == "SkinningModel")
+		if (data->GetType() == Primitive::Type::SkinningModel)
 		{
 			auto p = static_cast<PrimitiveSkinningModelData*>(data.get());
 			p->Register(viewProjection, commandList, pso);
@@ -74,12 +74,12 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 /// @return 
 PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
 	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-	DX12Heap* heap, const std::string& name, const std::string& type, Log* log)
+	DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
 	{
-		if (data->GetName() == name && data->GetTypeName() == type)
+		if (data->GetName() == name && data->GetType() == type)
 			return data->GetHandle();
 	}
 
@@ -88,7 +88,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 
 
 	// 静的モデル
-	if (type == "StaticModel")
+	if (type == Primitive::Type::StaticModel)
 	{
 		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
 		data->Initialize(modelStore, textureStore, device, log);
@@ -97,7 +97,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	}
 
 	// アニメーションモデル
-	if (type == "AnimationModel")
+	if (type == Primitive::Type::AnimationModel)
 	{
 		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
 		data->Initialize(modelStore, textureStore, animationStore, device, log);
@@ -106,7 +106,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	}
 
 	// スキニングモデル
-	if (type == "SkinningModel")
+	if (type == Primitive::Type::SkinningModel)
 	{
 		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
 		data->Initialize(modelStore, textureStore, animationStore, skeletonStore, heap, device,commandList, log);
@@ -125,21 +125,21 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore)
 {
 	// 静的モデル
-	if (dataTable_[handle]->GetTypeName() == "StaticModel")
+	if (dataTable_[handle]->GetType() == Primitive::Type::StaticModel)
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
 		p->Register(viewProjection, commandList, pso, lightStore);
 	}
 
 	// アニメーションモデル
-	if (dataTable_[handle]->GetTypeName() == "AnimationModel")
+	if (dataTable_[handle]->GetType() == Primitive::Type::AnimationModel)
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
 		p->Register(viewProjection, commandList, pso, lightStore);
 	}
 
 	// スキニングモデル
-	if (dataTable_[handle]->GetTypeName() == "SkinningModel")
+	if (dataTable_[handle]->GetType() == Primitive::Type::SkinningModel)
 	{
 		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
 		p->Register(viewProjection, commandList, pso, lightStore);

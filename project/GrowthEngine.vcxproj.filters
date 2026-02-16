@@ -373,6 +373,9 @@
     <Filter Include="Engine\Include\Data\PrefabData">
       <UniqueIdentifier>{3527835c-37e0-4dc7-a41c-367d169b9ac6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\SkyboxStore">
+      <UniqueIdentifier>{1a87e706-3342-46e1-bd18-833c1a42f1c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -620,6 +623,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp">
       <Filter>Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
+      <Filter>Engine\Include\Store\SkyboxStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -916,6 +922,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\PrefabData\PrefabData.h">
       <Filter>Engine\Include\Data\PrefabData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h">
+      <Filter>Engine\Include\Store\SkyboxStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

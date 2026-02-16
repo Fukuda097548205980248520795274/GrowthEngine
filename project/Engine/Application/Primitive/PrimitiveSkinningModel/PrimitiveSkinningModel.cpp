@@ -11,7 +11,7 @@ PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHand
 	engine_ = GrowthEngine::GetInstance();
 
 	// 種別名
-	type_ = "SkinningModel";
+	type_ = Engine::Primitive::Type::SkinningModel;
 
 	// 読み込み
 	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_, hSkeleton_, name_, type_);

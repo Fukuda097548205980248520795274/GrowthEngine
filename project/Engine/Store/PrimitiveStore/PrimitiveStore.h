@@ -53,7 +53,7 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-			DX12Heap* heap, const std::string& name, const std::string& type, Log* log);
+			DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 

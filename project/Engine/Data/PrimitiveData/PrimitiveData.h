@@ -9,6 +9,14 @@ namespace Engine
 {
 	namespace Primitive
 	{
+		/// @brief 種類
+		enum class Type
+		{
+			StaticModel,
+			AnimationModel,
+			SkinningModel
+		};
+
 		/// @brief 静的モデル
 		namespace StaticModel
 		{

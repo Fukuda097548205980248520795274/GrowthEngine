@@ -10,6 +10,13 @@ namespace Engine
 	/// @brief プレハブ
 	namespace Prefab
 	{
+		enum class Type
+		{
+			StaticModel,
+			AnimationModel,
+			SkinningModel,
+		};
+
 		/// @brief 静的モデル
 		namespace StaticModel
 		{

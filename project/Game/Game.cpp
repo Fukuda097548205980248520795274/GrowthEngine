@@ -8,9 +8,9 @@ void Game::Initialize()
 	light_ = std::make_unique<LightDirectional>("TEST");
 
 	model_ = std::make_unique<PrimitiveSkinningModel>(
-		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/CharacterPreset", "bone.gltf"),
-		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/CharacterPreset", "bone.gltf"), 
-		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/CharacterPreset", "bone.gltf"),
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/walk", "walk.gltf"),
+		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/walk", "walk.gltf"), 
+		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/walk", "walk.gltf"),
 		"suzanne");
 	model_->param_->modelTransform.translate.x = -5.0f;
 

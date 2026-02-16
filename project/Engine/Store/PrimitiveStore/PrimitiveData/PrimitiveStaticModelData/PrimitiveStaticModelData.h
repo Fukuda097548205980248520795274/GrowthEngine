@@ -29,7 +29,7 @@ namespace Engine
 		/// @param name 
 		/// @param hModel 
 		PrimitiveStaticModelData(const std::string& name , ModelHandle hModel, PrimitiveHandle hPrimitive) 
-			: hModel_(hModel), hPrimitive_(hPrimitive), PrimitiveBaseData(name) { typeName_ = "StaticModel"; }
+			: hModel_(hModel), hPrimitive_(hPrimitive), PrimitiveBaseData(name) { type_ = Primitive::Type::StaticModel; }
 
 		/// @brief 初期化
 		/// @param modelStore 
