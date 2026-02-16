@@ -8,10 +8,17 @@ void Game::Initialize()
 	light_ = std::make_unique<LightDirectional>("TEST");
 
 	model_ = std::make_unique<PrimitiveSkinningModel>(
-		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/sneakWalk", "sneakWalk.gltf"),
-		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/sneakWalk", "sneakWalk.gltf"), 
-		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/sneakWalk", "sneakWalk.gltf"),
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/CharacterPreset", "bone.gltf"),
+		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/CharacterPreset", "bone.gltf"), 
+		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/CharacterPreset", "bone.gltf"),
 		"suzanne");
+	model_->param_->modelTransform.translate.x = -5.0f;
+
+	animationModel_ = std::make_unique<PrimitiveAnimationModel>(
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),
+		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),
+		"AnimatedCube");
+	animationModel_->param_->modelTransform.translate.x = 5.0f;
 
 	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");
 	
@@ -32,4 +39,6 @@ void Game::Update()
 void Game::Draw()
 {
 	model_->Draw();
+
+	animationModel_->Draw();
 }

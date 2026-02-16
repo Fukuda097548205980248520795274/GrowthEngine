@@ -28,3 +28,6 @@ using LightHandle = uint32_t;
 
 // プリミティブハンドル
 using PrimitiveHandle = uint32_t;
+
+/// @brief プレハブハンドル
+using PrefabHandle = uint32_t;

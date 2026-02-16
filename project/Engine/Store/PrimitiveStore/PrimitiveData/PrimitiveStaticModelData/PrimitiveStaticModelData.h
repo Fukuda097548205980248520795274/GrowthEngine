@@ -69,7 +69,7 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<StaticModel::Param> param_ = nullptr;
+		std::unique_ptr<Primitive::StaticModel::Param> param_ = nullptr;
 
 		
 		// 座標変換リソース

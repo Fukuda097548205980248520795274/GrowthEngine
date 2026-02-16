@@ -30,6 +30,8 @@ private:
 
 	std::unique_ptr<PrimitiveSkinningModel> model_ = nullptr;
 
+	std::unique_ptr<PrimitiveAnimationModel> animationModel_ = nullptr;
+
 	std::unique_ptr<GameCamera> gameCamera_ = nullptr;
 
 	std::unique_ptr<LightDirectional> light_ = nullptr;

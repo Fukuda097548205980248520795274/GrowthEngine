@@ -90,7 +90,7 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<SkinningModel::Param> param_ = nullptr;
+		std::unique_ptr<Primitive::SkinningModel::Param> param_ = nullptr;
 
 
 		// 座標変換リソース

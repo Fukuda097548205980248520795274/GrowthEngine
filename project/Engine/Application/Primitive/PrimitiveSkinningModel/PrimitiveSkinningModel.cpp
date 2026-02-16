@@ -15,7 +15,7 @@ PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHand
 
 	// 読み込み
 	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_, hSkeleton_, name_, type_);
-	param_ = engine_->GetPrimitiveParam<Engine::SkinningModel::Param>(hPrimitive_);
+	param_ = engine_->GetPrimitiveParam<Engine::Primitive::SkinningModel::Param>(hPrimitive_);
 }
 
 /// @brief 描画処理

@@ -33,7 +33,7 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 
 
 	// パラメータの生成
-	param_ = std::make_unique<SkinningModel::Param>();
+	param_ = std::make_unique<Primitive::SkinningModel::Param>();
 
 
 	// モデルトランスフォーム
@@ -43,6 +43,8 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 
 	// アニメーション
 	param_->animation.timer = 0.0f;
+	param_->animation.hAnimation = hAnimation_;
+	param_->animation.hSkeleton = hSkeleton_;
 
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -121,7 +123,7 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 /// @brief 更新処理
 void Engine::PrimitiveSkinningModelData::Update()
 {
-	Animation animation = animationStore_->GetAnimation(hAnimation_);
+	Animation animation = animationStore_->GetAnimation(param_->animation.hAnimation);
 
 	// 現在の時間に合わせたスケルトンを取得する
 	Skeleton endSkeleton = ApplyBoneAnimation(skeleton_, animation, param_->animation.timer);

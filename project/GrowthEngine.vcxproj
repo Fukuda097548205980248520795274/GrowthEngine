@@ -396,6 +396,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.cpp" />
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp" />
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabStore.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp" />
@@ -449,6 +452,7 @@
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
+    <ClInclude Include="Engine\Data\PrefabData\PrefabData.h" />
     <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h" />
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
@@ -514,6 +518,9 @@
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.h" />
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.h" />
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabStore.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h" />

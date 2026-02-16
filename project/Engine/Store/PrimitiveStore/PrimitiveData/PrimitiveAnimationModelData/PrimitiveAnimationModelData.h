@@ -75,7 +75,7 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<AnimationModel::Param> param_ = nullptr;
+		std::unique_ptr<Primitive::AnimationModel::Param> param_ = nullptr;
 
 
 		// 座標変換リソース

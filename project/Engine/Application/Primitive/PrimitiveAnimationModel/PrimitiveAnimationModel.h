@@ -21,7 +21,7 @@ public:
 
 
 	/// @brief パラメータ
-	Engine::AnimationModel::Param* param_ = nullptr;
+	Engine::Primitive::AnimationModel::Param* param_ = nullptr;
 
 
 private:

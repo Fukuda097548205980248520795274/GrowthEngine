@@ -361,6 +361,18 @@
     <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
       <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PrefabStore">
+      <UniqueIdentifier>{8d47ca41-2531-442a-b87d-06683851805c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabStore\PrefabData">
+      <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData">
+      <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\PrefabData">
+      <UniqueIdentifier>{3527835c-37e0-4dc7-a41c-367d169b9ac6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -599,6 +611,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp">
       <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabStore.cpp">
+      <Filter>Engine\Include\Store\PrefabStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.cpp">
+      <Filter>Engine\Include\Store\PrefabStore\PrefabData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp">
+      <Filter>Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -883,6 +904,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
       <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabStore.h">
+      <Filter>Engine\Include\Store\PrefabStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.h">
+      <Filter>Engine\Include\Store\PrefabStore\PrefabData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.h">
+      <Filter>Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\PrefabData\PrefabData.h">
+      <Filter>Engine\Include\Data\PrefabData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

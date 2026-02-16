@@ -20,7 +20,7 @@ public:
 
 
 	/// @brief パラメータ
-	Engine::StaticModel::Param* param_ = nullptr;
+	Engine::Primitive::StaticModel::Param* param_ = nullptr;
 
 
 private:

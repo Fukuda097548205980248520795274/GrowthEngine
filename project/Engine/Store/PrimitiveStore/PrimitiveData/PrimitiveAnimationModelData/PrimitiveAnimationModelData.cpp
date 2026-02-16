@@ -28,7 +28,7 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 
 
 	// パラメータの生成
-	param_ = std::make_unique<AnimationModel::Param>();
+	param_ = std::make_unique<Primitive::AnimationModel::Param>();
 
 
 	// モデルトランスフォーム
@@ -38,6 +38,7 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 
 	// アニメーション
 	param_->animation.timer = 0.0f;
+	param_->animation.hAnimation = hAnimation_;
 
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -95,7 +96,7 @@ void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjecti
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	// アニメーションデータを取得する
-	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
+	const Animation& animation = animationStore_->GetAnimation(param_->animation.hAnimation);
 	NodeAnimation rootNodeAnimation = animation.nodes[0];
 	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
 	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
@@ -133,7 +134,7 @@ void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjecti
 
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
-			localMatrix * animationMatrix * worldMatrix * nodeMatrix;
+			localMatrix * animationMatrix * nodeMatrix * worldMatrix;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -194,7 +195,7 @@ void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjecti
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	// アニメーションデータを取得する
-	const Animation& animation = animationStore_->GetAnimation(hAnimation_);
+	const Animation& animation = animationStore_->GetAnimation(param_->animation.hAnimation);
 	NodeAnimation rootNodeAnimation = animation.nodes[0];
 	Vector3 animationTranslate = CalculateValue(rootNodeAnimation.translate, param_->animation.timer);
 	Quaternion animationRotate = CalculateValue(rootNodeAnimation.rotate, param_->animation.timer);
@@ -231,7 +232,7 @@ void Engine::PrimitiveAnimationModelData::Register(const Matrix4x4& viewProjecti
 
 
 		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * worldMatrix * nodeMatrix) * viewProjection;
+		*shadowMapTransformationResource_[meshIndex]->data_ = (localMatrix * animationMatrix * nodeMatrix * worldMatrix) * viewProjection;
 
 
 		/*------------------------

@@ -15,7 +15,7 @@ PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHa
 
 	// 読み込み
 	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_,0, name_, type_);
-	param_ = engine_->GetPrimitiveParam<Engine::AnimationModel::Param>(hPrimitive_);
+	param_ = engine_->GetPrimitiveParam<Engine::Primitive::AnimationModel::Param>(hPrimitive_);
 }
 
 /// @brief 描画処理

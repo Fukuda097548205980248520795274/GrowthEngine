@@ -24,7 +24,7 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 
 
 	// パラメータの生成
-	param_ = std::make_unique<StaticModel::Param>();
+	param_ = std::make_unique<Primitive::StaticModel::Param>();
 
 
 	// モデルトランスフォーム
@@ -121,7 +121,7 @@ void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection,
 
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
-			localMatrix * worldMatrix * nodeMatrix;
+			localMatrix * nodeMatrix * worldMatrix;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -214,7 +214,7 @@ void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection,
 
 
 		// ワールド座標
-		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * worldMatrix * nodeMatrix * viewProjection;
+		*shadowMapTransformationResource_[meshIndex]->data_ = localMatrix * nodeMatrix * worldMatrix * viewProjection;
 
 
 		/*------------------------

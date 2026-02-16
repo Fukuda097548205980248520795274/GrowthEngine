@@ -21,7 +21,7 @@ public:
 
 
 	/// @brief パラメータ
-	Engine::SkinningModel::Param* param_ = nullptr;
+	Engine::Primitive::SkinningModel::Param* param_ = nullptr;
 
 
 private:

@@ -7,192 +7,206 @@
 
 namespace Engine
 {
-	/// @brief 静的モデル
-	namespace StaticModel
+	namespace Primitive
 	{
-		/// @brief トランスフォーム
-		struct Transform
+		/// @brief 静的モデル
+		namespace StaticModel
 		{
-			// 拡縮
-			Vector3 scale;
+			/// @brief トランスフォーム
+			struct Transform
+			{
+				// 拡縮
+				Vector3 scale;
 
-			// 回転
-			Vector3 rotate;
+				// 回転
+				Vector3 rotate;
 
-			// 移動
-			Vector3 translate;
-		};
+				// 移動
+				Vector3 translate;
+			};
 
-		/// @brief UVトランスフォーム
-		struct UVTransform
+			/// @brief UVトランスフォーム
+			struct UVTransform
+			{
+				// 拡縮
+				Vector2 scale;
+
+				// 回転
+				float radius;
+
+				// 移動
+				Vector2 translate;
+			};
+
+			/// @brief マテリアル
+			struct Material
+			{
+				/// @brief テクスチャハンドル
+				TextureHandle hTexture;
+
+				/// @brief 色
+				Vector4 color;
+
+				/// @brief UV
+				UVTransform uv;
+			};
+
+			/// @brief パラメータ
+			struct Param
+			{
+				/// @brief モデルトランスフォーム
+				Transform modelTransform;
+
+
+				/// @brief メッシュトランスフォーム
+				std::vector<Transform> meshTransforms;
+
+				/// @brief メッシュマテリアル
+				std::vector<Material> meshMaterial;
+			};
+		}
+
+		/// @brief アニメーションモデル
+		namespace AnimationModel
 		{
-			// 拡縮
-			Vector2 scale;
+			/// @brief トランスフォーム
+			struct Transform
+			{
+				// 拡縮
+				Vector3 scale;
 
-			// 回転
-			float radius;
+				// 回転
+				Vector3 rotate;
 
-			// 移動
-			Vector2 translate;
-		};
+				// 移動
+				Vector3 translate;
+			};
 
-		/// @brief マテリアル
-		struct Material
-		{
-			/// @brief テクスチャハンドル
-			TextureHandle hTexture;
+			/// @brief UVトランスフォーム
+			struct UVTransform
+			{
+				// 拡縮
+				Vector2 scale;
 
-			/// @brief 色
-			Vector4 color;
+				// 回転
+				float radius;
 
-			/// @brief UV
-			UVTransform uv;
-		};
+				// 移動
+				Vector2 translate;
+			};
 
-		/// @brief パラメータ
-		struct Param
-		{
-			/// @brief モデルトランスフォーム
-			Transform modelTransform;
+			/// @brief マテリアル
+			struct Material
+			{
+				/// @brief テクスチャハンドル
+				TextureHandle hTexture;
 
+				/// @brief 色
+				Vector4 color;
 
-			/// @brief メッシュトランスフォーム
-			std::vector<Transform> meshTransforms;
-
-			/// @brief メッシュマテリアル
-			std::vector<Material> meshMaterial;
-		};
-	}
-
-	/// @brief アニメーションモデル
-	namespace AnimationModel
-	{
-		/// @brief トランスフォーム
-		struct Transform
-		{
-			// 拡縮
-			Vector3 scale;
-
-			// 回転
-			Vector3 rotate;
-
-			// 移動
-			Vector3 translate;
-		};
-
-		/// @brief UVトランスフォーム
-		struct UVTransform
-		{
-			// 拡縮
-			Vector2 scale;
-
-			// 回転
-			float radius;
-
-			// 移動
-			Vector2 translate;
-		};
-
-		/// @brief マテリアル
-		struct Material
-		{
-			/// @brief テクスチャハンドル
-			TextureHandle hTexture;
-
-			/// @brief 色
-			Vector4 color;
-
-			/// @brief UV
-			UVTransform uv;
-		};
-
-		/// @brief アニメーション
-		struct Animation
-		{
-			float timer;
-		};
-
-		/// @brief パラメータ
-		struct Param
-		{
-			/// @brief モデルトランスフォーム
-			Transform modelTransform;
+				/// @brief UV
+				UVTransform uv;
+			};
 
 			/// @brief アニメーション
-			Animation animation;
+			struct Animation
+			{
+				/// @brief タイマー
+				float timer;
+
+				/// @brief アニメーションハンドル
+				AnimationHandle hAnimation;
+			};
+
+			/// @brief パラメータ
+			struct Param
+			{
+				/// @brief モデルトランスフォーム
+				Transform modelTransform;
+
+				/// @brief アニメーション
+				Animation animation;
 
 
-			/// @brief メッシュトランスフォーム
-			std::vector<Transform> meshTransforms;
+				/// @brief メッシュトランスフォーム
+				std::vector<Transform> meshTransforms;
 
-			/// @brief メッシュマテリアル
-			std::vector<Material> meshMaterial;
-		};
-	}
+				/// @brief メッシュマテリアル
+				std::vector<Material> meshMaterial;
+			};
+		}
 
-	/// @brief スキニングモデル
-	namespace SkinningModel
-	{
-		/// @brief トランスフォーム
-		struct Transform
+		/// @brief スキニングモデル
+		namespace SkinningModel
 		{
-			// 拡縮
-			Vector3 scale;
+			/// @brief トランスフォーム
+			struct Transform
+			{
+				// 拡縮
+				Vector3 scale;
 
-			// 回転
-			Vector3 rotate;
+				// 回転
+				Vector3 rotate;
 
-			// 移動
-			Vector3 translate;
-		};
+				// 移動
+				Vector3 translate;
+			};
 
-		/// @brief UVトランスフォーム
-		struct UVTransform
-		{
-			// 拡縮
-			Vector2 scale;
+			/// @brief UVトランスフォーム
+			struct UVTransform
+			{
+				// 拡縮
+				Vector2 scale;
 
-			// 回転
-			float radius;
+				// 回転
+				float radius;
 
-			// 移動
-			Vector2 translate;
-		};
+				// 移動
+				Vector2 translate;
+			};
 
-		/// @brief マテリアル
-		struct Material
-		{
-			/// @brief テクスチャハンドル
-			TextureHandle hTexture;
+			/// @brief マテリアル
+			struct Material
+			{
+				/// @brief テクスチャハンドル
+				TextureHandle hTexture;
 
-			/// @brief 色
-			Vector4 color;
+				/// @brief 色
+				Vector4 color;
 
-			/// @brief UV
-			UVTransform uv;
-		};
-
-		/// @brief アニメーション
-		struct Animation
-		{
-			float timer;
-		};
-
-		/// @brief パラメータ
-		struct Param
-		{
-			/// @brief モデルトランスフォーム
-			Transform modelTransform;
+				/// @brief UV
+				UVTransform uv;
+			};
 
 			/// @brief アニメーション
-			Animation animation;
+			struct Animation
+			{
+				/// @brief タイマー
+				float timer;
+
+				/// @brief アニメーションハンドル
+				AnimationHandle hAnimation;
+
+				/// @brief スケルトンハンドル
+				SkeletonHandle hSkeleton;
+			};
+
+			/// @brief パラメータ
+			struct Param
+			{
+				/// @brief モデルトランスフォーム
+				Transform modelTransform;
+
+				/// @brief アニメーション
+				Animation animation;
 
 
-			/// @brief メッシュトランスフォーム
-			std::vector<Transform> meshTransforms;
+				/// @brief メッシュトランスフォーム
+				std::vector<Transform> meshTransforms;
 
-			/// @brief メッシュマテリアル
-			std::vector<Material> meshMaterial;
-		};
+				/// @brief メッシュマテリアル
+				std::vector<Material> meshMaterial;
+			};
+		}
 	}
 }
