@@ -51,7 +51,7 @@ void Engine::DebugCameraResource::Update()
 		const float kSpeedController = mouseVectorLength * 0.01f;
 
 		// 回転行列で進む方向を取得する
-		Matrix4x4 rotateMatrix = Make3DRotateMatrix4x4(camera3d_->rotate_);
+		Matrix4x4 rotateMatrix = Make3DRotateMatrix4x4(camera3d_->param_->transform.rotate);
 		Vector3 velocity = TransformNormal({ -mouseVector.x , mouseVector.y , 0.0f }, rotateMatrix);
 
 		// 移動する
@@ -73,13 +73,14 @@ void Engine::DebugCameraResource::Update()
 		Vector2 rotationVelocity = mouseVector * kSpeedController;
 
 		// 回転させる
-		camera3d_->rotate_.x += rotationVelocity.y;
-		camera3d_->rotate_.y += rotationVelocity.x;
+		camera3d_->param_->transform.rotate.x += rotationVelocity.y;
+		camera3d_->param_->transform.rotate.y += rotationVelocity.x;
 	}
 
 	// 球面座標系の位置を取得する
-	camera3d_->translate_ =
-		pivotPoint_ + SphericalCoordinate(pointLength_, camera3d_->rotate_.x, -(std::numbers::pi_v<float> / 2.0f) - camera3d_->rotate_.y);
+	camera3d_->param_->transform.translate =
+		pivotPoint_ + SphericalCoordinate(pointLength_,
+			camera3d_->param_->transform.rotate.x, -(std::numbers::pi_v<float> / 2.0f) - camera3d_->param_->transform.rotate.y);
 
 	// カメラの更新
 	camera3d_->Update();

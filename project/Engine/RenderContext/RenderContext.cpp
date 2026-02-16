@@ -62,8 +62,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	primitive_ = std::make_unique<DX12Primitive>();
 	primitive_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
-	// カメラストア
-	cameraStore_ = std::make_unique<CameraStore>();
+	// 3Dカメラストア
+	camera3DStore_ = std::make_unique<Camera3DStore>();
 
 	// テクスチャストアの生成
 	textureStore_ = std::make_unique<TextureStore>();
@@ -127,11 +127,11 @@ void Engine::RenderContext::PreDraw()
 	// プリミティブストアの更新
 	primitive_->Update(commandList_);
 
-	// カメラストアの更新
-	cameraStore_->Update();
+	// 3Dカメラストアの更新
+	camera3DStore_->Update();
 
 	// ライトストアの更新
-	lightStore_->Update(commandList_, primitive_.get(), cameraStore_->GetCamera3D().GetProjectionMatrix());
+	lightStore_->Update(commandList_, primitive_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

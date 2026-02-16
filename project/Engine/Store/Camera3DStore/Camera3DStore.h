@@ -2,33 +2,30 @@
 #include <string>
 #include <vector>
 #include "Handle/Handle.h"
-#include "CameraResource/CameraResource.h"
+#include "Camera3DResource/Camera3DResource.h"
 #include "DebugCameraResource/DebugCameraResource.h"
-
-class GameCamera;
 
 namespace Engine
 {
 
-	class CameraStore
+	class Camera3DStore
 	{
 	public:
 
 		/// @brief コンストラクタ
-		CameraStore();
+		Camera3DStore();
 
 		/// @brief 読み込み
-		/// @param gameCamera 
 		/// @param name 
 		/// @return 
-		CameraHandle Load(GameCamera* gameCamera, const std::string& name);
+		Camera3DHandle Load(const std::string& name);
 
 		/// @brief 更新処理
 		void Update();
 
 		/// @brief カメラを切り替える
 		/// @param hCamera 
-		void Switch(CameraHandle hCamera) { selectHCamera_ = hCamera; }
+		void Switch(Camera3DHandle hCamera) { selectHCamera_ = hCamera; }
 
 		/// @brief 3Dカメラデータを取得する
 		/// @return 
@@ -40,16 +37,16 @@ namespace Engine
 		/// @brief 初期読み込み
 		/// @param name 
 		/// @return 
-		CameraHandle InitialLoad(const std::string& name);
+		Camera3DHandle InitialLoad(const std::string& name);
 
 		// 選択中のカメラハンドル
-		CameraHandle selectHCamera_ = 0;
+		Camera3DHandle selectHCamera_ = 0;
 
 
 	private:
 
 		// データテーブル
-		std::vector<std::unique_ptr<CameraResource>> dataTable_;
+		std::vector<std::unique_ptr<Camera3DResource>> dataTable_;
 
 
 	private:

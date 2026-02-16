@@ -12,14 +12,12 @@
 #include <chrono>
 #include <thread>
 
-#include "Store/CameraStore/CameraStore.h"
+#include "Store/Camera3DStore/Camera3DStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/AnimationStore/AnimationStore.h"
 #include "Store/SkeletonStore/SkeletonStore.h"
 #include "Store/LightStore/LightStore.h"
-
-class GameCamera;
 
 namespace Engine
 {
@@ -41,13 +39,12 @@ namespace Engine
 
 		/// @brief カメラ切り替え
 		/// @param hCamera 
-		void CameraSwitch(CameraHandle hCamera) { cameraStore_->Switch(hCamera); }
+		void CameraSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera); }
 
 		/// @brief カメラを読み込む
-		/// @param gameCamera 
 		/// @param name 
 		/// @return 
-		CameraHandle LoadCamera(GameCamera* gameCamera, const std::string& name) { return cameraStore_->Load(gameCamera, name); }
+		Camera3DHandle LoadCamera(const std::string& name) { return camera3DStore_->Load(name); }
 
 		/// @brief テクスチャを読み込む
 		/// @param filePath 
@@ -120,7 +117,7 @@ namespace Engine
 		/// @param handle 
 		void DrawPrimitiveModel(PrimitiveHandle handle)
 		{
-			primitive_->DrawModel(cameraStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+			primitive_->DrawModel(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
 		}
 
 
@@ -170,8 +167,8 @@ namespace Engine
 
 	private:
 
-		// カメラストア
-		std::unique_ptr<CameraStore> cameraStore_ = nullptr;
+		// 3Dカメラストア
+		std::unique_ptr<Camera3DStore> camera3DStore_ = nullptr;
 
 		// テクスチャストア
 		std::unique_ptr<TextureStore> textureStore_ = nullptr;

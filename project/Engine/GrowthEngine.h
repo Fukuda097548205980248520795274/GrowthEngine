@@ -14,7 +14,7 @@
 #include "Math/Vector/Vector3/Vector3.h"
 
 #include "Application/Framework/Framework.h"
-#include "Application/Camera/GameCamera/GameCamera.h"
+#include "Application/Camera/GameCamera3D/GameCamera3D.h"
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
@@ -65,13 +65,12 @@ public:
 
 	/// @brief カメラの切り替え
 	/// @param hCamera 
-	void CameraSwitch(CameraHandle hCamera) const { renderContext_->CameraSwitch(hCamera); }
+	void CameraSwitch(Camera3DHandle hCamera) const { renderContext_->CameraSwitch(hCamera); }
 
 	/// @brief カメラを読み込む
-	/// @param gameCamera 
 	/// @param name 
 	/// @return 
-	CameraHandle LoadCamera(GameCamera* gameCamera, const std::string& name)const { return renderContext_->LoadCamera(gameCamera, name); }
+	Camera3DHandle LoadCamera(const std::string& name)const { return renderContext_->LoadCamera(name); }
 
 	/// @brief テクスチャを読み込む
 	/// @param filePath 

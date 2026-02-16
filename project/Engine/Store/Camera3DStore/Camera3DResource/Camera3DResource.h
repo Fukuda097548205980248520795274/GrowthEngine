@@ -1,21 +1,19 @@
 #pragma once
 #include <memory>
 #include <string>
-#include "Application/Camera/Camera3D/Camera3D.h"
+#include "Camera/Camera3D/Camera3D.h"
 #include "Handle/Handle.h"
-
-class GameCamera;
 
 namespace Engine
 {
-	class CameraResource
+	class Camera3DResource
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hCamera 
-		CameraResource(const std::string& name, CameraHandle hCamera);
+		Camera3DResource(const std::string& name, Camera3DHandle hCamera);
 
 		/// @brief 更新処理
 		void Update();
@@ -26,15 +24,11 @@ namespace Engine
 		
 		/// @brief ハンドルを取得する
 		/// @return 
-		CameraHandle GetHandle() { return hCamera_; }
+		Camera3DHandle GetHandle() { return hCamera_; }
 
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName() { return name_; }
-
-		/// @brief データを反映させる
-		/// @param gameCamera 
-		void DataReflect(GameCamera* gameCamera);
 
 
 	private:
@@ -43,7 +37,7 @@ namespace Engine
 		std::unique_ptr<Camera3D> camera3d_ = nullptr;
 
 		// カメラハンドル
-		CameraHandle hCamera_ = 0;
+		Camera3DHandle hCamera_ = 0;
 
 		// 名前
 		std::string name_{};

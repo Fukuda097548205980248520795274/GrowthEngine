@@ -1,6 +1,5 @@
 #pragma once
 #include "GrowthEngine.h"
-#include "Application/Camera/Camera3D/Camera3D.h"
 
 class Scene
 {
@@ -21,11 +20,5 @@ public:
 
 	/// @brief 描画処理
 	virtual void Draw();
-
-
-protected:
-
-	// 3Dカメラ
-	std::unique_ptr<Camera3D> camera3d_ = nullptr;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
-#include "Application/Camera/Camera3D/Camera3D.h"
+#include "Camera/Camera3D/Camera3D.h"
 
 class GrowthEngine;
 

@@ -1,15 +1,15 @@
-#include "GameCamera.h"
+#include "GameCamera3D.h"
 #include "GrowthEngine.h"
 
 /// @brief コンストラクタ
-GameCamera::GameCamera(const std::string& name) : name_(name)
+GameCamera3D::GameCamera3D(const std::string& name) : name_(name)
 {
 	// カメラハンドルを取得する
-	hCamera_ = GrowthEngine::GetInstance()->LoadCamera(this, name_);
+	hCamera_ = GrowthEngine::GetInstance()->LoadCamera(name_);
 }
 
 /// @brief カメラを切り替える
-void GameCamera::Switch()
+void GameCamera3D::Switch()
 {
 	// 切り替え
 	GrowthEngine::GetInstance()->CameraSwitch(hCamera_);

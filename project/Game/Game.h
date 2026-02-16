@@ -32,7 +32,7 @@ private:
 
 	std::unique_ptr<PrimitiveAnimationModel> animationModel_ = nullptr;
 
-	std::unique_ptr<GameCamera> gameCamera_ = nullptr;
+	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
 
 	std::unique_ptr<LightDirectional> light_ = nullptr;
 };

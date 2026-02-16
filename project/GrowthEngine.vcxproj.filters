@@ -154,9 +154,6 @@
     <Filter Include="Engine\Include\Application\Camera">
       <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Camera\Camera3D">
-      <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\Scene">
       <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
     </Filter>
@@ -256,15 +253,6 @@
     <Filter Include="Engine\Include\RenderContext\DX12Primitive">
       <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\CameraStore">
-      <UniqueIdentifier>{1e486c89-32cf-4000-a018-a36eebdd40a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Camera\GameCamera">
-      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\CameraStore\CameraResource">
-      <UniqueIdentifier>{b223b0d1-8f8d-4176-8ba0-094dc06f8ca1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\LightStore">
       <UniqueIdentifier>{2461ffb0-e5f3-45bc-aaa5-9a362fd70cfd}</UniqueIdentifier>
     </Filter>
@@ -297,9 +285,6 @@
     </Filter>
     <Filter Include="Engine\Include\Store\LightStore\LightData\AreaLightData">
       <UniqueIdentifier>{17a26997-b8f3-45b2-a869-b3ce00d46b7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\CameraStore\DebugCameraResource">
-      <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Data\LightData">
       <UniqueIdentifier>{3bc111b1-7079-4792-9149-78e64ba1ee0d}</UniqueIdentifier>
@@ -375,6 +360,27 @@
     </Filter>
     <Filter Include="Engine\Include\Store\SkyboxStore">
       <UniqueIdentifier>{1a87e706-3342-46e1-bd18-833c1a42f1c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera3DStore">
+      <UniqueIdentifier>{1e486c89-32cf-4000-a018-a36eebdd40a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera3DStore\DebugCameraResource">
+      <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera3DStore\Camera3DResource">
+      <UniqueIdentifier>{b223b0d1-8f8d-4176-8ba0-094dc06f8ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Camera\GameCamera3D">
+      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\CameraData">
+      <UniqueIdentifier>{3ccd88c1-8551-43c3-92b9-9739337a6543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera">
+      <UniqueIdentifier>{d6334dd0-a548-46d7-8b1e-b11643fea0b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera\Camera3D">
+      <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -468,8 +474,8 @@
     <ClCompile Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Camera\Camera3D\Camera3D.cpp">
-      <Filter>Engine\Include\Application\Camera\Camera3D</Filter>
+    <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
+      <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\Framework\Framework.cpp">
       <Filter>Engine\Include\Application\Framework</Filter>
@@ -540,14 +546,14 @@
     <ClCompile Include="Engine\RenderContext\DX12Primitive\DX12Primitive.cpp">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\CameraStore\CameraStore.cpp">
-      <Filter>Engine\Include\Store\CameraStore</Filter>
+    <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
+      <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Camera\GameCamera\GameCamera.cpp">
-      <Filter>Engine\Include\Application\Camera\GameCamera</Filter>
+    <ClCompile Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.cpp">
+      <Filter>Engine\Include\Application\Camera\GameCamera3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\CameraStore\CameraResource\CameraResource.cpp">
-      <Filter>Engine\Include\Store\CameraStore\CameraResource</Filter>
+    <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
+      <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\LightStore\LightStore.cpp">
       <Filter>Engine\Include\Store\LightStore</Filter>
@@ -579,8 +585,8 @@
     <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
       <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.cpp">
-      <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
+    <ClCompile Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.cpp">
+      <Filter>Engine\Include\Store\Camera3DStore\DebugCameraResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp">
       <Filter>Engine\Include\Resource\ShadowMapTextureResource</Filter>
@@ -725,8 +731,8 @@
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Camera\Camera3D\Camera3D.h">
-      <Filter>Engine\Include\Application\Camera\Camera3D</Filter>
+    <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h">
+      <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\Framework\Framework.h">
       <Filter>Engine\Include\Application\Framework</Filter>
@@ -815,14 +821,14 @@
     <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\CameraStore\CameraStore.h">
-      <Filter>Engine\Include\Store\CameraStore</Filter>
+    <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
+      <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Camera\GameCamera\GameCamera.h">
-      <Filter>Engine\Include\Application\Camera\GameCamera</Filter>
+    <ClInclude Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.h">
+      <Filter>Engine\Include\Application\Camera\GameCamera3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\CameraStore\CameraResource\CameraResource.h">
-      <Filter>Engine\Include\Store\CameraStore\CameraResource</Filter>
+    <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h">
+      <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\LightStore\LightStore.h">
       <Filter>Engine\Include\Store\LightStore</Filter>
@@ -854,8 +860,8 @@
     <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h">
       <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\CameraStore\DebugCameraResource\DebugCameraResource.h">
-      <Filter>Engine\Include\Store\CameraStore\DebugCameraResource</Filter>
+    <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h">
+      <Filter>Engine\Include\Store\Camera3DStore\DebugCameraResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\LightData\LightData.h">
       <Filter>Engine\Include\Data\LightData</Filter>
@@ -925,6 +931,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h">
       <Filter>Engine\Include\Store\SkyboxStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\CameraData\CameraData.h">
+      <Filter>Engine\Include\Data\CameraData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera\BaseCamera.h">
+      <Filter>Engine\Include\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
