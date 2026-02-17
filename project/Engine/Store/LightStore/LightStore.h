@@ -22,7 +22,7 @@ namespace Engine
 	class DX12Heap;
 	class Log;
 	class ShaderCompiler;
-	class DX12Primitive;
+	class DX12Model;
 
 	class LightStore
 	{
@@ -45,7 +45,7 @@ namespace Engine
 
 		/// @brief 更新処理
 		/// @param commandList 
-		void Update(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive, const Matrix4x4& projectionMatrix);
+		void Update(ID3D12GraphicsCommandList* commandList, DX12Model* model, const Matrix4x4& projectionMatrix);
 
 		/// @brief シャドウマップ用座標変換リソースを取得する
 		/// @return 

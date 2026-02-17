@@ -58,9 +58,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	offscreen_ = std::make_unique<DX12Offscreen>();
 	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
 
-	// DX12Primitiveの生成と初期化
-	primitive_ = std::make_unique<DX12Primitive>();
-	primitive_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
+	// DX12Modelの生成と初期化
+	model_ = std::make_unique<DX12Model>();
+	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
@@ -127,15 +127,15 @@ void Engine::RenderContext::PreDraw()
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 
-	// プリミティブストアの更新
-	primitive_->Update(commandList_);
+	// モデル全体の更新
+	model_->Update(commandList_);
 
 	// カメラストアの更新
 	camera3DStore_->Update();
 	camera2DStore_->Update();
 
 	// ライトストアの更新
-	lightStore_->Update(commandList_, primitive_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+	lightStore_->Update(commandList_, model_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

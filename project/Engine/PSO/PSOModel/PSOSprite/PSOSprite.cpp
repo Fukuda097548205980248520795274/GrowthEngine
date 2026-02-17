@@ -1,4 +1,4 @@
-#include "PSOPrimitiveModel.h"
+#include "PSOSprite.h"
 #include "Log/Log.h"
 #include <cassert>
 
@@ -7,7 +7,7 @@
 /// @param vertexShaderBlob 
 /// @param pixelShaderBlob 
 /// @param log 
-void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
+void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -16,7 +16,7 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 
 
 	/*------------------------
-	    ディスクリプタレンジ
+		ディスクリプタレンジ
 	------------------------*/
 
 	// SRV t0 テクスチャ
@@ -27,20 +27,12 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 	descriptorTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	// SRV t1 シャドウマップテクスチャ
-	D3D12_DESCRIPTOR_RANGE descriptorShadowMapTexture[1];
-	descriptorShadowMapTexture[0].BaseShaderRegister = 1;
-	descriptorShadowMapTexture[0].RegisterSpace = 0;
-	descriptorShadowMapTexture[0].NumDescriptors = 1;
-	descriptorShadowMapTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorShadowMapTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
 
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[5];
+	D3D12_ROOT_PARAMETER rootParameter[3];
 
 	// CBV VertexShader b0 座標変換
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -60,24 +52,12 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorTexture;
 	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
 
-	// DescriptorTable PixelShader シャドウマップテクスチャ
-	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[3].DescriptorTable.pDescriptorRanges = descriptorShadowMapTexture;
-	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorShadowMapTexture);
-
-	// CBV PixelShader b1 シャドウ用座標変換
-	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[4].Descriptor.RegisterSpace = 0;
-	rootParameter[4].Descriptor.ShaderRegister = 1;
-
 
 	/*--------------------
 		サンプラーの設定
 	--------------------*/
 
-	D3D12_STATIC_SAMPLER_DESC samplers[2] = {};
+	D3D12_STATIC_SAMPLER_DESC samplers[1] = {};
 
 	// サンプラー
 	samplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -89,21 +69,6 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 	samplers[0].ShaderRegister = 0;
 	samplers[0].RegisterSpace = 0;
 	samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-	// 比較用サンプラー
-	samplers[1].Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-	samplers[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplers[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplers[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplers[1].MipLODBias = 0.0f;
-	samplers[1].MaxAnisotropy = 1;
-	samplers[1].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-	samplers[1].BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
-	samplers[1].MinLOD = 0.0f;
-	samplers[1].MaxLOD = D3D12_FLOAT32_MAX;
-	samplers[1].ShaderRegister = 1;
-	samplers[1].RegisterSpace = 0;
-	samplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 
 	/*---------------------------------------
@@ -149,7 +114,7 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 		インプットレイアウトの設定
 	----------------------------*/
 
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 
 	// POSITION 0 float4
 	inputElementDescs[0].SemanticName = "POSITION";
@@ -162,12 +127,6 @@ void Engine::PSOPrimitiveModel::Initialize(ID3D12Device* device, IDxcBlob* verte
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	// NORMAL 0 float3
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;

@@ -1,4 +1,4 @@
-#include "PrimitiveModel.hlsli"
+#include "Primitive.hlsli"
 
 // 入力頂点シェーダ
 struct VertexShaderInput

@@ -1,4 +1,4 @@
-#include "PrimitiveModel.hlsli"
+#include "Primitive.hlsli"
 
 // 出力ピクセルシェーダ
 struct PixelShaderOutput

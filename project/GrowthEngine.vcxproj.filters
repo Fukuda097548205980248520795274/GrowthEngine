@@ -238,14 +238,8 @@
     <Filter Include="Engine\Include\DataForGPU\TransformationDataForGPU">
       <UniqueIdentifier>{7acbd6bf-1615-401a-8dcd-2497529b2dd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Shader\PrimitiveModel">
-      <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\PSOModel">
       <UniqueIdentifier>{43a94fc8-0b82-4019-b8b3-cdc0d5c03a60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrimitiveModel">
-      <UniqueIdentifier>{56c22e12-b7ef-4b16-b363-fb15b4d450e2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\PSO\EnumBlendMode">
       <UniqueIdentifier>{51fd534c-e67b-4ca7-af9f-c41cba8ac1d6}</UniqueIdentifier>
@@ -393,6 +387,18 @@
     </Filter>
     <Filter Include="Engine\Include\Store\Camera2DStore\Camera2DResource">
       <UniqueIdentifier>{977c6dbf-0a4c-4346-9ed8-87583d505965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Primitive">
+      <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Sprite">
+      <UniqueIdentifier>{c36d17c9-790a-4363-bf77-7cf89ff3590b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOSprite">
+      <UniqueIdentifier>{7558a9d6-afe7-4d9f-95f4-c5d6804eedc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrimitive">
+      <UniqueIdentifier>{56c22e12-b7ef-4b16-b363-fb15b4d450e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -549,13 +555,13 @@
     <ClCompile Include="Engine\PSO\PSOModel\BasePSOModel.cpp">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.cpp">
-      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitiveModel</Filter>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitive</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp">
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\RenderContext\DX12Primitive\DX12Primitive.cpp">
+    <ClCompile Include="Engine\RenderContext\DX12Model\DX12Model.cpp">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
@@ -656,6 +662,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.cpp">
       <Filter>Engine\Include\Store\Camera2DStore\Camera2DResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -836,13 +845,13 @@
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitiveModel\PSOPrimitiveModel.h">
-      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitiveModel</Filter>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrimitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h">
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\RenderContext\DX12Primitive\DX12Primitive.h">
+    <ClInclude Include="Engine\RenderContext\DX12Model\DX12Model.h">
       <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
@@ -974,13 +983,19 @@
     <ClInclude Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.h">
       <Filter>Engine\Include\Store\Camera2DStore\Camera2DResource</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
       <Filter>Engine\Shader\Fullscreen</Filter>
     </None>
-    <None Include="Assets\Shader\PrimitiveModel\PrimitiveModel.hlsli">
-      <Filter>Engine\Shader\PrimitiveModel</Filter>
+    <None Include="Assets\Shader\Primitive\Primitive.hlsli">
+      <Filter>Engine\Shader\Primitive</Filter>
+    </None>
+    <None Include="Assets\Shader\Sprite\Sprite.hlsli">
+      <Filter>Engine\Shader\Sprite</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -993,17 +1008,23 @@
     <FxCompile Include="Assets\Shader\Skinning\Skinning.CS.hlsl">
       <Filter>Engine\Shader\Skinning</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrimitiveModel\PrimitiveModel.VS.hlsl">
-      <Filter>Engine\Shader\PrimitiveModel</Filter>
+    <FxCompile Include="Assets\Shader\Primitive\Primitive.VS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrimitiveModel\PrimitiveModel.PS.hlsl">
-      <Filter>Engine\Shader\PrimitiveModel</Filter>
+    <FxCompile Include="Assets\Shader\Primitive\Primitive.PS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapPrimitive.VS.hlsl">
       <Filter>Engine\Shader\ShadowMap</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\LightCulling\LightCulling.CS.hlsl">
       <Filter>Engine\Shader\LightCulling</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sprite\Sprite.VS.hlsl">
+      <Filter>Engine\Shader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sprite\Sprite.PS.hlsl">
+      <Filter>Engine\Shader\Sprite</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

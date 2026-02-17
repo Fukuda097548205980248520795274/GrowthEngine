@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PSOPrimitiveModel : public BasePSOModel
+	class PSOPrimitive : public BasePSOModel
 	{
 	public:
 

@@ -7,7 +7,7 @@
 #include "DX12Fence/DX12Fence.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
-#include "DX12Primitive/DX12Primitive.h"
+#include "DX12Model/DX12Model.h"
 #include "ImGuiRender/ImGuiRender.h"
 #include <chrono>
 #include <thread>
@@ -101,7 +101,7 @@ namespace Engine
 		/// @param handle 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(PrimitiveHandle handle) { return primitive_->GetParam<T>(handle); }
+		T* GetPrimitiveParam(PrimitiveHandle handle) { return model_->GetParam<T>(handle); }
 
 
 
@@ -113,7 +113,7 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Primitive::Type type, Log* log)
 		{
-			return primitive_->Load(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
+			return model_->Load(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
 				core_->GetDevice(),commandList_, hModel, hAnimation, hSkeleton, heap_.get(), name, type, log);
 		}
 
@@ -127,7 +127,7 @@ namespace Engine
 		/// @param handle 
 		void DrawPrimitiveModel(PrimitiveHandle handle)
 		{
-			primitive_->DrawModel(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+			model_->DrawModel(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
 		}
 
 
@@ -159,8 +159,8 @@ namespace Engine
 		// DX12Offscreen
 		std::unique_ptr<DX12Offscreen> offscreen_ = nullptr;
 
-		// DX12Primitive
-		std::unique_ptr<DX12Primitive> primitive_ = nullptr;
+		// DX12Model
+		std::unique_ptr<DX12Model> model_ = nullptr;
 
 
 	private:

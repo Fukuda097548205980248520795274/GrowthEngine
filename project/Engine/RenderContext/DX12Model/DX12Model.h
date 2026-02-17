@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-#include "PSO/PSOModel/PSOPrimitiveModel/PSOPrimitiveModel.h"
+#include "PSO/PSOModel/PSOPrimitive/PSOPrimitive.h"
+#include "PSO/PSOModel/PSOSprite/PSOSprite.h"
 #include "Store/PrimitiveStore/PrimitiveStore.h"
 #include "Data/PrimitiveData/PrimitiveData.h"
 
@@ -12,7 +13,7 @@ namespace Engine
 	class ModelStore;
 	class TextureStore;
 
-	class DX12Primitive
+	class DX12Model
 	{
 	public:
 
@@ -59,7 +60,7 @@ namespace Engine
 		/// @param handle 
 		void DrawModel(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) 
 		{
-			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitiveModel_.get() , lightStore); 
+			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitive_.get() , lightStore); 
 		}
 
 
@@ -68,17 +69,27 @@ namespace Engine
 
 	private:
 
-		// モデル用プリミティブ頂点シェーダ
-		ComPtr<IDxcBlob> primitiveModelVS_ = nullptr;
+		// プリミティブ頂点シェーダ
+		ComPtr<IDxcBlob> primitiveVS_ = nullptr;
 
-		// モデル用プリミティブピクセルシェーダ
-		ComPtr<IDxcBlob> primitiveModelPS_ = nullptr;
+		// プリミティブピクセルシェーダ
+		ComPtr<IDxcBlob> primitivePS_ = nullptr;
+
+
+		// スプライト頂点シェーダ
+		ComPtr<IDxcBlob> spriteVS_ = nullptr;
+
+		// スプライトピクセルシェーダ
+		ComPtr<IDxcBlob> spritePS_ = nullptr;
 
 
 	private:
 
-		// モデル用プリミティブPSO
-		std::unique_ptr<PSOPrimitiveModel> psoPrimitiveModel_ = nullptr;
+		// プリミティブPSO
+		std::unique_ptr<PSOPrimitive> psoPrimitive_ = nullptr;
+
+		// スプライトPSO
+		std::unique_ptr<PSOSprite> psoSprite_ = nullptr;
 
 
 	private:

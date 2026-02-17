@@ -1,6 +1,6 @@
 #include "LightStore.h"
 #include "LightData/DirectionalLightData/DirectionalLightData.h"
-#include "RenderContext/DX12Primitive/DX12Primitive.h"
+#include "RenderContext/DX12Model/DX12Model.h"
 #include <cassert>
 #include "GrowthEngine.h"
 
@@ -67,7 +67,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 
 /// @brief 更新処理
 /// @param commandList 
-void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Primitive* primitive, const Matrix4x4& projectionMatrix)
+void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Model* model, const Matrix4x4& projectionMatrix)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
@@ -86,7 +86,7 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Prim
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
 
 		// シャドウマップ用に描画
-		primitive->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapPrimitive_.get());
+		model->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapPrimitive_.get());
 
 		// データを渡す
 		*shadowMapTransformationResource_->data_ = viewProjectionMatrix;
