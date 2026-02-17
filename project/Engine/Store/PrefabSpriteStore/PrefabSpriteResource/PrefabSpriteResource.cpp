@@ -1,5 +1,7 @@
 #include "PrefabSpriteResource.h"
 #include "Store/TextureStore/TextureStore.h"
+#include "PSO/PSOModel/BasePSOModel.h"
+#include "Resource/IndexBufferResource/IndexBufferResource.h"
 
 /// @brief コンストラクタ
 /// @param hPrefabSprite 
@@ -58,4 +60,35 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	// リソースの生成と初期化
 	resource_ = std::make_unique<StructuredBufferResource<Prefab::SpriteDataForGPU>>();
 	resource_->Initialize(device, heap, numInstance_, log);
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	// インスタンスがないときは処理しない
+	if (useInstance_ <= 0)
+		return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// インデックスの設定
+	indexResource_->Register(commandList);
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+
+	// パラメータの設定
+	resource_->RegisterCompute(commandList, 0);
+
+	// テクスチャの設定
+	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->texture.hTexture));
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(6, useInstance_, 0, 0, 0);
 }

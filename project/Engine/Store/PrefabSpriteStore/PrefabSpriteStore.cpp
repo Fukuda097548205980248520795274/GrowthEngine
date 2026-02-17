@@ -81,7 +81,13 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite,  ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	
+	dataTable_[hPrefabSprite]->Register(commandList, pso);
+}
+
+/// @brief リセット
+void Engine::PrefabSpriteStore::Reset()
+{
+	for (auto& data : dataTable_)data->Reset();
 }

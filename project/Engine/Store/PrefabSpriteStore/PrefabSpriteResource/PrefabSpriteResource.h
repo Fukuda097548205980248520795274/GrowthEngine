@@ -6,6 +6,9 @@
 #include "Resource/VertexBufferResource/VertexBufferResource.h"
 #include "Data/ModelData/ModelData.h"
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
+#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
+
+class PrefabInstanceSprite;
 
 namespace Engine
 {
@@ -44,6 +47,14 @@ namespace Engine
 		/// @return 
 		PrefabSpriteHandle GetHandle()const { return hPrefabSprite_; }
 
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param pso 
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief リセット
+		void Reset() { useInstance_ = 0; }
+
 
 	private:
 
@@ -61,6 +72,15 @@ namespace Engine
 
 		// プレハブリソース
 		std::unique_ptr<StructuredBufferResource<Prefab::SpriteDataForGPU>> resource_ = nullptr;
+
+
+	private:
+
+		/// @brief インスタンステーブル
+		std::vector<std::unique_ptr<PrefabInstanceSprite>> instanceTable_;
+
+		// 使用インスタンス数
+		uint32_t useInstance_ = 0;
 
 
 	private:

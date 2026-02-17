@@ -223,6 +223,10 @@ void Engine::RenderContext::PostDraw()
 	assert(SUCCEEDED(hr));
 	hr = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr));
+
+
+	// プレハブをリセット
+	prefab_->Reset();
 }
 
 

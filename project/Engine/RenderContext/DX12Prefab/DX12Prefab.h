@@ -38,6 +38,9 @@ namespace Engine
 			return prefabSpriteStore_->Load(name, hTexture, numInstance, textureStore, heap, device, log);
 		}
 
+		/// @brief リセット
+		void Reset();
+
 
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

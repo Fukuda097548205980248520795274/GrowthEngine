@@ -30,10 +30,12 @@ namespace Engine
 
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 
-		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(PrefabSpriteHandle hPrefabSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(PrefabSpriteHandle hPrefabSprite,ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief リセット
+		void Reset();
 
 
 	private:

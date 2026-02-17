@@ -37,3 +37,9 @@ void Engine::DX12Prefab::Update()
 {
 
 }
+
+/// @brief リセット
+void Engine::DX12Prefab::Reset()
+{
+	prefabSpriteStore_->Reset();
+}
