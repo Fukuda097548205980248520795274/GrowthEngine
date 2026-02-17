@@ -21,5 +21,5 @@ PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHand
 /// @brief 描画処理
 void PrimitiveSkinningModel::Draw()
 {
-	engine_->DrawPrimitiveModel(hPrimitive_);
+	engine_->DrawPrimitive(hPrimitive_);
 }

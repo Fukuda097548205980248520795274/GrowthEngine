@@ -113,8 +113,18 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Primitive::Type type, Log* log)
 		{
-			return model_->Load(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
+			return model_->LoadPrimitive(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
 				core_->GetDevice(),commandList_, hModel, hAnimation, hSkeleton, heap_.get(), name, type, log);
+		}
+
+		/// @brief スプライト読み込み
+		/// @param hTexture 
+		/// @param name 
+		/// @param log 
+		/// @return 
+		SpriteHandle LoadSprite(TextureHandle hTexture, const std::string& name, Log* log)
+		{
+			return model_->LoadSprite(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
 		}
 
 
@@ -123,11 +133,17 @@ namespace Engine
 	public:
 
 		/// @brief プリミティブモデルの描画処理
-		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitiveModel(PrimitiveHandle handle)
+		void DrawPrimitive(PrimitiveHandle handle)
 		{
-			model_->DrawModel(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+			model_->DrawPrimitive(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+		}
+
+		/// @brief スプライトの描画処理
+		/// @param handle 
+		void DrawSprite(SpriteHandle handle)
+		{
+			model_->DrawSprite(handle, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
 		}
 
 

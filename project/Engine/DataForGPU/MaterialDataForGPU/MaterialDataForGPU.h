@@ -13,4 +13,17 @@ namespace Engine
 		// UV行列
 		Matrix4x4 uvMatrix;
 	};
+
+	namespace Sprite
+	{
+		/// @brief GPUに送るマテリアルデータ
+		struct MaterialDataForGPU
+		{
+			// 色
+			Vector4 color;
+
+			// UV行列
+			Matrix4x4 uvMatrix;
+		};
+	}
 }

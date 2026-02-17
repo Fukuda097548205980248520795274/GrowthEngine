@@ -21,5 +21,5 @@ PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string
 /// @brief 描画処理
 void PrimitiveStaticModel::Draw()
 {
-	engine_->DrawPrimitiveModel(hPrimitive_);
+	engine_->DrawPrimitive(hPrimitive_);
 }

@@ -159,6 +159,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Sprite\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp" />
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -417,6 +418,7 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp" />
+    <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp" />
     <ClCompile Include="Engine\Store\SpriteStore\SpriteStore.cpp" />
     <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -444,6 +446,7 @@
     <ClInclude Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
+    <ClInclude Include="Engine\Application\Sprite\Sprite\Sprite.h" />
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h" />
     <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h" />
@@ -467,6 +470,7 @@
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h" />
+    <ClInclude Include="Engine\Data\SpriteData\SpriteData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
     <ClInclude Include="Engine\Func\Interpolation\Interpolation.h" />
@@ -542,6 +546,7 @@
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h" />
+    <ClInclude Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.h" />
     <ClInclude Include="Engine\Store\SpriteStore\SpriteStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />

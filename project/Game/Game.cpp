@@ -22,7 +22,7 @@ void Game::Initialize()
 		"AnimatedCube");
 	animationModel_->param_->modelTransform.translate.x = 5.0f;
 
-	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png");
+	sprite_ = std::make_unique<Sprite>(GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png"), "Sprite");
 	
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
@@ -43,4 +43,6 @@ void Game::Draw()
 	model_->Draw();
 
 	animationModel_->Draw();
+
+	sprite_->Draw();
 }

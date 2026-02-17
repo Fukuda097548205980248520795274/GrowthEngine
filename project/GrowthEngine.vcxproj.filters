@@ -241,9 +241,6 @@
     <Filter Include="Engine\Include\PSO\EnumBlendMode">
       <UniqueIdentifier>{51fd534c-e67b-4ca7-af9f-c41cba8ac1d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\RenderContext\DX12Primitive">
-      <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\LightStore">
       <UniqueIdentifier>{2461ffb0-e5f3-45bc-aaa5-9a362fd70cfd}</UniqueIdentifier>
     </Filter>
@@ -402,6 +399,21 @@
     </Filter>
     <Filter Include="Engine\Include\Resource\IndexBufferResource">
       <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SpriteStore\SpriteResource">
+      <UniqueIdentifier>{4635c73b-9016-4d54-a5c1-85c5430d95e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\SpriteData">
+      <UniqueIdentifier>{49f33eea-97db-4b44-8752-14422b9c24b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Model">
+      <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Sprite">
+      <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Sprite\Sprite">
+      <UniqueIdentifier>{c201c32f-f4d1-422c-aca6-adc4fcaac25b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -565,7 +577,7 @@
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Model\DX12Model.cpp">
-      <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
+      <Filter>Engine\Include\RenderContext\DX12Model</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
@@ -668,6 +680,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\SpriteStore\SpriteStore.cpp">
       <Filter>Engine\Include\Store\SpriteStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp">
+      <Filter>Engine\Include\Store\SpriteStore\SpriteResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Sprite\Sprite\Sprite.cpp">
+      <Filter>Engine\Include\Application\Sprite\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -855,7 +873,7 @@
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Model\DX12Model.h">
-      <Filter>Engine\Include\RenderContext\DX12Primitive</Filter>
+      <Filter>Engine\Include\RenderContext\DX12Model</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
@@ -991,6 +1009,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\VertexBufferResource\VertexBufferResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.h">
+      <Filter>Engine\Include\Store\SpriteStore\SpriteResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\SpriteData\SpriteData.h">
+      <Filter>Engine\Include\Data\SpriteData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Sprite\Sprite\Sprite.h">
+      <Filter>Engine\Include\Application\Sprite\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

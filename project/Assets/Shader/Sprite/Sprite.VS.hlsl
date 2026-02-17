@@ -17,15 +17,6 @@ struct Transformation
     
     // アンカーポイント
     float2 anchor;
-    
-    // テクスチャサイズ
-    float2 textureSize;
-    
-    // テクスチャ左上
-    float2 textureLeftTop;
-    
-    // テクスチャ右下
-    float2 textureRightBottom;
 };
 ConstantBuffer<Transformation> gTransformation : register(b0);
 
@@ -41,11 +32,7 @@ VertexShaderOutput main(VertexShaderInput input)
     
     output.position = mul(localPos, gTransformation.worldViewProjection);
     
-    
-    float2 uvPixel = gTransformation.textureLeftTop + (input.texcoord * gTransformation.textureRightBottom);
-    float2 uv = uvPixel / gTransformation.textureSize;
-    
-    output.texcoord = uv;
+    output.texcoord = input.texcoord;
     
     return output;
 }

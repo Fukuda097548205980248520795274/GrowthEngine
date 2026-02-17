@@ -16,6 +16,10 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ShaderCompiler* shaderC
 	primitiveStore_ = std::make_unique<PrimitiveStore>();
 	primitiveStore_->Initialize(device, shaderCompiler, log);
 
+	// スプライトストアの生成と初期化
+	spriteStore_ = std::make_unique<SpriteStore>();
+	spriteStore_->Initialize(device, log);
+
 
 	// プリミティブ頂点シェーダ
 	primitiveVS_ = shaderCompiler->Compile(L"./Assets/Shader/Primitive/Primitive.VS.hlsl", L"vs_6_0");
@@ -50,6 +54,7 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ShaderCompiler* shaderC
 void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 {
 	primitiveStore_->Update(commandList);
+	spriteStore_->Update();
 }
 
 /// @brief シャドウアップ用描画処理

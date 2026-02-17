@@ -21,5 +21,5 @@ PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHa
 /// @brief 描画処理
 void PrimitiveAnimationModel::Draw()
 {
-	engine_->DrawPrimitiveModel(hPrimitive_);
+	engine_->DrawPrimitive(hPrimitive_);
 }

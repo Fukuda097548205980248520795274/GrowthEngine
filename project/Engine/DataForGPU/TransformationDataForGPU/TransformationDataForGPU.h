@@ -14,4 +14,17 @@ namespace Engine
 		// ワールド逆転置行列
 		Matrix4x4 worldInverseTransposeMatrix;
 	};
+
+	namespace Sprite
+	{
+		/// @brief 座標変換
+		struct TransformationDataForGPU
+		{
+			/// @brief ビュープロジェクション行列
+			Matrix4x4 worldViewProjectionMatrix;
+
+			/// @brief アンカー
+			Vector2 anchor;
+		};
+	}
 }

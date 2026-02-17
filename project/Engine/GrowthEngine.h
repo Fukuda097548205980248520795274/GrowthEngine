@@ -22,6 +22,8 @@
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
 #include "Application/Primitive/PrimitiveSkinningModel/PrimitiveSkinningModel.h"
 
+#include "Application/Sprite/Sprite/Sprite.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -316,9 +318,9 @@ public:
 		return renderContext_->LoadPrimitive(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}
 
-	/// @brief プリミティブ : モデル
+	/// @brief プリミティブを描画する
 	/// @param handle 
-	void DrawPrimitiveModel(PrimitiveHandle handle)const { renderContext_->DrawPrimitiveModel(handle); }
+	void DrawPrimitive(PrimitiveHandle handle)const { renderContext_->DrawPrimitive(handle); }
 
 	/// @brief プリミティブのパラメータを取得する
 	/// @tparam T 
@@ -327,6 +329,20 @@ public:
 	template<typename T>
 	T* GetPrimitiveParam(PrimitiveHandle handle)const { return renderContext_->GetPrimitiveParam<T>(handle); }
 
+
+
+	/// @brief スプライトを読み込む
+	/// @param hTexture 
+	/// @param name 
+	/// @return 
+	SpriteHandle LoadSprite(TextureHandle hTexture, const std::string& name) const
+	{
+		return renderContext_->LoadSprite(hTexture, name, log_.get());
+	}
+
+	/// @brief スプライトを描画する
+	/// @param handle 
+	void DrawSprite(SpriteHandle handle)const { renderContext_->DrawSprite(handle); }
 
 
 public:

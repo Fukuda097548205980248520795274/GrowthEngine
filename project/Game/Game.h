@@ -37,5 +37,7 @@ private:
 	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
 
 	std::unique_ptr<LightDirectional> light_ = nullptr;
+
+	std::unique_ptr<Sprite> sprite_ = nullptr;
 };
 
