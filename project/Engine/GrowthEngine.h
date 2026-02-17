@@ -22,7 +22,10 @@
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
 #include "Application/Primitive/PrimitiveSkinningModel/PrimitiveSkinningModel.h"
 
-#include "Application/Sprite/Sprite/Sprite.h"
+#include "Application/Sprite/Sprite.h"
+
+#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
+#include "Application/PrefabBase/PrefabBaseSprite/PrefabBaseSprite.h"
 
 
 // マウスボタン
@@ -343,6 +346,18 @@ public:
 	/// @brief スプライトを描画する
 	/// @param handle 
 	void DrawSprite(SpriteHandle handle)const { renderContext_->DrawSprite(handle); }
+
+
+
+	/// @brief プレハブスプライトの読み込み
+	/// @param name 
+	/// @param numInstance 
+	/// @param hTexture 
+	/// @return 
+	PrefabSpriteHandle LoadPrefabSprite(const std::string& name, uint32_t numInstance, TextureHandle hTexture) const
+	{
+		return renderContext_->LoadPrefabSprite(name, hTexture, numInstance, log_.get());
+	}
 
 
 public:

@@ -8,6 +8,7 @@
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
 #include "DX12Model/DX12Model.h"
+#include "DX12Prefab/DX12Prefab.h"
 #include "ImGuiRender/ImGuiRender.h"
 #include <chrono>
 #include <thread>
@@ -127,6 +128,16 @@ namespace Engine
 			return model_->LoadSprite(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
 		}
 
+		/// @brief プレハブスプライトを読み込む
+		/// @param name 
+		/// @param numInstance 
+		/// @param log 
+		/// @return 
+		PrefabSpriteHandle LoadPrefabSprite(const std::string& name,TextureHandle hTexture, uint32_t numInstance, Log* log)
+		{
+			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(), heap_.get(), core_->GetDevice(), log);
+		}
+
 
 
 
@@ -177,6 +188,9 @@ namespace Engine
 
 		// DX12Model
 		std::unique_ptr<DX12Model> model_ = nullptr;
+
+		// DX12Prefab
+		std::unique_ptr<DX12Prefab> prefab_ = nullptr;
 
 
 	private:

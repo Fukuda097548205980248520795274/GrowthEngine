@@ -1,6 +1,7 @@
 #include "SpriteResource.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Store/TextureStore/TextureStore.h"
+#include "Resource/IndexBufferResource/IndexBufferResource.h"
 
 /// @brief コンストラクタ
 /// @param hSprite 

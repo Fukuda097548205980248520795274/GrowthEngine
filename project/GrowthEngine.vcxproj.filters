@@ -412,8 +412,35 @@
     <Filter Include="Engine\Include\Application\Sprite">
       <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Sprite\Sprite">
-      <UniqueIdentifier>{c201c32f-f4d1-422c-aca6-adc4fcaac25b}</UniqueIdentifier>
+    <Filter Include="Engine\Include\RenderContext\DX12Prefab">
+      <UniqueIdentifier>{376c0382-fd73-4a2d-8616-b1d1e8aeb0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabSpriteStore">
+      <UniqueIdentifier>{de2afa54-1a67-4935-a31e-e5d380e7810d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\PrefabSprite">
+      <UniqueIdentifier>{641b06ff-7b4d-4619-834c-f0e1cc2152fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrefabSprite">
+      <UniqueIdentifier>{2b11ad94-a4e5-4312-a094-79455f37eec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBase">
+      <UniqueIdentifier>{78a30a99-d6c2-4c6a-b7ae-edd4acc4c186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseSprite">
+      <UniqueIdentifier>{b3dfd094-7118-4a15-acd9-e853d364d754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstance">
+      <UniqueIdentifier>{abc4a254-5c74-46c4-8de3-16758da0c0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceSprite">
+      <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource">
+      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\PrefabDataForGPU">
+      <UniqueIdentifier>{f7ce20fc-3b83-4187-8bbe-886b9e5378f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -684,8 +711,26 @@
     <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp">
       <Filter>Engine\Include\Store\SpriteStore\SpriteResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sprite\Sprite\Sprite.cpp">
-      <Filter>Engine\Include\Application\Sprite\Sprite</Filter>
+    <ClCompile Include="Engine\RenderContext\DX12Prefab\DX12Prefab.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.cpp">
+      <Filter>Engine\Include\Store\PrefabSpriteStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Sprite\Sprite.cpp">
+      <Filter>Engine\Include\Application\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
+      <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1016,8 +1061,29 @@
     <ClInclude Include="Engine\Data\SpriteData\SpriteData.h">
       <Filter>Engine\Include\Data\SpriteData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Sprite\Sprite\Sprite.h">
-      <Filter>Engine\Include\Application\Sprite\Sprite</Filter>
+    <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h">
+      <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.h">
+      <Filter>Engine\Include\Store\PrefabSpriteStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Sprite\Sprite.h">
+      <Filter>Engine\Include\Application\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h">
+      <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\PrefabDataForGPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1029,6 +1095,9 @@
     </None>
     <None Include="Assets\Shader\Sprite\Sprite.hlsli">
       <Filter>Engine\Shader\Sprite</Filter>
+    </None>
+    <None Include="Assets\Shader\PrefabSprite\PrefabSprite.hlsli">
+      <Filter>Engine\Shader\PrefabSprite</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1058,6 +1127,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Sprite\Sprite.PS.hlsl">
       <Filter>Engine\Shader\Sprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.VS.hlsl">
+      <Filter>Engine\Shader\PrefabSprite</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.PS.hlsl">
+      <Filter>Engine\Shader\PrefabSprite</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

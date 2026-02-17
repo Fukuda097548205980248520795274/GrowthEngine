@@ -1,0 +1,27 @@
+#pragma once
+#include "Math/Vector/Vector4/Vector4.h"
+#include "Math/Vector/Vector2/Vector2.h"
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
+
+namespace Engine
+{
+	namespace Prefab
+	{
+		struct SpriteDataForGPU
+		{
+            // WVP行列
+            Matrix4x4 worldViewProjection;
+
+            // アンカーポイント
+            Vector2 anchor;
+
+            float padding[2];
+
+            // 色
+            Vector4 color;
+
+            // UVトランスフォーム
+            Matrix4x4 uvTransform;
+		};
+	}
+}

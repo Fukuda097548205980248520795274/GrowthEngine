@@ -1,10 +1,11 @@
 #pragma once
-#include "SpriteResource/SpriteResource.h"
+#include "PrefabSpriteResource/PrefabSpriteResource.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
+#include <vector>
 
 namespace Engine
 {
-	class SpriteStore
+	class PrefabSpriteStore
 	{
 	public:
 
@@ -19,22 +20,26 @@ namespace Engine
 		/// @brief 読み込み
 		/// @param name 
 		/// @param hTexture 
+		/// @param numInstance 
 		/// @param textureStore 
+		/// @param device 
+		/// @param log 
 		/// @return 
-		SpriteHandle Load(const std::string& name, TextureHandle hTexture, TextureStore* textureStore, ID3D12Device* device, Log* log);
+		PrefabSpriteHandle Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
+			TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 
 		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(PrefabSpriteHandle hPrefabSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 
 	private:
 
 		/// @brief データテーブル
-		std::vector<std::unique_ptr<SpriteResource>> dataTable_;
+		std::vector<std::unique_ptr<PrefabSpriteResource>> dataTable_;
 
 
 	private:

@@ -26,7 +26,7 @@ VertexShaderOutput main(VertexShaderInput input)
     
     float4 localPos;
     localPos.x = input.position.x - gTransformation.anchor.x;
-    localPos.y = input.position.y - gTransformation.anchor.y;
+    localPos.y = input.position.y + gTransformation.anchor.y;
     localPos.z = input.position.z;
     localPos.w = input.position.w;
     

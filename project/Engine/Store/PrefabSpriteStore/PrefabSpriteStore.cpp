@@ -1,9 +1,9 @@
-#include "SpriteStore.h"
+#include "PrefabSpriteStore.h"
 
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::SpriteStore::Initialize(ID3D12Device* device, Log* log)
+void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -38,7 +38,7 @@ void Engine::SpriteStore::Initialize(ID3D12Device* device, Log* log)
 }
 
 /// @brief 更新処理
-void Engine::SpriteStore::Update()
+void Engine::PrefabSpriteStore::Update()
 {
 
 }
@@ -46,9 +46,13 @@ void Engine::SpriteStore::Update()
 /// @brief 読み込み
 /// @param name 
 /// @param hTexture 
+/// @param numInstance 
 /// @param textureStore 
+/// @param device 
+/// @param log 
 /// @return 
-SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hTexture, TextureStore* textureStore, ID3D12Device* device, Log* log)
+PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
+	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
@@ -65,8 +69,8 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
 	// データの生成と初期化
-	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, hTexture, name);
-	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, device, log);
+	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, hTexture, numInstance, name);
+	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, heap, device, log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;
@@ -77,7 +81,7 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::SpriteStore::Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	dataTable_[hSprite]->Register(viewProjection, commandList, pso);
+	
 }

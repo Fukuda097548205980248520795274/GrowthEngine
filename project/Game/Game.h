@@ -38,6 +38,6 @@ private:
 
 	std::unique_ptr<LightDirectional> light_ = nullptr;
 
-	std::unique_ptr<Sprite> sprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> sprite_ = nullptr;
 };
 

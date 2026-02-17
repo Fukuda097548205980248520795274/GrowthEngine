@@ -62,6 +62,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	model_ = std::make_unique<DX12Model>();
 	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
+	// DX12Prefabの生成と初期化
+	prefab_ = std::make_unique<DX12Prefab>();
+	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
+
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
 
@@ -129,6 +133,7 @@ void Engine::RenderContext::PreDraw()
 
 	// モデル全体の更新
 	model_->Update(commandList_);
+	prefab_->Update();
 
 	// カメラストアの更新
 	camera3DStore_->Update();

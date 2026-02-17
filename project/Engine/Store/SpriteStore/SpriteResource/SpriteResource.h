@@ -1,8 +1,5 @@
 #pragma once
 #include <memory>
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <wrl.h>
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 
@@ -12,13 +9,13 @@
 #include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
 
 #include "Resource/VertexBufferResource/VertexBufferResource.h"
-#include "Resource/IndexBufferResource/IndexBufferResource.h"
 
 namespace Engine
 {
 	class Log;
 	class BasePSOModel;
 	class TextureStore;
+	class IndexBufferResource;
 
 	class SpriteResource
 	{

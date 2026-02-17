@@ -159,7 +159,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sprite\Sprite\Sprite.cpp" />
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp" />
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp" />
+    <ClCompile Include="Engine\Application\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp" />
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -262,6 +264,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -315,6 +318,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Prefab\DX12Prefab.cpp" />
     <ClCompile Include="Engine\RenderContext\ImGuiRender\ImGuiRender.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -401,6 +405,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp" />
+    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.cpp" />
     <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.cpp" />
     <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp" />
     <ClCompile Include="Engine\Store\PrefabStore\PrefabStore.cpp" />
@@ -446,7 +452,9 @@
     <ClInclude Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
-    <ClInclude Include="Engine\Application\Sprite\Sprite\Sprite.h" />
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h" />
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h" />
+    <ClInclude Include="Engine\Application\Sprite\Sprite.h" />
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h" />
     <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h" />
@@ -460,6 +468,7 @@
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
+    <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
@@ -494,6 +503,7 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h" />
@@ -508,6 +518,7 @@
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h" />
     <ClInclude Include="Engine\RenderContext\DX12Model\DX12Model.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h" />
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\Resource\ConstantBufferResource\ConstantBufferResource.h" />
@@ -535,6 +546,8 @@
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
+    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h" />
+    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.h" />
     <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.h" />
     <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.h" />
     <ClInclude Include="Engine\Store\PrefabStore\PrefabStore.h" />
@@ -555,6 +568,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Assets\Shader\PrefabSprite\PrefabSprite.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -594,6 +612,22 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
