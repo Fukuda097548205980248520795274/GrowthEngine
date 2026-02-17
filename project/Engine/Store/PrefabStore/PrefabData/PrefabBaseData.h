@@ -44,7 +44,7 @@ namespace Engine
 		std::string typeName_{};
 
 		// ハンドル
-		PrefabHandle hPrefab_ = 0;
+		PrefabPrimitiveHandle hPrefab_ = 0;
 
 
 		// インスタンス数

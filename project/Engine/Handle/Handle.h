@@ -32,5 +32,11 @@ using LightHandle = uint32_t;
 // プリミティブハンドル
 using PrimitiveHandle = uint32_t;
 
-/// @brief プレハブハンドル
-using PrefabHandle = uint32_t;
+// スプライトハンドル
+using SpriteHandle = uint32_t;
+
+/// @brief プレハブプリミティブハンドル
+using PrefabPrimitiveHandle = uint32_t;
+
+/// @brief プレハブスプライトハンドル
+using PrefabSpriteHandle = uint32_t;

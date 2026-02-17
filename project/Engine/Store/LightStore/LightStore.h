@@ -15,7 +15,6 @@
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
-#include "Resource/TileLightResource/TileLightResource.h"
 
 namespace Engine
 {

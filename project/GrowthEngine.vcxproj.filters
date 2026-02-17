@@ -166,9 +166,6 @@
     <Filter Include="Engine\Include\Store\TextureStore">
       <UniqueIdentifier>{42441166-4c82-4f35-9d1b-56d62a18374c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Resource\IndexResource">
-      <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Input">
       <UniqueIdentifier>{4b7da7d8-9a89-476e-83bb-74f9a04be64f}</UniqueIdentifier>
     </Filter>
@@ -304,9 +301,6 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOLightCulling">
       <UniqueIdentifier>{8c8da7b7-3e57-4c30-b288-19fc43982e1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Resource\TileLightResource">
-      <UniqueIdentifier>{1be739a0-98db-4238-bca4-be250d5e2e50}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData">
       <UniqueIdentifier>{671be303-0741-47f1-8ef1-187a3d8c1368}</UniqueIdentifier>
     </Filter>
@@ -399,6 +393,15 @@
     </Filter>
     <Filter Include="Engine\Include\PSO\PSOModel\PSOPrimitive">
       <UniqueIdentifier>{56c22e12-b7ef-4b16-b363-fb15b4d450e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SpriteStore">
+      <UniqueIdentifier>{3a244c9d-5a50-4c07-a0cf-47b2fcc1ce7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\VertexBufferResource">
+      <UniqueIdentifier>{8df30616-28e8-4797-b55f-fb6f70459e10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\IndexBufferResource">
+      <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -504,8 +507,8 @@
     <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp">
       <Filter>Engine\Include\Store\TextureStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\IndexResource\IndexResource.cpp">
-      <Filter>Engine\Include\Resource\IndexResource</Filter>
+    <ClCompile Include="Engine\Resource\IndexBufferResource\IndexBufferResource.cpp">
+      <Filter>Engine\Include\Resource\IndexBufferResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Engine\Include\Input</Filter>
@@ -618,9 +621,6 @@
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Resource\TileLightResource\TileLightResource.cpp">
-      <Filter>Engine\Include\Resource\TileLightResource</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
     </ClCompile>
@@ -665,6 +665,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SpriteStore\SpriteStore.cpp">
+      <Filter>Engine\Include\Store\SpriteStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -779,8 +782,8 @@
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h">
       <Filter>Engine\Include\Store\TextureStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\IndexResource\IndexResource.h">
-      <Filter>Engine\Include\Resource\IndexResource</Filter>
+    <ClInclude Include="Engine\Resource\IndexBufferResource\IndexBufferResource.h">
+      <Filter>Engine\Include\Resource\IndexBufferResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>Engine\Include\Input</Filter>
@@ -914,9 +917,6 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\TileLightResource\TileLightResource.h">
-      <Filter>Engine\Include\Resource\TileLightResource</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h">
       <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
     </ClInclude>
@@ -985,6 +985,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SpriteStore\SpriteStore.h">
+      <Filter>Engine\Include\Store\SpriteStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\VertexBufferResource\VertexBufferResource.h">
+      <Filter>Engine\Include\Resource\VertexBufferResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

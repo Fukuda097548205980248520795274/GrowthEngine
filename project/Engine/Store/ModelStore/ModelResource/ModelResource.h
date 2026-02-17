@@ -6,6 +6,9 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
+#include "Resource/VertexBufferResource/VertexBufferResource.h"
+#include "Resource/IndexBufferResource/IndexBufferResource.h"
+
 namespace Engine
 {
 	class Log;
@@ -55,39 +58,10 @@ namespace Engine
 
 	private:
 
-		/// @brief 頂点リソース
-		struct VertexResource
-		{
-			/// @brief リソース
-			Microsoft::WRL::ComPtr<ID3D12Resource> resource_ = nullptr;
-
-			/// @brief ビュー
-			D3D12_VERTEX_BUFFER_VIEW view_{};
-
-			/// @brief データ
-			ModelVertexData* data_ = nullptr;
-		};
-
 		/// @brief 頂点テーブル
-		std::vector<std::unique_ptr<VertexResource>> vertexTable_;
-
-
-	private:
-
-		/// @brief インデックスリソース
-		struct IndexResource
-		{
-			/// @brief リソース
-			Microsoft::WRL::ComPtr<ID3D12Resource> resource_ = nullptr;
-
-			/// @brief ビュー
-			D3D12_INDEX_BUFFER_VIEW view_{};
-
-			/// @brief データ
-			uint32_t* data_ = nullptr;
-		};
+		std::vector<std::unique_ptr<VertexBufferResource<ModelVertexData>>> vertexTable_;
 
 		/// @brief インデックステーブル
-		std::vector<std::unique_ptr<IndexResource>> indexTable_;
+		std::vector<std::unique_ptr<IndexBufferResource>> indexTable_;
 	};
 }
