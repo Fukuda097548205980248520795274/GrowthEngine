@@ -9,6 +9,8 @@
 
 #include "PSO/PSOPostEffect/BasePSOPostEffect/PSOCopyImage/PSOCopyImage.h"
 
+#include "Store/PostEffectStore/PostEffectStore.h"
+
 namespace Engine
 {
 	class DX12Heap;
@@ -44,6 +46,19 @@ namespace Engine
 		/// @return 
 		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return offscreenResource_[currentOffscreen_]->GetSrvGpuHandle(); }
 
+		/// @brief ポストエフェクトを読み込む
+		/// @param name 
+		/// @param type 
+		/// @param device 
+		/// @param log 
+		/// @return 
+		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log) { return postEffectStore_->Load(name, type, device, log); }
+
+		/// @brief ポストエフェクトを描画する
+		/// @param hPostEffect 
+		/// @param commandList 
+		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList);
+
 
 		template<typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -70,6 +85,9 @@ namespace Engine
 
 		// オフスクリーンリソース
 		std::unique_ptr<OffscreenResource> offscreenResource_[kMaxOffscreenCount] = { nullptr };
+
+		// ポストエフェクトストア
+		std::unique_ptr<PostEffectStore> postEffectStore_ = nullptr;
 
 
 	private:

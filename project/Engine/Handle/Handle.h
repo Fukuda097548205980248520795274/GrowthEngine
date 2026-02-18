@@ -40,3 +40,6 @@ using PrefabPrimitiveHandle = uint32_t;
 
 /// @brief プレハブスプライトハンドル
 using PrefabSpriteHandle = uint32_t;
+
+/// @brief ポストエフェクトハンドル
+using PostEffectHandle = uint32_t;

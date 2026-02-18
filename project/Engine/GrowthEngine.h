@@ -27,6 +27,8 @@
 #include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
 #include "Application/PrefabBase/PrefabBaseSprite/PrefabBaseSprite.h"
 
+#include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -373,6 +375,19 @@ public:
 	/// @brief スプライト用プレハブのパラメータを取得する
 	/// @return 
 	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite)const { return renderContext_->GetPrefabSpriteParam(hPrefabSprite); }
+
+
+
+	/// @brief ポストエフェクトを読み込む
+	/// @param name 
+	/// @param type 
+	/// @return 
+	PostEffectHandle LoadPostEffect(const std::string& name, Engine::PostEffect::Type type)const { return renderContext_->LoadPostEffect(name, type, log_.get()); }
+
+	/// @brief ポストエフェクトを描画する
+	/// @param hPostEffect 
+	void DrawPostEffect(PostEffectHandle hPostEffect)const { return renderContext_->DrawPostEffect(hPostEffect); }
+
 
 
 public:

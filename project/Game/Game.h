@@ -42,5 +42,7 @@ private:
 
 	PrefabInstanceSprite* instanceSprite1_ = nullptr;
 	PrefabInstanceSprite* instanceSprite2_ = nullptr;
+
+	std::unique_ptr<PostEffectRadialBlur> radialBlur_ = nullptr;
 };
 

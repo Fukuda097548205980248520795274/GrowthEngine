@@ -36,6 +36,11 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 	// PSO CopyImage の生成と初期化
 	psoCopyImage_ = std::make_unique<PSOCopyImage>();
 	psoCopyImage_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
+
+
+	// ポストエフェクトストアの生成
+	postEffectStore_ = std::make_unique<PostEffectStore>();
+	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
 }
 
 /// @brief クリア
@@ -97,4 +102,33 @@ void Engine::DX12Offscreen::ClearDepthStencil(ID3D12GraphicsCommandList* command
 {
 	// てぷスステンシルのクリア
 	depthResource_->ClearDepthStencil(commandList);
+}
+
+
+
+/// @brief ポストエフェクトを描画する
+/// @param hPostEffect 
+/// @param commandList 
+void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList)
+{
+	// nullptrチェック
+	assert(commandList);
+
+	// カウントする
+	++currentOffscreen_;
+	currentOffscreen_ = currentOffscreen_ % 2;
+
+	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+	ClearRenderTarget(commandList);
+	
+
+	// 書き込み対象 -> 読み込ませテクスチャ
+	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+	postEffectStore_->DrawPostEffect(hPostEffect, commandList, offscreenResource_[1 - currentOffscreen_].get());
+
+	// 読み込ませテクスチャ -> 書き込み対象
+	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }

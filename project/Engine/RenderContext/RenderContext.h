@@ -175,6 +175,19 @@ namespace Engine
 		}
 
 
+
+		/// @brief ポストエフェクトを読み込む
+		/// @param name 
+		/// @param type 
+		/// @param log 
+		/// @return 
+		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, Log* log) { return offscreen_->LoadPostEffect(name, type, core_->GetDevice(), log); }
+
+		/// @brief ポストエフェクトを描画する
+		/// @param hPostEffect 
+		void DrawPostEffect(PostEffectHandle hPostEffect) { return offscreen_->DrawPostEffect(hPostEffect, commandList_); }
+
+
 	private:
 
 #ifdef _DEBUG
