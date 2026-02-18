@@ -2,6 +2,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
+#include "Store/Camera2DStore/Camera2DStore.h"
 
 /// @brief コンストラクタ
 /// @param hPrefabSprite 
@@ -38,12 +39,13 @@ Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSpr
 /// @param device 
 /// @param log 
 void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
-	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log)
+	TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(vertexResource);
 	assert(indexResource);
 	assert(textureStore);
+	assert(cameraStore);
 	assert(heap);
 	assert(device);
 
@@ -51,6 +53,7 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	vertexResource_ = vertexResource;
 	indexResource_ = indexResource;
 	textureStore_ = textureStore;
+	cameraStore_ = cameraStore;
 
 	// テクスチャサイズを取得する
 	param_->texture.size =
@@ -81,7 +84,7 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 	vertexResource_->Register(commandList);
 
 	// パラメータの設定
-	resource_->RegisterCompute(commandList, 0);
+	resource_->RegisterGraphics(commandList, 0);
 
 	// テクスチャの設定
 	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->texture.hTexture));
@@ -91,4 +94,36 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(6, useInstance_, 0, 0, 0);
+}
+
+/// @brief インスタンスのドローコール
+/// @param param 
+void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab::Sprite::Instance::Param* param)
+{
+	// nullptrチェック
+	assert(param);
+
+	// インスタンス数以上のドローコールは処理しない
+	if (useInstance_ >= numInstance_)
+		return;
+
+	// ワールドビュープロジェクション行列
+	resource_->data_[useInstance_].worldViewProjection =
+		Make2DScaleMatrix4x4((Vector2(param->transform.scale.x * param->texture.size.x, param->transform.scale.y * param->texture.size.y)))
+		* Make3DRotateZMatrix4x4(param->transform.rotate) * Make2DTranslateMatrix4x4(param->transform.translate)
+		* cameraStore_->GetCamera2D().GetViewProjectionMatrix();
+
+	// アンカー
+	resource_->data_[useInstance_].anchor = param_->texture.anchor;
+
+	// 色
+	resource_->data_[useInstance_].color = param->material.color;
+
+	// UV
+	resource_->data_[useInstance_].uvTransform =
+		Make2DScaleMatrix4x4(param->material.uv.scale) * Make3DRotateZMatrix4x4(param->material.uv.rotate) * Make2DTranslateMatrix4x4(param->material.uv.translate);
+
+
+	// 使用インスタンス数をカウントする
+	useInstance_++;
 }

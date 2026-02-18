@@ -359,6 +359,21 @@ public:
 		return renderContext_->LoadPrefabSprite(name, hTexture, numInstance, log_.get());
 	}
 
+	/// @brief スプライトのドローコール関数を取得する
+	/// @return 
+	std::function<void(const Engine::Prefab::Sprite::Instance::Param*)> GetSpriteDrawCall(PrefabSpriteHandle hPrefabSprite) const
+	{
+		return renderContext_->GetSpriteDrawCall(hPrefabSprite);
+	}
+
+	/// @brief コマンドリストに登録する
+	/// @param hSprite 
+	void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite)const { renderContext_->DrawPrefabSprite(hPrefabSprite); }
+
+	/// @brief スプライト用プレハブのパラメータを取得する
+	/// @return 
+	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite)const { return renderContext_->GetPrefabSpriteParam(hPrefabSprite); }
+
 
 public:
 

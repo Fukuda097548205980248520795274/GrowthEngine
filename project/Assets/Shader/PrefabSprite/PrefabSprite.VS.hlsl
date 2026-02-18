@@ -12,14 +12,14 @@ struct Sprite
     // WVP行列
     float4x4 worldViewProjection;
     
-    // アンカーポイント
-    float2 anchor;
-    
     // 色
     float4 color;
     
     // UVトランスフォーム
     float4x4 uvTransform;
+    
+    // アンカーポイント
+    float2 anchor;
 };
 StructuredBuffer<Sprite> gSprite : register(t0);
 

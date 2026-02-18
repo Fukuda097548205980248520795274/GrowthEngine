@@ -17,6 +17,7 @@ namespace Engine
 	class TextureStore;
 	class IndexBufferResource;
 	class DX12Heap;
+	class Camera2DStore;
 
 	class PrefabSpriteResource
 	{
@@ -37,7 +38,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
-			TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log);
+			TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -47,6 +48,10 @@ namespace Engine
 		/// @return 
 		PrefabSpriteHandle GetHandle()const { return hPrefabSprite_; }
 
+		/// @brief パラメータを取得する
+		/// @return 
+		Prefab::Sprite::Base::Param* GetParam() { return param_.get(); }
+
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 
@@ -55,8 +60,16 @@ namespace Engine
 		/// @brief リセット
 		void Reset() { useInstance_ = 0; }
 
+		/// @brief ドローコール関数を取得する
+		/// @return 
+		std::function<void(const Prefab::Sprite::Instance::Param*)> GetDrawCall() { return [this](const Prefab::Sprite::Instance::Param* param) {InstanceDrawCall(param); }; }
+
 
 	private:
+
+		/// @brief インスタンスのドローコール
+		/// @param param 
+		void InstanceDrawCall(const Prefab::Sprite::Instance::Param* param);
 
 		// 名前
 		std::string name_{};
@@ -93,5 +106,8 @@ namespace Engine
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
+
+		// カメラストア
+		Camera2DStore* cameraStore_ = nullptr;
 	};
 }

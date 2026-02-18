@@ -2,6 +2,8 @@
 #include "Handle/Handle.h"
 #include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
 #include <string>
+#include <list>
+#include <memory>
 
 class GrowthEngine;
 
@@ -15,8 +17,17 @@ public:
 	/// @param name 
 	PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance, const std::string& name);
 
+	/// @brief インスタンスを生成する
+	PrefabInstanceSprite* CreateInstance();
+
+	/// @brief 更新処理
+	void Update();
+
 	/// @brief 描画処理
 	void Draw();
+
+	// パラメータ
+	Engine::Prefab::Sprite::Base::Param* param_ = nullptr;
 
 
 private:
@@ -32,5 +43,8 @@ private:
 
 	// プレハブスプライトハンドル
 	PrefabSpriteHandle handle_ = 0;
+
+	// インスタンステーブル
+	std::list<std::unique_ptr<PrefabInstanceSprite>> instanceTable_;
 };
 

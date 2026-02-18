@@ -33,10 +33,23 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		PrefabSpriteHandle LoadSprite(const std::string& name, TextureHandle hTexture,uint32_t numInstance, 
-			TextureStore* textureStore,DX12Heap* heap, ID3D12Device* device, Log* log)
+			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 		{
-			return prefabSpriteStore_->Load(name, hTexture, numInstance, textureStore, heap, device, log);
+			return prefabSpriteStore_->Load(name, hTexture, numInstance, textureStore,cameraStore, heap, device, log);
 		}
+
+		/// @brief スプライトのドローコール関数を取得する
+		/// @return 
+		std::function<void(const Prefab::Sprite::Instance::Param*)> GetSpriteDrawCall(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->GetDrawCall(hPrefabSprite); }
+
+		/// @brief コマンドリストに登録する
+		/// @param hSprite 
+		/// @param commandList 
+		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite, ID3D12GraphicsCommandList* commandList) { prefabSpriteStore_->Register(hPrefabSprite, commandList, psoPrefabSprite_.get()); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @return 
+		Prefab::Sprite::Base::Param* GetSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->GetParam(hPrefabSprite); }
 
 		/// @brief リセット
 		void Reset();

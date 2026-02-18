@@ -135,8 +135,25 @@ namespace Engine
 		/// @return 
 		PrefabSpriteHandle LoadPrefabSprite(const std::string& name,TextureHandle hTexture, uint32_t numInstance, Log* log)
 		{
-			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(), heap_.get(), core_->GetDevice(), log);
+			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(),camera2DStore_.get(), heap_.get(), core_->GetDevice(), log);
 		}
+
+
+		/// @brief スプライトのドローコール関数を取得する
+		/// @return 
+		std::function<void(const Prefab::Sprite::Instance::Param*)> GetSpriteDrawCall(PrefabSpriteHandle hPrefabSprite)
+		{
+			return prefab_->GetSpriteDrawCall(hPrefabSprite);
+		}
+
+		/// @brief コマンドリストに登録する
+		/// @param hSprite 
+		/// @param commandList 
+		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite) { prefab_->DrawPrefabSprite(hPrefabSprite, commandList_); }
+
+		/// @brief スプライト用プレハブのパラメータを取得する
+		/// @return 
+		Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefab_->GetSpriteParam(hPrefabSprite); }
 
 
 

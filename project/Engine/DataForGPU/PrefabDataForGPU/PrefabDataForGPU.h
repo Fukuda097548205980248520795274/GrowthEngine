@@ -12,16 +12,14 @@ namespace Engine
             // WVP行列
             Matrix4x4 worldViewProjection;
 
-            // アンカーポイント
-            Vector2 anchor;
-
-            float padding[2];
-
             // 色
             Vector4 color;
 
             // UVトランスフォーム
             Matrix4x4 uvTransform;
+
+			// アンカーポイント
+			Vector2 anchor;
 		};
 	}
 }

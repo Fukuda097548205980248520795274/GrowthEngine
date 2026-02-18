@@ -26,13 +26,21 @@ namespace Engine
 		/// @param log 
 		/// @return 
 		PrefabSpriteHandle Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
-			TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log);
+			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 
 		/// @param commandList 
 		/// @param pso 
 		void Register(PrefabSpriteHandle hPrefabSprite,ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief ドローコール関数を取得する
+		/// @return 
+		std::function<void(const Prefab::Sprite::Instance::Param*)> GetDrawCall(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetDrawCall(); }
+
+		/// @brief パラメータを取得する
+		/// @return 
+		Prefab::Sprite::Base::Param* GetParam(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetParam(); }
 
 		/// @brief リセット
 		void Reset();

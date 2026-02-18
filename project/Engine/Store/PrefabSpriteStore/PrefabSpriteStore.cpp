@@ -52,7 +52,7 @@ void Engine::PrefabSpriteStore::Update()
 /// @param log 
 /// @return 
 PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
-	TextureStore* textureStore, DX12Heap* heap, ID3D12Device* device, Log* log)
+	TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
@@ -70,7 +70,7 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 
 	// データの生成と初期化
 	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, hTexture, numInstance, name);
-	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, heap, device, log);
+	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore,cameraStore, heap, device, log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;

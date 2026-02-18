@@ -23,6 +23,11 @@ void Game::Initialize()
 	animationModel_->param_->modelTransform.translate.x = 5.0f;
 
 	sprite_ = std::make_unique<PrefabBaseSprite>(GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/uvChecker.png"), 100, "Sprite");
+
+	instanceSprite1_ = sprite_->CreateInstance();
+	instanceSprite2_ = sprite_->CreateInstance();
+	instanceSprite2_->param_.transform.translate.x = 100.0f;
+	
 	
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
@@ -43,6 +48,9 @@ void Game::Draw()
 	model_->Draw();
 
 	animationModel_->Draw();
+
+	instanceSprite1_->Draw();
+	instanceSprite2_->Draw();
 
 	sprite_->Draw();
 }
