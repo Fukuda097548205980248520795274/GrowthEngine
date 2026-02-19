@@ -141,14 +141,6 @@ namespace Engine
 			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(),camera2DStore_.get(), heap_.get(), core_->GetDevice(), log);
 		}
 
-
-		/// @brief スプライトのドローコール関数を取得する
-		/// @return 
-		std::function<void(const Prefab::Sprite::Instance::Param*)> GetSpriteDrawCall(PrefabSpriteHandle hPrefabSprite)
-		{
-			return prefab_->GetSpriteDrawCall(hPrefabSprite);
-		}
-
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 
 		/// @param commandList 
@@ -157,6 +149,11 @@ namespace Engine
 		/// @brief スプライト用プレハブのパラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefab_->GetSpriteParam(hPrefabSprite); }
+
+		/// @brief インスタンスを作成する
+		/// @param hPrefabSprite 
+		/// @return 
+		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefab_->CreateSpriteInstance(hPrefabSprite); }
 
 
 

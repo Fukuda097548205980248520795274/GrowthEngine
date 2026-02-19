@@ -34,16 +34,20 @@ namespace Engine
 		/// @param pso 
 		void Register(PrefabSpriteHandle hPrefabSprite,ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
-		/// @brief ドローコール関数を取得する
-		/// @return 
-		std::function<void(const Prefab::Sprite::Instance::Param*)> GetDrawCall(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetDrawCall(); }
-
 		/// @brief パラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetParam(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetParam(); }
 
+		/// @brief インスタンスを作成する
+		/// @param hPrefabSprite 
+		/// @return 
+		PrefabInstanceSprite* CreateInstance(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->CreateInstance(); }
+
 		/// @brief リセット
 		void Reset();
+
+		/// @brief 全てのインスタンスを削除する
+		void DestroyAllInstance();
 
 
 	private:

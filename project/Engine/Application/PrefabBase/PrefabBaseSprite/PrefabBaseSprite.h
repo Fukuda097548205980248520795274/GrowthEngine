@@ -18,10 +18,8 @@ public:
 	PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance, const std::string& name);
 
 	/// @brief インスタンスを生成する
+	[[nodiscard]]
 	PrefabInstanceSprite* CreateInstance();
-
-	/// @brief 更新処理
-	void Update();
 
 	/// @brief 描画処理
 	void Draw();
@@ -43,8 +41,5 @@ private:
 
 	// プレハブスプライトハンドル
 	PrefabSpriteHandle handle_ = 0;
-
-	// インスタンステーブル
-	std::list<std::unique_ptr<PrefabInstanceSprite>> instanceTable_;
 };
 

@@ -40,7 +40,8 @@ void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
 /// @brief 更新処理
 void Engine::PrefabSpriteStore::Update()
 {
-
+	// データの更新
+	for (auto& data : dataTable_)data->Update();
 }
 
 /// @brief 読み込み
@@ -90,4 +91,10 @@ void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite,  ID3D
 void Engine::PrefabSpriteStore::Reset()
 {
 	for (auto& data : dataTable_)data->Reset();
+}
+
+/// @brief 全てのインスタンスを削除する
+void Engine::PrefabSpriteStore::DestroyAllInstance()
+{
+
 }

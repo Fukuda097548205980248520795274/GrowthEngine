@@ -40,6 +40,9 @@ namespace Engine
 		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
 			TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
+		/// @brief 更新処理
+		void Update();
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }
@@ -57,19 +60,15 @@ namespace Engine
 		/// @param pso 
 		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
+		/// @brief インスタンスを作成する
+		/// @return 
+		PrefabInstanceSprite* CreateInstance();
+
 		/// @brief リセット
 		void Reset() { useInstance_ = 0; }
 
-		/// @brief ドローコール関数を取得する
-		/// @return 
-		std::function<void(const Prefab::Sprite::Instance::Param*)> GetDrawCall() { return [this](const Prefab::Sprite::Instance::Param* param) {InstanceDrawCall(param); }; }
-
 
 	private:
-
-		/// @brief インスタンスのドローコール
-		/// @param param 
-		void InstanceDrawCall(const Prefab::Sprite::Instance::Param* param);
 
 		// 名前
 		std::string name_{};
@@ -89,8 +88,15 @@ namespace Engine
 
 	private:
 
+		/// @brief インスタンスのドローコール
+		/// @param param 
+		void InstanceDrawCall(const Prefab::Sprite::Instance::Param* param);
+
 		// 使用インスタンス数
 		uint32_t useInstance_ = 0;
+
+		// インスタンステーブル
+		std::list<std::unique_ptr<PrefabInstanceSprite>> instanceTable_;
 
 
 	private:

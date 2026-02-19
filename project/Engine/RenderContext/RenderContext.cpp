@@ -130,6 +130,9 @@ void Engine::RenderContext::NewFrame()
 	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
+	// プレハブの更新
+	prefab_->Update();
+
 #ifdef _DEVELOPMENT
 	// Dockスペースを作成する
 	imguiRender_->CreateDockSpace();
@@ -148,7 +151,6 @@ void Engine::RenderContext::PreDraw()
 
 	// モデル全体の更新
 	model_->Update(commandList_);
-	prefab_->Update();
 
 	// カメラストアの更新
 	camera3DStore_->Update();

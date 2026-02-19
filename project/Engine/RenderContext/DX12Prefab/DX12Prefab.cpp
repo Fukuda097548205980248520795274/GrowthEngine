@@ -35,7 +35,8 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* shader
 /// @brief 更新処理
 void Engine::DX12Prefab::Update()
 {
-
+	// 更新
+	prefabSpriteStore_->Update();
 }
 
 /// @brief リセット

@@ -31,5 +31,9 @@ private:
 	std::unique_ptr<GameCamera2D> gameCamera2D_ = nullptr;
 
 	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
+
+	std::unique_ptr<PrefabBaseSprite> sprite_ = nullptr;
+
+	PrefabInstanceSprite* spriteInstance1_ = nullptr;
 };
 

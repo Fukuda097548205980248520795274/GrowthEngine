@@ -19,22 +19,10 @@ PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance,
 }
 
 /// @brief インスタンスを生成する
+[[nodiscard]]
 PrefabInstanceSprite* PrefabBaseSprite::CreateInstance()
 {
-	std::unique_ptr<PrefabInstanceSprite> instance = std::make_unique<PrefabInstanceSprite>(engine_->GetSpriteDrawCall(handle_), param_);
-	PrefabInstanceSprite* pInstance = instance.get();
-
-	// テーブルに追加
-	instanceTable_.push_back(std::move(instance));
-
-	return pInstance;
-}
-
-/// @brief 描画処理
-void PrefabBaseSprite::Update()
-{
-	// 削除したインスタンスを消す
-	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance) { if (instance->IsDelete()) { return true; }return false; });
+	return engine_->CreateSpriteInstance(handle_);
 }
 
 /// @brief 描画処理

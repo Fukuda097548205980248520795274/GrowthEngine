@@ -23,6 +23,10 @@ void GameScene::Initialize()
 	animationModel_->param_->modelTransform.translate.y = -1.0f;
 
 
+	sprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 100, "TEST");
+	spriteInstance1_ = sprite_->CreateInstance();
+
+
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
 }
@@ -34,11 +38,6 @@ void GameScene::Update()
 
 	model_->param_->animation.timer += 1.0f / 60.0f;
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);
-
-	if (engine_->GetKeyTrigger(DIK_Z))
-	{
-		Transition("Title");
-	}
 }
 
 /// @brief 描画処理

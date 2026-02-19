@@ -65,6 +65,21 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	resource_->Initialize(device, heap, numInstance_, log);
 }
 
+/// @brief 更新処理
+void Engine::PrefabSpriteResource::Update()
+{
+	// 終了したインスタンスを削除する
+	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance)
+		{
+			if (instance->IsDelete()) 
+			{ 
+				return true; 
+			}
+			return false; 
+		}
+	);
+}
+
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
@@ -94,6 +109,23 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(6, useInstance_, 0, 0, 0);
+}
+
+/// @brief インスタンスを作成する
+/// @return 
+PrefabInstanceSprite* Engine::PrefabSpriteResource::CreateInstance()
+{
+	// インスタンスを生成する
+	std::unique_ptr<PrefabInstanceSprite> instance =
+		std::make_unique<PrefabInstanceSprite>([this](const Prefab::Sprite::Instance::Param* param) {InstanceDrawCall(param); }, param_.get());
+
+	// ポインタを保存する
+	PrefabInstanceSprite* pInstance = instance.get();
+
+	// テーブルに追加する
+	instanceTable_.push_back(std::move(instance));
+
+	return pInstance;
 }
 
 /// @brief インスタンスのドローコール
