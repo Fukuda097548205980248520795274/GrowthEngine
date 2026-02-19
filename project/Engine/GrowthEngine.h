@@ -395,7 +395,7 @@ public:
 	void DrawPostEffect(PostEffectHandle hPostEffect)const { return renderContext_->DrawPostEffect(hPostEffect); }
 
 	/// @brief 全てのプレハブインスタンスを削除する
-	void DestroyAllPrefabInstance() const{}
+	void DestroyAllPrefabInstance() const { renderContext_->DestroyAllInstance(); }
 
 
 

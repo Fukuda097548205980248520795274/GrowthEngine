@@ -38,6 +38,16 @@ void GameScene::Update()
 
 	model_->param_->animation.timer += 1.0f / 60.0f;
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);
+
+	if (engine_->GetKeyTrigger(DIK_SPACE))
+	{
+		Transition("Title");
+	}
+
+	if (engine_->GetKeyTrigger(DIK_Z))
+	{
+		spriteInstance1_->Delete();
+	}
 }
 
 /// @brief 描画処理

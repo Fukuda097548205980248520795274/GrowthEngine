@@ -96,5 +96,5 @@ void Engine::PrefabSpriteStore::Reset()
 /// @brief 全てのインスタンスを削除する
 void Engine::PrefabSpriteStore::DestroyAllInstance()
 {
-
+	for (auto& data : dataTable_)data->DestroyAllInstance();
 }

@@ -155,6 +155,9 @@ namespace Engine
 		/// @return 
 		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefab_->CreateSpriteInstance(hPrefabSprite); }
 
+		/// @brief 全てのインスタンスを削除する
+		void DestroyAllInstance() { prefab_->DestroyAllInstance(); }
+
 
 
 

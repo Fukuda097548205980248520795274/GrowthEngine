@@ -64,6 +64,9 @@ namespace Engine
 		/// @return 
 		PrefabInstanceSprite* CreateInstance();
 
+		/// @brief 全てのインスタンスを削除する
+		void DestroyAllInstance() { instanceTable_.clear(); }
+
 		/// @brief リセット
 		void Reset() { useInstance_ = 0; }
 
