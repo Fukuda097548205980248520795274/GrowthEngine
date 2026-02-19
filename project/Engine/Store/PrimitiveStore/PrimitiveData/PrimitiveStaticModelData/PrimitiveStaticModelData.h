@@ -34,7 +34,7 @@ namespace Engine
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore,LightStore* lightStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -48,7 +48,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		/// @param lightStore 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリストに登録
 		/// @param viewProjection 
@@ -92,5 +92,8 @@ namespace Engine
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
+
+		/// @brief ライトストア
+		LightStore* lightStore_ = nullptr;
 	};
 }

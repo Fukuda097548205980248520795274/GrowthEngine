@@ -11,16 +11,18 @@
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, ID3D12Device* device, Log* log)
+void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, LightStore* lightStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(modelStore);
 	assert(textureStore);
+	assert(lightStore);
 	assert(device);
 
 	// 引数を受け取る
 	modelStore_ = modelStore;
 	textureStore_ = textureStore;
+	lightStore_ = lightStore;
 
 
 	// パラメータの生成
@@ -84,7 +86,7 @@ void Engine::PrimitiveStaticModelData::Update()
 /// @param commandList 
 /// @param pso 
 /// @param textureStore 
-void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
+void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -161,10 +163,10 @@ void Engine::PrimitiveStaticModelData::Register(const Matrix4x4& viewProjection,
 		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture));
 
 		// シャドウマップテクスチャの設定
-		lightStore->GetShadowMapTextureResource()->Register(commandList, 3);
+		lightStore_->GetShadowMapTextureResource()->Register(commandList, 3);
 
 		// シャドウ用座標変換の設定
-		lightStore->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 4);
+		lightStore_->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 4);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

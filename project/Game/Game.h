@@ -37,12 +37,5 @@ private:
 	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
 
 	std::unique_ptr<LightDirectional> light_ = nullptr;
-
-	std::unique_ptr<PrefabBaseSprite> sprite_ = nullptr;
-
-	PrefabInstanceSprite* instanceSprite1_ = nullptr;
-	PrefabInstanceSprite* instanceSprite2_ = nullptr;
-
-	std::unique_ptr<PostEffectRadialBlur> radialBlur_ = nullptr;
 };
 

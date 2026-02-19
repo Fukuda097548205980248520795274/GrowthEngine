@@ -46,8 +46,8 @@ namespace Engine
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore,
-			DX12Heap* heap,ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
+			DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -64,7 +64,7 @@ namespace Engine
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリスト
 		/// @param commandList 
@@ -135,5 +135,8 @@ namespace Engine
 
 		/// @brief スケルトンストア
 		SkeletonStore* skeletonStore_ = nullptr;
+
+		/// @brief ライトストア
+		LightStore* lightStore_ = nullptr;
 	};
 }

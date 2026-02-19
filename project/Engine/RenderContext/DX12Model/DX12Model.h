@@ -48,11 +48,11 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle LoadPrimitive(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, 
+		PrimitiveHandle LoadPrimitive(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, LightStore* lightStore,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
 			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
 		{
-			return primitiveStore_->Load(modelStore, textureStore, animationStore, skeletonStore, device,commandList, hModel, hAnimation, hSkeleton, heap, name, type, log);
+			return primitiveStore_->Load(modelStore, textureStore, animationStore, skeletonStore, lightStore, device, commandList, hModel, hAnimation, hSkeleton, heap, name, type, log);
 		}
 
 		/// @brief スプライト読み込み
@@ -71,9 +71,9 @@ namespace Engine
 		/// @brief プリミティブの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitive(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, LightStore* lightStore) 
+		void DrawPrimitive(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle) 
 		{
-			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitive_.get() , lightStore); 
+			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitive_.get());
 		}
 
 		/// @brief スプライトの描画処理

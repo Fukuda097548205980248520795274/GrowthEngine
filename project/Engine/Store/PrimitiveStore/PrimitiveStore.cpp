@@ -72,7 +72,7 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 /// @param type 
 /// @param log 
 /// @return 
-PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
 	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 	DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
 {
@@ -91,7 +91,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::StaticModel)
 	{
 		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
-		data->Initialize(modelStore, textureStore, device, log);
+		data->Initialize(modelStore, textureStore, lightStore, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -100,7 +100,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::AnimationModel)
 	{
 		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
-		data->Initialize(modelStore, textureStore, animationStore, device, log);
+		data->Initialize(modelStore, textureStore, animationStore, lightStore, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -109,7 +109,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::SkinningModel)
 	{
 		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
-		data->Initialize(modelStore, textureStore, animationStore, skeletonStore, heap, device,commandList, log);
+		data->Initialize(modelStore, textureStore, animationStore, skeletonStore, lightStore, heap, device, commandList, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -122,26 +122,26 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 /// @param commandList 
 /// @param handle 
 /// @param meshIndex 
-void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore)
+void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso)
 {
 	// 静的モデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::StaticModel)
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso, lightStore);
+		p->Register(viewProjection, commandList, pso);
 	}
 
 	// アニメーションモデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::AnimationModel)
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso, lightStore);
+		p->Register(viewProjection, commandList, pso);
 	}
 
 	// スキニングモデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::SkinningModel)
 	{
 		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso, lightStore);
+		p->Register(viewProjection, commandList, pso);
 	}
 }

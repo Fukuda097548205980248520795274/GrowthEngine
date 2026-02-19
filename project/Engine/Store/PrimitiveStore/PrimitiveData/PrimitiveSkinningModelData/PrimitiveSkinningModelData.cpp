@@ -15,7 +15,7 @@
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
 	DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 {
 	// nullptrチェック
@@ -23,6 +23,7 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 	assert(textureStore);
 	assert(animationStore);
 	assert(skeletonStore);
+	assert(lightStore);
 	assert(device);
 
 	// 引数を受け取る
@@ -30,6 +31,7 @@ void Engine::PrimitiveSkinningModelData::Initialize(ModelStore* modelStore, Text
 	textureStore_ = textureStore;
 	animationStore_ = animationStore;
 	skeletonStore_ = skeletonStore;
+	lightStore_ = lightStore;
 
 
 	// パラメータの生成
@@ -176,7 +178,7 @@ void Engine::PrimitiveSkinningModelData::Skinning(ID3D12GraphicsCommandList* com
 /// @param commandList 
 /// @param pso 
 /// @param textureStore 
-void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso, LightStore* lightStore)
+void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -258,10 +260,10 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 		commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture));
 
 		// シャドウマップテクスチャの設定
-		lightStore->GetShadowMapTextureResource()->Register(commandList, 3);
+		lightStore_->GetShadowMapTextureResource()->Register(commandList, 3);
 
 		// シャドウ用座標変換の設定
-		lightStore->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 4);
+		lightStore_->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 4);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

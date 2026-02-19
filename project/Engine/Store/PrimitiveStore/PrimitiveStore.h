@@ -51,7 +51,7 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log);
 
@@ -59,7 +59,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param meshIndex 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso, LightStore* lightStore);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

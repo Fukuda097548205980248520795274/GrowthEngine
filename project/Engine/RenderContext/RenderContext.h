@@ -114,7 +114,7 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Primitive::Type type, Log* log)
 		{
-			return model_->LoadPrimitive(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),
+			return model_->LoadPrimitive(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),lightStore_.get(),
 				core_->GetDevice(),commandList_, hModel, hAnimation, hSkeleton, heap_.get(), name, type, log);
 		}
 
@@ -164,7 +164,7 @@ namespace Engine
 		/// @param handle 
 		void DrawPrimitive(PrimitiveHandle handle)
 		{
-			model_->DrawPrimitive(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle, lightStore_.get());
+			model_->DrawPrimitive(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle);
 		}
 
 		/// @brief スプライトの描画処理
