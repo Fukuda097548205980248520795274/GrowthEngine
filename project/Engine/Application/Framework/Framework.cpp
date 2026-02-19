@@ -23,6 +23,9 @@ int32_t Framework::Run()
 	// ゲームループ
 	while (engine->GameLoop())
 	{
+		// 新フレーム処理
+		engine->NewFrame();
+
 		// 更新処理
 		Update();
 

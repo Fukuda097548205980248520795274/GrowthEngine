@@ -345,6 +345,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\SceneManager\SceneManager.cpp" />
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -412,9 +413,9 @@
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectStore.cpp" />
     <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp" />
     <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.cpp" />
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.cpp" />
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp" />
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabStore.cpp" />
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.cpp" />
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.cpp" />
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp" />
     <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp" />
@@ -447,10 +448,12 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Game\GameScene\GameScene.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Game\TitleScene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
@@ -538,6 +541,7 @@
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
     <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\VertexBufferResource.h" />
+    <ClInclude Include="Engine\Application\SceneManager\SceneManager.h" />
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationResource\AnimationResource.h" />
     <ClInclude Include="Engine\Store\AnimationStore\AnimationStore.h" />
@@ -560,9 +564,9 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />
     <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h" />
     <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.h" />
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.h" />
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.h" />
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabStore.h" />
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h" />
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h" />
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h" />
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h" />
@@ -577,6 +581,8 @@
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\GameScene\GameScene.h" />
+    <ClInclude Include="Game\TitleScene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

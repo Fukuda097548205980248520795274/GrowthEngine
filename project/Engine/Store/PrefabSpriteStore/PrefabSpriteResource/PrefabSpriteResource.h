@@ -89,9 +89,6 @@ namespace Engine
 
 	private:
 
-		/// @brief インスタンステーブル
-		std::vector<std::unique_ptr<PrefabInstanceSprite>> instanceTable_;
-
 		// 使用インスタンス数
 		uint32_t useInstance_ = 0;
 

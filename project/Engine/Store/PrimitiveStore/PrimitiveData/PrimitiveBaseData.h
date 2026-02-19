@@ -12,7 +12,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param name 
-		PrimitiveBaseData(const std::string& name) : name_(name){}
+		PrimitiveBaseData(const std::string& name , PrimitiveHandle hPrimitive) : name_(name) , hPrimitive_(hPrimitive){}
 
 		/// @brief 仮想デストラクタ
 		virtual ~PrimitiveBaseData() = default;
@@ -35,15 +35,18 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @return 
 		virtual void* GetParam() = 0;
-		
+
 
 	protected:
 
-		// 名前
-		std::string name_{};
-
 		// 種別名
 		Primitive::Type type_;
+		
+
+	private:
+
+		// 名前
+		std::string name_{};
 
 		// ハンドル
 		PrimitiveHandle hPrimitive_ = 0;

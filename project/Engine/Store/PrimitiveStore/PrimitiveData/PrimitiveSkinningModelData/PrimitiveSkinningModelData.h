@@ -39,7 +39,7 @@ namespace Engine
 		/// @param name 
 		/// @param hModel 
 		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, PrimitiveHandle hPrimitive)
-			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
+			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton),  PrimitiveBaseData(name, hPrimitive) {
 			type_ = Primitive::Type::SkinningModel;
 		}
 
@@ -76,9 +76,6 @@ namespace Engine
 
 		// モデルハンドル
 		ModelHandle hModel_ = 0;
-
-		// プリミティブハンドル
-		PrimitiveHandle hPrimitive_ = 0;
 
 		/// @brief アニメーションハンドル
 		AnimationHandle hAnimation_ = 0;

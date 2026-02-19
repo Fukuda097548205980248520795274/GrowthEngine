@@ -1,8 +1,6 @@
 #pragma once
 #include "GrowthEngine.h"
 
-#include "Application/AudioObject/AudioObject.h"
-
 class Game : public Framework
 {
 public:
@@ -26,16 +24,7 @@ public:
 
 private:
 
-	std::unique_ptr<AudioObject> object_ = nullptr;
-
-	std::unique_ptr<PrimitiveSkinningModel> model_ = nullptr;
-
-	std::unique_ptr<PrimitiveAnimationModel> animationModel_ = nullptr;
-
-	std::unique_ptr<GameCamera2D> gameCamera2D_ = nullptr;
-
-	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
-
-	std::unique_ptr<LightDirectional> light_ = nullptr;
+	/// @brief シーンマネージャ
+	std::unique_ptr<SceneManager> sceneManager_ = nullptr;
 };
 

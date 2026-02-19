@@ -30,7 +30,7 @@ namespace Engine
 		/// @param name 
 		/// @param hModel 
 		PrimitiveAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, PrimitiveHandle hPrimitive)
-			: hModel_(hModel),hAnimation_(hAnimation), hPrimitive_(hPrimitive), PrimitiveBaseData(name) {
+			: hModel_(hModel),hAnimation_(hAnimation), PrimitiveBaseData(name, hPrimitive) {
 			type_ = Primitive::Type::AnimationModel;
 		}
 
@@ -63,9 +63,6 @@ namespace Engine
 
 		// モデルハンドル
 		ModelHandle hModel_ = 0;
-
-		// プリミティブハンドル
-		PrimitiveHandle hPrimitive_ = 0;
 
 		/// @brief アニメーションハンドル
 		AnimationHandle hAnimation_ = 0;

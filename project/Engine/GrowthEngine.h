@@ -29,6 +29,11 @@
 
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
 
+#include "Application/AudioObject/AudioObject.h"
+
+#include "Application/Scene/Scene.h"
+#include "Application/SceneManager/SceneManager.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -65,6 +70,9 @@ public:
 	/// @brief ゲームループ
 	/// @return 
 	bool GameLoop() { return winApp_->ProcessMessage(); }
+
+	/// @brief 新フレーム処理
+	void NewFrame();
 
 	/// @brief 描画前処理
 	void PreDraw();
@@ -387,6 +395,9 @@ public:
 	/// @brief ポストエフェクトを描画する
 	/// @param hPostEffect 
 	void DrawPostEffect(PostEffectHandle hPostEffect)const { return renderContext_->DrawPostEffect(hPostEffect); }
+
+	/// @brief 全てのプレハブインスタンスを削除する
+	void DestroyAllPrefabInstance() const{}
 
 
 

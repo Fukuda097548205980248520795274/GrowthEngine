@@ -1,19 +1,23 @@
 #pragma once
 #include "Handle/Handle.h"
+#include "Data/PrefabData/PrefabData.h"
 #include <string>
 
 namespace Engine
 {
-	class PrefabBaseData
+	class PrefabPrimitiveBaseData
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
-		PrefabBaseData(const std::string& name) : name_(name) {}
+		/// @param numInstance 
+		/// @param hPrefab 
+		PrefabPrimitiveBaseData(const std::string& name , uint32_t numInstance , PrefabPrimitiveHandle hPrefab) 
+			: name_(name), numInstance_(numInstance),hPrefab_(hPrefab) {}
 
 		/// @brief 仮想デストラクタ
-		virtual ~PrefabBaseData() = default;
+		virtual ~PrefabPrimitiveBaseData() = default;
 
 		/// @brief 更新処理
 		virtual void Update() = 0;
@@ -22,9 +26,9 @@ namespace Engine
 		/// @return 
 		std::string GetName()const { return name_; }
 
-		/// @brief 種別名を取得する
+		/// @brief 種類を取得する
 		/// @return 
-		std::string GetTypeName()const { return typeName_; }
+		Prefab::Type GetTypeName()const { return type_; }
 
 		/// @brief ハンドルを取得する
 		/// @return 
@@ -40,8 +44,8 @@ namespace Engine
 		// 名前
 		std::string name_{};
 
-		// 種別名
-		std::string typeName_{};
+		// 種類
+		Prefab::Type type_{};
 
 		// ハンドル
 		PrefabPrimitiveHandle hPrefab_ = 0;

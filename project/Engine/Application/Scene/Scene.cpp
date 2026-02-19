@@ -1,25 +1,17 @@
 #include "Scene.h"
+#include "GrowthEngine.h"
 
 /// @brief コンストラクタ
-Scene::Scene()
+/// @param sceneManager 
+Scene::Scene(SceneManager* sceneManager) : sceneManager_(sceneManager)
 {
-	
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
 }
 
-/// @brief 初期化
-void Scene::Initialize()
+/// @brief シーン遷移する
+/// @param sceneName 
+void Scene::Transition(const std::string& sceneName)
 {
-	
-}
-
-/// @brief 更新処理
-void Scene::Update()
-{
-
-}
-
-/// @brief 描画処理
-void Scene::Draw()
-{
-
+	sceneManager_->Transition(sceneName);
 }

@@ -111,8 +111,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 #endif
 }
 
-/// @brief 描画前処理
-void Engine::RenderContext::PreDraw()
+/// @brief 新フレーム処理
+void Engine::RenderContext::NewFrame()
 {
 #ifdef _DEVELOPMENT
 	// フレームの開始をImGuiに伝える
@@ -130,6 +130,21 @@ void Engine::RenderContext::PreDraw()
 	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
+#ifdef _DEVELOPMENT
+	// Dockスペースを作成する
+	imguiRender_->CreateDockSpace();
+	ImGui::ShowDemoWindow();
+
+	// テクスチャストアのUI
+	textureStore_->DrawUI();
+#endif 
+}
+
+/// @brief 描画前処理
+void Engine::RenderContext::PreDraw()
+{
+	// コマンドリストの取得
+	commandList_ = command_->GetCommandList();
 
 	// モデル全体の更新
 	model_->Update(commandList_);
@@ -148,15 +163,6 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
-
-#ifdef _DEVELOPMENT
-	// Dockスペースを作成する
-	imguiRender_->CreateDockSpace();
-	ImGui::ShowDemoWindow();
-
-	// テクスチャストアのUI
-	textureStore_->DrawUI();
-#endif 
 }
 
 /// @brief 描画後処理

@@ -116,9 +116,8 @@ GrowthEngine::~GrowthEngine()
 	CoUninitialize();
 }
 
-
-/// @brief 描画前処理
-void GrowthEngine::PreDraw() 
+/// @brief 新フレーム処理
+void GrowthEngine::NewFrame()
 {
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();
@@ -126,6 +125,13 @@ void GrowthEngine::PreDraw()
 	// 流れていない音楽を削除する
 	audioStore_->DeletePlayAudio();
 
+	// 新フレーム処理
+	renderContext_->NewFrame();
+}
+
+/// @brief 描画前処理
+void GrowthEngine::PreDraw() 
+{
 	// 描画前処理
 	renderContext_->PreDraw();
 

@@ -33,6 +33,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(WinApp* winApp, Log* log);
 
+		/// @brief 新フレーム処理
+		void NewFrame();
+
 		/// @brief 描画前処理
 		void PreDraw();
 

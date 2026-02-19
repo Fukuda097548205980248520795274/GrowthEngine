@@ -331,15 +331,6 @@
     <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
       <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\PrefabStore">
-      <UniqueIdentifier>{8d47ca41-2531-442a-b87d-06683851805c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabStore\PrefabData">
-      <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData">
-      <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Data\PrefabData">
       <UniqueIdentifier>{3527835c-37e0-4dc7-a41c-367d169b9ac6}</UniqueIdentifier>
     </Filter>
@@ -465,6 +456,24 @@
     </Filter>
     <Filter Include="Engine\Include\Application\PostEffect\PostEffectRadialBlur">
       <UniqueIdentifier>{e48f281a-7be3-4b31-bae1-6f5e4f1dd82e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore">
+      <UniqueIdentifier>{8d47ca41-2531-442a-b87d-06683851805c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData">
+      <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData">
+      <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameScene">
+      <UniqueIdentifier>{20ad2d6e-d1e4-4bc1-b05b-90791888966f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\SceneManager">
+      <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\TitleScene">
+      <UniqueIdentifier>{704dc3cf-1093-4345-9eab-075014f0bb8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -702,14 +711,14 @@
     <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp">
       <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabStore.cpp">
-      <Filter>Engine\Include\Store\PrefabStore</Filter>
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.cpp">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.cpp">
-      <Filter>Engine\Include\Store\PrefabStore\PrefabData</Filter>
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.cpp">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.cpp">
-      <Filter>Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData</Filter>
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.cpp">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
       <Filter>Engine\Include\Store\SkyboxStore</Filter>
@@ -770,6 +779,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameScene\GameScene.cpp">
+      <Filter>Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\SceneManager\SceneManager.cpp">
+      <Filter>Engine\Include\Application\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\TitleScene\TitleScene.cpp">
+      <Filter>Game\TitleScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1052,14 +1070,14 @@
     <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
       <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabStore.h">
-      <Filter>Engine\Include\Store\PrefabStore</Filter>
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabBaseData.h">
-      <Filter>Engine\Include\Store\PrefabStore\PrefabData</Filter>
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabStore\PrefabData\PrefabStaticModelData\PrefabStaticModelData.h">
-      <Filter>Engine\Include\Store\PrefabStore\PrefabData\PrefabStaticModelData</Filter>
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\PrefabData\PrefabData.h">
       <Filter>Engine\Include\Data\PrefabData</Filter>
@@ -1144,6 +1162,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h">
       <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameScene\GameScene.h">
+      <Filter>Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\SceneManager\SceneManager.h">
+      <Filter>Engine\Include\Application\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\TitleScene\TitleScene.h">
+      <Filter>Game\TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

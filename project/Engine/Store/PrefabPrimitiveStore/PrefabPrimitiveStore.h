@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-	class PrefabStore
+	class PrefabPrimitiveStore
 	{
 	public:
 
