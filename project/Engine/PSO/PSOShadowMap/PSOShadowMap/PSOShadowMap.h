@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PSOShadowMapPrimitive : public BasePSOShadowMap
+	class PSOShadowMap : public BasePSOShadowMap
 	{
 	public:
 

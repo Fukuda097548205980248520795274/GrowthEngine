@@ -1,4 +1,4 @@
-#include "PSOShadowMapPrimitive.h"
+#include "PSOShadowMap.h"
 #include <cassert>
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "Log/Log.h"
@@ -7,10 +7,10 @@
 /// @param device 
 /// @param compiler 
 /// @param log 
-void Engine::PSOShadowMapPrimitive::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
+void Engine::PSOShadowMap::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
 {
 	// 頂点シェーダを読み込む
-	vertexShaderBlob_ = compiler->Compile(L"./Assets/Shader/ShadowMap/ShadowMapPrimitive.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob_ = compiler->Compile(L"./Assets/Shader/ShadowMap/ShadowMap.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob_ != nullptr);
 
 

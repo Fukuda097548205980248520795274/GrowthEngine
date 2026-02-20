@@ -289,9 +289,6 @@
     <Filter Include="Engine\Include\PSO\PSOShadowMap">
       <UniqueIdentifier>{64d206c3-31ba-4d2c-a3f5-deb1d202fd5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive">
-      <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\LightCulling">
       <UniqueIdentifier>{6092de8f-1c78-440f-b0fb-ebd04ceb732b}</UniqueIdentifier>
     </Filter>
@@ -474,6 +471,9 @@
     </Filter>
     <Filter Include="Game\TitleScene">
       <UniqueIdentifier>{704dc3cf-1093-4345-9eab-075014f0bb8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMap">
+      <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -687,8 +687,8 @@
     <ClCompile Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.cpp">
-      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
+    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMap\PSOShadowMap.cpp">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMap</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
@@ -1031,8 +1031,8 @@
     <ClInclude Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.h">
       <Filter>Engine\Include\PSO\PSOShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrimitive\PSOShadowMapPrimitive.h">
-      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrimitive</Filter>
+    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMap\PSOShadowMap.h">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMap</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
@@ -1203,7 +1203,7 @@
     <FxCompile Include="Assets\Shader\Primitive\Primitive.PS.hlsl">
       <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapPrimitive.VS.hlsl">
+    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMap.VS.hlsl">
       <Filter>Engine\Shader\ShadowMap</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\LightCulling\LightCulling.CS.hlsl">
