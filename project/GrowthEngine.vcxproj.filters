@@ -475,6 +475,15 @@
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMap">
       <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab">
+      <UniqueIdentifier>{d86e0a75-7686-49ef-94e3-812802ec9be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\PrefabPrimitive">
+      <UniqueIdentifier>{3d18328b-f358-440c-9c47-231520a037bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrefabPrimitive">
+      <UniqueIdentifier>{f372803e-0dff-4e80-b30e-6cb3a6bf9c34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -788,6 +797,12 @@
     </ClCompile>
     <ClCompile Include="Game\TitleScene\TitleScene.cpp">
       <Filter>Game\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.cpp">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefabPrimitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1172,6 +1187,12 @@
     <ClInclude Include="Game\TitleScene\TitleScene.h">
       <Filter>Game\TitleScene</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.h">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefabPrimitive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -1185,6 +1206,9 @@
     </None>
     <None Include="Assets\Shader\PrefabSprite\PrefabSprite.hlsli">
       <Filter>Engine\Shader\PrefabSprite</Filter>
+    </None>
+    <None Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.hlsli">
+      <Filter>Engine\Shader\PrefabPrimitive</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1223,6 +1247,15 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\RadialBlur.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapPrefab.VS.hlsl">
+      <Filter>Engine\Shader\ShadowMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.VS.hlsl">
+      <Filter>Engine\Shader\PrefabPrimitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.PS.hlsl">
+      <Filter>Engine\Shader\PrefabPrimitive</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

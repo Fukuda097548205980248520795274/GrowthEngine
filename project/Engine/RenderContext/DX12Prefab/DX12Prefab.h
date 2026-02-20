@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "PSO/PSOModel/PSOPrefabSprite/PSOPrefabSprite.h"
+#include "PSO/PSOModel/PSOPrefabPrimitive/PSOPrefabPrimitive.h"
 #include "Store/PrefabSpriteStore/PrefabSpriteStore.h"
 
 namespace Engine
@@ -64,6 +65,13 @@ namespace Engine
 
 	private:
 
+		// プリミティブ用プレハブ頂点シェーダ
+		ComPtr<IDxcBlob> primitivePrefabVS_ = nullptr;
+
+		// プリミティブ用プレハブピクセルシェーダ
+		ComPtr<IDxcBlob> primitivePrefabPS_ = nullptr;
+
+
 		// スプライト用プレハブ頂点シェーダ
 		ComPtr<IDxcBlob> spritePrefabVS_ = nullptr;
 
@@ -72,6 +80,9 @@ namespace Engine
 
 
 	private:
+
+		/// @brief プリミティブ用プレハブPSO
+		std::unique_ptr<PSOPrefabPrimitive> psoPrefabPrimitive_ = nullptr;
 
 		/// @brief スプライト用プレハブPSO
 		std::unique_ptr<PSOPrefabSprite> psoPrefabSprite_ = nullptr;

@@ -18,6 +18,15 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	prefabSpriteStore_->Initialize(device, log);
 
 
+	// プリミティブ用プレハブ頂点シェーダ
+	primitivePrefabVS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.VS.hlsl", L"vs_6_0");
+	assert(primitivePrefabVS_);
+
+	// プリミティブ用プレハブピクセルシェーダ
+	primitivePrefabPS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.PS.hlsl", L"ps_6_0");
+	assert(primitivePrefabPS_);
+
+
 	// スプライト用プレハブ頂点シェーダ
 	spritePrefabVS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.VS.hlsl", L"vs_6_0");
 	assert(spritePrefabVS_);
@@ -26,6 +35,10 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	spritePrefabPS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.PS.hlsl", L"ps_6_0");
 	assert(spritePrefabPS_);
 
+
+	// プリミティブ用プレハブPSO
+	psoPrefabPrimitive_ = std::make_unique<PSOPrefabPrimitive>();
+	psoPrefabPrimitive_->Initialize(device, primitivePrefabVS_.Get(), primitivePrefabPS_.Get(), log);
 
 	// スプライト用プレハブPSO
 	psoPrefabSprite_ = std::make_unique<PSOPrefabSprite>();

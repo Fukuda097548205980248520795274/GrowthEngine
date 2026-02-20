@@ -20,6 +20,10 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	psoShadowMap_ = std::make_unique<PSOShadowMap>();
 	psoShadowMap_->Initialize(device, compiler, log);
 
+	// プレハブ用シャドウマップPSOの生成と初期化
+	psoShadowMapPrefab_ = std::make_unique<PSOShadowMapPrefab>();
+	psoShadowMapPrefab_->Initialize(device, compiler, log);
+
 
 	// 座標変換用シャドウマップリソース
 	shadowMapTransformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();

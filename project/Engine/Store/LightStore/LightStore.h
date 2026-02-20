@@ -11,6 +11,7 @@
 #include "Application/Light/LightDirectional/LightDirectional.h"
 
 #include "PSO/PSOShadowMap/PSOShadowMap/PSOShadowMap.h"
+#include "PSO/PSOShadowMap/PSOShadowMapPrefab/PSOShadowMapPrefab.h"
 #include "PSO/ComputePSO/ComputePSOLightCulling/ComputePSOLightCulling.h"
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
@@ -76,6 +77,9 @@ namespace Engine
 
 		// シャドウマップPSO
 		std::unique_ptr<PSOShadowMap> psoShadowMap_ = nullptr;
+
+		/// @brief プレハブ用シャドウマップPSO
+		std::unique_ptr<PSOShadowMapPrefab> psoShadowMapPrefab_ = nullptr;
 		
 		// ライトカリングPSO
 		std::unique_ptr<ComputePSOLightCulling> psoLightCulling_ = nullptr;
