@@ -117,8 +117,7 @@ namespace Engine
 		/// @return 
 		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Primitive::Type type, Log* log)
 		{
-			return model_->LoadPrimitive(modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(),lightStore_.get(),
-				core_->GetDevice(),commandList_, hModel, hAnimation, hSkeleton, heap_.get(), name, type, log);
+			return model_->LoadPrimitive(core_->GetDevice(), commandList_, hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
 		/// @brief スプライト読み込み

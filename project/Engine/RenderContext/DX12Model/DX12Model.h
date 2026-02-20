@@ -21,8 +21,15 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param shaderCompiler 
+		/// @param heap 
+		/// @param modelStore 
+		/// @param textureStore 
+		/// @param animationStore 
+		/// @param skeletonStore 
+		/// @param lightStore 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, Log* log);
+		void Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, DX12Heap* heap,
+			ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log);
 
 		/// @brief 更新処理
 		/// @param viewProjection 
@@ -39,20 +46,20 @@ namespace Engine
 		template<typename T>
 		T* GetParam(PrimitiveHandle handle) { return primitiveStore_->GetParam<T>(handle); }
 
-		/// @brief プリミティブ読み込み
-		/// @param modelStore 
-		/// @param textureStore 
+		/// @brief プリミティブを読み込む
 		/// @param device 
+		/// @param commandList 
 		/// @param hModel 
+		/// @param hAnimation 
+		/// @param hSkeleton 
 		/// @param name 
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle LoadPrimitive(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore,SkeletonStore* skeletonStore, LightStore* lightStore,
-			ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
+		PrimitiveHandle LoadPrimitive(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton,
+			const std::string& name, Primitive::Type type, Log* log)
 		{
-			return primitiveStore_->Load(modelStore, textureStore, animationStore, skeletonStore, lightStore, device, commandList, hModel, hAnimation, hSkeleton, heap, name, type, log);
+			return primitiveStore_->Load(device, commandList, hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
 		/// @brief スプライト読み込み

@@ -7,8 +7,27 @@
 /// @param device 
 /// @param compiler 
 /// @param log 
-void Engine::PrimitiveStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
+void Engine::PrimitiveStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log)
 {
+	// nullptrチェック
+	assert(device);
+	assert(compiler);
+	assert(heap);
+	assert(modelStore);
+	assert(textureStore);
+	assert(animationStore);
+	assert(skeletonStore);
+	assert(lightStore);
+
+	// 引数を受け取る
+	heap_ = heap;
+	modelStore_ = modelStore;
+	textureStore_ = textureStore;
+	animationStore_ = animationStore;
+	skeletonStore_ = skeletonStore;
+	lightStore_ = lightStore;
+
 	// スキニングPSOの生成と初期化
 	psoSkinning_ = std::make_unique<ComputePSOSkinning>();
 	psoSkinning_->Initialize(device, compiler, log);
@@ -72,9 +91,8 @@ void Engine::PrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D
 /// @param type 
 /// @param log 
 /// @return 
-PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
-	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-	DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log)
+PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, 
+	ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,const std::string& name, Primitive::Type type, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -91,7 +109,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::StaticModel)
 	{
 		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
-		data->Initialize(modelStore, textureStore, lightStore, device, log);
+		data->Initialize(modelStore_, textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -100,7 +118,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::AnimationModel)
 	{
 		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
-		data->Initialize(modelStore, textureStore, animationStore, lightStore, device, log);
+		data->Initialize(modelStore_, textureStore_, animationStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
@@ -109,7 +127,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ModelStore* modelStore, TextureStor
 	if (type == Primitive::Type::SkinningModel)
 	{
 		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
-		data->Initialize(modelStore, textureStore, animationStore, skeletonStore, lightStore, heap, device, commandList, log);
+		data->Initialize(modelStore_, textureStore_, animationStore_, skeletonStore_, lightStore_, heap_, device, commandList, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

@@ -58,14 +58,6 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	offscreen_ = std::make_unique<DX12Offscreen>();
 	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
 
-	// DX12Modelの生成と初期化
-	model_ = std::make_unique<DX12Model>();
-	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
-
-	// DX12Prefabの生成と初期化
-	prefab_ = std::make_unique<DX12Prefab>();
-	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
-
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
 
@@ -88,6 +80,14 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	lightStore_ = std::make_unique<LightStore>();
 	lightStore_->Initialize(core_->GetDevice(), commandList_, heap_.get(), shaderCompiler_.get(), log);
 
+	// DX12Modelの生成と初期化
+	model_ = std::make_unique<DX12Model>();
+	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), log);
+
+	// DX12Prefabの生成と初期化
+	prefab_ = std::make_unique<DX12Prefab>();
+	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp->GetClientWidth());

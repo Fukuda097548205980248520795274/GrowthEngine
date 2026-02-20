@@ -5,7 +5,8 @@
 /// @brief 初期化
 /// @param device 
 /// @param shaderCompiler 
-void Engine::DX12Model::Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, Log* log)
+void Engine::DX12Model::Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, DX12Heap* heap,
+	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -14,7 +15,7 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ShaderCompiler* shaderC
 
 	// プリミティブストアの生成と初期化
 	primitiveStore_ = std::make_unique<PrimitiveStore>();
-	primitiveStore_->Initialize(device, shaderCompiler, log);
+	primitiveStore_->Initialize(device, shaderCompiler, heap, modelStore, textureStore, animationStore, skeletonStore, lightStore, log);
 
 	// スプライトストアの生成と初期化
 	spriteStore_ = std::make_unique<SpriteStore>();

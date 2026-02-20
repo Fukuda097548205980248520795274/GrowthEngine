@@ -31,8 +31,15 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param compiler 
+		/// @param heap 
+		/// @param modelStore 
+		/// @param textureStore 
+		/// @param animationStore 
+		/// @param skeletonStore 
+		/// @param lightStore 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log);
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+			ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log);
 
 		/// @brief 更新処理
 		void Update(ID3D12GraphicsCommandList* commandList);
@@ -43,17 +50,17 @@ namespace Engine
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 		/// @brief プリミティブを読み込む
-		/// @param modelStore 
-		/// @param textureStore 
 		/// @param device 
+		/// @param commandList 
 		/// @param hModel 
+		/// @param hAnimation 
+		/// @param hSkeleton 
 		/// @param name 
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle Load(ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore,
-			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-			DX12Heap* heap, const std::string& name, Primitive::Type type, Log* log);
+		PrimitiveHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+			const std::string& name, Primitive::Type type, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -75,12 +82,32 @@ namespace Engine
 
 	private:
 
-
 		// データテーブル
 		std::vector<std::unique_ptr<PrimitiveBaseData>> dataTable_;
 
 		
 		// スキニングPSO
 		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
+
+
+	private:
+
+		/// @brief ヒープ
+		DX12Heap* heap_ = nullptr;
+
+		/// @brief モデルストア
+		ModelStore* modelStore_ = nullptr;
+
+		/// @brief テクスチャストア
+		TextureStore* textureStore_ = nullptr;
+
+		/// @brief アニメーションストア
+		AnimationStore* animationStore_ = nullptr;
+
+		/// @brief スケルトンストア
+		SkeletonStore* skeletonStore_ = nullptr;
+
+		/// @brief ライトストア
+		LightStore* lightStore_ = nullptr;
 	};
 }
