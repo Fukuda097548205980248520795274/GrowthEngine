@@ -21,5 +21,23 @@ namespace Engine
 			// アンカーポイント
 			Vector2 anchor;
 		};
+
+		struct PrimitiveDataForGPU
+		{
+			// WVP行列
+			Matrix4x4 worldViewProjection;
+
+			// ワールド行列
+			Matrix4x4 world;
+
+			// ワールド逆転置行列
+			Matrix4x4 worldInverseTranspose;
+
+			// 色
+			Vector4 color;
+
+			// UVトランスフォーム
+			Matrix4x4 uvTransform;
+		};
 	}
 }

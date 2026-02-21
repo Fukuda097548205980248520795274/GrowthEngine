@@ -2,11 +2,13 @@
 #include "../PrefabPrimitiveBaseData.h"
 
 #include <memory>
+#include <list>
 #include "Handle/Handle.h"
 #include "Resource/StructuredBufferResource/StructuredBufferResource.h"
-#include "Resource/VertexBufferResource/VertexBufferResource.h"
 #include "Data/ModelData/ModelData.h"
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
+
+#include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
 
 namespace Engine
 {
@@ -38,14 +40,54 @@ namespace Engine
 		void Initialize(ModelStore* modelStore, TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
 			DX12Heap* heap, ID3D12Device* device, Log* log);
 
+		/// @brief 更新処理
+		void Update() override;
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param pso 
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
+
+		/// @brief シャドウマップを描画する
+		/// @param viewProjection 
+		/// @param commandList 
+		/// @param pso 
+		void DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
+
+		/// @brief パラメータを取得する
+		/// @return 
+		void* GetParam() override { return param_.get(); }
+
+		/// @brief インスタンスを生成する
+		/// @return 
+		void* CreateInstance() override;
+
+		/// @brief 全てのインスタンスを削除する
+		void DestroyAllInstance() override;
+
 
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<Prefab::StaticModel::Param> param_ = nullptr;
+		std::unique_ptr<Prefab::StaticModel::Base::Param> param_ = nullptr;
 
 		/// @brief モデルハンドル
 		ModelHandle hModel_ = 0;
+
+		/// @brief インスタンスのドローコール
+		void DrawCallInstance(const Engine::Prefab::StaticModel::Instance::Param* param);
+
+		/// @brief インスタンステーブル
+		std::list<std::unique_ptr<PrefabInstanceStaticModel>> instanceTable_;
+
+
+	private:
+
+		/// @brief プリミティブリソース
+		std::vector<std::unique_ptr<StructuredBufferResource<Prefab::PrimitiveDataForGPU>>> primitiveResource_;
+
+		/// @brief シャドウマップ座標変換用リソース
+		std::vector<std::unique_ptr<StructuredBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
 
 
 	private:

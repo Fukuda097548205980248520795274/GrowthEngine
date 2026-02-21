@@ -484,6 +484,12 @@
     <Filter Include="Engine\Include\PSO\PSOModel\PSOPrefabPrimitive">
       <UniqueIdentifier>{f372803e-0dff-4e80-b30e-6cb3a6bf9c34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel">
+      <UniqueIdentifier>{6e4136c7-9aef-4244-b722-7cabfd819b1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseStaticModel">
+      <UniqueIdentifier>{437a42e9-b027-45bf-a2a6-2f19e2f3ddeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -803,6 +809,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabPrimitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.cpp">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseStaticModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1192,6 +1204,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabPrimitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.h">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseStaticModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

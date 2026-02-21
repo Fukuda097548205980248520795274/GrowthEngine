@@ -23,6 +23,7 @@ namespace Engine
 	class Log;
 	class ShaderCompiler;
 	class DX12Model;
+	class DX12Prefab;
 
 	class LightStore
 	{
@@ -45,7 +46,10 @@ namespace Engine
 
 		/// @brief 更新処理
 		/// @param commandList 
-		void Update(ID3D12GraphicsCommandList* commandList, DX12Model* model, const Matrix4x4& projectionMatrix);
+		/// @param model 
+		/// @param prefab 
+		/// @param projectionMatrix 
+		void Update(ID3D12GraphicsCommandList* commandList, DX12Model* model, DX12Prefab* prefab, const Matrix4x4& projectionMatrix);
 
 		/// @brief シャドウマップ用座標変換リソースを取得する
 		/// @return 

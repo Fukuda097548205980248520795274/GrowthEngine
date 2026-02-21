@@ -87,7 +87,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Prefabの生成と初期化
 	prefab_ = std::make_unique<DX12Prefab>();
-	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), log);
+	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), camera3DStore_.get(), log);
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp->GetClientWidth());
@@ -157,7 +158,7 @@ void Engine::RenderContext::PreDraw()
 	camera2DStore_->Update();
 
 	// ライトストアの更新
-	lightStore_->Update(commandList_, model_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+	lightStore_->Update(commandList_, model_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);

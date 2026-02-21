@@ -27,6 +27,9 @@
 #include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
 #include "Application/PrefabBase/PrefabBaseSprite/PrefabBaseSprite.h"
 
+#include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
+#include "Application/PrefabBase/PrefabBaseStaticModel/PrefabBaseStaticModel.h"
+
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
 
 #include "Application/AudioObject/AudioObject.h"
@@ -359,6 +362,20 @@ public:
 
 
 
+	/// @brief プリミティブ用prefabの読み込み
+	/// @param name 
+	/// @param type 
+	/// @param numInstance 
+	/// @param hModel 
+	/// @param hAnimation 
+	/// @param hSkeleton 
+	/// @return 
+	PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab::Type type,
+		uint32_t numInstance, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton) const
+	{
+		return renderContext_->LoadPrefabPrimitive(name, type, numInstance, hModel, hAnimation, hSkeleton, log_.get());
+	}
+
 	/// @brief プレハブスプライトの読み込み
 	/// @param name 
 	/// @param numInstance 
@@ -369,13 +386,27 @@ public:
 		return renderContext_->LoadPrefabSprite(name, hTexture, numInstance, log_.get());
 	}
 
+
+	/// @brief プリミティブ用プレハブを描画する
+	/// @param hPrefabPrimitive 
+	void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive)const { renderContext_->DrawPrefabPrimitive(hPrefabPrimitive); }
+
 	/// @brief コマンドリストに登録する
 	/// @param hSprite 
 	void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite)const { renderContext_->DrawPrefabSprite(hPrefabSprite); }
 
+
 	/// @brief スプライト用プレハブのパラメータを取得する
 	/// @return 
 	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite)const { return renderContext_->GetPrefabSpriteParam(hPrefabSprite); }
+
+
+	/// @brief プリミティブ用インスタンスを作成する
+	/// @tparam T 
+	/// @param hPrefabPrimitive 
+	/// @return 
+	template<typename T>
+	T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive)const { return renderContext_->CreatePrimitiveInstance<T>(hPrefabPrimitive); }
 
 	/// @brief インスタンスを作成する
 	/// @param hPrefabSprite 

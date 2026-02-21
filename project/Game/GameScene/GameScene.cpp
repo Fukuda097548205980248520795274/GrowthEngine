@@ -23,8 +23,11 @@ void GameScene::Initialize()
 	animationModel_->param_->modelTransform.translate.y = -1.0f;
 
 
-	sprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 100, "TEST");
-	spriteInstance1_ = sprite_->CreateInstance();
+	modelPrefab_ = std::make_unique<PrefabBaseStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/plane", "plame.obj"), 100, "TEST");
+	instance1_ = modelPrefab_->CreateInstance();
+	instance2_ = modelPrefab_->CreateInstance();
+	instance1_->param_.modelTransform.translate.y = -1.0f;
+	instance2_->param_.modelTransform.translate.y = -2.0f;
 
 
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
@@ -43,11 +46,6 @@ void GameScene::Update()
 	{
 		Transition("Title");
 	}
-
-	if (engine_->GetKeyTrigger(DIK_Z))
-	{
-		spriteInstance1_->Delete();
-	}
 }
 
 /// @brief 描画処理
@@ -56,4 +54,8 @@ void GameScene::Draw()
 	model_->Draw();
 
 	animationModel_->Draw();
+
+	instance1_->Draw();
+	instance2_->Draw();
+	modelPrefab_->Draw();
 }

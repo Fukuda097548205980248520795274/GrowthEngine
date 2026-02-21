@@ -4,35 +4,55 @@
 
 /// @brief 初期化
 /// @param device 
-/// @param shaderCompiler 
+/// @param compiler 
+/// @param heap 
+/// @param modelStore 
+/// @param textureStore 
+/// @param animationStore 
+/// @param skeletonStore 
+/// @param lightStore 
+/// @param cameraStore 
 /// @param log 
-void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, Log* log)
+void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
+	LightStore* lightStore, Camera3DStore* cameraStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
-	assert(shaderCompiler);
+	assert(compiler);
+	assert(heap);
+	assert(modelStore);
+	assert(textureStore);
+	assert(animationStore);
+	assert(skeletonStore);
+	assert(lightStore);
+	assert(cameraStore);
 
 
-	// プレハブ用スプライトストアの生成
+	// プリミティブ用プレハブストアの生成
+	prefabPrimitiveStore_ = std::make_unique<PrefabPrimitiveStore>();
+	prefabPrimitiveStore_->Initialize(device, compiler, heap, modelStore, textureStore, animationStore, skeletonStore, lightStore, cameraStore, log);
+
+	// スプライト用プレハブストアの生成
 	prefabSpriteStore_ = std::make_unique<PrefabSpriteStore>();
 	prefabSpriteStore_->Initialize(device, log);
 
 
 	// プリミティブ用プレハブ頂点シェーダ
-	primitivePrefabVS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.VS.hlsl", L"vs_6_0");
+	primitivePrefabVS_ = compiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.VS.hlsl", L"vs_6_0");
 	assert(primitivePrefabVS_);
 
 	// プリミティブ用プレハブピクセルシェーダ
-	primitivePrefabPS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.PS.hlsl", L"ps_6_0");
+	primitivePrefabPS_ = compiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.PS.hlsl", L"ps_6_0");
 	assert(primitivePrefabPS_);
 
 
 	// スプライト用プレハブ頂点シェーダ
-	spritePrefabVS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.VS.hlsl", L"vs_6_0");
+	spritePrefabVS_ = compiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.VS.hlsl", L"vs_6_0");
 	assert(spritePrefabVS_);
 
 	// スプライト用プレハブピクセルシェーダ
-	spritePrefabPS_ = shaderCompiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.PS.hlsl", L"ps_6_0");
+	spritePrefabPS_ = compiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.PS.hlsl", L"ps_6_0");
 	assert(spritePrefabPS_);
 
 
@@ -49,11 +69,29 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* shader
 void Engine::DX12Prefab::Update()
 {
 	// 更新
+	prefabPrimitiveStore_->Update();
 	prefabSpriteStore_->Update();
+}
+
+/// @brief シャドウマップの描画処理
+/// @param viewProjection 
+/// @param commandList 
+/// @param pso 
+void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+{
+	prefabPrimitiveStore_->ShadowMapDraw(viewProjection, commandList, pso);
+}
+
+/// @brief 全てのインスタンスを削除する
+void Engine::DX12Prefab::DestroyAllInstance()
+{
+	prefabPrimitiveStore_->DestroyAllInstance();
+	prefabSpriteStore_->DestroyAllInstance();
 }
 
 /// @brief リセット
 void Engine::DX12Prefab::Reset()
 {
+	prefabPrimitiveStore_->Reset();
 	prefabSpriteStore_->Reset();
 }

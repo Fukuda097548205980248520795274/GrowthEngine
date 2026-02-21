@@ -33,9 +33,6 @@ private:
 	// エンジン
 	const GrowthEngine* engine_ = nullptr;
 
-	// インスタンス数
-	uint32_t numInstance_ = 0;
-
 	// 名前
 	std::string name_{};
 

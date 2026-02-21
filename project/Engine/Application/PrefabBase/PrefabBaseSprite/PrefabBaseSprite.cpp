@@ -5,8 +5,7 @@
 /// @param hTexture 
 /// @param numInstance 
 /// @param name 
-PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance, const std::string& name)
-	: numInstance_(numInstance), name_(name)
+PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance, const std::string& name) : name_(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();

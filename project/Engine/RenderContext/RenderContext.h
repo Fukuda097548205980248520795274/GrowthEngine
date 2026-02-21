@@ -130,8 +130,24 @@ namespace Engine
 			return model_->LoadSprite(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
 		}
 
-		/// @brief プレハブスプライトを読み込む
+		/// @brief プリミティブ用プレハブを読み込む
 		/// @param name 
+		/// @param type 
+		/// @param numInstance 
+		/// @param hModel 
+		/// @param hAnimation 
+		/// @param hSkeleton 
+		/// @param log 
+		/// @return 
+		PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Prefab::Type type,
+			uint32_t numInstance, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, Log* log)
+		{
+			return prefab_->LoadPrimitive(name, type, numInstance, hModel, hAnimation, hSkeleton, core_->GetDevice(), commandList_, log);
+		}
+
+		/// @brief スプライト用プレハブを読み込む
+		/// @param name 
+		/// @param hTexture 
 		/// @param numInstance 
 		/// @param log 
 		/// @return 
@@ -140,19 +156,33 @@ namespace Engine
 			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(),camera2DStore_.get(), heap_.get(), core_->GetDevice(), log);
 		}
 
-		/// @brief コマンドリストに登録する
-		/// @param hSprite 
-		/// @param commandList 
+
+		/// @brief プリミティブ用プレハブを描画する
+		/// @param hPrefabPrimitive 
+		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive, commandList_); }
+
+		/// @brief スプライト用プレハブを描画する
+		/// @param hPrefabSprite 
 		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite) { prefab_->DrawPrefabSprite(hPrefabSprite, commandList_); }
+
 
 		/// @brief スプライト用プレハブのパラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefab_->GetSpriteParam(hPrefabSprite); }
 
+
+		/// @brief プリミティブ用インスタンスを作成する
+		/// @tparam T 
+		/// @param hPrefabPrimitive 
+		/// @return 
+		template<typename T>
+		T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive) { return prefab_->CreatePrimitiveInstance<T>(hPrefabPrimitive); }
+
 		/// @brief インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
 		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefab_->CreateSpriteInstance(hPrefabSprite); }
+
 
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance() { prefab_->DestroyAllInstance(); }
