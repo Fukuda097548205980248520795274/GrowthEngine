@@ -120,6 +120,10 @@ void Engine::RenderContext::NewFrame()
 	imguiRender_->FrameStart();
 #endif
 
+	// リセット
+	model_->Reset();
+	prefab_->Reset();
+
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
 
@@ -235,7 +239,7 @@ void Engine::RenderContext::PostDraw()
 
 
 	// プレハブをリセット
-	prefab_->Reset();
+	prefab_->PrefabReset();
 }
 
 

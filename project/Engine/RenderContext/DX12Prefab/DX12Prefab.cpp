@@ -73,6 +73,13 @@ void Engine::DX12Prefab::Update()
 	prefabSpriteStore_->Update();
 }
 
+/// @brief リセット
+void Engine::DX12Prefab::Reset()
+{
+	psoPrefabPrimitive_->ResetBlendMode();
+	psoPrefabSprite_->ResetBlendMode();
+}
+
 /// @brief シャドウマップの描画処理
 /// @param viewProjection 
 /// @param commandList 
@@ -90,7 +97,7 @@ void Engine::DX12Prefab::DestroyAllInstance()
 }
 
 /// @brief リセット
-void Engine::DX12Prefab::Reset()
+void Engine::DX12Prefab::PrefabReset()
 {
 	prefabPrimitiveStore_->Reset();
 	prefabSpriteStore_->Reset();

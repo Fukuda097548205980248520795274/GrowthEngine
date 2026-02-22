@@ -36,6 +36,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief リセット
+		void Reset();
+
 
 		/// @brief プリミティブを読み込む
 		/// @param name 
@@ -108,8 +111,8 @@ namespace Engine
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance();
 
-		/// @brief リセット
-		void Reset();
+		/// @brief プレハブリセット
+		void PrefabReset();
 
 
 		template <typename T>

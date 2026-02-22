@@ -35,6 +35,9 @@ namespace Engine
 		/// @param viewProjection 
 		void Update(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief リセット
+		void Reset();
+
 		/// @brief シャドウアップ用描画処理
 		/// @param commandList 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);

@@ -58,6 +58,13 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 	spriteStore_->Update();
 }
 
+/// @brief リセット
+void Engine::DX12Model::Reset()
+{
+	psoPrimitive_->ResetBlendMode();
+	psoSprite_->ResetBlendMode();
+}
+
 /// @brief シャドウアップ用描画処理
 /// @param commandList 
 void Engine::DX12Model::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
