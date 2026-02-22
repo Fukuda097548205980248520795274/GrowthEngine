@@ -490,6 +490,18 @@
     <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseStaticModel">
       <UniqueIdentifier>{437a42e9-b027-45bf-a2a6-2f19e2f3ddeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\DataForGPU\ParticleDataForGPU">
+      <UniqueIdentifier>{d3026257-0513-4280-afc8-8b7992e7d405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Particle">
+      <UniqueIdentifier>{91baecc9-2b0a-4bed-bb70-2b0843527dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticleInitialize">
+      <UniqueIdentifier>{07972957-edaf-4823-a9bd-0891968263a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOParticle">
+      <UniqueIdentifier>{197e5428-68dd-4e09-a187-11c71b4eaa27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -815,6 +827,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticleInitialize\ComputePSOParticleInitialize.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticleInitialize</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOParticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1211,6 +1229,15 @@
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\ParticleDataForGPU\ParticleDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\ParticleDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticleInitialize\ComputePSOParticleInitialize.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticleInitialize</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -1227,6 +1254,9 @@
     </None>
     <None Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.hlsli">
       <Filter>Engine\Shader\PrefabPrimitive</Filter>
+    </None>
+    <None Include="Assets\Shader\Particle\Particle.hlsli">
+      <Filter>Engine\Shader\Particle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1274,6 +1304,18 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.PS.hlsl">
       <Filter>Engine\Shader\PrefabPrimitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.CS.hlsl">
+      <Filter>Engine\Shader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\ParticleInitialize.CS.hlsl">
+      <Filter>Engine\Shader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.VS.hlsl">
+      <Filter>Engine\Shader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.PS.hlsl">
+      <Filter>Engine\Shader\Particle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -48,6 +48,9 @@ namespace Engine
 		/// @brief リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource_ = nullptr;
 
+		/// @brief UAVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> uavHandle_;
+
 		/// @brief SRVハンドル
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle_;
 	};
@@ -79,11 +82,30 @@ void Engine::RWStructuredBufferResource<T>::Initialize(ID3D12Device* device, ID3
 	uavDesc.Buffer.StructureByteStride = sizeof(T);
 
 	// ハンドルを取得する
+	uavHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	uavHandle_.second = heap->GetSrvGPUDescriptorHandle();
+
+	// ビューの生成
+	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, uavHandle_.first);
+
+
+	// SRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	srvDesc.Buffer.NumElements = num;
+	srvDesc.Buffer.StructureByteStride = sizeof(T);
+
+	// ハンドルを取得する
 	srvHandle_.first = heap->GetSrvCPUDescriptorHandle();
 	srvHandle_.second = heap->GetSrvGPUDescriptorHandle();
 
 	// ビューの生成
-	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, srvHandle_.first);
+	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
+
 
 	// ログ出力
 	if (log)
@@ -114,7 +136,7 @@ void Engine::RWStructuredBufferResource<T>::RegisterGraphics(ID3D12GraphicsComma
 template <typename T>
 void Engine::RWStructuredBufferResource<T>::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
-	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, uavHandle_.second);
 }
 
 /// @brief バリアを張る

@@ -3,6 +3,8 @@
 /// @brief 初期化
 void GameScene::Initialize()
 {
+	GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/circle.png");
+
 	light_ = std::make_unique<LightDirectional>("TEST");
 
 
@@ -51,11 +53,5 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
-	model_->Draw();
-
-	animationModel_->Draw();
-
-	instance1_->Draw();
-	instance2_->Draw();
-	modelPrefab_->Draw();
+	
 }

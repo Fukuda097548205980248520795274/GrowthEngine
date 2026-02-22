@@ -82,7 +82,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Modelの生成と初期化
 	model_ = std::make_unique<DX12Model>();
-	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+	model_->Initialize(core_->GetDevice(),commandList_, shaderCompiler_.get(), heap_.get(),
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), log);
 
 	// DX12Prefabの生成と初期化
@@ -171,6 +171,8 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
+	model_->DrawParticle(commandList_, camera3DStore_->GetCamera3D(), textureStore_.get());
+
 	// コマンドリスト・アロケータの取得
 	commandList_ = command_->GetCommandList();
 	commandAllocator_ = command_->GetCommandAllocator();

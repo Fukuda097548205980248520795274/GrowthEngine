@@ -6,6 +6,11 @@
 #include "Store/SpriteStore/SpriteStore.h"
 #include "Data/PrimitiveData/PrimitiveData.h"
 
+#include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
+#include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
+#include "PSO/ComputePSO/ComputePSOParticleInitialize/ComputePSOParticleInitialize.h"
+#include "PSO/PSOModel/PSOParticle/PSOParticle.h"
+
 namespace Engine
 {
 	class ShaderCompiler;
@@ -13,6 +18,7 @@ namespace Engine
 	class BasePSOShadowMap;
 	class ModelStore;
 	class TextureStore;
+	class Camera3D;
 
 	class DX12Model
 	{
@@ -28,7 +34,7 @@ namespace Engine
 		/// @param skeletonStore 
 		/// @param lightStore 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, DX12Heap* heap,
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ShaderCompiler* shaderCompiler, DX12Heap* heap,
 			ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log);
 
 		/// @brief 更新処理
@@ -128,5 +134,53 @@ namespace Engine
 
 		/// @brief スプライトストア
 		std::unique_ptr<SpriteStore> spriteStore_ = nullptr;
+
+
+	private:
+
+		/// @brief パーティクルリソース
+		std::unique_ptr<RWStructuredBufferResource<ParticleCS>> particleResource_ = nullptr;
+
+		/// @brief 初期化用パーティクルPSO
+		std::unique_ptr<ComputePSOParticleInitialize> psoParticleInitialize_ = nullptr;
+
+		/// @brief パーティクル初期化フラグ
+		bool isParticleInitialize = false;
+
+		/// @brief パーティクル初期化
+		void ParticleInitialize(ID3D12GraphicsCommandList* commandList);
+
+
+	private:
+
+		// パーティクルインデックスリソース
+		std::unique_ptr<IndexBufferResource> particleIndexResource_ = nullptr;
+
+		/// @brief パーティクル頂点リソース
+		std::unique_ptr<VertexBufferResource<SpriteVertexData>> particleVertexResource_ = nullptr;
+
+
+	private:
+
+		// パーティクル頂点シェーダ
+		ComPtr<IDxcBlob> particleVS_ = nullptr;
+
+		// パーティクルピクセルシェーダ
+		ComPtr<IDxcBlob> particlePS_ = nullptr;
+
+		// パーティクルPSO
+		std::unique_ptr<PSOParticle> psoParticle_ = nullptr;
+
+
+		// ビューリソース
+		std::unique_ptr<ConstantBufferResource<PreViewDataForGPU>> viewResource_ = nullptr;
+
+
+	public:
+
+		/// @brief パーティクルを描画する
+		/// @param commandList 
+		/// @param camera3d 
+		void DrawParticle(ID3D12GraphicsCommandList* commandList, const Camera3D& camera3d, TextureStore* textureStore);
 	};
 }

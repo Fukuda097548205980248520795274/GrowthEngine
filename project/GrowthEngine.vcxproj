@@ -255,6 +255,7 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticleInitialize\ComputePSOParticleInitialize.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -267,6 +268,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.cpp">
@@ -483,6 +485,7 @@
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
+    <ClInclude Include="Engine\DataForGPU\ParticleDataForGPU\ParticleDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PostEffectDataForGPU\PostEffectDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
@@ -517,9 +520,11 @@
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticleInitialize\ComputePSOParticleInitialize.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
@@ -598,6 +603,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="Assets\Shader\Particle\Particle.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -629,6 +639,44 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\Shader\LightCulling\LightCulling.CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\Particle.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\ParticleInitialize.CS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
