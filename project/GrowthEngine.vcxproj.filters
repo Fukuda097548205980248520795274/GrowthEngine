@@ -505,6 +505,9 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOEmitParticle">
       <UniqueIdentifier>{a7d131be-87f5-4b2c-b6f2-f01042676b78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Random">
+      <UniqueIdentifier>{46b6ef71-ba05-4c29-b5c9-0a55e37a9960}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1266,6 +1269,9 @@
     </None>
     <None Include="Assets\Shader\Particle\Particle.hlsli">
       <Filter>Engine\Shader\Particle</Filter>
+    </None>
+    <None Include="Assets\Shader\Random\Random.hlsli">
+      <Filter>Engine\Shader\Random</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

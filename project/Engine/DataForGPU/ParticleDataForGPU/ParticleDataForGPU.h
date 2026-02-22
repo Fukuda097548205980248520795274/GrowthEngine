@@ -47,4 +47,13 @@ namespace Engine
 		/// @brief 射出許可
 		uint32_t emit;
 	};
+
+	struct PerFrameDataForGPU
+	{
+		float time;
+
+		float deltaTime;
+
+		float padding[2];
+	};
 }

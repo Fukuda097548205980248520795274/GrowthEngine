@@ -25,19 +25,32 @@ void Engine::ComputePSOParticleInitialize::Initialize(ID3D12Device* device, Shad
 	particleDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	particleDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	D3D12_DESCRIPTOR_RANGE counterDescriptor[1];
+	counterDescriptor[0].BaseShaderRegister = 1;
+	counterDescriptor[0].RegisterSpace = 0;
+	counterDescriptor[0].NumDescriptors = 1;
+	counterDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	counterDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 
 	/*---------------------
 		ルートパラメータ
 	---------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[1];
+	D3D12_ROOT_PARAMETER rootParameter[2];
 
-	// SRV DescriptorTable t0
+	// UAV u0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = particleDescriptor;
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = _countof(particleDescriptor);
+
+	// UAV u1
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = counterDescriptor;
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(counterDescriptor);
 
 
 	/*-------------------------

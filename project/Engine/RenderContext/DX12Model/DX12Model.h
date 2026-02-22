@@ -166,6 +166,12 @@ namespace Engine
 		/// @brief エミッターリソース
 		std::unique_ptr<ConstantBufferResource<EmitterSphere>> emitterResource_ = nullptr;
 
+		/// @brief フレームリソース
+		std::unique_ptr<ConstantBufferResource<PerFrameDataForGPU>> frameResource_ = nullptr;
+
+		/// @brief カウンターリソース
+		std::unique_ptr<RWStructuredBufferResource<int32_t>> counterResource_ = nullptr;
+
 
 	private:
 

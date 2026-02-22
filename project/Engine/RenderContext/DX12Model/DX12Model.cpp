@@ -63,10 +63,20 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	emitterResource_->Initialize(device, log);
 	emitterResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
 	emitterResource_->data_->radius = 1.0f;
-	emitterResource_->data_->count = 10;
+	emitterResource_->data_->count = 1;
 	emitterResource_->data_->frequency = 0.5f;
 	emitterResource_->data_->frequencyTime = 0.0f;
 	emitterResource_->data_->emit = 0;
+
+	// フレームリソース
+	frameResource_ = std::make_unique<ConstantBufferResource<PerFrameDataForGPU>>();
+	frameResource_->Initialize(device, log);
+	frameResource_->data_->time = 0.0f;
+	frameResource_->data_->deltaTime = 0.0f;
+
+	// カウンターリソース
+	counterResource_ = std::make_unique<RWStructuredBufferResource<int32_t>>();
+	counterResource_->Initialize(device, commandList, heap, 1, log);
 
 	// 初期化用パーティクルPSOの生成と初期化
 	psoParticleInitialize_ = std::make_unique<ComputePSOParticleInitialize>();
@@ -136,6 +146,9 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 	spriteStore_->Update();
 
 
+	frameResource_->data_->time += 1.0f / 60.0f;
+	frameResource_->data_->deltaTime = 1.0f / 60.0f;
+
 	// タイマーを進める
 	emitterResource_->data_->frequencyTime += 1.0f / 60.0f;
 	
@@ -158,6 +171,10 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 
 	emitterResource_->RegisterCompute(commandList, 1);
 
+	frameResource_->RegisterCompute(commandList, 2);
+
+	counterResource_->RegisterCompute(commandList, 3);
+
 	commandList->Dispatch(1, 1, 1);
 }
 
@@ -176,6 +193,7 @@ void Engine::DX12Model::ParticleInitialize(ID3D12GraphicsCommandList* commandLis
 
 	psoParticleInitialize_->Register(commandList);
 	particleResource_->RegisterCompute(commandList, 0);
+	counterResource_->RegisterCompute(commandList, 1);
 	commandList->Dispatch(1, 1, 1);
 
 	isParticleInitialize = true;

@@ -25,13 +25,20 @@ void Engine::ComputePSOEmitParticle::Initialize(ID3D12Device* device, ShaderComp
 	particleDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	particleDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	D3D12_DESCRIPTOR_RANGE counterDescriptor[1];
+	counterDescriptor[0].BaseShaderRegister = 1;
+	counterDescriptor[0].RegisterSpace = 0;
+	counterDescriptor[0].NumDescriptors = 1;
+	counterDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	counterDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 
 	/*---------------------
 		ルートパラメータ
 	---------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[2];
+	D3D12_ROOT_PARAMETER rootParameter[4];
 
 	// DescriptorTable u0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -44,6 +51,18 @@ void Engine::ComputePSOEmitParticle::Initialize(ID3D12Device* device, ShaderComp
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[1].Descriptor.ShaderRegister = 0;
 	rootParameter[1].Descriptor.RegisterSpace = 0;
+
+	// CBV b1
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].Descriptor.ShaderRegister = 1;
+	rootParameter[2].Descriptor.RegisterSpace = 0;
+
+	// DescriptorTable u1
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = counterDescriptor;
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(counterDescriptor);
 
 
 	/*-------------------------
