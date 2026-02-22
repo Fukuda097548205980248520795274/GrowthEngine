@@ -26,4 +26,25 @@ namespace Engine
 
 		Matrix4x4 billboardMatrix;
 	};
+
+	struct EmitterSphere
+	{
+		/// @brief 位置
+		Vector3 translate;
+
+		/// @brief 半径
+		float radius;
+
+		/// @brief 放出数
+		uint32_t count;
+
+		/// @brief 射出間隔
+		float frequency;
+
+		/// @brief 射出間隔調整用時間
+		float frequencyTime;
+
+		/// @brief 射出許可
+		uint32_t emit;
+	};
 }

@@ -9,6 +9,7 @@
 #include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
 #include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
 #include "PSO/ComputePSO/ComputePSOParticleInitialize/ComputePSOParticleInitialize.h"
+#include "PSO/ComputePSO/ComputePSOEmitParticle/ComputePSOEmitParticle.h"
 #include "PSO/PSOModel/PSOParticle/PSOParticle.h"
 
 namespace Engine
@@ -144,6 +145,9 @@ namespace Engine
 		/// @brief 初期化用パーティクルPSO
 		std::unique_ptr<ComputePSOParticleInitialize> psoParticleInitialize_ = nullptr;
 
+		/// @brief 放出用パーティクルPSO
+		std::unique_ptr<ComputePSOEmitParticle> psoEmitParticle_ = nullptr;
+
 		/// @brief パーティクル初期化フラグ
 		bool isParticleInitialize = false;
 
@@ -158,6 +162,9 @@ namespace Engine
 
 		/// @brief パーティクル頂点リソース
 		std::unique_ptr<VertexBufferResource<SpriteVertexData>> particleVertexResource_ = nullptr;
+
+		/// @brief エミッターリソース
+		std::unique_ptr<ConstantBufferResource<EmitterSphere>> emitterResource_ = nullptr;
 
 
 	private:

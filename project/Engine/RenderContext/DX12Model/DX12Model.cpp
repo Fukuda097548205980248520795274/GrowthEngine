@@ -58,9 +58,23 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	particleResource_ = std::make_unique<RWStructuredBufferResource<ParticleCS>>();
 	particleResource_->Initialize(device, commandList, heap, 1024, log);
 
+	// エミッターリソース
+	emitterResource_ = std::make_unique<ConstantBufferResource<EmitterSphere>>();
+	emitterResource_->Initialize(device, log);
+	emitterResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
+	emitterResource_->data_->radius = 1.0f;
+	emitterResource_->data_->count = 10;
+	emitterResource_->data_->frequency = 0.5f;
+	emitterResource_->data_->frequencyTime = 0.0f;
+	emitterResource_->data_->emit = 0;
+
 	// 初期化用パーティクルPSOの生成と初期化
 	psoParticleInitialize_ = std::make_unique<ComputePSOParticleInitialize>();
 	psoParticleInitialize_->Initialize(device, shaderCompiler, log);
+
+	// 放出用パーティクルPSOの生成と初期化
+	psoEmitParticle_ = std::make_unique<ComputePSOEmitParticle>();
+	psoEmitParticle_->Initialize(device, shaderCompiler, log);
 
 
 	// パーティクル頂点シェーダ
@@ -120,6 +134,31 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 
 	primitiveStore_->Update(commandList);
 	spriteStore_->Update();
+
+
+	// タイマーを進める
+	emitterResource_->data_->frequencyTime += 1.0f / 60.0f;
+	
+	// 射出間隔を上回ったら、射出許可を出して時間を調整
+	if (emitterResource_->data_->frequencyTime >= emitterResource_->data_->frequency)
+	{
+		emitterResource_->data_->frequencyTime -= emitterResource_->data_->frequency;
+		emitterResource_->data_->emit = 1;
+	}
+	else
+	{
+		// まだ射出しない
+		emitterResource_->data_->emit = 0;
+	}
+
+
+	psoEmitParticle_->Register(commandList);
+
+	particleResource_->RegisterCompute(commandList, 0);
+
+	emitterResource_->RegisterCompute(commandList, 1);
+
+	commandList->Dispatch(1, 1, 1);
 }
 
 /// @brief シャドウアップ用描画処理
