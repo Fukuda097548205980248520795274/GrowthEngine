@@ -48,6 +48,9 @@ namespace Engine
 			return static_cast<T*>(dataTable_[hPostEffect]->GetParam());
 		}
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

@@ -66,6 +66,9 @@ namespace Engine
 		template<typename T>
 		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return postEffectStore_->GetParam<T>(hPostEffect); }
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 		template<typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

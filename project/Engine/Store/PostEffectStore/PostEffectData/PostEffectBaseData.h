@@ -46,11 +46,11 @@ namespace Engine
 		/// @param commandList 
 		virtual void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) = 0;
 
+		/// @brief デバッグ用パラメータ
+		virtual void DebugParameter() = 0;
+
 
 	private:
-
-		// 名前
-		std::string name_{};
 
 		/// @brief 種類
 		PostEffect::Type type_;
@@ -60,6 +60,9 @@ namespace Engine
 
 
 	protected:
+
+		// 名前
+		std::string name_{};
 
 		/// @brief PSO
 		BasePSOPostEffect* pso_ = nullptr;

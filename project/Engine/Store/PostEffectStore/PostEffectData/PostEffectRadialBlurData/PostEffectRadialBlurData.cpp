@@ -3,6 +3,10 @@
 #include "PSO/PSOPostEffect/BasePSOPostEffect/BasePSOPostEffect.h"
 #include "Resource/OffscreenResource/OffscreenResource.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief 初期化
 /// @param device 
 /// @param log 
@@ -17,12 +21,12 @@ void Engine::PostEffectRadialBlurData::Initialize(ID3D12Device* device, Log* log
 
 	// パラメータの生成
 	param_ = std::make_unique<PostEffect::RadialBlur>();
-	param_->center = Vector2(0.0f, 0.0f);
+	param_->center = Vector2(0.5f, 0.5f);
 	param_->sampleCount = 32;
 	param_->blur = 1.0f;
 	param_->saturation = 1.0f;
 	param_->contrast = 1.0f;
-	param_->brightness = 0.5f;
+	param_->brightness = 0.0f;
 
 	// リソース生成
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::RadialBlurDataForGPU>>();
@@ -72,4 +76,26 @@ void Engine::PostEffectRadialBlurData::Register(ID3D12GraphicsCommandList* comma
 	// ドローコール
 	commandList->DrawInstanced(3, 1, 0, 0);
 
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::PostEffectRadialBlurData::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// UV
+	if (ImGui::TreeNode((name_ + "_RadialBlur").c_str()))
+	{
+		ImGui::DragFloat("Blur", &param_->blur, 0.1f, -1000.0f, 1000.0f);
+		ImGui::DragFloat2("Center", &param_->center.x, 0.01f, -10.0f, 10.0f);
+		ImGui::DragInt("SampleCount", &param_->sampleCount, 1, 0);
+		ImGui::DragFloat("Saturation", &param_->saturation, 0.1f, -1000.0f, 1000.0f);
+		ImGui::DragFloat("Contrast", &param_->contrast, 0.1f, 0.0f, 1000.0f);
+		ImGui::DragFloat("Brightness", &param_->brightness, 0.1f, 0.0f, 1000.0f);
+
+		// 終了
+		ImGui::TreePop();
+	}
+
+#endif
 }

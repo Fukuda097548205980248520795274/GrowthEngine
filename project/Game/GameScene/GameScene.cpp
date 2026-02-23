@@ -61,5 +61,5 @@ void GameScene::Draw()
 	instance2_->Draw();
 	modelPrefab_->Draw();
 
-	//blur_->Draw();
+	blur_->Draw();
 }

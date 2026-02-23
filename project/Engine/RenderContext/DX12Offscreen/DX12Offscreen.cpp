@@ -6,6 +6,10 @@
 #include "Func/ResourceFunc/ResourceFunc.h"
 #include <cassert>
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief 初期化
 /// @param device 
 /// @param heap 
@@ -131,4 +135,24 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	// 読み込ませテクスチャ -> 書き込み対象
 	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::DX12Offscreen::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// メニューバーを使用する
+	if (!ImGui::Begin("PostEffect"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	postEffectStore_->DebugParameter();
+
+	// 終了
+	ImGui::End();
+
+#endif
 }

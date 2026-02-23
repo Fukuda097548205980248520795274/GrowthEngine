@@ -59,3 +59,10 @@ void Engine::PostEffectStore::DrawPostEffect(PostEffectHandle hPostEffect, ID3D1
 {
 	dataTable_[hPostEffect]->Register(commandList, offscreenResource);
 }
+
+/// @brief デバッグ用パラメータ
+void Engine::PostEffectStore::DebugParameter()
+{
+
+	for (auto& data : dataTable_)data->DebugParameter();
+}

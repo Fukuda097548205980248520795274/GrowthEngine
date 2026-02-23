@@ -29,6 +29,9 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter() override;
+
 
 	private:
 

@@ -154,6 +154,7 @@ void Engine::RenderContext::PreDraw()
 #ifdef _DEVELOPMENT
 	model_->DebugParameter();
 	prefab_->DebugParameter();
+	offscreen_->DebugParameter();
 #endif
 
 	// コマンドリストの取得
