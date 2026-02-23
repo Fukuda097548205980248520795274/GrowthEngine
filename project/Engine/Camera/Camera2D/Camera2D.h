@@ -17,7 +17,7 @@ namespace Engine
 
 		/// @brief パラメータを取得する
 		/// @return 
-		Camera2DData::Param* GetParam() { return param_.get(); }
+		Camera2DData::Param* GetParam() const { return param_.get(); }
 
 
 	private:

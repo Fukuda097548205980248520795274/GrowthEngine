@@ -174,6 +174,21 @@ public:
 	int32_t GetScreenHeight()const { return winApp_->GetClientHeight(); }
 
 
+#pragma region カメラ
+
+	/// @brief 3Dカメラのパラメータを取得する
+	/// @param hCamera 
+	/// @return 
+	Engine::Camera3DData::Param* GetCamera3DParam(Camera3DHandle hCamera)const { return renderContext_->GetCamera3DParam(hCamera); }
+
+	/// @brief 2Dカメラのパラメータを取得する
+	/// @param hCamera 
+	/// @return 
+	Engine::Camera2DData::Param* GetCamera2DParam(Camera2DHandle hCamera)const { return renderContext_->GetCamera2DParam(hCamera); }
+
+#pragma endregion
+
+
 
 #pragma region キーボード入力
 

@@ -29,6 +29,11 @@ namespace Engine
 		/// @return 
 		const Camera2D& GetCamera2D() const;
 
+		/// @brief パラメータを取得する
+		/// @param hCamera 
+		/// @return 
+		Camera2DData::Param* GetParam(Camera2DHandle hCamera)const { return dataTable_[hCamera]->GetCamera2D().GetParam(); }
+
 
 	private:
 

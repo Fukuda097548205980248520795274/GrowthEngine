@@ -6,6 +6,9 @@ GameCamera2D::GameCamera2D(const std::string& name) : name_(name)
 {
 	// カメラハンドルを取得する
 	hCamera_ = GrowthEngine::GetInstance()->LoadCamera2D(name_);
+
+	// パラメータを取得する
+	param_ = GrowthEngine::GetInstance()->GetCamera2DParam(hCamera_);
 }
 
 /// @brief カメラを切り替える

@@ -31,6 +31,11 @@ namespace Engine
 		/// @return 
 		const Camera3D& GetCamera3D() const;
 
+		/// @brief パメータを取得する
+		/// @param hCamera 
+		/// @return 
+		Camera3DData::Param* GetParam(Camera3DHandle hCamera) { return dataTable_[hCamera]->GetCamera3D().GetParam(); }
+
 
 	private:
 

@@ -93,6 +93,19 @@ namespace Engine
 		LightHandle LoadLight(const std::string& name, const std::string& type, Log* log) { return lightStore_->Load(name, type, heap_.get(), core_->GetDevice(), log); }
 
 
+
+		/// @brief 3Dカメラのパラメータを取得する
+		/// @param hCamera 
+		/// @return 
+		Camera3DData::Param* GetCamera3DParam(Camera3DHandle hCamera)const { return camera3DStore_->GetParam(hCamera); }
+
+		/// @brief 2Dカメラのパラメータを取得する
+		/// @param hCamera 
+		/// @return 
+		Camera2DData::Param* GetCamera2DParam(Camera2DHandle hCamera)const { return camera2DStore_->GetParam(hCamera); }
+
+
+
 		/// @brief ライトのパラメータを取得する
 		/// @tparam T 
 		/// @param handle 
