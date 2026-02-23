@@ -4,8 +4,7 @@
 /// @brief コンストラクタ
 /// @param modelHandle 
 /// @param name 
-PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name)
-	: hModel_(hModel), hAnimation_(hAnimation), name_(name)
+PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name) : BasePrimitive(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
@@ -14,7 +13,9 @@ PrimitiveAnimationModel::PrimitiveAnimationModel(ModelHandle hModel, AnimationHa
 	type_ = Engine::Primitive::Type::AnimationModel;
 
 	// 読み込み
-	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_,0, name_, type_);
+	hPrimitive_ = engine_->LoadPrimitive(hModel, hAnimation,0, name_, type_);
+
+	// パラメータを取得する
 	param_ = engine_->GetPrimitiveParam<Engine::Primitive::AnimationModel::Param>(hPrimitive_);
 }
 

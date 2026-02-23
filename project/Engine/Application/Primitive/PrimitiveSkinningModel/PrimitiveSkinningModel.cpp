@@ -4,8 +4,7 @@
 /// @brief コンストラクタ
 /// @param modelHandle 
 /// @param name 
-PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name)
-	: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), name_(name)
+PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name) : BasePrimitive(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
@@ -14,7 +13,9 @@ PrimitiveSkinningModel::PrimitiveSkinningModel(ModelHandle hModel, AnimationHand
 	type_ = Engine::Primitive::Type::SkinningModel;
 
 	// 読み込み
-	hPrimitive_ = engine_->LoadPrimitive(hModel_, hAnimation_, hSkeleton_, name_, type_);
+	hPrimitive_ = engine_->LoadPrimitive(hModel, hAnimation, hSkeleton, name_, type_);
+
+	// パラメータを取得する
 	param_ = engine_->GetPrimitiveParam<Engine::Primitive::SkinningModel::Param>(hPrimitive_);
 }
 

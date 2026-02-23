@@ -4,8 +4,7 @@
 /// @brief コンストラクタ
 /// @param modelHandle 
 /// @param name 
-PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string& name)
-	: hModel_(hModel) , name_(name)
+PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string& name) : BasePrimitive(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
@@ -14,7 +13,9 @@ PrimitiveStaticModel::PrimitiveStaticModel(ModelHandle hModel, const std::string
 	type_ = Engine::Primitive::Type::StaticModel;
 
 	// 読み込み
-	hPrimitive_ = engine_->LoadPrimitive(hModel_,0,0, name_, type_);
+	hPrimitive_ = engine_->LoadPrimitive(hModel,0,0, name_, type_);
+
+	// パラメータを取得する
 	param_ = engine_->GetPrimitiveParam<Engine::Primitive::StaticModel::Param>(hPrimitive_);
 }
 

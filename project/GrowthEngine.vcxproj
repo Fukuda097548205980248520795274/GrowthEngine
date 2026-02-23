@@ -164,6 +164,7 @@
     <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.cpp" />
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp" />
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp" />
+    <ClCompile Include="Engine\Application\Primitive\BasePrimitive.cpp" />
     <ClCompile Include="Engine\Application\Sprite\Sprite.cpp" />
     <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp" />
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
@@ -471,6 +472,7 @@
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h" />
+    <ClInclude Include="Engine\Application\Primitive\BasePrimitive.h" />
     <ClInclude Include="Engine\Application\Sprite\Sprite.h" />
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h" />

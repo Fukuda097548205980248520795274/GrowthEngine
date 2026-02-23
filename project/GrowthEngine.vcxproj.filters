@@ -828,6 +828,9 @@
     <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
       <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Primitive\BasePrimitive.cpp">
+      <Filter>Engine\Include\Application\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1228,6 +1231,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h">
       <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Primitive\BasePrimitive.h">
+      <Filter>Engine\Include\Application\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
