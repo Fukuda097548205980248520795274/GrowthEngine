@@ -15,8 +15,8 @@
 
 #include "Application/Framework/Framework.h"
 
-#include "Application/Camera/GameCamera3D/GameCamera3D.h"
-#include "Application/Camera/GameCamera2D/GameCamera2D.h"
+#include "Application/GameCamera/GameCamera3D/GameCamera3D.h"
+#include "Application/GameCamera/GameCamera2D/GameCamera2D.h"
 
 #include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
 #include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"

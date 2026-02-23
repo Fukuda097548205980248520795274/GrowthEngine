@@ -1,19 +1,19 @@
 #pragma once
 #include <string>
 #include "Handle/Handle.h"
-#include "Data/PrimitiveData/PrimitiveData.h"
+#include "Data/PostEffectData/PostEffectData.h"
 
 class GrowthEngine;
 
 namespace Engine
 {
-	class BasePrimitive
+	class BasePostEffect
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
-		BasePrimitive(const std::string& name) : name_(name){}
+		BasePostEffect(const std::string& name) : name_(name){}
 
 		/// @brief 描画処理
 		virtual void Draw() = 0;
@@ -21,17 +21,16 @@ namespace Engine
 
 	protected:
 
-
 		// エンジン
 		const GrowthEngine* engine_ = nullptr;
 
-		// 名前
+		/// @brief 名前
 		std::string name_{};
 
-		// 種類
-		Engine::Primitive::Type type_;
+		/// @brief 種類
+		Engine::PostEffect::Type type_;
 
-		// プリミティブハンドル
-		PrimitiveHandle hPrimitive_ = 0;
+		/// @brief ハンドル
+		PostEffectHandle handle_ = 0;
 	};
 }

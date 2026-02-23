@@ -3,7 +3,7 @@
 
 /// @brief コンストラクタ
 /// @param name 名前
-PostEffectRadialBlur::PostEffectRadialBlur(std::string name) : name_(name)
+PostEffectRadialBlur::PostEffectRadialBlur(const std::string& name) : BasePostEffect(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();

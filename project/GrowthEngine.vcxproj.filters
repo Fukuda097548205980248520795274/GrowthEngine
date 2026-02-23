@@ -151,9 +151,6 @@
     <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform3D">
       <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Camera">
-      <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\Scene">
       <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
     </Filter>
@@ -343,9 +340,6 @@
     <Filter Include="Engine\Include\Store\Camera3DStore\Camera3DResource">
       <UniqueIdentifier>{b223b0d1-8f8d-4176-8ba0-094dc06f8ca1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Camera\GameCamera3D">
-      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Data\CameraData">
       <UniqueIdentifier>{3ccd88c1-8551-43c3-92b9-9739337a6543}</UniqueIdentifier>
     </Filter>
@@ -357,9 +351,6 @@
     </Filter>
     <Filter Include="Engine\Include\Camera\Camera2D">
       <UniqueIdentifier>{0b07ddf6-1b2d-4768-bca2-5475f66f419d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Camera\GameCamera2D">
-      <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\Camera2DStore">
       <UniqueIdentifier>{14c7b516-5725-43f3-a652-caf223e07a79}</UniqueIdentifier>
@@ -495,6 +486,15 @@
     </Filter>
     <Filter Include="Engine\Include\Parameter\PrimitiveParameter">
       <UniqueIdentifier>{d5572f16-e4c7-4857-8335-fff1e61253ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\GameCamera">
+      <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\GameCamera\GameCamera3D">
+      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\GameCamera\GameCamera2D">
+      <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -663,8 +663,8 @@
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.cpp">
-      <Filter>Engine\Include\Application\Camera\GameCamera3D</Filter>
+    <ClCompile Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.cpp">
+      <Filter>Engine\Include\Application\GameCamera\GameCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
       <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
@@ -747,8 +747,8 @@
     <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp">
       <Filter>Engine\Include\Camera\Camera2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.cpp">
-      <Filter>Engine\Include\Application\Camera\GameCamera2D</Filter>
+    <ClCompile Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.cpp">
+      <Filter>Engine\Include\Application\GameCamera\GameCamera2D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera2DStore\Camera2DStore.cpp">
       <Filter>Engine\Include\Store\Camera2DStore</Filter>
@@ -827,9 +827,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
       <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\BasePrimitive.cpp">
-      <Filter>Engine\Include\Application\Primitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1022,8 +1019,8 @@
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Camera\GameCamera3D\GameCamera3D.h">
-      <Filter>Engine\Include\Application\Camera\GameCamera3D</Filter>
+    <ClInclude Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.h">
+      <Filter>Engine\Include\Application\GameCamera\GameCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h">
       <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
@@ -1136,8 +1133,8 @@
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h">
       <Filter>Engine\Include\Camera\Camera2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Camera\GameCamera2D\GameCamera2D.h">
-      <Filter>Engine\Include\Application\Camera\GameCamera2D</Filter>
+    <ClInclude Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.h">
+      <Filter>Engine\Include\Application\GameCamera\GameCamera2D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera2DStore\Camera2DStore.h">
       <Filter>Engine\Include\Store\Camera2DStore</Filter>
@@ -1234,6 +1231,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Primitive\BasePrimitive.h">
       <Filter>Engine\Include\Application\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h">
+      <Filter>Engine\Include\Application\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\GameCamera\BaseGameCamera.h">
+      <Filter>Engine\Include\Application\GameCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

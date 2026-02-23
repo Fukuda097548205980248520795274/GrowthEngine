@@ -1,10 +1,7 @@
 #pragma once
-#include <memory>
-#include <string>
-#include "Handle/Handle.h"
-#include "Data/CameraData/CameraData.h"
+#include "../BaseGameCamera.h"
 
-class GameCamera2D
+class GameCamera2D : public Engine::BaseGameCamera
 {
 public:
 
@@ -12,16 +9,13 @@ public:
 	GameCamera2D(const std::string& name);
 
 	/// @brief カメラを切り替える
-	void Switch();
+	void Switch() override;
 
 	/// @brief パラメータ
 	Engine::Camera2DData::Param* param_ = nullptr;
 
 
 private:
-
-	// 名前
-	std::string name_;
 
 	// カメラハンドル
 	Camera2DHandle hCamera_ = 0;

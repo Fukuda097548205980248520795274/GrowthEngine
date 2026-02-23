@@ -12,7 +12,7 @@ public:
 	PrimitiveAnimationModel(ModelHandle hModel,AnimationHandle hAnimation, const std::string& name);
 
 	/// @brief 描画処理
-	void Draw();
+	void Draw() override;
 
 	/// @brief パラメータ
 	Engine::Primitive::AnimationModel::Param* param_ = nullptr;

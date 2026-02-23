@@ -2,7 +2,7 @@
 #include "GrowthEngine.h"
 
 /// @brief コンストラクタ
-GameCamera2D::GameCamera2D(const std::string& name) : name_(name)
+GameCamera2D::GameCamera2D(const std::string& name) : BaseGameCamera(name)
 {
 	// カメラハンドルを取得する
 	hCamera_ = GrowthEngine::GetInstance()->LoadCamera2D(name_);

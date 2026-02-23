@@ -12,7 +12,7 @@ public:
 	PrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name);
 
 	/// @brief 描画処理
-	void Draw();
+	void Draw() override;
 
 	/// @brief パラメータ
 	Engine::Primitive::SkinningModel::Param* param_ = nullptr;
