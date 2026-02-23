@@ -176,6 +176,9 @@ namespace Engine
 		/// @brief カウンターリソース
 		std::unique_ptr<RWStructuredBufferResource<int32_t>> counterResource_ = nullptr;
 
+		/// @brief フリーリストリソース
+		std::unique_ptr<RWStructuredBufferResource<uint32_t>> freeListResource_ = nullptr;
+
 
 	private:
 

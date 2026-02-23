@@ -33,7 +33,8 @@ struct EmitterSphere
 };
 ConstantBuffer<EmitterSphere> gEmitter : register(b0);
 
-RWStructuredBuffer<int> gCounter : register(u1);
+RWStructuredBuffer<int> gFreeListIndex : register(u1);
+RWStructuredBuffer<uint> gFreeList : register(u2);
 
 struct PerFrame
 {
@@ -45,6 +46,8 @@ struct PerFrame
 };
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
 
+static const uint kMaxParticle = 1024;
+
 [numthreads(1, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
@@ -54,20 +57,32 @@ void main( uint3 DTid : SV_DispatchThreadID )
         RandomGenerator generator;
         generator.seed = (DTid + gPerFrame.time) * gPerFrame.time;
         
-        int particleIndex;
-        InterlockedAdd(gCounter[0], 1, particleIndex);
-        
         // カウント分放出
         for (uint countIndex = 0; countIndex < gEmitter.count; ++countIndex)
         {
-            gParticles[particleIndex].scale = generator.Generate3d();
-            gParticles[particleIndex].translate = generator.Generate3d();
-            gParticles[particleIndex].lifeTime = 1.0f;
-            gParticles[particleIndex].velocity = generator.Generate3d() * (1.0f / 60.0f);
-            gParticles[particleIndex].color.rgb = generator.Generate3d();
-            gParticles[particleIndex].color.a = 1.0f;
-            
-
+            int freeListIndex;
+            InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
+        
+            // FreeListのIndexを1つ前に設定し、現在のIndexを取得する
+            if (0 <= freeListIndex && freeListIndex < kMaxParticle)
+            {
+                uint particleIndex = gFreeList[freeListIndex];
+                
+                gParticles[particleIndex].scale = generator.Generate3d();
+                gParticles[particleIndex].translate = generator.Generate3d();
+                gParticles[particleIndex].lifeTime = 1.0f;
+                gParticles[particleIndex].currentTime = 0.0f;
+                gParticles[particleIndex].velocity = generator.Generate3d() * (1.0f / 60.0f);
+                gParticles[particleIndex].color.rgb = generator.Generate3d();
+                gParticles[particleIndex].color.a = 1.0f;
+            }
+            else
+            {
+                // 発生させられなかったら減らしてしまった分、元に戻す
+                InterlockedAdd(gFreeListIndex[0], 1);
+                
+                break;
+            }
         }
 
     }

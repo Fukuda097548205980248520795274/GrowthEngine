@@ -78,6 +78,10 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	counterResource_ = std::make_unique<RWStructuredBufferResource<int32_t>>();
 	counterResource_->Initialize(device, commandList, heap, 1, log);
 
+	// フリーリストリソース
+	freeListResource_ = std::make_unique<RWStructuredBufferResource<uint32_t>>();
+	freeListResource_->Initialize(device, commandList, heap, 1024, log);
+
 	// 初期化用パーティクルPSOの生成と初期化
 	psoParticleInitialize_ = std::make_unique<ComputePSOParticleInitialize>();
 	psoParticleInitialize_->Initialize(device, shaderCompiler, log);
@@ -179,17 +183,24 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 
 	counterResource_->RegisterCompute(commandList, 3);
 
+	freeListResource_->RegisterCompute(commandList, 4);
+
 	commandList->Dispatch(1, 1, 1);
 
 	// UAVバリア
 	UAVBarrier(particleResource_->GetResource(), commandList);
 	UAVBarrier(counterResource_->GetResource(), commandList);
+	UAVBarrier(freeListResource_->GetResource(), commandList);
 
 	psoUpdateParticle_->Register(commandList);
 
 	particleResource_->RegisterCompute(commandList, 0);
 
 	frameResource_->RegisterCompute(commandList, 1);
+
+	counterResource_->RegisterCompute(commandList, 2);
+
+	freeListResource_->RegisterCompute(commandList, 3);
 
 	commandList->Dispatch(1, 1, 1);
 }
@@ -210,9 +221,14 @@ void Engine::DX12Model::ParticleInitialize(ID3D12GraphicsCommandList* commandLis
 	psoParticleInitialize_->Register(commandList);
 	particleResource_->RegisterCompute(commandList, 0);
 	counterResource_->RegisterCompute(commandList, 1);
+	freeListResource_->RegisterCompute(commandList, 2);
 	commandList->Dispatch(1, 1, 1);
 
 	isParticleInitialize = true;
+
+	UAVBarrier(particleResource_->GetResource(), commandList);
+	UAVBarrier(counterResource_->GetResource(), commandList);
+	UAVBarrier(freeListResource_->GetResource(), commandList);
 }
 
 /// @brief パーティクルを描画する
