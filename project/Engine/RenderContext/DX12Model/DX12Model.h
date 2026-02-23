@@ -10,6 +10,7 @@
 #include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
 #include "PSO/ComputePSO/ComputePSOParticleInitialize/ComputePSOParticleInitialize.h"
 #include "PSO/ComputePSO/ComputePSOEmitParticle/ComputePSOEmitParticle.h"
+#include "PSO/ComputePSO/ComputePSOUpdateParticle/ComputePSOUpdateParticle.h"
 #include "PSO/PSOModel/PSOParticle/PSOParticle.h"
 
 namespace Engine
@@ -147,6 +148,9 @@ namespace Engine
 
 		/// @brief 放出用パーティクルPSO
 		std::unique_ptr<ComputePSOEmitParticle> psoEmitParticle_ = nullptr;
+
+		/// @brief 更新用パーティクルPSO
+		std::unique_ptr<ComputePSOUpdateParticle> psoUpdateParticle_ = nullptr;
 
 		/// @brief パーティクル初期化フラグ
 		bool isParticleInitialize = false;

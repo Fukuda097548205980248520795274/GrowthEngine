@@ -64,7 +64,7 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	emitterResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
 	emitterResource_->data_->radius = 1.0f;
 	emitterResource_->data_->count = 1;
-	emitterResource_->data_->frequency = 0.5f;
+	emitterResource_->data_->frequency = 0.1f;
 	emitterResource_->data_->frequencyTime = 0.0f;
 	emitterResource_->data_->emit = 0;
 
@@ -85,6 +85,10 @@ void Engine::DX12Model::Initialize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	// 放出用パーティクルPSOの生成と初期化
 	psoEmitParticle_ = std::make_unique<ComputePSOEmitParticle>();
 	psoEmitParticle_->Initialize(device, shaderCompiler, log);
+
+	// 更新用パーティクルPSOの生成と初期化
+	psoUpdateParticle_ = std::make_unique<ComputePSOUpdateParticle>();
+	psoUpdateParticle_->Initialize(device, shaderCompiler, log);
 
 
 	// パーティクル頂点シェーダ
@@ -174,6 +178,18 @@ void Engine::DX12Model::Update(ID3D12GraphicsCommandList* commandList)
 	frameResource_->RegisterCompute(commandList, 2);
 
 	counterResource_->RegisterCompute(commandList, 3);
+
+	commandList->Dispatch(1, 1, 1);
+
+	// UAVバリア
+	UAVBarrier(particleResource_->GetResource(), commandList);
+	UAVBarrier(counterResource_->GetResource(), commandList);
+
+	psoUpdateParticle_->Register(commandList);
+
+	particleResource_->RegisterCompute(commandList, 0);
+
+	frameResource_->RegisterCompute(commandList, 1);
 
 	commandList->Dispatch(1, 1, 1);
 }

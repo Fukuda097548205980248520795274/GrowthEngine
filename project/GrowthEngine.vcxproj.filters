@@ -508,6 +508,9 @@
     <Filter Include="Engine\Shader\Random">
       <UniqueIdentifier>{46b6ef71-ba05-4c29-b5c9-0a55e37a9960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOUpdateParticle">
+      <UniqueIdentifier>{cda0e16e-c2ef-48e6-801c-1c5da3d449c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -842,6 +845,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOEmitParticle\ComputePSOEmitParticle.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOEmitParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUpdateParticle\ComputePSOUpdateParticle.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOUpdateParticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1250,6 +1256,9 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOEmitParticle\ComputePSOEmitParticle.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOEmitParticle</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOUpdateParticle\ComputePSOUpdateParticle.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOUpdateParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -1330,6 +1339,9 @@
       <Filter>Engine\Shader\Particle</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle\Particle.PS.hlsl">
+      <Filter>Engine\Shader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle\UpdateParticle.CS.hlsl">
       <Filter>Engine\Shader\Particle</Filter>
     </FxCompile>
   </ItemGroup>
