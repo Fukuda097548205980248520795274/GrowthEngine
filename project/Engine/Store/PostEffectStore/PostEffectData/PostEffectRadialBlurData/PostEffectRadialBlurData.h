@@ -4,8 +4,6 @@
 namespace Engine
 {
 	class Log;
-	class BasePSOPostEffect;
-	class OffscreenResource;
 
 	class PostEffectRadialBlurData : public PostEffectBaseData
 	{
@@ -30,12 +28,6 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @return 
 		void* GetParam() override { return param_.get(); }
-
-
-	private:
-
-		/// @brief PSO
-		BasePSOPostEffect* pso_ = nullptr;
 
 
 	private:

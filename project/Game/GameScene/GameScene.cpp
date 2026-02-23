@@ -22,6 +22,8 @@ void GameScene::Initialize()
 		"AnimatedCube");
 	animationModel_->param_->modelTransform.translate.y = -1.0f;
 
+	blur_ = std::make_unique<PostEffectRadialBlur>("PostEffect");
+
 
 	modelPrefab_ = std::make_unique<PrefabBaseStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/plane", "plame.obj"), 100, "TEST");
 	instance1_ = modelPrefab_->CreateInstance();
@@ -58,4 +60,6 @@ void GameScene::Draw()
 	instance1_->Draw();
 	instance2_->Draw();
 	modelPrefab_->Draw();
+
+	blur_->Draw();
 }

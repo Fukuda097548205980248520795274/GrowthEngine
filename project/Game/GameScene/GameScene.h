@@ -36,5 +36,7 @@ private:
 
 	PrefabInstanceStaticModel* instance1_ = nullptr;
 	PrefabInstanceStaticModel* instance2_ = nullptr;
+
+	std::unique_ptr<PostEffectRadialBlur> blur_ = nullptr;
 };
 

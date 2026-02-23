@@ -425,6 +425,14 @@ public:
 	/// @param hPostEffect 
 	void DrawPostEffect(PostEffectHandle hPostEffect)const { return renderContext_->DrawPostEffect(hPostEffect); }
 
+	/// @brief パメータを取得する
+	/// @tparam T 
+	/// @param hPostEffect 
+	/// @return 
+	template<typename T>
+	T* GetPostEffectParam(PostEffectHandle hPostEffect)const { return renderContext_->GetPostEffectParam<T>(hPostEffect); }
+
+
 	/// @brief 全てのプレハブインスタンスを削除する
 	void DestroyAllPrefabInstance() const { renderContext_->DestroyAllInstance(); }
 

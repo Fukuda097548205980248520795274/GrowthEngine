@@ -28,6 +28,9 @@ private:
 	/// @brief 種類
 	Engine::PostEffect::Type type_;
 
+	/// @brief パラメータ
+	Engine::PostEffect::RadialBlur* param_ = nullptr;
+
 	/// @brief ハンドル
 	PostEffectHandle handle_ = 0;
 };

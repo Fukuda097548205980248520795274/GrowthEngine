@@ -59,6 +59,13 @@ namespace Engine
 		/// @param commandList 
 		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList);
 
+		/// @brief ポストエフェクトのパラメータを取得する
+		/// @tparam T 
+		/// @param hPostEffect 
+		/// @return 
+		template<typename T>
+		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return postEffectStore_->GetParam<T>(hPostEffect); }
+
 
 		template<typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

@@ -13,6 +13,9 @@ PostEffectRadialBlur::PostEffectRadialBlur(std::string name) : name_(name)
 
 	// 読み込む
 	handle_ = engine_->LoadPostEffect(name_, type_);
+
+	// パラメータを取得する
+	param_ = engine_->GetPostEffectParam<Engine::PostEffect::RadialBlur>(handle_);
 }
 
 /// @brief 描画処理

@@ -38,6 +38,16 @@ namespace Engine
 		/// @param offscreenResource 
 		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource);
 
+		/// @brief パメータを取得する
+		/// @tparam T 
+		/// @param hPostEffect 
+		/// @return 
+		template<typename T>
+		T* GetParam(PostEffectHandle hPostEffect)
+		{
+			return static_cast<T*>(dataTable_[hPostEffect]->GetParam());
+		}
+
 
 	private:
 

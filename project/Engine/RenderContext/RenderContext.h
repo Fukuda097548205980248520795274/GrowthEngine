@@ -219,6 +219,13 @@ namespace Engine
 		/// @param hPostEffect 
 		void DrawPostEffect(PostEffectHandle hPostEffect) { return offscreen_->DrawPostEffect(hPostEffect, commandList_); }
 
+		/// @brief パメータを取得する
+		/// @tparam T 
+		/// @param hPostEffect 
+		/// @return 
+		template<typename T>
+		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return offscreen_->GetPostEffectParam<T>(hPostEffect); }
+
 
 	private:
 

@@ -9,6 +9,7 @@
 namespace Engine
 {
 	class OffscreenResource;
+	class BasePSOPostEffect;
 
 	class PostEffectBaseData
 	{
@@ -56,5 +57,11 @@ namespace Engine
 
 		// ハンドル
 		PostEffectHandle hPostEffect_ = 0;
+
+
+	protected:
+
+		/// @brief PSO
+		BasePSOPostEffect* pso_ = nullptr;
 	};
 }
