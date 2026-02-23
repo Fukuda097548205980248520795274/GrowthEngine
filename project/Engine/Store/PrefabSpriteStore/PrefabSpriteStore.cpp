@@ -98,3 +98,11 @@ void Engine::PrefabSpriteStore::DestroyAllInstance()
 {
 	for (auto& data : dataTable_)data->DestroyAllInstance();
 }
+
+/// @brief デバッグ用パラメータ
+void Engine::PrefabSpriteStore::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+	for (auto& data : dataTable_)data->DebugParameter();
+#endif
+}

@@ -70,6 +70,9 @@ namespace Engine
 		/// @brief リセット
 		void Reset() { useInstance_ = 0; }
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

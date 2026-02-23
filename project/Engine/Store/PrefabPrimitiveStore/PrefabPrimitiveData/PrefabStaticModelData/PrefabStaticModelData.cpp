@@ -7,6 +7,10 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief コンストラクタ
 /// @param name 
 /// @param numInstance 
@@ -226,6 +230,100 @@ void* Engine::PrefabStaticModelData::CreateInstance()
 void Engine::PrefabStaticModelData::DestroyAllInstance()
 {
 	instanceTable_.clear();
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::PrefabStaticModelData::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// モデル名
+	if (ImGui::TreeNode(name_.c_str()))
+	{
+		// モデルトランスフォーム
+		if (ImGui::TreeNode("Model_Transform"))
+		{
+			// 拡縮
+			ImGui::DragFloat3("Scale", &param_->modelTransform.scale.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 回転
+			ImGui::DragFloat3("Rotate", &param_->modelTransform.rotate.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 平行移動
+			ImGui::DragFloat3("Translate", &param_->modelTransform.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+
+		// モデルデータを取得する
+		const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+		// メッシュ
+		if (ImGui::TreeNode("Mesh"))
+		{
+			for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); ++meshIndex)
+			{
+				// メッシュ
+				if (ImGui::TreeNode(modelData.meshNames[meshIndex].c_str()))
+				{
+					// トランスフォーム
+					if (ImGui::TreeNode("Transform"))
+					{
+						// 拡縮
+						ImGui::DragFloat3("Scale", &param_->meshTransforms[meshIndex].scale.x, 0.01f, -100000.0f, 100000.0f);
+
+						// 回転
+						ImGui::DragFloat3("Rotate", &param_->meshTransforms[meshIndex].rotate.x, 0.01f, -100000.0f, 100000.0f);
+
+						// 平行移動
+						ImGui::DragFloat3("Translate", &param_->meshTransforms[meshIndex].translate.x, 0.01f, -100000.0f, 100000.0f);
+
+						// 終了
+						ImGui::TreePop();
+					}
+
+					// マテリアル
+					if (ImGui::TreeNode("Material"))
+					{
+						// UV
+						if (ImGui::TreeNode("UV"))
+						{
+							// 拡縮
+							ImGui::DragFloat2("Scale", &param_->meshMaterial[meshIndex].uv.scale.x, 0.01f, -100000.0f, 100000.0f);
+
+							// 回転
+							ImGui::DragFloat("Rotate", &param_->meshMaterial[meshIndex].uv.radius, 0.01f, -100000.0f, 100000.0f);
+
+							// 平行移動
+							ImGui::DragFloat2("Translate", &param_->meshMaterial[meshIndex].uv.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+							// 終了
+							ImGui::TreePop();
+						}
+
+						// 色
+						ImGui::ColorEdit4("Color", &param_->meshMaterial[meshIndex].color.x);
+
+						// 終了
+						ImGui::TreePop();
+					}
+
+					// 終了
+					ImGui::TreePop();
+				}
+			}
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// 終了
+		ImGui::TreePop();
+	}
+
+#endif
 }
 
 /// @brief インスタンスのドローコール

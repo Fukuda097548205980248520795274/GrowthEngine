@@ -250,6 +250,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\BaseComputePSO.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -458,6 +459,7 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\TitleScene\TitleScene.cpp" />
+    <ClCompile Include="Engine\Parameter\Parameter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
@@ -515,6 +517,8 @@
     <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
+    <ClInclude Include="Engine\Parameter\Parameter.h" />
+    <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />

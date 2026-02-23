@@ -40,7 +40,10 @@ void Engine::SpriteStore::Initialize(ID3D12Device* device, Log* log)
 /// @brief 更新処理
 void Engine::SpriteStore::Update()
 {
-
+	// デバッグ用パラメータ
+#ifdef _DEVELOPMENT
+	DebugParameter();
+#endif
 }
 
 /// @brief 読み込み
@@ -80,4 +83,12 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 void Engine::SpriteStore::Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	dataTable_[hSprite]->Register(viewProjection, commandList, pso);
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::SpriteStore::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+	for (auto& data : dataTable_)data->DebugParameter();
+#endif
 }

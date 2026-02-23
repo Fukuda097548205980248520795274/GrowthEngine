@@ -64,6 +64,9 @@ namespace Engine
 		/// @brief リセット
 		void Reset() { numUseInstance_ = 0; }
 
+		/// @brief デバッグ用パラメータ
+		virtual void DebugParameter() = 0;
+
 
 	protected:
 

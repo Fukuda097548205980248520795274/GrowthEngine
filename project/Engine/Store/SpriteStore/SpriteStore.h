@@ -30,6 +30,9 @@ namespace Engine
 		/// @param pso 
 		void Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

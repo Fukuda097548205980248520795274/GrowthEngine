@@ -2,6 +2,10 @@
 #include <cassert>
 #include "ShaderCompiler/ShaderCompiler.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -101,4 +105,31 @@ void Engine::DX12Prefab::PrefabReset()
 {
 	prefabPrimitiveStore_->Reset();
 	prefabSpriteStore_->Reset();
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::DX12Prefab::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// メニューバーを使用する
+	if (!ImGui::Begin("Prefab"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	ImGui::SeparatorText("Primitive");
+
+	prefabPrimitiveStore_->DebugParameter();
+
+	ImGui::Text("\n\n\n\n\n");
+	ImGui::SeparatorText("Sprite");
+
+	prefabSpriteStore_->DebugParameter();
+
+	// 終了
+	ImGui::End();
+
+#endif
 }

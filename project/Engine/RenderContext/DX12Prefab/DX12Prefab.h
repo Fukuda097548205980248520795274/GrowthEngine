@@ -114,6 +114,9 @@ namespace Engine
 		/// @brief プレハブリセット
 		void PrefabReset();
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

@@ -151,6 +151,11 @@ void Engine::RenderContext::NewFrame()
 /// @brief 描画前処理
 void Engine::RenderContext::PreDraw()
 {
+#ifdef _DEVELOPMENT
+	model_->DebugParameter();
+	prefab_->DebugParameter();
+#endif
+
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
 

@@ -98,6 +98,9 @@ namespace Engine
 		// メッシュインデックス
 		std::unordered_map<std::string, int32_t> meshIndices;
 
+		// メッシュ名
+		std::vector<std::string> meshNames;
+
 		// ノード
 		std::vector<ModelNode> nodes;
 	};

@@ -3,6 +3,10 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief コンストラクタ
 /// @param hSprite 
 Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hTexture, std::string name) 
@@ -107,4 +111,61 @@ void Engine::SpriteResource::Register(const Matrix4x4& viewProjection, ID3D12Gra
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::SpriteResource::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// モデル名
+	if (ImGui::TreeNode(name_.c_str()))
+	{
+		// モデルトランスフォーム
+		if (ImGui::TreeNode("Transform"))
+		{
+			// 拡縮
+			ImGui::DragFloat2("Scale", &param_->transform.scale.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 回転
+			ImGui::DragFloat("Rotate", &param_->transform.rotate, 0.01f, -100000.0f, 100000.0f);
+
+			// 平行移動
+			ImGui::DragFloat2("Translate", &param_->transform.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// マテリアル
+		if (ImGui::TreeNode("Material"))
+		{
+			// UV
+			if (ImGui::TreeNode("UV"))
+			{
+				// 拡縮
+				ImGui::DragFloat2("Scale", &param_->material.uv.scale.x, 0.01f, -100000.0f, 100000.0f);
+
+				// 回転
+				ImGui::DragFloat("Rotate", &param_->material.uv.rotate, 0.01f, -100000.0f, 100000.0f);
+
+				// 平行移動
+				ImGui::DragFloat2("Translate", &param_->material.uv.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+				// 終了
+				ImGui::TreePop();
+			}
+
+			// 色
+			ImGui::ColorEdit4("Color", &param_->material.color.x);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// 終了
+		ImGui::TreePop();
+	}
+
+#endif
 }

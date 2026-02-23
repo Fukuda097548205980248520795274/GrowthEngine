@@ -490,6 +490,12 @@
     <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseStaticModel">
       <UniqueIdentifier>{437a42e9-b027-45bf-a2a6-2f19e2f3ddeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter">
+      <UniqueIdentifier>{3496d5fe-cf2f-46f5-8ba6-50915cfe8f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\PrimitiveParameter">
+      <UniqueIdentifier>{d5572f16-e4c7-4857-8335-fff1e61253ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -815,6 +821,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\Parameter.cpp">
+      <Filter>Engine\Include\Parameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
+      <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1210,6 +1222,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\Parameter.h">
+      <Filter>Engine\Include\Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h">
+      <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

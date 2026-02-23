@@ -36,17 +36,19 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+		/// @brief デバッグ用パラメータ
+		virtual void DebugParameter() = 0;
+
 
 	protected:
 
 		// 種別名
 		Primitive::Type type_;
 		
-
-	private:
-
 		// 名前
 		std::string name_{};
+
+	private:
 
 		// ハンドル
 		PrimitiveHandle hPrimitive_ = 0;

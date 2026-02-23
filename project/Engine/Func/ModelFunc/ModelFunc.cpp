@@ -41,6 +41,7 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 
 	// メッシュの数を確保する
 	modelData.meshes.resize(scene->mNumMeshes);
+	modelData.meshNames.resize(scene->mNumMeshes);
 
 	// メッシュ
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
@@ -126,6 +127,7 @@ Engine::ModelData Engine::LoadModel(const std::string& directory, const std::str
 
 		// 登録する
 		modelData.meshes[meshIndex] = meshData;
+		modelData.meshNames[meshIndex] = meshName;
 		modelData.meshIndices[meshName] = meshIndex;
 	}
 

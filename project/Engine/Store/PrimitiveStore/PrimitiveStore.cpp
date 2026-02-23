@@ -3,6 +3,10 @@
 #include "PrimitiveData/PrimitiveAnimationModelData/PrimitiveAnimationModelData.h"
 #include "PrimitiveData/PrimitiveSkinningModelData/PrimitiveSkinningModelData.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -162,4 +166,13 @@ void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12Gra
 		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
 		p->Register(viewProjection, commandList, pso);
 	}
+}
+
+/// @brief デバッグパラメータ
+void Engine::PrimitiveStore::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+	// データ更新
+	for (auto& data : dataTable_)data->DebugParameter();
+#endif
 }

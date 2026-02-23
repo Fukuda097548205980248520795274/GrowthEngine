@@ -79,6 +79,9 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

@@ -49,6 +49,9 @@ namespace Engine
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance();
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

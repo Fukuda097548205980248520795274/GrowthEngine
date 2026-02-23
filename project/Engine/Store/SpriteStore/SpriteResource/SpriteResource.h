@@ -44,6 +44,9 @@ namespace Engine
 		/// @return 
 		SpriteHandle GetHandle()const { return hSprite_; }
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

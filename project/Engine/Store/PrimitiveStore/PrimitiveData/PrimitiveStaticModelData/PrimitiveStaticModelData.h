@@ -56,6 +56,9 @@ namespace Engine
 		/// @param pso 
 		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 

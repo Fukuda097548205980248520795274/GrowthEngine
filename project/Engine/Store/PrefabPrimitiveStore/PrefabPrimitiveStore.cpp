@@ -115,3 +115,11 @@ void Engine::PrefabPrimitiveStore::DestroyAllInstance()
 {
 	for (auto& data : dataTable_)data->DestroyAllInstance();
 }
+
+/// @brief デバッグ用パラメータ
+void Engine::PrefabPrimitiveStore::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+	for (auto& data : dataTable_)data->DebugParameter();
+#endif
+}

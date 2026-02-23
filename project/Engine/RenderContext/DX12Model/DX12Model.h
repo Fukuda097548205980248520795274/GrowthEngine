@@ -95,6 +95,9 @@ namespace Engine
 			spriteStore_->Register(hSprite, viewProjection, commandList, psoSprite_.get());
 		}
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

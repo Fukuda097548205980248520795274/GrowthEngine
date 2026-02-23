@@ -82,6 +82,9 @@ namespace Engine
 			return static_cast<T*>(data->CreateInstance());
 		}
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 
