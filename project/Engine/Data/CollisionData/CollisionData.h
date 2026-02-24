@@ -15,7 +15,7 @@ namespace Engine
 		/// @brief 球
 		struct Sphere
 		{
-			/// @brief 中心地
+			/// @brief 中心点
 			Vector3 center;
 
 			/// @brief 半径
@@ -30,6 +30,59 @@ namespace Engine
 
 			/// @brief 半径
 			Vector3 radius;
+		};
+
+		/// @brief OBB
+		struct OBB
+		{
+			/// @brief 中心点
+			Vector3 center;
+
+			/// @brief 回転軸
+			Vector3 oriented[3];
+
+			/// @brief 半径
+			Vector3 radius;
+		};
+
+		/// @brief 平面
+		struct Plane
+		{
+			/// @brief 法線
+			Vector3 normal;
+
+			/// @brief 距離
+			float distance;
+		};
+
+		/// @brief 直線
+		struct Line
+		{
+			/// @brief 始点
+			Vector3 start;
+
+			/// @brief 終点（差分ベクトル）
+			Vector3 diff;
+		};
+
+		/// @brief 半直線
+		struct Ray
+		{
+			/// @brief 始点
+			Vector3 start;
+
+			/// @brief 終点（差分ベクトル）
+			Vector3 diff;
+		};
+
+		/// @brief 線分
+		struct Segment
+		{
+			/// @brief 始点
+			Vector3 start;
+
+			/// @brief 終点（差分ベクトル）
+			Vector3 diff;
 		};
 	}
 }
