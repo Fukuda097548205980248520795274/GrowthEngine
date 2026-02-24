@@ -104,9 +104,13 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	scissorRect_.top = 0;
 	scissorRect_.bottom = winApp->GetClientHeight();
 
+#ifdef _DEVELOPMENT
+
+	// DX12Lineの生成と初期化
+	line_ = std::make_unique<DX12Line>();
+	line_->Initialize(core_->GetDevice(), heap_.get(), shaderCompiler_.get(), log);
 
 	// ImGuiの初期設定
-#ifdef _DEVELOPMENT
 	imguiRender_ = std::make_unique<ImGuiRender>();
 	imguiRender_->Initialize(core_->GetDevice(), winApp, heap_.get(), buffering_.get(), log);
 #endif
@@ -118,6 +122,9 @@ void Engine::RenderContext::NewFrame()
 #ifdef _DEVELOPMENT
 	// フレームの開始をImGuiに伝える
 	imguiRender_->FrameStart();
+
+	// 線のリセット
+	line_->Reset();
 #endif
 
 	// リセット
@@ -181,6 +188,11 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
+#ifdef _DEVELOPMENT
+	// 線の描画
+	line_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
+#endif
+
 	// コマンドリスト・アロケータの取得
 	commandList_ = command_->GetCommandList();
 	commandAllocator_ = command_->GetCommandAllocator();

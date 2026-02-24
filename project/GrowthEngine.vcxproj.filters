@@ -343,15 +343,6 @@
     <Filter Include="Engine\Include\Data\CameraData">
       <UniqueIdentifier>{3ccd88c1-8551-43c3-92b9-9739337a6543}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Camera">
-      <UniqueIdentifier>{d6334dd0-a548-46d7-8b1e-b11643fea0b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Camera\Camera3D">
-      <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Camera\Camera2D">
-      <UniqueIdentifier>{0b07ddf6-1b2d-4768-bca2-5475f66f419d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\Camera2DStore">
       <UniqueIdentifier>{14c7b516-5725-43f3-a652-caf223e07a79}</UniqueIdentifier>
     </Filter>
@@ -495,6 +486,24 @@
     </Filter>
     <Filter Include="Engine\Include\Application\GameCamera\GameCamera2D">
       <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera">
+      <UniqueIdentifier>{d6334dd0-a548-46d7-8b1e-b11643fea0b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera\Camera3D">
+      <UniqueIdentifier>{64c1cc8a-01ad-49ee-a416-1f3d9b1538e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Camera\Camera2D">
+      <UniqueIdentifier>{0b07ddf6-1b2d-4768-bca2-5475f66f419d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOLine">
+      <UniqueIdentifier>{ed450e6b-fe3e-47aa-b5a5-d53db576b365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Line">
+      <UniqueIdentifier>{39a4a695-fcfe-4474-9327-ad2ccd232a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Line">
+      <UniqueIdentifier>{b99f674d-76ed-4baf-8aae-1f06228843bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -827,6 +836,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
       <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOLine\PSOLine.cpp">
+      <Filter>Engine\Include\PSO\PSOLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Line\DX12Line.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Line</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1238,6 +1253,12 @@
     <ClInclude Include="Engine\Application\GameCamera\BaseGameCamera.h">
       <Filter>Engine\Include\Application\GameCamera</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h">
+      <Filter>Engine\Include\PSO\PSOLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Line\DX12Line.h">
+      <Filter>Engine\Include\RenderContext\DX12Line</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -1254,6 +1275,9 @@
     </None>
     <None Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.hlsli">
       <Filter>Engine\Shader\PrefabPrimitive</Filter>
+    </None>
+    <None Include="Assets\Shader\Line\Line.hlsli">
+      <Filter>Engine\Shader\Line</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1301,6 +1325,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.PS.hlsl">
       <Filter>Engine\Shader\PrefabPrimitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Line\Line.VS.hlsl">
+      <Filter>Engine\Shader\Line</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Line\Line.PS.hlsl">
+      <Filter>Engine\Shader\Line</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

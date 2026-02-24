@@ -5,6 +5,7 @@
 #include "DX12Heap/DX12Heap.h"
 #include "DX12Buffering/DX12Buffering.h"
 #include "DX12Fence/DX12Fence.h"
+#include "DX12Line/DX12Line.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
 #include "DX12Model/DX12Model.h"
@@ -240,11 +241,28 @@ namespace Engine
 		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return offscreen_->GetPostEffectParam<T>(hPostEffect); }
 
 
+#ifdef _DEVELOPMENT
+
+		/// @brief デバッグ用の線を描画する
+		/// @param start 
+		/// @param diff 
+		/// @param color 
+		void DrawDebugLine(const Vector3& start, const Vector3& diff, const Vector4& color)
+		{
+			line_->DrawCall(start, diff, color);
+		}
+
+#endif
+
+
 	private:
 
 #ifdef _DEBUG
 		// DX12Debug
 		std::unique_ptr<DX12Debug> debug_ = nullptr;
+
+		/// @brief DX12Line
+		std::unique_ptr<DX12Line> line_ = nullptr;
 #endif
 
 		// DX12Core

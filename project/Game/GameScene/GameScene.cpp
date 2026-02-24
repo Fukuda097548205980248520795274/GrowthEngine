@@ -53,6 +53,10 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
+	engine_->DrawDebugLine(Vector3(-10.0f, -10.0f, -10.0f), Vector3(20.0f, 20.0f, 20.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	engine_->DrawDebugLine(Vector3(-10.0f, 10.0f, 10.0f), Vector3(20.0f, -20.0f, -20.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+
 	model_->Draw();
 
 	animationModel_->Draw();

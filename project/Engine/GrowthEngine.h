@@ -453,6 +453,21 @@ public:
 
 
 
+#ifdef _DEVELOPMENT
+
+	/// @brief デバッグ用の線を描画する
+	/// @param start 
+	/// @param diff 
+	/// @param color 
+	void DrawDebugLine(const Vector3& start, const Vector3& diff, const Vector4& color) const
+	{
+		renderContext_->DrawDebugLine(start, diff, color);
+	}
+
+#endif
+
+
+
 public:
 
 	/// @brief ライトのパラメータを取得する
