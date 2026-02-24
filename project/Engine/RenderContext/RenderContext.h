@@ -260,7 +260,9 @@ namespace Engine
 #ifdef _DEBUG
 		// DX12Debug
 		std::unique_ptr<DX12Debug> debug_ = nullptr;
+#endif
 
+#ifdef _DEVELOPMENT
 		/// @brief DX12Line
 		std::unique_ptr<DX12Line> line_ = nullptr;
 #endif
