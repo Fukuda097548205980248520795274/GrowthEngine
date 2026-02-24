@@ -11,6 +11,9 @@ namespace Engine
 	{
 	public:
 
+		/// @brief 仮想デストラクタ
+		virtual ~BasePostEffect() = default;
+
 		/// @brief コンストラクタ
 		/// @param name 
 		BasePostEffect(const std::string& name) : name_(name){}

@@ -9,6 +9,9 @@ namespace Engine
 	{
 	public:
 
+		/// @brief 仮想デストラクタ
+		virtual ~BaseGameCamera() = default;
+
 		/// @brief コンストラクタ
 		/// @param name 
 		BaseGameCamera(const std::string& name) : name_(name){}

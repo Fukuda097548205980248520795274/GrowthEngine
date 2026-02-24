@@ -11,6 +11,9 @@ namespace Engine
 	{
 	public:
 
+		/// @brief 仮想デストラクタ
+		virtual ~BasePrimitive() = default;
+
 		/// @brief コンストラクタ
 		/// @param name 
 		BasePrimitive(const std::string& name) : name_(name){}

@@ -21,6 +21,9 @@ namespace Engine
 			: func_(func), name_(name), type_(type), hCollision_(hCollision) {
 		}
 
+		/// @brief 仮想デストラクタ
+		virtual ~CollisionBase3DData() = default;
+
 		/// @brief 初期化
 		/// @param collisionStore 
 		void Initialize(Collision3DStore* collisionStore);
