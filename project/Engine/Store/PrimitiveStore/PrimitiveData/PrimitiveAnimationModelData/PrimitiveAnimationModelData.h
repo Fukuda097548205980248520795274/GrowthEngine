@@ -29,8 +29,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, PrimitiveHandle hPrimitive)
-			: hModel_(hModel),hAnimation_(hAnimation), PrimitiveBaseData(name, hPrimitive) {
+		PrimitiveAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, PrimitiveHandle hPrimitive, PrimitiveParameter* parameter)
+			: hModel_(hModel),hAnimation_(hAnimation), PrimitiveBaseData(name, hPrimitive, parameter) {
 			type_ = Primitive::Type::AnimationModel;
 		}
 

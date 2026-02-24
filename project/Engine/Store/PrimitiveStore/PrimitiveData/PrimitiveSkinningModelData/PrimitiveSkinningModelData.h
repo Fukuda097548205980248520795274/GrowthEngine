@@ -38,8 +38,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, PrimitiveHandle hPrimitive)
-			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton),  PrimitiveBaseData(name, hPrimitive) {
+		PrimitiveSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, PrimitiveHandle hPrimitive, PrimitiveParameter* parameter)
+			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton),  PrimitiveBaseData(name, hPrimitive, parameter) {
 			type_ = Primitive::Type::SkinningModel;
 		}
 

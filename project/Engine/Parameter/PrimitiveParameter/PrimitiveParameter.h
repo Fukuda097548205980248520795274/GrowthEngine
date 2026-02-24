@@ -10,6 +10,11 @@ namespace Engine
 	{
 	public:
 
+		/// @brief コンストラクタ
+		/// @param settingTypeName 
+		/// @param directory 
+		PrimitiveParameter(const std::string& settingTypeName, const std::string& directory) : Parameter(settingTypeName, directory){}
+
 		/// @brief 更新処理
 		void Update() override;
 

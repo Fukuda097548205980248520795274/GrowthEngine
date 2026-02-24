@@ -7,6 +7,13 @@
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
 
+/// @brief コンストラクタ
+Engine::PrimitiveStore::PrimitiveStore()
+{
+	// パラメータの生成
+	parameter_ = std::make_unique<PrimitiveParameter>("Model" , "./Assets/Parameter/Model");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -112,7 +119,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 	// 静的モデル
 	if (type == Primitive::Type::StaticModel)
 	{
-		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle);
+		std::unique_ptr<PrimitiveStaticModelData> data = std::make_unique<PrimitiveStaticModelData>(name, hModel, handle, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -121,7 +128,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 	// アニメーションモデル
 	if (type == Primitive::Type::AnimationModel)
 	{
-		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle);
+		std::unique_ptr<PrimitiveAnimationModelData> data = std::make_unique<PrimitiveAnimationModelData>(name, hModel, hAnimation, handle, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, animationStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -130,7 +137,7 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 	// スキニングモデル
 	if (type == Primitive::Type::SkinningModel)
 	{
-		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
+		std::unique_ptr<PrimitiveSkinningModelData> data = std::make_unique<PrimitiveSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, animationStore_, skeletonStore_, lightStore_, heap_, device, commandList, log);
 		dataTable_.push_back(std::move(data));
 		return handle;

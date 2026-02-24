@@ -6,13 +6,16 @@
 
 namespace Engine
 {
+	class PrimitiveParameter;
+
 	class PrimitiveBaseData
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
-		PrimitiveBaseData(const std::string& name , PrimitiveHandle hPrimitive) : name_(name) , hPrimitive_(hPrimitive){}
+		PrimitiveBaseData(const std::string& name , PrimitiveHandle hPrimitive, PrimitiveParameter* parameter)
+			: name_(name) , hPrimitive_(hPrimitive), parameter_(parameter){}
 
 		/// @brief 仮想デストラクタ
 		virtual ~PrimitiveBaseData() = default;
@@ -47,6 +50,12 @@ namespace Engine
 		
 		// 名前
 		std::string name_{};
+
+		/// @brief グループ名
+		std::string group_{};
+
+		/// @brief パラメータ
+		PrimitiveParameter* parameter_ = nullptr;
 
 	private:
 

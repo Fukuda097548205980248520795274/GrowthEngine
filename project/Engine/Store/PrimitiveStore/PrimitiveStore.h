@@ -8,6 +8,8 @@
 
 #include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
 
+#include "Parameter/PrimitiveParameter/PrimitiveParameter.h"
+
 class PrimitiveStaticModel;
 
 namespace Engine
@@ -27,6 +29,9 @@ namespace Engine
 	class PrimitiveStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		PrimitiveStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -91,6 +96,10 @@ namespace Engine
 		
 		// スキニングPSO
 		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
+
+
+		// プリミティブ用パラメータ
+		std::unique_ptr<PrimitiveParameter> parameter_ = nullptr;
 
 
 	private:

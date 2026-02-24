@@ -12,6 +12,8 @@
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
 
+#include "Parameter/PrimitiveParameter/PrimitiveParameter.h"
+
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
@@ -37,6 +39,15 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
 	param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
+
+	// パラメータの記録
+	group_ = "StaticModel_" + name_;
+	if (parameter_)
+	{
+		parameter_->SetValue(group_, "Model_Transform_Scale", &param_->modelTransform.scale);
+		parameter_->SetValue(group_, "Model_Transform_Rotate", &param_->modelTransform.rotate);
+		parameter_->SetValue(group_, "Model_Transform_Translate", &param_->modelTransform.translate);
+	}
 
 
 
@@ -66,6 +77,19 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		param_->meshMaterial[meshIndex].uv.radius = 0.0f;
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 
+		// パラメータの記録
+		if (parameter_)
+		{
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Scale", &param_->meshTransforms[meshIndex].scale);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Rotate", &param_->meshTransforms[meshIndex].rotate);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Translate", &param_->meshTransforms[meshIndex].translate);
+
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Color", &param_->meshMaterial[meshIndex].color);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
+		}
+
 		// 座標変換リソース
 		meshTransformationResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
 		meshTransformationResources_[meshIndex]->Initialize(device, log);
@@ -78,6 +102,9 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		shadowMapTransformationResource_[meshIndex] = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, log);
 	}
+
+	// 値を反映させる
+	if (parameter_)parameter_->RegisterGroupDataReflection(group_);
 }
 
 /// @brief 更新処理
@@ -327,6 +354,28 @@ void Engine::PrimitiveStaticModelData::DebugParameter()
 			// 終了
 			ImGui::TreePop();
 		}
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
 
 		// 終了
 		ImGui::TreePop();

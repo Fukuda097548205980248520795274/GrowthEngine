@@ -1,0 +1,50 @@
+{
+    "AnimationModel_AnimatedCube": {
+        "AnimatedCube_Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AnimatedCube_Material_UV_Rotate": 0.0,
+        "AnimatedCube_Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "AnimatedCube_Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "AnimatedCube_Mesh_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AnimatedCube_Mesh_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "AnimatedCube_Mesh_Transform_Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Animation_Timer": 0.0,
+        "Model_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Model_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Model_Transform_Translate": [
+            3.059999942779541,
+            -1.0,
+            0.0
+        ]
+    }
+}
