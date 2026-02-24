@@ -31,9 +31,6 @@ namespace Engine
 		/// @brief 種類
 		Collision::Type type_;
 
-		/// @brief ハンドルを取得する
-		Collision3DHandle handle_ = 0;
-
 	private:
 
 		/// @brief 削除フラグ

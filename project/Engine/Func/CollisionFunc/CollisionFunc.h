@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 #include "Data/CollisionData/CollisionData.h"
 
 namespace Engine

@@ -37,7 +37,21 @@
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
 
+#include "Application/CollisionBase/CollisionBaseSphere/CollisionBaseSphere.h"
 #include "Application/CollisionBase/CollisionBaseAABB/CollisionBaseAABB.h"
+#include "Application/CollisionBase/CollisionBaseOBB/CollisionBaseOBB.h"
+#include "Application/CollisionBase/CollisionBasePlane/CollisionBasePlane.h"
+#include "Application/CollisionBase/CollisionBaseLine/CollisionBaseLine.h"
+#include "Application/CollisionBase/CollisionBaseRay/CollisionBaseRay.h"
+#include "Application/CollisionBase/CollisionBaseSegment/CollisionBaseSegment.h"
+
+#include "Application/CollisionInstance/CollisionInstanceSphere/CollisionInstanceSphere.h"
+#include "Application/CollisionInstance/CollisionInstanceAABB/CollisionInstanceAABB.h"
+#include "Application/CollisionInstance/CollisionInstanceOBB/CollisionInstanceOBB.h"
+#include "Application/CollisionInstance/CollisionInstancePlane/CollisionInstancePlane.h"
+#include "Application/CollisionInstance/CollisionInstanceLine/CollisionInstanceLine.h"
+#include "Application/CollisionInstance/CollisionInstanceRay/CollisionInstanceRay.h"
+#include "Application/CollisionInstance/CollisionInstanceSegment/CollisionInstanceSegment.h"
 
 
 // マウスボタン
@@ -470,7 +484,7 @@ public:
 	/// @param hCollision 
 	/// @return 
 	template<typename T>
-	T* CreateCollision3DInstance(Collision3DHandle hCollision)const { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
+	T* CreateCollision3DInstance(Collision3DHandle hCollision) { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
 
 	/// @brief 衝突対象の設定
 	/// @param hCollision 

@@ -1,18 +1,19 @@
 #pragma once
 #include "../BaseCollisionInstance.h"
 
-class CollisionInstanceAABB : public Engine::BaseCollisionInstance
+class CollisionInstanceRay : public Engine::BaseCollisionInstance
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	CollisionInstanceAABB(Engine::Collision::AABB* param) : param_(param) { type_ = Engine::Collision::Type::AABB; }
+	CollisionInstanceRay(Engine::Collision::Ray* param) : param_(param) { type_ = Engine::Collision::Type::Ray; }
 
 	/// @brief パラメータを取得する
 	/// @return 
 	void* GetParam() override { return param_; }
 
 	/// @brief パラメータ
-	Engine::Collision::AABB* param_ = nullptr;
+	Engine::Collision::Ray* param_ = nullptr;
 };
+

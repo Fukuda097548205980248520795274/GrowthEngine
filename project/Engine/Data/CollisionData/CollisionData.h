@@ -9,7 +9,11 @@ namespace Engine
 		{
 			Sphere,
 			AABB,
-			OBB
+			OBB,
+			Plane,
+			Line,
+			Ray,
+			Segment
 		};
 
 		/// @brief 球

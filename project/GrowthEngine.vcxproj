@@ -150,9 +150,38 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseAABB\CollisionBaseAABB.cpp" />
-    <ClCompile Include="Engine\Application\CollisionInstance\BaseCollisionInstance.cpp" />
-    <ClCompile Include="Engine\Application\CollisionInstance\CollisionInstanceAABB\CollisionInstanceAABB.cpp" />
+    <ClCompile Include="Engine\Application\CollisionBase\BaseCollisionBase.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseAABB\CollisionBaseAABB.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseLine\CollisionBaseLine.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseOBB\CollisionBaseOBB.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBasePlane\CollisionBasePlane.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseRay\CollisionBaseRay.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseSegment\CollisionBaseSegment.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseSphere\CollisionBaseSphere.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -453,9 +482,42 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.cpp" />
-    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.cpp" />
-    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DStore.cpp" />
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionLineData\CollisionLineData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionOBBData\CollisionOBBData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionPlaneData\CollisionPlaneData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionRayData\CollisionRayData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionSegmentData\CollisionSegmentData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionSphereData\CollisionSphereData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -586,9 +648,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\BaseCollisionBase.h" />
     <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseAABB\CollisionBaseAABB.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseLine\CollisionBaseLine.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseOBB\CollisionBaseOBB.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBasePlane\CollisionBasePlane.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseRay\CollisionBaseRay.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseSegment\CollisionBaseSegment.h" />
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseSphere\CollisionBaseSphere.h" />
     <ClInclude Include="Engine\Application\CollisionInstance\BaseCollisionInstance.h" />
     <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceAABB\CollisionInstanceAABB.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceLine\CollisionInstanceLine.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceOBB\CollisionInstanceOBB.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstancePlane\CollisionInstancePlane.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceRay\CollisionInstanceRay.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceSegment\CollisionInstanceSegment.h" />
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceSphere\CollisionInstanceSphere.h" />
     <ClInclude Include="Engine\Application\GameCamera\BaseGameCamera.h" />
     <ClInclude Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.h" />
@@ -698,6 +773,12 @@
     <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionLineData\CollisionLineData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionOBBData\CollisionOBBData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionPlaneData\CollisionPlaneData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionRayData\CollisionRayData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionSegmentData\CollisionSegmentData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionSphereData\CollisionSphereData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DStore.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h" />

@@ -1,5 +1,11 @@
 #include "Collision3DStore.h"
+#include "Collision3DData/CollisionSphereData/CollisionSphereData.h"
 #include "Collision3DData/CollisionAABBData/CollisionAABBData.h"
+#include "Collision3DData/CollisionOBBData/CollisionOBBData.h"
+#include "Collision3DData/CollisionPlaneData/CollisionPlaneData.h"
+#include "Collision3DData/CollisionLineData/CollisionLineData.h"
+#include "Collision3DData/CollisionRayData/CollisionRayData.h"
+#include "Collision3DData/CollisionSegmentData/CollisionSegmentData.h"
 
 #include <cassert>
 
@@ -27,10 +33,64 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// ハンドルを取得
 	Collision3DHandle handle = static_cast<uint32_t>(dataTable_.size());
 
+	// 球
+	if (type == Collision::Type::Sphere)
+	{
+		std::unique_ptr<CollisionSphereData> data = std::make_unique<CollisionSphereData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
 	// AABB
 	if (type == Collision::Type::AABB)
 	{
 		std::unique_ptr<CollisionAABBData> data = std::make_unique<CollisionAABBData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// OBB
+	if (type == Collision::Type::OBB)
+	{
+		std::unique_ptr<CollisionOBBData> data = std::make_unique<CollisionOBBData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 平面
+	if (type == Collision::Type::Plane)
+	{
+		std::unique_ptr<CollisionPlaneData> data = std::make_unique<CollisionPlaneData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 直線
+	if (type == Collision::Type::Line)
+	{
+		std::unique_ptr<CollisionLineData> data = std::make_unique<CollisionLineData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 半直線
+	if (type == Collision::Type::Ray)
+	{
+		std::unique_ptr<CollisionRayData> data = std::make_unique<CollisionRayData>(func, name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 線分
+	if (type == Collision::Type::Segment)
+	{
+		std::unique_ptr<CollisionSegmentData> data = std::make_unique<CollisionSegmentData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;

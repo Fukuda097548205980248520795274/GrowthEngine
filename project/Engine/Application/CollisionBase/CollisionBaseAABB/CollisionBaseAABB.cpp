@@ -14,10 +14,3 @@ CollisionInstanceAABB* CollisionBaseAABB::CreateInstance()
 {
 	return GrowthEngine::GetInstance()->CreateCollision3DInstance<CollisionInstanceAABB>(hCollision_);
 }
-
-/// @brief 衝突対象の設定
-/// @param hCollision 
-void CollisionBaseAABB::SetTargetCollision(Collision3DHandle hCollision)
-{
-	GrowthEngine::GetInstance()->SetCollisionTarget(hCollision_, hCollision);
-}

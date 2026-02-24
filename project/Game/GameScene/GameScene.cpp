@@ -1,10 +1,5 @@
 #include "GameScene.h"
 
-void Test()
-{
-	int a = 0;
-}
-
 /// @brief 初期化
 void GameScene::Initialize()
 {
@@ -37,15 +32,6 @@ void GameScene::Initialize()
 	instance2_->param_.modelTransform.translate.y = -2.0f;
 
 
-	collisionA_ = std::make_unique<CollisionBaseAABB>(Test, "TestA");
-	collisionA00_ = collisionA_->CreateInstance();
-
-	collisionB_ = std::make_unique<CollisionBaseAABB>(Test, "TestB");
-	collisionB00_ = collisionB_->CreateInstance();
-
-	collisionA_->SetTargetCollision(collisionB_->GetHandle());
-
-
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
 }
@@ -53,6 +39,7 @@ void GameScene::Initialize()
 /// @brief 更新処理
 void GameScene::Update()
 {
+
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 
 	model_->param_->animation.timer += 1.0f / 60.0f;
