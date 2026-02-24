@@ -80,6 +80,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	lightStore_ = std::make_unique<LightStore>();
 	lightStore_->Initialize(core_->GetDevice(), commandList_, heap_.get(), shaderCompiler_.get(), log);
 
+	// 3D衝突ストアの生成と初期化
+	collision3DStore_ = std::make_unique<Collision3DStore>();
+
 	// DX12Modelの生成と初期化
 	model_ = std::make_unique<DX12Model>();
 	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
@@ -180,6 +183,8 @@ void Engine::RenderContext::PreDraw()
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
+	// 衝突判定
+	collision3DStore_->Update();
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);

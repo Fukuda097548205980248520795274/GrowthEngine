@@ -43,3 +43,9 @@ using PrefabSpriteHandle = uint32_t;
 
 /// @brief ポストエフェクトハンドル
 using PostEffectHandle = uint32_t;
+
+// 3D衝突ハンドル
+using Collision3DHandle = uint32_t;
+
+// 2D衝突ハンドル
+using Collision2DHandle = uint32_t;

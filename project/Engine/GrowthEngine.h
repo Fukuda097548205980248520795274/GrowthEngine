@@ -37,6 +37,8 @@
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
 
+#include "Application/CollisionBase/CollisionBaseAABB/CollisionBaseAABB.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -450,6 +452,30 @@ public:
 
 	/// @brief 全てのプレハブインスタンスを削除する
 	void DestroyAllPrefabInstance() const { renderContext_->DestroyAllInstance(); }
+
+
+
+	/// @brief 3D衝突の読み込み
+	/// @param func 
+	/// @param name 
+	/// @param type 
+	/// @return 
+	Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Engine::Collision::Type type)const
+	{
+		return renderContext_->LoadCollision3D(func, name, type);
+	}
+
+	/// @brief インスタンスを作成する
+	/// @tparam T 
+	/// @param hCollision 
+	/// @return 
+	template<typename T>
+	T* CreateCollision3DInstance(Collision3DHandle hCollision)const { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
+
+	/// @brief 衝突対象の設定
+	/// @param hCollision 
+	/// @param hTargetCollision 
+	void SetCollisionTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision)const { renderContext_->SetCollisionTarget(hCollision, hTargetCollision); }
 
 
 

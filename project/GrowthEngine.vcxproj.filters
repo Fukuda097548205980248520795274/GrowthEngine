@@ -505,6 +505,33 @@
     <Filter Include="Engine\Include\RenderContext\DX12Line">
       <UniqueIdentifier>{b99f674d-76ed-4baf-8aae-1f06228843bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Collision3DStore">
+      <UniqueIdentifier>{42771ded-cfc9-4018-853e-49f7bea35449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData">
+      <UniqueIdentifier>{4a636df1-98c1-4373-9e96-3afaa690682d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\CollisionAABBData">
+      <UniqueIdentifier>{570bdc21-de1a-4b4a-b7f9-511c9622091b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\CollisionData">
+      <UniqueIdentifier>{4ef673ec-5d70-417c-921d-872289a8767d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\CollisionBase">
+      <UniqueIdentifier>{bf757dc0-3fbd-4024-87bd-4faa314e7336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\CollisionInstance">
+      <UniqueIdentifier>{e32fc2ce-9d2c-41ae-8c65-6a376d3fc36b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\CollisionBase\CollisionBaseAABB">
+      <UniqueIdentifier>{0cd4bc99-c018-47ba-a75c-42852a3680e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\CollisionInstance\CollisionInstanceAABB">
+      <UniqueIdentifier>{dc2f8208-0a73-47ee-a03d-341de726fc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Func\CollisionFunc">
+      <UniqueIdentifier>{234806a3-2545-4875-a354-837d41a072d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -842,6 +869,27 @@
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Line\DX12Line.cpp">
       <Filter>Engine\Include\RenderContext\DX12Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DStore.cpp">
+      <Filter>Engine\Include\Store\Collision3DStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.cpp">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.cpp">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\CollisionAABBData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseAABB\CollisionBaseAABB.cpp">
+      <Filter>Engine\Include\Application\CollisionBase\CollisionBaseAABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionInstance\CollisionInstanceAABB\CollisionInstanceAABB.cpp">
+      <Filter>Engine\Include\Application\CollisionInstance\CollisionInstanceAABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\CollisionInstance\BaseCollisionInstance.cpp">
+      <Filter>Engine\Include\Application\CollisionInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Func\CollisionFunc\CollisionFunc.cpp">
+      <Filter>Engine\Include\Func\CollisionFunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1258,6 +1306,30 @@
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Line\DX12Line.h">
       <Filter>Engine\Include\RenderContext\DX12Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DStore.h">
+      <Filter>Engine\Include\Store\Collision3DStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.h">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.h">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\CollisionAABBData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\CollisionData\CollisionData.h">
+      <Filter>Engine\Include\Data\CollisionData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\CollisionBase\CollisionBaseAABB\CollisionBaseAABB.h">
+      <Filter>Engine\Include\Application\CollisionBase\CollisionBaseAABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceAABB\CollisionInstanceAABB.h">
+      <Filter>Engine\Include\Application\CollisionInstance\CollisionInstanceAABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\CollisionInstance\BaseCollisionInstance.h">
+      <Filter>Engine\Include\Application\CollisionInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Func\CollisionFunc\CollisionFunc.h">
+      <Filter>Engine\Include\Func\CollisionFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

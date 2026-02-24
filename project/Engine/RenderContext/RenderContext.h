@@ -21,6 +21,7 @@
 #include "Store/AnimationStore/AnimationStore.h"
 #include "Store/SkeletonStore/SkeletonStore.h"
 #include "Store/LightStore/LightStore.h"
+#include "Store/Collision3DStore/Collision3DStore.h"
 
 namespace Engine
 {
@@ -199,7 +200,7 @@ namespace Engine
 
 
 		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance() { prefab_->DestroyAllInstance(); }
+		void DestroyAllInstance() { prefab_->DestroyAllInstance(); collision3DStore_->DestroyAllInstance(); }
 
 
 
@@ -239,6 +240,28 @@ namespace Engine
 		/// @return 
 		template<typename T>
 		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return offscreen_->GetPostEffectParam<T>(hPostEffect); }
+
+
+
+		/// @brief 3D衝突の読み込み
+		/// @param func 
+		/// @param name 
+		/// @param type 
+		/// @return 
+		Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Collision::Type type) { return collision3DStore_->Load(func, name, type); }
+
+		/// @brief インスタンスを作成する
+		/// @tparam T 
+		/// @param hCollision 
+		/// @return 
+		template<typename T>
+		T* CreateCollision3DInstance(Collision3DHandle hCollision) { return collision3DStore_->CreateInstance<T>(hCollision); }
+
+		/// @brief 衝突対象の設定
+		/// @param hCollision 
+		/// @param hTargetCollision 
+		void SetCollisionTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { collision3DStore_->SetCollisionTarget(hCollision, hTargetCollision); }
+
 
 
 #ifdef _DEVELOPMENT
@@ -329,6 +352,9 @@ namespace Engine
 
 		/// @brief ライトストア
 		std::unique_ptr<LightStore> lightStore_ = nullptr;
+
+		// 3D衝突ストア
+		std::unique_ptr<Collision3DStore> collision3DStore_ = nullptr;
 
 
 	private:

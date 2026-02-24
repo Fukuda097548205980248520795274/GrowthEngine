@@ -38,5 +38,11 @@ private:
 	PrefabInstanceStaticModel* instance2_ = nullptr;
 
 	std::unique_ptr<PostEffectRadialBlur> blur_ = nullptr;
+
+	std::unique_ptr<CollisionBaseAABB> collisionA_ = nullptr;
+	CollisionInstanceAABB* collisionA00_ = nullptr;
+
+	std::unique_ptr<CollisionBaseAABB> collisionB_ = nullptr;
+	CollisionInstanceAABB* collisionB00_ = nullptr;
 };
 
