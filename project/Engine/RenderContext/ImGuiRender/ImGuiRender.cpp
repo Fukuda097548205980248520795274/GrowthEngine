@@ -72,13 +72,6 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	// ドッキング機能を有効にする
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-	// Viewport機能の初期化
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		// Win32で追加のウィンドウを作成・管理するための処理をフック
-		ImGui_ImplWin32_EnableDpiAwareness();
-	}
-
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(device, buffering->GetSwapChainDesc().BufferCount,
