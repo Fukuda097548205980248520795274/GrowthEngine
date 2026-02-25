@@ -2,11 +2,16 @@
 #include "SpriteResource/SpriteResource.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 
+#include "Parameter/SpriteParameter/SpriteParameter.h"
+
 namespace Engine
 {
 	class SpriteStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		SpriteStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -47,5 +52,11 @@ namespace Engine
 
 		/// @brief インデックスリソース
 		std::unique_ptr<IndexBufferResource> indexResource_ = nullptr;
+
+
+	private:
+
+		// パラメータ
+		std::unique_ptr<SpriteParameter> parameter_ = nullptr;
 	};
 }

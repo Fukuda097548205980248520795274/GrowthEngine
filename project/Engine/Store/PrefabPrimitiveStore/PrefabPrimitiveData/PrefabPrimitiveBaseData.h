@@ -9,6 +9,7 @@ namespace Engine
 {
 	class BasePSOModel;
 	class BasePSOShadowMap;
+	class PrefabPrimitiveParameter;
 
 	class PrefabPrimitiveBaseData
 	{
@@ -18,8 +19,8 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param hPrefab 
-		PrefabPrimitiveBaseData(const std::string& name , uint32_t numInstance , PrefabPrimitiveHandle hPrefab) 
-			: name_(name), numInstance_(numInstance),hPrefab_(hPrefab) {}
+		PrefabPrimitiveBaseData(const std::string& name , uint32_t numInstance , PrefabPrimitiveHandle hPrefab, PrefabPrimitiveParameter* parameter)
+			: name_(name), numInstance_(numInstance),hPrefab_(hPrefab), parameter_(parameter) {}
 
 		/// @brief 仮想デストラクタ
 		virtual ~PrefabPrimitiveBaseData() = default;
@@ -73,6 +74,9 @@ namespace Engine
 		// 名前
 		std::string name_{};
 
+		/// @brief グループ名
+		std::string group_{};
+
 		// 種類
 		Prefab::Type type_{};
 
@@ -85,5 +89,11 @@ namespace Engine
 
 		// 使用インスタンス数
 		uint32_t numUseInstance_ = 0;
+
+
+	protected:
+
+		/// @brief パラメータ
+		PrefabPrimitiveParameter* parameter_ = nullptr;
 	};
 }

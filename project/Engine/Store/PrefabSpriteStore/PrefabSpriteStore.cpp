@@ -1,5 +1,12 @@
 #include "PrefabSpriteStore.h"
 
+/// @brief コンストラクタ
+Engine::PrefabSpriteStore::PrefabSpriteStore()
+{
+	// パラメータの生成
+	parameter_ = std::make_unique<PrefabSpriteParameter>("PrefabSprite", "./Assets/Parameter/PrefabSprite/");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param log 
@@ -70,7 +77,7 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
 	// データの生成と初期化
-	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, hTexture, numInstance, name);
+	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, hTexture, numInstance, name, parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore,cameraStore, heap, device, log);
 	dataTable_.push_back(std::move(data));
 

@@ -3,6 +3,13 @@
 
 #include "PrefabPrimitiveData/PrefabStaticModelData/PrefabStaticModelData.h"
 
+/// @brief コンストラクタ
+Engine::PrefabPrimitiveStore::PrefabPrimitiveStore()
+{
+	// パラメータの生成
+	parameter_ = std::make_unique<PrefabPrimitiveParameter>("PrefabPrimitive", "./Assets/Parameter/PrefabPrimitive/");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -69,7 +76,7 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	// 静的モデルプレハブデータ
 	if (type == Prefab::Type::StaticModel)
 	{
-		std::unique_ptr<PrefabStaticModelData> data = std::make_unique<PrefabStaticModelData>(name, numInstance, handle, hModel);
+		std::unique_ptr<PrefabStaticModelData> data = std::make_unique<PrefabStaticModelData>(name, numInstance, handle, hModel, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, lightStore_, cameraStore_, heap_, device, log);
 		dataTable_.push_back(std::move(data));
 

@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
+
 namespace Engine
 {
 	class ModelStore;
@@ -21,6 +23,9 @@ namespace Engine
 	class PrefabPrimitiveStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		PrefabPrimitiveStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -90,6 +95,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<PrefabPrimitiveBaseData>> dataTable_;
+
+		// パラメータ
+		std::unique_ptr<PrefabPrimitiveParameter> parameter_ = nullptr;
 
 
 	private:

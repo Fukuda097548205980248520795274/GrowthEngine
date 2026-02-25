@@ -16,6 +16,7 @@ namespace Engine
 	class BasePSOModel;
 	class TextureStore;
 	class IndexBufferResource;
+	class SpriteParameter;
 
 	class SpriteResource
 	{
@@ -23,7 +24,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		SpriteResource(SpriteHandle hSprite, TextureHandle hTexture, std::string name);
+		SpriteResource(SpriteHandle hSprite, TextureHandle hTexture, std::string name ,SpriteParameter* parameter);
 
 		/// @brief 初期化
 		/// @param vertexResource 
@@ -79,5 +80,14 @@ namespace Engine
 
 		// 名前
 		std::string name_{};
+
+		/// @brief グループ名
+		std::string group_{};
+
+
+	private:
+
+		/// @brief パラメータ
+		SpriteParameter* parameter_ = nullptr;
 	};
 }

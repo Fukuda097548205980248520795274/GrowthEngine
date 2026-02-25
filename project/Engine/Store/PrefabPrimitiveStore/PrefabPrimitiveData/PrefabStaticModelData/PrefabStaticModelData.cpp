@@ -7,6 +7,8 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 
+#include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
+
 #include <imgui.h>
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
@@ -16,8 +18,8 @@
 /// @param numInstance 
 /// @param hPrefab 
 /// @param hTexture 
-Engine::PrefabStaticModelData::PrefabStaticModelData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, ModelHandle hModel)
-	: hModel_(hModel), PrefabPrimitiveBaseData(name, numInstance, hPrefab)
+Engine::PrefabStaticModelData::PrefabStaticModelData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, ModelHandle hModel, PrefabPrimitiveParameter* parameter)
+	: hModel_(hModel), PrefabPrimitiveBaseData(name, numInstance, hPrefab, parameter)
 {
 	// 種類
 	type_ = Prefab::Type::StaticModel;
@@ -59,6 +61,15 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
 
+	// パラメータの記録
+	group_ = "StaticModel_" + name_;
+	if (parameter_)
+	{
+		parameter_->SetValue(group_, "Model_Transform_Scale", &param_->modelTransform.scale);
+		parameter_->SetValue(group_, "Model_Transform_Rotate", &param_->modelTransform.rotate);
+		parameter_->SetValue(group_, "Model_Transform_Translate", &param_->modelTransform.translate);
+	}
+
 	// 領域確保
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -80,6 +91,19 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 		param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
 
+		// パラメータの記録
+		if (parameter_)
+		{
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Scale", &param_->meshTransforms[meshIndex].scale);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Rotate", &param_->meshTransforms[meshIndex].rotate);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Translate", &param_->meshTransforms[meshIndex].translate);
+
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Color", &param_->meshMaterial[meshIndex].color);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
+		}
+
 		// プリミティブ
 		primitiveResource_[meshIndex] = std::make_unique<StructuredBufferResource<Prefab::PrimitiveDataForGPU>>();
 		primitiveResource_[meshIndex]->Initialize(device, heap, numInstance_, log);
@@ -88,6 +112,9 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 		shadowMapTransformationResource_[meshIndex] = std::make_unique<StructuredBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, heap, numInstance_, log);
 	}
+
+	// 値を反映させる
+	if (parameter_)parameter_->RegisterGroupDataReflection(group_);
 }
 
 /// @brief 更新処理
@@ -318,6 +345,28 @@ void Engine::PrefabStaticModelData::DebugParameter()
 			// 終了
 			ImGui::TreePop();
 		}
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
 
 		// 終了
 		ImGui::TreePop();

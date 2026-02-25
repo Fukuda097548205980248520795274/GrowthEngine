@@ -586,6 +586,18 @@
     <Filter Include="Engine\Include\Application\CollisionBase\CollisionBaseSegment">
       <UniqueIdentifier>{44670564-be98-41c1-aaa9-95f5f1a15f48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter\SpriteParameter">
+      <UniqueIdentifier>{d2edf250-df92-4888-bdb0-96ec339feef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\PostEffectParameter">
+      <UniqueIdentifier>{1b71f4b3-e9d1-4892-80a8-865701059401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\PrefabPrimitiveParameter">
+      <UniqueIdentifier>{f508b1c8-9f55-4e20-aaef-4e19a61c878f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\PrefabSpriteParameter">
+      <UniqueIdentifier>{0d7cfb96-9038-43d7-8ddf-34e7e9d53ef6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -977,6 +989,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\CollisionBase\CollisionBaseSegment\CollisionBaseSegment.cpp">
       <Filter>Engine\Include\Application\CollisionBase\CollisionBaseSegment</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp">
+      <Filter>Engine\Include\Parameter\SpriteParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp">
+      <Filter>Engine\Include\Parameter\PostEffectParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.cpp">
+      <Filter>Engine\Include\Parameter\PrefabSpriteParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.cpp">
+      <Filter>Engine\Include\Parameter\PrefabPrimitiveParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1474,6 +1498,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\CollisionInstance\CollisionInstanceSegment\CollisionInstanceSegment.h">
       <Filter>Engine\Include\Application\CollisionInstance\CollisionInstanceSegment</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\SpriteParameter\SpriteParameter.h">
+      <Filter>Engine\Include\Parameter\SpriteParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.h">
+      <Filter>Engine\Include\Parameter\PostEffectParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.h">
+      <Filter>Engine\Include\Parameter\PrefabSpriteParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.h">
+      <Filter>Engine\Include\Parameter\PrefabPrimitiveParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 #include <wrl.h>
 
 #include "PostEffectData/PostEffectBaseData.h"
+#include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
 #include "PSO/PSOPostEffect/BasePSOPostEffect/PSORadialBlur/PSORadialBlur.h"
 
@@ -18,6 +19,9 @@ namespace Engine
 	class PostEffectStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		PostEffectStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -56,6 +60,9 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<PostEffectBaseData>> dataTable_;
+
+		/// @brief パラメータ
+		std::unique_ptr<PostEffectParameter> parameter_ = nullptr;
 
 
 	private:

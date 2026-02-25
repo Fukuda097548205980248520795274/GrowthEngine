@@ -11,7 +11,7 @@
 Engine::PrimitiveStore::PrimitiveStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PrimitiveParameter>("Model" , "./Assets/Parameter/Model");
+	parameter_ = std::make_unique<PrimitiveParameter>("Primitive" , "./Assets/Parameter/Primitive/");
 }
 
 /// @brief 初期化

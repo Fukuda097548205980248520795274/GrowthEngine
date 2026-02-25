@@ -3,11 +3,16 @@
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 #include <vector>
 
+#include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
+
 namespace Engine
 {
 	class PrefabSpriteStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		PrefabSpriteStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -57,6 +62,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<PrefabSpriteResource>> dataTable_;
+
+		// パラメータ
+		std::unique_ptr<PrefabSpriteParameter> parameter_ = nullptr;
 
 
 	private:

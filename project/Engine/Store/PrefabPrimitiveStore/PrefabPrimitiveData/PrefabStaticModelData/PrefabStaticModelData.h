@@ -27,7 +27,7 @@ namespace Engine
 		/// @param numInstance 
 		/// @param hPrefab 
 		/// @param hTexture 
-		PrefabStaticModelData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, ModelHandle hModel);
+		PrefabStaticModelData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, ModelHandle hModel, PrefabPrimitiveParameter* parameter);
 
 		/// @brief 初期化
 		/// @param modelStore 

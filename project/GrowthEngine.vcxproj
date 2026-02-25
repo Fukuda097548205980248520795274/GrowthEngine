@@ -313,7 +313,11 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp" />
+    <ClCompile Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.cpp" />
+    <ClCompile Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.cpp" />
     <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp" />
+    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\BaseComputePSO.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -724,7 +728,11 @@
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
     <ClInclude Include="Engine\Parameter\Parameter.h" />
+    <ClInclude Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.h" />
+    <ClInclude Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.h" />
+    <ClInclude Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.h" />
     <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h" />
+    <ClInclude Include="Engine\Parameter\SpriteParameter\SpriteParameter.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />

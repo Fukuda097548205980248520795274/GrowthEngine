@@ -4,6 +4,13 @@
 
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
+/// @brief コンストラクタ
+Engine::PostEffectStore::PostEffectStore()
+{
+	// パラメータの生成
+	parameter_ = std::make_unique<PostEffectParameter>("PostEffect", "./Assets/Parameter/PostEffect/");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 

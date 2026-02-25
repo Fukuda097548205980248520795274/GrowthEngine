@@ -64,6 +64,9 @@ namespace Engine
 		// 名前
 		std::string name_{};
 
+		/// @brief グループ
+		std::string group_{};
+
 		/// @brief PSO
 		BasePSOPostEffect* pso_ = nullptr;
 	};

@@ -1,0 +1,49 @@
+{
+    "StaticModel_TEST": {
+        "Model_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Model_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Model_Transform_Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "平面_Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "平面_Material_UV_Rotate": 0.0,
+        "平面_Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "平面_Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "平面_Mesh_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "平面_Mesh_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "平面_Mesh_Transform_Translate": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

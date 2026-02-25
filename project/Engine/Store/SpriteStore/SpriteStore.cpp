@@ -1,5 +1,12 @@
 #include "SpriteStore.h"
 
+/// @brief コンストラクタ
+Engine::SpriteStore::SpriteStore()
+{
+	// パラメータの生成
+	parameter_ = std::make_unique<SpriteParameter>("Sprite", "./Assets/Parameter/Sprite/");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param log 
@@ -68,7 +75,7 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
 	// データの生成と初期化
-	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, hTexture, name);
+	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, hTexture, name , parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, device, log);
 	dataTable_.push_back(std::move(data));
 

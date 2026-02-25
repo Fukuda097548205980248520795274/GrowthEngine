@@ -8,14 +8,16 @@
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
 
+#include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
+
 
 /// @brief コンストラクタ
 /// @param hPrefabSprite 
 /// @param hTexture 
 /// @param numInstance 
 /// @param name 
-Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, TextureHandle hTexture, uint32_t numInstance, const std::string& name)
-	: hPrefabSprite_(hPrefabSprite), numInstance_(numInstance) , name_(name)
+Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, TextureHandle hTexture, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
+	: hPrefabSprite_(hPrefabSprite), numInstance_(numInstance) , name_(name), parameter_(parameter)
 {
 	// パラメータの生成
 	param_ = std::make_unique<Prefab::Sprite::Base::Param>();
@@ -34,6 +36,28 @@ Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSpr
 	// テクスチャ
 	param_->texture.hTexture = hTexture;
 	param_->texture.anchor = Vector2(0.0f, 0.0f);
+
+	// パラメータに記録と反映
+	group_ = "Sprite_" + name_;
+	if (parameter_)
+	{
+		// トランスフォーム
+		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
+		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
+		parameter_->SetValue(group_, "Transform_Translate", &param_->transform.translate);
+
+		// マテリアル
+		parameter_->SetValue(group_, "Material_Color", &param_->material.color);
+		parameter_->SetValue(group_, "Material_UV_Scale", &param_->material.uv.scale);
+		parameter_->SetValue(group_, "Material_UV_Rotate", &param_->material.uv.rotate);
+		parameter_->SetValue(group_, "Material_UV_Translate", &param_->material.uv.translate);
+
+		// テクスチャ
+		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
+
+		// 反映させる
+		parameter_->RegisterGroupDataReflection(group_);
+	}
 }
 
 /// @brief 初期化
@@ -214,6 +238,28 @@ void Engine::PrefabSpriteResource::DebugParameter()
 			// 終了
 			ImGui::TreePop();
 		}
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
 
 		// 終了
 		ImGui::TreePop();
