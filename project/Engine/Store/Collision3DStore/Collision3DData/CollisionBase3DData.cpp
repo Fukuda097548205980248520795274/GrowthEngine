@@ -41,157 +41,157 @@ void Engine::CollisionBase3DData::CollisionCheck()
 		for (auto& myInstance : instanceTable_) for(auto& yourInstance : instanceTable)
 		{
 			// 球 球
-			if (myInstance->GetType() == Collision::Type::Sphere && yourInstance->GetType() == Collision::Type::Sphere)
+			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Sphere*>(myInstance->GetParam()), *static_cast<Collision::Sphere*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Sphere*>(myInstance->GetParam()), *static_cast<Collision3D::Sphere*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 			
 			// AABB AABB
-			if (myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::AABB)
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::AABB*>(myInstance->GetParam()), *static_cast<Collision::AABB*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::AABB*>(myInstance->GetParam()), *static_cast<Collision3D::AABB*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// OBB OBB
-			if (myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::OBB)
+			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::OBB*>(myInstance->GetParam()), *static_cast<Collision::OBB*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::OBB*>(myInstance->GetParam()), *static_cast<Collision3D::OBB*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 球 AABB
-			if (myInstance->GetType() == Collision::Type::Sphere && yourInstance->GetType() == Collision::Type::AABB ||
-				myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::Sphere)
+			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::AABB ||
+				myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Sphere*>(myInstance->GetParam()), *static_cast<Collision::AABB*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Sphere*>(myInstance->GetParam()), *static_cast<Collision3D::AABB*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 球 OBB
-			if (myInstance->GetType() == Collision::Type::Sphere && yourInstance->GetType() == Collision::Type::OBB ||
-				myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::Sphere)
+			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::OBB ||
+				myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Sphere*>(myInstance->GetParam()), *static_cast<Collision::OBB*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Sphere*>(myInstance->GetParam()), *static_cast<Collision3D::OBB*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// AABB OBB
-			if (myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::OBB ||
-				myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::AABB)
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::OBB ||
+				myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::AABB*>(myInstance->GetParam()), *static_cast<Collision::OBB*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::AABB*>(myInstance->GetParam()), *static_cast<Collision3D::OBB*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 球 平面
-			if (myInstance->GetType() == Collision::Type::Sphere && yourInstance->GetType() == Collision::Type::Plane ||
-				myInstance->GetType() == Collision::Type::Plane && yourInstance->GetType() == Collision::Type::Sphere)
+			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Plane ||
+				myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Plane*>(myInstance->GetParam()), *static_cast<Collision::Sphere*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Plane*>(myInstance->GetParam()), *static_cast<Collision3D::Sphere*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 平面 直線
-			if (myInstance->GetType() == Collision::Type::Plane && yourInstance->GetType() == Collision::Type::Line ||
-				myInstance->GetType() == Collision::Type::Line && yourInstance->GetType() == Collision::Type::Plane)
+			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Line ||
+				myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Plane*>(myInstance->GetParam()), *static_cast<Collision::Line*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Plane*>(myInstance->GetParam()), *static_cast<Collision3D::Line*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 平面 半直線
-			if (myInstance->GetType() == Collision::Type::Plane && yourInstance->GetType() == Collision::Type::Ray ||
-				myInstance->GetType() == Collision::Type::Ray && yourInstance->GetType() == Collision::Type::Plane)
+			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Ray ||
+				myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Plane*>(myInstance->GetParam()), *static_cast<Collision::Ray*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Plane*>(myInstance->GetParam()), *static_cast<Collision3D::Ray*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// 平面 線分
-			if (myInstance->GetType() == Collision::Type::Plane && yourInstance->GetType() == Collision::Type::Segment ||
-				myInstance->GetType() == Collision::Type::Segment && yourInstance->GetType() == Collision::Type::Plane)
+			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Segment ||
+				myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::Plane*>(myInstance->GetParam()), *static_cast<Collision::Segment*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::Plane*>(myInstance->GetParam()), *static_cast<Collision3D::Segment*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// AABB 直線
-			if (myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::Line ||
-				myInstance->GetType() == Collision::Type::Line && yourInstance->GetType() == Collision::Type::AABB)
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Line ||
+				myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::AABB*>(myInstance->GetParam()), *static_cast<Collision::Line*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::AABB*>(myInstance->GetParam()), *static_cast<Collision3D::Line*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// AABB 半直線
-			if (myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::Ray ||
-				myInstance->GetType() == Collision::Type::Ray && yourInstance->GetType() == Collision::Type::AABB)
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Ray ||
+				myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::AABB*>(myInstance->GetParam()), *static_cast<Collision::Ray*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::AABB*>(myInstance->GetParam()), *static_cast<Collision3D::Ray*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// AABB 線分
-			if (myInstance->GetType() == Collision::Type::AABB && yourInstance->GetType() == Collision::Type::Segment ||
-				myInstance->GetType() == Collision::Type::Segment && yourInstance->GetType() == Collision::Type::AABB)
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Segment ||
+				myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::AABB*>(myInstance->GetParam()), *static_cast<Collision::Segment*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::AABB*>(myInstance->GetParam()), *static_cast<Collision3D::Segment*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// OBB 直線
-			if (myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::Line ||
-				myInstance->GetType() == Collision::Type::Line && yourInstance->GetType() == Collision::Type::OBB)
+			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Line ||
+				myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::OBB*>(myInstance->GetParam()), *static_cast<Collision::Line*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::OBB*>(myInstance->GetParam()), *static_cast<Collision3D::Line*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// OBB 半直線
-			if (myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::Ray ||
-				myInstance->GetType() == Collision::Type::Ray && yourInstance->GetType() == Collision::Type::OBB)
+			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Ray ||
+				myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::OBB*>(myInstance->GetParam()), *static_cast<Collision::Ray*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::OBB*>(myInstance->GetParam()), *static_cast<Collision3D::Ray*>(yourInstance->GetParam())))
 					func_();
 
 				continue;
 			}
 
 			// OBB 線分
-			if (myInstance->GetType() == Collision::Type::OBB && yourInstance->GetType() == Collision::Type::Segment ||
-				myInstance->GetType() == Collision::Type::Segment && yourInstance->GetType() == Collision::Type::OBB)
+			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Segment ||
+				myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision::OBB*>(myInstance->GetParam()), *static_cast<Collision::Segment*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision3D::OBB*>(myInstance->GetParam()), *static_cast<Collision3D::Segment*>(yourInstance->GetParam())))
 					func_();
 
 				continue;

@@ -3,11 +3,11 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::CollisionOBBData::CollisionOBBData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision)
+Engine::CollisionOBBData::CollisionOBBData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
 	: CollisionBase3DData(func, name, type, hCollision)
 {
 	// パラメータの生成と初期化
-	param_ = std::make_unique<Collision::OBB>();
+	param_ = std::make_unique<Collision3D::OBB>();
 	param_->center = Vector3(0.0f, 0.0f, 0.0f);
 	param_->radius = Vector3(1.0f, 1.0f, 1.0f);
 	param_->oriented[0] = Vector3(1.0f, 0.0f, 0.0f);
@@ -20,7 +20,7 @@ Engine::CollisionOBBData::CollisionOBBData(std::function<void()> func, const std
 void* Engine::CollisionOBBData::CreateInstance()
 {
 	// パラメータの生成
-	std::unique_ptr<Collision::OBB> instanceParam = std::make_unique<Collision::OBB>();
+	std::unique_ptr<Collision3D::OBB> instanceParam = std::make_unique<Collision3D::OBB>();
 	instanceParam->center = param_->center;
 	instanceParam->radius = param_->radius;
 	instanceParam->oriented[0] = param_->oriented[0];

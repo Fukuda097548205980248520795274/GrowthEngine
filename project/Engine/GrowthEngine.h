@@ -474,7 +474,7 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Engine::Collision::Type type)const
+	Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Engine::Collision3D::Type type)const
 	{
 		return renderContext_->LoadCollision3D(func, name, type);
 	}

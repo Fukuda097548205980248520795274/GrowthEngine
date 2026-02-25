@@ -598,6 +598,18 @@
     <Filter Include="Engine\Include\Parameter\PrefabSpriteParameter">
       <UniqueIdentifier>{0d7cfb96-9038-43d7-8ddf-34e7e9d53ef6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Collision2DStore">
+      <UniqueIdentifier>{78c51329-5b5f-4759-9a08-1681d6950787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Collision2DStore\Collision2DData">
+      <UniqueIdentifier>{59b32b50-5b8b-48f4-a564-14e39f85e9ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Collision2DStore\Collision2DData\CollisionCircleData">
+      <UniqueIdentifier>{8f0e3394-b50e-44ab-8544-62d638baa05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData">
+      <UniqueIdentifier>{b9b9d6c1-2c39-446f-9608-f64dae79b065}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1001,6 +1013,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.cpp">
       <Filter>Engine\Include\Parameter\PrefabPrimitiveParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DStore.cpp">
+      <Filter>Engine\Include\Store\Collision2DStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.cpp">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionCircleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.cpp">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1510,6 +1534,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.h">
       <Filter>Engine\Include\Parameter\PrefabPrimitiveParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DStore.h">
+      <Filter>Engine\Include\Store\Collision2DStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.h">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.h">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionCircleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.h">
+      <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

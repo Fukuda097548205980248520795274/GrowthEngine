@@ -5,7 +5,7 @@
 CollisionBaseRay::CollisionBaseRay(std::function<void()> func, const std::string& name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision::Type::Ray);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision3D::Type::Ray);
 }
 
 /// @brief インスタンスを作成する

@@ -248,7 +248,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @return 
-		Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Collision::Type type) { return collision3DStore_->Load(func, name, type); }
+		Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Collision3D::Type type) { return collision3DStore_->Load(func, name, type); }
 
 		/// @brief インスタンスを作成する
 		/// @tparam T 

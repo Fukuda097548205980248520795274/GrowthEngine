@@ -20,7 +20,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @return 
-		Collision3DHandle Load(std::function<void()> func, const std::string& name, Collision::Type type);
+		Collision3DHandle Load(std::function<void()> func, const std::string& name, Collision3D::Type type);
 
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance() { for (auto& data : dataTable_)data->DestroyAllInstance(); }

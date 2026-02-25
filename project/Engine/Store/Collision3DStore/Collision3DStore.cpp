@@ -21,7 +21,7 @@ void Engine::Collision3DStore::Update()
 /// @param name 
 /// @param type 
 /// @return 
-Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, const std::string& name, Collision::Type type)
+Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, const std::string& name, Collision3D::Type type)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -34,7 +34,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	Collision3DHandle handle = static_cast<uint32_t>(dataTable_.size());
 
 	// 球
-	if (type == Collision::Type::Sphere)
+	if (type == Collision3D::Type::Sphere)
 	{
 		std::unique_ptr<CollisionSphereData> data = std::make_unique<CollisionSphereData>(func, name, type, handle);
 		data->Initialize(this);
@@ -43,7 +43,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// AABB
-	if (type == Collision::Type::AABB)
+	if (type == Collision3D::Type::AABB)
 	{
 		std::unique_ptr<CollisionAABBData> data = std::make_unique<CollisionAABBData>(func, name, type, handle);
 		data->Initialize(this);
@@ -52,7 +52,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// OBB
-	if (type == Collision::Type::OBB)
+	if (type == Collision3D::Type::OBB)
 	{
 		std::unique_ptr<CollisionOBBData> data = std::make_unique<CollisionOBBData>(func, name, type, handle);
 		data->Initialize(this);
@@ -61,7 +61,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// 平面
-	if (type == Collision::Type::Plane)
+	if (type == Collision3D::Type::Plane)
 	{
 		std::unique_ptr<CollisionPlaneData> data = std::make_unique<CollisionPlaneData>(func, name, type, handle);
 		data->Initialize(this);
@@ -70,7 +70,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// 直線
-	if (type == Collision::Type::Line)
+	if (type == Collision3D::Type::Line)
 	{
 		std::unique_ptr<CollisionLineData> data = std::make_unique<CollisionLineData>(func, name, type, handle);
 		data->Initialize(this);
@@ -79,7 +79,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// 半直線
-	if (type == Collision::Type::Ray)
+	if (type == Collision3D::Type::Ray)
 	{
 		std::unique_ptr<CollisionRayData> data = std::make_unique<CollisionRayData>(func, name, type, handle);
 		data->Initialize(this);
@@ -88,7 +88,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	}
 
 	// 線分
-	if (type == Collision::Type::Segment)
+	if (type == Collision3D::Type::Segment)
 	{
 		std::unique_ptr<CollisionSegmentData> data = std::make_unique<CollisionSegmentData>(func, name, type, handle);
 		data->Initialize(this);

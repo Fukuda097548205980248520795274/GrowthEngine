@@ -119,3 +119,9 @@ skybox
 wireframe
 fullscreen
 vsync
+
+tparam
+aabb
+imgui
+adjugate
+Slerp

@@ -486,6 +486,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DStore.cpp" />
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -779,6 +783,10 @@
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DStore.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionAABBData\CollisionAABBData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionBase3DData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\CollisionLineData\CollisionLineData.h" />

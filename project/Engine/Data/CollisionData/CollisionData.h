@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	namespace Collision
+	namespace Collision3D
 	{
 		enum class Type
 		{

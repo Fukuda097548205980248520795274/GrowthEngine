@@ -7,13 +7,13 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	CollisionInstanceSphere(Engine::Collision::Sphere* param) : param_(param) { type_ = Engine::Collision::Type::Sphere; }
+	CollisionInstanceSphere(Engine::Collision3D::Sphere* param) : param_(param) { type_ = Engine::Collision3D::Type::Sphere; }
 
 	/// @brief パラメータを取得する
 	/// @return 
 	void* GetParam() override { return param_; }
 
 	/// @brief パラメータ
-	Engine::Collision::Sphere* param_ = nullptr;
+	Engine::Collision3D::Sphere* param_ = nullptr;
 };
 

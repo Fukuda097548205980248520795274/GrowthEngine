@@ -3,11 +3,11 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::CollisionRayData::CollisionRayData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision)
+Engine::CollisionRayData::CollisionRayData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
 	: CollisionBase3DData(func, name, type, hCollision)
 {
 	// パラメータの生成と初期化
-	param_ = std::make_unique<Collision::Ray>();
+	param_ = std::make_unique<Collision3D::Ray>();
 	param_->start = Vector3(0.0f, -1.0f, 0.0f);
 	param_->diff = Vector3(0.0f, 2.0f, 0.0f);
 }
@@ -17,7 +17,7 @@ Engine::CollisionRayData::CollisionRayData(std::function<void()> func, const std
 void* Engine::CollisionRayData::CreateInstance()
 {
 	// パラメータの生成
-	std::unique_ptr<Collision::Ray> instanceParam = std::make_unique<Collision::Ray>();
+	std::unique_ptr<Collision3D::Ray> instanceParam = std::make_unique<Collision3D::Ray>();
 	instanceParam->start = param_->start;
 	instanceParam->diff = param_->diff;
 

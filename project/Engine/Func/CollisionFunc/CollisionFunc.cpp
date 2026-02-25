@@ -7,7 +7,7 @@
 /// @param s1 球1
 /// @param s2 球2
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Sphere& s1, const Collision::Sphere& s2)
+bool Engine::CollisionCheckFunc(const Collision3D::Sphere& s1, const Collision3D::Sphere& s2)
 {
 	if (s1.radius + s2.radius >= (s2.center - s1.center).Length())
 		return true;
@@ -19,7 +19,7 @@ bool Engine::CollisionCheckFunc(const Collision::Sphere& s1, const Collision::Sp
 /// @param aabb1 
 /// @param aabb2 
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::AABB& aabb1, const Collision::AABB& aabb2)
+bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb1, const Collision3D::AABB& aabb2)
 {
 	if (aabb1.center.x + aabb1.radius.x >= aabb2.center.x - aabb2.center.x &&
 		aabb1.center.x - aabb1.radius.x <= aabb2.center.x + aabb2.center.x)
@@ -36,7 +36,7 @@ bool Engine::CollisionCheckFunc(const Collision::AABB& aabb1, const Collision::A
 /// @param obb1 OBB1
 /// @param obb2 OBB2
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::OBB& obb1, const Collision::OBB& obb2)
+bool Engine::CollisionCheckFunc(const Collision3D::OBB& obb1, const Collision3D::OBB& obb2)
 {
 	/*---------------------- -
 		ワールド座標を求める
@@ -580,7 +580,7 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb1, const Collision::OBB
 /// @param sphere 球
 /// @param aabb AABB
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Sphere& sphere, const Collision::AABB& aabb)
+bool Engine::CollisionCheckFunc(const Collision3D::Sphere& sphere, const Collision3D::AABB& aabb)
 {
 	// 最近接点
 	Vector3 closetPoint;
@@ -599,7 +599,7 @@ bool Engine::CollisionCheckFunc(const Collision::Sphere& sphere, const Collision
 /// @param sphere 球
 /// @param obb OBB
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Sphere& sphere, const Collision::OBB& obb)
+bool Engine::CollisionCheckFunc(const Collision3D::Sphere& sphere, const Collision3D::OBB& obb)
 {
 	// ワールド行列
 	Matrix4x4 obbWorld;
@@ -632,12 +632,12 @@ bool Engine::CollisionCheckFunc(const Collision::Sphere& sphere, const Collision
 	Vector3 centerInOBBLocalSpace = Transform(sphere.center, inverseMatrix);
 
 	// OBB視点のため、AABBを使用する
-	Collision::AABB aabbOBBLocal;
+	Collision3D::AABB aabbOBBLocal;
 	aabbOBBLocal.center = Vector3(0.0f, 0.0f, 0.0f);
 	aabbOBBLocal.radius = obb.radius;
 
 	// OBB視点の球
-	Collision::Sphere sphereOBBLocal =
+	Collision3D::Sphere sphereOBBLocal =
 	{
 		centerInOBBLocalSpace,
 		sphere.radius
@@ -651,7 +651,7 @@ bool Engine::CollisionCheckFunc(const Collision::Sphere& sphere, const Collision
 /// @param aabb AABB
 /// @param obb OBB
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::OBB& obb)
+bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb, const Collision3D::OBB& obb)
 {
 	/*-----------------------
 		ワールド座標を求める
@@ -1200,7 +1200,7 @@ bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::OB
 /// @param plane 平面
 /// @param sphere 球
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::Sphere& sphere)
+bool Engine::CollisionCheckFunc(const Collision3D::Plane& plane, const Collision3D::Sphere& sphere)
 {
 	// 平面方程式で距離を求める
 	float distance = Dot(sphere.center, plane.normal) - plane.distance;
@@ -1216,7 +1216,7 @@ bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::
 /// @param plane 平面
 /// @param line 直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::Line& line)
+bool Engine::CollisionCheckFunc(const Collision3D::Plane& plane, const Collision3D::Line& line)
 {
 	// 法線と終点方向の内積
 	float NdotD = Dot(plane.normal, line.diff);
@@ -1232,7 +1232,7 @@ bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::
 /// @param plane 平面
 /// @param ray 半直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::Ray& ray)
+bool Engine::CollisionCheckFunc(const Collision3D::Plane& plane, const Collision3D::Ray& ray)
 {
 	// 法線と終点方向の内積
 	float NdotD = Dot(plane.normal, ray.diff);
@@ -1257,7 +1257,7 @@ bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::
 /// @param plane 平面
 /// @param segment 線分
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::Segment& segment)
+bool Engine::CollisionCheckFunc(const Collision3D::Plane& plane, const Collision3D::Segment& segment)
 {
 	// 法線と終点方向の内積
 	float NdotD = Dot(plane.normal, segment.diff);
@@ -1282,7 +1282,7 @@ bool Engine::CollisionCheckFunc(const Collision::Plane& plane, const Collision::
 /// @param aabb AABB
 /// @param line 直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Line& line)
+bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb, const Collision3D::Line& line)
 {
 	Vector3 tMin =
 	{
@@ -1325,7 +1325,7 @@ bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Li
 /// @param aabb AABB
 /// @param ray 半直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Ray& ray)
+bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb, const Collision3D::Ray& ray)
 {
 	Vector3 tMin =
 	{
@@ -1368,7 +1368,7 @@ bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Ra
 /// @param aabb AABB
 /// @param segment 線分
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Segment& segment)
+bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb, const Collision3D::Segment& segment)
 {
 	Vector3 tMin =
 	{
@@ -1411,7 +1411,7 @@ bool Engine::CollisionCheckFunc(const Collision::AABB& aabb, const Collision::Se
 /// @param obb OBB
 /// @param line 直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Line& line)
+bool Engine::CollisionCheckFunc(const Collision3D::OBB& obb, const Collision3D::Line& line)
 {
 	// OBBのワールド行列
 	Matrix4x4 obbWorld;
@@ -1445,12 +1445,12 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Line
 	Vector3 localEnd = Transform(line.start + line.diff, obbInverse);
 
 	// OBB視点のためAABBを使用する
-	Collision::AABB localAABB;
+	Collision3D::AABB localAABB;
 	localAABB.center = Vector3(0.0f, 0.0f, 0.0f);
 	localAABB.radius = obb.radius;
 
 	// OBB視点の直線
-	Collision::Line localLine;
+	Collision3D::Line localLine;
 	localLine.start = localOrigin;
 	localLine.diff = localEnd - localOrigin;
 
@@ -1462,7 +1462,7 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Line
 /// @param obb OBB
 /// @param ray 半直線
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Ray& ray)
+bool Engine::CollisionCheckFunc(const Collision3D::OBB& obb, const Collision3D::Ray& ray)
 {
 	// OBBのワールド行列
 	Matrix4x4 obbWorld;
@@ -1496,12 +1496,12 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Ray&
 	Vector3 localEnd = Transform(ray.start + ray.diff, obbInverse);
 
 	// OBB視点のためAABBを使用する
-	Collision::AABB localAABB;
+	Collision3D::AABB localAABB;
 	localAABB.center = Vector3(0.0f, 0.0f, 0.0f);
 	localAABB.radius = obb.radius;
 
 	// OBB視点の半直線
-	Collision::Ray localRay;
+	Collision3D::Ray localRay;
 	localRay.start = localOrigin;
 	localRay.diff = localEnd - localOrigin;
 
@@ -1513,7 +1513,7 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Ray&
 /// @param obb OBB
 /// @param segment 線分
 /// @return 
-bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Segment& segment)
+bool Engine::CollisionCheckFunc(const Collision3D::OBB& obb, const Collision3D::Segment& segment)
 {
 	// OBBのワールド行列
 	Matrix4x4 obbWorld;
@@ -1547,12 +1547,12 @@ bool Engine::CollisionCheckFunc(const Collision::OBB& obb, const Collision::Segm
 	Vector3 localEnd = Transform(segment.start + segment.diff, obbInverse);
 
 	// OBB視点のためAABBを使用する
-	Collision::AABB localAABB;
+	Collision3D::AABB localAABB;
 	localAABB.center = Vector3(0.0f, 0.0f, 0.0f);
 	localAABB.radius = obb.radius;
 
 	// OBB視点の線分
-	Collision::Segment localSegment;
+	Collision3D::Segment localSegment;
 	localSegment.start = localOrigin;
 	localSegment.diff = localEnd - localOrigin;
 

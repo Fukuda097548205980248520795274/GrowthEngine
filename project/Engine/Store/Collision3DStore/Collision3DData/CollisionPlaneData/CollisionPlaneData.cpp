@@ -3,11 +3,11 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::CollisionPlaneData::CollisionPlaneData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision)
+Engine::CollisionPlaneData::CollisionPlaneData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
 	: CollisionBase3DData(func, name, type, hCollision)
 {
 	// パラメータの生成と初期化
-	param_ = std::make_unique<Collision::Plane>();
+	param_ = std::make_unique<Collision3D::Plane>();
 	param_->normal = Vector3(0.0f, 1.0f, 0.0f);
 	param_->distance = 0.0f;
 }
@@ -17,7 +17,7 @@ Engine::CollisionPlaneData::CollisionPlaneData(std::function<void()> func, const
 void* Engine::CollisionPlaneData::CreateInstance()
 {
 	// パラメータの生成
-	std::unique_ptr<Collision::Plane> instanceParam = std::make_unique<Collision::Plane>();
+	std::unique_ptr<Collision3D::Plane> instanceParam = std::make_unique<Collision3D::Plane>();
 	instanceParam->normal = param_->normal;
 	instanceParam->distance = param_->distance;
 

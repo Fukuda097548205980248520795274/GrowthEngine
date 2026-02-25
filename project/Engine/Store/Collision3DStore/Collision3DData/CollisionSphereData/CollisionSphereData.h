@@ -9,7 +9,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param func 
-		CollisionSphereData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision);
+		CollisionSphereData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision);
 
 		/// @brief インスタンスを作成する
 		/// @return 
@@ -23,9 +23,9 @@ namespace Engine
 	private:
 
 		// パラメータ
-		std::unique_ptr<Collision::Sphere> param_ = nullptr;
+		std::unique_ptr<Collision3D::Sphere> param_ = nullptr;
 
 		/// @brief インスタンスのパラメータ
-		std::list<std::unique_ptr<Collision::Sphere>> instanceParams_;
+		std::list<std::unique_ptr<Collision3D::Sphere>> instanceParams_;
 	};
 }

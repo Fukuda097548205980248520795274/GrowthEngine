@@ -17,7 +17,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param func 
-		CollisionBase3DData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision)
+		CollisionBase3DData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
 			: func_(func), name_(name), type_(type), hCollision_(hCollision) {
 		}
 
@@ -41,7 +41,7 @@ namespace Engine
 
 		/// @brief 種類を取得する
 		/// @return 
-		Collision::Type GetType()const { return type_; }
+		Collision3D::Type GetType()const { return type_; }
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -81,7 +81,7 @@ namespace Engine
 		std::string name_{};
 
 		/// @brief 種類
-		Collision::Type type_;
+		Collision3D::Type type_;
 
 	protected:
 

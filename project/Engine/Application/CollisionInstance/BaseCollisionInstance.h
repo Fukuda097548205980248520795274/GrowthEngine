@@ -13,7 +13,7 @@ namespace Engine
 
 		/// @brief 種類を取得する
 		/// @return 
-		Collision::Type GetType()const { return type_; }
+		Collision3D::Type GetType()const { return type_; }
 
 		/// @brief 削除したかどうか
 		/// @return 
@@ -29,7 +29,7 @@ namespace Engine
 	protected:
 
 		/// @brief 種類
-		Collision::Type type_;
+		Collision3D::Type type_;
 
 	private:
 

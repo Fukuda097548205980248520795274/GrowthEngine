@@ -7,12 +7,12 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	CollisionInstanceAABB(Engine::Collision::AABB* param) : param_(param) { type_ = Engine::Collision::Type::AABB; }
+	CollisionInstanceAABB(Engine::Collision3D::AABB* param) : param_(param) { type_ = Engine::Collision3D::Type::AABB; }
 
 	/// @brief パラメータを取得する
 	/// @return 
 	void* GetParam() override { return param_; }
 
 	/// @brief パラメータ
-	Engine::Collision::AABB* param_ = nullptr;
+	Engine::Collision3D::AABB* param_ = nullptr;
 };

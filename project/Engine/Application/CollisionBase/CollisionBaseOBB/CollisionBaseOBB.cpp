@@ -5,7 +5,7 @@
 CollisionBaseOBB::CollisionBaseOBB(std::function<void()> func, const std::string& name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision::Type::OBB);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision3D::Type::OBB);
 }
 
 /// @brief インスタンスを作成する

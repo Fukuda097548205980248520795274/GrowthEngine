@@ -3,11 +3,11 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::CollisionAABBData::CollisionAABBData(std::function<void()> func, const std::string& name, Collision::Type type, Collision3DHandle hCollision)
+Engine::CollisionAABBData::CollisionAABBData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
 	: CollisionBase3DData(func, name, type, hCollision) 
 {
 	// パラメータの生成と初期化
-	param_ = std::make_unique<Collision::AABB>();
+	param_ = std::make_unique<Collision3D::AABB>();
 	param_->center = Vector3(0.0f, 0.0f, 0.0f);
 	param_->radius = Vector3(1.0f, 1.0f, 1.0f);
 }
@@ -17,7 +17,7 @@ Engine::CollisionAABBData::CollisionAABBData(std::function<void()> func, const s
 void* Engine::CollisionAABBData::CreateInstance()
 {
 	// パラメータの生成
-	std::unique_ptr<Collision::AABB> instanceParam = std::make_unique<Collision::AABB>();
+	std::unique_ptr<Collision3D::AABB> instanceParam = std::make_unique<Collision3D::AABB>();
 	instanceParam->center = param_->center;
 	instanceParam->radius = param_->radius;
 
