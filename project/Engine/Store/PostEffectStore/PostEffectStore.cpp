@@ -47,7 +47,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	// ラジアルブラー
 	if (type == PostEffect::Type::RadialBlur)
 	{
-		std::unique_ptr<PostEffectRadialBlurData> data = std::make_unique<PostEffectRadialBlurData>(name, type, handle);
+		std::unique_ptr<PostEffectRadialBlurData> data = std::make_unique<PostEffectRadialBlurData>(name, type, handle, parameter_.get());
 		data->Initialize(device, log, psoRadialBlur_.get());
 		dataTable_.push_back(std::move(data));
 

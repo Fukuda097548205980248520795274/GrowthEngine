@@ -7,6 +7,8 @@
 #include <imgui_impl_dx12.h>
 #include <imgui_impl_win32.h>
 
+#include "Parameter/PostEffectParameter/PostEffectParameter.h"
+
 /// @brief 初期化
 /// @param device 
 /// @param log 
@@ -27,6 +29,20 @@ void Engine::PostEffectRadialBlurData::Initialize(ID3D12Device* device, Log* log
 	param_->saturation = 1.0f;
 	param_->contrast = 1.0f;
 	param_->brightness = 0.0f;
+
+	// パラメータを記録する
+	group_ = "RadialBlur_" + name_;
+	if (parameter_)
+	{
+		parameter_->SetValue(group_, "Center", &param_->center);
+		parameter_->SetValue(group_, "SampleCount", &param_->sampleCount);
+		parameter_->SetValue(group_, "Blur", &param_->blur);
+		parameter_->SetValue(group_, "Saturation", &param_->saturation);
+		parameter_->SetValue(group_, "Contrast", &param_->contrast);
+		parameter_->SetValue(group_, "Brightness", &param_->brightness);
+
+		parameter_->RegisterGroupDataReflection(group_);
+	}
 
 	// リソース生成
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::RadialBlurDataForGPU>>();
@@ -92,6 +108,28 @@ void Engine::PostEffectRadialBlurData::DebugParameter()
 		ImGui::DragFloat("Saturation", &param_->saturation, 0.1f, -1000.0f, 1000.0f);
 		ImGui::DragFloat("Contrast", &param_->contrast, 0.1f, 0.0f, 1000.0f);
 		ImGui::DragFloat("Brightness", &param_->brightness, 0.1f, 0.0f, 1000.0f);
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
 
 		// 終了
 		ImGui::TreePop();

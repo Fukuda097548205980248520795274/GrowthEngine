@@ -13,8 +13,9 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectRadialBlurData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect)
-			: PostEffectBaseData(name,type,hPostEffect){ }
+		PostEffectRadialBlurData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+			: PostEffectBaseData(name, type, hPostEffect, parameter) {
+		}
 
 		/// @brief 初期化
 		/// @param device 

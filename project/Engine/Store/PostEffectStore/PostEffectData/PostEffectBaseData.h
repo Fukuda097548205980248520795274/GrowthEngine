@@ -10,6 +10,7 @@ namespace Engine
 {
 	class OffscreenResource;
 	class BasePSOPostEffect;
+	class PostEffectParameter;
 
 	class PostEffectBaseData
 	{
@@ -19,8 +20,8 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectBaseData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect)
-			: name_(name), type_(type), hPostEffect_(hPostEffect) {
+		PostEffectBaseData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+			: name_(name), type_(type), hPostEffect_(hPostEffect), parameter_(parameter) {
 		}
 
 		/// @brief 仮想デストラクタ
@@ -69,5 +70,11 @@ namespace Engine
 
 		/// @brief PSO
 		BasePSOPostEffect* pso_ = nullptr;
+
+
+	protected:
+
+		/// @brief パラメータ
+		PostEffectParameter* parameter_ = nullptr;
 	};
 }

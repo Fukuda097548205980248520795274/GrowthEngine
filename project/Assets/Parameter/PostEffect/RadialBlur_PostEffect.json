@@ -1,0 +1,13 @@
+{
+    "RadialBlur_PostEffect": {
+        "Blur": 1.0,
+        "Brightness": 0.0,
+        "Center": [
+            0.5,
+            0.5
+        ],
+        "Contrast": 1.0,
+        "SampleCount": 32,
+        "Saturation": 1.0
+    }
+}
