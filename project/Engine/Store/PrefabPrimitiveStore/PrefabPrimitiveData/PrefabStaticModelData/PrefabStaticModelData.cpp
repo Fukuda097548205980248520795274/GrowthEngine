@@ -346,6 +346,11 @@ void Engine::PrefabStaticModelData::DebugParameter()
 			ImGui::TreePop();
 		}
 
+		// インスタンス量
+		ImGui::Text("Instance \n");
+		ImGui::ProgressBar(static_cast<float>(numUseInstance_) / static_cast<float>(numInstance_), ImVec2(200.0f, 20.0f),
+			std::format("{} / {}", numUseInstance_, numInstance_).c_str());
+
 		ImGui::Text("\n");
 
 		// 保存ボタン

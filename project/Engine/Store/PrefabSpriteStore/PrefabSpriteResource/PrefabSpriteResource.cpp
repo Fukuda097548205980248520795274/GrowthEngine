@@ -241,6 +241,13 @@ void Engine::PrefabSpriteResource::DebugParameter()
 
 		ImGui::Text("\n");
 
+		// インスタンス量
+		ImGui::Text("Instance \n");
+		ImGui::ProgressBar(static_cast<float>(useInstance_) / static_cast<float>(numInstance_), ImVec2(200.0f, 20.0f),
+			std::format("{} / {}", useInstance_, numInstance_).c_str());
+
+		ImGui::Text("\n");
+
 		// 保存ボタン
 		if (ImGui::Button("Save"))
 		{
