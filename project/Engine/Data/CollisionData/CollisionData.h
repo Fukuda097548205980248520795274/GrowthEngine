@@ -1,4 +1,5 @@
 #pragma once
+#include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
 
 namespace Engine
@@ -87,6 +88,35 @@ namespace Engine
 
 			/// @brief 終点（差分ベクトル）
 			Vector3 diff;
+		};
+	}
+
+	namespace Collision2D
+	{
+		enum class Type
+		{
+			Circle,
+			Sprite
+		};
+
+		/// @brief 円
+		struct Circle
+		{
+			/// @brief 位置
+			Vector2 position;
+
+			/// @brief 半径
+			float radius;
+		};
+
+		/// @brief 矩形
+		struct Sprite
+		{
+			/// @brief 位置
+			Vector2 position;
+
+			/// @brief 半径
+			Vector2 radius;
 		};
 	}
 }
