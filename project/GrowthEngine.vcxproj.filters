@@ -445,14 +445,8 @@
     <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData">
       <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameScene">
-      <UniqueIdentifier>{20ad2d6e-d1e4-4bc1-b05b-90791888966f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\SceneManager">
       <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\TitleScene">
-      <UniqueIdentifier>{704dc3cf-1093-4345-9eab-075014f0bb8b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMap">
       <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
@@ -609,6 +603,18 @@
     </Filter>
     <Filter Include="Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData">
       <UniqueIdentifier>{b9b9d6c1-2c39-446f-9608-f64dae79b065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{8ee735fc-3c5f-4e1b-b9f7-33bbef6ef173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TitleScene">
+      <UniqueIdentifier>{704dc3cf-1093-4345-9eab-075014f0bb8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\GameScene">
+      <UniqueIdentifier>{20ad2d6e-d1e4-4bc1-b05b-90791888966f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor2D">
+      <UniqueIdentifier>{813f0c82-67d7-456f-95ae-bf99272f6ad8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -915,14 +921,14 @@
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameScene\GameScene.cpp">
-      <Filter>Game\GameScene</Filter>
+    <ClCompile Include="Game\Scene\GameScene\GameScene.cpp">
+      <Filter>Game\Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\SceneManager\SceneManager.cpp">
       <Filter>Engine\Include\Application\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="Game\TitleScene\TitleScene.cpp">
-      <Filter>Game\TitleScene</Filter>
+    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp">
+      <Filter>Game\Scene\TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
@@ -1025,6 +1031,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor2D\StageEditor2D.cpp">
+      <Filter>Game\StageEditor2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1400,14 +1409,14 @@
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h">
       <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameScene\GameScene.h">
-      <Filter>Game\GameScene</Filter>
+    <ClInclude Include="Game\Scene\GameScene\GameScene.h">
+      <Filter>Game\Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\SceneManager\SceneManager.h">
       <Filter>Engine\Include\Application\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="Game\TitleScene\TitleScene.h">
-      <Filter>Game\TitleScene</Filter>
+    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h">
+      <Filter>Game\Scene\TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.h">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
@@ -1546,6 +1555,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor2D\StageEditor2D.h">
+      <Filter>Game\StageEditor2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

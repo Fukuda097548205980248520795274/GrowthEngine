@@ -39,6 +39,71 @@ void GameScene::Initialize()
 /// @brief 更新処理
 void GameScene::Update()
 {
+	ImGui::Begin("Stage Editor");
+
+	// キャンバスのサイズ
+	ImVec2 canvasSize = ImGui::GetContentRegionAvail();
+	ImVec2 canvasPos = ImGui::GetCursorScreenPos();
+
+	// DrawList を取得
+	ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+	// 背景
+	drawList->AddRectFilled(canvasPos,
+		ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y),
+		IM_COL32(50, 50, 50, 255));
+
+	// グリッド描画
+	const float gridSize = 32.0f;
+	for (float x = 0; x < canvasSize.x; x += gridSize) {
+		drawList->AddLine(
+			ImVec2(canvasPos.x + x, canvasPos.y),
+			ImVec2(canvasPos.x + x, canvasPos.y + canvasSize.y),
+			IM_COL32(80, 80, 80, 255)
+		);
+	}
+	for (float y = 0; y < canvasSize.y; y += gridSize) {
+		drawList->AddLine(
+			ImVec2(canvasPos.x, canvasPos.y + y),
+			ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + y),
+			IM_COL32(80, 80, 80, 255)
+		);
+	}
+
+	// タイル配置例
+	ImVec2 tilePos = ImVec2(canvasPos.x + 32, canvasPos.y + 32);
+	drawList->AddRectFilled(tilePos,
+		ImVec2(tilePos.x + gridSize, tilePos.y + gridSize),
+		IM_COL32(200, 100, 100, 255));
+
+	ImGui::End();
+
+	ImVec2 mousePos = ImGui::GetMousePos();
+	bool isInside =
+		mousePos.x >= canvasPos.x && mousePos.x < canvasPos.x + canvasSize.x &&
+		mousePos.y >= canvasPos.y && mousePos.y < canvasPos.y + canvasSize.y;
+
+	if (isInside && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+		int gridX = static_cast<int32_t>((mousePos.x - canvasPos.x) / gridSize);
+		int gridY = static_cast<int32_t>((mousePos.y - canvasPos.y) / gridSize);
+
+		stage_[gridY][gridX] = id_;
+	}
+
+	ImGui::Begin("Palette");
+
+	for (int i = 0; i < 3; i++) {
+		if (ImGui::Selectable(tileName[i].c_str(), id_ == i))
+		{
+			id_ = i;
+		}
+	}
+
+	ImGui::End();
+
+
+
+
 
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 

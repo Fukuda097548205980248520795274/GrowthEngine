@@ -646,12 +646,13 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Game\GameScene\GameScene.cpp" />
+    <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
+    <ClCompile Include="Game\StageEditor2D\StageEditor2D.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Game\TitleScene\TitleScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Engine\Parameter\Parameter.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -826,8 +827,9 @@
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
-    <ClInclude Include="Game\GameScene\GameScene.h" />
-    <ClInclude Include="Game\TitleScene\TitleScene.h" />
+    <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
+    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
+    <ClInclude Include="Game\StageEditor2D\StageEditor2D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

@@ -38,5 +38,19 @@ private:
 	PrefabInstanceStaticModel* instance2_ = nullptr;
 
 	std::unique_ptr<PostEffectRadialBlur> blur_ = nullptr;
+
+
+	enum TileID
+	{
+		kAir,
+		kBlock,
+		kBomb
+	};
+
+	std::string tileName[3] = { "Air", "Block", "Bomb" };
+
+	int32_t id_ = kAir;
+
+	int32_t stage_[12][18] = { 0 };
 };
 
