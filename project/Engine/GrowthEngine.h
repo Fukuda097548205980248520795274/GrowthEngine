@@ -53,6 +53,12 @@
 #include "Application/Collision3DInstance/Collision3DInstanceRay/Collision3DInstanceRay.h"
 #include "Application/Collision3DInstance/Collision3DInstanceSegment/Collision3DInstanceSegment.h"
 
+#include "Application/Collision2DBase/Collision2DBaseCircle/Collision2DBaseCircle.h"
+#include "Application/Collision2DBase/Collision2DBaseSprite/Collision2DBaseSprite.h"
+
+#include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
+#include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -489,7 +495,31 @@ public:
 	/// @brief 衝突対象の設定
 	/// @param hCollision 
 	/// @param hTargetCollision 
-	void SetCollisionTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision)const { renderContext_->SetCollisionTarget(hCollision, hTargetCollision); }
+	void SetCollision3DTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision)const { renderContext_->SetCollision3DTarget(hCollision, hTargetCollision); }
+
+
+
+	/// @brief 2D衝突の読み込み
+	/// @param func 
+	/// @param name 
+	/// @param type 
+	/// @return 
+	Collision2DHandle LoadCollision2D(std::function<void()> func, const std::string& name, Engine::Collision2D::Type type)const
+	{
+		return renderContext_->LoadCollision2D(func, name, type);
+	}
+
+	/// @brief インスタンスを作成する
+	/// @tparam T 
+	/// @param hCollision 
+	/// @return 
+	template<typename T>
+	T* CreateCollision2DInstance(Collision2DHandle hCollision) { return renderContext_->CreateCollision2DInstance<T>(hCollision); }
+
+	/// @brief 衝突対象の設定
+	/// @param hCollision 
+	/// @param hTargetCollision 
+	void SetCollision2DTarget(Collision2DHandle hCollision, Collision2DHandle hTargetCollision)const { renderContext_->SetCollision2DTarget(hCollision, hTargetCollision); }
 
 
 

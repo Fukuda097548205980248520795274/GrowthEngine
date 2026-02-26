@@ -150,6 +150,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp" />
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp" />
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp" />
     <ClCompile Include="Engine\Application\Collision3DBase\BaseCollision3DBase.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -487,8 +490,8 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp" />
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.cpp" />
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp" />
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DStore.cpp" />
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DAABBData\Collision3DAABBData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -657,6 +660,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
+    <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h" />
+    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.h" />
+    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h" />
+    <ClInclude Include="Engine\Application\Collision2DInstance\BaseCollision2DInstance.h" />
+    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.h" />
+    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.h" />
     <ClInclude Include="Engine\Application\Collision3DBase\BaseCollision3DBase.h" />
     <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseAABB\Collision3DBaseAABB.h" />
     <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseLine\Collision3DBaseLine.h" />
@@ -785,8 +794,8 @@
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h" />
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.h" />
-    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.h" />
-    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.h" />
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.h" />
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DStore.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DAABBData\Collision3DAABBData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DBaseData.h" />

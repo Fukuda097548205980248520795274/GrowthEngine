@@ -5,5 +5,5 @@
 /// @param hCollision 
 void Engine::BaseCollision3DBase::SetCollisionTarget(Collision3DHandle hCollision)const
 {
-	GrowthEngine::GetInstance()->SetCollisionTarget(hCollision_, hCollision);
+	GrowthEngine::GetInstance()->SetCollision3DTarget(hCollision_, hCollision);
 }

@@ -38,7 +38,7 @@ namespace Engine
 		/// @brief 衝突対象の設定
 		/// @param hCollision 
 		/// @param hTargetCollision 
-		void SetCollisionTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { dataTable_[hCollision]->SetCollisionTarget(hTargetCollision); }
+		void SetCollision3DTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { dataTable_[hCollision]->SetCollisionTarget(hTargetCollision); }
 
 
 	private:

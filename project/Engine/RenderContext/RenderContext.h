@@ -21,6 +21,7 @@
 #include "Store/AnimationStore/AnimationStore.h"
 #include "Store/SkeletonStore/SkeletonStore.h"
 #include "Store/LightStore/LightStore.h"
+#include "Store/Collision2DStore/Collision2DStore.h"
 #include "Store/Collision3DStore/Collision3DStore.h"
 
 namespace Engine
@@ -200,7 +201,7 @@ namespace Engine
 
 
 		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance() { prefab_->DestroyAllInstance(); collision3DStore_->DestroyAllInstance(); }
+		void DestroyAllInstance() { prefab_->DestroyAllInstance(); collision3DStore_->DestroyAllInstance(); collision2DStore_->DestroyAllInstance(); }
 
 
 
@@ -260,7 +261,28 @@ namespace Engine
 		/// @brief 衝突対象の設定
 		/// @param hCollision 
 		/// @param hTargetCollision 
-		void SetCollisionTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { collision3DStore_->SetCollisionTarget(hCollision, hTargetCollision); }
+		void SetCollision3DTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { collision3DStore_->SetCollision3DTarget(hCollision, hTargetCollision); }
+
+
+
+		/// @brief 2D衝突の読み込み
+		/// @param func 
+		/// @param name 
+		/// @param type 
+		/// @return 
+		Collision2DHandle LoadCollision2D(std::function<void()> func, const std::string& name, Collision2D::Type type) { return collision2DStore_->Load(func, name, type); }
+
+		/// @brief インスタンスを作成する
+		/// @tparam T 
+		/// @param hCollision 
+		/// @return 
+		template<typename T>
+		T* CreateCollision2DInstance(Collision2DHandle hCollision) { return collision2DStore_->CreateInstance<T>(hCollision); }
+
+		/// @brief 衝突対象の設定
+		/// @param hCollision 
+		/// @param hTargetCollision 
+		void SetCollision2DTarget(Collision2DHandle hCollision, Collision2DHandle hTargetCollision) { collision2DStore_->SetCollision2DTarget(hCollision, hTargetCollision); }
 
 
 
@@ -352,6 +374,9 @@ namespace Engine
 
 		/// @brief ライトストア
 		std::unique_ptr<LightStore> lightStore_ = nullptr;
+
+		/// @brief 2D衝突ストア
+		std::unique_ptr<Collision2DStore> collision2DStore_ = nullptr;
 
 		// 3D衝突ストア
 		std::unique_ptr<Collision3DStore> collision3DStore_ = nullptr;

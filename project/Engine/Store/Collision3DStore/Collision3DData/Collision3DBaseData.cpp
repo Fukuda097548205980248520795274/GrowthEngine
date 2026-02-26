@@ -1,10 +1,6 @@
 #include "Collision3DBaseData.h"
 #include "../Collision3DStore.h"
 
-#include "Collision3DAABBData/Collision3DAABBData.h"
-
-#include "Application/Collision3DInstance/Collision3DInstanceAABB/Collision3DInstanceAABB.h"
-
 #include "Func/CollisionFunc/CollisionFunc.h"
 #include <cassert>
 

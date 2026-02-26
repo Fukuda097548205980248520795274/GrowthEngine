@@ -616,6 +616,24 @@
     <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DSphereData">
       <UniqueIdentifier>{b9adbf9f-6e23-4c43-b6a7-b8f34e82f291}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DBase">
+      <UniqueIdentifier>{5dbb610a-d695-4afd-8f29-f39bd8697a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DInstance">
+      <UniqueIdentifier>{9bc8e965-8c20-4311-b30d-6c99e7d6b20e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite">
+      <UniqueIdentifier>{07020b70-2671-448c-9df5-ac702db46faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle">
+      <UniqueIdentifier>{8c650a55-056e-4c86-a8d1-3d56c1deb9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseCircle">
+      <UniqueIdentifier>{cd63af27-0c7d-48bb-b05a-392f2fa12b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseSprite">
+      <UniqueIdentifier>{3f6dda46-067a-4d5a-8b87-2d952dc326b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1026,14 +1044,23 @@
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.cpp">
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionCircleData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.cpp">
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClCompile>
     <ClCompile Include="Game\StageEditor2D\StageEditor2D.cpp">
       <Filter>Game\StageEditor2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp">
+      <Filter>Engine\Include\Application\Collision2DBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp">
+      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
+      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1550,14 +1577,32 @@
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionCircleData\CollisionCircleData.h">
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionCircleData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\CollisionSpriteData\CollisionSpriteData.h">
+    <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClInclude>
     <ClInclude Include="Game\StageEditor2D\StageEditor2D.h">
       <Filter>Game\StageEditor2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h">
+      <Filter>Engine\Include\Application\Collision2DBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DInstance\BaseCollision2DInstance.h">
+      <Filter>Engine\Include\Application\Collision2DInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.h">
+      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.h">
+      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.h">
+      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h">
+      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -83,6 +83,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 3D衝突ストアの生成と初期化
 	collision3DStore_ = std::make_unique<Collision3DStore>();
 
+	// 2D衝突ストアの生成と初期化
+	collision2DStore_ = std::make_unique<Collision2DStore>();
+
 	// DX12Modelの生成と初期化
 	model_ = std::make_unique<DX12Model>();
 	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
@@ -185,6 +188,7 @@ void Engine::RenderContext::PreDraw()
 
 	// 衝突判定
 	collision3DStore_->Update();
+	collision2DStore_->Update();
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
