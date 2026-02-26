@@ -1,5 +1,14 @@
 #pragma once
-class Collision2DBaseData
-{
-};
 
+namespace Engine
+{
+	class Collision2DBaseData
+	{
+	public:
+
+
+	private:
+
+
+	};
+}

@@ -1559,3 +1559,50 @@ bool Engine::CollisionCheckFunc(const Collision3D::OBB& obb, const Collision3D::
 	// AABBと線分の当たり判定
 	return CollisionCheckFunc(localAABB, localSegment);
 }
+
+/// @brief 衝突判定
+/// @param c1 
+/// @param c2 
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision2D::Circle& c1, const Collision2D::Circle& c2)
+{
+	float length = (c1.center - c2.center).Length();
+
+	if (length <= c1.radius + c2.radius)
+		return true;
+
+	return false;
+}
+
+/// @brief 衝突判定
+/// @param s1 
+/// @param s2 
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision2D::Sprite& s1, const Collision2D::Sprite& s2)
+{
+	if (s1.center.x + s1.radius.x >= s2.center.x - s2.radius.x &&
+		s1.center.x - s1.radius.x <= s2.center.x + s2.radius.x)
+		if (s1.center.y + s1.radius.y >= s2.center.y - s2.radius.y &&
+			s1.center.y - s1.radius.y <= s2.center.y + s2.radius.y)
+			return true;
+
+	return false;
+}
+
+/// @brief 衝突判定
+/// @param circle 
+/// @param sprite 
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision2D::Circle& circle, const Collision2D::Sprite& sprite)
+{
+	// 最近接点
+	Vector2 closetPoint;
+	closetPoint.x = std::clamp(circle.center.x, sprite.center.x - sprite.radius.x, sprite.center.x + sprite.radius.x);
+	closetPoint.y = std::clamp(circle.center.y, sprite.center.y - sprite.radius.y, sprite.center.y + sprite.radius.y);
+
+	// 最近接点が半径より小さいとき
+	if (circle.radius >= (circle.center - closetPoint).Length())
+		return true;
+
+	return false;
+}

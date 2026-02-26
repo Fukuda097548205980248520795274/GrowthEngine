@@ -1,11 +1,11 @@
 #include "Collision3DStore.h"
-#include "Collision3DData/CollisionSphereData/CollisionSphereData.h"
-#include "Collision3DData/CollisionAABBData/CollisionAABBData.h"
-#include "Collision3DData/CollisionOBBData/CollisionOBBData.h"
-#include "Collision3DData/CollisionPlaneData/CollisionPlaneData.h"
-#include "Collision3DData/CollisionLineData/CollisionLineData.h"
-#include "Collision3DData/CollisionRayData/CollisionRayData.h"
-#include "Collision3DData/CollisionSegmentData/CollisionSegmentData.h"
+#include "Collision3DData/Collision3DSphereData/Collision3DSphereData.h"
+#include "Collision3DData/Collision3DAABBData/Collision3DAABBData.h"
+#include "Collision3DData/Collision3DOBBData/Collision3DOBBData.h"
+#include "Collision3DData/Collision3DPlaneData/Collision3DPlaneData.h"
+#include "Collision3DData/Collision3DLineData/Collision3DLineData.h"
+#include "Collision3DData/Collision3DRayData/Collision3DRayData.h"
+#include "Collision3DData/Collision3DSegmentData/Collision3DSegmentData.h"
 
 #include <cassert>
 
@@ -36,7 +36,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// 球
 	if (type == Collision3D::Type::Sphere)
 	{
-		std::unique_ptr<CollisionSphereData> data = std::make_unique<CollisionSphereData>(func, name, type, handle);
+		std::unique_ptr<Collision3DSphereData> data = std::make_unique<Collision3DSphereData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -45,7 +45,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// AABB
 	if (type == Collision3D::Type::AABB)
 	{
-		std::unique_ptr<CollisionAABBData> data = std::make_unique<CollisionAABBData>(func, name, type, handle);
+		std::unique_ptr<Collision3DAABBData> data = std::make_unique<Collision3DAABBData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -54,7 +54,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// OBB
 	if (type == Collision3D::Type::OBB)
 	{
-		std::unique_ptr<CollisionOBBData> data = std::make_unique<CollisionOBBData>(func, name, type, handle);
+		std::unique_ptr<Collision3DOBBData> data = std::make_unique<Collision3DOBBData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -63,7 +63,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// 平面
 	if (type == Collision3D::Type::Plane)
 	{
-		std::unique_ptr<CollisionPlaneData> data = std::make_unique<CollisionPlaneData>(func, name, type, handle);
+		std::unique_ptr<Collision3DPlaneData> data = std::make_unique<Collision3DPlaneData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -72,7 +72,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// 直線
 	if (type == Collision3D::Type::Line)
 	{
-		std::unique_ptr<CollisionLineData> data = std::make_unique<CollisionLineData>(func, name, type, handle);
+		std::unique_ptr<Collision3DLineData> data = std::make_unique<Collision3DLineData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -81,7 +81,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// 半直線
 	if (type == Collision3D::Type::Ray)
 	{
-		std::unique_ptr<CollisionRayData> data = std::make_unique<CollisionRayData>(func, name, type, handle);
+		std::unique_ptr<Collision3DRayData> data = std::make_unique<Collision3DRayData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -90,7 +90,7 @@ Collision3DHandle Engine::Collision3DStore::Load(std::function<void()> func, con
 	// 線分
 	if (type == Collision3D::Type::Segment)
 	{
-		std::unique_ptr<CollisionSegmentData> data = std::make_unique<CollisionSegmentData>(func, name, type, handle);
+		std::unique_ptr<Collision3DSegmentData> data = std::make_unique<Collision3DSegmentData>(func, name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;

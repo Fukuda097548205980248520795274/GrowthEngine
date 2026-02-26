@@ -1,5 +1,5 @@
 #pragma once
-#include "Collision3DData/CollisionBase3DData.h"
+#include "Collision3DData/Collision3DBaseData.h"
 
 namespace Engine
 {
@@ -10,7 +10,7 @@ namespace Engine
 		/// @brief 衝突データを取得する
 		/// @param hCollision 
 		/// @return 
-		CollisionBase3DData* GetCollisionData(Collision3DHandle hCollision) { return dataTable_[hCollision].get(); }
+		Collision3DBaseData* GetCollisionData(Collision3DHandle hCollision) { return dataTable_[hCollision].get(); }
 
 		/// @brief 更新処理
 		void Update();
@@ -44,6 +44,6 @@ namespace Engine
 	private:
 
 		// データテーブル
-		std::vector<std::unique_ptr<CollisionBase3DData>> dataTable_;
+		std::vector<std::unique_ptr<Collision3DBaseData>> dataTable_;
 	};
 }

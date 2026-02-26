@@ -102,8 +102,8 @@ namespace Engine
 		/// @brief 円
 		struct Circle
 		{
-			/// @brief 位置
-			Vector2 position;
+			/// @brief 中心点
+			Vector2 center;
 
 			/// @brief 半径
 			float radius;
@@ -112,8 +112,8 @@ namespace Engine
 		/// @brief 矩形
 		struct Sprite
 		{
-			/// @brief 位置
-			Vector2 position;
+			/// @brief 中心点
+			Vector2 center;
 
 			/// @brief 半径
 			Vector2 radius;

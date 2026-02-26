@@ -99,4 +99,22 @@ namespace Engine
 	/// @param segment 線分
 	/// @return 
 	bool CollisionCheckFunc(const Collision3D::OBB& obb, const Collision3D::Segment& segment);
+
+	/// @brief 衝突判定
+	/// @param c1 
+	/// @param c2 
+	/// @return 
+	bool CollisionCheckFunc(const Collision2D::Circle& c1, const Collision2D::Circle& c2);
+
+	/// @brief 衝突判定
+	/// @param s1 
+	/// @param s2 
+	/// @return 
+	bool CollisionCheckFunc(const Collision2D::Sprite& s1, const Collision2D::Sprite& s2);
+
+	/// @brief 衝突判定
+	/// @param circle 
+	/// @param sprite 
+	/// @return 
+	bool CollisionCheckFunc(const Collision2D::Circle& circle, const Collision2D::Sprite& sprite);
 }
