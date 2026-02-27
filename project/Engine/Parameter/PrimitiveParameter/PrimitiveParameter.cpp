@@ -109,6 +109,12 @@ void Engine::PrimitiveParameter::RegisterGroupDataReflection(const std::string& 
 				Vector4** ptr = std::get_if<Vector4*>(&item);
 				**ptr = value;
 			}
+			else if (itItem->is_string() && std::holds_alternative<std::string*>(item))
+			{
+				std::string value = itItem->get<std::string>();
+				std::string** ptr = std::get_if<std::string*>(&item);
+				**ptr = value;
+			}
 
 
 			break;
@@ -187,6 +193,12 @@ void Engine::PrimitiveParameter::SaveFile(const std::string& groupName)
 			Vector4* value = std::get<Vector4*>(item);
 			root[groupName][itemName] = json::array({ value->x, value->y, value->z , value->w });
 		}
+		else if (std::holds_alternative<std::string*>(item))
+		{
+			std::string* value = std::get<std::string*>(item);
+			root[groupName][itemName] = *value;
+		}
+
 	}
 
 	// ディレクトリがなければ作成する

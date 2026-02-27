@@ -29,12 +29,30 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	// 名前
 	textureData->name = filePath;
 
-	// ミップイメージを取得する
-	textureData->mipImages = LoadTextureGetMipImages(filePath,log);
+
+	// テクスチャファイルを読んで、プログラムで扱えるようにする
+	DirectX::ScratchImage image{};
+	std::wstring filePathW = ConvertString(filePath);
+
+	HRESULT hr;
+
+	// ddsファイルかどうか
+	if (filePathW.ends_with(L".dds"))
+	{
+		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
+		assert(SUCCEEDED(hr));
+		if (log)log->Logging("ext : .dds");
+	}
+	else
+	{
+		// pngとか
+		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+		assert(SUCCEEDED(hr));
+		if (log)log->Logging("ext : .png");
+	}
 
 	// ハッシュ値を取得する
-	const DirectX::Image* image1 = textureData->mipImages.GetImages();
-	size_t hash1 = CalculateTextureHash(*image1);
+	size_t hash1 = CalculateTextureHash(*image.GetImages());
 
 	// 過去に取得したミップイメージと被っているかどうかを判断する
 	for (std::unique_ptr<TextureData>& data : dataTable_)
@@ -47,6 +65,29 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 			return data->handle;
 		}
 	}
+
+	// ログ出力
+	if (log)log->Logging(std::format("Load Texture : {}", filePath));
+
+	// 圧縮フォーマットであるとき
+	if (DirectX::IsCompressed(image.GetMetadata().format))
+	{
+		textureData->mipImages = std::move(image);
+		if (log)log->Logging("CompressionFormat : true");
+	}
+	else
+	{
+		// 圧縮フォーマットではないとき
+		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, textureData->mipImages);
+		assert(SUCCEEDED(hr));
+		if (log)log->Logging("CompressionFormat : false");
+	}
+
+	// ログ出力
+	if (log)log->Logging("Succeeded LoadTextureFile \n");
+
+
+
 
 	// テクスチャリソースを取得する
 	const DirectX::TexMetadata& metadata = textureData->mipImages.GetMetadata();
@@ -113,6 +154,47 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	dataTable_.push_back(std::move(textureData));
 
 	return handle;
+}
+
+/// @brief ハンドルを取得する
+/// @param filePath 
+/// @return 
+TextureHandle Engine::TextureStore::GetHandle(const std::string& filePath)
+{
+	// テクスチャファイルを読んで、プログラムで扱えるようにする
+	DirectX::ScratchImage image{};
+	std::wstring filePathW = ConvertString(filePath);
+
+	HRESULT hr;
+
+	// ddsファイルかどうか
+	if (filePathW.ends_with(L".dds"))
+	{
+		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
+		assert(SUCCEEDED(hr));
+	} else
+	{
+		// pngとか
+		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+		assert(SUCCEEDED(hr));
+	}
+
+	// ハッシュ値を取得する
+	size_t hash1 = CalculateTextureHash(*image.GetImages());
+
+	// 過去に取得したミップイメージと被っているかどうかを判断する
+	for (std::unique_ptr<TextureData>& data : dataTable_)
+	{
+		const DirectX::Image* image2 = data->mipImages.GetImages();
+		size_t hash2 = CalculateTextureHash(*image2);
+
+		if (hash1 == hash2)
+		{
+			return data->handle;
+		}
+	}
+
+	return 0;
 }
 
 /// @brief テクスチャのハッシュ値を計算する

@@ -69,6 +69,9 @@ namespace Engine
 		/// @brief パラメータ
 		std::unique_ptr<Sprite::Param> param_ = nullptr;
 
+		/// @brief テクスチャファイルパス
+		std::string textureFilePath_{};
+
 		/// @brief ハンドル
 		SpriteHandle hSprite_ = 0;
 

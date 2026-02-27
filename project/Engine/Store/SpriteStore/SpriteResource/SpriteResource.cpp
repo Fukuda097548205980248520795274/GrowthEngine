@@ -31,6 +31,7 @@ Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hText
 	// テクスチャ
 	param_->texture.hTexture = hTexture;
 	param_->texture.anchor = Vector2(0.0f, 0.0f);
+	textureFilePath_ = textureStore_->GetFilePath(hTexture);
 
 	// パラメータに記録と反映
 	group_ = "Sprite_" + name_;
@@ -49,9 +50,11 @@ Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hText
 
 		// テクスチャ
 		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
+		parameter_->SetValue(group_, "Texture", &textureFilePath_);
 
 		// 反映させる
 		parameter_->RegisterGroupDataReflection(group_);
+		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
 }
 
@@ -185,6 +188,41 @@ void Engine::SpriteResource::DebugParameter()
 
 			// 終了
 			ImGui::TreePop();
+		}
+
+		// テクスチャ
+		if (ImGui::TreeNode("Texture"))
+		{
+			// アンカー
+			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f);
+
+			// テクスチャ
+			ImGui::Text("\n");
+
+			ImGui::ImageButton(
+				textureStore_->GetFilePath(param_->texture.hTexture).c_str(),
+				textureStore_->GetSrvGpuHandle(param_->texture.hTexture).ptr,
+				ImVec2(32.0f, 32.0f),
+				ImVec2(0, 0),
+				ImVec2(1, 1),
+				ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
+				ImVec4(1, 1, 1, 1)
+			);
+
+			// --- ドロップ処理 ---
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
+				{
+					int droppedIndex = *(const int*)payload->Data;
+
+					// droppedIndex が dataTable_ の index
+					// ここでマテリアルなどに設定する
+					param_->texture.hTexture = static_cast<uint32_t>(droppedIndex);
+					textureFilePath_ = textureStore_->GetFilePath(param_->texture.hTexture);
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 
 		ImGui::Text("\n");

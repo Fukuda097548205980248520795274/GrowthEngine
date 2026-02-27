@@ -76,6 +76,9 @@ namespace Engine
 		/// @brief パラメータ
 		std::unique_ptr<Primitive::AnimationModel::Param> param_ = nullptr;
 
+		// テクスチャファイルパステーブル
+		std::vector<std::string> textureFilePathTable_;
+
 
 		// 座標変換リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>> meshTransformationResources_;

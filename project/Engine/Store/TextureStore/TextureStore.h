@@ -49,6 +49,11 @@ namespace Engine
 		/// @param log 
 		TextureHandle Load(const std::string& filePath, DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log);
 
+		/// @brief ファイルパスを取得する
+		/// @param hTexture 
+		/// @return 
+		std::string GetFilePath(TextureHandle hTexture)const { return dataTable_[hTexture]->name; }
+
 		/// @brief SRV用GPUハンドルを取得する
 		/// @param handle 
 		/// @return 
@@ -63,6 +68,16 @@ namespace Engine
 		/// @param handle 
 		/// @return 
 		size_t GetTextureHeight(TextureHandle handle)const { return dataTable_[handle]->mipImages.GetMetadata().height; }
+
+		/// @brief ハンドルを取得する
+		/// @param filePath 
+		/// @return 
+		TextureHandle GetHandle(const std::string& filePath);
+
+		/// @brief ファイルパスを取得する
+		/// @param handle 
+		/// @return 
+		std::string GetFilePath(TextureHandle handle) { return dataTable_[handle]->name; }
 
 		/// @brief UIを描画する
 		void DrawUI();

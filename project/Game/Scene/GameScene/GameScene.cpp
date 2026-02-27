@@ -16,10 +16,8 @@ void GameScene::Initialize()
 		GrowthEngine::GetInstance()->LoadSkeleton("./Assets/Models/walk", "walk.gltf"),
 		"suzanne");
 
-	animationModel_ = std::make_unique<PrimitiveAnimationModel>(
-		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),
-		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),
-		"AnimatedCube");
+	animationModel_ = std::make_unique<PrimitiveStaticModel>(
+		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"),"AnimatedCube");
 	animationModel_->param_->modelTransform.translate.y = -1.0f;
 
 	blur_ = std::make_unique<PostEffectRadialBlur>("PostEffect");

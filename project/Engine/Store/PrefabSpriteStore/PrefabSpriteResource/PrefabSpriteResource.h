@@ -92,6 +92,9 @@ namespace Engine
 		/// @brief パラメータ
 		std::unique_ptr<Prefab::Sprite::Base::Param> param_ = nullptr;
 
+		/// @brief テクスチャファイルパス
+		std::string textureFilePath_{};
+
 		// プレハブリソース
 		std::unique_ptr<StructuredBufferResource<Prefab::SpriteDataForGPU>> resource_ = nullptr;
 

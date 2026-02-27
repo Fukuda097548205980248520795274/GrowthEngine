@@ -74,6 +74,9 @@ namespace Engine
 		/// @brief パラメータ
 		std::unique_ptr<Prefab::StaticModel::Base::Param> param_ = nullptr;
 
+		// テクスチャファイルパステーブル
+		std::vector<std::string> textureFilePathTable_;
+
 		/// @brief モデルハンドル
 		ModelHandle hModel_ = 0;
 

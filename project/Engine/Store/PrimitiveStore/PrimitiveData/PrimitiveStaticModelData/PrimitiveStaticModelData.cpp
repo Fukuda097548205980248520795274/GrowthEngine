@@ -62,6 +62,9 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	
+	// ファイルパス
+	textureFilePathTable_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
@@ -77,6 +80,10 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 		param_->meshMaterial[meshIndex].uv.radius = 0.0f;
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 
+		// テクスチャファイルパス
+		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
+
+
 		// パラメータの記録
 		if (parameter_)
 		{
@@ -88,6 +95,8 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
+
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
 
 		// 座標変換リソース
@@ -105,6 +114,8 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 
 	// 値を反映させる
 	if (parameter_)parameter_->RegisterGroupDataReflection(group_);
+	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
+		param_->meshMaterial[meshIndex].hTexture = textureStore_->GetHandle(textureFilePathTable_[meshIndex]);
 }
 
 /// @brief 更新処理
@@ -341,6 +352,34 @@ void Engine::PrimitiveStaticModelData::DebugParameter()
 
 						// 色
 						ImGui::ColorEdit4("Color", &param_->meshMaterial[meshIndex].color.x);
+
+						// テクスチャ
+						ImGui::Text("Texture");
+
+						ImGui::ImageButton(
+							textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture).c_str(),
+							textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture).ptr,
+							ImVec2(32.0f, 32.0f),
+							ImVec2(0, 0),
+							ImVec2(1, 1),
+							ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
+							ImVec4(1, 1, 1, 1)
+						);
+
+						// --- ドロップ処理 ---
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
+							{
+								int droppedIndex = *(const int*)payload->Data;
+
+								// droppedIndex が dataTable_ の index
+								// ここでマテリアルなどに設定する
+								param_->meshMaterial[meshIndex].hTexture = static_cast<uint32_t>(droppedIndex);
+								textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
+							}
+							ImGui::EndDragDropTarget();
+						}
 
 						// 終了
 						ImGui::TreePop();
