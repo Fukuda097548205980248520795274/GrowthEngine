@@ -561,6 +561,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.cpp" />
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.cpp" />
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.cpp" />
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleStore.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -814,6 +818,10 @@
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.h" />
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.h" />
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h" />
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleStore.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />

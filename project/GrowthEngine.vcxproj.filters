@@ -634,6 +634,18 @@
     <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseSprite">
       <UniqueIdentifier>{3f6dda46-067a-4d5a-8b87-2d952dc326b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore">
+      <UniqueIdentifier>{fd8e0911-cb46-4b58-b235-1e7d8d6e9f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData">
+      <UniqueIdentifier>{528526b9-934a-4d5a-bb07-b144bb5e2f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData">
+      <UniqueIdentifier>{b16ced47-312f-44a0-820f-2768a11f43b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
+      <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1061,6 +1073,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
       <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleStore.cpp">
+      <Filter>Engine\Include\Store\ParticleStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.cpp">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.cpp">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.cpp">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1603,6 +1627,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h">
       <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleStore.h">
+      <Filter>Engine\Include\Store\ParticleStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.h">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.h">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h">
+      <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

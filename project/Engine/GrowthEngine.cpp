@@ -3,6 +3,7 @@
 #include "Log/Log.h"
 #include "Func/CrushHandler/CrushHandler.h"
 #include "Func/ConvertString/ConvertString.h"
+#include <chrono>
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"Dbghelp.lib")
@@ -119,6 +120,12 @@ GrowthEngine::~GrowthEngine()
 /// @brief 新フレーム処理
 void GrowthEngine::NewFrame()
 {
+	TimePoint currentTime = Clock::now();
+	std::chrono::duration<float> deltaTime = currentTime - previousTime_;
+	previousTime_ = currentTime;
+	deltaTime_ = deltaTime.count();
+
+
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();
 

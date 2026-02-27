@@ -105,6 +105,10 @@ public:
 	/// @brief 描画後処理
 	void PostDraw();
 
+	/// @brief デルタタイムを取得する
+	/// @return 
+	float GetDeltaTime()const { return deltaTime_; }
+
 	/// @brief 3Dカメラの切り替え
 	/// @param hCamera 
 	void Camera3DSwitch(Camera3DHandle hCamera) const { renderContext_->Camera3DSwitch(hCamera); }
@@ -579,6 +583,15 @@ private:
 
 	// 描画統括
 	std::unique_ptr<Engine::RenderContext> renderContext_ = nullptr;
+
+
+private:
+
+	using Clock = std::chrono::high_resolution_clock;
+	using TimePoint = std::chrono::time_point<Clock>;
+
+	TimePoint previousTime_;
+	float deltaTime_ = 0.0f;
 
 
 private:

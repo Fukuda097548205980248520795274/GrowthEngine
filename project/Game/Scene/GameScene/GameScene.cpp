@@ -105,7 +105,7 @@ void GameScene::Update()
 
 	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 
-	model_->param_->animation.timer += 1.0f / 60.0f;
+	model_->param_->animation.timer += engine_->GetDeltaTime();
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);
 
 	if (engine_->GetKeyTrigger(DIK_SPACE))

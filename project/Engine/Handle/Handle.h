@@ -49,3 +49,6 @@ using Collision3DHandle = uint32_t;
 
 // 2D衝突ハンドル
 using Collision2DHandle = uint32_t;
+
+/// @brief パーティクルハンドル
+using ParticleHandle = uint32_t;
