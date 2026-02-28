@@ -80,6 +80,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	lightStore_ = std::make_unique<LightStore>();
 	lightStore_->Initialize(core_->GetDevice(), commandList_, heap_.get(), shaderCompiler_.get(), log);
 
+	// スカイボックスストアの生成と初期化
+	skyboxStore_ = std::make_unique<SkyboxStore>();
+	skyboxStore_->Initialize(core_->GetDevice(), commandList_, shaderCompiler_.get(), textureStore_.get(), heap_.get(), log);
+
 	// 3D衝突ストアの生成と初期化
 	collision3DStore_ = std::make_unique<Collision3DStore>();
 
@@ -192,6 +196,9 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
+
+	// スカイボックスの描画
+	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
 }
 
 /// @brief 描画後処理

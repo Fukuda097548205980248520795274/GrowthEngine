@@ -11,6 +11,13 @@ namespace Engine
 	class DX12Heap;
 	class Log;
 
+	/// @brief テクスチャの種類
+	enum class TextureType
+	{
+		Texture2D,
+		Cubemap
+	};
+
 	class TextureStore
 	{
 	public:
@@ -18,16 +25,16 @@ namespace Engine
 		/// @brief テクスチャデータ
 		struct TextureData
 		{
-			// テクスチャリソース
+			/// @brief リソース
 			Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 
 			/// @brief 中間リソース
 			Microsoft::WRL::ComPtr<ID3D12Resource> subResource = nullptr;
 
-			// ミップイメージ
+			/// @brief みっぷイメージ
 			DirectX::ScratchImage mipImages{};
 
-			// SRV用ハンドル
+			/// @brief SRVハンドル
 			std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle;
 
 			// ハンドル
@@ -35,6 +42,9 @@ namespace Engine
 
 			// 名前
 			std::string name{};
+
+			/// @brief 種類
+			TextureType type_;
 		};
 
 
@@ -74,10 +84,10 @@ namespace Engine
 		/// @return 
 		TextureHandle GetHandle(const std::string& filePath);
 
-		/// @brief ファイルパスを取得する
+		/// @brief 種類の取得
 		/// @param handle 
 		/// @return 
-		std::string GetFilePath(TextureHandle handle) { return dataTable_[handle]->name; }
+		TextureType GetType(TextureHandle handle)const { return dataTable_[handle]->type_; }
 
 		/// @brief UIを描画する
 		void DrawUI();

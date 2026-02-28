@@ -39,12 +39,18 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	// ddsファイルかどうか
 	if (filePathW.ends_with(L".dds"))
 	{
+		// キューブマップ
+		textureData->type_ = TextureType::Cubemap;
+
 		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
 		assert(SUCCEEDED(hr));
 		if (log)log->Logging("ext : .dds");
 	}
 	else
 	{
+		// 2Dテクスチャ
+		textureData->type_ = TextureType::Texture2D;
+
 		// pngとか
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 		assert(SUCCEEDED(hr));
@@ -228,6 +234,10 @@ void Engine::TextureStore::DrawUI()
 	for (int i = 0; i < dataTable_.size(); i++)
 	{
 		const auto& tex = dataTable_[i];
+
+		// Texture2Dのみ
+		if (tex->type_ != TextureType::Texture2D)
+			continue;
 
 		ImGui::PushID(i);
 

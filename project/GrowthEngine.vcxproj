@@ -357,6 +357,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -385,6 +386,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOSkybox\BasePSOSkybox.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -625,6 +627,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp" />
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -725,6 +728,7 @@
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h" />
+    <ClInclude Include="Engine\Data\SkyboxData\SkyboxData.h" />
     <ClInclude Include="Engine\Data\SpriteData\SpriteData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CollisionFunc\CollisionFunc.h" />
@@ -760,6 +764,7 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
+    <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h" />
@@ -767,6 +772,7 @@
     <ClInclude Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.h" />
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.h" />
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMap\PSOShadowMap.h" />
+    <ClInclude Include="Engine\PSO\PSOSkybox\BasePSOSkybox.h" />
     <ClInclude Include="Engine\RenderContext\DX12Buffering\DX12Buffering.h" />
     <ClInclude Include="Engine\RenderContext\DX12Command\DX12Command.h" />
     <ClInclude Include="Engine\RenderContext\DX12Core\DX12Core.h" />
@@ -837,6 +843,7 @@
     <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveStore.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
+    <ClInclude Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h" />
     <ClInclude Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.h" />
     <ClInclude Include="Engine\Store\SpriteStore\SpriteStore.h" />
@@ -870,6 +877,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="Assets\Shader\Primitive\Primitive.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Assets\Shader\Skybox\Skybox.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -1003,6 +1015,22 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Skybox\Skybox.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Skybox\Skybox.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

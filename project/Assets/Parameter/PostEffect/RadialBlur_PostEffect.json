@@ -1,6 +1,6 @@
 {
     "RadialBlur_PostEffect": {
-        "Blur": 1.0,
+        "Blur": 0.0,
         "Brightness": 0.0,
         "Center": [
             0.5,

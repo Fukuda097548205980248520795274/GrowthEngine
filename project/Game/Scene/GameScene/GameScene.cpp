@@ -10,6 +10,8 @@ void GameScene::Initialize()
 
 	gameCamera_ = std::make_unique<GameCamera3D>("Test");
 
+	engine_->LoadTexture("./Assets/Textures/rostock_laage_airport_4k.dds");
+
 	model_ = std::make_unique<PrimitiveSkinningModel>(
 		GrowthEngine::GetInstance()->LoadModel("./Assets/Models/walk", "walk.gltf"),
 		GrowthEngine::GetInstance()->LoadAnimation("./Assets/Models/walk", "walk.gltf"),

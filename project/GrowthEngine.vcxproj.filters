@@ -646,6 +646,21 @@
     <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
       <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Skybox">
+      <UniqueIdentifier>{52c3a4a7-4ad9-4ed4-a38f-c0e696bfad32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOSkybox">
+      <UniqueIdentifier>{c168dd58-1e67-46b5-8930-a249a1dd8036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOSkybox\PSOSkybox">
+      <UniqueIdentifier>{ce38fb66-a1c0-4856-bf65-981647c04104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SkyboxStore\SkyboxResource">
+      <UniqueIdentifier>{62d19117-64a5-4e4a-9947-59bcd6b8d512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\SkyboxData">
+      <UniqueIdentifier>{d0e784c8-4bc9-4ed6-a670-2d94ef212661}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1085,6 +1100,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.cpp">
       <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
+      <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOSkybox\BasePSOSkybox.cpp">
+      <Filter>Engine\Include\PSO\PSOSkybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp">
+      <Filter>Engine\Include\Store\SkyboxStore\SkyboxResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1640,6 +1664,18 @@
     <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h">
       <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h">
+      <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOSkybox\BasePSOSkybox.h">
+      <Filter>Engine\Include\PSO\PSOSkybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.h">
+      <Filter>Engine\Include\Store\SkyboxStore\SkyboxResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\SkyboxData\SkyboxData.h">
+      <Filter>Engine\Include\Data\SkyboxData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -1659,6 +1695,9 @@
     </None>
     <None Include="Assets\Shader\Line\Line.hlsli">
       <Filter>Engine\Shader\Line</Filter>
+    </None>
+    <None Include="Assets\Shader\Skybox\Skybox.hlsli">
+      <Filter>Engine\Shader\Skybox</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1712,6 +1751,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Line\Line.PS.hlsl">
       <Filter>Engine\Shader\Line</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Skybox\Skybox.VS.hlsl">
+      <Filter>Engine\Shader\Skybox</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Skybox\Skybox.PS.hlsl">
+      <Filter>Engine\Shader\Skybox</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

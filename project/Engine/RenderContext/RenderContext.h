@@ -23,6 +23,7 @@
 #include "Store/LightStore/LightStore.h"
 #include "Store/Collision2DStore/Collision2DStore.h"
 #include "Store/Collision3DStore/Collision3DStore.h"
+#include "Store/SkyboxStore/SkyboxStore.h"
 
 namespace Engine
 {
@@ -380,6 +381,9 @@ namespace Engine
 
 		// 3D衝突ストア
 		std::unique_ptr<Collision3DStore> collision3DStore_ = nullptr;
+
+		/// @brief スカイボックスストア
+		std::unique_ptr<SkyboxStore> skyboxStore_ = nullptr;
 
 
 	private:
