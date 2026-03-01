@@ -151,27 +151,27 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 /// @param commandList 
 /// @param handle 
 /// @param meshIndex 
-void Engine::PrimitiveStore::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso)
+void Engine::PrimitiveStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso)
 {
 	// 静的モデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::StaticModel)
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso);
+		p->Register(cameraStore, skyboxStore, commandList, pso);
 	}
 
 	// アニメーションモデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::AnimationModel)
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso);
+		p->Register(cameraStore, skyboxStore, commandList, pso);
 	}
 
 	// スキニングモデル
 	if (dataTable_[handle]->GetType() == Primitive::Type::SkinningModel)
 	{
 		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
-		p->Register(viewProjection, commandList, pso);
+		p->Register(cameraStore, skyboxStore, commandList, pso);
 	}
 }
 

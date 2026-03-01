@@ -35,12 +35,20 @@ void Engine::PSOPrimitive::Initialize(ID3D12Device* device, IDxcBlob* vertexShad
 	descriptorShadowMapTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorShadowMapTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	// SRV t2 環境マップテクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorEnvironmentTexture[1];
+	descriptorEnvironmentTexture[0].BaseShaderRegister = 2;
+	descriptorEnvironmentTexture[0].RegisterSpace = 0;
+	descriptorEnvironmentTexture[0].NumDescriptors = 1;
+	descriptorEnvironmentTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorEnvironmentTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[5];
+	D3D12_ROOT_PARAMETER rootParameter[7];
 
 	// CBV VertexShader b0 座標変換
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -71,6 +79,18 @@ void Engine::PSOPrimitive::Initialize(ID3D12Device* device, IDxcBlob* vertexShad
 	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[4].Descriptor.RegisterSpace = 0;
 	rootParameter[4].Descriptor.ShaderRegister = 1;
+
+	// CBV PixelShader b2 カメラ
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[5].Descriptor.RegisterSpace = 0;
+	rootParameter[5].Descriptor.ShaderRegister = 2;
+
+	// DescriptorTable PixelShader 環境マップテクスチャ
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[6].DescriptorTable.pDescriptorRanges = descriptorEnvironmentTexture;
+	rootParameter[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorEnvironmentTexture);
 
 
 	/*--------------------

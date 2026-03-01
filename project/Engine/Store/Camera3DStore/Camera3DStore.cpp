@@ -15,6 +15,19 @@ Engine::Camera3DStore::Camera3DStore()
 #endif
 }
 
+/// @brief 初期化
+/// @param device 
+/// @param log 
+void Engine::Camera3DStore::Initialize(ID3D12Device* device, Log* log)
+{
+	// nullptrチェック
+	assert(device);
+
+	// カメラリソースの生成と初期化
+	cameraResource_ = std::make_unique<ConstantBufferResource<Vector4>>();
+	cameraResource_->Initialize(device, log);
+}
+
 /// @brief 読み込み
 /// @param name 名前
 /// @return 
@@ -46,12 +59,21 @@ void Engine::Camera3DStore::Update()
 	// 指定されたカメラの更新
 	dataTable_[selectHCamera_]->Update();
 
+	Vector3 cameraPosition = dataTable_[selectHCamera_]->GetCamera3D().GetWorldPosition();
+
 #ifdef _DEVELOPMENT
 
 	// デバッグカメラ更新
 	debugCamera_->Update();
 
+	// デバッグカメラ有効時
+	if (debugCamera_->IsEnable())
+		cameraPosition = debugCamera_->GetCamera3D().GetWorldPosition();
+
 #endif
+
+	// 指定されたカメラのデータ
+	*cameraResource_->data_ = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 0.0f);
 }
 
 /// @brief 3Dカメラデータを取得する

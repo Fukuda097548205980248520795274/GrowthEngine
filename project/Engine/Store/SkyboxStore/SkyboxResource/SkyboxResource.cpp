@@ -90,3 +90,12 @@ void Engine::SkyboxResource::Register(ID3D12GraphicsCommandList* commandList, Ba
 	// ドローコール
 	commandList->DrawIndexedInstanced(36, 1, 0, 0, 0);
 }
+
+/// @brief キューブマップをコマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::SkyboxResource::RegisterCubeMap(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	// テクスチャの設定
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, textureStore_->GetSrvGpuHandle(hTexture_));
+}

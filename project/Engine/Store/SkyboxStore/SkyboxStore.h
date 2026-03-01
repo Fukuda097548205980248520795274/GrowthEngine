@@ -46,6 +46,11 @@ namespace Engine
 		/// @return 
 		SkyboxData::Param* GetParam(SkyboxHandle hSkybox) { return dataTable_[hSkybox]->GetParam(); }
 
+		/// @brief キューブマップテクスチャをコマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterCubeMapTexture(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) { dataTable_[currentHandle_]->RegisterCubeMap(commandList, rootParameterIndex); }
+
 
 	private:
 

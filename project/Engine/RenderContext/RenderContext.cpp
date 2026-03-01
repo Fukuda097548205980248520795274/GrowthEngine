@@ -60,6 +60,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
+	camera3DStore_->Initialize(core_->GetDevice(), log);
 
 	// 2Dカメラストア
 	camera2DStore_ = std::make_unique<Camera2DStore>();

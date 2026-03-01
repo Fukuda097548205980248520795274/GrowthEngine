@@ -10,6 +10,7 @@ namespace Engine
 	class BasePSOModel;
 	class BasePSOShadowMap;
 	class PrefabPrimitiveParameter;
+	class SkyboxStore;
 
 	class PrefabPrimitiveBaseData
 	{
@@ -43,7 +44,7 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 
-		virtual void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) = 0;
+		virtual void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) = 0;
 
 		/// @brief シャドウマップを描画する
 		/// @param viewProjection 

@@ -30,6 +30,8 @@ namespace Engine
 	class SkeletonStore;
 	class DX12Heap;
 	class ComputePSOSkinning;
+	class Camera3DStore;
+	class SkyboxStore;
 
 	class PrimitiveSkinningModelData : public PrimitiveBaseData
 	{
@@ -64,7 +66,7 @@ namespace Engine
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリスト
 		/// @param commandList 

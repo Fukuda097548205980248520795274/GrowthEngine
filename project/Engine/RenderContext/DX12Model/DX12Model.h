@@ -13,6 +13,8 @@ namespace Engine
 	class BasePSOShadowMap;
 	class ModelStore;
 	class TextureStore;
+	class Camera3DStore;
+	class SkyboxStore;
 
 	class DX12Model
 	{
@@ -81,9 +83,9 @@ namespace Engine
 		/// @brief プリミティブの描画処理
 		/// @param commandList 
 		/// @param handle 
-		void DrawPrimitive(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle) 
+		void DrawPrimitive(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle)
 		{
-			primitiveStore_->Register(viewProjection, commandList, handle, psoPrimitive_.get());
+			primitiveStore_->Register(cameraStore,skyboxStore, commandList, handle, psoPrimitive_.get());
 		}
 
 		/// @brief スプライトの描画処理

@@ -25,6 +25,8 @@ namespace Engine
 	class Log;
 	class DX12Heap;
 	class ShaderCompiler;
+	class Camera3DStore;
+	class SkyboxStore;
 
 	class PrimitiveStore
 	{
@@ -71,7 +73,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param meshIndex 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

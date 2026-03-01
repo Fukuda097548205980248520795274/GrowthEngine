@@ -21,6 +21,8 @@ namespace Engine
 	class TextureStore;
 	class LightStore;
 	class AnimationStore;
+	class Camera3DStore;
+	class SkyboxStore;
 
 	class PrimitiveAnimationModelData : public PrimitiveBaseData
 	{
@@ -47,10 +49,10 @@ namespace Engine
 		void* GetParam()override { return param_.get(); }
 
 		/// @brief コマンドリストに登録する
-		/// @param viewProjection 
+		/// @param cameraStore 
 		/// @param commandList 
 		/// @param pso 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリストに登録する
 		/// @param viewProjection 

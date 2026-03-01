@@ -176,7 +176,7 @@ namespace Engine
 
 		/// @brief プリミティブ用プレハブを描画する
 		/// @param hPrefabPrimitive 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive, commandList_); }
+		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive,skyboxStore_.get(), commandList_); }
 
 		/// @brief スプライト用プレハブを描画する
 		/// @param hPrefabSprite 
@@ -213,7 +213,7 @@ namespace Engine
 		/// @param handle 
 		void DrawPrimitive(PrimitiveHandle handle)
 		{
-			model_->DrawPrimitive(camera3DStore_->GetCamera3D().GetViewProjectionMatrix(), commandList_, handle);
+			model_->DrawPrimitive(camera3DStore_.get(),skyboxStore_.get(), commandList_, handle);
 		}
 
 		/// @brief スプライトの描画処理

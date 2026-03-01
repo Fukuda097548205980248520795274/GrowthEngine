@@ -42,6 +42,11 @@ namespace Engine
 		/// @param viewProjection 
 		void Register(ID3D12GraphicsCommandList* commandList, BasePSOSkybox* pso, const Matrix4x4& viewProjection);
 
+		/// @brief キューブマップをコマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterCubeMap(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
 		/// @brief パラメータを取得する
 		/// @return 
 		SkyboxData::Param* GetParam() { return param_.get(); }

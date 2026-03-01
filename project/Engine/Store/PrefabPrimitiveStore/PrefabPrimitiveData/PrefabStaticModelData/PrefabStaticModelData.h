@@ -17,6 +17,7 @@ namespace Engine
 	class LightStore;
 	class Camera3DStore;
 	class Log;
+	class SkyboxStore;
 
 	class PrefabStaticModelData : public PrefabPrimitiveBaseData
 	{
@@ -46,7 +47,7 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 
-		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
+		void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
 
 		/// @brief シャドウマップを描画する
 		/// @param viewProjection 

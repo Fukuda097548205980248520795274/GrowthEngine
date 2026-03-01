@@ -20,6 +20,8 @@ namespace Engine
 	class Log;
 	class TextureStore;
 	class LightStore;
+	class Camera3DStore;
+	class SkyboxStore;
 
 	class PrimitiveStaticModelData : public PrimitiveBaseData
 	{
@@ -48,7 +50,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		/// @param lightStore 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリストに登録
 		/// @param viewProjection 

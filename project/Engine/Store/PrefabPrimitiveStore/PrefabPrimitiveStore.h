@@ -19,6 +19,7 @@ namespace Engine
 	class Log;
 	class BasePSOShadowMap;
 	class BasePSOModel;
+	class SkyboxStore;
 
 	class PrefabPrimitiveStore
 	{
@@ -62,7 +63,7 @@ namespace Engine
 		/// @param hPrefabPrimitive 
 		/// @param commandList 
 		/// @param pso 
-		void Register(PrefabPrimitiveHandle hPrefabPrimitive, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief シャドウマップの描画処理
 		/// @param viewProjection 

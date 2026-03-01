@@ -6,6 +6,7 @@
 #include "Store/LightStore/LightStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
+#include "Store/SkyboxStore/SkyboxStore.h"
 
 #include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
 
@@ -137,7 +138,7 @@ void Engine::PrefabStaticModelData::Update()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabStaticModelData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrefabStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
@@ -145,6 +146,12 @@ void Engine::PrefabStaticModelData::Register(ID3D12GraphicsCommandList* commandL
 
 	// PSOの設定
 	pso->Register(commandList);
+
+	// カメラの設定
+	cameraStore_->RegisterCameraResource(commandList, 4);
+
+	// スカイボックスの設定
+	skyboxStore->RegisterCubeMapTexture(commandList, 5);
 
 	// メッシュごとに処理
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)

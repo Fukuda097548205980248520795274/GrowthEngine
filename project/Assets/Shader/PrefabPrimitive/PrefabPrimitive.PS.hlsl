@@ -12,11 +12,22 @@ struct ShadowTransformation
 };
 ConstantBuffer<ShadowTransformation> gShadowTransformation : register(b0);
 
+// カメラ
+struct Camera
+{
+    float3 worldPosition;
+};
+ConstantBuffer<Camera> gCamera : register(b1);
+
 Texture2D<float4> gTexture : register(t0);
-SamplerState gSampler : register(s0);
 
 // シャドウマップ用テクスチャ
 Texture2D<float> gShadowMap : register(t1);
+
+// 環境マップテクスチャ
+TextureCube<float4> gEnvironmentTexture : register(t2);
+
+SamplerState gSampler : register(s0);
 
 // シャドウ用比較サンプラー
 SamplerComparisonState gShadowSampler : register(s1);
@@ -42,9 +53,14 @@ PixelShaderOutput main(VertexShaderOutput input)
     float shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - 0.005f);
     float shadowFactor = lerp(0.5f, 1.0f, shadow); // 影の濃さ調整
     
+    float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
+    float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
+    float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
     
     // 色
     output.color.rgb = input.color.rgb * textureColor.rgb * shadowFactor;
+    output.color.rgb += environmentColor.rgb;
+    
     output.color.a = input.color.a * textureColor.a;
     
     // a = 0は描画しない

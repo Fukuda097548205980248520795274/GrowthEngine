@@ -13,6 +13,7 @@ namespace Engine
 	class BasePSOShadowMap;
 	class ModelStore;
 	class TextureStore;
+	class SkyboxStore;
 
 	class DX12Prefab
 	{
@@ -82,7 +83,7 @@ namespace Engine
 		/// @brief プリミティブ用プレハブを描画する
 		/// @param hPrefabPrimitive 
 		/// @param commandList 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive, ID3D12GraphicsCommandList* commandList) { prefabPrimitiveStore_->Register(hPrefabPrimitive, commandList, psoPrefabPrimitive_.get()); }
+		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefabPrimitiveStore_->Register(hPrefabPrimitive,skyboxStore, commandList, psoPrefabPrimitive_.get()); }
 
 		/// @brief スプライト用プレハブでの描画処理
 		/// @param hPrefabSprite 

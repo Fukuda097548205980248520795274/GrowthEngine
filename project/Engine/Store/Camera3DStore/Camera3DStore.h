@@ -5,8 +5,11 @@
 #include "Camera3DResource/Camera3DResource.h"
 #include "DebugCameraResource/DebugCameraResource.h"
 
+#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+
 namespace Engine
 {
+	class Log;
 
 	class Camera3DStore
 	{
@@ -14,6 +17,11 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		Camera3DStore();
+
+		/// @brief 初期化
+		/// @param device 
+		/// @param log 
+		void Initialize(ID3D12Device* device, Log* log);
 
 		/// @brief 読み込み
 		/// @param name 
@@ -36,6 +44,11 @@ namespace Engine
 		/// @return 
 		Camera3DData::Param* GetParam(Camera3DHandle hCamera) { return dataTable_[hCamera]->GetCamera3D().GetParam(); }
 
+		/// @brief カメラリソースをコマンドリストに登録
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterCameraResource(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) { cameraResource_->RegisterGraphics(commandList, rootParameterIndex); }
+
 
 	private:
 
@@ -46,6 +59,9 @@ namespace Engine
 
 		// 選択中のカメラハンドル
 		Camera3DHandle selectHCamera_ = 0;
+
+		/// @brief カメラリソース
+		std::unique_ptr<ConstantBufferResource<Vector4>> cameraResource_ = nullptr;
 
 
 	private:

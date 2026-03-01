@@ -9,6 +9,8 @@
 #include "Store/SkeletonStore/SkeletonStore.h"
 #include "Func/ModelFunc/ModelFunc.h"
 #include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
+#include "Store/Camera3DStore/Camera3DStore.h"
+#include "Store/SkyboxStore/SkyboxStore.h"
 
 #include <numbers>
 
@@ -225,7 +227,7 @@ void Engine::PrimitiveSkinningModelData::Skinning(ID3D12GraphicsCommandList* com
 /// @param commandList 
 /// @param pso 
 /// @param textureStore 
-void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrimitiveSkinningModelData::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
@@ -237,10 +239,19 @@ void Engine::PrimitiveSkinningModelData::Register(const Matrix4x4& viewProjectio
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 
+	// ビュープロジェクション行列を取得する
+	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+
 
 
 	// PSOの設定
 	pso->Register(commandList);
+
+	// カメラリソースの設定
+	cameraStore->RegisterCameraResource(commandList, 5);
+
+	// スカイボックスの設定
+	skyboxStore->RegisterCubeMapTexture(commandList, 6);
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
