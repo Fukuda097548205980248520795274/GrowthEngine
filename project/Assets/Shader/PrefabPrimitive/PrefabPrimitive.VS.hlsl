@@ -15,6 +15,7 @@ struct Primitive
     float4x4 worldInverseTranspose;
     float4 color;
     float4x4 uvTransform;
+    float environment;
 };
 StructuredBuffer<Primitive> gPrimitive : register(t0);
 
@@ -39,6 +40,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     // UVトランスフォーム
     output.uvTransform = gPrimitive[instanceID].uvTransform;
+    
+    // 環境
+    output.environment = gPrimitive[instanceID].environment;
     
     return output;
 }

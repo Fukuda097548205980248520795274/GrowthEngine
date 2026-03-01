@@ -26,6 +26,7 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 		param_.meshMaterial[meshIndex].uv.scale = param->meshMaterial[meshIndex].uv.scale;
 		param_.meshMaterial[meshIndex].uv.radius = param->meshMaterial[meshIndex].uv.radius;
 		param_.meshMaterial[meshIndex].uv.translate = param->meshMaterial[meshIndex].uv.translate;
+		param_.meshMaterial[meshIndex].environment = param->meshMaterial[meshIndex].environment;
 	}
 }
 

@@ -14,6 +14,9 @@ struct Material
     
     // uv行列
     float4x4 uvMatrix;
+    
+    // 環境
+    float environment;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -73,7 +76,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
     float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
-    float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector);
+    float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector) * gMaterial.environment;
     
     
     // 色

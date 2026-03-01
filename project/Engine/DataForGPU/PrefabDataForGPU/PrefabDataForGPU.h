@@ -38,6 +38,9 @@ namespace Engine
 
 			// UVトランスフォーム
 			Matrix4x4 uvTransform;
+
+			// 環境
+			float environment;
 		};
 	}
 }

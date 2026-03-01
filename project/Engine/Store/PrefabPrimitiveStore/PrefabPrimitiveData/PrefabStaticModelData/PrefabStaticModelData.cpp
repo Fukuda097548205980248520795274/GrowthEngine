@@ -94,6 +94,7 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 		param_->meshMaterial[meshIndex].uv.radius = 0.0f;
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 		param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
+		param_->meshMaterial[meshIndex].environment = 0.0f;
 
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -109,6 +110,7 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Environment", &param_->meshMaterial[meshIndex].environment);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -350,6 +352,9 @@ void Engine::PrefabStaticModelData::DebugParameter()
 						// 色
 						ImGui::ColorEdit4("Color", &param_->meshMaterial[meshIndex].color.x);
 
+						// 環境
+						ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
+
 						// テクスチャ
 						ImGui::Text("Texture");
 
@@ -393,8 +398,8 @@ void Engine::PrefabStaticModelData::DebugParameter()
 
 		// インスタンス量
 		ImGui::Text("Instance \n");
-		ImGui::ProgressBar(static_cast<float>(numUseInstance_) / static_cast<float>(numInstance_), ImVec2(200.0f, 20.0f),
-			std::format("{} / {}", numUseInstance_, numInstance_).c_str());
+		ImGui::ProgressBar(static_cast<float>(instanceTable_.size()) / static_cast<float>(numInstance_), ImVec2(200.0f, 20.0f),
+			std::format("{} / {}", static_cast<uint32_t>(instanceTable_.size()), numInstance_).c_str());
 
 		ImGui::Text("\n");
 
@@ -470,13 +475,16 @@ void Engine::PrefabStaticModelData::DrawCallInstance(const Engine::Prefab::Stati
 
 
 		// 色
-		primitiveResource_[meshIndex]->data_[numUseInstance_].color = param_->meshMaterial[meshIndex].color;
+		primitiveResource_[meshIndex]->data_[numUseInstance_].color = param->meshMaterial[meshIndex].color;
+
+		// 環境
+		primitiveResource_[meshIndex]->data_[numUseInstance_].environment = param->meshMaterial[meshIndex].environment;
 
 		// UV行列
 		primitiveResource_[meshIndex]->data_[numUseInstance_].uvTransform =
-			Make3DScaleMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.scale.x, param_->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
-			Make3DRotateZMatrix4x4(param_->meshMaterial[meshIndex].uv.radius) *
-			Make3DTranslateMatrix4x4(Vector3(param_->meshMaterial[meshIndex].uv.translate.x, param_->meshMaterial[meshIndex].uv.translate.y, 0.0f));
+			Make3DScaleMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.scale.x, param->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
+			Make3DRotateZMatrix4x4(param->meshMaterial[meshIndex].uv.radius) *
+			Make3DTranslateMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.translate.x, param->meshMaterial[meshIndex].uv.translate.y, 0.0f));
 	}
 
 	numUseInstance_++;

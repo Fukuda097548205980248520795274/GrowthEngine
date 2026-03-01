@@ -1,4 +1,4 @@
-#include "PrimitiveAnimationModelData.h"
+    #include "PrimitiveAnimationModelData.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include <cassert>
@@ -91,6 +91,7 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 		param_->meshMaterial[meshIndex].uv.scale = Vector2(1.0f, 1.0f);
 		param_->meshMaterial[meshIndex].uv.radius = 0.0f;
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
+		param_->meshMaterial[meshIndex].environment = 0.0f;
 
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -106,6 +107,7 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Environment", &param_->meshMaterial[meshIndex].environment);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -207,6 +209,9 @@ void Engine::PrimitiveAnimationModelData::Register(Camera3DStore* cameraStore, S
 
 		// 色
 		meshMaterialResources_[meshIndex]->data_->color = param_->meshMaterial[meshIndex].color;
+
+		// 環境
+		meshMaterialResources_[meshIndex]->data_->environment = param_->meshMaterial[meshIndex].environment;
 
 		// UV行列
 		meshMaterialResources_[meshIndex]->data_->uvMatrix =
@@ -395,6 +400,9 @@ void Engine::PrimitiveAnimationModelData::DebugParameter()
 
 						// 色
 						ImGui::ColorEdit4("Color", &param_->meshMaterial[meshIndex].color.x);
+
+						// 環境
+						ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
 
 
 						// テクスチャ

@@ -60,6 +60,9 @@ namespace Engine
 
 					/// @brief UV
 					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
 				};
 
 				/// @brief パラメータ
@@ -114,6 +117,9 @@ namespace Engine
 
 					/// @brief UV
 					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
 				};
 
 				/// @brief パラメータ

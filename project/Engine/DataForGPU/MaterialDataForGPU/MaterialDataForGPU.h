@@ -12,6 +12,11 @@ namespace Engine
 
 		// UV行列
 		Matrix4x4 uvMatrix;
+
+		// 環境
+		float environment;
+
+		float padding0[3];
 	};
 
 	namespace Sprite
