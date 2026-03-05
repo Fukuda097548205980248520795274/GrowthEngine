@@ -24,6 +24,12 @@ namespace Engine
 		void Initialize(Log* log, DX12Heap* heap,WinApp* winApp,
 			IDXGIFactory7* dxgiFactory, ID3D12Device* device, ID3D12CommandQueue* commandQueue);
 
+		/// @brief サイズを作り直す
+		/// @param device 
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, int32_t width, int32_t height);
+
 		/// @brief スワップチェーンを取得する
 		/// @return 
 		IDXGISwapChain4* GetSwapChain()const { return swapChain_.Get(); }

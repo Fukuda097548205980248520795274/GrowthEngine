@@ -11,58 +11,53 @@ namespace Engine
 	{
 	public:
 
-		/// <summary>
-		/// ウィンドウプロシージャ
-		/// </summary>
-		/// <param name="hwnd"></param>
-		/// <param name="msg"></param>
-		/// <param name="wparam"></param>
-		/// <param name="lparam"></param>
-		/// <returns></returns>
+		/// @brief ウィンドウプロシージャ
+		/// @param hwnd 
+		/// @param msg 
+		/// @param wparam 
+		/// @param lparam 
+		/// @return 
 		static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 
 	public:
 
-		/// <summary>
-		/// デストラクタ
-		/// </summary>
+		/// @brief デストラクタ
 		~WinApp();
 
-		/// <summary>
-		/// 初期化
-		/// </summary>
+		/// @brief 初期化
+		/// @param clientWidth 
+		/// @param clientHeight 
+		/// @param title 
+		/// @param log 
 		void Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title, Log* log);
 
-		/// <summary>
-		/// ウィンドウにメッセージを渡して応答する
-		/// </summary>
-		/// <returns></returns>
+		/// @brief 更新処理
+		void Update();
+
+		/// @brief ウィンドウにメッセージを渡して応答する
+		/// @return 
 		bool ProcessMessage();
 
-		/// <summary>
-		/// クライアント領域横幅のGetter
-		/// </summary>
-		/// <returns></returns>
+		/// @brief クライアント領域横幅を取得する
+		/// @return 
 		int32_t GetClientWidth()const { return clientWidth_; }
 
-		/// <summary>
-		/// クライアント領域縦幅のGetter
-		/// </summary>
-		/// <returns></returns>
+		/// @brief クライアント領域縦幅を取得する
+		/// @return 
 		int32_t GetClientHeight()const { return clientHeight_; }
 
-		/// <summary>
-		/// ウィンドウクラスのGetter
-		/// </summary>
-		/// <returns></returns>
+		/// @brief ウィンドウクラスを取得する
+		/// @return 
 		const WNDCLASS& GetWndClass()const { return wc_; }
 
-		/// <summary>
-		/// ウィンドウハンドルのGetter
-		/// </summary>
-		/// <returns></returns>
+		/// @brief ウィンドウハンドルを取得する
+		/// @return 
 		const HWND& GetHwnd()const { return  hwnd_; }
+
+		/// @brief リサイズしたかどうか
+		/// @return 
+		bool IsResized()const { return isResized_; }
 
 
 	private:
@@ -70,13 +65,29 @@ namespace Engine
 		// ウィンドウクラス
 		WNDCLASS wc_{};
 
+		/// @brief ウィンドウ矩形
+		RECT wrc_{};
+
+		// ウィンドウハンドル
+		HWND hwnd_;
+
+
+	private:
+
 		// クライアント領域の横幅
 		int32_t clientWidth_ = 0;
 
 		// クライアント領域の縦幅
 		int32_t clientHeight_ = 0;
 
-		// ウィンドウハンドル
-		HWND hwnd_;
+		// 直前のクライアント領域の横幅
+		int32_t prevClientWidth_ = 0;
+
+		// 直前のクライアント領域の縦幅
+		int32_t prevClientHeight_ = 0;
+
+
+		/// @brief リサイズしたかどうか
+		bool isResized_ = false;
 	};
 }

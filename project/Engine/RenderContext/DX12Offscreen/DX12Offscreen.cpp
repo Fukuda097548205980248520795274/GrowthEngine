@@ -47,6 +47,16 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
 }
 
+/// @brief サイズを作り直す
+/// @param device 
+/// @param buffering 
+void Engine::DX12Offscreen::Resize(ID3D12Device* device, DX12Buffering* buffering)
+{
+	offscreenResource_[0]->Resize(device, buffering);
+	offscreenResource_[1]->Resize(device, buffering);
+	depthResource_->Resize(device, buffering);
+}
+
 /// @brief クリア
 /// @param commandList 
 void Engine::DX12Offscreen::Clear(ID3D12GraphicsCommandList* commandList)

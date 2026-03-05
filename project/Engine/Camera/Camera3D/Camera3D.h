@@ -4,6 +4,8 @@
 #include "Data/CameraData/CameraData.h"
 #include <memory>
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class Camera3D : public BaseCamera
@@ -32,5 +34,8 @@ namespace Engine
 
 		// クォータニオン
 		Quaternion quaternion_ = MakeIdentityQuaternion();
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 	};
 }

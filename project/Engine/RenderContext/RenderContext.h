@@ -410,5 +410,16 @@ namespace Engine
 #ifdef _DEVELOPMENT
 		std::unique_ptr<ImGuiRender> imguiRender_ = nullptr;
 #endif
+
+	private:
+
+		/// @brief サイズを作り直す
+		/// @param width 
+		/// @param height 
+		void Resize(int32_t width, int32_t height);
+
+		// ウィンドウアプリケーション
+		WinApp* winApp_ = nullptr;
+
 	};
 }

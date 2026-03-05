@@ -12,6 +12,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// nullptrチェック
 	assert(winApp);
 
+	// 引数を受け取る
+	winApp_ = winApp;
+
 	// FPS固定初期化
 	InitializeFixFPS();
 
@@ -43,7 +46,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Bufferingの生成と初期化
 	buffering_ = std::make_unique<DX12Buffering>();
-	buffering_->Initialize(log, heap_.get(), winApp,
+	buffering_->Initialize(log, heap_.get(), winApp_,
 		core_->GetDXGIFactory(), core_->GetDevice(), command_->GetCommandQueue());
 
 	// DX12Fenceの生成と初期化
@@ -102,8 +105,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), camera3DStore_.get(), log);
 
 	// ビューポートの設定
-	viewport_.Width = static_cast<float>(winApp->GetClientWidth());
-	viewport_.Height = static_cast<float>(winApp->GetClientHeight());
+	viewport_.Width = static_cast<float>(winApp_->GetClientWidth());
+	viewport_.Height = static_cast<float>(winApp_->GetClientHeight());
 	viewport_.TopLeftX = 0;
 	viewport_.TopLeftY = 0;
 	viewport_.MinDepth = 0.0f;
@@ -111,9 +114,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// シザー矩形の設定
 	scissorRect_.left = 0;
-	scissorRect_.right = winApp->GetClientWidth();
+	scissorRect_.right = winApp_->GetClientWidth();
 	scissorRect_.top = 0;
-	scissorRect_.bottom = winApp->GetClientHeight();
+	scissorRect_.bottom = winApp_->GetClientHeight();
 
 #ifdef _DEVELOPMENT
 
@@ -123,13 +126,17 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// ImGuiの初期設定
 	imguiRender_ = std::make_unique<ImGuiRender>();
-	imguiRender_->Initialize(core_->GetDevice(), winApp, heap_.get(), buffering_.get(), log);
+	imguiRender_->Initialize(core_->GetDevice(), winApp_, heap_.get(), buffering_.get(), log);
 #endif
 }
 
 /// @brief 新フレーム処理
 void Engine::RenderContext::NewFrame()
 {
+	// リサイズ処理
+	if (winApp_->IsResized())
+		Resize(winApp_->GetClientWidth(), winApp_->GetClientHeight());
+
 #ifdef _DEVELOPMENT
 	// フレームの開始をImGuiに伝える
 	imguiRender_->FrameStart();
@@ -332,4 +339,38 @@ void Engine::RenderContext::UpdateFixFPS()
 
 	// 現在の時間を記録する
 	reference_ = std::chrono::steady_clock::now();
+}
+
+/// @brief サイズを作り直す
+/// @param width 
+/// @param height 
+void Engine::RenderContext::Resize(int32_t width, int32_t height)
+{
+	if (width == 0 || height == 0) return;
+
+	// 1. GPU待機
+	fence_->WaitGPU();
+
+	// スワップチェーンのリサイズ
+	buffering_->Resize(core_->GetDevice(), width, height);
+
+	// 5. オフスクリーン再生成
+	offscreen_->Resize(core_->GetDevice(), buffering_.get());
+
+	// シャドウマップテクスチャのリサイズ
+	lightStore_->Resize(core_->GetDevice(), width, height);
+
+	// ビューポートの設定
+	viewport_.Width = static_cast<float>(width);
+	viewport_.Height = static_cast<float>(height);
+	viewport_.TopLeftX = 0;
+	viewport_.TopLeftY = 0;
+	viewport_.MinDepth = 0.0f;
+	viewport_.MaxDepth = 1.0f;
+
+	// シザー矩形の設定
+	scissorRect_.left = 0;
+	scissorRect_.right = width;
+	scissorRect_.top = 0;
+	scissorRect_.bottom = height;
 }

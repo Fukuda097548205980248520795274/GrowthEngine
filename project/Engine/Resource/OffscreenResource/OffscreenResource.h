@@ -21,6 +21,11 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log);
 
+		/// @brief サイズを作り直す
+		/// @param device 
+		/// @param buffering 
+		void Resize(ID3D12Device* device, DX12Buffering* buffering);
+
 		/// @brief レンダーターゲットの設定とクリア
 		/// @param commandList 
 		/// @param dsvHandle 

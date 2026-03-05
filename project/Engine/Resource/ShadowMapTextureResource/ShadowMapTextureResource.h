@@ -19,6 +19,13 @@ namespace Engine
 		/// @param device 
 		void Initialize(DX12Heap* heap, ID3D12Device* device, int32_t width, int32_t height, Log* log);
 
+		/// @brief サイズを作り直す
+		/// @param heap 
+		/// @param device 
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, int32_t width, int32_t height);
+
 		/// @brief レンダーターゲットの設定
 		/// @param commandList 
 		void SetRenderTarget(ID3D12GraphicsCommandList* commandList);

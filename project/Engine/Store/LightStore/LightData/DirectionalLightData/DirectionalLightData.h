@@ -24,21 +24,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(DX12Heap* heap, ID3D12Device* device, Log* log);
 
-		/// @brief レンダーターゲットの設定
-		/// @param commandList 
-		void SetRenderTarget(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->SetRenderTarget(commandList); }
-
-		/// @brief 深度ステンシルをクリア
-		/// @param commandList 
-		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList) { shadowMapTextureResource_->ClearDepthStencil(commandList); }
-
 		/// @brief ビュープロジェクション行列を取得する
 		/// @return 
 		Matrix4x4 GetViewProjectionMatrix() const;
-
-		/// @brief シャドウマップテクスチャリソースを取得する
-		/// @return 
-		ShadowMapTextureResource* GetShadowMapTextureResource() { return shadowMapTextureResource_.get(); }
 
 		/// @brief 
 		/// @return 
@@ -53,8 +41,5 @@ namespace Engine
 
 		// パラメータ
 		std::unique_ptr<DirectionalLightParam> param_ = nullptr;
-
-		// シャドウマップテクスチャリソース
-		std::unique_ptr<ShadowMapTextureResource> shadowMapTextureResource_ = nullptr;
 	};
 }

@@ -77,6 +77,55 @@ void Engine::ShadowMapTextureResource::Initialize(DX12Heap* heap, ID3D12Device* 
 	}
 }
 
+/// @brief サイズを作り直す
+/// @param heap 
+/// @param device 
+/// @param width 
+/// @param height 
+void Engine::ShadowMapTextureResource::Resize(ID3D12Device* device, int32_t width, int32_t height)
+{
+	assert(device);
+
+	if (width == 0 || height == 0) return;
+
+	// リソース開放
+	resource_.Reset();
+
+	// シャドウマップのリソースを作成する
+	resource_ = CreateShadowMapTextureResource(device, width, height, nullptr);
+
+
+	/*------------------
+		DSVを設定する
+	------------------*/
+
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+
+	// 深度のみ
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+	device->CreateDepthStencilView(resource_.Get(), &dsvDesc, dsvHandle_);
+
+
+	/*------------------
+		SRVを設定する
+	------------------*/
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+
+	srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+
+	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
+}
+
 /// @brief レンダーターゲットの設定
 /// @param commandList 
 void Engine::ShadowMapTextureResource::SetRenderTarget(ID3D12GraphicsCommandList* commandList)

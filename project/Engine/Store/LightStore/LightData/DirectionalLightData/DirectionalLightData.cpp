@@ -32,10 +32,6 @@ void Engine::DirectionalLightData::Initialize(DX12Heap* heap, ID3D12Device* devi
 
 	// エンジンのインスタンスを取得する
 	const GrowthEngine* engine = GrowthEngine::GetInstance();
-
-	// シャドウマップ用テクスチャリソースの生成と初期化
-	shadowMapTextureResource_ = std::make_unique<ShadowMapTextureResource>();
-	shadowMapTextureResource_->Initialize(heap, device, engine->GetScreenWidth(), engine->GetScreenHeight(), log);
 }
 
 /// @brief ビュープロジェクション行列を取得する

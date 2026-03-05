@@ -10,7 +10,12 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-// ウィンドウプロシージャ
+/// @brief ウィンドウプロシージャ
+/// @param hwnd 
+/// @param msg 
+/// @param wparam 
+/// @param lparam 
+/// @return 
 LRESULT CALLBACK Engine::WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	// ImGuiを操作すると途中で打ち切ることができる
@@ -35,9 +40,7 @@ LRESULT CALLBACK Engine::WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, 
 
 
 
-/// <summary>
-/// デストラクタ
-/// </summary>
+/// @brief デストラクタ
 Engine::WinApp::~WinApp()
 {
 	// OSの精度を戻す
@@ -49,9 +52,11 @@ Engine::WinApp::~WinApp()
 }
 
 
-/// <summary>
-/// 初期化
-/// </summary>
+/// @brief 初期化
+/// @param clientWidth 
+/// @param clientHeight 
+/// @param title 
+/// @param log 
 void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const std::string& title, Log* log)
 {
 
@@ -93,10 +98,10 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 	---------------------------*/
 
 	// ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc = { 0 , 0 , clientWidth_ , clientHeight_ };
+	wrc_ = { 0 , 0 , clientWidth_ , clientHeight_ };
 
 	// クライアント領域をもとに、実際のサイズにwrcを変更してもらう
-	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
+	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 
 
 	// ログ
@@ -124,8 +129,8 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 		CW_USEDEFAULT,
 
 		// ウィンドウの大きさ
-		wrc.right - wrc.left,
-		wrc.bottom - wrc.top,
+		wrc_.right - wrc_.left,
+		wrc_.bottom - wrc_.top,
 
 		// 親ウィンドウハンドル
 		nullptr,
@@ -148,10 +153,24 @@ void Engine::WinApp::Initialize(int32_t clientWidth, int32_t clientHeight, const
 	if (log)log->Logging("ShowWindow \n");
 }
 
-/// <summary>
-/// ウィンドウにメッセージを渡して応答する
-/// </summary>
-/// <returns></returns>
+/// @brief 更新処理
+void Engine::WinApp::Update()
+{
+	prevClientWidth_ = clientWidth_;
+	prevClientHeight_ = clientHeight_;
+
+	GetClientRect(hwnd_, &wrc_);
+
+	clientWidth_ = wrc_.right - wrc_.left;
+	clientHeight_ = wrc_.bottom - wrc_.top;
+
+	isResized_ =
+		(clientWidth_ != prevClientWidth_) ||
+		(clientHeight_ != prevClientHeight_);
+}
+
+/// @brief ウィンドウにメッセージを渡して応答する
+/// @return 
 bool Engine::WinApp::ProcessMessage()
 {
 	MSG msg{};

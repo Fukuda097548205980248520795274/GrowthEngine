@@ -43,6 +43,29 @@ void Engine::DepthResource::Initialize(ID3D12Device* device, DX12Buffering* buff
 	device->CreateDepthStencilView(resource_.Get(), &dsvDesc, dsvCPUHandle_);
 }
 
+/// @brief サイズを作り直す
+/// @param device 
+/// @param buffering 
+void Engine::DepthResource::Resize(ID3D12Device* device, DX12Buffering* buffering)
+{
+	assert(device);
+	assert(buffering);
+
+	// リソース開放
+	resource_.Reset();
+
+	// 新たなサイズで再生成
+	resource_ = CreateDepthStencilTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, nullptr);
+
+	// DSV 同じ設定
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+
+	// DSV再生成
+	device->CreateDepthStencilView(resource_.Get(), &dsvDesc, dsvCPUHandle_);
+}
+
 /// @brief デプスステンシルのクリア
 /// @param commandList 
 void Engine::DepthResource::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)

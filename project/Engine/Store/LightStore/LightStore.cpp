@@ -30,6 +30,10 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	shadowMapTransformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 	shadowMapTransformationResource_->Initialize(device, log);
 
+	// シャドウマップ用テクスチャリソースの生成と初期化
+	shadowMapTextureResource_ = std::make_unique<ShadowMapTextureResource>();
+	shadowMapTextureResource_->Initialize(heap, device, GrowthEngine::GetInstance()->GetScreenWidth(), GrowthEngine::GetInstance()->GetScreenHeight(), log);
+
 }
 
 /// @brief 読み込み
@@ -84,8 +88,8 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Mode
 		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
 
 		// 深度をクリアする
-		directionalLightData->SetRenderTarget(commandList);
-		directionalLightData->ClearDepthStencil(commandList);
+		shadowMapTextureResource_->SetRenderTarget(commandList);
+		shadowMapTextureResource_->ClearDepthStencil(commandList);
 
 		// 平行光源のビュープロジェクション行列を取得する
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
@@ -99,22 +103,4 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Mode
 
 		break;
 	}
-}
-
-/// @brief シャドウマップテクスチャリソースを取得する
-/// @return 
-Engine::ShadowMapTextureResource* Engine::LightStore::GetShadowMapTextureResource()
-{
-	// 平行光源を探す
-	for (auto& light : dataTable_)
-	{
-		if (light->GetTypeName() != "Directional")
-			continue;
-
-		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
-
-		return directionalLightData->GetShadowMapTextureResource();
-	}
-
-	return nullptr;
 }

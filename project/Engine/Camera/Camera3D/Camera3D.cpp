@@ -4,6 +4,9 @@
 /// @brief コンストラクタ
 Engine::Camera3D::Camera3D()
 {
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
+
 	// パラメータの生成
 	param_ = std::make_unique<Camera3DData::Param>();
 
@@ -17,8 +20,8 @@ Engine::Camera3D::Camera3D()
 	param_->setting.farClip = 800.0f;
 
 	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight());
+	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
+	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
@@ -31,6 +34,10 @@ Engine::Camera3D::Camera3D()
 /// @brief 更新処理
 void Engine::Camera3D::Update()
 {
+	// 画面の幅を取得する
+	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
+	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
+
 	// 3軸の回転を合成する
 	quaternion_ =
 		ToQuaternion(param_->transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *

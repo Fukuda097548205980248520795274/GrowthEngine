@@ -125,6 +125,8 @@ void GrowthEngine::NewFrame()
 	previousTime_ = currentTime;
 	deltaTime_ = deltaTime.count();
 
+	// ウィンドウの更新
+	winApp_->Update();
 
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();

@@ -110,3 +110,36 @@ void Engine::DX12Buffering::Initialize(Log* log, DX12Heap* heap, WinApp* winApp,
 	rtvCPUHandle_[1] = heap->GetRtvCPUDescriptorHandle();
 	device->CreateRenderTargetView(swapChainResource_[1].Get(), &rtvDesc_, rtvCPUHandle_[1]);
 }
+
+/// @brief サイズを作り直す
+/// @param device 
+/// @param width 
+/// @param height 
+void Engine::DX12Buffering::Resize(ID3D12Device* device, int32_t width, int32_t height)
+{
+	if (width <= 0 || height <= 0) return;
+
+	// スワップチェイン再設定
+	swapChainDesc_.Width = width;
+	swapChainDesc_.Height = height;
+
+	// リソース開放
+	swapChainResource_[0].Reset();
+	swapChainResource_[1].Reset();
+
+	// リサイズ
+	HRESULT hr = swapChain_->ResizeBuffers(2, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+	assert(SUCCEEDED(hr));
+
+	// 1つめ再取得
+	hr = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResource_[0]));
+	assert(SUCCEEDED(hr));
+
+	// 2つめ再取得
+	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&swapChainResource_[1]));
+	assert(SUCCEEDED(hr));
+
+	// RTV再生成
+	device->CreateRenderTargetView(swapChainResource_[0].Get(), &rtvDesc_, rtvCPUHandle_[0]);
+	device->CreateRenderTargetView(swapChainResource_[1].Get(), &rtvDesc_, rtvCPUHandle_[1]);
+}

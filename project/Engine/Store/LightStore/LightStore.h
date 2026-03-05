@@ -35,6 +35,12 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Heap* heap, ShaderCompiler* compiler, Log* log);
 
+		/// @brief サイズを作り直す
+		/// @param device 
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, int32_t width, int32_t height) { shadowMapTextureResource_->Resize(device, width, height); }
+
 		/// @brief 読み込み
 		/// @param name 
 		/// @param type 
@@ -57,7 +63,7 @@ namespace Engine
 
 		/// @brief シャドウマップテクスチャリソースを取得する
 		/// @return 
-		ShadowMapTextureResource* GetShadowMapTextureResource();
+		ShadowMapTextureResource* GetShadowMapTextureResource() { return shadowMapTextureResource_.get(); }
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -93,5 +99,8 @@ namespace Engine
 
 		// シャドウマップ用座標変換リソース
 		std::unique_ptr<ConstantBufferResource<Matrix4x4>> shadowMapTransformationResource_ = nullptr;
+
+		// シャドウマップテクスチャリソース
+		std::unique_ptr<ShadowMapTextureResource> shadowMapTextureResource_ = nullptr;
 	};
 }

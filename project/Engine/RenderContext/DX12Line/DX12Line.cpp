@@ -30,14 +30,14 @@ void Engine::DX12Line::Initialize(ID3D12Device* device, DX12Heap* heap, ShaderCo
 }
 
 /// @brief ドローコール
-void Engine::DX12Line::DrawCall(const Vector3& start, const Vector3& diff, const Vector4& color)
+void Engine::DX12Line::DrawCall(const Vector3& start, const Vector3& enf, const Vector4& color)
 {
 	// 描画制限
 	if (drawCount_ >= kMaxNumLine)return;
 
 	// 頂点の位置
 	vertexResource_->data_[drawCount_ * 2] = Vector4(start.x, start.y, start.z, 1.0f);
-	vertexResource_->data_[drawCount_ * 2 + 1] = Vector4(start.x + diff.x, start.y + diff.y, start.z + diff.z, 1.0f);
+	vertexResource_->data_[drawCount_ * 2 + 1] = Vector4(enf.x, enf.y, enf.z, 1.0f);
 
 	// 色
 	lineResource_->data_[drawCount_] = color;

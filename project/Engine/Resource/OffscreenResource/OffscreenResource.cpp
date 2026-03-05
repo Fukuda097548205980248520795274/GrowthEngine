@@ -78,6 +78,43 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* 
 	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
 }
 
+/// @brief サイズを作り直す
+/// @param device 
+/// @param buffering 
+void Engine::OffscreenResource::Resize(ID3D12Device* device, DX12Buffering* buffering)
+{
+	assert(device);
+	assert(buffering);
+
+	// リソース開放
+	resource_.Reset();
+
+	// 新たなサイズで作り直す
+	resource_ = CreateRenderTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height,
+		buffering->GetSwapChainDesc().Format, buffering->GetRtvDesc().Format, Vector4(0.1f, 0.1f, 0.1f, 1.0f), nullptr);
+
+	// スワップチェーンのRTV設定を反映させる
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
+	rtvDesc.Format = buffering->GetRtvDesc().Format;
+	rtvDesc.ViewDimension = buffering->GetRtvDesc().ViewDimension;
+	rtvDesc.Texture2D.MipSlice = 0;
+	rtvDesc.Texture2D.PlaneSlice = 0;
+
+	// RTV再生成
+	device->CreateRenderTargetView(resource_.Get(), &rtvDesc, rtvCpuHandle_);
+
+	// SRV設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = buffering->GetRtvDesc().Format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = 1;
+
+	// SRV再生成
+	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
+}
+
 /// @brief レンダーターゲットの設定とクリア
 /// @param commandList 
 /// @param dsvHandle 

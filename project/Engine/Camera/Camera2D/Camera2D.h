@@ -3,6 +3,8 @@
 #include "Data/CameraData/CameraData.h"
 #include <memory>
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class Camera2D : public BaseCamera
@@ -24,5 +26,8 @@ namespace Engine
 
 		/// @brief パラメータ
 		std::unique_ptr<Camera2DData::Param> param_ = nullptr;
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 	};
 }
