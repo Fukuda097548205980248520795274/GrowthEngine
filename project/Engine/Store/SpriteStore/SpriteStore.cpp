@@ -75,8 +75,8 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
 	// データの生成と初期化
-	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, hTexture, name , parameter_.get());
-	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, device, log);
+	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, name, parameter_.get());
+	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;

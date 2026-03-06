@@ -29,7 +29,9 @@ namespace Engine
 		/// @param hTexture 
 		/// @param numInstance 
 		/// @param name 
-		PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, TextureHandle hTexture, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter);
+		PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
+			: hPrefabSprite_(hPrefabSprite), numInstance_(numInstance), name_(name), parameter_(parameter) {
+		}
 
 		/// @brief 初期化
 		/// @param vertexResource 
@@ -39,7 +41,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
-			TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
+			TextureStore* textureStore, TextureHandle hTexture, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		void Update();

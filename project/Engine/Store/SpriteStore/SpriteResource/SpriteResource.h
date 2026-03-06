@@ -24,13 +24,13 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		SpriteResource(SpriteHandle hSprite, TextureHandle hTexture, std::string name ,SpriteParameter* parameter);
+		SpriteResource(SpriteHandle hSprite, std::string name, SpriteParameter* parameter) : hSprite_(hSprite_), name_(name), parameter_(parameter) {}
 
 		/// @brief 初期化
 		/// @param vertexResource 
 		/// @param indexResource 
 		/// @param device 
-		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource, TextureStore* textureStore,
+		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource, TextureStore* textureStore, TextureHandle hTexture,
 			ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録

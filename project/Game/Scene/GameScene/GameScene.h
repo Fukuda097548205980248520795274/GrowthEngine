@@ -39,6 +39,8 @@ private:
 
 	std::unique_ptr<PostEffectRadialBlur> blur_ = nullptr;
 
+	std::unique_ptr<Sprite> sprite_ = nullptr;
+
 
 	enum TileID
 	{

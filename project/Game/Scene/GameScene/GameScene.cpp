@@ -34,6 +34,8 @@ void GameScene::Initialize()
 
 	object_ = std::make_unique<AudioObject>("./Assets/Sounds/bgm/forget_me_not.mp3", 0.4f, true);
 	object_->PlayAudio();
+
+	sprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "TestSprite");
 }
 
 /// @brief 更新処理
@@ -127,6 +129,8 @@ void GameScene::Draw()
 	instance1_->Draw();
 	instance2_->Draw();
 	modelPrefab_->Draw();
+
+	sprite_->Draw();
 
 	blur_->Draw();
 }

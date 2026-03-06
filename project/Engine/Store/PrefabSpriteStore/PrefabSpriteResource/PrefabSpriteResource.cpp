@@ -10,15 +10,30 @@
 
 #include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
 
-
-/// @brief コンストラクタ
-/// @param hPrefabSprite 
-/// @param hTexture 
-/// @param numInstance 
-/// @param name 
-Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, TextureHandle hTexture, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
-	: hPrefabSprite_(hPrefabSprite), numInstance_(numInstance) , name_(name), parameter_(parameter)
+/// @brief 初期化
+/// @param vertexResource 
+/// @param indexResource 
+/// @param textureStore 
+/// @param heap 
+/// @param device 
+/// @param log 
+void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
+	TextureStore* textureStore, TextureHandle hTexture, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
+	// nullptrチェック
+	assert(vertexResource);
+	assert(indexResource);
+	assert(textureStore);
+	assert(cameraStore);
+	assert(heap);
+	assert(device);
+
+	// 引数を受け取る
+	vertexResource_ = vertexResource;
+	indexResource_ = indexResource;
+	textureStore_ = textureStore;
+	cameraStore_ = cameraStore;
+
 	// パラメータの生成
 	param_ = std::make_unique<Prefab::Sprite::Base::Param>();
 
@@ -38,6 +53,11 @@ Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSpr
 	param_->texture.anchor = Vector2(0.0f, 0.0f);
 	textureFilePath_ = textureStore_->GetFilePath(hTexture);
 
+	// テクスチャサイズを取得する
+	param_->texture.size =
+		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->texture.hTexture)),
+			static_cast<float>(textureStore_->GetTextureHeight(param_->texture.hTexture)));
+
 	// パラメータに記録と反映
 	group_ = "Sprite_" + name_;
 	if (parameter_)
@@ -55,42 +75,13 @@ Engine::PrefabSpriteResource::PrefabSpriteResource(PrefabSpriteHandle hPrefabSpr
 
 		// テクスチャ
 		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
+		parameter_->SetValue(group_, "Texture_Size", &param_->texture.size);
 		parameter_->SetValue(group_, "Texture", &textureFilePath_);
 
 		// 反映させる
 		parameter_->RegisterGroupDataReflection(group_);
 		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
-}
-
-/// @brief 初期化
-/// @param vertexResource 
-/// @param indexResource 
-/// @param textureStore 
-/// @param heap 
-/// @param device 
-/// @param log 
-void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
-	TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
-{
-	// nullptrチェック
-	assert(vertexResource);
-	assert(indexResource);
-	assert(textureStore);
-	assert(cameraStore);
-	assert(heap);
-	assert(device);
-
-	// 引数を受け取る
-	vertexResource_ = vertexResource;
-	indexResource_ = indexResource;
-	textureStore_ = textureStore;
-	cameraStore_ = cameraStore;
-
-	// テクスチャサイズを取得する
-	param_->texture.size =
-		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->texture.hTexture)),
-			static_cast<float>(textureStore_->GetTextureHeight(param_->texture.hTexture)));
 	
 	// リソースの生成と初期化
 	resource_ = std::make_unique<StructuredBufferResource<Prefab::SpriteDataForGPU>>();
@@ -248,6 +239,9 @@ void Engine::PrefabSpriteResource::DebugParameter()
 			// アンカー
 			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f);
 
+			// サイズ
+			ImGui::DragFloat2("Size", &param_->texture.anchor.x, 1.0f);
+
 			// テクスチャ
 			ImGui::Text("\n");
 
@@ -275,6 +269,9 @@ void Engine::PrefabSpriteResource::DebugParameter()
 				}
 				ImGui::EndDragDropTarget();
 			}
+
+			// 終了
+			ImGui::TreePop();
 		}
 
 		ImGui::Text("\n");

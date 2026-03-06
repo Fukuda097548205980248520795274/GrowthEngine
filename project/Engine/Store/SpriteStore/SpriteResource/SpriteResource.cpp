@@ -9,11 +9,25 @@
 
 #include "Parameter/SpriteParameter/SpriteParameter.h"
 
-/// @brief コンストラクタ
-/// @param hSprite 
-Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hTexture, std::string name, SpriteParameter* parameter)
-	: hSprite_(hSprite_), name_(name), parameter_(parameter)
+/// @brief 初期化
+/// @param vertexResource 
+/// @param indexResource 
+/// @param device 
+void Engine::SpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
+	TextureStore* textureStore, TextureHandle hTexture, ID3D12Device* device, Log* log)
 {
+	// nullptrチェック
+	assert(vertexResource);
+	assert(indexResource);
+	assert(textureStore);
+	assert(device);
+
+	// 引数を受け取る
+	vertexResource_ = vertexResource;
+	indexResource_ = indexResource;
+	textureStore_ = textureStore;
+
+
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Sprite::Param>();
 
@@ -30,8 +44,13 @@ Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hText
 
 	// テクスチャ
 	param_->texture.hTexture = hTexture;
-	param_->texture.anchor = Vector2(0.0f, 0.0f);
+	param_->texture.anchor = Vector2(0.5f, 0.5f);
 	textureFilePath_ = textureStore_->GetFilePath(hTexture);
+
+	// テクスチャサイズを取得する
+	param_->texture.size =
+		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->texture.hTexture)),
+			static_cast<float>(textureStore_->GetTextureHeight(param_->texture.hTexture)));
 
 	// パラメータに記録と反映
 	group_ = "Sprite_" + name_;
@@ -50,36 +69,13 @@ Engine::SpriteResource::SpriteResource(SpriteHandle hSprite, TextureHandle hText
 
 		// テクスチャ
 		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
+		parameter_->SetValue(group_, "Texture_Size", &param_->texture.size);
 		parameter_->SetValue(group_, "Texture", &textureFilePath_);
 
 		// 反映させる
 		parameter_->RegisterGroupDataReflection(group_);
 		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
-}
-
-/// @brief 初期化
-/// @param vertexResource 
-/// @param indexResource 
-/// @param device 
-void Engine::SpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource, TextureStore* textureStore,
-	ID3D12Device* device, Log* log)
-{
-	// nullptrチェック
-	assert(vertexResource);
-	assert(indexResource);
-	assert(textureStore);
-	assert(device);
-
-	// 引数を受け取る
-	vertexResource_ = vertexResource;
-	indexResource_ = indexResource;
-	textureStore_ = textureStore;
-
-	// テクスチャサイズを取得する
-	param_->texture.size =
-		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->texture.hTexture)),
-			static_cast<float>(textureStore_->GetTextureHeight(param_->texture.hTexture)));
 
 	// マテリアルリソースの生成
 	materialResource_ = std::make_unique<ConstantBufferResource<Sprite::MaterialDataForGPU>>();
@@ -196,6 +192,9 @@ void Engine::SpriteResource::DebugParameter()
 			// アンカー
 			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f);
 
+			// テクスチャサイズ
+			ImGui::DragFloat2("Size", &param_->texture.size.x, 1.0f);
+
 			// テクスチャ
 			ImGui::Text("\n");
 
@@ -223,6 +222,8 @@ void Engine::SpriteResource::DebugParameter()
 				}
 				ImGui::EndDragDropTarget();
 			}
+
+			ImGui::TreePop();
 		}
 
 		ImGui::Text("\n");
