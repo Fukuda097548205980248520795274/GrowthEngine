@@ -36,6 +36,16 @@ void GameScene::Initialize()
 	object_->PlayAudio();
 
 	sprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "TestSprite");
+
+
+	collisionA_ = std::make_unique<Collision2DBaseSprite>([]() {int a = 0; }, "TestCollisionSprite");
+	collisionInstanceA_ = collisionA_->CreateInstance();
+	collisionInstanceA_->param_->center.x = 10.0f;
+
+	collisionB_ = std::make_unique<Collision2DBaseCircle>([]() {int a = 0; }, "TestCollisionCircle");
+	collisionInstanceB_ = collisionB_->CreateInstance();
+
+	collisionA_->SetCollisionTarget(collisionB_->GetHandle());
 }
 
 /// @brief 更新処理

@@ -16,15 +16,9 @@ Engine::Collision2DSpriteData::Collision2DSpriteData(std::function<void()> func,
 /// @return 
 void* Engine::Collision2DSpriteData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision2D::Sprite> instanceParam = std::make_unique<Collision2D::Sprite>();
-	instanceParam->center = param_->center;
-	instanceParam->radius = param_->radius;
-
-	std::unique_ptr<Collision2DInstanceSprite> instance = std::make_unique<Collision2DInstanceSprite>(instanceParam.get());
+	std::unique_ptr<Collision2DInstanceSprite> instance = std::make_unique<Collision2DInstanceSprite>(param_.get());
 	Collision2DInstanceSprite* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

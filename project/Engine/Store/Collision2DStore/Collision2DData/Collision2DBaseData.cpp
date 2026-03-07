@@ -4,6 +4,9 @@
 #include "Func/CollisionFunc/CollisionFunc.h"
 #include <cassert>
 
+#include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
+#include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
+
 /// @brief 初期化
 /// @param collisionStore 
 void Engine::Collision2DBaseData::Initialize(Collision2DStore* collisionStore)
@@ -39,7 +42,7 @@ void Engine::Collision2DBaseData::CollisionCheck()
 			// 円 円
 			if (myInstance->GetType() == Collision2D::Type::Circle && yourInstance->GetType() == Collision2D::Type::Circle)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision2D::Circle*>(myInstance->GetParam()), *static_cast<Collision2D::Circle*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(myInstance.get())->param_, *static_cast<Collision2DInstanceCircle*>(yourInstance.get())->param_))
 					func_();
 
 				continue;
@@ -48,17 +51,25 @@ void Engine::Collision2DBaseData::CollisionCheck()
 			// 矩形 矩形
 			if (myInstance->GetType() == Collision2D::Type::Sprite && yourInstance->GetType() == Collision2D::Type::Sprite)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision2D::Sprite*>(myInstance->GetParam()), *static_cast<Collision2D::Sprite*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision2DInstanceSprite*>(myInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(yourInstance.get())->param_))
 					func_();
 
 				continue;
 			}
 
-			// 球 AABB
-			if (myInstance->GetType() == Collision2D::Type::Circle && yourInstance->GetType() == Collision2D::Type::Sprite ||
-				myInstance->GetType() == Collision2D::Type::Sprite && yourInstance->GetType() == Collision2D::Type::Circle)
+			// 円 矩形
+			if (myInstance->GetType() == Collision2D::Type::Circle && yourInstance->GetType() == Collision2D::Type::Sprite)
 			{
-				if (CollisionCheckFunc(*static_cast<Collision2D::Circle*>(myInstance->GetParam()), *static_cast<Collision2D::Sprite*>(yourInstance->GetParam())))
+				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(myInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(yourInstance.get())->param_))
+					func_();
+
+				continue;
+			}
+
+			// 矩形 円
+			if (myInstance->GetType() == Collision2D::Type::Sprite && yourInstance->GetType() == Collision2D::Type::Circle)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(yourInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(myInstance.get())->param_))
 					func_();
 
 				continue;

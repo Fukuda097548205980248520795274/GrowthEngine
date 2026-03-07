@@ -153,6 +153,8 @@
     <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp" />
     <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp" />
     <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp" />
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp" />
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp" />
     <ClCompile Include="Engine\Application\Collision3DBase\BaseCollision3DBase.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>

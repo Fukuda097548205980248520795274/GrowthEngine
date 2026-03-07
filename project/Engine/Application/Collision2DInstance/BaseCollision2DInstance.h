@@ -1,6 +1,7 @@
 #pragma once
 #include "Data/CollisionData/CollisionData.h"
 #include "Handle/Handle.h"
+#include <memory>
 
 namespace Engine
 {
@@ -21,10 +22,6 @@ namespace Engine
 
 		/// @brief 削除
 		void Delete() { isDelete_ = true; }
-
-		/// @brief パラメータを取得する
-		/// @return 
-		virtual void* GetParam() = 0;
 
 	protected:
 

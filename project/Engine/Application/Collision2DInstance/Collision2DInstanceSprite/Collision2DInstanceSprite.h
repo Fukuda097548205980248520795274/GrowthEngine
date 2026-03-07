@@ -7,12 +7,8 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	Collision2DInstanceSprite(Engine::Collision2D::Sprite* param) : param_(param) { type_ = Engine::Collision2D::Type::Sprite; }
-
-	/// @brief パラメータを取得する
-	/// @return 
-	void* GetParam() override { return param_; }
+	Collision2DInstanceSprite(Engine::Collision2D::Sprite* param);
 
 	/// @brief パラメータ
-	Engine::Collision2D::Sprite* param_ = nullptr;
+	std::unique_ptr<Engine::Collision2D::Sprite> param_ = nullptr;
 };

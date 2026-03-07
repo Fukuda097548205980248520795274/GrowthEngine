@@ -16,15 +16,9 @@ Engine::Collision2DCircleData::Collision2DCircleData(std::function<void()> func,
 /// @return 
 void* Engine::Collision2DCircleData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision2D::Circle> instanceParam = std::make_unique<Collision2D::Circle>();
-	instanceParam->center = param_->center;
-	instanceParam->radius = param_->radius;
-
-	std::unique_ptr<Collision2DInstanceCircle> instance = std::make_unique<Collision2DInstanceCircle>(instanceParam.get());
+	std::unique_ptr<Collision2DInstanceCircle> instance = std::make_unique<Collision2DInstanceCircle>(param_.get());
 	Collision2DInstanceCircle* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

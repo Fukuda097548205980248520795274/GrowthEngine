@@ -7,12 +7,8 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	Collision2DInstanceCircle(Engine::Collision2D::Circle* param) : param_(param) { type_ = Engine::Collision2D::Type::Circle; }
-
-	/// @brief パラメータを取得する
-	/// @return 
-	void* GetParam() override { return param_; }
+	Collision2DInstanceCircle(Engine::Collision2D::Circle* param);
 
 	/// @brief パラメータ
-	Engine::Collision2D::Circle* param_ = nullptr;
+	std::unique_ptr<Engine::Collision2D::Circle> param_ = nullptr;
 };

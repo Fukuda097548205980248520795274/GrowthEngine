@@ -1110,6 +1110,12 @@
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp">
       <Filter>Engine\Include\Store\SkyboxStore\SkyboxResource</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp">
+      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp">
+      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
