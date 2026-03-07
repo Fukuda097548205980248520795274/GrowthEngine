@@ -187,6 +187,13 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp" />
     <ClCompile Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>

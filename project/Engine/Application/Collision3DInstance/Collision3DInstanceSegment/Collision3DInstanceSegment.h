@@ -7,13 +7,9 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	Collision3DInstanceSegment(Engine::Collision3D::Segment* param) : param_(param) { type_ = Engine::Collision3D::Type::Segment; }
-
-	/// @brief パラメータを取得する
-	/// @return 
-	void* GetParam() override { return param_; }
+	Collision3DInstanceSegment(Engine::Collision3D::Segment* param);
 
 	/// @brief パラメータ
-	Engine::Collision3D::Segment* param_ = nullptr;
+	std::unique_ptr<Engine::Collision3D::Segment> param_ = nullptr;
 };
 

@@ -7,13 +7,9 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	Collision3DInstanceRay(Engine::Collision3D::Ray* param) : param_(param) { type_ = Engine::Collision3D::Type::Ray; }
-
-	/// @brief パラメータを取得する
-	/// @return 
-	void* GetParam() override { return param_; }
+	Collision3DInstanceRay(Engine::Collision3D::Ray* param);
 
 	/// @brief パラメータ
-	Engine::Collision3D::Ray* param_ = nullptr;
+	std::unique_ptr<Engine::Collision3D::Ray> param_ = nullptr;
 };
 

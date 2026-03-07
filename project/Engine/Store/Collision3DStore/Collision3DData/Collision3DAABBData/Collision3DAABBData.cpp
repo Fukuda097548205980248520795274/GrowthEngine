@@ -16,15 +16,10 @@ Engine::Collision3DAABBData::Collision3DAABBData(std::function<void()> func, con
 /// @return 
 void* Engine::Collision3DAABBData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::AABB> instanceParam = std::make_unique<Collision3D::AABB>();
-	instanceParam->center = param_->center;
-	instanceParam->radius = param_->radius;
 
-	std::unique_ptr<Collision3DInstanceAABB> instance = std::make_unique<Collision3DInstanceAABB>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceAABB> instance = std::make_unique<Collision3DInstanceAABB>(param_.get());
 	Collision3DInstanceAABB* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

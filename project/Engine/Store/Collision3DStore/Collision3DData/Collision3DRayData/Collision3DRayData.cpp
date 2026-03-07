@@ -16,15 +16,9 @@ Engine::Collision3DRayData::Collision3DRayData(std::function<void()> func, const
 /// @return 
 void* Engine::Collision3DRayData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::Ray> instanceParam = std::make_unique<Collision3D::Ray>();
-	instanceParam->start = param_->start;
-	instanceParam->diff = param_->diff;
-
-	std::unique_ptr<Collision3DInstanceRay> instance = std::make_unique<Collision3DInstanceRay>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceRay> instance = std::make_unique<Collision3DInstanceRay>(param_.get());
 	Collision3DInstanceRay* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

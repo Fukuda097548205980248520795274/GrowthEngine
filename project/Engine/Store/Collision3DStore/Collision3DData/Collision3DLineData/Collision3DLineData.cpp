@@ -16,15 +16,9 @@ Engine::Collision3DLineData::Collision3DLineData(std::function<void()> func, con
 /// @return 
 void* Engine::Collision3DLineData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::Line> instanceParam = std::make_unique<Collision3D::Line>();
-	instanceParam->start = param_->start;
-	instanceParam->diff = param_->diff;
-
-	std::unique_ptr<Collision3DInstanceLine> instance = std::make_unique<Collision3DInstanceLine>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceLine> instance = std::make_unique<Collision3DInstanceLine>(param_.get());
 	Collision3DInstanceLine* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

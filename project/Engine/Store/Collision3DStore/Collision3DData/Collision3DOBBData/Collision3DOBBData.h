@@ -24,8 +24,5 @@ namespace Engine
 
 		// パラメータ
 		std::unique_ptr<Collision3D::OBB> param_ = nullptr;
-
-		/// @brief インスタンスのパラメータ
-		std::list<std::unique_ptr<Collision3D::OBB>> instanceParams_;
 	};
 }

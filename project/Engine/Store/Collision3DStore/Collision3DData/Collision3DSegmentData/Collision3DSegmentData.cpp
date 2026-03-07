@@ -16,15 +16,9 @@ Engine::Collision3DSegmentData::Collision3DSegmentData(std::function<void()> fun
 /// @return 
 void* Engine::Collision3DSegmentData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::Segment> instanceParam = std::make_unique<Collision3D::Segment>();
-	instanceParam->start = param_->start;
-	instanceParam->diff = param_->diff;
-
-	std::unique_ptr<Collision3DInstanceSegment> instance = std::make_unique<Collision3DInstanceSegment>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceSegment> instance = std::make_unique<Collision3DInstanceSegment>(param_.get());
 	Collision3DInstanceSegment* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

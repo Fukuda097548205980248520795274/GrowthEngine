@@ -7,13 +7,9 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param param 
-	Collision3DInstanceLine(Engine::Collision3D::Line* param) : param_(param) { type_ = Engine::Collision3D::Type::Line; }
-
-	/// @brief パラメータを取得する
-	/// @return 
-	void* GetParam() override { return param_; }
+	Collision3DInstanceLine(Engine::Collision3D::Line* param);
 
 	/// @brief パラメータ
-	Engine::Collision3D::Line* param_ = nullptr;
+	std::unique_ptr<Engine::Collision3D::Line> param_ = nullptr;
 };
 

@@ -1116,6 +1116,27 @@
     <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp">
       <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceAABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceOBB</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstancePlane</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceRay</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSegment</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSphere</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">

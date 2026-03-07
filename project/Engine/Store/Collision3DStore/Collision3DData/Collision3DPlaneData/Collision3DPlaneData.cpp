@@ -16,15 +16,9 @@ Engine::Collision3DPlaneData::Collision3DPlaneData(std::function<void()> func, c
 /// @return 
 void* Engine::Collision3DPlaneData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::Plane> instanceParam = std::make_unique<Collision3D::Plane>();
-	instanceParam->normal = param_->normal;
-	instanceParam->distance = param_->distance;
-
-	std::unique_ptr<Collision3DInstancePlane> instance = std::make_unique<Collision3DInstancePlane>(instanceParam.get());
+	std::unique_ptr<Collision3DInstancePlane> instance = std::make_unique<Collision3DInstancePlane>(param_.get());
 	Collision3DInstancePlane* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

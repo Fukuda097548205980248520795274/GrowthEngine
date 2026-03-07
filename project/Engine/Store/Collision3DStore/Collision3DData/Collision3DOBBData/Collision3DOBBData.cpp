@@ -19,18 +19,9 @@ Engine::Collision3DOBBData::Collision3DOBBData(std::function<void()> func, const
 /// @return 
 void* Engine::Collision3DOBBData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::OBB> instanceParam = std::make_unique<Collision3D::OBB>();
-	instanceParam->center = param_->center;
-	instanceParam->radius = param_->radius;
-	instanceParam->oriented[0] = param_->oriented[0];
-	instanceParam->oriented[1] = param_->oriented[1];
-	instanceParam->oriented[2] = param_->oriented[2];
-
-	std::unique_ptr<Collision3DInstanceOBB> instance = std::make_unique<Collision3DInstanceOBB>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceOBB> instance = std::make_unique<Collision3DInstanceOBB>(param_.get());
 	Collision3DInstanceOBB* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;

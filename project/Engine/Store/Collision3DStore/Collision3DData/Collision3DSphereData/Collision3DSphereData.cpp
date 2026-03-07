@@ -16,15 +16,9 @@ Engine::Collision3DSphereData::Collision3DSphereData(std::function<void()> func,
 /// @return 
 void* Engine::Collision3DSphereData::CreateInstance()
 {
-	// パラメータの生成
-	std::unique_ptr<Collision3D::Sphere> instanceParam = std::make_unique<Collision3D::Sphere>();
-	instanceParam->center = param_->center;
-	instanceParam->radius = param_->radius;
-
-	std::unique_ptr<Collision3DInstanceSphere> instance = std::make_unique<Collision3DInstanceSphere>(instanceParam.get());
+	std::unique_ptr<Collision3DInstanceSphere> instance = std::make_unique<Collision3DInstanceSphere>(param_.get());
 	Collision3DInstanceSphere* pInstance = instance.get();
 
-	instanceParams_.push_back(std::move(instanceParam));
 	instanceTable_.push_back(std::move(instance));
 
 	return pInstance;
