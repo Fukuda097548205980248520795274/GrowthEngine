@@ -1,0 +1,52 @@
+{
+    "SkinningModel_suzanne": {
+        "Animation_Timer": 0.7221224904060364,
+        "Model_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Model_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Model_Transform_Translate": [
+            0.5400000214576721,
+            0.0,
+            0.0
+        ],
+        "Retopology_hp_Plane.002_Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Retopology_hp_Plane.002_Material_Environment": 0.0,
+        "Retopology_hp_Plane.002_Material_Texture": "./Assets/Models/walk/white.png",
+        "Retopology_hp_Plane.002_Material_UV_Rotate": 0.0,
+        "Retopology_hp_Plane.002_Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Retopology_hp_Plane.002_Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "Retopology_hp_Plane.002_Mesh_Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Retopology_hp_Plane.002_Mesh_Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Retopology_hp_Plane.002_Mesh_Transform_Translate": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

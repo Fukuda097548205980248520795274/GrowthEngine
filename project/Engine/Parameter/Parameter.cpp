@@ -1,8 +1,24 @@
 #include "Parameter.h"
+#include <Windows.h>
+#include "Func/ConvertString/ConvertString.h"
+
+/// @brief コンストラクタ
+/// @param folderName 
+Engine::Parameter::Parameter(const std::string& folderName) : folderName_(folderName) 
+{
+	// ディレクトリを掘る
+	if (!CreateDirectory(ConvertString(directory_ + folderName).c_str(), nullptr))
+	{
+		if (GetLastError() != ERROR_ALREADY_EXISTS)
+		{
+			assert(false);
+		}
+	}
+}
 
 /// @brief ファイルを作成する
-/// @param groupName 
-void Engine::Parameter::CreateRecordFile(const std::string& groupName)
+/// @param fileName 
+void Engine::Parameter::CreateRecordFile(const std::string& fileName)
 {
 	// ディレクトリがなければ作成する
 	std::filesystem::path dir(directory_);
@@ -12,7 +28,7 @@ void Engine::Parameter::CreateRecordFile(const std::string& groupName)
 	}
 
 	// ファイルパス
-	std::string filePath = directory_ + groupName + ".json";
+	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
 
 	// 入力ファイルストリーム
 	std::ifstream ifs;

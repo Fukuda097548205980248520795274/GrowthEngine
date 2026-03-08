@@ -11,31 +11,27 @@ namespace Engine
 	public:
 
 		/// @brief コンストラクタ
-		/// @param settingTypeName 
-		/// @param directory 
-		SpriteParameter(const std::string& settingTypeName, const std::string& directory) : Parameter(settingTypeName, directory) {}
-
-		/// @brief 更新処理
-		void Update() override;
+		/// @param folderName 
+		SpriteParameter(const std::string& folderName) : Parameter(folderName) {}
 
 		/// @brief 登録した調整項目の値に、ファイルの値を反映させる
-		/// @param groupName 
-		void RegisterGroupDataReflection(const std::string& groupName) override;
+		/// @param fileName 
+		void RegisterGroupDataReflection(const std::string& fileName) override;
 
 		/// @brief ファイルを記録する
-		/// @param groupName 
-		void SaveFile(const std::string& groupName) override;
+		/// @param fileName 
+		void SaveFile(const std::string& fileName) override;
 
 		/// @brief 項目に値を入れる
 		/// @tparam T 
-		/// @param groupName 
+		/// @param fileName 
 		/// @param key 
 		/// @param value 
 		template<typename T>
-		void SetValue(const std::string& groupName, const std::string& key, T* value)
+		void SetValue(const std::string& fileName, const std::string& key, T* value)
 		{
 			// グループの参照を取得
-			Group& group = data_[groupName];
+			Group& group = data_[fileName];
 
 			// 新しい項目のデータを設定
 			Item newItem{};

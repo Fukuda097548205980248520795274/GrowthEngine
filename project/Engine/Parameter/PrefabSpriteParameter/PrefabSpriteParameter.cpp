@@ -1,17 +1,11 @@
 #include "PrefabSpriteParameter.h"
 
-/// @brief 更新処理
-void Engine::PrefabSpriteParameter::Update()
-{
-
-}
-
 /// @brief 登録した調整項目の値に、ファイルの値を反映させる
-/// @param groupName 
-void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::string& groupName)
+/// @param fileName 
+void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::string& fileName)
 {
 	// ファイルパス
-	std::string filePath = directory_ + groupName + ".json";
+	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
 
 	// 入力ファイルストリーム
 	std::ifstream ifs;
@@ -30,7 +24,7 @@ void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::strin
 	ifs.close();
 
 	// グループを検索
-	json::iterator itGroup = root.find(groupName);
+	json::iterator itGroup = root.find(fileName);
 
 	// 未登録は何もしない
 	if (itGroup == root.end())
@@ -38,7 +32,7 @@ void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::strin
 
 
 	// グループ参照
-	Group& group = data_[groupName];
+	Group& group = data_[fileName];
 
 	// json各項目について
 	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem)
@@ -116,11 +110,11 @@ void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::strin
 }
 
 /// @brief ファイルを記録する
-/// @param groupName 
-void Engine::PrefabSpriteParameter::SaveFile(const std::string& groupName)
+/// @param fileName 
+void Engine::PrefabSpriteParameter::SaveFile(const std::string& fileName)
 {
 	// グループを検索
-	Datas::iterator itGroup = data_.find(groupName);
+	Datas::iterator itGroup = data_.find(fileName);
 
 	// 未登録のときは処理しない
 	if (itGroup == data_.end())
@@ -132,7 +126,7 @@ void Engine::PrefabSpriteParameter::SaveFile(const std::string& groupName)
 	root = json::object();
 
 	// jsonオブジェクトに登録
-	root[groupName] = json::object();
+	root[fileName] = json::object();
 
 	// 各行もについて
 	for (Group::iterator itItem = itGroup->second.begin(); itItem != itGroup->second.end(); ++itItem)
@@ -148,42 +142,42 @@ void Engine::PrefabSpriteParameter::SaveFile(const std::string& groupName)
 		if (std::holds_alternative<bool*>(item))
 		{
 			bool* value = std::get<bool*>(item);
-			root[groupName][itemName] = *value;
+			root[fileName][itemName] = *value;
 		} else if (std::holds_alternative<int32_t*>(item))
 		{
 			// int32_t型
 			int32_t* value = std::get<int32_t*>(item);
-			root[groupName][itemName] = *value;
+			root[fileName][itemName] = *value;
 		} else if (std::holds_alternative<uint32_t*>(item))
 		{
 			// uint32_t型
 			uint32_t* value = std::get<uint32_t*>(item);
-			root[groupName][itemName] = *value;
+			root[fileName][itemName] = *value;
 		} else if (std::holds_alternative<float*>(item))
 		{
 			//float型
 			float* value = std::get<float*>(item);
-			root[groupName][itemName] = *value;
+			root[fileName][itemName] = *value;
 		} else if (std::holds_alternative<Vector2*>(item))
 		{
 			// Vector2型
 			Vector2* value = std::get<Vector2*>(item);
-			root[groupName][itemName] = json::array({ value->x , value->y });
+			root[fileName][itemName] = json::array({ value->x , value->y });
 		} else if (std::holds_alternative<Vector3*>(item))
 		{
 			// Vector3型
 			Vector3* value = std::get<Vector3*>(item);
-			root[groupName][itemName] = json::array({ value->x , value->y , value->z });
+			root[fileName][itemName] = json::array({ value->x , value->y , value->z });
 		} else if (std::holds_alternative<Vector4*>(item))
 		{
 			// Vector4型
 			Vector4* value = std::get<Vector4*>(item);
-			root[groupName][itemName] = json::array({ value->x, value->y, value->z , value->w });
+			root[fileName][itemName] = json::array({ value->x, value->y, value->z , value->w });
 		}
 		else if (std::holds_alternative<std::string*>(item))
 		{
 			std::string* value = std::get<std::string*>(item);
-			root[groupName][itemName] = *value;
+			root[fileName][itemName] = *value;
 		}
 	}
 
@@ -195,10 +189,10 @@ void Engine::PrefabSpriteParameter::SaveFile(const std::string& groupName)
 	}
 
 	// 新規ファイルを作成する
-	CreateRecordFile(groupName);
+	CreateRecordFile(fileName);
 
 	// ファイルパス
-	std::string filePath = directory_ + groupName + ".json";
+	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
 
 	// 出力ファイルストリーム
 	std::ofstream ofs;

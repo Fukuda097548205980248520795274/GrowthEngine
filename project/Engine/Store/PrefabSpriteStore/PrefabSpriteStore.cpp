@@ -4,7 +4,7 @@
 Engine::PrefabSpriteStore::PrefabSpriteStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PrefabSpriteParameter>("PrefabSprite", "./Assets/Parameter/PrefabSprite/");
+	parameter_ = std::make_unique<PrefabSpriteParameter>("PrefabSprite");
 }
 
 /// @brief 初期化

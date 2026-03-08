@@ -7,7 +7,7 @@
 Engine::PrefabPrimitiveStore::PrefabPrimitiveStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PrefabPrimitiveParameter>("PrefabPrimitive", "./Assets/Parameter/PrefabPrimitive/");
+	parameter_ = std::make_unique<PrefabPrimitiveParameter>("PrefabPrimitive");
 }
 
 /// @brief 初期化

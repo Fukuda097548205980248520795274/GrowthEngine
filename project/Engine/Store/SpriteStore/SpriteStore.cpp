@@ -4,7 +4,7 @@
 Engine::SpriteStore::SpriteStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<SpriteParameter>("Sprite", "./Assets/Parameter/Sprite/");
+	parameter_ = std::make_unique<SpriteParameter>("Sprite");
 }
 
 /// @brief 初期化

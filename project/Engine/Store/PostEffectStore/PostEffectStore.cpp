@@ -8,7 +8,7 @@
 Engine::PostEffectStore::PostEffectStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PostEffectParameter>("PostEffect", "./Assets/Parameter/PostEffect/");
+	parameter_ = std::make_unique<PostEffectParameter>("PostEffect");
 }
 
 /// @brief 初期化
