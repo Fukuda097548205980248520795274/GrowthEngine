@@ -130,7 +130,7 @@ public:
 	/// @brief テクスチャを読み込む
 	/// @param filePath 
 	/// @return 
-	TextureHandle LoadTexture(const std::string& filePath) const {return renderContext_->LoadTexture(filePath, log_.get()); }
+	TextureHandle LoadTexture(const std::string& filePath) const { return renderContext_->LoadTexture(filePath, log_.get()); }
 
 	/// @brief オーディオを読み込む
 	/// @param filePath 
@@ -167,7 +167,7 @@ public:
 	/// @param ah 
 	/// @param volume 
 	/// @return 
-	PlayHandle PlayAudio(AudioHandle ah , float volume)const { return audioStore_->PlayAudio(ah , volume); }
+	PlayHandle PlayAudio(AudioHandle ah, float volume)const { return audioStore_->PlayAudio(ah, volume); }
 
 	/// @brief オーディオを停止する
 	/// @param ph 
@@ -370,7 +370,7 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Engine::Primitive::Type type) const
+	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Engine::Primitive::Type type) const
 	{
 		return renderContext_->LoadPrimitive(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}
@@ -495,10 +495,22 @@ public:
 	template<typename T>
 	T* CreateCollision3DInstance(Collision3DHandle hCollision) { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
 
+	/// @brief インスタンスを作成する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* CreateCollision3DInstance(const std::string& name) { return renderContext_->CreateCollision3DInstance<T>(name); }
+
 	/// @brief 衝突対象の設定
 	/// @param hCollision 
 	/// @param hTargetCollision 
 	void SetCollision3DTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision)const { renderContext_->SetCollision3DTarget(hCollision, hTargetCollision); }
+
+	/// @brief 衝突対象の設定
+	/// @param name 
+	/// @param targetName 
+	void SetCollision3DTarget(const std::string& name, const std::string& targetName)const { return renderContext_->SetCollision3DTarget(name, targetName); }
 
 
 
@@ -518,10 +530,22 @@ public:
 	template<typename T>
 	T* CreateCollision2DInstance(Collision2DHandle hCollision) { return renderContext_->CreateCollision2DInstance<T>(hCollision); }
 
+	/// @brief インスタンスを作成する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* CreateCollision2DInstance(const std::string& name) { return renderContext_->CreateCollision2DInstance<T>(name); }
+
 	/// @brief 衝突対象の設定
 	/// @param hCollision 
 	/// @param hTargetCollision 
 	void SetCollision2DTarget(Collision2DHandle hCollision, Collision2DHandle hTargetCollision)const { renderContext_->SetCollision2DTarget(hCollision, hTargetCollision); }
+
+	/// @brief 衝突対象の設定
+	/// @param name 
+	/// @param targetName 
+	void SetCollision2DTarget(const std::string& name, const std::string& targetName)const { return renderContext_->SetCollision2DTarget(name, targetName); }
 
 
 

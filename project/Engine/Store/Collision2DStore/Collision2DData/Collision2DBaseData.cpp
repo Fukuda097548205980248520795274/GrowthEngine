@@ -39,6 +39,10 @@ void Engine::Collision2DBaseData::CollisionCheck()
 		// インスタンス同士の当たり判定
 		for (auto& myInstance : instanceTable_) for (auto& yourInstance : instanceTable)
 		{
+			// 同じインスタンス同士は処理しない
+			if (myInstance == yourInstance)
+				continue;
+
 			myInstance->isCollision_ = false;
 
 			// 円 円

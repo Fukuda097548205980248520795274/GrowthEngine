@@ -28,6 +28,9 @@ Collision2DHandle Engine::Collision2DStore::Load(const std::string& name, Collis
 	// ハンドルを取得
 	Collision2DHandle handle = static_cast<uint32_t>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// 円
 	if (type == Collision2D::Type::Circle)
 	{

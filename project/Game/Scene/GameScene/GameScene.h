@@ -44,9 +44,7 @@ private:
 
 	std::unique_ptr<Collision2DBaseSprite> collisionA_ = nullptr;
 	Collision2DInstanceSprite* collisionInstanceA_ = nullptr;
-
-	std::unique_ptr<Collision2DBaseCircle> collisionB_ = nullptr;
-	Collision2DInstanceCircle* collisionInstanceB_ = nullptr;
+	Collision2DInstanceSprite* collisionInstanceB_ = nullptr;
 
 
 

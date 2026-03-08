@@ -33,6 +33,9 @@ Collision3DHandle Engine::Collision3DStore::Load(const std::string& name, Collis
 	// ハンドルを取得
 	Collision3DHandle handle = static_cast<uint32_t>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// 球
 	if (type == Collision3D::Type::Sphere)
 	{

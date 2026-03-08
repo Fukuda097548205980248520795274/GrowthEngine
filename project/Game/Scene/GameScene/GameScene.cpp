@@ -40,12 +40,9 @@ void GameScene::Initialize()
 
 	collisionA_ = std::make_unique<Collision2DBaseSprite>("TestCollisionSprite");
 	collisionInstanceA_ = collisionA_->CreateInstance();
-	collisionInstanceA_->param_->center.x = 0.0f;
+	collisionInstanceB_ = collisionA_->CreateInstance();
 
-	collisionB_ = std::make_unique<Collision2DBaseCircle>("TestCollisionCircle");
-	collisionInstanceB_ = collisionB_->CreateInstance();
-
-	collisionA_->SetCollisionTarget(collisionB_->GetHandle());
+	engine_->SetCollision2DTarget("TestCollisionSprite", "TestCollisionSprite");
 }
 
 /// @brief 更新処理

@@ -258,10 +258,22 @@ namespace Engine
 		template<typename T>
 		T* CreateCollision3DInstance(Collision3DHandle hCollision) { return collision3DStore_->CreateInstance<T>(hCollision); }
 
+		/// @brief インスタンスを作成する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* CreateCollision3DInstance(const std::string& name) { return collision3DStore_->CreateInstance<T>(name); }
+
 		/// @brief 衝突対象の設定
 		/// @param hCollision 
 		/// @param hTargetCollision 
 		void SetCollision3DTarget(Collision3DHandle hCollision, Collision3DHandle hTargetCollision) { collision3DStore_->SetCollision3DTarget(hCollision, hTargetCollision); }
+
+		/// @brief 衝突対象の設定
+		/// @param name 
+		/// @param targetName 
+		void SetCollision3DTarget(const std::string& name, const std::string& targetName) { collision3DStore_->SetCollision3DTarget(name, targetName); }
 
 
 
@@ -278,10 +290,22 @@ namespace Engine
 		template<typename T>
 		T* CreateCollision2DInstance(Collision2DHandle hCollision) { return collision2DStore_->CreateInstance<T>(hCollision); }
 
+		/// @brief インスタンスを作成する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* CreateCollision2DInstance(const std::string& name) { return collision2DStore_->CreateInstance<T>(name); }
+
 		/// @brief 衝突対象の設定
 		/// @param hCollision 
 		/// @param hTargetCollision 
 		void SetCollision2DTarget(Collision2DHandle hCollision, Collision2DHandle hTargetCollision) { collision2DStore_->SetCollision2DTarget(hCollision, hTargetCollision); }
+
+		/// @brief 衝突対象の設定
+		/// @param name 
+		/// @param targetName 
+		void SetCollision2DTarget(const std::string& name, const std::string& targetName) { collision2DStore_->SetCollision2DTarget(name, targetName); }
 
 
 
