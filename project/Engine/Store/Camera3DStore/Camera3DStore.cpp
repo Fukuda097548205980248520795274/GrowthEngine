@@ -43,6 +43,9 @@ Camera3DHandle Engine::Camera3DStore::Load(const std::string& name)
 	// ハンドルの値
 	Camera3DHandle hCamera = static_cast<Camera3DHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = hCamera;
+
 	// 初めての読み込みカメラは自動で切り替え
 	if (dataTable_.size() == 1)selectHCamera_ = hCamera;
 
@@ -99,6 +102,9 @@ Camera3DHandle Engine::Camera3DStore::InitialLoad(const std::string& name)
 {
 	// ハンドルの値
 	Camera3DHandle hCamera = static_cast<Camera3DHandle>(dataTable_.size());
+
+	// 名前テーブルに記録する
+	nameTable_[name] = hCamera;
 
 	// カメラリソースの生成
 	std::unique_ptr<Camera3DResource> data = std::make_unique<Camera3DResource>(name, hCamera);

@@ -50,9 +50,17 @@ namespace Engine
 		/// @param hCamera 
 		void Camera3DSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera); }
 
+		/// @brief 3Dカメラ切り替え
+		/// @param name 
+		void Camera3DSwitch(const std::string& name) { camera3DStore_->Switch(name); }
+
 		/// @brief 2Dカメラ切り替え
 		/// @param hCamera 
 		void Camera2DSwitch(Camera2DHandle hCamera) { camera2DStore_->Switch(hCamera); }
+
+		/// @brief 2Dカメラ切り替え
+		/// @param name 
+		void Camera2DSwitch(const std::string& name) { camera2DStore_->Switch(name); }
 
 		/// @brief 3Dカメラを読み込む
 		/// @param name 
@@ -103,10 +111,20 @@ namespace Engine
 		/// @return 
 		Camera3DData::Param* GetCamera3DParam(Camera3DHandle hCamera)const { return camera3DStore_->GetParam(hCamera); }
 
+		/// @brief 3Dカメラのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Camera3DData::Param* GetCamera3DParam(const std::string& name)const { return camera3DStore_->GetParam(name); }
+
 		/// @brief 2Dカメラのパラメータを取得する
 		/// @param hCamera 
 		/// @return 
 		Camera2DData::Param* GetCamera2DParam(Camera2DHandle hCamera)const { return camera2DStore_->GetParam(hCamera); }
+
+		/// @brief 2Dカメラのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return camera2DStore_->GetParam(name); }
 
 
 

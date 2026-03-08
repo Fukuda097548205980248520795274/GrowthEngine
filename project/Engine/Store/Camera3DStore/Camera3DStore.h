@@ -5,6 +5,8 @@
 #include "Camera3DResource/Camera3DResource.h"
 #include "DebugCameraResource/DebugCameraResource.h"
 
+#include <unordered_map>
+
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 
 namespace Engine
@@ -35,6 +37,10 @@ namespace Engine
 		/// @param hCamera 
 		void Switch(Camera3DHandle hCamera) { selectHCamera_ = hCamera; }
 
+		/// @brief カメラを切り替える
+		/// @param name 
+		void Switch(const std::string& name) { selectHCamera_ = nameTable_[name]; }
+
 		/// @brief 3Dカメラデータを取得する
 		/// @return 
 		const Camera3D& GetCamera3D() const;
@@ -43,6 +49,11 @@ namespace Engine
 		/// @param hCamera 
 		/// @return 
 		Camera3DData::Param* GetParam(Camera3DHandle hCamera) { return dataTable_[hCamera]->GetCamera3D().GetParam(); }
+
+		/// @brief パラメータを取得する
+		/// @param name 
+		/// @return 
+		Camera3DData::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetCamera3D().GetParam(); }
 
 		/// @brief カメラリソースをコマンドリストに登録
 		/// @param commandList 
@@ -68,6 +79,9 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<Camera3DResource>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::unordered_map<std::string, Camera3DHandle> nameTable_;
 
 
 	private:

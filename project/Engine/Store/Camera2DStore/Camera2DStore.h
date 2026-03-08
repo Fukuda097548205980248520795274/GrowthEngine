@@ -4,6 +4,8 @@
 #include "Handle/Handle.h"
 #include "Camera2DResource/Camera2DResource.h"
 
+#include <unordered_map>
+
 namespace Engine
 {
 	class Camera2DStore
@@ -25,6 +27,10 @@ namespace Engine
 		/// @param hCamera 
 		void Switch(Camera2DHandle hCamera) { selectHCamera_ = hCamera; }
 
+		/// @brief カメラを切り替える
+		/// @param name 
+		void Switch(const std::string& name) { selectHCamera_ = nameTable_[name]; }
+
 		/// @brief 2Dカメラデータを取得する
 		/// @return 
 		const Camera2D& GetCamera2D() const;
@@ -32,7 +38,12 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @param hCamera 
 		/// @return 
-		Camera2DData::Param* GetParam(Camera2DHandle hCamera)const { return dataTable_[hCamera]->GetCamera2D().GetParam(); }
+		Camera2DData::Param* GetParam(Camera2DHandle hCamera) { return dataTable_[hCamera]->GetCamera2D().GetParam(); }
+
+		/// @brief パラメータを取得する
+		/// @param name 
+		/// @return 
+		Camera2DData::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetCamera2D().GetParam(); }
 
 
 	private:
@@ -50,5 +61,8 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<Camera2DResource>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::unordered_map<std::string, Camera2DHandle> nameTable_;
 	};
 }

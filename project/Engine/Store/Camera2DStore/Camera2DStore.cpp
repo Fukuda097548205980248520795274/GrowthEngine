@@ -23,6 +23,9 @@ Camera2DHandle Engine::Camera2DStore::Load(const std::string& name)
 	// ハンドルの値
 	Camera2DHandle hCamera = static_cast<Camera2DHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = hCamera;
+
 	// 初めての読み込みカメラは自動で切り替え
 	if (dataTable_.size() == 1)selectHCamera_ = hCamera;
 
@@ -55,6 +58,9 @@ Camera2DHandle Engine::Camera2DStore::InitialLoad(const std::string& name)
 {
 	// ハンドルの値
 	Camera2DHandle hCamera = static_cast<Camera2DHandle>(dataTable_.size());
+
+	// 名前テーブルに記録する
+	nameTable_[name] = hCamera;
 
 	// カメラリソースの生成
 	std::unique_ptr<Camera2DResource> data = std::make_unique<Camera2DResource>(name, hCamera);

@@ -113,9 +113,17 @@ public:
 	/// @param hCamera 
 	void Camera3DSwitch(Camera3DHandle hCamera) const { renderContext_->Camera3DSwitch(hCamera); }
 
+	/// @brief 3Dカメラの切り替え
+	/// @param name 
+	void Camera3DSwitch(const std::string& name)const { renderContext_->Camera3DSwitch(name); }
+
 	/// @brief 2Dカメラの切り替え
 	/// @param hCamera 
 	void Camera2DSwitch(Camera2DHandle hCamera)const { renderContext_->Camera2DSwitch(hCamera); }
+
+	/// @brief 2Dカメラの切り替え
+	/// @param name 
+	void Camera2DSwitch(const std::string& name)const { renderContext_->Camera2DSwitch(name); }
 
 	/// @brief 3Dカメラを読み込む
 	/// @param name 
@@ -207,10 +215,20 @@ public:
 	/// @return 
 	Engine::Camera3DData::Param* GetCamera3DParam(Camera3DHandle hCamera)const { return renderContext_->GetCamera3DParam(hCamera); }
 
+	/// @brief 3Dカメラのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::Camera3DData::Param* GetCamera3DParam(const std::string& name)const { return renderContext_->GetCamera3DParam(name); }
+
 	/// @brief 2Dカメラのパラメータを取得する
 	/// @param hCamera 
 	/// @return 
 	Engine::Camera2DData::Param* GetCamera2DParam(Camera2DHandle hCamera)const { return renderContext_->GetCamera2DParam(hCamera); }
+
+	/// @brief 2Dカメラのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return renderContext_->GetCamera2DParam(name); }
 
 #pragma endregion
 
