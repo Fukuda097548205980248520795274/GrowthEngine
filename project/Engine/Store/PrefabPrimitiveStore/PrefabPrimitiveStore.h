@@ -65,6 +65,13 @@ namespace Engine
 		/// @param pso 
 		void Register(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
+		/// @brief コマンドリストに登録する
+		/// @param name 
+		/// @param skyboxStore 
+		/// @param commandList 
+		/// @param pso 
+		void Register(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
 		/// @brief シャドウマップの描画処理
 		/// @param viewProjection 
 		/// @param commandList 
@@ -88,6 +95,39 @@ namespace Engine
 			return static_cast<T*>(data->CreateInstance());
 		}
 
+		/// @brief インスタンスを作成する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* CreateInstance(const std::string& name)
+		{
+			PrefabPrimitiveBaseData* data = dataTable_[nameTable_[name]].get();
+			return static_cast<T*>(data->CreateInstance());
+		}
+
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param hPrefabPrimitive 
+		/// @return 
+		template<typename T>
+		T* GetParam(PrefabPrimitiveHandle hPrefabPrimitive)
+		{
+			PrefabPrimitiveBaseData* data = dataTable_[hPrefabPrimitive].get();
+			return static_cast<T*>(data->GetParam());
+		}
+
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetParam(const std::string& name)
+		{
+			PrefabPrimitiveBaseData* data = dataTable_[nameTable_[name]].get();
+			return static_cast<T*>(data->GetParam());
+		}
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
@@ -96,6 +136,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<PrefabPrimitiveBaseData>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::map<std::string, PrefabPrimitiveHandle> nameTable_;
 
 		// パラメータ
 		std::unique_ptr<PrefabPrimitiveParameter> parameter_ = nullptr;

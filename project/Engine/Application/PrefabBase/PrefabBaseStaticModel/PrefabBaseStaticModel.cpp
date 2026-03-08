@@ -14,7 +14,7 @@ PrefabBaseStaticModel::PrefabBaseStaticModel(ModelHandle hModel, uint32_t numIns
 	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::StaticModel, numInstance, hModel, 0, 0);
 
 	// パラメータを取得する
-	//param_ = engine_->GetPrefabSpriteParam(handle_);
+	param_ = engine_->GetPrefabPrimitiveParam<Engine::Prefab::StaticModel::Base::Param>(handle_);
 }
 
 /// @brief インスタンスを生成する

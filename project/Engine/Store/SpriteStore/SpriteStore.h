@@ -35,6 +35,23 @@ namespace Engine
 		/// @param pso 
 		void Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
+		/// @brief コマンドリストに登録する
+		/// @param name 
+		/// @param viewProjection 
+		/// @param commandList 
+		/// @param pso 
+		void Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief パラメータを取得する
+		/// @param hSprite 
+		/// @return 
+		Sprite::Param* GetParam(SpriteHandle hSprite) { return dataTable_[hSprite]->GetParam(); }
+
+		/// @brief パラメータを取得する
+		/// @param name 
+		/// @return 
+		Sprite::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
@@ -43,6 +60,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<SpriteResource>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::unordered_map<std::string, SpriteHandle> nameTable_;
 
 
 	private:

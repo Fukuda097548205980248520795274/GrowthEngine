@@ -379,12 +379,33 @@ public:
 	/// @param handle 
 	void DrawPrimitive(PrimitiveHandle handle)const { renderContext_->DrawPrimitive(handle); }
 
+	/// @brief プリミティブを描画する
+	/// @param name 
+	void DrawPrimitive(const std::string& name)const { renderContext_->DrawPrimitive(name); }
+
 	/// @brief プリミティブのパラメータを取得する
 	/// @tparam T 
 	/// @param handle 
 	/// @return 
 	template<typename T>
 	T* GetPrimitiveParam(PrimitiveHandle handle)const { return renderContext_->GetPrimitiveParam<T>(handle); }
+
+	/// @brief プリミティブのパラメータを取得する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* GetPrimitiveParam(const std::string& name)const { return renderContext_->GetPrimitiveParam<T>(name); }
+
+	/// @brief スプライトのパラメータを取得する
+	/// @param handle 
+	/// @return 
+	Engine::Sprite::Param* GetSpriteParam(SpriteHandle handle)const { return renderContext_->GetSpriteParam(handle); }
+
+	/// @brief スプライトのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::Sprite::Param* GetSpriteParam(const std::string& name)const { return renderContext_->GetSpriteParam(name); }
 
 
 
@@ -400,6 +421,10 @@ public:
 	/// @brief スプライトを描画する
 	/// @param handle 
 	void DrawSprite(SpriteHandle handle)const { renderContext_->DrawSprite(handle); }
+
+	/// @brief スプライトを描画する
+	/// @param name 
+	void DrawSprite(const std::string& name)const { renderContext_->DrawSprite(name); }
 
 
 
@@ -432,14 +457,41 @@ public:
 	/// @param hPrefabPrimitive 
 	void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive)const { renderContext_->DrawPrefabPrimitive(hPrefabPrimitive); }
 
-	/// @brief コマンドリストに登録する
+	/// @brief プリミティブ用プレハブを描画する
+	/// @param name 
+	void DrawPrefabPrimitive(const std::string& name)const { renderContext_->DrawPrefabPrimitive(name); }
+
+	/// @brief スプライト用プレハブを描画する
 	/// @param hSprite 
 	void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite)const { renderContext_->DrawPrefabSprite(hPrefabSprite); }
 
+	/// @brief スプライト用プレハブを描画する
+	/// @param name 
+	void DrawPrefabSprite(const std::string& name)const { renderContext_->DrawPrefabSprite(name); }
+
+
+	/// @brief プリミティブ用プレハブのパラメータを取得する
+	/// @tparam T 
+	/// @param hPrefabPrimitive 
+	/// @return 
+	template<typename T>
+	T* GetPrefabPrimitiveParam(PrefabPrimitiveHandle hPrefabPrimitive)const { return renderContext_->GetPrefabPrimitiveParam<T>(hPrefabPrimitive); }
+
+	/// @brief プリミティブ用プレハブのパラメータを取得する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* GetPrefabPrimitiveParam(const std::string& name)const { return renderContext_->GetPrefabPrimitiveParam<T>(name); }
 
 	/// @brief スプライト用プレハブのパラメータを取得する
 	/// @return 
 	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite)const { return renderContext_->GetPrefabSpriteParam(hPrefabSprite); }
+
+	/// @brief スプライト用プレハブのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(const std::string& name)const { return renderContext_->GetPrefabSpriteParam(name); }
 
 
 	/// @brief プリミティブ用インスタンスを作成する
@@ -449,10 +501,22 @@ public:
 	template<typename T>
 	T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive)const { return renderContext_->CreatePrimitiveInstance<T>(hPrefabPrimitive); }
 
-	/// @brief インスタンスを作成する
+	/// @brief プリミティブ用インスタンスを作成する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* CreatePrimitiveInstance(const std::string& name)const { return renderContext_->CreatePrimitiveInstance<T>(name); }
+
+	/// @brief スプライト用インスタンスを作成する
 	/// @param hPrefabSprite 
 	/// @return 
 	PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) const { return renderContext_->CreateSpriteInstance(hPrefabSprite); }
+
+	/// @brief スプライト用インスタンスを作成する
+	/// @param name 
+	/// @return 
+	PrefabInstanceSprite* CreateSpriteInstance(const std::string& name)const { renderContext_->CreateSpriteInstance(name); }
 
 
 
@@ -493,14 +557,14 @@ public:
 	/// @param hCollision 
 	/// @return 
 	template<typename T>
-	T* CreateCollision3DInstance(Collision3DHandle hCollision) { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
+	T* CreateCollision3DInstance(Collision3DHandle hCollision)const { return renderContext_->CreateCollision3DInstance<T>(hCollision); }
 
 	/// @brief インスタンスを作成する
 	/// @tparam T 
 	/// @param name 
 	/// @return 
 	template<typename T>
-	T* CreateCollision3DInstance(const std::string& name) { return renderContext_->CreateCollision3DInstance<T>(name); }
+	T* CreateCollision3DInstance(const std::string& name)const { return renderContext_->CreateCollision3DInstance<T>(name); }
 
 	/// @brief 衝突対象の設定
 	/// @param hCollision 
@@ -528,14 +592,14 @@ public:
 	/// @param hCollision 
 	/// @return 
 	template<typename T>
-	T* CreateCollision2DInstance(Collision2DHandle hCollision) { return renderContext_->CreateCollision2DInstance<T>(hCollision); }
+	T* CreateCollision2DInstance(Collision2DHandle hCollision) const { return renderContext_->CreateCollision2DInstance<T>(hCollision); }
 
 	/// @brief インスタンスを作成する
 	/// @tparam T 
 	/// @param name 
 	/// @return 
 	template<typename T>
-	T* CreateCollision2DInstance(const std::string& name) { return renderContext_->CreateCollision2DInstance<T>(name); }
+	T* CreateCollision2DInstance(const std::string& name) const { return renderContext_->CreateCollision2DInstance<T>(name); }
 
 	/// @brief 衝突対象の設定
 	/// @param hCollision 

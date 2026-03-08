@@ -45,6 +45,10 @@ namespace Engine
 		/// @return 
 		SpriteHandle GetHandle()const { return hSprite_; }
 
+		/// @brief パラメータを取得する
+		/// @return 
+		Sprite::Param* GetParam()const { return param_.get(); }
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 

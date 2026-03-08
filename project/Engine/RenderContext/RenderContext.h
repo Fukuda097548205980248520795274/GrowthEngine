@@ -117,12 +117,31 @@ namespace Engine
 		template <typename T>
 		T* GetLightParam(LightHandle handle) { return lightStore_->GetParam<T>(handle); }
 
+
+
 		/// @brief プリミティブのパラメータを取得する
 		/// @tparam T 
 		/// @param handle 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(PrimitiveHandle handle) { return model_->GetParam<T>(handle); }
+		T* GetPrimitiveParam(PrimitiveHandle handle) { return model_->GetPrimitiveParam<T>(handle); }
+
+		/// @brief プリミティブのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPrimitiveParam(const std::string& name) { return model_->GetPrimitiveParam<T>(name); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		Sprite::Param* GetSpriteParam(SpriteHandle handle) { return model_->GetSpriteParam(handle); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Sprite::Param* GetSpriteParam(const std::string& name) { return model_->GetSpriteParam(name); }
 
 
 
@@ -176,16 +195,43 @@ namespace Engine
 
 		/// @brief プリミティブ用プレハブを描画する
 		/// @param hPrefabPrimitive 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive,skyboxStore_.get(), commandList_); }
+		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive, skyboxStore_.get(), commandList_); }
+
+		/// @brief プリミティブ用プレハブを描画する
+		/// @param name 
+		void DrawPrefabPrimitive(const std::string& name) { prefab_->DrawPrefabPrimitive(name, skyboxStore_.get(), commandList_); }
 
 		/// @brief スプライト用プレハブを描画する
 		/// @param hPrefabSprite 
 		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite) { prefab_->DrawPrefabSprite(hPrefabSprite, commandList_); }
 
+		/// @brief スプライト用プレハブを描画する
+		/// @param name 
+		void DrawPrefabSprite(const std::string& name) { prefab_->DrawPrefabSprite(name, commandList_); }
+
+
+		/// @brief プリミティブ用プレハブのパラメータを取得する
+		/// @tparam T 
+		/// @param hPrefabPrimitive 
+		/// @return 
+		template<typename T>
+		T* GetPrefabPrimitiveParam(PrefabPrimitiveHandle hPrefabPrimitive) { return prefab_->GetPrimitiveParam<T>(hPrefabPrimitive); }
+
+		/// @brief プリミティブ用プレハブのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPrefabPrimitiveParam(const std::string& name) { return prefab_->GetPrimitiveParam(name); }
 
 		/// @brief スプライト用プレハブのパラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefab_->GetSpriteParam(hPrefabSprite); }
+
+		/// @brief スプライト用プレハブのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Prefab::Sprite::Base::Param* GetPrefabSpriteParam(const std::string& name) { return prefab_->GetSpriteParam(name); }
 
 
 		/// @brief プリミティブ用インスタンスを作成する
@@ -195,10 +241,22 @@ namespace Engine
 		template<typename T>
 		T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive) { return prefab_->CreatePrimitiveInstance<T>(hPrefabPrimitive); }
 
-		/// @brief インスタンスを作成する
+		/// @brief プリミティブ用インスタンスを作成する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* CreatePrimitiveInstance(const std::string& name) { return prefab_->CreatePrimitiveInstance<T>(name); }
+
+		/// @brief スプライト用インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
 		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefab_->CreateSpriteInstance(hPrefabSprite); }
+
+		/// @brief スプライト用インスタンスを作成する
+		/// @param name 
+		/// @return 
+		PrefabInstanceSprite* CreateSpriteInstance(const std::string& name) { return prefab_->CreateSpriteInstance(name); }
 
 
 		/// @brief 全てのインスタンスを削除する
@@ -209,11 +267,18 @@ namespace Engine
 
 	public:
 
-		/// @brief プリミティブモデルの描画処理
+		/// @brief プリミティブの描画処理
 		/// @param handle 
 		void DrawPrimitive(PrimitiveHandle handle)
 		{
 			model_->DrawPrimitive(camera3DStore_.get(),skyboxStore_.get(), commandList_, handle);
+		}
+
+		/// @brief プリミティブの描画処理
+		/// @param name 
+		void DrawPrimitive(const std::string& name)
+		{
+			model_->DrawPrimitive(camera3DStore_.get(), skyboxStore_.get(), commandList_, name);
 		}
 
 		/// @brief スプライトの描画処理
@@ -221,6 +286,13 @@ namespace Engine
 		void DrawSprite(SpriteHandle handle)
 		{
 			model_->DrawSprite(handle, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
+		}
+
+		/// @brief スプライトの描画処理
+		/// @param name 
+		void DrawSprite(const std::string& name)
+		{
+			model_->DrawSprite(name, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
 		}
 
 

@@ -44,12 +44,29 @@ namespace Engine
 		/// @param commandList 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
-		/// @brief パラメータを取得する
+		/// @brief プリミティブのパラメータを取得する
 		/// @tparam T 
 		/// @param handle 
 		/// @return 
 		template<typename T>
-		T* GetParam(PrimitiveHandle handle) { return primitiveStore_->GetParam<T>(handle); }
+		T* GetPrimitiveParam(PrimitiveHandle handle) { return primitiveStore_->GetParam<T>(handle); }
+
+		/// @brief プリミティブのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPrimitiveParam(const std::string& name) { return primitiveStore_->GetParam<T>(name); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		Sprite::Param* GetSpriteParam(SpriteHandle handle) { return spriteStore_->GetParam(handle); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Sprite::Param* GetSpriteParam(const std::string& name) { return spriteStore_->GetParam(name); }
 
 		/// @brief プリミティブを読み込む
 		/// @param device 
@@ -80,12 +97,24 @@ namespace Engine
 		}
 
 
-		/// @brief プリミティブの描画処理
+		/// @brief プリミティブ描画処理
+		/// @param cameraStore 
+		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param handle 
 		void DrawPrimitive(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle)
 		{
 			primitiveStore_->Register(cameraStore,skyboxStore, commandList, handle, psoPrimitive_.get());
+		}
+
+		/// @brief プリミティブ描画処理
+		/// @param cameraStore 
+		/// @param skyboxStore 
+		/// @param commandList 
+		/// @param name 
+		void DrawPrimitive(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name)
+		{
+			primitiveStore_->Register(cameraStore, skyboxStore, commandList, name, psoPrimitive_.get());
 		}
 
 		/// @brief スプライトの描画処理
@@ -95,6 +124,15 @@ namespace Engine
 		void DrawSprite(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList)
 		{
 			spriteStore_->Register(hSprite, viewProjection, commandList, psoSprite_.get());
+		}
+
+		/// @brief スプライトの描画処理
+		/// @param name 
+		/// @param viewProjection 
+		/// @param commandList 
+		void DrawSprite(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList)
+		{
+			spriteStore_->Register(name, viewProjection, commandList, psoSprite_.get());
 		}
 
 		/// @brief デバッグ用パラメータ

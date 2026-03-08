@@ -70,10 +70,20 @@ namespace Engine
 			const std::string& name, Primitive::Type type, Log* log);
 
 		/// @brief コマンドリストに登録する
+		/// @param cameraStore 
+		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param handle 
-		/// @param meshIndex 
+		/// @param pso 
 		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, PrimitiveHandle handle, BasePSOModel* pso);
+
+		/// @brief コマンドリストに登録する
+		/// @param cameraStore 
+		/// @param skyboxStore 
+		/// @param commandList 
+		/// @param name 
+		/// @param pso 
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -86,6 +96,17 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetParam(const std::string& name)
+		{
+			PrimitiveBaseData* data = dataTable_[nameTable_[name]].get();
+			return static_cast<T*>(data->GetParam());
+		}
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
@@ -94,6 +115,9 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<PrimitiveBaseData>> dataTable_;
+
+		// 名前テーブル
+		std::unordered_map<std::string, PrimitiveHandle> nameTable_;
 
 		
 		// スキニングPSO

@@ -10,6 +10,9 @@ Sprite::Sprite(TextureHandle hTexture, const std::string& name) : name_(name)
 
 	// 読み込む
 	hSprite_ = engine_->LoadSprite(hTexture, name_);
+
+	// パラメータを取得する
+	param_ = engine_->GetSpriteParam(hSprite_);
 }
 
 /// @brief 描画処理

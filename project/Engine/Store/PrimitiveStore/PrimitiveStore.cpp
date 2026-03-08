@@ -115,6 +115,9 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 	// ハンドル
 	PrimitiveHandle handle = static_cast<PrimitiveHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 
 	// 静的モデル
 	if (type == Primitive::Type::StaticModel)
@@ -158,6 +161,7 @@ void Engine::PrimitiveStore::Register(Camera3DStore* cameraStore, SkyboxStore* s
 	{
 		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[handle].get());
 		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
 	}
 
 	// アニメーションモデル
@@ -165,6 +169,7 @@ void Engine::PrimitiveStore::Register(Camera3DStore* cameraStore, SkyboxStore* s
 	{
 		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[handle].get());
 		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
 	}
 
 	// スキニングモデル
@@ -172,6 +177,40 @@ void Engine::PrimitiveStore::Register(Camera3DStore* cameraStore, SkyboxStore* s
 	{
 		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[handle].get());
 		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
+	}
+}
+
+/// @brief コマンドリストに登録する
+/// @param cameraStore 
+/// @param skyboxStore 
+/// @param commandList 
+/// @param name 
+/// @param pso 
+void Engine::PrimitiveStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name, BasePSOModel* pso)
+{
+	// 静的モデル
+	if (dataTable_[nameTable_[name]]->GetType() == Primitive::Type::StaticModel)
+	{
+		auto p = static_cast<PrimitiveStaticModelData*>(dataTable_[nameTable_[name]].get());
+		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
+	}
+
+	// アニメーションモデル
+	if (dataTable_[nameTable_[name]]->GetType() == Primitive::Type::AnimationModel)
+	{
+		auto p = static_cast<PrimitiveAnimationModelData*>(dataTable_[nameTable_[name]].get());
+		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
+	}
+
+	// スキニングモデル
+	if (dataTable_[nameTable_[name]]->GetType() == Primitive::Type::SkinningModel)
+	{
+		auto p = static_cast<PrimitiveSkinningModelData*>(dataTable_[nameTable_[name]].get());
+		p->Register(cameraStore, skyboxStore, commandList, pso);
+		return;
 	}
 }
 

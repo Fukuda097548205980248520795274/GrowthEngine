@@ -82,18 +82,55 @@ namespace Engine
 
 		/// @brief プリミティブ用プレハブを描画する
 		/// @param hPrefabPrimitive 
+		/// @param skyboxStore 
 		/// @param commandList 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefabPrimitiveStore_->Register(hPrefabPrimitive,skyboxStore, commandList, psoPrefabPrimitive_.get()); }
+		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
+		{
+			prefabPrimitiveStore_->Register(hPrefabPrimitive, skyboxStore, commandList, psoPrefabPrimitive_.get());
+		}
+
+		/// @brief プリミティブ用プレハブを描画する
+		/// @param name 
+		/// @param skyboxStore 
+		/// @param commandList 
+		void DrawPrefabPrimitive(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
+		{
+			prefabPrimitiveStore_->Register(name, skyboxStore, commandList, psoPrefabPrimitive_.get());
+		}
 
 		/// @brief スプライト用プレハブでの描画処理
 		/// @param hPrefabSprite 
 		/// @param commandList 
 		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite, ID3D12GraphicsCommandList* commandList) { prefabSpriteStore_->Register(hPrefabSprite, commandList, psoPrefabSprite_.get()); }
 
+		/// @brief スプライト用プレハブでの描画処理
+		/// @param name 
+		/// @param commandList 
+		void DrawPrefabSprite(const std::string& name, ID3D12GraphicsCommandList* commandList) { prefabSpriteStore_->Register(name, commandList, psoPrefabSprite_.get()); }
+
+
+		/// @brief プリミティブのパラメータを取得する
+		/// @tparam T 
+		/// @param hPrefabPrimitive 
+		/// @return 
+		template<typename T>
+		T* GetPrimitiveParam(PrefabPrimitiveHandle hPrefabPrimitive) { return prefabPrimitiveStore_->GetParam<T>(hPrefabPrimitive); }
+
+		/// @brief プリミティブのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPrimitiveParam(const std::string& name) { return prefabPrimitiveStore_->GetParam<T>(name); }
 
 		/// @brief スプライトのパラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->GetParam(hPrefabSprite); }
+
+		/// @brief スプライトのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Prefab::Sprite::Base::Param* GetSpriteParam(const std::string& name) { return prefabSpriteStore_->GetParam(name); }
 
 
 		/// @brief プリミティブ用インスタンスを作成する
@@ -103,10 +140,23 @@ namespace Engine
 		template<typename T>
 		T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive) { return prefabPrimitiveStore_->CreateInstance<T>(hPrefabPrimitive); }
 
+		/// @brief プリミティブ用インスタンスを作成する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* CreatePrimitiveInstance(const std::string& name) { return prefabPrimitiveStore_->CreateInstance<T>(name); }
+
+
 		/// @brief スプライト用インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
 		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->CreateInstance(hPrefabSprite); }
+
+		/// @brief スプライト用インスタンスを作成する
+		/// @param name 
+		/// @return 
+		PrefabInstanceSprite* CreateSpriteInstance(const std::string& name) { return prefabSpriteStore_->CreateInstance(name); }
 
 
 		/// @brief 全てのインスタンスを削除する

@@ -73,6 +73,9 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	// ハンドルを取得する
 	PrefabPrimitiveHandle handle = static_cast<PrefabPrimitiveHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// 静的モデルプレハブデータ
 	if (type == Prefab::Type::StaticModel)
 	{
@@ -100,6 +103,16 @@ void Engine::PrefabPrimitiveStore::Update()
 void Engine::PrefabPrimitiveStore::Register(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	dataTable_[hPrefabPrimitive]->Register(skyboxStore, commandList, pso);
+}
+
+/// @brief コマンドリストに登録する
+/// @param name 
+/// @param skyboxStore 
+/// @param commandList 
+/// @param pso 
+void Engine::PrefabPrimitiveStore::Register(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, pso);
 }
 
 /// @brief シャドウマップの描画処理

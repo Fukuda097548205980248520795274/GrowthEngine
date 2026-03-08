@@ -76,6 +76,9 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	// ハンドル
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// データの生成と初期化
 	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, numInstance, name, parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, cameraStore, heap, device, log);
@@ -92,6 +95,15 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite,  ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	dataTable_[hPrefabSprite]->Register(commandList, pso);
+}
+
+/// @brief コマンドリストに登録する
+/// @param name 
+/// @param commandList 
+/// @param pso 
+void Engine::PrefabSpriteStore::Register(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[nameTable_[name]]->Register(commandList, pso);
 }
 
 /// @brief リセット

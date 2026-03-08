@@ -74,6 +74,9 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 	// ハンドル
 	SpriteHandle handle = static_cast<SpriteHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// データの生成と初期化
 	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, name, parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
@@ -90,6 +93,16 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 void Engine::SpriteStore::Register(SpriteHandle hSprite, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	dataTable_[hSprite]->Register(viewProjection, commandList, pso);
+}
+
+/// @brief コマンドリストに登録する
+/// @param name 
+/// @param viewProjection 
+/// @param commandList 
+/// @param pso 
+void Engine::SpriteStore::Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[nameTable_[name]]->Register(viewProjection, commandList, pso);
 }
 
 /// @brief デバッグ用パラメータ

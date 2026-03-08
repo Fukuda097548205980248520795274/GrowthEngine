@@ -37,16 +37,32 @@ namespace Engine
 		/// @param hSprite 
 		/// @param commandList 
 		/// @param pso 
-		void Register(PrefabSpriteHandle hPrefabSprite,ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(PrefabSpriteHandle hPrefabSprite, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief コマンドリストに登録する
+		/// @param name 
+		/// @param commandList 
+		/// @param pso 
+		void Register(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @return 
 		Prefab::Sprite::Base::Param* GetParam(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetParam(); }
 
+		/// @brief パラメータを取得する
+		/// @param name 
+		/// @return 
+		Prefab::Sprite::Base::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
+
 		/// @brief インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
 		PrefabInstanceSprite* CreateInstance(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->CreateInstance(); }
+
+		/// @brief インスタンスを作成する
+		/// @param name 
+		/// @return 
+		PrefabInstanceSprite* CreateInstance(const std::string& name) { return dataTable_[nameTable_[name]]->CreateInstance(); }
 
 		/// @brief リセット
 		void Reset();
@@ -62,6 +78,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<PrefabSpriteResource>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::unordered_map<std::string, PrefabSpriteHandle> nameTable_;
 
 		// パラメータ
 		std::unique_ptr<PrefabSpriteParameter> parameter_ = nullptr;
