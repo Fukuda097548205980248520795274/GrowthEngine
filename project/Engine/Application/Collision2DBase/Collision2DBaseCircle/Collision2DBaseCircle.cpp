@@ -2,10 +2,12 @@
 #include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
 #include "GrowthEngine.h"
 
-Collision2DBaseCircle::Collision2DBaseCircle(std::function<void()> func, const std::string& name)
+/// @brief コンストラクタ
+/// @param name 
+Collision2DBaseCircle::Collision2DBaseCircle(const std::string& name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision2D(func, name, Engine::Collision2D::Type::Sprite);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision2D(name, Engine::Collision2D::Type::Sprite);
 }
 
 /// @brief インスタンスを作成する

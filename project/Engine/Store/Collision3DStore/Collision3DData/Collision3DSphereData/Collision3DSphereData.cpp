@@ -3,8 +3,8 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::Collision3DSphereData::Collision3DSphereData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
-	: Collision3DBaseData(func, name, type, hCollision)
+Engine::Collision3DSphereData::Collision3DSphereData(const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
+	: Collision3DBaseData(name, type, hCollision)
 {
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Collision3D::Sphere>();

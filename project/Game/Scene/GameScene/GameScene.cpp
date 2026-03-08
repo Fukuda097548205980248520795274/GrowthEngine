@@ -38,11 +38,11 @@ void GameScene::Initialize()
 	sprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "TestSprite");
 
 
-	collisionA_ = std::make_unique<Collision2DBaseSprite>([]() {int a = 0; }, "TestCollisionSprite");
+	collisionA_ = std::make_unique<Collision2DBaseSprite>("TestCollisionSprite");
 	collisionInstanceA_ = collisionA_->CreateInstance();
-	collisionInstanceA_->param_->center.x = 10.0f;
+	collisionInstanceA_->param_->center.x = 0.0f;
 
-	collisionB_ = std::make_unique<Collision2DBaseCircle>([]() {int a = 0; }, "TestCollisionCircle");
+	collisionB_ = std::make_unique<Collision2DBaseCircle>("TestCollisionCircle");
 	collisionInstanceB_ = collisionB_->CreateInstance();
 
 	collisionA_->SetCollisionTarget(collisionB_->GetHandle());
@@ -113,7 +113,10 @@ void GameScene::Update()
 
 	ImGui::End();
 
-
+	if(collisionInstanceA_->isCollision_)
+	{
+		int a = 0;
+	}
 
 
 

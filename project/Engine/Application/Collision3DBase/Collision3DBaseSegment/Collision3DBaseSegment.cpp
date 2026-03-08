@@ -2,10 +2,12 @@
 #include "Application/Collision3DInstance/Collision3DInstanceSegment/Collision3DInstanceSegment.h"
 #include "GrowthEngine.h"
 
-Collision3DBaseSegment::Collision3DBaseSegment(std::function<void()> func, const std::string& name)
+/// @brief コンストラクタ
+/// @param name 
+Collision3DBaseSegment::Collision3DBaseSegment(const std::string& name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision3D::Type::Segment);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(name, Engine::Collision3D::Type::Segment);
 }
 
 /// @brief インスタンスを作成する

@@ -23,6 +23,9 @@ namespace Engine
 		/// @brief 削除
 		void Delete() { isDelete_ = true; }
 
+		/// @brief 衝突したかどうか
+		bool isCollision_ = false;
+
 	protected:
 
 		/// @brief 種類

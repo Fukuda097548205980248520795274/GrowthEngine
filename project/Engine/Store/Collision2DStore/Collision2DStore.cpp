@@ -16,7 +16,7 @@ void Engine::Collision2DStore::Update()
 /// @param name 
 /// @param type 
 /// @return 
-Collision2DHandle Engine::Collision2DStore::Load(std::function<void()> func, const std::string& name, Collision2D::Type type)
+Collision2DHandle Engine::Collision2DStore::Load(const std::string& name, Collision2D::Type type)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -31,7 +31,7 @@ Collision2DHandle Engine::Collision2DStore::Load(std::function<void()> func, con
 	// 円
 	if (type == Collision2D::Type::Circle)
 	{
-		std::unique_ptr<Collision2DCircleData> data = std::make_unique<Collision2DCircleData>(func, name, type, handle);
+		std::unique_ptr<Collision2DCircleData> data = std::make_unique<Collision2DCircleData>(name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -40,7 +40,7 @@ Collision2DHandle Engine::Collision2DStore::Load(std::function<void()> func, con
 	// 矩形
 	if (type == Collision2D::Type::Sprite)
 	{
-		std::unique_ptr<Collision2DSpriteData> data = std::make_unique<Collision2DSpriteData>(func, name, type, handle);
+		std::unique_ptr<Collision2DSpriteData> data = std::make_unique<Collision2DSpriteData>(name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;

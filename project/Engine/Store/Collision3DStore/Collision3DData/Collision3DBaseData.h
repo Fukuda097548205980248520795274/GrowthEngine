@@ -17,8 +17,8 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param func 
-		Collision3DBaseData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
-			: func_(func), name_(name), type_(type), hCollision_(hCollision) {
+		Collision3DBaseData(const std::string& name, Collision3D::Type type, Collision3DHandle hCollision)
+			: name_(name), type_(type), hCollision_(hCollision) {
 		}
 
 		/// @brief 仮想デストラクタ
@@ -73,9 +73,6 @@ namespace Engine
 
 		// ハンドル
 		Collision3DHandle hCollision_ = 0;
-
-		/// @brief 関数
-		std::function<void()> func_ = nullptr;
 
 		/// @brief 名前
 		std::string name_{};

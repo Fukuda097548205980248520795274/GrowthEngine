@@ -9,7 +9,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param func 
-		Collision3DOBBData(std::function<void()> func, const std::string& name, Collision3D::Type type, Collision3DHandle hCollision);
+		Collision3DOBBData(const std::string& name, Collision3D::Type type, Collision3DHandle hCollision);
 
 		/// @brief インスタンスを作成する
 		/// @return 

@@ -8,9 +8,8 @@ class Collision2DBaseCircle : public Engine::BaseCollision2DBase
 public:
 
 	/// @brief コンストラクタ
-	/// @param func 
 	/// @param name 
-	Collision2DBaseCircle(std::function<void()> func, const std::string& name);
+	Collision2DBaseCircle(const std::string& name);
 
 	/// @brief インスタンスを作成する
 	/// @return 

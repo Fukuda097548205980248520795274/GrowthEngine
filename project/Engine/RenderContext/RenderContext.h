@@ -245,12 +245,11 @@ namespace Engine
 
 
 
-		/// @brief 3D衝突の読み込み
-		/// @param func 
+		/// @brief 3D衝突読み込み
 		/// @param name 
 		/// @param type 
 		/// @return 
-		Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Collision3D::Type type) { return collision3DStore_->Load(func, name, type); }
+		Collision3DHandle LoadCollision3D(const std::string& name, Collision3D::Type type) { return collision3DStore_->Load(name, type); }
 
 		/// @brief インスタンスを作成する
 		/// @tparam T 
@@ -266,12 +265,11 @@ namespace Engine
 
 
 
-		/// @brief 2D衝突の読み込み
-		/// @param func 
+		/// @brief 2D衝突読み込み
 		/// @param name 
 		/// @param type 
 		/// @return 
-		Collision2DHandle LoadCollision2D(std::function<void()> func, const std::string& name, Collision2D::Type type) { return collision2DStore_->Load(func, name, type); }
+		Collision2DHandle LoadCollision2D(const std::string& name, Collision2D::Type type) { return collision2DStore_->Load(name, type); }
 
 		/// @brief インスタンスを作成する
 		/// @tparam T 

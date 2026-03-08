@@ -39,11 +39,13 @@ void Engine::Collision2DBaseData::CollisionCheck()
 		// インスタンス同士の当たり判定
 		for (auto& myInstance : instanceTable_) for (auto& yourInstance : instanceTable)
 		{
+			myInstance->isCollision_ = false;
+
 			// 円 円
 			if (myInstance->GetType() == Collision2D::Type::Circle && yourInstance->GetType() == Collision2D::Type::Circle)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(myInstance.get())->param_, *static_cast<Collision2DInstanceCircle*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -52,7 +54,7 @@ void Engine::Collision2DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision2D::Type::Sprite && yourInstance->GetType() == Collision2D::Type::Sprite)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision2DInstanceSprite*>(myInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -61,7 +63,7 @@ void Engine::Collision2DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision2D::Type::Circle && yourInstance->GetType() == Collision2D::Type::Sprite)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(myInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -70,7 +72,7 @@ void Engine::Collision2DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision2D::Type::Sprite && yourInstance->GetType() == Collision2D::Type::Circle)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision2DInstanceCircle*>(yourInstance.get())->param_, *static_cast<Collision2DInstanceSprite*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}

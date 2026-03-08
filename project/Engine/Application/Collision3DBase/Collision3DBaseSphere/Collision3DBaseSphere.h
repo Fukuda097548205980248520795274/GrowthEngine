@@ -8,9 +8,8 @@ class Collision3DBaseSphere : public Engine::BaseCollision3DBase
 public:
 
 	/// @brief コンストラクタ
-	/// @param func 
 	/// @param name 
-	Collision3DBaseSphere(std::function<void()> func, const std::string& name);
+	Collision3DBaseSphere(const std::string& name);
 
 	/// @brief インスタンスを作成する
 	/// @return 

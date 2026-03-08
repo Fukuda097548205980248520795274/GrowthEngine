@@ -3,8 +3,8 @@
 
 /// @brief コンストラクタ
 /// @param func 
-Engine::Collision2DSpriteData::Collision2DSpriteData(std::function<void()> func, const std::string& name, Collision2D::Type type, Collision2DHandle hCollision)
-	: Collision2DBaseData(func, name, type, hCollision)
+Engine::Collision2DSpriteData::Collision2DSpriteData(const std::string& name, Collision2D::Type type, Collision2DHandle hCollision)
+	: Collision2DBaseData(name, type, hCollision)
 {
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Collision2D::Sprite>();

@@ -2,10 +2,12 @@
 #include "Application/Collision3DInstance/Collision3DInstanceRay/Collision3DInstanceRay.h"
 #include "GrowthEngine.h"
 
-Collision3DBaseRay::Collision3DBaseRay(std::function<void()> func, const std::string& name)
+/// @brief コンストラクタ
+/// @param name 
+Collision3DBaseRay::Collision3DBaseRay(const std::string& name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(func, name, Engine::Collision3D::Type::Ray);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(name, Engine::Collision3D::Type::Ray);
 }
 
 /// @brief インスタンスを作成する

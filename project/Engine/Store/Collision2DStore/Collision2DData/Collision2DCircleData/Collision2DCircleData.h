@@ -9,7 +9,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param func 
-		Collision2DCircleData(std::function<void()> func, const std::string& name, Collision2D::Type type, Collision2DHandle hCollision);
+		Collision2DCircleData(const std::string& name, Collision2D::Type type, Collision2DHandle hCollision);
 
 		/// @brief インスタンスを作成する
 		/// @return 

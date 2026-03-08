@@ -479,14 +479,13 @@ public:
 
 
 
-	/// @brief 3D衝突の読み込み
-	/// @param func 
+	/// @brief 3D衝突読み込み
 	/// @param name 
 	/// @param type 
 	/// @return 
-	Collision3DHandle LoadCollision3D(std::function<void()> func, const std::string& name, Engine::Collision3D::Type type)const
+	Collision3DHandle LoadCollision3D(const std::string& name, Engine::Collision3D::Type type)const
 	{
-		return renderContext_->LoadCollision3D(func, name, type);
+		return renderContext_->LoadCollision3D(name, type);
 	}
 
 	/// @brief インスタンスを作成する
@@ -503,14 +502,13 @@ public:
 
 
 
-	/// @brief 2D衝突の読み込み
-	/// @param func 
+	/// @brief 2D衝突読み込み
 	/// @param name 
 	/// @param type 
 	/// @return 
-	Collision2DHandle LoadCollision2D(std::function<void()> func, const std::string& name, Engine::Collision2D::Type type)const
+	Collision2DHandle LoadCollision2D(const std::string& name, Engine::Collision2D::Type type)const
 	{
-		return renderContext_->LoadCollision2D(func, name, type);
+		return renderContext_->LoadCollision2D(name, type);
 	}
 
 	/// @brief インスタンスを作成する

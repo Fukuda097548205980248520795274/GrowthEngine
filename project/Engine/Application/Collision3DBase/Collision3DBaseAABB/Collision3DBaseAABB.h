@@ -8,9 +8,8 @@ class Collision3DBaseAABB : public Engine::BaseCollision3DBase
 public:
 
 	/// @brief コンストラクタ
-	/// @param func 
 	/// @param name 
-	Collision3DBaseAABB(std::function<void()> func, const std::string& name);
+	Collision3DBaseAABB(const std::string& name);
 
 	/// @brief インスタンスを作成する
 	/// @return 

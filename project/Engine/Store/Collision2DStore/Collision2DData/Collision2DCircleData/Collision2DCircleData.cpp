@@ -2,9 +2,11 @@
 #include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
 
 /// @brief コンストラクタ
-/// @param func 
-Engine::Collision2DCircleData::Collision2DCircleData(std::function<void()> func, const std::string& name, Collision2D::Type type, Collision2DHandle hCollision)
-	: Collision2DBaseData(func, name, type, hCollision)
+/// @param name 
+/// @param type 
+/// @param hCollision 
+Engine::Collision2DCircleData::Collision2DCircleData(const std::string& name, Collision2D::Type type, Collision2DHandle hCollision)
+	: Collision2DBaseData(name, type, hCollision)
 {
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Collision2D::Circle>();

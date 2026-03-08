@@ -44,11 +44,13 @@ void Engine::Collision3DBaseData::CollisionCheck()
 		// インスタンス同士の当たり判定
 		for (auto& myInstance : instanceTable_) for(auto& yourInstance : instanceTable)
 		{
+			myInstance->isCollision_ = false;
+
 			// 球 球
 			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceSphere*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSphere*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -57,7 +59,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -66,7 +68,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -75,7 +77,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceSphere*>(myInstance.get())->param_, *static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -84,7 +86,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceSphere*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -93,7 +95,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceSphere*>(myInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -102,7 +104,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceSphere*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -111,7 +113,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -120,7 +122,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -129,7 +131,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Sphere)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSphere*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -138,7 +140,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceSphere*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -147,7 +149,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Line)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(myInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -156,7 +158,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -165,7 +167,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Ray)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(myInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -174,7 +176,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -183,7 +185,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Plane && yourInstance->GetType() == Collision3D::Type::Segment)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -192,7 +194,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::Plane)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstancePlane*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -201,7 +203,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Line)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -210,7 +212,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -219,7 +221,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Ray)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -228,7 +230,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -237,7 +239,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Segment)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -246,7 +248,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -255,7 +257,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Line)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -264,7 +266,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Line && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceLine*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -273,7 +275,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Ray)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -282,7 +284,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Ray && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceRay*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -291,7 +293,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Segment)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(yourInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}
@@ -300,7 +302,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::Segment && yourInstance->GetType() == Collision3D::Type::OBB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceSegment*>(myInstance.get())->param_))
-					func_();
+					myInstance->isCollision_ = true;
 
 				continue;
 			}

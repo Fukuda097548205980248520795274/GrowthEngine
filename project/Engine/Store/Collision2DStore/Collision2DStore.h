@@ -16,11 +16,10 @@ namespace Engine
 		void Update();
 
 		/// @brief 読み込み
-		/// @param func 
 		/// @param name 
 		/// @param type 
 		/// @return 
-		Collision2DHandle Load(std::function<void()> func, const std::string& name, Collision2D::Type type);
+		Collision2DHandle Load(const std::string& name, Collision2D::Type type);
 
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance() { for (auto& data : dataTable_)data->DestroyAllInstance(); }
