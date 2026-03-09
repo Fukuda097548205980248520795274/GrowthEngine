@@ -110,6 +110,12 @@ public:
 	/// @return 
 	float GetDeltaTime()const { return deltaTime_; }
 
+	/// @brief フルスクリーン切り替え
+	void FullscreenSwitch()const { winApp_->Fullscreen(); }
+
+	/// @brief ウィンドウを閉じる
+	void CloseWindow()const { winApp_->Close(); }
+
 	/// @brief 3Dカメラの切り替え
 	/// @param hCamera 
 	void Camera3DSwitch(Camera3DHandle hCamera) const { renderContext_->Camera3DSwitch(hCamera); }
@@ -763,6 +769,8 @@ private:
 
 
 private:
+
+	bool isPushFullscreenButton_ = false;
 
 
 #ifdef _DEVELOPMENT

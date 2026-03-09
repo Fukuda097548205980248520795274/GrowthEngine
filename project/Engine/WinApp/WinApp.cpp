@@ -187,3 +187,39 @@ bool Engine::WinApp::ProcessMessage()
 
 	return true;
 }
+
+/// @brief フルスクリーントグル
+void Engine::WinApp::Fullscreen()
+{
+	isFullscreen_ = !isFullscreen_;
+
+	if (isFullscreen_)
+	{
+		// 現在のウィンドウ情報保存
+		windowStyle_ = GetWindowLong(hwnd_, GWL_STYLE);
+		GetWindowPlacement(hwnd_, &windowPlacement_);
+
+		MONITORINFO mi{ sizeof(mi) };
+		GetMonitorInfo(MonitorFromWindow(hwnd_, MONITOR_DEFAULTTOPRIMARY), &mi);
+
+		// 枠を外す
+		SetWindowLong(hwnd_, GWL_STYLE, windowStyle_ & ~WS_OVERLAPPEDWINDOW);
+
+		// モニタサイズにする
+		SetWindowPos(hwnd_, HWND_TOP,
+			mi.rcMonitor.left,
+			mi.rcMonitor.top,
+			mi.rcMonitor.right - mi.rcMonitor.left,
+			mi.rcMonitor.bottom - mi.rcMonitor.top,
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+	} 
+	else
+	{
+		// 元に戻す
+		SetWindowLong(hwnd_, GWL_STYLE, windowStyle_);
+		SetWindowPlacement(hwnd_, &windowPlacement_);
+		SetWindowPos(hwnd_, nullptr, 0, 0, 0, 0,
+			SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+	}
+}

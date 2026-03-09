@@ -140,6 +140,22 @@ void GrowthEngine::NewFrame()
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();
 
+	// Alt + Enter の同時押し
+	bool isAltPressed = GetKeyPress(DIK_LALT) || GetKeyPress(DIK_RALT);
+	bool isEnterPressed = GetKeyPress(DIK_RETURN);
+
+	if (isAltPressed && isEnterPressed)
+	{
+		if (!isPushFullscreenButton_)
+		{
+			winApp_->Fullscreen();
+		}
+		isPushFullscreenButton_ = true;
+	} else
+	{
+		isPushFullscreenButton_ = false;
+	}
+
 	// 入力ストアの更新
 	inputStore_->Update();
 

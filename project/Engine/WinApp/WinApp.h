@@ -59,6 +59,12 @@ namespace Engine
 		/// @return 
 		bool IsResized()const { return isResized_; }
 
+		/// @brief フルスクリーントグル
+		void Fullscreen();
+
+		/// @brief 閉じる
+		void Close() { PostQuitMessage(0); }
+
 
 	private:
 
@@ -89,5 +95,13 @@ namespace Engine
 
 		/// @brief リサイズしたかどうか
 		bool isResized_ = false;
+
+
+	private:
+
+		/// @brief フルスクリーン
+		bool isFullscreen_ = false;
+		WINDOWPLACEMENT windowPlacement_{ sizeof(WINDOWPLACEMENT) };
+		DWORD windowStyle_ = 0;
 	};
 }
