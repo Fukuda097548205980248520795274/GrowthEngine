@@ -70,7 +70,10 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	for (auto& data : dataTable_)
 	{
 		if (name == data->GetName())
+		{
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドル
@@ -109,7 +112,7 @@ void Engine::PrefabSpriteStore::Register(const std::string& name, ID3D12Graphics
 /// @brief リセット
 void Engine::PrefabSpriteStore::Reset()
 {
-	for (auto& data : dataTable_)data->Reset();
+	for (auto& data : dataTable_)data->InstanceReset();
 }
 
 /// @brief 全てのインスタンスを削除する

@@ -38,7 +38,10 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	for (auto& data : dataTable_)
 	{
 		if (name == data->GetName() && type == data->GetType())
+		{
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドル

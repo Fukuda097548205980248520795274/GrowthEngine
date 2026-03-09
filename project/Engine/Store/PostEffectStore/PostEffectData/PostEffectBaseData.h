@@ -27,6 +27,9 @@ namespace Engine
 		/// @brief 仮想デストラクタ
 		virtual ~PostEffectBaseData() = default;
 
+		/// @brief リセット
+		virtual void Reset() = 0;
+
 		/// @brief 種類を取得する
 		/// @return 
 		PostEffect::Type GetType()const { return type_; }

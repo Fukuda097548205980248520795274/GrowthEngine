@@ -86,6 +86,34 @@ void Engine::SpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* 
 	transformationResource_->Initialize(device, log);
 }
 
+/// @brief リセット
+void Engine::SpriteResource::Reset()
+{
+	if (parameter_->IsFileFound(group_))
+	{
+		// 反映させる
+		parameter_->RegisterGroupDataReflection(group_);
+		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
+	}
+	else
+	{
+		// トラスフォーム
+		param_->transform.scale = Vector2(1.0f, 1.0f);
+		param_->transform.rotate = 0.0f;
+		param_->transform.translate = Vector2(0.0f, 0.0f);
+
+		// マテリアル
+		param_->material.color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->material.uv.scale = Vector2(1.0f, 1.0f);
+		param_->material.uv.rotate = 0.0f;
+		param_->material.uv.translate = Vector2(0.0f, 0.0f);
+
+		// テクスチャ
+		param_->texture.anchor = Vector2(0.5f, 0.5f);
+		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
+	}
+}
+
 /// @brief コマンドリストに登録
 /// @param commandList 
 void Engine::SpriteResource::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)

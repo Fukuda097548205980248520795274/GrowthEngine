@@ -109,7 +109,11 @@ PrimitiveHandle Engine::PrimitiveStore::Load(ID3D12Device* device, ID3D12Graphic
 	for (auto& data : dataTable_)
 	{
 		if (data->GetName() == name && data->GetType() == type)
+		{
+			// リセット
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドル

@@ -37,6 +37,9 @@ private:
 	// 遷移したいシーン名
 	std::string sceneName_{};
 
+	// 現在のシーン名
+	std::string currentSceneName_{};
+
 	// 遷移フラグ
 	bool isTransition_ = true;
 };

@@ -28,6 +28,9 @@ namespace Engine
 
 		/// @brief 更新処理
 		virtual void Update() = 0;
+		
+		/// @brief リセット
+		virtual void Reset() = 0;
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -64,7 +67,7 @@ namespace Engine
 		virtual void DestroyAllInstance() = 0;
 
 		/// @brief リセット
-		void Reset() { numUseInstance_ = 0; }
+		void InstanceReset() { numUseInstance_ = 0; }
 
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;

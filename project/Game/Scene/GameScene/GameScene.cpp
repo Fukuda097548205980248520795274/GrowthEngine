@@ -126,6 +126,7 @@ void GameScene::Update()
 
 	model_->param_->animation.timer += engine_->GetDeltaTime();
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);
+	model_->param_->modelTransform.translate.x += 0.01f;
 
 	if (engine_->IsInput("toTitle"))
 	{

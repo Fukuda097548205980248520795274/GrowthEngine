@@ -44,6 +44,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update() override;
 
+		/// @brief リセット
+		void Reset() override;
+
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 

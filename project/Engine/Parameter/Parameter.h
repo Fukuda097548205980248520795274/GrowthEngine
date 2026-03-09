@@ -14,6 +14,11 @@ namespace Engine
 		/// @param folderName 
 		Parameter(const std::string& folderName);
 
+		/// @brief ファイルがあるかどうか
+		/// @param fileName 
+		/// @return 
+		bool IsFileFound(const std::string& fileName);
+
 		/// @brief 登録した調整項目の値に、ファイルの値を反映させる
 		/// @param fileName 
 		virtual void RegisterGroupDataReflection(const std::string& fileName) = 0;

@@ -23,6 +23,9 @@ namespace Engine
 		/// @brief 更新処理
 		virtual void Update() = 0;
 
+		/// @brief リセット
+		virtual void Reset() = 0;
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }

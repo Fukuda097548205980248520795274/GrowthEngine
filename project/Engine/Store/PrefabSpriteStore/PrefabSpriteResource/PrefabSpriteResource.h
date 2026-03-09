@@ -46,6 +46,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief リセット
+		void Reset();
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }
@@ -71,7 +74,7 @@ namespace Engine
 		void DestroyAllInstance() { instanceTable_.clear(); }
 
 		/// @brief リセット
-		void Reset() { useInstance_ = 0; }
+		void InstanceReset() { useInstance_ = 0; }
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();

@@ -57,6 +57,24 @@ void Engine::PostEffectRadialBlurData::Initialize(ID3D12Device* device, Log* log
 	resource_->data_->center = param_->center;
 }
 
+/// @brief リセット
+void Engine::PostEffectRadialBlurData::Reset()
+{
+	if (parameter_->IsFileFound(group_))
+	{
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+	else
+	{
+		param_->center = Vector2(0.5f, 0.5f);
+		param_->sampleCount = 32;
+		param_->blur = 1.0f;
+		param_->saturation = 1.0f;
+		param_->contrast = 1.0f;
+		param_->brightness = 0.0f;
+	}
+}
+
 /// @brief コマンドリストに登録する
 /// @param commandList 
 void Engine::PostEffectRadialBlurData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)

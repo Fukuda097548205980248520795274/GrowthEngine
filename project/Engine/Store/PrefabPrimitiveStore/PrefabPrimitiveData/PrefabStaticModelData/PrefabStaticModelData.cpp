@@ -62,6 +62,11 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
 
+	// モデルトランスフォーム
+	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
+	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+	param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
+
 	// パラメータの記録
 	group_ = "StaticModel_" + name_;
 	if (parameter_)
@@ -135,6 +140,48 @@ void Engine::PrefabStaticModelData::Update()
 {
 	// 削除されたインスタンスをリストから除外する
 	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceStaticModel>& instance) {if (instance->IsDelete()) { return true; }return false; });
+}
+
+/// @brief リセット
+void Engine::PrefabStaticModelData::Reset()
+{
+	// モデルデータを取得する
+	ModelData modelData = modelStore_->GetModelData(hModel_);
+
+	if (parameter_->IsFileFound(group_))
+	{
+		// 値を反映させる
+		if (parameter_)parameter_->RegisterGroupDataReflection(group_);
+		for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
+			param_->meshMaterial[meshIndex].hTexture = textureStore_->GetHandle(textureFilePathTable_[meshIndex]);
+	}
+	else
+	{
+		// モデルトランスフォーム
+		param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
+		param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+		param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
+
+		// メッシュごとにデータ生成
+		for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); ++meshIndex)
+		{
+			// トランスフォーム
+			param_->meshTransforms[meshIndex].scale = Vector3(1.0f, 1.0f, 1.0f);
+			param_->meshTransforms[meshIndex].rotate = Vector3(0.0f, 0.0f, 0.0f);
+			param_->meshTransforms[meshIndex].translate = Vector3(0.0f, 0.0f, 0.0f);
+
+			// マテリアル
+			param_->meshMaterial[meshIndex].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			param_->meshMaterial[meshIndex].uv.scale = Vector2(1.0f, 1.0f);
+			param_->meshMaterial[meshIndex].uv.radius = 0.0f;
+			param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
+			param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
+			param_->meshMaterial[meshIndex].environment = 0.0f;
+
+			// テクスチャファイルパス
+			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
+		}
+	}
 }
 
 /// @brief コマンドリストに登録する

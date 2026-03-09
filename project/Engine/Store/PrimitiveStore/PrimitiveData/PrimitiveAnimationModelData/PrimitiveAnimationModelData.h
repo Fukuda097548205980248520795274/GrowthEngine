@@ -44,6 +44,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update() override;
 
+		/// @brief リセット
+		void Reset() override;
+
 		/// @brief パラメータを取得する
 		/// @return 
 		void* GetParam()override { return param_.get(); }

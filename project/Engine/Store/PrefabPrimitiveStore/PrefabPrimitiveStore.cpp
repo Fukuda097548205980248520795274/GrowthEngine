@@ -67,7 +67,11 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	for (auto& data : dataTable_)
 	{
 		if (data->GetName() == name && data->GetType() == type)
+		{
+			// リセット
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドルを取得する
@@ -127,7 +131,7 @@ void Engine::PrefabPrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection
 /// @brief リセット
 void Engine::PrefabPrimitiveStore::Reset()
 {
-	for (auto& data : dataTable_)data->Reset();
+	for (auto& data : dataTable_)data->InstanceReset();
 }
 
 /// @brief 全てのインスタンスを削除する

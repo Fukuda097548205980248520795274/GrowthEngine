@@ -33,6 +33,9 @@ namespace Engine
 		void Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource, TextureStore* textureStore, TextureHandle hTexture,
 			ID3D12Device* device, Log* log);
 
+		/// @brief リセット
+		void Reset();
+
 		/// @brief コマンドリストに登録
 		/// @param commandList 
 		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);

@@ -22,6 +22,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, Log* log, BasePSOPostEffect* pso);
 
+		/// @brief リセット
+		void Reset() override;
+
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) override;

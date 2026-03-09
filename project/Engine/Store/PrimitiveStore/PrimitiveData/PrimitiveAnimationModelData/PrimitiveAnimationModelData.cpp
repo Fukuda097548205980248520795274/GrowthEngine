@@ -138,6 +138,55 @@ void Engine::PrimitiveAnimationModelData::Update()
 
 }
 
+/// @brief リセット
+void Engine::PrimitiveAnimationModelData::Reset()
+{
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	// jsonファイルがあるかどうか
+	if (parameter_->IsFileFound(group_))
+	{
+		// ファイルがあるとき
+
+		// 値を反映させる
+		if (parameter_)parameter_->RegisterGroupDataReflection(group_);
+		for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
+			param_->meshMaterial[meshIndex].hTexture = textureStore_->GetHandle(textureFilePathTable_[meshIndex]);
+	} else
+	{
+		// ファイルがないとき
+
+		// モデルトランスフォーム
+		param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
+		param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+		param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
+
+		// アニメーション
+		param_->animation.timer = 0.0f;
+		param_->animation.hAnimation = hAnimation_;
+
+		for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
+		{
+			// メッシュトランスフォーム
+			param_->meshTransforms[meshIndex].scale = Vector3(1.0f, 1.0f, 1.0f);
+			param_->meshTransforms[meshIndex].rotate = Vector3(0.0f, 0.0f, 0.0f);
+			param_->meshTransforms[meshIndex].translate = Vector3(0.0f, 0.0f, 0.0f);
+
+			// マテリアルトランスフォーム
+			param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
+			param_->meshMaterial[meshIndex].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			param_->meshMaterial[meshIndex].uv.scale = Vector2(1.0f, 1.0f);
+			param_->meshMaterial[meshIndex].uv.radius = 0.0f;
+			param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
+			param_->meshMaterial[meshIndex].environment = 0.0f;
+
+			// テクスチャファイルパス
+			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
+		}
+	}
+}
+
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 

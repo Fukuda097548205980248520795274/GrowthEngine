@@ -16,6 +16,25 @@ Engine::Parameter::Parameter(const std::string& folderName) : folderName_(folder
 	}
 }
 
+/// @brief ファイルがあるかどうか
+/// @param fileName 
+/// @return 
+bool Engine::Parameter::IsFileFound(const std::string& fileName)
+{
+	// ファイルパス
+	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
+
+	// 入力ファイルストリーム
+	std::ifstream ifs;
+	ifs.open(filePath);
+
+	// ファイルが開けないとき
+	if (!ifs.is_open())
+		return false;
+
+	return true;
+}
+
 /// @brief ファイルを作成する
 /// @param fileName 
 void Engine::Parameter::CreateRecordFile(const std::string& fileName)

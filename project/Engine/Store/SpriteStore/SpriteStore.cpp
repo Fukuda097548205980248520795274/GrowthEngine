@@ -68,7 +68,11 @@ SpriteHandle Engine::SpriteStore::Load(const std::string& name, TextureHandle hT
 	for (auto& data : dataTable_)
 	{
 		if (name == data->GetName())
+		{
+			// リセット
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドル
