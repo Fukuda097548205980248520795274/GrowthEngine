@@ -701,12 +701,23 @@ public:
 
 	/// @brief デバッグ用の線を描画する
 	/// @param start 
-	/// @param diff 
+	/// @param end 
 	/// @param color 
-	void DrawDebugLine3D(const Vector3& start, const Vector3& diff, const Vector4& color) const
+	void DrawDebugLine3D(const Vector3& start, const Vector3& end, const Vector4& color) const
 	{
 #ifdef _DEVELOPMENT
-		renderContext_->DrawDebugLine3D(start, diff, color);
+		renderContext_->DrawDebugLine3D(start, end, color);
+#endif
+	}
+
+	/// @brief デバッグ用の線を描画する
+	/// @param start 
+	/// @param end 
+	/// @param color 
+	void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color) const
+	{
+#ifdef _DEVELOPMENT
+		renderContext_->DrawDebugLine2D(start, end, color);
 #endif
 	}
 

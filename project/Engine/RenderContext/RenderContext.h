@@ -403,11 +403,20 @@ namespace Engine
 
 		/// @brief デバッグ用の線を描画する
 		/// @param start 
-		/// @param diff 
+		/// @param end 
 		/// @param color 
-		void DrawDebugLine3D(const Vector3& start, const Vector3& diff, const Vector4& color)
+		void DrawDebugLine3D(const Vector3& start, const Vector3& end, const Vector4& color)
 		{
-			line_->DrawCallLine3D(start, diff, color);
+			line_->DrawCallLine3D(start, end, color);
+		}
+
+		/// @brief デバッグ用の線を描画する
+		/// @param start 
+		/// @param end 
+		/// @param color 
+		void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color)
+		{
+			line_->DrawCallLine2D(start, end, color);
 		}
 
 #endif

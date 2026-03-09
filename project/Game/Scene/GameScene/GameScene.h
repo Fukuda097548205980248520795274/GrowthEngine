@@ -47,6 +47,9 @@ private:
 	std::unique_ptr<Collision3DBaseOBB> collisionB_ = nullptr;
 	Collision3DInstanceOBB* collisionB0_ = nullptr;
 
+	std::unique_ptr<Collision2DBaseSprite> spriteCollision_ = nullptr;
+	Collision2DInstanceSprite* spriteCollisionInstance_ = nullptr;
+
 	enum TileID
 	{
 		kAir,

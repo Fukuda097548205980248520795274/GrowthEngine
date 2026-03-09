@@ -54,6 +54,9 @@ namespace Engine
 		/// @param targetName 
 		void SetCollision2DTarget(const std::string& name, const std::string& targetName) { dataTable_[nameTable_[name]]->SetCollisionTarget(nameTable_[targetName]); }
 
+		/// @brief デバッグ用描画処理
+		void DebugDrawLine();
+
 
 	private:
 

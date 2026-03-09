@@ -1,6 +1,8 @@
 #pragma once
 #include "../Collision2DBaseData.h"
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class Collision2DSpriteData : public Collision2DBaseData
@@ -19,8 +21,14 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+		/// @brief デバッグ用描画処理
+		void DebugDrawLine() override;
+
 
 	private:
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 
 		// パラメータ
 		std::unique_ptr<Collision2D::Sprite> param_ = nullptr;

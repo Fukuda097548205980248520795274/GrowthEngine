@@ -16,34 +16,69 @@ void Engine::DX12Line::Initialize(ID3D12Device* device, DX12Heap* heap, ShaderCo
 	psoLine_ = std::make_unique<PSOLine>();
 	psoLine_->Initialize(device, compiler, log);
 
+
+
 	// 頂点リソースの生成と初期化
-	vertexResource_ = std::make_unique<VertexBufferResource<Vector4>>();
-	vertexResource_->Initialize(device, 2 * kMaxNumLine, log);
+	line3D_.vertexResource = std::make_unique<VertexBufferResource<Vector4>>();
+	line3D_.vertexResource->Initialize(device, 2 * kMaxNumLine, log);
 
 	// 線リソースの生成と初期化
-	lineResource_ = std::make_unique<StructuredBufferResource<Vector4>>();
-	lineResource_->Initialize(device, heap, kMaxNumLine, log);
+	line3D_.lineResource = std::make_unique<StructuredBufferResource<Vector4>>();
+	line3D_.lineResource->Initialize(device, heap, kMaxNumLine, log);
 
 	// 座標変換リソースの生成と初期化
-	transformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
-	transformationResource_->Initialize(device, log);
+	line3D_.transformationResource = std::make_unique<ConstantBufferResource<Matrix4x4>>();
+	line3D_.transformationResource->Initialize(device, log);
+
+
+	// 頂点リソースの生成と初期化
+	line2D_.vertexResource = std::make_unique<VertexBufferResource<Vector4>>();
+	line2D_.vertexResource->Initialize(device, 2 * kMaxNumLine, log);
+
+	// 線リソースの生成と初期化
+	line2D_.lineResource = std::make_unique<StructuredBufferResource<Vector4>>();
+	line2D_.lineResource->Initialize(device, heap, kMaxNumLine, log);
+
+	// 座標変換リソースの生成と初期化
+	line2D_.transformationResource = std::make_unique<ConstantBufferResource<Matrix4x4>>();
+	line2D_.transformationResource->Initialize(device, log);
 }
 
 /// @brief ドローコール
-void Engine::DX12Line::DrawCallLine3D(const Vector3& start, const Vector3& enf, const Vector4& color)
+void Engine::DX12Line::DrawCallLine3D(const Vector3& start, const Vector3& end, const Vector4& color)
 {
 	// 描画制限
-	if (drawCount_ >= kMaxNumLine)return;
+	if (line3D_.drawCount >= kMaxNumLine)return;
 
 	// 頂点の位置
-	vertexResource_->data_[drawCount_ * 2] = Vector4(start.x, start.y, start.z, 1.0f);
-	vertexResource_->data_[drawCount_ * 2 + 1] = Vector4(enf.x, enf.y, enf.z, 1.0f);
+	line3D_.vertexResource->data_[line3D_.drawCount * 2] = Vector4(start.x, start.y, start.z, 1.0f);
+	line3D_.vertexResource->data_[line3D_.drawCount * 2 + 1] = Vector4(end.x, end.y, end.z, 1.0f);
 
 	// 色
-	lineResource_->data_[drawCount_] = color;
+	line3D_.lineResource->data_[line3D_.drawCount] = color;
 
 	// カウントする
-	drawCount_++;
+	line3D_.drawCount++;
+}
+
+/// @brief 2Dラインのドローコール
+/// @param start 
+/// @param diff 
+/// @param color 
+void Engine::DX12Line::DrawCallLine2D(const Vector2& start, const Vector2& end, const Vector4& color)
+{
+	// 描画制限
+	if (line2D_.drawCount >= kMaxNumLine)return;
+
+	// 頂点の位置
+	line2D_.vertexResource->data_[line2D_.drawCount * 2] = Vector4(start.x, start.y, 0.0f, 1.0f);
+	line2D_.vertexResource->data_[line2D_.drawCount * 2 + 1] = Vector4(end.x, end.y, 0.0f, 1.0f);
+
+	// 色
+	line2D_.lineResource->data_[line2D_.drawCount] = color;
+
+	// カウントする
+	line2D_.drawCount++;
 }
 
 /// @brief 描画処理
@@ -52,24 +87,52 @@ void Engine::DX12Line::DrawCallLine3D(const Vector3& start, const Vector3& enf, 
 void Engine::DX12Line::DrawLine3D(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
 {
 	// 描画していないときは処理しない
-	if (drawCount_ <= 0)return;
+	if (line3D_.drawCount <= 0)return;
 
 	// PSOの設定
 	psoLine_->Register(commandList);
 
 	// 頂点の設定
-	vertexResource_->Register(commandList);
+	line3D_.vertexResource->Register(commandList);
 
 	// 座標変換の設定
-	*transformationResource_->data_ = viewProjection;
-	transformationResource_->RegisterGraphics(commandList, 0);
+	*line3D_.transformationResource->data_ = viewProjection;
+	line3D_.transformationResource->RegisterGraphics(commandList, 0);
 
 	// 線の設定
-	lineResource_->RegisterGraphics(commandList, 1);
+	line3D_.lineResource->RegisterGraphics(commandList, 1);
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// 描画
-	commandList->DrawInstanced(drawCount_ * 2, 1, 0, 0);
+	commandList->DrawInstanced(line3D_.drawCount * 2, 1, 0, 0);
+}
+
+/// @brief 2Dラインの描画
+/// @param commandList 
+/// @param viewProjection 
+void Engine::DX12Line::DrawLine2D(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
+{
+	// 描画していないときは処理しない
+	if (line2D_.drawCount <= 0)return;
+
+	// PSOの設定
+	psoLine_->Register(commandList);
+
+	// 頂点の設定
+	line2D_.vertexResource->Register(commandList);
+
+	// 座標変換の設定
+	*line2D_.transformationResource->data_ = viewProjection;
+	line2D_.transformationResource->RegisterGraphics(commandList, 0);
+
+	// 線の設定
+	line2D_.lineResource->RegisterGraphics(commandList, 1);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	// 描画
+	commandList->DrawInstanced(line2D_.drawCount * 2, 1, 0, 0);
 }

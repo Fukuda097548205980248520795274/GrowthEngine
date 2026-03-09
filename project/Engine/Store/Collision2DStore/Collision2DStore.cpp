@@ -52,3 +52,9 @@ Collision2DHandle Engine::Collision2DStore::Load(const std::string& name, Collis
 	assert(false);
 	return 0;
 }
+
+/// @brief デバッグ用描画処理
+void Engine::Collision2DStore::DebugDrawLine()
+{
+	for (auto& data : dataTable_)data->DebugDrawLine();
+}

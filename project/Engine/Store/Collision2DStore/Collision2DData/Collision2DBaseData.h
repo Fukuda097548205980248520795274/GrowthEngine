@@ -65,6 +65,9 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+		/// @brief デバッグ用描画処理
+		virtual void DebugDrawLine() = 0;
+
 
 	private:
 

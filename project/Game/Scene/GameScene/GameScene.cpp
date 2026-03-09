@@ -47,6 +47,11 @@ void GameScene::Initialize()
 	
 	collisionA_->SetCollisionTarget(collisionB_->GetHandle());
 
+	spriteCollision_ = std::make_unique<Collision2DBaseSprite>("sprite");
+	spriteCollisionInstance_ = spriteCollision_->CreateInstance();
+	spriteCollisionInstance_->param_->radius = Vector2(100.0f, 100.0f);
+	spriteCollisionInstance_->param_->center = Vector2(300.0f, 300.0f);
+
 
 	engine_->LoadInputKey("toTitle", InputState::Trigger, DIK_SPACE);
 	Engine::InputData::KeyParam* inputParam = engine_->GetInputParam<Engine::InputData::KeyParam>("toTitle");

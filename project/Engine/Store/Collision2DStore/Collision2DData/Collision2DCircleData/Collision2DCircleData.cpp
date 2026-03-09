@@ -25,3 +25,9 @@ void* Engine::Collision2DCircleData::CreateInstance()
 
 	return pInstance;
 }
+
+/// @brief デバッグ用描画処理
+void Engine::Collision2DCircleData::DebugDrawLine()
+{
+
+}
