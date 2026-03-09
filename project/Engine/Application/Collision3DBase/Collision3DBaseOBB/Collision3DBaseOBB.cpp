@@ -4,10 +4,10 @@
 
 /// @brief コンストラクタ
 /// @param name 
-Collision3DBaseOBB::Collision3DBaseOBB(const std::string& name)
+Collision3DBaseOBB::Collision3DBaseOBB(const std::string& name) : BaseCollision3DBase(name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(name, Engine::Collision3D::Type::OBB);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision3D(name_, Engine::Collision3D::Type::OBB);
 }
 
 /// @brief インスタンスを作成する

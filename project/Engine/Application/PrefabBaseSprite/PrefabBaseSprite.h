@@ -1,6 +1,6 @@
 #pragma once
 #include "Handle/Handle.h"
-#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
+#include "Application/PrefabInstanceSprite/PrefabInstanceSprite.h"
 #include <string>
 #include <list>
 #include <memory>

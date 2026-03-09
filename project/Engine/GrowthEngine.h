@@ -25,8 +25,8 @@
 
 #include "Application/Sprite/Sprite.h"
 
-#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
-#include "Application/PrefabBase/PrefabBaseSprite/PrefabBaseSprite.h"
+#include "Application/PrefabInstanceSprite/PrefabInstanceSprite.h"
+#include "Application/PrefabBaseSprite/PrefabBaseSprite.h"
 
 #include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
 #include "Application/PrefabBase/PrefabBaseStaticModel/PrefabBaseStaticModel.h"

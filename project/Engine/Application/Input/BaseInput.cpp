@@ -2,7 +2,8 @@
 #include "GrowthEngine.h"
 
 /// @brief コンストラクタ
-Engine::BaseInput::BaseInput()
+/// @param name 
+Engine::BaseInput::BaseInput(const std::string& name) : name_(name)
 {
 	// インスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();

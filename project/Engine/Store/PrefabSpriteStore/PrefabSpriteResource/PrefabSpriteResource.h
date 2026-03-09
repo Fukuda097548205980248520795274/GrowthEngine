@@ -6,7 +6,7 @@
 #include "Resource/VertexBufferResource/VertexBufferResource.h"
 #include "Data/ModelData/ModelData.h"
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
-#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
+#include "Application/PrefabInstanceSprite/PrefabInstanceSprite.h"
 
 class PrefabInstanceSprite;
 

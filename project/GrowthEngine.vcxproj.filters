@@ -394,14 +394,8 @@
     <Filter Include="Engine\Include\Application\PrefabBase">
       <UniqueIdentifier>{78a30a99-d6c2-4c6a-b7ae-edd4acc4c186}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseSprite">
-      <UniqueIdentifier>{b3dfd094-7118-4a15-acd9-e853d364d754}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\PrefabInstance">
       <UniqueIdentifier>{abc4a254-5c74-46c4-8de3-16758da0c0af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceSprite">
-      <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource">
       <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
@@ -727,6 +721,12 @@
     <Filter Include="Engine\Include\Application\Input\InputGamepadRightTrigger">
       <UniqueIdentifier>{cb6ab08a-2dc8-4c2c-a3a7-93ff8cb4a480}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBaseSprite">
+      <UniqueIdentifier>{b3dfd094-7118-4a15-acd9-e853d364d754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstanceSprite">
+      <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1005,14 +1005,14 @@
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    <ClCompile Include="Engine\Application\PrefabBaseSprite\PrefabBaseSprite.cpp">
+      <Filter>Engine\Include\Application\PrefabBaseSprite</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\Sprite\Sprite.cpp">
       <Filter>Engine\Include\Application\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    <ClCompile Include="Engine\Application\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
+      <Filter>Engine\Include\Application\PrefabInstanceSprite</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
       <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>
@@ -1604,14 +1604,14 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    <ClInclude Include="Engine\Application\PrefabBaseSprite\PrefabBaseSprite.h">
+      <Filter>Engine\Include\Application\PrefabBaseSprite</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\Sprite\Sprite.h">
       <Filter>Engine\Include\Application\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    <ClInclude Include="Engine\Application\PrefabInstanceSprite\PrefabInstanceSprite.h">
+      <Filter>Engine\Include\Application\PrefabInstanceSprite</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h">
       <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>

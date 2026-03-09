@@ -7,10 +7,10 @@
 /// @param controller 
 /// @param direction 
 /// @param dot 
-InputGamepadRightStick::InputGamepadRightStick(const std::string& name, InputState inputState, DWORD controller, const Vector2& direction, float dot) : BaseInput()
+InputGamepadRightStick::InputGamepadRightStick(const std::string& name, InputState inputState, DWORD controller, const Vector2& direction, float dot) : BaseInput(name)
 {
 	// スティック入力読み込み
-	hInput_ = engine_->LoadInputGamepadStick(name, inputState, StickType::Right, controller, direction, dot);
+	hInput_ = engine_->LoadInputGamepadStick(name_, inputState, StickType::Right, controller, direction, dot);
 
 	// パラメータを取得する
 	param_ = engine_->GetInputParam<Engine::InputData::GamepadStickParam>(hInput_);

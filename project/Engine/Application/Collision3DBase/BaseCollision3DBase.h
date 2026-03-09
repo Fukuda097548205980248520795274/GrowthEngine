@@ -13,6 +13,10 @@ namespace Engine
 		/// @brief 仮想デストラクタ
 		virtual ~BaseCollision3DBase() = default;
 
+		/// @brief コンストラクタ
+		/// @param name 
+		BaseCollision3DBase(const std::string& name) : name_(name){}
+
 		/// @brief ハンドルを取得する
 		/// @return 
 		Collision3DHandle GetHandle()const { return hCollision_; }
@@ -26,5 +30,8 @@ namespace Engine
 
 		/// @brief ハンドル
 		Collision3DHandle hCollision_ = 0;
+
+		/// @brief 名前
+		std::string name_{};
 	};
 }

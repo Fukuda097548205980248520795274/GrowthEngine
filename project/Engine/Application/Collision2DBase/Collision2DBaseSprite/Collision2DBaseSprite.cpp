@@ -4,10 +4,10 @@
 
 /// @brief コンストラクタ
 /// @param name 
-Collision2DBaseSprite::Collision2DBaseSprite(const std::string& name)
+Collision2DBaseSprite::Collision2DBaseSprite(const std::string& name) : BaseCollision2DBase(name)
 {
 	// 読み込む
-	hCollision_ = GrowthEngine::GetInstance()->LoadCollision2D(name, Engine::Collision2D::Type::Sprite);
+	hCollision_ = GrowthEngine::GetInstance()->LoadCollision2D(name_, Engine::Collision2D::Type::Sprite);
 }
 
 /// @brief インスタンスを作成する

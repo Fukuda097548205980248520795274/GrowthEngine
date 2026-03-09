@@ -16,7 +16,8 @@ namespace Engine
 		virtual ~BaseInput() = default;
 
 		/// @brief コンストラクタ
-		BaseInput();
+		/// @param name 
+		BaseInput(const std::string& name);
 
 		/// @brief 入力したかどうか
 		/// @return 
@@ -30,5 +31,8 @@ namespace Engine
 
 		/// @brief 入力ハンドル
 		InputHandle hInput_ = 0;
+
+		/// @brief 名前
+		std::string name_{};
 	};
 }
