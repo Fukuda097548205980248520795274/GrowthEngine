@@ -405,9 +405,9 @@ namespace Engine
 		/// @param start 
 		/// @param diff 
 		/// @param color 
-		void DrawDebugLine(const Vector3& start, const Vector3& diff, const Vector4& color)
+		void DrawDebugLine3D(const Vector3& start, const Vector3& diff, const Vector4& color)
 		{
-			line_->DrawCall(start, diff, color);
+			line_->DrawCallLine3D(start, diff, color);
 		}
 
 #endif

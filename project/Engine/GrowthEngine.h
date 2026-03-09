@@ -703,10 +703,10 @@ public:
 	/// @param start 
 	/// @param diff 
 	/// @param color 
-	void DrawDebugLine(const Vector3& start, const Vector3& diff, const Vector4& color) const
+	void DrawDebugLine3D(const Vector3& start, const Vector3& diff, const Vector4& color) const
 	{
 #ifdef _DEVELOPMENT
-		renderContext_->DrawDebugLine(start, diff, color);
+		renderContext_->DrawDebugLine3D(start, diff, color);
 #endif
 	}
 

@@ -30,7 +30,7 @@ void Engine::DX12Line::Initialize(ID3D12Device* device, DX12Heap* heap, ShaderCo
 }
 
 /// @brief ドローコール
-void Engine::DX12Line::DrawCall(const Vector3& start, const Vector3& enf, const Vector4& color)
+void Engine::DX12Line::DrawCallLine3D(const Vector3& start, const Vector3& enf, const Vector4& color)
 {
 	// 描画制限
 	if (drawCount_ >= kMaxNumLine)return;
@@ -49,7 +49,7 @@ void Engine::DX12Line::DrawCall(const Vector3& start, const Vector3& enf, const 
 /// @brief 描画処理
 /// @param commandList 
 /// @param viewProjection 
-void Engine::DX12Line::Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
+void Engine::DX12Line::DrawLine3D(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
 {
 	// 描画していないときは処理しない
 	if (drawCount_ <= 0)return;

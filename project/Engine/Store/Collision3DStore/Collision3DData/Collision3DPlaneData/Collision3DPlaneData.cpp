@@ -23,3 +23,9 @@ void* Engine::Collision3DPlaneData::CreateInstance()
 
 	return pInstance;
 }
+
+/// @brief デバッグ用の線を描画する
+void Engine::Collision3DPlaneData::DebugDrawLine()
+{
+
+}

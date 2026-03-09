@@ -31,16 +31,16 @@ namespace Engine
 		/// @brief リセット
 		void Reset() { drawCount_ = 0; }
 
-		/// @brief ドローコール
+		/// @brief 3Dラインのドローコール
 		/// @param start 
 		/// @param diff 
 		/// @param color 
-		void DrawCall(const Vector3& start, const Vector3& diff, const Vector4& color);
+		void DrawCallLine3D(const Vector3& start, const Vector3& diff, const Vector4& color);
 
-		/// @brief 描画処理
+		/// @brief 3Dラインの描画処理
 		/// @param commandList 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
+		void DrawLine3D(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
 
 
 	private:

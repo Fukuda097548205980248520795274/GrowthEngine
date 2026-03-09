@@ -65,6 +65,9 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+		/// @brief デバッグ用の線を描画する
+		virtual void DebugDrawLine() = 0;
+
 
 	private:
 

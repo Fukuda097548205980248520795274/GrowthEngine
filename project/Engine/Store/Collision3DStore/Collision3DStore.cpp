@@ -102,3 +102,11 @@ Collision3DHandle Engine::Collision3DStore::Load(const std::string& name, Collis
 	assert(false);
 	return 0;
 }
+
+/// @brief デバッグ用の線を描画する
+void Engine::Collision3DStore::DebugDrawLine()
+{
+#ifdef _DEVELOPMENT
+	for (auto& data : dataTable_)data->DebugDrawLine();
+#endif
+}

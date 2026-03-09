@@ -213,8 +213,11 @@ void Engine::RenderContext::PreDraw()
 void Engine::RenderContext::PostDraw()
 {
 #ifdef _DEVELOPMENT
+	// 衝突ストアのデバッグ線
+	collision3DStore_->DebugDrawLine();
+
 	// 線の描画
-	line_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
+	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
 #endif
 
 	// コマンドリスト・アロケータの取得

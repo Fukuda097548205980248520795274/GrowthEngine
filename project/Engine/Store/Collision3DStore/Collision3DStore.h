@@ -55,6 +55,9 @@ namespace Engine
 		/// @param targetName 
 		void SetCollision3DTarget(const std::string& name, const std::string& targetName) { dataTable_[nameTable_[name]]->SetCollisionTarget(nameTable_[targetName]); }
 
+		/// @brief デバッグ用の線を描画する
+		void DebugDrawLine();
+
 
 	private:
 

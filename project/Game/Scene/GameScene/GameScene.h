@@ -41,12 +41,11 @@ private:
 
 	std::unique_ptr<Sprite> sprite_ = nullptr;
 
+	std::unique_ptr<Collision3DBaseOBB> collisionA_ = nullptr;
+	Collision3DInstanceOBB* collisionA0_ = nullptr;
 
-	std::unique_ptr<Collision2DBaseSprite> collisionA_ = nullptr;
-	Collision2DInstanceSprite* collisionInstanceA_ = nullptr;
-	Collision2DInstanceSprite* collisionInstanceB_ = nullptr;
-
-
+	std::unique_ptr<Collision3DBaseOBB> collisionB_ = nullptr;
+	Collision3DInstanceOBB* collisionB0_ = nullptr;
 
 	enum TileID
 	{

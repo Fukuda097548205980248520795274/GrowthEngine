@@ -1,6 +1,8 @@
 #pragma once
 #include "../Collision3DBaseData.h"
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class Collision3DOBBData : public Collision3DBaseData
@@ -19,8 +21,14 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+		/// @brief デバッグ用の線を描画する
+		void DebugDrawLine() override;
+
 
 	private:
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 
 		// パラメータ
 		std::unique_ptr<Collision3D::OBB> param_ = nullptr;

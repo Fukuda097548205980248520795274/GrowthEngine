@@ -19,6 +19,9 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+		/// @brief デバッグ用の線を描画する
+		void DebugDrawLine() override;
+
 
 	private:
 

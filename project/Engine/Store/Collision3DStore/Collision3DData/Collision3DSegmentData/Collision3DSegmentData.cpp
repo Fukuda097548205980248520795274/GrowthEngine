@@ -23,3 +23,9 @@ void* Engine::Collision3DSegmentData::CreateInstance()
 
 	return pInstance;
 }
+
+/// @brief デバッグ用の線を描画する
+void Engine::Collision3DSegmentData::DebugDrawLine()
+{
+
+}
