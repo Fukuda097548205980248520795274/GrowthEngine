@@ -47,10 +47,7 @@ void Engine::SpriteStore::Initialize(ID3D12Device* device, Log* log)
 /// @brief 更新処理
 void Engine::SpriteStore::Update()
 {
-	// デバッグ用パラメータ
-#ifdef _DEVELOPMENT
-	DebugParameter();
-#endif
+	
 }
 
 /// @brief 読み込み
