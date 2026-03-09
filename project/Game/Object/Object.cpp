@@ -1,10 +1,12 @@
 #include "Object.h"
 
 /// @brief コンストラクタ
-Object::Object()
+/// @param position 
+Object::Object(const Vector2& position)
 {
 	// ワールドトラスフォーム
 	worldTransform_ = std::make_unique<WorldTransform2D>();
+	worldTransform_->translate_ = position;
 }
 
 /// @brief 更新処理

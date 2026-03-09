@@ -6,7 +6,8 @@ class Object
 public:
 
 	/// @brief コンストラクタ
-	Object();
+	/// @param position 
+	Object(const Vector2& position);
 
 	/// @brief 更新処理
 	virtual void Update();
