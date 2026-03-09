@@ -697,6 +697,12 @@
     <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform2D">
       <UniqueIdentifier>{a44c1fe7-a5ed-4b9f-a5d9-029f540f74e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{94e22eca-b680-4465-95bf-903dff5f3b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object\Player">
+      <UniqueIdentifier>{511b2d10-ccf1-40e8-8f53-9edbc91680d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1205,6 +1211,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.cpp">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Object\Object.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Object\Player\Player.cpp">
+      <Filter>Game\Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1807,6 +1819,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.h">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Object\Object.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Object\Player\Player.h">
+      <Filter>Game\Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
