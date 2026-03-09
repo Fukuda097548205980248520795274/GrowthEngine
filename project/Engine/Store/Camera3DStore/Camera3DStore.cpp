@@ -10,7 +10,7 @@ Engine::Camera3DStore::Camera3DStore()
 #ifdef _DEVELOPMENT
 
 	// デバッグカメラの生成
-	debugCamera_ = std::make_unique<DebugCameraResource>();
+	debugCamera_ = std::make_unique<DebugCamera3DResource>();
 
 #endif
 }

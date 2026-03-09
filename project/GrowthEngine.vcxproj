@@ -489,6 +489,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.cpp" />
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -497,7 +498,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.cpp">
+    <ClCompile Include="Engine\Store\Camera3DStore\DebugCamera3DResource\DebugCamera3DResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -820,9 +821,10 @@
     <ClInclude Include="Engine\Store\AudioStore\AudioStore.h" />
     <ClInclude Include="Engine\Store\Camera2DStore\Camera2DResource\Camera2DResource.h" />
     <ClInclude Include="Engine\Store\Camera2DStore\Camera2DStore.h" />
+    <ClInclude Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h" />
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h" />
-    <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h" />
+    <ClInclude Include="Engine\Store\Camera3DStore\DebugCamera3DResource\DebugCamera3DResource.h" />
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.h" />
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.h" />
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.h" />

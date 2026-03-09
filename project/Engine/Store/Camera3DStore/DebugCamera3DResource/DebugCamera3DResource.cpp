@@ -1,9 +1,9 @@
-#include "DebugCameraResource.h"
+#include "DebugCamera3DResource.h"
 #include "GrowthEngine.h"
 #include <numbers>
 
 /// @brief コンストラクタ
-Engine::DebugCameraResource::DebugCameraResource()
+Engine::DebugCamera3DResource::DebugCamera3DResource()
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
@@ -13,7 +13,7 @@ Engine::DebugCameraResource::DebugCameraResource()
 }
 
 /// @brief 更新処理
-void Engine::DebugCameraResource::Update()
+void Engine::DebugCamera3DResource::Update()
 {
 	// F1キーで有効
 	if (engine_->GetKeyTrigger(DIK_F1))

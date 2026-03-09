@@ -11,6 +11,7 @@ Engine::Camera2D::Camera2D()
 	param_ = std::make_unique<Camera2DData::Param>();
 
 	// トランスフォーム
+	param_->transform.scale = Vector2(1.0f, 1.0f);
 	param_->transform.rotate = 0.0f;
 	param_->transform.translate = Vector2(0.0f, 0.0f);
 
@@ -38,7 +39,9 @@ void Engine::Camera2D::Update()
 	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// ワールド行列を生成する
-	worldMatrix_ = Make3DRotateZMatrix4x4(param_->transform.rotate) * Make3DTranslateMatrix4x4(Vector3(param_->transform.translate.x, param_->transform.translate.y, 0.0f));
+	worldMatrix_ = Make3DScaleMatrix4x4(Vector3(param_->transform.scale.x, param_->transform.scale.y, 1.0f)) *
+		Make3DRotateZMatrix4x4(param_->transform.rotate) *
+		Make3DTranslateMatrix4x4(Vector3(param_->transform.translate.x, param_->transform.translate.y, 0.0f));
 
 	// 正射影行列を作成する
 	projectionMatrix_ =

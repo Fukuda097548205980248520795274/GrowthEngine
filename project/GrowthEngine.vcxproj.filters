@@ -334,9 +334,6 @@
     <Filter Include="Engine\Include\Store\Camera3DStore">
       <UniqueIdentifier>{1e486c89-32cf-4000-a018-a36eebdd40a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\Camera3DStore\DebugCameraResource">
-      <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\Camera3DStore\Camera3DResource">
       <UniqueIdentifier>{b223b0d1-8f8d-4176-8ba0-094dc06f8ca1}</UniqueIdentifier>
     </Filter>
@@ -691,6 +688,12 @@
     <Filter Include="Engine\Include\Store\InputStore\InputResource\InputGamepadRightTriggerResource">
       <UniqueIdentifier>{807b9750-3fe0-49d8-92c6-6b0cf5ec234c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Camera3DStore\DebugCamera3DResource">
+      <UniqueIdentifier>{c367bc4f-2fbe-4d2c-8d08-b9f18a5197a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Camera2DStore\DebugCamera2DResource">
+      <UniqueIdentifier>{4b49fd25-11d2-4796-b4d5-11734e14500b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -894,8 +897,8 @@
     <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
       <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.cpp">
-      <Filter>Engine\Include\Store\Camera3DStore\DebugCameraResource</Filter>
+    <ClCompile Include="Engine\Store\Camera3DStore\DebugCamera3DResource\DebugCamera3DResource.cpp">
+      <Filter>Engine\Include\Store\Camera3DStore\DebugCamera3DResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp">
       <Filter>Engine\Include\Resource\ShadowMapTextureResource</Filter>
@@ -1194,6 +1197,9 @@
     <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.cpp">
       <Filter>Engine\Include\Store\InputStore\InputResource\InputGamepadRightTriggerResource</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.cpp">
+      <Filter>Engine\Include\Store\Camera2DStore\DebugCamera2DResource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1421,8 +1427,8 @@
     <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h">
       <Filter>Engine\Include\Store\LightStore\LightData\AreaLightData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Camera3DStore\DebugCameraResource\DebugCameraResource.h">
-      <Filter>Engine\Include\Store\Camera3DStore\DebugCameraResource</Filter>
+    <ClInclude Include="Engine\Store\Camera3DStore\DebugCamera3DResource\DebugCamera3DResource.h">
+      <Filter>Engine\Include\Store\Camera3DStore\DebugCamera3DResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\LightData\LightData.h">
       <Filter>Engine\Include\Data\LightData</Filter>
@@ -1789,6 +1795,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.h">
       <Filter>Engine\Include\Store\InputStore\InputResource\InputGamepadRightTriggerResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.h">
+      <Filter>Engine\Include\Store\Camera2DStore\DebugCamera2DResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

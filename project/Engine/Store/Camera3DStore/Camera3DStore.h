@@ -3,7 +3,7 @@
 #include <vector>
 #include "Handle/Handle.h"
 #include "Camera3DResource/Camera3DResource.h"
-#include "DebugCameraResource/DebugCameraResource.h"
+#include "DebugCamera3DResource/DebugCamera3DResource.h"
 
 #include <unordered_map>
 
@@ -89,7 +89,7 @@ namespace Engine
 #ifdef _DEVELOPMENT
 
 		// デバッグカメラ
-		std::unique_ptr<DebugCameraResource> debugCamera_ = nullptr;
+		std::unique_ptr<DebugCamera3DResource> debugCamera_ = nullptr;
 
 #endif
 	};

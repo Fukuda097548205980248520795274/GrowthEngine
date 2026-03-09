@@ -60,6 +60,9 @@ namespace Engine
 		/// @brief トランスフォーム
 		struct Transform
 		{
+			/// @brief 拡縮
+			Vector2 scale;
+
 			/// @brief 回転
 			float rotate;
 

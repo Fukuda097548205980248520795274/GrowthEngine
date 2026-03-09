@@ -4,6 +4,8 @@
 #include "Handle/Handle.h"
 #include "Camera2DResource/Camera2DResource.h"
 
+#include "DebugCamera2DResource/DebugCamera2DResource.h"
+
 #include <unordered_map>
 
 namespace Engine
@@ -64,5 +66,15 @@ namespace Engine
 
 		/// @brief 名前テーブル
 		std::unordered_map<std::string, Camera2DHandle> nameTable_;
+
+
+	private:
+
+#ifdef _DEVELOPMENT
+
+		// デバッグカメラ
+		std::unique_ptr<DebugCamera2DResource> debugCamera_ = nullptr;
+
+#endif
 	};
 }

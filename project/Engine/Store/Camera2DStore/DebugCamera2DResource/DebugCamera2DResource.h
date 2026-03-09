@@ -1,25 +1,23 @@
 #pragma once
 #include <memory>
 #include <string>
-#include "Camera/Camera3D/Camera3D.h"
-
-class GrowthEngine;
+#include "Camera/Camera2D/Camera2D.h"
 
 namespace Engine
 {
-	class DebugCameraResource
+	class DebugCamera2DResource
 	{
 	public:
 
 		/// @brief コンストラクタ
-		DebugCameraResource();
+		DebugCamera2DResource();
 
 		/// @brief 更新処理
 		void Update();
 
 		/// @brief カメラデータを取得する
 		/// @return 
-		const Camera3D& GetCamera3D() { return *camera3d_; }
+		const Camera2D& GetCamera2D() { return *camera2d_; }
 
 		/// @brief 有効かどうか
 		/// @return 
@@ -33,16 +31,9 @@ namespace Engine
 
 
 		// カメラ3D
-		std::unique_ptr<Camera3D> camera3d_ = nullptr;
+		std::unique_ptr<Camera2D> camera2d_ = nullptr;
 
 		// 有効
 		bool enable_ = false;
-
-
-		// ピボットポイント
-		Vector3 pivotPoint_ = Vector3(0.0f, 0.0f, 0.0f);
-
-		// ピボットポイントとの距離
-		float pointLength_ = 50.0f;
 	};
 }

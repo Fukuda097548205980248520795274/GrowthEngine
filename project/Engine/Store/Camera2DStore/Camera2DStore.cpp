@@ -6,6 +6,13 @@ Engine::Camera2DStore::Camera2DStore()
 {
 	// 初期カメラを読み込む
 	selectHCamera_ = InitialLoad("Initial");
+
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラの生成
+	debugCamera_ = std::make_unique<DebugCamera2DResource>();
+
+#endif
 }
 
 /// @brief 読み込み
@@ -41,12 +48,27 @@ void Engine::Camera2DStore::Update()
 {
 	// 指定されたカメラの更新
 	dataTable_[selectHCamera_]->Update();
+
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラ更新
+	debugCamera_->Update();
+
+#endif
 }
 
 /// @brief 2Dカメラデータを取得する
 /// @return 
 const Engine::Camera2D& Engine::Camera2DStore::GetCamera2D() const
 {
+#ifdef _DEVELOPMENT
+
+	// デバッグカメラ有効時
+	if (debugCamera_->IsEnable())
+		return debugCamera_->GetCamera2D();
+
+#endif
+
 	return dataTable_[selectHCamera_]->GetCamera2D();
 }
 
