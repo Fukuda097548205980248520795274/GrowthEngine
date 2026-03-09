@@ -146,16 +146,34 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Application\AppParam\AppParam.cpp" />
+    <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp" />
-    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp" />
-    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp" />
-    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp" />
-    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp" />
+    <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Application\Collision3DBase\BaseCollision3DBase.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -188,13 +206,34 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp" />
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -231,8 +270,14 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.cpp" />
-    <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp" />
+    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -269,8 +314,14 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp" />
-    <ClCompile Include="Engine\Func\CollisionFunc\CollisionFunc.cpp" />
+    <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Func\CollisionFunc\CollisionFunc.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Func\Interpolation\Interpolation.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -327,11 +378,26 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp" />
-    <ClCompile Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.cpp" />
-    <ClCompile Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.cpp" />
-    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp" />
-    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp" />
+    <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\BaseComputePSO.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -368,7 +434,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp" />
+    <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -397,7 +466,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOSkybox\BasePSOSkybox.cpp" />
+    <ClCompile Include="Engine\PSO\PSOSkybox\BasePSOSkybox.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Buffering\DX12Buffering.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -490,7 +562,10 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.cpp" />
+    <ClCompile Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -503,10 +578,22 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp" />
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.cpp" />
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp" />
-    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DStore.cpp" />
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DBaseData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DCircleData\Collision2DCircleData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision2DStore\Collision2DStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DAABBData\Collision3DAABBData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -543,14 +630,38 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputBaseResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadButtonResource\InputGamepadButtonResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftStickResource\InputGamepadLeftStickResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftTriggerResource\InputGamepadLeftTriggerResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightStickResource\InputGamepadRightStickResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.cpp" />
-    <ClCompile Include="Engine\Store\InputStore\InputStore.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputBaseResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadButtonResource\InputGamepadButtonResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftStickResource\InputGamepadLeftStickResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftTriggerResource\InputGamepadLeftTriggerResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightStickResource\InputGamepadRightStickResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputStore.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -647,9 +758,12 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp" />
+    <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MinSpace</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MinSpace</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp">
@@ -683,7 +797,10 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
-    <ClCompile Include="Engine\Parameter\Parameter.cpp" />
+    <ClCompile Include="Engine\Parameter\Parameter.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
