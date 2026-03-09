@@ -146,6 +146,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Application\AppParam\AppParam.cpp" />
     <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -540,6 +541,14 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputBaseResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadButtonResource\InputGamepadButtonResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftStickResource\InputGamepadLeftStickResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadLeftTriggerResource\InputGamepadLeftTriggerResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightStickResource\InputGamepadRightStickResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.cpp" />
+    <ClCompile Include="Engine\Store\InputStore\InputStore.cpp" />
     <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -675,6 +684,7 @@
     <ClCompile Include="Engine\Parameter\Parameter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
     <ClInclude Include="Engine\Application\AudioObject\AudioObject.h" />
     <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h" />
     <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.h" />
@@ -730,6 +740,7 @@
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
     <ClInclude Include="Engine\Data\CameraData\CameraData.h" />
     <ClInclude Include="Engine\Data\CollisionData\CollisionData.h" />
+    <ClInclude Include="Engine\Data\InputData\InputData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\PostEffectData\PostEffectData.h" />
     <ClInclude Include="Engine\Data\PrefabData\PrefabData.h" />
@@ -825,6 +836,14 @@
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSegmentData\Collision3DSegmentData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSphereData\Collision3DSphereData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DStore.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputBaseResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadButtonResource\InputGamepadButtonResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadLeftStickResource\InputGamepadLeftStickResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadLeftTriggerResource\InputGamepadLeftTriggerResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightStickResource\InputGamepadRightStickResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputStore.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h" />

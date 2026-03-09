@@ -55,3 +55,6 @@ using ParticleHandle = uint32_t;
 
 /// @brief スカイボックスハンドル
 using SkyboxHandle = uint32_t;
+
+/// @brief 入力ハンドル
+using InputHandle = uint32_t;

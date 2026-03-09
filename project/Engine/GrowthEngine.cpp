@@ -75,6 +75,10 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	audioStore_ = std::make_unique<Engine::AudioStore>();
 	audioStore_->Initialize(log_.get());
 
+	// 入力ストアの生成と初期化
+	inputStore_ = std::make_unique<Engine::InputStore>();
+	inputStore_->Initialize(input_.get());
+
 	// 描画統括の生成と初期化
 	renderContext_ = std::make_unique<Engine::RenderContext>();
 	renderContext_->Initialize(winApp_.get(), log_.get());
@@ -87,6 +91,11 @@ GrowthEngine::~GrowthEngine()
 	renderContext_.reset();
 	renderContext_ = nullptr;
 	if (log_)log_->Logging("RenderContext released \n");
+
+	// 入力ストアの終了
+	inputStore_.reset();
+	inputStore_ = nullptr;
+	if (log_)log_->Logging("InputStore released \n");
 
 	// オーディオストアの終了
 	audioStore_.reset();
@@ -130,6 +139,9 @@ void GrowthEngine::NewFrame()
 
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();
+
+	// 入力ストアの更新
+	inputStore_->Update();
 
 	// 流れていない音楽を削除する
 	audioStore_->DeletePlayAudio();

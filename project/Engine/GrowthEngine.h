@@ -9,6 +9,7 @@
 #include "WinApp/WinApp.h"
 #include "Input/Input.h"
 #include "Store/AudioStore/AudioStore.h"
+#include "Store/InputStore/InputStore.h"
 #include "RenderContext/RenderContext.h"
 
 #include "Math/Vector/Vector3/Vector3.h"
@@ -232,7 +233,67 @@ public:
 
 #pragma endregion
 
+#pragma region 入力
 
+	/// @brief キー入力を読み込む
+	/// @param name 
+	/// @param inputState 
+	/// @param key 
+	/// @return 
+	InputHandle LoadInputKey(const std::string& name, InputState inputState, BYTE key)const { return inputStore_->LoadKey(name, inputState, key); }
+
+	/// @brief ゲームパッドボタン入力を読み込む
+	/// @param name 
+	/// @param inputState 
+	/// @param controller 
+	/// @param button 
+	/// @return 
+	InputHandle LoadInputGamepadButton(const std::string& name, InputState inputState, DWORD controller, DWORD button)const { return inputStore_->LoadGamepadButton(name, inputState, controller, button); }
+
+	/// @brief ゲームパッドスティック読み込み
+	/// @param name 
+	/// @param inputState 
+	/// @param stickType 
+	/// @param controller 
+	/// @param direction 
+	/// @param dot 
+	/// @return 
+	InputHandle LoadInputGamepadStick(const std::string& name, InputState inputState, StickType stickType, DWORD controller, const Vector2& direction, float dot)const { return inputStore_->LoadGamepadStick(name, inputState, stickType, controller, direction, dot); }
+
+	/// @brief ゲームパッドトリガー読み込み
+	/// @param name 
+	/// @param inputState 
+	/// @param triggerType 
+	/// @param controller 
+	/// @param threshold 
+	/// @return 
+	InputHandle LoadInputGamepadTrigger(const std::string& name, InputState inputState, TriggerType triggerType, DWORD controller, float threshold)const { return inputStore_->LoadGamepadTrigger(name, inputState, triggerType, controller, threshold); }
+
+	/// @brief 入力のパラメータを取得する
+	/// @tparam T 
+	/// @param hInput 
+	/// @return 
+	template<typename T>
+	T* GetInputParam(InputHandle hInput)const { return inputStore_->GetParam<T>(hInput); }
+
+	/// @brief 入力のパラメータを取得する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* GetInputParam(const std::string& name)const { return inputStore_->GetParam<T>(name); }
+
+	/// @brief 入力したかどうか
+	/// @param hInput 
+	/// @return 
+	bool IsInput(InputHandle hInput)const { return inputStore_->IsInput(hInput); }
+
+	/// @brief 入力したかどうか
+	/// @param name 
+	/// @return 
+	bool IsInput(const std::string& name)const { return inputStore_->IsInput(name); }
+
+#pragma endregion
 
 #pragma region キーボード入力
 
@@ -684,6 +745,9 @@ private:
 
 	// オーディオストア
 	std::unique_ptr<Engine::AudioStore> audioStore_ = nullptr;
+
+	/// @brief 入力ストア
+	std::unique_ptr<Engine::InputStore> inputStore_ = nullptr;
 
 	// 描画統括
 	std::unique_ptr<Engine::RenderContext> renderContext_ = nullptr;

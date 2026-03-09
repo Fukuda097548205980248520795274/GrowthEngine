@@ -1,0 +1,32 @@
+#pragma once
+#include "../InputBaseResource.h"
+
+namespace Engine
+{
+	class InputGamepadLeftStickResource : public InputBaseResource
+	{
+	public:
+
+		/// @brief コンストラクタ
+		/// @param inputState 
+		/// @param hInput 
+		/// @param name 
+		/// @param controller 
+		/// @param direction 
+		/// @param dot 
+		InputGamepadLeftStickResource(InputState inputState, InputHandle hInput, const std::string& name, DWORD controller, const Vector2& direction, float dot);
+
+		/// @brief 更新処理
+		void Update() override;
+
+		/// @brief パラメータを取得する
+		/// @return 
+		void* GetParam() override { return param_.get(); }
+
+
+	private:
+
+		/// @brief パラメータ
+		std::unique_ptr<InputData::GamepadStickParam> param_ = nullptr;
+	};
+}

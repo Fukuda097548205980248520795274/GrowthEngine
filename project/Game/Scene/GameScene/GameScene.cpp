@@ -43,6 +43,11 @@ void GameScene::Initialize()
 	collisionInstanceB_ = collisionA_->CreateInstance();
 
 	engine_->SetCollision2DTarget("TestCollisionSprite", "TestCollisionSprite");
+
+
+	engine_->LoadInputKey("toTitle", InputState::Trigger, DIK_SPACE);
+	Engine::InputData::KeyParam* inputParam = engine_->GetInputParam<Engine::InputData::KeyParam>("toTitle");
+	inputParam->key = DIK_A;
 }
 
 /// @brief 更新処理
@@ -122,7 +127,7 @@ void GameScene::Update()
 	model_->param_->animation.timer += engine_->GetDeltaTime();
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);
 
-	if (engine_->GetKeyTrigger(DIK_SPACE))
+	if (engine_->IsInput("toTitle"))
 	{
 		Transition("Title");
 	}
