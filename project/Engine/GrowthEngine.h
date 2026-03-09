@@ -60,6 +60,9 @@
 #include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
 #include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
 
+#include "Application/WorldTransform/WorldTransform2D/WorldTransform2D.h"
+#include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
+
 
 // マウスボタン
 enum MouseButton
