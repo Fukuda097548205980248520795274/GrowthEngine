@@ -13,9 +13,33 @@ struct Primitive
     float4x4 worldViewProjection;
     float4x4 world;
     float4x4 worldInverseTranspose;
+    
+    // 色
     float4 color;
+    
+    // UVトランスフォーム
     float4x4 uvTransform;
+    
+    // 環境
     float environment;
+    
+    // 光沢度
+    float shininess;
+    
+    // ライティング有効化
+    int enableLighting;
+    
+    // ディフューズ
+    int enableDiffuse;
+    
+    // ハーフランバート有効化
+    int enableHalfLambert;
+    
+    // スペキュラー有効化
+    int enableSpecular;
+    
+    // ブリンフォン有効化
+    int enableBlinnPhong;
 };
 StructuredBuffer<Primitive> gPrimitive : register(t0);
 
@@ -43,6 +67,24 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     // 環境
     output.environment = gPrimitive[instanceID].environment;
+    
+    // 光沢度
+    output.shininess = gPrimitive[instanceID].shininess;
+    
+    // ライティング有効化
+    output.enableLighting = gPrimitive[instanceID].enableLighting;
+    
+    // ディフューズ有効化
+    output.enableDiffuse = gPrimitive[instanceID].enableDiffuse;
+    
+    // ハーフランバート反射有効化
+    output.enableHalfLambert = gPrimitive[instanceID].enableHalfLambert;
+    
+    // スペキュラー有効化
+    output.enableSpecular = gPrimitive[instanceID].enableSpecular;
+    
+    // ブリンフォン有効化
+    output.enableBlinnPhong = gPrimitive[instanceID].enableBlinnPhong;
     
     return output;
 }

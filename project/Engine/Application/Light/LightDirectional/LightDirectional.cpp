@@ -11,9 +11,9 @@ LightDirectional::LightDirectional(const std::string& name)
 	const GrowthEngine* engine = GrowthEngine::GetInstance();
 
 	// ライトを読み込む
-	handle_ = engine->LoadLight(name, "Directional");
+	handle_ = engine->LoadLight(name, Engine::Light::Type::Directional);
 
-	auto param = engine->GetLightParam<Engine::DirectionalLightParam>(handle_);
+	auto param = engine->GetLightParam<Engine::Light::DirectionalLightParam>(handle_);
 	param_ = param;
 }
 

@@ -7,16 +7,34 @@ namespace Engine
 	// GPUに送るプリミティブモデル用マテリアルデータ
 	struct PrimitiveModelMaterialDataForGPU
 	{
-		// 色
-		Vector4 color;
+        // 色
+        Vector4 color;
 
-		// UV行列
-		Matrix4x4 uvMatrix;
+        // uv行列
+        Matrix4x4 uvMatrix;
 
-		// 環境
-		float environment;
+        // 環境
+        float environment;
 
-		float padding0[3];
+        // 光沢度
+        float shininess;
+
+        // ライティング有効化
+        int enableLighting;
+
+        // ディフューズ
+        int enableDiffuse;
+
+        // ハーフランバート有効化
+        int enableHalfLambert;
+
+        // スペキュラー有効化
+        int enableSpecular;
+
+        // ブリンフォン有効化
+        int enableBlinnPhong;
+
+        float padding0[1];
 	};
 
 	namespace Sprite

@@ -34,23 +34,34 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	shadowMapTextureResource_ = std::make_unique<ShadowMapTextureResource>();
 	shadowMapTextureResource_->Initialize(heap, device, GrowthEngine::GetInstance()->GetScreenWidth(), GrowthEngine::GetInstance()->GetScreenHeight(), log);
 
+
+	// ライト数リソースの生成と初期化
+	numLightResource_ = std::make_unique<ConstantBufferResource<LightNumDataForGPU>>();
+	numLightResource_->Initialize(device, log);
+
+	// 平行光源リソースの作成と初期化
+	directionalLightResource_ = std::make_unique<StructuredBufferResource<DirectionalLightDataForGPU>>();
+	directionalLightResource_->Initialize(device, heap, kNumMaxLight, log);
+
+	// 平行光源リソースの作成と初期化
+	pointLightResource_ = std::make_unique<StructuredBufferResource<PointLightDataForGPU>>();
+	pointLightResource_->Initialize(device, heap, kNumMaxLight, log);
+
+	// 平行光源リソースの作成と初期化
+	spotLightResource_ = std::make_unique<StructuredBufferResource<SpotLightDataForGPU>>();
+	spotLightResource_->Initialize(device, heap, kNumMaxLight, log);
 }
 
-/// @brief 読み込み
+/// @brief ライト読み込み
 /// @param name 
 /// @param type 
 /// @return 
-LightHandle Engine::LightStore::Load(const std::string& name, const std::string& type,
-	DX12Heap* heap, ID3D12Device* device, Log* log)
+LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 {
-	// nullptrチェック
-	assert(heap);
-	assert(device);
-
 	// 同じライトデータがあるかどうか
 	for (auto& data : dataTable_)
 	{
-		if (data->GetName() == name && data->GetTypeName() == type)
+		if (data->GetName() == name && data->GetType() == type)
 			return data->GetHandle();
 	}
 
@@ -58,10 +69,9 @@ LightHandle Engine::LightStore::Load(const std::string& name, const std::string&
 	LightHandle handle = static_cast<LightHandle>(dataTable_.size());
 
 	// 平行光源
-	if (type == "Directional")
+	if (type == Light::Type::Directional)
 	{
 		std::unique_ptr<DirectionalLightData> data = std::make_unique<DirectionalLightData>(name, handle);
-		data->Initialize(heap, device, log);
 		dataTable_.push_back(std::move(data));
 
 		return handle;
@@ -82,7 +92,7 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Mode
 	for (auto& light : dataTable_)
 	{
 
-		if (light->GetTypeName() != "Directional")
+		if (light->GetType() != Light::Type::Directional)
 			continue;
 
 		auto directionalLightData = static_cast<DirectionalLightData*>(light.get());
@@ -103,4 +113,19 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Mode
 
 		break;
 	}
+}
+
+/// @brief ライトのコマンドリスト登録
+/// @param commandList 
+/// @param numLightRootParameterIndex 
+/// @param directionalLightRootParameterIndex 
+/// @param pointLightRootParameterIndex 
+/// @param spotLightRootParameterIndex 
+void Engine::LightStore::LightRegister(ID3D12GraphicsCommandList* commandList, UINT numLightRootParameterIndex,
+	UINT directionalLightRootParameterIndex, UINT pointLightRootParameterIndex, UINT spotLightRootParameterIndex)
+{
+	numLightResource_->RegisterGraphics(commandList, numLightRootParameterIndex);
+	directionalLightResource_->RegisterGraphics(commandList, directionalLightRootParameterIndex);
+	pointLightResource_->RegisterGraphics(commandList, pointLightRootParameterIndex);
+	spotLightResource_->RegisterGraphics(commandList, spotLightRootParameterIndex);
 }

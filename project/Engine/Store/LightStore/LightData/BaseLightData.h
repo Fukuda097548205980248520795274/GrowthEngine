@@ -3,6 +3,7 @@
 #include <memory>
 #include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Data/LightData/LightData.h"
 
 namespace Engine
 {
@@ -30,9 +31,9 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
-		/// @brief 種別名を取得する
+		/// @brief 種類を取得する
 		/// @return 
-		virtual const char* GetTypeName() const = 0;
+		virtual Light::Type GetType() const = 0;
 
 
 	protected:

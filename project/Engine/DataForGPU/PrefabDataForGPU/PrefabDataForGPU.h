@@ -41,6 +41,24 @@ namespace Engine
 
 			// 環境
 			float environment;
+
+			// 光沢度
+			float shininess;
+
+			// ライティング有効化
+			int enableLighting;
+
+			// ディフューズ
+			int enableDiffuse;
+
+			// ハーフランバート有効化
+			int enableHalfLambert;
+
+			// スペキュラー有効化
+			int enableSpecular;
+
+			// ブリンフォン有効化
+			int enableBlinnPhong;
 		};
 	}
 }

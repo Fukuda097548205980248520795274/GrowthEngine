@@ -4,75 +4,86 @@
 
 namespace Engine
 {
-	/// @brief 平行光源パラメータ
-	struct DirectionalLightParam
+	namespace Light
 	{
-		// 位置
-		Vector3 position;
+		/// @brief ライト種類
+		enum class Type
+		{
+			Directional,
+			Point,
+			Spot,
+		};
 
-		// サイズ
-		Vector2 size;
+		/// @brief 平行光源パラメータ
+		struct DirectionalLightParam
+		{
+			// 位置
+			Vector3 position;
 
-		// 最小深度値
-		float minDepth;
+			// サイズ
+			Vector2 size;
 
-		// 最大深度値
-		float maxDepth;
+			// 最小深度値
+			float minDepth;
 
-		// 向き
-		Vector3 direction;
+			// 最大深度値
+			float maxDepth;
 
-		// 輝度
-		float intensity;
+			// 向き
+			Vector3 direction;
 
-		// 色
-		Vector3 color;
-	};
+			// 輝度
+			float intensity;
 
-	/// @brief ポイントライトパラメータ
-	struct PointLightParam
-	{
-		// 位置
-		Vector3 position;
+			// 色
+			Vector3 color;
+		};
 
-		// 輝度
-		float intensity;
+		/// @brief ポイントライトパラメータ
+		struct PointLightParam
+		{
+			// 位置
+			Vector3 position;
 
-		// 色
-		Vector3 color;
+			// 輝度
+			float intensity;
 
-		// ライトの届く距離
-		float radius;
+			// 色
+			Vector3 color;
 
-		// 減衰率
-		float decay;
-	};
+			// ライトの届く距離
+			float radius;
 
-	/// @brief スポットライトパラメータ
-	struct SpotLightParam
-	{
-		// 位置
-		Vector3 position;
+			// 減衰率
+			float decay;
+		};
 
-		// 輝度
-		float intensity;
+		/// @brief スポットライトパラメータ
+		struct SpotLightParam
+		{
+			// 位置
+			Vector3 position;
 
-		// 色
-		Vector3 color;
+			// 輝度
+			float intensity;
 
-		// 向き
-		Vector3 direction;
+			// 色
+			Vector3 color;
 
-		// ライトの届く距離
-		float distance;
+			// 向き
+			Vector3 direction;
 
-		// 減衰率
-		float decay;
+			// ライトの届く距離
+			float distance;
 
-		// 光の当たる角度
-		float cosAngle;
+			// 減衰率
+			float decay;
 
-		// フォールオフ開始角度
-		float cosFalloffStart;
-	};
+			// 光の当たる角度
+			float cosAngle;
+
+			// フォールオフ開始角度
+			float cosFalloffStart;
+		};
+	}
 }

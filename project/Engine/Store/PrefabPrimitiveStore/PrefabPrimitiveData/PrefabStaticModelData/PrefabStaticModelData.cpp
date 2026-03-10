@@ -100,6 +100,12 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 		param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 		param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
 		param_->meshMaterial[meshIndex].environment = 0.0f;
+		param_->meshMaterial[meshIndex].shininess = 10.0f;
+		param_->meshMaterial[meshIndex].enableLighting = true;
+		param_->meshMaterial[meshIndex].enableDiffuse = true;
+		param_->meshMaterial[meshIndex].enableHalfLambert = true;
+		param_->meshMaterial[meshIndex].enableSpecular = true;
+		param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -116,6 +122,12 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Translate", &param_->meshMaterial[meshIndex].uv.translate);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Environment", &param_->meshMaterial[meshIndex].environment);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Shininess", &param_->meshMaterial[meshIndex].shininess);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Lighting", &param_->meshMaterial[meshIndex].enableLighting);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Diffuse", &param_->meshMaterial[meshIndex].enableDiffuse);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_HalfLambert", &param_->meshMaterial[meshIndex].enableHalfLambert);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -177,6 +189,12 @@ void Engine::PrefabStaticModelData::Reset()
 			param_->meshMaterial[meshIndex].uv.translate = Vector2(0.0f, 0.0f);
 			param_->meshMaterial[meshIndex].hTexture = modelData.meshes[meshIndex].material.handle;
 			param_->meshMaterial[meshIndex].environment = 0.0f;
+			param_->meshMaterial[meshIndex].shininess = 10.0f;
+			param_->meshMaterial[meshIndex].enableLighting = true;
+			param_->meshMaterial[meshIndex].enableDiffuse = true;
+			param_->meshMaterial[meshIndex].enableHalfLambert = true;
+			param_->meshMaterial[meshIndex].enableSpecular = true;
+			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -201,6 +219,9 @@ void Engine::PrefabStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12Gra
 
 	// スカイボックスの設定
 	skyboxStore->RegisterCubeMapTexture(commandList, 5);
+
+	// ライトの設定
+	lightStore_->LightRegister(commandList, 6, 7, 8, 9);
 
 	// メッシュごとに処理
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
@@ -527,11 +548,29 @@ void Engine::PrefabStaticModelData::DrawCallInstance(const Engine::Prefab::Stati
 		// 環境
 		primitiveResource_[meshIndex]->data_[numUseInstance_].environment = param->meshMaterial[meshIndex].environment;
 
+		// 光沢度
+		primitiveResource_[meshIndex]->data_->shininess = param->meshMaterial[meshIndex].shininess;
+
 		// UV行列
 		primitiveResource_[meshIndex]->data_[numUseInstance_].uvTransform =
 			Make3DScaleMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.scale.x, param->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
 			Make3DRotateZMatrix4x4(param->meshMaterial[meshIndex].uv.radius) *
 			Make3DTranslateMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.translate.x, param->meshMaterial[meshIndex].uv.translate.y, 0.0f));
+
+		// ライティング有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableLighting = static_cast<int32_t>(param->meshMaterial[meshIndex].enableLighting);
+
+		// ディフューズ有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableDiffuse = static_cast<int32_t>(param->meshMaterial[meshIndex].enableDiffuse);
+
+		// ハーフランバード有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableHalfLambert = static_cast<int32_t>(param->meshMaterial[meshIndex].enableHalfLambert);
+
+		// スペキュラー有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableSpecular = static_cast<int32_t>(param->meshMaterial[meshIndex].enableSpecular);
+
+		// ブリンフォン有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableBlinnPhong = static_cast<int32_t>(param->meshMaterial[meshIndex].enableBlinnPhong);
 	}
 
 	numUseInstance_++;

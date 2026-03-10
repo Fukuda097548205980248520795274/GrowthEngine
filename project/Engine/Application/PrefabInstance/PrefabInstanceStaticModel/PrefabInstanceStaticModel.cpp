@@ -27,6 +27,12 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 		param_.meshMaterial[meshIndex].uv.radius = param->meshMaterial[meshIndex].uv.radius;
 		param_.meshMaterial[meshIndex].uv.translate = param->meshMaterial[meshIndex].uv.translate;
 		param_.meshMaterial[meshIndex].environment = param->meshMaterial[meshIndex].environment;
+		param_.meshMaterial[meshIndex].shininess = param->meshMaterial[meshIndex].shininess;
+		param_.meshMaterial[meshIndex].enableLighting = param->meshMaterial[meshIndex].enableLighting;
+		param_.meshMaterial[meshIndex].enableDiffuse = param->meshMaterial[meshIndex].enableDiffuse;
+		param_.meshMaterial[meshIndex].enableHalfLambert = param->meshMaterial[meshIndex].enableHalfLambert;
+		param_.meshMaterial[meshIndex].enableSpecular = param->meshMaterial[meshIndex].enableSpecular;
+		param_.meshMaterial[meshIndex].enableBlinnPhong = param->meshMaterial[meshIndex].enableBlinnPhong;
 	}
 }
 

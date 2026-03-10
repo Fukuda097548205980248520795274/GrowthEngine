@@ -17,7 +17,7 @@ public:
 
 
 	/// @brief パラメータ
-	Engine::DirectionalLightParam* param_{};
+	Engine::Light::DirectionalLightParam* param_{};
 
 
 private:

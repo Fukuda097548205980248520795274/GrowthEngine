@@ -102,7 +102,7 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		LightHandle LoadLight(const std::string& name, const std::string& type, Log* log) { return lightStore_->Load(name, type, heap_.get(), core_->GetDevice(), log); }
+		LightHandle LoadLight(const std::string& name, Light::Type type) { return lightStore_->Load(name, type); }
 
 
 

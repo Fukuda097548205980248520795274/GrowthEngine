@@ -60,6 +60,24 @@ namespace Engine
 
 				/// @brief 環境
 				float environment;
+
+				// 光沢度
+				float shininess;
+
+				// ライティング有効化
+				bool enableLighting;
+
+				// ディフューズ
+				bool enableDiffuse;
+
+				// ハーフランバート有効化
+				bool enableHalfLambert;
+
+				// スペキュラー有効化
+				bool enableSpecular;
+
+				// ブリンフォン有効化
+				bool enableBlinnPhong;
 			};
 
 			/// @brief パラメータ
@@ -120,6 +138,24 @@ namespace Engine
 
 				/// @brief 環境
 				float environment;
+
+				// 光沢度
+				float shininess;
+
+				// ライティング有効化
+				bool enableLighting;
+
+				// ディフューズ
+				bool enableDiffuse;
+
+				// ハーフランバート有効化
+				bool enableHalfLambert;
+
+				// スペキュラー有効化
+				bool enableSpecular;
+
+				// ブリンフォン有効化
+				bool enableBlinnPhong;
 			};
 
 			/// @brief アニメーション
@@ -193,6 +229,24 @@ namespace Engine
 
 				/// @brief 環境
 				float environment;
+
+				// 光沢度
+				float shininess;
+
+				// ライティング有効化
+				bool enableLighting;
+
+				// ディフューズ
+				bool enableDiffuse;
+
+				// ハーフランバート有効化
+				bool enableHalfLambert;
+
+				// スペキュラー有効化
+				bool enableSpecular;
+
+				// ブリンフォン有効化
+				bool enableBlinnPhong;
 			};
 
 			/// @brief アニメーション

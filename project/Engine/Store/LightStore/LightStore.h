@@ -15,7 +15,10 @@
 #include "PSO/ComputePSO/ComputePSOLightCulling/ComputePSOLightCulling.h"
 
 #include "Resource/ShadowMapTextureResource/ShadowMapTextureResource.h"
+#include "Resource/StructuredBufferResource/StructuredBufferResource.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+
+#include "DataForGPU/LightDataForGPU/LightDataForGPU.h"
 
 namespace Engine
 {
@@ -44,11 +47,8 @@ namespace Engine
 		/// @brief 読み込み
 		/// @param name 
 		/// @param type 
-		/// @param heap 
-		/// @param device 
-		/// @param log 
 		/// @return 
-		LightHandle Load(const std::string& name, const std::string& type, DX12Heap* heap, ID3D12Device* device, Log* log);
+		LightHandle Load(const std::string& name, Light::Type type);
 
 		/// @brief 更新処理
 		/// @param commandList 
@@ -64,6 +64,15 @@ namespace Engine
 		/// @brief シャドウマップテクスチャリソースを取得する
 		/// @return 
 		ShadowMapTextureResource* GetShadowMapTextureResource() { return shadowMapTextureResource_.get(); }
+
+		/// @brief ライトのコマンドリスト登録
+		/// @param commandList 
+		/// @param numLightRootParameterIndex 
+		/// @param directionalLightRootParameterIndex 
+		/// @param pointLightRootParameterIndex 
+		/// @param spotLightRootParameterIndex 
+		void LightRegister(ID3D12GraphicsCommandList* commandList, UINT numLightRootParameterIndex,
+			UINT directionalLightRootParameterIndex, UINT pointLightRootParameterIndex, UINT spotLightRootParameterIndex);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -90,9 +99,6 @@ namespace Engine
 
 		/// @brief プレハブ用シャドウマップPSO
 		std::unique_ptr<PSOShadowMapPrefab> psoShadowMapPrefab_ = nullptr;
-		
-		// ライトカリングPSO
-		std::unique_ptr<ComputePSOLightCulling> psoLightCulling_ = nullptr;
 
 
 	private:
@@ -102,5 +108,24 @@ namespace Engine
 
 		// シャドウマップテクスチャリソース
 		std::unique_ptr<ShadowMapTextureResource> shadowMapTextureResource_ = nullptr;
+
+
+
+	private:
+
+		// 最大ライト数
+		static constexpr uint32_t kNumMaxLight = 512;
+
+		/// @brief ライト数リソース
+		std::unique_ptr<ConstantBufferResource<LightNumDataForGPU>> numLightResource_ = nullptr;
+
+		/// @brief 平行光源リソース
+		std::unique_ptr<StructuredBufferResource<DirectionalLightDataForGPU>> directionalLightResource_ = nullptr;
+
+		/// @brief ポイントライトリソース
+		std::unique_ptr<StructuredBufferResource<PointLightDataForGPU>> pointLightResource_ = nullptr;
+
+		/// @brief スポットリソース
+		std::unique_ptr<StructuredBufferResource<SpotLightDataForGPU>> spotLightResource_ = nullptr;
 	};
 }

@@ -10,7 +10,7 @@ Engine::DirectionalLightData::DirectionalLightData(const std::string& name, Ligh
 	: BaseLightData(name, handle) 
 {
 	// パラメータ生成
-	param_ = std::make_unique<DirectionalLightParam>();
+	param_ = std::make_unique<Light::DirectionalLightParam>();
 	param_->direction = Vector3(0.0f, -1.0f, 0.0f);
 	param_->intensity = 1.0f;
 	param_->color = Vector3(1.0f, 1.0f, 1.0f);
@@ -18,20 +18,6 @@ Engine::DirectionalLightData::DirectionalLightData(const std::string& name, Ligh
 	param_->size = Vector2(20.0f, 20.0f);
 	param_->minDepth = 0.1f;
 	param_->maxDepth = 15.0f;
-}
-
-/// @brief 初期化
-/// @param heap 
-/// @param device 
-/// @param log 
-void Engine::DirectionalLightData::Initialize(DX12Heap* heap, ID3D12Device* device, Log* log)
-{
-	// nullptrチェック
-	assert(heap);
-	assert(device);
-
-	// エンジンのインスタンスを取得する
-	const GrowthEngine* engine = GrowthEngine::GetInstance();
 }
 
 /// @brief ビュープロジェクション行列を取得する
