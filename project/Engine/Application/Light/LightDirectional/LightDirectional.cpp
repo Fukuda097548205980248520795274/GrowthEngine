@@ -8,17 +8,17 @@ LightDirectional::LightDirectional(const std::string& name)
 	: name_(name)
 {
 	// エンジンのインスタンスを取得する
-	const GrowthEngine* engine = GrowthEngine::GetInstance();
+	engine_ = GrowthEngine::GetInstance();
 
 	// ライトを読み込む
-	handle_ = engine->LoadLight(name, Engine::Light::Type::Directional);
+	handle_ = engine_->LoadLight(name, Engine::Light::Type::Directional);
 
-	auto param = engine->GetLightParam<Engine::Light::DirectionalLightParam>(handle_);
+	auto param = engine_->GetLightParam<Engine::Light::DirectionalLightParam>(handle_);
 	param_ = param;
 }
 
 /// @brief 設置
 void LightDirectional::Set()
 {
-
+	engine_->SetLight(handle_, Engine::Light::Type::Directional);
 }

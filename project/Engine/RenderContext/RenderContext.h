@@ -398,6 +398,12 @@ namespace Engine
 		void SetCollision2DTarget(const std::string& name, const std::string& targetName) { collision2DStore_->SetCollision2DTarget(name, targetName); }
 
 
+		/// @brief ライトを設置する
+		/// @param hLight 
+		/// @param type 
+		void SetLight(LightHandle hLight, Light::Type type) { lightStore_->Set(hLight, type); }
+
+
 
 #ifdef _DEVELOPMENT
 

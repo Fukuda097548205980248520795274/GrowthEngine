@@ -701,6 +701,12 @@ public:
 
 
 
+	/// @brief ライトを設置する
+	/// @param hLight 
+	/// @param type 
+	void SetLight(LightHandle hLight, Engine::Light::Type type)const { renderContext_->SetLight(hLight, type); }
+
+
 
 	/// @brief デバッグ用の線を描画する
 	/// @param start 

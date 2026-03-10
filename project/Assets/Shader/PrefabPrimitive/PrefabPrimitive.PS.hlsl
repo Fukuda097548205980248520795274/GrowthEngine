@@ -312,7 +312,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float2 shadowUV = ((float2) shadowPos + float2(1, -1)) * float2(0.5, -0.5);
         
         float shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - 0.005f);
-        float shadowFactor = lerp(0.5f, 1.0f, shadow); // 影の濃さ調整
+        float shadowFactor = lerp(0.3f, 1.0f, shadow); // 影の濃さ調整
     
         float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
         float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
@@ -439,9 +439,17 @@ PixelShaderOutput main(VertexShaderOutput input)
         
     
         // 色
-        output.color.rgb = input.color.rgb * textureColor.rgb * shadowFactor;
-        output.color.rgb += environmentColor.rgb;
+        float3 baseColor = input.color.rgb * textureColor.rgb;
+        
+        // 光
+        float3 directLight = directionalLightDiffuse + directionalLightSpecular + pointLightDiffuse + pointLightSpecular + spotLightDiffuse + spotLightSpecular;
+        directLight *= shadowFactor;
+        
+        // 合成
+        output.color.rgb = baseColor * (directLight + environmentColor.rgb);
+
     
+        // アルファ
         output.color.a = input.color.a * textureColor.a;
     }
     else

@@ -148,6 +148,7 @@ void Engine::RenderContext::NewFrame()
 	// リセット
 	model_->Reset();
 	prefab_->Reset();
+	lightStore_->Reset();
 
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();

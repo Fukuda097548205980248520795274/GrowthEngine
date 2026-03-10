@@ -52,6 +52,15 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	spotLightResource_->Initialize(device, heap, kNumMaxLight, log);
 }
 
+/// @brief リセット
+void Engine::LightStore::Reset()
+{
+	// 数をリセット
+	numLightResource_->data_->directionalLight = 0;
+	numLightResource_->data_->pointLight = 0;
+	numLightResource_->data_->spotLight = 0;
+}
+
 /// @brief ライト読み込み
 /// @param name 
 /// @param type 
@@ -128,4 +137,46 @@ void Engine::LightStore::LightRegister(ID3D12GraphicsCommandList* commandList, U
 	directionalLightResource_->RegisterGraphics(commandList, directionalLightRootParameterIndex);
 	pointLightResource_->RegisterGraphics(commandList, pointLightRootParameterIndex);
 	spotLightResource_->RegisterGraphics(commandList, spotLightRootParameterIndex);
+}
+
+/// @brief セットする
+/// @param hLight 
+/// @param type 
+void Engine::LightStore::Set(LightHandle hLight, Light::Type type)
+{
+	switch (type)
+	{
+	case Light::Type::Directional:
+		SetDirection(dataTable_[hLight].get());
+		break;
+
+	case Light::Type::Point:
+
+		break;
+
+	case Light::Type::Spot:
+
+		break;
+	}
+}
+
+/// @brief 平行光源を設置する
+/// @param lightData 
+void Engine::LightStore::SetDirection(BaseLightData* lightData)
+{
+	// 最大数を超えないようにする
+	if (numLightResource_->data_->directionalLight >= kNumMaxLight)
+		return;
+
+	// 型変換
+	DirectionalLightData* data = static_cast<DirectionalLightData*>(lightData);
+	Engine::Light::DirectionalLightParam* param = static_cast<Engine::Light::DirectionalLightParam*>(data->GetParam());
+
+	// 値を渡す
+	directionalLightResource_->data_[numLightResource_->data_->directionalLight].color = Vector4(param->color.x, param->color.y, param->color.z, 0.0f);
+	directionalLightResource_->data_[numLightResource_->data_->directionalLight].direction = param->direction.Normalize();
+	directionalLightResource_->data_[numLightResource_->data_->directionalLight].intensity = param->intensity;
+
+	// 個数を加算
+	numLightResource_->data_->directionalLight++;
 }

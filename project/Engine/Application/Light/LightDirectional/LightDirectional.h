@@ -3,6 +3,8 @@
 #include "Handle/Handle.h"
 #include <string>
 
+class GrowthEngine;
+
 class LightDirectional
 {
 
@@ -21,6 +23,9 @@ public:
 
 
 private:
+
+	/// @brief エンジン
+	const GrowthEngine* engine_ = nullptr;
 
 	/// @brief 名前
 	std::string name_{};

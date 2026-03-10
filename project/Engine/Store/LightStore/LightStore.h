@@ -38,6 +38,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Heap* heap, ShaderCompiler* compiler, Log* log);
 
+		/// @brief リセット
+		void Reset();
+
 		/// @brief サイズを作り直す
 		/// @param device 
 		/// @param width 
@@ -84,6 +87,18 @@ namespace Engine
 			BaseLightData* data = dataTable_[handle].get();
 			return static_cast<T*>(data->GetParam());
 		}
+
+		/// @brief セットする
+		/// @param hLight 
+		/// @param type 
+		void Set(LightHandle hLight, Light::Type type);
+
+
+	private:
+
+		/// @brief 平行光源を設置する
+		/// @param lightData 
+		void SetDirection(BaseLightData* lightData);
 
 
 	private:
