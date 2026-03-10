@@ -1,5 +1,6 @@
 #pragma once
 #include "GrowthEngine.h"
+#include "Context/Context.h"
 
 class GameScene : public Scene
 {
@@ -20,6 +21,7 @@ public:
 
 private:
 
-	
+	// 全体で使用する
+	std::unique_ptr<Context> context_ = nullptr;
 };
 
