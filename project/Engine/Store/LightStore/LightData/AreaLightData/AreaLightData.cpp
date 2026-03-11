@@ -1,1 +1,0 @@
-#include "AreaLightData.h"

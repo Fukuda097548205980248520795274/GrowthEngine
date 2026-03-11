@@ -578,9 +578,6 @@ void Engine::PrimitiveSkinningModelData::DebugParameter()
 						// 色
 						ImGui::ColorEdit4("Color", &param_->meshMaterial[meshIndex].color.x);
 
-						// 環境
-						ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
-
 						// テクスチャ
 						ImGui::Text("Texture");
 
@@ -608,6 +605,42 @@ void Engine::PrimitiveSkinningModelData::DebugParameter()
 							}
 							ImGui::EndDragDropTarget();
 						}
+
+
+
+
+						ImGui::SeparatorText("Lighting");
+
+						// ライティング有効化
+						ImGui::Checkbox("Lighting", &param_->meshMaterial[meshIndex].enableLighting);
+
+						if (param_->meshMaterial[meshIndex].enableLighting)
+						{
+							// ディフューズ有効化
+							ImGui::Checkbox("Diffuse", &param_->meshMaterial[meshIndex].enableDiffuse);
+
+							if (param_->meshMaterial[meshIndex].enableDiffuse)
+							{
+								// ハーフランバート有効化
+								ImGui::Checkbox("HalfLambert", &param_->meshMaterial[meshIndex].enableHalfLambert);
+							}
+
+							// スペキュラー有効化
+							ImGui::Checkbox("Specular", &param_->meshMaterial[meshIndex].enableSpecular);
+
+							if (param_->meshMaterial[meshIndex].enableSpecular)
+							{
+								// ブリンフォン有効化
+								ImGui::Checkbox("BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
+
+								// 光沢度
+								ImGui::DragFloat("Shininess", &param_->meshMaterial[meshIndex].shininess, 0.1f);
+							}
+
+							// 環境
+							ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
+						}
+
 
 						// 終了
 						ImGui::TreePop();

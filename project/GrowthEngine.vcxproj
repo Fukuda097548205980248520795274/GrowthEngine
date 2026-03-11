@@ -283,10 +283,6 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Light\LightArea\LightArea.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="Engine\Application\Light\LightDirectional\LightDirectional.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -664,10 +660,6 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="Engine\Store\LightStore\LightData\BaseLightData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -846,7 +838,6 @@
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h" />
     <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h" />
-    <ClInclude Include="Engine\Application\Light\LightArea\LightArea.h" />
     <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h" />
     <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h" />
     <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h" />
@@ -969,7 +960,6 @@
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputStore.h" />
-    <ClInclude Include="Engine\Store\LightStore\LightData\AreaLightData\AreaLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.h" />

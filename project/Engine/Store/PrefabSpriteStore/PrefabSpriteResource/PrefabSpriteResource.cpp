@@ -47,16 +47,16 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	param_->material.uv.scale = Vector2(1.0f, 1.0f);
 	param_->material.uv.rotate = 0.0f;
 	param_->material.uv.translate = Vector2(0.0f, 0.0f);
+	param_->material.hTexture = hTexture;
 
 	// テクスチャ
-	param_->texture.hTexture = hTexture;
 	param_->texture.anchor = Vector2(0.0f, 0.0f);
 	textureFilePath_ = textureStore_->GetFilePath(hTexture);
 
 	// テクスチャサイズを取得する
 	param_->texture.size =
-		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->texture.hTexture)),
-			static_cast<float>(textureStore_->GetTextureHeight(param_->texture.hTexture)));
+		Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->material.hTexture)),
+			static_cast<float>(textureStore_->GetTextureHeight(param_->material.hTexture)));
 
 	// パラメータに記録と反映
 	group_ = "Sprite_" + name_;
@@ -80,7 +80,7 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 
 		// 反映させる
 		parameter_->RegisterGroupDataReflection(group_);
-		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
+		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
 	
 	// リソースの生成と初期化
@@ -110,7 +110,7 @@ void Engine::PrefabSpriteResource::Reset()
 	{
 		// 反映させる
 		parameter_->RegisterGroupDataReflection(group_);
-		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
+		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
 	else
 	{
@@ -124,10 +124,13 @@ void Engine::PrefabSpriteResource::Reset()
 		param_->material.uv.scale = Vector2(1.0f, 1.0f);
 		param_->material.uv.rotate = 0.0f;
 		param_->material.uv.translate = Vector2(0.0f, 0.0f);
+		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
 
 		// テクスチャ
 		param_->texture.anchor = Vector2(0.5f, 0.5f);
-		param_->texture.hTexture = textureStore_->GetHandle(textureFilePath_);
+		param_->texture.size =
+			Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->material.hTexture)),
+				static_cast<float>(textureStore_->GetTextureHeight(param_->material.hTexture)));
 	}
 }
 
@@ -153,7 +156,7 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 	resource_->RegisterGraphics(commandList, 0);
 
 	// テクスチャの設定
-	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->texture.hTexture));
+	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->material.hTexture));
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -257,25 +260,13 @@ void Engine::PrefabSpriteResource::DebugParameter()
 			// 色
 			ImGui::ColorEdit4("Color", &param_->material.color.x);
 
-			// 終了
-			ImGui::TreePop();
-		}
-
-		// テクスチャ
-		if (ImGui::TreeNode("Texture"))
-		{
-			// アンカー
-			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f);
-
-			// サイズ
-			ImGui::DragFloat2("Size", &param_->texture.anchor.x, 1.0f);
 
 			// テクスチャ
 			ImGui::Text("\n");
 
 			ImGui::ImageButton(
-				textureStore_->GetFilePath(param_->texture.hTexture).c_str(),
-				textureStore_->GetSrvGpuHandle(param_->texture.hTexture).ptr,
+				textureStore_->GetFilePath(param_->material.hTexture).c_str(),
+				textureStore_->GetSrvGpuHandle(param_->material.hTexture).ptr,
 				ImVec2(32.0f, 32.0f),
 				ImVec2(0, 0),
 				ImVec2(1, 1),
@@ -292,11 +283,25 @@ void Engine::PrefabSpriteResource::DebugParameter()
 
 					// droppedIndex が dataTable_ の index
 					// ここでマテリアルなどに設定する
-					param_->texture.hTexture = static_cast<uint32_t>(droppedIndex);
-					textureFilePath_ = textureStore_->GetFilePath(param_->texture.hTexture);
+					param_->material.hTexture = static_cast<uint32_t>(droppedIndex);
+					textureFilePath_ = textureStore_->GetFilePath(param_->material.hTexture);
 				}
 				ImGui::EndDragDropTarget();
 			}
+
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// テクスチャ
+		if (ImGui::TreeNode("Texture"))
+		{
+			// アンカー
+			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f);
+
+			// サイズ
+			ImGui::DragFloat2("Size", &param_->texture.anchor.x, 1.0f);
 
 			// 終了
 			ImGui::TreePop();

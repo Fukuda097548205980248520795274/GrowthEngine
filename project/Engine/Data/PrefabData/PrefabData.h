@@ -201,14 +201,14 @@ namespace Engine
 
 					/// @brief UV
 					Transform uv;
+
+					/// @brief テクスチャハンドル
+					TextureHandle hTexture;
 				};
 
 				/// @brief テクスチャ
 				struct Texture
 				{
-					/// @brief テクスチャハンドル
-					TextureHandle hTexture;
-
 					/// @brief サイズ
 					Vector2 size;
 
