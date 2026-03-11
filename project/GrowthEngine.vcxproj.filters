@@ -697,6 +697,9 @@
     <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform2D">
       <UniqueIdentifier>{a44c1fe7-a5ed-4b9f-a5d9-029f540f74e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter\LightParameter">
+      <UniqueIdentifier>{78a27541-5636-48c5-9db2-e3c5c8674c2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1208,6 +1211,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Light\BaseLight.cpp">
       <Filter>Engine\Include\Application\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\LightParameter\LightParameter.cpp">
+      <Filter>Engine\Include\Parameter\LightParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1813,6 +1819,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Light\BaseLight.h">
       <Filter>Engine\Include\Application\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\LightParameter\LightParameter.h">
+      <Filter>Engine\Include\Parameter\LightParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
