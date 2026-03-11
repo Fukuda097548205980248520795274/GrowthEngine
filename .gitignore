@@ -323,3 +323,6 @@ DirectXGame/imgui.ini
 imgui.ini
 *.blend1
 *.blend
+*.aseprite
+*.xcf
+*.mdp
