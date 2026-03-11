@@ -321,3 +321,5 @@ DirectXGame/imgui.ini
 **/x64/
 
 imgui.ini
+*.blend1
+*.blend
