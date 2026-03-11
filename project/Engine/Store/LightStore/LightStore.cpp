@@ -9,6 +9,17 @@
 #include <cassert>
 #include "GrowthEngine.h"
 
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
+
+/// @brief コンストラクタ
+Engine::LightStore::LightStore()
+{
+	// パラメータの生成と初期化
+	parameter_ = std::make_unique<LightParameter>("Light");
+}
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -85,6 +96,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 	if (type == Light::Type::Directional)
 	{
 		std::unique_ptr<DirectionalLightData> data = std::make_unique<DirectionalLightData>(name, handle);
+		data->Initialize(parameter_.get());
 		dataTable_.push_back(std::move(data));
 
 		return handle;
@@ -94,6 +106,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 	if (type == Light::Type::Point)
 	{
 		std::unique_ptr<PointLightData> data = std::make_unique<PointLightData>(name, handle);
+		data->Initialize(parameter_.get());
 		dataTable_.push_back(std::move(data));
 
 		return handle;
@@ -103,6 +116,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 	if (type == Light::Type::Spot)
 	{
 		std::unique_ptr<SpotLightData> data = std::make_unique<SpotLightData>(name, handle);
+		data->Initialize(parameter_.get());
 		dataTable_.push_back(std::move(data));
 
 		return handle;
@@ -252,4 +266,24 @@ void Engine::LightStore::SetSpot(BaseLightData* lightData)
 
 	// 個数を加算
 	numLightResource_->data_->spotLight++;
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::LightStore::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// メニューバーを使用する
+	if (!ImGui::Begin("Light"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	for (auto& data : dataTable_)data->DebugDraw();
+
+	// 終了
+	ImGui::End();
+
+#endif
 }

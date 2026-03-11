@@ -15,6 +15,10 @@ namespace Engine
 		/// @param handle 
 		DirectionalLightData(const std::string& name, LightHandle handle);
 
+		/// @brief 初期化
+		/// @param parameter 
+		void Initialize(LightParameter* parameter) override;
+
 		/// @brief ビュープロジェクション行列を取得する
 		/// @return 
 		Matrix4x4 GetViewProjectionMatrix() const;
@@ -26,6 +30,9 @@ namespace Engine
 		/// @brief 種別名を取得する
 		/// @return 
 		Light::Type GetType() const override { return Light::Type::Directional; }
+
+		/// @brief デバッグ用描画処理
+		void DebugDraw() override;
 
 
 	private:

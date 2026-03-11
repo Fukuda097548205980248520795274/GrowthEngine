@@ -181,6 +181,7 @@ void Engine::RenderContext::PreDraw()
 	model_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
+	lightStore_->DebugParameter();
 #endif
 
 	// コマンドリストの取得

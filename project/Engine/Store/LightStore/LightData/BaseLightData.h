@@ -7,12 +7,18 @@
 
 namespace Engine
 {
+	class LightParameter;
+
 	class BaseLightData
 	{
 	public:
 
 		/// @brief 仮想デストラクタ
 		virtual ~BaseLightData() = default;
+
+		/// @brief 初期化
+		/// @param parameter 
+		virtual void Initialize(LightParameter* parameter);
 
 		/// @brief コンストラクタ
 		/// @param name 
@@ -35,13 +41,22 @@ namespace Engine
 		/// @return 
 		virtual Light::Type GetType() const = 0;
 
+		/// @brief デバッグ用描画処理
+		virtual void DebugDraw() = 0;
+
 
 	protected:
 
 		// 名前
 		std::string name_{};
 
+		/// @brief グループ名
+		std::string group_{};
+
 		// ハンドル
 		LightHandle handle_ = 0;
+
+		/// @brief パラメータ
+		LightParameter* parameter_ = nullptr;
 	};
 }

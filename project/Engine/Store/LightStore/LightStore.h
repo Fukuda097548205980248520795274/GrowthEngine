@@ -20,6 +20,8 @@
 
 #include "DataForGPU/LightDataForGPU/LightDataForGPU.h"
 
+#include "Parameter/LightParameter/LightParameter.h"
+
 namespace Engine
 {
 	class DX12Heap;
@@ -31,6 +33,9 @@ namespace Engine
 	class LightStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		LightStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -92,6 +97,9 @@ namespace Engine
 		/// @param hLight 
 		void Set(LightHandle hLight);
 
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
 
 	private:
 
@@ -112,6 +120,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<BaseLightData>> dataTable_;
+
+		/// @brief パラメータ
+		std::unique_ptr<LightParameter> parameter_ = nullptr;
 
 
 	private:
