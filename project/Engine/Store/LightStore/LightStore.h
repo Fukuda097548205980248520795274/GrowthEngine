@@ -90,8 +90,7 @@ namespace Engine
 
 		/// @brief セットする
 		/// @param hLight 
-		/// @param type 
-		void Set(LightHandle hLight, Light::Type type);
+		void Set(LightHandle hLight);
 
 
 	private:
@@ -99,6 +98,14 @@ namespace Engine
 		/// @brief 平行光源を設置する
 		/// @param lightData 
 		void SetDirection(BaseLightData* lightData);
+
+		/// @brief ポイントライトを設置する
+		/// @param lightData 
+		void SetPoint(BaseLightData* lightData);
+
+		/// @brief スポットライトを設置する
+		/// @param lightData 
+		void SetSpot(BaseLightData* lightData);
 
 
 	private:

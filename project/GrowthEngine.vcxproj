@@ -246,6 +246,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Light\BaseLight.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -831,6 +832,7 @@
     <ClInclude Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
+    <ClInclude Include="Engine\Application\Light\BaseLight.h" />
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h" />

@@ -3,9 +3,6 @@
 
 namespace Engine
 {
-	class DX12Heap;
-	class Log;
-
 	class PointLightData : public BaseLightData
 	{
 	public:
@@ -21,12 +18,12 @@ namespace Engine
 
 		/// @brief 種別名を取得する
 		/// @return 
-		Light::Type GetType() const override { return Light::Type::Directional; }
+		Light::Type GetType() const override { return Light::Type::Point; }
 
 
 	private:
 
 		// パラメータ
-		std::unique_ptr<Light::DirectionalLightParam> param_ = nullptr;
+		std::unique_ptr<Light::PointLightParam> param_ = nullptr;
 	};
 }

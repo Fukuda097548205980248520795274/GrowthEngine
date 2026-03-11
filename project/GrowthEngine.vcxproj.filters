@@ -1206,6 +1206,9 @@
     <ClCompile Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.cpp">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Light\BaseLight.cpp">
+      <Filter>Engine\Include\Application\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1807,6 +1810,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.h">
       <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Light\BaseLight.h">
+      <Filter>Engine\Include\Application\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,22 +3,12 @@
 #include "Store/LightStore/LightData/DirectionalLightData/DirectionalLightData.h"
 
 /// @brief コンストラクタ
-/// @param name 
-LightDirectional::LightDirectional(const std::string& name) 
-	: name_(name)
+	/// @param name 
+LightDirectional::LightDirectional(const std::string& name) : BaseLight(name)
 {
-	// エンジンのインスタンスを取得する
-	engine_ = GrowthEngine::GetInstance();
-
 	// ライトを読み込む
-	handle_ = engine_->LoadLight(name, Engine::Light::Type::Directional);
+	hLight_ = engine_->LoadLight(name, Engine::Light::Type::Directional);
 
-	auto param = engine_->GetLightParam<Engine::Light::DirectionalLightParam>(handle_);
-	param_ = param;
-}
-
-/// @brief 設置
-void LightDirectional::Set()
-{
-	engine_->SetLight(handle_, Engine::Light::Type::Directional);
+	// パラメータを取得する
+	param_ = engine_->GetLightParam<Engine::Light::DirectionalLightParam>(hLight_);
 }

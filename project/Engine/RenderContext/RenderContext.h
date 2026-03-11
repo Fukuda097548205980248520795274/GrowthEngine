@@ -400,8 +400,7 @@ namespace Engine
 
 		/// @brief ライトを設置する
 		/// @param hLight 
-		/// @param type 
-		void SetLight(LightHandle hLight, Light::Type type) { lightStore_->Set(hLight, type); }
+		void SetLight(LightHandle hLight) { lightStore_->Set(hLight); }
 
 
 

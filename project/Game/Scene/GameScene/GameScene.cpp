@@ -3,7 +3,8 @@
 /// @brief 初期化
 void GameScene::Initialize()
 {
-	light_ = std::make_unique<LightDirectional>("TEST");
+	light_ = std::make_unique<LightPoint>("TEST");
+	light_->param_->position.y = 3.0f;
 
 
 	gameCamera2D_ = std::make_unique<GameCamera2D>("TEST");
@@ -122,8 +123,6 @@ void GameScene::Update()
 	//}
 	//
 	//ImGui::End();
-
-	light_->param_->position = Vector3(0.0f, 10.0f, 0.0f);
 
 	model_->param_->animation.timer += engine_->GetDeltaTime();
 	model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, 1.0f);

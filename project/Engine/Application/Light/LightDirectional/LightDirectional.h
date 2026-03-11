@@ -1,36 +1,18 @@
 #pragma once
-#include "Data/LightData/LightData.h"
-#include "Handle/Handle.h"
-#include <string>
+#include "../BaseLight.h"
 
 class GrowthEngine;
 
-class LightDirectional
+class LightDirectional : public Engine::BaseLight
 {
-
 public:
 
 	/// @brief コンストラクタ
 	/// @param name 
 	LightDirectional(const std::string& name);
 
-	/// @brief 設置
-	void Set();
-
 
 	/// @brief パラメータ
 	Engine::Light::DirectionalLightParam* param_{};
-
-
-private:
-
-	/// @brief エンジン
-	const GrowthEngine* engine_ = nullptr;
-
-	/// @brief 名前
-	std::string name_{};
-
-	/// @brief ハンドル
-	LightHandle handle_ = 0;
 };
 

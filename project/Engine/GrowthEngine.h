@@ -63,6 +63,10 @@
 #include "Application/WorldTransform/WorldTransform2D/WorldTransform2D.h"
 #include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
 
+#include "Application/Light/LightDirectional/LightDirectional.h"
+#include "Application/Light/LightPoint/LightPoint.h"
+#include "Application/Light/LightSpot/LightSpot.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -703,8 +707,7 @@ public:
 
 	/// @brief ライトを設置する
 	/// @param hLight 
-	/// @param type 
-	void SetLight(LightHandle hLight, Engine::Light::Type type)const { renderContext_->SetLight(hLight, type); }
+	void SetLight(LightHandle hLight)const { renderContext_->SetLight(hLight); }
 
 
 

@@ -1,5 +1,9 @@
 #include "LightStore.h"
+
 #include "LightData/DirectionalLightData/DirectionalLightData.h"
+#include "LightData/PointLightData/PointLightData.h"
+#include "LightData/SpotLightData/SpotLightData.h"
+
 #include "RenderContext/DX12Model/DX12Model.h"
 #include "RenderContext/DX12Prefab/DX12Prefab.h"
 #include <cassert>
@@ -86,6 +90,24 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 		return handle;
 	}
 
+	// ポイントライト
+	if (type == Light::Type::Point)
+	{
+		std::unique_ptr<PointLightData> data = std::make_unique<PointLightData>(name, handle);
+		dataTable_.push_back(std::move(data));
+
+		return handle;
+	}
+
+	// スポットライト
+	if (type == Light::Type::Spot)
+	{
+		std::unique_ptr<SpotLightData> data = std::make_unique<SpotLightData>(name, handle);
+		dataTable_.push_back(std::move(data));
+
+		return handle;
+	}
+
 
 	assert(false);
 	return 0;
@@ -141,21 +163,22 @@ void Engine::LightStore::LightRegister(ID3D12GraphicsCommandList* commandList, U
 
 /// @brief セットする
 /// @param hLight 
-/// @param type 
-void Engine::LightStore::Set(LightHandle hLight, Light::Type type)
+void Engine::LightStore::Set(LightHandle hLight)
 {
-	switch (type)
+	BaseLightData* data = dataTable_[hLight].get();
+
+	switch (data->GetType())
 	{
 	case Light::Type::Directional:
-		SetDirection(dataTable_[hLight].get());
+		SetDirection(data);
 		break;
 
 	case Light::Type::Point:
-
+		SetPoint(data);
 		break;
 
 	case Light::Type::Spot:
-
+		SetSpot(data);
 		break;
 	}
 }
@@ -174,9 +197,59 @@ void Engine::LightStore::SetDirection(BaseLightData* lightData)
 
 	// 値を渡す
 	directionalLightResource_->data_[numLightResource_->data_->directionalLight].color = Vector4(param->color.x, param->color.y, param->color.z, 0.0f);
-	directionalLightResource_->data_[numLightResource_->data_->directionalLight].direction = param->direction.Normalize();
+	directionalLightResource_->data_[numLightResource_->data_->directionalLight].direction = param->direction;
 	directionalLightResource_->data_[numLightResource_->data_->directionalLight].intensity = param->intensity;
 
 	// 個数を加算
 	numLightResource_->data_->directionalLight++;
+}
+
+/// @brief ポイントライトを設置する
+/// @param lightData 
+void Engine::LightStore::SetPoint(BaseLightData* lightData)
+{
+	// 最大数を超えないようにする
+	if (numLightResource_->data_->pointLight >= kNumMaxLight)
+		return;
+
+	// 型変換
+	PointLightData* data = static_cast<PointLightData*>(lightData);
+	Engine::Light::PointLightParam* param = static_cast<Engine::Light::PointLightParam*>(data->GetParam());
+
+	// 値を渡す
+	pointLightResource_->data_[numLightResource_->data_->pointLight].color = Vector4(param->color.x, param->color.y, param->color.z, 0.0f);
+	pointLightResource_->data_[numLightResource_->data_->pointLight].position = param->position;
+	pointLightResource_->data_[numLightResource_->data_->pointLight].intensity = param->intensity;
+	pointLightResource_->data_[numLightResource_->data_->pointLight].radius = param->radius;
+	pointLightResource_->data_[numLightResource_->data_->pointLight].decay = param->decay;
+
+	// 個数を加算
+	numLightResource_->data_->pointLight++;
+}
+
+/// @brief スポットライトを設置する
+/// @param lightData 
+void Engine::LightStore::SetSpot(BaseLightData* lightData)
+{
+	// 最大数を超えないようにする
+	if (numLightResource_->data_->spotLight >= kNumMaxLight)
+		return;
+
+	// 型変換
+	SpotLightData* data = static_cast<SpotLightData*>(lightData);
+	Engine::Light::SpotLightParam* param = static_cast<Engine::Light::SpotLightParam*>(data->GetParam());
+
+	// 値を渡す
+	spotLightResource_->data_[numLightResource_->data_->spotLight].color = Vector4(param->color.x, param->color.y, param->color.z, 0.0f);
+	spotLightResource_->data_[numLightResource_->data_->spotLight].position = param->position;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].direction = param->direction;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].intensity = param->intensity;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].distance = param->distance;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].decay = param->decay;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].cosAngle = param->cosAngle;
+	spotLightResource_->data_[numLightResource_->data_->spotLight].cosFalloffStart = param->cosFalloffStart;
+
+
+	// 個数を加算
+	numLightResource_->data_->spotLight++;
 }

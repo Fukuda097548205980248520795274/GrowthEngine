@@ -20,7 +20,7 @@ public:
 
 private:
 
-	std::unique_ptr<LightDirectional> light_ = nullptr;
+	std::unique_ptr<LightPoint> light_ = nullptr;
 
 	std::unique_ptr<AudioObject> object_ = nullptr;
 
