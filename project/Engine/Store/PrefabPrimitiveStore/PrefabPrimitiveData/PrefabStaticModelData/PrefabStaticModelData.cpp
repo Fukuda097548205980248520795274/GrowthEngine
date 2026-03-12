@@ -259,9 +259,6 @@ void Engine::PrefabStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12Gra
 /// @param pso 
 void Engine::PrefabStaticModelData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
-	// インスタンス描画命令を行っていないときは処理しない
-	if (numUseInstance_ <= 0)
-		return;
 
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);

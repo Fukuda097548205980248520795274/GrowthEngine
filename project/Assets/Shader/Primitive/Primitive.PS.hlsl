@@ -350,7 +350,7 @@ PixelShaderOutput main(VertexShaderOutput input)
         float2 shadowUV = ((float2) shadowPos + float2(1, -1)) * float2(0.5, -0.5);
         
         float shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - 0.005f);
-        float shadowFactor = lerp(0.3f, 1.0f, shadow); // 影の濃さ調整
+        float shadowFactor = lerp(0.5f, 1.0f, shadow); // 影の濃さ調整
     
         // 環境光
         float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);

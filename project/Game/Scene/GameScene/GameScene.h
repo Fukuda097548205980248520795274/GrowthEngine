@@ -35,5 +35,9 @@ private:
 
 	/// @brief エディター
 	std::unique_ptr<StageEditor> editor_ = nullptr;
+
+
+	// 太陽
+	std::unique_ptr<LightDirectional> sun_ = nullptr;
 };
 

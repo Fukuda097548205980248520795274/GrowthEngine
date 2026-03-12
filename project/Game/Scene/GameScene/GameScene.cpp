@@ -3,6 +3,8 @@
 /// @brief 初期化
 void GameScene::Initialize()
 {
+	sun_ = std::make_unique<LightDirectional>("Sun");
+
 	// ステージ読み込み
 	serializer_ = std::make_unique<StageSerializer>();
 
@@ -31,6 +33,8 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
+	sun_->Set();
+
 	// ステージ描画
 	stage_->Draw();
 }
