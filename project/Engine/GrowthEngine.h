@@ -13,6 +13,7 @@
 #include "RenderContext/RenderContext.h"
 
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Vector/VectorInt3/VectorInt3.h"
 
 #include "Application/Framework/Framework.h"
 

@@ -1,5 +1,8 @@
 #pragma once
 #include "GrowthEngine.h"
+#include "Stage/Stage.h"
+#include "StageEditor/StageEditor.h"
+#include "StageSerializer/StageSerializer.h"
 
 class GameScene : public Scene
 {
@@ -17,5 +20,20 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
+
+
+private:
+
+	/// @brief ステージ読み込み
+	std::unique_ptr<StageSerializer> serializer_ = nullptr;
+
+	/// @brief ステージデータ
+	std::unique_ptr<StageData> stageData_ = nullptr;
+
+	/// @brief ステージ
+	std::unique_ptr<Stage> stage_ = nullptr;
+
+	/// @brief エディター
+	std::unique_ptr<StageEditor> editor_ = nullptr;
 };
 
