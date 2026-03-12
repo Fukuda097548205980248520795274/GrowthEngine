@@ -18,8 +18,5 @@ public:
 	/// @brief 描画処理
 	void Draw() override;
 
-private:
-
-	std::unique_ptr<LightDirectional> light_ = nullptr;
 };
 

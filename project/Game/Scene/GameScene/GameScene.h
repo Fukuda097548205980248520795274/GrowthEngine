@@ -17,50 +17,5 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
-
-private:
-
-	std::unique_ptr<LightPoint> light_ = nullptr;
-
-	std::unique_ptr<AudioObject> object_ = nullptr;
-
-	std::unique_ptr<PrimitiveSkinningModel> model_ = nullptr;
-
-	std::unique_ptr<PrimitiveStaticModel> animationModel_ = nullptr;
-
-	std::unique_ptr<GameCamera2D> gameCamera2D_ = nullptr;
-
-	std::unique_ptr<GameCamera3D> gameCamera_ = nullptr;
-
-	std::unique_ptr<PrefabBaseStaticModel> modelPrefab_ = nullptr;
-
-	PrefabInstanceStaticModel* instance1_ = nullptr;
-	PrefabInstanceStaticModel* instance2_ = nullptr;
-
-	std::unique_ptr<PostEffectRadialBlur> blur_ = nullptr;
-
-	std::unique_ptr<Sprite> sprite_ = nullptr;
-
-	std::unique_ptr<Collision3DBaseOBB> collisionA_ = nullptr;
-	Collision3DInstanceOBB* collisionA0_ = nullptr;
-
-	std::unique_ptr<Collision3DBaseOBB> collisionB_ = nullptr;
-	Collision3DInstanceOBB* collisionB0_ = nullptr;
-
-	std::unique_ptr<Collision2DBaseSprite> spriteCollision_ = nullptr;
-	Collision2DInstanceSprite* spriteCollisionInstance_ = nullptr;
-
-	enum TileID
-	{
-		kAir,
-		kBlock,
-		kBomb
-	};
-
-	std::string tileName[3] = { "Air", "Block", "Bomb" };
-
-	int32_t id_ = kAir;
-
-	int32_t stage_[12][18] = { 0 };
 };
 
