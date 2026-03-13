@@ -10,9 +10,7 @@
 
 #include <numbers>
 
-#include <imgui.h>
-#include <imgui_impl_dx12.h>
-#include <imgui_impl_win32.h>
+#include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 #include "Parameter/PrimitiveParameter/PrimitiveParameter.h"
 
@@ -210,6 +208,54 @@ void Engine::PrimitiveStaticModelData::Register(Camera3DStore* cameraStore, Skyb
 
 	// ビュープロジェクション行列を取得する
 	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+
+
+
+	Matrix4x4 viewMatrix = cameraStore->GetCamera3D().GetViewMatrix();        // worldMatrix_.Inverse()
+	Matrix4x4 projMatrix = cameraStore->GetCamera3D().GetProjectionMatrix();  // いつものやつ
+
+	// ② ImGuizmo 用に column-major に変換（転置）
+	Matrix4x4 viewCM = viewMatrix;
+	Matrix4x4 projCM = projMatrix;
+	Matrix4x4 worldCM = worldMatrix;
+
+
+	// ③ Gizmo 描画
+	ImGuizmo::Manipulate(
+		&viewCM.m[0][0],
+		&projCM.m[0][0],
+		ImGuizmo::TRANSLATE,
+		ImGuizmo::LOCAL,
+		&worldCM.m[0][0]
+	);
+
+	// ④ Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+	if (ImGuizmo::IsUsing()) 
+	{
+		worldMatrix = worldCM;  // row-major に戻す
+
+		// 拡縮
+		Vector3 scale;
+		scale.x = std::sqrt(worldMatrix.m[0][0] * worldMatrix.m[0][0] + worldMatrix.m[0][1] * worldMatrix.m[0][1] + worldMatrix.m[0][2] * worldMatrix.m[0][2]);
+		scale.y = std::sqrt(worldMatrix.m[1][0] * worldMatrix.m[1][0] + worldMatrix.m[1][1] * worldMatrix.m[1][1] + worldMatrix.m[1][2] * worldMatrix.m[1][2]);
+		scale.z = std::sqrt(worldMatrix.m[2][0] * worldMatrix.m[2][0] + worldMatrix.m[2][1] * worldMatrix.m[2][1] + worldMatrix.m[2][2] * worldMatrix.m[2][2]);
+		param_->modelTransform.scale = scale;
+
+		// 平行移動
+		param_->modelTransform.translate = Vector3(worldMatrix.m[3][0], worldMatrix.m[3][1], worldMatrix.m[3][2]);
+
+
+		Matrix4x4 rot = worldMatrix;
+		rot.m[0][0] /= scale.x;  rot.m[0][1] /= scale.x;  rot.m[0][2] /= scale.x;
+		rot.m[1][0] /= scale.y;  rot.m[1][1] /= scale.y;  rot.m[1][2] /= scale.y;
+		rot.m[2][0] /= scale.z;  rot.m[2][1] /= scale.z;  rot.m[2][2] /= scale.z;
+
+		
+
+	}
+
+
+
 
 
 	// PSOの設定

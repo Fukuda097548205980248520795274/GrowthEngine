@@ -781,6 +781,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Externals\imguizmo\ImGuizmo.cpp" />
     <ClCompile Include="Game\Game.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1001,6 +1002,7 @@
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
+    <ClInclude Include="Externals\imguizmo\ImGuizmo.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\IObject\IObject.h" />
     <ClInclude Include="Game\IObject\Player\Player.h" />

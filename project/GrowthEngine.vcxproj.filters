@@ -715,6 +715,12 @@
     <Filter Include="Game\IObject\Wall">
       <UniqueIdentifier>{24922e12-2cab-45ab-9848-09631e1c64ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Externals">
+      <UniqueIdentifier>{68bb405c-4244-4ff7-92a8-b82cd30eac09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Externals\imguizmo">
+      <UniqueIdentifier>{fc5cffb9-af6e-40bf-88b1-e55761575f23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1244,6 +1250,9 @@
     </ClCompile>
     <ClCompile Include="Game\IObject\Wall\Wall.cpp">
       <Filter>Game\IObject\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Externals\imguizmo\ImGuizmo.cpp">
+      <Filter>Externals\imguizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1867,6 +1876,9 @@
     </ClInclude>
     <ClInclude Include="Game\IObject\Wall\Wall.h">
       <Filter>Game\IObject\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Externals\imguizmo\ImGuizmo.h">
+      <Filter>Externals\imguizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

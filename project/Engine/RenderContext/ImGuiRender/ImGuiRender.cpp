@@ -72,6 +72,7 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	// ドッキング機能を有効にする
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(device, buffering->GetSwapChainDesc().BufferCount,
@@ -85,6 +86,10 @@ void Engine::ImGuiRender::FrameStart()
 	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX12_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuizmo::BeginFrame();
+	ImGuizmo::SetOrthographic(false);
+
 }
 
 /// @brief Dockスペースを作成する
@@ -157,6 +162,18 @@ void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DE
 		cursorPos.x + (availSize.x - imageSize.x) * 0.5f,
 		cursorPos.y + (availSize.y - imageSize.y) * 0.5f
 	);
+
+
+	ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
+
+	// 画像が描かれている領域をそのままギズモの Rect にする
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	ImVec2 gizmoPos = ImVec2(windowPos.x + newCursorPos.x,
+		windowPos.y + newCursorPos.y);
+
+	ImGuizmo::SetRect(gizmoPos.x, gizmoPos.y, imageSize.x, imageSize.y);
+
+
 
 	ImGui::SetCursorPos(newCursorPos);
 

@@ -18,7 +18,7 @@ void Player::Update()
 	IObject::Update();
 
 	// モデルの位置
-	model_->param_->modelTransform.translate = worldTransform_->GetWorldPosition();
+	//model_->param_->modelTransform.translate = worldTransform_->GetWorldPosition();
 }
 
 /// @brief 描画処理
