@@ -381,3 +381,47 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 	scissorRect_.top = 0;
 	scissorRect_.bottom = height;
 }
+
+
+#ifdef _DEVELOPMENT
+
+/// @brief デバッグ用レイピッキング
+/// @param mouseScreenPos 
+void Engine::RenderContext::DebugRayPicking(const Vector2& mouseScreenPos)
+{
+	// 正規化デバイス座標系
+	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(winApp_->GetClientWidth()) - 1.0f;
+	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(winApp_->GetClientHeight());
+
+	// 同次クリップ空間
+	Vector4 clip = Vector4(ndcX, ndcY, 1.0f, 1.0f);
+
+	// ビュー座標系
+	Matrix4x4 invProj = camera3DStore_->GetCamera3D().GetProjectionMatrix().Inverse();
+	Vector4 rayView = Transform(clip, invProj);
+
+	// ワールド座標系
+	Matrix4x4 invView = camera3DStore_->GetCamera3D().GetViewMatrix().Inverse();
+	Vector4 rayDir4 = Transform(rayView, invView);
+	Vector3 rayDir = Vector3(rayDir4.x, rayDir4.y, rayDir4.z).Normalize();
+
+	// レイ
+	Collision3D::Ray ray;
+	ray.start = camera3DStore_->GetCamera3D().GetWorldPosition();
+	ray.diff = rayDir;
+
+	// リストを作成し、判定
+	std::vector<std::pair<float, bool*>> pickList;
+	model_->DebugRayPicking(ray, pickList);
+
+	if (!pickList.empty())
+	{
+		// もっとも近いリストを選択する
+		std::sort(pickList.begin(), pickList.end());
+
+		*pickList[0].second = true;
+	}
+
+}
+
+#endif

@@ -424,6 +424,10 @@ namespace Engine
 			line_->DrawCallLine2D(start, end, color);
 		}
 
+		/// @brief デバッグ用レイピッキング
+		/// @param mouseScreenPos マウスのスクリーン座標
+		void DebugRayPicking(const Vector2& mouseScreenPos);
+
 #endif
 
 

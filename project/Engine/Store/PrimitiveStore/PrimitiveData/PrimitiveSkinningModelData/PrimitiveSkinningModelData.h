@@ -77,7 +77,12 @@ namespace Engine
 		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 		/// @brief デバッグ用パラメータ
-		void DebugParameter();
+		void DebugParameter() override;
+
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) override;
 
 
 	private:

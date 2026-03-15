@@ -18,6 +18,8 @@
 
 #include "Parameter/PrimitiveParameter/PrimitiveParameter.h"
 
+#include "Func/CollisionFunc/CollisionFunc.h"
+
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
@@ -684,4 +686,25 @@ void Engine::PrimitiveSkinningModelData::DebugParameter()
 	}
 
 #endif
+}
+
+/// @brief デバッグ用レイピッキング
+/// @param ray 
+/// @param pickList 
+void Engine::PrimitiveSkinningModelData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+{
+	// 選択初期化
+	isGuizmoSelect_ = false;
+
+	Collision3D::AABB aabb;
+	aabb.center = param_->modelTransform.translate;
+	aabb.radius = Vector3(1.0f, 1.0f, 1.0f);
+
+	if (CollisionCheckFunc(aabb, ray))
+	{
+		std::pair<float, bool*> pick;
+		pick.first = Vector3(aabb.center - ray.start).Length();
+		pick.second = &isGuizmoSelect_;
+		pickList.push_back(pick);
+	}
 }

@@ -4,6 +4,8 @@
 #include "Handle/Handle.h"
 #include "Data/PrimitiveData/PrimitiveData.h"
 
+#include "Data/CollisionData/CollisionData.h"
+
 namespace Engine
 {
 	class PrimitiveParameter;
@@ -45,6 +47,11 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		virtual void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) = 0;
+
 
 	protected:
 
@@ -64,5 +71,11 @@ namespace Engine
 
 		// ハンドル
 		PrimitiveHandle hPrimitive_ = 0;
+
+
+	protected:
+
+		// ギズモの選択フラグ
+		bool isGuizmoSelect_ = false;
 	};
 }

@@ -172,8 +172,15 @@ void GrowthEngine::PreDraw()
 	// 描画前処理
 	renderContext_->PreDraw();
 
-	// メニューバー
 #ifdef _DEVELOPMENT
+
+	// マウスでオブジェクト選択
+	if (input_->GetMouseTrigger(MouseButton::kMouseButtonLeft))
+	{
+		renderContext_->DebugRayPicking(GetMousePosition());
+	}
+
+	// メニューバー
 	MenuBer();
 #endif
 }
@@ -186,6 +193,16 @@ void GrowthEngine::PostDraw()
 
 	// 全ての入力情報をコピーする
 	input_->CopyInputInfo();
+}
+
+/// @brief マウスの位置を取得する
+/// @return 
+Vector2 GrowthEngine::GetMousePosition()const
+{
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(winApp_->GetHwnd(), &p);
+	return Vector2(static_cast<float>(p.x), static_cast<float>(p.y));
 }
 
 

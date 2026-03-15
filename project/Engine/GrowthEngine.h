@@ -381,6 +381,10 @@ public:
 	/// <returns></returns>
 	float GetMouseWheelVelocity() const { return input_->GetMouseWheelVelocity(); }
 
+	/// @brief マウスの位置を取得する
+	/// @return 
+	Vector2 GetMousePosition()const;
+
 #pragma endregion
 
 #pragma region ゲームパッド入力

@@ -138,6 +138,11 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) { primitiveStore_->DebugRayPicking(ray, pickList); }
+
 
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;

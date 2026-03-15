@@ -25,6 +25,10 @@ namespace Engine
 		/// @return 
 		Matrix4x4 GetWorldMatrix()const { return worldMatrix_; }
 
+		/// @brief ビュー行列を取得する
+		/// @return 
+		Matrix4x4 GetViewMatrix()const { return worldMatrix_.Inverse(); }
+
 		/// @brief ワールド座標を取得する
 		/// @return 
 		Vector3 GetWorldPosition()const { return Vector3(worldMatrix_.m[3][0], worldMatrix_.m[3][1], worldMatrix_.m[3][2]); }
