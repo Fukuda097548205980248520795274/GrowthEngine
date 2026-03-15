@@ -135,7 +135,9 @@ void Engine::PrimitiveStaticModelData::Initialize(ModelStore* modelStore, Textur
 /// @brief 更新処理
 void Engine::PrimitiveStaticModelData::Update()
 {
+#ifdef _DEVELOPMENT
 
+#endif 
 }
 
 /// @brief リセット

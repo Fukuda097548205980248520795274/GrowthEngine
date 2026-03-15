@@ -585,7 +585,7 @@ void Engine::PrefabStaticModelData::DrawCallInstance(const Engine::Prefab::Stati
 		primitiveResource_[meshIndex]->data_[numUseInstance_].environment = param->meshMaterial[meshIndex].environment;
 
 		// 光沢度
-		primitiveResource_[meshIndex]->data_->shininess = param->meshMaterial[meshIndex].shininess;
+		primitiveResource_[meshIndex]->data_[numUseInstance_].shininess = param->meshMaterial[meshIndex].shininess;
 
 		// UV行列
 		primitiveResource_[meshIndex]->data_[numUseInstance_].uvTransform =

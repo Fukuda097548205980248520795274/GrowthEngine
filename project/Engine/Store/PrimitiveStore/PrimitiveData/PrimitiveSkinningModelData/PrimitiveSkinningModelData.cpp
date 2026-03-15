@@ -204,6 +204,10 @@ void Engine::PrimitiveSkinningModelData::Update()
 	{
 		skinClusters_[meshIndex]->Update(skeleton_);
 	}
+
+#ifdef _DEVELOPMENT
+
+#endif 
 }
 
 /// @brief リセット

@@ -145,7 +145,11 @@ void Engine::PrimitiveAnimationModelData::Initialize(ModelStore* modelStore, Tex
 /// @brief 更新処理
 void Engine::PrimitiveAnimationModelData::Update()
 {
+#ifdef _DEVELOPMENT
 
+
+
+#endif 
 }
 
 /// @brief リセット
