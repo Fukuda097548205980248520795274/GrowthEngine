@@ -145,3 +145,5 @@ namespace ImGui
     void MyFunction(const char* name, MyMatrix44* mtx);
 }
 */
+
+#define IMGUI_DEFINE_MATH_OPERATORS

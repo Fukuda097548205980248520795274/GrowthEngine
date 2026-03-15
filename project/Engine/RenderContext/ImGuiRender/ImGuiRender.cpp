@@ -85,6 +85,9 @@ void Engine::ImGuiRender::FrameStart()
 	ImGui_ImplWin32_NewFrame();
 	ImGui_ImplDX12_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuizmo::BeginFrame();
+	ImGuizmo::SetOrthographic(false);
 }
 
 /// @brief Dockスペースを作成する
@@ -150,13 +153,23 @@ void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DE
 		imageSize.x = availSize.x;
 		imageSize.y = availSize.x / aspectRatio;
 	}
-
+	
 	// 中央寄せ（X方向、Y方向両方）
 	ImVec2 cursorPos = ImGui::GetCursorPos();
 	ImVec2 newCursorPos = ImVec2(
 		cursorPos.x + (availSize.x - imageSize.x) * 0.5f,
 		cursorPos.y + (availSize.y - imageSize.y) * 0.5f
 	);
+
+	// 画像が描かれている領域をそのままギズモの Rect にする
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	ImVec2 gizmoPos = ImVec2(windowPos.x + newCursorPos.x,
+		windowPos.y + newCursorPos.y);
+
+
+	ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
+
+	ImGuizmo::SetRect(gizmoPos.x, gizmoPos.y, imageSize.x, imageSize.y);
 
 	ImGui::SetCursorPos(newCursorPos);
 

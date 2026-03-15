@@ -6,9 +6,7 @@
 #include "Func/ResourceFunc/ResourceFunc.h"
 #include <cassert>
 
-#include <imgui.h>
-#include <imgui_impl_dx12.h>
-#include <imgui_impl_win32.h>
+#include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 /// @brief 初期化
 /// @param device 

@@ -4,9 +4,7 @@
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 #include "Store/Camera2DStore/Camera2DStore.h"
 
-#include <imgui.h>
-#include <imgui_impl_dx12.h>
-#include <imgui_impl_win32.h>
+#include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 #include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
 
