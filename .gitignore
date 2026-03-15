@@ -326,3 +326,4 @@ imgui.ini
 *.aseprite
 *.xcf
 *.mdp
+*.pdb
