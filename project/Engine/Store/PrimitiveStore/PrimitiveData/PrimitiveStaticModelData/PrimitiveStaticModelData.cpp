@@ -614,7 +614,11 @@ void Engine::PrimitiveStaticModelData::DebugParameter()
 void Engine::PrimitiveStaticModelData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
 {
 	// 選択初期化
-	isGuizmoSelect_ = false;
+	if (isGuizmoSelect_)
+	{
+		isGuizmoSelect_ = false;
+		return;
+	}
 
 	Collision3D::AABB aabb;
 	aabb.center = param_->modelTransform.translate;

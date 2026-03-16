@@ -394,21 +394,22 @@ void Engine::RenderContext::DebugRayPicking(const Vector2& mouseScreenPos)
 	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(winApp_->GetClientHeight());
 
 	// 同次クリップ空間
-	Vector4 clip = Vector4(ndcX, ndcY, 1.0f, 1.0f);
+	Vector4 nearClip = { ndcX, ndcY, 0.0f, 1.0f };
+	Vector4 farClip = { ndcX, ndcY, 1.0f, 1.0f };
 
-	// ビュー座標系
-	Matrix4x4 invProj = camera3DStore_->GetCamera3D().GetProjectionMatrix().Inverse();
-	Vector4 rayView = Transform(clip, invProj);
+	// 逆ビュープロジェクション行列
+	Matrix4x4 invVP =
+		(camera3DStore_->GetCamera3D().GetViewMatrix() *
+			camera3DStore_->GetCamera3D().GetProjectionMatrix()).Inverse();
 
-	// ワールド座標系
-	Matrix4x4 invView = camera3DStore_->GetCamera3D().GetViewMatrix().Inverse();
-	Vector4 rayDir4 = Transform(rayView, invView);
-	Vector3 rayDir = Vector3(rayDir4.x, rayDir4.y, rayDir4.z).Normalize();
+	Vector4 nearWorld = Transform(nearClip, invVP);
+	Vector4 farWorld = Transform(farClip, invVP);
 
 	// レイ
 	Collision3D::Ray ray;
-	ray.start = camera3DStore_->GetCamera3D().GetWorldPosition();
-	ray.diff = rayDir;
+	ray.start = Vector3(nearWorld.x, nearWorld.y, nearWorld.z);
+
+	ray.diff = Vector3(farWorld.x - nearWorld.x, farWorld.y - nearWorld.y, farWorld.z - nearWorld.z).Normalize();
 
 	// リストを作成し、判定
 	std::vector<std::pair<float, bool*>> pickList;
