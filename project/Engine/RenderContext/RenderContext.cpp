@@ -214,13 +214,13 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
+	// プレハブ描画
+	prefab_->DrawPrefab(skyboxStore_.get(), commandList_);
+
 #ifdef _DEVELOPMENT
 	// 衝突ストアのデバッグ線
 	collision3DStore_->DebugDrawLine();
 	collision2DStore_->DebugDrawLine();
-
-	// デバッグ用プレハブ描画
-	prefab_->DrawDebugPrefab();
 
 	// 線の描画
 	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());

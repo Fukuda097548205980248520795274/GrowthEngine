@@ -71,14 +71,14 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	psoPrefabSprite_->Initialize(device, spritePrefabVS_.Get(), spritePrefabPS_.Get(), log);
 
 
+#ifdef _DEVELOPMENT
+
 	// 立方体を生成とインスタンス確保
 	cube_ = std::make_unique<PrefabBaseCube>(textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log) , 512 , "Debug_Object_Cube");
-
 	cubeInstances_.resize(512);
-	for (int i = 0; i < 512; ++i)
-	{
-		cubeInstances_[i] = cube_->CreateInstance();
-	}
+	for (int i = 0; i < 512; ++i)cubeInstances_[i] = cube_->CreateInstance();
+
+#endif
 }
 
 /// @brief 更新処理
@@ -95,8 +95,12 @@ void Engine::DX12Prefab::Reset()
 	psoPrefabPrimitive_->ResetBlendMode();
 	psoPrefabSprite_->ResetBlendMode();
 
+#ifdef _DEVELOPMENT
+
 	// 描画数
 	cubeNumDraw_ = 0;
+
+#endif
 }
 
 /// @brief シャドウマップの描画処理
@@ -106,6 +110,15 @@ void Engine::DX12Prefab::Reset()
 void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	prefabPrimitiveStore_->ShadowMapDraw(viewProjection, commandList, pso);
+}
+
+/// @brief プレハブ描画処理
+/// @param skyboxStore 
+/// @param commandList 
+void Engine::DX12Prefab::DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
+{
+	prefabPrimitiveStore_->Register(skyboxStore, commandList, psoPrefabPrimitive_.get());
+	prefabSpriteStore_->Register(commandList, psoPrefabSprite_.get());
 }
 
 /// @brief 全てのインスタンスを削除する
@@ -149,11 +162,10 @@ void Engine::DX12Prefab::DebugParameter()
 #endif
 }
 
-/// @brief デバッグ用プレハブ描画
-void Engine::DX12Prefab::DrawDebugPrefab()
-{
-	cube_->Draw();
-}
+
+
+
+#ifdef _DEVELOPMENT
 
 /// @brief 立方体を描画する
 /// @param position 
@@ -178,3 +190,5 @@ void Engine::DX12Prefab::DrawDebugCube(const Vector3& position, const Vector3& r
 	// カウントする
 	cubeNumDraw_++;
 }
+
+#endif

@@ -211,23 +211,6 @@ namespace Engine
 		}
 
 
-		/// @brief プリミティブ用プレハブを描画する
-		/// @param hPrefabPrimitive 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive) { prefab_->DrawPrefabPrimitive(hPrefabPrimitive, skyboxStore_.get(), commandList_); }
-
-		/// @brief プリミティブ用プレハブを描画する
-		/// @param name 
-		void DrawPrefabPrimitive(const std::string& name) { prefab_->DrawPrefabPrimitive(name, skyboxStore_.get(), commandList_); }
-
-		/// @brief スプライト用プレハブを描画する
-		/// @param hPrefabSprite 
-		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite) { prefab_->DrawPrefabSprite(hPrefabSprite, commandList_); }
-
-		/// @brief スプライト用プレハブを描画する
-		/// @param name 
-		void DrawPrefabSprite(const std::string& name) { prefab_->DrawPrefabSprite(name, commandList_); }
-
-
 		/// @brief プリミティブ用プレハブのパラメータを取得する
 		/// @tparam T 
 		/// @param hPrefabPrimitive 
@@ -428,8 +411,6 @@ namespace Engine
 		/// @param mouseScreenPos マウスのスクリーン座標
 		void DebugRayPicking(const Vector2& mouseScreenPos);
 
-#endif
-
 		/// @brief デバッグ用立方体の描画
 		/// @param position 
 		/// @param rotate 
@@ -439,6 +420,8 @@ namespace Engine
 		{
 			prefab_->DrawDebugCube(position, rotate, scale, color);
 		}
+
+#endif
 
 
 	private:

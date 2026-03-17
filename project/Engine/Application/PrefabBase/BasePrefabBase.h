@@ -18,9 +18,6 @@ namespace Engine
 		/// @param name 
 		BasePrefabBase(const std::string& name);
 
-		/// @brief 描画処理
-		virtual void Draw() = 0;
-
 
 	protected:
 

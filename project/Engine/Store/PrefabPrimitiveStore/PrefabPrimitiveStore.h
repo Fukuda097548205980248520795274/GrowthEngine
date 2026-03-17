@@ -63,17 +63,10 @@ namespace Engine
 		void Update();
 
 		/// @brief コマンドリストに登録する
-		/// @param hPrefabPrimitive 
-		/// @param commandList 
-		/// @param pso 
-		void Register(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
-
-		/// @brief コマンドリストに登録する
-		/// @param name 
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param pso 
-		void Register(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief シャドウマップの描画処理
 		/// @param viewProjection 

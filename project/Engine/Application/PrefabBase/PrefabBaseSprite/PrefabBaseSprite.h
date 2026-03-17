@@ -17,9 +17,6 @@ public:
 	[[nodiscard]]
 	PrefabInstanceSprite* CreateInstance();
 
-	/// @brief 描画処理
-	void Draw() override;
-
 	// パラメータ
 	Engine::Prefab::Sprite::Base::Param* param_ = nullptr;
 

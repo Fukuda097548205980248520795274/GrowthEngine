@@ -21,9 +21,3 @@ PrefabInstanceCube* PrefabBaseCube::CreateInstance()
 {
 	return engine_->CreatePrimitiveInstance<PrefabInstanceCube>(handle_);
 }
-
-/// @brief 描画処理
-void PrefabBaseCube::Draw()
-{
-	engine_->DrawPrefabPrimitive(handle_);
-}

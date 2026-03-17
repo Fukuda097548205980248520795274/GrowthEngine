@@ -83,33 +83,10 @@ namespace Engine
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
-		/// @brief プリミティブ用プレハブを描画する
-		/// @param hPrefabPrimitive 
+		/// @brief プレハブ描画処理
 		/// @param skyboxStore 
 		/// @param commandList 
-		void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
-		{
-			prefabPrimitiveStore_->Register(hPrefabPrimitive, skyboxStore, commandList, psoPrefabPrimitive_.get());
-		}
-
-		/// @brief プリミティブ用プレハブを描画する
-		/// @param name 
-		/// @param skyboxStore 
-		/// @param commandList 
-		void DrawPrefabPrimitive(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
-		{
-			prefabPrimitiveStore_->Register(name, skyboxStore, commandList, psoPrefabPrimitive_.get());
-		}
-
-		/// @brief スプライト用プレハブでの描画処理
-		/// @param hPrefabSprite 
-		/// @param commandList 
-		void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite, ID3D12GraphicsCommandList* commandList) { prefabSpriteStore_->Register(hPrefabSprite, commandList, psoPrefabSprite_.get()); }
-
-		/// @brief スプライト用プレハブでの描画処理
-		/// @param name 
-		/// @param commandList 
-		void DrawPrefabSprite(const std::string& name, ID3D12GraphicsCommandList* commandList) { prefabSpriteStore_->Register(name, commandList, psoPrefabSprite_.get()); }
+		void DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList);
 
 
 		/// @brief プリミティブのパラメータを取得する
@@ -171,12 +148,14 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
+		template <typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
 
 
 	public:
 
-		/// @brief デバッグ用プレハブ描画
-		void DrawDebugPrefab();
+#ifdef _DEVELOPMENT
 
 		/// @brief 立方体を描画する
 		/// @param position 
@@ -185,10 +164,7 @@ namespace Engine
 		/// @param color 
 		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color);
 
-
-
-		template <typename T>
-		using ComPtr = Microsoft::WRL::ComPtr<T>;
+#endif
 
 	private:
 
@@ -225,6 +201,7 @@ namespace Engine
 		std::unique_ptr<PrefabSpriteStore> prefabSpriteStore_ = nullptr;
 
 
+#ifdef _DEVELOPMENT
 
 	private:
 
@@ -236,5 +213,7 @@ namespace Engine
 
 		/// @brief 立方体描画数
 		int32_t cubeNumDraw_ = 0;
+
+#endif
 	};
 }

@@ -104,6 +104,4 @@ void Stage::Draw()
 
 	// オブジェクト描画処理
 	for (auto& object : objects_)object->Draw();
-
-	wallModelPrefab_->Draw();
 }

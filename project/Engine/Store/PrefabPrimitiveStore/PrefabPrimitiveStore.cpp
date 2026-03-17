@@ -120,19 +120,9 @@ void Engine::PrefabPrimitiveStore::Update()
 /// @param hPrefabPrimitive 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabPrimitiveStore::Register(PrefabPrimitiveHandle hPrefabPrimitive, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrefabPrimitiveStore::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	dataTable_[hPrefabPrimitive]->Register(skyboxStore, commandList, pso);
-}
-
-/// @brief コマンドリストに登録する
-/// @param name 
-/// @param skyboxStore 
-/// @param commandList 
-/// @param pso 
-void Engine::PrefabPrimitiveStore::Register(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
-{
-	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, pso);
+	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, pso);
 }
 
 /// @brief シャドウマップの描画処理

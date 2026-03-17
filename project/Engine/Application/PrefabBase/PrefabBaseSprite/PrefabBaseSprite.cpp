@@ -21,9 +21,3 @@ PrefabInstanceSprite* PrefabBaseSprite::CreateInstance()
 {
 	return engine_->CreateSpriteInstance(handle_);
 }
-
-/// @brief 描画処理
-void PrefabBaseSprite::Draw()
-{
-	engine_->DrawPrefabSprite(handle_);
-}

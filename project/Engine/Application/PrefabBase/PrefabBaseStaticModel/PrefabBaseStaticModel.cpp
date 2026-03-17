@@ -21,9 +21,3 @@ PrefabInstanceStaticModel* PrefabBaseStaticModel::CreateInstance()
 {
 	return engine_->CreatePrimitiveInstance<PrefabInstanceStaticModel>(handle_);
 }
-
-/// @brief 描画処理
-void PrefabBaseStaticModel::Draw()
-{
-	engine_->DrawPrefabPrimitive(handle_);
-}

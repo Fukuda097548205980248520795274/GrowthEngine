@@ -34,16 +34,9 @@ namespace Engine
 			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
-		/// @param hSprite 
 		/// @param commandList 
 		/// @param pso 
-		void Register(PrefabSpriteHandle hPrefabSprite, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
-
-		/// @brief コマンドリストに登録する
-		/// @param name 
-		/// @param commandList 
-		/// @param pso 
-		void Register(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @return 

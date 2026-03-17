@@ -91,22 +91,11 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 }
 
 /// @brief コマンドリストに登録する
-/// @param hSprite 
-/// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabSpriteStore::Register(PrefabSpriteHandle hPrefabSprite,  ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::PrefabSpriteStore::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	dataTable_[hPrefabSprite]->Register(commandList, pso);
-}
-
-/// @brief コマンドリストに登録する
-/// @param name 
-/// @param commandList 
-/// @param pso 
-void Engine::PrefabSpriteStore::Register(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
-{
-	dataTable_[nameTable_[name]]->Register(commandList, pso);
+	for (auto& data : dataTable_)data->Register(commandList, pso);
 }
 
 /// @brief リセット

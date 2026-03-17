@@ -550,23 +550,6 @@ public:
 	}
 
 
-	/// @brief プリミティブ用プレハブを描画する
-	/// @param hPrefabPrimitive 
-	void DrawPrefabPrimitive(PrefabPrimitiveHandle hPrefabPrimitive)const { renderContext_->DrawPrefabPrimitive(hPrefabPrimitive); }
-
-	/// @brief プリミティブ用プレハブを描画する
-	/// @param name 
-	void DrawPrefabPrimitive(const std::string& name)const { renderContext_->DrawPrefabPrimitive(name); }
-
-	/// @brief スプライト用プレハブを描画する
-	/// @param hSprite 
-	void DrawPrefabSprite(PrefabSpriteHandle hPrefabSprite)const { renderContext_->DrawPrefabSprite(hPrefabSprite); }
-
-	/// @brief スプライト用プレハブを描画する
-	/// @param name 
-	void DrawPrefabSprite(const std::string& name)const { renderContext_->DrawPrefabSprite(name); }
-
-
 	/// @brief プリミティブ用プレハブのパラメータを取得する
 	/// @tparam T 
 	/// @param hPrefabPrimitive 
@@ -745,7 +728,9 @@ public:
 	/// @param color 
 	void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color) const
 	{
+#ifdef _DEVELOPMENT
 		renderContext_->DrawDebugCube(position, rotate, scale, color);
+#endif
 	}
 
 
