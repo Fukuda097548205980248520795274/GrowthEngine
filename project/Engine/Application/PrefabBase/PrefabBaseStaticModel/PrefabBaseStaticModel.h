@@ -1,12 +1,9 @@
 #pragma once
-#include "Handle/Handle.h"
-#include "Data/PrefabData/PrefabData.h"
-#include <string>
+#include "../BasePrefabBase.h"
 
-class GrowthEngine;
 class PrefabInstanceStaticModel;
 
-class PrefabBaseStaticModel
+class PrefabBaseStaticModel : public Engine::BasePrefabBase
 {
 public:
 
@@ -21,19 +18,13 @@ public:
 	PrefabInstanceStaticModel* CreateInstance();
 
 	/// @brief 描画処理
-	void Draw();
+	void Draw() override;
 
 	// パラメータ
 	Engine::Prefab::StaticModel::Base::Param* param_ = nullptr;
 
 
 private:
-
-	// エンジン
-	const GrowthEngine* engine_ = nullptr;
-
-	// 名前
-	std::string name_{};
 
 	// プレハブプリミティブハンドル
 	PrefabPrimitiveHandle handle_ = 0;

@@ -92,7 +92,7 @@ void Engine::PrefabSpriteResource::Update()
 	// 終了したインスタンスを削除する
 	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance)
 		{
-			if (instance->IsDelete()) 
+			if (instance->isDelete_) 
 			{ 
 				return true; 
 			}

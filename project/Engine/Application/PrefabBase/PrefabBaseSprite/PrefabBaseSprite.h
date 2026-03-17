@@ -1,13 +1,9 @@
 #pragma once
-#include "Handle/Handle.h"
-#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
-#include <string>
-#include <list>
-#include <memory>
+#include "../BasePrefabBase.h"
 
-class GrowthEngine;
+class PrefabInstanceSprite;
 
-class PrefabBaseSprite
+class PrefabBaseSprite : public Engine::BasePrefabBase
 {
 public:
 
@@ -22,19 +18,13 @@ public:
 	PrefabInstanceSprite* CreateInstance();
 
 	/// @brief 描画処理
-	void Draw();
+	void Draw() override;
 
 	// パラメータ
 	Engine::Prefab::Sprite::Base::Param* param_ = nullptr;
 
 
 private:
-
-	// エンジン
-	const GrowthEngine* engine_ = nullptr;
-
-	// 名前
-	std::string name_{};
 
 	// プレハブスプライトハンドル
 	PrefabSpriteHandle handle_ = 0;

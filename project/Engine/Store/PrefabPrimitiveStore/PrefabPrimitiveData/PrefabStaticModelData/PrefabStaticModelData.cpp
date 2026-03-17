@@ -149,7 +149,7 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 void Engine::PrefabStaticModelData::Update()
 {
 	// 削除されたインスタンスをリストから除外する
-	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceStaticModel>& instance) {if (instance->IsDelete()) { return true; }return false; });
+	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceStaticModel>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット

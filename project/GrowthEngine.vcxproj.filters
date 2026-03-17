@@ -1245,6 +1245,12 @@
     <ClCompile Include="Game\IObject\Wall\Wall.cpp">
       <Filter>Game\IObject\Wall</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\BasePrefabBase.cpp">
+      <Filter>Engine\Include\Application\PrefabBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\BasePrefabInstance.cpp">
+      <Filter>Engine\Include\Application\PrefabInstance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1867,6 +1873,12 @@
     </ClInclude>
     <ClInclude Include="Game\IObject\Wall\Wall.h">
       <Filter>Game\IObject\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabBase\BasePrefabBase.h">
+      <Filter>Engine\Include\Application\PrefabBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabInstance\BasePrefabInstance.h">
+      <Filter>Engine\Include\Application\PrefabInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

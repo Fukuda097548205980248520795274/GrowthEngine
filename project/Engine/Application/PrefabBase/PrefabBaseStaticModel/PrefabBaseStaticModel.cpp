@@ -5,11 +5,9 @@
 /// @param hTexture 
 /// @param numInstance 
 /// @param name 
-PrefabBaseStaticModel::PrefabBaseStaticModel(ModelHandle hModel, uint32_t numInstance, const std::string& name)	: name_(name)
+PrefabBaseStaticModel::PrefabBaseStaticModel(ModelHandle hModel, uint32_t numInstance, const std::string& name)
+	: BasePrefabBase(name)
 {
-	// エンジンのインスタンスを取得する
-	engine_ = GrowthEngine::GetInstance();
-
 	// 読み込む
 	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::StaticModel, numInstance, hModel, 0, 0);
 
