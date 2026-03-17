@@ -6,6 +6,8 @@
 #include "Store/PrefabPrimitiveStore/PrefabPrimitiveStore.h"
 #include "Store/PrefabSpriteStore/PrefabSpriteStore.h"
 
+#include "Application/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
+
 namespace Engine
 {
 	class ShaderCompiler;
@@ -30,7 +32,7 @@ namespace Engine
 		/// @param lightStore 
 		/// @param cameraStore 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ShaderCompiler* compiler, DX12Heap* heap,
 			ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
 			LightStore* lightStore, Camera3DStore* cameraStore, Log* log);
 
@@ -52,10 +54,11 @@ namespace Engine
 		/// @param commandList 
 		/// @param log 
 		/// @return 
-		PrefabPrimitiveHandle LoadPrimitive(const std::string& name, Prefab::Type type, uint32_t numInstance, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+		PrefabPrimitiveHandle LoadPrimitive(const std::string& name, Prefab::Type type, uint32_t numInstance,
+			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 		{
-			return prefabPrimitiveStore_->Load(device, commandList, hModel, hAnimation, hSkeleton, name, numInstance, type, log);
+			return prefabPrimitiveStore_->Load(device, commandList, hTexture, hModel, hAnimation, hSkeleton, name, numInstance, type, log);
 		}
 
 		/// @brief スプライトを読み込む
@@ -169,6 +172,21 @@ namespace Engine
 		void DebugParameter();
 
 
+
+	public:
+
+		/// @brief デバッグ用プレハブ描画
+		void DrawDebugPrefab();
+
+		/// @brief 立方体を描画する
+		/// @param position 
+		/// @param rotate 
+		/// @param scale 
+		/// @param color 
+		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color);
+
+
+
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
@@ -205,5 +223,18 @@ namespace Engine
 
 		/// @brief スプライト用プレハブストア
 		std::unique_ptr<PrefabSpriteStore> prefabSpriteStore_ = nullptr;
+
+
+
+	private:
+
+		/// @brief 立方体
+		std::unique_ptr<PrefabBaseCube> cube_ = nullptr;
+
+		/// @brief 立方体インスタンスリスト
+		std::vector<PrefabInstanceCube*> cubeInstances_;
+
+		/// @brief 立方体描画数
+		int32_t cubeNumDraw_ = 0;
 	};
 }

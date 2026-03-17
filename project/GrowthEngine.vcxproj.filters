@@ -715,6 +715,18 @@
     <Filter Include="Game\IObject\Wall">
       <UniqueIdentifier>{24922e12-2cab-45ab-9848-09631e1c64ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData">
+      <UniqueIdentifier>{3c01ec70-fca6-414e-9409-937ae7c7e5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceCube">
+      <UniqueIdentifier>{8d831ee4-4556-43e2-98a3-dc37d1ee1fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\VertexBufferResource\CubeVertexResource">
+      <UniqueIdentifier>{e3de5fd3-7c1e-4702-9748-875def845da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseCube">
+      <UniqueIdentifier>{632ea143-a45e-483e-8944-8e22490965ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1250,6 +1262,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabInstance\BasePrefabInstance.cpp">
       <Filter>Engine\Include\Application\PrefabInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.cpp">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.cpp">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\VertexBufferResource\CubeVertexResource\CubeVertexResource.cpp">
+      <Filter>Engine\Include\Resource\VertexBufferResource\CubeVertexResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1879,6 +1903,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabInstance\BasePrefabInstance.h">
       <Filter>Engine\Include\Application\PrefabInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.h">
+      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\VertexBufferResource\CubeVertexResource\CubeVertexResource.h">
+      <Filter>Engine\Include\Resource\VertexBufferResource\CubeVertexResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

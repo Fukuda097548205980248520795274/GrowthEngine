@@ -13,8 +13,7 @@ namespace Engine
 		enum class Type
 		{
 			StaticModel,
-			AnimationModel,
-			SkinningModel,
+			Cube
 		};
 
 		/// @brief 静的モデル
@@ -170,6 +169,155 @@ namespace Engine
 
 					/// @brief メッシュマテリアル
 					std::vector<Material> meshMaterial;
+				};
+			}
+		}
+
+		/// @brief 立方体
+		namespace Cube
+		{
+			/// @brief 基底
+			namespace Base
+			{
+				/// @brief トランスフォーム
+				struct Transform
+				{
+					// 拡縮
+					Vector3 scale;
+
+					// 回転
+					Vector3 rotate;
+
+					// 移動
+					Vector3 translate;
+				};
+
+				/// @brief UVトランスフォーム
+				struct UVTransform
+				{
+					// 拡縮
+					Vector2 scale;
+
+					// 回転
+					float radius;
+
+					// 移動
+					Vector2 translate;
+				};
+
+				/// @brief マテリアル
+				struct Material
+				{
+					/// @brief テクスチャハンドル
+					TextureHandle hTexture;
+
+					/// @brief 色
+					Vector4 color;
+
+					/// @brief UV
+					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
+
+					// 光沢度
+					float shininess;
+
+					// ライティング有効化
+					bool enableLighting;
+
+					// ディフューズ
+					bool enableDiffuse;
+
+					// ハーフランバート有効化
+					bool enableHalfLambert;
+
+					// スペキュラー有効化
+					bool enableSpecular;
+
+					// ブリンフォン有効化
+					bool enableBlinnPhong;
+				};
+
+				/// @brief パラメータ
+				struct Param
+				{
+					/// @brief トランスフォーム
+					Transform transform;
+
+					/// @brief マテリアル
+					Material material;
+				};
+			}
+
+			/// @brief インスタンス
+			namespace Instance
+			{
+				/// @brief トランスフォーム
+				struct Transform
+				{
+					// 拡縮
+					Vector3 scale;
+
+					// 回転
+					Vector3 rotate;
+
+					// 移動
+					Vector3 translate;
+				};
+
+				/// @brief UVトランスフォーム
+				struct UVTransform
+				{
+					// 拡縮
+					Vector2 scale;
+
+					// 回転
+					float radius;
+
+					// 移動
+					Vector2 translate;
+				};
+
+				/// @brief マテリアル
+				struct Material
+				{
+					/// @brief 色
+					Vector4 color;
+
+					/// @brief UV
+					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
+
+					// 光沢度
+					float shininess;
+
+					// ライティング有効化
+					bool enableLighting;
+
+					// ディフューズ
+					bool enableDiffuse;
+
+					// ハーフランバート有効化
+					bool enableHalfLambert;
+
+					// スペキュラー有効化
+					bool enableSpecular;
+
+					// ブリンフォン有効化
+					bool enableBlinnPhong;
+				};
+
+				/// @brief パラメータ
+				struct Param
+				{
+					/// @brief トランスフォーム
+					Transform transform;
+
+					/// @brief マテリアル
+					Material material;
 				};
 			}
 		}

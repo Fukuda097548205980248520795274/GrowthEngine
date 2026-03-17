@@ -6,6 +6,8 @@
 
 #include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
 
+#include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
+
 namespace Engine
 {
 	class ModelStore;
@@ -53,7 +55,8 @@ namespace Engine
 		/// @param numInstance 
 		/// @param type 
 		/// @param log 
-		PrefabPrimitiveHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+		PrefabPrimitiveHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			const std::string& name, uint32_t numInstance, Prefab::Type type, Log* log);
 
 		/// @brief 更新処理
@@ -142,6 +145,13 @@ namespace Engine
 
 		// パラメータ
 		std::unique_ptr<PrefabPrimitiveParameter> parameter_ = nullptr;
+
+
+	private:
+
+		/// @brief 立方体頂点リソース
+		std::unique_ptr<CubeVertexResource> cubeVertexResource_ = nullptr;
+
 
 
 	private:

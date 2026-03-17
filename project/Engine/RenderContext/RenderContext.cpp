@@ -101,7 +101,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Prefabの生成と初期化
 	prefab_ = std::make_unique<DX12Prefab>();
-	prefab_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+	prefab_->Initialize(core_->GetDevice(),commandList_, shaderCompiler_.get(), heap_.get(),
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), camera3DStore_.get(), log);
 
 	// ビューポートの設定
@@ -218,6 +218,9 @@ void Engine::RenderContext::PostDraw()
 	// 衝突ストアのデバッグ線
 	collision3DStore_->DebugDrawLine();
 	collision2DStore_->DebugDrawLine();
+
+	// デバッグ用プレハブ描画
+	prefab_->DrawDebugPrefab();
 
 	// 線の描画
 	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());

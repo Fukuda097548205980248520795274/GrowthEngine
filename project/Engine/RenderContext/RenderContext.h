@@ -193,10 +193,10 @@ namespace Engine
 		/// @param hSkeleton 
 		/// @param log 
 		/// @return 
-		PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Prefab::Type type,
-			uint32_t numInstance, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, Log* log)
+		PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Prefab::Type type,uint32_t numInstance, 
+			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, Log* log)
 		{
-			return prefab_->LoadPrimitive(name, type, numInstance, hModel, hAnimation, hSkeleton, core_->GetDevice(), commandList_, log);
+			return prefab_->LoadPrimitive(name, type, numInstance,hTexture, hModel, hAnimation, hSkeleton, core_->GetDevice(), commandList_, log);
 		}
 
 		/// @brief スプライト用プレハブを読み込む
@@ -429,6 +429,16 @@ namespace Engine
 		void DebugRayPicking(const Vector2& mouseScreenPos);
 
 #endif
+
+		/// @brief デバッグ用立方体の描画
+		/// @param position 
+		/// @param rotate 
+		/// @param scale 
+		/// @param color 
+		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color)
+		{
+			prefab_->DrawDebugCube(position, rotate, scale, color);
+		}
 
 
 	private:

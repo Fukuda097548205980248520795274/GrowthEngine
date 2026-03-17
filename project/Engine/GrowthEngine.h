@@ -533,10 +533,10 @@ public:
 	/// @param hAnimation 
 	/// @param hSkeleton 
 	/// @return 
-	PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab::Type type,
-		uint32_t numInstance, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton) const
+	PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab::Type type,uint32_t numInstance,
+		TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton) const
 	{
-		return renderContext_->LoadPrefabPrimitive(name, type, numInstance, hModel, hAnimation, hSkeleton, log_.get());
+		return renderContext_->LoadPrefabPrimitive(name, type, numInstance, hTexture, hModel, hAnimation, hSkeleton, log_.get());
 	}
 
 	/// @brief プレハブスプライトの読み込み
@@ -736,6 +736,16 @@ public:
 #ifdef _DEVELOPMENT
 		renderContext_->DrawDebugLine2D(start, end, color);
 #endif
+	}
+
+	/// @brief デバッグ用立方体の描画
+	/// @param position 
+	/// @param rotate 
+	/// @param scale 
+	/// @param color 
+	void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color) const
+	{
+		renderContext_->DrawDebugCube(position, rotate, scale, color);
 	}
 
 

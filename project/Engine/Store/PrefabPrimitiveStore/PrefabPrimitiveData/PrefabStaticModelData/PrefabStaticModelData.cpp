@@ -25,11 +25,6 @@ Engine::PrefabStaticModelData::PrefabStaticModelData(const std::string& name, ui
 
 	// パラメータを生成する
 	param_ = std::make_unique<Prefab::StaticModel::Base::Param>();
-
-	// モデルトランスフォームの初期化
-	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
-	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
-	param_->modelTransform.translate = Vector3(0.0f, 0.0f, 0.0f);
 }
 
 /// @brief 初期化

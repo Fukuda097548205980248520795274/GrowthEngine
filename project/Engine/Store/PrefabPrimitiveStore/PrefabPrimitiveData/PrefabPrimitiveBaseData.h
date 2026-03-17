@@ -1,9 +1,15 @@
 #pragma once
-#include "Resource/IndexBufferResource/IndexBufferResource.h"
+
 #include "Handle/Handle.h"
 #include "Data/PrefabData/PrefabData.h"
+
+#include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
+#include <memory>
+#include <list>
 #include <string>
-#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
+
+#include "Resource/IndexBufferResource/IndexBufferResource.h"
+#include "Resource/StructuredBufferResource/StructuredBufferResource.h"
 
 namespace Engine
 {

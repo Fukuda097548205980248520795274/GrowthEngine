@@ -1,0 +1,29 @@
+#include "PrefabBaseCube.h"
+#include "GrowthEngine.h"
+
+/// @brief コンストラクタ
+/// @param hTexture 
+/// @param numInstance 
+/// @param name 
+PrefabBaseCube::PrefabBaseCube(TextureHandle hTexture, uint32_t numInstance, const std::string& name)
+	: BasePrefabBase(name)
+{
+	// 読み込む
+	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::Cube, numInstance, hTexture, 0, 0, 0);
+
+	// パラメータを取得する
+	param_ = engine_->GetPrefabPrimitiveParam<Engine::Prefab::Cube::Base::Param>(handle_);
+}
+
+/// @brief インスタンスを生成する
+[[nodiscard]]
+PrefabInstanceCube* PrefabBaseCube::CreateInstance()
+{
+	return engine_->CreatePrimitiveInstance<PrefabInstanceCube>(handle_);
+}
+
+/// @brief 描画処理
+void PrefabBaseCube::Draw()
+{
+	engine_->DrawPrefabPrimitive(handle_);
+}

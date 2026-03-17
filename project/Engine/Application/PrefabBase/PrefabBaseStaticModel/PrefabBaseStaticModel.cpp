@@ -9,7 +9,7 @@ PrefabBaseStaticModel::PrefabBaseStaticModel(ModelHandle hModel, uint32_t numIns
 	: BasePrefabBase(name)
 {
 	// 読み込む
-	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::StaticModel, numInstance, hModel, 0, 0);
+	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::StaticModel, numInstance, 0, hModel, 0, 0);
 
 	// パラメータを取得する
 	param_ = engine_->GetPrefabPrimitiveParam<Engine::Prefab::StaticModel::Base::Param>(handle_);

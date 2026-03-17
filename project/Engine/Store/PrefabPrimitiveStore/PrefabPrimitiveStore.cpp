@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include "PrefabPrimitiveData/PrefabStaticModelData/PrefabStaticModelData.h"
+#include "PrefabPrimitiveData/PrefabCubeData/PrefabCubeData.h"
 
 /// @brief コンストラクタ
 Engine::PrefabPrimitiveStore::PrefabPrimitiveStore()
@@ -44,6 +45,10 @@ void Engine::PrefabPrimitiveStore::Initialize(ID3D12Device* device, ShaderCompil
 	skeletonStore_ = skeletonStore;
 	lightStore_ = lightStore;
 	cameraStore_ = cameraStore;
+
+	// 立方体頂点リソースの生成と初期化
+	cubeVertexResource_ = std::make_unique<CubeVertexResource>();
+	cubeVertexResource_->Initialize(device, log);
 }
 
 /// @brief プレハブの読み込み
@@ -56,7 +61,8 @@ void Engine::PrefabPrimitiveStore::Initialize(ID3D12Device* device, ShaderCompil
 /// @param numInstance 
 /// @param type 
 /// @param log 
-PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+	TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 	const std::string& name, uint32_t numInstance, Prefab::Type type, Log* log)
 {
 	// nullptrチェック
@@ -85,6 +91,16 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	{
 		std::unique_ptr<PrefabStaticModelData> data = std::make_unique<PrefabStaticModelData>(name, numInstance, handle, hModel, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, lightStore_, cameraStore_, heap_, device, log);
+		dataTable_.push_back(std::move(data));
+
+		return handle;
+	}
+
+	// 立方体プレハブデータ
+	if (type == Prefab::Type::Cube)
+	{
+		std::unique_ptr<PrefabCubeData> data = std::make_unique<PrefabCubeData>(name, numInstance, handle, hTexture, parameter_.get());
+		data->Initialize(textureStore_, lightStore_, cameraStore_,cubeVertexResource_.get(), heap_, device, log);
 		dataTable_.push_back(std::move(data));
 
 		return handle;

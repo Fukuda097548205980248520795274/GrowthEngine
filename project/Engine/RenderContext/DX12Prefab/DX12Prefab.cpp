@@ -4,6 +4,10 @@
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
+#include "Store/TextureStore/TextureStore.h"
+
+#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
+
 /// @brief 初期化
 /// @param device 
 /// @param compiler 
@@ -15,7 +19,7 @@
 /// @param lightStore 
 /// @param cameraStore 
 /// @param log 
-void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ShaderCompiler* compiler, DX12Heap* heap,
 	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
 	LightStore* lightStore, Camera3DStore* cameraStore, Log* log)
 {
@@ -65,6 +69,16 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ShaderCompiler* compil
 	// スプライト用プレハブPSO
 	psoPrefabSprite_ = std::make_unique<PSOPrefabSprite>();
 	psoPrefabSprite_->Initialize(device, spritePrefabVS_.Get(), spritePrefabPS_.Get(), log);
+
+
+	// 立方体を生成とインスタンス確保
+	cube_ = std::make_unique<PrefabBaseCube>(textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log) , 512 , "Debug_Object_Cube");
+
+	cubeInstances_.resize(512);
+	for (int i = 0; i < 512; ++i)
+	{
+		cubeInstances_[i] = cube_->CreateInstance();
+	}
 }
 
 /// @brief 更新処理
@@ -80,6 +94,9 @@ void Engine::DX12Prefab::Reset()
 {
 	psoPrefabPrimitive_->ResetBlendMode();
 	psoPrefabSprite_->ResetBlendMode();
+
+	// 描画数
+	cubeNumDraw_ = 0;
 }
 
 /// @brief シャドウマップの描画処理
@@ -130,4 +147,34 @@ void Engine::DX12Prefab::DebugParameter()
 	ImGui::End();
 
 #endif
+}
+
+/// @brief デバッグ用プレハブ描画
+void Engine::DX12Prefab::DrawDebugPrefab()
+{
+	cube_->Draw();
+}
+
+/// @brief 立方体を描画する
+/// @param position 
+/// @param rotate 
+/// @param scale 
+/// @param color 
+void Engine::DX12Prefab::DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color)
+{
+	// 最大数は超えてはいけない
+	if (cubeNumDraw_ >= 512)
+		return;
+
+	// 値を渡す
+	cubeInstances_[cubeNumDraw_]->param_.transform.translate = position;
+	cubeInstances_[cubeNumDraw_]->param_.transform.rotate = rotate;
+	cubeInstances_[cubeNumDraw_]->param_.transform.scale = scale;
+	cubeInstances_[cubeNumDraw_]->param_.material.color = color;
+
+	// 描画命令
+	cubeInstances_[cubeNumDraw_]->Draw();
+
+	// カウントする
+	cubeNumDraw_++;
 }
