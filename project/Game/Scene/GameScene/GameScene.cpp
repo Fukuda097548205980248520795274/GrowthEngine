@@ -35,7 +35,8 @@ void GameScene::Draw()
 {
 	sun_->Set();
 
-	engine_->DrawDebugCube(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	engine_->DrawDebugCube(Vector3(-5.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	engine_->DrawDebugCube(Vector3(-5.0f, 3.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.5f, 1.0f), Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 
 	// ステージ描画
 	stage_->Draw();
