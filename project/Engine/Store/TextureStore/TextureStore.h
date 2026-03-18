@@ -50,6 +50,9 @@ namespace Engine
 
 	public:
 
+		/// @brief コンストラクタ
+		TextureStore(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap);
+
 
 		/// @brief 読み込み
 		/// @param filePath 
@@ -68,6 +71,11 @@ namespace Engine
 		/// @param handle 
 		/// @return 
 		D3D12_GPU_DESCRIPTOR_HANDLE GetSrvGpuHandle(TextureHandle handle) { return dataTable_[handle]->srvHandle.second; }
+
+		/// @brief SRV用GPUハンドルを取得する
+		/// @param handle 
+		/// @return 
+		D3D12_GPU_DESCRIPTOR_HANDLE GetSrvGpuHandleFont() { return fontSrvHandle_.second; }
 
 		/// @brief テクスチャの横幅を取得する
 		/// @param handle 
@@ -109,5 +117,17 @@ namespace Engine
 
 		// テクスチャ数
 		int numTexture_ = 0;
+
+
+	private:
+
+		/// @brief 転送用フォントリソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> uploadFontResource_ = nullptr;
+
+		/// @brief フォントリソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> fontResource_ = nullptr;
+
+		/// @brief SRVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> fontSrvHandle_;
 	};
 }

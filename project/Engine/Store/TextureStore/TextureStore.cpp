@@ -1,10 +1,208 @@
 #include "TextureStore.h"
 #include "Func/TextureFunc/TextureFunc.h"
+#include "Func/ResourceFunc/ResourceFunc.h"
 #include "RenderContext/DX12Heap/DX12Heap.h"
 #include "Log//Log.h"
 #include <format>
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+/// @brief コンストラクタ
+Engine::TextureStore::TextureStore(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap)
+{
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+	{
+		// 初期化失敗
+		assert(false);
+	}
+
+	FT_Face face;
+	if (FT_New_Face(ft, "C:/Windows/Fonts/arial.ttf", 0, &face))
+	{
+		// 読み込み失敗
+		assert(false);
+	}
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	if (FT_Load_Char(face, 'A', FT_LOAD_RENDER))
+	{
+		// 失敗
+		assert(false);
+	}
+
+	FT_GlyphSlot g = face->glyph;
+
+
+
+	/*---------------------------------
+		メタデータを元にリソースを作成
+	---------------------------------*/
+
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	resourceDesc.Width = g->bitmap.width;
+	resourceDesc.Height = g->bitmap.rows;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_R8_UNORM;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+	/*------------------------
+		利用するヒープの設定
+	------------------------*/
+
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+
+	/*----------------------
+		リソースを生成する
+	----------------------*/
+
+	HRESULT hr = device->CreateCommittedResource(
+		// ヒープの設定
+		&heapProperties,
+
+		// ヒープの特殊な設定
+		D3D12_HEAP_FLAG_NONE,
+
+		// リソースの設定
+		&resourceDesc,
+
+		// データ転送できる設定
+		D3D12_RESOURCE_STATE_COPY_DEST,
+
+		// クリア最適値
+		nullptr,
+
+		IID_PPV_ARGS(&fontResource_)
+	);
+	assert(SUCCEEDED(hr));
+
+
+
+
+	UINT64 uploadBufferSize = 0;
+
+	device->GetCopyableFootprints(
+		&resourceDesc,
+		0,
+		1,
+		0,
+		nullptr,
+		nullptr,
+		nullptr,
+		&uploadBufferSize
+	);
+
+
+	D3D12_HEAP_PROPERTIES heapProp{};
+	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
+
+	D3D12_RESOURCE_DESC bufDesc{};
+	bufDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	bufDesc.Width = uploadBufferSize;
+	bufDesc.Height = 1;
+	bufDesc.DepthOrArraySize = 1;
+	bufDesc.MipLevels = 1;
+	bufDesc.SampleDesc.Count = 1;
+	bufDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	device->CreateCommittedResource(
+		&heapProp,
+		D3D12_HEAP_FLAG_NONE,
+		&bufDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&uploadFontResource_));
+
+
+	// データを割り当てる
+	UINT8* mappedData = nullptr;
+	uploadFontResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
+
+
+	D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint;
+	UINT numRows;
+	UINT64 rowSize;
+	UINT64 totalBytes;
+
+	device->GetCopyableFootprints(
+		&resourceDesc,
+		0,
+		1,
+		0,
+		&footprint,
+		&numRows,
+		&rowSize,
+		&totalBytes
+	);
+
+	UINT rowPitch = footprint.Footprint.RowPitch;
+
+	for (int y = 0; y < static_cast<int32_t>(g->bitmap.rows); y++)
+	{
+		memcpy(
+			mappedData + y * rowPitch,
+			g->bitmap.buffer + y * g->bitmap.width,
+			g->bitmap.width
+		);
+	}
+
+
+
+
+	D3D12_TEXTURE_COPY_LOCATION dst{};
+	dst.pResource = fontResource_.Get();
+	dst.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+	dst.SubresourceIndex = 0;
+
+	D3D12_TEXTURE_COPY_LOCATION src{};
+	src.pResource = uploadFontResource_.Get();
+	src.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+	src.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8_UNORM;
+	src.PlacedFootprint.Footprint.Width = g->bitmap.width;
+	src.PlacedFootprint.Footprint.Height = g->bitmap.rows;
+	src.PlacedFootprint.Footprint.Depth = 1;
+	src.PlacedFootprint.Footprint.RowPitch = rowPitch;
+
+	commandList->CopyTextureRegion(&dst, 0, 0, 0, &src, nullptr);
+
+
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Transition.pResource = fontResource_.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	commandList->ResourceBarrier(1, &barrier);
+
+	uploadFontResource_->Unmap(0, nullptr);
+
+
+	// SRVを設定する
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = DXGI_FORMAT_R8_UNORM;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+
+
+	// CPU・GPUハンドルを取得する
+	fontSrvHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	fontSrvHandle_.second = heap->GetSrvGPUDescriptorHandle();
+
+	// テクスチャリソースにSRVの設定を付与する
+	device->CreateShaderResourceView(fontResource_.Get(), &srvDesc, fontSrvHandle_.first);
+}
 
 /// @brief 読み込み
 /// @param filePath 

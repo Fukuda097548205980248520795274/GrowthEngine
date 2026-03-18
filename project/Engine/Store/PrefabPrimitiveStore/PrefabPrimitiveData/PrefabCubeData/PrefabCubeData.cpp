@@ -245,7 +245,7 @@ void Engine::PrefabCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCo
 	primitiveResource_->RegisterGraphics(commandList, 0);
 
 	// テクスチャの設定
-	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->material.hTexture));
+	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandleFont());
 
 	// シャドウマップテクスチャの設定
 	lightStore_->GetShadowMapTextureResource()->Register(commandList, 2);

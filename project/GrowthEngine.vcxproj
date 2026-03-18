@@ -80,7 +80,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,7 +106,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,7 +132,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine\;$(ProjectDir)Game\;$(ProjectDir)Externals\DirectXTex\;$(ProjectDir)Externals\assimp\include\;$(ProjectDir)Externals\imgui\;$(ProjectDir)Externals\nlohmann\;$(ProjectDir)Externals\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1224,9 +1224,6 @@
   <ItemGroup>
     <ProjectReference Include="Externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
-    </ProjectReference>
-    <ProjectReference Include="Externals\freetype\builds\windows\vc2010\freetype.vcxproj">
-      <Project>{78b079bd-9fc7-4b9e-b4a6-96da0f00248b}</Project>
     </ProjectReference>
     <ProjectReference Include="Externals\imgui\imgui.vcxproj">
       <Project>{30b4b48b-cc71-4756-bd4c-bf778fcf2357}</Project>

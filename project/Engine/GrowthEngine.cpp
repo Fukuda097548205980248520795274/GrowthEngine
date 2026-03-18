@@ -18,6 +18,7 @@
 #pragma comment(lib, "Mfreadwrite.lib")
 #pragma comment(lib, "mfuuid.lib")
 #pragma comment(lib, "xaudio2.lib")
+#pragma comment(lib, "Externals/freetype/lib/freetype.lib")
 
 // インスタンス
 std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;

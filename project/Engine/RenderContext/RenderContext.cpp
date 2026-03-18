@@ -69,7 +69,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	camera2DStore_ = std::make_unique<Camera2DStore>();
 
 	// テクスチャストアの生成
-	textureStore_ = std::make_unique<TextureStore>();
+	textureStore_ = std::make_unique<TextureStore>(core_->GetDevice() , commandList_, heap_.get());
 
 	// モデルストアの生成
 	modelStore_ = std::make_unique<ModelStore>();
