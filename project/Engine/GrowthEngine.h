@@ -68,9 +68,6 @@
 #include "Application/Light/LightPoint/LightPoint.h"
 #include "Application/Light/LightSpot/LightSpot.h"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 
 // マウスボタン
 enum MouseButton

@@ -82,14 +82,6 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	// 描画統括の生成と初期化
 	renderContext_ = std::make_unique<Engine::RenderContext>();
 	renderContext_->Initialize(winApp_.get(), log_.get());
-
-
-	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-	{
-		// 初期化失敗
-		assert(false);
-	}
 }
 
 /// @brief デストラクタ

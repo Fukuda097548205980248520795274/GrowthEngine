@@ -58,3 +58,10 @@ using SkyboxHandle = uint32_t;
 
 /// @brief 入力ハンドル
 using InputHandle = uint32_t;
+
+
+/// @brief フォントハンドル
+using FontHandle = uint32_t;
+
+/// @brief 文字ハンドル
+using CharHandle = uint32_t;

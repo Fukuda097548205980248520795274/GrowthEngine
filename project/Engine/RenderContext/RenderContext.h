@@ -25,6 +25,8 @@
 #include "Store/Collision3DStore/Collision3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
 
+#include "Store/FontStore/FontStore.h"
+
 namespace Engine
 {
 	class Log;
@@ -507,6 +509,9 @@ namespace Engine
 
 		/// @brief スカイボックスストア
 		std::unique_ptr<SkyboxStore> skyboxStore_ = nullptr;
+
+		/// @brief フォントストア
+		std::unique_ptr<FontStore> fontStore_ = nullptr;
 
 
 	private:

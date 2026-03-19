@@ -94,6 +94,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 2D衝突ストアの生成と初期化
 	collision2DStore_ = std::make_unique<Collision2DStore>();
 
+	// フォントストアの生成と初期化
+	fontStore_ = std::make_unique<FontStore>();
+
 	// DX12Modelの生成と初期化
 	model_ = std::make_unique<DX12Model>();
 	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
