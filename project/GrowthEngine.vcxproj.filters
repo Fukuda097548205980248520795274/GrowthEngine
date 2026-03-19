@@ -727,6 +727,9 @@
     <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseCube">
       <UniqueIdentifier>{632ea143-a45e-483e-8944-8e22490965ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\FontStore">
+      <UniqueIdentifier>{485dea5a-e4c6-4555-8c59-1b59d8dcad18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1274,6 +1277,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp">
       <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\FontStore\FontStore.cpp">
+      <Filter>Engine\Include\Store\FontStore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1915,6 +1921,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h">
       <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\FontStore\FontStore.h">
+      <Filter>Engine\Include\Store\FontStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
