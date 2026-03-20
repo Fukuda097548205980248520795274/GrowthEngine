@@ -764,6 +764,40 @@ public:
 	void SetLight(const std::string& name)const { return renderContext_->SetLight(name); }
 
 
+public:
+
+
+	/// @brief プリミティブの静的モデルを読み込む
+	/// @param hModel 
+	/// @param name 
+	/// @return 
+	Render3DHandle LoadPrimitiveStaticModel(ModelHandle hModel, const std::string& name) const
+	{
+		return renderContext_->LoadRender3D(hModel, 0, 0, name, Engine::Render3D::Type::StaticModel, log_.get());
+	}
+
+	/// @brief プリミティブのアニメーションモデルを読み込む
+	/// @param hModel 
+	/// @param hAnimation 
+	/// @param name 
+	/// @return 
+	Render3DHandle LoadPrimitiveAnimationModel(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name) const
+	{
+		return renderContext_->LoadRender3D(hModel, hAnimation, 0, name, Engine::Render3D::Type::AnimationModel, log_.get());
+	}
+
+	/// @brief プリミティブのスキニングモデルを読み込む
+	/// @param hModel 
+	/// @param hAnimation 
+	/// @param hSkeleton 
+	/// @param name 
+	/// @return 
+	Render3DHandle LoadPrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name) const
+	{
+		return renderContext_->LoadRender3D(hModel, hAnimation, hSkeleton, name, Engine::Render3D::Type::SkinningModel, log_.get());
+	}
+
+
 private:
 
 	// 生成できないようにする
