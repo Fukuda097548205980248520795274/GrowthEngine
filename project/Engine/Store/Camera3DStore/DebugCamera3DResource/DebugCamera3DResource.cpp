@@ -10,6 +10,25 @@ Engine::DebugCamera3DResource::DebugCamera3DResource()
 
 	// 3Dカメラの生成
 	camera3d_ = std::make_unique<Camera3D>();
+
+	// パラメータを取得する
+	Camera3DData::Param* param = camera3d_->GetParam();
+
+	// パラメータの生成と初期化
+	parameter_ = std::make_unique<DebugCameraParameter>("Debug");
+	parameter_->SetValue<Vector3>("Camera3D", "PivotPoint", &pivotPoint_);
+	parameter_->SetValue<float>("Camera3D", "Length", &pointLength_);
+	parameter_->SetValue<Vector3>("Camera3D", "Rotate", &param->transform.rotate);
+
+	// 記録ファイルがあったら反映させる
+	parameter_->RegisterGroupDataReflection("Camera3D");
+}
+
+/// @brief デストラクタ
+Engine::DebugCamera3DResource::~DebugCamera3DResource()
+{
+	// 記録を保存する
+	parameter_->SaveFile("Camera3D");
 }
 
 /// @brief 更新処理

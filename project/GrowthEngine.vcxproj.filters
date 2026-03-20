@@ -739,6 +739,9 @@
     <Filter Include="Engine\Include\Data\Prefab2DData">
       <UniqueIdentifier>{18b0b682-0658-4c64-a1a6-6b696a892920}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter\DebugCameraParameter">
+      <UniqueIdentifier>{d6d8e19c-4f48-4631-b5ae-86585638051d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1292,6 +1295,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.cpp">
+      <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1942,6 +1948,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\Prefab2DData\Prefab2DData.h">
       <Filter>Engine\Include\Data\Prefab2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.h">
+      <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

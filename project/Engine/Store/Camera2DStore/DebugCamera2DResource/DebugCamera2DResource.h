@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include "Camera/Camera2D/Camera2D.h"
+#include "Parameter/DebugCameraParameter/DebugCameraParameter.h"
 
 namespace Engine
 {
@@ -11,6 +12,9 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		DebugCamera2DResource();
+
+		/// @brief コンストラクタ
+		~DebugCamera2DResource();
 
 		/// @brief 更新処理
 		void Update();
@@ -32,6 +36,9 @@ namespace Engine
 
 		// カメラ3D
 		std::unique_ptr<Camera2D> camera2d_ = nullptr;
+
+		/// @brief パラメータ
+		std::unique_ptr<DebugCameraParameter> parameter_ = nullptr;
 
 		// 有効
 		bool enable_ = false;

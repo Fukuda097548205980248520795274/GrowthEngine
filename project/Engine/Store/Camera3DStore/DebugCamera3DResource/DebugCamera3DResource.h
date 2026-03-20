@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include "Camera/Camera3D/Camera3D.h"
+#include "Parameter/DebugCameraParameter/DebugCameraParameter.h"
 
 class GrowthEngine;
 
@@ -13,6 +14,9 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		DebugCamera3DResource();
+
+		/// @brief デストラクタ
+		~DebugCamera3DResource();
 
 		/// @brief 更新処理
 		void Update();
@@ -35,9 +39,14 @@ namespace Engine
 		// カメラ3D
 		std::unique_ptr<Camera3D> camera3d_ = nullptr;
 
+		/// @brief パラメータ
+		std::unique_ptr<DebugCameraParameter> parameter_ = nullptr;
+
 		// 有効
 		bool enable_ = false;
 
+
+	private:
 
 		// ピボットポイント
 		Vector3 pivotPoint_ = Vector3(0.0f, 0.0f, 0.0f);

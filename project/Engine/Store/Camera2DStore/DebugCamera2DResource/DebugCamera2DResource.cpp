@@ -10,6 +10,24 @@ Engine::DebugCamera2DResource::DebugCamera2DResource()
 
 	// 2Dカメラの生成
 	camera2d_ = std::make_unique<Camera2D>();
+
+	// パラメータを取得する
+	Camera2DData::Param* param = camera2d_->GetParam();
+
+	// パラメータの生成と初期化
+	parameter_ = std::make_unique<DebugCameraParameter>("Debug");
+	parameter_->SetValue<Vector2>("Camera2D", "Translate", &param->transform.translate);
+	parameter_->SetValue<Vector2>("Camera2D", "Scale", &param->transform.scale);
+
+	// 記録ファイルがあったら反映させる
+	parameter_->RegisterGroupDataReflection("Camera2D");
+}
+
+/// @brief コンストラクタ
+Engine::DebugCamera2DResource::~DebugCamera2DResource()
+{
+	// 記録を保存する
+	parameter_->SaveFile("Camera2D");
 }
 
 /// @brief 更新処理
