@@ -14,8 +14,11 @@ Engine::FontStore::FontStore()
 /// @param text 
 /// @param pixel 
 /// @return 
-FontHandle Engine::FontStore::Load(const std::string& text, const std::string& fontName, int32_t pixel)
+FontHandle Engine::FontStore::Load(const std::string& text, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList)
 {
+	assert(device);
+	assert(commandList);
+
 	// 同じデータがあるかどうかを探す
 	for (auto& data : fontTable_)
 	{
@@ -40,7 +43,7 @@ FontHandle Engine::FontStore::Load(const std::string& text, const std::string& f
 	for (auto c : text)
 	{
 		// 文字読み込み
-		fontData->hCharTable[index] = Load(c, fontData->fontName, fontData->pixel);
+		fontData->hCharTable[index] = Load(c, fontData->fontName, fontData->pixel , device, commandList);
 
 		// 次のインデックス
 		++index;
@@ -57,7 +60,7 @@ FontHandle Engine::FontStore::Load(const std::string& text, const std::string& f
 /// @param fontName 
 /// @param pixel 
 /// @return 
-CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t pixel)
+CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList)
 {
 	// 同じデータがあるかどうかを探す
 	for (auto& data : charTable_)
@@ -83,6 +86,10 @@ CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t 
 	// 文字生成
 	hr = FT_Load_Char(charData->face, 0, charData->pixel);
 	assert(SUCCEEDED(hr));
+
+
+
+
 
 	// テーブルに記録
 	charTable_.push_back(std::move(charData));

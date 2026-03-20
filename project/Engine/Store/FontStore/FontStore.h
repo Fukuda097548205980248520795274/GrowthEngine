@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <wrl.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -27,6 +30,16 @@ namespace Engine
 
 		// ハンドル
 		CharHandle handle;
+
+
+		/// @brief テクスチャリソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = nullptr;
+
+		/// @brief SRVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle;
+
+		/// @brief 転送用リソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> uploadResource = nullptr;
 	};
 
 	/// @brief フォントデータ
@@ -61,8 +74,10 @@ namespace Engine
 		/// @param text 
 		/// @param fontName 
 		/// @param pixel 
+		/// @param device 
+		/// @param commandList 
 		/// @return 
-		FontHandle Load(const std::string& text,const std::string& fontName, int32_t pixel);
+		FontHandle Load(const std::string& text, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList);
 
 
 	private:
@@ -71,8 +86,10 @@ namespace Engine
 		/// @param c 
 		/// @param fontName 
 		/// @param pixel 
+		/// @param device 
+		/// @param commandList 
 		/// @return 
-		CharHandle Load(char c, const std::string& fontName, int32_t pixel);
+		CharHandle Load(char c, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList);
 
 
 	private:

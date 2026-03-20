@@ -25,7 +25,7 @@ Engine::Camera2D::Camera2D()
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
-		MakeOrthographicMatrix4x4(0.0f, 0.0f, param_->aspect.width, param_->aspect.height, param_->setting.nearClip, param_->setting.farClip);
+		MakeOrthographicMatrix4x4(0.0f, param_->aspect.height, param_->aspect.width, 0.0f, param_->setting.nearClip, param_->setting.farClip);
 
 	// ビュー正射影行列を作成する
 	viewProjectionMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
@@ -45,7 +45,7 @@ void Engine::Camera2D::Update()
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
-		MakeOrthographicMatrix4x4(0.0f, 0.0f, param_->aspect.width, param_->aspect.height, param_->setting.nearClip, param_->setting.farClip);
+		MakeOrthographicMatrix4x4(0.0f, param_->aspect.height, param_->aspect.width, 0.0f, param_->setting.nearClip, param_->setting.farClip);
 
 	// ビュー正射影行列を作成する
 	viewProjectionMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
