@@ -18,9 +18,6 @@ namespace Engine
 		/// @param name 
 		BaseLight(const std::string& name);
 
-		/// @brief 設置する
-		void Set();
-
 
 	protected:
 

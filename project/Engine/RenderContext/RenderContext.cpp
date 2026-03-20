@@ -133,6 +133,20 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 #endif
 }
 
+/// @brief 全てのインスタンスを削除する
+void Engine::RenderContext::PerScene()
+{ 
+	// ライトストアのリセット
+	lightStore_->SceneReset();
+
+	// プレハブのインスタンスを削除する
+	prefab_->DestroyAllInstance(); 
+
+	// コリジョンのインスタンスを削除する
+	collision3DStore_->DestroyAllInstance(); 
+	collision2DStore_->DestroyAllInstance(); 
+}
+
 /// @brief 新フレーム処理
 void Engine::RenderContext::NewFrame()
 {
@@ -151,7 +165,7 @@ void Engine::RenderContext::NewFrame()
 	// リセット
 	render_->Reset();
 	prefab_->Reset();
-	lightStore_->Reset();
+	lightStore_->FrameReset();
 
 	// コマンドリストの取得
 	commandList_ = command_->GetCommandList();
@@ -197,11 +211,14 @@ void Engine::RenderContext::PreDraw()
 	camera3DStore_->Update();
 	camera2DStore_->Update();
 
-	// ライトストアの更新
-	lightStore_->Update(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+	// シャドウマップ処理
+	lightStore_->ShadowMap(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// ライトストアの更新
+	lightStore_->Update();
 
 	// 衝突判定
 	collision3DStore_->Update();

@@ -19,6 +19,9 @@ namespace Engine
 		/// @param parameter 
 		void Initialize(LightParameter* parameter) override;
 
+		/// @brief リセット
+		void Reset() override;
+
 		/// @brief ビュープロジェクション行列を取得する
 		/// @return 
 		Matrix4x4 GetViewProjectionMatrix() const;
@@ -26,6 +29,10 @@ namespace Engine
 		/// @brief 
 		/// @return 
 		void* GetParam() override { return param_.get(); }
+
+		/// @brief 輝度を取得する
+		/// @return 
+		float GetIntensity() override { return param_->intensity; }
 
 		/// @brief 種別名を取得する
 		/// @return 

@@ -34,6 +34,27 @@ void Engine::PointLightData::Initialize(LightParameter* parameter)
 	parameter_->RegisterGroupDataReflection(group_);
 }
 
+/// @brief リセット
+void Engine::PointLightData::Reset()
+{
+	// ファイルがあった時
+	if (parameter_->IsFileFound(group_))
+	{
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+	else
+	{
+		param_->position = Vector3(0.0f, 0.0f, 0.0f);
+		param_->color = Vector3(1.0f, 1.0f, 1.0f);
+		param_->intensity = 12.0f;
+		param_->radius = 5.0f;
+		param_->decay = 4.0f;
+	}
+
+	// 使用する
+	isUse_ = true;
+}
+
 /// @brief デバッグ用描画処理
 void Engine::PointLightData::DebugDraw()
 {

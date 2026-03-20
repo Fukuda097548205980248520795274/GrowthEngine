@@ -126,6 +126,13 @@ GrowthEngine::~GrowthEngine()
 	CoUninitialize();
 }
 
+/// @brief シーン前処理
+void GrowthEngine::PerScene() const
+{
+	// シーン前処理
+	renderContext_->PerScene();
+}
+
 /// @brief 新フレーム処理
 void GrowthEngine::NewFrame()
 {

@@ -65,13 +65,51 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	spotLightResource_->Initialize(device, heap, kNumMaxLight, log);
 }
 
+/// @brief 更新処理
+void Engine::LightStore::Update()
+{
+	for (auto& data : dataTable_)
+	{
+		// 使用していないと処理しない
+		if (!data->IsUse())
+			continue;
+
+		// 輝度がないと処理しない
+		if (data->GetIntensity() <= 0.0f)
+			continue;
+
+		// ライトの種類ごとの処理
+		switch (data->GetType())
+		{
+		case Light::Type::Directional:
+			SetDirection(data.get());
+			break;
+
+		case Light::Type::Point:
+			SetPoint(data.get());
+			break;
+
+		case Light::Type::Spot:
+			SetSpot(data.get());
+			break;
+		}
+	}
+}
+
 /// @brief リセット
-void Engine::LightStore::Reset()
+void Engine::LightStore::FrameReset()
 {
 	// 数をリセット
 	numLightResource_->data_->directionalLight = 0;
 	numLightResource_->data_->pointLight = 0;
 	numLightResource_->data_->spotLight = 0;
+}
+
+/// @brief シーン毎リセット
+void Engine::LightStore::SceneReset()
+{
+	// シーン前処理
+	for (auto& data : dataTable_)data->PerScene();
 }
 
 /// @brief ライト読み込み
@@ -84,7 +122,11 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 	for (auto& data : dataTable_)
 	{
 		if (data->GetName() == name && data->GetType() == type)
+		{
+			// リセットしてハンドルを返す
+			data->Reset();
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドル
@@ -130,9 +172,12 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 }
 
 
-/// @brief 更新処理
+/// @brief シャドウマップ
 /// @param commandList 
-void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab, const Matrix4x4& projectionMatrix)
+/// @param render 
+/// @param prefab 
+/// @param projectionMatrix 
+void Engine::LightStore::ShadowMap(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab, const Matrix4x4& projectionMatrix)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
@@ -174,50 +219,6 @@ void Engine::LightStore::LightRegister(ID3D12GraphicsCommandList* commandList, U
 	directionalLightResource_->RegisterGraphics(commandList, directionalLightRootParameterIndex);
 	pointLightResource_->RegisterGraphics(commandList, pointLightRootParameterIndex);
 	spotLightResource_->RegisterGraphics(commandList, spotLightRootParameterIndex);
-}
-
-/// @brief セットする
-/// @param hLight 
-void Engine::LightStore::Set(LightHandle hLight)
-{
-	BaseLightData* data = dataTable_[hLight].get();
-
-	switch (data->GetType())
-	{
-	case Light::Type::Directional:
-		SetDirection(data);
-		break;
-
-	case Light::Type::Point:
-		SetPoint(data);
-		break;
-
-	case Light::Type::Spot:
-		SetSpot(data);
-		break;
-	}
-}
-
-/// @brief セットする
-/// @param name 
-void Engine::LightStore::Set(const std::string& name)
-{
-	BaseLightData* data = dataTable_[nameTable_[name]].get();
-
-	switch (data->GetType())
-	{
-	case Light::Type::Directional:
-		SetDirection(data);
-		break;
-
-	case Light::Type::Point:
-		SetPoint(data);
-		break;
-
-	case Light::Type::Spot:
-		SetSpot(data);
-		break;
-	}
 }
 
 /// @brief 平行光源を設置する

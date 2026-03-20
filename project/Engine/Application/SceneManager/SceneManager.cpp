@@ -59,8 +59,8 @@ void SceneManager::Update()
 	// 遷移するとき
 	if (isTransition_)
 	{
-		// 使用中のプレハブインスタンスを全て消す
-		engine_->DestroyAllPrefabInstance();
+		// シーン前処理
+		engine_->PerScene();
 
 		// ゲームシーン
 		if (sceneName_ == "Game")

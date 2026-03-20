@@ -105,6 +105,9 @@ public:
 	/// @return 
 	bool GameLoop() { return winApp_->ProcessMessage(); }
 
+	/// @brief シーン前処理
+	void PerScene() const;
+
 	/// @brief 新フレーム処理
 	void NewFrame();
 
@@ -629,10 +632,6 @@ public:
 	T* GetPostEffectParam(PostEffectHandle hPostEffect)const { return renderContext_->GetPostEffectParam<T>(hPostEffect); }
 
 
-	/// @brief 全てのプレハブインスタンスを削除する
-	void DestroyAllPrefabInstance() const { renderContext_->DestroyAllInstance(); }
-
-
 
 	/// @brief 3D衝突読み込み
 	/// @param name 
@@ -754,14 +753,6 @@ public:
 	/// @return 
 	template<typename T>
 	T* GetLightParam(const std::string& name)const { return renderContext_->GetLightParam<T>(name); }
-
-	/// @brief ライトを設置する
-	/// @param hLight 
-	void SetLight(LightHandle hLight)const { renderContext_->SetLight(hLight); }
-
-	/// @brief ライトを設置する
-	/// @param name 
-	void SetLight(const std::string& name)const { return renderContext_->SetLight(name); }
 
 
 public:

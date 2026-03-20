@@ -153,15 +153,6 @@ namespace Engine
 		T* GetLightParam(const std::string& name) { return lightStore_->GetParam<T>(name); }
 
 
-		/// @brief ライトを設置する
-		/// @param hLight 
-		void SetLight(LightHandle hLight) { lightStore_->Set(hLight); }
-
-		/// @brief ライトを設置する
-		/// @param name 
-		void SetLight(const std::string& name) { lightStore_->Set(name); }
-
-
 
 		/// @brief プリミティブのパラメータを取得する
 		/// @tparam T 
@@ -290,8 +281,8 @@ namespace Engine
 		PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name) { return prefab_->CreatePrefab2DInstance(name); }
 
 
-		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance() { prefab_->DestroyAllInstance(); collision3DStore_->DestroyAllInstance(); collision2DStore_->DestroyAllInstance(); }
+		/// @brief シーン前処理
+		void PerScene();
 
 
 

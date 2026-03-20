@@ -43,6 +43,28 @@ void Engine::DirectionalLightData::Initialize(LightParameter* parameter)
 	parameter_->RegisterGroupDataReflection(group_);
 }
 
+/// @brief リセット
+void Engine::DirectionalLightData::Reset()
+{
+	if (parameter_->IsFileFound(group_))
+	{
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+	else
+	{
+		param_->direction = Vector3(0.0f, -1.0f, 0.0f);
+		param_->intensity = 1.0f;
+		param_->color = Vector3(1.0f, 1.0f, 1.0f);
+		param_->position = Vector3(0.0f, 0.0f, 0.0f);
+		param_->size = Vector2(20.0f, 20.0f);
+		param_->minDepth = 0.1f;
+		param_->maxDepth = 15.0f;
+	}
+
+	// 使用する
+	isUse_ = true;
+}
+
 /// @brief ビュープロジェクション行列を取得する
 /// @return 
 Matrix4x4 Engine::DirectionalLightData::GetViewProjectionMatrix() const

@@ -40,6 +40,32 @@ void Engine::SpotLightData::Initialize(LightParameter* parameter)
 	parameter_->RegisterGroupDataReflection(group_);
 }
 
+/// @brief リセット
+void Engine::SpotLightData::Reset()
+{
+	// ファイルがあった時
+	if (parameter_->IsFileFound(group_))
+	{
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+	else
+	{
+		// なかったとき
+
+		param_->position = Vector3(0.0f, 0.0f, 0.0f);
+		param_->color = Vector3(1.0f, 1.0f, 1.0f);
+		param_->direction = Vector3(0.0f, 1.0f, 0.0f);
+		param_->intensity = 12.0f;
+		param_->distance = 5.0f;
+		param_->decay = 4.0f;
+		param_->cosAngle = 0.3f;
+		param_->cosFalloffStart = 1.0f;
+	}
+
+	// 使用する
+	isUse_ = true;
+}
+
 /// @brief デバッグ用描画処理
 void Engine::SpotLightData::DebugDraw()
 {

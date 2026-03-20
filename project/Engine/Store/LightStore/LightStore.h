@@ -43,8 +43,14 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Heap* heap, ShaderCompiler* compiler, Log* log);
 
-		/// @brief リセット
-		void Reset();
+		/// @brief 更新処理
+		void Update();
+
+		/// @brief フレーム毎リセット
+		void FrameReset();
+
+		/// @brief シーン毎リセット
+		void SceneReset();
 
 		/// @brief サイズを作り直す
 		/// @param device 
@@ -58,12 +64,12 @@ namespace Engine
 		/// @return 
 		LightHandle Load(const std::string& name, Light::Type type);
 
-		/// @brief 更新処理
+		/// @brief シャドウマップ
 		/// @param commandList 
 		/// @param model 
 		/// @param prefab 
 		/// @param projectionMatrix 
-		void Update(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab, const Matrix4x4& projectionMatrix);
+		void ShadowMap(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab, const Matrix4x4& projectionMatrix);
 
 		/// @brief シャドウマップ用座標変換リソースを取得する
 		/// @return 
@@ -103,14 +109,6 @@ namespace Engine
 			BaseLightData* data = dataTable_[nameTable_[name]].get();
 			return static_cast<T*>(data->GetParam());
 		}
-
-		/// @brief セットする
-		/// @param hLight 
-		void Set(LightHandle hLight);
-
-		/// @brief セットする
-		/// @param name 
-		void Set(const std::string& name);
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
