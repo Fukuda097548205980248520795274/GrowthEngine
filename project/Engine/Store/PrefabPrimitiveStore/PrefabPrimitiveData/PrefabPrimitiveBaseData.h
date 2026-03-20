@@ -48,7 +48,7 @@ namespace Engine
 
 		/// @brief ハンドルを取得する
 		/// @return 
-		PrimitiveHandle GetHandle()const { return hPrefab_; }
+		PrefabPrimitiveHandle GetHandle()const { return hPrefab_; }
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 

@@ -14,7 +14,7 @@ void Stage::Initialize(const StageData* stageData)
 
 
 	// プレイヤーモデル読み込み
-	playerModel_ = std::make_unique<PrimitiveStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"), "Player");
+	playerModel_ = std::make_unique<Render3DStaticModel>(GrowthEngine::GetInstance()->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"), "Player");
 
 	// 壁モデルプレハブ
 	wallModelPrefab_ = 

@@ -302,15 +302,15 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.cpp">
+    <ClCompile Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp">
+    <ClCompile Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.cpp">
+    <ClCompile Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -396,11 +396,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
+    <ClCompile Include="Engine\Parameter\Render3DParameter\Render3DParameter.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp">
+    <ClCompile Include="Engine\Parameter\Render2DParameter\Render2DParameter.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -508,7 +508,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\RenderContext\DX12Model\DX12Model.cpp">
+    <ClCompile Include="Engine\RenderContext\DX12Render\DX12Render.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -735,23 +735,23 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp">
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp">
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp">
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.cpp">
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveStore.cpp">
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -771,11 +771,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MinSpace</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp">
+    <ClCompile Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\SpriteStore\SpriteStore.cpp">
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -853,7 +853,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h" />
-    <ClInclude Include="Engine\Application\Primitive\BasePrimitive.h" />
+    <ClInclude Include="Engine\Application\Render3D\BaseRender3D.h" />
     <ClInclude Include="Engine\Application\Sprite\Sprite.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.h" />
     <ClInclude Include="Engine\Camera\BaseCamera.h" />
@@ -862,9 +862,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h" />
     <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h" />
     <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h" />
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.h" />
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.h" />
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h" />
+    <ClInclude Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.h" />
+    <ClInclude Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.h" />
+    <ClInclude Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
@@ -879,12 +879,12 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\PostEffectData\PostEffectData.h" />
     <ClInclude Include="Engine\Data\PrefabData\PrefabData.h" />
-    <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h" />
+    <ClInclude Include="Engine\Data\Render3DData\Render3DData.h" />
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
     <ClInclude Include="Engine\Data\SkinCluster\SkinCluster.h" />
     <ClInclude Include="Engine\Data\SkyboxData\SkyboxData.h" />
-    <ClInclude Include="Engine\Data\SpriteData\SpriteData.h" />
+    <ClInclude Include="Engine\Data\Render2DData\Render2DData.h" />
     <ClInclude Include="Engine\Data\TransformData\TransformData.h" />
     <ClInclude Include="Engine\Func\CollisionFunc\CollisionFunc.h" />
     <ClInclude Include="Engine\Func\CrushHandler\CrushHandler.h" />
@@ -910,8 +910,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.h" />
     <ClInclude Include="Engine\Parameter\PrefabPrimitiveParameter\PrefabPrimitiveParameter.h" />
     <ClInclude Include="Engine\Parameter\PrefabSpriteParameter\PrefabSpriteParameter.h" />
-    <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h" />
-    <ClInclude Include="Engine\Parameter\SpriteParameter\SpriteParameter.h" />
+    <ClInclude Include="Engine\Parameter\Render3DParameter\Render3DParameter.h" />
+    <ClInclude Include="Engine\Parameter\Render2DParameter\Render2DParameter.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
@@ -938,7 +938,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\DX12Line\DX12Line.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h" />
-    <ClInclude Include="Engine\RenderContext\DX12Model\DX12Model.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Render\DX12Render.h" />
     <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h" />
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
     <ClInclude Include="Engine\RenderContext\RenderContext.h" />
@@ -1004,17 +1004,17 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h" />
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h" />
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h" />
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h" />
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h" />
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h" />
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.h" />
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveStore.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DStore.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h" />
-    <ClInclude Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.h" />
-    <ClInclude Include="Engine\Store\SpriteStore\SpriteStore.h" />
+    <ClInclude Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.h" />
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />

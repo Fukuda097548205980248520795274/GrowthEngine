@@ -8,7 +8,7 @@
 #include "DX12Line/DX12Line.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include "DX12Offscreen/DX12Offscreen.h"
-#include "DX12Model/DX12Model.h"
+#include "DX12Render/DX12Render.h"
 #include "DX12Prefab/DX12Prefab.h"
 #include "ImGuiRender/ImGuiRender.h"
 #include <chrono>
@@ -152,24 +152,24 @@ namespace Engine
 		/// @param handle 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(PrimitiveHandle handle) { return model_->GetPrimitiveParam<T>(handle); }
+		T* GetRender3DParam(Render3DHandle handle) { return render_->GetRender3DParam<T>(handle); }
 
 		/// @brief プリミティブのパラメータを取得する
 		/// @tparam T 
 		/// @param name 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(const std::string& name) { return model_->GetPrimitiveParam<T>(name); }
+		T* GetRender3DParam(const std::string& name) { return render_->GetRender3DParam<T>(name); }
 
 		/// @brief スプライトのパラメータを取得する
 		/// @param handle 
 		/// @return 
-		Sprite::Param* GetSpriteParam(SpriteHandle handle) { return model_->GetSpriteParam(handle); }
+		Render2D::Sprite::Param* GetRender2DParam(Render2DHandle handle) { return render_->GetRender2DParam(handle); }
 
 		/// @brief スプライトのパラメータを取得する
 		/// @param name 
 		/// @return 
-		Sprite::Param* GetSpriteParam(const std::string& name) { return model_->GetSpriteParam(name); }
+		Render2D::Sprite::Param* GetRender2DParam(const std::string& name) { return render_->GetRender2DParam(name); }
 
 
 
@@ -179,9 +179,9 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Primitive::Type type, Log* log)
+		Render3DHandle LoadRender3D(ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton, const std::string& name, Render3D::Type type, Log* log)
 		{
-			return model_->LoadPrimitive(core_->GetDevice(), commandList_, hModel, hAnimation, hSkeleton, name, type, log);
+			return render_->LoadRender3D(core_->GetDevice(), commandList_, hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
 		/// @brief スプライト読み込み
@@ -189,9 +189,9 @@ namespace Engine
 		/// @param name 
 		/// @param log 
 		/// @return 
-		SpriteHandle LoadSprite(TextureHandle hTexture, const std::string& name, Log* log)
+		Render2DHandle LoadRender2D(TextureHandle hTexture, const std::string& name, Log* log)
 		{
-			return model_->LoadSprite(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
+			return render_->LoadRender2D(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
 		}
 
 		/// @brief プリミティブ用プレハブを読み込む
@@ -280,30 +280,30 @@ namespace Engine
 
 		/// @brief プリミティブの描画処理
 		/// @param handle 
-		void DrawPrimitive(PrimitiveHandle handle)
+		void DrawRender3D(Render3DHandle handle)
 		{
-			model_->DrawPrimitive(camera3DStore_.get(),skyboxStore_.get(), commandList_, handle);
+			render_->DrawRender3D(camera3DStore_.get(),skyboxStore_.get(), commandList_, handle);
 		}
 
 		/// @brief プリミティブの描画処理
 		/// @param name 
-		void DrawPrimitive(const std::string& name)
+		void DrawRender3D(const std::string& name)
 		{
-			model_->DrawPrimitive(camera3DStore_.get(), skyboxStore_.get(), commandList_, name);
+			render_->DrawRender3D(camera3DStore_.get(), skyboxStore_.get(), commandList_, name);
 		}
 
 		/// @brief スプライトの描画処理
 		/// @param handle 
-		void DrawSprite(SpriteHandle handle)
+		void DrawRender2D(Render2DHandle handle)
 		{
-			model_->DrawSprite(handle, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
+			render_->DrawRender2D(handle, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
 		}
 
 		/// @brief スプライトの描画処理
 		/// @param name 
-		void DrawSprite(const std::string& name)
+		void DrawRender2D(const std::string& name)
 		{
-			model_->DrawSprite(name, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
+			render_->DrawRender2D(name, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
 		}
 
 
@@ -468,7 +468,7 @@ namespace Engine
 		std::unique_ptr<DX12Offscreen> offscreen_ = nullptr;
 
 		// DX12Model
-		std::unique_ptr<DX12Model> model_ = nullptr;
+		std::unique_ptr<DX12Render> render_ = nullptr;
 
 		// DX12Prefab
 		std::unique_ptr<DX12Prefab> prefab_ = nullptr;

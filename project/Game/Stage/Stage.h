@@ -30,7 +30,7 @@ private:
 
 
 	// プレイヤーモデル
-	std::unique_ptr<PrimitiveStaticModel> playerModel_ = nullptr;
+	std::unique_ptr<Render3DStaticModel> playerModel_ = nullptr;
 
 	// 壁モデルプレハブ
 	std::unique_ptr<PrefabBaseStaticModel> wallModelPrefab_ = nullptr;

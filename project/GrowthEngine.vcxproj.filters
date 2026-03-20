@@ -208,21 +208,6 @@
     <Filter Include="Engine\Include\Store\SkeletonStore\SkeletonResource">
       <UniqueIdentifier>{7d6b0525-3ae4-45b8-a2c0-6d1886d5eed9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\PrimitiveStore">
-      <UniqueIdentifier>{a6f61fef-b2fb-478c-85fd-dce5b6a1eb56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData">
-      <UniqueIdentifier>{c990878f-d72c-45c7-847a-dfbe423ddf36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData">
-      <UniqueIdentifier>{962bc7ea-8fa7-4d4e-a6f8-09c77250b2b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Primitive">
-      <UniqueIdentifier>{f36c5669-5b0c-4b43-9eb6-3d03ff6f8422}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Primitive\PrimitiveStaticModel">
-      <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\DataForGPU">
       <UniqueIdentifier>{42dbadc8-5139-421c-a6eb-14b6e080ef8b}</UniqueIdentifier>
     </Filter>
@@ -286,12 +271,6 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOLightCulling">
       <UniqueIdentifier>{8c8da7b7-3e57-4c30-b288-19fc43982e1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData">
-      <UniqueIdentifier>{671be303-0741-47f1-8ef1-187a3d8c1368}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData">
-      <UniqueIdentifier>{6525448e-7018-4101-9ec1-a7ec5a198006}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Func\Interpolation">
       <UniqueIdentifier>{8c61aac0-7c65-49f2-ac89-74abaea3b158}</UniqueIdentifier>
     </Filter>
@@ -303,15 +282,6 @@
     </Filter>
     <Filter Include="Engine\Include\Resource\StructuredBufferResource">
       <UniqueIdentifier>{192573e5-5bdd-49e1-8ac0-ec3dd532fdcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Data\PrimitiveData">
-      <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Primitive\PrimitiveAnimationModel">
-      <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Primitive\PrimitiveSkinningModel">
-      <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\DataForGPU\VertexDataForGPU">
       <UniqueIdentifier>{200baf1f-7a84-4899-a658-c2c1094d38cf}</UniqueIdentifier>
@@ -352,23 +322,14 @@
     <Filter Include="Engine\Include\PSO\PSOModel\PSOPrimitive">
       <UniqueIdentifier>{56c22e12-b7ef-4b16-b363-fb15b4d450e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\SpriteStore">
-      <UniqueIdentifier>{3a244c9d-5a50-4c07-a0cf-47b2fcc1ce7a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Resource\VertexBufferResource">
       <UniqueIdentifier>{8df30616-28e8-4797-b55f-fb6f70459e10}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Resource\IndexBufferResource">
       <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\SpriteStore\SpriteResource">
-      <UniqueIdentifier>{4635c73b-9016-4d54-a5c1-85c5430d95e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Data\SpriteData">
       <UniqueIdentifier>{49f33eea-97db-4b44-8752-14422b9c24b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\RenderContext\DX12Model">
-      <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Application\Sprite">
       <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
@@ -460,9 +421,6 @@
     <Filter Include="Engine\Include\Parameter">
       <UniqueIdentifier>{3496d5fe-cf2f-46f5-8ba6-50915cfe8f42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Parameter\PrimitiveParameter">
-      <UniqueIdentifier>{d5572f16-e4c7-4857-8335-fff1e61253ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\GameCamera">
       <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
     </Filter>
@@ -501,9 +459,6 @@
     </Filter>
     <Filter Include="Engine\Include\Func\CollisionFunc">
       <UniqueIdentifier>{234806a3-2545-4875-a354-837d41a072d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Parameter\SpriteParameter">
-      <UniqueIdentifier>{d2edf250-df92-4888-bdb0-96ec339feef9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Parameter\PostEffectParameter">
       <UniqueIdentifier>{1b71f4b3-e9d1-4892-80a8-865701059401}</UniqueIdentifier>
@@ -733,6 +688,51 @@
     <Filter Include="Engine\Shader\Text">
       <UniqueIdentifier>{753f42d5-59bb-4b9e-8f7b-5ed12993e5c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Data\Render3DData">
+      <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore">
+      <UniqueIdentifier>{a6f61fef-b2fb-478c-85fd-dce5b6a1eb56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData">
+      <UniqueIdentifier>{c990878f-d72c-45c7-847a-dfbe423ddf36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DAnimationModelData">
+      <UniqueIdentifier>{671be303-0741-47f1-8ef1-187a3d8c1368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DSkinningModelData">
+      <UniqueIdentifier>{6525448e-7018-4101-9ec1-a7ec5a198006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DStaticModelData">
+      <UniqueIdentifier>{962bc7ea-8fa7-4d4e-a6f8-09c77250b2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render2DStore">
+      <UniqueIdentifier>{3a244c9d-5a50-4c07-a0cf-47b2fcc1ce7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render2DStore\SpriteResource">
+      <UniqueIdentifier>{4635c73b-9016-4d54-a5c1-85c5430d95e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Render">
+      <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\Render3DParameter">
+      <UniqueIdentifier>{d5572f16-e4c7-4857-8335-fff1e61253ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\Render2DParameter">
+      <UniqueIdentifier>{d2edf250-df92-4888-bdb0-96ec339feef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D">
+      <UniqueIdentifier>{f36c5669-5b0c-4b43-9eb6-3d03ff6f8422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DAnimationModel">
+      <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DSkinningModel">
+      <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DStaticModel">
+      <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -873,17 +873,17 @@
     <ClCompile Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.cpp">
       <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveStore.cpp">
-      <Filter>Engine\Include\Store\PrimitiveStore</Filter>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DStore.cpp">
+      <Filter>Engine\Include\Store\Render3DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.cpp">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData</Filter>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DStaticModelData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.cpp">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveStaticModel</Filter>
+    <ClCompile Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DStaticModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.cpp">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\BasePSOModel.cpp">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
@@ -894,8 +894,8 @@
     <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp">
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\RenderContext\DX12Model\DX12Model.cpp">
-      <Filter>Engine\Include\RenderContext\DX12Model</Filter>
+    <ClCompile Include="Engine\RenderContext\DX12Render\DX12Render.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Render</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
@@ -945,11 +945,11 @@
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.cpp">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DSkinningModelData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.cpp">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DAnimationModelData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Func\Interpolation\Interpolation.cpp">
       <Filter>Engine\Include\Func\Interpolation</Filter>
@@ -957,11 +957,11 @@
     <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp">
       <Filter>Engine\Include\Data\SkinCluster</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.cpp">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
+    <ClCompile Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DAnimationModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.cpp">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
+    <ClCompile Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DSkinningModel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.cpp">
       <Filter>Engine\Include\Store\PrefabPrimitiveStore</Filter>
@@ -990,11 +990,11 @@
     <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\SpriteStore\SpriteStore.cpp">
-      <Filter>Engine\Include\Store\SpriteStore</Filter>
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DStore.cpp">
+      <Filter>Engine\Include\Store\Render2DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.cpp">
-      <Filter>Engine\Include\Store\SpriteStore\SpriteResource</Filter>
+    <ClCompile Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.cpp">
+      <Filter>Engine\Include\Store\Render2DStore\SpriteResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Prefab\DX12Prefab.cpp">
       <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
@@ -1056,8 +1056,8 @@
     <ClCompile Include="Engine\Parameter\Parameter.cpp">
       <Filter>Engine\Include\Parameter</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.cpp">
-      <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
+    <ClCompile Include="Engine\Parameter\Render3DParameter\Render3DParameter.cpp">
+      <Filter>Engine\Include\Parameter\Render3DParameter</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOLine\PSOLine.cpp">
       <Filter>Engine\Include\PSO\PSOLine</Filter>
@@ -1119,8 +1119,8 @@
     <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseSegment\Collision3DBaseSegment.cpp">
       <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseSegment</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Parameter\SpriteParameter\SpriteParameter.cpp">
-      <Filter>Engine\Include\Parameter\SpriteParameter</Filter>
+    <ClCompile Include="Engine\Parameter\Render2DParameter\Render2DParameter.cpp">
+      <Filter>Engine\Include\Parameter\Render2DParameter</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp">
       <Filter>Engine\Include\Parameter\PostEffectParameter</Filter>
@@ -1442,14 +1442,14 @@
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h">
       <Filter>Engine\Include\Store\SkeletonStore\SkeletonResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveStore.h">
-      <Filter>Engine\Include\Store\PrimitiveStore</Filter>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DStore.h">
+      <Filter>Engine\Include\Store\Render3DStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData\PrimitiveStaticModelData.h">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveStaticModelData</Filter>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DStaticModelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveStaticModel\PrimitiveStaticModel.h">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveStaticModel</Filter>
+    <ClInclude Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DStaticModel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\MaterialDataForGPU</Filter>
@@ -1457,8 +1457,8 @@
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\TransformationDataForGPU</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveBaseData.h">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData</Filter>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h">
       <Filter>Engine\Include\PSO\PSOModel</Filter>
@@ -1469,8 +1469,8 @@
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h">
       <Filter>Engine\Include\PSO\EnumBlendMode</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\RenderContext\DX12Model\DX12Model.h">
-      <Filter>Engine\Include\RenderContext\DX12Model</Filter>
+    <ClInclude Include="Engine\RenderContext\DX12Render\DX12Render.h">
+      <Filter>Engine\Include\RenderContext\DX12Render</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
@@ -1526,11 +1526,11 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData\PrimitiveSkinningModelData.h">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveSkinningModelData</Filter>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DSkinningModelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData\PrimitiveAnimationModelData.h">
-      <Filter>Engine\Include\Store\PrimitiveStore\PrimitiveData\PrimitiveAnimationModelData</Filter>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DAnimationModelData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Func\Interpolation\Interpolation.h">
       <Filter>Engine\Include\Func\Interpolation</Filter>
@@ -1544,14 +1544,14 @@
     <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h">
       <Filter>Engine\Include\Resource\StructuredBufferResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Data\PrimitiveData\PrimitiveData.h">
-      <Filter>Engine\Include\Data\PrimitiveData</Filter>
+    <ClInclude Include="Engine\Data\Render3DData\Render3DData.h">
+      <Filter>Engine\Include\Data\Render3DData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveAnimationModel\PrimitiveAnimationModel.h">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveAnimationModel</Filter>
+    <ClInclude Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DAnimationModel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Primitive\PrimitiveSkinningModel\PrimitiveSkinningModel.h">
-      <Filter>Engine\Include\Application\Primitive\PrimitiveSkinningModel</Filter>
+    <ClInclude Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DSkinningModel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\VertexDataForGPU</Filter>
@@ -1595,16 +1595,16 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\SpriteStore\SpriteStore.h">
-      <Filter>Engine\Include\Store\SpriteStore</Filter>
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DStore.h">
+      <Filter>Engine\Include\Store\Render2DStore</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\VertexBufferResource\VertexBufferResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\SpriteStore\SpriteResource\SpriteResource.h">
-      <Filter>Engine\Include\Store\SpriteStore\SpriteResource</Filter>
+    <ClInclude Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.h">
+      <Filter>Engine\Include\Store\Render2DStore\SpriteResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Data\SpriteData\SpriteData.h">
+    <ClInclude Include="Engine\Data\Render2DData\Render2DData.h">
       <Filter>Engine\Include\Data\SpriteData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h">
@@ -1676,11 +1676,11 @@
     <ClInclude Include="Engine\Parameter\Parameter.h">
       <Filter>Engine\Include\Parameter</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Parameter\PrimitiveParameter\PrimitiveParameter.h">
-      <Filter>Engine\Include\Parameter\PrimitiveParameter</Filter>
+    <ClInclude Include="Engine\Parameter\Render3DParameter\Render3DParameter.h">
+      <Filter>Engine\Include\Parameter\Render3DParameter</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Primitive\BasePrimitive.h">
-      <Filter>Engine\Include\Application\Primitive</Filter>
+    <ClInclude Include="Engine\Application\Render3D\BaseRender3D.h">
+      <Filter>Engine\Include\Application\Render3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h">
       <Filter>Engine\Include\Application\PostEffect</Filter>
@@ -1775,8 +1775,8 @@
     <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.h">
       <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSegment</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Parameter\SpriteParameter\SpriteParameter.h">
-      <Filter>Engine\Include\Parameter\SpriteParameter</Filter>
+    <ClInclude Include="Engine\Parameter\Render2DParameter\Render2DParameter.h">
+      <Filter>Engine\Include\Parameter\Render2DParameter</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.h">
       <Filter>Engine\Include\Parameter\PostEffectParameter</Filter>

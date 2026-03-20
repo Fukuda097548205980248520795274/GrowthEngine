@@ -14,7 +14,7 @@ public:
 	/// @brief 初期化
 	/// @param tiles 
 	/// @param model 
-	void Initialize(PrimitiveStaticModel* model);
+	void Initialize(Render3DStaticModel* model);
 
 	/// @brief 更新処理
 	void Update() override;
@@ -26,6 +26,6 @@ public:
 private:
 
 	// モデル
-	PrimitiveStaticModel* model_ = nullptr;
+	Render3DStaticModel* model_ = nullptr;
 };
 

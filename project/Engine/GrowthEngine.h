@@ -20,9 +20,9 @@
 #include "Application/GameCamera/GameCamera3D/GameCamera3D.h"
 #include "Application/GameCamera/GameCamera2D/GameCamera2D.h"
 
-#include "Application/Primitive/PrimitiveStaticModel/PrimitiveStaticModel.h"
-#include "Application/Primitive/PrimitiveAnimationModel/PrimitiveAnimationModel.h"
-#include "Application/Primitive/PrimitiveSkinningModel/PrimitiveSkinningModel.h"
+#include "Application/Render3D/Render3DStaticModel/Render3DStaticModel.h"
+#include "Application/Render3D/Render3DAnimationModel/Render3DAnimationModel.h"
+#include "Application/Render3D/Render3DSkinningModel/Render3DSkinningModel.h"
 
 #include "Application/Sprite/Sprite.h"
 
@@ -474,42 +474,42 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	PrimitiveHandle LoadPrimitive(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Engine::Primitive::Type type) const
+	Render3DHandle LoadRender3D(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Engine::Render3D::Type type) const
 	{
-		return renderContext_->LoadPrimitive(hModel, hAnimation, hSkeleton, name, type, log_.get());
+		return renderContext_->LoadRender3D(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}
 
 	/// @brief プリミティブを描画する
 	/// @param handle 
-	void DrawPrimitive(PrimitiveHandle handle)const { renderContext_->DrawPrimitive(handle); }
+	void DrawRender3D(Render3DHandle handle)const { renderContext_->DrawRender3D(handle); }
 
 	/// @brief プリミティブを描画する
 	/// @param name 
-	void DrawPrimitive(const std::string& name)const { renderContext_->DrawPrimitive(name); }
+	void DrawRender3D(const std::string& name)const { renderContext_->DrawRender3D(name); }
 
 	/// @brief プリミティブのパラメータを取得する
 	/// @tparam T 
 	/// @param handle 
 	/// @return 
 	template<typename T>
-	T* GetPrimitiveParam(PrimitiveHandle handle)const { return renderContext_->GetPrimitiveParam<T>(handle); }
+	T* GetRender3DParam(Render3DHandle handle)const { return renderContext_->GetRender3DParam<T>(handle); }
 
 	/// @brief プリミティブのパラメータを取得する
 	/// @tparam T 
 	/// @param name 
 	/// @return 
 	template<typename T>
-	T* GetPrimitiveParam(const std::string& name)const { return renderContext_->GetPrimitiveParam<T>(name); }
+	T* GetRender3DParam(const std::string& name)const { return renderContext_->GetRender3DParam<T>(name); }
 
 	/// @brief スプライトのパラメータを取得する
 	/// @param handle 
 	/// @return 
-	Engine::Sprite::Param* GetSpriteParam(SpriteHandle handle)const { return renderContext_->GetSpriteParam(handle); }
+	Engine::Render2D::Sprite::Param* GetRender2DParam(Render2DHandle handle)const { return renderContext_->GetRender2DParam(handle); }
 
 	/// @brief スプライトのパラメータを取得する
 	/// @param name 
 	/// @return 
-	Engine::Sprite::Param* GetSpriteParam(const std::string& name)const { return renderContext_->GetSpriteParam(name); }
+	Engine::Render2D::Sprite::Param* GetRender2DParam(const std::string& name)const { return renderContext_->GetRender2DParam(name); }
 
 
 
@@ -517,18 +517,18 @@ public:
 	/// @param hTexture 
 	/// @param name 
 	/// @return 
-	SpriteHandle LoadSprite(TextureHandle hTexture, const std::string& name) const
+	Render2DHandle LoadRender2D(TextureHandle hTexture, const std::string& name) const
 	{
-		return renderContext_->LoadSprite(hTexture, name, log_.get());
+		return renderContext_->LoadRender2D(hTexture, name, log_.get());
 	}
 
 	/// @brief スプライトを描画する
 	/// @param handle 
-	void DrawSprite(SpriteHandle handle)const { renderContext_->DrawSprite(handle); }
+	void DrawRender2D(Render2DHandle handle)const { renderContext_->DrawRender2D(handle); }
 
 	/// @brief スプライトを描画する
 	/// @param name 
-	void DrawSprite(const std::string& name)const { renderContext_->DrawSprite(name); }
+	void DrawRender2D(const std::string& name)const { renderContext_->DrawRender2D(name); }
 
 
 

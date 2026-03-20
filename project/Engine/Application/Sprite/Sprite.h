@@ -1,6 +1,6 @@
 #pragma once
 #include "Handle/Handle.h"
-#include "Data/SpriteData/SpriteData.h"
+#include "Data/Render2DData/Render2DData.h"
 #include <memory>
 #include <string>
 
@@ -19,7 +19,7 @@ public:
 	void Draw();
 
 	/// @brief パラメータ
-	Engine::Sprite::Param* param_ = nullptr;
+	Engine::Render2D::Sprite::Param* param_ = nullptr;
 
 
 private:
@@ -28,7 +28,7 @@ private:
 	const GrowthEngine* engine_ = nullptr;
 
 	// ハンドル
-	SpriteHandle hSprite_ = 0;
+	Render2DHandle hRender2D_ = 0;
 
 	// 名前
 	std::string name_{};

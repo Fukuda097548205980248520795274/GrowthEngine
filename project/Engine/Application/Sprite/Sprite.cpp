@@ -9,14 +9,14 @@ Sprite::Sprite(TextureHandle hTexture, const std::string& name) : name_(name)
 	engine_ = GrowthEngine::GetInstance();
 
 	// 読み込む
-	hSprite_ = engine_->LoadSprite(hTexture, name_);
+	hRender2D_ = engine_->LoadRender2D(hTexture, name_);
 
 	// パラメータを取得する
-	param_ = engine_->GetSpriteParam(hSprite_);
+	param_ = engine_->GetRender2DParam(hRender2D_);
 }
 
 /// @brief 描画処理
 void Sprite::Draw()
 {
-	engine_->DrawSprite(hSprite_);
+	engine_->DrawRender2D(hRender2D_);
 }

@@ -98,8 +98,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	fontStore_ = std::make_unique<FontStore>();
 
 	// DX12Modelの生成と初期化
-	model_ = std::make_unique<DX12Model>();
-	model_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+	render_ = std::make_unique<DX12Render>();
+	render_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), log);
 
 	// DX12Prefabの生成と初期化
@@ -149,7 +149,7 @@ void Engine::RenderContext::NewFrame()
 #endif
 
 	// リセット
-	model_->Reset();
+	render_->Reset();
 	prefab_->Reset();
 	lightStore_->Reset();
 
@@ -181,7 +181,7 @@ void Engine::RenderContext::NewFrame()
 void Engine::RenderContext::PreDraw()
 {
 #ifdef _DEVELOPMENT
-	model_->DebugParameter();
+	render_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
 	lightStore_->DebugParameter();
@@ -191,14 +191,14 @@ void Engine::RenderContext::PreDraw()
 	commandList_ = command_->GetCommandList();
 
 	// モデル全体の更新
-	model_->Update(commandList_);
+	render_->Update(commandList_);
 
 	// カメラストアの更新
 	camera3DStore_->Update();
 	camera2DStore_->Update();
 
 	// ライトストアの更新
-	lightStore_->Update(commandList_, model_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+	lightStore_->Update(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
 	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -419,7 +419,7 @@ void Engine::RenderContext::DebugRayPicking(const Vector2& mouseScreenPos)
 
 	// リストを作成し、判定
 	std::vector<std::pair<float, bool*>> pickList;
-	model_->DebugRayPicking(ray, pickList);
+	render_->DebugRayPicking(ray, pickList);
 
 	if (!pickList.empty())
 	{

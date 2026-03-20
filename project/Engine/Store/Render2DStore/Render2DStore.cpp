@@ -1,16 +1,16 @@
-#include "PrefabSpriteStore.h"
+#include "Render2DStore.h"
 
 /// @brief コンストラクタ
-Engine::PrefabSpriteStore::PrefabSpriteStore()
+Engine::Render2DStore::Render2DStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PrefabSpriteParameter>("PrefabSprite");
+	parameter_ = std::make_unique<Render2DParameter>("Sprite");
 }
 
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
+void Engine::Render2DStore::Initialize(ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -45,22 +45,17 @@ void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
 }
 
 /// @brief 更新処理
-void Engine::PrefabSpriteStore::Update()
+void Engine::Render2DStore::Update()
 {
-	// データの更新
-	for (auto& data : dataTable_)data->Update();
+	
 }
 
 /// @brief 読み込み
 /// @param name 
 /// @param hTexture 
-/// @param numInstance 
 /// @param textureStore 
-/// @param device 
-/// @param log 
 /// @return 
-PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
-	TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
+Render2DHandle Engine::Render2DStore::Load(const std::string& name, TextureHandle hTexture, TextureStore* textureStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
@@ -71,6 +66,7 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	{
 		if (name == data->GetName())
 		{
+			// リセット
 			data->Reset();
 			return data->GetHandle();
 		}
@@ -83,35 +79,35 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	nameTable_[name] = handle;
 
 	// データの生成と初期化
-	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, numInstance, name, parameter_.get());
-	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, cameraStore, heap, device, log);
+	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, name, parameter_.get());
+	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;
 }
 
 /// @brief コマンドリストに登録する
+/// @param hSprite 
+/// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabSpriteStore::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DStore::Register(Render2DHandle hRender2D, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	for (auto& data : dataTable_)data->Register(commandList, pso);
+	dataTable_[hRender2D]->Register(viewProjection, commandList, pso);
 }
 
-/// @brief リセット
-void Engine::PrefabSpriteStore::Reset()
+/// @brief コマンドリストに登録する
+/// @param name 
+/// @param viewProjection 
+/// @param commandList 
+/// @param pso 
+void Engine::Render2DStore::Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	for (auto& data : dataTable_)data->InstanceReset();
-}
-
-/// @brief 全てのインスタンスを削除する
-void Engine::PrefabSpriteStore::DestroyAllInstance()
-{
-	for (auto& data : dataTable_)data->DestroyAllInstance();
+	dataTable_[nameTable_[name]]->Register(viewProjection, commandList, pso);
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabSpriteStore::DebugParameter()
+void Engine::Render2DStore::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();

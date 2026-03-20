@@ -4,7 +4,7 @@
 #include "LightData/PointLightData/PointLightData.h"
 #include "LightData/SpotLightData/SpotLightData.h"
 
-#include "RenderContext/DX12Model/DX12Model.h"
+#include "RenderContext/DX12Render/DX12Render.h"
 #include "RenderContext/DX12Prefab/DX12Prefab.h"
 #include <cassert>
 #include "GrowthEngine.h"
@@ -129,7 +129,7 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 
 /// @brief 更新処理
 /// @param commandList 
-void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Model* model, DX12Prefab* prefab, const Matrix4x4& projectionMatrix)
+void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab, const Matrix4x4& projectionMatrix)
 {
 	// 平行光源を探す
 	for (auto& light : dataTable_)
@@ -148,7 +148,7 @@ void Engine::LightStore::Update(ID3D12GraphicsCommandList* commandList, DX12Mode
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
 
 		// シャドウマップ用に描画
-		model->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMap_.get());
+		render->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMap_.get());
 		prefab->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapPrefab_.get());
 
 		// データを渡す

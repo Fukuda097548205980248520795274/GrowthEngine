@@ -2,7 +2,7 @@
 
 /// @brief 初期化
 /// @param stageData 
-void Player::Initialize(PrimitiveStaticModel* model)
+void Player::Initialize(Render3DStaticModel* model)
 {
 	// nullptrチェック
 	assert(model);

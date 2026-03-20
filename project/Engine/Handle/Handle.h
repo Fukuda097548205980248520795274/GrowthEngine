@@ -29,11 +29,11 @@ using Camera2DHandle = uint32_t;
 using LightHandle = uint32_t;
 
 
-// プリミティブハンドル
-using PrimitiveHandle = uint32_t;
+// 3D描画ハンドル
+using Render3DHandle = uint32_t;
 
-// スプライトハンドル
-using SpriteHandle = uint32_t;
+// 2D描画ハンドル
+using Render2DHandle = uint32_t;
 
 /// @brief プレハブプリミティブハンドル
 using PrefabPrimitiveHandle = uint32_t;
