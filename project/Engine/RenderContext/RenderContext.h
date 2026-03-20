@@ -161,15 +161,19 @@ namespace Engine
 		template<typename T>
 		T* GetRender3DParam(const std::string& name) { return render_->GetRender3DParam<T>(name); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2D描画のパラメータを取得する
+		/// @tparam T 
 		/// @param handle 
 		/// @return 
-		Render2D::Sprite::Param* GetRender2DParam(Render2DHandle handle) { return render_->GetRender2DParam(handle); }
+		template<typename T>
+		T* GetRender2DParam(Render2DHandle handle) { return render_->GetRender2DParam<T>(handle); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2D描画のパラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		Render2D::Sprite::Param* GetRender2DParam(const std::string& name) { return render_->GetRender2DParam(name); }
+		template<typename T>
+		T* GetRender2DParam(const std::string& name) { return render_->GetRender2DParam<T>(name); }
 
 
 

@@ -328,9 +328,6 @@
     <Filter Include="Engine\Include\Resource\IndexBufferResource">
       <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Data\SpriteData">
-      <UniqueIdentifier>{49f33eea-97db-4b44-8752-14422b9c24b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\Sprite">
       <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
     </Filter>
@@ -709,9 +706,6 @@
     <Filter Include="Engine\Include\Store\Render2DStore">
       <UniqueIdentifier>{3a244c9d-5a50-4c07-a0cf-47b2fcc1ce7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\Render2DStore\SpriteResource">
-      <UniqueIdentifier>{4635c73b-9016-4d54-a5c1-85c5430d95e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\RenderContext\DX12Render">
       <UniqueIdentifier>{95a9a85c-354f-4aaf-b557-5a955f1eb289}</UniqueIdentifier>
     </Filter>
@@ -732,6 +726,15 @@
     </Filter>
     <Filter Include="Engine\Include\Application\Render3D\Render3DStaticModel">
       <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render2DStore\Render2DData">
+      <UniqueIdentifier>{80b5d22c-dc11-4382-a076-19605d5acbb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render2DStore\Render2DData\Render2DSpriteData">
+      <UniqueIdentifier>{4635c73b-9016-4d54-a5c1-85c5430d95e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\Render2DData">
+      <UniqueIdentifier>{49f33eea-97db-4b44-8752-14422b9c24b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -993,8 +996,8 @@
     <ClCompile Include="Engine\Store\Render2DStore\Render2DStore.cpp">
       <Filter>Engine\Include\Store\Render2DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.cpp">
-      <Filter>Engine\Include\Store\Render2DStore\SpriteResource</Filter>
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DSpriteData\Render2DSpriteData.cpp">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DSpriteData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Prefab\DX12Prefab.cpp">
       <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
@@ -1283,6 +1286,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\FontStore\FontStore.cpp">
       <Filter>Engine\Include\Store\FontStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1601,11 +1607,11 @@
     <ClInclude Include="Engine\Resource\VertexBufferResource\VertexBufferResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.h">
-      <Filter>Engine\Include\Store\Render2DStore\SpriteResource</Filter>
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DSpriteData\Render2DSpriteData.h">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DSpriteData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\Render2DData\Render2DData.h">
-      <Filter>Engine\Include\Data\SpriteData</Filter>
+      <Filter>Engine\Include\Data\Render2DData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h">
       <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
@@ -1927,6 +1933,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\FontStore\FontStore.h">
       <Filter>Engine\Include\Store\FontStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

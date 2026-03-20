@@ -1,4 +1,4 @@
-#include "SpriteResource.h"
+#include "Render2DSpriteData.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
@@ -11,7 +11,7 @@
 /// @param vertexResource 
 /// @param indexResource 
 /// @param device 
-void Engine::SpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
+void Engine::Render2DSpriteData::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
 	TextureStore* textureStore, TextureHandle hTexture, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
@@ -85,7 +85,7 @@ void Engine::SpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* 
 }
 
 /// @brief リセット
-void Engine::SpriteResource::Reset()
+void Engine::Render2DSpriteData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -117,7 +117,7 @@ void Engine::SpriteResource::Reset()
 
 /// @brief コマンドリストに登録
 /// @param commandList 
-void Engine::SpriteResource::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DSpriteData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	Matrix4x4 worldMatrix = Make2DScaleMatrix4x4(Vector2(param_->transform.scale.x * param_->texture.size.x, param_->transform.scale.y * param_->texture.size.y))
 		* Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
@@ -166,7 +166,7 @@ void Engine::SpriteResource::Register(const Matrix4x4& viewProjection, ID3D12Gra
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::SpriteResource::DebugParameter()
+void Engine::Render2DSpriteData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 

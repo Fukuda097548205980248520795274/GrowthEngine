@@ -44,29 +44,33 @@ namespace Engine
 		/// @param commandList 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
-		/// @brief プリミティブのパラメータを取得する
+		/// @brief 3D描画のパラメータを取得する
 		/// @tparam T 
 		/// @param handle 
 		/// @return 
 		template<typename T>
 		T* GetRender3DParam(Render3DHandle handle) { return render3DStore_->GetParam<T>(handle); }
 
-		/// @brief プリミティブのパラメータを取得する
+		/// @brief 3D描画のパラメータを取得する
 		/// @tparam T 
 		/// @param name 
 		/// @return 
 		template<typename T>
 		T* GetRender3DParam(const std::string& name) { return render3DStore_->GetParam<T>(name); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2D描画のパラメータを取得する
+		/// @tparam T 
 		/// @param handle 
 		/// @return 
-		Render2D::Sprite::Param* GetRender2DParam(Render2DHandle handle) { return render2DStore_->GetParam(handle); }
+		template<typename T>
+		T* GetRender2DParam(Render2DHandle handle) { return render2DStore_->GetParam<T>(handle); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2D描画のパラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		Render2D::Sprite::Param* GetRender2DParam(const std::string& name) { return render2DStore_->GetParam(name); }
+		template<typename T>
+		T* GetRender2DParam(const std::string& name) { return render2DStore_->GetParam<T>(name); }
 
 		/// @brief プリミティブを読み込む
 		/// @param device 

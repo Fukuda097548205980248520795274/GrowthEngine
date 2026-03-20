@@ -20,6 +20,8 @@ void GameScene::Initialize()
 	editor_ = std::make_unique<StageEditor>(*stageData_);
 
 	engine_->LoadFont("String", "C:/Windows/Fonts/arial.ttf", 32);
+
+	sprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "sprite_test");
 }
 
 /// @brief 更新処理
@@ -42,4 +44,6 @@ void GameScene::Draw()
 
 	// ステージ描画
 	stage_->Draw();
+
+	sprite_->Draw();
 }

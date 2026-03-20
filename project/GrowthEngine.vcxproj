@@ -735,6 +735,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp" />
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -771,7 +772,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MinSpace</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.cpp">
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DSpriteData\Render2DSpriteData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1004,6 +1005,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h" />
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h" />
     <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h" />
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.h" />
@@ -1013,7 +1015,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h" />
-    <ClInclude Include="Engine\Store\Render2DStore\SpriteResource\SpriteResource.h" />
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DSpriteData\Render2DSpriteData.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />

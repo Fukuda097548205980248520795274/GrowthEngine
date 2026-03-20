@@ -1,4 +1,5 @@
 #include "Render2DStore.h"
+#include "Render2DData/Render2DSpriteData/Render2DSpriteData.h"
 
 /// @brief コンストラクタ
 Engine::Render2DStore::Render2DStore()
@@ -79,7 +80,7 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, TextureHandl
 	nameTable_[name] = handle;
 
 	// データの生成と初期化
-	std::unique_ptr<SpriteResource> data = std::make_unique<SpriteResource>(handle, name, parameter_.get());
+	std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name, parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
 	dataTable_.push_back(std::move(data));
 
