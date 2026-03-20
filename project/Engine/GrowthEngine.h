@@ -184,6 +184,13 @@ public:
 	/// @return 
 	LightHandle LoadLight(const std::string& name, Engine::Light::Type type) const { return renderContext_->LoadLight(name, type); }
 
+	/// @brief フォントを読み込む
+	/// @param text 
+	/// @param fontName 
+	/// @param pixel 
+	/// @return 
+	TextHandle LoadFont(const std::string& text, const std::string& fontName, int pixel)const { return renderContext_->LoadFont(text, fontName, pixel, log_.get()); }
+
 
 
 	/// @brief オーディオを再生する

@@ -106,6 +106,14 @@ namespace Engine
 		/// @return 
 		LightHandle LoadLight(const std::string& name, Light::Type type) { return lightStore_->Load(name, type); }
 
+		/// @brief フォントを読み込む
+		/// @param text 
+		/// @param fontName 
+		/// @param pixel 
+		/// @param log 
+		/// @return 
+		TextHandle LoadFont(const std::string& text, const std::string& fontName, int pixel, Log* log) { return fontStore_->Load(text, fontName, pixel, core_->GetDevice(), commandList_, heap_.get(), log); }
+
 
 
 		/// @brief 3Dカメラのパラメータを取得する

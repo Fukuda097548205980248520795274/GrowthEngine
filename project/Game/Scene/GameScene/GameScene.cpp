@@ -18,6 +18,8 @@ void GameScene::Initialize()
 
 	// エディター
 	editor_ = std::make_unique<StageEditor>(*stageData_);
+
+	engine_->LoadFont("String", "C:/Windows/Fonts/arial.ttf", 32);
 }
 
 /// @brief 更新処理

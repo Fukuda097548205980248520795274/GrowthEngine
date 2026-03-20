@@ -6,11 +6,15 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+#include <unordered_map>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 namespace Engine
 {
+	class Log;
+	class DX12Heap;
+
 	/// @brief 文字データ
 	struct CharData
 	{
@@ -23,10 +27,6 @@ namespace Engine
 
 		// ピクセル
 		int32_t pixel;
-
-
-		// FT_Face
-		FT_Face face;
 
 		// ハンドル
 		CharHandle handle;
@@ -42,8 +42,8 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D12Resource> uploadResource = nullptr;
 	};
 
-	/// @brief フォントデータ
-	struct FontData
+	/// @brief テキストデータ
+	struct TextData
 	{
 		/// @brief テキスト
 		std::string text;
@@ -57,7 +57,7 @@ namespace Engine
 
 
 		// ハンドル
-		FontHandle handle;
+		TextHandle handle;
 
 		// 文字データテーブル
 		std::vector<CharHandle> hCharTable;
@@ -77,7 +77,8 @@ namespace Engine
 		/// @param device 
 		/// @param commandList 
 		/// @return 
-		FontHandle Load(const std::string& text, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList);
+		TextHandle Load(const std::string& text, const std::string& fontName, int32_t pixel,
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, Log* log);
 
 
 	private:
@@ -89,7 +90,8 @@ namespace Engine
 		/// @param device 
 		/// @param commandList 
 		/// @return 
-		CharHandle Load(char c, const std::string& fontName, int32_t pixel, ID3D12Device* device, ID3D12GraphicsCommandList* commandList);
+		CharHandle Load(char c, const std::string& fontName, int32_t pixel, FT_Face face,
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, Log* log);
 
 
 	private:
@@ -98,10 +100,13 @@ namespace Engine
 		FT_Library ft_;
 
 
-		/// @brief フォントテーブル
-		std::vector<std::unique_ptr<FontData>> fontTable_;
+		/// @brief テキストテーブル
+		std::vector<std::unique_ptr<TextData>> textTable_;
 
 		/// @brief 文字テーブル
 		std::vector<std::unique_ptr<CharData>> charTable_;
+
+		/// @brief フォントテーブル
+		std::unordered_map<std::string, FT_Face> fontTable_;
 	};
 }
