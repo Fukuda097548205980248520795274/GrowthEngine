@@ -1,5 +1,5 @@
 #pragma once
-#include "PrefabPrimitiveData/PrefabPrimitiveBaseData.h"
+#include "Prefab3DData/Prefab3DBaseData.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include <memory>
 #include <vector>
@@ -23,12 +23,12 @@ namespace Engine
 	class BasePSOModel;
 	class SkyboxStore;
 
-	class PrefabPrimitiveStore
+	class Prefab3DStore
 	{
 	public:
 
 		/// @brief コンストラクタ
-		PrefabPrimitiveStore();
+		Prefab3DStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -55,9 +55,9 @@ namespace Engine
 		/// @param numInstance 
 		/// @param type 
 		/// @param log 
-		PrefabPrimitiveHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+		Prefab3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
 			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-			const std::string& name, uint32_t numInstance, Prefab::Type type, Log* log);
+			const std::string& name, uint32_t numInstance, Prefab3D::Type type, Log* log);
 
 		/// @brief 更新処理
 		void Update();
@@ -85,9 +85,9 @@ namespace Engine
 		/// @param hPrefabPrimitive 
 		/// @return 
 		template<typename T>
-		T* CreateInstance(PrefabPrimitiveHandle hPrefabPrimitive)
+		T* CreateInstance(Prefab3DHandle hPrefab3D)
 		{
-			PrefabPrimitiveBaseData* data = dataTable_[hPrefabPrimitive].get();
+			Prefab3DBaseData* data = dataTable_[hPrefab3D].get();
 			return static_cast<T*>(data->CreateInstance());
 		}
 
@@ -98,7 +98,7 @@ namespace Engine
 		template<typename T>
 		T* CreateInstance(const std::string& name)
 		{
-			PrefabPrimitiveBaseData* data = dataTable_[nameTable_[name]].get();
+			Prefab3DBaseData* data = dataTable_[nameTable_[name]].get();
 			return static_cast<T*>(data->CreateInstance());
 		}
 
@@ -107,9 +107,9 @@ namespace Engine
 		/// @param hPrefabPrimitive 
 		/// @return 
 		template<typename T>
-		T* GetParam(PrefabPrimitiveHandle hPrefabPrimitive)
+		T* GetParam(Prefab3DHandle hPrefab3D)
 		{
-			PrefabPrimitiveBaseData* data = dataTable_[hPrefabPrimitive].get();
+			Prefab3DBaseData* data = dataTable_[hPrefab3D].get();
 			return static_cast<T*>(data->GetParam());
 		}
 
@@ -120,7 +120,7 @@ namespace Engine
 		template<typename T>
 		T* GetParam(const std::string& name)
 		{
-			PrefabPrimitiveBaseData* data = dataTable_[nameTable_[name]].get();
+			Prefab3DBaseData* data = dataTable_[nameTable_[name]].get();
 			return static_cast<T*>(data->GetParam());
 		}
 
@@ -131,10 +131,10 @@ namespace Engine
 	private:
 
 		/// @brief データテーブル
-		std::vector<std::unique_ptr<PrefabPrimitiveBaseData>> dataTable_;
+		std::vector<std::unique_ptr<Prefab3DBaseData>> dataTable_;
 
 		/// @brief 名前テーブル
-		std::map<std::string, PrefabPrimitiveHandle> nameTable_;
+		std::map<std::string, Prefab3DHandle> nameTable_;
 
 		// パラメータ
 		std::unique_ptr<PrefabPrimitiveParameter> parameter_ = nullptr;

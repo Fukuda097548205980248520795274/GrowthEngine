@@ -7,18 +7,18 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param drawCall 
-	PrefabInstanceCube(std::function<void(const Engine::Prefab::Cube::Instance::Param*)> drawCall,
-		Engine::Prefab::Cube::Base::Param* param);
+	PrefabInstanceCube(std::function<void(const Engine::Prefab3D::Cube::Instance::Param*)> drawCall,
+		Engine::Prefab3D::Cube::Base::Param* param);
 
 	/// @brief 描画処理
 	void Draw() override;
 
 	/// @brief パラメータ
-	Engine::Prefab::Cube::Instance::Param param_;
+	Engine::Prefab3D::Cube::Instance::Param param_;
 
 private:
 
 	/// @brief 描画処理
-	std::function<void(const Engine::Prefab::Cube::Instance::Param*)> drawCall_;
+	std::function<void(const Engine::Prefab3D::Cube::Instance::Param*)> drawCall_;
 };
 

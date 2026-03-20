@@ -1,20 +1,20 @@
 #pragma once
-#include "../PrefabPrimitiveBaseData.h"
-#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
-#include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
+#include "../Prefab3DBaseData.h"
 
-#include "RenderContext/ImGuiRender/ImGuiRender.h"
+#include "Data/ModelData/ModelData.h"
+
+#include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
 
 namespace Engine
 {
+	class ModelStore;
 	class TextureStore;
 	class LightStore;
 	class Camera3DStore;
 	class Log;
 	class SkyboxStore;
-	class CubeVertexResource;
 
-	class PrefabCubeData : public PrefabPrimitiveBaseData
+	class Prefab3DStaticModelData : public Prefab3DBaseData
 	{
 	public:
 
@@ -23,26 +23,24 @@ namespace Engine
 		/// @param numInstance 
 		/// @param hPrefab 
 		/// @param hTexture 
-		/// @param parameter 
-		PrefabCubeData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, TextureHandle hTexture, PrefabPrimitiveParameter* parameter);
+		Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, PrefabPrimitiveParameter* parameter);
 
 		/// @brief 初期化
+		/// @param modelStore 
 		/// @param textureStore 
 		/// @param lightStore 
 		/// @param cameraStore 
-		/// @param vertexResource 
 		/// @param heap 
 		/// @param device 
 		/// @param log 
-		void Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
-			CubeVertexResource* vertexResource, DX12Heap* heap, ID3D12Device* device, Log* log);
+		void Initialize(ModelStore* modelStore, TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
+			DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
 
 		/// @brief リセット
 		void Reset() override;
-
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -54,7 +52,6 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		void DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
-
 
 		/// @brief パラメータを取得する
 		/// @return 
@@ -74,41 +71,35 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<Prefab::Cube::Base::Param> param_ = nullptr;
+		std::unique_ptr<Prefab3D::StaticModel::Base::Param> param_ = nullptr;
 
+		// テクスチャファイルパステーブル
+		std::vector<std::string> textureFilePathTable_;
 
-		// テクスチャハンドル
-		TextureHandle hTexture_ = 0;
+		/// @brief モデルハンドル
+		ModelHandle hModel_ = 0;
 
-		// テクスチャファイルパス
-		std::string textureFilePath_{};
+		/// @brief インスタンスのドローコール
+		void DrawCallInstance(const Engine::Prefab3D::StaticModel::Instance::Param* param);
 
-
-
+		/// @brief インスタンステーブル
+		std::list<std::unique_ptr<PrefabInstanceStaticModel>> instanceTable_;
 
 
 	private:
 
 		/// @brief プリミティブリソース
-		std::unique_ptr<StructuredBufferResource<Prefab::PrimitiveDataForGPU>> primitiveResource_;
+		std::vector<std::unique_ptr<StructuredBufferResource<Prefab::PrimitiveDataForGPU>>> primitiveResource_;
 
 		/// @brief シャドウマップ座標変換用リソース
-		std::unique_ptr<StructuredBufferResource<Matrix4x4>> shadowMapTransformationResource_;
-
-		/// @brief 立方体頂点リソース
-		CubeVertexResource* vertexResource_ = nullptr;
+		std::vector<std::unique_ptr<StructuredBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
 
 
 	private:
 
-		/// @brief インスタンスのドローコール
-		void DrawCallInstance(const Engine::Prefab::Cube::Instance::Param* param);
 
-		/// @brief インスタンステーブル
-		std::list<std::unique_ptr<PrefabInstanceCube>> instanceTable_;
-
-
-	private:
+		/// @brief モデルストア
+		ModelStore* modelStore_ = nullptr;
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
@@ -118,11 +109,5 @@ namespace Engine
 
 		/// @brief カメラストア
 		Camera3DStore* cameraStore_ = nullptr;
-
-
-	private:
-
-		// デバッグフラグ
-		bool isDebug_ = false;
 	};
 }

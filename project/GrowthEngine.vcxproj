@@ -714,24 +714,24 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.cpp" />
-    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.cpp" />
+    <ClCompile Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.cpp">
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.cpp">
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.cpp">
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.cpp">
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -879,7 +879,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Data\InputData\InputData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\PostEffectData\PostEffectData.h" />
-    <ClInclude Include="Engine\Data\PrefabData\PrefabData.h" />
+    <ClInclude Include="Engine\Data\Prefab2DData\Prefab2DData.h" />
+    <ClInclude Include="Engine\Data\Prefab3DData\Prefab3DData.h" />
     <ClInclude Include="Engine\Data\Render3DData\Render3DData.h" />
     <ClInclude Include="Engine\Data\SkeletonData\SkeletonData.h" />
     <ClInclude Include="Engine\Data\ModelData\ModelData.h" />
@@ -999,12 +1000,12 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.h" />
-    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h" />
-    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.h" />
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h" />
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h" />
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h" />
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.h" />
+    <ClInclude Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.h" />
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DStore.h" />
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.h" />
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.h" />
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />

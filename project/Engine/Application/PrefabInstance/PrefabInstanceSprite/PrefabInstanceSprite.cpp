@@ -2,8 +2,8 @@
 
 /// @brief コンストラクタ
 /// @param drawCall 
-PrefabInstanceSprite::PrefabInstanceSprite(std::function<void(const Engine::Prefab::Sprite::Instance::Param*)> drawCall, 
-	Engine::Prefab::Sprite::Base::Param* param)
+PrefabInstanceSprite::PrefabInstanceSprite(std::function<void(const Engine::Prefab2D::Sprite::Instance::Param*)> drawCall, 
+	Engine::Prefab2D::Sprite::Base::Param* param)
 	: drawCall_(drawCall)
 {
 	param_.transform.scale = param->transform.scale;

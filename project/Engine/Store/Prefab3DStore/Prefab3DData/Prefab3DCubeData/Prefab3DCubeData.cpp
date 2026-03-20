@@ -1,4 +1,4 @@
-#include "PrefabCubeData.h"
+#include "Prefab3DCubeData.h"
 
 #include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
 
@@ -17,14 +17,14 @@
 /// @param hPrefab 
 /// @param hTexture 
 /// @param parameter 
-Engine::PrefabCubeData::PrefabCubeData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, TextureHandle hTexture, PrefabPrimitiveParameter* parameter)
-	: hTexture_(hTexture), PrefabPrimitiveBaseData(name, numInstance, hPrefab, parameter)
+Engine::Prefab3DCubeData::Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, PrefabPrimitiveParameter* parameter)
+	: hTexture_(hTexture), Prefab3DBaseData(name, numInstance, hPrefab3D, parameter)
 {
 	// 種類
-	type_ = Prefab::Type::Cube;
+	type_ = Prefab3D::Type::Cube;
 
 	// パラメータを生成する
-	param_ = std::make_unique<Prefab::Cube::Base::Param>();
+	param_ = std::make_unique<Prefab3D::Cube::Base::Param>();
 
 	// 特定の名前のオブジェクトはデバッグ用となる
 	if (name == "Debug_Object_Cube")
@@ -38,7 +38,7 @@ Engine::PrefabCubeData::PrefabCubeData(const std::string& name, uint32_t numInst
 /// @param heap 
 /// @param device 
 /// @param log 
-void Engine::PrefabCubeData::Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
+void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
 	CubeVertexResource* vertexResource, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
@@ -117,7 +117,7 @@ void Engine::PrefabCubeData::Initialize(TextureStore* textureStore, LightStore* 
 }
 
 /// @brief インスタンスのドローコール
-void Engine::PrefabCubeData::DrawCallInstance(const Engine::Prefab::Cube::Instance::Param* param)
+void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::Instance::Param* param)
 {
 	if (numUseInstance_ >= numInstance_)
 		return;
@@ -178,14 +178,14 @@ void Engine::PrefabCubeData::DrawCallInstance(const Engine::Prefab::Cube::Instan
 }
 
 /// @brief 更新処理
-void Engine::PrefabCubeData::Update()
+void Engine::Prefab3DCubeData::Update()
 {
 	// 削除されたインスタンスをリストから除外する
 	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceCube>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット
-void Engine::PrefabCubeData::Reset()
+void Engine::Prefab3DCubeData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -219,7 +219,7 @@ void Engine::PrefabCubeData::Reset()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// インスタンス描画命令を行っていないときは処理しない
 	if (numUseInstance_ <= 0)
@@ -264,7 +264,7 @@ void Engine::PrefabCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCo
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	// デバッグ指定のオブジェクトは処理しない
 	if (isDebug_)return;
@@ -322,11 +322,11 @@ void Engine::PrefabCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D
 
 /// @brief インスタンスを生成する
 /// @return 
-void* Engine::PrefabCubeData::CreateInstance()
+void* Engine::Prefab3DCubeData::CreateInstance()
 {
 	// インスタンスを生成する
 	std::unique_ptr<PrefabInstanceCube> instance =
-		std::make_unique<PrefabInstanceCube>([this](const Prefab::Cube::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
+		std::make_unique<PrefabInstanceCube>([this](const Prefab3D::Cube::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
 
 	// ポインタを保存する
 	PrefabInstanceCube* pInstance = instance.get();
@@ -338,7 +338,7 @@ void* Engine::PrefabCubeData::CreateInstance()
 }
 
 /// @brief 全てのインスタンスを削除する
-void Engine::PrefabCubeData::DestroyAllInstance()
+void Engine::Prefab3DCubeData::DestroyAllInstance()
 {
 	// デバッグ用は削除しない
 	if (isDebug_)return;
@@ -347,7 +347,7 @@ void Engine::PrefabCubeData::DestroyAllInstance()
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabCubeData::DebugParameter()
+void Engine::Prefab3DCubeData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 

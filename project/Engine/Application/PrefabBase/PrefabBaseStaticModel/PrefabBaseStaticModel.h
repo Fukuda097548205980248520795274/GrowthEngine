@@ -18,12 +18,12 @@ public:
 	PrefabInstanceStaticModel* CreateInstance();
 
 	// パラメータ
-	Engine::Prefab::StaticModel::Base::Param* param_ = nullptr;
+	Engine::Prefab3D::StaticModel::Base::Param* param_ = nullptr;
 
 
 private:
 
 	// プレハブプリミティブハンドル
-	PrefabPrimitiveHandle handle_ = 0;
+	Prefab3DHandle handle_ = 0;
 };
 

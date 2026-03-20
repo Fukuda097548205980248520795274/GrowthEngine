@@ -7,18 +7,18 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param drawCall 
-	PrefabInstanceStaticModel(std::function<void(const Engine::Prefab::StaticModel::Instance::Param*)> drawCall,
-		Engine::Prefab::StaticModel::Base::Param* param);
+	PrefabInstanceStaticModel(std::function<void(const Engine::Prefab3D::StaticModel::Instance::Param*)> drawCall,
+		Engine::Prefab3D::StaticModel::Base::Param* param);
 
 	/// @brief 描画処理
 	void Draw() override;
 
 	/// @brief パラメータ
-	Engine::Prefab::StaticModel::Instance::Param param_;
+	Engine::Prefab3D::StaticModel::Instance::Param param_;
 
 private:
 
 	/// @brief 描画処理
-	std::function<void(const Engine::Prefab::StaticModel::Instance::Param*)> drawCall_;
+	std::function<void(const Engine::Prefab3D::StaticModel::Instance::Param*)> drawCall_;
 };
 

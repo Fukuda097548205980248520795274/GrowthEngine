@@ -35,11 +35,11 @@ using Render3DHandle = uint32_t;
 // 2D描画ハンドル
 using Render2DHandle = uint32_t;
 
-/// @brief プレハブプリミティブハンドル
-using PrefabPrimitiveHandle = uint32_t;
+/// @brief 3Dプレハブハンドル
+using Prefab3DHandle = uint32_t;
 
-/// @brief プレハブスプライトハンドル
-using PrefabSpriteHandle = uint32_t;
+/// @brief 2Dプレハブハンドル
+using Prefab2DHandle = uint32_t;
 
 /// @brief ポストエフェクトハンドル
 using PostEffectHandle = uint32_t;

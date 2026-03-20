@@ -7,12 +7,12 @@
 
 namespace Engine
 {
-	class PrefabSpriteStore
+	class Prefab2DStore
 	{
 	public:
 
 		/// @brief コンストラクタ
-		PrefabSpriteStore();
+		Prefab2DStore();
 
 		/// @brief 初期化
 		/// @param device 
@@ -30,7 +30,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		/// @return 
-		PrefabSpriteHandle Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
+		Prefab2DHandle Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
 			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
@@ -40,17 +40,17 @@ namespace Engine
 
 		/// @brief パラメータを取得する
 		/// @return 
-		Prefab::Sprite::Base::Param* GetParam(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->GetParam(); }
+		Prefab2D::Sprite::Base::Param* GetParam(Prefab2DHandle hPrefab2D) { return dataTable_[hPrefab2D]->GetParam(); }
 
 		/// @brief パラメータを取得する
 		/// @param name 
 		/// @return 
-		Prefab::Sprite::Base::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
+		Prefab2D::Sprite::Base::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
 
 		/// @brief インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
-		PrefabInstanceSprite* CreateInstance(PrefabSpriteHandle hPrefabSprite) { return dataTable_[hPrefabSprite]->CreateInstance(); }
+		PrefabInstanceSprite* CreateInstance(Prefab2DHandle hPrefab2D) { return dataTable_[hPrefab2D]->CreateInstance(); }
 
 		/// @brief インスタンスを作成する
 		/// @param name 
@@ -73,7 +73,7 @@ namespace Engine
 		std::vector<std::unique_ptr<PrefabSpriteResource>> dataTable_;
 
 		/// @brief 名前テーブル
-		std::unordered_map<std::string, PrefabSpriteHandle> nameTable_;
+		std::unordered_map<std::string, Prefab2DHandle> nameTable_;
 
 		// パラメータ
 		std::unique_ptr<PrefabSpriteParameter> parameter_ = nullptr;

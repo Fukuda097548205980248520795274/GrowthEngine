@@ -3,8 +3,8 @@
 #include "PSO/PSOModel/PSOPrefabSprite/PSOPrefabSprite.h"
 #include "PSO/PSOModel/PSOPrefabPrimitive/PSOPrefabPrimitive.h"
 
-#include "Store/PrefabPrimitiveStore/PrefabPrimitiveStore.h"
-#include "Store/PrefabSpriteStore/PrefabSpriteStore.h"
+#include "Store/Prefab3DStore/Prefab3DStore.h"
+#include "Store/Prefab2DStore/Prefab2DStore.h"
 
 #include "Application/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
 
@@ -54,11 +54,11 @@ namespace Engine
 		/// @param commandList 
 		/// @param log 
 		/// @return 
-		PrefabPrimitiveHandle LoadPrimitive(const std::string& name, Prefab::Type type, uint32_t numInstance,
+		Prefab3DHandle LoadPrimitive(const std::string& name, Prefab3D::Type type, uint32_t numInstance,
 			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 		{
-			return prefabPrimitiveStore_->Load(device, commandList, hTexture, hModel, hAnimation, hSkeleton, name, numInstance, type, log);
+			return prefab3DStore_->Load(device, commandList, hTexture, hModel, hAnimation, hSkeleton, name, numInstance, type, log);
 		}
 
 		/// @brief スプライトを読み込む
@@ -69,10 +69,10 @@ namespace Engine
 		/// @param heap 
 		/// @param device 
 		/// @param log 
-		PrefabSpriteHandle LoadSprite(const std::string& name, TextureHandle hTexture,uint32_t numInstance, 
+		Prefab2DHandle LoadSprite(const std::string& name, TextureHandle hTexture,uint32_t numInstance, 
 			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 		{
-			return prefabSpriteStore_->Load(name, hTexture, numInstance, textureStore,cameraStore, heap, device, log);
+			return prefab2DStore_->Load(name, hTexture, numInstance, textureStore,cameraStore, heap, device, log);
 		}
 
 
@@ -94,23 +94,23 @@ namespace Engine
 		/// @param hPrefabPrimitive 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(PrefabPrimitiveHandle hPrefabPrimitive) { return prefabPrimitiveStore_->GetParam<T>(hPrefabPrimitive); }
+		T* GetPrefab3DParam(Prefab3DHandle hPrefab3D) { return prefab3DStore_->GetParam<T>(hPrefab3D); }
 
 		/// @brief プリミティブのパラメータを取得する
 		/// @tparam T 
 		/// @param name 
 		/// @return 
 		template<typename T>
-		T* GetPrimitiveParam(const std::string& name) { return prefabPrimitiveStore_->GetParam<T>(name); }
+		T* GetPrefab3DParam(const std::string& name) { return prefab3DStore_->GetParam<T>(name); }
 
 		/// @brief スプライトのパラメータを取得する
 		/// @return 
-		Prefab::Sprite::Base::Param* GetSpriteParam(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->GetParam(hPrefabSprite); }
+		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(Prefab2DHandle hPrefab2D) { return prefab2DStore_->GetParam(hPrefab2D); }
 
 		/// @brief スプライトのパラメータを取得する
 		/// @param name 
 		/// @return 
-		Prefab::Sprite::Base::Param* GetSpriteParam(const std::string& name) { return prefabSpriteStore_->GetParam(name); }
+		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(const std::string& name) { return prefab2DStore_->GetParam(name); }
 
 
 		/// @brief プリミティブ用インスタンスを作成する
@@ -118,25 +118,25 @@ namespace Engine
 		/// @param hPrefabPrimitive 
 		/// @return 
 		template<typename T>
-		T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive) { return prefabPrimitiveStore_->CreateInstance<T>(hPrefabPrimitive); }
+		T* CreatePrefab3DInstance(Prefab3DHandle hPrefabPrimitive) { return prefab3DStore_->CreateInstance<T>(hPrefabPrimitive); }
 
 		/// @brief プリミティブ用インスタンスを作成する
 		/// @tparam T 
 		/// @param name 
 		/// @return 
 		template<typename T>
-		T* CreatePrimitiveInstance(const std::string& name) { return prefabPrimitiveStore_->CreateInstance<T>(name); }
+		T* CreatePrefab3DInstance(const std::string& name) { return prefab3DStore_->CreateInstance<T>(name); }
 
 
 		/// @brief スプライト用インスタンスを作成する
 		/// @param hPrefabSprite 
 		/// @return 
-		PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) { return prefabSpriteStore_->CreateInstance(hPrefabSprite); }
+		PrefabInstanceSprite* CreatePrefab2DInstance(Prefab2DHandle hPrefabSprite) { return prefab2DStore_->CreateInstance(hPrefabSprite); }
 
 		/// @brief スプライト用インスタンスを作成する
 		/// @param name 
 		/// @return 
-		PrefabInstanceSprite* CreateSpriteInstance(const std::string& name) { return prefabSpriteStore_->CreateInstance(name); }
+		PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name) { return prefab2DStore_->CreateInstance(name); }
 
 
 		/// @brief 全てのインスタンスを削除する
@@ -194,11 +194,11 @@ namespace Engine
 
 	private:
 
-		/// @brief プリミティブ用プレハブストア
-		std::unique_ptr<PrefabPrimitiveStore> prefabPrimitiveStore_ = nullptr;
+		/// @brief プレハブ3Dストア
+		std::unique_ptr<Prefab3DStore> prefab3DStore_ = nullptr;
 
-		/// @brief スプライト用プレハブストア
-		std::unique_ptr<PrefabSpriteStore> prefabSpriteStore_ = nullptr;
+		/// @brief プレハブ2Dストア
+		std::unique_ptr<Prefab2DStore> prefab2DStore_ = nullptr;
 
 
 #ifdef _DEVELOPMENT

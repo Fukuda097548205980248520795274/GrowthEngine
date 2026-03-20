@@ -18,12 +18,12 @@ public:
 	PrefabInstanceCube* CreateInstance();
 
 	// パラメータ
-	Engine::Prefab::Cube::Base::Param* param_ = nullptr;
+	Engine::Prefab3D::Cube::Base::Param* param_ = nullptr;
 
 
 private:
 
-	// プレハブプリミティブハンドル
-	PrefabPrimitiveHandle handle_ = 0;
+	// 3Dプレハブブハンドル
+	Prefab3DHandle handle_ = 0;
 };
 

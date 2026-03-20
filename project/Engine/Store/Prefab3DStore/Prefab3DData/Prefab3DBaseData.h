@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Handle/Handle.h"
-#include "Data/PrefabData/PrefabData.h"
+#include "Data/Prefab3DData/Prefab3DData.h"
 
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
 #include <memory>
@@ -18,7 +18,7 @@ namespace Engine
 	class PrefabPrimitiveParameter;
 	class SkyboxStore;
 
-	class PrefabPrimitiveBaseData
+	class Prefab3DBaseData
 	{
 	public:
 
@@ -26,11 +26,11 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param hPrefab 
-		PrefabPrimitiveBaseData(const std::string& name , uint32_t numInstance , PrefabPrimitiveHandle hPrefab, PrefabPrimitiveParameter* parameter)
-			: name_(name), numInstance_(numInstance),hPrefab_(hPrefab), parameter_(parameter) {}
+		Prefab3DBaseData(const std::string& name , uint32_t numInstance , Prefab3DHandle hPrefab3D, PrefabPrimitiveParameter* parameter)
+			: name_(name), numInstance_(numInstance),hPrefab3D_(hPrefab3D), parameter_(parameter) {}
 
 		/// @brief 仮想デストラクタ
-		virtual ~PrefabPrimitiveBaseData() = default;
+		virtual ~Prefab3DBaseData() = default;
 
 		/// @brief 更新処理
 		virtual void Update() = 0;
@@ -44,11 +44,11 @@ namespace Engine
 
 		/// @brief 種類を取得する
 		/// @return 
-		Prefab::Type GetType()const { return type_; }
+		Prefab3D::Type GetType()const { return type_; }
 
 		/// @brief ハンドルを取得する
 		/// @return 
-		PrefabPrimitiveHandle GetHandle()const { return hPrefab_; }
+		Prefab3DHandle GetHandle()const { return hPrefab3D_; }
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -88,10 +88,10 @@ namespace Engine
 		std::string group_{};
 
 		// 種類
-		Prefab::Type type_{};
+		Prefab3D::Type type_{};
 
 		// ハンドル
-		PrefabPrimitiveHandle hPrefab_ = 0;
+		Prefab3DHandle hPrefab3D_ = 0;
 
 
 		// インスタンス数

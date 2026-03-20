@@ -1,7 +1,7 @@
-#include "PrefabSpriteStore.h"
+#include "Prefab2DStore.h"
 
 /// @brief コンストラクタ
-Engine::PrefabSpriteStore::PrefabSpriteStore()
+Engine::Prefab2DStore::Prefab2DStore()
 {
 	// パラメータの生成
 	parameter_ = std::make_unique<PrefabSpriteParameter>("PrefabSprite");
@@ -10,7 +10,7 @@ Engine::PrefabSpriteStore::PrefabSpriteStore()
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
+void Engine::Prefab2DStore::Initialize(ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -45,7 +45,7 @@ void Engine::PrefabSpriteStore::Initialize(ID3D12Device* device, Log* log)
 }
 
 /// @brief 更新処理
-void Engine::PrefabSpriteStore::Update()
+void Engine::Prefab2DStore::Update()
 {
 	// データの更新
 	for (auto& data : dataTable_)data->Update();
@@ -59,7 +59,7 @@ void Engine::PrefabSpriteStore::Update()
 /// @param device 
 /// @param log 
 /// @return 
-PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
+Prefab2DHandle Engine::Prefab2DStore::Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
 	TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
@@ -77,7 +77,7 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 	}
 
 	// ハンドル
-	Render2DHandle handle = static_cast<Render2DHandle>(dataTable_.size());
+	Prefab2DHandle handle = static_cast<Prefab2DHandle>(dataTable_.size());
 
 	// 名前テーブルに記録する
 	nameTable_[name] = handle;
@@ -93,25 +93,25 @@ PrefabSpriteHandle Engine::PrefabSpriteStore::Load(const std::string& name, Text
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabSpriteStore::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DStore::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	for (auto& data : dataTable_)data->Register(commandList, pso);
 }
 
 /// @brief リセット
-void Engine::PrefabSpriteStore::Reset()
+void Engine::Prefab2DStore::Reset()
 {
 	for (auto& data : dataTable_)data->InstanceReset();
 }
 
 /// @brief 全てのインスタンスを削除する
-void Engine::PrefabSpriteStore::DestroyAllInstance()
+void Engine::Prefab2DStore::DestroyAllInstance()
 {
 	for (auto& data : dataTable_)data->DestroyAllInstance();
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabSpriteStore::DebugParameter()
+void Engine::Prefab2DStore::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();

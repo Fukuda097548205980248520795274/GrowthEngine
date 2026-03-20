@@ -1,11 +1,11 @@
-#include "PrefabPrimitiveStore.h"
+#include "Prefab3DStore.h"
 #include <cassert>
 
-#include "PrefabPrimitiveData/PrefabStaticModelData/PrefabStaticModelData.h"
-#include "PrefabPrimitiveData/PrefabCubeData/PrefabCubeData.h"
+#include "Prefab3DData/Prefab3DStaticModelData/Prefab3DStaticModelData.h"
+#include "Prefab3DData/Prefab3DCubeData/Prefab3DCubeData.h"
 
 /// @brief コンストラクタ
-Engine::PrefabPrimitiveStore::PrefabPrimitiveStore()
+Engine::Prefab3DStore::Prefab3DStore()
 {
 	// パラメータの生成
 	parameter_ = std::make_unique<PrefabPrimitiveParameter>("PrefabPrimitive");
@@ -22,7 +22,7 @@ Engine::PrefabPrimitiveStore::PrefabPrimitiveStore()
 /// @param lightStore 
 /// @param cameraStore 
 /// @param log 
-void Engine::PrefabPrimitiveStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
+void Engine::Prefab3DStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap,
 	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore,
 	LightStore* lightStore, Camera3DStore* cameraStore, Log* log)
 {
@@ -61,9 +61,9 @@ void Engine::PrefabPrimitiveStore::Initialize(ID3D12Device* device, ShaderCompil
 /// @param numInstance 
 /// @param type 
 /// @param log 
-PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+Prefab3DHandle Engine::Prefab3DStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
 	TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
-	const std::string& name, uint32_t numInstance, Prefab::Type type, Log* log)
+	const std::string& name, uint32_t numInstance, Prefab3D::Type type, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -81,15 +81,15 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	}
 
 	// ハンドルを取得する
-	PrefabPrimitiveHandle handle = static_cast<PrefabPrimitiveHandle>(dataTable_.size());
+	Prefab3DHandle handle = static_cast<Prefab3DHandle>(dataTable_.size());
 
 	// 名前テーブルに記録する
 	nameTable_[name] = handle;
 
 	// 静的モデルプレハブデータ
-	if (type == Prefab::Type::StaticModel)
+	if (type == Prefab3D::Type::StaticModel)
 	{
-		std::unique_ptr<PrefabStaticModelData> data = std::make_unique<PrefabStaticModelData>(name, numInstance, handle, hModel, parameter_.get());
+		std::unique_ptr<Prefab3DStaticModelData> data = std::make_unique<Prefab3DStaticModelData>(name, numInstance, handle, hModel, parameter_.get());
 		data->Initialize(modelStore_, textureStore_, lightStore_, cameraStore_, heap_, device, log);
 		dataTable_.push_back(std::move(data));
 
@@ -97,9 +97,9 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 	}
 
 	// 立方体プレハブデータ
-	if (type == Prefab::Type::Cube)
+	if (type == Prefab3D::Type::Cube)
 	{
-		std::unique_ptr<PrefabCubeData> data = std::make_unique<PrefabCubeData>(name, numInstance, handle, hTexture, parameter_.get());
+		std::unique_ptr<Prefab3DCubeData> data = std::make_unique<Prefab3DCubeData>(name, numInstance, handle, hTexture, parameter_.get());
 		data->Initialize(textureStore_, lightStore_, cameraStore_,cubeVertexResource_.get(), heap_, device, log);
 		dataTable_.push_back(std::move(data));
 
@@ -111,7 +111,7 @@ PrefabPrimitiveHandle Engine::PrefabPrimitiveStore::Load(ID3D12Device* device, I
 }
 
 /// @brief 更新処理
-void Engine::PrefabPrimitiveStore::Update()
+void Engine::Prefab3DStore::Update()
 {
 	for (auto& data : dataTable_)data->Update();
 }
@@ -120,7 +120,7 @@ void Engine::PrefabPrimitiveStore::Update()
 /// @param hPrefabPrimitive 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabPrimitiveStore::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStore::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, pso);
 }
@@ -129,25 +129,25 @@ void Engine::PrefabPrimitiveStore::Register(SkyboxStore* skyboxStore, ID3D12Grap
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabPrimitiveStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::Prefab3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	for (auto& data : dataTable_)data->DrawShadowMap(viewProjection, commandList, pso);
 }
 
 /// @brief リセット
-void Engine::PrefabPrimitiveStore::Reset()
+void Engine::Prefab3DStore::Reset()
 {
 	for (auto& data : dataTable_)data->InstanceReset();
 }
 
 /// @brief 全てのインスタンスを削除する
-void Engine::PrefabPrimitiveStore::DestroyAllInstance()
+void Engine::Prefab3DStore::DestroyAllInstance()
 {
 	for (auto& data : dataTable_)data->DestroyAllInstance();
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabPrimitiveStore::DebugParameter()
+void Engine::Prefab3DStore::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();

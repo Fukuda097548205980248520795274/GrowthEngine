@@ -289,9 +289,6 @@
     <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
       <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Data\PrefabData">
-      <UniqueIdentifier>{3527835c-37e0-4dc7-a41c-367d169b9ac6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\SkyboxStore">
       <UniqueIdentifier>{1a87e706-3342-46e1-bd18-833c1a42f1c8}</UniqueIdentifier>
     </Filter>
@@ -334,9 +331,6 @@
     <Filter Include="Engine\Include\RenderContext\DX12Prefab">
       <UniqueIdentifier>{376c0382-fd73-4a2d-8616-b1d1e8aeb0f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\PrefabSpriteStore">
-      <UniqueIdentifier>{de2afa54-1a67-4935-a31e-e5d380e7810d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\PrefabSprite">
       <UniqueIdentifier>{641b06ff-7b4d-4619-834c-f0e1cc2152fd}</UniqueIdentifier>
     </Filter>
@@ -354,9 +348,6 @@
     </Filter>
     <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceSprite">
       <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource">
-      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\DataForGPU\PrefabDataForGPU">
       <UniqueIdentifier>{f7ce20fc-3b83-4187-8bbe-886b9e5378f7}</UniqueIdentifier>
@@ -384,15 +375,6 @@
     </Filter>
     <Filter Include="Engine\Include\Application\PostEffect\PostEffectRadialBlur">
       <UniqueIdentifier>{e48f281a-7be3-4b31-bae1-6f5e4f1dd82e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore">
-      <UniqueIdentifier>{8d47ca41-2531-442a-b87d-06683851805c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData">
-      <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData">
-      <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Application\SceneManager">
       <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
@@ -667,9 +649,6 @@
     <Filter Include="Game\IObject\Wall">
       <UniqueIdentifier>{24922e12-2cab-45ab-9848-09631e1c64ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData">
-      <UniqueIdentifier>{3c01ec70-fca6-414e-9409-937ae7c7e5c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceCube">
       <UniqueIdentifier>{8d831ee4-4556-43e2-98a3-dc37d1ee1fdb}</UniqueIdentifier>
     </Filter>
@@ -735,6 +714,30 @@
     </Filter>
     <Filter Include="Engine\Include\Data\Render2DData">
       <UniqueIdentifier>{49f33eea-97db-4b44-8752-14422b9c24b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab3DStore">
+      <UniqueIdentifier>{8d47ca41-2531-442a-b87d-06683851805c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab2DStore">
+      <UniqueIdentifier>{de2afa54-1a67-4935-a31e-e5d380e7810d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab2DStore\PrefabSpriteResource">
+      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData">
+      <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData">
+      <UniqueIdentifier>{3c01ec70-fca6-414e-9409-937ae7c7e5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData">
+      <UniqueIdentifier>{f09643f6-3029-41b0-89cc-e91c632fb191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\Prefab3DData">
+      <UniqueIdentifier>{3527835c-37e0-4dc7-a41c-367d169b9ac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\Prefab2DData">
+      <UniqueIdentifier>{18b0b682-0658-4c64-a1a6-6b696a892920}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -966,14 +969,14 @@
     <ClCompile Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.cpp">
       <Filter>Engine\Include\Application\Render3D\Render3DSkinningModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.cpp">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore</Filter>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DStore.cpp">
+      <Filter>Engine\Include\Store\Prefab3DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.cpp">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData</Filter>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.cpp">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.cpp">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData</Filter>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.cpp">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxStore.cpp">
       <Filter>Engine\Include\Store\SkyboxStore</Filter>
@@ -1002,8 +1005,8 @@
     <ClCompile Include="Engine\RenderContext\DX12Prefab\DX12Prefab.cpp">
       <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.cpp">
-      <Filter>Engine\Include\Store\PrefabSpriteStore</Filter>
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DStore.cpp">
+      <Filter>Engine\Include\Store\Prefab2DStore</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
@@ -1017,8 +1020,8 @@
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
-      <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>
+    <ClCompile Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
+      <Filter>Engine\Include\Store\Prefab2DStore\PrefabSpriteResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectStore.cpp">
       <Filter>Engine\Include\Store\PostEffectStore</Filter>
@@ -1272,8 +1275,8 @@
     <ClCompile Include="Engine\Application\PrefabInstance\BasePrefabInstance.cpp">
       <Filter>Engine\Include\Application\PrefabInstance</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.cpp">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData</Filter>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.cpp">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
@@ -1565,17 +1568,17 @@
     <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
       <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveStore.h">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore</Filter>
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h">
+      <Filter>Engine\Include\Store\Prefab3DStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabPrimitiveBaseData.h">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData</Filter>
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.h">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData\PrefabStaticModelData.h">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabStaticModelData</Filter>
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.h">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Data\PrefabData\PrefabData.h">
-      <Filter>Engine\Include\Data\PrefabData</Filter>
+    <ClInclude Include="Engine\Data\Prefab3DData\Prefab3DData.h">
+      <Filter>Engine\Include\Data\Prefab3DData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h">
       <Filter>Engine\Include\Store\SkyboxStore</Filter>
@@ -1616,8 +1619,8 @@
     <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h">
       <Filter>Engine\Include\RenderContext\DX12Prefab</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteStore.h">
-      <Filter>Engine\Include\Store\PrefabSpriteStore</Filter>
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DStore.h">
+      <Filter>Engine\Include\Store\Prefab2DStore</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefabSprite</Filter>
@@ -1631,8 +1634,8 @@
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabSpriteStore\PrefabSpriteResource\PrefabSpriteResource.h">
-      <Filter>Engine\Include\Store\PrefabSpriteStore\PrefabSpriteResource</Filter>
+    <ClInclude Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.h">
+      <Filter>Engine\Include\Store\Prefab2DStore\PrefabSpriteResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\PrefabDataForGPU</Filter>
@@ -1919,8 +1922,8 @@
     <ClInclude Include="Engine\Application\PrefabInstance\BasePrefabInstance.h">
       <Filter>Engine\Include\Application\PrefabInstance</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData\PrefabCubeData.h">
-      <Filter>Engine\Include\Store\PrefabPrimitiveStore\PrefabPrimitiveData\PrefabCubeData</Filter>
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.h">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
@@ -1936,6 +1939,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\Prefab2DData\Prefab2DData.h">
+      <Filter>Engine\Include\Data\Prefab2DData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

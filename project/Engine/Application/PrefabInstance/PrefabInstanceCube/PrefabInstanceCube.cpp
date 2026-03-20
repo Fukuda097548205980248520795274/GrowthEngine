@@ -2,7 +2,7 @@
 
 /// @brief コンストラクタ
 /// @param drawCall 
-PrefabInstanceCube::PrefabInstanceCube(std::function<void(const Engine::Prefab::Cube::Instance::Param*)> drawCall, Engine::Prefab::Cube::Base::Param* param)
+PrefabInstanceCube::PrefabInstanceCube(std::function<void(const Engine::Prefab3D::Cube::Instance::Param*)> drawCall, Engine::Prefab3D::Cube::Base::Param* param)
 	: drawCall_(drawCall)
 {
 	// トランスフォーム

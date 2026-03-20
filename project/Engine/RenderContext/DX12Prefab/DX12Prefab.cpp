@@ -36,12 +36,12 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 
 
 	// プリミティブ用プレハブストアの生成
-	prefabPrimitiveStore_ = std::make_unique<PrefabPrimitiveStore>();
-	prefabPrimitiveStore_->Initialize(device, compiler, heap, modelStore, textureStore, animationStore, skeletonStore, lightStore, cameraStore, log);
+	prefab3DStore_ = std::make_unique<Prefab3DStore>();
+	prefab3DStore_->Initialize(device, compiler, heap, modelStore, textureStore, animationStore, skeletonStore, lightStore, cameraStore, log);
 
 	// スプライト用プレハブストアの生成
-	prefabSpriteStore_ = std::make_unique<PrefabSpriteStore>();
-	prefabSpriteStore_->Initialize(device, log);
+	prefab2DStore_ = std::make_unique<Prefab2DStore>();
+	prefab2DStore_->Initialize(device, log);
 
 
 	// プリミティブ用プレハブ頂点シェーダ
@@ -85,8 +85,8 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 void Engine::DX12Prefab::Update()
 {
 	// 更新
-	prefabPrimitiveStore_->Update();
-	prefabSpriteStore_->Update();
+	prefab3DStore_->Update();
+	prefab2DStore_->Update();
 }
 
 /// @brief リセット
@@ -109,7 +109,7 @@ void Engine::DX12Prefab::Reset()
 /// @param pso 
 void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
-	prefabPrimitiveStore_->ShadowMapDraw(viewProjection, commandList, pso);
+	prefab3DStore_->ShadowMapDraw(viewProjection, commandList, pso);
 }
 
 /// @brief プレハブ描画処理
@@ -117,22 +117,22 @@ void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12Gr
 /// @param commandList 
 void Engine::DX12Prefab::DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	prefabPrimitiveStore_->Register(skyboxStore, commandList, psoPrefabPrimitive_.get());
-	prefabSpriteStore_->Register(commandList, psoPrefabSprite_.get());
+	prefab3DStore_->Register(skyboxStore, commandList, psoPrefabPrimitive_.get());
+	prefab2DStore_->Register(commandList, psoPrefabSprite_.get());
 }
 
 /// @brief 全てのインスタンスを削除する
 void Engine::DX12Prefab::DestroyAllInstance()
 {
-	prefabPrimitiveStore_->DestroyAllInstance();
-	prefabSpriteStore_->DestroyAllInstance();
+	prefab3DStore_->DestroyAllInstance();
+	prefab2DStore_->DestroyAllInstance();
 }
 
 /// @brief リセット
 void Engine::DX12Prefab::PrefabReset()
 {
-	prefabPrimitiveStore_->Reset();
-	prefabSpriteStore_->Reset();
+	prefab3DStore_->Reset();
+	prefab2DStore_->Reset();
 }
 
 /// @brief デバッグ用パラメータ
@@ -149,12 +149,12 @@ void Engine::DX12Prefab::DebugParameter()
 
 	ImGui::SeparatorText("Primitive");
 
-	prefabPrimitiveStore_->DebugParameter();
+	prefab3DStore_->DebugParameter();
 
 	ImGui::Text("\n\n\n\n\n");
 	ImGui::SeparatorText("Sprite");
 
-	prefabSpriteStore_->DebugParameter();
+	prefab2DStore_->DebugParameter();
 
 	// 終了
 	ImGui::End();

@@ -18,12 +18,12 @@ public:
 	PrefabInstanceSprite* CreateInstance();
 
 	// パラメータ
-	Engine::Prefab::Sprite::Base::Param* param_ = nullptr;
+	Engine::Prefab2D::Sprite::Base::Param* param_ = nullptr;
 
 
 private:
 
-	// プレハブスプライトハンドル
-	PrefabSpriteHandle handle_ = 0;
+	// 2Dプレハブハンドル
+	Prefab2DHandle handle_ = 0;
 };
 

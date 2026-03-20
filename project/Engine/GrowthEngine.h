@@ -544,7 +544,7 @@ public:
 	/// @param hAnimation 
 	/// @param hSkeleton 
 	/// @return 
-	PrefabPrimitiveHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab::Type type,uint32_t numInstance,
+	Prefab3DHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab3D::Type type,uint32_t numInstance,
 		TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton) const
 	{
 		return renderContext_->LoadPrefabPrimitive(name, type, numInstance, hTexture, hModel, hAnimation, hSkeleton, log_.get());
@@ -555,7 +555,7 @@ public:
 	/// @param numInstance 
 	/// @param hTexture 
 	/// @return 
-	PrefabSpriteHandle LoadPrefabSprite(const std::string& name, uint32_t numInstance, TextureHandle hTexture) const
+	Prefab2DHandle LoadPrefabSprite(const std::string& name, uint32_t numInstance, TextureHandle hTexture) const
 	{
 		return renderContext_->LoadPrefabSprite(name, hTexture, numInstance, log_.get());
 	}
@@ -566,23 +566,23 @@ public:
 	/// @param hPrefabPrimitive 
 	/// @return 
 	template<typename T>
-	T* GetPrefabPrimitiveParam(PrefabPrimitiveHandle hPrefabPrimitive)const { return renderContext_->GetPrefabPrimitiveParam<T>(hPrefabPrimitive); }
+	T* GetPrefab3DParam(Prefab3DHandle hPrefab3D)const { return renderContext_->GetPrefab3DParam<T>(hPrefab3D); }
 
 	/// @brief プリミティブ用プレハブのパラメータを取得する
 	/// @tparam T 
 	/// @param name 
 	/// @return 
 	template<typename T>
-	T* GetPrefabPrimitiveParam(const std::string& name)const { return renderContext_->GetPrefabPrimitiveParam<T>(name); }
+	T* GetPrefab3DParam(const std::string& name)const { return renderContext_->GetPrefab3DParam<T>(name); }
 
 	/// @brief スプライト用プレハブのパラメータを取得する
 	/// @return 
-	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(PrefabSpriteHandle hPrefabSprite)const { return renderContext_->GetPrefabSpriteParam(hPrefabSprite); }
+	Engine::Prefab2D::Sprite::Base::Param* GetPrefab2DParam(Prefab2DHandle hPrefab2D)const { return renderContext_->GetPrefab2DParam(hPrefab2D); }
 
 	/// @brief スプライト用プレハブのパラメータを取得する
 	/// @param name 
 	/// @return 
-	Engine::Prefab::Sprite::Base::Param* GetPrefabSpriteParam(const std::string& name)const { return renderContext_->GetPrefabSpriteParam(name); }
+	Engine::Prefab2D::Sprite::Base::Param* GetPrefab2DParam(const std::string& name)const { return renderContext_->GetPrefab2DParam(name); }
 
 
 	/// @brief プリミティブ用インスタンスを作成する
@@ -590,24 +590,24 @@ public:
 	/// @param hPrefabPrimitive 
 	/// @return 
 	template<typename T>
-	T* CreatePrimitiveInstance(PrefabPrimitiveHandle hPrefabPrimitive)const { return renderContext_->CreatePrimitiveInstance<T>(hPrefabPrimitive); }
+	T* CreatePrefab3DInstance(Prefab3DHandle hPrefab3D)const { return renderContext_->CreatePrefab3DInstance<T>(hPrefab3D); }
 
 	/// @brief プリミティブ用インスタンスを作成する
 	/// @tparam T 
 	/// @param name 
 	/// @return 
 	template<typename T>
-	T* CreatePrimitiveInstance(const std::string& name)const { return renderContext_->CreatePrimitiveInstance<T>(name); }
+	T* CreatePrefab3DInstance(const std::string& name)const { return renderContext_->CreatePrefab3DInstance<T>(name); }
 
 	/// @brief スプライト用インスタンスを作成する
 	/// @param hPrefabSprite 
 	/// @return 
-	PrefabInstanceSprite* CreateSpriteInstance(PrefabSpriteHandle hPrefabSprite) const { return renderContext_->CreateSpriteInstance(hPrefabSprite); }
+	PrefabInstanceSprite* CreatePrefab2DInstance(Prefab2DHandle hPrefab2D) const { return renderContext_->CreatePrefab2DInstance(hPrefab2D); }
 
 	/// @brief スプライト用インスタンスを作成する
 	/// @param name 
 	/// @return 
-	PrefabInstanceSprite* CreateSpriteInstance(const std::string& name)const { renderContext_->CreateSpriteInstance(name); }
+	PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name)const { renderContext_->CreatePrefab2DInstance(name); }
 
 
 

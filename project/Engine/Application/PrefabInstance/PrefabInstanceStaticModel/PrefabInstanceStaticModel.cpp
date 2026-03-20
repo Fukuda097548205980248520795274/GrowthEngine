@@ -2,8 +2,8 @@
 
 /// @brief コンストラクタ
 /// @param drawCall 
-PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const Engine::Prefab::StaticModel::Instance::Param*)> drawCall,
-	Engine::Prefab::StaticModel::Base::Param* param)
+PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const Engine::Prefab3D::StaticModel::Instance::Param*)> drawCall,
+	Engine::Prefab3D::StaticModel::Base::Param* param)
 	: drawCall_(drawCall)
 {
 	param_.modelTransform.scale = param->modelTransform.scale;

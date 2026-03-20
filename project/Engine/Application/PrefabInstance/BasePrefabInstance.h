@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
-#include "Data/PrefabData/PrefabData.h"
+#include "Data/Prefab3DData/Prefab3DData.h"
+#include "Data/Prefab2DData/Prefab2DData.h"
 
 namespace Engine
 {

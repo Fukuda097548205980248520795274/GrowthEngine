@@ -12,12 +12,12 @@ PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance,
 	handle_ = engine_->LoadPrefabSprite(name_, numInstance, hTexture);
 
 	// パラメータを取得する
-	param_ = engine_->GetPrefabSpriteParam(handle_);
+	param_ = engine_->GetPrefab2DParam(handle_);
 }
 
 /// @brief インスタンスを生成する
 [[nodiscard]]
 PrefabInstanceSprite* PrefabBaseSprite::CreateInstance()
 {
-	return engine_->CreateSpriteInstance(handle_);
+	return engine_->CreatePrefab2DInstance(handle_);
 }

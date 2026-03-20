@@ -33,7 +33,7 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	cameraStore_ = cameraStore;
 
 	// パラメータの生成
-	param_ = std::make_unique<Prefab::Sprite::Base::Param>();
+	param_ = std::make_unique<Prefab2D::Sprite::Base::Param>();
 
 	// トラスフォーム
 	param_->transform.scale = Vector2(1.0f, 1.0f);
@@ -169,7 +169,7 @@ PrefabInstanceSprite* Engine::PrefabSpriteResource::CreateInstance()
 {
 	// インスタンスを生成する
 	std::unique_ptr<PrefabInstanceSprite> instance =
-		std::make_unique<PrefabInstanceSprite>([this](const Prefab::Sprite::Instance::Param* param) {InstanceDrawCall(param); }, param_.get());
+		std::make_unique<PrefabInstanceSprite>([this](const Prefab2D::Sprite::Instance::Param* param) {InstanceDrawCall(param); }, param_.get());
 
 	// ポインタを保存する
 	PrefabInstanceSprite* pInstance = instance.get();
@@ -182,7 +182,7 @@ PrefabInstanceSprite* Engine::PrefabSpriteResource::CreateInstance()
 
 /// @brief インスタンスのドローコール
 /// @param param 
-void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab::Sprite::Instance::Param* param)
+void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Instance::Param* param)
 {
 	// nullptrチェック
 	assert(param);

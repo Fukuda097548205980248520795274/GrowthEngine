@@ -2,7 +2,7 @@
 #include <memory>
 #include "Handle/Handle.h"
 #include "Resource/StructuredBufferResource/StructuredBufferResource.h"
-#include "Data/PrefabData/PrefabData.h"
+#include "Data/Prefab2DData/Prefab2DData.h"
 #include "Resource/VertexBufferResource/VertexBufferResource.h"
 #include "Data/ModelData/ModelData.h"
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
@@ -29,8 +29,8 @@ namespace Engine
 		/// @param hTexture 
 		/// @param numInstance 
 		/// @param name 
-		PrefabSpriteResource(PrefabSpriteHandle hPrefabSprite, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
-			: hPrefabSprite_(hPrefabSprite), numInstance_(numInstance), name_(name), parameter_(parameter) {
+		PrefabSpriteResource(Prefab2DHandle hPrefab2D, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
+			: hPrefab2D_(hPrefab2D), numInstance_(numInstance), name_(name), parameter_(parameter) {
 		}
 
 		/// @brief 初期化
@@ -55,11 +55,11 @@ namespace Engine
 
 		/// @brief ハンドルを取得する
 		/// @return 
-		PrefabSpriteHandle GetHandle()const { return hPrefabSprite_; }
+		Prefab2DHandle GetHandle()const { return hPrefab2D_; }
 
 		/// @brief パラメータを取得する
 		/// @return 
-		Prefab::Sprite::Base::Param* GetParam() { return param_.get(); }
+		Prefab2D::Sprite::Base::Param* GetParam() { return param_.get(); }
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -89,13 +89,13 @@ namespace Engine
 		std::string group_{};
 
 		// ハンドル
-		PrefabSpriteHandle hPrefabSprite_ = 0;
+		Prefab2DHandle hPrefab2D_ = 0;
 
 		// インスタンス数
 		uint32_t numInstance_ = 0;
 
 		/// @brief パラメータ
-		std::unique_ptr<Prefab::Sprite::Base::Param> param_ = nullptr;
+		std::unique_ptr<Prefab2D::Sprite::Base::Param> param_ = nullptr;
 
 		/// @brief テクスチャファイルパス
 		std::string textureFilePath_{};
@@ -108,7 +108,7 @@ namespace Engine
 
 		/// @brief インスタンスのドローコール
 		/// @param param 
-		void InstanceDrawCall(const Prefab::Sprite::Instance::Param* param);
+		void InstanceDrawCall(const Prefab2D::Sprite::Instance::Param* param);
 
 		// 使用インスタンス数
 		uint32_t useInstance_ = 0;

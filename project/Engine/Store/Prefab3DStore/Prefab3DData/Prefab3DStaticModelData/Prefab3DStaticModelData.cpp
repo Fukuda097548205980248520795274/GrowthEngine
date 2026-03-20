@@ -1,4 +1,4 @@
-#include "PrefabStaticModelData.h"
+#include "Prefab3DStaticModelData.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "PSO/PSOShadowMap/BasePSOShadowMap.h"
@@ -17,14 +17,14 @@
 /// @param numInstance 
 /// @param hPrefab 
 /// @param hTexture 
-Engine::PrefabStaticModelData::PrefabStaticModelData(const std::string& name, uint32_t numInstance, PrefabPrimitiveHandle hPrefab, ModelHandle hModel, PrefabPrimitiveParameter* parameter)
-	: hModel_(hModel), PrefabPrimitiveBaseData(name, numInstance, hPrefab, parameter)
+Engine::Prefab3DStaticModelData::Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, PrefabPrimitiveParameter* parameter)
+	: hModel_(hModel), Prefab3DBaseData(name, numInstance, hPrefab3D, parameter)
 {
 	// 種類
-	type_ = Prefab::Type::StaticModel;
+	type_ = Prefab3D::Type::StaticModel;
 
 	// パラメータを生成する
-	param_ = std::make_unique<Prefab::StaticModel::Base::Param>();
+	param_ = std::make_unique<Prefab3D::StaticModel::Base::Param>();
 }
 
 /// @brief 初期化
@@ -35,7 +35,7 @@ Engine::PrefabStaticModelData::PrefabStaticModelData(const std::string& name, ui
 /// @param heap 
 /// @param device 
 /// @param log 
-void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
+void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
 	DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
@@ -141,14 +141,14 @@ void Engine::PrefabStaticModelData::Initialize(ModelStore* modelStore, TextureSt
 }
 
 /// @brief 更新処理
-void Engine::PrefabStaticModelData::Update()
+void Engine::Prefab3DStaticModelData::Update()
 {
 	// 削除されたインスタンスをリストから除外する
 	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceStaticModel>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット
-void Engine::PrefabStaticModelData::Reset()
+void Engine::Prefab3DStaticModelData::Reset()
 {
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
@@ -198,7 +198,7 @@ void Engine::PrefabStaticModelData::Reset()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// インスタンス描画命令を行っていないときは処理しない
 	if (numUseInstance_ <= 0)
@@ -250,7 +250,7 @@ void Engine::PrefabStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12Gra
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabStaticModelData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 
 	// モデルデータを取得する
@@ -323,11 +323,11 @@ void Engine::PrefabStaticModelData::DrawShadowMap(const Matrix4x4& viewProjectio
 
 /// @brief インスタンスを生成する
 /// @return 
-void* Engine::PrefabStaticModelData::CreateInstance()
+void* Engine::Prefab3DStaticModelData::CreateInstance()
 {
 	// インスタンスを生成する
 	std::unique_ptr<PrefabInstanceStaticModel> instance =
-		std::make_unique<PrefabInstanceStaticModel>([this](const Prefab::StaticModel::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
+		std::make_unique<PrefabInstanceStaticModel>([this](const Prefab3D::StaticModel::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
 
 	// ポインタを保存する
 	PrefabInstanceStaticModel* pInstance = instance.get();
@@ -339,13 +339,13 @@ void* Engine::PrefabStaticModelData::CreateInstance()
 }
 
 /// @brief 全てのインスタンスを削除する
-void Engine::PrefabStaticModelData::DestroyAllInstance()
+void Engine::Prefab3DStaticModelData::DestroyAllInstance()
 {
 	instanceTable_.clear();
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabStaticModelData::DebugParameter()
+void Engine::Prefab3DStaticModelData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
@@ -530,7 +530,7 @@ void Engine::PrefabStaticModelData::DebugParameter()
 }
 
 /// @brief インスタンスのドローコール
-void Engine::PrefabStaticModelData::DrawCallInstance(const Engine::Prefab::StaticModel::Instance::Param* param)
+void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::StaticModel::Instance::Param* param)
 {
 	if (numUseInstance_ >= numInstance_)
 		return;

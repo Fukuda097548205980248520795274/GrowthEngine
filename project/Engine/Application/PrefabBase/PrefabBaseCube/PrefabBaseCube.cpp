@@ -9,15 +9,15 @@ PrefabBaseCube::PrefabBaseCube(TextureHandle hTexture, uint32_t numInstance, con
 	: BasePrefabBase(name)
 {
 	// 読み込む
-	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab::Type::Cube, numInstance, hTexture, 0, 0, 0);
+	handle_ = engine_->LoadPrefabPrimitive(name_, Engine::Prefab3D::Type::Cube, numInstance, hTexture, 0, 0, 0);
 
 	// パラメータを取得する
-	param_ = engine_->GetPrefabPrimitiveParam<Engine::Prefab::Cube::Base::Param>(handle_);
+	param_ = engine_->GetPrefab3DParam<Engine::Prefab3D::Cube::Base::Param>(handle_);
 }
 
 /// @brief インスタンスを生成する
 [[nodiscard]]
 PrefabInstanceCube* PrefabBaseCube::CreateInstance()
 {
-	return engine_->CreatePrimitiveInstance<PrefabInstanceCube>(handle_);
+	return engine_->CreatePrefab3DInstance<PrefabInstanceCube>(handle_);
 }
