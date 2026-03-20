@@ -145,6 +145,22 @@ namespace Engine
 		template <typename T>
 		T* GetLightParam(LightHandle handle) { return lightStore_->GetParam<T>(handle); }
 
+		/// @brief ライトのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetLightParam(const std::string& name) { return lightStore_->GetParam<T>(name); }
+
+
+		/// @brief ライトを設置する
+		/// @param hLight 
+		void SetLight(LightHandle hLight) { lightStore_->Set(hLight); }
+
+		/// @brief ライトを設置する
+		/// @param name 
+		void SetLight(const std::string& name) { lightStore_->Set(name); }
+
 
 
 		/// @brief プリミティブのパラメータを取得する
@@ -393,11 +409,6 @@ namespace Engine
 		/// @param name 
 		/// @param targetName 
 		void SetCollision2DTarget(const std::string& name, const std::string& targetName) { collision2DStore_->SetCollision2DTarget(name, targetName); }
-
-
-		/// @brief ライトを設置する
-		/// @param hLight 
-		void SetLight(LightHandle hLight) { lightStore_->Set(hLight); }
 
 
 

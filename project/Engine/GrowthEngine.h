@@ -704,12 +704,6 @@ public:
 
 
 
-	/// @brief ライトを設置する
-	/// @param hLight 
-	void SetLight(LightHandle hLight)const { renderContext_->SetLight(hLight); }
-
-
-
 	/// @brief デバッグ用の線を描画する
 	/// @param start 
 	/// @param end 
@@ -753,6 +747,21 @@ public:
 	/// @return 
 	template <typename T>
 	T* GetLightParam(LightHandle handle) const { return renderContext_->GetLightParam<T>(handle); }
+
+	/// @brief ライトのパラメータを取得する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* GetLightParam(const std::string& name)const { return renderContext_->GetLightParam<T>(name); }
+
+	/// @brief ライトを設置する
+	/// @param hLight 
+	void SetLight(LightHandle hLight)const { renderContext_->SetLight(hLight); }
+
+	/// @brief ライトを設置する
+	/// @param name 
+	void SetLight(const std::string& name)const { return renderContext_->SetLight(name); }
 
 
 private:

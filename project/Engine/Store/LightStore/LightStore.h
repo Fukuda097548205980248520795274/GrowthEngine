@@ -93,9 +93,24 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetParam(const std::string& name)
+		{
+			BaseLightData* data = dataTable_[nameTable_[name]].get();
+			return static_cast<T*>(data->GetParam());
+		}
+
 		/// @brief セットする
 		/// @param hLight 
 		void Set(LightHandle hLight);
+
+		/// @brief セットする
+		/// @param name 
+		void Set(const std::string& name);
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
@@ -120,6 +135,9 @@ namespace Engine
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<BaseLightData>> dataTable_;
+
+		/// @brief 名前テーブル
+		std::unordered_map<std::string, LightHandle> nameTable_;
 
 		/// @brief パラメータ
 		std::unique_ptr<LightParameter> parameter_ = nullptr;

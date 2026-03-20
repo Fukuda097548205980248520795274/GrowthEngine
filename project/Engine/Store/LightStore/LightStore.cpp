@@ -90,6 +90,9 @@ LightHandle Engine::LightStore::Load(const std::string& name, Light::Type type)
 	// ハンドル
 	LightHandle handle = static_cast<LightHandle>(dataTable_.size());
 
+	// 名前テーブルに記録する
+	nameTable_[name] = handle;
+
 	// 平行光源
 	if (type == Light::Type::Directional)
 	{
@@ -178,6 +181,28 @@ void Engine::LightStore::LightRegister(ID3D12GraphicsCommandList* commandList, U
 void Engine::LightStore::Set(LightHandle hLight)
 {
 	BaseLightData* data = dataTable_[hLight].get();
+
+	switch (data->GetType())
+	{
+	case Light::Type::Directional:
+		SetDirection(data);
+		break;
+
+	case Light::Type::Point:
+		SetPoint(data);
+		break;
+
+	case Light::Type::Spot:
+		SetSpot(data);
+		break;
+	}
+}
+
+/// @brief セットする
+/// @param name 
+void Engine::LightStore::Set(const std::string& name)
+{
+	BaseLightData* data = dataTable_[nameTable_[name]].get();
 
 	switch (data->GetType())
 	{
