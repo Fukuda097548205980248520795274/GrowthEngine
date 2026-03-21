@@ -13,6 +13,7 @@ namespace Engine
 	class BasePSOShadowMap;
 	class ModelStore;
 	class TextureStore;
+	class FontStore;
 	class Camera3DStore;
 	class SkyboxStore;
 
@@ -88,16 +89,20 @@ namespace Engine
 			return render3DStore_->Load(device, commandList, hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
-		/// @brief スプライト読み込み
-		/// @param textureStore 
-		/// @param device 
-		/// @param hTexture 
+		/// @brief 2D描画読み込み
 		/// @param name 
+		/// @param type 
+		/// @param hTexture 
+		/// @param hText 
+		/// @param textureStore 
+		/// @param fontStore 
+		/// @param device 
 		/// @param log 
 		/// @return 
-		Render2DHandle LoadRender2D(TextureStore* textureStore, ID3D12Device* device, TextureHandle hTexture, const std::string& name, Log* log)
+		Render2DHandle LoadRender2D(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
+			TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log)
 		{
-			return render2DStore_->Load(name, hTexture, textureStore, device, log);
+			return render2DStore_->Load(name,type, hTexture,hText, textureStore,fontStore, device, log);
 		}
 
 
@@ -166,6 +171,9 @@ namespace Engine
 		// スプライトピクセルシェーダ
 		ComPtr<IDxcBlob> spritePS_ = nullptr;
 
+		/// @brief テキストピクセルシェーダ
+		ComPtr<IDxcBlob> textPS_ = nullptr;
+
 
 	private:
 
@@ -174,6 +182,9 @@ namespace Engine
 
 		// スプライトPSO
 		std::unique_ptr<PSOSprite> psoSprite_ = nullptr;
+
+		// テキストPSO
+		std::unique_ptr<PSOSprite> psoText_ = nullptr;
 
 
 	private:

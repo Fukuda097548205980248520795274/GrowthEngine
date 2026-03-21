@@ -6,6 +6,8 @@
 
 namespace Engine
 {
+	class FontStore;
+
 	class Render2DStore
 	{
 	public:
@@ -23,10 +25,16 @@ namespace Engine
 
 		/// @brief 読み込み
 		/// @param name 
+		/// @param type 
 		/// @param hTexture 
+		/// @param hText 
 		/// @param textureStore 
+		/// @param fontStore 
+		/// @param device 
+		/// @param log 
 		/// @return 
-		Render2DHandle Load(const std::string& name, TextureHandle hTexture, TextureStore* textureStore, ID3D12Device* device, Log* log);
+		Render2DHandle Load(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
+			TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 

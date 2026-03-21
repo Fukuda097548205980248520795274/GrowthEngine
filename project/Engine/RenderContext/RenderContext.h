@@ -200,9 +200,9 @@ namespace Engine
 		/// @param name 
 		/// @param log 
 		/// @return 
-		Render2DHandle LoadRender2D(TextureHandle hTexture, const std::string& name, Log* log)
+		Render2DHandle LoadRender2D(const std::string& name, Render2D::Type type, TextureHandle hTexture,TextHandle hText, Log* log)
 		{
-			return render_->LoadRender2D(textureStore_.get(), core_->GetDevice(), hTexture, name, log);
+			return render_->LoadRender2D(name, type, hTexture, hText, textureStore_.get(), fontStore_.get(), core_->GetDevice(), log);
 		}
 
 		/// @brief プリミティブ用プレハブを読み込む

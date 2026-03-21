@@ -41,6 +41,10 @@ void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	spritePS_ = shaderCompiler->Compile(L"./Assets/Shader/Sprite/Sprite.PS.hlsl", L"ps_6_0");
 	assert(spritePS_);
 
+	// テキストピクセルシェーダ
+	textPS_ = shaderCompiler->Compile(L"./Assets/Shader/Text/Text.PS.hlsl", L"ps_6_0");
+	assert(textPS_);
+
 
 
 	// プリミティブPSOの生成と初期化
@@ -50,6 +54,10 @@ void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	// スプライトPSOの生成と初期化
 	psoSprite_ = std::make_unique<PSOSprite>();
 	psoSprite_->Initialize(device, spriteVS_.Get(), spritePS_.Get(), log);
+
+	// テキストPSOの生成と初期化
+	psoText_ = std::make_unique<PSOSprite>();
+	psoText_->Initialize(device, spriteVS_.Get(), textPS_.Get(), log);
 }
 
 /// @brief 更新処理

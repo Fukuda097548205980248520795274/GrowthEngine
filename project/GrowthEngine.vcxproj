@@ -737,6 +737,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp" />
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.cpp" />
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1009,6 +1010,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h" />
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.h" />

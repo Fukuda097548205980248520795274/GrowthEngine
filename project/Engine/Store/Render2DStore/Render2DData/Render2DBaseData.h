@@ -46,6 +46,10 @@ namespace Engine
 		/// @return 
 		Render2DHandle GetHandle()const { return hRender2D_; }
 
+		/// @brief 種類を取得する
+		/// @return 
+		Render2D::Type GetType() const { return type_; }
+
 		/// @brief パラメータを取得する
 		/// @return 
 		virtual void* GetParam() = 0;
@@ -79,6 +83,9 @@ namespace Engine
 
 		/// @brief グループ名
 		std::string group_{};
+
+		/// @brief 種類
+		Render2D::Type type_;
 
 
 	protected:

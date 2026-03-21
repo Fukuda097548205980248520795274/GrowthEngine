@@ -221,7 +221,7 @@ Matrix4x4 Make2DScaleMatrix4x4(const Vector2& scale)
 
 	matrix.m[2][0] = 0.0f;
 	matrix.m[2][1] = 0.0f;
-	matrix.m[2][2] = 0.0f;
+	matrix.m[2][2] = 1.0f;
 	matrix.m[2][3] = 0.0f;
 
 	matrix.m[3][0] = 0.0f;

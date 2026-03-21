@@ -742,6 +742,9 @@
     <Filter Include="Engine\Include\Parameter\DebugCameraParameter">
       <UniqueIdentifier>{d6d8e19c-4f48-4631-b5ae-86585638051d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData">
+      <UniqueIdentifier>{72c443f1-d031-46a4-a17b-324830b75516}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1298,6 +1301,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.cpp">
       <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.cpp">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1951,6 +1957,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.h">
       <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h">
+      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

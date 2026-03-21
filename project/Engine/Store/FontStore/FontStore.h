@@ -28,6 +28,12 @@ namespace Engine
 		// ピクセル
 		int32_t pixel;
 
+		/// @brief 横幅
+		int32_t width;
+
+		/// @brief 縦幅
+		int32_t height;
+
 		// ハンドル
 		CharHandle handle;
 
@@ -79,6 +85,16 @@ namespace Engine
 		/// @return 
 		TextHandle Load(const std::string& text, const std::string& fontName, int32_t pixel,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, Log* log);
+
+		/// @brief テキストデータを取得する
+		/// @param hText 
+		/// @return 
+		TextData* GetTextData(TextHandle hText) const { return textTable_[hText].get(); }
+
+		/// @brief 文字データを取得する
+		/// @param hChar 
+		/// @return 
+		CharData* GetCharData(CharHandle hChar) const { return charTable_[hChar].get(); }
 
 
 	private:

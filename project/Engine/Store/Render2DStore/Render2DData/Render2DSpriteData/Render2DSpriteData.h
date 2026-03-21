@@ -15,7 +15,10 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		Render2DSpriteData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter) : Render2DBaseData(hRender2D, name, parameter) {}
+		Render2DSpriteData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter) 
+			: Render2DBaseData(hRender2D, name, parameter) {
+			type_ = Render2D::Type::Sprite;
+		}
 
 		/// @brief 初期化
 		/// @param vertexResource 

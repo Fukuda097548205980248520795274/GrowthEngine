@@ -524,9 +524,9 @@ public:
 	/// @param hTexture 
 	/// @param name 
 	/// @return 
-	Render2DHandle LoadRender2D(TextureHandle hTexture, const std::string& name) const
+	Render2DHandle LoadRender2D(const std::string& name, Engine::Render2D::Type type, TextureHandle hTexture, TextHandle hText) const
 	{
-		return renderContext_->LoadRender2D(hTexture, name, log_.get());
+		return renderContext_->LoadRender2D(name, type, hTexture, hText, log_.get());
 	}
 
 	/// @brief スプライトを描画する

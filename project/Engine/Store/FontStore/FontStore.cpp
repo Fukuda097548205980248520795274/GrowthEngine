@@ -111,6 +111,9 @@ CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t 
 		assert(false);
 	}
 
+	// 幅を取得
+	charData->width = face->glyph->bitmap.width;
+	charData->height = face->glyph->bitmap.rows;
 
 	// テクスチャ用リソースを生成する
 	charData->textureResource = CreateFontTextureResource(device, face->glyph, log);

@@ -1,5 +1,6 @@
 #include "Render2DStore.h"
 #include "Render2DData/Render2DSpriteData/Render2DSpriteData.h"
+#include "Render2DData/Render2DTextData/Render2DTextData.h"
 
 /// @brief コンストラクタ
 Engine::Render2DStore::Render2DStore()
@@ -43,6 +44,8 @@ void Engine::Render2DStore::Initialize(ID3D12Device* device, Log* log)
 	indexResource_->data_[3] = 1;
 	indexResource_->data_[4] = 3;
 	indexResource_->data_[5] = 2;
+
+
 }
 
 /// @brief 更新処理
@@ -56,7 +59,8 @@ void Engine::Render2DStore::Update()
 /// @param hTexture 
 /// @param textureStore 
 /// @return 
-Render2DHandle Engine::Render2DStore::Load(const std::string& name, TextureHandle hTexture, TextureStore* textureStore, ID3D12Device* device, Log* log)
+Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
+	TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
@@ -65,7 +69,7 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, TextureHandl
 	// 同じデータがないかどうか
 	for (auto& data : dataTable_)
 	{
-		if (name == data->GetName())
+		if (name == data->GetName() && type == data->GetType())
 		{
 			// リセット
 			data->Reset();
@@ -79,10 +83,23 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, TextureHandl
 	// 名前テーブルに記録する
 	nameTable_[name] = handle;
 
-	// データの生成と初期化
-	std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name, parameter_.get());
-	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
-	dataTable_.push_back(std::move(data));
+	// スプライト
+	if (type == Render2D::Type::Sprite)
+	{
+		// データの生成と初期化
+		std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name, parameter_.get());
+		data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
+		dataTable_.push_back(std::move(data));
+	}
+
+	// テキスト
+	if (type == Render2D::Type::Text)
+	{
+		// データの生成と初期化
+		std::unique_ptr<Render2DTextData> data = std::make_unique<Render2DTextData>(handle, name, parameter_.get(), hText);
+		data->Initialize(vertexResource_.get(), indexResource_.get(), fontStore, device, log);
+		dataTable_.push_back(std::move(data));
+	}
 
 	return handle;
 }
