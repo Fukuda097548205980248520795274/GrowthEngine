@@ -60,7 +60,17 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 		// トランスフォーム
 		param_->charTransform[i].scale = Vector2(static_cast<float>(charData->width), static_cast<float>(charData->height));
 		param_->charTransform[i].rotate = 0.0f;
-		param_->charTransform[i].translate = Vector2(static_cast<float>(charData->width * i), 0.0f);
+
+		float space = 0.0f;
+		if (i > 0)
+		{
+			float space = param_->charTransform[i - 1].translate.x;
+			param_->charTransform[i].translate = Vector2(static_cast<float>(charData->pixel) + space, 0.0f);
+		}
+		else
+		{
+			param_->charTransform[i].translate = Vector2(0.0f, 0.0f);
+		}
 
 		// テクスチャ
 		param_->charTexture[i].anchor = Vector2(0.0f, 1.0f);

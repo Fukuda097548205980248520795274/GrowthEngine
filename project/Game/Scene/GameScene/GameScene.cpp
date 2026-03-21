@@ -42,4 +42,6 @@ void GameScene::Draw()
 
 	// ステージ描画
 	stage_->Draw();
+
+	engine_->DrawRender2D("Test_Text");
 }
