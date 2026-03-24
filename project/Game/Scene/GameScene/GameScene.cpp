@@ -6,6 +6,7 @@ void GameScene::Initialize()
 	sun_ = std::make_unique<LightDirectional>("Sun");
 
 	engine_->LoadCamera3D("MainCamera_TEST");
+	engine_->GetCamera3DParam("MainCamera_TEST")->transform.translate = Vector3(0.0f, 0.0f, -20.0f);
 
 	// ステージ読み込み
 	serializer_ = std::make_unique<StageSerializer>();
