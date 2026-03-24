@@ -126,6 +126,10 @@ namespace Engine
 		/// @return 
 		Camera3DData::Param* GetCamera3DParam(const std::string& name)const { return camera3DStore_->GetParam(name); }
 
+		/// @brief 3Dカメラのパラメータを取得する
+		/// @return 
+		Camera3DData::Param* GetCamera3DParam()const { return camera3DStore_->GetSelectParam(); }
+
 		/// @brief 2Dカメラのパラメータを取得する
 		/// @param hCamera 
 		/// @return 

@@ -4,6 +4,7 @@
 #include "Handle/Handle.h"
 #include "Camera3DResource/Camera3DResource.h"
 #include "DebugCamera3DResource/DebugCamera3DResource.h"
+#include "Parameter/Camera3DParameter/Camera3DParameter.h"
 
 #include <unordered_map>
 
@@ -24,6 +25,9 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(ID3D12Device* device, Log* log);
+
+		/// @brief シーン前のリセット
+		void PerSceneReset();
 
 		/// @brief 読み込み
 		/// @param name 
@@ -55,10 +59,30 @@ namespace Engine
 		/// @return 
 		Camera3DData::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetCamera3D().GetParam(); }
 
+		/// @brief 選択中のカメラをパラメータを取得する
+		/// @return 
+		Camera3DData::Param* GetSelectParam();
+
+
+
 		/// @brief カメラリソースをコマンドリストに登録
 		/// @param commandList 
 		/// @param rootParameterIndex 
 		void RegisterCameraResource(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) { cameraResource_->RegisterGraphics(commandList, rootParameterIndex); }
+
+
+	public:
+
+		/// @brief デバッグ用の線を描画する
+		void DebugDrawLine();
+
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList);
 
 
 	private:
@@ -73,6 +97,9 @@ namespace Engine
 
 		/// @brief カメラリソース
 		std::unique_ptr<ConstantBufferResource<Vector4>> cameraResource_ = nullptr;
+
+		/// @brief パラメータ
+		std::unique_ptr<Camera3DParameter> parameter_ = nullptr;
 
 
 	private:

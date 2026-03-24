@@ -748,6 +748,12 @@
     <Filter Include="Engine\Include\Parameter\Prefab2DParameter">
       <UniqueIdentifier>{0d7cfb96-9038-43d7-8ddf-34e7e9d53ef6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter\Camera3DParameter">
+      <UniqueIdentifier>{6cad11fe-980b-4438-96d4-b834fcedefc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\Camera2DParameter">
+      <UniqueIdentifier>{aebf586f-de4e-4b37-a21a-13a0c2f3fccc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1307,6 +1313,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.cpp">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.cpp">
+      <Filter>Engine\Include\Parameter\Camera2DParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.cpp">
+      <Filter>Engine\Include\Parameter\Camera3DParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1966,6 +1978,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Data\DebugData\DebugData.h">
       <Filter>Engine\Include\Data\DebugData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.h">
+      <Filter>Engine\Include\Parameter\Camera2DParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.h">
+      <Filter>Engine\Include\Parameter\Camera3DParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

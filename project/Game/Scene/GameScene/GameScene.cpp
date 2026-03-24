@@ -5,6 +5,8 @@ void GameScene::Initialize()
 {
 	sun_ = std::make_unique<LightDirectional>("Sun");
 
+	engine_->LoadCamera3D("MainCamera_TEST");
+
 	// ステージ読み込み
 	serializer_ = std::make_unique<StageSerializer>();
 

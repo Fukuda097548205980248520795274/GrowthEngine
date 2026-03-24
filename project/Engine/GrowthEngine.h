@@ -245,6 +245,10 @@ public:
 	/// @return 
 	Engine::Camera3DData::Param* GetCamera3DParam(const std::string& name)const { return renderContext_->GetCamera3DParam(name); }
 
+	/// @brief 3Dカメラのパラメータを取得する
+	/// @return 
+	Engine::Camera3DData::Param* GetCamera3DParam()const { return renderContext_->GetCamera3DParam(); }
+
 	/// @brief 2Dカメラのパラメータを取得する
 	/// @param hCamera 
 	/// @return 

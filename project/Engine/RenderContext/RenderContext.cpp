@@ -136,6 +136,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 /// @brief 全てのインスタンスを削除する
 void Engine::RenderContext::PerScene()
 { 
+	// カメラのリセット
+	camera3DStore_->PerSceneReset();
+
 	// 描画のリセット
 	render_->PerSceneReset();
 
@@ -198,6 +201,7 @@ void Engine::RenderContext::NewFrame()
 void Engine::RenderContext::PreDraw()
 {
 #ifdef _DEVELOPMENT
+	camera3DStore_->DebugParameter();
 	render_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
@@ -244,6 +248,9 @@ void Engine::RenderContext::PostDraw()
 	// 衝突ストアのデバッグ線
 	collision3DStore_->DebugDrawLine();
 	collision2DStore_->DebugDrawLine();
+
+	// カメラのデバッグ線
+	camera3DStore_->DebugDrawLine();
 
 	// 線の描画
 	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
@@ -442,6 +449,7 @@ void Engine::RenderContext::DebugRayPicking()
 	// リストを作成し、判定
 	std::vector<std::pair<float, bool*>> pickList;
 	render_->DebugRayPicking(ray, pickList);
+	camera3DStore_->DebugRayPicking(ray, pickList);
 
 	if (!pickList.empty())
 	{

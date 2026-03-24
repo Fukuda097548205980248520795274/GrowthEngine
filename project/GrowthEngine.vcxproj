@@ -383,6 +383,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Math\Vector\VectorInt3\VectorInt3.cpp" />
+    <ClCompile Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.cpp" />
+    <ClCompile Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.cpp" />
     <ClCompile Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.cpp" />
     <ClCompile Include="Engine\Parameter\LightParameter\LightParameter.cpp" />
     <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp">
@@ -910,6 +912,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
     <ClInclude Include="Engine\Math\Vector\VectorInt3\VectorInt3.h" />
+    <ClInclude Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.h" />
+    <ClInclude Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.h" />
     <ClInclude Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.h" />
     <ClInclude Include="Engine\Parameter\LightParameter\LightParameter.h" />
     <ClInclude Include="Engine\Parameter\Parameter.h" />
