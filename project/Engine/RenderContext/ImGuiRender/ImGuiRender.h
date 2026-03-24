@@ -8,6 +8,8 @@
 #include <imgui_impl_win32.h>
 #include <ImGuizmo.h>
 
+#include "Math/Vector/Vector2/Vector2.h"
+
 namespace Engine
 {
 	class WinApp;
@@ -42,6 +44,14 @@ namespace Engine
 		/// @param commandList 
 		void DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, ID3D12GraphicsCommandList* commandList);
 
+		/// @brief ビューウィンドウ内のカーソルの位置を取得する
+		/// @return 
+		Vector2 GetViewWindowCursorPos()const { return viewWindowCursorPos_; }
+
+		/// @brief ビューウィンドウ内にカーソルがホバーしているかどうか
+		/// @return 
+		bool IsViewWindowHover()const { return isViewWindowHover_; }
+
 
 	private:
 
@@ -55,5 +65,17 @@ namespace Engine
 		
 		// スクリーン縦幅
 		float screenHeight_ = 0.0f;
+
+
+	private:
+
+		// ウィンドウアプリケーション
+		WinApp* winApp_ = nullptr;
+
+		/// @brief ビューウィンドウ内のカーソル位置
+		Vector2 viewWindowCursorPos_ = Vector2(0.0f, 0.0f);
+
+		/// @brief ビューウィンドウにホバーしているかどうか
+		bool isViewWindowHover_ = false;
 	};
 }

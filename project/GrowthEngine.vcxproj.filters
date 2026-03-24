@@ -745,6 +745,9 @@
     <Filter Include="Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData">
       <UniqueIdentifier>{72c443f1-d031-46a4-a17b-324830b75516}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Data\DebugData">
+      <UniqueIdentifier>{e1a39dc7-fe80-4783-942c-e3967b2c0557}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1960,6 +1963,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\DebugData\DebugData.h">
+      <Filter>Engine\Include\Data\DebugData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

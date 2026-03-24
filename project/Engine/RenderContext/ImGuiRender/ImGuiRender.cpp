@@ -29,6 +29,9 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	assert(heap);
 	assert(buffering);
 
+	// 引数を受け取る
+	winApp_ = winApp;
+
 	// SRVハンドルを取得する
 	srvHandle_.first = heap->GetSrvCPUDescriptorHandle();
 	srvHandle_.second = heap->GetSrvGPUDescriptorHandle();
@@ -73,7 +76,7 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winApp->GetHwnd());
+	ImGui_ImplWin32_Init(winApp_->GetHwnd());
 	ImGui_ImplDX12_Init(device, buffering->GetSwapChainDesc().BufferCount,
 		buffering->GetRtvDesc().Format, heap->GetSrvDescriptorHeap(),srvHandle_.first, srvHandle_.second);
 }
@@ -174,6 +177,27 @@ void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DE
 	ImGui::SetCursorPos(newCursorPos);
 
 	ImGui::Image(texId, imageSize);
+
+
+	// Imageの矩形取得
+	ImVec2 imageMin = ImGui::GetItemRectMin();
+
+	// マウス
+	ImVec2 mousePos = ImGui::GetMousePos();
+
+	float renderWidth = static_cast<float>(winApp_->GetClientWidth());
+	float renderHeight = static_cast<float>(winApp_->GetClientHeight());
+
+	viewWindowCursorPos_.x = (mousePos.x - imageMin.x) * (renderWidth / imageSize.x);
+	viewWindowCursorPos_.y = (mousePos.y - imageMin.y) * (renderHeight / imageSize.y);
+
+	// ウィンドウ内をホバーしているかどうか
+	isViewWindowHover_ = ImGui::IsItemHovered();
+
+	// ローカル座標
+	viewWindowCursorPos_.x = std::clamp(viewWindowCursorPos_.x, 0.0f, renderWidth);
+	viewWindowCursorPos_.y = std::clamp(viewWindowCursorPos_.y, 0.0f, renderHeight);
+
 
 	ImGui::End();
 

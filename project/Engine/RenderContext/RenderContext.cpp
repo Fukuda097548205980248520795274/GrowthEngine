@@ -409,9 +409,11 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 #ifdef _DEVELOPMENT
 
 /// @brief デバッグ用レイピッキング
-/// @param mouseScreenPos 
-void Engine::RenderContext::DebugRayPicking(const Vector2& mouseScreenPos)
+void Engine::RenderContext::DebugRayPicking()
 {
+	// imguiのビューウィンドウ内のカーソルの位置を取得する
+	Vector2 mouseScreenPos = imguiRender_->GetViewWindowCursorPos();
+
 	// 正規化デバイス座標系
 	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(winApp_->GetClientWidth()) - 1.0f;
 	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(winApp_->GetClientHeight());

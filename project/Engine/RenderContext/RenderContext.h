@@ -409,33 +409,31 @@ namespace Engine
 		/// @param start 
 		/// @param end 
 		/// @param color 
-		void DrawDebugLine3D(const Vector3& start, const Vector3& end, const Vector4& color)
-		{
-			line_->DrawCallLine3D(start, end, color);
-		}
+		void DrawDebugLine3D(const Vector3& start, const Vector3& end, const Vector4& color) { line_->DrawCallLine3D(start, end, color); }
 
 		/// @brief デバッグ用の線を描画する
 		/// @param start 
 		/// @param end 
 		/// @param color 
-		void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color)
-		{
-			line_->DrawCallLine2D(start, end, color);
-		}
+		void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color) { line_->DrawCallLine2D(start, end, color); }
+
+		/// @brief ビューウィンドウ内のカーソルの位置を取得する
+		/// @return 
+		Vector2 GetViewWindowCursorPos()const { return imguiRender_->GetViewWindowCursorPos(); }
+
+		/// @brief ビューウィンドウ内にカーソルがホバーしているかどうか
+		/// @return 
+		bool IsViewWindowHover()const { return imguiRender_->IsViewWindowHover(); }
 
 		/// @brief デバッグ用レイピッキング
-		/// @param mouseScreenPos マウスのスクリーン座標
-		void DebugRayPicking(const Vector2& mouseScreenPos);
+		void DebugRayPicking();
 
 		/// @brief デバッグ用立方体の描画
 		/// @param position 
 		/// @param rotate 
 		/// @param scale 
 		/// @param color 
-		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color)
-		{
-			prefab_->DrawDebugCube(position, rotate, scale, color);
-		}
+		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color) { prefab_->DrawDebugCube(position, rotate, scale, color); }
 
 #endif
 

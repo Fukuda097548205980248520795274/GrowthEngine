@@ -158,6 +158,11 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 /// @param meshIndex 
 void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, Render3DHandle handle, BasePSOModel* pso)
 {
+#ifdef _DEVELOPMENT
+	// 描画している者のみGuizmo操作可能
+	dataTable_[handle]->DebugGuizmo(cameraStore);
+#endif
+
 	// 静的モデル
 	if (dataTable_[handle]->GetType() == Render3D::Type::StaticModel)
 	{
@@ -191,6 +196,11 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 /// @param pso 
 void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name, BasePSOModel* pso)
 {
+#ifdef _DEVELOPMENT
+	// 描画している者のみGuizmo操作可能
+	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore);
+#endif
+
 	// 静的モデル
 	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::StaticModel)
 	{

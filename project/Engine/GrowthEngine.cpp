@@ -183,9 +183,8 @@ void GrowthEngine::PreDraw()
 
 	// マウスでオブジェクト選択
 	if (input_->GetMouseTrigger(MouseButton::kMouseButtonLeft))
-	{
-		renderContext_->DebugRayPicking(GetMousePosition());
-	}
+		if (!ImGuizmo::IsOver())
+			renderContext_->DebugRayPicking();
 
 	// メニューバー
 	MenuBer();
@@ -206,10 +205,52 @@ void GrowthEngine::PostDraw()
 /// @return 
 Vector2 GrowthEngine::GetMousePosition()const
 {
+	Vector2 mousePos = Vector2(0.0f, 0.0f);
+
+#ifdef _DEVELOPMENT
+
+	// ビューウィンドウ内
+	mousePos = renderContext_->GetViewWindowCursorPos();
+
+#else
+
+	// ウィンドウ内
 	POINT p;
 	GetCursorPos(&p);
 	ScreenToClient(winApp_->GetHwnd(), &p);
-	return Vector2(static_cast<float>(p.x), static_cast<float>(p.y));
+	mousePos = Vector2(static_cast<float>(p.x), static_cast<float>(p.y));
+
+#endif
+
+	return mousePos;
+}
+
+/// @brief カーソルがウィンドウ内にホバーしているかどうか
+/// @return 
+bool GrowthEngine::IsCursorWindowHover() const
+{
+	bool isHover = false;
+
+#ifdef _DEVELOPMENT
+
+	// ビューウィンドウ内
+	isHover = renderContext_->IsViewWindowHover();
+
+#else
+
+
+	Vector2 mousePos = GetMousePosition();
+
+	// ウィンドウ内
+	if (mousePos.x >= 0.0f && mousePos.x <= static_cast<float>(winApp_->GetClientWidth()) &&
+		mousePos.y >= 0.0f && mousePos.y <= static_cast<float>(winApp_->GetClientHeight()))
+	{
+		isHover = true;
+	}
+
+#endif
+
+	return isHover;
 }
 
 

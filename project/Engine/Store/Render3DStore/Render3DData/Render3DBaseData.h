@@ -3,12 +3,16 @@
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Handle/Handle.h"
 #include "Data/Render3DData/Render3DData.h"
+#include "Data/DebugData/DebugData.h"
 
 #include "Data/CollisionData/CollisionData.h"
+
+class GrowthEngine;
 
 namespace Engine
 {
 	class Render3DParameter;
+	class Camera3DStore;
 
 	class Render3DBaseData
 	{
@@ -16,8 +20,9 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param name 
-		Render3DBaseData(const std::string& name , Render3DHandle hRender3D, Render3DParameter* parameter)
-			: name_(name) , hRender3D_(hRender3D), parameter_(parameter){}
+		/// @param hRender3D 
+		/// @param parameter 
+		Render3DBaseData(const std::string& name, Render3DHandle hRender3D, Render3DParameter* parameter);
 
 		/// @brief 仮想デストラクタ
 		virtual ~Render3DBaseData() = default;
@@ -44,6 +49,9 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
@@ -52,8 +60,15 @@ namespace Engine
 		/// @param pickList 
 		virtual void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) = 0;
 
+		/// @brief Guizmo操作
+		/// @return 
+		virtual void DebugGuizmo(Camera3DStore* cameraStore) = 0;
+
 
 	protected:
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 
 		// 種別名
 		Render3D::Type type_;
@@ -75,7 +90,7 @@ namespace Engine
 
 	protected:
 
-		// ギズモの選択フラグ
-		bool isGuizmoSelect_ = false;
+		// デバッグデータ : Guizmo
+		DebugData::DebugGuizmoData guizmoData_{};
 	};
 }

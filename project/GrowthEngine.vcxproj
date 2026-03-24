@@ -878,6 +878,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
     <ClInclude Include="Engine\Data\CameraData\CameraData.h" />
     <ClInclude Include="Engine\Data\CollisionData\CollisionData.h" />
+    <ClInclude Include="Engine\Data\DebugData\DebugData.h" />
     <ClInclude Include="Engine\Data\InputData\InputData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
     <ClInclude Include="Engine\Data\PostEffectData\PostEffectData.h" />

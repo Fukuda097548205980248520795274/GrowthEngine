@@ -395,6 +395,10 @@ public:
 	/// @return 
 	Vector2 GetMousePosition()const;
 
+	/// @brief カーソルがウィンドウ内にホバーしているかどうか
+	/// @return 
+	bool IsCursorWindowHover()const;
+
 #pragma endregion
 
 #pragma region ゲームパッド入力

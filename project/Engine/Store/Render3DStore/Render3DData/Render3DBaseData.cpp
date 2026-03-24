@@ -1,1 +1,13 @@
 #include "Render3DBaseData.h"
+#include "GrowthEngine.h"
+
+/// @brief コンストラクタ
+/// @param name 
+/// @param hRender3D 
+/// @param parameter 
+Engine::Render3DBaseData::Render3DBaseData(const std::string& name, Render3DHandle hRender3D, Render3DParameter* parameter)
+	: name_(name), hRender3D_(hRender3D), parameter_(parameter) 
+{
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
+}

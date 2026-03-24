@@ -76,6 +76,9 @@ namespace Engine
 		/// @param pso 
 		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
 
@@ -83,6 +86,10 @@ namespace Engine
 		/// @param ray 
 		/// @param pickList 
 		void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) override;
+
+		/// @brief Guizmo操作
+		/// @param cameraStore 
+		void DebugGuizmo(Camera3DStore* cameraStore) override;
 
 
 	private:

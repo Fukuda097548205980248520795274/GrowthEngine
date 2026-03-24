@@ -18,6 +18,8 @@
 
 #include "Func/CollisionFunc/CollisionFunc.h"
 
+#include "GrowthEngine.h"
+
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
@@ -606,9 +608,9 @@ void Engine::Render3DAnimationModelData::DebugParameter()
 void Engine::Render3DAnimationModelData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
 {
 	// 選択初期化
-	if (isGuizmoSelect_)
+	if (guizmoData_.isSelect)
 	{
-		isGuizmoSelect_ = false;
+		guizmoData_.isSelect = false;
 		return;
 	}
 
@@ -620,7 +622,113 @@ void Engine::Render3DAnimationModelData::DebugRayPicker(const Collision3D::Ray& 
 	{
 		std::pair<float, bool*> pick;
 		pick.first = Vector3(aabb.center - ray.start).Length();
-		pick.second = &isGuizmoSelect_;
+		pick.second = &guizmoData_.isSelect;
 		pickList.push_back(pick);
+	}
+}
+
+/// @brief Guizmo操作
+/// @param cameraStore 
+void Engine::Render3DAnimationModelData::DebugGuizmo(Camera3DStore* cameraStore)
+{
+	// 選択していないときは処理しない
+	if (!guizmoData_.isSelect)
+		return;
+
+	// Tキー -> 移動
+	if (engine_->GetKeyTrigger(DIK_T))guizmoData_.mode = DebugData::GuizmoMode::Translate;
+
+	// Rキー -> 回転
+	if (engine_->GetKeyTrigger(DIK_R))guizmoData_.mode = DebugData::GuizmoMode::Rotate;
+
+	// Sキー -> 拡縮
+	if (engine_->GetKeyTrigger(DIK_S))guizmoData_.mode = DebugData::GuizmoMode::Scale;
+
+	Matrix4x4 viewMatrix = cameraStore->GetCamera3D().GetViewMatrix();        // worldMatrix_.Inverse()
+	Matrix4x4 projMatrix = cameraStore->GetCamera3D().GetProjectionMatrix();  // いつものやつ
+
+	// ワールド行列
+	Matrix4x4 worldMatrix;
+
+	switch (guizmoData_.mode)
+	{
+	case DebugData::GuizmoMode::Translate:
+		// 移動
+
+		// 移動
+		worldMatrix = Make3DTranslateMatrix4x4(param_->modelTransform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			// 平行移動
+			param_->modelTransform.translate = Vector3(worldMatrix.m[3][0], worldMatrix.m[3][1], worldMatrix.m[3][2]);
+		}
+
+		break;
+
+	case DebugData::GuizmoMode::Rotate:
+		// 回転
+
+		Quaternion rotateQ =
+			ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		// 回転 * 移動
+		worldMatrix = Make3DRotateMatrix4x4(rotateQ) * Make3DTranslateMatrix4x4(param_->modelTransform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			float translation[3];
+			float rotation[3];
+			float scale[3];
+
+			ImGuizmo::DecomposeMatrixToComponents(
+				&worldMatrix.m[0][0],
+				translation,
+				rotation,
+				scale
+			);
+
+			// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
+			constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+
+			// rotation[] は度数法（degrees）なので、ラジアンに変換して代入する
+			param_->modelTransform.rotate.x = rotation[0] * DEG2RAD;
+			param_->modelTransform.rotate.y = rotation[1] * DEG2RAD;
+			param_->modelTransform.rotate.z = rotation[2] * DEG2RAD;
+		}
+
+		break;
+
+	case DebugData::GuizmoMode::Scale:
+		// 拡縮
+
+		// 拡縮 * 移動
+		worldMatrix = Make3DScaleMatrix4x4(param_->modelTransform.scale) * Make3DTranslateMatrix4x4(param_->modelTransform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::SCALE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			param_->modelTransform.scale.x =
+				std::sqrt(worldMatrix.m[0][0] * worldMatrix.m[0][0] + worldMatrix.m[0][1] * worldMatrix.m[0][1] + worldMatrix.m[0][2] * worldMatrix.m[0][2]);
+			param_->modelTransform.scale.y =
+				std::sqrt(worldMatrix.m[1][0] * worldMatrix.m[1][0] + worldMatrix.m[1][1] * worldMatrix.m[1][1] + worldMatrix.m[1][2] * worldMatrix.m[1][2]);
+			param_->modelTransform.scale.z =
+				std::sqrt(worldMatrix.m[2][0] * worldMatrix.m[2][0] + worldMatrix.m[2][1] * worldMatrix.m[2][1] + worldMatrix.m[2][2] * worldMatrix.m[2][2]);
+		}
+
+		break;
 	}
 }
