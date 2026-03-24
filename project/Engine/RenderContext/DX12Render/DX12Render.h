@@ -41,6 +41,9 @@ namespace Engine
 		/// @brief リセット
 		void Reset();
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 		/// @brief シャドウアップ用描画処理
 		/// @param commandList 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);

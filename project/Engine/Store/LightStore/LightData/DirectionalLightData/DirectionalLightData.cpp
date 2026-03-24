@@ -61,8 +61,8 @@ void Engine::DirectionalLightData::Reset()
 		param_->maxDepth = 15.0f;
 	}
 
-	// 使用する
-	isUse_ = true;
+	// 読み込む
+	isLoad_ = true;
 }
 
 /// @brief ビュープロジェクション行列を取得する
@@ -86,9 +86,12 @@ Matrix4x4 Engine::DirectionalLightData::GetViewProjectionMatrix() const
 }
 
 /// @brief デバッグ用描画処理
-void Engine::DirectionalLightData::DebugDraw()
+void Engine::DirectionalLightData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込んでいないときは使えない
+	if (!isLoad_)return;
 
 	if (ImGui::TreeNode((name_ + "_Directional").c_str()))
 	{

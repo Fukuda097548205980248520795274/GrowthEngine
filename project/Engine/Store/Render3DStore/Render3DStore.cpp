@@ -59,6 +59,12 @@ void Engine::Render3DStore::Update(ID3D12GraphicsCommandList* commandList)
 	}
 }
 
+/// @brief シーン前のリセット
+void Engine::Render3DStore::PerSceneReset()
+{
+	for (auto& data : dataTable_)data->PerSceneReset();
+}
+
 /// @brief シャドウマップ用の描画処理
 /// @param commandList 
 /// @param pso 

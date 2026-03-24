@@ -33,6 +33,9 @@ namespace Engine
 		/// @brief リセット
 		virtual void Reset() = 0;
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }
@@ -78,6 +81,9 @@ namespace Engine
 
 		/// @brief グループ名
 		std::string group_{};
+
+		/// @brief 読み込んだかどうか
+		bool isLoad_ = false;
 
 		/// @brief パラメータ
 		Render3DParameter* parameter_ = nullptr;

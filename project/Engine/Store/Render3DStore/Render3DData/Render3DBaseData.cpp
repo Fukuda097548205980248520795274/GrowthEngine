@@ -10,4 +10,14 @@ Engine::Render3DBaseData::Render3DBaseData(const std::string& name, Render3DHand
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
+
+	// 読み込み
+	isLoad_ = true;
+}
+
+/// @brief シーン前のリセット
+void Engine::Render3DBaseData::PerSceneReset()
+{
+	// 読み込みをリセットする
+	isLoad_ = false;
 }

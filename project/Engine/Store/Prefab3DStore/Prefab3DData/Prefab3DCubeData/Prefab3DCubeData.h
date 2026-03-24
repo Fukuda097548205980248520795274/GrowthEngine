@@ -24,7 +24,7 @@ namespace Engine
 		/// @param hPrefab 
 		/// @param hTexture 
 		/// @param parameter 
-		Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, PrefabPrimitiveParameter* parameter);
+		Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, Prefab3DParameter* parameter);
 
 		/// @brief 初期化
 		/// @param textureStore 

@@ -8,7 +8,7 @@
 #include "Store/Camera3DStore/Camera3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
 
-#include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
+#include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
@@ -17,7 +17,7 @@
 /// @param numInstance 
 /// @param hPrefab 
 /// @param hTexture 
-Engine::Prefab3DStaticModelData::Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, PrefabPrimitiveParameter* parameter)
+Engine::Prefab3DStaticModelData::Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, Prefab3DParameter* parameter)
 	: hModel_(hModel), Prefab3DBaseData(name, numInstance, hPrefab3D, parameter)
 {
 	// 種類

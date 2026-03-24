@@ -51,14 +51,17 @@ void Engine::PointLightData::Reset()
 		param_->decay = 4.0f;
 	}
 
-	// 使用する
-	isUse_ = true;
+	// 読み込む
+	isLoad_ = true;
 }
 
 /// @brief デバッグ用描画処理
-void Engine::PointLightData::DebugDraw()
+void Engine::PointLightData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込んでいないときは使えない
+	if (!isLoad_)return;
 
 	if (ImGui::TreeNode((name_).c_str()))
 	{

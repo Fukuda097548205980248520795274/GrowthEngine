@@ -1,8 +1,8 @@
-#include "PrefabSpriteParameter.h"
+#include "Prefab3DParameter.h"
 
 /// @brief 登録した調整項目の値に、ファイルの値を反映させる
 /// @param fileName 
-void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::string& fileName)
+void Engine::Prefab3DParameter::RegisterGroupDataReflection(const std::string& fileName)
 {
 	// ファイルパス
 	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
@@ -104,6 +104,7 @@ void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::strin
 				**ptr = value;
 			}
 
+
 			break;
 		}
 	}
@@ -111,7 +112,7 @@ void Engine::PrefabSpriteParameter::RegisterGroupDataReflection(const std::strin
 
 /// @brief ファイルを記録する
 /// @param fileName 
-void Engine::PrefabSpriteParameter::SaveFile(const std::string& fileName)
+void Engine::Prefab3DParameter::SaveFile(const std::string& fileName)
 {
 	// グループを検索
 	Datas::iterator itGroup = data_.find(fileName);

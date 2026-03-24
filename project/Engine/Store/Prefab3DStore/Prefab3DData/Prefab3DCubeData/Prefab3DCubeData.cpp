@@ -1,6 +1,6 @@
 #include "Prefab3DCubeData.h"
 
-#include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
+#include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
 #include "Store/LightStore/LightStore.h"
 #include "Store/TextureStore/TextureStore.h"
@@ -17,7 +17,7 @@
 /// @param hPrefab 
 /// @param hTexture 
 /// @param parameter 
-Engine::Prefab3DCubeData::Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, PrefabPrimitiveParameter* parameter)
+Engine::Prefab3DCubeData::Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, Prefab3DParameter* parameter)
 	: hTexture_(hTexture), Prefab3DBaseData(name, numInstance, hPrefab3D, parameter)
 {
 	// 種類

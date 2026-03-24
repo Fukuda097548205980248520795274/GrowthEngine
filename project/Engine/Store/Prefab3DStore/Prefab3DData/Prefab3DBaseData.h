@@ -15,7 +15,7 @@ namespace Engine
 {
 	class BasePSOModel;
 	class BasePSOShadowMap;
-	class PrefabPrimitiveParameter;
+	class Prefab3DParameter;
 	class SkyboxStore;
 
 	class Prefab3DBaseData
@@ -26,7 +26,7 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param hPrefab 
-		Prefab3DBaseData(const std::string& name , uint32_t numInstance , Prefab3DHandle hPrefab3D, PrefabPrimitiveParameter* parameter)
+		Prefab3DBaseData(const std::string& name , uint32_t numInstance , Prefab3DHandle hPrefab3D, Prefab3DParameter* parameter)
 			: name_(name), numInstance_(numInstance),hPrefab3D_(hPrefab3D), parameter_(parameter) {}
 
 		/// @brief 仮想デストラクタ
@@ -104,6 +104,6 @@ namespace Engine
 	protected:
 
 		/// @brief パラメータ
-		PrefabPrimitiveParameter* parameter_ = nullptr;
+		Prefab3DParameter* parameter_ = nullptr;
 	};
 }

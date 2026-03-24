@@ -6,13 +6,13 @@
 
 namespace Engine
 {
-	class PrefabSpriteParameter : public Parameter
+	class Prefab2DParameter : public Parameter
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param folderName 
-		PrefabSpriteParameter(const std::string& folderName) : Parameter(folderName) {}
+		Prefab2DParameter(const std::string& folderName) : Parameter(folderName) {}
 
 		/// @brief 登録した調整項目の値に、ファイルの値を反映させる
 		/// @param fileName 

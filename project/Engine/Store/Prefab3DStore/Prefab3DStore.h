@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "Parameter/PrefabPrimitiveParameter/PrefabPrimitiveParameter.h"
+#include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
 #include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
 
@@ -137,7 +137,7 @@ namespace Engine
 		std::map<std::string, Prefab3DHandle> nameTable_;
 
 		// パラメータ
-		std::unique_ptr<PrefabPrimitiveParameter> parameter_ = nullptr;
+		std::unique_ptr<Prefab3DParameter> parameter_ = nullptr;
 
 
 	private:

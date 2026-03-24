@@ -6,7 +6,7 @@
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
-#include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
+#include "Parameter/Prefab2DParameter/Prefab2DParameter.h"
 
 /// @brief 初期化
 /// @param vertexResource 

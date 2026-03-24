@@ -71,7 +71,7 @@ void Engine::LightStore::Update()
 	for (auto& data : dataTable_)
 	{
 		// 使用していないと処理しない
-		if (!data->IsUse())
+		if (!data->IsLoad())
 			continue;
 
 		// 輝度がないと処理しない
@@ -106,10 +106,10 @@ void Engine::LightStore::FrameReset()
 }
 
 /// @brief シーン毎リセット
-void Engine::LightStore::SceneReset()
+void Engine::LightStore::PerSceneReset()
 {
 	// シーン前処理
-	for (auto& data : dataTable_)data->PerScene();
+	for (auto& data : dataTable_)data->PerSceneReset();
 }
 
 /// @brief ライト読み込み
@@ -182,7 +182,11 @@ void Engine::LightStore::ShadowMap(ID3D12GraphicsCommandList* commandList, DX12R
 	// 平行光源を探す
 	for (auto& light : dataTable_)
 	{
+		// 読み込まれているかどうか
+		if(!light->IsLoad())
+			continue;
 
+		// 平行光源であるかどうか
 		if (light->GetType() != Light::Type::Directional)
 			continue;
 
@@ -304,7 +308,7 @@ void Engine::LightStore::DebugParameter()
 		return;
 	}
 
-	for (auto& data : dataTable_)data->DebugDraw();
+	for (auto& data : dataTable_)data->DebugParameter();
 
 	// 終了
 	ImGui::End();

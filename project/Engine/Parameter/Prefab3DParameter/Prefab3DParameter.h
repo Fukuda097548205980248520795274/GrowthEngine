@@ -6,13 +6,13 @@
 
 namespace Engine
 {
-	class PrefabPrimitiveParameter : public Parameter
+	class Prefab3DParameter : public Parameter
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param folderName 
-		PrefabPrimitiveParameter(const std::string& folderName) : Parameter(folderName) {}
+		Prefab3DParameter(const std::string& folderName) : Parameter(folderName) {}
 
 		/// @brief 登録した調整項目の値に、ファイルの値を反映させる
 		/// @param fileName 

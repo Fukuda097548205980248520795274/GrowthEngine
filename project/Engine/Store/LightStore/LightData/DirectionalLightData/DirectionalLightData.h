@@ -38,8 +38,11 @@ namespace Engine
 		/// @return 
 		Light::Type GetType() const override { return Light::Type::Directional; }
 
+
+	public:
+
 		/// @brief デバッグ用描画処理
-		void DebugDraw() override;
+		void DebugParameter() override;
 
 
 	private:

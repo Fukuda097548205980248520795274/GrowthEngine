@@ -136,8 +136,11 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 /// @brief 全てのインスタンスを削除する
 void Engine::RenderContext::PerScene()
 { 
+	// 描画のリセット
+	render_->PerSceneReset();
+
 	// ライトストアのリセット
-	lightStore_->SceneReset();
+	lightStore_->PerSceneReset();
 
 	// プレハブのインスタンスを削除する
 	prefab_->DestroyAllInstance(); 

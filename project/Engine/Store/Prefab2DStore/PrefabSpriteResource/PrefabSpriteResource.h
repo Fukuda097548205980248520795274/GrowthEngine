@@ -18,7 +18,7 @@ namespace Engine
 	class IndexBufferResource;
 	class DX12Heap;
 	class Camera2DStore;
-	class PrefabSpriteParameter;
+	class Prefab2DParameter;
 
 	class PrefabSpriteResource
 	{
@@ -29,7 +29,7 @@ namespace Engine
 		/// @param hTexture 
 		/// @param numInstance 
 		/// @param name 
-		PrefabSpriteResource(Prefab2DHandle hPrefab2D, uint32_t numInstance, const std::string& name, PrefabSpriteParameter* parameter)
+		PrefabSpriteResource(Prefab2DHandle hPrefab2D, uint32_t numInstance, const std::string& name, Prefab2DParameter* parameter)
 			: hPrefab2D_(hPrefab2D), numInstance_(numInstance), name_(name), parameter_(parameter) {
 		}
 
@@ -135,6 +135,6 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		PrefabSpriteParameter* parameter_ = nullptr;
+		Prefab2DParameter* parameter_ = nullptr;
 	};
 }

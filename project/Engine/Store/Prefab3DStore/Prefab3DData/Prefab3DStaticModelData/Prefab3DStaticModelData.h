@@ -23,7 +23,7 @@ namespace Engine
 		/// @param numInstance 
 		/// @param hPrefab 
 		/// @param hTexture 
-		Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, PrefabPrimitiveParameter* parameter);
+		Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, Prefab3DParameter* parameter);
 
 		/// @brief 初期化
 		/// @param modelStore 

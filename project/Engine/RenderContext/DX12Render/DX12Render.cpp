@@ -75,6 +75,12 @@ void Engine::DX12Render::Reset()
 	psoSprite_->ResetBlendMode();
 }
 
+/// @brief シーン前のリセット
+void Engine::DX12Render::PerSceneReset()
+{
+	render3DStore_->PerSceneReset();
+}
+
 /// @brief シャドウアップ用描画処理
 /// @param commandList 
 void Engine::DX12Render::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)

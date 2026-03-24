@@ -16,6 +16,11 @@ namespace Engine
 		/// @brief 仮想デストラクタ
 		virtual ~BaseLightData() = default;
 
+		/// @brief コンストラクタ
+		/// @param name 
+		/// @param handle 
+		BaseLightData(const std::string& name, LightHandle handle);
+
 		/// @brief 初期化
 		/// @param parameter 
 		virtual void Initialize(LightParameter* parameter);
@@ -23,13 +28,8 @@ namespace Engine
 		/// @brief リセット
 		virtual void Reset() = 0;
 
-		/// @brief シーン前処理
-		void PerScene() { isUse_ = false; }
-
-		/// @brief コンストラクタ
-		/// @param name 
-		/// @param handle 
-		BaseLightData(const std::string& name, LightHandle handle) : name_(name), handle_(handle) { isUse_ = true; }
+		/// @brief シーン前リセット
+		void PerSceneReset() { isLoad_ = false; }
 
 		/// @brief 輝度を取得する
 		/// @return 
@@ -51,12 +51,15 @@ namespace Engine
 		/// @return 
 		virtual Light::Type GetType() const = 0;
 
-		/// @brief デバッグ用描画処理
-		virtual void DebugDraw() = 0;
-
 		/// @brief 使用しているかどうか
 		/// @return 
-		bool IsUse()const { return isUse_; }
+		bool IsLoad()const { return isLoad_; }
+
+
+	public:
+
+		/// @brief デバッグ用パラメータ
+		virtual void DebugParameter() = 0;
 
 
 	protected:
@@ -73,7 +76,7 @@ namespace Engine
 		/// @brief パラメータ
 		LightParameter* parameter_ = nullptr;
 
-		// 使用フラグ
-		bool isUse_ = false;
+		// 読み込んでいるかどうか
+		bool isLoad_ = false;
 	};
 }

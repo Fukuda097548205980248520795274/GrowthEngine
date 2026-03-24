@@ -49,8 +49,8 @@ namespace Engine
 		/// @brief フレーム毎リセット
 		void FrameReset();
 
-		/// @brief シーン毎リセット
-		void SceneReset();
+		/// @brief シーン前リセット
+		void PerSceneReset();
 
 		/// @brief サイズを作り直す
 		/// @param device 

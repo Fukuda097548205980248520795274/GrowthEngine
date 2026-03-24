@@ -1,8 +1,8 @@
-#include "PrefabPrimitiveParameter.h"
+#include "Prefab2DParameter.h"
 
 /// @brief 登録した調整項目の値に、ファイルの値を反映させる
 /// @param fileName 
-void Engine::PrefabPrimitiveParameter::RegisterGroupDataReflection(const std::string& fileName)
+void Engine::Prefab2DParameter::RegisterGroupDataReflection(const std::string& fileName)
 {
 	// ファイルパス
 	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
@@ -104,7 +104,6 @@ void Engine::PrefabPrimitiveParameter::RegisterGroupDataReflection(const std::st
 				**ptr = value;
 			}
 
-
 			break;
 		}
 	}
@@ -112,7 +111,7 @@ void Engine::PrefabPrimitiveParameter::RegisterGroupDataReflection(const std::st
 
 /// @brief ファイルを記録する
 /// @param fileName 
-void Engine::PrefabPrimitiveParameter::SaveFile(const std::string& fileName)
+void Engine::Prefab2DParameter::SaveFile(const std::string& fileName)
 {
 	// グループを検索
 	Datas::iterator itGroup = data_.find(fileName);

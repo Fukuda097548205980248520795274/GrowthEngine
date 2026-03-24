@@ -8,7 +8,7 @@
 Engine::Prefab3DStore::Prefab3DStore()
 {
 	// パラメータの生成
-	parameter_ = std::make_unique<PrefabPrimitiveParameter>("PrefabPrimitive");
+	parameter_ = std::make_unique<Prefab3DParameter>("PrefabPrimitive");
 }
 
 /// @brief 初期化

@@ -194,6 +194,9 @@ void Engine::Render3DStaticModelData::Reset()
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 		}
 	}
+
+	// 読み込み
+	isLoad_ = true;
 }
 
 /// @brief コマンドリストに登録する
@@ -388,6 +391,9 @@ void Engine::Render3DStaticModelData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
@@ -575,6 +581,9 @@ void Engine::Render3DStaticModelData::DebugRayPicker(const Collision3D::Ray& ray
 		return;
 	}
 
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
 	Collision3D::AABB aabb;
 	aabb.center = param_->modelTransform.translate;
 	aabb.radius = Vector3(1.0f, 1.0f, 1.0f);
@@ -592,6 +601,9 @@ void Engine::Render3DStaticModelData::DebugRayPicker(const Collision3D::Ray& ray
 /// @return 
 void Engine::Render3DStaticModelData::DebugGuizmo(Camera3DStore* cameraStore)
 {
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
 	// 選択していないときは処理しない
 	if (!guizmoData_.isSelect)
 		return;

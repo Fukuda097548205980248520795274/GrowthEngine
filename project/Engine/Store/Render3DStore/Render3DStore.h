@@ -51,6 +51,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 		/// @brief シャドウマップ用の描画処理
 		/// @param commandList 
 		/// @param pso 

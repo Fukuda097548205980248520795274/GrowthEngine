@@ -62,14 +62,17 @@ void Engine::SpotLightData::Reset()
 		param_->cosFalloffStart = 1.0f;
 	}
 
-	// 使用する
-	isUse_ = true;
+	// 読み込む
+	isLoad_ = true;
 }
 
 /// @brief デバッグ用描画処理
-void Engine::SpotLightData::DebugDraw()
+void Engine::SpotLightData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込んでいないときは使えない
+	if (!isLoad_)return;
 
 	if (ImGui::TreeNode((name_).c_str()))
 	{

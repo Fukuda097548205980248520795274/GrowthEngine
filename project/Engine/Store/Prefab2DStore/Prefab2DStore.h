@@ -3,7 +3,7 @@
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 #include <vector>
 
-#include "Parameter/PrefabSpriteParameter/PrefabSpriteParameter.h"
+#include "Parameter/Prefab2DParameter/Prefab2DParameter.h"
 
 namespace Engine
 {
@@ -76,7 +76,7 @@ namespace Engine
 		std::unordered_map<std::string, Prefab2DHandle> nameTable_;
 
 		// パラメータ
-		std::unique_ptr<PrefabSpriteParameter> parameter_ = nullptr;
+		std::unique_ptr<Prefab2DParameter> parameter_ = nullptr;
 
 
 	private:
