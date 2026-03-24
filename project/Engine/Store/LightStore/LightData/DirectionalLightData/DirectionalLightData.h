@@ -19,6 +19,9 @@ namespace Engine
 		/// @param parameter 
 		void Initialize(LightParameter* parameter) override;
 
+		/// @brief 更新処理
+		void Update() override;
+
 		/// @brief リセット
 		void Reset() override;
 
@@ -43,6 +46,19 @@ namespace Engine
 
 		/// @brief デバッグ用描画処理
 		void DebugParameter() override;
+
+		/// @brief デバッグ用の線を描画する
+		void DebugDrawLine() override;
+
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) override;
+
+		/// @brief デバッグ用Guizmo操作
+		/// @param viewMatrix 
+		/// @param projMatrix 
+		void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) override;
 
 
 	private:

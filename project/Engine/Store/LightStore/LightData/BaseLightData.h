@@ -3,7 +3,13 @@
 #include <memory>
 #include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Data/LightData/LightData.h"
+#include "Data/CollisionData/CollisionData.h"
+#include "Data/DebugData/DebugData.h"
+#include <vector>
+
+class GrowthEngine;
 
 namespace Engine
 {
@@ -24,6 +30,9 @@ namespace Engine
 		/// @brief 初期化
 		/// @param parameter 
 		virtual void Initialize(LightParameter* parameter);
+
+		/// @brief 更新処理
+		virtual void Update() = 0;
 
 		/// @brief リセット
 		virtual void Reset() = 0;
@@ -61,8 +70,22 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
+		/// @brief デバッグ用の線を描画する
+		virtual void DebugDrawLine() = 0;
+
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		virtual void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) = 0;
+
+		/// @brief デバッグ用Guizmo操作
+		virtual void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) = 0;
+
 
 	protected:
+
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
 
 		// 名前
 		std::string name_{};
@@ -78,5 +101,11 @@ namespace Engine
 
 		// 読み込んでいるかどうか
 		bool isLoad_ = false;
+
+
+	protected:
+
+		/// @brief デバッグデータ : Guizmo
+		DebugData::DebugGuizmoData debugGuizmoData_{};
 	};
 }

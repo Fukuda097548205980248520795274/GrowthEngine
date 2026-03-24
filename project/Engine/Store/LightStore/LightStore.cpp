@@ -78,6 +78,9 @@ void Engine::LightStore::Update()
 		if (data->GetIntensity() <= 0.0f)
 			continue;
 
+		// 更新処理
+		data->Update();
+
 		// ライトの種類ごとの処理
 		switch (data->GetType())
 		{
@@ -314,4 +317,26 @@ void Engine::LightStore::DebugParameter()
 	ImGui::End();
 
 #endif
+}
+
+/// @brief デバッグ用の線を描画
+void Engine::LightStore::DebugDrawLine()
+{
+	for (auto& data : dataTable_)data->DebugDrawLine();
+}
+
+/// @brief デバッグ用レイピッキング
+/// @param ray 
+/// @param pickList 
+void Engine::LightStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+{
+	for (auto& data : dataTable_)data->DebugRayPicking(ray, pickList);
+}
+
+/// @brief デバッグ用Guizmo操作
+/// @param viewMatrix 
+/// @param projMatrix 
+void Engine::LightStore::DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix)
+{
+	for (auto& data : dataTable_)data->DebugGuizmo(viewMatrix, projMatrix);
 }

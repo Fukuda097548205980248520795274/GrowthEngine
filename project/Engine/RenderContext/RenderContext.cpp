@@ -200,11 +200,14 @@ void Engine::RenderContext::NewFrame()
 /// @brief 描画前処理
 void Engine::RenderContext::PreDraw()
 {
+	// パラメータやGuizmo操作などのデバッグ表示
 #ifdef _DEVELOPMENT
 	camera3DStore_->DebugParameter();
 	render_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
+
+	lightStore_->DebugGuizmo(camera3DStore_->GetCamera3D().GetViewMatrix(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 	lightStore_->DebugParameter();
 #endif
 
@@ -251,6 +254,9 @@ void Engine::RenderContext::PostDraw()
 
 	// カメラのデバッグ線
 	camera3DStore_->DebugDrawLine();
+
+	// ライトのデバッグ線
+	lightStore_->DebugDrawLine();
 
 	// 線の描画
 	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
@@ -450,6 +456,7 @@ void Engine::RenderContext::DebugRayPicking()
 	std::vector<std::pair<float, bool*>> pickList;
 	render_->DebugRayPicking(ray, pickList);
 	camera3DStore_->DebugRayPicking(ray, pickList);
+	lightStore_->DebugRayPicking(ray, pickList);
 
 	if (!pickList.empty())
 	{

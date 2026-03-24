@@ -110,8 +110,24 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
+
+		/// @brief デバッグ用の線を描画
+		void DebugDrawLine();
+
+		/// @brief デバッグ用レイピッキング
+		/// @param ray 
+		/// @param pickList 
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList);
+
+		/// @brief デバッグ用Guizmo操作
+		/// @param viewMatrix 
+		/// @param projMatrix 
+		void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix);
 
 
 	private:
