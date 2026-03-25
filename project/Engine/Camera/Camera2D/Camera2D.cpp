@@ -41,7 +41,7 @@ void Engine::Camera2D::Update()
 	// ワールド行列を生成する
 	worldMatrix_ = Make3DScaleMatrix4x4(Vector3(param_->transform.scale.x, param_->transform.scale.y, 1.0f)) *
 		Make3DRotateZMatrix4x4(param_->transform.rotate) *
-		Make3DTranslateMatrix4x4(Vector3(param_->transform.translate.x, param_->transform.translate.y, 0.0f));
+		Make3DTranslateMatrix4x4(Vector3(param_->transform.translate.x, param_->transform.translate.y, -0.01f));
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
