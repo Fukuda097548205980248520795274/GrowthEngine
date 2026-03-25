@@ -133,18 +133,18 @@ namespace Engine
 		/// @param hSprite 
 		/// @param viewProjection 
 		/// @param commandList 
-		void DrawRender2D(Render2DHandle hRender2D, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList)
+		void DrawRender2D(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(hRender2D, viewProjection, commandList, psoSprite_.get());
+			render2DStore_->Register(hRender2D, cameraStore, commandList, psoSprite_.get());
 		}
 
 		/// @brief スプライトの描画処理
 		/// @param name 
 		/// @param viewProjection 
 		/// @param commandList 
-		void DrawRender2D(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList)
+		void DrawRender2D(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(name, viewProjection, commandList, psoSprite_.get());
+			render2DStore_->Register(name, cameraStore, commandList, psoSprite_.get());
 		}
 
 

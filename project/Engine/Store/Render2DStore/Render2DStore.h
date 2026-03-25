@@ -7,6 +7,7 @@
 namespace Engine
 {
 	class FontStore;
+	class Camera2DStore;
 
 	class Render2DStore
 	{
@@ -44,14 +45,14 @@ namespace Engine
 		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(Render2DHandle hRender2D, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief コマンドリストに登録する
 		/// @param name 
 		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

@@ -2,6 +2,8 @@
 #include "Render2DData/Render2DSpriteData/Render2DSpriteData.h"
 #include "Render2DData/Render2DTextData/Render2DTextData.h"
 
+#include "Store/Camera2DStore/Camera2DStore.h"
+
 /// @brief コンストラクタ
 Engine::Render2DStore::Render2DStore()
 {
@@ -115,14 +117,14 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::Render2DStore::Register(Render2DHandle hRender2D, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// Guizmo操作
 #ifdef _DEVELOPMENT
-	dataTable_[hRender2D]->DebugGuizmo(viewProjection, viewProjection);
+	dataTable_[hRender2D]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
 #endif
 
-	dataTable_[hRender2D]->Register(viewProjection, commandList, pso);
+	dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, pso);
 }
 
 /// @brief コマンドリストに登録する
@@ -130,14 +132,14 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, const Matrix4x4& 
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::Render2DStore::Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// Guizmo操作
 #ifdef _DEVELOPMENT
-	dataTable_[nameTable_[name]]->DebugGuizmo(viewProjection, viewProjection);
+	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
 #endif
 
-	dataTable_[nameTable_[name]]->Register(viewProjection, commandList, pso);
+	dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, pso);
 }
 
 /// @brief デバッグ用パラメータ

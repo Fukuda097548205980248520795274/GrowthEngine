@@ -311,14 +311,14 @@ namespace Engine
 		/// @param handle 
 		void DrawRender2D(Render2DHandle handle)
 		{
-			render_->DrawRender2D(handle, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
+			render_->DrawRender2D(handle, camera2DStore_.get(), commandList_);
 		}
 
 		/// @brief スプライトの描画処理
 		/// @param name 
 		void DrawRender2D(const std::string& name)
 		{
-			render_->DrawRender2D(name, camera2DStore_->GetCamera2D().GetViewProjectionMatrix(), commandList_);
+			render_->DrawRender2D(name, camera2DStore_.get(), commandList_);
 		}
 
 
