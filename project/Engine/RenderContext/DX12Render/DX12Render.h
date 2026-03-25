@@ -144,7 +144,7 @@ namespace Engine
 		/// @param commandList 
 		void DrawRender2D(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(name, viewProjection, commandList, psoText_.get());
+			render2DStore_->Register(name, viewProjection, commandList, psoSprite_.get());
 		}
 
 

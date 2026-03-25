@@ -24,18 +24,6 @@ public:
 
 private:
 
-	/// @brief ステージ読み込み
-	std::unique_ptr<StageSerializer> serializer_ = nullptr;
-
-	/// @brief ステージデータ
-	std::unique_ptr<StageData> stageData_ = nullptr;
-
-	/// @brief ステージ
-	std::unique_ptr<Stage> stage_ = nullptr;
-
-	/// @brief エディター
-	std::unique_ptr<StageEditor> editor_ = nullptr;
-
 
 	// 太陽
 	std::unique_ptr<LightDirectional> sun_ = nullptr;

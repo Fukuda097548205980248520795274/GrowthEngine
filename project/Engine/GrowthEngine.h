@@ -618,7 +618,7 @@ public:
 	/// @brief スプライト用インスタンスを作成する
 	/// @param name 
 	/// @return 
-	PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name)const { renderContext_->CreatePrefab2DInstance(name); }
+	PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name)const { return renderContext_->CreatePrefab2DInstance(name); }
 
 
 
@@ -794,6 +794,15 @@ public:
 	Render3DHandle LoadPrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name) const
 	{
 		return renderContext_->LoadRender3D(hModel, hAnimation, hSkeleton, name, Engine::Render3D::Type::SkinningModel, log_.get());
+	}
+
+	/// @brief スプライトを読み込む
+	/// @param hTexture 
+	/// @param name 
+	/// @return 
+	Render2DHandle LoadSprite(TextureHandle hTexture, const std::string& name) const
+	{
+		return renderContext_->LoadRender2D(name, Engine::Render2D::Type::Sprite, hTexture, 0, log_.get());
 	}
 
 

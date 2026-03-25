@@ -313,7 +313,7 @@ void Engine::Render2DSpriteData::DebugPicking(const Vector2& point, std::vector<
 
 	Collision2D::Sprite sprite;
 	sprite.center = Vector2(param_->transform.translate.x, param_->transform.translate.y);
-	sprite.radius = Vector2(param_->transform.scale.x, param_->transform.scale.y);
+	sprite.radius = Vector2(param_->transform.scale.x * param_->texture.size.x, param_->transform.scale.y * param_->texture.size.y);
 
 	if (CollisionCheckFunc(point, sprite))
 	{

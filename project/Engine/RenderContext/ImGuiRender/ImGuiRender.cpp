@@ -90,7 +90,7 @@ void Engine::ImGuiRender::FrameStart()
 	ImGui::NewFrame();
 
 	ImGuizmo::BeginFrame();
-	ImGuizmo::SetOrthographic(false);
+	ImGuizmo::SetOrthographic(true);
 }
 
 /// @brief Dockスペースを作成する
