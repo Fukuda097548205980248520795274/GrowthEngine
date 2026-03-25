@@ -327,3 +327,4 @@ imgui.ini
 *.xcf
 *.mdp
 *.pdb
+project/Assets/Parameter/Debug/*
