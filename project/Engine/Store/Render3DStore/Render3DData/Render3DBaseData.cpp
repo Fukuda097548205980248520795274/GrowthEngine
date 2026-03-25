@@ -13,6 +13,9 @@ Engine::Render3DBaseData::Render3DBaseData(const std::string& name, Render3DHand
 
 	// 読み込み
 	isLoad_ = true;
+
+	// 3D
+	guizmoData_.dimension = DebugData::GuizmoDimension::Perspective;
 }
 
 /// @brief シーン前のリセット

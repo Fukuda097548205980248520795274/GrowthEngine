@@ -70,7 +70,7 @@ namespace Engine
 		/// @brief デバッグ用ピッキング
 		/// @param point 
 		/// @param pickList 
-		virtual void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList) = 0;
+		virtual void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) = 0;
 
 		/// @brief Guizmo操作
 		/// @param viewMatrix 

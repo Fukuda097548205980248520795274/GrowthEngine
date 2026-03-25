@@ -47,7 +47,7 @@ namespace Engine
 		/// @brief デバッグ用ピッキング
 		/// @param point 
 		/// @param pickList 
-		void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList) override;
+		void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) override;
 
 		/// @brief Guizmo操作
 		/// @param viewMatrix 

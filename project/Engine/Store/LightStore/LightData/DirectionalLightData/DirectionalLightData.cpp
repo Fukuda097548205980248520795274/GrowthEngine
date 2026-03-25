@@ -224,7 +224,7 @@ void Engine::DirectionalLightData::DebugDrawLine()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::DirectionalLightData::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::DirectionalLightData::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	// 選択初期化
 	if (debugGuizmoData_.isSelect)
@@ -242,9 +242,9 @@ void Engine::DirectionalLightData::DebugRayPicking(const Collision3D::Ray& ray, 
 
 	if (CollisionCheckFunc(aabb, ray))
 	{
-		std::pair<float, bool*> pick;
+		std::pair<float, DebugData::DebugGuizmoData*> pick;
 		pick.first = Vector3(aabb.center - ray.start).Length();
-		pick.second = &debugGuizmoData_.isSelect;
+		pick.second = &debugGuizmoData_;
 		pickList.push_back(pick);
 	}
 }

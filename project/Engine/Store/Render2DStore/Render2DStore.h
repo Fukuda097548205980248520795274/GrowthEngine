@@ -82,7 +82,7 @@ namespace Engine
 		/// @brief デバッグ用ピッキング
 		/// @param point 
 		/// @param pickList 
-		void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList);
+		void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList);
 
 
 	private:

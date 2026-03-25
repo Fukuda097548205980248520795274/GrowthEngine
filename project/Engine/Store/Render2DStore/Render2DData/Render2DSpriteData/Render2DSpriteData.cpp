@@ -299,7 +299,7 @@ void Engine::Render2DSpriteData::DebugParameter()
 /// @brief デバッグ用ピッキング
 /// @param point 
 /// @param pickList 
-void Engine::Render2DSpriteData::DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::Render2DSpriteData::DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	// 選択初期化
 	if (guizmoData_.isSelect)
@@ -317,9 +317,9 @@ void Engine::Render2DSpriteData::DebugPicking(const Vector2& point, std::vector<
 
 	if (CollisionCheckFunc(point, sprite))
 	{
-		std::pair<float, bool*> pick;
+		std::pair<float, DebugData::DebugGuizmoData*> pick;
 		pick.first = 0.0f;
-		pick.second = &guizmoData_.isSelect;
+		pick.second = &guizmoData_;
 		pickList.push_back(pick);
 	}
 }

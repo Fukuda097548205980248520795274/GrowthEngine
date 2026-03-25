@@ -453,7 +453,7 @@ void Engine::RenderContext::DebugRayPicking()
 	ray.diff = Vector3(farWorld.x - nearWorld.x, farWorld.y - nearWorld.y, farWorld.z - nearWorld.z).Normalize();
 
 	// リストを作成し、判定
-	std::vector<std::pair<float, bool*>> pickList;
+	std::vector<std::pair<float, DebugData::DebugGuizmoData*>> pickList;
 	render_->DebugRayPicking(ray, pickList);
 	render_->DebugPicking(mouseScreenPos, pickList);
 	camera3DStore_->DebugRayPicking(ray, pickList);
@@ -464,7 +464,7 @@ void Engine::RenderContext::DebugRayPicking()
 		// もっとも近いリストを選択する
 		std::sort(pickList.begin(), pickList.end());
 
-		*pickList[0].second = true;
+		pickList[0].second->isSelect = true;
 	}
 
 }

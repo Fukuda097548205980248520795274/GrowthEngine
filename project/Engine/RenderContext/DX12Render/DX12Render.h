@@ -156,12 +156,12 @@ namespace Engine
 		/// @brief デバッグ用レイピッキング
 		/// @param ray 
 		/// @param pickList 
-		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) { render3DStore_->DebugRayPicking(ray, pickList); }
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) { render3DStore_->DebugRayPicking(ray, pickList); }
 
 		/// @brief デバッグ用ピッキング
 		/// @param point 
 		/// @param pickList 
-		void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList) { render2DStore_->DebugPicking(point, pickList); }
+		void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) { render2DStore_->DebugPicking(point, pickList); }
 
 
 		template <typename T>

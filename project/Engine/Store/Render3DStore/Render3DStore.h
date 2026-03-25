@@ -116,7 +116,7 @@ namespace Engine
 		/// @brief デバッグ用レイピッキング
 		/// @param ray 
 		/// @param pickList 
-		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) { for (auto& data : dataTable_)data->DebugRayPicker(ray, pickList); }
+		void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) { for (auto& data : dataTable_)data->DebugRayPicker(ray, pickList); }
 
 
 	private:

@@ -699,7 +699,7 @@ void Engine::Render3DSkinningModelData::DebugParameter()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::Render3DSkinningModelData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::Render3DSkinningModelData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	// 選択初期化
 	if (guizmoData_.isSelect)
@@ -717,9 +717,9 @@ void Engine::Render3DSkinningModelData::DebugRayPicker(const Collision3D::Ray& r
 
 	if (CollisionCheckFunc(aabb, ray))
 	{
-		std::pair<float, bool*> pick;
+		std::pair<float, DebugData::DebugGuizmoData*> pick;
 		pick.first = Vector3(aabb.center - ray.start).Length();
-		pick.second = &guizmoData_.isSelect;
+		pick.second = &guizmoData_;
 		pickList.push_back(pick);
 	}
 }

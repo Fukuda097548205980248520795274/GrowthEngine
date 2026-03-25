@@ -76,7 +76,7 @@ namespace Engine
 		/// @brief デバッグ用レイピッキング
 		/// @param ray 
 		/// @param pickList 
-		virtual void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) = 0;
+		virtual void DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) = 0;
 
 		/// @brief デバッグ用Guizmo操作
 		virtual void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) = 0;

@@ -32,6 +32,9 @@ Engine::Camera3DResource::Camera3DResource(const std::string& name, Camera3DHand
 
 	// 読み込む
 	isLoad_ = true;
+
+	// 3D
+	guizmoData_.dimension = DebugData::GuizmoDimension::Perspective;
 }
 
 /// @brief 更新処理
@@ -197,7 +200,7 @@ void Engine::Camera3DResource::DebugParameter()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::Camera3DResource::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::Camera3DResource::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	// 選択初期化
 	if (guizmoData_.isSelect)
@@ -215,9 +218,9 @@ void Engine::Camera3DResource::DebugRayPicking(const Collision3D::Ray& ray, std:
 
 	if (CollisionCheckFunc(aabb, ray))
 	{
-		std::pair<float, bool*> pick;
+		std::pair<float, DebugData::DebugGuizmoData*> pick;
 		pick.first = Vector3(aabb.center - ray.start).Length();
-		pick.second = &guizmoData_.isSelect;
+		pick.second = &guizmoData_;
 		pickList.push_back(pick);
 	}
 }

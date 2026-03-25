@@ -151,7 +151,7 @@ void Engine::Render2DStore::DebugParameter()
 /// @brief デバッグ用ピッキング
 /// @param point 
 /// @param pickList 
-void Engine::Render2DStore::DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::Render2DStore::DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	for (auto& data : dataTable_)data->DebugPicking(point, pickList);
 }

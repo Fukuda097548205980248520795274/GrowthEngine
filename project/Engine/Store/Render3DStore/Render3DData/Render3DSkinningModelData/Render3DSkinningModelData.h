@@ -85,7 +85,7 @@ namespace Engine
 		/// @brief デバッグ用レイピッキング
 		/// @param ray 
 		/// @param pickList 
-		void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList) override;
+		void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) override;
 
 		/// @brief Guizmo操作
 		/// @param cameraStore 

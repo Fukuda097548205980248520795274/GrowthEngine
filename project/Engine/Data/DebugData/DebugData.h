@@ -12,6 +12,13 @@ namespace Engine
 			Scale
 		};
 
+		// Guizmoの次元
+		enum class GuizmoDimension
+		{
+			Orthogothic,
+			Perspective
+		};
+
 		/// @brief デバッグデータ : Guizmo
 		struct DebugGuizmoData
 		{
@@ -20,6 +27,9 @@ namespace Engine
 
 			// モード
 			GuizmoMode mode = GuizmoMode::Translate;
+
+			// 次元
+			GuizmoDimension dimension;
 		};
 	}
 }

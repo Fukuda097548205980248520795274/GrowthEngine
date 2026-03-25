@@ -177,7 +177,7 @@ void Engine::Camera3DStore::DebugParameter()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::Camera3DStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::Camera3DStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 #ifdef _DEVELOPMENT
 

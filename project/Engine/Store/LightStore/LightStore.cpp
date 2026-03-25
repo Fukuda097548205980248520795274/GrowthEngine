@@ -328,7 +328,7 @@ void Engine::LightStore::DebugDrawLine()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::LightStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, bool*>>& pickList)
+void Engine::LightStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	for (auto& data : dataTable_)data->DebugRayPicking(ray, pickList);
 }
