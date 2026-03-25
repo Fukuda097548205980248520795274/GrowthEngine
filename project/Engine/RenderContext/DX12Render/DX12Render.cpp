@@ -79,6 +79,7 @@ void Engine::DX12Render::Reset()
 void Engine::DX12Render::PerSceneReset()
 {
 	render3DStore_->PerSceneReset();
+	render2DStore_->PerSceneReset();
 }
 
 /// @brief シャドウアップ用描画処理

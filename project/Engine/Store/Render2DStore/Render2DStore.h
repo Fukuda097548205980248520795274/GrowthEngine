@@ -23,6 +23,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 		/// @brief 読み込み
 		/// @param name 
 		/// @param type 
@@ -70,8 +73,16 @@ namespace Engine
 			return static_cast<T*>(dataTable_[nameTable_[name]]->GetParam());
 		}
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
+
+		/// @brief デバッグ用ピッキング
+		/// @param point 
+		/// @param pickList 
+		void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList);
 
 
 	private:

@@ -54,6 +54,12 @@ void Engine::Render2DStore::Update()
 	
 }
 
+/// @brief シーン前のリセット
+void Engine::Render2DStore::PerSceneReset()
+{
+	for (auto& data : dataTable_)data->PerSceneReset();
+}
+
 /// @brief 読み込み
 /// @param name 
 /// @param hTexture 
@@ -111,6 +117,11 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 /// @param pso 
 void Engine::Render2DStore::Register(Render2DHandle hRender2D, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// Guizmo操作
+#ifdef _DEVELOPMENT
+	dataTable_[hRender2D]->DebugGuizmo(viewProjection, viewProjection);
+#endif
+
 	dataTable_[hRender2D]->Register(viewProjection, commandList, pso);
 }
 
@@ -121,6 +132,11 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, const Matrix4x4& 
 /// @param pso 
 void Engine::Render2DStore::Register(const std::string& name, const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// Guizmo操作
+#ifdef _DEVELOPMENT
+	dataTable_[nameTable_[name]]->DebugGuizmo(viewProjection, viewProjection);
+#endif
+
 	dataTable_[nameTable_[name]]->Register(viewProjection, commandList, pso);
 }
 
@@ -130,4 +146,12 @@ void Engine::Render2DStore::DebugParameter()
 #ifdef _DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
+}
+
+/// @brief デバッグ用ピッキング
+/// @param point 
+/// @param pickList 
+void Engine::Render2DStore::DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList)
+{
+	for (auto& data : dataTable_)data->DebugPicking(point, pickList);
 }

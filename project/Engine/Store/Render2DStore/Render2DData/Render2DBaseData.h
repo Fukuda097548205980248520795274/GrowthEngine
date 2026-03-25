@@ -12,6 +12,10 @@
 #include "Resource/VertexBufferResource/VertexBufferResource.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 
+#include "Data/DebugData/DebugData.h"
+
+class GrowthEngine;
+
 namespace Engine
 {
 	class Log;
@@ -29,10 +33,13 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		Render2DBaseData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter) : hRender2D_(hRender2D), name_(name), parameter_(parameter) {}
+		Render2DBaseData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter);
 
 		/// @brief リセット
 		virtual void Reset() = 0;
+
+		/// @brief シーン前のリセット
+		void PerSceneReset();
 
 		/// @brief コマンドリストに登録
 		/// @param commandList 
@@ -54,8 +61,21 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
+
+		/// @brief デバッグ用ピッキング
+		/// @param point 
+		/// @param pickList 
+		virtual void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList) = 0;
+
+		/// @brief Guizmo操作
+		/// @param viewMatrix 
+		/// @param projMatrix 
+		virtual void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) = 0;
 
 
 	protected:
@@ -78,6 +98,9 @@ namespace Engine
 
 	protected:
 
+		/// @brief エンジン
+		const GrowthEngine* engine_ = nullptr;
+
 		// 名前
 		std::string name_{};
 
@@ -87,10 +110,16 @@ namespace Engine
 		/// @brief 種類
 		Render2D::Type type_;
 
+		// 読み込んだかどうか
+		bool isLoad_ = false;
+
 
 	protected:
 
 		/// @brief パラメータ
 		Render2DParameter* parameter_ = nullptr;
+
+		/// @brief デバッグデータ : Guizmo
+		DebugData::DebugGuizmoData guizmoData_{};
 	};
 }

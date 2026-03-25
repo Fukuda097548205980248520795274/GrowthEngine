@@ -117,4 +117,10 @@ namespace Engine
 	/// @param sprite 
 	/// @return 
 	bool CollisionCheckFunc(const Collision2D::Circle& circle, const Collision2D::Sprite& sprite);
+
+	/// @brief 衝突判定
+	/// @param point 
+	/// @param sprite 
+	/// @return 
+	bool CollisionCheckFunc(const Vector2& point, const Collision2D::Sprite& sprite);
 }

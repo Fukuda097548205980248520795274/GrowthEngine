@@ -38,8 +38,21 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
+
+		/// @brief デバッグ用ピッキング
+		/// @param point 
+		/// @param pickList 
+		void DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList) override;
+
+		/// @brief Guizmo操作
+		/// @param viewMatrix 
+		/// @param projMatrix 
+		void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) override;
 
 
 	private:

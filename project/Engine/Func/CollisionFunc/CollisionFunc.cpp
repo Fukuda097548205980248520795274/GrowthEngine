@@ -1606,3 +1606,18 @@ bool Engine::CollisionCheckFunc(const Collision2D::Circle& circle, const Collisi
 
 	return false;
 }
+
+/// @brief 衝突判定
+/// @param point 
+/// @param sprite 
+/// @return 
+bool Engine::CollisionCheckFunc(const Vector2& point, const Collision2D::Sprite& sprite)
+{
+	if(point.x >= sprite.center.x - sprite.radius.x &&
+		point.x <= sprite.center.x + sprite.radius.x)
+		if (point.y >= sprite.center.y - sprite.radius.y &&
+			point.y <= sprite.center.y + sprite.radius.y)
+			return true;
+
+	return false;
+}

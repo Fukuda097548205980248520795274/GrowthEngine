@@ -4,6 +4,12 @@
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 
+#include "Func/CollisionFunc/CollisionFunc.h"
+
+#include <numbers>
+
+#include "GrowthEngine.h"
+
 /// @brief 初期化
 /// @param vertexResource 
 /// @param indexResource 
@@ -137,6 +143,9 @@ void Engine::Render2DTextData::Reset()
 			param_->charMaterial[i].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
+
+	// 読み込む
+	isLoad_ = true;
 }
 
 /// @brief コマンドリストに登録
@@ -190,4 +199,130 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 void Engine::Render2DTextData::DebugParameter()
 {
 
+}
+
+/// @brief デバッグ用ピッキング
+/// @param point 
+/// @param pickList 
+void Engine::Render2DTextData::DebugPicking(const Vector2& point, std::vector<std::pair<float, bool*>>& pickList)
+{
+	// 選択初期化
+	if (guizmoData_.isSelect)
+	{
+		guizmoData_.isSelect = false;
+		return;
+	}
+
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
+	Collision2D::Sprite sprite;
+	sprite.center = Vector2(param_->transform.translate.x, param_->transform.translate.y);
+	sprite.radius = Vector2(30.0f, 30.0f);
+
+	if (CollisionCheckFunc(point, sprite))
+	{
+		std::pair<float, bool*> pick;
+		pick.first = 0.0f;
+		pick.second = &guizmoData_.isSelect;
+		pickList.push_back(pick);
+	}
+}
+
+/// @brief Guizmo操作
+/// @param viewMatrix 
+/// @param projMatrix 
+void Engine::Render2DTextData::DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix)
+{
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
+	// 選択していないときは処理しない
+	if (!guizmoData_.isSelect)
+		return;
+
+	// Tキー -> 移動
+	if (engine_->GetKeyTrigger(DIK_T))guizmoData_.mode = DebugData::GuizmoMode::Translate;
+
+	// Rキー -> 回転
+	if (engine_->GetKeyTrigger(DIK_R))guizmoData_.mode = DebugData::GuizmoMode::Rotate;
+
+	// Sキー -> 拡縮
+	if (engine_->GetKeyTrigger(DIK_S))guizmoData_.mode = DebugData::GuizmoMode::Scale;
+
+	// ワールド行列
+	Matrix4x4 worldMatrix;
+
+	switch (guizmoData_.mode)
+	{
+	case DebugData::GuizmoMode::Translate:
+		// 移動
+
+		// 移動
+		worldMatrix = Make2DTranslateMatrix4x4(param_->transform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			// 平行移動
+			param_->transform.translate = Vector2(worldMatrix.m[3][0], worldMatrix.m[3][1]);
+		}
+
+		break;
+
+	case DebugData::GuizmoMode::Rotate:
+		// 回転
+
+		// 回転 * 移動
+		worldMatrix = Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			float translation[3];
+			float rotation[3];
+			float scale[3];
+
+			ImGuizmo::DecomposeMatrixToComponents(
+				&worldMatrix.m[0][0],
+				translation,
+				rotation,
+				scale
+			);
+
+			// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
+			constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+
+			// rotation[] は度数法（degrees）なので、ラジアンに変換して代入する
+			param_->transform.rotate = rotation[2] * DEG2RAD;
+		}
+
+		break;
+
+	case DebugData::GuizmoMode::Scale:
+		// 拡縮
+
+		// 拡縮 * 移動
+		worldMatrix = Make2DScaleMatrix4x4(param_->transform.scale) * Make2DTranslateMatrix4x4(param_->transform.translate);
+
+		// Guizmo描画
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::SCALE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
+		if (ImGuizmo::IsUsing())
+		{
+			param_->transform.scale.x =
+				std::sqrt(worldMatrix.m[0][0] * worldMatrix.m[0][0] + worldMatrix.m[0][1] * worldMatrix.m[0][1] + worldMatrix.m[0][2] * worldMatrix.m[0][2]);
+			param_->transform.scale.y =
+				std::sqrt(worldMatrix.m[1][0] * worldMatrix.m[1][0] + worldMatrix.m[1][1] * worldMatrix.m[1][1] + worldMatrix.m[1][2] * worldMatrix.m[1][2]);
+		}
+
+		break;
+	}
 }
