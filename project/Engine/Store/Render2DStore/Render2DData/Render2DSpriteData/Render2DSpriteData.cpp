@@ -311,12 +311,17 @@ void Engine::Render2DSpriteData::DebugPicking(const Vector2& point, std::vector<
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;
 
-	Collision2D::Sprite sprite;
-	sprite.center = Vector2(param_->transform.translate.x, param_->transform.translate.y);
-	sprite.radius = Vector2(param_->transform.scale.x * param_->texture.size.x, param_->transform.scale.y * param_->texture.size.y);
 
-	if (CollisionCheckFunc(point, sprite))
+	float left = -param_->texture.anchor.x * (param_->texture.size.x * param_->transform.scale.x) + param_->transform.translate.x;
+	float right = (1.0f - param_->texture.anchor.x) * (param_->texture.size.x * param_->transform.scale.x) + param_->transform.translate.x;
+	float top = (1.0f - param_->texture.anchor.y) * (param_->texture.size.y * param_->transform.scale.y) + param_->transform.translate.y;
+	float bottom =  -param_->texture.anchor.y * (param_->texture.size.y * param_->transform.scale.y) + param_->transform.translate.y;
+
+	if (point.x >= left && point.x <= right &&
+		point.y <= top && point.y >= bottom)
 	{
+		// 当たっている
+
 		std::pair<float, DebugData::DebugGuizmoData*> pick;
 		pick.first = 0.0f;
 		pick.second = &guizmoData_;
@@ -352,12 +357,10 @@ void Engine::Render2DSpriteData::DebugGuizmo(const Matrix4x4& viewMatrix, const 
 	{
 	case DebugData::GuizmoMode::Translate:
 		// 移動
-
-		// 移動
 		worldMatrix = Make2DTranslateMatrix4x4(param_->transform.translate);
 
 		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE_X | ImGuizmo::TRANSLATE_Y, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
 		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
 		if (ImGuizmo::IsUsing())
@@ -374,8 +377,8 @@ void Engine::Render2DSpriteData::DebugGuizmo(const Matrix4x4& viewMatrix, const 
 		// 回転 * 移動
 		worldMatrix = Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
 
-		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+		// ROTATE_Z だけを許可する
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE_Z, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
 		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
 		if (ImGuizmo::IsUsing())
@@ -407,7 +410,7 @@ void Engine::Render2DSpriteData::DebugGuizmo(const Matrix4x4& viewMatrix, const 
 		worldMatrix = Make2DScaleMatrix4x4(param_->transform.scale) * Make2DTranslateMatrix4x4(param_->transform.translate);
 
 		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::SCALE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::SCALE_X | ImGuizmo::SCALE_Y, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
 		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
 		if (ImGuizmo::IsUsing())

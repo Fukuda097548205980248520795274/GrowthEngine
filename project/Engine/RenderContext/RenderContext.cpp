@@ -452,10 +452,13 @@ void Engine::RenderContext::DebugRayPicking()
 
 	ray.diff = Vector3(farWorld.x - nearWorld.x, farWorld.y - nearWorld.y, farWorld.z - nearWorld.z).Normalize();
 
+	// 2D描画の座標に変換する
+	Vector2 render2DCoordinatePos = Vector2(mouseScreenPos.x, static_cast<float>(winApp_->GetClientHeight()) - mouseScreenPos.y);
+
 	// リストを作成し、判定
 	std::vector<std::pair<float, DebugData::DebugGuizmoData*>> pickList;
 	render_->DebugRayPicking(ray, pickList);
-	render_->DebugPicking(mouseScreenPos, pickList);
+	render_->DebugPicking(render2DCoordinatePos, pickList);
 	camera3DStore_->DebugRayPicking(ray, pickList);
 	lightStore_->DebugRayPicking(ray, pickList);
 
