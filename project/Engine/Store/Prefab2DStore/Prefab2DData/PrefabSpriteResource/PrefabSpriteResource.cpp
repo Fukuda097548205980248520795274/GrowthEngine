@@ -48,7 +48,7 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	param_->material.hTexture = hTexture;
 
 	// テクスチャ
-	param_->texture.anchor = Vector2(0.0f, 0.0f);
+	param_->texture.anchor = Vector2(0.5f, 0.5f);
 	textureFilePath_ = textureStore_->GetFilePath(hTexture);
 
 	// テクスチャサイズを取得する
@@ -90,15 +90,7 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 void Engine::PrefabSpriteResource::Update()
 {
 	// 終了したインスタンスを削除する
-	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance)
-		{
-			if (instance->isDelete_) 
-			{ 
-				return true; 
-			}
-			return false; 
-		}
-	);
+	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット
@@ -130,6 +122,9 @@ void Engine::PrefabSpriteResource::Reset()
 			Vector2(static_cast<float>(textureStore_->GetTextureWidth(param_->material.hTexture)),
 				static_cast<float>(textureStore_->GetTextureHeight(param_->material.hTexture)));
 	}
+
+	// 読み込まれたことにする
+	isLoad_ = true;
 }
 
 /// @brief コマンドリストに登録する
@@ -137,9 +132,13 @@ void Engine::PrefabSpriteResource::Reset()
 /// @param pso 
 void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// 読み込まれていないと処理しない
+	if (!isLoad_)return;
+
 	// インスタンスがないときは処理しない
 	if (useInstance_ <= 0)
 		return;
+
 
 	// PSOの設定
 	pso->Register(commandList);
@@ -165,7 +164,7 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 
 /// @brief インスタンスを作成する
 /// @return 
-PrefabInstanceSprite* Engine::PrefabSpriteResource::CreateInstance()
+void* Engine::PrefabSpriteResource::CreateInstance()
 {
 	// インスタンスを生成する
 	std::unique_ptr<PrefabInstanceSprite> instance =
@@ -186,6 +185,9 @@ void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Inst
 {
 	// nullptrチェック
 	assert(param);
+
+	// 読み込まれていないと処理しない
+	if (!isLoad_)return;
 
 	// インスタンス数以上のドローコールは処理しない
 	if (useInstance_ >= numInstance_)
@@ -216,6 +218,9 @@ void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Inst
 void Engine::PrefabSpriteResource::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込まれていないと処理しない
+	if (!isLoad_)return;
 
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))

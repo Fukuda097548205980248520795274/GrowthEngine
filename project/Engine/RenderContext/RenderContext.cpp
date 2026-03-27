@@ -144,7 +144,6 @@ void Engine::RenderContext::PerScene()
 
 	// プレハブのリセット
 	prefab_->PerSceneReset();
-	prefab_->DestroyAllInstance();
 
 	// ライトストアのリセット
 	lightStore_->PerSceneReset();

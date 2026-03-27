@@ -1,5 +1,5 @@
 #pragma once
-#include "PrefabSpriteResource/PrefabSpriteResource.h"
+#include "Prefab2DData/Prefab2DBaseData.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 #include <vector>
 
@@ -22,6 +22,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief シーン前リセット
+		void PerSceneReset();
+
 		/// @brief 読み込み
 		/// @param name 
 		/// @param hTexture 
@@ -39,29 +42,35 @@ namespace Engine
 		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param hPrefab2D 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetParam(Prefab2DHandle hPrefab2D) { return dataTable_[hPrefab2D]->GetParam(); }
+		template<typename T>
+		T* GetParam(Prefab2DHandle hPrefab2D) { return static_cast<T*>(dataTable_[hPrefab2D]->GetParam()); }
 
 		/// @brief パラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
+		template<typename T>
+		T* GetParam(const std::string& name) { return static_cast<T*>(dataTable_[nameTable_[name]]->GetParam()); }
 
 		/// @brief インスタンスを作成する
-		/// @param hPrefabSprite 
+		/// @tparam T 
+		/// @param hPrefab2D 
 		/// @return 
-		PrefabInstanceSprite* CreateInstance(Prefab2DHandle hPrefab2D) { return dataTable_[hPrefab2D]->CreateInstance(); }
+		template<typename T>
+		T* CreateInstance(Prefab2DHandle hPrefab2D) { return static_cast<T*>(dataTable_[hPrefab2D]->CreateInstance()); }
 
 		/// @brief インスタンスを作成する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		PrefabInstanceSprite* CreateInstance(const std::string& name) { return dataTable_[nameTable_[name]]->CreateInstance(); }
+		template<typename T>
+		T* CreateInstance(const std::string& name) { return static_cast<T*>(dataTable_[nameTable_[name]]->CreateInstance()); }
 
 		/// @brief リセット
 		void Reset();
-
-		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance();
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
@@ -70,7 +79,7 @@ namespace Engine
 	private:
 
 		/// @brief データテーブル
-		std::vector<std::unique_ptr<PrefabSpriteResource>> dataTable_;
+		std::vector<std::unique_ptr<Prefab2DBaseData>> dataTable_;
 
 		/// @brief 名前テーブル
 		std::unordered_map<std::string, Prefab2DHandle> nameTable_;

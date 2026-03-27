@@ -107,6 +107,7 @@ void Engine::DX12Prefab::Reset()
 void Engine::DX12Prefab::PerSceneReset()
 {
 	prefab3DStore_->PerSceneReset();
+	prefab2DStore_->PerSceneReset();
 }
 
 /// @brief シャドウマップの描画処理
@@ -125,12 +126,6 @@ void Engine::DX12Prefab::DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsComm
 {
 	prefab3DStore_->Register(skyboxStore, commandList, psoPrefabPrimitive_.get());
 	prefab2DStore_->Register(commandList, psoPrefabSprite_.get());
-}
-
-/// @brief 全てのインスタンスを削除する
-void Engine::DX12Prefab::DestroyAllInstance()
-{
-	prefab2DStore_->DestroyAllInstance();
 }
 
 /// @brief リセット

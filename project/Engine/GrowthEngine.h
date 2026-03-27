@@ -586,14 +586,19 @@ public:
 	template<typename T>
 	T* GetPrefab3DParam(const std::string& name)const { return renderContext_->GetPrefab3DParam<T>(name); }
 
-	/// @brief スプライト用プレハブのパラメータを取得する
+	/// @brief 2Dプレハブのパラメータを取得する
+	/// @tparam T 
+	/// @param hPrefab2D 
 	/// @return 
-	Engine::Prefab2D::Sprite::Base::Param* GetPrefab2DParam(Prefab2DHandle hPrefab2D)const { return renderContext_->GetPrefab2DParam(hPrefab2D); }
+	template<typename T>
+	T* GetPrefab2DParam(Prefab2DHandle hPrefab2D) const { return renderContext_->GetPrefab2DParam<T>(hPrefab2D); }
 
-	/// @brief スプライト用プレハブのパラメータを取得する
+	/// @brief 2Dプレハブのパラメータを取得する
+	/// @tparam T 
 	/// @param name 
 	/// @return 
-	Engine::Prefab2D::Sprite::Base::Param* GetPrefab2DParam(const std::string& name)const { return renderContext_->GetPrefab2DParam(name); }
+	template<typename T>
+	T* GetPrefab2DParam(const std::string& name) const { return renderContext_->GetPrefab2DParam<T>(name); }
 
 
 	/// @brief プリミティブ用インスタンスを作成する
@@ -610,15 +615,19 @@ public:
 	template<typename T>
 	T* CreatePrefab3DInstance(const std::string& name)const { return renderContext_->CreatePrefab3DInstance<T>(name); }
 
-	/// @brief スプライト用インスタンスを作成する
+	/// @brief 2Dプレハブ用インスタンスを作成する
+	/// @tparam T 
 	/// @param hPrefabSprite 
 	/// @return 
-	PrefabInstanceSprite* CreatePrefab2DInstance(Prefab2DHandle hPrefab2D) const { return renderContext_->CreatePrefab2DInstance(hPrefab2D); }
+	template<typename T>
+	T* CreatePrefab2DInstance(Prefab2DHandle hPrefabSprite) const { return renderContext_->CreatePrefab2DInstance<T>(hPrefabSprite); }
 
-	/// @brief スプライト用インスタンスを作成する
+	/// @brief 2Dプレハブ用インスタンスを作成する
+	/// @tparam T 
 	/// @param name 
 	/// @return 
-	PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name)const { return renderContext_->CreatePrefab2DInstance(name); }
+	template<typename T>
+	T* CreatePrefab2DInstance(const std::string& name) const { return renderContext_->CreatePrefab2DInstance<T>(name); }
 
 
 

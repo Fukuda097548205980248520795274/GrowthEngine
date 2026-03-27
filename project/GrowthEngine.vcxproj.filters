@@ -550,18 +550,6 @@
     <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseSprite">
       <UniqueIdentifier>{3f6dda46-067a-4d5a-8b87-2d952dc326b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore">
-      <UniqueIdentifier>{fd8e0911-cb46-4b58-b235-1e7d8d6e9f16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData">
-      <UniqueIdentifier>{528526b9-934a-4d5a-bb07-b144bb5e2f8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData">
-      <UniqueIdentifier>{b16ced47-312f-44a0-820f-2768a11f43b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
-      <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\Skybox">
       <UniqueIdentifier>{52c3a4a7-4ad9-4ed4-a38f-c0e696bfad32}</UniqueIdentifier>
     </Filter>
@@ -715,9 +703,6 @@
     <Filter Include="Engine\Include\Store\Prefab2DStore">
       <UniqueIdentifier>{de2afa54-1a67-4935-a31e-e5d380e7810d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\Prefab2DStore\PrefabSpriteResource">
-      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData">
       <UniqueIdentifier>{f2dc0143-ef53-4185-87ce-e75e02fcbde8}</UniqueIdentifier>
     </Filter>
@@ -753,6 +738,24 @@
     </Filter>
     <Filter Include="Engine\Include\Parameter\Camera2DParameter">
       <UniqueIdentifier>{aebf586f-de4e-4b37-a21a-13a0c2f3fccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData">
+      <UniqueIdentifier>{e3b231d0-9f62-448c-ad19-a3d5dd89111c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource">
+      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore">
+      <UniqueIdentifier>{fd8e0911-cb46-4b58-b235-1e7d8d6e9f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData">
+      <UniqueIdentifier>{528526b9-934a-4d5a-bb07-b144bb5e2f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData">
+      <UniqueIdentifier>{b16ced47-312f-44a0-820f-2768a11f43b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
+      <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1035,8 +1038,8 @@
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
-      <Filter>Engine\Include\Store\Prefab2DStore\PrefabSpriteResource</Filter>
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.cpp">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectStore.cpp">
       <Filter>Engine\Include\Store\PostEffectStore</Filter>
@@ -1319,6 +1322,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.cpp">
       <Filter>Engine\Include\Parameter\Camera3DParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.cpp">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1661,8 +1667,8 @@
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.h">
-      <Filter>Engine\Include\Store\Prefab2DStore\PrefabSpriteResource</Filter>
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.h">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\PrefabDataForGPU</Filter>
@@ -1984,6 +1990,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.h">
       <Filter>Engine\Include\Parameter\Camera3DParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.h">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

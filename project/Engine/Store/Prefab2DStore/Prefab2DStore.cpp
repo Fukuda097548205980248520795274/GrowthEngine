@@ -1,4 +1,5 @@
 #include "Prefab2DStore.h"
+#include "Prefab2DData/PrefabSpriteResource/PrefabSpriteResource.h"
 
 /// @brief コンストラクタ
 Engine::Prefab2DStore::Prefab2DStore()
@@ -49,6 +50,12 @@ void Engine::Prefab2DStore::Update()
 {
 	// データの更新
 	for (auto& data : dataTable_)data->Update();
+}
+
+/// @brief シーン前リセット
+void Engine::Prefab2DStore::PerSceneReset()
+{
+	for (auto& data : dataTable_)data->PerSceneReset();
 }
 
 /// @brief 読み込み
@@ -102,12 +109,6 @@ void Engine::Prefab2DStore::Register(ID3D12GraphicsCommandList* commandList, Bas
 void Engine::Prefab2DStore::Reset()
 {
 	for (auto& data : dataTable_)data->InstanceReset();
-}
-
-/// @brief 全てのインスタンスを削除する
-void Engine::Prefab2DStore::DestroyAllInstance()
-{
-	for (auto& data : dataTable_)data->DestroyAllInstance();
 }
 
 /// @brief デバッグ用パラメータ

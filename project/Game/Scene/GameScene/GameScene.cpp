@@ -11,12 +11,21 @@ void GameScene::Initialize()
 	engine_->LoadSprite(engine_->LoadTexture("Assets/Textures/uvChecker.png"), "TEST_Sprite");
 	
 	engine_->LoadPrimitiveStaticModel(engine_->LoadModel("Assets/Models/AnimatedCube", "AnimatedCube.gltf"), "TEST_Model");
+
+	engine_->LoadPrefabSprite("Test_Sprite_Prefab", 100, engine_->LoadTexture("Assets/Textures/uvChecker.png"));
+	a1_ = engine_->CreatePrefab2DInstance<PrefabInstanceSprite>("Test_Sprite_Prefab");
+	a2_ = engine_->CreatePrefab2DInstance<PrefabInstanceSprite>("Test_Sprite_Prefab");
+
+	a2_->param_.transform.translate = Vector2(100.0f, 100.0f);
 }
 
 /// @brief 更新処理
 void GameScene::Update()
 {
-	
+	if (engine_->GetKeyTrigger(DIK_SPACE))
+	{
+		Transition("Title");
+	}
 }
 
 /// @brief 描画処理
@@ -27,5 +36,8 @@ void GameScene::Draw()
 
 	engine_->DrawRender3D("TEST_Model");
 
-	engine_->DrawRender2D("TEST_Sprite");
+	a2_->Draw();
+	a1_->Draw();
+
+	//engine_->DrawRender2D("TEST_Sprite");
 }

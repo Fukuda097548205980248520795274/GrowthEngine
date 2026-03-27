@@ -39,6 +39,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(WinApp* winApp, Log* log);
 
+		/// @brief シーン前処理
+		void PerScene();
+
 		/// @brief 新フレーム処理
 		void NewFrame();
 
@@ -250,14 +253,19 @@ namespace Engine
 		template<typename T>
 		T* GetPrefab3DParam(const std::string& name) { return prefab_->GetPrefab3DParam(name); }
 
-		/// @brief スプライト用プレハブのパラメータを取得する
+		/// @brief 2Dプレハブのパラメータを取得する
+		/// @tparam T 
+		/// @param hPrefab2D 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(Prefab2DHandle hPrefab2D) { return prefab_->GetPrefab2DParam(hPrefab2D); }
+		template<typename T>
+		T* GetPrefab2DParam(Prefab2DHandle hPrefab2D) { return prefab_->GetPrefab2DParam<T>(hPrefab2D); }
 
-		/// @brief スプライト用プレハブのパラメータを取得する
+		/// @brief 2Dプレハブのパラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(const std::string& name) { return prefab_->GetPrefab2DParam(name); }
+		template<typename T>
+		T* GetPrefab2DParam(const std::string& name) { return prefab_->GetPrefab2DParam<T>(name); }
 
 
 		/// @brief プリミティブ用インスタンスを作成する
@@ -274,19 +282,19 @@ namespace Engine
 		template<typename T>
 		T* CreatePrefab3DInstance(const std::string& name) { return prefab_->CreatePrefab3DInstance<T>(name); }
 
-		/// @brief スプライト用インスタンスを作成する
+		/// @brief 2Dプレハブ用インスタンスを作成する
+		/// @tparam T 
 		/// @param hPrefabSprite 
 		/// @return 
-		PrefabInstanceSprite* CreatePrefab2DInstance(Prefab2DHandle hPrefab2D) { return prefab_->CreatePrefab2DInstance(hPrefab2D); }
+		template<typename T>
+		T* CreatePrefab2DInstance(Prefab2DHandle hPrefabSprite) { return prefab_->CreatePrefab2DInstance<T>(hPrefabSprite); }
 
-		/// @brief スプライト用インスタンスを作成する
+		/// @brief 2Dプレハブ用インスタンスを作成する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name) { return prefab_->CreatePrefab2DInstance(name); }
-
-
-		/// @brief シーン前処理
-		void PerScene();
+		template<typename T>
+		T* CreatePrefab2DInstance(const std::string& name) { return prefab_->CreatePrefab2DInstance<T>(name); }
 
 
 

@@ -717,8 +717,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.cpp" />
     <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.cpp" />
-    <ClCompile Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.cpp">
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1008,8 +1009,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.h" />
-    <ClInclude Include="Engine\Store\Prefab2DStore\PrefabSpriteResource\PrefabSpriteResource.h" />
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.h" />
     <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DStore.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.h" />

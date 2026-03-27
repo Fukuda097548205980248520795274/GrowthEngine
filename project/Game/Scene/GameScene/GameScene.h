@@ -27,5 +27,8 @@ private:
 
 	// 太陽
 	std::unique_ptr<LightDirectional> sun_ = nullptr;
+
+	PrefabInstanceSprite* a1_ = nullptr;
+	PrefabInstanceSprite* a2_ = nullptr;
 };
 

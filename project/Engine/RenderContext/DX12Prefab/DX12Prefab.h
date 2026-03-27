@@ -106,14 +106,19 @@ namespace Engine
 		template<typename T>
 		T* GetPrefab3DParam(const std::string& name) { return prefab3DStore_->GetParam<T>(name); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2Dプレハブのパラメータを取得する
+		/// @tparam T 
+		/// @param hPrefab2D 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(Prefab2DHandle hPrefab2D) { return prefab2DStore_->GetParam(hPrefab2D); }
+		template<typename T>
+		T* GetPrefab2DParam(Prefab2DHandle hPrefab2D) { return prefab2DStore_->GetParam<T>(hPrefab2D); }
 
-		/// @brief スプライトのパラメータを取得する
+		/// @brief 2Dプレハブのパラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		Prefab2D::Sprite::Base::Param* GetPrefab2DParam(const std::string& name) { return prefab2DStore_->GetParam(name); }
+		template<typename T>
+		T* GetPrefab2DParam(const std::string& name) { return prefab2DStore_->GetParam<T>(name); }
 
 
 		/// @brief プリミティブ用インスタンスを作成する
@@ -130,20 +135,20 @@ namespace Engine
 		template<typename T>
 		T* CreatePrefab3DInstance(const std::string& name) { return prefab3DStore_->CreateInstance<T>(name); }
 
-
-		/// @brief スプライト用インスタンスを作成する
+		/// @brief 2Dプレハブ用インスタンスを作成する
+		/// @tparam T 
 		/// @param hPrefabSprite 
 		/// @return 
-		PrefabInstanceSprite* CreatePrefab2DInstance(Prefab2DHandle hPrefabSprite) { return prefab2DStore_->CreateInstance(hPrefabSprite); }
+		template<typename T>
+		T* CreatePrefab2DInstance(Prefab2DHandle hPrefabSprite) { return prefab2DStore_->CreateInstance<T>(hPrefabSprite); }
 
-		/// @brief スプライト用インスタンスを作成する
+		/// @brief 2Dプレハブ用インスタンスを作成する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		PrefabInstanceSprite* CreatePrefab2DInstance(const std::string& name) { return prefab2DStore_->CreateInstance(name); }
+		template<typename T>
+		T* CreatePrefab2DInstance(const std::string& name) { return prefab2DStore_->CreateInstance<T>(name); }
 
-
-		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance();
 
 		/// @brief プレハブリセット
 		void PrefabReset();
