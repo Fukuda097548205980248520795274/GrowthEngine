@@ -48,6 +48,10 @@ namespace Engine
 		/// @return 
 		Render3DHandle GetHandle()const { return hRender3D_; }
 
+		/// @brief 描画したかどうか
+		/// @return 
+		bool IsDrew()const { return isDrew_ || isPreDrew_; }
+
 		/// @brief パラメータを取得する
 		/// @return 
 		virtual void* GetParam() = 0;
@@ -73,6 +77,12 @@ namespace Engine
 		/// @brief エンジン
 		const GrowthEngine* engine_ = nullptr;
 
+		/// @brief パラメータ
+		Render3DParameter* parameter_ = nullptr;
+
+
+	protected:
+
 		// 種別名
 		Render3D::Type type_;
 		
@@ -85,8 +95,14 @@ namespace Engine
 		/// @brief 読み込んだかどうか
 		bool isLoad_ = false;
 
-		/// @brief パラメータ
-		Render3DParameter* parameter_ = nullptr;
+
+	protected:
+
+		// 描画したかどうか
+		bool isDrew_ = false;
+
+		// 描画前に処理したかどうか
+		bool isPreDrew_ = false;
 
 	private:
 

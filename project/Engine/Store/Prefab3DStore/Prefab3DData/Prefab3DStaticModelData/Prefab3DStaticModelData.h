@@ -61,6 +61,9 @@ namespace Engine
 		/// @return 
 		void* CreateInstance() override;
 
+
+	public:
+
 		/// @brief 全てのインスタンスを削除する
 		void DestroyAllInstance() override;
 

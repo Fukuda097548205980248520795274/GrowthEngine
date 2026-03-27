@@ -190,6 +190,13 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 /// @brief 更新処理
 void Engine::Render3DSkinningModelData::Update()
 {
+	// 描画を記録する
+	isPreDrew_ = isDrew_;
+	isDrew_ = false;
+
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
 	Animation animation = animationStore_->GetAnimation(param_->animation.hAnimation);
 
 	// 現在の時間に合わせたスケルトンを取得する
@@ -208,10 +215,6 @@ void Engine::Render3DSkinningModelData::Update()
 	{
 		skinClusters_[meshIndex]->Update(skeleton_);
 	}
-
-#ifdef _DEVELOPMENT
-
-#endif 
 }
 
 /// @brief リセット
@@ -279,6 +282,9 @@ void Engine::Render3DSkinningModelData::Reset()
 /// @param pso 
 void Engine::Render3DSkinningModelData::Skinning(ID3D12GraphicsCommandList* commandList, ComputePSOSkinning* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
@@ -309,6 +315,10 @@ void Engine::Render3DSkinningModelData::Skinning(ID3D12GraphicsCommandList* comm
 /// @param textureStore 
 void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
@@ -435,6 +445,9 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 
 		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	}
+
+	// 描画した
+	isDrew_ = true;
 }
 
 /// @brief コマンドリスト
@@ -442,6 +455,13 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 /// @param pso 
 void Engine::Render3DSkinningModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 直前で描画されているときのみ
+	if (!IsDrew())return;
+
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 

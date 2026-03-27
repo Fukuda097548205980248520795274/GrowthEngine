@@ -118,11 +118,5 @@ namespace Engine
 
 		/// @brief カメラストア
 		Camera3DStore* cameraStore_ = nullptr;
-
-
-	private:
-
-		// デバッグフラグ
-		bool isDebug_ = false;
 	};
 }

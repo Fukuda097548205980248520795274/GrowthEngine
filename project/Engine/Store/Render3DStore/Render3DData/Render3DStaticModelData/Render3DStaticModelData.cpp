@@ -139,9 +139,9 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 /// @brief 更新処理
 void Engine::Render3DStaticModelData::Update()
 {
-#ifdef _DEVELOPMENT
-
-#endif 
+	// 描画を記録する
+	isPreDrew_ = isDrew_;
+	isDrew_ = false;
 }
 
 /// @brief リセット
@@ -205,6 +205,9 @@ void Engine::Render3DStaticModelData::Reset()
 /// @param textureStore 
 void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
@@ -323,6 +326,9 @@ void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, Skybo
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
 	}
+
+	// 描画した
+	isDrew_ = true;
 }
 
 /// @brief コマンドリスト
@@ -330,6 +336,12 @@ void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, Skybo
 /// @param pso 
 void Engine::Render3DStaticModelData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 直前で描画されているときのみ
+	if (!IsDrew())return;
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 

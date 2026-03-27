@@ -140,10 +140,10 @@ void Engine::Prefab3DStore::Reset()
 	for (auto& data : dataTable_)data->InstanceReset();
 }
 
-/// @brief 全てのインスタンスを削除する
-void Engine::Prefab3DStore::DestroyAllInstance()
+/// @brief シーン前のリセット
+void Engine::Prefab3DStore::PerSceneReset()
 {
-	for (auto& data : dataTable_)data->DestroyAllInstance();
+	for (auto& data : dataTable_)data->PerSceneReset();
 }
 
 /// @brief デバッグ用パラメータ

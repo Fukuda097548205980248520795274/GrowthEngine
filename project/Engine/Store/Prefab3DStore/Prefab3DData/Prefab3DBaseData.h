@@ -26,8 +26,7 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param hPrefab 
-		Prefab3DBaseData(const std::string& name , uint32_t numInstance , Prefab3DHandle hPrefab3D, Prefab3DParameter* parameter)
-			: name_(name), numInstance_(numInstance),hPrefab3D_(hPrefab3D), parameter_(parameter) {}
+		Prefab3DBaseData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, Prefab3DParameter* parameter);
 
 		/// @brief 仮想デストラクタ
 		virtual ~Prefab3DBaseData() = default;
@@ -37,6 +36,9 @@ namespace Engine
 		
 		/// @brief リセット
 		virtual void Reset() = 0;
+
+		/// @brief シーン前のリセット
+		void PerSceneReset();
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -69,8 +71,8 @@ namespace Engine
 		/// @return 
 		virtual void* CreateInstance() = 0;
 
-		/// @brief 全てのインスタンスを削除する
-		virtual void DestroyAllInstance() = 0;
+
+	public:
 
 		/// @brief リセット
 		void InstanceReset() { numUseInstance_ = 0; }
@@ -99,6 +101,22 @@ namespace Engine
 
 		// 使用インスタンス数
 		uint32_t numUseInstance_ = 0;
+
+
+		/// @brief 読み込まれたかどうか
+		bool isLoad_ = false;
+
+
+	protected:
+
+		// デバッグフラグ
+		bool isDebug_ = false;
+
+
+	protected:
+
+		/// @brief 全てのインスタンスを削除する
+		virtual void DestroyAllInstance() = 0;
 
 
 	protected:

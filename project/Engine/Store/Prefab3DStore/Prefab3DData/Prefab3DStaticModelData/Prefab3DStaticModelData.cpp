@@ -193,6 +193,9 @@ void Engine::Prefab3DStaticModelData::Reset()
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 		}
 	}
+
+	// 読み込まれたことにする
+	isLoad_ = true;
 }
 
 /// @brief コマンドリストに登録する
@@ -200,9 +203,13 @@ void Engine::Prefab3DStaticModelData::Reset()
 /// @param pso 
 void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
 	// インスタンス描画命令を行っていないときは処理しない
 	if (numUseInstance_ <= 0)
 		return;
+
 
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
@@ -252,6 +259,8 @@ void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12G
 /// @param pso 
 void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
 
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
@@ -348,6 +357,9 @@ void Engine::Prefab3DStaticModelData::DestroyAllInstance()
 void Engine::Prefab3DStaticModelData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
 
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
@@ -532,6 +544,10 @@ void Engine::Prefab3DStaticModelData::DebugParameter()
 /// @brief インスタンスのドローコール
 void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::StaticModel::Instance::Param* param)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス数を越えたら処理しない
 	if (numUseInstance_ >= numInstance_)
 		return;
 

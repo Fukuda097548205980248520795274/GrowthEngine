@@ -42,6 +42,9 @@ namespace Engine
 		/// @brief リセット
 		void Reset();
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 
 		/// @brief プリミティブを読み込む
 		/// @param name 

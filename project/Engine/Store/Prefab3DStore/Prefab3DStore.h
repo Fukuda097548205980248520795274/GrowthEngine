@@ -77,8 +77,8 @@ namespace Engine
 		/// @brief リセット
 		void Reset();
 
-		/// @brief 全てのインスタンスを削除する
-		void DestroyAllInstance();
+		/// @brief シーン前のリセット
+		void PerSceneReset();
 
 		/// @brief インスタンスを生成する
 		/// @tparam T 

@@ -142,11 +142,12 @@ void Engine::RenderContext::PerScene()
 	// 描画のリセット
 	render_->PerSceneReset();
 
+	// プレハブのリセット
+	prefab_->PerSceneReset();
+	prefab_->DestroyAllInstance();
+
 	// ライトストアのリセット
 	lightStore_->PerSceneReset();
-
-	// プレハブのインスタンスを削除する
-	prefab_->DestroyAllInstance(); 
 
 	// コリジョンのインスタンスを削除する
 	collision3DStore_->DestroyAllInstance(); 
@@ -190,7 +191,6 @@ void Engine::RenderContext::NewFrame()
 #ifdef _DEVELOPMENT
 	// Dockスペースを作成する
 	imguiRender_->CreateDockSpace();
-	ImGui::ShowDemoWindow();
 
 	// テクスチャストアのUI
 	textureStore_->DrawUI();

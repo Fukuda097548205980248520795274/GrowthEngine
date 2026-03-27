@@ -116,9 +116,164 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	}
 }
 
+/// @brief 更新処理
+void Engine::Prefab3DCubeData::Update()
+{
+	// 削除されたインスタンスをリストから除外する
+	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceCube>& instance) {if (instance->isDelete_) { return true; }return false; });
+}
+
+/// @brief リセット
+void Engine::Prefab3DCubeData::Reset()
+{
+	if (parameter_->IsFileFound(group_))
+	{
+		// 値を反映させる
+		if (parameter_)parameter_->RegisterGroupDataReflection(group_);
+		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
+	}
+	else
+	{
+		// モデルトランスフォーム
+		param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
+		param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+		param_->transform.translate = Vector3(0.0f, 0.0f, 0.0f);
+
+		// マテリアル
+		param_->material.color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->material.uv.scale = Vector2(1.0f, 1.0f);
+		param_->material.uv.radius = 0.0f;
+		param_->material.uv.translate = Vector2(0.0f, 0.0f);
+		param_->material.hTexture = hTexture_;
+		param_->material.environment = 0.0f;
+		param_->material.shininess = 10.0f;
+		param_->material.enableLighting = true;
+		param_->material.enableDiffuse = true;
+		param_->material.enableHalfLambert = true;
+		param_->material.enableSpecular = true;
+		param_->material.enableBlinnPhong = true;
+	}
+
+	// 読み込まれたことにする
+	isLoad_ = true;
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス描画命令を行っていないときは処理しない
+	if (numUseInstance_ <= 0)
+		return;
+
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// カメラの設定
+	cameraStore_->RegisterCameraResource(commandList, 4);
+
+	// スカイボックスの設定
+	skyboxStore->RegisterCubeMapTexture(commandList, 5);
+
+	// ライトの設定
+	lightStore_->LightRegister(commandList, 6, 7, 8, 9);
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+
+	// プリミティブの設定
+	primitiveResource_->RegisterGraphics(commandList, 0);
+
+	// テクスチャの設定
+	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->material.hTexture));
+
+	// シャドウマップテクスチャの設定
+	lightStore_->GetShadowMapTextureResource()->Register(commandList, 2);
+
+	// シャドウ用座標変換の設定
+	lightStore_->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 3);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
+}
+
+/// @brief シャドウマップを描画する
+/// @param viewProjection 
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// デバッグ指定のオブジェクトは処理しない
+	if (isDebug_)return;
+
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	UINT useInstance = 0;
+
+	// インスタンスごとに処理
+	for (auto& instance : instanceTable_)
+	{
+		// インスタンス数を越えたら処理しない
+		if (useInstance >= numInstance_)
+			break;
+
+		Quaternion modelQuaternion =
+			ToQuaternion(instance->param_.transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(instance->param_.transform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(instance->param_.transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(instance->param_.transform.scale, modelQuaternion, instance->param_.transform.translate);
+
+		// ワールド座標
+		shadowMapTransformationResource_->data_[useInstance] = worldMatrix * viewProjection;
+
+		// 使用インスタンスをカウントする
+		useInstance++;
+	}
+
+
+	// 使用インスタンスがなかったら処理しない
+	if (useInstance <= 0)
+		return;
+
+
+	/*------------------------
+		コマンドリストに登録
+	------------------------*/
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+
+	// 座標変換の設定
+	shadowMapTransformationResource_->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(36, useInstance, 0, 0, 0);
+}
+
 /// @brief インスタンスのドローコール
 void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::Instance::Param* param)
 {
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 使用インスタンス数が最大インスタンス数以上のときは処理しない
 	if (numUseInstance_ >= numInstance_)
 		return;
 
@@ -177,147 +332,6 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	numUseInstance_++;
 }
 
-/// @brief 更新処理
-void Engine::Prefab3DCubeData::Update()
-{
-	// 削除されたインスタンスをリストから除外する
-	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceCube>& instance) {if (instance->isDelete_) { return true; }return false; });
-}
-
-/// @brief リセット
-void Engine::Prefab3DCubeData::Reset()
-{
-	if (parameter_->IsFileFound(group_))
-	{
-		// 値を反映させる
-		if (parameter_)parameter_->RegisterGroupDataReflection(group_);
-		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
-	}
-	else
-	{
-		// モデルトランスフォーム
-		param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
-		param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
-		param_->transform.translate = Vector3(0.0f, 0.0f, 0.0f);
-
-		// マテリアル
-		param_->material.color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		param_->material.uv.scale = Vector2(1.0f, 1.0f);
-		param_->material.uv.radius = 0.0f;
-		param_->material.uv.translate = Vector2(0.0f, 0.0f);
-		param_->material.hTexture = hTexture_;
-		param_->material.environment = 0.0f;
-		param_->material.shininess = 10.0f;
-		param_->material.enableLighting = true;
-		param_->material.enableDiffuse = true;
-		param_->material.enableHalfLambert = true;
-		param_->material.enableSpecular = true;
-		param_->material.enableBlinnPhong = true;
-	}
-}
-
-/// @brief コマンドリストに登録する
-/// @param commandList 
-/// @param pso 
-void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
-{
-	// インスタンス描画命令を行っていないときは処理しない
-	if (numUseInstance_ <= 0)
-		return;
-
-
-	// PSOの設定
-	pso->Register(commandList);
-
-	// カメラの設定
-	cameraStore_->RegisterCameraResource(commandList, 4);
-
-	// スカイボックスの設定
-	skyboxStore->RegisterCubeMapTexture(commandList, 5);
-
-	// ライトの設定
-	lightStore_->LightRegister(commandList, 6, 7, 8, 9);
-
-	// 頂点の設定
-	vertexResource_->Register(commandList);
-
-	// プリミティブの設定
-	primitiveResource_->RegisterGraphics(commandList, 0);
-
-	// テクスチャの設定
-	commandList->SetGraphicsRootDescriptorTable(1, textureStore_->GetSrvGpuHandle(param_->material.hTexture));
-
-	// シャドウマップテクスチャの設定
-	lightStore_->GetShadowMapTextureResource()->Register(commandList, 2);
-
-	// シャドウ用座標変換の設定
-	lightStore_->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 3);
-
-	// 形状の設定
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// ドローコール
-	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
-}
-
-/// @brief シャドウマップを描画する
-/// @param viewProjection 
-/// @param commandList 
-/// @param pso 
-void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
-{
-	// デバッグ指定のオブジェクトは処理しない
-	if (isDebug_)return;
-
-	// PSOの設定
-	pso->Register(commandList);
-
-	UINT useInstance = 0;
-
-	// インスタンスごとに処理
-	for (auto& instance : instanceTable_)
-	{
-		// インスタンス数を越えたら処理しない
-		if (useInstance >= numInstance_)
-			break;
-
-		Quaternion modelQuaternion =
-			ToQuaternion(instance->param_.transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(instance->param_.transform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(instance->param_.transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(instance->param_.transform.scale, modelQuaternion, instance->param_.transform.translate);
-
-		// ワールド座標
-		shadowMapTransformationResource_->data_[useInstance] = worldMatrix * viewProjection;
-
-		// 使用インスタンスをカウントする
-		useInstance++;
-	}
-
-
-	// 使用インスタンスがなかったら処理しない
-	if (useInstance <= 0)
-		return;
-
-
-	/*------------------------
-		コマンドリストに登録
-	------------------------*/
-
-	// 頂点の設定
-	vertexResource_->Register(commandList);
-
-	// 座標変換の設定
-	shadowMapTransformationResource_->RegisterGraphics(commandList, 0);
-
-	// 形状の設定
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// ドローコール
-	commandList->DrawIndexedInstanced(36, useInstance, 0, 0, 0);
-}
-
 
 
 /// @brief インスタンスを生成する
@@ -350,6 +364,9 @@ void Engine::Prefab3DCubeData::DestroyAllInstance()
 void Engine::Prefab3DCubeData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
+
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
 
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
