@@ -1,5 +1,6 @@
 #pragma once
 #include "Handle/Handle.h"
+#include "Math/Vector/VectorInt2/VectorInt2.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -21,6 +22,9 @@ namespace Engine
 		/// @brief 文字
 		char c;
 
+		// 文字列
+		std::string str;
+
 
 		/// @brief フォント名
 		std::string fontName;
@@ -28,11 +32,14 @@ namespace Engine
 		// ピクセル
 		int32_t pixel;
 
-		/// @brief 横幅
-		int32_t width;
+		/// @brief サイズ
+		VectorInt2 size;
 
-		/// @brief 縦幅
-		int32_t height;
+		/// @brief 余白
+		VectorInt2 bearing;
+
+		/// @brief 文字送り幅
+		int32_t advance;
 
 		// ハンドル
 		CharHandle handle;

@@ -382,6 +382,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\VectorInt2\VectorInt2.cpp" />
     <ClCompile Include="Engine\Math\Vector\VectorInt3\VectorInt3.cpp" />
     <ClCompile Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.cpp" />
     <ClCompile Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.cpp" />
@@ -912,6 +913,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />
+    <ClInclude Include="Engine\Math\Vector\VectorInt2\VectorInt2.h" />
     <ClInclude Include="Engine\Math\Vector\VectorInt3\VectorInt3.h" />
     <ClInclude Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.h" />
     <ClInclude Include="Engine\Parameter\Camera3DParameter\Camera3DParameter.h" />

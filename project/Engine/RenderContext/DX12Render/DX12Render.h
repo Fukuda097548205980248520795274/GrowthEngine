@@ -144,7 +144,7 @@ namespace Engine
 		/// @param commandList 
 		void DrawRender2D(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(name, cameraStore, commandList, psoSprite_.get());
+			render2DStore_->Register(name, cameraStore, commandList, psoText_.get());
 		}
 
 

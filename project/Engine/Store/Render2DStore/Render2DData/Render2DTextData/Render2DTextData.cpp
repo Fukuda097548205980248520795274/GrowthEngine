@@ -58,25 +58,26 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 	materialResource_.resize(static_cast<int32_t>(textData->hCharTable.size()));
 	transformationResource_.resize(static_cast<int32_t>(textData->hCharTable.size()));
 
+
+	// 描画基準点のX座標
+	float penX = 0.0f;
+
 	for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
 	{
 		// 文字データを取得する
 		CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
 
-		// トランスフォーム
-		param_->charTransform[i].scale = Vector2(static_cast<float>(charData->width), static_cast<float>(charData->height));
-		param_->charTransform[i].rotate = 0.0f;
+		// 本当の描画開始位置
+		float drawX = penX + static_cast<float>(charData->bearing.x);
+		float drawY = 0.0f;
 
-		float space = 0.0f;
-		if (i > 0)
-		{
-			float space = param_->charTransform[i - 1].translate.x;
-			param_->charTransform[i].translate = Vector2(static_cast<float>(charData->pixel) + space, 0.0f);
-		}
-		else
-		{
-			param_->charTransform[i].translate = Vector2(0.0f, 0.0f);
-		}
+		// トランスフォーム
+		param_->charTransform[i].scale = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
+		param_->charTransform[i].rotate = 0.0f;
+		param_->charTransform[i].translate = Vector2(drawX, drawY);
+
+		// advanceは「1/64ピクセル単位」で格納されているので、64で割る（>> 6）必要があります
+		penX += static_cast<float>(charData->advance >> 6);
 
 		// テクスチャ
 		param_->charTexture[i].anchor = Vector2(0.0f, 1.0f);
@@ -84,18 +85,18 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 		// マテリアル
 		param_->charMaterial[i].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-		if (parameter_)
+		if (parameter_)if (charData->size.x > 0 && charData->size.y > 0)
 		{
 			// トランスフォーム
-			parameter_->SetValue(group_, charData->c + "_Transform_Scale", &param_->charTransform[i].scale);
-			parameter_->SetValue(group_, charData->c + "_Transform_Rotate", &param_->charTransform[i].rotate);
-			parameter_->SetValue(group_, charData->c + "_Transform_Translate", &param_->charTransform[i].translate);
+			parameter_->SetValue(group_, charData->str + "_Transform_Scale", &param_->charTransform[i].scale);
+			parameter_->SetValue(group_, charData->str + "_Transform_Rotate", &param_->charTransform[i].rotate);
+			parameter_->SetValue(group_, charData->str + "_Transform_Translate", &param_->charTransform[i].translate);
 
 			// マテリアル
-			parameter_->SetValue(group_, charData->c + "_Material_Color", &param_->charMaterial[i].color);
+			parameter_->SetValue(group_, charData->str + "_Material_Color", &param_->charMaterial[i].color);
 
 			// テクスチャ
-			parameter_->SetValue(group_, charData->c + "_Texture_Anchor", &param_->charTexture[i].anchor);
+			parameter_->SetValue(group_, charData->str + "_Texture_Anchor", &param_->charTexture[i].anchor);
 		}
 
 		// マテリアルリソースの生成と初期化
@@ -129,14 +130,24 @@ void Engine::Render2DTextData::Reset()
 		// テキストデータを取得する
 		TextData* textData = fontStore_->GetTextData(hText_);
 
+		// 描画基準点のX座標
+		float penX = 0.0f;
+
 		for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
 		{
 			// 文字データを取得する
 			CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
 
-			param_->charTransform[i].scale = Vector2(static_cast<float>(charData->width), static_cast<float>(charData->height));
+			// 本当の描画開始位置
+			float drawX = penX + static_cast<float>(charData->bearing.x);
+			float drawY = 0.0f;
+
+			param_->charTransform[i].scale = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
 			param_->charTransform[i].rotate = 0.0f;
-			param_->charTransform[i].translate = Vector2(static_cast<float>(charData->width * i), 0.0f);
+			param_->charTransform[i].translate = Vector2(drawX, drawY);
+
+			// advanceは「1/64ピクセル単位」で格納されているので、64で割る（>> 6）必要があります
+			penX += static_cast<float>(charData->advance >> 6);
 
 			param_->charTexture[i].anchor = Vector2(0.0f, 1.0f);
 
@@ -169,6 +180,13 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 
 	for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
 	{
+		// 文字データを取得する
+		CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
+
+		// スペース以外
+		if (charData->size.x <= 0 || charData->size.y <= 0)
+			continue;
+
 		// マテリアル
 		*materialResource_[i]->data_ = param_->charMaterial[i].color;
 		materialResource_[i]->RegisterGraphics(commandList, 1);
@@ -198,7 +216,110 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 /// @brief デバッグ用パラメータ
 void Engine::Render2DTextData::DebugParameter()
 {
+#ifdef _DEVELOPMENT
 
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
+	// モデル名
+	if (ImGui::TreeNode(name_.c_str()))
+	{
+		// モデルトランスフォーム
+		if (ImGui::TreeNode("Transform"))
+		{
+			// 拡縮
+			ImGui::DragFloat2("Scale", &param_->transform.scale.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 回転
+			ImGui::DragFloat("Rotate", &param_->transform.rotate, 0.01f, -100000.0f, 100000.0f);
+
+			// 平行移動
+			ImGui::DragFloat2("Translate", &param_->transform.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// テキストデータを取得する
+		TextData* textData = fontStore_->GetTextData(hText_);
+
+		for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
+		{
+			// 文字データを取得する
+			CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
+
+			// スペース以外
+			if (charData->size.x <= 0 || charData->size.y <= 0)
+				continue;
+
+			// 文字ごとに
+			if (ImGui::TreeNode(charData->str.c_str()))
+			{
+				// トランスフォーム
+				if (ImGui::TreeNode("Transform"))
+				{
+					// 拡縮
+					ImGui::DragFloat2("Scale", &param_->charTransform[i].scale.x, 0.01f, -100000.0f, 100000.0f);
+					// 回転
+					ImGui::DragFloat("Rotate", &param_->charTransform[i].rotate, 0.01f, -100000.0f, 100000.0f);
+					// 平行移動
+					ImGui::DragFloat2("Translate", &param_->charTransform[i].translate.x, 0.01f, -100000.0f, 100000.0f);
+					// 終了
+					ImGui::TreePop();
+				}
+
+				// マテリアル
+				if (ImGui::TreeNode("Material"))
+				{
+					// 色
+					ImGui::ColorEdit4("Color", &param_->charMaterial[i].color.x);
+
+					// 終了
+					ImGui::TreePop();
+				}
+
+				// テクスチャ
+				if (ImGui::TreeNode("Texture"))
+				{
+					// アンカー
+					ImGui::DragFloat2("Anchor", &param_->charTexture[i].anchor.x, 0.01f);
+
+					// 終了
+					ImGui::TreePop();
+				}
+
+				// 終了
+				ImGui::TreePop();
+			}
+		}
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// 終了
+		ImGui::TreePop();
+	}
+
+#endif
 }
 
 /// @brief デバッグ用ピッキング

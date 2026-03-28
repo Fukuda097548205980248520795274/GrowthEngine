@@ -98,6 +98,7 @@ CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t 
 	// 文字データの生成と初期化
 	std::unique_ptr<CharData> charData = std::make_unique<CharData>();
 	charData->c = c;
+	charData->str = std::string(1, c);
 	charData->fontName = fontName;
 	charData->pixel = pixel;
 	charData->handle = handle;
@@ -112,30 +113,46 @@ CharHandle Engine::FontStore::Load(char c, const std::string& fontName, int32_t 
 	}
 
 	// 幅を取得
-	charData->width = face->glyph->bitmap.width;
-	charData->height = face->glyph->bitmap.rows;
+	charData->size.x = face->glyph->bitmap.width;
+	charData->size.y = face->glyph->bitmap.rows;
 
-	// テクスチャ用リソースを生成する
-	charData->textureResource = CreateFontTextureResource(device, face->glyph, log);
+	// 余白を取得
+	charData->bearing.x = face->glyph->bitmap_left;
+	charData->bearing.y = face->glyph->bitmap_top;
 
-	// 転送用リソースを作成し、GPU転送命令を送る
-	charData->uploadResource = UploadFontTextureData(charData->textureResource.Get(), face->glyph, device, commandList, log);
+	// 文字送り幅を取得
+	charData->advance = face->glyph->advance.x;
+
+	if (charData->size.x > 0 && charData->size.y > 0)
+	{
+		// テクスチャ用リソースを生成する
+		charData->textureResource = CreateFontTextureResource(device, face->glyph, log);
+
+		// 転送用リソースを作成し、GPU転送命令を送る
+		charData->uploadResource = UploadFontTextureData(charData->textureResource.Get(), face->glyph, device, commandList, log);
 
 
-	// SRVを設定する
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = DXGI_FORMAT_R8_UNORM;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = 1;
+		// SRVを設定する
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+		srvDesc.Format = DXGI_FORMAT_R8_UNORM;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = 1;
 
 
-	// CPU・GPUハンドルを取得する
-	charData->srvHandle.first = heap->GetSrvCPUDescriptorHandle();
-	charData->srvHandle.second = heap->GetSrvGPUDescriptorHandle();
+		// CPU・GPUハンドルを取得する
+		charData->srvHandle.first = heap->GetSrvCPUDescriptorHandle();
+		charData->srvHandle.second = heap->GetSrvGPUDescriptorHandle();
 
-	// テクスチャリソースにSRVの設定を付与する
-	device->CreateShaderResourceView(charData->textureResource.Get(), &srvDesc, charData->srvHandle.first);
+		// テクスチャリソースにSRVの設定を付与する
+		device->CreateShaderResourceView(charData->textureResource.Get(), &srvDesc, charData->srvHandle.first);
+	}
+	else
+	{
+		// テクスチャを持たないことを明示（既存のコンストラクタでnullptrになっているはずですが念のため）
+		charData->textureResource = nullptr;
+		charData->uploadResource = nullptr;
+	}
 
 
 	// テーブルに記録

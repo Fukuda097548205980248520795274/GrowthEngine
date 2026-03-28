@@ -22,6 +22,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     // テクスチャカラー
     float textureColor = gTexture.Sample(gSampler, input.texcoord);
     
+    // テクスチャカラーが0.5以下なら描画しない
+    if(textureColor <= 0.5f)
+    {
+        discard;
+    }
+    
     output.color = gMaterial.color * textureColor;
     
     return output;

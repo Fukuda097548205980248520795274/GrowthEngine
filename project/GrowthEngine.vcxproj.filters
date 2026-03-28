@@ -757,6 +757,9 @@
     <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
       <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Math\Vector\VectorInt2">
+      <UniqueIdentifier>{e3770771-401f-4778-8eb7-96988475fa60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1325,6 +1328,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.cpp">
       <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\VectorInt2\VectorInt2.cpp">
+      <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1993,6 +1999,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.h">
       <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\VectorInt2\VectorInt2.h">
+      <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
