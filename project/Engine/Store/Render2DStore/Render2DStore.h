@@ -1,6 +1,7 @@
 #pragma once
 #include "Render2DData/Render2DBaseData.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
+#include "PSO/PSOModel/PSOSprite/PSOSprite.h"
 
 #include "Parameter/Render2DParameter/Render2DParameter.h"
 
@@ -8,6 +9,7 @@ namespace Engine
 {
 	class FontStore;
 	class Camera2DStore;
+	class ShaderCompiler;
 
 	class Render2DStore
 	{
@@ -19,7 +21,10 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param log 
-		void Initialize(ID3D12Device* device, Log* log);
+		void Initialize(ID3D12Device* device,ShaderCompiler* compiler, Log* log);
+
+		/// @brief リセット
+		void Reset();
 
 		/// @brief 更新処理
 		void Update();
@@ -44,15 +49,13 @@ namespace Engine
 		/// @param hSprite 
 		/// @param viewProjection 
 		/// @param commandList 
-		/// @param pso 
-		void Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief コマンドリストに登録する
 		/// @param name 
 		/// @param viewProjection 
 		/// @param commandList 
-		/// @param pso 
-		void Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -84,6 +87,29 @@ namespace Engine
 		/// @param point 
 		/// @param pickList 
 		void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList);
+
+		template <typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+	private:
+
+		// スプライト頂点シェーダ
+		ComPtr<IDxcBlob> spriteVS_ = nullptr;
+
+		// スプライトピクセルシェーダ
+		ComPtr<IDxcBlob> spritePS_ = nullptr;
+
+		/// @brief テキストピクセルシェーダ
+		ComPtr<IDxcBlob> textPS_ = nullptr;
+
+
+	private:
+
+		// スプライトPSO
+		std::unique_ptr<PSOSprite> psoSprite_ = nullptr;
+
+		// テキストPSO
+		std::unique_ptr<PSOSprite> psoText_ = nullptr;
 
 
 	private:

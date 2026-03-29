@@ -21,7 +21,7 @@ void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shader
 
 	// スプライトストアの生成と初期化
 	render2DStore_ = std::make_unique<Render2DStore>();
-	render2DStore_->Initialize(device, log);
+	render2DStore_->Initialize(device, shaderCompiler, log);
 
 
 	// プリミティブ頂点シェーダ
@@ -33,31 +33,10 @@ void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	assert(primitivePS_);
 
 
-	// スプライト頂点シェーダ
-	spriteVS_ = shaderCompiler->Compile(L"./Assets/Shader/Sprite/Sprite.VS.hlsl", L"vs_6_0");
-	assert(spriteVS_);
-
-	// スプライトピクセルシェーダ
-	spritePS_ = shaderCompiler->Compile(L"./Assets/Shader/Sprite/Sprite.PS.hlsl", L"ps_6_0");
-	assert(spritePS_);
-
-	// テキストピクセルシェーダ
-	textPS_ = shaderCompiler->Compile(L"./Assets/Shader/Text/Text.PS.hlsl", L"ps_6_0");
-	assert(textPS_);
-
-
 
 	// プリミティブPSOの生成と初期化
 	psoPrimitive_ = std::make_unique<PSOPrimitive>();
 	psoPrimitive_->Initialize(device, primitiveVS_.Get(), primitivePS_.Get(), log);
-
-	// スプライトPSOの生成と初期化
-	psoSprite_ = std::make_unique<PSOSprite>();
-	psoSprite_->Initialize(device, spriteVS_.Get(), spritePS_.Get(), log);
-
-	// テキストPSOの生成と初期化
-	psoText_ = std::make_unique<PSOSprite>();
-	psoText_->Initialize(device, spriteVS_.Get(), textPS_.Get(), log);
 }
 
 /// @brief 更新処理
@@ -72,7 +51,6 @@ void Engine::DX12Render::Update(ID3D12GraphicsCommandList* commandList)
 void Engine::DX12Render::Reset()
 {
 	psoPrimitive_->ResetBlendMode();
-	psoSprite_->ResetBlendMode();
 }
 
 /// @brief シーン前のリセット

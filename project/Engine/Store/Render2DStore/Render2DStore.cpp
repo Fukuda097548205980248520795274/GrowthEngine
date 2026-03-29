@@ -4,6 +4,8 @@
 
 #include "Store/Camera2DStore/Camera2DStore.h"
 
+#include "ShaderCompiler/ShaderCompiler.h"
+
 /// @brief コンストラクタ
 Engine::Render2DStore::Render2DStore()
 {
@@ -14,10 +16,11 @@ Engine::Render2DStore::Render2DStore()
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::Render2DStore::Initialize(ID3D12Device* device, Log* log)
+void Engine::Render2DStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
 {
 	// nullptrチェック
 	assert(device);
+	assert(compiler);
 
 	// 頂点リソースの生成と初期化
 	vertexResource_ = std::make_unique<VertexBufferResource<SpriteVertexData>>();
@@ -48,6 +51,33 @@ void Engine::Render2DStore::Initialize(ID3D12Device* device, Log* log)
 	indexResource_->data_[5] = 2;
 
 
+	// スプライト頂点シェーダ
+	spriteVS_ = compiler->Compile(L"./Assets/Shader/Sprite/Sprite.VS.hlsl", L"vs_6_0");
+	assert(spriteVS_);
+
+	// スプライトピクセルシェーダ
+	spritePS_ = compiler->Compile(L"./Assets/Shader/Sprite/Sprite.PS.hlsl", L"ps_6_0");
+	assert(spritePS_);
+
+	// テキストピクセルシェーダ
+	textPS_ = compiler->Compile(L"./Assets/Shader/Text/Text.PS.hlsl", L"ps_6_0");
+	assert(textPS_);
+
+
+	// スプライトPSOの生成と初期化
+	psoSprite_ = std::make_unique<PSOSprite>();
+	psoSprite_->Initialize(device, spriteVS_.Get(), spritePS_.Get(), log);
+
+	// テキストPSOの生成と初期化
+	psoText_ = std::make_unique<PSOSprite>();
+	psoText_->Initialize(device, spriteVS_.Get(), textPS_.Get(), log);
+}
+
+/// @brief リセット
+void Engine::Render2DStore::Reset()
+{
+	psoSprite_->ResetBlendMode();
+	psoText_->ResetBlendMode();
 }
 
 /// @brief 更新処理
@@ -117,14 +147,23 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 {
 	// Guizmo操作
 #ifdef _DEVELOPMENT
 	dataTable_[hRender2D]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
 #endif
 
-	dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, pso);
+	// スプライト
+	if (dataTable_[hRender2D]->GetType() == Render2D::Type::Sprite)
+	{
+		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoSprite_.get());
+	}
+	else if(dataTable_[hRender2D]->GetType() == Render2D::Type::Text)
+	{
+		// テキスト
+		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoText_.get());
+	}
 }
 
 /// @brief コマンドリストに登録する
@@ -132,14 +171,23 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* ca
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 {
 	// Guizmo操作
 #ifdef _DEVELOPMENT
 	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
 #endif
 
-	dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, pso);
+	// スプライト
+	if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Sprite)
+	{
+		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoSprite_.get());
+	}
+	else if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Text)
+	{
+		// テキスト
+		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoText_.get());
+	}
 }
 
 /// @brief デバッグ用パラメータ

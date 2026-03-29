@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include "PSO/PSOModel/PSOPrimitive/PSOPrimitive.h"
-#include "PSO/PSOModel/PSOSprite/PSOSprite.h"
 #include "Store/Render3DStore/Render3DStore.h"
 #include "Store/Render2DStore/Render2DStore.h"
 #include "Data/Render3DData/Render3DData.h"
@@ -135,7 +134,7 @@ namespace Engine
 		/// @param commandList 
 		void DrawRender2D(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(hRender2D, cameraStore, commandList, psoSprite_.get());
+			render2DStore_->Register(hRender2D, cameraStore, commandList);
 		}
 
 		/// @brief スプライトの描画処理
@@ -144,7 +143,7 @@ namespace Engine
 		/// @param commandList 
 		void DrawRender2D(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 		{
-			render2DStore_->Register(name, cameraStore, commandList, psoText_.get());
+			render2DStore_->Register(name, cameraStore, commandList);
 		}
 
 
@@ -176,26 +175,10 @@ namespace Engine
 		ComPtr<IDxcBlob> primitivePS_ = nullptr;
 
 
-		// スプライト頂点シェーダ
-		ComPtr<IDxcBlob> spriteVS_ = nullptr;
-
-		// スプライトピクセルシェーダ
-		ComPtr<IDxcBlob> spritePS_ = nullptr;
-
-		/// @brief テキストピクセルシェーダ
-		ComPtr<IDxcBlob> textPS_ = nullptr;
-
-
 	private:
 
 		// プリミティブPSO
 		std::unique_ptr<PSOPrimitive> psoPrimitive_ = nullptr;
-
-		// スプライトPSO
-		std::unique_ptr<PSOSprite> psoSprite_ = nullptr;
-
-		// テキストPSO
-		std::unique_ptr<PSOSprite> psoText_ = nullptr;
 
 
 	private:
