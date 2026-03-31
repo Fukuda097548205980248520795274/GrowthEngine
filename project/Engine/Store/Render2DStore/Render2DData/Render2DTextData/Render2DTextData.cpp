@@ -36,6 +36,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 	param_->transform.rotate = 0.0f;
 	param_->transform.translate = Vector2(0.0f, 0.0f);
 
+	// テクスチャ
+	param_->texture.anchor = Vector2(0.0f, 0.0f);
+
 
 	// パラメータに記録と反映
 	group_ = "Text_" + name_;
@@ -45,6 +48,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
 		parameter_->SetValue(group_, "Transform_Translate", &param_->transform.translate);
+
+		// テクスチャ
+		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
 	}
 
 
@@ -127,6 +133,9 @@ void Engine::Render2DTextData::Reset()
 		param_->transform.rotate = 0.0f;
 		param_->transform.translate = Vector2(0.0f, 0.0f);
 
+		// テクスチャ
+		param_->texture.anchor = Vector2(0.0f, 0.0f);
+
 		// テキストデータを取得する
 		TextData* textData = fontStore_->GetTextData(hText_);
 
@@ -171,6 +180,51 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 	TextData* textData = fontStore_->GetTextData(hText_);
 
 
+	float minX = 0.0f;
+	float maxX = 0.0f;
+	float minY = 0.0f;
+	float maxY = 0.0f;
+	bool hasRect = false;
+
+	for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
+	{
+		CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
+		if (charData->size.x <= 0 || charData->size.y <= 0)
+			continue;
+
+		const Vector2& anchor = param_->charTexture[i].anchor;
+		const Vector2& size = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
+		const Vector2& translate = param_->charTransform[i].translate;
+
+		const float left = -anchor.x * size.x + translate.x;
+		const float right = (1.0f - anchor.x) * size.x + translate.x;
+		const float top = anchor.y * size.y + translate.y;
+		const float bottom = (1.0f - anchor.y) * size.y + translate.y;
+
+		if (!hasRect)
+		{
+			minX = left;
+			maxX = right;
+			minY = bottom;
+			maxY = top;
+			hasRect = true;
+		}
+		else
+		{
+			minX = (std::min)(minX, left);
+			maxX = (std::max)(maxX, right);
+			minY = (std::min)(minY, bottom);
+			maxY = (std::max)(maxY, top);
+		}
+	}
+
+	Vector2 textAnchorOffset = Vector2(0.0f, 0.0f);
+	if (hasRect)
+	{
+		textAnchorOffset = Vector2((maxX - minX) * param_->texture.anchor.x, (maxY - minY) * param_->texture.anchor.y);
+	}
+
+
 	// psoの設定
 	pso->Register(commandList);
 
@@ -191,11 +245,15 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 		*materialResource_[i]->data_ = param_->charMaterial[i].color;
 		materialResource_[i]->RegisterGraphics(commandList, 1);
 
+		const Vector2 translate = Vector2(
+			param_->charTransform[i].translate.x - textAnchorOffset.x,
+			param_->charTransform[i].translate.y - textAnchorOffset.y);
+
 		// ローカル行列
 		Matrix4x4 localMatrix =
 			Make2DScaleMatrix4x4(param_->charTransform[i].scale) *
 			Make3DRotateZMatrix4x4(param_->charTransform[i].rotate) *
-			Make2DTranslateMatrix4x4(param_->charTransform[i].translate);
+			Make2DTranslateMatrix4x4(translate);
 
 		// 座標変換
 		transformationResource_[i]->data_->anchor = param_->charTexture[i].anchor;
@@ -224,7 +282,7 @@ void Engine::Render2DTextData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
-		// モデルトランスフォーム
+		// トランスフォーム
 		if (ImGui::TreeNode("Transform"))
 		{
 			// 拡縮
@@ -235,6 +293,16 @@ void Engine::Render2DTextData::DebugParameter()
 
 			// 平行移動
 			ImGui::DragFloat2("Translate", &param_->transform.translate.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// テクスチャ
+		if (ImGui::TreeNode("Texture"))
+		{
+			// 拡縮
+			ImGui::DragFloat2("Anchor", &param_->texture.anchor.x, 0.01f, -100000.0f, 100000.0f);
 
 			// 終了
 			ImGui::TreePop();
@@ -337,16 +405,96 @@ void Engine::Render2DTextData::DebugPicking(const Vector2& point, std::vector<st
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;
 
-	Collision2D::Sprite sprite;
-	sprite.center = Vector2(param_->transform.translate.x, param_->transform.translate.y);
-	sprite.radius = Vector2(30.0f, 30.0f);
+	// テキストデータを取得する
+	TextData* textData = fontStore_->GetTextData(hText_);
+	
+	float minX = 0.0f;
+	float maxX = 0.0f;
+	float minY = 0.0f;
+	float maxY = 0.0f;
+	bool hasRect = false;
 
-	if (CollisionCheckFunc(point, sprite))
+	for (int i = 0; i < static_cast<int32_t>(textData->hCharTable.size()); ++i)
 	{
-		std::pair<float, DebugData::DebugGuizmoData*> pick;
-		pick.first = 0.0f;
-		pick.second = &guizmoData_;
-		pickList.push_back(pick);
+		CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
+		if (charData->size.x <= 0 || charData->size.y <= 0)
+			continue;
+
+		const Vector2& anchor = param_->charTexture[i].anchor;
+		const Vector2& size = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
+		const Vector2& translate = param_->charTransform[i].translate;
+
+		const float left = -anchor.x * size.x + translate.x;
+		const float right = (1.0f - anchor.x) * size.x + translate.x;
+		const float top = anchor.y * size.y + translate.y;
+		const float bottom = (1.0f - anchor.y) * size.y + translate.y;
+
+		if (!hasRect)
+		{
+			minX = left;
+			maxX = right;
+			minY = bottom;
+			maxY = top;
+			hasRect = true;
+		}
+		else
+		{
+			minX = (std::min)(minX, left);
+			maxX = (std::max)(maxX, right);
+			minY = (std::min)(minY, bottom);
+			maxY = (std::max)(maxY, top);
+		}
+	}
+
+	Vector2 textAnchorOffset = Vector2(0.0f, 0.0f);
+	if (hasRect)
+	{
+		textAnchorOffset = Vector2((maxX - minX) * param_->texture.anchor.x, (maxY - minY) * param_->texture.anchor.y);
+	}
+
+	// テキスト行列
+	Matrix4x4 textMatrix =
+		Make2DScaleMatrix4x4(param_->transform.scale) * Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
+
+	for (int i = 0; i < static_cast<int32_t>(param_->charTransform.size()); ++i)
+	{
+		CharData* charData = fontStore_->GetCharData(textData->hCharTable[i]);
+		if (charData->size.x <= 0 || charData->size.y <= 0)
+			continue;
+
+		const Vector2 charTranslate = Vector2(
+			param_->charTransform[i].translate.x - textAnchorOffset.x,
+			param_->charTransform[i].translate.y - textAnchorOffset.y);
+
+		// 文字行列
+		Matrix4x4 charMatrix =
+			Make2DScaleMatrix4x4(param_->charTransform[i].scale) * Make3DRotateZMatrix4x4(param_->charTransform[i].rotate) * Make2DTranslateMatrix4x4(charTranslate);
+
+		// ワールド行列
+		Matrix4x4 worldMatrix = charMatrix * textMatrix;
+
+		Vector2 pos = Vector2(worldMatrix.m[3][0], worldMatrix.m[3][1]);
+
+		// サイズ
+		Vector2 size = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
+
+		float left = -param_->charTexture[i].anchor.x * (size.x * param_->transform.scale.x) + pos.x;
+		float right = (1.0f - param_->charTexture[i].anchor.x) * (size.x * param_->transform.scale.x) + pos.x;
+		float top = param_->charTexture[i].anchor.y * (size.y * param_->transform.scale.y) + pos.y;
+		float bottom = (1.0f - param_->charTexture[i].anchor.y) * (size.y * param_->transform.scale.y) + pos.y;
+
+		if (point.x >= left && point.x <= right &&
+			point.y <= top && point.y >= bottom)
+		{
+			// 当たっている
+
+			std::pair<float, DebugData::DebugGuizmoData*> pick;
+			pick.first = 0.0f;
+			pick.second = &guizmoData_;
+			pickList.push_back(pick);
+
+			return;
+		}
 	}
 }
 

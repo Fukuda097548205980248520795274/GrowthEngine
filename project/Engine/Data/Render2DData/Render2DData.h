@@ -103,6 +103,9 @@ namespace Engine
 				/// @brief トランスフォーム
 				Transform transform;
 
+				/// @brief テクスチャ
+				Texture texture;
+
 				/// @brief 文字トランスフォーム
 				std::vector<Transform> charTransform;
 
