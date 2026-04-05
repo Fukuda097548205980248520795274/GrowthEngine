@@ -240,66 +240,48 @@ void Engine::Camera3DResource::DebugGuizmo(const Matrix4x4& viewMatrix, const Ma
 	// Rキー -> 回転
 	if (engine_->GetKeyTrigger(DIK_R))guizmoData_.mode = DebugData::GuizmoMode::Rotate;
 
+	// 現在の回転・移動からワールド行列を一度だけ生成する
+	Quaternion rotateQ =
+		ToQuaternion(param_->transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->transform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param_->transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
 	// ワールド行列
-	Matrix4x4 worldMatrix;
+	Matrix4x4 worldMatrix =
+		Make3DRotateMatrix4x4(rotateQ) *
+		Make3DTranslateMatrix4x4(param_->transform.translate);
 
-	switch (guizmoData_.mode)
+	// Guizmoの操作タイプを切り替える
+	ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+	if (guizmoData_.mode == DebugData::GuizmoMode::Rotate)
 	{
-	case DebugData::GuizmoMode::Translate:
-		// 移動
+		operation = ImGuizmo::ROTATE;
+	}
 
-		// 移動
-		worldMatrix = Make3DTranslateMatrix4x4(param_->transform.translate);
+	// 操作モードだけ切り替えて同じ行列を編集する
+	ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], operation, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
-		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+	if (ImGuizmo::IsUsing())
+	{
+		float translation[3];
+		float rotation[3];
+		float scale[3];
 
-		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
-		if (ImGuizmo::IsUsing())
+		// ワールド行列から回転・移動を分解する
+		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
+
+		// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
+		constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+
+		if (guizmoData_.mode == DebugData::GuizmoMode::Translate)
 		{
-			// 平行移動
-			param_->transform.translate = Vector3(worldMatrix.m[3][0], worldMatrix.m[3][1], worldMatrix.m[3][2]);
+			param_->transform.translate = Vector3(translation[0], translation[1], translation[2]);
 		}
-
-		break;
-
-	case DebugData::GuizmoMode::Rotate:
-		// 回転
-
-		Quaternion rotateQ =
-			ToQuaternion(param_->transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(param_->transform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(param_->transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		// 回転 * 移動
-		worldMatrix = Make3DRotateMatrix4x4(rotateQ) * Make3DTranslateMatrix4x4(param_->transform.translate);
-
-		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
-		if (ImGuizmo::IsUsing())
+		else
 		{
-			float translation[3];
-			float rotation[3];
-			float scale[3];
-
-			ImGuizmo::DecomposeMatrixToComponents(
-				&worldMatrix.m[0][0],
-				translation,
-				rotation,
-				scale
-			);
-
-			// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
-			constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
-
-			// rotation[] は度数法（degrees）なので、ラジアンに変換して代入する
 			param_->transform.rotate.x = rotation[0] * DEG2RAD;
 			param_->transform.rotate.y = rotation[1] * DEG2RAD;
 			param_->transform.rotate.z = rotation[2] * DEG2RAD;
 		}
-
-		break;
 	}
 }
