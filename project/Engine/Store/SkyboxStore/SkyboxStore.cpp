@@ -76,7 +76,7 @@ void Engine::SkyboxStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommand
 
 
 	// 初期読み込み
-	currentHandle_ = InitialLoad(textureStore->Load("./Assets/Textures/rostock_laage_airport_4k.dds", heap, device, commandList, log), textureStore, device, log);
+	currentHandle_ = InitialLoad(textureStore->Load("./Assets/Textures/white_skybox.dds", heap, device, commandList, log), textureStore, device, log);
 }
 
 /// @brief 読み込む
