@@ -6,6 +6,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
+#include "PSO/PSOModel/PSOPrimitive/PSOPrimitive.h"
 #include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
 
 #include "Parameter/Render3DParameter/Render3DParameter.h"
@@ -51,6 +52,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief リセット
+		void Reset();
+
 		/// @brief シーン前のリセット
 		void PerSceneReset();
 
@@ -77,16 +81,14 @@ namespace Engine
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param handle 
-		/// @param pso 
-		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, Render3DHandle handle, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, Render3DHandle handle);
 
 		/// @brief コマンドリストに登録する
 		/// @param cameraStore 
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param name 
-		/// @param pso 
-		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -110,6 +112,12 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+		template <typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+
+	public:
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 
@@ -127,13 +135,27 @@ namespace Engine
 		// 名前テーブル
 		std::unordered_map<std::string, Render3DHandle> nameTable_;
 
-		
-		// スキニングPSO
-		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
-
 
 		// プリミティブ用パラメータ
 		std::unique_ptr<Render3DParameter> parameter_ = nullptr;
+
+
+	private:
+
+		// プリミティブ頂点シェーダ
+		ComPtr<IDxcBlob> primitiveVS_ = nullptr;
+
+		// プリミティブピクセルシェーダ
+		ComPtr<IDxcBlob> primitivePS_ = nullptr;
+
+
+	private:
+
+		// プリミティブPSO
+		std::unique_ptr<PSOPrimitive> psoPrimitive_ = nullptr;
+
+		// スキニングPSO
+		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
 
 
 	private:

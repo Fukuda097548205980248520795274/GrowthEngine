@@ -22,21 +22,6 @@ void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shader
 	// スプライトストアの生成と初期化
 	render2DStore_ = std::make_unique<Render2DStore>();
 	render2DStore_->Initialize(device, shaderCompiler, log);
-
-
-	// プリミティブ頂点シェーダ
-	primitiveVS_ = shaderCompiler->Compile(L"./Assets/Shader/Primitive/Primitive.VS.hlsl", L"vs_6_0");
-	assert(primitiveVS_);
-
-	// プリミティブピクセルシェーダ
-	primitivePS_ = shaderCompiler->Compile(L"./Assets/Shader/Primitive/Primitive.PS.hlsl", L"ps_6_0");
-	assert(primitivePS_);
-
-
-
-	// プリミティブPSOの生成と初期化
-	psoPrimitive_ = std::make_unique<PSOPrimitive>();
-	psoPrimitive_->Initialize(device, primitiveVS_.Get(), primitivePS_.Get(), log);
 }
 
 /// @brief 更新処理
@@ -50,7 +35,8 @@ void Engine::DX12Render::Update(ID3D12GraphicsCommandList* commandList)
 /// @brief リセット
 void Engine::DX12Render::Reset()
 {
-	psoPrimitive_->ResetBlendMode();
+	render2DStore_->Reset();
+	render3DStore_->Reset();
 }
 
 /// @brief シーン前のリセット

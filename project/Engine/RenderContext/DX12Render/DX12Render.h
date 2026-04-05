@@ -115,7 +115,7 @@ namespace Engine
 		/// @param handle 
 		void DrawRender3D(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, Render3DHandle handle)
 		{
-			render3DStore_->Register(cameraStore,skyboxStore, commandList, handle, psoPrimitive_.get());
+			render3DStore_->Register(cameraStore,skyboxStore, commandList, handle);
 		}
 
 		/// @brief プリミティブ描画処理
@@ -125,7 +125,7 @@ namespace Engine
 		/// @param name 
 		void DrawRender3D(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name)
 		{
-			render3DStore_->Register(cameraStore, skyboxStore, commandList, name, psoPrimitive_.get());
+			render3DStore_->Register(cameraStore, skyboxStore, commandList, name);
 		}
 
 		/// @brief スプライトの描画処理
@@ -165,20 +165,6 @@ namespace Engine
 
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
-
-	private:
-
-		// プリミティブ頂点シェーダ
-		ComPtr<IDxcBlob> primitiveVS_ = nullptr;
-
-		// プリミティブピクセルシェーダ
-		ComPtr<IDxcBlob> primitivePS_ = nullptr;
-
-
-	private:
-
-		// プリミティブPSO
-		std::unique_ptr<PSOPrimitive> psoPrimitive_ = nullptr;
 
 
 	private:
