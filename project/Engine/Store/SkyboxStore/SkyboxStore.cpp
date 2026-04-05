@@ -119,6 +119,7 @@ SkyboxHandle Engine::SkyboxStore::InitialLoad(TextureHandle hTexture, TextureSto
 	// データを生成
 	std::unique_ptr<SkyboxResource> data = std::make_unique<SkyboxResource>("Initial", hTexture, hSkybox);
 	data->Initialize(textureStore, device, indexResource_.get(), vertexResource_.get(), log);
+	data->GetParam()->material.color = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
 	dataTable_.push_back(std::move(data));
 
 	return hSkybox;

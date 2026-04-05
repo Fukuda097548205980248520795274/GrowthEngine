@@ -12,9 +12,6 @@ Engine::BaseLightData::BaseLightData(const std::string& name, LightHandle handle
 
 	// 読み込む
 	isLoad_ = true; 
-
-	// 3D
-	debugGuizmoData_.dimension = DebugData::GuizmoDimension::Perspective;
 }
 
 /// @brief 初期化

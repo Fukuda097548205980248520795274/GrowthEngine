@@ -11,9 +11,6 @@ Engine::Render2DBaseData::Render2DBaseData(Render2DHandle hRender2D, std::string
 
 	// 読み込む
 	isLoad_ = true;
-
-	// 2D
-	guizmoData_.dimension = DebugData::GuizmoDimension::Orthogothic;
 }
 
 /// @brief シーン前のリセット

@@ -32,9 +32,6 @@ Engine::Camera3DResource::Camera3DResource(const std::string& name, Camera3DHand
 
 	// 読み込む
 	isLoad_ = true;
-
-	// 3D
-	guizmoData_.dimension = DebugData::GuizmoDimension::Perspective;
 }
 
 /// @brief 更新処理

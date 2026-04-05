@@ -351,76 +351,55 @@ void Engine::Render2DSpriteData::DebugGuizmo(const Matrix4x4& viewMatrix, const 
 	if (engine_->GetKeyTrigger(DIK_S))guizmoData_.mode = DebugData::GuizmoMode::Scale;
 
 	// ワールド行列
-	Matrix4x4 worldMatrix;
+	Matrix4x4 worldMatrix =
+		Make2DScaleMatrix4x4(param_->transform.scale) *
+		Make3DRotateZMatrix4x4(param_->transform.rotate) *
+		Make2DTranslateMatrix4x4(param_->transform.translate);
 
+	// Guizmoの操作モードに応じて、操作する成分を決める
+	ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE_X | ImGuizmo::TRANSLATE_Y;
 	switch (guizmoData_.mode)
 	{
 	case DebugData::GuizmoMode::Translate:
-		// 移動
-		worldMatrix = Make2DTranslateMatrix4x4(param_->transform.translate);
-
-		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::TRANSLATE_X | ImGuizmo::TRANSLATE_Y, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
-		if (ImGuizmo::IsUsing())
-		{
-			// 平行移動
-			param_->transform.translate = Vector2(worldMatrix.m[3][0], worldMatrix.m[3][1]);
-		}
-
+		operation = ImGuizmo::TRANSLATE_X | ImGuizmo::TRANSLATE_Y;
 		break;
-
 	case DebugData::GuizmoMode::Rotate:
-		// 回転
-
-		// 回転 * 移動
-		worldMatrix = Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
-
-		// ROTATE_Z だけを許可する
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::ROTATE_Z, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
-		if (ImGuizmo::IsUsing())
-		{
-			float translation[3];
-			float rotation[3];
-			float scale[3];
-
-			ImGuizmo::DecomposeMatrixToComponents(
-				&worldMatrix.m[0][0],
-				translation,
-				rotation,
-				scale
-			);
-
-			// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
-			constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
-
-			// rotation[] は度数法（degrees）なので、ラジアンに変換して代入する
-			param_->transform.rotate = rotation[2] * DEG2RAD;
-		}
-
+		operation = ImGuizmo::ROTATE_Z;
 		break;
-
 	case DebugData::GuizmoMode::Scale:
-		// 拡縮
-
-		// 拡縮 * 移動
-		worldMatrix = Make2DScaleMatrix4x4(param_->transform.scale) * Make2DTranslateMatrix4x4(param_->transform.translate);
-
-		// Guizmo描画
-		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], ImGuizmo::SCALE_X | ImGuizmo::SCALE_Y, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-		// Gizmo を動かしている間だけ、結果を自分の行列系に戻す
-		if (ImGuizmo::IsUsing())
-		{
-			param_->transform.scale.x =
-				std::sqrt(worldMatrix.m[0][0] * worldMatrix.m[0][0] + worldMatrix.m[0][1] * worldMatrix.m[0][1] + worldMatrix.m[0][2] * worldMatrix.m[0][2]);
-			param_->transform.scale.y =
-				std::sqrt(worldMatrix.m[1][0] * worldMatrix.m[1][0] + worldMatrix.m[1][1] * worldMatrix.m[1][1] + worldMatrix.m[1][2] * worldMatrix.m[1][2]);
-		}
-
+		operation = ImGuizmo::SCALE_X | ImGuizmo::SCALE_Y;
 		break;
+	}
+
+	// ImGuizmoを描画して、操作する
+	ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projMatrix.m[0][0], operation, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+
+	if (ImGuizmo::IsUsing())
+	{
+		float translation[3];
+		float rotation[3];
+		float scale[3];
+
+		// ワールド行列から分解して、パラメータに反映させる
+		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
+
+		// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
+		constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+
+		switch (guizmoData_.mode)
+		{
+		case DebugData::GuizmoMode::Translate:
+			// 移動成分抽出
+			param_->transform.translate = Vector2(translation[0], translation[1]);
+			break;
+		case DebugData::GuizmoMode::Rotate:
+			// 回転成分抽出
+			param_->transform.rotate = rotation[2] * DEG2RAD;
+			break;
+		case DebugData::GuizmoMode::Scale:
+			// 拡縮成分抽出
+			param_->transform.scale = Vector2(scale[0], scale[1]);
+			break;
+		}
 	}
 }
