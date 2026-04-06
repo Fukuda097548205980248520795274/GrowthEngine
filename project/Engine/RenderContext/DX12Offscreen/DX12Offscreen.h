@@ -59,10 +59,17 @@ namespace Engine
 		/// @return 
 		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log) { return postEffectStore_->Load(name, type, device, log); }
 
+
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
 		/// @param commandList 
 		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList);
+
+		/// @brief ポストエフェクトを描画する
+		/// @param name 
+		/// @param commandList 
+		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList);
+
 
 		/// @brief ポストエフェクトのパラメータを取得する
 		/// @tparam T 
@@ -70,6 +77,13 @@ namespace Engine
 		/// @return 
 		template<typename T>
 		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return postEffectStore_->GetParam<T>(hPostEffect); }
+
+		/// @brief ポストエフェクトのパラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPostEffectParam(const std::string& name) { return postEffectStore_->GetParam<T>(name); }
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();

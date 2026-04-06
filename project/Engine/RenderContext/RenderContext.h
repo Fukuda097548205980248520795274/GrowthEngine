@@ -342,12 +342,23 @@ namespace Engine
 		/// @param hPostEffect 
 		void DrawPostEffect(PostEffectHandle hPostEffect) { return offscreen_->DrawPostEffect(hPostEffect, commandList_); }
 
-		/// @brief パメータを取得する
+		/// @brief ポストエフェクトを描画する
+		/// @param name 
+		void DrawPostEffect(const std::string& name) { return offscreen_->DrawPostEffect(name, commandList_); }
+
+		/// @brief パラメータを取得する
 		/// @tparam T 
 		/// @param hPostEffect 
 		/// @return 
 		template<typename T>
 		T* GetPostEffectParam(PostEffectHandle hPostEffect) { return offscreen_->GetPostEffectParam<T>(hPostEffect); }
+
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetPostEffectParam(const std::string& name) { return offscreen_->GetPostEffectParam<T>(name); }
 
 
 
