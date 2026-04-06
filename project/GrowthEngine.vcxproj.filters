@@ -766,6 +766,9 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData">
       <UniqueIdentifier>{1acacf8c-2b1c-487e-8e20-9f39b831576f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOVignetting">
+      <UniqueIdentifier>{68252ceb-1933-43a3-b6ed-e8c70d3668fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -828,10 +831,10 @@
     <ClCompile Include="Engine\Math\Vector\Vector2\Vector2.cpp">
       <Filter>Engine\Include\Math\Vector\Vector2</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.cpp">
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.cpp">
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOCopyImage\PSOCopyImage.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImage</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Vector\Vector3\Vector3.cpp">
@@ -1059,7 +1062,7 @@
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSORadialBlur\PSORadialBlur.cpp">
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSORadialBlur\PSORadialBlur.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSORadialBlur</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
@@ -1338,11 +1341,17 @@
     <ClCompile Include="Engine\Math\Vector\VectorInt2\VectorInt2.cpp">
       <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOGrayscale\PSOGrayscale.cpp">
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOGrayscale</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1406,10 +1415,10 @@
     <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h">
       <Filter>Engine\Include\Math\Vector\Vector2</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\BasePSOPostEffect.h">
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect.h">
       <Filter>Engine\Include\PSO\PSOPostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOCopyImage\PSOCopyImage.h">
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOCopyImage\PSOCopyImage.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImage</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h">
@@ -1706,7 +1715,7 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSORadialBlur\PSORadialBlur.h">
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSORadialBlur\PSORadialBlur.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSORadialBlur</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h">
@@ -2015,11 +2024,17 @@
     <ClInclude Include="Engine\Math\Vector\VectorInt2\VectorInt2.h">
       <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOGrayscale\PSOGrayscale.h">
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOGrayscale</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOVignetting\PSOVignetting.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2107,6 +2122,9 @@
       <Filter>Engine\Shader\Text</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\Grayscale.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\Vignetting.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

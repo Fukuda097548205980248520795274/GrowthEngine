@@ -8,8 +8,8 @@
 #include "PostEffectData/PostEffectBaseData.h"
 #include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
-#include "PSO/PSOPostEffect/BasePSOPostEffect/PSORadialBlur/PSORadialBlur.h"
-#include "PSO/PSOPostEffect/BasePSOPostEffect/PSOGrayscale/PSOGrayscale.h"
+#include "PSO/PSOPostEffect/PSORadialBlur/PSORadialBlur.h"
+#include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 
 namespace Engine
 {
