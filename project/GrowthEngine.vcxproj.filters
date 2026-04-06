@@ -760,6 +760,12 @@
     <Filter Include="Engine\Include\Math\Vector\VectorInt2">
       <UniqueIdentifier>{e3770771-401f-4778-8eb7-96988475fa60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOGrayscale">
+      <UniqueIdentifier>{faf3661b-59c5-475f-a904-1c7c4d206aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData">
+      <UniqueIdentifier>{1acacf8c-2b1c-487e-8e20-9f39b831576f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1331,6 +1337,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Vector\VectorInt2\VectorInt2.cpp">
       <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOGrayscale\PSOGrayscale.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOGrayscale</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2003,6 +2015,12 @@
     <ClInclude Include="Engine\Math\Vector\VectorInt2\VectorInt2.h">
       <Filter>Engine\Include\Math\Vector\VectorInt2</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOGrayscale\PSOGrayscale.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOGrayscale</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2087,6 +2105,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Text\Text.PS.hlsl">
       <Filter>Engine\Shader\Text</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\Grayscale.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

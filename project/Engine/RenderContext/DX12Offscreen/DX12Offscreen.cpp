@@ -145,6 +145,33 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }
 
+/// @brief ポストエフェクトを描画する
+/// @param name 
+/// @param commandList 
+void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList)
+{
+	// nullptrチェック
+	assert(commandList);
+
+	// カウントする
+	++currentOffscreen_;
+	currentOffscreen_ = currentOffscreen_ % 2;
+
+	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+	ClearRenderTarget(commandList);
+
+
+	// 書き込み対象 -> 読み込ませテクスチャ
+	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+	postEffectStore_->DrawPostEffect(name, commandList, offscreenResource_[1 - currentOffscreen_].get());
+
+	// 読み込ませテクスチャ -> 書き込み対象
+	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::DX12Offscreen::DebugParameter()
 {

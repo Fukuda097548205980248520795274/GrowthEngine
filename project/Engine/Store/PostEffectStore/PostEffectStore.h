@@ -9,6 +9,7 @@
 #include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
 #include "PSO/PSOPostEffect/BasePSOPostEffect/PSORadialBlur/PSORadialBlur.h"
+#include "PSO/PSOPostEffect/BasePSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 
 namespace Engine
 {
@@ -36,13 +37,21 @@ namespace Engine
 		/// @param log 
 		PostEffectHandle Load(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log);
 
-		/// @brief ポストエフェクトを描画する
+
+		/// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect 
 		/// @param commandList 
 		/// @param offscreenResource 
-		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource);
+		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) { dataTable_[hPostEffect]->Register(commandList, offscreenResource); }
 
-		/// @brief パメータを取得する
+		/// @brief 描画処理をコマンドリストに登録する
+		/// @param name 
+		/// @param commandList 
+		/// @param offscreenResource 
+		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) { dataTable_[nameTable_[name]]->Register(commandList, offscreenResource); }
+
+
+		/// @brief パラメータを取得する
 		/// @tparam T 
 		/// @param hPostEffect 
 		/// @return 
@@ -50,6 +59,16 @@ namespace Engine
 		T* GetParam(PostEffectHandle hPostEffect)
 		{
 			return static_cast<T*>(dataTable_[hPostEffect]->GetParam());
+		}
+
+		/// @brief パラメータを取得する
+		/// @tparam T 
+		/// @param name 
+		/// @return 
+		template<typename T>
+		T* GetParam(const std::string& name)
+		{
+			return static_cast<T*>(dataTable_[nameTable_[name]]->GetParam());
 		}
 
 		/// @brief デバッグ用パラメータ
@@ -61,11 +80,17 @@ namespace Engine
 		// データテーブル
 		std::vector<std::unique_ptr<PostEffectBaseData>> dataTable_;
 
+		// 名前テーブル
+		std::unordered_map<std::string, PostEffectHandle> nameTable_;
+
 		/// @brief パラメータ
 		std::unique_ptr<PostEffectParameter> parameter_ = nullptr;
 
 
 	private:
+
+		/// @brief グレースケールPSO
+		std::unique_ptr<PSOGrayscale> psoGrayscale_ = nullptr;
 
 		// ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;

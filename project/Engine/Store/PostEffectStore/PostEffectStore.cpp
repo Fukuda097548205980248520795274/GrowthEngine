@@ -2,6 +2,7 @@
 #include <cassert>
 #include "ShaderCompiler/ShaderCompiler.h"
 
+#include "PostEffectData/PostEffectGrayscaleData/PostEffectGrayscaleData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
 /// @brief コンストラクタ
@@ -21,6 +22,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	assert(device);
 	assert(compiler);
 	assert(vertexShaderBlob);
+
+	// グレースケールPSO
+	psoGrayscale_ = std::make_unique<PSOGrayscale>();
+	psoGrayscale_->Initialize(device, compiler, vertexShaderBlob, log);
 	
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
@@ -47,6 +52,18 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	// ハンドル
 	PostEffectHandle handle = static_cast<PostEffectHandle>(dataTable_.size());
 
+	// 名前テーブルに登録
+	nameTable_[name] = handle;
+
+	// グレースケール
+	if (type == PostEffect::Type::Grayscale)
+	{
+		std::unique_ptr<PostEffectGrayscaleData> data = std::make_unique<PostEffectGrayscaleData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoGrayscale_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
 	// ラジアルブラー
 	if (type == PostEffect::Type::RadialBlur)
 	{
@@ -59,15 +76,6 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 
 	assert(false);
 	return handle;
-}
-
-/// @brief ポストエフェクトを描画する
-/// @param hPostEffect 
-/// @param commandList 
-/// @param offscreenResource 
-void Engine::PostEffectStore::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
-{
-	dataTable_[hPostEffect]->Register(commandList, offscreenResource);
 }
 
 /// @brief デバッグ用パラメータ

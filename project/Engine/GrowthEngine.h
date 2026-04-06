@@ -641,12 +641,23 @@ public:
 	/// @param hPostEffect 
 	void DrawPostEffect(PostEffectHandle hPostEffect)const { return renderContext_->DrawPostEffect(hPostEffect); }
 
-	/// @brief パメータを取得する
+	/// @brief ポストエフェクトを描画する
+	/// @param name 
+	void DrawPostEffect(const std::string& name)const { return renderContext_->DrawPostEffect(name); }
+
+	/// @brief パラメータを取得する
 	/// @tparam T 
 	/// @param hPostEffect 
 	/// @return 
 	template<typename T>
 	T* GetPostEffectParam(PostEffectHandle hPostEffect)const { return renderContext_->GetPostEffectParam<T>(hPostEffect); }
+
+	/// @brief パラメータを取得する
+	/// @tparam T 
+	/// @param name 
+	/// @return 
+	template<typename T>
+	T* GetPostEffectParam(const std::string& name)const { return renderContext_->GetPostEffectParam<T>(name); }
 
 
 
