@@ -7,7 +7,7 @@
 #include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Resource/DepthResource/DepthResource.h"
 
-#include "PSO/PSOPostEffect/BasePSOPostEffect/PSOCopyImage/PSOCopyImage.h"
+#include "PSO/PSOPostEffect/PSOCopyImage/PSOCopyImage.h"
 
 #include "Store/PostEffectStore/PostEffectStore.h"
 

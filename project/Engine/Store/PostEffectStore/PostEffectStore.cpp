@@ -3,6 +3,7 @@
 #include "ShaderCompiler/ShaderCompiler.h"
 
 #include "PostEffectData/PostEffectGrayscaleData/PostEffectGrayscaleData.h"
+#include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
 /// @brief コンストラクタ
@@ -26,6 +27,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// グレースケールPSO
 	psoGrayscale_ = std::make_unique<PSOGrayscale>();
 	psoGrayscale_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// ヴィネッティングPSO
+	psoVignetting_ = std::make_unique<PSOVignetting>();
+	psoVignetting_->Initialize(device, compiler, vertexShaderBlob, log);
 	
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
@@ -60,6 +65,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	{
 		std::unique_ptr<PostEffectGrayscaleData> data = std::make_unique<PostEffectGrayscaleData>(name, type, handle, parameter_.get());
 		data->Initialize(device, log, psoGrayscale_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// ヴィネッティング
+	if (type == PostEffect::Type::Vignetting)
+	{
+		std::unique_ptr<PostEffectVignettingData> data = std::make_unique<PostEffectVignettingData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoVignetting_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

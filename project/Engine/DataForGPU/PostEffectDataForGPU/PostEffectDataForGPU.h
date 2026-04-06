@@ -37,5 +37,20 @@ namespace Engine
 
 			Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
         };
+
+		/// @brief GPUに送るヴィネット
+        struct VignettingDataForGPU
+        {
+            // 色
+            Vector3 color;
+
+            // ブレンド強度
+            float intensity;
+
+            // 減衰カーブ
+            float power;
+
+			Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

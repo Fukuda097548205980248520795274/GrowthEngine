@@ -10,6 +10,7 @@ namespace Engine
 		enum class Type
 		{
 			Grayscale,
+			Vignetting,
 			RadialBlur
 		};
 
@@ -43,6 +44,19 @@ namespace Engine
 
 			// 明るさ
 			float brightness;
+		};
+
+		/// @brief ヴィネット
+		struct Vignetting
+		{
+			// 色
+			Vector3 color;
+
+			// ブレンド強度
+			float intensity;
+
+			// 減衰カーブ
+			float power;
 		};
 	}
 }

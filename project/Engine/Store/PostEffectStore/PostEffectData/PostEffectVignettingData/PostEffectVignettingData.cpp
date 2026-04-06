@@ -1,4 +1,4 @@
-#include "PostEffectGrayscaleData.h"
+#include "PostEffectVignettingData.h"
 #include "GrowthEngine.h"
 #include "Resource/OffscreenResource/OffscreenResource.h"
 
@@ -9,7 +9,7 @@
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PostEffectGrayscaleData::Initialize(ID3D12Device* device, Log* log, BasePSOPostEffect* pso)
+void Engine::PostEffectVignettingData::Initialize(ID3D12Device* device, Log* log, BasePSOPostEffect* pso)
 {
 	// nullptrチェック
 	assert(device);
@@ -19,38 +19,32 @@ void Engine::PostEffectGrayscaleData::Initialize(ID3D12Device* device, Log* log,
 	pso_ = pso;
 
 	// パラメータの生成
-	param_ = std::make_unique<PostEffect::Grayscale>();
-	param_->colorWeight = Vector3(0.2125f, 0.7154f, 0.0721f);
+	param_ = std::make_unique<PostEffect::Vignetting>();
+	param_->color = Vector3(0.0f, 0.0f, 0.0f);
 	param_->intensity = 1.0f;
-	param_->tint = Vector3(1.0f, 1.0f, 1.0f);
-	param_->contrast = 1.0f;
-	param_->brightness = 0.0f;
+	param_->power = 0.8f;
 
 	// パラメータを記録する
-	group_ = "Grayscale_" + name_;
+	group_ = "Vignetting_" + name_;
 	if (parameter_)
 	{
-		parameter_->SetValue(group_, "RGB_Weight", &param_->colorWeight);
+		parameter_->SetValue(group_, "Color", &param_->color);
 		parameter_->SetValue(group_, "Intensity", &param_->intensity);
-		parameter_->SetValue(group_, "Tint", &param_->tint);
-		parameter_->SetValue(group_, "Contrast", &param_->contrast);
-		parameter_->SetValue(group_, "Brightness", &param_->brightness);
+		parameter_->SetValue(group_, "Power", &param_->power);
 
 		parameter_->RegisterGroupDataReflection(group_);
 	}
 
 	// リソース生成
-	resource_ = std::make_unique<ConstantBufferResource<PostEffect::GrayscaleDataForGPU>>();
+	resource_ = std::make_unique<ConstantBufferResource<PostEffect::VignettingDataForGPU>>();
 	resource_->Initialize(device, log);
-	resource_->data_->colorWeight = param_->colorWeight;
+	resource_->data_->color = param_->color;
 	resource_->data_->intensity = param_->intensity;
-	resource_->data_->tint = param_->tint;
-	resource_->data_->contrast = param_->contrast;
-	resource_->data_->brightness = param_->brightness;
+	resource_->data_->power = param_->power;
 }
 
 /// @brief リセット
-void Engine::PostEffectGrayscaleData::Reset()
+void Engine::PostEffectVignettingData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -58,27 +52,23 @@ void Engine::PostEffectGrayscaleData::Reset()
 	}
 	else
 	{
-		param_->colorWeight = Vector3(0.2125f, 0.7154f, 0.0721f);
+		param_->color = Vector3(0.0f, 0.0f, 0.0f);
 		param_->intensity = 1.0f;
-		param_->tint = Vector3(1.0f, 1.0f, 1.0f);
-		param_->contrast = 1.0f;
-		param_->brightness = 0.0f;
+		param_->power = 0.8f;
 	}
 }
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectGrayscaleData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
+void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
 {
 	/*-----------------
 		データを渡す
 	-----------------*/
 
-	resource_->data_->colorWeight = param_->colorWeight;
+	resource_->data_->color = param_->color;
 	resource_->data_->intensity = param_->intensity;
-	resource_->data_->tint = param_->tint;
-	resource_->data_->contrast = param_->contrast;
-	resource_->data_->brightness = param_->brightness;
+	resource_->data_->power = param_->power;
 
 
 	/*------------------------
@@ -103,17 +93,16 @@ void Engine::PostEffectGrayscaleData::Register(ID3D12GraphicsCommandList* comman
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PostEffectGrayscaleData::DebugParameter()
+void Engine::PostEffectVignettingData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
-	if (ImGui::TreeNode((name_ + "_Grayscale").c_str()))
+	// UV
+	if (ImGui::TreeNode((name_ + "_Vignetting").c_str()))
 	{
-		ImGui::ColorEdit3("RGB Weight", &param_->colorWeight.x);
+		ImGui::ColorEdit3("Color", &param_->color.x);
 		ImGui::SliderFloat("Intensity", &param_->intensity, 0.0f, 1.0f);
-		ImGui::ColorEdit3("Tint", &param_->tint.x);
-		ImGui::DragFloat("Contrast", &param_->contrast, 0.01f, 0.0f, 100.0f);
-		ImGui::DragFloat("Brightness", &param_->brightness,0.01f, -1.0f, 1.0f);
+		ImGui::DragFloat("Power", &param_->power, 0.01f, 0.0f, 50.0f);
 
 		ImGui::Text("\n");
 
