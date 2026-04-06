@@ -3,26 +3,23 @@
 /// @brief 初期化
 void GameScene::Initialize()
 {
-	engine_->LoadCamera3D("TestMainCamera");
+	engine_->LoadCamera3D("MainCamera");
 
-	engine_->LoadText(engine_->LoadFont("Test", "C:/Windows/Fonts/Arial.ttf", 256), "Text_Test");
+	// 地形のモデルを読み込む
+	engine_->LoadPrimitiveStaticModel(engine_->LoadModel("./Assets/Models/terrain", "terrain.obj"), "Terrain");
 
-	engine_->LoadPrimitiveStaticModel(engine_->LoadModel("./Assets/Models/AnimatedCube" , "AnimatedCube.gltf") , "Test");
+	// ライトを読み込む
+	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 }
 
 /// @brief 更新処理
 void GameScene::Update()
 {
-	if (engine_->GetKeyTrigger(DIK_SPACE))
-	{
-		Transition("Title");
-	}
+	
 }
 
 /// @brief 描画処理
 void GameScene::Draw()
 {
-	engine_->DrawRender3D("Test");
-
-	engine_->DrawRender2D("Text_Test");
+	engine_->DrawRender3D("Terrain");
 }
