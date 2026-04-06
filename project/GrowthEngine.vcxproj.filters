@@ -769,6 +769,9 @@
     <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOVignetting">
       <UniqueIdentifier>{68252ceb-1933-43a3-b6ed-e8c70d3668fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData">
+      <UniqueIdentifier>{e3e9968b-f6df-4828-bb9c-504243d5e474}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1348,10 +1351,13 @@
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2033,8 +2039,8 @@
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect\PSOVignetting\PSOVignetting.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

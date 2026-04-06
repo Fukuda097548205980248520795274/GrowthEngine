@@ -457,6 +457,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.cpp" />
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp" />
     <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -731,6 +732,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -964,6 +966,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.h" />
     <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect.h" />
@@ -1041,6 +1044,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />
     <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DBaseData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.h" />

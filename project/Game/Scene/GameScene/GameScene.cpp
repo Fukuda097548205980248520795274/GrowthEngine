@@ -11,8 +11,8 @@ void GameScene::Initialize()
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
-	// グレースケール
-	engine_->LoadPostEffect("Grayscale", Engine::PostEffect::Type::Grayscale);
+	// ヴィネッティング
+	engine_->LoadPostEffect("Vignetting", Engine::PostEffect::Type::Vignetting);
 }
 
 /// @brief 更新処理
@@ -27,6 +27,6 @@ void GameScene::Draw()
 	// 地形を描画する
 	engine_->DrawRender3D("Terrain");
 
-	// グレースケール
-	engine_->DrawPostEffect("Grayscale");
+	// ヴィネッティング
+	engine_->DrawPostEffect("Vignetting");
 }

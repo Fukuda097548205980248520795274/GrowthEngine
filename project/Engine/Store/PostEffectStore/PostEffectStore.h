@@ -9,6 +9,7 @@
 #include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
 #include "PSO/PSOPostEffect/PSORadialBlur/PSORadialBlur.h"
+#include "PSO/PSOPostEffect/PSOVignetting/PSOVignetting.h"
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 
 namespace Engine
@@ -91,6 +92,9 @@ namespace Engine
 
 		/// @brief グレースケールPSO
 		std::unique_ptr<PSOGrayscale> psoGrayscale_ = nullptr;
+
+		/// @brief ヴィネッティングPSO
+		std::unique_ptr<PSOVignetting> psoVignetting_ = nullptr;
 
 		// ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;
