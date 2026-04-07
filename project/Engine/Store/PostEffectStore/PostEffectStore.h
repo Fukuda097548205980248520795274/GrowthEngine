@@ -12,6 +12,7 @@
 #include "PSO/PSOPostEffect/PSOVignetting/PSOVignetting.h"
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 #include "PSO/PSOPostEffect/PSOSmoothing/PSOSmoothing.h"
+#include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
 
 namespace Engine
 {
@@ -99,6 +100,9 @@ namespace Engine
 
 		/// @brief 平滑化PSO
 		std::unique_ptr<PSOSmoothing> psoSmoothing_ = nullptr;
+
+		/// @brief ガウシアンフィルタPSO
+		std::unique_ptr<PSOGaussianFilter> psoGaussianFilter_ = nullptr;
 
 		// ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;

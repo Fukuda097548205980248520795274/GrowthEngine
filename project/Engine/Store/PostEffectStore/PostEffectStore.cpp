@@ -5,6 +5,7 @@
 #include "PostEffectData/PostEffectGrayscaleData/PostEffectGrayscaleData.h"
 #include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"
+#include "PostEffectData/PostEffectGaussianFilterData/PostEffectGaussianFilterData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
 /// @brief コンストラクタ
@@ -36,6 +37,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// 平滑化PSO
 	psoSmoothing_ = std::make_unique<PSOSmoothing>();
 	psoSmoothing_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// ガウシアンフィルタPSO
+	psoGaussianFilter_ = std::make_unique<PSOGaussianFilter>();
+	psoGaussianFilter_->Initialize(device, compiler, vertexShaderBlob, log);
 	
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
@@ -88,6 +93,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	{
 		std::unique_ptr<PostEffectSmoothingData> data = std::make_unique<PostEffectSmoothingData>(name, type, handle, parameter_.get());
 		data->Initialize(device, log, psoSmoothing_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// ガウシアンフィルター
+	if (type == PostEffect::Type::GaussianFilter)
+	{
+		std::unique_ptr<PostEffectGaussianFilterData> data = std::make_unique<PostEffectGaussianFilterData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoGaussianFilter_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

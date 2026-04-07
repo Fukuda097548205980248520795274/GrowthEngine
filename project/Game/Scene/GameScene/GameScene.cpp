@@ -11,8 +11,8 @@ void GameScene::Initialize()
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
-	// 平滑化
-	engine_->LoadPostEffect("Smoothing", Engine::PostEffect::Type::Smoothing);
+	// ガウシアンフィルター
+	engine_->LoadPostEffect("GaussianFilter", Engine::PostEffect::Type::GaussianFilter);
 }
 
 /// @brief 更新処理
@@ -27,6 +27,6 @@ void GameScene::Draw()
 	// 地形を描画する
 	engine_->DrawRender3D("Terrain");
 
-	// ヴィネッティング
-	engine_->DrawPostEffect("Smoothing");
+	// ガウシアンフィルター
+	engine_->DrawPostEffect("GaussianFilter");
 }
