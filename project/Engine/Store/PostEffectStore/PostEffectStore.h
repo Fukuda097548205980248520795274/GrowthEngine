@@ -16,6 +16,7 @@
 #include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
 #include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
 #include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
+#include "PSO/PSOPostEffect/PSODissolve/PSODissolve.h"
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 
 namespace Engine
@@ -24,6 +25,7 @@ namespace Engine
 	class Log;
 	class OffscreenResource;
 	class DepthResource;
+	class TextureStore;
 
 	class PostEffectStore
 	{
@@ -36,7 +38,7 @@ namespace Engine
 		/// @param device 
 		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, Log* log);
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, TextureStore* textureStore, Log* log);
 
 		/// @brief 読み込み
 		/// @param name 
@@ -142,7 +144,16 @@ namespace Engine
 		/// @brief ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;
 
+		/// @brief ディゾルブPSO
+		std::unique_ptr<PSODissolve> psoDissolve_ = nullptr;
+
 		/// @brief ホワイトノイズPSO
 		std::unique_ptr<PSOWhiteNoise> psoWhiteNoise_ = nullptr;
+
+
+	private:
+
+		/// @brief テクスチャストア
+		TextureStore* textureStore_ = nullptr;
 	};
 }

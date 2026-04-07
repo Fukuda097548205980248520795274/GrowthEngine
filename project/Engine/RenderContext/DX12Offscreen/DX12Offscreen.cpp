@@ -14,11 +14,14 @@
 /// @param buffering 
 /// @param compiler 
 /// @param log 
-void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, Log* log)
+void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(heap);
+	assert(buffering);
+	assert(compiler);
+	assert(textureStore);
 
 	// オフスクリーンのリソースを生成する
 	for (int32_t i = 0; i < kMaxOffscreenCount; ++i)
@@ -42,7 +45,7 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 
 	// ポストエフェクトストアの生成
 	postEffectStore_ = std::make_unique<PostEffectStore>();
-	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
+	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(), textureStore, log);
 }
 
 /// @brief サイズを作り直す

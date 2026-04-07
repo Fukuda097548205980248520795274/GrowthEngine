@@ -2,6 +2,7 @@
 #include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
+#include "Handle/Handle.h"
 
 namespace Engine
 {
@@ -17,6 +18,7 @@ namespace Engine
 			LuminanceBasedOutline,
 			DepthBasedOutline,
 			RadialBlur,
+			Dissolve,
 			WhiteNoise
 		};
 
@@ -73,6 +75,22 @@ namespace Engine
 
 			// 輝度の閾値
 			float intensity;
+		};
+
+		/// @brief ディゾルブ
+		struct Dissolve
+		{
+			// 閾値
+			float threshold;
+
+			// マスクテクスチャ
+			TextureHandle hMaskTexture;
+
+			// エッジの幅
+			float edgeDiff;
+
+			// エッジの色
+			Vector3 edgeColor;
 		};
 
 		/// @brief ホワイトノイズ

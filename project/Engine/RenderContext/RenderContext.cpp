@@ -57,9 +57,12 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	shaderCompiler_ = std::make_unique<ShaderCompiler>();
 	shaderCompiler_->Initialize(log);
 
+	// テクスチャストアの生成
+	textureStore_ = std::make_unique<TextureStore>();
+
 	// DX12Offscreenの生成と初期化
 	offscreen_ = std::make_unique<DX12Offscreen>();
-	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(), log);
+	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(),textureStore_.get(), log);
 
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
@@ -67,9 +70,6 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// 2Dカメラストア
 	camera2DStore_ = std::make_unique<Camera2DStore>();
-
-	// テクスチャストアの生成
-	textureStore_ = std::make_unique<TextureStore>();
 
 	// モデルストアの生成
 	modelStore_ = std::make_unique<ModelStore>();

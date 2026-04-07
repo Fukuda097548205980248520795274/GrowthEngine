@@ -12,7 +12,8 @@ void GameScene::Initialize()
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
 	// ラジアルブラーを読み込む
-	engine_->LoadPostEffect("WhiteNoise", Engine::PostEffect::Type::WhiteNoise);
+	engine_->LoadPostEffect("Dissolve", Engine::PostEffect::Type::Dissolve);
+	engine_->LoadTexture("./Assets/Textures/noise0.png");
 }
 
 /// @brief 更新処理
@@ -28,5 +29,5 @@ void GameScene::Draw()
 	engine_->DrawRender3D("Terrain");
 
 	// ラジアルブラー
-	engine_->DrawPostEffect("WhiteNoise");
+	engine_->DrawPostEffect("Dissolve");
 }

@@ -18,6 +18,7 @@ namespace Engine
 	class DX12Heap;
 	class DX12Buffering;
 	class ShaderCompiler;
+	class TextureStore;
 	class Log;
 
 	class DX12Offscreen
@@ -30,7 +31,7 @@ namespace Engine
 		/// @param buffering 
 		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, Log* log);
+		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log);
 
 		/// @brief サイズを作り直す
 		/// @param device 
