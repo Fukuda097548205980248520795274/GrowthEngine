@@ -121,10 +121,11 @@ void Engine::DX12Offscreen::ClearDepthStencil(ID3D12GraphicsCommandList* command
 /// @brief ポストエフェクトを描画する
 /// @param hPostEffect 
 /// @param commandList 
-void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList)
+void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse)
 {
 	// nullptrチェック
 	assert(commandList);
+	const bool isUseDepth = postEffectStore_->IsUseDepth(hPostEffect);
 
 	// カウントする
 	++currentOffscreen_;
@@ -138,7 +139,22 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
-	postEffectStore_->DrawPostEffect(hPostEffect, commandList, offscreenResource_[1 - currentOffscreen_].get());
+	if (isUseDepth)
+	{
+		// 深度書き込み -> 読み込みテクスチャ
+		TransitionBarrier(depthResource_->GetResource(),
+			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+	}
+
+	postEffectStore_->DrawPostEffect(hPostEffect, commandList,
+      offscreenResource_[1 - currentOffscreen_].get(), isUseDepth ? depthResource_.get() : nullptr, projectionInverse);
+
+	if (isUseDepth)
+	{
+		// 読み込みテクスチャ -> 深度書き込み
+		TransitionBarrier(depthResource_->GetResource(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
+	}
 
 	// 読み込ませテクスチャ -> 書き込み対象
 	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
@@ -148,10 +164,11 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 /// @brief ポストエフェクトを描画する
 /// @param name 
 /// @param commandList 
-void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList)
+void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse)
 {
 	// nullptrチェック
 	assert(commandList);
+	const bool isUseDepth = postEffectStore_->IsUseDepth(name);
 
 	// カウントする
 	++currentOffscreen_;
@@ -165,7 +182,22 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
-	postEffectStore_->DrawPostEffect(name, commandList, offscreenResource_[1 - currentOffscreen_].get());
+	if (isUseDepth)
+	{
+		// 深度書き込み -> 読み込みテクスチャ
+		TransitionBarrier(depthResource_->GetResource(),
+			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+	}
+
+	postEffectStore_->DrawPostEffect(name, commandList,
+      offscreenResource_[1 - currentOffscreen_].get(), isUseDepth ? depthResource_.get() : nullptr, projectionInverse);
+
+	if (isUseDepth)
+	{
+		// 読み込みテクスチャ -> 深度書き込み
+		TransitionBarrier(depthResource_->GetResource(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
+	}
 
 	// 読み込ませテクスチャ -> 書き込み対象
 	TransitionBarrier(offscreenResource_[1 - currentOffscreen_]->GetResource(),

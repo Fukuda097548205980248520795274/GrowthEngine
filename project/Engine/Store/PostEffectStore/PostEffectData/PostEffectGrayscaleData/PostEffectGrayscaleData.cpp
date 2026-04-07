@@ -68,8 +68,12 @@ void Engine::PostEffectGrayscaleData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectGrayscaleData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
+void Engine::PostEffectGrayscaleData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+	DepthResource* depthResource, const Matrix4x4& projectionInverse)
 {
+	(void)depthResource;
+	(void)projectionInverse;
+
 	/*-----------------
 		データを渡す
 	-----------------*/

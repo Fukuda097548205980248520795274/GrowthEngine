@@ -1,4 +1,4 @@
-#include "PostEffectVignettingData.h"
+#include "PostEffectLuminanceBasedOutlineData.h"
 #include "GrowthEngine.h"
 #include "Resource/OffscreenResource/OffscreenResource.h"
 
@@ -9,7 +9,7 @@
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PostEffectVignettingData::Initialize(ID3D12Device* device, Log* log, BasePSOPostEffect* pso)
+void Engine::PostEffectLuminanceBasedOutlineData::Initialize(ID3D12Device* device, Log* log, BasePSOPostEffect* pso)
 {
 	// nullptrチェック
 	assert(device);
@@ -19,32 +19,29 @@ void Engine::PostEffectVignettingData::Initialize(ID3D12Device* device, Log* log
 	pso_ = pso;
 
 	// パラメータの生成
-	param_ = std::make_unique<PostEffect::Vignetting>();
-	param_->color = Vector3(0.0f, 0.0f, 0.0f);
+	param_ = std::make_unique<PostEffect::LuminanceBasedOutline>();
+	param_->colorWeight = Vector3(0.2125f, 0.7154f, 0.0721f);
 	param_->intensity = 1.0f;
-	param_->power = 0.8f;
 
 	// パラメータを記録する
-	group_ = "Vignetting_" + name_;
+	group_ = "LuminanceBasedOutline_" + name_;
 	if (parameter_)
 	{
-		parameter_->SetValue(group_, "Color", &param_->color);
+		parameter_->SetValue(group_, "Color_Weight", &param_->colorWeight);
 		parameter_->SetValue(group_, "Intensity", &param_->intensity);
-		parameter_->SetValue(group_, "Power", &param_->power);
 
 		parameter_->RegisterGroupDataReflection(group_);
 	}
 
 	// リソース生成
-	resource_ = std::make_unique<ConstantBufferResource<PostEffect::VignettingDataForGPU>>();
+	resource_ = std::make_unique<ConstantBufferResource<PostEffect::LuminanceBasedOutlineDataForGPU>>();
 	resource_->Initialize(device, log);
-	resource_->data_->color = param_->color;
+	resource_->data_->colorWeight = param_->colorWeight;
 	resource_->data_->intensity = param_->intensity;
-	resource_->data_->power = param_->power;
 }
 
 /// @brief リセット
-void Engine::PostEffectVignettingData::Reset()
+void Engine::PostEffectLuminanceBasedOutlineData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -52,15 +49,14 @@ void Engine::PostEffectVignettingData::Reset()
 	}
 	else
 	{
-		param_->color = Vector3(0.0f, 0.0f, 0.0f);
+		param_->colorWeight = Vector3(0.2125f, 0.7154f, 0.0721f);
 		param_->intensity = 1.0f;
-		param_->power = 0.8f;
 	}
 }
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+void Engine::PostEffectLuminanceBasedOutlineData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
 	DepthResource* depthResource, const Matrix4x4& projectionInverse)
 {
 	(void)depthResource;
@@ -70,9 +66,8 @@ void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* comma
 		データを渡す
 	-----------------*/
 
-	resource_->data_->color = param_->color;
+	resource_->data_->colorWeight = param_->colorWeight;
 	resource_->data_->intensity = param_->intensity;
-	resource_->data_->power = param_->power;
 
 
 	/*------------------------
@@ -97,16 +92,15 @@ void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* comma
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PostEffectVignettingData::DebugParameter()
+void Engine::PostEffectLuminanceBasedOutlineData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
 	// UV
 	if (ImGui::TreeNode((name_ + "_Vignetting").c_str()))
 	{
-		ImGui::ColorEdit3("Color", &param_->color.x);
-		ImGui::SliderFloat("Intensity", &param_->intensity, 0.0f, 1.0f);
-		ImGui::DragFloat("Power", &param_->power, 0.01f, 0.0f, 50.0f);
+		ImGui::ColorEdit3("Color_Weight", &param_->colorWeight.x);
+		ImGui::DragFloat("Intensity", &param_->intensity, 0.01f, 0.0f, 100.0f);
 
 		ImGui::Text("\n");
 

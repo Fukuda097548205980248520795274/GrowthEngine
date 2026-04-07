@@ -1,9 +1,11 @@
 #pragma once
+#pragma once
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include <cstdint>
 #include <memory>
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Resource/DepthResource/DepthResource.h"
 
@@ -63,12 +65,12 @@ namespace Engine
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
 		/// @param commandList 
-		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList);
+      void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse);
 
 		/// @brief ポストエフェクトを描画する
 		/// @param name 
 		/// @param commandList 
-		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList);
+       void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse);
 
 
 		/// @brief ポストエフェクトのパラメータを取得する

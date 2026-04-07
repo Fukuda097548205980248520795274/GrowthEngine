@@ -27,7 +27,8 @@ namespace Engine
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
-		void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) override;
+		void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+			DepthResource* depthResource, const Matrix4x4& projectionInverse) override;
 
 		/// @brief パラメータを取得する
 		/// @return 

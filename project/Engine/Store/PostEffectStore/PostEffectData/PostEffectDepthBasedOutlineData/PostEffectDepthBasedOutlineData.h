@@ -1,9 +1,10 @@
 #pragma once
+  #pragma once
 #include "../PostEffectBaseData.h"
 
 namespace Engine
 {
-	class PostEffectGaussianFilterData : public PostEffectBaseData
+	class PostEffectDepthBasedOutlineData : public PostEffectBaseData
 	{
 	public:
 
@@ -11,7 +12,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectGaussianFilterData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+		PostEffectDepthBasedOutlineData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
 			: PostEffectBaseData(name, type, hPostEffect, parameter) {
 		}
 
@@ -34,5 +35,11 @@ namespace Engine
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
+
+
+	private:
+
+		// リソース
+		std::unique_ptr<ConstantBufferResource<PostEffect::DepthBasedOutlineDataForGPU>> resource_ = nullptr;
 	};
 }

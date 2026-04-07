@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PostEffectGaussianFilterData : public PostEffectBaseData
+	class PostEffectLuminanceBasedOutlineData : public PostEffectBaseData
 	{
 	public:
 
@@ -11,7 +11,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectGaussianFilterData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+		PostEffectLuminanceBasedOutlineData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
 			: PostEffectBaseData(name, type, hPostEffect, parameter) {
 		}
 
@@ -30,9 +30,18 @@ namespace Engine
 
 		/// @brief パラメータを取得する
 		/// @return 
-		void* GetParam() override { return nullptr; }
+		void* GetParam() override { return param_.get(); }
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
+
+
+	private:
+
+		/// @brief パラメータ
+		std::unique_ptr<PostEffect::LuminanceBasedOutline> param_ = nullptr;
+
+		// リソース
+		std::unique_ptr<ConstantBufferResource<PostEffect::LuminanceBasedOutlineDataForGPU>> resource_ = nullptr;
 	};
 }

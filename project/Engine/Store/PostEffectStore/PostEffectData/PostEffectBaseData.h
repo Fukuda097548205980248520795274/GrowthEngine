@@ -9,6 +9,7 @@
 namespace Engine
 {
 	class OffscreenResource;
+    class DepthResource;
 	class BasePSOPostEffect;
 	class PostEffectParameter;
 
@@ -48,7 +49,8 @@ namespace Engine
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
-		virtual void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) = 0;
+        virtual void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+			DepthResource* depthResource, const Matrix4x4& projectionInverse) = 0;
 
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
