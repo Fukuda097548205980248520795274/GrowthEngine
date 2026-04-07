@@ -11,8 +11,8 @@ void GameScene::Initialize()
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
-	// 深度ベース輪郭抽出のポストエフェクトを読み込む
-	engine_->LoadPostEffect("DepthBasedOutline", Engine::PostEffect::Type::DepthBasedOutline);
+	// ラジアルブラーを読み込む
+	engine_->LoadPostEffect("RadialBlur", Engine::PostEffect::Type::RadialBlur);
 }
 
 /// @brief 更新処理
@@ -27,6 +27,6 @@ void GameScene::Draw()
 	// 地形を描画する
 	engine_->DrawRender3D("Terrain");
 
-	// 深度ベース輪郭抽出
-	engine_->DrawPostEffect("DepthBasedOutline");
+	// ラジアルブラー
+	engine_->DrawPostEffect("RadialBlur");
 }

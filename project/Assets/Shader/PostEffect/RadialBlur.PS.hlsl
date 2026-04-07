@@ -5,74 +5,64 @@ struct PixelShaderOutput
     float4 color : SV_TARGET0;
 };
 
-struct Param
+struct RadialBlurParam
 {
-    float2 resolution;
+    // ブラーの中心座標
     float2 center;
-    float blur;
-    int sampleCount;
+    
+    // ブラーのサンプル数
+    int samples;
 
-    // --- 色補正パラメータ ---
-    float saturation; // 彩度 (1.0 = 元のまま)
-    float contrast; // コントラスト (1.0 = 元のまま)
-    float brightness; // 明るさ (0 = 変化なし)
-
+    // ブラーの強さ
+    float power;
 };
-ConstantBuffer<Param> gParam : register(b0);
+ConstantBuffer<RadialBlurParam> gParams : register(b0);
 
 Texture2D<float4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 
-// 彩度調整
-float3 AdjustSaturation(float3 color, float sat)
+// シンプルな疑似乱数生成関数
+float rand(float2 uv)
 {
-    float gray = dot(color, float3(0.299, 0.587, 0.114));
-    return lerp(gray.xxx, color, sat);
+    return frac(sin(dot(uv, float2(12.9898f, 78.233f))) * 43758.5453f);
 }
-
-// コントラスト調整
-float3 AdjustContrast(float3 color, float contrast)
-{
-    return (color - 0.5) * contrast + 0.5;
-}
-
-// 明るさ調整
-float3 AdjustBrightness(float3 color, float brightness)
-{
-    return color + brightness;
-}
-
-
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
+    // 初期化
     PixelShaderOutput output;
-    
-    float2 uv = input.texcoord;
+    output.color = float4(0.0f, 0.0f, 0.0f, 1.0f);
 
-    float detal = gParam.blur / gParam.sampleCount;
-    float offset = detal;
-
-    float2 velocity = uv - gParam.center;
-    velocity *= length(velocity);
-
-    float4 sum = float4(0, 0, 0, 0);
-
-    [loop]
-    for (int i = 0; i < gParam.sampleCount; i++)
+    // サンプル数が0以下の場合はブラーを使用しない
+    if (gParams.samples <= 0)
     {
-        sum += gTexture.Sample(gSampler, uv - velocity * offset);
-        offset += detal;
+        output.color.rgb = gTexture.SampleLevel(gSampler, input.texcoord, 0).rgb;
+        return output;
     }
 
-    float3 color = (sum / gParam.sampleCount).rgb;
-
-    // --- 色補正処理 ---
-    color = AdjustSaturation(color, gParam.saturation);
-    color = AdjustContrast(color, gParam.contrast);
-    color = AdjustBrightness(color, gParam.brightness);
+    // ブラーの中心へ向かう方向ベクトル
+    float2 direction = gParams.center - input.texcoord;
     
-    output.color = float4(color, 1.0f);
+    // ブラーの強さとサンプル数に基づいてステップを計算
+    float2 step = (direction * gParams.power) / float(gParams.samples);
+
+    // 乱数を生成してサンプリング位置をランダムにずらす（ジッタリング）
+    float jitter = rand(input.texcoord) - 0.5f;
+
+    float3 outputColor = float3(0.0f, 0.0f, 0.0f);
+
+    // サンプル数に基づいてブラーを適用
+    for (int i = 0; i < gParams.samples; ++i)
+    {
+        // サンプリング位置を計算
+        float2 texcoord = input.texcoord + step * (float(i) + jitter);
+        
+        // テクスチャからサンプルを取得して加算
+        outputColor += gTexture.SampleLevel(gSampler, texcoord, 0).rgb;
+    }
+
+    // 平均化
+    output.color.rgb = outputColor * rcp(float(gParams.samples));
     
     return output;
 }
