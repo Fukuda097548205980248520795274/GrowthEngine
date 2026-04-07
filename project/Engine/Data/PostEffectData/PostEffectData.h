@@ -11,6 +11,7 @@ namespace Engine
 		{
 			Grayscale,
 			Vignetting,
+			Smoothing,
 			RadialBlur
 		};
 

@@ -11,6 +11,7 @@
 #include "PSO/PSOPostEffect/PSORadialBlur/PSORadialBlur.h"
 #include "PSO/PSOPostEffect/PSOVignetting/PSOVignetting.h"
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
+#include "PSO/PSOPostEffect/PSOSmoothing/PSOSmoothing.h"
 
 namespace Engine
 {
@@ -95,6 +96,9 @@ namespace Engine
 
 		/// @brief ヴィネッティングPSO
 		std::unique_ptr<PSOVignetting> psoVignetting_ = nullptr;
+
+		/// @brief 平滑化PSO
+		std::unique_ptr<PSOSmoothing> psoSmoothing_ = nullptr;
 
 		// ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;

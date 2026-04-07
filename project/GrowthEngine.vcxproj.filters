@@ -772,6 +772,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData">
       <UniqueIdentifier>{e3e9968b-f6df-4828-bb9c-504243d5e474}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOSmoothing">
+      <UniqueIdentifier>{5c93ad53-dd39-4dd3-8dc1-e20d7ab19e21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData">
+      <UniqueIdentifier>{1619fc60-7235-4611-9b18-37842528987a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1358,6 +1364,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOSmoothing\PSOSmoothing.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOSmoothing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2042,6 +2054,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectVignettingData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOSmoothing\PSOSmoothing.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOSmoothing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2131,6 +2149,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\Vignetting.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\Smoothing.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

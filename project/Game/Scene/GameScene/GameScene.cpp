@@ -11,8 +11,8 @@ void GameScene::Initialize()
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
-	// ヴィネッティング
-	engine_->LoadPostEffect("Vignetting", Engine::PostEffect::Type::Vignetting);
+	// 平滑化
+	engine_->LoadPostEffect("Smoothing", Engine::PostEffect::Type::Smoothing);
 }
 
 /// @brief 更新処理
@@ -28,5 +28,5 @@ void GameScene::Draw()
 	engine_->DrawRender3D("Terrain");
 
 	// ヴィネッティング
-	engine_->DrawPostEffect("Vignetting");
+	engine_->DrawPostEffect("Smoothing");
 }
