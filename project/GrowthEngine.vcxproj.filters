@@ -796,6 +796,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData">
       <UniqueIdentifier>{f8a5038e-32d4-42a9-a70f-fcaceb7b4d5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise">
+      <UniqueIdentifier>{384c55b5-07b6-441d-82f3-554d707b65bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData">
+      <UniqueIdentifier>{340ae851-aac8-4657-b765-4671a02334c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1406,6 +1412,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOWhiteNoise\PSOWhiteNoise.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2114,6 +2126,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOWhiteNoise\PSOWhiteNoise.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2215,6 +2233,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\DepthBasedOutline.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\WhiteNoise.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
