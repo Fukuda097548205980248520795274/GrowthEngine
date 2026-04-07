@@ -12,6 +12,7 @@ namespace Engine
 			Grayscale,
 			Vignetting,
 			Smoothing,
+			GaussianFilter,
 			RadialBlur
 		};
 

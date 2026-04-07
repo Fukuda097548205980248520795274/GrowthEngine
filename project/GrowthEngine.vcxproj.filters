@@ -778,6 +778,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData">
       <UniqueIdentifier>{1619fc60-7235-4611-9b18-37842528987a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOGaussianFilter">
+      <UniqueIdentifier>{df3e8c82-1b78-4cf5-b04f-f95379df7d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData">
+      <UniqueIdentifier>{84a3de5c-0a90-4c1a-be9a-9bfcca5302e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1370,6 +1376,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOGaussianFilter\PSOGaussianFilter.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOGaussianFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2060,6 +2072,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOGaussianFilter\PSOGaussianFilter.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOGaussianFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2152,6 +2170,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\Smoothing.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\GaussianFilter.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
