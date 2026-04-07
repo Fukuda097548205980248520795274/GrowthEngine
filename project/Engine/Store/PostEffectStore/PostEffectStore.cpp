@@ -6,6 +6,7 @@
 #include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"
 #include "PostEffectData/PostEffectGaussianFilterData/PostEffectGaussianFilterData.h"
+#include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
 /// @brief コンストラクタ
@@ -41,6 +42,14 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// ガウシアンフィルタPSO
 	psoGaussianFilter_ = std::make_unique<PSOGaussianFilter>();
 	psoGaussianFilter_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// 輝度ベース輪郭抽出PSO
+	psoLuminanceBasedOutline_ = std::make_unique<PSOLuminanceBasedOutline>();
+	psoLuminanceBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// 深度ベース輪郭抽出PSO
+	psoDepthBasedOutline_ = std::make_unique<PSODepthBasedOutline>();
+	psoDepthBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
 	
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
@@ -102,6 +111,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	{
 		std::unique_ptr<PostEffectGaussianFilterData> data = std::make_unique<PostEffectGaussianFilterData>(name, type, handle, parameter_.get());
 		data->Initialize(device, log, psoGaussianFilter_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 輝度ベース輪郭抽出
+	if (type == PostEffect::Type::LuminanceBasedOutline)
+	{
+		std::unique_ptr<PostEffectLuminanceBasedOutlineData> data = std::make_unique<PostEffectLuminanceBasedOutlineData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoLuminanceBasedOutline_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

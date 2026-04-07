@@ -456,8 +456,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOGaussianFilter\PSOGaussianFilter.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.cpp" />
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOSmoothing\PSOSmoothing.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp" />
     <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
@@ -729,8 +731,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.cpp" />
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -969,8 +973,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOGaussianFilter\PSOGaussianFilter.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOGrayscale\PSOGrayscale.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOSmoothing\PSOSmoothing.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.h" />
     <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h" />
@@ -1048,8 +1054,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h" />
     <ClInclude Include="Engine\Store\ParticleStore\ParticleStore.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.h" />
@@ -1169,6 +1177,14 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\DepthBasedOutline.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\GaussianFilter.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -1180,6 +1196,14 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <FxCompile Include="Assets\Shader\PostEffect\Grayscale.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\LuminanceBasedOutline.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

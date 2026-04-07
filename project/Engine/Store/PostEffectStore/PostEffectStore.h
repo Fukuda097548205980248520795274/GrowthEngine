@@ -13,6 +13,8 @@
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 #include "PSO/PSOPostEffect/PSOSmoothing/PSOSmoothing.h"
 #include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
+#include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
+#include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
 
 namespace Engine
 {
@@ -103,6 +105,12 @@ namespace Engine
 
 		/// @brief ガウシアンフィルタPSO
 		std::unique_ptr<PSOGaussianFilter> psoGaussianFilter_ = nullptr;
+
+		/// @brief 輝度ベース輪郭抽出PSO
+		std::unique_ptr<PSOLuminanceBasedOutline> psoLuminanceBasedOutline_ = nullptr;
+
+		/// @brief 深度ベース輪郭抽出PSO
+		std::unique_ptr<PSODepthBasedOutline> psoDepthBasedOutline_ = nullptr;
 
 		// ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;

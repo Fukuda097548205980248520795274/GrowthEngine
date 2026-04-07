@@ -11,8 +11,8 @@ void GameScene::Initialize()
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
-	// ガウシアンフィルター
-	engine_->LoadPostEffect("GaussianFilter", Engine::PostEffect::Type::GaussianFilter);
+	// 輝度ベース輪郭抽出のポストエフェクトを読み込む
+	engine_->LoadPostEffect("LuminanceBasedOutline", Engine::PostEffect::Type::LuminanceBasedOutline);
 }
 
 /// @brief 更新処理
@@ -27,6 +27,6 @@ void GameScene::Draw()
 	// 地形を描画する
 	engine_->DrawRender3D("Terrain");
 
-	// ガウシアンフィルター
-	engine_->DrawPostEffect("GaussianFilter");
+	// 輝度ベース輪郭抽出
+	engine_->DrawPostEffect("LuminanceBasedOutline");
 }

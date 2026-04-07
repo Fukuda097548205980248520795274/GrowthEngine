@@ -1,6 +1,7 @@
 #pragma once
 #include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 namespace Engine
 {
@@ -13,6 +14,8 @@ namespace Engine
 			Vignetting,
 			Smoothing,
 			GaussianFilter,
+			LuminanceBasedOutline,
+			DepthBasedOutline,
 			RadialBlur
 		};
 
@@ -59,6 +62,16 @@ namespace Engine
 
 			// 減衰カーブ
 			float power;
+		};
+
+		/// @brief 輝度ベースの輪郭抽出
+		struct LuminanceBasedOutline
+		{
+			// RGBチャンネルの重み
+			Vector3 colorWeight;
+
+			// 輝度の閾値
+			float intensity;
 		};
 	}
 }
