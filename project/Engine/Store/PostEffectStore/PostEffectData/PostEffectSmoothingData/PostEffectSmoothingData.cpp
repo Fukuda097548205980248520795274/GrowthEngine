@@ -27,8 +27,12 @@ void Engine::PostEffectSmoothingData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectSmoothingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
+void Engine::PostEffectSmoothingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+	DepthResource* depthResource, const Matrix4x4& projectionInverse)
 {
+	(void)depthResource;
+	(void)projectionInverse;
+
 	/*------------------------
 		コマンドリストに登録
 	------------------------*/

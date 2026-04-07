@@ -60,8 +60,12 @@ void Engine::PostEffectVignettingData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
+void Engine::PostEffectVignettingData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+	DepthResource* depthResource, const Matrix4x4& projectionInverse)
 {
+	(void)depthResource;
+	(void)projectionInverse;
+
 	/*-----------------
 		データを渡す
 	-----------------*/

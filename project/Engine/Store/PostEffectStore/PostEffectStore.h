@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include <memory>
 #include <vector>
 #include <d3d12.h>
@@ -21,6 +22,7 @@ namespace Engine
 	class ShaderCompiler;
 	class Log;
 	class OffscreenResource;
+	class DepthResource;
 
 	class PostEffectStore
 	{
@@ -47,13 +49,37 @@ namespace Engine
 		/// @param hPostEffect 
 		/// @param commandList 
 		/// @param offscreenResource 
-		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) { dataTable_[hPostEffect]->Register(commandList, offscreenResource); }
+		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList,
+			OffscreenResource* offscreenResource, DepthResource* depthResource, const Matrix4x4& projectionInverse)
+		{
+			dataTable_[hPostEffect]->Register(commandList, offscreenResource, depthResource, projectionInverse);
+		}
 
 		/// @brief 描画処理をコマンドリストに登録する
 		/// @param name 
 		/// @param commandList 
 		/// @param offscreenResource 
-		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource) { dataTable_[nameTable_[name]]->Register(commandList, offscreenResource); }
+		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList,
+			OffscreenResource* offscreenResource, DepthResource* depthResource, const Matrix4x4& projectionInverse)
+		{
+			dataTable_[nameTable_[name]]->Register(commandList, offscreenResource, depthResource, projectionInverse);
+		}
+
+		/// @brief 深度テクスチャを使うポストエフェクトかどうか
+		/// @param hPostEffect
+		/// @return
+		bool IsUseDepth(PostEffectHandle hPostEffect) const
+		{
+			return dataTable_[hPostEffect]->GetType() == PostEffect::Type::DepthBasedOutline;
+		}
+
+		/// @brief 深度テクスチャを使うポストエフェクトかどうか
+		/// @param name
+		/// @return
+		bool IsUseDepth(const std::string& name) const
+		{
+			return dataTable_[nameTable_.at(name)]->GetType() == PostEffect::Type::DepthBasedOutline;
+		}
 
 
 		/// @brief パラメータを取得する

@@ -56,8 +56,12 @@ void Engine::PostEffectLuminanceBasedOutlineData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectLuminanceBasedOutlineData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource)
+void Engine::PostEffectLuminanceBasedOutlineData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
+	DepthResource* depthResource, const Matrix4x4& projectionInverse)
 {
+	(void)depthResource;
+	(void)projectionInverse;
+
 	/*-----------------
 		データを渡す
 	-----------------*/

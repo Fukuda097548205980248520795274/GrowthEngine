@@ -7,6 +7,7 @@
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"
 #include "PostEffectData/PostEffectGaussianFilterData/PostEffectGaussianFilterData.h"
 #include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
+#include "PostEffectData/PostEffectDepthBasedOutlineData/PostEffectDepthBasedOutlineData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 
 /// @brief コンストラクタ
@@ -120,6 +121,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	{
 		std::unique_ptr<PostEffectLuminanceBasedOutlineData> data = std::make_unique<PostEffectLuminanceBasedOutlineData>(name, type, handle, parameter_.get());
 		data->Initialize(device, log, psoLuminanceBasedOutline_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 深度ベース輪郭抽出
+	if (type == PostEffect::Type::DepthBasedOutline)
+	{
+		std::unique_ptr<PostEffectDepthBasedOutlineData> data = std::make_unique<PostEffectDepthBasedOutlineData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoDepthBasedOutline_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
