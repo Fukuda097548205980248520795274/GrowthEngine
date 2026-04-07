@@ -3,6 +3,9 @@
 #include "RenderContext/DX12Heap/DX12Heap.h"
 #include "Log//Log.h"
 #include <format>
+#include <algorithm>
+#include <cctype>
+#include <filesystem>
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
@@ -58,13 +61,22 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	// ハッシュ値を取得する
 	size_t hash1 = CalculateTextureHash(*image.GetImages());
 
+	auto normalizeExtension = [](const std::string& path) {
+		std::string ext = std::filesystem::path(path).extension().string();
+		std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+		return ext;
+	};
+
+	const std::string extension1 = normalizeExtension(filePath);
+
 	// 過去に取得したミップイメージと被っているかどうかを判断する
 	for (std::unique_ptr<TextureData>& data : dataTable_)
 	{
 		const DirectX::Image* image2 = data->mipImages.GetImages();
 		size_t hash2 = CalculateTextureHash(*image2);
+		const std::string extension2 = normalizeExtension(data->name);
 
-		if (hash1 == hash2)
+     if (hash1 == hash2 && extension1 == extension2)
 		{
 			return data->handle;
 		}
@@ -186,13 +198,22 @@ TextureHandle Engine::TextureStore::GetHandle(const std::string& filePath)
 	// ハッシュ値を取得する
 	size_t hash1 = CalculateTextureHash(*image.GetImages());
 
+	auto normalizeExtension = [](const std::string& path) {
+		std::string ext = std::filesystem::path(path).extension().string();
+		std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+		return ext;
+	};
+
+	const std::string extension1 = normalizeExtension(filePath);
+
 	// 過去に取得したミップイメージと被っているかどうかを判断する
 	for (std::unique_ptr<TextureData>& data : dataTable_)
 	{
 		const DirectX::Image* image2 = data->mipImages.GetImages();
 		size_t hash2 = CalculateTextureHash(*image2);
+		const std::string extension2 = normalizeExtension(data->name);
 
-		if (hash1 == hash2)
+     if (hash1 == hash2 && extension1 == extension2)
 		{
 			return data->handle;
 		}

@@ -26,16 +26,20 @@ namespace Engine
         {
             // RGBチャンネルの重み
             Vector3 colorWeight;
+
             // エフェクトのブレンド強度
             float intensity;
+
             // ティントカラー
             Vector3 tint;
+
             // コントラスト
             float contrast;
+
             // 明るさ
             float brightness;
 
-			Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
+			float padding0[3]; // 16バイトアラインメントのためのパディング
         };
 
 		/// @brief GPUに送るヴィネット
@@ -50,7 +54,7 @@ namespace Engine
             // 減衰カーブ
             float power;
 
-			Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
+			float padding0[3]; // 16バイトアラインメントのためのパディング
         };
 
 		/// @brief GPUに送る輝度ベースの輪郭抽出
@@ -69,13 +73,30 @@ namespace Engine
             Matrix4x4 projectionInverse;
         };
 
-        /// @brief ホワイトノイズ
+        /// @brief GPUに送るディゾルブ
+		struct DissolveDataForGPU
+        {
+            // 閾値
+            float threshold;
+
+            // エッジの幅
+            float edgeDiff;
+
+            float padding0[2]; // 16バイトアラインメントのためのパディング
+
+            // エッジの色
+            Vector3 edgeColor;
+
+			float padding1[1]; // 16バイトアラインメントのためのパディング
+        };
+
+        /// @brief GPUに送るホワイトノイズ
         struct WhiteNoiseDataForGPU
         {
             // 時間
             float time;
 
-            Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
+            float padding0[3]; // 16バイトアラインメントのためのパディング
         };
 	}
 }

@@ -802,6 +802,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData">
       <UniqueIdentifier>{340ae851-aac8-4657-b765-4671a02334c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODissolve">
+      <UniqueIdentifier>{2d7c790d-8e9e-46c7-98cc-ac53b53ec1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData">
+      <UniqueIdentifier>{f37d9bc4-ed89-44df-b50f-d88511567128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1418,6 +1424,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODissolve\PSODissolve.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODissolve</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2132,6 +2144,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODissolve\PSODissolve.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODissolve</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2236,6 +2254,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\WhiteNoise.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\Dissolve.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

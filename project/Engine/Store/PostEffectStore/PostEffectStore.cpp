@@ -9,6 +9,7 @@
 #include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
 #include "PostEffectData/PostEffectDepthBasedOutlineData/PostEffectDepthBasedOutlineData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
+#include "PostEffectData/PostEffectDissolveData/PostEffectDissolveData.h"
 #include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
 
 /// @brief コンストラクタ
@@ -22,12 +23,16 @@ Engine::PostEffectStore::PostEffectStore()
 /// @param device 
 /// @param compiler 
 /// @param log 
-void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, Log* log)
+void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob,TextureStore* textureStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(compiler);
 	assert(vertexShaderBlob);
+	assert(textureStore);
+
+	// 引数を受け取る
+	textureStore_ = textureStore;
 
 	// グレースケールPSO
 	psoGrayscale_ = std::make_unique<PSOGrayscale>();
@@ -56,6 +61,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
 	psoRadialBlur_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// ディゾルブPSO
+	psoDissolve_ = std::make_unique<PSODissolve>();
+	psoDissolve_->Initialize(device, compiler, vertexShaderBlob, log);
 
 	// ホワイトノイズPSO
 	psoWhiteNoise_ = std::make_unique<PSOWhiteNoise>();
@@ -146,6 +155,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		data->Initialize(device, log, psoRadialBlur_.get());
 		dataTable_.push_back(std::move(data));
 
+		return handle;
+	}
+
+	// ディゾルブ
+	if (type == PostEffect::Type::Dissolve)
+	{
+		std::unique_ptr<PostEffectDissolveData> data = std::make_unique<PostEffectDissolveData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoDissolve_.get(), textureStore_);
+		dataTable_.push_back(std::move(data));
 		return handle;
 	}
 
