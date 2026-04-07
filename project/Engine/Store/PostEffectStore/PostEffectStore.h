@@ -16,6 +16,7 @@
 #include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
 #include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
 #include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
+#include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 
 namespace Engine
 {
@@ -138,7 +139,10 @@ namespace Engine
 		/// @brief 深度ベース輪郭抽出PSO
 		std::unique_ptr<PSODepthBasedOutline> psoDepthBasedOutline_ = nullptr;
 
-		// ラジアルブラーPSO
+		/// @brief ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;
+
+		/// @brief ホワイトノイズPSO
+		std::unique_ptr<PSOWhiteNoise> psoWhiteNoise_ = nullptr;
 	};
 }

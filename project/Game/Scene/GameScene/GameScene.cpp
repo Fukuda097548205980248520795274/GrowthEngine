@@ -12,7 +12,7 @@ void GameScene::Initialize()
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
 	// ラジアルブラーを読み込む
-	engine_->LoadPostEffect("RadialBlur", Engine::PostEffect::Type::RadialBlur);
+	engine_->LoadPostEffect("WhiteNoise", Engine::PostEffect::Type::WhiteNoise);
 }
 
 /// @brief 更新処理
@@ -28,5 +28,5 @@ void GameScene::Draw()
 	engine_->DrawRender3D("Terrain");
 
 	// ラジアルブラー
-	engine_->DrawPostEffect("RadialBlur");
+	engine_->DrawPostEffect("WhiteNoise");
 }

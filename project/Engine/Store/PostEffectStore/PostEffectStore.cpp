@@ -9,6 +9,7 @@
 #include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
 #include "PostEffectData/PostEffectDepthBasedOutlineData/PostEffectDepthBasedOutlineData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
+#include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -55,6 +56,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
 	psoRadialBlur_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// ホワイトノイズPSO
+	psoWhiteNoise_ = std::make_unique<PSOWhiteNoise>();
+	psoWhiteNoise_->Initialize(device, compiler, vertexShaderBlob, log);
 }
 
 /// @brief 読み込み
@@ -141,6 +146,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		data->Initialize(device, log, psoRadialBlur_.get());
 		dataTable_.push_back(std::move(data));
 
+		return handle;
+	}
+
+	// ホワイトノイズ
+	if (type == PostEffect::Type::WhiteNoise)
+	{
+		std::unique_ptr<PostEffectWhiteNoiseData> data = std::make_unique<PostEffectWhiteNoiseData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoWhiteNoise_.get());
+		dataTable_.push_back(std::move(data));
 		return handle;
 	}
 

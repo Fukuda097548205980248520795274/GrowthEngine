@@ -16,7 +16,8 @@ namespace Engine
 			GaussianFilter,
 			LuminanceBasedOutline,
 			DepthBasedOutline,
-			RadialBlur
+			RadialBlur,
+			WhiteNoise
 		};
 
 		/// @brief ラジアルブラー
@@ -72,6 +73,13 @@ namespace Engine
 
 			// 輝度の閾値
 			float intensity;
+		};
+
+		/// @brief ホワイトノイズ
+		struct WhiteNoise
+		{
+			// 時間
+			float time;
 		};
 	}
 }

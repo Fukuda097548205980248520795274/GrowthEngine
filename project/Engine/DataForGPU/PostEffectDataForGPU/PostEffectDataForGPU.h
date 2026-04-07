@@ -68,5 +68,14 @@ namespace Engine
         {
             Matrix4x4 projectionInverse;
         };
+
+        /// @brief ホワイトノイズ
+        struct WhiteNoiseDataForGPU
+        {
+            // 時間
+            float time;
+
+            Vector3 padding0[3]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }
