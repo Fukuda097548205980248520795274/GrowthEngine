@@ -3,8 +3,6 @@
 
 namespace Engine
 {
-	class Log;
-
 	class PostEffectGrayscaleData : public PostEffectBaseData
 	{
 	public:
@@ -26,9 +24,8 @@ namespace Engine
 		void Reset() override;
 
 		/// @brief コマンドリストに登録する
-		/// @param commandList 
-		void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-			DepthResource* depthResource, const Matrix4x4& projectionInverse) override;
+     /// @param context
+		void Register(const PostEffectRenderContext& context) override;
 
 		/// @brief パラメータを取得する
 		/// @return 

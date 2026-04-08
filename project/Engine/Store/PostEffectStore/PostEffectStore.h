@@ -18,6 +18,7 @@
 #include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
 #include "PSO/PSOPostEffect/PSODissolve/PSODissolve.h"
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
+#include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
 
 namespace Engine
 {
@@ -26,6 +27,9 @@ namespace Engine
 	class OffscreenResource;
 	class DepthResource;
 	class TextureStore;
+	class Camera3DStore;
+	class DX12Buffering;
+	class DX12Heap;
 
 	class PostEffectStore
 	{
@@ -45,43 +49,64 @@ namespace Engine
 		/// @param type 
 		/// @param device 
 		/// @param log 
-		PostEffectHandle Load(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log);
+		PostEffectHandle Load(const std::string& name, PostEffect::Type type,
+			ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log);
 
-
-		/// @brief 描画処理をコマンドリストに登録する
-		/// @param hPostEffect 
-		/// @param commandList 
-		/// @param offscreenResource 
-		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList,
-			OffscreenResource* offscreenResource, DepthResource* depthResource, const Matrix4x4& projectionInverse)
+		/// @brief カメラストアを設定する
+		/// @param camera3DStore
+		/// @details すでに読み込み済みのPostEffectDataにも同じ依存を再注入する
+		void SetCamera3DStore(Camera3DStore* camera3DStore)
 		{
-			dataTable_[hPostEffect]->Register(commandList, offscreenResource, depthResource, projectionInverse);
+			camera3DStore_ = camera3DStore;
+			for (const auto& data : dataTable_)
+			{
+				data->SetCamera3DStore(camera3DStore_);
+			}
 		}
 
-		/// @brief 描画処理をコマンドリストに登録する
-		/// @param name 
-		/// @param commandList 
-		/// @param offscreenResource 
-		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList,
-			OffscreenResource* offscreenResource, DepthResource* depthResource, const Matrix4x4& projectionInverse)
-		{
-			dataTable_[nameTable_[name]]->Register(commandList, offscreenResource, depthResource, projectionInverse);
-		}
 
-		/// @brief 深度テクスチャを使うポストエフェクトかどうか
+        /// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect
-		/// @return
-		bool IsUseDepth(PostEffectHandle hPostEffect) const
+		/// @param context
+		void DrawPostEffect(PostEffectHandle hPostEffect, const PostEffectRenderContext& context)
 		{
-			return dataTable_[hPostEffect]->GetType() == PostEffect::Type::DepthBasedOutline;
+			PostEffectRenderContext registerContext = context;
+			if (registerContext.camera3DStore == nullptr)
+			{
+				registerContext.camera3DStore = camera3DStore_;
+			}
+			dataTable_[hPostEffect]->Register(registerContext);
 		}
 
-		/// @brief 深度テクスチャを使うポストエフェクトかどうか
+        /// @brief 描画処理をコマンドリストに登録する
 		/// @param name
-		/// @return
-		bool IsUseDepth(const std::string& name) const
+		/// @param context
+		void DrawPostEffect(const std::string& name, const PostEffectRenderContext& context)
 		{
-			return dataTable_[nameTable_.at(name)]->GetType() == PostEffect::Type::DepthBasedOutline;
+            PostEffectRenderContext registerContext = context;
+			if (registerContext.camera3DStore == nullptr)
+			{
+				registerContext.camera3DStore = camera3DStore_;
+			}
+			dataTable_[nameTable_[name]]->Register(registerContext);
+		}
+
+		/// @brief 指定入力が必要かどうか
+		/// @param hPostEffect
+		/// @param input
+		/// @return
+		bool IsRequiredInput(PostEffectHandle hPostEffect, PostEffectInput input) const
+		{
+			return (static_cast<uint32_t>(dataTable_[hPostEffect]->GetRequiredInputs()) & static_cast<uint32_t>(input)) != 0;
+		}
+
+		/// @brief 指定入力が必要かどうか
+		/// @param name
+		/// @param input
+		/// @return
+		bool IsRequiredInput(const std::string& name, PostEffectInput input) const
+		{
+			return (static_cast<uint32_t>(dataTable_[nameTable_.at(name)]->GetRequiredInputs()) & static_cast<uint32_t>(input)) != 0;
 		}
 
 
@@ -110,6 +135,14 @@ namespace Engine
 
 
 	private:
+
+		/// @brief 共通依存データを設定する
+		/// @param data
+        /// @details 新しい共通依存を増やす場合はここに追加する
+		void ConfigureData(PostEffectBaseData* data)
+		{
+			data->SetCamera3DStore(camera3DStore_);
+		}
 
 		// データテーブル
 		std::vector<std::unique_ptr<PostEffectBaseData>> dataTable_;
@@ -150,10 +183,16 @@ namespace Engine
 		/// @brief ホワイトノイズPSO
 		std::unique_ptr<PSOWhiteNoise> psoWhiteNoise_ = nullptr;
 
+		/// @brief 被写界深度PSO
+		std::unique_ptr<PSODOF> psoDOF_ = nullptr;
+
 
 	private:
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
+
+		/// @brief カメラストア
+		Camera3DStore* camera3DStore_ = nullptr;
 	};
 }

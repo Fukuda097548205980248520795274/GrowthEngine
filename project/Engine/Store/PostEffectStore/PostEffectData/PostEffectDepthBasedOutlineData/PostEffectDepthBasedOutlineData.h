@@ -1,5 +1,4 @@
 #pragma once
-  #pragma once
 #include "../PostEffectBaseData.h"
 
 namespace Engine
@@ -25,9 +24,16 @@ namespace Engine
 		void Reset() override;
 
 		/// @brief コマンドリストに登録する
-		/// @param commandList 
-		void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-			DepthResource* depthResource, const Matrix4x4& projectionInverse) override;
+		/// @param context
+		void Register(const PostEffectRenderContext& context) override;
+
+		/// @brief 必要な入力データの種類を取得する
+		/// @return
+		/// @details 深度テクスチャと逆射影行列が必須
+		PostEffectInput GetRequiredInputs() const override
+		{
+			return PostEffectInput::DepthTexture | PostEffectInput::ProjectionInverse;
+		}
 
 		/// @brief パラメータを取得する
 		/// @return 

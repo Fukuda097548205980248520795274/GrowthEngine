@@ -23,6 +23,10 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 	assert(compiler);
 	assert(textureStore);
 
+	// 引数を受け取る
+	heap_ = heap;
+	buffering_ = buffering;
+
 	// オフスクリーンのリソースを生成する
 	for (int32_t i = 0; i < kMaxOffscreenCount; ++i)
 	{
@@ -115,7 +119,7 @@ void Engine::DX12Offscreen::ClearRenderTarget(ID3D12GraphicsCommandList* command
 /// @param commandList 
 void Engine::DX12Offscreen::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)
 {
-	// てぷスステンシルのクリア
+	// デプスステンシルのクリア
 	depthResource_->ClearDepthStencil(commandList);
 }
 
@@ -128,7 +132,9 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 {
 	// nullptrチェック
 	assert(commandList);
-	const bool isUseDepth = postEffectStore_->IsUseDepth(hPostEffect);
+
+	// このポストエフェクトが深度を必要とするかどうか
+	const bool isUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
 
 	// カウントする
 	++currentOffscreen_;
@@ -149,8 +155,14 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 	}
 
-	postEffectStore_->DrawPostEffect(hPostEffect, commandList,
-      offscreenResource_[1 - currentOffscreen_].get(), isUseDepth ? depthResource_.get() : nullptr, projectionInverse);
+	PostEffectRenderContext context{};
+	context.commandList = commandList;
+	context.offscreenPixelShaderResource = offscreenResource_[1 - currentOffscreen_].get();
+	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+	context.projectionInverse = &projectionInverse;
+
+	postEffectStore_->DrawPostEffect(hPostEffect, context);
 
 	if (isUseDepth)
 	{
@@ -171,7 +183,9 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 {
 	// nullptrチェック
 	assert(commandList);
-	const bool isUseDepth = postEffectStore_->IsUseDepth(name);
+
+	// このポストエフェクトが深度を必要とするかどうか
+	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
 
 	// カウントする
 	++currentOffscreen_;
@@ -192,8 +206,14 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 	}
 
-	postEffectStore_->DrawPostEffect(name, commandList,
-      offscreenResource_[1 - currentOffscreen_].get(), isUseDepth ? depthResource_.get() : nullptr, projectionInverse);
+	PostEffectRenderContext context{};
+	context.commandList = commandList;
+	context.offscreenPixelShaderResource = offscreenResource_[1 - currentOffscreen_].get();
+	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+	context.projectionInverse = &projectionInverse;
+
+	postEffectStore_->DrawPostEffect(name, context);
 
 	if (isUseDepth)
 	{

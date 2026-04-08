@@ -808,6 +808,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData">
       <UniqueIdentifier>{f37d9bc4-ed89-44df-b50f-d88511567128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODOF">
+      <UniqueIdentifier>{f360b711-ba09-424b-995c-088cbdca649f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData">
+      <UniqueIdentifier>{b553e1cb-87de-4abc-9b79-f2c4d5c93514}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1430,6 +1436,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODOF\PSODOF.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODOF</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2150,6 +2162,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODOF\PSODOF.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODOF</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2257,6 +2275,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\Dissolve.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\DOF.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

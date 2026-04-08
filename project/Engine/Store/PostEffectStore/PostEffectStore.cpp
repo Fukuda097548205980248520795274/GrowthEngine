@@ -11,6 +11,7 @@
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
 #include "PostEffectData/PostEffectDissolveData/PostEffectDissolveData.h"
 #include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
+#include "PostEffectData/PostEffectDOFData/PostEffectDOFData.h"
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -69,6 +70,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// ホワイトノイズPSO
 	psoWhiteNoise_ = std::make_unique<PSOWhiteNoise>();
 	psoWhiteNoise_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// 被写界深度PSO
+	psoDOF_ = std::make_unique<PSODOF>();
+	psoDOF_->Initialize(device, compiler, vertexShaderBlob, log);
 }
 
 /// @brief 読み込み
@@ -76,7 +81,8 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 /// @param type 
 /// @param device 
 /// @param log 
-PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log)
+PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffect::Type type,
+	ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -98,6 +104,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Grayscale)
 	{
 		std::unique_ptr<PostEffectGrayscaleData> data = std::make_unique<PostEffectGrayscaleData>(name, type, handle, parameter_.get());
+     ConfigureData(data.get());
 		data->Initialize(device, log, psoGrayscale_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -107,6 +114,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Vignetting)
 	{
 		std::unique_ptr<PostEffectVignettingData> data = std::make_unique<PostEffectVignettingData>(name, type, handle, parameter_.get());
+        ConfigureData(data.get());
 		data->Initialize(device, log, psoVignetting_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -116,6 +124,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Smoothing)
 	{
 		std::unique_ptr<PostEffectSmoothingData> data = std::make_unique<PostEffectSmoothingData>(name, type, handle, parameter_.get());
+     ConfigureData(data.get());
 		data->Initialize(device, log, psoSmoothing_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -125,6 +134,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::GaussianFilter)
 	{
 		std::unique_ptr<PostEffectGaussianFilterData> data = std::make_unique<PostEffectGaussianFilterData>(name, type, handle, parameter_.get());
+        ConfigureData(data.get());
 		data->Initialize(device, log, psoGaussianFilter_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -134,6 +144,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::LuminanceBasedOutline)
 	{
 		std::unique_ptr<PostEffectLuminanceBasedOutlineData> data = std::make_unique<PostEffectLuminanceBasedOutlineData>(name, type, handle, parameter_.get());
+		ConfigureData(data.get());
 		data->Initialize(device, log, psoLuminanceBasedOutline_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -143,6 +154,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::DepthBasedOutline)
 	{
 		std::unique_ptr<PostEffectDepthBasedOutlineData> data = std::make_unique<PostEffectDepthBasedOutlineData>(name, type, handle, parameter_.get());
+		ConfigureData(data.get());
 		data->Initialize(device, log, psoDepthBasedOutline_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -152,6 +164,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::RadialBlur)
 	{
 		std::unique_ptr<PostEffectRadialBlurData> data = std::make_unique<PostEffectRadialBlurData>(name, type, handle, parameter_.get());
+        ConfigureData(data.get());
 		data->Initialize(device, log, psoRadialBlur_.get());
 		dataTable_.push_back(std::move(data));
 
@@ -162,6 +175,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Dissolve)
 	{
 		std::unique_ptr<PostEffectDissolveData> data = std::make_unique<PostEffectDissolveData>(name, type, handle, parameter_.get());
+       ConfigureData(data.get());
 		data->Initialize(device, log, psoDissolve_.get(), textureStore_);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -171,7 +185,18 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::WhiteNoise)
 	{
 		std::unique_ptr<PostEffectWhiteNoiseData> data = std::make_unique<PostEffectWhiteNoiseData>(name, type, handle, parameter_.get());
+        ConfigureData(data.get());
 		data->Initialize(device, log, psoWhiteNoise_.get());
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 被写界深度
+	if (type == PostEffect::Type::DOF)
+	{
+		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
+		ConfigureData(data.get());
+		data->Initialize(device, buffering, heap, log, psoDOF_.get() , psoGaussianFilter_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

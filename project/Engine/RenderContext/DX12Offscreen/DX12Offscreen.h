@@ -1,5 +1,6 @@
 #pragma once
 #pragma once
+#pragma once
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
@@ -19,6 +20,7 @@ namespace Engine
 	class DX12Buffering;
 	class ShaderCompiler;
 	class TextureStore;
+	class Camera3DStore;
 	class Log;
 
 	class DX12Offscreen
@@ -60,7 +62,21 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		/// @return 
-		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log) { return postEffectStore_->Load(name, type, device, log); }
+		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log) 
+		{
+			return postEffectStore_->Load(name, type, device, buffering_, heap_, log);
+		}
+
+		/// @brief カメラストアを設定する
+		/// @param camera3DStore
+		/// @details PostEffectStore内部の全Dataへ反映される
+		void SetCamera3DStore(Camera3DStore* camera3DStore)
+		{
+			if (postEffectStore_)
+			{
+				postEffectStore_->SetCamera3DStore(camera3DStore);
+			}
+		}
 
 
 		/// @brief ポストエフェクトを描画する
@@ -136,5 +152,14 @@ namespace Engine
 
 		// CopyImage PSO
 		std::unique_ptr<PSOCopyImage> psoCopyImage_ = nullptr;
+
+
+	private:
+
+		/// @brief ヒープ
+		DX12Heap* heap_;
+
+		/// @brief DX12Buffering
+		DX12Buffering* buffering_;
 	};
 }

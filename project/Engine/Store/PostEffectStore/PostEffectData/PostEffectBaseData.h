@@ -1,6 +1,9 @@
 #pragma once
+#pragma once
 #include <string>
 #include <memory>
+#include <unordered_map>
+#include <cstdint>
 #include "Data/PostEffectData/PostEffectData.h"
 #include "DataForGPU/PostEffectDataForGPU/PostEffectDataForGPU.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
@@ -10,8 +13,36 @@ namespace Engine
 {
 	class OffscreenResource;
     class DepthResource;
+	class Camera3DStore;
 	class BasePSOPostEffect;
 	class PostEffectParameter;
+
+	/// @brief 各ポストエフェクトが必要とする入力データの種類
+	/// @details 新しい入力が必要になった場合はここにフラグを追加する
+	enum class PostEffectInput : uint32_t
+	{
+		None = 0,
+		DepthTexture = 1u << 0,
+		ProjectionInverse = 1u << 1,
+		Camera3DStore = 1u << 2,
+	};
+
+	inline PostEffectInput operator|(PostEffectInput lhs, PostEffectInput rhs)
+	{
+		return static_cast<PostEffectInput>(static_cast<uint32_t>(lhs) | static_cast<uint32_t>(rhs));
+	}
+
+	/// @brief ポストエフェクト描画時に渡す入力データ
+	/// @details 将来的に必要な入力が増えた場合はこの構造体へ項目を追加する
+	struct PostEffectRenderContext
+	{
+		ID3D12GraphicsCommandList* commandList = nullptr;
+		OffscreenResource* offscreenPixelShaderResource = nullptr;
+		OffscreenResource* offscreenRenderTargetResource = nullptr;
+		DepthResource* depthResource = nullptr;
+		const Matrix4x4* projectionInverse = nullptr;
+		Camera3DStore* camera3DStore = nullptr;
+	};
 
 	class PostEffectBaseData
 	{
@@ -48,9 +79,39 @@ namespace Engine
 		virtual void* GetParam() = 0;
 
 		/// @brief コマンドリストに登録する
-		/// @param commandList 
-        virtual void Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-			DepthResource* depthResource, const Matrix4x4& projectionInverse) = 0;
+		/// @param context
+		virtual void Register(const PostEffectRenderContext& context) = 0;
+
+		/// @brief 必要な入力データの種類を取得する
+		/// @return RequiredInputフラグ
+		/// @details 必要なデータが増えたら派生クラス側でオーバーライドして返す
+		virtual PostEffectInput GetRequiredInputs() const { return PostEffectInput::None; }
+
+		/// @brief カメラストアを設定する
+		/// @param camera3DStore
+		void SetCamera3DStore(Camera3DStore* camera3DStore) { camera3DStore_ = camera3DStore; }
+
+		/// @brief 補助PSOを設定する
+		/// @param key
+		/// @param pso
+        /// @details keyを使って派生クラス側で自由にPSOを引き回せるようにする
+		void SetExtraPSO(const std::string& key, BasePSOPostEffect* pso)
+		{
+			extraPSOTable_[key] = pso;
+		}
+
+		/// @brief 補助PSOを取得する
+		/// @param key
+		/// @return
+		BasePSOPostEffect* GetExtraPSO(const std::string& key) const
+		{
+			auto it = extraPSOTable_.find(key);
+			if (it == extraPSOTable_.end())
+			{
+				return nullptr;
+			}
+			return it->second;
+		}
 
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
@@ -81,5 +142,11 @@ namespace Engine
 
 		/// @brief パラメータ
 		PostEffectParameter* parameter_ = nullptr;
+
+		/// @brief カメラストア
+		Camera3DStore* camera3DStore_ = nullptr;
+
+		/// @brief 補助PSOテーブル
+		std::unordered_map<std::string, BasePSOPostEffect*> extraPSOTable_;
 	};
 }

@@ -39,16 +39,19 @@ void Engine::PostEffectDepthBasedOutlineData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectDepthBasedOutlineData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-	DepthResource* depthResource, const Matrix4x4& projectionInverse)
+void Engine::PostEffectDepthBasedOutlineData::Register(const PostEffectRenderContext& context)
 {
+	ID3D12GraphicsCommandList* commandList = context.commandList;
+	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
+	DepthResource* depthResource = context.depthResource;
+	assert(context.projectionInverse);
 	assert(depthResource);
 
 	/*-----------------
 		データを渡す
 	-----------------*/
 
-	resource_->data_->projectionInverse = projectionInverse;
+    resource_->data_->projectionInverse = *context.projectionInverse;
 
 
 	/*------------------------
@@ -59,7 +62,7 @@ void Engine::PostEffectDepthBasedOutlineData::Register(ID3D12GraphicsCommandList
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenResource->Register(commandList, 0);
+	offscreenPixelShaderResource->Register(commandList, 0);
 
 	// パラメータの設定
 	resource_->RegisterGraphics(commandList, 1);

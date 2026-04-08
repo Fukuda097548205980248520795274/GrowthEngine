@@ -60,11 +60,10 @@ void Engine::PostEffectRadialBlurData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectRadialBlurData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-	DepthResource* depthResource, const Matrix4x4& projectionInverse)
+void Engine::PostEffectRadialBlurData::Register(const PostEffectRenderContext& context)
 {
-	(void)depthResource;
-	(void)projectionInverse;
+    ID3D12GraphicsCommandList* commandList = context.commandList;
+	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 
 	/*-----------------
 	    データを渡す
@@ -83,7 +82,7 @@ void Engine::PostEffectRadialBlurData::Register(ID3D12GraphicsCommandList* comma
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenResource->Register(commandList, 0);
+	offscreenPixelShaderResource->Register(commandList, 0);
 
 	// パラメータの設定
 	resource_->RegisterGraphics(commandList, 1);

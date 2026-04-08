@@ -98,5 +98,27 @@ namespace Engine
 
             float padding0[3]; // 16バイトアラインメントのためのパディング
         };
+
+        /// @brief GPUに送る被写界深度
+        struct DOFDataForGPU
+        {
+            // ピントが合う距離
+            float focusDistance;
+
+            // ピントが合う範囲
+            float focusRange;
+
+            // ブラーの滑らかさ
+            float blurFalloff;
+
+            // 近クリップ面
+            float zNear;
+
+
+            // 遠クリップ面
+            float zFar;
+
+			float padding0[3]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

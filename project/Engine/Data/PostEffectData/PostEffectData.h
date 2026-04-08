@@ -19,7 +19,8 @@ namespace Engine
 			DepthBasedOutline,
 			RadialBlur,
 			Dissolve,
-			WhiteNoise
+			WhiteNoise,
+			DOF
 		};
 
 		/// @brief ラジアルブラー
@@ -98,6 +99,19 @@ namespace Engine
 		{
 			// 時間
 			float time;
+		};
+
+		/// @brief 被写界深度
+		struct DOF
+		{
+			// ピントが合う距離
+			float focusDistance;
+
+			// ピントが合う範囲
+			float focusRange;
+
+			// ブラーの滑らかさ
+			float blurFalloff;
 		};
 	}
 }

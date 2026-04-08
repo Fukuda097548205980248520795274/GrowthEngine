@@ -12,7 +12,7 @@ void GameScene::Initialize()
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
 	// ラジアルブラーを読み込む
-	engine_->LoadPostEffect("Dissolve", Engine::PostEffect::Type::Dissolve);
+	engine_->LoadPostEffect("DOF", Engine::PostEffect::Type::DOF);
 	engine_->LoadTexture("./Assets/Textures/noise0.png");
 }
 
@@ -29,5 +29,5 @@ void GameScene::Draw()
 	engine_->DrawRender3D("Terrain");
 
 	// ラジアルブラー
-	engine_->DrawPostEffect("Dissolve");
+	engine_->DrawPostEffect("DOF");
 }

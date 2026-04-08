@@ -27,11 +27,10 @@ void Engine::PostEffectGaussianFilterData::Reset()
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PostEffectGaussianFilterData::Register(ID3D12GraphicsCommandList* commandList, OffscreenResource* offscreenResource,
-	DepthResource* depthResource, const Matrix4x4& projectionInverse)
+void Engine::PostEffectGaussianFilterData::Register(const PostEffectRenderContext& context)
 {
-	(void)depthResource;
-	(void)projectionInverse;
+    ID3D12GraphicsCommandList* commandList = context.commandList;
+	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 
 	/*------------------------
 		コマンドリストに登録
@@ -41,7 +40,7 @@ void Engine::PostEffectGaussianFilterData::Register(ID3D12GraphicsCommandList* c
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenResource->Register(commandList, 0);
+	offscreenPixelShaderResource->Register(commandList, 0);
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
