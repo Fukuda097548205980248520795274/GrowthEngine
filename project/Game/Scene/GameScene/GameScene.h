@@ -22,6 +22,9 @@ public:
 	void Draw() override;
 
 
+private:
+
+	float focusVel_ = 0.5f;
 
 };
 

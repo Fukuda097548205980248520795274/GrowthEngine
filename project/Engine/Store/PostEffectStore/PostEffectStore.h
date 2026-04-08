@@ -109,6 +109,22 @@ namespace Engine
 			return (static_cast<uint32_t>(dataTable_[nameTable_.at(name)]->GetRequiredInputs()) & static_cast<uint32_t>(input)) != 0;
 		}
 
+		/// @brief DX12Offscreen側のRTV/DSV設定を使うかどうか
+		/// @param hPostEffect
+		/// @return
+		bool IsUseOffscreenRenderTarget(PostEffectHandle hPostEffect) const
+		{
+			return dataTable_[hPostEffect]->GetType() != PostEffect::Type::DOF;
+		}
+
+		/// @brief DX12Offscreen側のRTV/DSV設定を使うかどうか
+		/// @param name
+		/// @return
+		bool IsUseOffscreenRenderTarget(const std::string& name) const
+		{
+			return dataTable_[nameTable_.at(name)]->GetType() != PostEffect::Type::DOF;
+		}
+
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
