@@ -67,7 +67,6 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
 	camera3DStore_->Initialize(core_->GetDevice(), log);
-	offscreen_->SetCamera3DStore(camera3DStore_.get());
 
 	// 2Dカメラストア
 	camera2DStore_ = std::make_unique<Camera2DStore>();
@@ -344,6 +343,27 @@ SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory,
 	// スケルトンハンドルを取得する
 	SkeletonHandle skeletonHandle = skeletonStore_->Load(directory, fileName, modelData.nodes);
 	return skeletonHandle;
+}
+
+
+/// @brief ポストエフェクトを描画する
+/// @param hPostEffect 
+void Engine::RenderContext::DrawPostEffect(PostEffectHandle hPostEffect)
+{
+	PostEffectRenderContext context;
+	context.camera3DStore = camera3DStore_.get();
+
+	return offscreen_->DrawPostEffect(hPostEffect, commandList_, context);
+}
+
+/// @brief ポストエフェクトを描画する
+/// @param name 
+void Engine::RenderContext::DrawPostEffect(const std::string& name)
+{
+	PostEffectRenderContext context;
+	context.camera3DStore = camera3DStore_.get();
+
+	return offscreen_->DrawPostEffect(name, commandList_, context);
 }
 
 

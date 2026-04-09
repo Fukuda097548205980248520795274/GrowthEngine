@@ -40,7 +40,6 @@ namespace Engine
 		OffscreenResource* offscreenPixelShaderResource = nullptr;
 		OffscreenResource* offscreenRenderTargetResource = nullptr;
 		DepthResource* depthResource = nullptr;
-		const Matrix4x4* projectionInverse = nullptr;
 		Camera3DStore* camera3DStore = nullptr;
 	};
 
@@ -86,10 +85,6 @@ namespace Engine
 		/// @return RequiredInputフラグ
 		/// @details 必要なデータが増えたら派生クラス側でオーバーライドして返す
 		virtual PostEffectInput GetRequiredInputs() const { return PostEffectInput::None; }
-
-		/// @brief カメラストアを設定する
-		/// @param camera3DStore
-		void SetCamera3DStore(Camera3DStore* camera3DStore) { camera3DStore_ = camera3DStore; }
 
 		/// @brief 補助PSOを設定する
 		/// @param key
@@ -142,9 +137,6 @@ namespace Engine
 
 		/// @brief パラメータ
 		PostEffectParameter* parameter_ = nullptr;
-
-		/// @brief カメラストア
-		Camera3DStore* camera3DStore_ = nullptr;
 
 		/// @brief 補助PSOテーブル
 		std::unordered_map<std::string, BasePSOPostEffect*> extraPSOTable_;

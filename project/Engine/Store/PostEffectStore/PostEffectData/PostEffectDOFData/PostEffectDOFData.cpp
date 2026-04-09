@@ -1,6 +1,6 @@
 #include "PostEffectDOFData.h"
 #include "GrowthEngine.h"
-#include "Resource/OffscreenResource/OffscreenResource.h"
+#include "Store/Camera3DStore/Camera3DStore.h"
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 

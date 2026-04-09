@@ -67,27 +67,16 @@ namespace Engine
 			return postEffectStore_->Load(name, type, device, buffering_, heap_, log);
 		}
 
-		/// @brief カメラストアを設定する
-		/// @param camera3DStore
-		/// @details PostEffectStore内部の全Dataへ反映される
-		void SetCamera3DStore(Camera3DStore* camera3DStore)
-		{
-			if (postEffectStore_)
-			{
-				postEffectStore_->SetCamera3DStore(camera3DStore);
-			}
-		}
-
 
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
 		/// @param commandList 
-      void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse);
+		void DrawPostEffect(PostEffectHandle hPostEffect, ID3D12GraphicsCommandList* commandList, const PostEffectRenderContext& context);
 
 		/// @brief ポストエフェクトを描画する
 		/// @param name 
 		/// @param commandList 
-       void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const Matrix4x4& projectionInverse);
+		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const PostEffectRenderContext& context);
 
 
 		/// @brief ポストエフェクトのパラメータを取得する

@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 #include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Resource/DepthResource/DepthResource.h"
+#include "Store/Camera3DStore/Camera3DStore.h"
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
@@ -44,14 +45,16 @@ void Engine::PostEffectDepthBasedOutlineData::Register(const PostEffectRenderCon
 	ID3D12GraphicsCommandList* commandList = context.commandList;
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	DepthResource* depthResource = context.depthResource;
-	assert(context.projectionInverse);
+	Camera3DStore* camera3DStore = context.camera3DStore;
+
+	assert(camera3DStore);
 	assert(depthResource);
 
 	/*-----------------
 		データを渡す
 	-----------------*/
 
-    resource_->data_->projectionInverse = *context.projectionInverse;
+	resource_->data_->projectionInverse = camera3DStore->GetCamera3D().GetProjectionMatrix().Inverse();
 
 
 	/*------------------------

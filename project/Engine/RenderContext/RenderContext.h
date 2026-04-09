@@ -340,17 +340,11 @@ namespace Engine
 
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
-		void DrawPostEffect(PostEffectHandle hPostEffect)
-		{
-			return offscreen_->DrawPostEffect(hPostEffect, commandList_, camera3DStore_->GetCamera3D().GetProjectionMatrix().Inverse());
-		}
+		void DrawPostEffect(PostEffectHandle hPostEffect);
 
 		/// @brief ポストエフェクトを描画する
 		/// @param name 
-		void DrawPostEffect(const std::string& name)
-		{
-			return offscreen_->DrawPostEffect(name, commandList_, camera3DStore_->GetCamera3D().GetProjectionMatrix().Inverse());
-		}
+		void DrawPostEffect(const std::string& name);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

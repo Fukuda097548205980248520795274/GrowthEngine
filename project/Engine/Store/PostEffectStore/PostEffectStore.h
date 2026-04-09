@@ -52,30 +52,12 @@ namespace Engine
 		PostEffectHandle Load(const std::string& name, PostEffect::Type type,
 			ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log);
 
-		/// @brief カメラストアを設定する
-		/// @param camera3DStore
-		/// @details すでに読み込み済みのPostEffectDataにも同じ依存を再注入する
-		void SetCamera3DStore(Camera3DStore* camera3DStore)
-		{
-			camera3DStore_ = camera3DStore;
-			for (const auto& data : dataTable_)
-			{
-				data->SetCamera3DStore(camera3DStore_);
-			}
-		}
-
-
         /// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect
 		/// @param context
 		void DrawPostEffect(PostEffectHandle hPostEffect, const PostEffectRenderContext& context)
 		{
-			PostEffectRenderContext registerContext = context;
-			if (registerContext.camera3DStore == nullptr)
-			{
-				registerContext.camera3DStore = camera3DStore_;
-			}
-			dataTable_[hPostEffect]->Register(registerContext);
+			dataTable_[hPostEffect]->Register(context);
 		}
 
         /// @brief 描画処理をコマンドリストに登録する
@@ -83,12 +65,7 @@ namespace Engine
 		/// @param context
 		void DrawPostEffect(const std::string& name, const PostEffectRenderContext& context)
 		{
-            PostEffectRenderContext registerContext = context;
-			if (registerContext.camera3DStore == nullptr)
-			{
-				registerContext.camera3DStore = camera3DStore_;
-			}
-			dataTable_[nameTable_[name]]->Register(registerContext);
+			dataTable_[nameTable_[name]]->Register(context);
 		}
 
 		/// @brief 指定入力が必要かどうか
@@ -152,14 +129,6 @@ namespace Engine
 
 	private:
 
-		/// @brief 共通依存データを設定する
-		/// @param data
-        /// @details 新しい共通依存を増やす場合はここに追加する
-		void ConfigureData(PostEffectBaseData* data)
-		{
-			data->SetCamera3DStore(camera3DStore_);
-		}
-
 		// データテーブル
 		std::vector<std::unique_ptr<PostEffectBaseData>> dataTable_;
 
@@ -207,8 +176,5 @@ namespace Engine
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;
-
-		/// @brief カメラストア
-		Camera3DStore* camera3DStore_ = nullptr;
 	};
 }
