@@ -12,7 +12,7 @@
 namespace Engine
 {
 	template<typename T>
-	class RWStructuredBufferResource
+	class RWStructuredVertexBufferResource
 	{
 	public:
 
@@ -22,11 +22,6 @@ namespace Engine
 		/// @param num 
 		/// @param log 
 		void Initialize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Heap* heap, UINT num, Log* log);
-
-		/// @brief コマンドリストに登録する
-		/// @param commandList 
-		/// @param rootParameterIndex 
-		void RegisterGraphics(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
@@ -48,8 +43,8 @@ namespace Engine
 		/// @brief リソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource_ = nullptr;
 
-		/// @brief SRVハンドル
-		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle_;
+		/// @brief UAVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> uavHandle_;
 	};
 }
 
@@ -59,7 +54,7 @@ namespace Engine
 /// @param num 
 /// @param log 
 template <typename T>
-void Engine::RWStructuredBufferResource<T>::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, UINT num, Log* log)
+void Engine::RWStructuredVertexBufferResource<T>::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, UINT num, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -79,11 +74,11 @@ void Engine::RWStructuredBufferResource<T>::Initialize(ID3D12Device* device, ID3
 	uavDesc.Buffer.StructureByteStride = sizeof(T);
 
 	// ハンドルを取得する
-	srvHandle_.first = heap->GetSrvCPUDescriptorHandle();
-	srvHandle_.second = heap->GetSrvGPUDescriptorHandle();
+	uavHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	uavHandle_.second = heap->GetSrvGPUDescriptorHandle();
 
 	// ビューの生成
-	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, srvHandle_.first);
+	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, uavHandle_.first);
 
 	// ログ出力
 	if (log)
@@ -103,18 +98,9 @@ void Engine::RWStructuredBufferResource<T>::Initialize(ID3D12Device* device, ID3
 /// @param commandList 
 /// @param rootParameterIndex 
 template <typename T>
-void Engine::RWStructuredBufferResource<T>::RegisterGraphics(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+void Engine::RWStructuredVertexBufferResource<T>::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
-	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
-}
-
-/// @brief コマンドリストに登録する
-/// @param commandList 
-/// @param rootParameterIndex 
-template <typename T>
-void Engine::RWStructuredBufferResource<T>::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
-{
-	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, uavHandle_.second);
 }
 
 /// @brief バリアを張る
@@ -122,7 +108,7 @@ void Engine::RWStructuredBufferResource<T>::RegisterCompute(ID3D12GraphicsComman
 /// @param before 
 /// @param after
 template <typename T>
-void Engine::RWStructuredBufferResource<T>::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+void Engine::RWStructuredVertexBufferResource<T>::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
 {
 	TransitionBarrier(resource_.Get(), before, after , commandList);
 }

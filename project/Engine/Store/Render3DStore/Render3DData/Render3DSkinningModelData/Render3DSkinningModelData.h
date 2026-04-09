@@ -10,7 +10,7 @@
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "Resource/StructuredBufferResource/StructuredBufferResource.h"
-#include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
+#include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"
 
 #include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
 #include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
@@ -130,7 +130,7 @@ namespace Engine
 		std::vector<std::unique_ptr<StructuredBufferResource<VertexDataForGPU>>> inputVertexResource_;
 
 		/// @brief 出力頂点リソース
-		std::vector<std::unique_ptr<RWStructuredBufferResource<VertexDataForGPU>>> outputVertexResource_;
+		std::vector<std::unique_ptr<RWStructuredVertexBufferResource<VertexDataForGPU>>> outputVertexResource_;
 
 		/// @brief 頂点数リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<uint32_t>>> vertexNumResource_;

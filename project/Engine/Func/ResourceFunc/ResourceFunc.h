@@ -43,6 +43,14 @@ namespace Engine
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height,
 		DXGI_FORMAT swapChainFormat, DXGI_FORMAT rtvFormat, Vector4 clearColor, Log* log);
 
+	/// @brief UAVテクスチャリソースを生成する
+	/// @param device 
+	/// @param width 
+	/// @param height 
+	/// @param log 
+	/// @return 
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateUAVTextureResource(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, uint32_t width, uint32_t height, Log* log);
+
 	/// @brief 深度テクスチャリソースを生成する
 	/// @param device 
 	/// @param width 

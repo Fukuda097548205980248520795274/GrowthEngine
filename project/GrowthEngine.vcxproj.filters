@@ -286,9 +286,6 @@
     <Filter Include="Engine\Include\DataForGPU\VertexDataForGPU">
       <UniqueIdentifier>{200baf1f-7a84-4899-a658-c2c1094d38cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
-      <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\SkyboxStore">
       <UniqueIdentifier>{1a87e706-3342-46e1-bd18-833c1a42f1c8}</UniqueIdentifier>
     </Filter>
@@ -813,6 +810,12 @@
     </Filter>
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData">
       <UniqueIdentifier>{b553e1cb-87de-4abc-9b79-f2c4d5c93514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\RWStructuredVertexBufferResource">
+      <UniqueIdentifier>{bb900c05-f068-430d-bc56-25c0d30925ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\RWTexture2DBufferResource">
+      <UniqueIdentifier>{cdb7e108-ca6a-4c91-b849-ebaeb427396e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1393,9 +1396,6 @@
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.cpp">
@@ -1442,6 +1442,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.cpp">
+      <Filter>Engine\Include\Resource\RWTexture2DBufferResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1715,8 +1721,8 @@
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\VertexDataForGPU</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
-      <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
+    <ClInclude Include="Engine\Resource\RWStructuredVertexBufferResource\RWStructuredVertexBufferResource.h">
+      <Filter>Engine\Include\Resource\RWStructuredVertexBufferResource</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h">
       <Filter>Engine\Include\Store\Prefab3DStore</Filter>
@@ -2167,6 +2173,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDOFData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.h">
+      <Filter>Engine\Include\Resource\RWTexture2DBufferResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,22 +12,14 @@ void GameScene::Initialize()
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
 	// ラジアルブラーを読み込む
-	engine_->LoadPostEffect("DOF", Engine::PostEffect::Type::DOF);
+	engine_->LoadPostEffect("DepthBasedOutline", Engine::PostEffect::Type::DepthBasedOutline);
 	engine_->LoadTexture("./Assets/Textures/noise0.png");
-	auto param = engine_->GetPostEffectParam<Engine::PostEffect::DOF>("DOF");
-	param->focusRange = 3.0f;
 }
 
 /// @brief 更新処理
 void GameScene::Update()
 {
-	auto param = engine_->GetPostEffectParam<Engine::PostEffect::DOF>("DOF");
-	param->focusDistance += focusVel_;
-
-	if(param->focusDistance > 40.0f || param->focusDistance <= 0.0f)
-	{
-		focusVel_ *= -1.0f;
-	}
+	
 }
 
 /// @brief 描画処理
@@ -37,5 +29,5 @@ void GameScene::Draw()
 	engine_->DrawRender3D("Terrain");
 
 	// ラジアルブラー
-	engine_->DrawPostEffect("DOF");
+	engine_->DrawPostEffect("DepthBasedOutline");
 }

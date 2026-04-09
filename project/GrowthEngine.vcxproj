@@ -588,6 +588,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.cpp" />
     <ClCompile Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1067,7 +1068,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\IndexBufferResource\IndexBufferResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
-    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h" />
+    <ClInclude Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.h" />
+    <ClInclude Include="Engine\Resource\RWStructuredVertexBufferResource\RWStructuredVertexBufferResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />
     <ClInclude Include="Engine\Resource\StructuredBufferResource\StructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\CubeVertexResource\CubeVertexResource.h" />

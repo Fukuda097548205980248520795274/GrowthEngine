@@ -164,7 +164,7 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 		}
 
 		// 出力頂点リソース
-		outputVertexResource_[meshIndex] = std::make_unique<RWStructuredBufferResource<VertexDataForGPU>>();
+		outputVertexResource_[meshIndex] = std::make_unique<RWStructuredVertexBufferResource<VertexDataForGPU>>();
 		outputVertexResource_[meshIndex]->Initialize(device,commandList, heap, UINT(modelData.meshes[meshIndex].vertices.size()), log);
 
 		// 頂点数リソース

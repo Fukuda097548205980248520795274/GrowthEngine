@@ -217,6 +217,85 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateRenderTextureResource(ID3D1
 }
 
 
+/// @brief UAVテクスチャリソースを生成する
+/// @param device 
+/// @param width 
+/// @param height 
+/// @param log 
+/// @return 
+Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateUAVTextureResource(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+	uint32_t width, uint32_t height, Log* log)
+{
+	assert(device);
+	assert(commandList);
+
+	/*------------------
+	    リソースの設定
+	------------------*/
+
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	resourceDesc.Width = width;
+	resourceDesc.Height = height;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+	// UAVとして使用できるようにする
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+
+	/*----------------
+	    ヒープの設定
+	----------------*/
+
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+
+	if (log)
+	{
+		log->Logging("Heap : DEFAULT");
+		log->Logging("Dimension : TEXTURE2D");
+		log->Logging(std::format("Width : {}", resourceDesc.Width));
+		log->Logging(std::format("Height : {}", resourceDesc.Height));
+		log->Logging(std::format("DepthOrArraySize : {}", resourceDesc.DepthOrArraySize));
+		log->Logging(std::format("MipLevels : {}", resourceDesc.MipLevels));
+		log->Logging(std::format("SampleDesc.Count : {}", resourceDesc.SampleDesc.Count));
+		log->Logging("Layout : UNKNOWN");
+		log->Logging("Flags : ALLOW_UNORDERED_ACCESS");
+	}
+
+
+	/*----------------------
+		リソースを生成する
+	----------------------*/
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
+
+	HRESULT hr = device->CreateCommittedResource(
+		&heapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&resource)
+	);
+
+	assert(SUCCEEDED(hr));
+
+	// 生成成功ログ
+	if (log)log->Logging("CreateCommitted UAVTextureResource \n");
+
+	// リソースステート遷移
+	Engine::TransitionBarrier(resource.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+
+	return resource;
+}
+
+
 /// @brief 深度テクスチャリソースを生成する
 /// @param device 
 /// @param width 
