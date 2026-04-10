@@ -826,6 +826,21 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSODualBlurUpsample">
       <UniqueIdentifier>{eb7c4870-d526-4d28-bafd-27b7ad2e17ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Particle3D">
+      <UniqueIdentifier>{6bf59a8f-d656-49dc-a3c2-ba2be339f6e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Particle3D\Emitter">
+      <UniqueIdentifier>{7935fd65-d8a8-4eea-bffc-2a7426441569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Particle3D\Update">
+      <UniqueIdentifier>{4d2015dc-e4f5-4bec-9bd5-d38c2951529a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Particle3D\Draw">
+      <UniqueIdentifier>{63cd3643-2e91-4b31-87ef-6057c48643a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Particle3D\Init">
+      <UniqueIdentifier>{f66b8cb5-3100-4359-b0e3-54c4a2f2d755}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2227,6 +2242,9 @@
     <None Include="Assets\Shader\Skybox\Skybox.hlsli">
       <Filter>Engine\Shader\Skybox</Filter>
     </None>
+    <None Include="Assets\Shader\Particle3D\Draw\Particle3D.hlsli">
+      <Filter>Engine\Shader\Particle3D\Draw</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Fullscreen\Fullscreen.VS.hlsl">
@@ -2324,6 +2342,21 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\DualBlurDownsample.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterAABB.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Emitter</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Init\Particle3DInit.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Init</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Update\Particle3DUpdate.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Update</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Draw\Particle3D.VS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Draw</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Draw\Particle3D.PS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Draw</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
