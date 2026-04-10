@@ -29,7 +29,7 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 	param_->blurFalloff = 20.0f;
 
 	// パラメータを記録する
-	group_ = "Grayscale_" + name_;
+	group_ = "DOF_" + name_;
 	if (parameter_)
 	{
 		parameter_->SetValue(group_, "Focus_Distance", &param_->focusDistance);
@@ -81,7 +81,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	    ガウシアンフィルターをかける
 	------------------------------*/
 
-	// オフスクリーンのテクスチャにバリアを張る 読み込み -> 書き込み
+	// オフスクリーンのテクスチャにバリアを張る PixelShader書き込み -> ComputeShader書き込み
 	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,commandList);
 
@@ -97,9 +97,9 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	// ディスパッチ
 	commandList->Dispatch(blurTextureResource_->GetWidth() / 8, blurTextureResource_->GetHeight() / 8, 1);
 
-
-	// ブラー用テクスチャにバリアを張る 書き込み -> 読み込み
-	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader読み込み
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 
 	/*-----------------
@@ -116,6 +116,9 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	/*---------------------------------
 		被写界深度のコマンドリストに登録
 	---------------------------------*/
+
+	// ブラー用テクスチャにバリアを張る 書き込み -> 読み込み
+	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 	// PSOの設定
 	pso_->Register(commandList);
@@ -142,10 +145,6 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
 	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
 
-	// オフスクリーンのテクスチャにバリアを張る 読み込み -> 書き込み
-	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 }
 
 /// @brief デバッグ用パラメータ
@@ -153,7 +152,7 @@ void Engine::PostEffectDOFData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
-	if (ImGui::TreeNode((name_ + "_Grayscale").c_str()))
+	if (ImGui::TreeNode((name_ + "_DOF").c_str()))
 	{
 		ImGui::DragFloat("Focus Distance", &param_->focusDistance, 0.01f, 0.0f, 1000000.0f);
 		ImGui::DragFloat("Focus Range", &param_->focusRange, 0.01f, 0.0f, 1000000.0f);
