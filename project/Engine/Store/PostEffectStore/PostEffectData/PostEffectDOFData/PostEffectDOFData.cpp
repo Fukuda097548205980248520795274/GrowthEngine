@@ -135,7 +135,9 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 		dualBlurTextureResources_[i]->RegisterComputeUAV(commandList, 1);
 
 		// ディスパッチ
-		commandList->Dispatch(dualBlurTextureResources_[i]->GetWidth() / 8, dualBlurTextureResources_[i]->GetHeight() / 8, 1);
+		UINT dispatchX = (dualBlurTextureResources_[i]->GetWidth() + 7) / 8;
+		UINT dispatchY = (dualBlurTextureResources_[i]->GetHeight() + 7) / 8;
+		commandList->Dispatch(dispatchX, dispatchY, 1);
 
 		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
 		TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
@@ -170,7 +172,9 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 		dualBlurTextureResources_[i - 1]->RegisterComputeUAV(commandList, 1);
 
 		// ディスパッチ
-		commandList->Dispatch(dualBlurTextureResources_[i - 1]->GetWidth() / 8, dualBlurTextureResources_[i - 1]->GetHeight() / 8, 1);
+		UINT dispatchX = (dualBlurTextureResources_[i - 1]->GetWidth() + 7) / 8;
+		UINT dispatchY = (dualBlurTextureResources_[i - 1]->GetHeight() + 7) / 8;
+		commandList->Dispatch(dispatchX, dispatchY, 1);
 
 		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
 		TransitionBarrier(dualBlurTextureResources_[i]->GetResource(),
