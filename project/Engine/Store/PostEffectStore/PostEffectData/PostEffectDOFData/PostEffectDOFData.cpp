@@ -10,16 +10,20 @@
 /// @param device 
 /// @param log 
 void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
-	BasePSOPostEffect* pso, BaseComputePSO* computePSO, Log* log)
+	BasePSOPostEffect* pso, BaseComputePSO* computePSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(pso);
+	assert(buffering);
 	assert(computePSO);
+	assert(upsamplePSO);
+	assert(downsamplePSO);
 
 	// 引数を受け取る
 	pso_ = pso;
-	psoGaussianBlur_ = computePSO;
+	upsamplePSO_ = upsamplePSO;
+	downsamplePSO_ = downsamplePSO;
 
 
 	// パラメータの生成
@@ -39,6 +43,10 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 		parameter_->RegisterGroupDataReflection(group_);
 	}
 
+	// スワップチェーンの幅と高さを取得
+	uint32_t width = buffering->GetSwapChainDesc().Width;
+	uint32_t height = buffering->GetSwapChainDesc().Height;
+
 	// リソース生成
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::DOFDataForGPU>>();
 	resource_->Initialize(device, log);
@@ -46,9 +54,20 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 	resource_->data_->focusRange = param_->focusRange;
 	resource_->data_->blurFalloff = param_->blurFalloff;
 
-	// ブラーをかけるためのオフスクリーンリソース生成
-	blurTextureResource_ = std::make_unique<RWTexture2DBufferResource>();
-	blurTextureResource_->Initialize(device, commandList, heap, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, log);
+
+	// デュアルブラー用のオフスクリーンリソース生成
+
+	// デュアルブラーは幅と高さが半分のテクスチャを複数用意して、順番に縮小サンプルと拡大サンプルをかけていく
+	while (width >= 30 && height >= 30)
+	{
+		std::unique_ptr<RWTexture2DBufferResource> dualBlurTextureResource = std::make_unique<RWTexture2DBufferResource>();
+		dualBlurTextureResource->Initialize(device, commandList, heap, width, height, log);
+		dualBlurTextureResources_.push_back(std::move(dualBlurTextureResource));
+
+		// 幅と高さを半分にする
+		width /= 2;
+		height /= 2;
+	}
 }
 
 /// @brief リセット
@@ -77,29 +96,100 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	Camera3DStore* camera3DStore = context.camera3DStore;
 
 
-	/*------------------------------
-	    ガウシアンフィルターをかける
-	------------------------------*/
+	/*------------------------
+	    縮小サンプルをかける
+	------------------------*/
 
 	// オフスクリーンのテクスチャにバリアを張る PixelShader書き込み -> ComputeShader書き込み
 	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,commandList);
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
-	// ガウシアンフィルターのPSOをセット
-	psoGaussianBlur_->Register(commandList);
+	// PSOの設定
+	downsamplePSO_->Register(commandList);
 
-	// テクスチャの設定
+	// ブラー用のテクスチャを設定
 	offscreenPixelShaderResource->ComputeRegister(commandList, 0);
 
-	// ブラー用テクスチャを設定
-	blurTextureResource_->RegisterCompute(commandList, 1);
+	// ブラー用のテクスチャを設定
+	dualBlurTextureResources_[0]->RegisterComputeUAV(commandList, 1);
 
 	// ディスパッチ
-	commandList->Dispatch(blurTextureResource_->GetWidth() / 8, blurTextureResource_->GetHeight() / 8, 1);
+	commandList->Dispatch(dualBlurTextureResources_[0]->GetWidth() / 8, dualBlurTextureResources_[0]->GetHeight() / 8, 1);
 
-	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader読み込み
+	// オフスクリーンのテクスチャにバリアを張る PixelShader書き込み -> ComputeShader書き込み
 	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+
+
+	for (int i = 1; i < static_cast<int32_t>(dualBlurTextureResources_.size()); i++)
+	{
+		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
+		TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+
+		// ブラー用のテクスチャを設定
+		dualBlurTextureResources_[i - 1]->RegisterComputeSRV(commandList, 0);
+
+		// ブラー用のテクスチャを設定
+		dualBlurTextureResources_[i]->RegisterComputeUAV(commandList, 1);
+
+		// ディスパッチ
+		commandList->Dispatch(dualBlurTextureResources_[i]->GetWidth() / 8, dualBlurTextureResources_[i]->GetHeight() / 8, 1);
+
+		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
+		TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+
+		// 最後のループならば、拡大サンプルで使うためにバリアを張る
+		if (i == static_cast<int32_t>(dualBlurTextureResources_.size()) - 1)
+		{
+			// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
+			TransitionBarrier(dualBlurTextureResources_[i]->GetResource(),
+				D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+		}
+		
+	}
+
+
+	/*-------------------------
+	    拡大サンプルをかける
+	-------------------------*/
+
+	// PSOの設定
+	upsamplePSO_->Register(commandList);
+
+	for (int i = static_cast<int32_t>(dualBlurTextureResources_.size()) - 1; i > 0; --i)
+	{
+
+
+		// ブラー用のテクスチャを設定
+		dualBlurTextureResources_[i]->RegisterComputeSRV(commandList, 0);
+
+		// ブラー用のテクスチャを設定
+		dualBlurTextureResources_[i - 1]->RegisterComputeUAV(commandList, 1);
+
+		// ディスパッチ
+		commandList->Dispatch(dualBlurTextureResources_[i - 1]->GetWidth() / 8, dualBlurTextureResources_[i - 1]->GetHeight() / 8, 1);
+
+		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
+		TransitionBarrier(dualBlurTextureResources_[i]->GetResource(),
+			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+
+
+		// 次のブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
+		if (i - 1 != 0)
+		{
+			TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
+				D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+		}
+		else
+		{
+			// 次のブラー用テクスチャにバリアを張る 書き込み -> 読み込み
+			TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
+				D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		}
+	}
 
 
 	/*-----------------
@@ -117,9 +207,6 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 		被写界深度のコマンドリストに登録
 	---------------------------------*/
 
-	// ブラー用テクスチャにバリアを張る 書き込み -> 読み込み
-	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 	// PSOの設定
 	pso_->Register(commandList);
 
@@ -127,7 +214,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	offscreenPixelShaderResource->Register(commandList, 0);
 
 	// ブラー用オフスクリーンのテクスチャを設定
-	blurTextureResource_->RegisterGraphics(commandList, 1);
+	dualBlurTextureResources_[0]->RegisterGraphicsSRV(commandList, 1);
 
 	// 深度用テクスチャの設定
 	depthResource->Register(commandList, 2);
@@ -143,7 +230,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 
 
 	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
-	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+	TransitionBarrier(dualBlurTextureResources_[0]->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
 
 }
 

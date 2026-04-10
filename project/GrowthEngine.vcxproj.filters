@@ -820,6 +820,12 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter">
       <UniqueIdentifier>{7b6a1f10-7e62-4797-9588-bc01b4ab538b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSODualBlurDownsample">
+      <UniqueIdentifier>{c1a4f929-683b-493f-b7a1-0eb39efb1873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSODualBlurUpsample">
+      <UniqueIdentifier>{eb7c4870-d526-4d28-bafd-27b7ad2e17ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1454,6 +1460,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSODualBlurUpsample\ComputePSODualBlurUpsample.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurUpsample</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurDownsample</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2186,6 +2198,12 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurUpsample\ComputePSODualBlurUpsample.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurUpsample</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurDownsample</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2299,6 +2317,12 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\GaussianFilter.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\DualBlurUpsample.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\DualBlurDownsample.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

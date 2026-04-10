@@ -76,6 +76,14 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	psoDOF_->Initialize(device, compiler, vertexShaderBlob, log);
 
 
+	// CSデュアルブラー縮小PSO
+	computePSODualBlurDownsample_ = std::make_unique<ComputePSODualBlurDownsample>();
+	computePSODualBlurDownsample_->Initialize(device, compiler, log);
+
+	// CSデュアルブラー拡大PSO
+	computePSODualBlurUpsample_ = std::make_unique<ComputePSODualBlurUpsample>();
+	computePSODualBlurUpsample_->Initialize(device, compiler, log);
+
 	// CSガウシアンフィルタPSO
 	computePSOGaussianFilter_ = std::make_unique<ComputePSOGaussianFilter>();
 	computePSOGaussianFilter_->Initialize(device, compiler, log);
@@ -191,7 +199,8 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::DOF)
 	{
 		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
-		data->Initialize(device, commandList, buffering, heap, psoDOF_.get(), computePSOGaussianFilter_.get(), log);
+		data->Initialize(device, commandList, buffering, heap, psoDOF_.get(),
+			computePSOGaussianFilter_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

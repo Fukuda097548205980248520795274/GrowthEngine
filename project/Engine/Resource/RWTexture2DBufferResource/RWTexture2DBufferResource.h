@@ -25,12 +25,22 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param rootParameterIndex 
-		void RegisterGraphics(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+		void RegisterGraphicsSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param rootParameterIndex 
-		void RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+		void RegisterGraphicsUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterComputeUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 		/// @brief サイズを作り直す
 		/// @param device 

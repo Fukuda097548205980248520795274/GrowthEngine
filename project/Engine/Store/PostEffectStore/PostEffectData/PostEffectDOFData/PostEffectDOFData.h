@@ -23,7 +23,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
-			BasePSOPostEffect* pso, BaseComputePSO* computePSO, Log* log);
+			BasePSOPostEffect* pso, BaseComputePSO* computePSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log);
 
 		/// @brief リセット
 		void Reset() override;
@@ -56,13 +56,16 @@ namespace Engine
 		// リソース
 		std::unique_ptr<ConstantBufferResource<PostEffect::DOFDataForGPU>> resource_ = nullptr;
 
-		/// @brief ブラー用テクスチャリソース
-		std::unique_ptr<RWTexture2DBufferResource> blurTextureResource_ = nullptr;
+		/// @brief デュアルブラー用テクスチャリソース
+		std::vector<std::unique_ptr<RWTexture2DBufferResource>> dualBlurTextureResources_;
 
 
 	private:
 
-		/// @brief CSガウシアンフィルターPSO
-		BaseComputePSO* psoGaussianBlur_ = nullptr;
+		// CSデュアルブラー縮小PSO
+		BaseComputePSO* downsamplePSO_ = nullptr;
+
+		// CSデュアルブラー拡大PSO
+		BaseComputePSO* upsamplePSO_ = nullptr;
 	};
 }

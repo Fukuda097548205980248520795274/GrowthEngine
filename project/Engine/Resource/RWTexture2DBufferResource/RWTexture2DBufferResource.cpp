@@ -78,7 +78,7 @@ void Engine::RWTexture2DBufferResource::Initialize(ID3D12Device* device, ID3D12G
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param rootParameterIndex 
-void Engine::RWTexture2DBufferResource::RegisterGraphics(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+void Engine::RWTexture2DBufferResource::RegisterGraphicsSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
 }
@@ -86,7 +86,23 @@ void Engine::RWTexture2DBufferResource::RegisterGraphics(ID3D12GraphicsCommandLi
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param rootParameterIndex 
-void Engine::RWTexture2DBufferResource::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+void Engine::RWTexture2DBufferResource::RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::RWTexture2DBufferResource::RegisterGraphicsUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, uavHandle_.second);
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::RWTexture2DBufferResource::RegisterComputeUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	commandList->SetComputeRootDescriptorTable(rootParameterIndex, uavHandle_.second);
 }

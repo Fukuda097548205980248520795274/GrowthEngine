@@ -160,7 +160,7 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	PostEffectRenderContext registerContext{};
 	registerContext = context;
 	registerContext.commandList = commandList;
-	registerContext.offscreenPixelShaderResource = offscreenResource_[1 - currentOffscreen_].get();
+	registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
 	registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
 	registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 
@@ -213,7 +213,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	PostEffectRenderContext registerContext{};
 	registerContext = context;
 	registerContext.commandList = commandList;
-	registerContext.offscreenPixelShaderResource = offscreenResource_[1 - currentOffscreen_].get();
+	registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
 	registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
 	registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 

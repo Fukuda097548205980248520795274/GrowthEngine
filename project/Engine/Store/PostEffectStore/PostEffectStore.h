@@ -21,6 +21,8 @@
 #include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
 
 #include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
+#include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
+#include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
 
 namespace Engine
 {
@@ -167,6 +169,12 @@ namespace Engine
 
 
 	private:
+
+		/// @brief デュアルブラー縮小PSO
+		std::unique_ptr<ComputePSODualBlurDownsample> computePSODualBlurDownsample_ = nullptr;
+
+		/// @brief デュアルブラー拡大PSO
+		std::unique_ptr<ComputePSODualBlurUpsample> computePSODualBlurUpsample_ = nullptr;
 
 		/// @brief CSガウシアンフィルタPSO
 		std::unique_ptr<ComputePSOGaussianFilter> computePSOGaussianFilter_ = nullptr;
