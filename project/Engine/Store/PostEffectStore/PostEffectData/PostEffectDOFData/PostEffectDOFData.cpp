@@ -114,7 +114,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	dualBlurTextureResources_[0]->RegisterComputeUAV(commandList, 1);
 
 	// ディスパッチ
-	commandList->Dispatch(dualBlurTextureResources_[0]->GetWidth() / 8, dualBlurTextureResources_[0]->GetHeight() / 8, 1);
+	commandList->Dispatch((dualBlurTextureResources_[0]->GetWidth() + 7) / 8, (dualBlurTextureResources_[0]->GetHeight() + 7) / 8, 1);
 
 	// オフスクリーンのテクスチャにバリアを張る PixelShader書き込み -> ComputeShader書き込み
 	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
