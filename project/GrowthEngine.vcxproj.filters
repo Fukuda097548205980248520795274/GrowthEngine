@@ -817,6 +817,9 @@
     <Filter Include="Engine\Include\Resource\RWTexture2DBufferResource">
       <UniqueIdentifier>{cdb7e108-ca6a-4c91-b849-ebaeb427396e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter">
+      <UniqueIdentifier>{7b6a1f10-7e62-4797-9588-bc01b4ab538b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1448,6 +1451,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOVignetting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2177,6 +2183,9 @@
     <ClInclude Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.h">
       <Filter>Engine\Include\Resource\RWTexture2DBufferResource</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOGaussianFilter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2287,6 +2296,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\DOF.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\GaussianFilter.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

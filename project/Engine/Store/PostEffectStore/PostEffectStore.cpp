@@ -74,6 +74,11 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// 被写界深度PSO
 	psoDOF_ = std::make_unique<PSODOF>();
 	psoDOF_->Initialize(device, compiler, vertexShaderBlob, log);
+
+
+	// CSガウシアンフィルタPSO
+	computePSOGaussianFilter_ = std::make_unique<ComputePSOGaussianFilter>();
+	computePSOGaussianFilter_->Initialize(device, compiler, log);
 }
 
 /// @brief 読み込み
@@ -82,7 +87,7 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 /// @param device 
 /// @param log 
 PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffect::Type type,
-	ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log)
+	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -186,7 +191,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::DOF)
 	{
 		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
-		data->Initialize(device, buffering, heap, log, psoDOF_.get() , psoGaussianFilter_.get());
+		data->Initialize(device, commandList, buffering, heap, psoDOF_.get(), computePSOGaussianFilter_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

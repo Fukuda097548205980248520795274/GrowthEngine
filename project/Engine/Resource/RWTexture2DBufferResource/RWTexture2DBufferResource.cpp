@@ -3,6 +3,7 @@
 #include "Log/Log.h"
 #include "Func/ResourceFunc/ResourceFunc.h"
 #include "RenderContext/DX12Heap/DX12Heap.h"
+#include "RenderContext/DX12Buffering/DX12Buffering.h"
 #include <cassert>
 #include <format>
 
@@ -18,8 +19,12 @@ void Engine::RWTexture2DBufferResource::Initialize(ID3D12Device* device, ID3D12G
 	assert(device);
 	assert(heap);
 
+	// 引数を受け取る
+	width_ = width;
+	height_ = height;
+
 	// リソース作成
-	resource_ = CreateUAVTextureResource(device, commandList, width, height, log);
+	resource_ = CreateUAVTextureResource(device, commandList, width_, height_, log);
 
 
 
@@ -84,6 +89,45 @@ void Engine::RWTexture2DBufferResource::RegisterGraphics(ID3D12GraphicsCommandLi
 void Engine::RWTexture2DBufferResource::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	commandList->SetComputeRootDescriptorTable(rootParameterIndex, uavHandle_.second);
+}
+
+/// @brief サイズを作り直す
+/// @param device 
+/// @param width 
+/// @param height 
+void Engine::RWTexture2DBufferResource::Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, uint32_t width, uint32_t height)
+{
+	// nullptrチェック
+	assert(device);
+	assert(commandList);
+
+	// サイズを更新する
+	width_ = width;
+	height_ = height;
+
+	// リソースを作り直す
+	resource_ = CreateUAVTextureResource(device, commandList, width_, height_, nullptr);
+
+
+	// UAVの設定
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
+	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+	uavDesc.Texture2D.MipSlice = 0;
+
+	// ビューの生成
+	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, uavHandle_.first);
+
+
+	// SRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+
+	// ビューの生成
+	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
 }
 
 /// @brief バリアを張る

@@ -141,14 +141,9 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	// カウントする
 	++currentOffscreen_;
 	currentOffscreen_ = currentOffscreen_ % 2;
-
-	// このポストエフェクトがオフスクリーンのレンダーターゲットを使用するかどうか
-	if (isUseOffscreenRenderTarget)
-	{
-		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-		ClearRenderTarget(commandList);
-	}
 	
+	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+	ClearRenderTarget(commandList);
 
 	// 書き込み対象 -> 読み込ませテクスチャ
 	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
@@ -194,19 +189,14 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
-	const bool isUseOffscreenRenderTarget = postEffectStore_->IsUseOffscreenRenderTarget(name);
 	const int32_t sourceOffscreenIndex = currentOffscreen_;
 
 	// カウントする
 	++currentOffscreen_;
 	currentOffscreen_ = currentOffscreen_ % 2;
 
-	if (isUseOffscreenRenderTarget)
-	{
-		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-		ClearRenderTarget(commandList);
-	}
-
+	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+	ClearRenderTarget(commandList);
 
 	// 書き込み対象 -> 読み込ませテクスチャ
 	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),

@@ -32,6 +32,12 @@ namespace Engine
 		/// @param rootParameterIndex 
 		void RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
+		/// @brief サイズを作り直す
+		/// @param device 
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, uint32_t width, uint32_t height);
+
 		/// @brief バリアを張る
 		/// @param commandList 
 		/// @param before 
@@ -41,6 +47,14 @@ namespace Engine
 		/// @brief リソースを取得する
 		/// @return 
 		ID3D12Resource* GetResource() { return resource_.Get(); }
+
+		/// @brief 横幅を取得する
+		/// @return 
+		int32_t GetWidth()const { return width_; }
+
+		/// @brief 縦幅を取得する
+		/// @return 
+		int32_t GetHeight()const { return height_; }
 
 	private:
 
@@ -52,5 +66,9 @@ namespace Engine
 
 		/// @brief SRVハンドル
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle_;
+
+		// @brief テクスチャの幅
+		int32_t width_ = 0;
+		int32_t height_ = 0;
 	};
 }

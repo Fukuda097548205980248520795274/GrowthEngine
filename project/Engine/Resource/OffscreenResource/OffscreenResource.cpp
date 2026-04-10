@@ -142,3 +142,15 @@ void Engine::OffscreenResource::Register(ID3D12GraphicsCommandList* commandList,
 	// テクスチャ
 	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
 }
+
+/// @brief コンピュートシェーダー用にコマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::OffscreenResource::ComputeRegister(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	// nullptrチェック
+	assert(commandList);
+
+	// テクスチャ
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}

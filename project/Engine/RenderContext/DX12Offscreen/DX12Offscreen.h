@@ -62,9 +62,9 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		/// @return 
-		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device, Log* log) 
+		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log) 
 		{
-			return postEffectStore_->Load(name, type, device, buffering_, heap_, log);
+			return postEffectStore_->Load(name, type, device, commandList, buffering_, heap_, log);
 		}
 
 

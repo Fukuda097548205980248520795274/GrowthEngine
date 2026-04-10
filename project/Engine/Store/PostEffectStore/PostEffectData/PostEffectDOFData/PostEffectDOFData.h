@@ -1,5 +1,5 @@
 #pragma once
-#include "Resource/OffscreenResource/OffscreenResource.h"
+#include "Resource/RWTexture2DBufferResource/RWTexture2DBufferResource.h"
 #include "../PostEffectBaseData.h"
 
 namespace Engine
@@ -22,7 +22,8 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param log 
-		void Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log, BasePSOPostEffect* pso, BasePSOPostEffect* psoGaussianBlur);
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
+			BasePSOPostEffect* pso, BaseComputePSO* computePSO, Log* log);
 
 		/// @brief リセット
 		void Reset() override;
@@ -55,13 +56,13 @@ namespace Engine
 		// リソース
 		std::unique_ptr<ConstantBufferResource<PostEffect::DOFDataForGPU>> resource_ = nullptr;
 
-		/// @brief ブラーをかけるためのオフスクリーンリソース
-		std::unique_ptr<OffscreenResource> blurTextureResource_ = nullptr;
+		/// @brief ブラー用テクスチャリソース
+		std::unique_ptr<RWTexture2DBufferResource> blurTextureResource_ = nullptr;
 
 
 	private:
 
-		/// @brief ガウシアンフィルターPSO
-		BasePSOPostEffect* psoGaussianBlur_ = nullptr;
+		/// @brief CSガウシアンフィルターPSO
+		BaseComputePSO* psoGaussianBlur_ = nullptr;
 	};
 }

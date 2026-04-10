@@ -336,7 +336,10 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, Log* log) { return offscreen_->LoadPostEffect(name, type, core_->GetDevice(), log); }
+		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, Log* log)
+		{
+			return offscreen_->LoadPostEffect(name, type, core_->GetDevice(),commandList_, log);
+		}
 
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 

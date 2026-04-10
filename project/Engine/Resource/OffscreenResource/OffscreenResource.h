@@ -34,7 +34,12 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param rootParameterIndex 
-		void Register(ID3D12GraphicsCommandList* commandList , UINT rootParameterIndex);
+		void Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief コンピュートシェーダー用にコマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void ComputeRegister(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 		/// @brief RTV用CPUハンドルを取得する
 		/// @return 

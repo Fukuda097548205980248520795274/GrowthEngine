@@ -9,17 +9,18 @@
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log,
-	BasePSOPostEffect* pso, BasePSOPostEffect* psoGaussianBlur)
+void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
+	BasePSOPostEffect* pso, BaseComputePSO* computePSO, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(pso);
-	assert(psoGaussianBlur);
+	assert(computePSO);
 
 	// 引数を受け取る
 	pso_ = pso;
-	psoGaussianBlur_ = psoGaussianBlur;
+	psoGaussianBlur_ = computePSO;
+
 
 	// パラメータの生成
 	param_ = std::make_unique<PostEffect::DOF>();
@@ -46,8 +47,8 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, DX12Buffering* 
 	resource_->data_->blurFalloff = param_->blurFalloff;
 
 	// ブラーをかけるためのオフスクリーンリソース生成
-	blurTextureResource_ = std::make_unique<OffscreenResource>();
-	blurTextureResource_->Initialize(device, buffering, heap, log);
+	blurTextureResource_ = std::make_unique<RWTexture2DBufferResource>();
+	blurTextureResource_->Initialize(device, commandList, heap, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, log);
 }
 
 /// @brief リセット
@@ -80,24 +81,25 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	    ガウシアンフィルターをかける
 	------------------------------*/
 
-	// ブラー用オフスクリーンをセット
-	blurTextureResource_->ClearRenderTarget(commandList, depthResource->GetDsvCpuHandle());
+	// オフスクリーンのテクスチャにバリアを張る 読み込み -> 書き込み
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,commandList);
 
 	// ガウシアンフィルターのPSOをセット
 	psoGaussianBlur_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenPixelShaderResource->Register(commandList, 0);
+	offscreenPixelShaderResource->ComputeRegister(commandList, 0);
 
-	// 形状の設定
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	// ブラー用テクスチャを設定
+	blurTextureResource_->RegisterCompute(commandList, 1);
 
-	// ドローコール
-	commandList->DrawInstanced(3, 1, 0, 0);
+	// ディスパッチ
+	commandList->Dispatch(blurTextureResource_->GetWidth() / 8, blurTextureResource_->GetHeight() / 8, 1);
 
 
-	// ブラー用オフスクリーンにバリアを張る　書き込み -> 読み込み
-	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+	// ブラー用テクスチャにバリアを張る 書き込み -> 読み込み
+	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 
 	/*-----------------
@@ -115,9 +117,6 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 		被写界深度のコマンドリストに登録
 	---------------------------------*/
 
-	// オフスクリーンをレンダーターゲットにセットする
-	offscreenRenderTargetResource->ClearRenderTarget(commandList, depthResource->GetDsvCpuHandle());
-
 	// PSOの設定
 	pso_->Register(commandList);
 
@@ -125,7 +124,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	offscreenPixelShaderResource->Register(commandList, 0);
 
 	// ブラー用オフスクリーンのテクスチャを設定
-	blurTextureResource_->Register(commandList, 1);
+	blurTextureResource_->RegisterGraphics(commandList, 1);
 
 	// 深度用テクスチャの設定
 	depthResource->Register(commandList, 2);
@@ -140,8 +139,12 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	commandList->DrawInstanced(3, 1, 0, 0);
 
 
-	// ブラー用オフスクリーンにバリアを張る　読み込み -> 書き込み
-	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
+	TransitionBarrier(blurTextureResource_->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+
+	// オフスクリーンのテクスチャにバリアを張る 読み込み -> 書き込み
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 }
 

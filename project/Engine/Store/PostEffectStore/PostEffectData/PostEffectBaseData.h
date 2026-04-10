@@ -15,6 +15,7 @@ namespace Engine
     class DepthResource;
 	class Camera3DStore;
 	class BasePSOPostEffect;
+	class BaseComputePSO;
 	class PostEffectParameter;
 
 	/// @brief 各ポストエフェクトが必要とする入力データの種類

@@ -20,6 +20,8 @@
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 #include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
 
+#include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
+
 namespace Engine
 {
 	class ShaderCompiler;
@@ -50,7 +52,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		PostEffectHandle Load(const std::string& name, PostEffect::Type type,
-			ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log);
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap, Log* log);
 
         /// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect
@@ -92,14 +94,6 @@ namespace Engine
 		bool IsUseOffscreenRenderTarget(PostEffectHandle hPostEffect) const
 		{
 			return dataTable_[hPostEffect]->GetType() != PostEffect::Type::DOF;
-		}
-
-		/// @brief DX12Offscreen側のRTV/DSV設定を使うかどうか
-		/// @param name
-		/// @return
-		bool IsUseOffscreenRenderTarget(const std::string& name) const
-		{
-			return dataTable_[nameTable_.at(name)]->GetType() != PostEffect::Type::DOF;
 		}
 
 
@@ -170,6 +164,12 @@ namespace Engine
 
 		/// @brief 被写界深度PSO
 		std::unique_ptr<PSODOF> psoDOF_ = nullptr;
+
+
+	private:
+
+		/// @brief CSガウシアンフィルタPSO
+		std::unique_ptr<ComputePSOGaussianFilter> computePSOGaussianFilter_ = nullptr;
 
 
 	private:
