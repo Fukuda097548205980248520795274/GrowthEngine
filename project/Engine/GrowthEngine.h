@@ -741,6 +741,10 @@ public:
 		return renderContext_->LoadParticle3D(name, numInstance, hModel, log_.get());
 	}
 
+	/// @brief 3Dパーティクルを描画する
+	/// @param name 
+	void DrawParticle3D(const std::string& name)const { renderContext_->DrawParticle3D(name); }
+
 
 
 

@@ -35,8 +35,9 @@ namespace Engine
 
 		/// @brief 描画処理
 		/// @param commandList 
+		/// @param name 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
+		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection) { particle3DStore_->Draw(commandList, name, viewProjection); }
 
 
 	private:

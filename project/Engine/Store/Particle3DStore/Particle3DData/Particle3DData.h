@@ -3,11 +3,15 @@
 #include "Handle/Handle.h"
 #include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
-#include "PSO/ComputePSO/BaseComputePSO.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 namespace Engine
 {
+	class BasePSOModel;
+	class BaseComputePSO;
+	class ModelStore;
+	class TextureStore;
+
 	class Particle3DData
 	{
 	public:
@@ -21,8 +25,12 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param commandList 
+		/// @param heap 
+		/// @param psoDraw 
+		/// @param psoInit 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, BaseComputePSO* psoInit, Log* log);
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap,
+			ModelStore* modelStore, TextureStore* textureStore, BasePSOModel* psoDraw, BaseComputePSO* psoInit, Log* log);
 
 		/// @brief 更新処理
 		/// @param commandList 
@@ -34,7 +42,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param psoDraw 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoDraw, const Matrix4x4& viewProjection);
+		void Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -53,6 +61,9 @@ namespace Engine
 		/// @brief パーティクル数リソース
 		std::unique_ptr<ConstantBufferResource<ParticleNumDataForGPU>> particleNumResource_ = nullptr;
 
+		/// @brief パーティクルビューリソース
+		std::unique_ptr<ConstantBufferResource<ParticlePreViewDataForGPU>> particleViewResource_ = nullptr;
+
 
 	private:
 
@@ -62,7 +73,22 @@ namespace Engine
 		/// @brief モデルハンドル
 		ModelHandle hModel_ = 0;
 
+		/// @brief テクスチャハンドル
+		TextureHandle hTexture_ = 0;
+
 		/// @brief インスタンス数
 		uint32_t numInstance_ = 0;
+
+
+	private:
+
+		// モデルストア
+		ModelStore* modelStore_ = nullptr;
+
+		// テクスチャストア
+		TextureStore* textureStore_ = nullptr;
+
+		/// @brief 描画用PSO
+		BasePSOModel* psoDraw_ = nullptr;
 	};
 }

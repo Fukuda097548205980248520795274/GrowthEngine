@@ -65,7 +65,7 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 
 	// データを生成する
 	std::unique_ptr<Particle3DData> data = std::make_unique<Particle3DData>(name, hModel, numInstance);
-	data->Initialize(device, commandList, heap_, computePsoParticle3DInit_.get(), log);
+	data->Initialize(device, commandList, heap_, modelStore_, textureStore_, psoParticle_.get(), computePsoParticle3DInit_.get(), log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;
@@ -81,7 +81,7 @@ void Engine::Particle3DStore::Update(ID3D12GraphicsCommandList* commandList)
 /// @brief 描画処理
 /// @param commandList 
 /// @param viewProjection 
-void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
+void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection)
 {
-
+	dataTable_[nameTable_[name]]->Draw(commandList, viewProjection);
 }

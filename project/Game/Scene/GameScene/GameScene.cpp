@@ -30,6 +30,9 @@ void GameScene::Draw()
 	// 地形を描画する
 	engine_->DrawRender3D("Terrain");
 
+	// パーティクルを描画する
+	engine_->DrawParticle3D("Particle3D");
+
 	// ラジアルブラー
 	engine_->DrawPostEffect("DOF");
 }

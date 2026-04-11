@@ -28,11 +28,3 @@ void Engine::DX12Particle::Update(ID3D12GraphicsCommandList* commandList)
 {
 	particle3DStore_->Update(commandList);
 }
-
-/// @brief 描画処理
-/// @param commandList 
-/// @param viewProjection 
-void Engine::DX12Particle::Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection)
-{
-	particle3DStore_->Draw(commandList, viewProjection);
-}

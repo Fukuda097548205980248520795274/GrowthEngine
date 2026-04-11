@@ -1,6 +1,7 @@
 #pragma once
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
+#include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 namespace Engine
 {
@@ -33,5 +34,15 @@ namespace Engine
 		int num;
 
 		float padding[3];
+	};
+
+	/// @brief GPUに送るパーティクルのビューデータ
+	struct ParticlePreViewDataForGPU
+	{
+		// ビュープロジェクション
+		Matrix4x4 viewProjection;
+
+		// ビルボード行列
+		Matrix4x4 billboard;
 	};
 }

@@ -1,16 +1,29 @@
 #include "Particle3DData.h"
+#include "PSO/ComputePSO/BaseComputePSO.h"
+#include "PSO/PSOModel/BasePSOModel.h"
+#include "Store/ModelStore/ModelStore.h"
+#include "Store/TextureStore/TextureStore.h"
 
 /// @brief 初期化
 /// @param device 
 /// @param commandList 
 /// @param log 
-void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, BaseComputePSO* psoInit, Log* log)
+void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap,
+	ModelStore* modelStore, TextureStore* textureStore, BasePSOModel* psoDraw, BaseComputePSO* psoInit, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(commandList);
+	assert(psoDraw);
 	assert(psoInit);
+	assert(modelStore);
+	assert(textureStore);
 	assert(heap);
+
+	// 引数を受け取る
+	psoDraw_ = psoDraw;
+	modelStore_ = modelStore;
+	textureStore_ = textureStore;
 
 	// パーティクルリソースを生成する
 	particleResource_ = std::make_unique<RWSTructuredBufferResource<Particle3DDataForGPU>>();
@@ -20,6 +33,13 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleNumResource_ = std::make_unique<ConstantBufferResource<ParticleNumDataForGPU>>();
 	particleNumResource_->Initialize(device,log);
 	particleNumResource_->data_->num = numInstance_;
+
+	// パーティクルビューリソースを生成する
+	particleViewResource_ = std::make_unique<ConstantBufferResource<ParticlePreViewDataForGPU>>();
+	particleViewResource_->Initialize(device, log);
+
+	// テクスチャを取得する
+	hTexture_ = modelStore_->GetModelData(hModel_).meshes[0].material.handle;
 
 
 	/*-----------------------
@@ -54,9 +74,45 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 /// @brief 描画処理
 /// @param commandList 
 /// @param psoDraw 
-void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoDraw, const Matrix4x4& viewProjection)
+void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList,const Matrix4x4& viewProjection)
 {
 	// nullptrチェック
 	assert(commandList);
-	assert(psoDraw);
+
+	// バリアを張る
+	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+
+
+	// データを渡す
+	particleViewResource_->data_->viewProjection = viewProjection;
+	particleViewResource_->data_->billboard = MakeIdentityMatrix4x4();
+
+
+	/*------------------------
+	    コマンドリストに登録する
+	------------------------*/
+
+	// PSOの設定
+	psoDraw_->Register(commandList);
+
+	// 頂点を登録する
+	modelStore_->Register(commandList, hModel_, 0);
+
+	// パーティクルリソースを登録する
+	particleResource_->RegisterGraphicsSRV(commandList, 0);
+
+	// パーティクルビューリソースを登録する
+	particleViewResource_->RegisterGraphics(commandList, 1);
+
+	// テクスチャを登録する
+	commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(hTexture_));
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[0].indices.size()), numInstance_, 0, 0, 0);
+
+
+
+	// バリアを張る
+	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }

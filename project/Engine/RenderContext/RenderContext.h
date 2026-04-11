@@ -441,6 +441,13 @@ namespace Engine
 			return particle_->LoadParticle3D(core_->GetDevice(), commandList_, hModel, name, numInstance, log);
 		}
 
+		/// @brief 3Dパーティクルを描画する
+		/// @param name 
+		void DrawParticle3D(const std::string& name)
+		{
+			particle_->Draw3DParticle(commandList_, name, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
+		}
+
 
 
 #ifdef _DEVELOPMENT
