@@ -23,8 +23,8 @@ namespace Engine
 		/// @brief 色
 		Vector4 color;
 
-		/// @brief 速度
-		Vector3 velocity;
+		/// @brief 方向
+		Vector3 direction;
 	};
 
 	/// @brief GPUに送るパーティクルの数のデータ

@@ -26,7 +26,7 @@ struct Particle
     float4 color;
     
     // 速度
-    float3 velocity;
+    float3 direction;
 };
 StructuredBuffer<Particle> gParticles : register(t0);
 

@@ -18,8 +18,8 @@ struct Particle
     // 色
     float4 color;
     
-    // 速度
-    float3 velocity;
+    // 方向
+    float3 direction;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 
@@ -91,14 +91,13 @@ void main( uint3 DTid : SV_DispatchThreadID )
     // 放出フラグが立っていない場合は処理しない
     if (gEmitter.emit == 0)
         return;
+    
+    // 乱数生成期
+    RandomGenerator generator;
+    generator.seed = (DTid + gPerFrame.time) * gPerFrame.time;
 
     for (uint countIndex = 0; countIndex < gEmitter.count; ++countIndex)
     {
-        // 乱数生成期
-        RandomGenerator generator;
-        generator.seed = (DTid + gPerFrame.time) * gPerFrame.time;
-        
-        
         int freeListIndex;
         
         // フリーリストの先頭からインデックスを取得
@@ -119,7 +118,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
             float3 randomDir = (generator.Generate3d() * 2.0f) - float3(1.0f, 1.0f, 1.0f);
 
             // ゼロ除算を防ぐため、ごくわずかな値を足してから正規化する
-            gParticles[particleIndex].velocity = normalize(randomDir + float3(0.001f, 0.0f, 0.0f));
+            gParticles[particleIndex].direction = normalize(randomDir + float3(0.001f, 0.0f, 0.0f));
 
         }
         else

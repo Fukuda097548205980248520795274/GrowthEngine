@@ -22,7 +22,10 @@ namespace Engine
 		/// @param name 
 		/// @param hModel 
 		/// @param numInstance 
-		Particle3DData(const std::string& name, ModelHandle hModel, uint32_t numInstance) :name_(name), hModel_(hModel), numInstance_(numInstance) {}
+		Particle3DData(const std::string& name, ModelHandle hModel, uint32_t numInstance) :
+			name_(name), hModel_(hModel), numInstance_(numInstance) {
+			isLoad_ = true;
+		}
 
 		/// @brief 初期化
 		/// @param device 
@@ -33,6 +36,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap,
 			ModelStore* modelStore, TextureStore* textureStore, BasePSOModel* psoDraw, BaseComputePSO* psoInit, Log* log);
+
+		/// @brief リセット
+		void Reset();
 
 		/// @brief 更新処理
 		/// @param commandList 
@@ -92,6 +98,9 @@ namespace Engine
 
 		/// @brief インスタンス数
 		uint32_t numInstance_ = 0;
+
+		/// @brief ロードフラグ
+		bool isLoad_ = false;
 
 
 	private:

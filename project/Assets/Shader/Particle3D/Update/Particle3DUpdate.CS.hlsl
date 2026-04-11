@@ -17,8 +17,8 @@ struct Particle
     // 色
     float4 color;
     
-    // 速度
-    float3 velocity;
+    // 方向
+    float3 direction;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 
@@ -109,7 +109,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         
         // 移動
         float speed = lerp(gEmitter.startSpeed, gEmitter.endSpeed, t);
-        gParticles[particleIndex].translate += gParticles[particleIndex].velocity * speed * gPerFrame.deltaTime;
+        gParticles[particleIndex].translate += gParticles[particleIndex].direction * speed * gPerFrame.deltaTime;
         
         // 大きさ
         float scale = lerp(gEmitter.startScale, gEmitter.endScale, t);

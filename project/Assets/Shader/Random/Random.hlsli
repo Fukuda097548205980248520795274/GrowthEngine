@@ -31,7 +31,8 @@ class RandomGenerator
     
     float Generate1d()
     {
-        seed = rand3dTo3d(seed);
-        return seed.x;
+        float result = rand3dTo1d(seed);
+        seed.x = result;
+        return result;
     }
 };

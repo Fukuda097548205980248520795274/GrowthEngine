@@ -62,18 +62,18 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 
 
 	particleEmitterPointResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
-	particleEmitterPointResource_->data_->count = 100;
-	particleEmitterPointResource_->data_->frequency = 1.0f;
+	particleEmitterPointResource_->data_->count = 1;
+	particleEmitterPointResource_->data_->frequency = 0.5f;
 	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
 	particleEmitterPointResource_->data_->emit = 0;
 	particleEmitterPointResource_->data_->startColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	particleEmitterPointResource_->data_->endColor = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
+	particleEmitterPointResource_->data_->endColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	particleEmitterPointResource_->data_->startScale = 1.0f;
 	particleEmitterPointResource_->data_->endScale = 1.0f;
 	particleEmitterPointResource_->data_->minLifeTime = 1.0f;
 	particleEmitterPointResource_->data_->maxLifeTime = 1.0f;
-	particleEmitterPointResource_->data_->startSpeed = 8.0f;
-	particleEmitterPointResource_->data_->endSpeed = 0.0f;
+	particleEmitterPointResource_->data_->startSpeed = 6.0f;
+	particleEmitterPointResource_->data_->endSpeed = 6.0f;
 
 
 	// テクスチャを取得する
@@ -103,12 +103,22 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	commandList->Dispatch((numInstance_ + 255) / 256, 1, 1);
 }
 
+/// @brief リセット
+void Engine::Particle3DData::Reset()
+{
+	// ロードしたこととする
+	isLoad_ = true;
+}
+
 /// @brief 更新処理
 /// @param commandList 
 /// @param psoEmitter 
 /// @param psoUpdate 
 void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoEmitter, BaseComputePSO* psoUpdate)
 {
+	// ロードしていなかったら処理しない
+	if (!isLoad_)return;
+
 	// nullptrチェック
 	assert(commandList);
 	assert(psoEmitter);
@@ -203,12 +213,15 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 /// @param psoDraw 
 void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList,const Matrix4x4& viewProjection)
 {
+	// ロードしていなかったら処理しない
+	if (!isLoad_)return;
+
+
 	// nullptrチェック
 	assert(commandList);
 
 	// バリアを張る
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
 
 
 	// データを渡す

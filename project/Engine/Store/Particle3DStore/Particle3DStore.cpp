@@ -44,6 +44,12 @@ void Engine::Particle3DStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePsoParticle3DUpdate_->Initialize(device, compiler, log);
 }
 
+/// @brief リセット
+void Engine::Particle3DStore::Reset()
+{
+	psoParticle_->ResetBlendMode();
+}
+
 /// @brief 読み込む
 /// @param device 
 /// @param commandList 
@@ -62,6 +68,7 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 	for(auto& data : dataTable_)
 		if (name == data->GetName())
 		{
+			data->Reset();
 			return data->GetHandle();
 		}
 
