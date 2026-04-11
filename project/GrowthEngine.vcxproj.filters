@@ -862,6 +862,9 @@
     <Filter Include="Engine\Shader\Random">
       <UniqueIdentifier>{90a77a04-acf6-42fa-a7f7-838593260bb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Parameter\Particle3DParameter">
+      <UniqueIdentifier>{4b7151fb-888d-4cb1-96f9-6da1ac7f6c59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1511,6 +1514,9 @@
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Particle\DX12Particle.cpp">
       <Filter>Engine\Include\RenderContext\DX12Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.cpp">
+      <Filter>Engine\Include\Parameter\Particle3DParameter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2266,6 +2272,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
       <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.h">
+      <Filter>Engine\Include\Parameter\Particle3DParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

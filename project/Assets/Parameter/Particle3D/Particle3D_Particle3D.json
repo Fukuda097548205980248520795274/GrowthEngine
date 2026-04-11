@@ -1,0 +1,29 @@
+{
+    "Particle3D_Particle3D": {
+        "Count": 10,
+        "EndColor": [
+            1.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "EndScale": 0.0,
+        "EndSpeed": 6.0,
+        "Frequency": 0.0,
+        "MaxLifeTime": 1.0,
+        "MinLifeTime": 1.0,
+        "Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "StartColor": [
+            1.0,
+            0.590673565864563,
+            0.0,
+            1.0
+        ],
+        "StartScale": 1.0,
+        "StartSpeed": 6.0
+    }
+}

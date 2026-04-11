@@ -4,12 +4,13 @@
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "GrowthEngine.h"
+#include "Parameter/Particle3DParameter/Particle3DParameter.h"
 
 /// @brief 初期化
 /// @param device 
 /// @param commandList 
 /// @param log 
-void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap,
+void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, Particle3DParameter* parameter,
 	ModelStore* modelStore, TextureStore* textureStore, BasePSOModel* psoDraw, BaseComputePSO* psoInit, Log* log)
 {
 	// nullptrチェック
@@ -19,15 +20,54 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	assert(psoInit);
 	assert(modelStore);
 	assert(textureStore);
+	assert(parameter);
 	assert(heap);
 
 	// 引数を受け取る
 	psoDraw_ = psoDraw;
 	modelStore_ = modelStore;
 	textureStore_ = textureStore;
+	parameter_ = parameter;
 
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
+
+	// パラメータの生成と初期化
+	param_ = std::make_unique<Particle3D::Param>();
+	param_->position = Vector3(0.0f, 0.0f, 0.0f);
+	param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	param_->scale.start = 1.0f;
+	param_->scale.end = 1.0f;
+	param_->lifeTime.min = 1.0f;
+	param_->lifeTime.max = 1.0f;
+	param_->speed.start = 6.0f;
+	param_->speed.end = 6.0f;
+	param_->count = 1;
+	param_->frequency = 0.5f;
+
+	// グループを設定する
+	group_ = "Particle3D_" + name_;
+
+	if (parameter_)
+	{
+		// パラメータを登録する
+		parameter_->SetValue(group_, "Position", &param_->position);
+		parameter_->SetValue(group_, "StartColor", &param_->color.start);
+		parameter_->SetValue(group_, "EndColor", &param_->color.end);
+		parameter_->SetValue(group_, "StartScale", &param_->scale.start);
+		parameter_->SetValue(group_, "EndScale", &param_->scale.end);
+		parameter_->SetValue(group_, "MinLifeTime", &param_->lifeTime.min);
+		parameter_->SetValue(group_, "MaxLifeTime", &param_->lifeTime.max);
+		parameter_->SetValue(group_, "StartSpeed", &param_->speed.start);
+		parameter_->SetValue(group_, "EndSpeed", &param_->speed.end);
+		parameter_->SetValue(group_, "Count", &param_->count);
+		parameter_->SetValue(group_, "Frequency", &param_->frequency);
+
+		// グループを登録及び反映
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+
 
 	// パーティクルリソースを生成する
 	particleResource_ = std::make_unique<RWSTructuredBufferResource<Particle3DDataForGPU>>();
@@ -46,6 +86,24 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterPointResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterPointDataForGPU>>();
 	particleEmitterPointResource_->Initialize(device, log);
 
+
+	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
+	particleEmitterPointResource_->data_->emit = 0;
+
+	particleEmitterPointResource_->data_->translate = param_->position;
+	particleEmitterPointResource_->data_->count = param_->count;
+	particleEmitterPointResource_->data_->frequency = param_->frequency;
+	particleEmitterPointResource_->data_->startColor = param_->color.start;
+	particleEmitterPointResource_->data_->endColor = param_->color.end;
+	particleEmitterPointResource_->data_->startScale = param_->scale.start;
+	particleEmitterPointResource_->data_->endScale = param_->scale.end;
+	particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
+	particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
+	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
+	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+
+
+
 	// パーティクルフレームリソースを生成する
 	particlePerFrameResource_ = std::make_unique<ConstantBufferResource<ParticlePerFrameDataForGPU>>();
 	particlePerFrameResource_->Initialize(device, log);
@@ -59,21 +117,6 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// フリーリストリソースを生成する
 	freeListResource_ = std::make_unique<RWSTructuredBufferResource<uint32_t>>();
 	freeListResource_->Initialize(device, commandList, heap, numInstance_, log);
-
-
-	particleEmitterPointResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
-	particleEmitterPointResource_->data_->count = 1;
-	particleEmitterPointResource_->data_->frequency = 0.5f;
-	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
-	particleEmitterPointResource_->data_->emit = 0;
-	particleEmitterPointResource_->data_->startColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	particleEmitterPointResource_->data_->endColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	particleEmitterPointResource_->data_->startScale = 1.0f;
-	particleEmitterPointResource_->data_->endScale = 1.0f;
-	particleEmitterPointResource_->data_->minLifeTime = 1.0f;
-	particleEmitterPointResource_->data_->maxLifeTime = 1.0f;
-	particleEmitterPointResource_->data_->startSpeed = 6.0f;
-	particleEmitterPointResource_->data_->endSpeed = 6.0f;
 
 
 	// テクスチャを取得する
@@ -106,6 +149,26 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 /// @brief リセット
 void Engine::Particle3DData::Reset()
 {
+	if (parameter_->IsFileFound(group_))
+	{
+		// グループを登録及び反映
+		parameter_->RegisterGroupDataReflection(group_);
+	}
+	else
+	{
+		particleEmitterPointResource_->data_->translate = param_->position;
+		particleEmitterPointResource_->data_->count = param_->count;
+		particleEmitterPointResource_->data_->frequency = param_->frequency;
+		particleEmitterPointResource_->data_->startColor = param_->color.start;
+		particleEmitterPointResource_->data_->endColor = param_->color.end;
+		particleEmitterPointResource_->data_->startScale = param_->scale.start;
+		particleEmitterPointResource_->data_->endScale = param_->scale.end;
+		particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
+		particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
+		particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
+		particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+	}
+
 	// ロードしたこととする
 	isLoad_ = true;
 }
@@ -142,6 +205,20 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	{
 		particleEmitterPointResource_->data_->emit = 0;
 	}
+
+
+	// エミッタのパラメータを更新する
+	particleEmitterPointResource_->data_->translate = param_->position;
+	particleEmitterPointResource_->data_->count = param_->count;
+	particleEmitterPointResource_->data_->frequency = param_->frequency;
+	particleEmitterPointResource_->data_->startColor = param_->color.start;
+	particleEmitterPointResource_->data_->endColor = param_->color.end;
+	particleEmitterPointResource_->data_->startScale = param_->scale.start;
+	particleEmitterPointResource_->data_->endScale = param_->scale.end;
+	particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
+	particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
+	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
+	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
 
 
 	/*------------
@@ -255,4 +332,107 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList,const M
 
 	// バリアを張る
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+}
+
+/// @brief デバッグパラメータ
+void Engine::Particle3DData::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// 読み込んでいないと処理しない
+	if (!isLoad_)return;
+
+	// モデル名
+	if (ImGui::TreeNode(name_.c_str()))
+	{
+		// 位置
+		ImGui::DragFloat3("Position" , &param_->position.x, 0.01f, -100000.0f, 100000.0f);
+
+		// 放出数
+		ImGui::DragInt("Count", &param_->count, 1.0f, 0, static_cast<int32_t>(numInstance_));
+
+		// 放出間隔
+		ImGui::DragFloat("Frequency", &param_->frequency, 0.01f, 0.0f, 100000.0f);
+
+		// 生存期間
+		if (ImGui::TreeNode("LifeTime"))
+		{
+			// 最小
+			ImGui::DragFloat("Min", &param_->lifeTime.min, 0.01f, 0.0f, 100000.0f);
+
+			// 最大
+			ImGui::DragFloat("Max", &param_->lifeTime.max, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// 色
+		if (ImGui::TreeNode("Color"))
+		{
+			// 開始
+			ImGui::ColorEdit4("Start", &param_->color.start.x);
+
+			// 終了
+			ImGui::ColorEdit4("End", &param_->color.end.x);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// 大きさ
+		if (ImGui::TreeNode("Scale"))
+		{
+			// 開始
+			ImGui::DragFloat("Start", &param_->scale.start, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::DragFloat("End", &param_->scale.end, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// 速度
+		if (ImGui::TreeNode("Speed"))
+		{
+			// 開始
+			ImGui::DragFloat("Start", &param_->speed.start, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::DragFloat("End", &param_->speed.end, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		
+
+		ImGui::Text("\n");
+
+		// 保存ボタン
+		if (ImGui::Button("Save"))
+		{
+			parameter_->SaveFile(group_);
+			std::string message = std::format("{} : saved.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// ロードボタン
+		if (ImGui::Button("Load"))
+		{
+			parameter_->RegisterGroupDataReflection(group_);
+			std::string message = std::format("{} : loaded.", group_);
+			MessageBoxA(nullptr, message.c_str(), "RecordSetting", 0);
+		}
+
+		ImGui::Text("\n");
+
+		// 終了
+		ImGui::TreePop();
+	}
+
+#endif
 }

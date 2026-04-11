@@ -211,6 +211,7 @@ void Engine::RenderContext::PreDraw()
 	render_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
+	particle_->DebugParameter();
 
 	lightStore_->DebugGuizmo(camera3DStore_->GetCamera3D().GetViewMatrix(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 	lightStore_->DebugParameter();

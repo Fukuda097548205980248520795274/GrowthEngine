@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include "Handle/Handle.h"
+#include "Parameter/Particle3DParameter/Particle3DParameter.h"
 
 #include "Particle3DData/Particle3DData.h"
 
@@ -61,6 +62,15 @@ namespace Engine
 
 
 	public:
+
+		/// @brief デバッグパラメータ
+		void DebugParameter();
+
+
+	private:
+
+		/// @brief パラメータ
+		std::unique_ptr<Particle3DParameter> parameter_ = nullptr;
 
 		/// @brief データテーブル
 		std::vector<std::unique_ptr<Particle3DData>> dataTable_{};

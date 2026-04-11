@@ -400,6 +400,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.cpp" />
     <ClCompile Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1037,6 +1038,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.h" />
     <ClInclude Include="Engine\Parameter\LightParameter\LightParameter.h" />
     <ClInclude Include="Engine\Parameter\Parameter.h" />
+    <ClInclude Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.h" />
     <ClInclude Include="Engine\Parameter\PostEffectParameter\PostEffectParameter.h" />
     <ClInclude Include="Engine\Parameter\Prefab3DParameter\Prefab3DParameter.h" />
     <ClInclude Include="Engine\Parameter\Prefab2DParameter\Prefab2DParameter.h" />

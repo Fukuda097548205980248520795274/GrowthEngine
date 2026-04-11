@@ -1,5 +1,6 @@
 #include "DX12Particle.h"
 #include <cassert>
+#include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 /// @brief 初期化
 /// @param device 
@@ -33,4 +34,31 @@ void Engine::DX12Particle::Reset()
 void Engine::DX12Particle::Update(ID3D12GraphicsCommandList* commandList)
 {
 	particle3DStore_->Update(commandList);
+}
+
+/// @brief デバッグ用パラメータ
+void Engine::DX12Particle::DebugParameter()
+{
+#ifdef _DEVELOPMENT
+
+	// メニューバーを使用する
+	if (!ImGui::Begin("Particle"))
+	{
+		ImGui::End();
+		return;
+	}
+
+	ImGui::SeparatorText("3D");
+
+	particle3DStore_->DebugParameter();
+
+	ImGui::Text("\n\n\n\n\n");
+	ImGui::SeparatorText("2D");
+
+	// render2DStore_->DebugParameter();
+
+	// 終了
+	ImGui::End();
+
+#endif
 }

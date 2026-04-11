@@ -43,6 +43,12 @@ namespace Engine
 		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection) { particle3DStore_->Draw(commandList, name, viewProjection); }
 
 
+	public:
+
+		/// @brief デバッグ用パラメータ
+		void DebugParameter();
+
+
 	private:
 
 		// 3Dパーティクルストア

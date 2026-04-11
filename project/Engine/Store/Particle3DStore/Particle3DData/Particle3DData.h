@@ -1,5 +1,6 @@
 #pragma once
 #include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
+#include "Data/ParticleData/ParticleData.h"
 #include "Handle/Handle.h"
 #include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
@@ -13,6 +14,7 @@ namespace Engine
 	class BaseComputePSO;
 	class ModelStore;
 	class TextureStore;
+	class Particle3DParameter;
 
 	class Particle3DData
 	{
@@ -34,7 +36,7 @@ namespace Engine
 		/// @param psoDraw 
 		/// @param psoInit 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap,
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, Particle3DParameter* parameter,
 			ModelStore* modelStore, TextureStore* textureStore, BasePSOModel* psoDraw, BaseComputePSO* psoInit, Log* log);
 
 		/// @brief リセット
@@ -59,6 +61,12 @@ namespace Engine
 		/// @brief ハンドルを取得する
 		/// @return 
 		ModelHandle GetHandle()const { return hModel_; }
+
+
+	public:
+
+		/// @brief デバッグパラメータ
+		void DebugParameter();
 
 
 	private:
@@ -90,6 +98,9 @@ namespace Engine
 		/// @brief 名前
 		std::string name_{};
 
+		/// @brief グループ
+		std::string group_{};
+
 		/// @brief モデルハンドル
 		ModelHandle hModel_ = 0;
 
@@ -103,10 +114,17 @@ namespace Engine
 		bool isLoad_ = false;
 
 
+		/// @brief パラメータ
+		std::unique_ptr<Particle3D::Param> param_ = nullptr;
+
+
 	private:
 
 		// エンジン
 		GrowthEngine* engine_ = nullptr;
+
+		// パラメータ
+		Particle3DParameter* parameter_ = nullptr;
 
 		// モデルストア
 		ModelStore* modelStore_ = nullptr;
