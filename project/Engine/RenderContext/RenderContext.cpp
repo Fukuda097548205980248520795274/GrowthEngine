@@ -107,6 +107,11 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	prefab_->Initialize(core_->GetDevice(),commandList_, shaderCompiler_.get(), heap_.get(),
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), camera3DStore_.get(), log);
 
+	// DX12Particleの生成と初期化
+	particle_ = std::make_unique<DX12Particle>();
+	particle_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+		modelStore_.get(), textureStore_.get(), log);
+
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(winApp_->GetClientWidth());
 	viewport_.Height = static_cast<float>(winApp_->GetClientHeight());

@@ -2,8 +2,5 @@
 
 namespace Engine
 {
-	class ParticleStore
-	{
 
-	};
 }

@@ -440,6 +440,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -456,6 +459,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -572,6 +576,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Particle\DX12Particle.cpp" />
     <ClCompile Include="Engine\RenderContext\DX12Render\DX12Render.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -766,10 +771,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.cpp" />
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.cpp" />
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.cpp" />
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleStore.cpp" />
+    <ClCompile Include="Engine\Store\Particle3DStore\Particle3DData\Particle3DData.cpp" />
+    <ClCompile Include="Engine\Store\Particle3DStore\Particle3DStore.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -987,6 +990,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
+    <ClInclude Include="Engine\DataForGPU\ParticleDataForGPU\ParticleDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PostEffectDataForGPU\PostEffectDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
@@ -997,6 +1001,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Data\DebugData\DebugData.h" />
     <ClInclude Include="Engine\Data\InputData\InputData.h" />
     <ClInclude Include="Engine\Data\LightData\LightData.h" />
+    <ClInclude Include="Engine\Data\ParticleData\ParticleData.h" />
     <ClInclude Include="Engine\Data\PostEffectData\PostEffectData.h" />
     <ClInclude Include="Engine\Data\Prefab2DData\Prefab2DData.h" />
     <ClInclude Include="Engine\Data\Prefab3DData\Prefab3DData.h" />
@@ -1042,10 +1047,14 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurUpsample\ComputePSODualBlurUpsample.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
     <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
@@ -1075,6 +1084,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\RenderContext\DX12Heap\DX12Heap.h" />
     <ClInclude Include="Engine\RenderContext\DX12Line\DX12Line.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Particle\DX12Particle.h" />
     <ClInclude Include="Engine\RenderContext\DX12Render\DX12Render.h" />
     <ClInclude Include="Engine\RenderContext\DX12Prefab\DX12Prefab.h" />
     <ClInclude Include="Engine\RenderContext\ImGuiRender\ImGuiRender.h" />
@@ -1129,10 +1139,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\LightStore\LightStore.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelResource\ModelResource.h" />
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.h" />
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.h" />
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h" />
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleStore.h" />
+    <ClInclude Include="Engine\Store\Particle3DStore\Particle3DData\Particle3DData.h" />
+    <ClInclude Include="Engine\Store\Particle3DStore\Particle3DStore.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.h" />
@@ -1273,7 +1281,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterAABB.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterPoint.CS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>

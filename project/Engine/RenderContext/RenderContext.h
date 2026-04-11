@@ -10,6 +10,7 @@
 #include "DX12Offscreen/DX12Offscreen.h"
 #include "DX12Render/DX12Render.h"
 #include "DX12Prefab/DX12Prefab.h"
+#include "DX12Particle/DX12Particle.h"
 #include "ImGuiRender/ImGuiRender.h"
 #include <chrono>
 #include <thread>
@@ -502,6 +503,9 @@ namespace Engine
 
 		// DX12Prefab
 		std::unique_ptr<DX12Prefab> prefab_ = nullptr;
+
+		/// @brief DX12Particle
+		std::unique_ptr<DX12Particle> particle_ = nullptr;
 
 
 	private:

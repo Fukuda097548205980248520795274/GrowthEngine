@@ -742,18 +742,6 @@
     <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource">
       <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore">
-      <UniqueIdentifier>{fd8e0911-cb46-4b58-b235-1e7d8d6e9f16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData">
-      <UniqueIdentifier>{528526b9-934a-4d5a-bb07-b144bb5e2f8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData">
-      <UniqueIdentifier>{b16ced47-312f-44a0-820f-2768a11f43b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData">
-      <UniqueIdentifier>{bb757e30-7e87-42c8-a065-bc534d025aff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Math\Vector\VectorInt2">
       <UniqueIdentifier>{e3770771-401f-4778-8eb7-96988475fa60}</UniqueIdentifier>
     </Filter>
@@ -840,6 +828,33 @@
     </Filter>
     <Filter Include="Engine\Shader\Particle3D\Init">
       <UniqueIdentifier>{f66b8cb5-3100-4359-b0e3-54c4a2f2d755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Particle3DStore">
+      <UniqueIdentifier>{6325117d-4c48-4d2e-aefd-7d8c38d9cd48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Particle3DStore\Particle3DData">
+      <UniqueIdentifier>{ef6a910c-e1e8-4456-8097-727012f101ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\ParticleDataForGPU">
+      <UniqueIdentifier>{72a8fe17-2ce0-417b-aaa9-582984b5dd1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Data\ParticleData">
+      <UniqueIdentifier>{80996e73-a7f6-416b-9f4b-d7b118d32ebf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit">
+      <UniqueIdentifier>{63c9b600-5fa6-4cdd-b643-e89514060d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate">
+      <UniqueIdentifier>{ae372ce6-9af1-4a40-a78b-b5313fe56d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint">
+      <UniqueIdentifier>{d798dd7d-81cf-4680-a0f2-c3975831ed98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOParticle">
+      <UniqueIdentifier>{03f7806f-65a8-429d-97fd-84b4174ca8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Particle">
+      <UniqueIdentifier>{3f624183-486d-4f31-82a3-c187e8c7489b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1263,18 +1278,6 @@
     <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
       <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleStore.cpp">
-      <Filter>Engine\Include\Store\ParticleStore</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.cpp">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.cpp">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.cpp">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
       <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
     </ClCompile>
@@ -1481,6 +1484,27 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurDownsample</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Particle3DStore\Particle3DData\Particle3DData.cpp">
+      <Filter>Engine\Include\Store\Particle3DStore\Particle3DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Particle3DStore\Particle3DStore.cpp">
+      <Filter>Engine\Include\Store\Particle3DStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Particle\DX12Particle.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2018,18 +2042,6 @@
     <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h">
       <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleStore.h">
-      <Filter>Engine\Include\Store\ParticleStore</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BaseParticleData.h">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\BillboardParticleData\BillboardParticleData.h">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData\BillboardParticleData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\ParticleStore\ParticleData\ModelParticleData\ModelParticleData.h">
-      <Filter>Engine\Include\Store\ParticleStore\ParticleData\ModelParticleData</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h">
       <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
     </ClInclude>
@@ -2219,6 +2231,33 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSODualBlurDownsample</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Store\Particle3DStore\Particle3DData\Particle3DData.h">
+      <Filter>Engine\Include\Store\Particle3DStore\Particle3DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Particle3DStore\Particle3DStore.h">
+      <Filter>Engine\Include\Store\Particle3DStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\ParticleDataForGPU\ParticleDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\ParticleDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Data\ParticleData\ParticleData.h">
+      <Filter>Engine\Include\Data\ParticleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Particle\DX12Particle.h">
+      <Filter>Engine\Include\RenderContext\DX12Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2343,7 +2382,7 @@
     <FxCompile Include="Assets\Shader\PostEffect\DualBlurDownsample.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterAABB.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterPoint.CS.hlsl">
       <Filter>Engine\Shader\Particle3D\Emitter</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle3D\Init\Particle3DInit.CS.hlsl">
