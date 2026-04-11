@@ -106,7 +106,7 @@ public:
 	bool GameLoop() { return winApp_->ProcessMessage(); }
 
 	/// @brief シーン前処理
-	void PerScene() const;
+	void PerScene();
 
 	/// @brief 新フレーム処理
 	void NewFrame();
@@ -895,8 +895,13 @@ private:
 	using Clock = std::chrono::high_resolution_clock;
 	using TimePoint = std::chrono::time_point<Clock>;
 
+	// 前のフレームの時間
 	TimePoint previousTime_;
+
 	float deltaTime_ = 0.0f;
+
+	// 最初のデルタタイムは0にするためのフラグ
+	bool isDeltaTimeFirst_ = true;
 
 
 private:

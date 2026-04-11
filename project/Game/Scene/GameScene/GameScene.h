@@ -21,10 +21,5 @@ public:
 	/// @brief 描画処理
 	void Draw() override;
 
-
-private:
-
-	float focusVel_ = 0.5f;
-
 };
 

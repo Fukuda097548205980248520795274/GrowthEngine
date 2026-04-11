@@ -46,11 +46,34 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterPointResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterPointDataForGPU>>();
 	particleEmitterPointResource_->Initialize(device, log);
 
+	// パーティクルフレームリソースを生成する
+	particlePerFrameResource_ = std::make_unique<ConstantBufferResource<ParticlePerFrameDataForGPU>>();
+	particlePerFrameResource_->Initialize(device, log);
+	particlePerFrameResource_->data_->deltaTime = 0.0f;
+	particlePerFrameResource_->data_->time = 0.0f;
+
+	// フリーリストインデックスリソースを生成する
+	freeListIndexResource_ = std::make_unique<RWSTructuredBufferResource<int32_t>>();
+	freeListIndexResource_->Initialize(device, commandList, heap, 1, log);
+
+	// フリーリストリソースを生成する
+	freeListResource_ = std::make_unique<RWSTructuredBufferResource<uint32_t>>();
+	freeListResource_->Initialize(device, commandList, heap, numInstance_, log);
+
+
 	particleEmitterPointResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
-	particleEmitterPointResource_->data_->count = 10;
-	particleEmitterPointResource_->data_->frequency = 0.5f;
+	particleEmitterPointResource_->data_->count = 100;
+	particleEmitterPointResource_->data_->frequency = 1.0f;
 	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
 	particleEmitterPointResource_->data_->emit = 0;
+	particleEmitterPointResource_->data_->startColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	particleEmitterPointResource_->data_->endColor = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
+	particleEmitterPointResource_->data_->startScale = 1.0f;
+	particleEmitterPointResource_->data_->endScale = 1.0f;
+	particleEmitterPointResource_->data_->minLifeTime = 1.0f;
+	particleEmitterPointResource_->data_->maxLifeTime = 1.0f;
+	particleEmitterPointResource_->data_->startSpeed = 8.0f;
+	particleEmitterPointResource_->data_->endSpeed = 0.0f;
 
 
 	// テクスチャを取得する
@@ -70,6 +93,12 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// パーティクル数リソースを登録する
 	particleNumResource_->RegisterCompute(commandList, 1);
 
+	// フリーリストインデックスリソースを登録する
+	freeListIndexResource_->RegisterComputeUAV(commandList, 2);
+
+	// フリーリストリソースを登録する
+	freeListResource_->RegisterComputeUAV(commandList, 3);
+
 	// ディスパッチする
 	commandList->Dispatch((numInstance_ + 255) / 256, 1, 1);
 }
@@ -83,11 +112,15 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// nullptrチェック
 	assert(commandList);
 	assert(psoEmitter);
-	//assert(psoUpdate);
+	assert(psoUpdate);
 
 
 	// タイマーを進める
 	particleEmitterPointResource_->data_->frequencyTimer += engine_->GetDeltaTime();
+	particlePerFrameResource_->data_->time += engine_->GetDeltaTime();
+
+	// デルタタイムを取得する
+	particlePerFrameResource_->data_->deltaTime = engine_->GetDeltaTime();
 
 	// タイマーが時間を超えたら放出する
 	if(particleEmitterPointResource_->data_->frequencyTimer >= particleEmitterPointResource_->data_->frequency)
@@ -114,8 +147,55 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// エミッターリソースを登録する
 	particleEmitterPointResource_->RegisterCompute(commandList, 1);
 
+	// パーティクル数リソースを登録する
+	particleNumResource_->RegisterCompute(commandList, 2);
+
+	// パーティクルフレームリソースを登録する
+	particlePerFrameResource_->RegisterCompute(commandList, 3);
+
+	// フリーリストインデックスリソースを登録する
+	freeListIndexResource_->RegisterComputeUAV(commandList, 4);
+
+	// フリーリストリソースを登録する
+	freeListResource_->RegisterComputeUAV(commandList, 5);
+
 	// ディスパッチする
 	commandList->Dispatch(1, 1, 1);
+
+
+	// UAVバリアを張る
+	UAVBarrier(particleResource_->GetResource(), commandList);
+	UAVBarrier(freeListIndexResource_->GetResource(), commandList);
+	UAVBarrier(freeListResource_->GetResource(), commandList);
+
+
+	/*-------------
+	    更新処理
+	-------------*/
+
+	// PSOの設定
+	psoUpdate->Register(commandList);
+
+	// パーティクルリソースを登録する
+	particleResource_->RegisterComputeUAV(commandList, 0);
+
+	// パーティクル数リソースを登録する
+	particleNumResource_->RegisterCompute(commandList, 1);
+
+	// パーティクルフレームリソースを登録する
+	particlePerFrameResource_->RegisterCompute(commandList, 2);
+
+	// フリーリストインデックスリソースを登録する
+	freeListIndexResource_->RegisterComputeUAV(commandList, 3);
+
+	// フリーリストリソースを登録する
+	freeListResource_->RegisterComputeUAV(commandList, 4);
+
+	// エミッターリソースを登録する
+	particleEmitterPointResource_->RegisterCompute(commandList, 5);
+
+	// ディスパッチする
+	commandList->Dispatch((numInstance_ + 255) / 256, 1, 1);
 }
 
 /// @brief 描画処理

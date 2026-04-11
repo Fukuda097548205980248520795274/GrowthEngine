@@ -859,6 +859,9 @@
     <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
       <UniqueIdentifier>{15f23ad6-45a5-42f4-b2c6-3dbb13753c83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Random">
+      <UniqueIdentifier>{90a77a04-acf6-42fa-a7f7-838593260bb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2289,6 +2292,9 @@
     </None>
     <None Include="Assets\Shader\Particle3D\Draw\Particle3D.hlsli">
       <Filter>Engine\Shader\Particle3D\Draw</Filter>
+    </None>
+    <None Include="Assets\Shader\Random\Random.hlsli">
+      <Filter>Engine\Shader\Random</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,25 @@ void Engine::TransitionBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES b
 	commandList->ResourceBarrier(1, &barrier);
 }
 
+/// @brief UAVバリアを張る
+/// @param resource 
+/// @param commandList 
+void Engine::UAVBarrier(ID3D12Resource* resource, ID3D12GraphicsCommandList* commandList)
+{
+	// nullptrチェック
+	assert(resource);
+	assert(commandList);
+
+	// バリアの設定
+	D3D12_RESOURCE_BARRIER barrier;
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.UAV.pResource = resource;
+
+	// バリアを張る
+	commandList->ResourceBarrier(1, &barrier);
+}
+
 /// @brief バッファリソースを生成する
 /// @param device 
 /// @param sizeInBytes 

@@ -27,7 +27,7 @@ public:
 private:
 
 	/// @brief エンジン
-	const GrowthEngine* engine_ = nullptr;
+	GrowthEngine* engine_ = nullptr;
 
 private:
 

@@ -12,10 +12,6 @@ void GameScene::Initialize()
 
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
-
-	// ラジアルブラーを読み込む
-	engine_->LoadPostEffect("DOF", Engine::PostEffect::Type::DOF);
-	engine_->LoadTexture("./Assets/Textures/noise0.png");
 }
 
 /// @brief 更新処理
@@ -32,7 +28,4 @@ void GameScene::Draw()
 
 	// パーティクルを描画する
 	engine_->DrawParticle3D("Particle3D");
-
-	// ラジアルブラー
-	engine_->DrawPostEffect("DOF");
 }

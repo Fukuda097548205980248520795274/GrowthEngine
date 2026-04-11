@@ -15,6 +15,7 @@
 
 #include "PSO/ComputePSO/ComputePSOParticle3DInit/ComputePSOParticle3DInit.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DEmitterPoint/ComputePSOParticle3DEmitterPoint.h"
+#include "PSO/ComputePSO/ComputePSOParticle3DUpdate/ComputePSOParticle3DUpdate.h"
 
 namespace Engine
 {
@@ -84,6 +85,9 @@ namespace Engine
 
 		/// @brief CSパーティクルエミッターポイントPSO
 		std::unique_ptr<ComputePSOParticle3DEmitterPoint> computePsoParticle3DEmitterPoint_ = nullptr;
+
+		/// @brief CSパーティクル更新PSO
+		std::unique_ptr<ComputePSOParticle3DUpdate> computePsoParticle3DUpdate_ = nullptr;
 
 
 	private:

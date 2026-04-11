@@ -69,6 +69,15 @@ namespace Engine
 		/// @brief エミッターリソース
 		std::unique_ptr<ConstantBufferResource<Particle3DEmitterPointDataForGPU>> particleEmitterPointResource_ = nullptr;
 
+		/// @brief パーティクルフレームリソース
+		std::unique_ptr<ConstantBufferResource<ParticlePerFrameDataForGPU>> particlePerFrameResource_ = nullptr;
+
+		/// @brief フリーリストインデックスリソース
+		std::unique_ptr<RWSTructuredBufferResource<int32_t>> freeListIndexResource_ = nullptr;
+
+		/// @brief フリーリストリソース
+		std::unique_ptr<RWSTructuredBufferResource<uint32_t>> freeListResource_ = nullptr;
+
 
 	private:
 

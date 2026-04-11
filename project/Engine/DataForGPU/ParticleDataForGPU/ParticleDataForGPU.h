@@ -65,5 +65,41 @@ namespace Engine
 		uint32_t emit;
 
 		float padding[1]; // パディング
+
+		/// @brief 初期の色
+		Vector4 startColor;
+
+		/// @brief 最後の色
+		Vector4 endColor;
+
+		// 初期の大きさ
+		float startScale;
+
+		// 最後の大きさ
+		float endScale;
+
+		// 最小の生存時間
+		float minLifeTime;
+
+		// 最大の生存時間
+		float maxLifeTime;
+
+		// 初期の速度
+		float startSpeed;
+
+		// 最後の速度
+		float endSpeed;
+	};
+
+	/// @brief GPUに送るパーティクルのフレームごとのデータ
+	struct ParticlePerFrameDataForGPU
+	{
+		// デルタタイム
+		float deltaTime;
+
+		// 経過時間
+		float time;
+
+		float padding[2]; // パディング
 	};
 }

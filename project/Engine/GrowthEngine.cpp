@@ -127,10 +127,13 @@ GrowthEngine::~GrowthEngine()
 }
 
 /// @brief シーン前処理
-void GrowthEngine::PerScene() const
+void GrowthEngine::PerScene()
 {
 	// シーン前処理
 	renderContext_->PerScene();
+
+	// デルタタイムの初期化
+	isDeltaTimeFirst_ = true;
 }
 
 /// @brief 新フレーム処理
@@ -140,6 +143,11 @@ void GrowthEngine::NewFrame()
 	std::chrono::duration<float> deltaTime = currentTime - previousTime_;
 	previousTime_ = currentTime;
 	deltaTime_ = deltaTime.count();
+
+	// 最初のデルタタイムは0にする
+	if(isDeltaTimeFirst_)
+		deltaTime_ = 0.0f;
+		
 
 	// ウィンドウの更新
 	winApp_->Update();
@@ -199,6 +207,9 @@ void GrowthEngine::PostDraw()
 
 	// 全ての入力情報をコピーする
 	input_->CopyInputInfo();
+
+	// デルタタイム一週目を終わらせる
+	isDeltaTimeFirst_ = false;
 }
 
 /// @brief マウスの位置を取得する
