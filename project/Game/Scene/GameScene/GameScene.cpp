@@ -8,6 +8,8 @@ void GameScene::Initialize()
 	// 地形のモデルを読み込む
 	engine_->LoadPrimitiveStaticModel(engine_->LoadModel("./Assets/Models/terrain", "terrain.obj"), "Terrain");
 
+	engine_->LoadParticle3D("Particle3D", 1000, engine_->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"));
+
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 

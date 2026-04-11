@@ -65,3 +65,10 @@ using TextHandle = uint32_t;
 
 /// @brief 文字ハンドル
 using CharHandle = uint32_t;
+
+
+/// @brief 3Dパーティクルハンドル
+using Particle3DHandle = uint32_t;
+
+/// @brief 2Dパーティクルハンドル
+using Particle2DHandle = uint32_t;

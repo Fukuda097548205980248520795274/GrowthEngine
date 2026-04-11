@@ -856,6 +856,9 @@
     <Filter Include="Engine\Include\RenderContext\DX12Particle">
       <UniqueIdentifier>{3f624183-486d-4f31-82a3-c187e8c7489b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\RWStructuredBufferResource">
+      <UniqueIdentifier>{15f23ad6-45a5-42f4-b2c6-3dbb13753c83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2257,6 +2260,9 @@
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Particle\DX12Particle.h">
       <Filter>Engine\Include\RenderContext\DX12Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h">
+      <Filter>Engine\Include\Resource\RWStructuredBufferResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

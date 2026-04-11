@@ -1093,6 +1093,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Resource\DepthResource\DepthResource.h" />
     <ClInclude Include="Engine\Resource\IndexBufferResource\IndexBufferResource.h" />
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h" />
+    <ClInclude Include="Engine\Resource\RWStructuredBufferResource\RWStructuredBufferResource.h" />
     <ClInclude Include="Engine\Resource\RWTexture2DBufferResource\RWTexture2DBufferResource.h" />
     <ClInclude Include="Engine\Resource\RWStructuredVertexBufferResource\RWStructuredVertexBufferResource.h" />
     <ClInclude Include="Engine\Resource\ShadowMapTextureResource\ShadowMapTextureResource.h" />

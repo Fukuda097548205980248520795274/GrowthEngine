@@ -16,6 +16,28 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap, ModelStore* modelStore, TextureStore* textureStore, Log* log);
 
+		/// @brief 3Dパーティクルを読み込む
+		/// @param device 
+		/// @param commandList 
+		/// @param hModel 
+		/// @param name 
+		/// @param numInstance 
+		/// @param log 
+		/// @return 
+		Particle3DHandle LoadParticle3D(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, const std::string& name, uint32_t numInstance, Log* log)
+		{
+			return particle3DStore_->Load(device, commandList, hModel, name, numInstance, log);
+		}
+
+		/// @brief 更新処理
+		/// @param commandList 
+		void Update(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief 描画処理
+		/// @param commandList 
+		/// @param viewProjection 
+		void Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
+
 
 	private:
 

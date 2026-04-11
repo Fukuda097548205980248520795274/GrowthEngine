@@ -430,6 +430,19 @@ namespace Engine
 
 
 
+		/// @brief 3Dパーティクルを読み込む
+		/// @param name 
+		/// @param numInstance 
+		/// @param hModel 
+		/// @param log 
+		/// @return 
+		Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance, ModelHandle hModel, Log* log)
+		{
+			return particle_->LoadParticle3D(core_->GetDevice(), commandList_, hModel, name, numInstance, log);
+		}
+
+
+
 #ifdef _DEVELOPMENT
 
 		/// @brief デバッグ用の線を描画する

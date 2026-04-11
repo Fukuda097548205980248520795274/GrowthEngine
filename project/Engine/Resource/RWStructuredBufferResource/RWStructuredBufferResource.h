@@ -1,0 +1,182 @@
+#pragma once
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <wrl.h>
+
+#include "Log/Log.h"
+#include "Func/ResourceFunc/ResourceFunc.h"
+#include "RenderContext/DX12Heap/DX12Heap.h"
+#include <cassert>
+#include <format>
+
+namespace Engine
+{
+	template<typename T>
+	class RWSTructuredBufferResource
+	{
+	public:
+
+		/// @brief 初期化
+		/// @param device 
+		/// @param heap 
+		/// @param num 
+		/// @param log 
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, UINT num, Log* log);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterComputeUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief コマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterGraphicsSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief バリアを張る
+		/// @param commandList 
+		/// @param before 
+		/// @param after 
+		void Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+
+		/// @brief リソースを取得する
+		/// @return 
+		ID3D12Resource* GetResource() { return resource_.Get(); }
+
+
+	private:
+
+		/// @brief リソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource_ = nullptr;
+
+		/// @brief UAVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> uavHandle_;
+
+		/// @brief SRVハンドル
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle_;
+	};
+
+
+}
+
+/// @brief 初期化
+/// @param device 
+/// @param heap 
+/// @param num 
+/// @param log 
+template <typename T>
+void Engine::RWSTructuredBufferResource<T>::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, UINT num, Log* log)
+{
+	// nullptrチェック
+	assert(device);
+	assert(heap);
+
+	// リソース作成
+	resource_ = CreateUAVResource(device, sizeof(T) * num, log, commandList);
+
+
+	// UAVの設定
+	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
+	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+	uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+	uavDesc.Buffer.FirstElement = 0;
+	uavDesc.Buffer.NumElements = num;
+	uavDesc.Buffer.CounterOffsetInBytes = 0;
+	uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
+	uavDesc.Buffer.StructureByteStride = sizeof(T);
+
+	// ハンドルを取得する
+	uavHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	uavHandle_.second = heap->GetSrvGPUDescriptorHandle();
+
+	// ビューの生成
+	device->CreateUnorderedAccessView(resource_.Get(), nullptr, &uavDesc, uavHandle_.first);
+
+	// ログ出力
+	if (log)
+	{
+		log->Logging("UAV Format : UNKNOWN");
+		log->Logging("UAV ViewDimension : DIMENSION_BUFFER");
+		log->Logging("UAV Buffer Flags : NONE");
+		log->Logging(std::format("UAV Buffer CounterOffsetInBytes : {}", uavDesc.Buffer.CounterOffsetInBytes));
+		log->Logging(std::format("UAV Buffer FirstElement : {}", uavDesc.Buffer.FirstElement));
+		log->Logging(std::format("UAV Buffer NumElements : {}", uavDesc.Buffer.NumElements));
+		log->Logging(std::format("UAV Buffer StructureByteStride : {} byte", uavDesc.Buffer.StructureByteStride));
+		log->Logging("Creat UnorderedAccessView \n");
+	}
+
+
+	// SRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Buffer.FirstElement = 0;
+	srvDesc.Buffer.NumElements = num;
+	srvDesc.Buffer.StructureByteStride = sizeof(T);
+	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+
+	// ハンドルを取得する
+	srvHandle_.first = heap->GetSrvCPUDescriptorHandle();
+	srvHandle_.second = heap->GetSrvGPUDescriptorHandle();
+
+	// ビューの生成
+	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
+
+	// ログ出力
+	if (log)
+	{
+		log->Logging("SRV Format : UNKNOWN");
+		log->Logging("SRV ViewDimension : DIMENSION_BUFFER");
+		log->Logging("SRV Shader4ComponentMapping : DEFAULT_SHADER_4_COMPONENT_MAPPING");
+		log->Logging("SRV Buffer Flags : NONE");
+		log->Logging(std::format("SRV Buffer FirstElement : {}", srvDesc.Buffer.FirstElement));
+		log->Logging(std::format("SRV Buffer NumElements : {}", srvDesc.Buffer.NumElements));
+		log->Logging(std::format("SRV Buffer StructureByteStride : {} byte", srvDesc.Buffer.StructureByteStride));
+		log->Logging("Creat ShaderResourceView \n");
+	}
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+template <typename T>
+void Engine::RWSTructuredBufferResource<T>::RegisterComputeUAV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, uavHandle_.second);
+}
+
+/// @brief コマンドリストに登録する
+/// @tparam T 
+/// @param commandList 
+/// @param rootParameterIndex 
+template<typename T>
+void Engine::RWSTructuredBufferResource<T>::RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
+
+/// @brief コマンドリストに登録する
+/// @tparam T 
+/// @param commandList 
+/// @param rootParameterIndex 
+template<typename T>
+void Engine::RWSTructuredBufferResource<T>::RegisterGraphicsSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
+
+/// @brief バリアを張る
+/// @param commandList 
+/// @param before 
+/// @param after
+template <typename T>
+void Engine::RWSTructuredBufferResource<T>::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+	TransitionBarrier(resource_.Get(), before, after, commandList);
+}

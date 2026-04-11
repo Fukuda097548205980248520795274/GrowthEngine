@@ -731,6 +731,19 @@ public:
 
 
 
+	/// @brief 3Dパーティクルを読み込む
+	/// @param name 
+	/// @param numInstance 
+	/// @param hModel 
+	/// @return 
+	Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance, ModelHandle hModel) const
+	{
+		return renderContext_->LoadParticle3D(name, numInstance, hModel, log_.get());
+	}
+
+
+
+
 	/// @brief デバッグ用の線を描画する
 	/// @param start 
 	/// @param end 
