@@ -45,4 +45,25 @@ namespace Engine
 		// ビルボード行列
 		Matrix4x4 billboard;
 	};
+
+	/// @brief GPUに送るパーティクルエミッタのデータ
+	struct Particle3DEmitterPointDataForGPU
+	{
+		// 位置
+		Vector3 translate;
+
+		// 放出数
+		uint32_t count;
+
+		// 放出間隔の時間
+		float frequency;
+
+		// 放出間隔のタイマー
+		float frequencyTimer;
+
+		// 放出フラグ
+		uint32_t emit;
+
+		float padding[1]; // パディング
+	};
 }

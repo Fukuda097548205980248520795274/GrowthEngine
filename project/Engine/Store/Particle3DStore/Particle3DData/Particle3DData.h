@@ -5,6 +5,8 @@
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class BasePSOModel;
@@ -64,6 +66,9 @@ namespace Engine
 		/// @brief パーティクルビューリソース
 		std::unique_ptr<ConstantBufferResource<ParticlePreViewDataForGPU>> particleViewResource_ = nullptr;
 
+		/// @brief エミッターリソース
+		std::unique_ptr<ConstantBufferResource<Particle3DEmitterPointDataForGPU>> particleEmitterPointResource_ = nullptr;
+
 
 	private:
 
@@ -81,6 +86,9 @@ namespace Engine
 
 
 	private:
+
+		// エンジン
+		GrowthEngine* engine_ = nullptr;
 
 		// モデルストア
 		ModelStore* modelStore_ = nullptr;

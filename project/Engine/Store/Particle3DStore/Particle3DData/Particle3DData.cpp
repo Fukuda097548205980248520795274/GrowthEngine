@@ -3,6 +3,7 @@
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Store/ModelStore/ModelStore.h"
 #include "Store/TextureStore/TextureStore.h"
+#include "GrowthEngine.h"
 
 /// @brief 初期化
 /// @param device 
@@ -25,6 +26,9 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	modelStore_ = modelStore;
 	textureStore_ = textureStore;
 
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
+
 	// パーティクルリソースを生成する
 	particleResource_ = std::make_unique<RWSTructuredBufferResource<Particle3DDataForGPU>>();
 	particleResource_->Initialize(device, commandList, heap, numInstance_, log);
@@ -37,6 +41,17 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// パーティクルビューリソースを生成する
 	particleViewResource_ = std::make_unique<ConstantBufferResource<ParticlePreViewDataForGPU>>();
 	particleViewResource_->Initialize(device, log);
+
+	// エミッターリソースを生成する
+	particleEmitterPointResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterPointDataForGPU>>();
+	particleEmitterPointResource_->Initialize(device, log);
+
+	particleEmitterPointResource_->data_->translate = Vector3(0.0f, 0.0f, 0.0f);
+	particleEmitterPointResource_->data_->count = 10;
+	particleEmitterPointResource_->data_->frequency = 0.5f;
+	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
+	particleEmitterPointResource_->data_->emit = 0;
+
 
 	// テクスチャを取得する
 	hTexture_ = modelStore_->GetModelData(hModel_).meshes[0].material.handle;
@@ -68,7 +83,39 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// nullptrチェック
 	assert(commandList);
 	assert(psoEmitter);
-	assert(psoUpdate);
+	//assert(psoUpdate);
+
+
+	// タイマーを進める
+	particleEmitterPointResource_->data_->frequencyTimer += engine_->GetDeltaTime();
+
+	// タイマーが時間を超えたら放出する
+	if(particleEmitterPointResource_->data_->frequencyTimer >= particleEmitterPointResource_->data_->frequency)
+	{
+		particleEmitterPointResource_->data_->emit = 1;
+		particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
+	}
+	else
+	{
+		particleEmitterPointResource_->data_->emit = 0;
+	}
+
+
+	/*------------
+	   エミッター
+	------------*/
+
+	// PSOの設定
+	psoEmitter->Register(commandList);
+
+	// パーティクルリソースを登録する
+	particleResource_->RegisterComputeUAV(commandList, 0);
+
+	// エミッターリソースを登録する
+	particleEmitterPointResource_->RegisterCompute(commandList, 1);
+
+	// ディスパッチする
+	commandList->Dispatch(1, 1, 1);
 }
 
 /// @brief 描画処理

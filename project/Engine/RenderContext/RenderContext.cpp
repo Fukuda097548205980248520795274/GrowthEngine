@@ -221,6 +221,9 @@ void Engine::RenderContext::PreDraw()
 	// モデル全体の更新
 	render_->Update(commandList_);
 
+	// パーティクルの更新
+	particle_->Update(commandList_);
+
 	// カメラストアの更新
 	camera3DStore_->Update();
 	camera2DStore_->Update();
