@@ -372,8 +372,6 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 		meshTransformationResources_[meshIndex]->data_->worldInverseTransposeMatrix =
 			meshTransformationResources_[meshIndex]->data_->worldMatrix.Transpose().Inverse();
 
-
-
 		// 色
 		meshMaterialResources_[meshIndex]->data_->color = param_->meshMaterial[meshIndex].color;
 

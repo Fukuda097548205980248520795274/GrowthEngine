@@ -1,0 +1,7 @@
+{
+    "DOF_DOF": {
+        "Blur_Falloff": 10.0,
+        "Focus_Distance": 15.0,
+        "Focus_Range": 3.0
+    }
+}

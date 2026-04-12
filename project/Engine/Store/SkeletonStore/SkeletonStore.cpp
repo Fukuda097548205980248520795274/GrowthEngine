@@ -1,5 +1,12 @@
 #include "SkeletonStore.h"
 #include "Store/ModelStore/ModelStore.h"
+#include "GrowthEngine.h"
+
+Engine::SkeletonStore::SkeletonStore()
+{
+	// インスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
+}
 
 /// @brief 読み込む
 /// @param directory 

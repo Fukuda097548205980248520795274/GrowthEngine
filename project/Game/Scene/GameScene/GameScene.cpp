@@ -6,15 +6,11 @@ void GameScene::Initialize()
 	engine_->LoadCamera3D("MainCamera");
 
 	// 地形のモデルを読み込む
-	engine_->LoadPrimitiveStaticModel(engine_->LoadModel("./Assets/Models/terrain", "terrain.obj"), "Terrain");
-
-	engine_->LoadParticle3D("Particle3D", 1000, engine_->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"));
+	engine_->LoadPrimitiveSkinningModel(engine_->LoadModel("./Assets/Models/walk", "walk.gltf"),
+		engine_->LoadAnimation("./Assets/Models/walk", "walk.gltf"), engine_->LoadSkeleton("./Assets/Models/walk", "walk.gltf"), "Walk");
 
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
-
-	// ブルーム
-	engine_->LoadPostEffect("Bloom", Engine::PostEffect::Type::Bloom);
 }
 
 /// @brief 更新処理
@@ -27,11 +23,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// 地形を描画する
-	engine_->DrawRender3D("Terrain");
+	engine_->DrawRender3D("Walk");
 
-	// パーティクルを描画する
-	engine_->DrawParticle3D("Particle3D");
-
-	// ブルーム
-	engine_->DrawPostEffect("Bloom");
+	
 }

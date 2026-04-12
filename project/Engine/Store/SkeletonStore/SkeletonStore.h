@@ -2,11 +2,16 @@
 #include <memory>
 #include "SkeletonResource/SkeletonResource.h"
 
+class GrowthEngine;
+
 namespace Engine
 {
 	class SkeletonStore
 	{
 	public:
+
+		/// @brief コンストラクタ
+		SkeletonStore();
 
 		/// @brief 読み込む
 		/// @param directory 
@@ -30,5 +35,11 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<SkeletonResource>> dataTable_;
+
+
+	private:
+
+		// エンジン
+		const GrowthEngine* engine_ = nullptr;
 	};
 }
