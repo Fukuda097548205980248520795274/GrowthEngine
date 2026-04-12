@@ -20,7 +20,8 @@ namespace Engine
 			RadialBlur,
 			Dissolve,
 			WhiteNoise,
-			DOF
+			DOF,
+			Bloom
 		};
 
 		/// @brief ラジアルブラー
@@ -112,6 +113,16 @@ namespace Engine
 
 			// ブラーの滑らかさ
 			float blurFalloff;
+		};
+
+		/// @brief ブルーム
+		struct Bloom
+		{
+			// ブルームの強度
+			float threshold;
+
+			// ブルームのブレンド強度
+			float knee;
 		};
 	}
 }

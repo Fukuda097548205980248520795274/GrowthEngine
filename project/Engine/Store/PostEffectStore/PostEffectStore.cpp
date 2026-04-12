@@ -12,6 +12,7 @@
 #include "PostEffectData/PostEffectDissolveData/PostEffectDissolveData.h"
 #include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
 #include "PostEffectData/PostEffectDOFData/PostEffectDOFData.h"
+#include "PostEffectData/PostEffectBloomData/PostEffectBloomData.h"
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -34,6 +35,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 
 	// 引数を受け取る
 	textureStore_ = textureStore;
+
+	// コピー加算PSO
+	psoCopyImageAdd_ = std::make_unique<PSOCopyImageAdd>();
+	psoCopyImageAdd_->Initialize(device, compiler, vertexShaderBlob, log);
 
 	// グレースケールPSO
 	psoGrayscale_ = std::make_unique<PSOGrayscale>();
@@ -87,6 +92,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// CSガウシアンフィルタPSO
 	computePSOGaussianFilter_ = std::make_unique<ComputePSOGaussianFilter>();
 	computePSOGaussianFilter_->Initialize(device, compiler, log);
+
+	// CS高輝度抽出PSO
+	computePSOHighLuminanceExtraction_ = std::make_unique<ComputePSOHighLuminanceExtraction>();
+	computePSOHighLuminanceExtraction_->Initialize(device, compiler, log);
 }
 
 /// @brief 読み込み
@@ -201,6 +210,16 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
 		data->Initialize(device, commandList, buffering, heap, psoDOF_.get(),
 			computePSOGaussianFilter_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// ブルーム
+	if (type == PostEffect::Type::Bloom)
+	{
+		std::unique_ptr<PostEffectBloomData> data = std::make_unique<PostEffectBloomData>(name, type, handle, parameter_.get());
+		data->Initialize(device, commandList, buffering, heap, psoCopyImageAdd_.get(),
+			computePSOHighLuminanceExtraction_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

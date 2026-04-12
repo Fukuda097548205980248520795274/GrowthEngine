@@ -120,5 +120,17 @@ namespace Engine
 
 			float padding0[3]; // 16バイトアラインメントのためのパディング
         };
+
+		/// @brief GPUに送る高輝度抽出
+        struct HighLuminanceExtractionDataForGPU
+        {
+            // 輝度の閾値
+            float threshold;
+
+			// 滑らかさ
+            float knee;
+
+			float padding[2]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

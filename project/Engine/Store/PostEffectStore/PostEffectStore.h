@@ -9,6 +9,7 @@
 #include "PostEffectData/PostEffectBaseData.h"
 #include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
+#include "PSO/PSOPostEffect/PSOCopyImageAdd/PSOCopyImageAdd.h"
 #include "PSO/PSOPostEffect/PSORadialBlur/PSORadialBlur.h"
 #include "PSO/PSOPostEffect/PSOVignetting/PSOVignetting.h"
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
@@ -23,6 +24,7 @@
 #include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
 #include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
 #include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
+#include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
 
 namespace Engine
 {
@@ -81,6 +83,18 @@ namespace Engine
 			return (static_cast<uint32_t>(dataTable_[hPostEffect]->GetRequiredInputs()) & static_cast<uint32_t>(input)) != 0;
 		}
 
+		// @brief 指定のポストエフェクトがBloomかどうか
+		bool IsBloom(PostEffectHandle hPostEffect) const
+		{
+			return dataTable_[hPostEffect]->GetType() == PostEffect::Type::Bloom;
+		}
+
+		// @brief 指定のポストエフェクトがBloomかどうか
+		bool IsBloom(const std::string& name)
+		{
+			return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::Bloom;
+		}
+
 		/// @brief 指定入力が必要かどうか
 		/// @param name
 		/// @param input
@@ -137,6 +151,9 @@ namespace Engine
 
 	private:
 
+		/// @brief コピー加算PSO
+		std::unique_ptr<PSOCopyImageAdd> psoCopyImageAdd_ = nullptr;
+
 		/// @brief グレースケールPSO
 		std::unique_ptr<PSOGrayscale> psoGrayscale_ = nullptr;
 
@@ -178,6 +195,9 @@ namespace Engine
 
 		/// @brief CSガウシアンフィルタPSO
 		std::unique_ptr<ComputePSOGaussianFilter> computePSOGaussianFilter_ = nullptr;
+
+		/// @brief CS高輝度抽出PSO
+		std::unique_ptr<ComputePSOHighLuminanceExtraction> computePSOHighLuminanceExtraction_ = nullptr;
 
 
 	private:

@@ -135,48 +135,65 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
-	const bool isUseOffscreenRenderTarget = postEffectStore_->IsUseOffscreenRenderTarget(hPostEffect);
+	const bool isBloom = postEffectStore_->IsBloom(hPostEffect);
 	const int32_t sourceOffscreenIndex = currentOffscreen_;
 
-	// カウントする
-	++currentOffscreen_;
-	currentOffscreen_ = currentOffscreen_ % 2;
-	
-	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-	ClearRenderTarget(commandList);
-
-	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
-	if (isUseDepth)
+	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
+	if (isBloom)
 	{
-		// 深度書き込み -> 読み込みテクスチャ
-		TransitionBarrier(depthResource_->GetResource(),
-			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		// 登録用コンテキストを作る
+		PostEffectRenderContext registerContext{};
+		registerContext = context;
+		registerContext.commandList = commandList;
+		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+
+		// ポストエフェクトの描画コマンドを登録する
+		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
 	}
-
-	// 登録用コンテキストを作る
-	PostEffectRenderContext registerContext{};
-	registerContext = context;
-	registerContext.commandList = commandList;
-	registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-	registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
-	registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
-
-	// ポストエフェクトの描画コマンドを登録する
-	postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
-
-	if (isUseDepth)
+	else
 	{
-		// 読み込みテクスチャ -> 深度書き込み
-		TransitionBarrier(depthResource_->GetResource(),
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
-	}
+		// カウントする
+		++currentOffscreen_;
+		currentOffscreen_ = currentOffscreen_ % 2;
 
-	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+		ClearRenderTarget(commandList);
+
+		// 書き込み対象 -> 読み込ませテクスチャ
+		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+		if (isUseDepth)
+		{
+			// 深度書き込み -> 読み込みテクスチャ
+			TransitionBarrier(depthResource_->GetResource(),
+				D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		}
+
+		// 登録用コンテキストを作る
+		PostEffectRenderContext registerContext{};
+		registerContext = context;
+		registerContext.commandList = commandList;
+		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+
+		// ポストエフェクトの描画コマンドを登録する
+		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
+
+		if (isUseDepth)
+		{
+			// 読み込みテクスチャ -> 深度書き込み
+			TransitionBarrier(depthResource_->GetResource(),
+				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
+		}
+
+		// 読み込ませテクスチャ -> 書き込み対象
+		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+	}
 }
 
 /// @brief ポストエフェクトを描画する
@@ -189,47 +206,65 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
+	const bool isBloom = postEffectStore_->IsBloom(name);
 	const int32_t sourceOffscreenIndex = currentOffscreen_;
 
-	// カウントする
-	++currentOffscreen_;
-	currentOffscreen_ = currentOffscreen_ % 2;
-
-	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-	ClearRenderTarget(commandList);
-
-	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
-	if (isUseDepth)
+	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
+	if (isBloom)
 	{
-		// 深度書き込み -> 読み込みテクスチャ
-		TransitionBarrier(depthResource_->GetResource(),
-			D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		// 登録用コンテキストを作る
+		PostEffectRenderContext registerContext{};
+		registerContext = context;
+		registerContext.commandList = commandList;
+		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+
+		// ポストエフェクトの描画コマンドを登録する
+		postEffectStore_->DrawPostEffect(name, registerContext);
 	}
-
-	// 登録用コンテキストを作る
-	PostEffectRenderContext registerContext{};
-	registerContext = context;
-	registerContext.commandList = commandList;
-	registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-	registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
-	registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
-
-	// ポストエフェクトの描画コマンドを登録する
-	postEffectStore_->DrawPostEffect(name, registerContext);
-
-	if (isUseDepth)
+	else
 	{
-		// 読み込みテクスチャ -> 深度書き込み
-		TransitionBarrier(depthResource_->GetResource(),
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
-	}
+		// カウントする
+		++currentOffscreen_;
+		currentOffscreen_ = currentOffscreen_ % 2;
 
-	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+		ClearRenderTarget(commandList);
+
+		// 書き込み対象 -> 読み込ませテクスチャ
+		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+		if (isUseDepth)
+		{
+			// 深度書き込み -> 読み込みテクスチャ
+			TransitionBarrier(depthResource_->GetResource(),
+				D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		}
+
+		// 登録用コンテキストを作る
+		PostEffectRenderContext registerContext{};
+		registerContext = context;
+		registerContext.commandList = commandList;
+		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+
+		// ポストエフェクトの描画コマンドを登録する
+		postEffectStore_->DrawPostEffect(name, registerContext);
+
+		if (isUseDepth)
+		{
+			// 読み込みテクスチャ -> 深度書き込み
+			TransitionBarrier(depthResource_->GetResource(),
+				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
+		}
+
+		// 読み込ませテクスチャ -> 書き込み対象
+		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+	}
 }
 
 /// @brief デバッグ用パラメータ

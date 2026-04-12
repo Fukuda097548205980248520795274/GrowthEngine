@@ -12,6 +12,9 @@ void GameScene::Initialize()
 
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
+
+	// ブルーム
+	engine_->LoadPostEffect("Bloom", Engine::PostEffect::Type::Bloom);
 }
 
 /// @brief 更新処理
@@ -28,4 +31,7 @@ void GameScene::Draw()
 
 	// パーティクルを描画する
 	engine_->DrawParticle3D("Particle3D");
+
+	// ブルーム
+	engine_->DrawPostEffect("Bloom");
 }

@@ -865,6 +865,15 @@
     <Filter Include="Engine\Include\Parameter\Particle3DParameter">
       <UniqueIdentifier>{4b7151fb-888d-4cb1-96f9-6da1ac7f6c59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOHighLuminanceExtraction">
+      <UniqueIdentifier>{f25e7e0a-09d9-47ab-bcd6-f4bd01734414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBloomData">
+      <UniqueIdentifier>{1462a3df-bb37-4cea-9837-149cc560f71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOCopyImageAdd">
+      <UniqueIdentifier>{a9d3ac6f-e820-4a68-a471-70c39fdca14f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1517,6 +1526,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.cpp">
       <Filter>Engine\Include\Parameter\Particle3DParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOHighLuminanceExtraction\ComputePSOHighLuminanceExtraction.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOHighLuminanceExtraction</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBloomData\PostEffectBloomData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBloomData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOCopyImageAdd\PSOCopyImageAdd.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImageAdd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2276,6 +2294,15 @@
     <ClInclude Include="Engine\Parameter\Particle3DParameter\Particle3DParameter.h">
       <Filter>Engine\Include\Parameter\Particle3DParameter</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOHighLuminanceExtraction\ComputePSOHighLuminanceExtraction.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOHighLuminanceExtraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBloomData\PostEffectBloomData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBloomData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOCopyImageAdd\PSOCopyImageAdd.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImageAdd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2417,6 +2444,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle3D\Draw\Particle3D.PS.hlsl">
       <Filter>Engine\Shader\Particle3D\Draw</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\HighLuminanceExtraction.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
