@@ -1,11 +1,26 @@
 #pragma once
 #include <string>
+#include <memory>
+#include <vector>
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 #include "Handle/Handle.h"
 #include "Data/Render3DData/Render3DData.h"
 #include "Data/DebugData/DebugData.h"
 
 #include "Data/CollisionData/CollisionData.h"
+
+#include "PSO/PSOShadowMap/BasePSOShadowMap.h"
+#include "PSO/PSOModel/BasePSOModel.h"
+#include "PSO/ComputePSO/BaseComputePSO.h"
+
+#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+#include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"
+#include "Resource/StructuredBufferResource/StructuredBufferResource.h"
+
+#include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
+#include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
+#include "DataForGPU/PrimitiveDataForGPU/PrimitiveDataForGPU.h"
+#include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 
 class GrowthEngine;
 

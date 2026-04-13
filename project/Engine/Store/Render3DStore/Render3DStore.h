@@ -7,6 +7,8 @@
 #include <wrl.h>
 
 #include "PSO/PSOModel/PSORender3D/PSORender3D.h"
+
+#include "PSO/ComputePSO/ComputePSOUVSphere/ComputePSOUVSphere.h"
 #include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
 
 #include "Parameter/Render3DParameter/Render3DParameter.h"
@@ -73,7 +75,8 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		Render3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+		Render3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			const std::string& name, Render3D::Type type, Log* log);
 
 		/// @brief コマンドリストに登録する
@@ -154,7 +157,11 @@ namespace Engine
 		// 3DD描画PSO
 		std::unique_ptr<PSORender3D> psoRender3D_ = nullptr;
 
-		// スキニングPSO
+
+		// CSUV球PSO
+		std::unique_ptr<ComputePSOUVSphere> psoUVSphere_ = nullptr;
+
+		// CSスキニングPSO
 		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;
 
 

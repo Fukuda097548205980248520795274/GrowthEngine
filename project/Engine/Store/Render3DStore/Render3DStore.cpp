@@ -2,6 +2,7 @@
 #include "Render3DData/Render3DStaticModelData/Render3DStaticModelData.h"
 #include "Render3DData/Render3DAnimationModelData/Render3DAnimationModelData.h"
 #include "Render3DData/Render3DSkinningModelData/Render3DSkinningModelData.h"
+#include "Render3DData/Render3DUVSphereData/Render3DUVSphereData.h"
 
 #include "ShaderCompiler/ShaderCompiler.h"
 
@@ -54,6 +55,9 @@ void Engine::Render3DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	psoRender3D_->Initialize(device, render3DVS_.Get(), render3DPS_.Get(), log);
 
 
+	// CSUVS球PSOの生成と初期化
+	psoUVSphere_ = std::make_unique<ComputePSOUVSphere>();
+	psoUVSphere_->Initialize(device, compiler, log);
 
 	// スキニングPSOの生成と初期化
 	psoSkinning_ = std::make_unique<ComputePSOSkinning>();
@@ -118,6 +122,13 @@ void Engine::Render3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D1
 			auto p = static_cast<Render3DSkinningModelData*>(data.get());
 			p->Register(viewProjection, commandList, pso);
 		}
+
+		// UV球
+		if (data->GetType() == Render3D::Type::UVSphere)
+		{
+			auto p = static_cast<Render3DUVSphereData*>(data.get());
+			p->Register(viewProjection, commandList, pso);
+		}
 	}
 }
 
@@ -132,7 +143,8 @@ void Engine::Render3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D1
 /// @param log 
 /// @return 
 Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-	ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,const std::string& name, Render3D::Type type, Log* log)
+	TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+	const std::string& name, Render3D::Type type, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -179,6 +191,15 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 		return handle;
 	}
 
+	// UV球
+	if (type == Render3D::Type::UVSphere)
+	{
+		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle, parameter_.get());
+		data->Initialize(textureStore_, lightStore_, heap_, device, commandList, psoUVSphere_.get(), log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
 	assert(false);
 	return handle;
 }
@@ -217,6 +238,14 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
+
+	// UV球
+	if (dataTable_[handle]->GetType() == Render3D::Type::UVSphere)
+	{
+		auto p = static_cast<Render3DUVSphereData*>(dataTable_[handle].get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
+		return;
+	}
 }
 
 /// @brief コマンドリストに登録する
@@ -252,6 +281,14 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::SkinningModel)
 	{
 		auto p = static_cast<Render3DSkinningModelData*>(dataTable_[nameTable_[name]].get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
+		return;
+	}
+
+	// UV球
+	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::UVSphere)
+	{
+		auto p = static_cast<Render3DUVSphereData*>(dataTable_[nameTable_[name]].get());
 		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
