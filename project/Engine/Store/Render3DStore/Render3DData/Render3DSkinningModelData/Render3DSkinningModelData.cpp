@@ -372,6 +372,7 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 		meshTransformationResources_[meshIndex]->data_->worldInverseTransposeMatrix =
 			meshTransformationResources_[meshIndex]->data_->worldMatrix.Transpose().Inverse();
 
+
 		// 色
 		meshMaterialResources_[meshIndex]->data_->color = param_->meshMaterial[meshIndex].color;
 
@@ -442,6 +443,16 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
 
 		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+
+#ifdef _DEVELOPMENT
+		// デバッグ用の線を描画する
+		skeletonStore_->DrawDebugSkeleton(skeleton_,
+			Vector3(meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][0],
+				meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][1],
+				meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][2]),
+			Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+#endif
 	}
 
 	// 描画した

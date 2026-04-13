@@ -30,6 +30,13 @@ namespace Engine
 		/// @return 
 		ModelBoneData GetBoneData(SkeletonHandle handle) { return dataTable_[handle]->GetBoneData(); }
 
+		
+		/// @brief スケルトンのデバッグ描画
+		/// @param skeleton 
+		/// @param position 
+		/// @param color 
+		void DrawDebugSkeleton(const Skeleton& skeleton, const Vector3& position, const Vector4& color);
+
 
 	private:
 
