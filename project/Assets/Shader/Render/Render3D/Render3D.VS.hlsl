@@ -1,4 +1,4 @@
-#include "Primitive.hlsli"
+#include "Render3D.hlsli"
 
 // 入力頂点シェーダ
 struct VertexShaderInput

@@ -1,4 +1,4 @@
-#include "PrefabPrimitive.hlsli"
+#include "Prefab3D.hlsli"
 
 // 入力頂点
 struct VertexShaderInput

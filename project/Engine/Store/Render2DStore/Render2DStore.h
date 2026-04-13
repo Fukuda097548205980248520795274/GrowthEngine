@@ -1,7 +1,7 @@
 #pragma once
 #include "Render2DData/Render2DBaseData.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
-#include "PSO/PSOModel/PSOSprite/PSOSprite.h"
+#include "PSO/PSOModel/PSORender2D/PSORender2D.h"
 
 #include "Parameter/Render2DParameter/Render2DParameter.h"
 
@@ -93,11 +93,11 @@ namespace Engine
 
 	private:
 
-		// スプライト頂点シェーダ
-		ComPtr<IDxcBlob> spriteVS_ = nullptr;
+		// 2D描画頂点シェーダ
+		ComPtr<IDxcBlob> render2DVS_ = nullptr;
 
-		// スプライトピクセルシェーダ
-		ComPtr<IDxcBlob> spritePS_ = nullptr;
+		// 2D描画ピクセルシェーダ
+		ComPtr<IDxcBlob> render2DPS_ = nullptr;
 
 		/// @brief テキストピクセルシェーダ
 		ComPtr<IDxcBlob> textPS_ = nullptr;
@@ -105,11 +105,11 @@ namespace Engine
 
 	private:
 
-		// スプライトPSO
-		std::unique_ptr<PSOSprite> psoSprite_ = nullptr;
+		// 2D描画PSO
+		std::unique_ptr<PSORender2D> psoRender2D_ = nullptr;
 
 		// テキストPSO
-		std::unique_ptr<PSOSprite> psoText_ = nullptr;
+		std::unique_ptr<PSORender2D> psoText_ = nullptr;
 
 
 	private:

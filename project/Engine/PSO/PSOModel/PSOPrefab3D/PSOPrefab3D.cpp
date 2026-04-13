@@ -1,4 +1,4 @@
-#include "PSOPrimitive.h"
+#include "PSOPrefab3D.h"
 #include "Log/Log.h"
 #include <cassert>
 
@@ -7,7 +7,7 @@
 /// @param vertexShaderBlob 
 /// @param pixelShaderBlob 
 /// @param log 
-void Engine::PSOPrimitive::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
+void Engine::PSOPrefab3D::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -16,8 +16,16 @@ void Engine::PSOPrimitive::Initialize(ID3D12Device* device, IDxcBlob* vertexShad
 
 
 	/*------------------------
-	    ディスクリプタレンジ
+		ディスクリプタレンジ
 	------------------------*/
+
+	// SRV t0 プリミティブ
+	D3D12_DESCRIPTOR_RANGE descriptorPrimitive[1];
+	descriptorPrimitive[0].BaseShaderRegister = 0;
+	descriptorPrimitive[0].RegisterSpace = 0;
+	descriptorPrimitive[0].NumDescriptors = 1;
+	descriptorPrimitive[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorPrimitive[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	// SRV t0 テクスチャ
 	D3D12_DESCRIPTOR_RANGE descriptorTexture[1];
@@ -72,73 +80,67 @@ void Engine::PSOPrimitive::Initialize(ID3D12Device* device, IDxcBlob* vertexShad
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[11];
+	D3D12_ROOT_PARAMETER rootParameter[10];
 
-	// CBV VertexShader b0 座標変換
-	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	// DescriptorTable VertexShader t0 プリミティブ
+	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameter[0].Descriptor.RegisterSpace = 0;
-	rootParameter[0].Descriptor.ShaderRegister = 0;
-
-	// CBV PixelShader b0 マテリアル
-	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[1].Descriptor.RegisterSpace = 0;
-	rootParameter[1].Descriptor.ShaderRegister = 0;
+	rootParameter[0].DescriptorTable.pDescriptorRanges = descriptorPrimitive;
+	rootParameter[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorPrimitive);
 
 	// DescriptorTable PixelShader テクスチャ
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorTexture;
-	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = descriptorTexture;
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
 
 	// DescriptorTable PixelShader シャドウマップテクスチャ
-	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[3].DescriptorTable.pDescriptorRanges = descriptorShadowMapTexture;
-	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorShadowMapTexture);
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorShadowMapTexture;
+	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorShadowMapTexture);
 
-	// CBV PixelShader b1 シャドウ用座標変換
+	// CBV PixelShader b0 シャドウ用座標変換
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[3].Descriptor.RegisterSpace = 0;
+	rootParameter[3].Descriptor.ShaderRegister = 0;
+
+	// CBV PixelShader b1 カメラ
 	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[4].Descriptor.RegisterSpace = 0;
 	rootParameter[4].Descriptor.ShaderRegister = 1;
 
-	// CBV PixelShader b2 カメラ
-	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[5].Descriptor.RegisterSpace = 0;
-	rootParameter[5].Descriptor.ShaderRegister = 2;
-
 	// DescriptorTable PixelShader 環境マップテクスチャ
-	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[6].DescriptorTable.pDescriptorRanges = descriptorEnvironmentTexture;
-	rootParameter[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorEnvironmentTexture);
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[5].DescriptorTable.pDescriptorRanges = descriptorEnvironmentTexture;
+	rootParameter[5].DescriptorTable.NumDescriptorRanges = _countof(descriptorEnvironmentTexture);
 
-	// CBV PixelShader b3 ライト数
-	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[7].Descriptor.RegisterSpace = 0;
-	rootParameter[7].Descriptor.ShaderRegister = 3;
+	// CBV PixelShader b2 ライト数
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[6].Descriptor.RegisterSpace = 0;
+	rootParameter[6].Descriptor.ShaderRegister = 2;
 
 	// DescriptorTable PixelShader 平行光源
-	rootParameter[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[8].DescriptorTable.pDescriptorRanges = descriptorDirectionalLight;
-	rootParameter[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorDirectionalLight);
+	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[7].DescriptorTable.pDescriptorRanges = descriptorDirectionalLight;
+	rootParameter[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorDirectionalLight);
 
 	// DescriptorTable PixelShader ポイントライト
-	rootParameter[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[9].DescriptorTable.pDescriptorRanges = descriptorPointLight;
-	rootParameter[9].DescriptorTable.NumDescriptorRanges = _countof(descriptorPointLight);
+	rootParameter[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[8].DescriptorTable.pDescriptorRanges = descriptorPointLight;
+	rootParameter[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorPointLight);
 
 	// DescriptorTable PixelShader スポットライト
-	rootParameter[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[10].DescriptorTable.pDescriptorRanges = descriptorSpotLight;
-	rootParameter[10].DescriptorTable.NumDescriptorRanges = _countof(descriptorSpotLight);
+	rootParameter[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[9].DescriptorTable.pDescriptorRanges = descriptorSpotLight;
+	rootParameter[9].DescriptorTable.NumDescriptorRanges = _countof(descriptorSpotLight);
 
 
 	/*--------------------

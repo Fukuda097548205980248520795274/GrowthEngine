@@ -1,4 +1,4 @@
-#include "Sprite.hlsli"
+#include "Render2D.hlsli"
 
 // 頂点入力
 struct VertexShaderInput

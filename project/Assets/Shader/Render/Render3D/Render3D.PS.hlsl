@@ -1,23 +1,56 @@
-#include "PrefabPrimitive.hlsli"
+#include "Render3D.hlsli"
 
+// 出力ピクセルシェーダ
 struct PixelShaderOutput
 {
     float4 color : SV_TARGET0;
 };
+
+// マテリアル
+struct Material
+{
+    // 色
+    float4 color;
+    
+    // uv行列
+    float4x4 uvMatrix;
+    
+    // 環境
+    float environment;
+    
+    // 光沢度
+    float shininess;
+    
+    // ライティング有効化
+    int enableLighting;
+    
+    // ディフューズ
+    int enableDiffuse;
+    
+    // ハーフランバート有効化
+    int enableHalfLambert;
+    
+    // スペキュラー有効化
+    int enableSpecular;
+    
+    // ブリンフォン有効化
+    int enableBlinnPhong;
+};
+ConstantBuffer<Material> gMaterial : register(b0);
 
 // シャドウ用座標変換
 struct ShadowTransformation
 {
     float4x4 viewProjection;
 };
-ConstantBuffer<ShadowTransformation> gShadowTransformation : register(b0);
+ConstantBuffer<ShadowTransformation> gShadowTransformation : register(b1);
 
 // カメラ
 struct Camera
 {
     float3 worldPosition;
 };
-ConstantBuffer<Camera> gCamera : register(b1);
+ConstantBuffer<Camera> gCamera : register(b2);
 
 // ライト数
 struct NumLight
@@ -31,9 +64,10 @@ struct NumLight
     // スポットライト
     int spotLight;
 };
-ConstantBuffer<NumLight> gNumLight : register(b2);
+ConstantBuffer<NumLight> gNumLight : register(b3);
 
 
+// テクスチャ
 Texture2D<float4> gTexture : register(t0);
 
 // シャドウマップ用テクスチャ
@@ -105,6 +139,8 @@ struct SpotLight
 };
 StructuredBuffer<SpotLight> gSpotLight : register(t5);
 
+
+// サンプラー
 SamplerState gSampler : register(s0);
 
 // シャドウ用比較サンプラー
@@ -112,11 +148,12 @@ SamplerComparisonState gShadowSampler : register(s1);
 
 
 
+
 // 平行光源の拡散反射
 float3 CreateDirectionalLightDiffuse(DirectionalLight light, VertexShaderOutput input)
 {
     // ハーフランバート有効
-    if (input.enableHalfLambert != 0)
+    if (gMaterial.enableHalfLambert != 0)
     {
         // 光と法線の内積
         float NdotL = dot(normalize(input.normal), -light.direction);
@@ -144,7 +181,7 @@ float3 CreateDirectionalLightSpecular(DirectionalLight light, float3 toEye, Vert
     float specularPow = 0.0f;
                     
     // ブリンフォン有効
-    if (input.enableBlinnPhong != 0)
+    if (gMaterial.enableBlinnPhong != 0)
     {
         // ハーフベクトル
         float3 halfVector = normalize(-light.direction + toEye);
@@ -152,7 +189,7 @@ float3 CreateDirectionalLightSpecular(DirectionalLight light, float3 toEye, Vert
         // 法線とハーフベクトルの内積
         float NdotH = dot(normalize(input.normal), halfVector);
 
-        specularPow = pow(saturate(NdotH), input.shininess);
+        specularPow = pow(saturate(NdotH), gMaterial.shininess);
 
     }
     else
@@ -165,7 +202,7 @@ float3 CreateDirectionalLightSpecular(DirectionalLight light, float3 toEye, Vert
         // カメラと反射ベクトルの内積
         float RdotE = dot(reflectLight, toEye);
 
-        specularPow = pow(saturate(RdotE), input.shininess);
+        specularPow = pow(saturate(RdotE), gMaterial.shininess);
     }
 
     return light.color.rgb * light.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
@@ -175,7 +212,7 @@ float3 CreateDirectionalLightSpecular(DirectionalLight light, float3 toEye, Vert
 float3 CreatePointLightDiffuse(PointLight light, float3 pointLightDirection, VertexShaderOutput input)
 {
     // ハーフランバート有効
-    if (input.enableHalfLambert != 0)
+    if (gMaterial.enableHalfLambert != 0)
     {
         // 光と法線の内積
         float NdotL = dot(normalize(input.normal), -pointLightDirection);
@@ -203,7 +240,7 @@ float3 CreatePointLightSpecular(PointLight light, float3 pointLightDirection, fl
     float specularPow = 0.0f;
                     
     // ブリンフォン有効
-    if (input.enableBlinnPhong != 0)
+    if (gMaterial.enableBlinnPhong != 0)
     {
         // ハーフベクトル
         float3 halfVector = normalize(-pointLightDirection + toEye);
@@ -211,7 +248,7 @@ float3 CreatePointLightSpecular(PointLight light, float3 pointLightDirection, fl
         // 法線とハーフベクトルの内積
         float NdotH = dot(normalize(input.normal), halfVector);
 
-        specularPow = pow(saturate(NdotH), input.shininess);
+        specularPow = pow(saturate(NdotH), gMaterial.shininess);
 
     }
     else
@@ -224,7 +261,7 @@ float3 CreatePointLightSpecular(PointLight light, float3 pointLightDirection, fl
         // カメラと反射ベクトルの内積
         float RdotE = dot(reflectLight, toEye);
 
-        specularPow = pow(saturate(RdotE), input.shininess);
+        specularPow = pow(saturate(RdotE), gMaterial.shininess);
     }
 
     return light.color.rgb * light.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
@@ -234,7 +271,7 @@ float3 CreatePointLightSpecular(PointLight light, float3 pointLightDirection, fl
 float3 CreateSpotLightDiffuse(SpotLight light, float3 spotLightDirectionOnSurface, VertexShaderOutput input)
 {
     // ハーフランバート有効
-    if (input.enableHalfLambert != 0)
+    if (gMaterial.enableHalfLambert != 0)
     {
         // 光と法線の内積
         float NdotL = dot(normalize(input.normal), -spotLightDirectionOnSurface);
@@ -262,7 +299,7 @@ float3 CreateSpotLightSpecular(SpotLight light, float3 spotLightDirectionOnSurfa
     float specularPow = 0.0f;
                     
     // ブリンフォン有効
-    if (input.enableBlinnPhong != 0)
+    if (gMaterial.enableBlinnPhong != 0)
     {
         // ハーフベクトル
         float3 halfVector = normalize(-spotLightDirectionOnSurface + toEye);
@@ -270,7 +307,7 @@ float3 CreateSpotLightSpecular(SpotLight light, float3 spotLightDirectionOnSurfa
         // 法線とハーフベクトルの内積
         float NdotH = dot(normalize(input.normal), halfVector);
 
-        specularPow = pow(saturate(NdotH), input.shininess);
+        specularPow = pow(saturate(NdotH), gMaterial.shininess);
 
     }
     else
@@ -283,7 +320,7 @@ float3 CreateSpotLightSpecular(SpotLight light, float3 spotLightDirectionOnSurfa
         // カメラと反射ベクトルの内積
         float RdotE = dot(reflectLight, toEye);
 
-        specularPow = pow(saturate(RdotE), input.shininess);
+        specularPow = pow(saturate(RdotE), gMaterial.shininess);
     }
 
     return light.color.rgb * light.intensity * specularPow * float3(1.0f, 1.0f, 1.0f);
@@ -297,12 +334,13 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     
     // UV座標を座標変換する
-    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), input.uvTransform);
+    float4 transformedUV = mul(float4(input.texcoord, 0.0f, 1.0f), gMaterial.uvMatrix);
     
     // テクスチャの色
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     
-    if(input.enableLighting != 0)
+    
+    if(gMaterial.enableLighting != 0)
     {
         // ワールド座標をライト空間に変換
         float4 shadowPos = mul(float4(input.worldPosition, 1.0f), gShadowTransformation.viewProjection);
@@ -314,14 +352,13 @@ PixelShaderOutput main(VertexShaderOutput input)
         float shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - 0.005f);
         float shadowFactor = lerp(0.5f, 1.0f, shadow); // 影の濃さ調整
     
+        // 環境光
         float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
         float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
-        float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector) * input.environment;
-        
+        float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector) * gMaterial.environment;
         
         // カメラへの方向を算出
         float3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
-        
         
         ///
         /// 平行光源
@@ -337,14 +374,14 @@ PixelShaderOutput main(VertexShaderOutput input)
         for (uint directionalLightIndex = 0; directionalLightIndex < gNumLight.directionalLight; ++directionalLightIndex)
         {
             // ディフューズ有効化
-            if (input.enableDiffuse != 0)
+            if (gMaterial.enableDiffuse != 0)
             {
                 // 光の拡散反射を加算する
                 directionalLightDiffuse += CreateDirectionalLightDiffuse(gDirectionalLight[directionalLightIndex], input);
             }
                 
             // スペキュラー有効
-            if (input.enableSpecular != 0)
+            if (gMaterial.enableSpecular != 0)
             {
                 // 光の鏡面反射を加算する
                 directionalLightSpecular += CreateDirectionalLightSpecular(gDirectionalLight[directionalLightIndex], toEye, input);
@@ -375,14 +412,14 @@ PixelShaderOutput main(VertexShaderOutput input)
             float factor = pow(saturate(-distance / gPointLight[pointLightIndex].radius + 1.0f), gPointLight[pointLightIndex].decay);
             
             // ディフューズ有効化
-            if (input.enableDiffuse != 0)
+            if (gMaterial.enableDiffuse != 0)
             {
                 // 拡散反射を加算する
                 pointLightDiffuse += CreatePointLightDiffuse(gPointLight[pointLightIndex], pointLightDirection, input) * factor;
             }
 
             // スペキュラー有効
-            if (input.enableSpecular != 0)
+            if (gMaterial.enableSpecular != 0)
             {
                 // 鏡面反射を加算する
                 pointLightSpecular += CreatePointLightSpecular(gPointLight[pointLightIndex], pointLightDirection, toEye, input) * factor;
@@ -423,23 +460,23 @@ PixelShaderOutput main(VertexShaderOutput input)
             float factor = pow(saturate(-distance / gSpotLight[spotLightIndex].distance + 1.0f), gSpotLight[spotLightIndex].decay);
             
             // ディフューズ有効化
-            if (input.enableDiffuse != 0)
+            if (gMaterial.enableDiffuse != 0)
             {
                 // 拡散反射を加算する
                 spotLightDiffuse += CreateSpotLightDiffuse(gSpotLight[spotLightIndex], spotLightDirectionOnSurface, input) * factor * falloffFactor;
             }
             
             // スペキュラー有効
-            if (input.enableSpecular != 0)
+            if (gMaterial.enableSpecular != 0)
             {
                 // 鏡面反射の加算する
                 spotLightSpecular += CreateSpotLightSpecular(gSpotLight[spotLightIndex], spotLightDirectionOnSurface, toEye, input) * factor * falloffFactor;
             }
         }
-        
+    
     
         // 色
-        float3 baseColor = input.color.rgb * textureColor.rgb;
+        float3 baseColor = gMaterial.color.rgb * textureColor.rgb;
         
         // 光
         float3 directLight = directionalLightDiffuse + directionalLightSpecular + pointLightDiffuse + pointLightSpecular + spotLightDiffuse + spotLightSpecular;
@@ -450,12 +487,12 @@ PixelShaderOutput main(VertexShaderOutput input)
 
     
         // アルファ
-        output.color.a = input.color.a * textureColor.a;
+        output.color.a = gMaterial.color.a * textureColor.a;
     }
     else
     {
         // 色
-        output.color = input.color * textureColor;
+        output.color = gMaterial.color * textureColor;
     }
     
     // a = 0は描画しない

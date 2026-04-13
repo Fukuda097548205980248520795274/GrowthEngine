@@ -1,4 +1,4 @@
-#include "PSOPrefabSprite.h"
+#include "PSOPrefab2D.h"
 #include "Log/Log.h"
 #include <cassert>
 
@@ -7,7 +7,7 @@
 /// @param vertexShaderBlob 
 /// @param pixelShaderBlob 
 /// @param log 
-void Engine::PSOPrefabSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
+void Engine::PSOPrefab2D::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
 {
 	// nullptrチェック
 	assert(device);

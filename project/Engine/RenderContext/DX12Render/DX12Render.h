@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include "PSO/PSOModel/PSOPrimitive/PSOPrimitive.h"
 #include "Store/Render3DStore/Render3DStore.h"
 #include "Store/Render2DStore/Render2DStore.h"
 #include "Data/Render3DData/Render3DData.h"

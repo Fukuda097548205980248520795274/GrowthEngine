@@ -44,32 +44,30 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	prefab2DStore_->Initialize(device, log);
 
 
-	// プリミティブ用プレハブ頂点シェーダ
-	primitivePrefabVS_ = compiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.VS.hlsl", L"vs_6_0");
-	assert(primitivePrefabVS_);
+	// 3Dプレハブ頂点シェーダ
+	prefab3DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.VS.hlsl", L"vs_6_0");
+	assert(prefab3DVS_);
 
-	// プリミティブ用プレハブピクセルシェーダ
-	primitivePrefabPS_ = compiler->Compile(L"./Assets/Shader/PrefabPrimitive/PrefabPrimitive.PS.hlsl", L"ps_6_0");
-	assert(primitivePrefabPS_);
+	// 3Dプレハブピクセルシェーダ
+	prefab3DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.PS.hlsl", L"ps_6_0");
+	assert(prefab3DPS_);
+
+	// 2Dプレハブ頂点シェーダ
+	prefab2DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.VS.hlsl", L"vs_6_0");
+	assert(prefab2DVS_);
+
+	// 2Dプレハブピクセルシェーダ
+	prefab2DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.PS.hlsl", L"ps_6_0");
+	assert(prefab2DPS_);
 
 
-	// スプライト用プレハブ頂点シェーダ
-	spritePrefabVS_ = compiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.VS.hlsl", L"vs_6_0");
-	assert(spritePrefabVS_);
+	// 3Dプレハブ用PSO
+	psoPrefab3D_ = std::make_unique<PSOPrefab3D>();
+	psoPrefab3D_->Initialize(device, prefab3DVS_.Get(), prefab3DPS_.Get(), log);
 
-	// スプライト用プレハブピクセルシェーダ
-	spritePrefabPS_ = compiler->Compile(L"./Assets/Shader/PrefabSprite/PrefabSprite.PS.hlsl", L"ps_6_0");
-	assert(spritePrefabPS_);
-
-
-	// プリミティブ用プレハブPSO
-	psoPrefabPrimitive_ = std::make_unique<PSOPrefabPrimitive>();
-	psoPrefabPrimitive_->Initialize(device, primitivePrefabVS_.Get(), primitivePrefabPS_.Get(), log);
-
-	// スプライト用プレハブPSO
-	psoPrefabSprite_ = std::make_unique<PSOPrefabSprite>();
-	psoPrefabSprite_->Initialize(device, spritePrefabVS_.Get(), spritePrefabPS_.Get(), log);
-
+	// 2Dプレハブ用PSO
+	psoPrefab2D_ = std::make_unique<PSOPrefab2D>();
+	psoPrefab2D_->Initialize(device, prefab2DVS_.Get(), prefab2DPS_.Get(), log);
 
 #ifdef _DEVELOPMENT
 
@@ -92,8 +90,8 @@ void Engine::DX12Prefab::Update()
 /// @brief リセット
 void Engine::DX12Prefab::Reset()
 {
-	psoPrefabPrimitive_->ResetBlendMode();
-	psoPrefabSprite_->ResetBlendMode();
+	psoPrefab3D_->ResetBlendMode();
+	psoPrefab2D_->ResetBlendMode();
 
 #ifdef _DEVELOPMENT
 
@@ -124,8 +122,8 @@ void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12Gr
 /// @param commandList 
 void Engine::DX12Prefab::DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	prefab3DStore_->Register(skyboxStore, commandList, psoPrefabPrimitive_.get());
-	prefab2DStore_->Register(commandList, psoPrefabSprite_.get());
+	prefab3DStore_->Register(skyboxStore, commandList, psoPrefab3D_.get());
+	prefab2DStore_->Register(commandList, psoPrefab2D_.get());
 }
 
 /// @brief リセット

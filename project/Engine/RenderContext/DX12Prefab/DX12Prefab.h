@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include "PSO/PSOModel/PSOPrefabSprite/PSOPrefabSprite.h"
-#include "PSO/PSOModel/PSOPrefabPrimitive/PSOPrefabPrimitive.h"
+#include "PSO/PSOModel/PSOPrefab2D/PSOPrefab2D.h"
+#include "PSO/PSOModel/PSOPrefab3D/PSOPrefab3D.h"
 
 #include "Store/Prefab3DStore/Prefab3DStore.h"
 #include "Store/Prefab2DStore/Prefab2DStore.h"
@@ -176,28 +176,25 @@ namespace Engine
 
 	private:
 
-		// プリミティブ用プレハブ頂点シェーダ
-		ComPtr<IDxcBlob> primitivePrefabVS_ = nullptr;
+		// 3Dプレハブ頂点シェーダ
+		ComPtr<IDxcBlob> prefab3DVS_ = nullptr;
 
-		// プリミティブ用プレハブピクセルシェーダ
-		ComPtr<IDxcBlob> primitivePrefabPS_ = nullptr;
+		// 3Dプレハブピクセルシェーダ
+		ComPtr<IDxcBlob> prefab3DPS_ = nullptr;
 
+		// 2Dプレハブ頂点シェーダ
+		ComPtr<IDxcBlob> prefab2DVS_ = nullptr;
 
-		// スプライト用プレハブ頂点シェーダ
-		ComPtr<IDxcBlob> spritePrefabVS_ = nullptr;
-
-		// スプライト用プレハブピクセルシェーダ
-		ComPtr<IDxcBlob> spritePrefabPS_ = nullptr;
-
+		// 2Dプレハブピクセルシェーダ
+		ComPtr<IDxcBlob> prefab2DPS_ = nullptr;
 
 	private:
 
-		/// @brief プリミティブ用プレハブPSO
-		std::unique_ptr<PSOPrefabPrimitive> psoPrefabPrimitive_ = nullptr;
+		/// @brief 3Dプレハブ用PSO
+		std::unique_ptr<PSOPrefab3D> psoPrefab3D_ = nullptr;
 
-		/// @brief スプライト用プレハブPSO
-		std::unique_ptr<PSOPrefabSprite> psoPrefabSprite_ = nullptr;
-
+		/// @brief 2Dプレハブ用PSO
+		std::unique_ptr<PSOPrefab2D> psoPrefab2D_ = nullptr;
 
 
 	private:

@@ -51,32 +51,32 @@ void Engine::Render2DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	indexResource_->data_[5] = 2;
 
 
-	// スプライト頂点シェーダ
-	spriteVS_ = compiler->Compile(L"./Assets/Shader/Sprite/Sprite.VS.hlsl", L"vs_6_0");
-	assert(spriteVS_);
+	// 2D描画頂点シェーダ
+	render2DVS_ = compiler->Compile(L"./Assets/Shader/Render/Render2D/Render2D.VS.hlsl", L"vs_6_0");
+	assert(render2DVS_);
 
-	// スプライトピクセルシェーダ
-	spritePS_ = compiler->Compile(L"./Assets/Shader/Sprite/Sprite.PS.hlsl", L"ps_6_0");
-	assert(spritePS_);
+	// 2D描画ピクセルシェーダ
+	render2DPS_ = compiler->Compile(L"./Assets/Shader/Render/Render2D/Render2D.PS.hlsl", L"ps_6_0");
+	assert(render2DPS_);
 
 	// テキストピクセルシェーダ
-	textPS_ = compiler->Compile(L"./Assets/Shader/Text/Text.PS.hlsl", L"ps_6_0");
+	textPS_ = compiler->Compile(L"./Assets/Shader/Render/Text/Text.PS.hlsl", L"ps_6_0");
 	assert(textPS_);
 
 
-	// スプライトPSOの生成と初期化
-	psoSprite_ = std::make_unique<PSOSprite>();
-	psoSprite_->Initialize(device, spriteVS_.Get(), spritePS_.Get(), log);
+	// 2D描画PSOの生成と初期化
+	psoRender2D_ = std::make_unique<PSORender2D>();
+	psoRender2D_->Initialize(device, render2DVS_.Get(), render2DPS_.Get(), log);
 
 	// テキストPSOの生成と初期化
-	psoText_ = std::make_unique<PSOSprite>();
-	psoText_->Initialize(device, spriteVS_.Get(), textPS_.Get(), log);
+	psoText_ = std::make_unique<PSORender2D>();
+	psoText_->Initialize(device, render2DVS_.Get(), textPS_.Get(), log);
 }
 
 /// @brief リセット
 void Engine::Render2DStore::Reset()
 {
-	psoSprite_->ResetBlendMode();
+	psoRender2D_->ResetBlendMode();
 	psoText_->ResetBlendMode();
 }
 
@@ -157,7 +157,7 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* ca
 	// スプライト
 	if (dataTable_[hRender2D]->GetType() == Render2D::Type::Sprite)
 	{
-		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoSprite_.get());
+		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoRender2D_.get());
 	}
 	else if(dataTable_[hRender2D]->GetType() == Render2D::Type::Text)
 	{
@@ -181,7 +181,7 @@ void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cam
 	// スプライト
 	if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Sprite)
 	{
-		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoSprite_.get());
+		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoRender2D_.get());
 	}
 	else if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Text)
 	{

@@ -474,15 +474,15 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.cpp">
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.cpp">
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab2D\PSOPrefab2D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.cpp">
+    <ClCompile Include="Engine\PSO\PSOModel\PSORender3D\PSORender3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -527,7 +527,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.cpp">
+    <ClCompile Include="Engine\PSO\PSOModel\PSORender2D\PSORender2D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1079,9 +1079,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h" />
-    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabPrimitive\PSOPrefabPrimitive.h" />
-    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefabSprite\PSOPrefabSprite.h" />
-    <ClInclude Include="Engine\PSO\PSOModel\PSOPrimitive\PSOPrimitive.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab2D\PSOPrefab2D.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSORender3D\PSORender3D.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOCopyImageAdd\PSOCopyImageAdd.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSODissolve\PSODissolve.h" />
@@ -1093,7 +1093,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOVignetting\PSOVignetting.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOWhiteNoise\PSOWhiteNoise.h" />
     <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h" />
-    <ClInclude Include="Engine\PSO\PSOModel\PSOSprite\PSOSprite.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSORender2D\PSORender2D.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\BasePSOPostEffect.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOCopyImage\PSOCopyImage.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSORadialBlur\PSORadialBlur.h" />
@@ -1230,17 +1230,17 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.hlsli">
+    <None Include="Assets\Shader\Prefab\Prefab3D\Prefab3D.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Assets\Shader\PrefabSprite\PrefabSprite.hlsli">
+    <None Include="Assets\Shader\Prefab\Prefab2D\Prefab2D.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Assets\Shader\Primitive\Primitive.hlsli">
+    <None Include="Assets\Shader\Render\Render3D\Render3D.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -1255,7 +1255,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Assets\Shader\Sprite\Sprite.hlsli">
+    <None Include="Assets\Shader\Render\Render2D\Render2D.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -1467,7 +1467,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.PS.hlsl">
+    <FxCompile Include="Assets\Shader\Prefab\Prefab3D\Prefab3D.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
@@ -1475,7 +1475,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrefabPrimitive\PrefabPrimitive.VS.hlsl">
+    <FxCompile Include="Assets\Shader\Prefab\Prefab3D\Prefab3D.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
@@ -1483,7 +1483,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.PS.hlsl">
+    <FxCompile Include="Assets\Shader\Prefab\Prefab2D\Prefab2D.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
@@ -1491,7 +1491,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PrefabSprite\PrefabSprite.VS.hlsl">
+    <FxCompile Include="Assets\Shader\Prefab\Prefab2D\Prefab2D.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
@@ -1499,7 +1499,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Primitive.PS.hlsl">
+    <FxCompile Include="Assets\Shader\Render\Render3D\Render3D.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
@@ -1507,7 +1507,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Primitive.VS.hlsl">
+    <FxCompile Include="Assets\Shader\Render\Render3D\Render3D.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
@@ -1558,7 +1558,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Sprite\Sprite.PS.hlsl">
+    <FxCompile Include="Assets\Shader\Render\Render2D\Render2D.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
@@ -1566,7 +1566,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Sprite\Sprite.VS.hlsl">
+    <FxCompile Include="Assets\Shader\Render\Render2D\Render2D.VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
@@ -1574,7 +1574,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Text\Text.PS.hlsl">
+    <FxCompile Include="Assets\Shader\Render\Text\Text.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>

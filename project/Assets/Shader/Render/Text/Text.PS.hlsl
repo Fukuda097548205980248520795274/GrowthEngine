@@ -1,4 +1,4 @@
-#include "../Sprite/Sprite.hlsli"
+#include "../Render2D/Render2D.hlsli"
 
 struct PixelShaderOutput
 {

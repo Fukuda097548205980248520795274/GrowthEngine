@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PSOPrefabSprite : public BasePSOModel
+	class PSORender2D : public BasePSOModel
 	{
 	public:
 

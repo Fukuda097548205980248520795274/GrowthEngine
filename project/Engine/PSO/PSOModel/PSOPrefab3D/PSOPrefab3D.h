@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PSOSprite : public BasePSOModel
+	class PSOPrefab3D : public BasePSOModel
 	{
 	public:
 
@@ -15,6 +15,6 @@ namespace Engine
 		void Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log) override;
 
 		/// @brief ブレンドモードを初期化する
-		void ResetBlendMode() override { blendMode_ = static_cast<int32_t>(BlendMode::kNormal); }
+		void ResetBlendMode() override { blendMode_ = static_cast<int32_t>(BlendMode::kNone); }
 	};
 }

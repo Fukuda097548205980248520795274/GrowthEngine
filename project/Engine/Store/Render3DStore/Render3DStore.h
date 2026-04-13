@@ -6,7 +6,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 
-#include "PSO/PSOModel/PSOPrimitive/PSOPrimitive.h"
+#include "PSO/PSOModel/PSORender3D/PSORender3D.h"
 #include "PSO/ComputePSO/ComputePSOSkinning/ComputePSOSkinning.h"
 
 #include "Parameter/Render3DParameter/Render3DParameter.h"
@@ -142,17 +142,17 @@ namespace Engine
 
 	private:
 
-		// プリミティブ頂点シェーダ
-		ComPtr<IDxcBlob> primitiveVS_ = nullptr;
+		// 3D描画頂点シェーダ
+		ComPtr<IDxcBlob> render3DVS_ = nullptr;
 
-		// プリミティブピクセルシェーダ
-		ComPtr<IDxcBlob> primitivePS_ = nullptr;
+		// 3D描画シェーダ
+		ComPtr<IDxcBlob> render3DPS_ = nullptr;
 
 
 	private:
 
-		// プリミティブPSO
-		std::unique_ptr<PSOPrimitive> psoPrimitive_ = nullptr;
+		// 3DD描画PSO
+		std::unique_ptr<PSORender3D> psoRender3D_ = nullptr;
 
 		// スキニングPSO
 		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;

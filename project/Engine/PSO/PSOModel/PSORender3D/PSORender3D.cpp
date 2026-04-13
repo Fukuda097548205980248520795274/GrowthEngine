@@ -1,4 +1,4 @@
-#include "PSOSprite.h"
+#include "PSORender3D.h"
 #include "Log/Log.h"
 #include <cassert>
 
@@ -7,7 +7,7 @@
 /// @param vertexShaderBlob 
 /// @param pixelShaderBlob 
 /// @param log 
-void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
+void Engine::PSORender3D::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -16,7 +16,7 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 
 
 	/*------------------------
-		ディスクリプタレンジ
+	    ディスクリプタレンジ
 	------------------------*/
 
 	// SRV t0 テクスチャ
@@ -27,12 +27,52 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 	descriptorTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	// SRV t1 シャドウマップテクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorShadowMapTexture[1];
+	descriptorShadowMapTexture[0].BaseShaderRegister = 1;
+	descriptorShadowMapTexture[0].RegisterSpace = 0;
+	descriptorShadowMapTexture[0].NumDescriptors = 1;
+	descriptorShadowMapTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorShadowMapTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// SRV t2 環境マップテクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorEnvironmentTexture[1];
+	descriptorEnvironmentTexture[0].BaseShaderRegister = 2;
+	descriptorEnvironmentTexture[0].RegisterSpace = 0;
+	descriptorEnvironmentTexture[0].NumDescriptors = 1;
+	descriptorEnvironmentTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorEnvironmentTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// SRV t3 平行光源
+	D3D12_DESCRIPTOR_RANGE descriptorDirectionalLight[1];
+	descriptorDirectionalLight[0].BaseShaderRegister = 3;
+	descriptorDirectionalLight[0].RegisterSpace = 0;
+	descriptorDirectionalLight[0].NumDescriptors = 1;
+	descriptorDirectionalLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorDirectionalLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// SRV t4 ポイントライト
+	D3D12_DESCRIPTOR_RANGE descriptorPointLight[1];
+	descriptorPointLight[0].BaseShaderRegister = 4;
+	descriptorPointLight[0].RegisterSpace = 0;
+	descriptorPointLight[0].NumDescriptors = 1;
+	descriptorPointLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorPointLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// SRV t5 スポットライト
+	D3D12_DESCRIPTOR_RANGE descriptorSpotLight[1];
+	descriptorSpotLight[0].BaseShaderRegister = 5;
+	descriptorSpotLight[0].RegisterSpace = 0;
+	descriptorSpotLight[0].NumDescriptors = 1;
+	descriptorSpotLight[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorSpotLight[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[3];
+	D3D12_ROOT_PARAMETER rootParameter[11];
 
 	// CBV VertexShader b0 座標変換
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -52,12 +92,60 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorTexture;
 	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
 
+	// DescriptorTable PixelShader シャドウマップテクスチャ
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = descriptorShadowMapTexture;
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorShadowMapTexture);
+
+	// CBV PixelShader b1 シャドウ用座標変換
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[4].Descriptor.RegisterSpace = 0;
+	rootParameter[4].Descriptor.ShaderRegister = 1;
+
+	// CBV PixelShader b2 カメラ
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[5].Descriptor.RegisterSpace = 0;
+	rootParameter[5].Descriptor.ShaderRegister = 2;
+
+	// DescriptorTable PixelShader 環境マップテクスチャ
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[6].DescriptorTable.pDescriptorRanges = descriptorEnvironmentTexture;
+	rootParameter[6].DescriptorTable.NumDescriptorRanges = _countof(descriptorEnvironmentTexture);
+
+	// CBV PixelShader b3 ライト数
+	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[7].Descriptor.RegisterSpace = 0;
+	rootParameter[7].Descriptor.ShaderRegister = 3;
+
+	// DescriptorTable PixelShader 平行光源
+	rootParameter[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[8].DescriptorTable.pDescriptorRanges = descriptorDirectionalLight;
+	rootParameter[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorDirectionalLight);
+
+	// DescriptorTable PixelShader ポイントライト
+	rootParameter[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[9].DescriptorTable.pDescriptorRanges = descriptorPointLight;
+	rootParameter[9].DescriptorTable.NumDescriptorRanges = _countof(descriptorPointLight);
+
+	// DescriptorTable PixelShader スポットライト
+	rootParameter[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[10].DescriptorTable.pDescriptorRanges = descriptorSpotLight;
+	rootParameter[10].DescriptorTable.NumDescriptorRanges = _countof(descriptorSpotLight);
+
 
 	/*--------------------
 		サンプラーの設定
 	--------------------*/
 
-	D3D12_STATIC_SAMPLER_DESC samplers[1] = {};
+	D3D12_STATIC_SAMPLER_DESC samplers[2] = {};
 
 	// サンプラー
 	samplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -69,6 +157,21 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 	samplers[0].ShaderRegister = 0;
 	samplers[0].RegisterSpace = 0;
 	samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	// 比較用サンプラー
+	samplers[1].Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+	samplers[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[1].MipLODBias = 0.0f;
+	samplers[1].MaxAnisotropy = 1;
+	samplers[1].ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+	samplers[1].BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE;
+	samplers[1].MinLOD = 0.0f;
+	samplers[1].MaxLOD = D3D12_FLOAT32_MAX;
+	samplers[1].ShaderRegister = 1;
+	samplers[1].RegisterSpace = 0;
+	samplers[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 
 	/*---------------------------------------
@@ -114,7 +217,7 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 		インプットレイアウトの設定
 	----------------------------*/
 
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 
 	// POSITION 0 float4
 	inputElementDescs[0].SemanticName = "POSITION";
@@ -127,6 +230,12 @@ void Engine::PSOSprite::Initialize(ID3D12Device* device, IDxcBlob* vertexShaderB
 	inputElementDescs[1].SemanticIndex = 0;
 	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	// NORMAL 0 float3
+	inputElementDescs[2].SemanticName = "NORMAL";
+	inputElementDescs[2].SemanticIndex = 0;
+	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;

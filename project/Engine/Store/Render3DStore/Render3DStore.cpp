@@ -41,19 +41,18 @@ void Engine::Render3DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 
 
 
-	// プリミティブ頂点シェーダ
-	primitiveVS_ = compiler->Compile(L"./Assets/Shader/Primitive/Primitive.VS.hlsl", L"vs_6_0");
-	assert(primitiveVS_);
+	// 3D描画頂点シェーダ
+	render3DVS_ = compiler->Compile(L"./Assets/Shader/Render/Render3D/Render3D.VS.hlsl", L"vs_6_0");
+	assert(render3DVS_);
 
-	// プリミティブピクセルシェーダ
-	primitivePS_ = compiler->Compile(L"./Assets/Shader/Primitive/Primitive.PS.hlsl", L"ps_6_0");
-	assert(primitivePS_);
+	// 3D描画ピクセルシェーダ
+	render3DPS_ = compiler->Compile(L"./Assets/Shader/Render/Render3D/Render3D.PS.hlsl", L"ps_6_0");
+	assert(render3DPS_);
 
+	// 3D描画PSOの生成と初期化
+	psoRender3D_ = std::make_unique<PSORender3D>();
+	psoRender3D_->Initialize(device, render3DVS_.Get(), render3DPS_.Get(), log);
 
-
-	// プリミティブPSOの生成と初期化
-	psoPrimitive_ = std::make_unique<PSOPrimitive>();
-	psoPrimitive_->Initialize(device, primitiveVS_.Get(), primitivePS_.Get(), log);
 
 
 	// スキニングPSOの生成と初期化
@@ -82,7 +81,7 @@ void Engine::Render3DStore::Update(ID3D12GraphicsCommandList* commandList)
 void Engine::Render3DStore::Reset()
 {
 	// データリセット
-	psoPrimitive_->ResetBlendMode();
+	psoRender3D_->ResetBlendMode();
 }
 
 /// @brief シーン前のリセット
@@ -199,7 +198,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[handle]->GetType() == Render3D::Type::StaticModel)
 	{
 		auto p = static_cast<Render3DStaticModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 
@@ -207,7 +206,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[handle]->GetType() == Render3D::Type::AnimationModel)
 	{
 		auto p = static_cast<Render3DAnimationModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 
@@ -215,7 +214,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[handle]->GetType() == Render3D::Type::SkinningModel)
 	{
 		auto p = static_cast<Render3DSkinningModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 }
@@ -237,7 +236,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::StaticModel)
 	{
 		auto p = static_cast<Render3DStaticModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 
@@ -245,7 +244,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::AnimationModel)
 	{
 		auto p = static_cast<Render3DAnimationModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 
@@ -253,7 +252,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::SkinningModel)
 	{
 		auto p = static_cast<Render3DSkinningModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoPrimitive_.get());
+		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 		return;
 	}
 }
