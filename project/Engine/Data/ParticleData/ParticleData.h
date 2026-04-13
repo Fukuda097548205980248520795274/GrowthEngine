@@ -62,6 +62,9 @@ namespace Engine
 
 			/// @brief 放出間隔
 			float frequency;
+
+			/// @brief ビルボード有効化
+			bool enableBillboard;
 		};
 	}
 }

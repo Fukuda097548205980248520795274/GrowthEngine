@@ -15,6 +15,7 @@ namespace Engine
 	class ModelStore;
 	class TextureStore;
 	class Particle3DParameter;
+	class Camera3DStore;
 
 	class Particle3DData
 	{
@@ -52,7 +53,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param psoDraw 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const Matrix4x4& viewProjection);
+		void Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore);
 
 		/// @brief 名前を取得する
 		/// @return 

@@ -3,6 +3,8 @@
 
 namespace Engine
 {
+	class Camera3DStore;
+
 	class DX12Particle
 	{
 	public:
@@ -40,7 +42,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
-		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection) { particle3DStore_->Draw(commandList, name, viewProjection); }
+		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore) { particle3DStore_->Draw(commandList, name, cameraStore); }
 
 
 	public:

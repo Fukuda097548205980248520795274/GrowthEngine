@@ -7,6 +7,100 @@
 #include <cassert>
 #include <filesystem>
 
+// Dear ImGuiの初期レイアウト
+const char* defaultImguiIni = R"(
+[Window][DockSpace]
+Pos=0,18
+Size=1280,702
+Collapsed=0
+
+[Window][Debug##Default]
+Pos=60,60
+Size=400,400
+Collapsed=0
+
+[Window][Dear ImGui Demo]
+Pos=0,18
+Size=967,490
+Collapsed=0
+DockId=0x00000001,1
+
+[Window][Texture]
+Pos=0,510
+Size=1222,210
+Collapsed=0
+DockId=0x00000005,0
+
+[Window][Reset Scene]
+Pos=1224,510
+Size=56,210
+Collapsed=0
+DockId=0x00000006,0
+
+[Window][Stage Editor]
+Pos=0,550
+Size=1222,170
+Collapsed=0
+DockId=0x00000005,2
+
+[Window][Chip Selector]
+Pos=0,550
+Size=1222,170
+Collapsed=0
+DockId=0x00000005,1
+
+[Window][Camera3D]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,4
+
+[Window][Model]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,3
+
+[Window][Prefab]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,2
+
+[Window][PostEffect]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,1
+
+[Window][Light]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,0
+
+[Window][View]
+Pos=0,18
+Size=926,490
+Collapsed=0
+DockId=0x00000001,0
+
+[Window][Particle]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,5
+
+[Docking][Data]
+DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
+  DockNode    ID=0x00000003 Parent=0x14621557 SizeRef=1280,490 Split=X
+    DockNode  ID=0x00000001 Parent=0x00000003 SizeRef=926,702 CentralNode=1 Selected=0xCD8A0BD6
+    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x3AD7C986
+  DockNode    ID=0x00000004 Parent=0x14621557 SizeRef=1280,210 Split=X Selected=0xBE78FE5F
+    DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=1222,170 Selected=0xFFE73297
+    DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=56,170 Selected=0xFDB80A1C
+)";
+
 /// @brief デストラクタ
 Engine::ImGuiRender::~ImGuiRender()
 {
@@ -74,6 +168,20 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 
 	// ドッキング機能を有効にする
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+	// imgui.iniの読み込み
+	std::fstream f("imgui.ini");
+
+	// ファイルが存在すれば読み込む、なければデフォルトのレイアウトを読み込む
+	if (f.is_open()) 
+	{
+		f.close();
+	}
+	else 
+	{
+		// デフォルトのレイアウトを読み込む
+		ImGui::LoadIniSettingsFromMemory(defaultImguiIni);
+	}
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp_->GetHwnd());

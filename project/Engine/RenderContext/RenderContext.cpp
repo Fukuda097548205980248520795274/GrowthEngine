@@ -4,7 +4,6 @@
 #include "Func/ResourceFunc/ResourceFunc.h"
 #include "WinApp/WinApp.h"
 
-
 /// @brief 初期化
 /// @param log 
 void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)

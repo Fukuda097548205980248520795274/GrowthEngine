@@ -99,9 +99,9 @@ void Engine::Particle3DStore::Update(ID3D12GraphicsCommandList* commandList)
 /// @brief 描画処理
 /// @param commandList 
 /// @param viewProjection 
-void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection)
+void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore)
 {
-	dataTable_[nameTable_[name]]->Draw(commandList, viewProjection);
+	dataTable_[nameTable_[name]]->Draw(commandList, cameraStore);
 }
 
 /// @brief デバッグパラメータ

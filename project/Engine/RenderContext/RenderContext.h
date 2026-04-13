@@ -445,7 +445,7 @@ namespace Engine
 		/// @param name 
 		void DrawParticle3D(const std::string& name)
 		{
-			particle_->Draw3DParticle(commandList_, name, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
+			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get());
 		}
 
 

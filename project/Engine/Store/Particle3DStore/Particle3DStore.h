@@ -24,6 +24,7 @@ namespace Engine
 	class DX12Heap;
 	class ModelStore;
 	class TextureStore;
+	class Camera3DStore;
 	class Log;
 
 	class Particle3DStore
@@ -58,7 +59,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Matrix4x4& viewProjection);
+		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore);
 
 
 	public:

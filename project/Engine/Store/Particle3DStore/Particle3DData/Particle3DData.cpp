@@ -5,6 +5,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "GrowthEngine.h"
 #include "Parameter/Particle3DParameter/Particle3DParameter.h"
+#include "Store/Camera3DStore/Camera3DStore.h"
 
 /// @brief 初期化
 /// @param device 
@@ -45,6 +46,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->speed.end = 6.0f;
 	param_->count = 1;
 	param_->frequency = 0.5f;
+	param_->enableBillboard = false;
 
 	// グループを設定する
 	group_ = "Particle3D_" + name_;
@@ -63,6 +65,8 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "EndSpeed", &param_->speed.end);
 		parameter_->SetValue(group_, "Count", &param_->count);
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
+		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
+		
 
 		// グループを登録及び反映
 		parameter_->RegisterGroupDataReflection(group_);
@@ -156,17 +160,19 @@ void Engine::Particle3DData::Reset()
 	}
 	else
 	{
-		particleEmitterPointResource_->data_->translate = param_->position;
-		particleEmitterPointResource_->data_->count = param_->count;
-		particleEmitterPointResource_->data_->frequency = param_->frequency;
-		particleEmitterPointResource_->data_->startColor = param_->color.start;
-		particleEmitterPointResource_->data_->endColor = param_->color.end;
-		particleEmitterPointResource_->data_->startScale = param_->scale.start;
-		particleEmitterPointResource_->data_->endScale = param_->scale.end;
-		particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
-		particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
-		particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
-		particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+		param_ = std::make_unique<Particle3D::Param>();
+		param_->position = Vector3(0.0f, 0.0f, 0.0f);
+		param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->scale.start = 1.0f;
+		param_->scale.end = 1.0f;
+		param_->lifeTime.min = 1.0f;
+		param_->lifeTime.max = 1.0f;
+		param_->speed.start = 6.0f;
+		param_->speed.end = 6.0f;
+		param_->count = 1;
+		param_->frequency = 0.5f;
+		param_->enableBillboard = false;
 	}
 
 	// ロードしたこととする
@@ -288,7 +294,7 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 /// @brief 描画処理
 /// @param commandList 
 /// @param psoDraw 
-void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList,const Matrix4x4& viewProjection)
+void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore)
 {
 	// ロードしていなかったら処理しない
 	if (!isLoad_)return;
@@ -302,8 +308,17 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList,const M
 
 
 	// データを渡す
-	particleViewResource_->data_->viewProjection = viewProjection;
-	particleViewResource_->data_->billboard = MakeIdentityMatrix4x4();
+	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+
+	// ビルボードの有効化
+	if (param_->enableBillboard)
+	{
+		particleViewResource_->data_->billboard = Make3DRotateMatrix4x4(cameraStore->GetCamera3D().GetQuaternion());
+	}
+	else
+	{
+		particleViewResource_->data_->billboard = MakeIdentityMatrix4x4();
+	}
 
 
 	/*------------------------
@@ -353,6 +368,10 @@ void Engine::Particle3DData::DebugParameter()
 
 		// 放出間隔
 		ImGui::DragFloat("Frequency", &param_->frequency, 0.01f, 0.0f, 100000.0f);
+
+		// ビルボード有効化
+		ImGui::Checkbox("Billboard", &param_->enableBillboard);
+
 
 		// 生存期間
 		if (ImGui::TreeNode("LifeTime"))
