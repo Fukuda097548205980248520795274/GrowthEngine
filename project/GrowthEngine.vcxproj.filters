@@ -175,9 +175,6 @@
     <Filter Include="Engine\Include\Application\AudioObject">
       <UniqueIdentifier>{b1fede05-3cae-4912-8f69-edb5b3d2d7ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Shader\Skinning">
-      <UniqueIdentifier>{88f2bace-352c-425f-a40c-860d7e1bbb41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\ComputePSO">
       <UniqueIdentifier>{5fd6ac47-8fa6-4ce5-9da6-c20846bc8c84}</UniqueIdentifier>
     </Filter>
@@ -879,6 +876,9 @@
     </Filter>
     <Filter Include="Engine\Include\PSO\PSOModel\PSORender2D">
       <UniqueIdentifier>{7558a9d6-afe7-4d9f-95f4-c5d6804eedc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Primitive">
+      <UniqueIdentifier>{4391fdb2-859c-49d4-830c-eb11a257d20e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2346,9 +2346,6 @@
     <FxCompile Include="Assets\Shader\PostEffect\CopyImage.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Skinning\Skinning.CS.hlsl">
-      <Filter>Engine\Shader\Skinning</Filter>
-    </FxCompile>
     <FxCompile Include="Assets\Shader\Render\Render3D\Render3D.VS.hlsl">
       <Filter>Engine\Shader\Render\Render3D</Filter>
     </FxCompile>
@@ -2453,6 +2450,18 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\HighLuminanceExtraction.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Primitive\UVSphere.CS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Primitive\Ring.CS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Primitive\Cylinder.CS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Primitive\Skinning.CS.hlsl">
+      <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
