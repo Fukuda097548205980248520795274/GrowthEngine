@@ -19,6 +19,9 @@ struct Particle
     
     // 方向
     float3 direction;
+    
+    // 放出位置
+    float3 emitPos;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 
@@ -127,6 +130,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
             // 大きさを0にする
             gParticles[particleIndex].scale = float3(0.0f, 0.0f, 0.0f);
             gParticles[particleIndex].color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+            gParticles[particleIndex].emitPos = float3(0.0f, 0.0f, 0.0f);
             
             int freeListIndex;
             

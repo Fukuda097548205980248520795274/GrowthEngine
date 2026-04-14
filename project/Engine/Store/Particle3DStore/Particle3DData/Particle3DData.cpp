@@ -36,17 +36,23 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Particle3D::Param>();
 	param_->position = Vector3(0.0f, 0.0f, 0.0f);
+	param_->shape = Particle3D::EmitterShape::Point;
+	param_->radius1 = 1.0f;
+	param_->radius3 = Vector3(1.0f, 1.0f, 1.0f);
 	param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	param_->scale.start = 1.0f;
 	param_->scale.end = 1.0f;
-	param_->lifeTime.min = 1.0f;
-	param_->lifeTime.max = 1.0f;
+	param_->lifeTime.min = 2.0f;
+	param_->lifeTime.max = 2.0f;
 	param_->speed.start = 6.0f;
 	param_->speed.end = 6.0f;
 	param_->count = 1;
-	param_->frequency = 0.5f;
+	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
+	param_->enableAttract = false;
+	param_->attractPos = Vector3(0.0f, 0.0f, 0.0f);
+	param_->attractAcceleration = 1.0f;
 
 	// グループを設定する
 	group_ = "Particle3D_" + name_;
@@ -55,6 +61,9 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	{
 		// パラメータを登録する
 		parameter_->SetValue(group_, "Position", &param_->position);
+		parameter_->SetValue(group_, "Shape", &param_->shape);
+		parameter_->SetValue(group_, "Radius1", &param_->radius1);
+		parameter_->SetValue(group_, "Radius3", &param_->radius3);
 		parameter_->SetValue(group_, "StartColor", &param_->color.start);
 		parameter_->SetValue(group_, "EndColor", &param_->color.end);
 		parameter_->SetValue(group_, "StartScale", &param_->scale.start);
@@ -66,6 +75,8 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "Count", &param_->count);
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
 		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
+		parameter_->SetValue(group_, "EnableAttract", &param_->enableAttract);
+		parameter_->SetValue(group_, "AttractPos", &param_->attractPos);
 		
 
 		// グループを登録及び反映
@@ -90,7 +101,6 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterPointResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterPointDataForGPU>>();
 	particleEmitterPointResource_->Initialize(device, log);
 
-
 	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
 	particleEmitterPointResource_->data_->emit = 0;
 
@@ -106,7 +116,11 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
 	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
 
-
+	// 引力リソースを生成する
+	particleAttractResource_ = std::make_unique<ConstantBufferResource<Particle3DAttractDataForGPU>>();
+	particleAttractResource_->Initialize(device, log);
+	particleAttractResource_->data_->position = param_->position + param_->attractPos;
+	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
 
 	// パーティクルフレームリソースを生成する
 	particlePerFrameResource_ = std::make_unique<ConstantBufferResource<ParticlePerFrameDataForGPU>>();
@@ -160,19 +174,24 @@ void Engine::Particle3DData::Reset()
 	}
 	else
 	{
-		param_ = std::make_unique<Particle3D::Param>();
 		param_->position = Vector3(0.0f, 0.0f, 0.0f);
+		param_->shape = Particle3D::EmitterShape::Point;
+		param_->radius1 = 1.0f;
+		param_->radius3 = Vector3(1.0f, 1.0f, 1.0f);
 		param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		param_->scale.start = 1.0f;
 		param_->scale.end = 1.0f;
-		param_->lifeTime.min = 1.0f;
-		param_->lifeTime.max = 1.0f;
+		param_->lifeTime.min = 2.0f;
+		param_->lifeTime.max = 2.0f;
 		param_->speed.start = 6.0f;
 		param_->speed.end = 6.0f;
 		param_->count = 1;
-		param_->frequency = 0.5f;
+		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
+		param_->enableAttract = false;
+		param_->attractPos = Vector3(0.0f, 0.0f, 0.0f);
+		param_->attractAcceleration = 1.0f;
 	}
 
 	// ロードしたこととする
@@ -225,6 +244,9 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
 	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
 	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+
+	particleAttractResource_->data_->position = param_->position + param_->attractPos;
+	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
 
 
 	/*------------
@@ -286,6 +308,12 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 
 	// エミッターリソースを登録する
 	particleEmitterPointResource_->RegisterCompute(commandList, 5);
+
+	if(param_->enableAttract)
+	{
+		// 引力リソースを登録する
+		particleAttractResource_->RegisterCompute(commandList, 6);
+	}
 
 	// ディスパッチする
 	commandList->Dispatch((numInstance_ + 255) / 256, 1, 1);
@@ -362,6 +390,35 @@ void Engine::Particle3DData::DebugParameter()
 	{
 		// 位置
 		ImGui::DragFloat3("Position" , &param_->position.x, 0.01f, -100000.0f, 100000.0f);
+		
+		ImGui::Text("\n");
+
+		// エミッターの図形
+		const char* type[] = { "Point", "AABB", "Sphere" };
+		int32_t shapeIndex = static_cast<int32_t>(param_->shape);
+		if (ImGui::Combo("Shape", &shapeIndex, type, IM_ARRAYSIZE(type)))
+		{
+			param_->shape = static_cast<Particle3D::EmitterShape>(shapeIndex);
+		}
+
+		// 図形ごとのパラメータ
+		switch(param_->shape)
+		{
+		case Particle3D::EmitterShape::AABB:
+			
+			// 半径
+			ImGui::DragFloat3("Radius", &param_->radius3.x, 0.01f, 0.0f, 100000.0f);
+
+			break;
+		case Particle3D::EmitterShape::Sphere:
+			
+			// 半径
+			ImGui::DragFloat("Radius", &param_->radius1, 0.01f, 0.0f, 100000.0f);
+
+			break;
+		}
+
+		ImGui::Text("\n");
 
 		// 放出数
 		ImGui::DragInt("Count", &param_->count, 1.0f, 0, static_cast<int32_t>(numInstance_));
@@ -412,17 +469,34 @@ void Engine::Particle3DData::DebugParameter()
 			ImGui::TreePop();
 		}
 
-		// 速度
-		if (ImGui::TreeNode("Speed"))
+		if (!param_->enableAttract)
 		{
-			// 開始
-			ImGui::DragFloat("Start", &param_->speed.start, 0.01f, 0.0f, 100000.0f);
+			// 速度
+			if (ImGui::TreeNode("Speed"))
+			{
+				// 開始
+				ImGui::DragFloat("Start", &param_->speed.start, 0.01f, 0.0f, 100000.0f);
 
-			// 終了
-			ImGui::DragFloat("End", &param_->speed.end, 0.01f, 0.0f, 100000.0f);
+				// 終了
+				ImGui::DragFloat("End", &param_->speed.end, 0.01f, 0.0f, 100000.0f);
 
-			// 終了
-			ImGui::TreePop();
+				// 終了
+				ImGui::TreePop();
+			}
+		}
+
+		ImGui::Text("\n");
+
+		// 引力有効化
+		ImGui::Checkbox("Attract", &param_->enableAttract);
+
+		if (param_->enableAttract)
+		{
+			// 引力の位置
+			ImGui::DragFloat3("AttractPos", &param_->attractPos.x, 0.01f, -100000.0f, 100000.0f);
+
+			// 吸引加速度
+			ImGui::DragFloat("AttractAcceleration", &param_->attractAcceleration, 0.01f, 0.01f, 100000.0f);
 		}
 
 		

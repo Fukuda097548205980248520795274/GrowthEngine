@@ -20,6 +20,9 @@ struct Particle
     
     // 方向
     float3 direction;
+    
+    // 放出位置
+    float3 emitPos;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 
@@ -109,6 +112,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
             uint particleIndex = gFreeList[freeListIndex];
             
             gParticles[particleIndex].translate = gEmitter.translate;
+            gParticles[particleIndex].emitPos = gParticles[particleIndex].translate;
             gParticles[particleIndex].lifeTime = gEmitter.maxLifeTime - generator.Generate1d() * (gEmitter.maxLifeTime - gEmitter.minLifeTime);
             gParticles[particleIndex].scale = float3(1.0f, 1.0f, 1.0f);
             gParticles[particleIndex].currentTime = 0.0f;

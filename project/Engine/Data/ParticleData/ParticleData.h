@@ -7,6 +7,14 @@ namespace Engine
 {
 	namespace Particle3D
 	{
+		// エミッターの図形
+		enum class EmitterShape
+		{
+			Point,
+			AABB,
+			Sphere
+		};
+
 		/// @brief 色
 		struct Color
 		{
@@ -45,6 +53,17 @@ namespace Engine
 			/// @brief 位置
 			Vector3 position;
 
+
+			// エミッターの図形
+			EmitterShape shape;
+
+			/// @brief 放出位置の半径
+			float radius1;
+
+			/// @brief 放出位置の半径
+			Vector3 radius3;
+
+
 			/// @brief 色
 			Color color;
 
@@ -65,6 +84,16 @@ namespace Engine
 
 			/// @brief ビルボード有効化
 			bool enableBillboard;
+
+
+			/// @brief 引力の有無
+			bool enableAttract;
+
+			/// @brief 引力の位置
+			Vector3 attractPos;
+
+			// 吸引加速度
+			float attractAcceleration;
 		};
 	}
 }

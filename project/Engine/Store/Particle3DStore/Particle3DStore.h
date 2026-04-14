@@ -17,6 +17,7 @@
 #include "PSO/ComputePSO/ComputePSOParticle3DInit/ComputePSOParticle3DInit.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DEmitterPoint/ComputePSOParticle3DEmitterPoint.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DUpdateVelocity/ComputePSOParticle3DUpdateVelocity.h"
+#include "PSO/ComputePSO/ComputePSOParticle3DUpdateAttract/ComputePSOParticle3DUpdateAttract.h"
 
 namespace Engine
 {
@@ -102,6 +103,9 @@ namespace Engine
 
 		/// @brief CSパーティクル速度更新PSO
 		std::unique_ptr<ComputePSOParticle3DUpdateVelocity> computePsoParticle3DUpdateVelocity_ = nullptr;
+
+		/// @brief CSパーティクル引力更新PSO
+		std::unique_ptr<ComputePSOParticle3DUpdateAttract> computePsoParticle3DUpdateAttract_ = nullptr;
 
 
 	private:

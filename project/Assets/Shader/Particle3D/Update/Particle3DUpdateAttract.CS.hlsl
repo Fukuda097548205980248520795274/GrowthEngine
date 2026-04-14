@@ -19,6 +19,9 @@ struct Particle
     
     // 方向
     float3 direction;
+    
+    // 放出位置
+    float3 emitPos;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 
@@ -81,6 +84,17 @@ struct Emitter
 };
 ConstantBuffer<Emitter> gEmitter : register(b2);
 
+// 引き寄せ
+struct Attract
+{
+    // 位置
+    float3 position;
+    
+    // 加速度
+    float acceleration;
+};
+ConstantBuffer<Attract> gAttract : register(b3);
+
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
@@ -108,8 +122,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         gParticles[particleIndex].color = lerp(gEmitter.startColor, gEmitter.endColor, t);
         
         // 移動
-        float speed = lerp(gEmitter.startSpeed, gEmitter.endSpeed, t);
-        gParticles[particleIndex].translate += gParticles[particleIndex].direction * speed * gPerFrame.deltaTime;
+        gParticles[particleIndex].translate = lerp(gParticles[particleIndex].emitPos, gAttract.position, pow(t, gAttract.acceleration));
         
         // 大きさ
         float scale = lerp(gEmitter.startScale, gEmitter.endScale, t);
@@ -127,6 +140,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
             // 大きさを0にする
             gParticles[particleIndex].scale = float3(0.0f, 0.0f, 0.0f);
             gParticles[particleIndex].color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+            gParticles[particleIndex].emitPos = float3(0.0f, 0.0f, 0.0f);
             
             int freeListIndex;
             

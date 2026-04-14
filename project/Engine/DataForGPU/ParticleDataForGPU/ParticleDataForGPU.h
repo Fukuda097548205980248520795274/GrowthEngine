@@ -25,6 +25,9 @@ namespace Engine
 
 		/// @brief 方向
 		Vector3 direction;
+
+		/// @brief 放出位置
+		Vector3 emitPos;
 	};
 
 	/// @brief GPUに送るパーティクルの数のデータ
@@ -64,7 +67,7 @@ namespace Engine
 		// 放出フラグ
 		uint32_t emit;
 
-		float padding[1]; // パディング
+		float padding0[1]; // パディング
 
 		/// @brief 初期の色
 		Vector4 startColor;
@@ -89,6 +92,28 @@ namespace Engine
 
 		// 最後の速度
 		float endSpeed;
+
+		float padding2[2]; // パディング
+	};
+
+	// @brief GPUに送るパーティクルの引き寄せのデータ
+	struct Particle3DAttractDataForGPU
+	{
+		// 引き寄せる位置
+		Vector3 position;
+
+		// 吸引加速度
+		float acceleration;
+	};
+
+	// @brief GPUに送るパーティクルの放出形状のデータ
+	struct Particle3DEmitterShapeDataForGPU
+	{
+		/// @brief 半径
+		float radius1;
+
+		/// @brief 半径
+		Vector3 radius3;
 	};
 
 	/// @brief GPUに送るパーティクルのフレームごとのデータ

@@ -27,6 +27,9 @@ struct Particle
     
     // 速度
     float3 direction;
+    
+    // 放出位置
+    float3 emitPos;
 };
 StructuredBuffer<Particle> gParticles : register(t0);
 

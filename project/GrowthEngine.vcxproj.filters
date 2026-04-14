@@ -889,6 +889,9 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity">
       <UniqueIdentifier>{ae372ce6-9af1-4a40-a78b-b5313fe56d87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract">
+      <UniqueIdentifier>{73edabad-f529-44ba-b549-ec83fbb43e2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1556,6 +1559,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.cpp">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DUVSphereData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2332,6 +2338,9 @@
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\PrimitiveDataForGPU\PrimitiveDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\PrimitiveDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

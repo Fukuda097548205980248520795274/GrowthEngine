@@ -6,7 +6,7 @@ void GameScene::Initialize()
 	engine_->LoadCamera3D("MainCamera");
 
 	// モデルを読み込む
-	engine_->LoadUVSphere(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "uv");
+	engine_->LoadParticle3D("particle", 1000, engine_->LoadModel("./Assets/Models/particlePlane", "particlePlane.obj"));
 
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
@@ -25,7 +25,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// 地形を描画する
-	engine_->DrawRender3D("uv");
+	engine_->DrawParticle3D("particle");
 
 	// ブルームを描画する
 	engine_->DrawPostEffect(engine_->LoadPostEffect("Bloom", Engine::PostEffect::Type::Bloom));

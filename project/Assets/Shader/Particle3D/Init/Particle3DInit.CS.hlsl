@@ -19,6 +19,9 @@ struct Particle
     
     // 方向
     float3 direction;
+    
+    // 放出位置
+    float3 emitPos;
 };
 RWStructuredBuffer<Particle> gParticles : register(u0);
 

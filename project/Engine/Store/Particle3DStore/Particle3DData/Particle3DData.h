@@ -63,6 +63,10 @@ namespace Engine
 		/// @return 
 		ModelHandle GetHandle()const { return hModel_; }
 
+		/// @brief 引力を有効にしているかどうか
+		/// @return 
+		bool EnableAttract()const { return param_->enableAttract; }
+
 
 	public:
 
@@ -83,6 +87,9 @@ namespace Engine
 
 		/// @brief エミッターリソース
 		std::unique_ptr<ConstantBufferResource<Particle3DEmitterPointDataForGPU>> particleEmitterPointResource_ = nullptr;
+
+		/// @brief 引力リソース
+		std::unique_ptr<ConstantBufferResource<Particle3DAttractDataForGPU>> particleAttractResource_ = nullptr;
 
 		/// @brief パーティクルフレームリソース
 		std::unique_ptr<ConstantBufferResource<ParticlePerFrameDataForGPU>> particlePerFrameResource_ = nullptr;
