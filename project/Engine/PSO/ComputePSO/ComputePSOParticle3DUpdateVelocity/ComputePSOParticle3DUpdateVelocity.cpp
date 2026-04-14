@@ -1,4 +1,4 @@
-#include "ComputePSOParticle3DUpdate.h"
+#include "ComputePSOParticle3DUpdateVelocity.h"
 #include "Log/Log.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 #include <cassert>
@@ -7,10 +7,10 @@
 /// @param device 
 /// @param compiler 
 /// @param log 
-void Engine::ComputePSOParticle3DUpdate::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
+void Engine::ComputePSOParticle3DUpdateVelocity::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
 {
 	// シェーダのバイナリデータを取得する
-	computeShaderBlob_ = compiler->Compile(L"./Assets/Shader/Particle3D/Update/Particle3DUpdate.CS.hlsl", L"cs_6_0");
+	computeShaderBlob_ = compiler->Compile(L"./Assets/Shader/Particle3D/Update/Particle3DUpdateVelocity.CS.hlsl", L"cs_6_0");
 	assert(computeShaderBlob_ != nullptr);
 
 

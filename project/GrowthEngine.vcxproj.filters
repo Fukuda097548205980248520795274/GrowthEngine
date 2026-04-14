@@ -814,9 +814,6 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit">
       <UniqueIdentifier>{63c9b600-5fa6-4cdd-b643-e89514060d5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate">
-      <UniqueIdentifier>{ae372ce6-9af1-4a40-a78b-b5313fe56d87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint">
       <UniqueIdentifier>{d798dd7d-81cf-4680-a0f2-c3975831ed98}</UniqueIdentifier>
     </Filter>
@@ -888,6 +885,9 @@
     </Filter>
     <Filter Include="Engine\Include\DataForGPU\PrimitiveDataForGPU">
       <UniqueIdentifier>{45f9903a-135a-410d-a2cf-5a2b29f69678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity">
+      <UniqueIdentifier>{ae372ce6-9af1-4a40-a78b-b5313fe56d87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1527,8 +1527,8 @@
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.cpp">
-      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate</Filter>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity\ComputePSOParticle3DUpdateVelocity.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint</Filter>
@@ -2297,8 +2297,8 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DInit</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.h">
-      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdate</Filter>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity\ComputePSOParticle3DUpdateVelocity.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint</Filter>
@@ -2463,7 +2463,7 @@
     <FxCompile Include="Assets\Shader\Particle3D\Init\Particle3DInit.CS.hlsl">
       <Filter>Engine\Shader\Particle3D\Init</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Particle3D\Update\Particle3DUpdate.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Particle3D\Update\Particle3DUpdateVelocity.CS.hlsl">
       <Filter>Engine\Shader\Particle3D\Update</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle3D\Draw\Particle3D.VS.hlsl">
@@ -2486,6 +2486,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Primitive\Skinning.CS.hlsl">
       <Filter>Engine\Shader\Primitive</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Update\Particle3DUpdateAttract.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Update</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -43,8 +43,8 @@ void Engine::Particle3DStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePsoParticle3DEmitterPoint_->Initialize(device, compiler, log);
 
 	// CSパーティクル更新PSOを生成する
-	computePsoParticle3DUpdate_ = std::make_unique<ComputePSOParticle3DUpdate>();
-	computePsoParticle3DUpdate_->Initialize(device, compiler, log);
+	computePsoParticle3DUpdateVelocity_ = std::make_unique<ComputePSOParticle3DUpdateVelocity>();
+	computePsoParticle3DUpdateVelocity_->Initialize(device, compiler, log);
 }
 
 /// @brief リセット
@@ -93,7 +93,7 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 /// @param commandList 
 void Engine::Particle3DStore::Update(ID3D12GraphicsCommandList* commandList)
 {
-	for (auto& data : dataTable_)data->Update(commandList, computePsoParticle3DEmitterPoint_.get(), computePsoParticle3DUpdate_.get());
+	for (auto& data : dataTable_)data->Update(commandList, computePsoParticle3DEmitterPoint_.get(), computePsoParticle3DUpdateVelocity_.get());
 }
 
 /// @brief 描画処理

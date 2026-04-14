@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class ComputePSOParticle3DUpdate : public BaseComputePSO
+	class ComputePSOParticle3DUpdateVelocity : public BaseComputePSO
 	{
 	public:
 
