@@ -458,6 +458,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.cpp" />
     <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -895,6 +896,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.cpp" />
     <ClCompile Include="Engine\Store\Render3DStore\Render3DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1015,6 +1017,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\DataForGPU\ParticleDataForGPU\ParticleDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PostEffectDataForGPU\PostEffectDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h" />
+    <ClInclude Include="Engine\DataForGPU\PrimitiveDataForGPU\PrimitiveDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\TransformationDataForGPU\TransformationDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h" />
     <ClInclude Include="Engine\Data\AnimationData\AnimationData.h" />
@@ -1075,6 +1078,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdate\ComputePSOParticle3DUpdate.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.h" />
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
     <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
@@ -1193,6 +1197,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DSkinningModelData\Render3DSkinningModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.h" />
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DStore.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />

@@ -13,7 +13,7 @@ Render3DSkinningModel::Render3DSkinningModel(ModelHandle hModel, AnimationHandle
 	type_ = Engine::Render3D::Type::SkinningModel;
 
 	// 読み込み
-	hRender3D_ = engine_->LoadRender3D(hModel, hAnimation, hSkeleton, name_, type_);
+	hRender3D_ = engine_->LoadRender3D(0, hModel, hAnimation, hSkeleton, name_, type_);
 
 	// パラメータを取得する
 	param_ = engine_->GetRender3DParam<Engine::Render3D::SkinningModel::Param>(hRender3D_);

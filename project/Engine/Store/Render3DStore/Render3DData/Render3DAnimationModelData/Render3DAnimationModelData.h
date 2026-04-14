@@ -1,16 +1,5 @@
 #pragma once
 #include "../Render3DBaseData.h"
-#include "Handle/Handle.h"
-#include <memory>
-#include <vector>
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <wrl.h>
-#include "Data/Render3DData/Render3DData.h"
-
-#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
-#include "DataForGPU/TransformationDataForGPU/TransformationDataForGPU.h"
-#include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
 
 namespace Engine
 {

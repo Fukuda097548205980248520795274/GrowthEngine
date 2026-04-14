@@ -1,31 +1,32 @@
 #pragma once
 #include "../Render3DBaseData.h"
+#include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 
 namespace Engine
 {
-	class ModelStore;
-	class BasePSOModel;
-	class BasePSOShadowMap;
-	class Log;
 	class TextureStore;
 	class LightStore;
-	class Camera3DStore;
 	class SkyboxStore;
+	class DX12Heap;
+	class Log;
 
-	class Render3DStaticModelData : public Render3DBaseData
+	class Render3DUVSphereData : public Render3DBaseData
 	{
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
-		/// @param hModel 
-		Render3DStaticModelData(const std::string& name , ModelHandle hModel, Render3DHandle hRender3D, Render3DParameter* parameter)
-			: hModel_(hModel), Render3DBaseData(name, hRender3D,parameter) { type_ = Render3D::Type::StaticModel; }
+		/// @param hTexture 
+		Render3DUVSphereData(const std::string& name, TextureHandle hTexture, Render3DHandle hRender3D, Render3DParameter* parameter)
+			: hTexture_(hTexture), Render3DBaseData(name, hRender3D, parameter) {
+			type_ = Render3D::Type::UVSphere;
+		}
 
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(ModelStore* modelStore, TextureStore* textureStore,LightStore* lightStore, ID3D12Device* device, Log* log);
+		void Initialize(TextureStore* textureStore, LightStore* lightStore, DX12Heap* heap,
+			ID3D12Device* device,ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoUVSphere, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -68,36 +69,58 @@ namespace Engine
 
 	private:
 
-		// モデルハンドル
-		ModelHandle hModel_ = 0;
+		// テクスチャハンドル
+		TextureHandle hTexture_ = 0;
 
 
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<Render3D::StaticModel::Param> param_ = nullptr;
+		std::unique_ptr<Render3D::UVSphere::Param> param_ = nullptr;
 
-		// テクスチャファイルパステーブル
-		std::vector<std::string> textureFilePathTable_;
+		// テクスチャファイルパス
+		std::string textureFilePath_;
 
-		
+
+	private:
+
+		// 頂点リソース
+		std::unique_ptr<RWStructuredVertexBufferResource<VertexDataForGPU>> vertexResource_ = nullptr;
+
+		// インデックスリソース
+		std::unique_ptr<RWStructuredVertexBufferResource<uint32_t>> indexResource_ = nullptr;
+
+		// 分割リソース
+		std::unique_ptr<ConstantBufferResource<PrimitiveDataForGPU::UVSphereDivisionDataForGPU>> divisionResource_ = nullptr;
+
+		// スライスの最大値
+		static constexpr int32_t kMaxSlices = 32;
+
+		// リングの最大値
+		static constexpr int32_t kMaxRings = 16;
+
+		int32_t preSlices_ = 0;
+		int32_t preRings_ = 0;
+
+	private:
+
 		// 座標変換リソース
-		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>> meshTransformationResources_;
+		std::unique_ptr<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>> transformationResources_;
 
 		// マテリアルリソース
-		std::vector<std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>> meshMaterialResources_;
+		std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>> materialResources_;
 
 
 	private:
 
 		// シャドウマップ用座標変換リソース
-		std::vector<std::unique_ptr<ConstantBufferResource<Matrix4x4>>> shadowMapTransformationResource_;
+		std::unique_ptr<ConstantBufferResource<Matrix4x4>> shadowMapTransformationResource_;
 
 
 	private:
 
-		/// @brief モデルストア
-		ModelStore* modelStore_ = nullptr;
+		// CSUV球PSO
+		BaseComputePSO* psoUVSphere_ = nullptr;
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;

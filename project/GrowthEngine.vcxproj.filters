@@ -880,6 +880,15 @@
     <Filter Include="Engine\Shader\Primitive">
       <UniqueIdentifier>{4391fdb2-859c-49d4-830c-eb11a257d20e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOUVSphere">
+      <UniqueIdentifier>{8f69af80-0ae6-46a0-945b-641fe9521a12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DUVSphereData">
+      <UniqueIdentifier>{a1253847-202b-4929-a489-deb997fa49ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\PrimitiveDataForGPU">
+      <UniqueIdentifier>{45f9903a-135a-410d-a2cf-5a2b29f69678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1541,6 +1550,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOCopyImageAdd\PSOCopyImageAdd.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImageAdd</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOUVSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DUVSphereData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2308,6 +2323,15 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOCopyImageAdd\PSOCopyImageAdd.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOCopyImageAdd</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOUVSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DUVSphereData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\PrimitiveDataForGPU\PrimitiveDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\PrimitiveDataForGPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
