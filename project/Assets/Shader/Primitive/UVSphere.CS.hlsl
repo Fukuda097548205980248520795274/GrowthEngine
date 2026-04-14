@@ -36,68 +36,63 @@ RWStructuredBuffer<uint> gIndexBuffer : register(u1);
 [numthreads(16, 16, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-    // 範囲外のスレッドは書き込みを行わずに終了する
-    if (DTid.x > gParam.slices || DTid.y > gParam.rings)
+    
+    uint s = DTid.x; // 経度のインデックス
+    uint t = DTid.y; // 緯度のインデックス
+
+    // ----------------------------------------------------
+    // 1. 頂点計算 (slices + 1, rings + 1 の範囲で実行)
+    // ----------------------------------------------------
+    if (s > gParam.slices || t > gParam.rings)
     {
-        return;
+        return; // 完全な範囲外のスレッドはここで終了
     }
-    
-    uint slicesIndex = DTid.x;
-    uint ringsIndex = DTid.y;
-    
-    // スライス数とリング数の範囲内であれば頂点を生成
-    if(slicesIndex <= gParam.slices && ringsIndex <= gParam.rings)
+
+    float phi = (2.0 * PI * s) / gParam.slices;
+    float theta = (PI * t) / gParam.rings;
+
+    float3 pos;
+    pos.x = sin(theta) * cos(phi);
+    pos.y = cos(theta);
+    pos.z = sin(theta) * sin(phi);
+
+    float3 normal = normalize(pos);
+    float2 uv = float2((float) s / gParam.slices, (float) t / gParam.rings);
+
+    uint stride = gParam.slices + 1;
+    uint vertexIndex = s + t * stride;
+
+    Vertex v;
+    v.position = float4(pos, 1.0f);
+    v.normal = normalize(normal);
+    v.texcoord = uv;
+    gVertex[vertexIndex] = v;
+
+    // ----------------------------------------------------
+    // 2. インデックス計算 (slices, rings の範囲でのみ実行)
+    // ----------------------------------------------------
+    // 端の頂点 (s == slices または t == rings) は
+    // 新たな四角形の起点にはならないためスキップする
+    if (s < gParam.slices && t < gParam.rings)
     {
-        // UV座標の計算
-        float u = (float) slicesIndex / (float) gParam.slices;
-        float v = (float) ringsIndex / (float) gParam.rings;
         
-        // 球面座標の計算
-        float theta = u * 2.0f * PI;
-        float phi = v * PI;
-        
-        // 三角関数の計算
-        float sinPhi = sin(phi);
-        float cosPhi = cos(phi);
-        float sinTheta = sin(theta);
-        float cosTheta = cos(theta);
-        
-        // 位置と法線の計算
-        float3 normal = float3(sinPhi * cosTheta, cosPhi, sinPhi * sinTheta);
-        float4 position = float4(normal, 1.0f);
-        
-        // 頂点の書き込み
-        Vertex vertex;
-        vertex.position = position;
-        vertex.normal = normal;
-        vertex.texcoord = float2(u, v);
-        
-        // 頂点バッファへの書き込み
-        uint vertexIndex = ringsIndex * (gParam.slices + 1) + slicesIndex;
-        gVertex[vertexIndex] = vertex;
-    }
-    
-    // スライス数とリング数の範囲内であればインデックスを生成
-    if (slicesIndex < gParam.slices && ringsIndex < gParam.rings)
-    {
-        // 頂点インデックスの計算
-        uint v0 = ringsIndex * (gParam.slices + 1) + slicesIndex;
-        uint v1 = v0 + 1;
-        uint v2 = (ringsIndex + 1) * (gParam.slices + 1) + slicesIndex;
-        uint v3 = v2 + 1;
-        
-        // インデックスの書き込み
-        uint indexOffset = (ringsIndex * gParam.slices + slicesIndex) * 6;
-        
+        uint topLeft = s + t * stride;
+        uint topRight = (s + 1) + t * stride;
+        uint bottomLeft = s + (t + 1) * stride;
+        uint bottomRight = (s + 1) + (t + 1) * stride;
+
+        uint quadIndex = s + t * gParam.slices;
+        uint indexOffset = quadIndex * 6;
+
         // 三角形1
-        gIndexBuffer[indexOffset + 0] = v0;
-        gIndexBuffer[indexOffset + 1] = v1;
-        gIndexBuffer[indexOffset + 2] = v2;
+        gIndexBuffer[indexOffset + 0] = topLeft;
+        gIndexBuffer[indexOffset + 1] = topRight;
+        gIndexBuffer[indexOffset + 2] = bottomLeft;
 
         // 三角形2
-        gIndexBuffer[indexOffset + 3] = v1;
-        gIndexBuffer[indexOffset + 4] = v3;
-        gIndexBuffer[indexOffset + 5] = v2;
+        gIndexBuffer[indexOffset + 3] = bottomLeft;
+        gIndexBuffer[indexOffset + 4] = topRight;
+        gIndexBuffer[indexOffset + 5] = bottomRight;
     }
 
 }

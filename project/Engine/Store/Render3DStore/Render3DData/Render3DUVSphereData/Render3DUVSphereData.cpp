@@ -5,6 +5,7 @@
 #include "Store/LightStore/LightStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
+#include <algorithm>
 
 #include <numbers>
 
@@ -27,6 +28,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	assert(lightStore);
 	assert(heap);
 	assert(device);
+	assert(commandList);
 	assert(psoUVSphere);
 
 	// 引数を受け取る
@@ -94,11 +96,11 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 
 	// 頂点リソースの生成
 	vertexResource_ = std::make_unique<RWStructuredVertexBufferResource<VertexDataForGPU>>();
-	vertexResource_->Initialize(device, commandList, heap, sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1)), log);
+	vertexResource_->Initialize(device, commandList, heap, ((kMaxSlices + 1) * (kMaxRings + 1)), log);
 
 	// インデックスリソースの生成
 	indexResource_ = std::make_unique<RWStructuredVertexBufferResource<uint32_t>>();
-	indexResource_->Initialize(device, commandList, heap, sizeof(uint32_t) * (kMaxSlices * kMaxRings * 6), log);
+	indexResource_->Initialize(device, commandList, heap, (kMaxSlices * kMaxRings * 6), log);
 
 	// 分割リソースの生成
 	divisionResource_ = std::make_unique<ConstantBufferResource<PrimitiveDataForGPU::UVSphereDivisionDataForGPU>>();
@@ -183,6 +185,9 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	// PSOの設定
 	psoUVSphere_->Register(commandList);
 
+	param_->division.slices = std::clamp(param_->division.slices, 3, kMaxSlices);
+	param_->division.rings = std::clamp(param_->division.rings, 3, kMaxRings);
+
 	// 分割の設定
 	divisionResource_->data_->slices = param_->division.slices;
 	divisionResource_->data_->rings = param_->division.rings;
@@ -195,7 +200,7 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	indexResource_->RegisterCompute(commandList, 2);
 
 	// ディスパッチ
-	commandList->Dispatch((param_->division.slices + 15) / 16, (param_->division.rings + 15) / 16, 1);
+	commandList->Dispatch((param_->division.slices + 1 + 15) / 16, (param_->division.rings + 1 + 15) / 16, 1);
 
 
 
