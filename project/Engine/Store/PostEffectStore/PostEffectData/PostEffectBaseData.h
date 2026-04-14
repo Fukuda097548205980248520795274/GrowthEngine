@@ -62,6 +62,11 @@ namespace Engine
 		/// @brief リセット
 		virtual void Reset() = 0;
 
+		/// @brief リサイズする
+		/// @param width 
+		/// @param height 
+		virtual void Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int32_t width, int32_t height) {}
+
 		/// @brief 種類を取得する
 		/// @return 
 		PostEffect::Type GetType()const { return type_; }

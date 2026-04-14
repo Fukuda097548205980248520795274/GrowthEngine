@@ -55,11 +55,14 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 /// @brief サイズを作り直す
 /// @param device 
 /// @param buffering 
-void Engine::DX12Offscreen::Resize(ID3D12Device* device, DX12Buffering* buffering)
+void Engine::DX12Offscreen::Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering)
 {
 	offscreenResource_[0]->Resize(device, buffering);
 	offscreenResource_[1]->Resize(device, buffering);
 	depthResource_->Resize(device, buffering);
+
+	// ポストエフェクトストアのリサイズ
+	postEffectStore_->Resize(device, commandList, buffering->GetSwapChainDesc().Width , buffering_->GetSwapChainDesc().Height);
 }
 
 /// @brief クリア

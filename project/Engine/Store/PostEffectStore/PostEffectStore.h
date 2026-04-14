@@ -50,6 +50,13 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, TextureStore* textureStore, Log* log);
 
+		/// @brief リサイズ
+		/// @param device 
+		/// @param commandList 
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int32_t width, int32_t height);
+
 		/// @brief 読み込み
 		/// @param name 
 		/// @param type 

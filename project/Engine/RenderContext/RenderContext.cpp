@@ -430,7 +430,12 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 	buffering_->Resize(core_->GetDevice(), width, height);
 
 	// 5. オフスクリーン再生成
-	offscreen_->Resize(core_->GetDevice(), buffering_.get());
+	offscreen_->Resize(core_->GetDevice(),commandList_, buffering_.get());
+
+#ifdef _DEVELOPMENT
+	// IMGUIのリサイズ
+	imguiRender_->Resize(width, height);
+#endif
 
 	// シャドウマップテクスチャのリサイズ
 	lightStore_->Resize(core_->GetDevice(), width, height);

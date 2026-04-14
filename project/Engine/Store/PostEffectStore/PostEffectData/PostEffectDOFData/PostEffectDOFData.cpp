@@ -43,10 +43,6 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 		parameter_->RegisterGroupDataReflection(group_);
 	}
 
-	// スワップチェーンの幅と高さを取得
-	uint32_t width = buffering->GetSwapChainDesc().Width;
-	uint32_t height = buffering->GetSwapChainDesc().Height;
-
 	// リソース生成
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::DOFDataForGPU>>();
 	resource_->Initialize(device, log);
@@ -55,7 +51,14 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 	resource_->data_->blurFalloff = param_->blurFalloff;
 
 
-	// デュアルブラー用のオフスクリーンリソース生成
+
+	// スワップチェーンの幅と高さを取得
+	width_ = buffering->GetSwapChainDesc().Width;
+	height_ = buffering->GetSwapChainDesc().Height;
+
+	// デュアルブラー用のテクスチャの幅と高さをスワップチェーンの幅と高さの半分にする
+	int width = width_;
+	int height = height_;
 
 	// デュアルブラーは幅と高さが半分のテクスチャを複数用意して、順番に縮小サンプルと拡大サンプルをかけていく
 	while (width >= 30 && height >= 30)
@@ -67,6 +70,9 @@ void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 		// 幅と高さを半分にする
 		width /= 2;
 		height /= 2;
+
+		// レベル数を増やす
+		numDualBlurLevels_++;
 	}
 }
 
@@ -83,18 +89,56 @@ void Engine::PostEffectDOFData::Reset()
 		param_->focusRange = 15.0f;
 		param_->blurFalloff = 20.0f;
 	}
+
+	// レベル数を初期化
+	numDualBlurLevels_ = 0;
+}
+
+/// @brief リサイズ
+/// @param width 
+/// @param height 
+void Engine::PostEffectDOFData::Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int32_t width, int32_t height)
+{
+	// nullptrチェック
+	assert(device);
+	assert(commandList);
+
+	// 引数を受け取る
+	width_ = width;
+	height_ = height;
+
+	// レベル数を初期化
+	numDualBlurLevels_ = 0;
+
+	for (int32_t i = 0; i < static_cast<int32_t>(dualBlurTextureResources_.size()); ++i)
+	{
+		// テクスチャのサイズをリサイズ
+		dualBlurTextureResources_[i]->Resize(device, commandList, width, height);
+		
+		// 幅と高さが30以上ならば、デュアルブラーをかける必要があるため、レベル数を増やす
+		if (width >= 30 && height >= 30)
+			numDualBlurLevels_++;
+
+		// テクスチャのサイズを半分にする
+		width /= 2;
+		height /= 2;
+	}
 }
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
 void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 {
+	// サンプルのレベル数が2以下ならば、デュアルブラーをかける必要がないため、処理を抜ける
+	if (numDualBlurLevels_ <= 2)
+		return;
+
+
 	ID3D12GraphicsCommandList* commandList = context.commandList;
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
 	DepthResource* depthResource = context.depthResource;
 	Camera3DStore* camera3DStore = context.camera3DStore;
-
 
 	/*------------------------
 	    縮小サンプルをかける
@@ -122,7 +166,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 
 
 
-	for (int i = 1; i < static_cast<int32_t>(dualBlurTextureResources_.size()); i++)
+	for (int i = 1; i < numDualBlurLevels_; i++)
 	{
 		// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
 		TransitionBarrier(dualBlurTextureResources_[i - 1]->GetResource(),
@@ -144,7 +188,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 			D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
 
 		// 最後のループならば、拡大サンプルで使うためにバリアを張る
-		if (i == static_cast<int32_t>(dualBlurTextureResources_.size()) - 1)
+		if (i == numDualBlurLevels_ - 1)
 		{
 			// ブラー用テクスチャにバリアを張る 書き込み -> Compute読み込み
 			TransitionBarrier(dualBlurTextureResources_[i]->GetResource(),
@@ -161,10 +205,8 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	// PSOの設定
 	upsamplePSO_->Register(commandList);
 
-	for (int i = static_cast<int32_t>(dualBlurTextureResources_.size()) - 1; i > 0; --i)
+	for (int i = numDualBlurLevels_ - 1; i > 0; --i)
 	{
-
-
 		// ブラー用のテクスチャを設定
 		dualBlurTextureResources_[i]->RegisterComputeSRV(commandList, 0);
 

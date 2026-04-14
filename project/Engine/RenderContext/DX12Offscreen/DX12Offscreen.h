@@ -38,7 +38,7 @@ namespace Engine
 		/// @brief サイズを作り直す
 		/// @param device 
 		/// @param buffering 
-		void Resize(ID3D12Device* device, DX12Buffering* buffering);
+		void Resize(ID3D12Device* device,ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering);
 
 		/// @brief クリア
 		/// @param commandList 

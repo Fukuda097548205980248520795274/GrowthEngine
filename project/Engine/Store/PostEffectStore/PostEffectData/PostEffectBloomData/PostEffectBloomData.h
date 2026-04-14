@@ -28,6 +28,11 @@ namespace Engine
 		/// @brief リセット
 		void Reset() override;
 
+		/// @brief リサイズ
+		/// @param width 
+		/// @param height 
+		void Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int32_t width, int32_t height) override;
+
 		/// @brief コマンドリストに登録する
 		/// @param context
 		void Register(const PostEffectRenderContext& context) override;
@@ -58,6 +63,13 @@ namespace Engine
 
 		/// @brief デュアルブラー用テクスチャリソース
 		std::vector<std::unique_ptr<RWTexture2DBufferResource>> dualBlurTextureResources_;
+
+		// デュアルブラー用のテクスチャの幅と高さ
+		int32_t width_ = 0;
+		int32_t height_ = 0;
+
+		// デュアルブラーのレベル数
+		int32_t numDualBlurLevels_ = 0;
 
 
 	private:

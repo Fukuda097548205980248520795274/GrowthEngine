@@ -32,6 +32,11 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, WinApp* winApp, DX12Heap* heap, DX12Buffering* buffering, Log* log);
 
+		/// @brief リサイズ
+		/// @param width 
+		/// @param height 
+		void Resize(int32_t width, int32_t height);
+
 		/// @brief フレーム開始
 		void FrameStart();
 

@@ -189,6 +189,15 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 		buffering->GetRtvDesc().Format, heap->GetSrvDescriptorHeap(),srvHandle_.first, srvHandle_.second);
 }
 
+/// @brief リサイズ
+/// @param width 
+/// @param height 
+void Engine::ImGuiRender::Resize(int32_t width, int32_t height)
+{
+	screenWidth_ = static_cast<float>(width);
+	screenHeight_ = static_cast<float>(height);
+}
+
 /// @brief フレーム開始
 void Engine::ImGuiRender::FrameStart()
 {
