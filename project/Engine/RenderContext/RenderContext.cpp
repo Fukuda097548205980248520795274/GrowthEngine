@@ -229,18 +229,18 @@ void Engine::RenderContext::PreDraw()
 	camera3DStore_->Update();
 	camera2DStore_->Update();
 
-	// シャドウマップ処理
-	lightStore_->ShadowMap(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
-
-	// シャドウマップをテクスチャとして使えるようにする
-	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
 	// ライトストアの更新
 	lightStore_->Update();
 
 	// 衝突判定
 	collision3DStore_->Update();
 	collision2DStore_->Update();
+
+	// シャドウマップ処理
+	lightStore_->ShadowMap(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+
+	// シャドウマップをテクスチャとして使えるようにする
+	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
