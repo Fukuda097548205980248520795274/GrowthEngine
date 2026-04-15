@@ -13,6 +13,8 @@ void GameScene::Initialize()
 
 	// ブルーム
 	engine_->LoadPostEffect("Bloom", Engine::PostEffect::Type::Bloom);
+
+	engine_->LoadSound("TEST_Sound", engine_->LoadAudio("./Assets/Sounds/se/button.mp3"));
 }
 
 /// @brief 更新処理

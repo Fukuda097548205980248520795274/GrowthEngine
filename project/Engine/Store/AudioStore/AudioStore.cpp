@@ -1,15 +1,34 @@
 #include "AudioStore.h"
 #include <cassert>
+#include <algorithm>
+#include <limits>
 #include "Log/Log.h"
 #include "Func/ConvertString/ConvertString.h"
 #include "Func/RandomFunc/RandomFunc.h"
 #include <format>
 
+namespace
+{
+	// 音声を停止して破棄する関数
+	void StopAndDestroyVoice(IXAudio2SourceVoice*& sourceVoice)
+	{
+		if (sourceVoice)
+		{
+			sourceVoice->Stop(0);
+			sourceVoice->DestroyVoice();
+			sourceVoice = nullptr;
+		}
+	}
 
-/// <summary>
-/// デストラクタ
-/// </summary>
-Engine::AudioData::~AudioData()
+	// ピッチを制御する関数
+	float ClampPitch(float pitch)
+	{
+		return std::clamp(pitch, XAUDIO2_MIN_FREQ_RATIO, XAUDIO2_MAX_FREQ_RATIO);
+	}
+}
+
+/// @brief デストラクタ
+Engine::AudioStore::AudioData::~AudioData()
 {
 	if (waveFormat) {
 		CoTaskMemFree(waveFormat);
@@ -24,15 +43,8 @@ Engine::AudioData::~AudioData()
 Engine::AudioStore::~AudioStore()
 {
 	// 全ての再生中の音声を停止・破棄する
-	for (std::unique_ptr<PlayData>& playDatum : playData_)
-	{
-		if (playDatum->pSourceVoice)
-		{
-			playDatum->pSourceVoice->Stop(0);
-			playDatum->pSourceVoice->DestroyVoice();
-		}
-	}
-	// playData_ リストが unique_ptr であれば、ここで自動的に要素が解放される
+	for (std::unique_ptr<PlayData>& playDatum : playTable_)
+		StopAndDestroyVoice(playDatum->pSourceVoice);
 
 	// MFの終了処理
 	HRESULT hr = MFShutdown();
@@ -47,18 +59,65 @@ Engine::AudioStore::~AudioStore()
 void Engine::AudioStore::Initialize(Log* log)
 {
 	// MFの初期化（ローカル版）
-	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+	HRESULT hr = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+	assert(SUCCEEDED(hr));
+	if (FAILED(hr))
+	{
+		if (log)log->Logging("Error : MFStartup");
+		return;
+	}
 	if (log)log->Logging("MFStartup : MF_VERSION , MFSTARTUP_NOSOCKET");
 
 	// XAudio2を初期化する
-	HRESULT hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+    hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
+	if (FAILED(hr))
+	{
+		if (log)log->Logging("Error : XAudio2Create");
+		return;
+	}
 	if (log)log->Logging("XAudio2Create : XAUDIO2_DEFAULT_PROCESSOR");
 
 	// マスターボイスを生成する
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
+    if (FAILED(hr))
+	{
+		if (log)log->Logging("Error : CreateMasteringVoice");
+		return;
+	}
 	if (log)log->Logging("CreateMasteringVoice \n");
+}
+
+/// @brief 更新処理
+void Engine::AudioStore::Update()
+{
+	// 再生中の音声を確認し、再生が終了しているものは破棄する
+	playTable_.remove_if([](std::unique_ptr<PlayData>& playDatum)
+		{
+			// ソースボイスが存在する場合、再生状態を確認する
+			if (playDatum->pSourceVoice)
+			{
+				// 再生状態を取得する
+				XAUDIO2_VOICE_STATE state;
+				playDatum->pSourceVoice->GetState(&state);
+
+				// 再生が終了している場合、ソースボイスを破棄する
+				if (state.BuffersQueued <= 0)
+				{
+                    StopAndDestroyVoice(playDatum->pSourceVoice);
+					return true;
+				}
+			} 
+			else
+			{
+				// ソースボイスが存在しない場合は、すでに再生が終了しているとみなして破棄する
+				return true;
+			}
+
+			return false;
+		}
+	);
 }
 
 /// @brief ファイルを読む
@@ -67,9 +126,9 @@ void Engine::AudioStore::Initialize(Log* log)
 AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 {
 	// 同じファイルパスを見つけたら、そのハンドルを返す
-	for (std::unique_ptr<AudioData>& data : audioData_)
+	for (std::unique_ptr<AudioData>& data : audioTable_)
 	{
-		if (strcmp(filePath.c_str(), data->filePath.c_str()) == 0)
+		if (filePath == data->filePath)
 			return data->handle;
 	}
 
@@ -114,7 +173,7 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 
 	// サウンドハンドルを取得する
 	AudioHandle soundHandle;
-	soundHandle = static_cast<uint32_t>(audioData_.size());
+	soundHandle = static_cast<uint32_t>(audioTable_.size());
 	audioDatum->handle = soundHandle;
 
 	// ウェーブフォーマットを作成する
@@ -152,7 +211,7 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 	}
 
 	// 配列に登録する
-	audioData_.push_back(std::move(audioDatum));
+	audioTable_.push_back(std::move(audioDatum));
 	if (log)log->Logging("Success : Load Audio \n");
 
 	return soundHandle;
@@ -165,50 +224,63 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 /// @return 
 PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 {
+	if (!xAudio2_)
+		return 0;
+
+	const AudioData* audioData = FindAudioData(handle);
+	if (!audioData)
+		return 0;
+
+	if (!audioData->waveFormat || audioData->mediaData.empty())
+		return 0;
+
 	// プレイデータを生成する
 	std::unique_ptr<PlayData> playDatum = std::make_unique<PlayData>();
 
 	// プレイハンドルを作成する
-	PlayHandle playHandle{};
-	while (playHandle == 0)
-	{
-		playHandle = GetRandomRange(1, 10000000);
-
-		for (std::unique_ptr<PlayData>& data : playData_)
-		{
-			if (playHandle == data->handle)
-			{
-				playHandle = 0;
-				break;
-			}
-		}
-	}
+    PlayHandle playHandle = GenerateUniquePlayHandle();
 	playDatum->handle = playHandle;
 
 
 	// ソースボイスを生成する
-	HRESULT hr = xAudio2_->CreateSourceVoice(&playDatum->pSourceVoice, audioData_[handle]->waveFormat);
+	HRESULT hr = xAudio2_->CreateSourceVoice(&playDatum->pSourceVoice, audioData->waveFormat);
 	assert(SUCCEEDED(hr));
+	if (FAILED(hr) || !playDatum->pSourceVoice)
+		return 0;
 
 	XAUDIO2_BUFFER buffer{ 0 };
-	buffer.pAudioData = audioData_[handle]->mediaData.data();
+	buffer.pAudioData = audioData->mediaData.data();
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
-	buffer.AudioBytes = sizeof(BYTE) * static_cast<UINT32>(audioData_[handle]->mediaData.size());
-	playDatum->pSourceVoice->SubmitSourceBuffer(&buffer);
-
-	const float kMaxSoundVolume = 1.0f;
-	const float kMinSoundVolume = 0.0f;
+	buffer.AudioBytes = sizeof(BYTE) * static_cast<UINT32>(audioData->mediaData.size());
+	hr = playDatum->pSourceVoice->SubmitSourceBuffer(&buffer);
+	assert(SUCCEEDED(hr));
+	if (FAILED(hr))
+	{
+		StopAndDestroyVoice(playDatum->pSourceVoice);
+		return 0;
+	}
 
 	// 規格外の音にならぬようにする
-	volume = std::max(kMinSoundVolume, volume);
-	volume = std::min(kMaxSoundVolume, volume);
+	volume = ClampVolume(volume);
 
-	playDatum->pSourceVoice->SetVolume(volume);
+	hr = playDatum->pSourceVoice->SetVolume(volume);
+	assert(SUCCEEDED(hr));
+	if (FAILED(hr))
+	{
+		StopAndDestroyVoice(playDatum->pSourceVoice);
+		return 0;
+	}
 
-	playDatum->pSourceVoice->Start(0);
+	hr = playDatum->pSourceVoice->Start(0);
+	assert(SUCCEEDED(hr));
+	if (FAILED(hr))
+	{
+		StopAndDestroyVoice(playDatum->pSourceVoice);
+		return 0;
+	}
 
 	// リストに登録する
-	playData_.push_back(std::move(playDatum));
+	playTable_.push_back(std::move(playDatum));
 
 	return playHandle;
 }
@@ -218,19 +290,18 @@ PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 /// @param handle 
 void Engine::AudioStore::StopAudio(PlayHandle handle)
 {
-	for (std::unique_ptr<PlayData>& playDatum : playData_)
+	for (auto it = playTable_.begin(); it != playTable_.end(); ++it)
 	{
-		if (handle == playDatum->handle)
+		PlayData* playData = it->get();
+		if (handle != playData->handle)
 		{
-			playDatum->pSourceVoice->Stop(0);
-			playDatum->pSourceVoice->DestroyVoice();
-			playDatum->pSourceVoice = nullptr;
-
-			return;
+			continue;
 		}
-	}
 
-	return;
+        StopAndDestroyVoice(playData->pSourceVoice);
+		playTable_.erase(it);
+		return;
+	}
 }
 
 /// @brief オーディオを再生されているかどうか
@@ -238,15 +309,16 @@ void Engine::AudioStore::StopAudio(PlayHandle handle)
 /// @return 
 bool Engine::AudioStore::IsAudioPlay(PlayHandle handle)
 {
-	for (std::unique_ptr<PlayData>& playDatum : playData_)
+	PlayData* playData = FindPlayData(handle);
+	if (!playData || !playData->pSourceVoice)
 	{
-		if (handle == playDatum->handle)
-		{
-			return true;
-		}
+		return false;
 	}
 
-	return false;
+	XAUDIO2_VOICE_STATE state{};
+	playData->pSourceVoice->GetState(&state);
+
+	return state.BuffersQueued > 0;
 }
 
 
@@ -255,25 +327,16 @@ bool Engine::AudioStore::IsAudioPlay(PlayHandle handle)
 /// @param volume 
 void Engine::AudioStore::SetVolume(PlayHandle handle, float volume)
 {
-	const float kMaxSoundVolume = 1.0f;
-	const float kMinSoundVolume = 0.0f;
-
 	// 規格外の音にならぬようにする
-	volume = std::max(kMinSoundVolume, volume);
-	volume = std::min(kMaxSoundVolume, volume);
+	volume = ClampVolume(volume);
 
 	// ハンドルが一致する構造体を探す
-	for (std::unique_ptr<PlayData>& playDatum : playData_)
-	{
-		if (handle == playDatum->handle)
-		{
-			playDatum->pSourceVoice->SetVolume(volume);
+	PlayData* playData = FindPlayData(handle);
+	if (!playData || !playData->pSourceVoice)
+		return;
 
-			return;
-		}
-	}
-
-	return;
+	HRESULT hr = playData->pSourceVoice->SetVolume(volume);
+	assert(SUCCEEDED(hr));
 }
 
 /// @brief ピッチを設定する
@@ -281,42 +344,85 @@ void Engine::AudioStore::SetVolume(PlayHandle handle, float volume)
 /// @param pitch 
 void Engine::AudioStore::SetPitch(PlayHandle handle, float pitch)
 {
+	pitch = ClampPitch(pitch);
+
 	// ハンドルが一致する構造体を探す
-	for (std::unique_ptr<PlayData>& playDatum : playData_)
+	PlayData* playData = FindPlayData(handle);
+	if (!playData || !playData->pSourceVoice)
+		return;
+
+	HRESULT hr = playData->pSourceVoice->SetFrequencyRatio(pitch);
+	assert(SUCCEEDED(hr));
+}
+
+/// @brief ハンドルに対応するプレイデータを探す
+/// @param handle 
+/// @return 
+Engine::AudioStore::PlayData* Engine::AudioStore::FindPlayData(PlayHandle handle)
+{
+	for (std::unique_ptr<PlayData>& playDatum : playTable_)
 	{
 		if (handle == playDatum->handle)
 		{
-			playDatum->pSourceVoice->SetFrequencyRatio(pitch);
-
-			return;
+			return playDatum.get();
 		}
 	}
 
-	return;
+	return nullptr;
 }
 
-
-/// @brief 流れているオーディオを削除する
-void Engine::AudioStore::DeletePlayAudio()
+/// @brief ハンドルに対応するオーディオデータを探す
+/// @param handle 
+/// @return 
+const Engine::AudioStore::AudioData* Engine::AudioStore::FindAudioData(AudioHandle handle) const
 {
-	playData_.remove_if([](std::unique_ptr<PlayData>& playDatum)
-		{
-			if (playDatum->pSourceVoice)
-			{
-				XAUDIO2_VOICE_STATE state;
-				playDatum->pSourceVoice->GetState(&state);
+	if (handle >= audioTable_.size())
+		return nullptr;
 
-				if (state.BuffersQueued <= 0)
-				{
-					playDatum->pSourceVoice->DestroyVoice();
-					playDatum->pSourceVoice = nullptr;
-					return true;
-				}
-			} else
+	return audioTable_[handle].get();
+}
+
+/// @brief ユニークなプレイハンドルを生成する
+/// @return 
+PlayHandle Engine::AudioStore::GenerateUniquePlayHandle() const
+{
+    constexpr uint32_t kMaxRetryCount = 64;
+	for (uint32_t retry = 0; retry < kMaxRetryCount; ++retry)
+	{
+		const PlayHandle playHandle = GetRandomRange(1, 10000000);
+		const bool isDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [playHandle](const std::unique_ptr<PlayData>& data)
 			{
-				return true;
-			}
-			return false;
+				return playHandle == data->handle;
+			});
+
+        if (!isDuplicate)
+		{
+         return playHandle;
 		}
-	);
+	}
+
+	for (PlayHandle playHandle = 1; playHandle < std::numeric_limits<PlayHandle>::max(); ++playHandle)
+	{
+		const bool isDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [playHandle](const std::unique_ptr<PlayData>& data)
+			{
+				return playHandle == data->handle;
+			});
+
+		if (!isDuplicate)
+		{
+			return playHandle;
+		}
+	}
+
+	return 0;
+}
+
+/// @brief 音量を制御する
+/// @param volume 
+/// @return 
+float Engine::AudioStore::ClampVolume(float volume)
+{
+	const float kMaxSoundVolume = 1.0f;
+	const float kMinSoundVolume = 0.0f;
+	return std::clamp(volume, kMinSoundVolume, kMaxSoundVolume);
 }

@@ -75,6 +75,10 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	audioStore_ = std::make_unique<Engine::AudioStore>();
 	audioStore_->Initialize(log_.get());
 
+	// サウンドストアの生成と初期化
+	soundStore_ = std::make_unique<Engine::SoundStore>();
+	soundStore_->Initialize(audioStore_.get());
+
 	// 入力ストアの生成と初期化
 	inputStore_ = std::make_unique<Engine::InputStore>();
 	inputStore_->Initialize(input_.get());
@@ -96,6 +100,11 @@ GrowthEngine::~GrowthEngine()
 	inputStore_.reset();
 	inputStore_ = nullptr;
 	if (log_)log_->Logging("InputStore released \n");
+
+	// サウンドストアの終了
+	soundStore_.reset();
+	soundStore_ = nullptr;
+	if (log_)log_->Logging("SoundStore released \n");
 
 	// オーディオストアの終了
 	audioStore_.reset();
@@ -174,8 +183,11 @@ void GrowthEngine::NewFrame()
 	// 入力ストアの更新
 	inputStore_->Update();
 
-	// 流れていない音楽を削除する
-	audioStore_->DeletePlayAudio();
+	// サウンドストアの更新
+	soundStore_->Update();
+
+	// オーディオストアの更新
+	audioStore_->Update();
 
 	// 新フレーム処理
 	renderContext_->NewFrame();
@@ -188,6 +200,9 @@ void GrowthEngine::PreDraw()
 	renderContext_->PreDraw();
 
 #ifdef _DEVELOPMENT
+
+	// サウンドストアのパラメータを表示する
+	soundStore_->DebugParameter();
 
 	// マウスでオブジェクト選択
 	if (input_->GetMouseTrigger(MouseButton::kMouseButtonLeft))

@@ -16,41 +16,52 @@ namespace Engine
 {
 	class Log;
 
-	// オーディオデータ
-	class AudioData
-	{
-	public:
-
-		/// @brief デストラクタ
-		~AudioData();
-
-		// ファイルパス
-		std::string filePath;
-
-		// フォーマット
-		WAVEFORMATEX* waveFormat;
-
-		// メディアデータ
-		std::vector<BYTE> mediaData;
-
-		// サウンドハンドル
-		AudioHandle handle;
-	};
-
-	// プレイデータ
-	class PlayData
-	{
-	public:
-
-		// プレイハンドル
-		PlayHandle handle;
-
-		// ソースボイス
-		IXAudio2SourceVoice* pSourceVoice;
-	};
-
 	class AudioStore
 	{
+	public:
+
+		// オーディオデータ
+		class AudioData
+		{
+		public:
+
+			/// @brief デストラクタ
+			~AudioData();
+
+			/// @brief ファイルパスを取得する
+			/// @return ファイルパス
+			std::string GetFilePath() const { return filePath; }
+
+			/// @brief ハンドルを取得する
+			/// @return ハンドル
+			AudioHandle GetHandle() const { return handle; }
+
+			// ファイルパス
+			std::string filePath;
+
+			// フォーマット
+           WAVEFORMATEX* waveFormat = nullptr;
+
+			// メディアデータ
+			std::vector<BYTE> mediaData;
+
+			// サウンドハンドル
+			AudioHandle handle;
+		};
+
+		// プレイデータ
+		class PlayData
+		{
+		public:
+
+			// プレイハンドル
+			PlayHandle handle;
+
+			// ソースボイス
+          IXAudio2SourceVoice* pSourceVoice = nullptr;
+		};
+
+
 	public:
 
 		/// @brief デストラクタ
@@ -59,6 +70,9 @@ namespace Engine
 		/// @brief 初期化
 		/// @param log 
 		void Initialize(Log* log);
+
+		/// @brief 更新処理
+		void Update();
 
 		/// @brief ファイルを読む
 		/// @param filePath 
@@ -70,6 +84,11 @@ namespace Engine
 		/// @param volume 
 		/// @return 
 		PlayHandle PlayAudio(AudioHandle handle, float volume);
+
+		/// @brief ファイルパスを取得する
+		/// @param handle 
+		/// @return 
+		std::string GetFilePath(AudioHandle handle) const { return audioTable_[handle]->GetFilePath(); }
 
 		/// @brief 音声を停止する
 		/// @param handle 
@@ -90,14 +109,29 @@ namespace Engine
 		/// @param pitch 
 		void SetPitch(PlayHandle handle, float pitch);
 
-		/// @brief 流れているオーディオを削除する
-		void DeletePlayAudio();
-
 		// Microsoft::WRL:: 省略
 		template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 
 	private:
+
+		/// @brief ハンドルに対応するプレイデータを探す
+		/// @param handle 
+		/// @return 
+		PlayData* FindPlayData(PlayHandle handle);
+
+		/// @brief ハンドルに対応するオーディオデータを探す
+		/// @param handle 
+		/// @return 
+		const AudioData* FindAudioData(AudioHandle handle) const;
+
+		/// @brief ユニークなプレイハンドルを生成する 
+		PlayHandle GenerateUniquePlayHandle() const;
+
+		/// @brief 音量を制御する
+		/// @param volume 
+		/// @return 
+		static float ClampVolume(float volume);
 
 
 
@@ -107,10 +141,13 @@ namespace Engine
 		// マスターボイス
 		IXAudio2MasteringVoice* masterVoice_ = nullptr;
 
-		// オーディオデータ配列
-		std::vector<std::unique_ptr<AudioData>> audioData_;
 
-		// プレイデータ配列
-		std::list<std::unique_ptr<PlayData>> playData_;
+	private:
+
+		// オーディオテーブル
+		std::vector<std::unique_ptr<AudioData>> audioTable_;
+
+		// プレイテーブル
+		std::list<std::unique_ptr<PlayData>> playTable_;
 	};
 }

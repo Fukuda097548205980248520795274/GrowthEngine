@@ -13,6 +13,9 @@ using AudioHandle = uint32_t;
 // プレイハンドル
 using PlayHandle = uint32_t;
 
+/// @brief サウンドハンドル
+using SoundHandle = uint32_t;
+
 // スケルトンハンドル
 using SkeletonHandle = uint32_t;
 

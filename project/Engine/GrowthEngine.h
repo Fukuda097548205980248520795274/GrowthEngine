@@ -8,8 +8,11 @@
 #include "Log/Log.h"
 #include "WinApp/WinApp.h"
 #include "Input/Input.h"
+
 #include "Store/AudioStore/AudioStore.h"
+#include "Store/SoundStore/SoundStore.h"
 #include "Store/InputStore/InputStore.h"
+
 #include "RenderContext/RenderContext.h"
 
 #include "Math/Vector/Vector3/Vector3.h"
@@ -33,8 +36,6 @@
 #include "Application/PrefabBase/PrefabBaseStaticModel/PrefabBaseStaticModel.h"
 
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
-
-#include "Application/AudioObject/AudioObject.h"
 
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
@@ -194,32 +195,51 @@ public:
 	/// @return 
 	TextHandle LoadFont(const std::string& text, const std::string& fontName, int pixel)const { return renderContext_->LoadFont(text, fontName, pixel, log_.get()); }
 
-
-
-	/// @brief オーディオを再生する
-	/// @param ah 
-	/// @param volume 
+	/// @brief サウンドを読み込む
+	/// @param name 
+	/// @param hAudio 
 	/// @return 
-	PlayHandle PlayAudio(AudioHandle ah, float volume)const { return audioStore_->PlayAudio(ah, volume); }
+	SoundHandle LoadSound(const std::string& name, AudioHandle hAudio)const { return soundStore_->Load(name, hAudio); }
 
-	/// @brief オーディオを停止する
-	/// @param ph 
-	void StopAudio(PlayHandle ph)const { audioStore_->StopAudio(ph); }
 
-	/// @brief オーディオが再生されているかどうか
-	/// @param ph 
+
+public:
+
+	/// @brief サウンドを再生する
+	/// @param hSound 
+	void SoundPlay(SoundHandle hSound)const { soundStore_->Play(hSound); }
+
+	/// @brief サウンドを再生する
+	/// @param name 
+	void SoundPlay(const std::string& name)const { soundStore_->Play(name); }
+
+	/// @brief サウンドを停止する
+	/// @param hSound 
+	void SoundStop(SoundHandle hSound)const { soundStore_->Stop(hSound); }
+
+	/// @brief サウンドを停止する
+	/// @param name 
+	void SoundStop(const std::string& name)const { soundStore_->Stop(name); }
+
+	/// @brief サウンドのパラメータを取得する
+	/// @param hSound 
 	/// @return 
-	bool IsPlayAudio(PlayHandle ph)const { return audioStore_->IsAudioPlay(ph); }
+	Engine::SoundParam* GetSoundParam(SoundHandle hSound)const { return soundStore_->GetParam(hSound); }
 
-	/// @brief ボリュームの設定
-	/// @param ph 
-	/// @param volume 
-	void SetVolume(PlayHandle ph, float volume)const { audioStore_->SetVolume(ph, volume); }
+	/// @brief サウンドのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::SoundParam* GetSoundParam(const std::string& name)const { return soundStore_->GetParam(name); }
 
-	/// @brief ピッチの設定
-	/// @param ph 
-	/// @param pitch 
-	void SetPitch(PlayHandle ph, float pitch)const { return audioStore_->SetPitch(ph, pitch); }
+	/// @brief サウンドが再生されているかどうか
+	/// @param hSound 
+	/// @return 
+	bool IsSoundPlay(SoundHandle hSound)const { return soundStore_->IsPlay(hSound); }
+
+	/// @brief サウンドが再生されているかどうか
+	/// @param name 
+	/// @return 
+	bool IsSoundPlay(const std::string& name)const { return soundStore_->IsPlay(name); }
 
 
 public:
@@ -891,6 +911,9 @@ private:
 
 	// オーディオストア
 	std::unique_ptr<Engine::AudioStore> audioStore_ = nullptr;
+
+	/// @brief サウンドストア
+	std::unique_ptr<Engine::SoundStore> soundStore_ = nullptr;
 
 	/// @brief 入力ストア
 	std::unique_ptr<Engine::InputStore> inputStore_ = nullptr;

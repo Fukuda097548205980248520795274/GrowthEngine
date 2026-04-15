@@ -172,9 +172,6 @@
     <Filter Include="Engine\Include\Func\RandomFunc">
       <UniqueIdentifier>{2d5e846d-c381-4c08-9eaa-f1fdf2b301ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\AudioObject">
-      <UniqueIdentifier>{b1fede05-3cae-4912-8f69-edb5b3d2d7ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\ComputePSO">
       <UniqueIdentifier>{5fd6ac47-8fa6-4ce5-9da6-c20846bc8c84}</UniqueIdentifier>
     </Filter>
@@ -898,6 +895,15 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere">
       <UniqueIdentifier>{c13ab62b-7498-4d2f-9bac-20a4f64e50a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\SoundStore">
+      <UniqueIdentifier>{6cee197e-9647-4ecb-a4aa-c81a7c18b5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SoundStore\SoundData">
+      <UniqueIdentifier>{10838d28-21ce-481c-854b-f5603ff486aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Parameter\SoundParameter">
+      <UniqueIdentifier>{f4645d6b-1b0a-4740-86a5-4485fe69fc48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1010,9 +1016,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\AudioStore\AudioStore.cpp">
       <Filter>Engine\Include\Store\AudioStore</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Application\AudioObject\AudioObject.cpp">
-      <Filter>Engine\Include\Application\AudioObject</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\BaseComputePSO.cpp">
       <Filter>Engine\Include\PSO\ComputePSO</Filter>
@@ -1575,6 +1578,15 @@
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Store\SoundStore\SoundStore.cpp">
+      <Filter>Engine\Include\Store\SoundStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SoundStore\SoundData\SoundData.cpp">
+      <Filter>Engine\Include\Store\SoundStore\SoundData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Parameter\SoundParameter\SoundParameter.cpp">
+      <Filter>Engine\Include\Parameter\SoundParameter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1699,9 +1711,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Func\RandomFunc\RandomFunc.h">
       <Filter>Engine\Include\Func\RandomFunc</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Application\AudioObject\AudioObject.h">
-      <Filter>Engine\Include\Application\AudioObject</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h">
       <Filter>Engine\Include\PSO\ComputePSO</Filter>
@@ -2359,6 +2368,15 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SoundStore\SoundStore.h">
+      <Filter>Engine\Include\Store\SoundStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SoundStore\SoundData\SoundData.h">
+      <Filter>Engine\Include\Store\SoundStore\SoundData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Parameter\SoundParameter\SoundParameter.h">
+      <Filter>Engine\Include\Parameter\SoundParameter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
