@@ -38,11 +38,26 @@ namespace Engine
 		/// @param commandList 
 		void Update(ID3D12GraphicsCommandList* commandList);
 
-		/// @brief 描画処理
+
+		/// @brief 3Dパーティクル描画処理
+		/// @param commandList 
+		/// @param handle 
+		/// @param cameraStore 
+		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore) { particle3DStore_->Draw(commandList, handle , cameraStore); }
+
+		/// @brief 3Dパーティクル描画処理
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
 		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore) { particle3DStore_->Draw(commandList, name, cameraStore); }
+
+		/// @brief 3Dパーティクルのパラメータを取得する
+		/// @param hParticle 
+		Particle3D::Param* Get3DParticleParam(Particle3DHandle hParticle) { particle3DStore_->GetParam(hParticle); }
+
+		/// @brief 3Dパーティクルのパラメータを取得する
+		/// @param name 
+		Particle3D::Param* Get3DParticleParam(const std::string& name) { particle3DStore_->GetParam(name); }
 
 
 	public:

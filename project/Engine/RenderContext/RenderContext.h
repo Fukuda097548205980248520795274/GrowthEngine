@@ -442,11 +442,28 @@ namespace Engine
 		}
 
 		/// @brief 3Dパーティクルを描画する
+		/// @param hParticle 
+		void DrawParticle3D(Particle3DHandle hParticle)
+		{
+			particle_->Draw3DParticle(commandList_, hParticle, camera3DStore_.get());
+		}
+
+		/// @brief 3Dパーティクルを描画する
 		/// @param name 
 		void DrawParticle3D(const std::string& name)
 		{
 			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get());
 		}
+
+		/// @brief 3Dパーティクルのパラメータを取得する
+		/// @param hParticle 
+		/// @return 
+		Particle3D::Param* GetParticle3DParam(Particle3DHandle hParticle) { return particle_->Get3DParticleParam(hParticle); }
+
+		/// @brief 3Dパーティクルのパラメータを取得する
+		/// @param name 
+		/// @return 
+		Particle3D::Param* GetParticle3DParam(const std::string& name) { return particle_->Get3DParticleParam(name); }
 
 
 

@@ -63,6 +63,10 @@ namespace Engine
 		/// @return 
 		ModelHandle GetHandle()const { return hModel_; }
 
+		/// @brief パラメータを取得する
+		/// @return 
+		Particle3D::Param* GetParam()const { return param_.get(); }
+
 		/// @brief 引力を有効にしているかどうか
 		/// @return 
 		bool EnableAttract()const { return param_->enableAttract; }

@@ -149,6 +149,15 @@ void Engine::Particle3DStore::Update(ID3D12GraphicsCommandList* commandList)
 
 /// @brief 描画処理
 /// @param commandList 
+/// @param handle 
+/// @param cameraStore 
+void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore)
+{
+
+}
+
+/// @brief 描画処理
+/// @param commandList 
 /// @param viewProjection 
 void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore)
 {
