@@ -424,9 +424,6 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{8ee735fc-3c5f-4e1b-b9f7-33bbef6ef173}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Scene\TitleScene">
-      <UniqueIdentifier>{704dc3cf-1093-4345-9eab-075014f0bb8b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Scene\GameScene">
       <UniqueIdentifier>{20ad2d6e-d1e4-4bc1-b05b-90791888966f}</UniqueIdentifier>
     </Filter>
@@ -574,29 +571,8 @@
     <Filter Include="Engine\Include\Parameter\LightParameter">
       <UniqueIdentifier>{78a27541-5636-48c5-9db2-e3c5c8674c2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\StageData">
-      <UniqueIdentifier>{26c161e7-28d7-45e6-989c-a0225c0299da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Stage">
-      <UniqueIdentifier>{224cf47b-25f9-441f-8d74-0dc2fcef606d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\StageEditor">
-      <UniqueIdentifier>{813f0c82-67d7-456f-95ae-bf99272f6ad8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\StageSerializer">
-      <UniqueIdentifier>{5506fa9d-3359-4d1b-95e6-e56270e7aa67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\IObject">
-      <UniqueIdentifier>{10394b6a-8499-4a43-b8d3-b50a938cea88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\IObject\Player">
-      <UniqueIdentifier>{4039a6c9-ab18-41f1-8a51-7511eebea9e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Math\Vector\VectorInt3">
       <UniqueIdentifier>{235ce479-464c-4209-9145-cb41c79c1479}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\IObject\Wall">
-      <UniqueIdentifier>{24922e12-2cab-45ab-9848-09631e1c64ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceCube">
       <UniqueIdentifier>{8d831ee4-4556-43e2-98a3-dc37d1ee1fdb}</UniqueIdentifier>
@@ -1206,9 +1182,6 @@
     <ClCompile Include="Engine\Application\SceneManager\SceneManager.cpp">
       <Filter>Engine\Include\Application\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp">
-      <Filter>Game\Scene\TitleScene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
     </ClCompile>
@@ -1311,9 +1284,6 @@
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StageEditor\StageEditor.cpp">
-      <Filter>Game\StageEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp">
       <Filter>Engine\Include\Application\Collision2DBase</Filter>
     </ClCompile>
@@ -1398,26 +1368,8 @@
     <ClCompile Include="Engine\Parameter\LightParameter\LightParameter.cpp">
       <Filter>Engine\Include\Parameter\LightParameter</Filter>
     </ClCompile>
-    <ClCompile Include="Game\StageData\StageData.cpp">
-      <Filter>Game\StageData</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Stage\Stage.cpp">
-      <Filter>Game\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\StageSerializer\StageSerializer.cpp">
-      <Filter>Game\StageSerializer</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\IObject\IObject.cpp">
-      <Filter>Game\IObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\IObject\Player\Player.cpp">
-      <Filter>Game\IObject\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Math\Vector\VectorInt3\VectorInt3.cpp">
       <Filter>Engine\Include\Math\Vector\VectorInt3</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\IObject\Wall\Wall.cpp">
-      <Filter>Game\IObject\Wall</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabBase\BasePrefabBase.cpp">
       <Filter>Engine\Include\Application\PrefabBase</Filter>
@@ -1958,9 +1910,6 @@
     <ClInclude Include="Engine\Application\SceneManager\SceneManager.h">
       <Filter>Engine\Include\Application\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h">
-      <Filter>Game\Scene\TitleScene</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.h">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
     </ClInclude>
@@ -2099,9 +2048,6 @@
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClInclude>
-    <ClInclude Include="Game\StageEditor\StageEditor.h">
-      <Filter>Game\StageEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h">
       <Filter>Engine\Include\Application\Collision2DBase</Filter>
     </ClInclude>
@@ -2174,26 +2120,8 @@
     <ClInclude Include="Engine\Parameter\LightParameter\LightParameter.h">
       <Filter>Engine\Include\Parameter\LightParameter</Filter>
     </ClInclude>
-    <ClInclude Include="Game\StageData\StageData.h">
-      <Filter>Game\StageData</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Stage\Stage.h">
-      <Filter>Game\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\StageSerializer\StageSerializer.h">
-      <Filter>Game\StageSerializer</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\IObject\IObject.h">
-      <Filter>Game\IObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\IObject\Player\Player.h">
-      <Filter>Game\IObject\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\Vector\VectorInt3\VectorInt3.h">
       <Filter>Engine\Include\Math\Vector\VectorInt3</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\IObject\Wall\Wall.h">
-      <Filter>Game\IObject\Wall</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabBase\BasePrefabBase.h">
       <Filter>Engine\Include\Application\PrefabBase</Filter>

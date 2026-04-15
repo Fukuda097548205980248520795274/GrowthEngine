@@ -1,6 +1,5 @@
 #include "SceneManager.h"
 #include "Scene/GameScene/GameScene.h"
-#include "Scene/TitleScene/TitleScene.h"
 #include "GrowthEngine.h"
 
 /// @brief コンストラクタ
@@ -66,14 +65,6 @@ void SceneManager::Update()
 		if (sceneName_ == "Game")
 		{
 			scene_ = std::make_unique<GameScene>(this);
-			scene_->Initialize();
-			isTransition_ = false;
-		}
-
-		// タイトルシーン
-		if (sceneName_ == "Title")
-		{
-			scene_ = std::make_unique<TitleScene>(this);
 			scene_->Initialize();
 			isTransition_ = false;
 		}

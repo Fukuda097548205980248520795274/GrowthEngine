@@ -1,8 +1,5 @@
 #pragma once
 #include "GrowthEngine.h"
-#include "Stage/Stage.h"
-#include "StageEditor/StageEditor.h"
-#include "StageSerializer/StageSerializer.h"
 
 class GameScene : public Scene
 {

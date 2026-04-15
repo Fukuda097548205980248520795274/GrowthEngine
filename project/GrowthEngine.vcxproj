@@ -958,19 +958,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Game\IObject\IObject.cpp" />
-    <ClCompile Include="Game\IObject\Player\Player.cpp" />
-    <ClCompile Include="Game\IObject\Wall\Wall.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
-    <ClCompile Include="Game\StageData\StageData.cpp" />
-    <ClCompile Include="Game\StageEditor\StageEditor.cpp" />
-    <ClCompile Include="Game\StageSerializer\StageSerializer.cpp" />
-    <ClCompile Include="Game\Stage\Stage.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Engine\Parameter\Parameter.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1231,15 +1223,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Game.h" />
-    <ClInclude Include="Game\IObject\IObject.h" />
-    <ClInclude Include="Game\IObject\Player\Player.h" />
-    <ClInclude Include="Game\IObject\Wall\Wall.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
-    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
-    <ClInclude Include="Game\StageData\StageData.h" />
-    <ClInclude Include="Game\StageEditor\StageEditor.h" />
-    <ClInclude Include="Game\StageSerializer\StageSerializer.h" />
-    <ClInclude Include="Game\Stage\Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
