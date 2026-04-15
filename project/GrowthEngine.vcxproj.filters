@@ -892,6 +892,12 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract">
       <UniqueIdentifier>{73edabad-f529-44ba-b549-ec83fbb43e2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB">
+      <UniqueIdentifier>{01e59b3e-b048-4422-b315-c610a7fb3d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere">
+      <UniqueIdentifier>{c13ab62b-7498-4d2f-9bac-20a4f64e50a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1562,6 +1568,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB\ComputePSOParticle3DEmitterAABB.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2342,6 +2354,12 @@
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB\ComputePSOParticle3DEmitterAABB.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2498,6 +2516,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle3D\Update\Particle3DUpdateAttract.CS.hlsl">
       <Filter>Engine\Shader\Particle3D\Update</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterAABB.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Emitter</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterSphere.CS.hlsl">
+      <Filter>Engine\Shader\Particle3D\Emitter</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

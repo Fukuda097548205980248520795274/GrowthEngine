@@ -67,6 +67,10 @@ namespace Engine
 		/// @return 
 		bool EnableAttract()const { return param_->enableAttract; }
 
+		/// @brief エミッターの形状IDを取得する
+		/// @return 
+		Particle3D::EmitterShape GetShape()const { return param_->shape; }
+
 
 	public:
 
@@ -87,6 +91,9 @@ namespace Engine
 
 		/// @brief エミッターリソース
 		std::unique_ptr<ConstantBufferResource<Particle3DEmitterPointDataForGPU>> particleEmitterPointResource_ = nullptr;
+
+		/// @brief エミッター形状リソース
+		std::unique_ptr<ConstantBufferResource<Particle3DEmitterShapeDataForGPU>> particleEmitterShapeResource_ = nullptr;
 
 		/// @brief 引力リソース
 		std::unique_ptr<ConstantBufferResource<Particle3DAttractDataForGPU>> particleAttractResource_ = nullptr;

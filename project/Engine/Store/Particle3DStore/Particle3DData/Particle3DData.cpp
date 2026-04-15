@@ -116,6 +116,12 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
 	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
 
+	// エミッター形状リソースを生成する
+	particleEmitterShapeResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterShapeDataForGPU>>();
+	particleEmitterShapeResource_->Initialize(device, log);
+	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
+	particleEmitterShapeResource_->data_->radius3 = param_->radius3;
+
 	// 引力リソースを生成する
 	particleAttractResource_ = std::make_unique<ConstantBufferResource<Particle3DAttractDataForGPU>>();
 	particleAttractResource_->Initialize(device, log);
@@ -245,6 +251,9 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
 	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
 
+	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
+	particleEmitterShapeResource_->data_->radius3 = param_->radius3;
+
 	particleAttractResource_->data_->position = param_->position + param_->attractPos;
 	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
 
@@ -273,6 +282,12 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 
 	// フリーリストリソースを登録する
 	freeListResource_->RegisterComputeUAV(commandList, 5);
+
+	if(param_->shape != Particle3D::EmitterShape::Point)
+	{
+		// エミッター形状リソースを登録する
+		particleEmitterShapeResource_->RegisterCompute(commandList, 6);
+	}
 
 	// ディスパッチする
 	commandList->Dispatch(1, 1, 1);

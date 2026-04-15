@@ -38,9 +38,17 @@ void Engine::Particle3DStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePsoParticle3DInit_ = std::make_unique<ComputePSOParticle3DInit>();
 	computePsoParticle3DInit_->Initialize(device, compiler, log);
 
-	// CSパーティクルエミッターポイントPSOを生成する
+	// CSパーティクルポイントエミッターPSOを生成する
 	computePsoParticle3DEmitterPoint_ = std::make_unique<ComputePSOParticle3DEmitterPoint>();
 	computePsoParticle3DEmitterPoint_->Initialize(device, compiler, log);
+
+	// CSパーティクルAABBエミッターPSOを生成する
+	computePsoParticle3DEmitterAABB_ = std::make_unique<ComputePSOParticle3DEmitterAABB>();
+	computePsoParticle3DEmitterAABB_->Initialize(device, compiler, log);
+
+	// CSパーティクル球エミッターPSOを生成する
+	computePsoParticle3DEmitterSphere_ = std::make_unique<ComputePSOParticle3DEmitterSphere>();
+	computePsoParticle3DEmitterSphere_->Initialize(device, compiler, log);
 
 	// CSパーティクル速度更新PSOを生成する
 	computePsoParticle3DUpdateVelocity_ = std::make_unique<ComputePSOParticle3DUpdateVelocity>();
@@ -99,14 +107,43 @@ void Engine::Particle3DStore::Update(ID3D12GraphicsCommandList* commandList)
 {
 	for (auto& data : dataTable_)
 	{
+		// 放出用PSO
+		BaseComputePSO* psoEmit = nullptr;
+
+		switch (data->GetShape())
+		{
+		case Particle3D::EmitterShape::Point:
+		default:
+			// ポイント
+			psoEmit = computePsoParticle3DEmitterPoint_.get();
+			break;
+
+		case Particle3D::EmitterShape::AABB:
+			// AABB
+			psoEmit = computePsoParticle3DEmitterAABB_.get();
+			break;
+
+		case Particle3D::EmitterShape::Sphere:
+			// 球
+			psoEmit = computePsoParticle3DEmitterSphere_.get();
+			break;
+		}
+
+
+		// 更新用PSO
+		BaseComputePSO* psoUpdate = nullptr;
+
 		if (data->EnableAttract())
 		{
-			data->Update(commandList, computePsoParticle3DEmitterPoint_.get(), computePsoParticle3DUpdateAttract_.get());
+			psoUpdate = computePsoParticle3DUpdateAttract_.get();
 		}
 		else
 		{
-			data->Update(commandList, computePsoParticle3DEmitterPoint_.get(), computePsoParticle3DUpdateVelocity_.get());
+			psoUpdate = computePsoParticle3DUpdateVelocity_.get();
 		}
+
+		// 更新処理
+		data->Update(commandList, psoEmit, psoUpdate);
 	}
 }
 

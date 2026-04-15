@@ -16,6 +16,8 @@
 
 #include "PSO/ComputePSO/ComputePSOParticle3DInit/ComputePSOParticle3DInit.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DEmitterPoint/ComputePSOParticle3DEmitterPoint.h"
+#include "PSO/ComputePSO/ComputePSOParticle3DEmitterAABB/ComputePSOParticle3DEmitterAABB.h"
+#include "PSO/ComputePSO/ComputePSOParticle3DEmitterSphere/ComputePSOParticle3DEmitterSphere.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DUpdateVelocity/ComputePSOParticle3DUpdateVelocity.h"
 #include "PSO/ComputePSO/ComputePSOParticle3DUpdateAttract/ComputePSOParticle3DUpdateAttract.h"
 
@@ -98,8 +100,16 @@ namespace Engine
 		/// @brief CSパーティクル初期化PSO
 		std::unique_ptr<ComputePSOParticle3DInit> computePsoParticle3DInit_ = nullptr;
 
-		/// @brief CSパーティクルエミッターポイントPSO
+
+		/// @brief CSパーティクルポイントエミッターPSO
 		std::unique_ptr<ComputePSOParticle3DEmitterPoint> computePsoParticle3DEmitterPoint_ = nullptr;
+
+		/// @brief CSパーティクルAABBエミッターPSO
+		std::unique_ptr<ComputePSOParticle3DEmitterAABB> computePsoParticle3DEmitterAABB_ = nullptr;
+
+		/// @brief CSパーティクル球エミッターPSO
+		std::unique_ptr<ComputePSOParticle3DEmitterSphere> computePsoParticle3DEmitterSphere_ = nullptr;
+
 
 		/// @brief CSパーティクル速度更新PSO
 		std::unique_ptr<ComputePSOParticle3DUpdateVelocity> computePsoParticle3DUpdateVelocity_ = nullptr;
