@@ -8,7 +8,7 @@
 /// @brief 初期化
 /// @param hAudio 
 /// @param audioStore 
-void Engine::SoundData::Initialize(AudioStore* audioStore, SoundParameter* parameter)
+void Engine::SoundData::Initialize(AudioStore* audioStore, SoundParameter* parameter, AudioHandle hAudio)
 {
 	// nullptrチェック
 	assert(audioStore);
@@ -23,9 +23,10 @@ void Engine::SoundData::Initialize(AudioStore* audioStore, SoundParameter* param
 	param_->volume = 0.5f;
 	param_->pitch = 1.0f;
 	param_->enableLoop = false;
+	param_->hAudio = hAudio;
 
 	// ファイルパスを取得する
-	filePath_ = audioStore_->GetFilePath(hAudio_);
+	filePath_ = audioStore_->GetFilePath(param_->hAudio);
 
 	if (parameter_)
 	{
@@ -37,7 +38,7 @@ void Engine::SoundData::Initialize(AudioStore* audioStore, SoundParameter* param
 
 		// 登録した調整項目の値に、ファイルの値を反映させる
 		parameter_->RegisterGroupDataReflection(name_);
-		hAudio_ = audioStore_->Load(filePath_, nullptr);
+		param_->hAudio = audioStore_->Load(filePath_, nullptr);
 	}
 }
 
@@ -48,7 +49,7 @@ void Engine::SoundData::Reset()
 	{
 		// 登録した調整項目の値に、ファイルの値を反映させる
 		parameter_->RegisterGroupDataReflection(name_);
-		hAudio_ = audioStore_->Load(filePath_, nullptr);
+		param_->hAudio = audioStore_->Load(filePath_, nullptr);
 	}
 	else
 	{
@@ -91,7 +92,7 @@ void Engine::SoundData::Update()
 		// 音声が流れていない場合、音声を流す
 		if (!audioStore_->IsAudioPlay(hPlay_) || hPlay_ == 0)
 		{
-			hPlay_ = audioStore_->PlayAudio(hAudio_, param_->volume);
+			hPlay_ = audioStore_->PlayAudio(param_->hAudio, param_->volume);
 		}
 	}
 	else
@@ -114,7 +115,7 @@ void Engine::SoundData::Play()
 	}
 
 	// 音声を流す
-	hPlay_ = audioStore_->PlayAudio(hAudio_, param_->volume);
+	hPlay_ = audioStore_->PlayAudio(param_->hAudio, param_->volume);
 	isPlay_ = true;
 }
 

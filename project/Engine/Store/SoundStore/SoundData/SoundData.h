@@ -18,6 +18,9 @@ namespace Engine
 
 		// ループの有効化
 		bool enableLoop = false;
+
+		// オーディオハンドル
+		AudioHandle hAudio = 0;
 	};
 
 	// サウンドデータ
@@ -29,14 +32,14 @@ namespace Engine
 		/// @param name 
 		/// @param hSound 
 		/// @param hAudio 
-		SoundData(const std::string& name, SoundHandle hSound, AudioHandle hAudio)
-			: name_(name), hSound_(hSound), hAudio_(hAudio) {
+		SoundData(const std::string& name, SoundHandle hSound)
+			: name_(name), hSound_(hSound){
 		}
 
 		/// @brief 初期化
 		/// @param audioStore 
 		/// @param parameter 
-		void Initialize(AudioStore* audioStore, SoundParameter* parameter);
+		void Initialize(AudioStore* audioStore, SoundParameter* parameter, AudioHandle hAudio);
 
 		/// @brief リセット
 		void Reset();
@@ -83,9 +86,6 @@ namespace Engine
 
 		/// @brief サウンドハンドル
 		SoundHandle hSound_ = 0;
-
-		/// @brief オーディオハンドル
-		AudioHandle hAudio_ = 0;
 
 		/// @brief プレイハンドル
 		PlayHandle hPlay_ = 0;

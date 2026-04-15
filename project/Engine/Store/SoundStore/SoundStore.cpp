@@ -47,8 +47,8 @@ SoundHandle Engine::SoundStore::Load(const std::string& name, AudioHandle hAudio
 	nameTable_[name] = hSound;
 
 	// サウンドデータを作成してテーブルに追加する
-	std::unique_ptr<SoundData> data = std::make_unique<SoundData>(name, hSound, hAudio);
-	data->Initialize(audioStore_, parameter_.get());
+	std::unique_ptr<SoundData> data = std::make_unique<SoundData>(name, hSound);
+	data->Initialize(audioStore_, parameter_.get(), hAudio);
 	dataTable_.push_back(std::move(data));
 
 	return hSound;
