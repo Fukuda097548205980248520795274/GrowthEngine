@@ -67,15 +67,11 @@ void Engine::SoundData::Update()
 
 	// ボリューム変更
 	if(param_->volume != preVolume_)
-	{
 		audioStore_->SetVolume(hPlay_, param_->volume);
-	}
 
 	// ピッチの変更
 	if(param_->pitch != prePitch_)
-	{
 		audioStore_->SetPitch(hPlay_, param_->pitch);
-	}
 
 	// 前回の音量とピッチを記録する
 	preVolume_ = param_->volume;
@@ -91,17 +87,13 @@ void Engine::SoundData::Update()
 	{
 		// 音声が流れていない場合、音声を流す
 		if (!audioStore_->IsAudioPlay(hPlay_) || hPlay_ == 0)
-		{
 			hPlay_ = audioStore_->PlayAudio(param_->hAudio, param_->volume);
-		}
 	}
 	else
 	{
 		// 音声が流れていない場合、再生フラグを下ろす
 		if (!audioStore_->IsAudioPlay(hPlay_) || hPlay_ == 0)
-		{
 			isPlay_ = false;
-		}
 	}
 }
 
@@ -109,10 +101,8 @@ void Engine::SoundData::Update()
 void Engine::SoundData::Play()
 {
 	// 音声が流れている場合、停止する
-	if (!audioStore_->IsAudioPlay(hPlay_))
-	{
+	if (audioStore_->IsAudioPlay(hPlay_))
 		audioStore_->StopAudio(hPlay_);
-	}
 
 	// 音声を流す
 	hPlay_ = audioStore_->PlayAudio(param_->hAudio, param_->volume);
