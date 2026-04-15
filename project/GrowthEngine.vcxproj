@@ -437,22 +437,34 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOHighLuminanceExtraction\ComputePSOHighLuminanceExtraction.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOHighLuminanceExtraction\ComputePSOHighLuminanceExtraction.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB\ComputePSOParticle3DEmitterAABB.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterAABB\ComputePSOParticle3DEmitterAABB.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterPoint\ComputePSOParticle3DEmitterPoint.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DEmitterSphere\ComputePSOParticle3DEmitterSphere.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DInit\ComputePSOParticle3DInit.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateAttract\ComputePSOParticle3DUpdateAttract.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity\ComputePSOParticle3DUpdateVelocity.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -461,7 +473,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.cpp" />
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="Engine\PSO\EnumBlendMode\EnumBlendMode.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>

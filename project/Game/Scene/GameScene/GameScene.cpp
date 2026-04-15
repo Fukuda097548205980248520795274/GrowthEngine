@@ -6,7 +6,7 @@ void GameScene::Initialize()
 	engine_->LoadCamera3D("MainCamera");
 
 	// モデルを読み込む
-	engine_->LoadParticle3D("particle", 1000, engine_->LoadModel("./Assets/Models/particlePlane", "particlePlane.obj"));
+	engine_->LoadParticle3D("particle", 1000, engine_->LoadModel("./Assets/Models/AnimatedCube", "AnimatedCube.gltf"));
 
 	// ライトを読み込む
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
