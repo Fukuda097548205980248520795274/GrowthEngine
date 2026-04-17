@@ -100,6 +100,7 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 		param_->meshMaterial[meshIndex].enableHalfLambert = true;
 		param_->meshMaterial[meshIndex].enableSpecular = true;
 		param_->meshMaterial[meshIndex].enableBlinnPhong = true;
+		param_->meshMaterial[meshIndex].enableShadowMap = true;
 
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -122,6 +123,7 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_HalfLambert", &param_->meshMaterial[meshIndex].enableHalfLambert);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_ShadowMap", &param_->meshMaterial[meshIndex].enableShadowMap);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -202,6 +204,7 @@ void Engine::Render3DAnimationModelData::Reset()
 			param_->meshMaterial[meshIndex].enableHalfLambert = true;
 			param_->meshMaterial[meshIndex].enableSpecular = true;
 			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
+			param_->meshMaterial[meshIndex].enableShadowMap = true;
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -388,6 +391,11 @@ void Engine::Render3DAnimationModelData::Register(const Matrix4x4& viewProjectio
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// シャドウマップに描画するかどうか
+		if (!param_->meshMaterial[meshIndex].enableShadowMap)
+			continue;
+
+
 		/*-----------------
 		    データを渡す
 		-----------------*/
@@ -573,6 +581,9 @@ void Engine::Render3DAnimationModelData::DebugParameter()
 
 							// 環境
 							ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
+
+							// シャドウマップ有効化
+							ImGui::Checkbox("ShadowMap", &param_->meshMaterial[meshIndex].enableShadowMap);
 						}
 
 

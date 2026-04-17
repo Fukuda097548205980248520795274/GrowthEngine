@@ -79,6 +79,9 @@ namespace Engine
 
 				// ブリンフォン有効化
 				bool enableBlinnPhong;
+
+				// シャドウマップ有効化
+				bool enableShadowMap;
 			};
 
 			/// @brief パラメータ
@@ -157,6 +160,9 @@ namespace Engine
 
 				// ブリンフォン有効化
 				bool enableBlinnPhong;
+
+				// シャドウマップ有効化
+				bool enableShadowMap;
 			};
 
 			/// @brief アニメーション
@@ -248,6 +254,9 @@ namespace Engine
 
 				// ブリンフォン有効化
 				bool enableBlinnPhong;
+
+				// シャドウマップ有効化
+				bool enableShadowMap;
 			};
 
 			/// @brief アニメーション
@@ -341,6 +350,9 @@ namespace Engine
 
 				// ブリンフォン有効化
 				bool enableBlinnPhong;
+
+				// シャドウマップ有効化
+				bool enableShadowMap;
 			};
 
 			// 分割

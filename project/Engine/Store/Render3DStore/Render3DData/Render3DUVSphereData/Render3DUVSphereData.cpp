@@ -57,6 +57,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	param_->material.enableHalfLambert = true;
 	param_->material.enableSpecular = true;
 	param_->material.enableBlinnPhong = true;
+	param_->material.enableShadowMap = true;
 
 	// 分割
 	param_->division.slices = 32;
@@ -85,6 +86,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 		parameter_->SetValue(group_, "Material_Enable_HalfLambert", &param_->material.enableHalfLambert);
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
+		parameter_->SetValue(group_, "Material_Enable_ShadowMap", &param_->material.enableShadowMap);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
 		parameter_->SetValue(group_, "Division_Rings", &param_->division.rings);
@@ -161,6 +163,7 @@ void Engine::Render3DUVSphereData::Reset()
 		param_->material.enableHalfLambert = true;
 		param_->material.enableSpecular = true;
 		param_->material.enableBlinnPhong = true;
+		param_->material.enableShadowMap = true;
 
 		// 分割
 		param_->division.slices = 32;
@@ -179,7 +182,6 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
-
 
 
 	// PSOの設定
@@ -341,6 +343,9 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// シャドウマップを描画しないときは処理しない
+	if (!param_->material.enableShadowMap)return;
+
 	// 直前で描画されているときのみ
 	if (!IsDrew())return;
 
@@ -490,6 +495,9 @@ void Engine::Render3DUVSphereData::DebugParameter()
 
 			if (param_->material.enableLighting)
 			{
+				// シャドウマップ有効化
+				ImGui::Checkbox("ShadowMap", &param_->material.enableShadowMap);
+
 				// ディフューズ有効化
 				ImGui::Checkbox("Diffuse", &param_->material.enableDiffuse);
 
