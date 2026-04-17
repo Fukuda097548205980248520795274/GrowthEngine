@@ -245,6 +245,13 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\Input\BaseInput.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp" />
+    <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp" />
     <ClCompile Include="Engine\Application\Light\BaseLight.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -1002,6 +1009,13 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.h" />
     <ClInclude Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.h" />
     <ClInclude Include="Engine\Application\Framework\Framework.h" />
+    <ClInclude Include="Engine\Application\Input\BaseInput.h" />
+    <ClInclude Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.h" />
+    <ClInclude Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.h" />
+    <ClInclude Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.h" />
+    <ClInclude Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.h" />
+    <ClInclude Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.h" />
+    <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h" />
     <ClInclude Include="Engine\Application\Light\BaseLight.h" />
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h" />

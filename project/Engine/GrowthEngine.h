@@ -69,6 +69,13 @@
 #include "Application/Light/LightPoint/LightPoint.h"
 #include "Application/Light/LightSpot/LightSpot.h"
 
+#include "Application/Input/InputGamepadButton/InputGamepadButton.h"
+#include "Application/Input/InputGamepadLeftStick/InputGamepadLeftStick.h"
+#include "Application/Input/InputGamepadLeftTrigger/InputGamepadLeftTrigger.h"
+#include "Application/Input/InputGamepadRightStick/InputGamepadRightStick.h"
+#include "Application/Input/InputGamepadRightTrigger/InputGamepadRightTrigger.h"
+#include "Application/Input/InputKey/InputKey.h"
+
 
 // マウスボタン
 enum MouseButton

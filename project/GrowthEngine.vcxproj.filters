@@ -880,6 +880,27 @@
     <Filter Include="Engine\Include\Parameter\SoundParameter">
       <UniqueIdentifier>{f4645d6b-1b0a-4740-86a5-4485fe69fc48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Input">
+      <UniqueIdentifier>{81f1ee84-dd67-4e6a-9c5e-4b84755eb869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputGamepadButton">
+      <UniqueIdentifier>{23093cff-a48d-4937-adca-8d38ec1d5db9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputGamepadLeftStick">
+      <UniqueIdentifier>{9f356b26-8637-4709-b760-c7093a20c826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputGamepadRightStick">
+      <UniqueIdentifier>{25fc738b-b74b-4103-b031-dfc42b2bf44b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputGamepadLeftTrigger">
+      <UniqueIdentifier>{c6da5ce2-4984-42b1-b0bd-1db332dbdc32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputGamepadRightTrigger">
+      <UniqueIdentifier>{e89f902d-7a73-4141-9e43-9d616cc6072a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Input\InputKey">
+      <UniqueIdentifier>{105581f1-4836-4549-b60a-e6db2ee459bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1538,6 +1559,27 @@
     </ClCompile>
     <ClCompile Include="Engine\Parameter\SoundParameter\SoundParameter.cpp">
       <Filter>Engine\Include\Parameter\SoundParameter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\BaseInput.cpp">
+      <Filter>Engine\Include\Application\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.cpp">
+      <Filter>Engine\Include\Application\Input\InputGamepadButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.cpp">
+      <Filter>Engine\Include\Application\Input\InputGamepadLeftStick</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.cpp">
+      <Filter>Engine\Include\Application\Input\InputGamepadRightStick</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.cpp">
+      <Filter>Engine\Include\Application\Input\InputGamepadLeftTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp">
+      <Filter>Engine\Include\Application\Input\InputGamepadRightTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp">
+      <Filter>Engine\Include\Application\Input\InputKey</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2305,6 +2347,27 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\SoundParameter\SoundParameter.h">
       <Filter>Engine\Include\Parameter\SoundParameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\BaseInput.h">
+      <Filter>Engine\Include\Application\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.h">
+      <Filter>Engine\Include\Application\Input\InputGamepadButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.h">
+      <Filter>Engine\Include\Application\Input\InputGamepadLeftStick</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.h">
+      <Filter>Engine\Include\Application\Input\InputGamepadRightStick</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.h">
+      <Filter>Engine\Include\Application\Input\InputGamepadLeftTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.h">
+      <Filter>Engine\Include\Application\Input\InputGamepadRightTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h">
+      <Filter>Engine\Include\Application\Input\InputKey</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
