@@ -32,5 +32,18 @@ private:
 
 	/// @brief 強攻撃入力
 	std::unique_ptr<InputGamepadButton> inputHeavyAttack_ = nullptr;
+
+
+	/// @brief 前方移動入力
+	std::unique_ptr<InputKey> keyFrontMove_ = nullptr;
+
+	/// @brief 後方移動入力
+	std::unique_ptr<InputKey> keyBackMove_ = nullptr;
+
+	/// @brief 左移動入力
+	std::unique_ptr<InputKey> keyLeftMove_ = nullptr;
+
+	/// @brief 右移動入力
+	std::unique_ptr<InputKey> keyRightMove_ = nullptr;
 };
 

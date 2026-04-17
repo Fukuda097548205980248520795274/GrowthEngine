@@ -15,6 +15,9 @@ Character::Character(const InitData& initData)
 	// 位置
 	worldTransform_->translate_ = initData.position;
 
+	// 体力
+	hp_ = initData.hp;
+
 	// モデル
 	if(initData.model_)
 		model_ = initData.model_;
