@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <cmath>
+
 /// @brief コンストラクタ
 /// @param initData 
 Player::Player(const InitData& initData) : Character(initData)
@@ -34,6 +36,22 @@ void Player::Initialize()
 /// @brief 更新処理
 void Player::Update()
 {
+	if (inputMove_ && inputMove_->param_)
+	{
+		if (inputMove_->IsInput())
+		{
+			// 左スティックの入力を取得する
+			const Vector2 stick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
+			constexpr float kMaxMoveSpeed = 0.2f;
+			SetMoveInputXZ(stick.Normalize(), kMaxMoveSpeed);
+		}
+		else
+		{
+			// 左スティックが入力されていない場合は移動を停止する
+			SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.2f);
+		}
+	}
+
 	// 基底クラスの更新
 	Character::Update();
 }
