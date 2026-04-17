@@ -21,26 +21,55 @@ void Engine::InputGamepadLeftStickResource::Update()
 	// 入力を初期化する
 	isInput_ = false;
 
-	// 入力方向と目標方向の内積
-	float dot = Dot(input_->GetGamepadLeftStick(param_->controller), param_->direction);
-
-	// 入力状態
-	switch (inputState_)
+	if (param_->direction.Length() == 0.0f)
 	{
-	case InputState::Press:
+		// 方向が指定されていないとき
 
-		// 内積で判定
-		if (dot >= param_->dot)
-			isInput_ = true;
+		// 入力状態
+		switch (inputState_)
+		{
+		case InputState::Press:
 
-		break;
+			// 内積で判定
+			if (input_->GetGamepadLeftStick(param_->controller).Length() >= param_->dot)
+				isInput_ = true;
 
-	case InputState::Trigger:
+			break;
 
-		break;
+		case InputState::Trigger:
 
-	case InputState::Release:
+			break;
 
-		break;
+		case InputState::Release:
+
+			break;
+		}
+	}
+	else
+	{
+		// 方向が指定されているとき
+
+		// 入力方向と目標方向の内積
+		float dot = Dot(input_->GetGamepadLeftStick(param_->controller), param_->direction);
+
+		// 入力状態
+		switch (inputState_)
+		{
+		case InputState::Press:
+
+			// 内積で判定
+			if (dot >= param_->dot)
+				isInput_ = true;
+
+			break;
+
+		case InputState::Trigger:
+
+			break;
+
+		case InputState::Release:
+
+			break;
+		}
 	}
 }

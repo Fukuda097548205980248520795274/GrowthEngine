@@ -192,6 +192,18 @@ namespace Engine
 
 
 
+		/// @brief 3D描画の親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetRender3DParent(Render3DHandle handle, WorldTransform3D* parent) { render_->SetRender3DParent(handle, parent); }
+
+		/// @brief 3D描画の親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetRender3DParent(const std::string& name, WorldTransform3D* parent) { render_->SetRender3DParent(name, parent); }
+
+
+
 		/// @brief プリミティブ読み込み
 		/// @param hModel 
 		/// @param name 

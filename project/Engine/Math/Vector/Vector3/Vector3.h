@@ -188,3 +188,10 @@ Vector3 Reflect(const Vector3& input, const Vector3& normal);
 /// @param phi 
 /// @return 
 Vector3 SphericalCoordinate(float radius, float theta, float phi);
+
+/// @brief 線形補間
+/// @param start 
+/// @param end 
+/// @param t
+/// @return 
+Vector3 Lerp(const Vector3& start, const Vector3& end, float t);

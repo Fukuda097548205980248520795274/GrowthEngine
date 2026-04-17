@@ -146,6 +146,16 @@ namespace Engine
 			render2DStore_->Register(name, cameraStore, commandList);
 		}
 
+		/// @brief 3D描画の親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetRender3DParent(Render3DHandle handle, WorldTransform3D* parent) { render3DStore_->SetParent(handle, parent); }
+
+		/// @brief 3D描画の親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetRender3DParent(const std::string& name, WorldTransform3D* parent) { render3DStore_->SetParent(name, parent); }
+
 
 	public:
 

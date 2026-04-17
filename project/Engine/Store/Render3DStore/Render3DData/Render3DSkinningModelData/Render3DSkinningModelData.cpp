@@ -331,6 +331,7 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
+	if (parent_)worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 	// ビュープロジェクション行列を取得する
 	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
@@ -483,6 +484,7 @@ void Engine::Render3DSkinningModelData::Register(const Matrix4x4& viewProjection
 		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
+	if (parent_)worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 
 	// PSOの設定

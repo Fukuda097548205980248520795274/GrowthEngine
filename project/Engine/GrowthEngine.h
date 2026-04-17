@@ -574,6 +574,18 @@ public:
 
 
 
+	/// @brief 3D描画の親を設定する
+	/// @param handle 
+	/// @param parent 
+	void SetRender3DParent(Render3DHandle handle, WorldTransform3D* parent) const { renderContext_->SetRender3DParent(handle, parent); }
+
+	/// @brief 3D描画の親を設定する
+	/// @param name 
+	/// @param parent 
+	void SetRender3DParent(const std::string& name, WorldTransform3D* parent) const { renderContext_->SetRender3DParent(name, parent); }
+
+
+
 	/// @brief プリミティブ用prefabの読み込み
 	/// @param name 
 	/// @param type 

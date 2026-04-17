@@ -1,6 +1,8 @@
 #pragma once
 #include "GrowthEngine.h"
 
+#include "Entity/Character/Player/Player.h"
+
 class GameScene : public Scene
 {
 public:
@@ -18,5 +20,13 @@ public:
 	/// @brief 描画処理
 	void Draw() override;
 
+
+private:
+
+	/// @brief プレイヤーのモデル
+	std::unique_ptr<Render3DSkinningModel> playerModel_ = nullptr;
+
+	/// @brief プレイヤー
+	std::unique_ptr<Player> player_ = nullptr;
 };
 

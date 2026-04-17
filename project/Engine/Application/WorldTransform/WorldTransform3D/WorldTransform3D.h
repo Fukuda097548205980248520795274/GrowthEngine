@@ -35,7 +35,7 @@ public:
 public:
 
 	/// @brief 拡縮
-	Vector3 scale_ = Vector3(1.0f, 0.0f, 0.0f);
+	Vector3 scale_ = Vector3(1.0f, 1.0f, 1.0f);
 
 	/// @brief 回転
 	Vector3 rotate_ = Vector3(0.0f, 0.0f, 0.0f);

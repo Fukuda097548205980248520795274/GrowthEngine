@@ -901,6 +901,18 @@
     <Filter Include="Engine\Include\Application\Input\InputKey">
       <UniqueIdentifier>{105581f1-4836-4549-b60a-e6db2ee459bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Entity">
+      <UniqueIdentifier>{b516375b-fd4f-4d86-867f-afd397a1d5e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Character">
+      <UniqueIdentifier>{4140d0d7-138d-4195-a41f-cb640c30bc70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Character\Player">
+      <UniqueIdentifier>{6bce7ceb-ec10-4e88-bd0c-3c2600af92ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Character\NPC">
+      <UniqueIdentifier>{ac7eded9-3981-4435-b9f9-2d2ffe50e2ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1580,6 +1592,21 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp">
       <Filter>Engine\Include\Application\Input\InputKey</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Entity.cpp">
+      <Filter>Game\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Character\Character.cpp">
+      <Filter>Game\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Character\Player\Player.cpp">
+      <Filter>Game\Entity\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp">
+      <Filter>Game\Entity\Character\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Render3D\BaseRender3D.cpp">
+      <Filter>Engine\Include\Application\Render3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2368,6 +2395,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h">
       <Filter>Engine\Include\Application\Input\InputKey</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity\Entity.h">
+      <Filter>Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity\Character\Character.h">
+      <Filter>Game\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity\Character\Player\Player.h">
+      <Filter>Game\Entity\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity\Character\NPC\NPC.h">
+      <Filter>Game\Entity\Character\NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

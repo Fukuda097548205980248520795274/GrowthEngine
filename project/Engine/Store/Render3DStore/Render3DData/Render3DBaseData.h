@@ -23,6 +23,7 @@
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 
 class GrowthEngine;
+class WorldTransform3D;
 
 namespace Engine
 {
@@ -50,6 +51,10 @@ namespace Engine
 
 		/// @brief シーン前のリセット
 		void PerSceneReset();
+
+		/// @brief 親を設定する
+		/// @param parent 
+		void SetParent(WorldTransform3D* parent) { parent_ = parent; }
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -118,6 +123,10 @@ namespace Engine
 
 		// 描画前に処理したかどうか
 		bool isPreDrew_ = false;
+
+
+		// 親ワールドトランスフォーム
+		WorldTransform3D* parent_ = nullptr;
 
 	private:
 

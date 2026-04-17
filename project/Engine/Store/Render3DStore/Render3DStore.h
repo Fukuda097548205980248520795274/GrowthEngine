@@ -115,6 +115,16 @@ namespace Engine
 			return static_cast<T*>(data->GetParam());
 		}
 
+		/// @brief 親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetParent(Render3DHandle handle, WorldTransform3D* parent) { dataTable_[handle]->SetParent(parent); }
+
+		/// @brief 親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetParent(const std::string& name, WorldTransform3D* parent) { dataTable_[nameTable_[name]]->SetParent(parent); }
+
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 

@@ -4,6 +4,7 @@
 #include "Data/Render3DData/Render3DData.h"
 
 class GrowthEngine;
+class WorldTransform3D;
 
 namespace Engine
 {
@@ -16,7 +17,11 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param name 
-		BaseRender3D(const std::string& name) : name_(name){}
+		BaseRender3D(const std::string& name);
+
+		/// @brief 親を設定する
+		/// @param parent 
+		void SetParent(WorldTransform3D* parent);
 
 		/// @brief 描画処理
 		virtual void Draw() = 0;
