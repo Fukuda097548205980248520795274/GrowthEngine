@@ -55,6 +55,10 @@ public:
 	/// @return
 	Vector3 GetDirection() const { return direction_; }
 
+	/// @brief 現在位置を取得する
+	/// @return
+	Vector3 GetPosition() const { return worldTransform_->translate_; }
+
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
@@ -82,6 +86,12 @@ protected:
 
 	/// @brief 現在の速度
 	Vector3 currentVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+
+
+protected:
+
+	/// @brief ダッシュフラグ
+	bool isDash_ = false;
 
 
 protected:

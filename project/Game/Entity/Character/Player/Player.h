@@ -24,6 +24,9 @@ private:
 	/// @brief 移動入力
 	std::unique_ptr<InputGamepadLeftStick> inputMove_;
 
+	/// @brief ダッシュ入力
+	std::unique_ptr<InputGamepadButton> inputDash_ = nullptr;
+
 	/// @brief 回避入力
 	std::unique_ptr<InputGamepadButton> inputAvoid_ = nullptr;
 
@@ -51,5 +54,11 @@ private:
 
 	/// @brief キーの構え入力
 	std::unique_ptr<InputKey> keyStance_ = nullptr;
+
+	/// @brief キーのカメラ左回転入力
+	std::unique_ptr<InputKey> keyCameraRotateLeft_ = nullptr;
+
+	/// @brief キーのカメラ右回転入力
+	std::unique_ptr<InputKey> keyCameraRotateRight_ = nullptr;
 };
 
