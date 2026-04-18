@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 
 #include "Entity/Character/Player/Player.h"
+#include "Entity/Character/NPC/NPC.h"
 
 class GameScene : public Scene
 {
@@ -28,5 +29,12 @@ private:
 
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
+
+
+	/// @brief 敵のモデル
+	std::unique_ptr<Render3DSkinningModel> enemyModel_ = nullptr;
+
+	/// @brief 敵
+	std::unique_ptr<NPC> enemy_;
 };
 

@@ -7,13 +7,17 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param initData 
-	NPC(const InitData& initData);
+	/// @param characterTag 
+	NPC(const InitData& initData, CharacterTag characterTag);
 
 	/// @brief 初期化
 	void Initialize();
 
 	/// @brief 更新処理
 	virtual void Update() override;
+
+	/// @brief 描画処理
+	void Draw();
 
 
 private:

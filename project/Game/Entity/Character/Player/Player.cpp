@@ -32,6 +32,9 @@ void Player::Initialize()
 	// 強攻撃入力の生成
 	inputHeavyAttack_ = std::make_unique<InputGamepadButton>("Player_HeavyAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_Y);
 
+	// 構え入力の生成
+	inputStance_ = std::make_unique<InputGamepadButton>("Player_Stance", InputState::Press, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
+
 	// キーの前移動入力の生成
 	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
 
@@ -43,12 +46,26 @@ void Player::Initialize()
 
 	// キーの右移動入力の生成
 	keyRightMove_ = std::make_unique<InputKey>("Player_KeyRightMove", InputState::Press, DIK_D);
+
+	// キーの構え入力の生成
+	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
 }
 
 /// @brief 更新処理
 void Player::Update()
 {
-   constexpr float kMaxMoveSpeed = 0.2f;
+    // 通常時の移動速度[m/s]
+	constexpr float kNormalMoveSpeed = 6.0f;
+	constexpr float kStanceMoveSpeed = kNormalMoveSpeed * 0.5f;
+
+	// 構え入力中は構えフラグを立て、離したらフラグを下ろす
+	const bool isGamepadStance = (inputStance_ && inputStance_->IsInput());
+	const bool isKeyStance = (keyStance_ && keyStance_->IsInput());
+	isStance_ = (isGamepadStance || isKeyStance);
+
+	// 構え中は移動速度を半分にする
+	// Character側で速度補間しているため、通常速度↔構え速度の切り替えも補間される
+	const float moveSpeed = isStance_ ? kStanceMoveSpeed : kNormalMoveSpeed;
 
 	// WASDキーの入力方向を作成する
 	Vector2 keyMoveDirection = Vector2(0.0f, 0.0f);
@@ -72,7 +89,7 @@ void Player::Update()
 	// キー入力がある場合はキー移動を優先する
 	if (keyMoveDirection.Length() > 0.0f)
 	{
-		SetMoveInputXZ(keyMoveDirection.Normalize(), kMaxMoveSpeed);
+        SetMoveInputXZ(keyMoveDirection.Normalize(), moveSpeed);
 	}
 	else if (inputMove_ && inputMove_->param_)
 	{
@@ -80,18 +97,18 @@ void Player::Update()
 		{
 			// 左スティックの入力を取得する
 			const Vector2 stick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
-			SetMoveInputXZ(stick.Normalize(), kMaxMoveSpeed);
+           SetMoveInputXZ(stick.Normalize(), moveSpeed);
 		}
 		else
 		{
 			// 左スティックが入力されていない場合は移動を停止する
-          SetMoveInputXZ(Vector2(0.0f, 0.0f), kMaxMoveSpeed);
+           SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
 		}
 	}
 	else
 	{
 		// 入力がない場合は移動を停止する
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), kMaxMoveSpeed);
+		SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
 	}
 
 	// 基底クラスの更新
