@@ -132,7 +132,7 @@ void Character::Update()
 /// @param cameraYaw
 void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
 {
-  // 新しい連続回避の開始時に回数を初期化する
+	// 新しい連続回避の開始時に回数を初期化する
 	if (!isAvoid_ && currentAvoidCount_ == 0)
 	{
 		currentAvoidCount_ = 1;
@@ -160,13 +160,13 @@ void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput,
 /// @param cameraYaw
 void Character::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
 {
-   // 回避中でない場合は何もしない
+	// 回避中でない場合は何もしない
 	if (!isAvoid_)
 	{
 		return;
 	}
 
-   // 最大連続回避回数に達している場合は連続回避できない
+	// 最大連続回避回数に達している場合は連続回避できない
 	if (currentAvoidCount_ >= maxConsecutiveAvoidCount_)
 	{
 		return;
@@ -186,7 +186,7 @@ void Character::UpdateAvoid(float deltaTime)
 
 	// 開始位置から終了位置まで線形補間で移動する
 	const float t = std::clamp<float>(avoidElapsedTime_ / avoidDuration_, 0.0f, 1.0f);
-	const float easeOutT = 1.0f - std::pow(1.0f - t, 3); // イーズアウト補間
+	const float easeOutT = 1.0f - std::powf(1.0f - t, 3); // イーズアウト補間
 	worldTransform_->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
 
 	// 到達したら回避フラグを下ろす

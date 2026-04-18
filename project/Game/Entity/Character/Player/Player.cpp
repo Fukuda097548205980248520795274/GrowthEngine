@@ -5,7 +5,7 @@
 
 namespace
 {
-   // 通常時の移動速度[m/s]
+	// 通常時の移動速度[m/s]
 	constexpr float kNormalMoveSpeed = 6.0f;
 
 	// 構え時の移動速度倍率
@@ -197,7 +197,7 @@ Vector2 Player::GetMoveInputDirection(bool& hasMoveInput) const
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
 {
-  // 構え中はダッシュできない
+	// 構え中はダッシュできない
 	// ダッシュ中に構えた場合もダッシュを解除する
 	if (isStance_)
 	{

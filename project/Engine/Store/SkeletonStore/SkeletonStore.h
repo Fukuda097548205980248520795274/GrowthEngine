@@ -30,6 +30,8 @@ namespace Engine
 		/// @return 
 		ModelBoneData GetBoneData(SkeletonHandle handle) { return dataTable_[handle]->GetBoneData(); }
 
+
+	public:
 		
 		/// @brief スケルトンのデバッグ描画
 		/// @param skeleton 

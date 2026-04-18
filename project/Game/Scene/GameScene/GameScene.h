@@ -25,6 +25,7 @@ public:
 
 
 private:
+
 	/// @brief カメラ制御の初期化
 	void InitializeCameraControl();
 
@@ -53,16 +54,24 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 
 
+
 	/// @brief 敵のモデル
 	std::unique_ptr<Render3DSkinningModel> enemyModel_ = nullptr;
 
 	/// @brief 敵
 	std::unique_ptr<NPC> enemy_;
 
+
+
 	/// @brief カメラのピボットポイント
 	std::unique_ptr<PivotPoint> pivotPoint_ = nullptr;
 
 	/// @brief カメラ回転入力
 	std::unique_ptr<InputGamepadRightStick> inputCameraRotate_ = nullptr;
+
+
+
+	/// @brief 太陽光
+	std::unique_ptr<LightDirectional> sunLight_ = nullptr;
 };
 

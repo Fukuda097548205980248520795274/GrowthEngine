@@ -22,6 +22,7 @@ public:
 
 private:
 
-
+	/// @brief 戦闘中かどうか
+	bool isFighting_ = false;
 };
 

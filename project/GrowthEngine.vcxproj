@@ -976,6 +976,13 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\Entity\Entity.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\CompositeNode.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\RestartingSelectorNode\RestartingSelectorNode.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.cpp" />
+    <ClCompile Include="Game\Node\ConditionNode\ConditionNode.cpp" />
+    <ClCompile Include="Game\Node\Node.cpp" />
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="main.cpp">
@@ -1253,6 +1260,13 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Entity\Character\Player\Player.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Entity\Entity.h" />
+    <ClInclude Include="Game\Node\CompositeNode\CompositeNode.h" />
+    <ClInclude Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.h" />
+    <ClInclude Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.h" />
+    <ClInclude Include="Game\Node\CompositeNode\RestartingSelectorNode\RestartingSelectorNode.h" />
+    <ClInclude Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.h" />
+    <ClInclude Include="Game\Node\ConditionNode\ConditionNode.h" />
+    <ClInclude Include="Game\Node\Node.h" />
     <ClInclude Include="Game\PivotPoint\PivotPoint.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
   </ItemGroup>

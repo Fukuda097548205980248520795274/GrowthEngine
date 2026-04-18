@@ -24,6 +24,9 @@ void GameScene::Initialize()
 {
 	engine_->LoadCamera3D("MainCamera");
 
+	// 太陽光の生成と初期化
+	sunLight_ = std::make_unique<LightDirectional>("SunLight");
+
 	engine_->LoadSound("TEST_audio", engine_->LoadAudio("./Assets/Sounds/bgm/season_goes_around.mp3"));
 
 	// プレイヤーのモデルの生成と初期化

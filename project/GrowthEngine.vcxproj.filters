@@ -916,6 +916,27 @@
     <Filter Include="Game\PivotPoint">
       <UniqueIdentifier>{1ee2b896-c9d9-42c6-8cba-98271490b4b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Node">
+      <UniqueIdentifier>{32442cc9-4a50-4e87-ba09-d189e46c8a71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ConditionNode">
+      <UniqueIdentifier>{1fef454b-2480-4dca-8ccd-eb9019003924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode">
+      <UniqueIdentifier>{c46e52fd-ca7e-4c8f-ac74-9d39b42d480f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode\RestartingSequenceNode">
+      <UniqueIdentifier>{480a22ae-5dda-4d83-bcae-c76aa2024fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode\PersistentSequenceNode">
+      <UniqueIdentifier>{95360061-faed-4a21-a48c-17800f54e2ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode\RestartingSelectorNode">
+      <UniqueIdentifier>{14eb14bb-fad7-45ef-869a-1396d5d530d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode\PersistentSelectorNode">
+      <UniqueIdentifier>{c7432967-937c-45c8-b1da-a7eb0862fa98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1613,6 +1634,27 @@
     </ClCompile>
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp">
       <Filter>Game\PivotPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\Node.cpp">
+      <Filter>Game\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ConditionNode\ConditionNode.cpp">
+      <Filter>Game\Node\ConditionNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\CompositeNode.cpp">
+      <Filter>Game\Node\CompositeNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.cpp">
+      <Filter>Game\Node\CompositeNode\RestartingSequenceNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.cpp">
+      <Filter>Game\Node\CompositeNode\PersistentSequenceNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\RestartingSelectorNode\RestartingSelectorNode.cpp">
+      <Filter>Game\Node\CompositeNode\RestartingSelectorNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.cpp">
+      <Filter>Game\Node\CompositeNode\PersistentSelectorNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2416,6 +2458,27 @@
     </ClInclude>
     <ClInclude Include="Game\PivotPoint\PivotPoint.h">
       <Filter>Game\PivotPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\Node.h">
+      <Filter>Game\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ConditionNode\ConditionNode.h">
+      <Filter>Game\Node\ConditionNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\CompositeNode.h">
+      <Filter>Game\Node\CompositeNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.h">
+      <Filter>Game\Node\CompositeNode\RestartingSequenceNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.h">
+      <Filter>Game\Node\CompositeNode\PersistentSequenceNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\RestartingSelectorNode\RestartingSelectorNode.h">
+      <Filter>Game\Node\CompositeNode\RestartingSelectorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.h">
+      <Filter>Game\Node\CompositeNode\PersistentSelectorNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
