@@ -57,7 +57,8 @@ void GameScene::Initialize()
 /// @brief 更新処理
 void GameScene::Update()
 {
- const float deltaTime = engine_->GetDeltaTime();
+	// デルタタイムを取得する
+	const float deltaTime = engine_->GetDeltaTime();
 
 	// プレイヤーの更新
 	player_->Update();
@@ -76,7 +77,7 @@ void GameScene::InitializeCameraControl()
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
 	pivotPoint_->GetData()->radius = 10.0f;
-	pivotPoint_->GetData()->phi = 0.4f;
+	pivotPoint_->GetData()->phi = -std::numbers::pi_v<float> / 2.0f;
 
 	// カメラ回転入力の生成
 	inputCameraRotate_ = std::make_unique<InputGamepadRightStick>("Camera_Rotate", InputState::Press, 0, Vector2(0.0f, 0.0f), 0.5f);

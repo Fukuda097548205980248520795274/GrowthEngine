@@ -3,6 +3,25 @@
 #include <algorithm>
 #include <cmath>
 
+namespace
+{
+	/// @brief カメラ基準の入力方向をワールド方向へ変換する
+	/// @param cameraLocalDirection
+	/// @param cameraYaw
+	/// @return
+	Vector2 ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDirection, float cameraYaw)
+	{
+		// カメラ前方向(XZ平面)
+		const Vector2 forward = Vector2(std::sin(cameraYaw), std::cos(cameraYaw));
+
+		// カメラ右方向(XZ平面)
+		const Vector2 right = Vector2(forward.y, -forward.x);
+
+		// カメラ基準入力をワールド方向へ変換する
+		return right * cameraLocalDirection.x + forward * cameraLocalDirection.y;
+	}
+}
+
 // Characterインスタンスの共有リスト
 std::vector<Character*> Character::characters_{};
 
@@ -40,6 +59,12 @@ void Character::Update()
 {
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(GrowthEngine::GetInstance()->GetDeltaTime(), 0.0f);
+
+	// 回避中は回避移動のみ更新する
+	if (isAvoid_)
+	{
+		UpdateAvoid(deltaTime);
+	}
 
 	// 現在のY回転から向いている方向ベクトルを更新する
 	direction_.x = std::sin(worldTransform_->rotate_.y);
@@ -99,6 +124,106 @@ void Character::Update()
 
 	// 基底クラスの更新
 	Entity::Update();
+}
+
+/// @brief 回避を開始する
+/// @param moveInputDirection
+/// @param hasMoveInput
+/// @param cameraYaw
+void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
+{
+  // 新しい連続回避の開始時に回数を初期化する
+	if (!isAvoid_ && currentAvoidCount_ == 0)
+	{
+		currentAvoidCount_ = 1;
+	}
+
+	// 回避開始時にダッシュは解除する
+	isDash_ = false;
+
+	// 回避方向を決定する
+	const Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, cameraYaw);
+
+	// 回避パラメータを初期化する
+	isAvoid_ = true;
+	avoidElapsedTime_ = 0.0f;
+	avoidStartPosition_ = worldTransform_->translate_;
+	avoidEndPosition_ = avoidStartPosition_ + Vector3(avoidDirection.x * avoidDistance_, 0.0f, avoidDirection.y * avoidDistance_);
+
+	// 通常移動は停止して回避移動へ移行する
+	MoveStop();
+}
+
+/// @brief 連続回避を試行する
+/// @param moveInputDirection
+/// @param hasMoveInput
+/// @param cameraYaw
+void Character::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
+{
+   // 回避中でない場合は何もしない
+	if (!isAvoid_)
+	{
+		return;
+	}
+
+   // 最大連続回避回数に達している場合は連続回避できない
+	if (currentAvoidCount_ >= maxConsecutiveAvoidCount_)
+	{
+		return;
+	}
+
+    // 現在位置から次の連続回避を即時開始する
+	++currentAvoidCount_;
+	StartAvoid(moveInputDirection, hasMoveInput, cameraYaw);
+}
+
+/// @brief 回避中の更新処理
+/// @param deltaTime
+void Character::UpdateAvoid(float deltaTime)
+{
+	// 回避時間を進める
+	avoidElapsedTime_ += deltaTime;
+
+	// 開始位置から終了位置まで線形補間で移動する
+	const float t = std::clamp<float>(avoidElapsedTime_ / avoidDuration_, 0.0f, 1.0f);
+	const float easeOutT = 1.0f - std::pow(1.0f - t, 3); // イーズアウト補間
+	worldTransform_->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
+
+	// 到達したら回避フラグを下ろす
+	if (t >= 1.0f)
+	{
+		// 連続回避が終了したので回避回数を回復する
+		isAvoid_ = false;
+		avoidElapsedTime_ = 0.0f;
+		currentAvoidCount_ = 0;
+	}
+}
+
+/// @brief 回避方向を取得する
+/// @param moveInputDirection
+/// @param hasMoveInput
+/// @param cameraYaw
+/// @return
+Vector2 Character::GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const
+{
+	// 移動入力がある場合はその方向へ回避する
+	if (hasMoveInput)
+	{
+		const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, cameraYaw);
+		if (worldMoveDirection.Length() > 0.0f)
+		{
+			return worldMoveDirection.Normalize();
+		}
+	}
+
+	// 移動入力がない場合は現在向いている方向の後ろへ回避する
+	Vector2 backwardDirection = Vector2(-direction_.x, -direction_.z);
+	if (backwardDirection.Length() <= 0.0f)
+	{
+		backwardDirection = Vector2(0.0f, -1.0f);
+	}
+
+	return backwardDirection.Normalize();
 }
 
 /// @brief 移動を停止させる

@@ -1,9 +1,19 @@
 #include "Player.h"
+#include "Player.h"
 
 #include <cmath>
 
 namespace
 {
+   // 通常時の移動速度[m/s]
+	constexpr float kNormalMoveSpeed = 6.0f;
+
+	// 構え時の移動速度倍率
+	constexpr float kStanceMoveSpeedMultiplier = 0.5f;
+
+	// ダッシュ時の移動速度倍率
+	constexpr float kDashSpeedMultiplier = 2.0f;
+
 	/// @brief カメラ基準の入力方向をワールド方向へ変換する
 	/// @param cameraLocalDirection 
 	/// @param cameraYaw 
@@ -76,27 +86,72 @@ void Player::Initialize()
 /// @brief 更新処理
 void Player::Update()
 {
-    // 通常時の移動速度[m/s]
-	constexpr float kNormalMoveSpeed = 6.0f;
-	constexpr float kStanceMoveSpeed = kNormalMoveSpeed * 0.5f;
-	constexpr float kDashSpeedMultiplier = 2.0f;
-
-	// カメラのY回転を取得する
-	float cameraYaw = 0.0f;
-	if (Engine::Camera3DData::Param* cameraParam = GrowthEngine::GetInstance()->GetCamera3DParam("MainCamera"))
+	// 回避中は回避更新のみ行い、他の操作は受け付けない
+	if (isAvoid_)
 	{
-		cameraYaw = cameraParam->transform.rotate.y;
+        // 回避中でも回避ボタン入力があれば次の回避を予約する
+		bool hasMoveInput = false;
+		const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
+		if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+		{
+			ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
+		}
+
+		Character::Update();
+		return;
 	}
 
+    // 構え状態を更新する
+	UpdateStanceState();
+
+	// 移動入力方向を取得する
+	bool hasMoveInput = false;
+	const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
+
+	// 構え中に回避ボタンを押したら回避を開始する
+	if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+	{
+       StartAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
+		Character::Update();
+		return;
+	}
+
+	// ダッシュ状態を更新する
+	UpdateDashState(hasMoveInput);
+
+	// 状態に応じた移動速度を計算する
+	const float moveSpeed = GetCurrentMoveSpeed();
+
+	if (hasMoveInput)
+	{
+		// カメラ基準の入力方向をワールド方向へ変換する
+       const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
+		SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
+	}
+	else
+	{
+		// 入力がない場合は移動を停止する
+		SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
+	}
+
+	// 基底クラスの更新
+	Character::Update();
+}
+
+/// @brief 構え状態を更新する
+void Player::UpdateStanceState()
+{
 	// 構え入力中は構えフラグを立て、離したらフラグを下ろす
 	const bool isGamepadStance = (inputStance_ && inputStance_->IsInput());
 	const bool isKeyStance = (keyStance_ && keyStance_->IsInput());
 	isStance_ = (isGamepadStance || isKeyStance);
+}
 
-	// 構え中は移動速度を半分にする
-	// Character側で速度補間しているため、通常速度↔構え速度の切り替えも補間される
-    float moveSpeed = isStance_ ? kStanceMoveSpeed : kNormalMoveSpeed;
-
+/// @brief 移動入力方向を取得する
+/// @param hasMoveInput
+/// @return
+Vector2 Player::GetMoveInputDirection(bool& hasMoveInput) const
+{
 	// WASDキーの入力方向を作成する
 	Vector2 keyMoveDirection = Vector2(0.0f, 0.0f);
 	if (keyFrontMove_ && keyFrontMove_->IsInput())
@@ -116,23 +171,38 @@ void Player::Update()
 		keyMoveDirection.x += 1.0f;
 	}
 
-  // 移動入力方向を求める（キー入力を優先）
-	bool hasMoveInput = false;
-	Vector2 moveInputDirection = Vector2(0.0f, 0.0f);
+	// 移動入力方向を求める（キー入力を優先）
+	hasMoveInput = false;
 	if (keyMoveDirection.Length() > 0.0f)
 	{
 		hasMoveInput = true;
-		moveInputDirection = keyMoveDirection.Normalize();
+		return keyMoveDirection.Normalize();
 	}
-	else if (inputMove_ && inputMove_->param_ && inputMove_->IsInput())
+
+	if (inputMove_ && inputMove_->param_ && inputMove_->IsInput())
 	{
 		// 左スティックの入力を取得する
 		const Vector2 stick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
 		if (stick.Length() > 0.0f)
 		{
 			hasMoveInput = true;
-			moveInputDirection = stick.Normalize();
+			return stick.Normalize();
 		}
+	}
+
+	return Vector2(0.0f, 0.0f);
+}
+
+/// @brief ダッシュ状態を更新する
+/// @param hasMoveInput
+void Player::UpdateDashState(bool hasMoveInput)
+{
+  // 構え中はダッシュできない
+	// ダッシュ中に構えた場合もダッシュを解除する
+	if (isStance_)
+	{
+		isDash_ = false;
+		return;
 	}
 
 	// ダッシュボタンを押したらダッシュフラグを立てる
@@ -146,6 +216,15 @@ void Player::Update()
 	{
 		isDash_ = false;
 	}
+}
+
+/// @brief 現在の移動速度を取得する
+/// @return
+float Player::GetCurrentMoveSpeed() const
+{
+	// 構え中は移動速度を半分にする
+	// Character側で速度補間しているため、通常速度↔構え速度の切り替えも補間される
+	float moveSpeed = isStance_ ? (kNormalMoveSpeed * kStanceMoveSpeedMultiplier) : kNormalMoveSpeed;
 
 	// ダッシュ中は移動速度を2倍にする
 	if (isDash_)
@@ -153,20 +232,19 @@ void Player::Update()
 		moveSpeed *= kDashSpeedMultiplier;
 	}
 
-	if (hasMoveInput)
+	return moveSpeed;
+}
+
+/// @brief カメラのY回転を取得する
+/// @return
+float Player::GetCameraYaw() const
+{
+	if (Engine::Camera3DData::Param* cameraParam = GrowthEngine::GetInstance()->GetCamera3DParam("MainCamera"))
 	{
-		// カメラ基準の入力方向をワールド方向へ変換する
-		const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, cameraYaw);
-		SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
-	}
-	else
-	{
-		// 入力がない場合は移動を停止する
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
+		return cameraParam->transform.rotate.y;
 	}
 
-	// 基底クラスの更新
-	Character::Update();
+	return 0.0f;
 }
 
 /// @brief 描画処理

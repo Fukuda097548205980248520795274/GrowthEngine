@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "../Character.h"
 
 class Player : public Character
@@ -17,6 +18,28 @@ public:
 
 	/// @brief 描画処理
 	void Draw();
+
+
+private:
+	/// @brief 構え状態を更新する
+	void UpdateStanceState();
+
+	/// @brief 移動入力方向を取得する
+	/// @param hasMoveInput
+	/// @return
+	Vector2 GetMoveInputDirection(bool& hasMoveInput) const;
+
+	/// @brief ダッシュ状態を更新する
+	/// @param hasMoveInput
+	void UpdateDashState(bool hasMoveInput);
+
+	/// @brief 現在の移動速度を取得する
+	/// @return
+	float GetCurrentMoveSpeed() const;
+
+	/// @brief カメラのY回転を取得する
+	/// @return
+	float GetCameraYaw() const;
 
 
 private:
@@ -60,5 +83,6 @@ private:
 
 	/// @brief キーのカメラ右回転入力
 	std::unique_ptr<InputKey> keyCameraRotateRight_ = nullptr;
+
 };
 
