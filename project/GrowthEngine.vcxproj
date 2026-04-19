@@ -968,6 +968,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
+    <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp" />
     <ClCompile Include="Game\Entity\Character\Character.cpp" />
     <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\Player.cpp" />
@@ -1255,6 +1257,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
+    <ClInclude Include="Game\Blackboard\Blackboard.h" />
+    <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h" />
     <ClInclude Include="Game\Entity\Character\Character.h" />
     <ClInclude Include="Game\Entity\Character\NPC\NPC.h" />
     <ClInclude Include="Game\Entity\Character\Player\Player.h" />

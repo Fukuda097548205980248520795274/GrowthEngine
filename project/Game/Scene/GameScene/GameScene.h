@@ -5,6 +5,7 @@
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
 #include "PivotPoint/PivotPoint.h"
+#include "Blackboard/Blackboard.h"
 
 class GameScene : public Scene
 {

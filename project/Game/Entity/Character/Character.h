@@ -173,6 +173,12 @@ protected:
 
 protected:
 
+	/// @brief 攻撃しているかどうか
+	bool isAttack_ = false;
+
+
+protected:
+
 	/// @brief モデル
 	Render3DSkinningModel* model_ = nullptr;
 };

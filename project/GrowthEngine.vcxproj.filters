@@ -937,6 +937,18 @@
     <Filter Include="Game\Node\CompositeNode\PersistentSelectorNode">
       <UniqueIdentifier>{c7432967-937c-45c8-b1da-a7eb0862fa98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Blackboard">
+      <UniqueIdentifier>{17889de2-0880-4bc4-9081-0403cc4ab0c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTree">
+      <UniqueIdentifier>{73701787-fcb1-4668-9dc6-8ef69af6a343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Builder">
+      <UniqueIdentifier>{bc179230-9cb4-43e4-a975-f501fcbb7479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Builder\BehaviorTreeBuilder">
+      <UniqueIdentifier>{9bb31c0b-fcdf-4429-ac1b-41c3bcedf1d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1655,6 +1667,12 @@
     </ClCompile>
     <ClCompile Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.cpp">
       <Filter>Game\Node\CompositeNode\PersistentSelectorNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp">
+      <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2479,6 +2497,15 @@
     </ClInclude>
     <ClInclude Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.h">
       <Filter>Game\Node\CompositeNode\PersistentSelectorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Blackboard\Blackboard.h">
+      <Filter>Game\Blackboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTree.h">
+      <Filter>Game\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h">
+      <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
