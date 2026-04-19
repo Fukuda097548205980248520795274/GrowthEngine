@@ -44,6 +44,10 @@ Character::Character(const InitData& initData) : Entity()
 	// モデル
 	if(initData.model_)
 		model_ = initData.model_;
+
+
+	// ブラックボードの生成
+	blackboard_ = std::make_unique<Blackboard>();
 }
 
 /// @brief デストラクタ

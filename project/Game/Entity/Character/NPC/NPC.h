@@ -1,5 +1,6 @@
 #pragma once
 #include "../Character.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 class NPC : public Character
 {
@@ -24,5 +25,8 @@ private:
 
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
+
+	/// @brief ビヘイビアツリー
+	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
 };
 

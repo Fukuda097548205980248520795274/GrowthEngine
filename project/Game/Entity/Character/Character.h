@@ -1,6 +1,7 @@
 #pragma once
 #define NOMINMAX
 #include "../Entity.h"
+#include "BlackBoard/BlackBoard.h"
 
 class Character : public Entity
 {
@@ -84,6 +85,9 @@ protected:
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
+
+	/// @brief ブラックボード
+	std::unique_ptr<Blackboard> blackboard_ = nullptr;
 
 
 protected:
