@@ -949,6 +949,12 @@
     <Filter Include="Game\Builder\BehaviorTreeBuilder">
       <UniqueIdentifier>{9bb31c0b-fcdf-4429-ac1b-41c3bcedf1d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Factory">
+      <UniqueIdentifier>{e447235c-2673-416c-a57e-4f447a6061c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Factory\AttackTreeFactory">
+      <UniqueIdentifier>{7cde76f7-628d-4be1-9abb-243ea12d1cc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1673,6 +1679,9 @@
     </ClCompile>
     <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp">
       <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.cpp">
+      <Filter>Game\Factory\AttackTreeFactory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2506,6 +2515,9 @@
     </ClInclude>
     <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h">
       <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h">
+      <Filter>Game\Factory\AttackTreeFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
