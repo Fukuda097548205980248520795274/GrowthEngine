@@ -2,6 +2,7 @@
 #define NOMINMAX
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
+#include "Attack/Attack.h"
 
 class Character : public Entity
 {
@@ -79,6 +80,10 @@ public:
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
+
+	/// @brief 現在の攻撃を設定する
+	/// @param attack 
+	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
 
 
 protected:
@@ -177,8 +182,8 @@ protected:
 
 protected:
 
-	/// @brief 攻撃しているかどうか
-	bool isAttack_ = false;
+	/// @brief 今の攻撃
+	Attack* currentAttack_ = nullptr;
 
 
 protected:

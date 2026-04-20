@@ -64,6 +64,10 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(GrowthEngine::GetInstance()->GetDeltaTime(), 0.0f);
 
+	// 現在の攻撃がある場合は更新する
+	if(currentAttack_)
+		currentAttack_->Update();
+
 	// 回避中は回避移動のみ更新する
 	if (isAvoid_)
 	{

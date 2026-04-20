@@ -955,6 +955,12 @@
     <Filter Include="Game\Factory\AttackTreeFactory">
       <UniqueIdentifier>{7cde76f7-628d-4be1-9abb-243ea12d1cc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Attack">
+      <UniqueIdentifier>{d722b712-93ca-4983-a25d-c49b1c2054e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\AttackNode">
+      <UniqueIdentifier>{4e0da869-928a-4a0d-b929-7cdcb9c0a41f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1682,6 +1688,12 @@
     </ClCompile>
     <ClCompile Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.cpp">
       <Filter>Game\Factory\AttackTreeFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Attack\Attack.cpp">
+      <Filter>Game\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\AttackNode\AttackNode.cpp">
+      <Filter>Game\Node\AttackNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2518,6 +2530,12 @@
     </ClInclude>
     <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h">
       <Filter>Game\Factory\AttackTreeFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Attack\Attack.h">
+      <Filter>Game\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\AttackNode\AttackNode.h">
+      <Filter>Game\Node\AttackNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
