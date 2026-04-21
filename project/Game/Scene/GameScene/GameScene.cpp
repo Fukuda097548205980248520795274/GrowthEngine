@@ -30,12 +30,12 @@ void GameScene::Initialize()
 	engine_->LoadSound("TEST_audio", engine_->LoadAudio("./Assets/Sounds/bgm/season_goes_around.mp3"));
 
 	// プレイヤーのモデルの生成と初期化
-	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/bone", "bone.gltf"),
-		engine_->LoadAnimation("./Assets/Models/bone", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/bone", "bone.gltf"), "Player_Model");
+	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
+		engine_->LoadAnimation("./Assets/Models/Character", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/Character", "bone.gltf"), "Player_Model");
 
 	// 敵のモデルの生成と初期化
-	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/bone", "bone.gltf"),
-		engine_->LoadAnimation("./Assets/Models/bone", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/bone", "bone.gltf"), "Enemy_Model");
+	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
+		engine_->LoadAnimation("./Assets/Models/Character", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/Character", "bone.gltf"), "Enemy_Model");
 
 	// プレイヤーの生成と初期化
 	Character::InitData playerInitData;
