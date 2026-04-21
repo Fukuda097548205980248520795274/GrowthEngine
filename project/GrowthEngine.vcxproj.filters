@@ -967,6 +967,9 @@
     <Filter Include="Game\Action\Move">
       <UniqueIdentifier>{3115f731-6a56-405a-abf1-92d2ccb24c6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Move\ApproachTargetMove">
+      <UniqueIdentifier>{6f86cdbb-e131-4e0a-a719-bd65dd5b18e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2554,6 +2557,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Move\Move.h">
       <Filter>Game\Action\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h">
+      <Filter>Game\Action\Move\ApproachTargetMove</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

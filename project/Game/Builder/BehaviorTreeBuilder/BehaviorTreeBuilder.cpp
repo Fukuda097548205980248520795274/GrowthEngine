@@ -42,6 +42,15 @@ BehaviorTreeBuilder& BehaviorTreeBuilder::Condition(std::function<bool()> func)
 	return *this;
 }
 
+/// @brief アクションノードを追加する
+/// @param action 
+/// @return 
+BehaviorTreeBuilder& BehaviorTreeBuilder::Action_(std::unique_ptr<Action> action)
+{
+	nodes_.push_back(std::make_unique<ActionNode>(std::move(action)));
+	return *this;
+}
+
 /// @brief ノードの追加を終了する
 /// @return 
 BehaviorTreeBuilder& BehaviorTreeBuilder::End()

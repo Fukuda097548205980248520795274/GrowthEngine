@@ -176,6 +176,9 @@ protected:
 	// 構え中かどうか
 	bool isStance_ = false;
 
+	// 構え状態でなくてもロックオン候補を更新するかどうか
+	bool canLockOnWithoutStance_ = false;
+
 	/// @brief ロックオンしているターゲット
 	Character* lockOnTarget_ = nullptr;
 

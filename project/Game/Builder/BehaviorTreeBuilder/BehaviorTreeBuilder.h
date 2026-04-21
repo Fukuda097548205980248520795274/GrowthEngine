@@ -4,6 +4,8 @@
 #include "Node/CompositeNode/RestartingSelectorNode/RestartingSelectorNode.h"
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
 #include "Node/ConditionNode/ConditionNode.h"
+#include "Node/ActionNode/ActionNode.h"
+#include "Action/Action.h"
 
 class BehaviorTreeBuilder
 {
@@ -29,6 +31,11 @@ public:
 	/// @param func 
 	/// @return 
 	BehaviorTreeBuilder& Condition(std::function<bool()> func);
+
+	/// @brief アクションノードを追加する
+	/// @param action 
+	/// @return 
+	BehaviorTreeBuilder& Action_(std::unique_ptr<Action> action);
 
 	/// @brief ノードの追加を終了する
 	/// @return 

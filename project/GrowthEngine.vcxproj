@@ -1264,6 +1264,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Action\Action.h" />
     <ClInclude Include="Game\Action\Attack\Attack.h" />
+    <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />

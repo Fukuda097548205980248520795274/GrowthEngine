@@ -284,7 +284,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 void Character::UpdateLockOnTargets()
 {
 	// 構えていない場合はターゲット情報をクリアする
-	if (!isStance_)
+ if (!isStance_ && !canLockOnWithoutStance_)
 	{
 		lockOnTarget_ = nullptr;
 		return;

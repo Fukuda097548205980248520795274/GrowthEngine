@@ -23,6 +23,9 @@ public:
 
 private:
 
+	/// @brief ターゲットとの距離で構え状態を更新する
+	void UpdateStanceStateByTargetDistance();
+
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
