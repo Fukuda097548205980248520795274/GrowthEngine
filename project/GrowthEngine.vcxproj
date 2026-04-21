@@ -968,7 +968,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Game\Attack\Attack.cpp" />
+    <ClCompile Include="Game\Action\Action.cpp" />
+    <ClCompile Include="Game\Action\Attack\Attack.cpp" />
+    <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp" />
     <ClCompile Include="Game\Entity\Character\Character.cpp" />
@@ -980,7 +982,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\Entity\Entity.cpp" />
-    <ClCompile Include="Game\Node\AttackNode\AttackNode.cpp" />
+    <ClCompile Include="Game\Node\ActionNode\ActionNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\CompositeNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.cpp" />
@@ -1260,7 +1262,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
-    <ClInclude Include="Game\Attack\Attack.h" />
+    <ClInclude Include="Game\Action\Action.h" />
+    <ClInclude Include="Game\Action\Attack\Attack.h" />
+    <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h" />
@@ -1270,7 +1274,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Entity\Entity.h" />
-    <ClInclude Include="Game\Node\AttackNode\AttackNode.h" />
+    <ClInclude Include="Game\Node\ActionNode\ActionNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\CompositeNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.h" />

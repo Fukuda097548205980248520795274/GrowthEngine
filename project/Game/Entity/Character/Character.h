@@ -2,7 +2,9 @@
 #define NOMINMAX
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
-#include "Attack/Attack.h"
+
+class Attack;
+class Move;
 
 class Character : public Entity
 {
@@ -84,6 +86,10 @@ public:
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
+
+	/// @brief 現在の移動を設定する
+	/// @param move 
+	void SetCurrentMove(Move* move) { currentMove_ = move; }
 
 
 protected:
@@ -184,6 +190,9 @@ protected:
 
 	/// @brief 今の攻撃
 	Attack* currentAttack_ = nullptr;
+
+	/// @brief 今の移動
+	Move* currentMove_ = nullptr;
 
 
 protected:

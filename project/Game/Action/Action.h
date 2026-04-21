@@ -3,25 +3,25 @@
 
 class Character;
 
-class Attack
+class Action
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param owner 
-	Attack(Character* owner) : owner_(owner) { engine_ = GrowthEngine::GetInstance(); }
+	Action(Character* owner) : owner_(owner) { engine_ = GrowthEngine::GetInstance(); }
 
 	/// @brief 仮想デストラクタ
-	virtual ~Attack() = default;
+	virtual ~Action() = default;
 
-	/// @brief 攻撃の実行
+	/// @brief 実行
 	virtual void Exec();
 
 	/// @brief 更新処理
 	virtual void Update();
 
-	/// @brief 攻撃の終了、中断
-	virtual void Exit();
+	/// @brief 終了、中断
+	void Exit();
 
 	/// @brief 実行したかどうか
 	/// @return 
@@ -41,7 +41,7 @@ protected:
 	/// @brief エンジン
 	const GrowthEngine* engine_ = nullptr;
 
-	/// @brief 攻撃の所有者
+	/// @brief 所有者
 	Character* owner_ = nullptr;
 
 

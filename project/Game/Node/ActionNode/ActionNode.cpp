@@ -1,30 +1,30 @@
-#include "AttackNode.h"
+#include "ActionNode.h"
 
 /// @brief 実行
 /// @return 
-Node::State AttackNode::Exec()
+Node::State ActionNode::Exec()
 {
 	// 攻撃がない場合は失敗
-	if (!attack_)return State::Failure;
+	if (!action_)return State::Failure;
 
-	// 攻撃を実行する
-	attack_->Exec();
+	// 実行する
+	action_->Exec();
 
-	if(attack_->IsExec())
+	if(action_->IsExec())
 	{
-		// 攻撃が実行中の場合は実行中
+		// 実行中の場合は実行中
 		return State::Running;
 	}
 	else
 	{
-		// 攻撃終了後
+		// 実行終了後
 
 		// 成功している場合は成功
-		if (attack_->IsSuccess())
+		if (action_->IsSuccess())
 			return State::Success;
 
 		// 失敗している場合は失敗
-		if(attack_->IsFailure())
+		if(action_->IsFailure())
 			return State::Failure;
 	}
 

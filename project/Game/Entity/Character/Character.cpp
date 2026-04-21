@@ -1,7 +1,9 @@
 #include "Character.h"
-#include "Character.h"
 #include <algorithm>
 #include <cmath>
+
+#include "Action/Attack/Attack.h"
+#include "Action/Move/Move.h"
 
 namespace
 {
@@ -67,6 +69,10 @@ void Character::Update()
 	// 現在の攻撃がある場合は更新する
 	if(currentAttack_)
 		currentAttack_->Update();
+
+	// 現在の移動がある場合は更新する
+	if(currentMove_)
+		currentMove_->Update();
 
 	// 回避中は回避移動のみ更新する
 	if (isAvoid_)

@@ -955,11 +955,17 @@
     <Filter Include="Game\Factory\AttackTreeFactory">
       <UniqueIdentifier>{7cde76f7-628d-4be1-9abb-243ea12d1cc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Attack">
+    <Filter Include="Game\Action">
       <UniqueIdentifier>{d722b712-93ca-4983-a25d-c49b1c2054e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Node\AttackNode">
+    <Filter Include="Game\Node\ActionNode">
       <UniqueIdentifier>{4e0da869-928a-4a0d-b929-7cdcb9c0a41f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Attack">
+      <UniqueIdentifier>{1461190c-716d-40c2-90f4-0b17725fa4d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Move">
+      <UniqueIdentifier>{3115f731-6a56-405a-abf1-92d2ccb24c6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1689,11 +1695,17 @@
     <ClCompile Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.cpp">
       <Filter>Game\Factory\AttackTreeFactory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Attack\Attack.cpp">
-      <Filter>Game\Attack</Filter>
+    <ClCompile Include="Game\Action\Action.cpp">
+      <Filter>Game\Action</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Node\AttackNode\AttackNode.cpp">
-      <Filter>Game\Node\AttackNode</Filter>
+    <ClCompile Include="Game\Node\ActionNode\ActionNode.cpp">
+      <Filter>Game\Node\ActionNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Attack\Attack.cpp">
+      <Filter>Game\Action\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Move\Move.cpp">
+      <Filter>Game\Action\Move</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2531,11 +2543,17 @@
     <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h">
       <Filter>Game\Factory\AttackTreeFactory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Attack\Attack.h">
-      <Filter>Game\Attack</Filter>
+    <ClInclude Include="Game\Action\Action.h">
+      <Filter>Game\Action</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Node\AttackNode\AttackNode.h">
-      <Filter>Game\Node\AttackNode</Filter>
+    <ClInclude Include="Game\Node\ActionNode\ActionNode.h">
+      <Filter>Game\Node\ActionNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Attack\Attack.h">
+      <Filter>Game\Action\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Move\Move.h">
+      <Filter>Game\Action\Move</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
