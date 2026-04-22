@@ -45,6 +45,12 @@ void GameScene::Initialize()
 	playerInitData.model_ = playerModel_.get();
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
 	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 4);
+	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
+	playerInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
+	playerInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
+	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
+	playerInitData.hAvoidLeftMotion = 0;
+	playerInitData.hAvoidRightMotion = 0;
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
@@ -55,6 +61,12 @@ void GameScene::Initialize()
 	enemyInitData.model_ = enemyModel_.get();
 	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
 	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
+	enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
+	enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
+	enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
+	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
+	enemyInitData.hAvoidLeftMotion = 0;
+	enemyInitData.hAvoidRightMotion = 0;
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
 	enemy_->Initialize();
 

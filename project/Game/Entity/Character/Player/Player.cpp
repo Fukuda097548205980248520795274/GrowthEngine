@@ -5,13 +5,13 @@
 namespace
 {
 	// 通常時の移動速度[m/s]
-	constexpr float kNormalMoveSpeed = 6.0f;
+	constexpr float kNormalMoveSpeed = 3.0f;
 
 	// 構え時の移動速度倍率
-	constexpr float kStanceMoveSpeedMultiplier = 0.5f;
+	constexpr float kStanceMoveSpeedMultiplier = 1.0f;
 
 	// ダッシュ時の移動速度倍率
-	constexpr float kDashSpeedMultiplier = 2.0f;
+	constexpr float kDashSpeedMultiplier = 3.0f;
 
 	/// @brief カメラ基準の入力方向をワールド方向へ変換する
 	/// @param cameraLocalDirection 

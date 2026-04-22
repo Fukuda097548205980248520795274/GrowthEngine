@@ -5,7 +5,14 @@
 enum class MotionType
 {
 	Stand,
-	Stance
+	Stance,
+	Walk,
+	Dash,
+	Attack,
+	AvoidFont,
+	AvoidBack,
+	AvoidLeft,
+	AvoidRight
 };
 
 class MotionManager
@@ -49,6 +56,34 @@ private:
 	/// @brief 構えモーション読み込み
 	/// @param dir 
 	void LoadStance(const std::string& dir);
+
+	/// @brief 歩きモーション読み込み
+	/// @param dir 
+	void LoadWalk(const std::string& dir);
+
+	/// @brief ダッシュモーション読み込み
+	/// @param dir 
+	void LoadDash(const std::string& dir);
+
+	/// @brief 攻撃モーション読み込み
+	/// @param dir 
+	void LoadAttack(const std::string& dir);
+
+	/// @brief 前回避モーション
+	/// @param dir 
+	void LoadAvoidFront(const std::string& dir);
+
+	/// @brief 後ろ回避モーション
+	/// @param dir 
+	void LoadAvoidBack(const std::string& dir);
+
+	/// @brief 左回避モーション
+	/// @param dir 
+	void LoadAvoidLeft(const std::string& dir);
+
+	/// @brief 右回避モーション
+	/// @param dir 
+	void LoadAvoidRight(const std::string& dir);
 
 
 private:

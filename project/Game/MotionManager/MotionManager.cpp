@@ -35,6 +35,14 @@ void MotionManager::Initialize()
 	// モーション読み込み
 	LoadStand(dir);
 	LoadStance(dir);
+	LoadWalk(dir);
+	LoadDash(dir);
+	LoadAttack(dir);
+	LoadAvoidFront(dir);
+	LoadAvoidBack(dir);
+	LoadAvoidLeft(dir);
+	LoadAvoidRight(dir);
+
 
 	// 初期化完了
 	isInit_ = true;
@@ -50,8 +58,58 @@ void MotionManager::LoadStand(const std::string& dir)
 /// @param dir 
 void MotionManager::LoadStance(const std::string& dir)
 {
+	table_[MotionType::Stance][0] = engine_->LoadAnimation(dir + "/stance/stance_000", "stance_000.gltf");
 	table_[MotionType::Stance][1] = engine_->LoadAnimation(dir + "/stance/stance_001", "stance_001.gltf");
 	table_[MotionType::Stance][2] = engine_->LoadAnimation(dir + "/stance/stance_002", "stance_002.gltf");
 	table_[MotionType::Stance][3] = engine_->LoadAnimation(dir + "/stance/stance_003", "stance_003.gltf");
 	table_[MotionType::Stance][4] = engine_->LoadAnimation(dir + "/stance/stance_004", "stance_004.gltf");
+}
+
+/// @brief 歩きモーション読み込み
+/// @param dir 
+void MotionManager::LoadWalk(const std::string& dir)
+{
+	table_[MotionType::Walk][0] = engine_->LoadAnimation(dir + "/walk", "walk.gltf");
+}
+
+/// @brief ダッシュモーション読み込み
+/// @param dir 
+void MotionManager::LoadDash(const std::string& dir)
+{
+	table_[MotionType::Dash][0] = engine_->LoadAnimation(dir + "/dash", "dash.gltf");
+}
+
+/// @brief 攻撃モーション読み込み
+/// @param dir 
+void MotionManager::LoadAttack(const std::string& dir)
+{
+
+}
+
+/// @brief 前回避モーション
+/// @param dir 
+void MotionManager::LoadAvoidFront(const std::string& dir)
+{
+	table_[MotionType::AvoidFont][0] = engine_->LoadAnimation(dir + "/avoidFront/avoidFront_000", "avoidFront_000.gltf");
+}
+
+/// @brief 後ろ回避モーション
+/// @param dir 
+void MotionManager::LoadAvoidBack(const std::string& dir)
+{
+	table_[MotionType::AvoidBack][0] = engine_->LoadAnimation(dir + "/avoidBack/avoidBack_000", "avoidBack_000.gltf");
+}
+
+/// @brief 左回避モーション
+/// @param dir 
+void MotionManager::LoadAvoidLeft(const std::string& dir)
+{
+
+}
+
+/// @brief 右回避モーション
+/// @param dir 
+void MotionManager::LoadAvoidRight(const std::string& dir)
+{
+
 }

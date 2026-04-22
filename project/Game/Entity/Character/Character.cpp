@@ -63,6 +63,9 @@ Character::Character(const InitData& initData) : Entity()
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;
+	hWalkMotion_ = initData.hWalkMotion;
+	hDashMotion_ = initData.hDashMotion;
+	
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
@@ -153,10 +156,65 @@ void Character::Update()
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
 
 
-	SetAnimation(hStandMotion_, false);
-	if(isStance_)
+	if (!isAttack_)
 	{
-		SetAnimation(hStanceMotion_, false);
+		// 立ちモーションを再生する
+		SetAnimation(hStandMotion_, false);
+
+		//　移動している場合は歩きモーションを再生する
+		if (targetVelocity_.Length() > 0.0f)
+			SetAnimation(hWalkMotion_, false);
+		
+		// ダッシュしている場合はダッシュモーションを再生する
+		if (isDash_)
+			SetAnimation(hDashMotion_, false);
+
+		// 構え中は構えモーションを優先して再生する
+		if (isStance_)
+			SetAnimation(hStanceMotion_, false);
+
+		// 回避中は回避モーションを優先して再生する
+		if (isAvoid_)
+		{
+			// 回避方向
+			Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
+
+			if (avoidDirection.Length() > 0.0f)
+			{
+				// 向いている方向基準に回避方向を変換
+				Vector3 forward = direction_;
+				Vector3 right = Vector3(forward.z, 0.0f, -forward.x);
+				Vector3 localAvoidDirection =
+					Vector3(avoidDirection.x * right.x + avoidDirection.z * forward.x, 0.0f, avoidDirection.x * right.z + avoidDirection.z * forward.z).Normalize();
+
+				// 回避モーションを再生する
+				if (Dot(localAvoidDirection, Vector3(0.0f, 0.0f, 1.0f)) >= 0.3f)
+				{
+					// 前回避モーションを再生する
+					SetAnimation(hAvoidFrontMotion_, false);
+				}
+				else if (Dot(localAvoidDirection, Vector3(0.0f, 0.0f, -1.0f)) >= 0.3f)
+				{
+					// 後ろ回避モーションを再生する
+					SetAnimation(hAvoidBackMotion_, false);
+				}
+				else if (Dot(localAvoidDirection, Vector3(1.0f, 0.0f, 0.0f)) >= 0.3f)
+				{
+					// 右回避モーションを再生する
+					SetAnimation(hAvoidRightMotion_, false);
+				}
+				else if (Dot(localAvoidDirection, Vector3(-1.0f, 0.0f, 0.0f)) >= 0.3f)
+				{
+					// 左回避モーションを再生する
+					SetAnimation(hAvoidLeftMotion_, false);
+				}
+			}
+		}
+	}
+	else
+	{
+		// 攻撃モーションを再生する
+		SetAnimation(hAttackMotion_, false);
 	}
 
 

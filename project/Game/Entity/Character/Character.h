@@ -35,6 +35,24 @@ public:
 
 		/// @brief 構えモーション
 		AnimationHandle hStanceMotion = 0;
+
+		/// @brief 歩きモーション
+		AnimationHandle hWalkMotion = 0;
+
+		/// @brief ダッシュモーション
+		AnimationHandle hDashMotion = 0;
+
+		/// @brief 前回避モーション
+		AnimationHandle hAvoidFrontMotion = 0;
+
+		/// @brief 後ろ回避モーション
+		AnimationHandle hAvoidBackMotion = 0;
+
+		/// @brief 左回避モーション
+		AnimationHandle hAvoidLeftMotion = 0;
+
+		/// @brief 右回避モーション
+		AnimationHandle hAvoidRightMotion = 0;
 	};
 
 
@@ -213,6 +231,12 @@ protected:
 
 protected:
 
+	/// @brief 攻撃しているかどうか
+	bool isAttack_ = false;
+
+
+protected:
+
 	/// @brief 今の攻撃
 	Attack* currentAttack_ = nullptr;
 
@@ -242,6 +266,24 @@ protected:
 
 	/// @brief 構えモーション
 	AnimationHandle hStanceMotion_ = 0;
+
+	/// @brief 歩きモーション
+	AnimationHandle hWalkMotion_ = 0;
+
+	/// @brief ダッシュモーション
+	AnimationHandle hDashMotion_ = 0;
+
+	/// @brief 前回避モーション
+	AnimationHandle hAvoidFrontMotion_ = 0;
+
+	/// @brief 後ろ回避モーション
+	AnimationHandle hAvoidBackMotion_ = 0;
+
+	/// @brief 左回避モーション
+	AnimationHandle hAvoidLeftMotion_ = 0;
+
+	/// @brief 右回避モーション
+	AnimationHandle hAvoidRightMotion_ = 0;
 
 	/// @brief 攻撃モーション
 	AnimationHandle hAttackMotion_ = 0;
