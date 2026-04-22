@@ -94,6 +94,10 @@ public:
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
 
+	/// @brief 攻撃モーションを設定する
+	/// @param hAttackMotion 
+	void SetAttackMotion(AnimationHandle hAttackMotion) { hAttackMotion_ = hAttackMotion; }
+
 	/// @brief 現在の移動を設定する
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
@@ -238,5 +242,8 @@ protected:
 
 	/// @brief 構えモーション
 	AnimationHandle hStanceMotion_ = 0;
+
+	/// @brief 攻撃モーション
+	AnimationHandle hAttackMotion_ = 0;
 };
 

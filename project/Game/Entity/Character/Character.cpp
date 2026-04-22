@@ -403,21 +403,24 @@ void Character::UpdateAnimation()
 {
 	if (!model_)return;
 
-	// アニメーションの時間よりもタイマーが小さい場合のみ更新する
-	if(model_->param_->animation.timer <= animationTime_)
+	if (isAnimationLoop_)
 	{
 		// タイマーを進める
 		model_->param_->animation.timer += engine_->GetDeltaTime();
 
-		if (isAnimationLoop_)
-		{
-			// アニメーションをループさせる
-			model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, animationTime_);
-		}
-		else
-		{
-			// アニメーションの時間を超えないようにする
-			model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
-		}
+		// アニメーションをループさせる
+		model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, animationTime_);
+	}
+	else
+	{
+		// アニメーションの時間よりもタイマーが大きい場合は更新しない
+		if (model_->param_->animation.timer > animationTime_)
+			return;
+
+		// タイマーを進める
+		model_->param_->animation.timer += engine_->GetDeltaTime();
+
+		// アニメーションの時間を超えないようにする
+		model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
 	}
 }

@@ -44,7 +44,7 @@ void GameScene::Initialize()
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
-	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
+	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 4);
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
