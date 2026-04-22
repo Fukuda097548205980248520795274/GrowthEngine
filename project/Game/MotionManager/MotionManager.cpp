@@ -42,6 +42,7 @@ void MotionManager::Initialize()
 	LoadAvoidBack(dir);
 	LoadAvoidLeft(dir);
 	LoadAvoidRight(dir);
+	LoadAttack(dir);
 
 
 	// 初期化完了
@@ -79,13 +80,6 @@ void MotionManager::LoadDash(const std::string& dir)
 	table_[MotionType::Dash][0] = engine_->LoadAnimation(dir + "/dash", "dash.gltf");
 }
 
-/// @brief 攻撃モーション読み込み
-/// @param dir 
-void MotionManager::LoadAttack(const std::string& dir)
-{
-
-}
-
 /// @brief 前回避モーション
 /// @param dir 
 void MotionManager::LoadAvoidFront(const std::string& dir)
@@ -112,4 +106,14 @@ void MotionManager::LoadAvoidLeft(const std::string& dir)
 void MotionManager::LoadAvoidRight(const std::string& dir)
 {
 
+}
+
+/// @brief 攻撃モーション読み込み
+/// @param dir 
+void MotionManager::LoadAttack(const std::string& dir)
+{
+	table_[MotionType::Attack][0] = engine_->LoadAnimation(dir + "/attack/attack_000", "attack_000.gltf");
+	table_[MotionType::Attack][1] = engine_->LoadAnimation(dir + "/attack/attack_001", "attack_001.gltf");
+	table_[MotionType::Attack][2] = engine_->LoadAnimation(dir + "/attack/attack_002", "attack_002.gltf");
+	table_[MotionType::Attack][3] = engine_->LoadAnimation(dir + "/attack/attack_003", "attack_003.gltf");
 }

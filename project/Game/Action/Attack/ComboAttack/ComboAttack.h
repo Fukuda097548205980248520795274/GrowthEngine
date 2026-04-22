@@ -10,8 +10,8 @@ public:
 	/// @param hAttackMotion 
 	/// @param cancelStartTime 
 	/// @param cancelEndTime 
-	ComboAttack(Character* character, AnimationHandle hAttackMotion, float cancelStartTime, float cancelEndTime) 
-		: Attack(character), hAttackMotion_(hAttackMotion), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime) {}
+	ComboAttack(Character* character, AnimationHandle hAttackMotion, float attackTime, float cancelStartTime, float cancelEndTime)
+		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime) {}
 
 	/// @brief 実行
 	virtual void Exec() override;
@@ -42,6 +42,12 @@ private:
 
 	// コンボキャンセル終了時間
 	float cancelEndTime_ = 0.0f;
+
+	/// @brief 攻撃時間
+	float attackTime_ = 0.0f;
+
+	/// @brief 攻撃タイマー
+	float attackTimer_ = 0.0f;
 
 	/// @brief 次のライト攻撃
 	ComboAttack* nextLightAttack_ = nullptr;

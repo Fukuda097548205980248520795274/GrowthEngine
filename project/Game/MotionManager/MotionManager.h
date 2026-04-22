@@ -12,7 +12,7 @@ enum class MotionType
 	AvoidFont,
 	AvoidBack,
 	AvoidLeft,
-	AvoidRight
+	AvoidRight,
 };
 
 class MotionManager
@@ -65,10 +65,6 @@ private:
 	/// @param dir 
 	void LoadDash(const std::string& dir);
 
-	/// @brief 攻撃モーション読み込み
-	/// @param dir 
-	void LoadAttack(const std::string& dir);
-
 	/// @brief 前回避モーション
 	/// @param dir 
 	void LoadAvoidFront(const std::string& dir);
@@ -84,6 +80,10 @@ private:
 	/// @brief 右回避モーション
 	/// @param dir 
 	void LoadAvoidRight(const std::string& dir);
+
+	/// @brief 攻撃モーション読み込み
+	/// @param dir 
+	void LoadAttack(const std::string& dir);
 
 
 private:

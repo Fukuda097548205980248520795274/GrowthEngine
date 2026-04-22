@@ -80,6 +80,21 @@ void Player::Initialize()
 
 	// キーの構え入力の生成
 	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
+
+
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0), 0.5f, 0.05f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1), 0.5f, 0.05f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2), 0.5f, 0.05f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3), 0.5f, 0.05f, 0.5f));
+
+	auto comboLight1 = comboAttacks_[0].get();
+	auto comboLight2 = comboAttacks_[1].get();
+	auto comboLight3 = comboAttacks_[2].get();
+	auto comboLight4 = comboAttacks_[3].get();
+
+	comboLight1->SetNextLightAttack(comboLight2);
+	comboLight2->SetNextLightAttack(comboLight3);
+	comboLight3->SetNextLightAttack(comboLight4);
 }
 
 /// @brief 更新処理
@@ -183,7 +198,8 @@ void Player::UpdateAttack()
 		{
 			// 初段の弱攻撃アクションのポインタを渡して実行
 			// (※事前に初期化で生成しておいた ComboAttack インスタンスを使用)
-			//comboLight1_->Exec();
+			auto comboLight1 = comboAttacks_[0].get();
+			comboLight1->Exec();
 		}
 		ConsumeBufferedAttackInput();
 	}

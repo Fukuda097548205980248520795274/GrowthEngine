@@ -8,7 +8,10 @@ void ComboAttack::Exec()
 	Attack::Exec();
 
 	// アニメーションを設定する
-	owner_->SetAnimation(hAttackMotion_, true);
+	owner_->SetAnimation(hAttackMotion_, true , false);
+
+	// 攻撃タイマーを初期化する
+	attackTimer_ = 0.0f;
 }
 
 /// @brief 更新処理
@@ -51,14 +54,15 @@ void ComboAttack::Update()
 		}
 	}
 
-	// コンボキャンセル受付時間を過ぎたらこの攻撃を終了する
-	if (animationTimer > cancelEndTime_)
-	{
-		Exit();
-	}
+	// 攻撃タイマーを更新する
+	attackTimer_ += engine_->GetDeltaTime();
 
-	// 既定の更新
-	Attack::Update();
+	// コンボキャンセル受付時間を過ぎたらこの攻撃を終了する
+	if (attackTimer_ >= attackTime_)
+	{
+		// 既定の更新
+		Attack::Update();
+	}
 }
 
 /// @brief 次の攻撃があるかどうか

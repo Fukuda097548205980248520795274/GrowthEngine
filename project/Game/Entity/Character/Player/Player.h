@@ -105,5 +105,8 @@ private:
 	// バッファされた攻撃入力
 	AttackInputType bufferedAttackInput_ = AttackInputType::None;
 
+
+	/// @brief コンボアタック
+	std::vector<std::unique_ptr<ComboAttack>> comboAttacks_;
 };
 

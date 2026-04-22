@@ -108,6 +108,10 @@ public:
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
 
+	/// @brief 攻撃しているかどうか
+	/// @return 
+	bool IsAttack()const { return currentAttack_ != nullptr; }
+
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
@@ -119,7 +123,7 @@ public:
 	/// @brief アニメーションを設定する
 	/// @param hAnimation 
 	/// @param isReset
-	void SetAnimation(AnimationHandle hAnimation, bool isReset);
+	void SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLoop);
 
 	/// @brief 現在のアニメーションの再生時間を取得する
 	/// @return 
@@ -227,12 +231,6 @@ protected:
 
 	// Characterインスタンスのリスト
 	static std::vector<Character*> characters_;
-
-
-protected:
-
-	/// @brief 攻撃しているかどうか
-	bool isAttack_ = false;
 
 
 protected:

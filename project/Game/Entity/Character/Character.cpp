@@ -156,22 +156,21 @@ void Character::Update()
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
 
 
-	if (!isAttack_)
+	if (!currentAttack_)
 	{
 		// 立ちモーションを再生する
-		SetAnimation(hStandMotion_, false);
+		SetAnimation(hStandMotion_, false , true);
 
 		//　移動している場合は歩きモーションを再生する
 		if (targetVelocity_.Length() > 0.0f)
-			SetAnimation(hWalkMotion_, false);
+			SetAnimation(hWalkMotion_, false, true);
 		
 		// ダッシュしている場合はダッシュモーションを再生する
 		if (isDash_)
-			SetAnimation(hDashMotion_, false);
-
+			SetAnimation(hDashMotion_, false, true);
 		// 構え中は構えモーションを優先して再生する
 		if (isStance_)
-			SetAnimation(hStanceMotion_, false);
+			SetAnimation(hStanceMotion_, false, true);
 
 		// 回避中は回避モーションを優先して再生する
 		if (isAvoid_)
@@ -195,20 +194,20 @@ void Character::Update()
 					// 前後への回避
 					if (localZ > 0.0f) {
 						// 前回避モーションを再生する
-						SetAnimation(hAvoidFrontMotion_, false);
+						SetAnimation(hAvoidFrontMotion_, false, false);
 					} else {
 						// 後ろ回避モーションを再生する
-						SetAnimation(hAvoidBackMotion_, false);
+						SetAnimation(hAvoidBackMotion_, false, false);
 					}
 				} else
 				{
 					// 左右への回避
 					if (localX > 0.0f) {
 						// 右回避モーションを再生する
-						SetAnimation(hAvoidRightMotion_, false);
+						SetAnimation(hAvoidRightMotion_, false, false);
 					} else {
 						// 左回避モーションを再生する
-						SetAnimation(hAvoidLeftMotion_, false);
+						SetAnimation(hAvoidLeftMotion_, false, false);
 					}
 				}
 			}
@@ -436,7 +435,7 @@ void Character::UpdateLockOnTargets()
 
 /// @brief アニメーションを設定する
 /// @param hAnimation 
-void Character::SetAnimation(AnimationHandle hAnimation, bool isReset)
+void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLoop)
 {
 	if (!model_)return;
 
@@ -452,6 +451,9 @@ void Character::SetAnimation(AnimationHandle hAnimation, bool isReset)
 	// アニメーションをリセットする
 	if (isReset)
 		model_->param_->animation.timer = 0.0f;
+
+	// アニメーションのループ設定を更新する
+	isAnimationLoop_ = isLoop;
 }
 
 /// @brief アニメーションの更新
