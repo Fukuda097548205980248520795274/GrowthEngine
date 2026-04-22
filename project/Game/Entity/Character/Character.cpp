@@ -181,40 +181,38 @@ void Character::Update()
 
 			if (avoidDirection.Length() > 0.0f)
 			{
-				// 向いている方向基準に回避方向を変換
+				// キャラクターの向き（前）と右方向
 				Vector3 forward = direction_;
-				Vector3 right = Vector3(forward.z, 0.0f, -forward.x);
-				Vector3 localAvoidDirection =
-					Vector3(avoidDirection.x * right.x + avoidDirection.z * forward.x, 0.0f, avoidDirection.x * right.z + avoidDirection.z * forward.z).Normalize();
+				Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
 
-				// 回避モーションを再生する
-				if (Dot(localAvoidDirection, Vector3(0.0f, 0.0f, 1.0f)) >= 0.3f)
+				// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
+				float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
+				float localX = Dot(avoidDirection, right);   // +なら右、-なら左
+
+				// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
+				if (std::abs(localZ) > std::abs(localX))
 				{
-					// 前回避モーションを再生する
-					SetAnimation(hAvoidFrontMotion_, false);
-				}
-				else if (Dot(localAvoidDirection, Vector3(0.0f, 0.0f, -1.0f)) >= 0.3f)
+					// 前後への回避
+					if (localZ > 0.0f) {
+						// 前回避モーションを再生する
+						SetAnimation(hAvoidFrontMotion_, false);
+					} else {
+						// 後ろ回避モーションを再生する
+						SetAnimation(hAvoidBackMotion_, false);
+					}
+				} else
 				{
-					// 後ろ回避モーションを再生する
-					SetAnimation(hAvoidBackMotion_, false);
-				}
-				else if (Dot(localAvoidDirection, Vector3(1.0f, 0.0f, 0.0f)) >= 0.3f)
-				{
-					// 右回避モーションを再生する
-					SetAnimation(hAvoidRightMotion_, false);
-				}
-				else if (Dot(localAvoidDirection, Vector3(-1.0f, 0.0f, 0.0f)) >= 0.3f)
-				{
-					// 左回避モーションを再生する
-					SetAnimation(hAvoidLeftMotion_, false);
+					// 左右への回避
+					if (localX > 0.0f) {
+						// 右回避モーションを再生する
+						SetAnimation(hAvoidRightMotion_, false);
+					} else {
+						// 左回避モーションを再生する
+						SetAnimation(hAvoidLeftMotion_, false);
+					}
 				}
 			}
 		}
-	}
-	else
-	{
-		// 攻撃モーションを再生する
-		SetAnimation(hAttackMotion_, false);
 	}
 
 

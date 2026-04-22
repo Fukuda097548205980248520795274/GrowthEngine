@@ -85,6 +85,9 @@ void Player::Initialize()
 /// @brief 更新処理
 void Player::Update()
 {
+	// 攻撃の更新処理
+	UpdateAttack();
+
 	// 回避中は回避更新のみ行い、他の操作は受け付けない
 	if (isAvoid_)
 	{
@@ -135,6 +138,55 @@ void Player::Update()
 
 	// 基底クラスの更新
 	Character::Update();
+}
+
+/// @brief 攻撃処理を更新する
+void Player::UpdateAttack()
+{
+	// デルタタイムの取得
+	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime();
+
+	// 攻撃入力のバッファ時間を減らす
+	if (attackInputBufferTime_ > 0.0f)
+	{
+		attackInputBufferTime_ -= deltaTime;
+
+		// バッファ時間が0以下になったらバッファされた攻撃入力を消す
+		if (attackInputBufferTime_ <= 0.0f)
+			bufferedAttackInput_ = AttackInputType::None;
+	}
+
+	// 攻撃ボタンの入力を受け付け、条件を満たす場合のみバッファに保存
+	if (inputLightAttack_ && inputLightAttack_->IsInput())
+	{
+		// 攻撃していない(待機・移動中) または、現在の攻撃から「弱」へ派生できる場合のみ
+		if (!currentAttack_ || currentAttack_->HasNextAttack(AttackInputType::Light))
+		{
+			bufferedAttackInput_ = AttackInputType::Light;
+			attackInputBufferTime_ = 0.2f; // バッファ有効時間
+		}
+	} 
+	else if (inputHeavyAttack_ && inputHeavyAttack_->IsInput())
+	{
+		// 攻撃していない または、現在の攻撃から「強」へ派生できる場合のみ
+		if (!currentAttack_ || currentAttack_->HasNextAttack(AttackInputType::Heavy))
+		{
+			bufferedAttackInput_ = AttackInputType::Heavy;
+			attackInputBufferTime_ = 0.2f;
+		}
+	}
+
+	// 現在攻撃中でなく、かつバッファされた攻撃入力がある場合は攻撃を開始する
+	if (!currentAttack_ && bufferedAttackInput_ != AttackInputType::None)
+	{
+		if (bufferedAttackInput_ == AttackInputType::Light)
+		{
+			// 初段の弱攻撃アクションのポインタを渡して実行
+			// (※事前に初期化で生成しておいた ComboAttack インスタンスを使用)
+			//comboLight1_->Exec();
+		}
+		ConsumeBufferedAttackInput();
+	}
 }
 
 /// @brief 構え状態を更新する

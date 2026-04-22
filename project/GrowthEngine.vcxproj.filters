@@ -973,6 +973,9 @@
     <Filter Include="Game\MotionManager">
       <UniqueIdentifier>{8b8ff10f-d253-4d5e-8c98-98a813da8b65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Attack\ComboAttack">
+      <UniqueIdentifier>{3aaca3af-9e1f-4cc6-9b20-ac7e055084e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1718,6 +1721,9 @@
     </ClCompile>
     <ClCompile Include="Game\MotionManager\MotionManager.cpp">
       <Filter>Game\MotionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Attack\ComboAttack\ComboAttack.cpp">
+      <Filter>Game\Action\Attack\ComboAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2572,6 +2578,9 @@
     </ClInclude>
     <ClInclude Include="Game\MotionManager\MotionManager.h">
       <Filter>Game\MotionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Attack\ComboAttack\ComboAttack.h">
+      <Filter>Game\Action\Attack\ComboAttack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

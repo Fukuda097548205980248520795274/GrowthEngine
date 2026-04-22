@@ -112,10 +112,6 @@ public:
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
 
-	/// @brief 攻撃モーションを設定する
-	/// @param hAttackMotion 
-	void SetAttackMotion(AnimationHandle hAttackMotion) { hAttackMotion_ = hAttackMotion; }
-
 	/// @brief 現在の移動を設定する
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
@@ -124,6 +120,10 @@ public:
 	/// @param hAnimation 
 	/// @param isReset
 	void SetAnimation(AnimationHandle hAnimation, bool isReset);
+
+	/// @brief 現在のアニメーションの再生時間を取得する
+	/// @return 
+	float GetAnimationTimer()const { return model_->param_->animation.timer; }
 
 
 protected:
@@ -284,8 +284,5 @@ protected:
 
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
-
-	/// @brief 攻撃モーション
-	AnimationHandle hAttackMotion_ = 0;
 };
 

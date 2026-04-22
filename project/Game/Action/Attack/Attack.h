@@ -1,6 +1,14 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief 攻撃入力の種類
+enum class AttackInputType
+{
+	None,
+	Light,
+	Heavy
+};
+
 class Attack : public Action
 {
 public:
@@ -14,5 +22,9 @@ public:
 
 	/// @brief 更新処理
 	virtual void Update() override;
+
+	/// @brief 次の攻撃があるかどうか
+	/// @return 
+	virtual bool HasNextAttack(AttackInputType inputType) const { return false; }
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #pragma once
 #include "../Character.h"
+#include "Action/Attack/ComboAttack/ComboAttack.h"
 
 class Player : public Character
 {
@@ -19,8 +20,19 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief バッファされた攻撃入力を取得する
+	/// @return 
+	AttackInputType GetBufferedAttackInput() const { return bufferedAttackInput_; }
+
+	/// @brief バッファされた攻撃入力を消化する
+	void ConsumeBufferedAttackInput() { bufferedAttackInput_ = AttackInputType::None; }
+
 
 private:
+
+	/// @brief 攻撃処理を更新する
+	void UpdateAttack();
+
 	/// @brief 構え状態を更新する
 	void UpdateStanceState();
 
@@ -83,6 +95,15 @@ private:
 
 	/// @brief キーのカメラ右回転入力
 	std::unique_ptr<InputKey> keyCameraRotateRight_ = nullptr;
+
+
+private:
+
+	// 攻撃入力のバッファ時間
+	float attackInputBufferTime_ = 0.2f;
+
+	// バッファされた攻撃入力
+	AttackInputType bufferedAttackInput_ = AttackInputType::None;
 
 };
 
