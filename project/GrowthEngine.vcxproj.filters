@@ -970,6 +970,9 @@
     <Filter Include="Game\Action\Move\ApproachTargetMove">
       <UniqueIdentifier>{6f86cdbb-e131-4e0a-a719-bd65dd5b18e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\MotionManager">
+      <UniqueIdentifier>{8b8ff10f-d253-4d5e-8c98-98a813da8b65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1709,6 +1712,12 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Move\Move.cpp">
       <Filter>Game\Action\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp">
+      <Filter>Game\Action\Move\ApproachTargetMove</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MotionManager\MotionManager.cpp">
+      <Filter>Game\MotionManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2560,6 +2569,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h">
       <Filter>Game\Action\Move\ApproachTargetMove</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MotionManager\MotionManager.h">
+      <Filter>Game\MotionManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

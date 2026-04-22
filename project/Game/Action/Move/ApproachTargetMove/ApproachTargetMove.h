@@ -14,40 +14,10 @@ public:
         : Move(character), stopDistanceSq_(stopDistance * stopDistance), moveSpeed_(moveSpeed) {}
 
     /// @brief 実行
-    void Exec() override
-    {
-        Move::Exec();
-    }
+    void Exec() override;
 
     /// @brief 更新処理
-    void Update() override
-    {
-        Character* target = owner_->GetLockOnTarget();
-        if (!target)
-        {
-            owner_->MoveStop();
-            owner_->SetCurrentMove(nullptr);
-            Exit();
-            return;
-        }
-
-        Vector3 toTarget = target->GetPosition() - owner_->GetPosition();
-        toTarget.y = 0.0f;
-
-        const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-        if (distanceSq <= stopDistanceSq_)
-        {
-            owner_->MoveStop();
-            owner_->SetCurrentMove(nullptr);
-            Action::Update();
-            return;
-        }
-
-        const Vector2 moveDirection = Vector2(toTarget.x, toTarget.z).Normalize();
-        owner_->SetMoveInputXZ(moveDirection, moveSpeed_);
-        owner_->SetCurrentMove(nullptr);
-        Action::Update();
-    }
+    void Update() override;
 
 private:
 

@@ -5,7 +5,7 @@
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
 #include "PivotPoint/PivotPoint.h"
-#include "Blackboard/Blackboard.h"
+#include "MotionManager/MotionManager.h"
 
 class GameScene : public Scene
 {
@@ -47,6 +47,10 @@ private:
 
 
 private:
+
+	// モーションマネージャ
+	MotionManager* motionManager_ = nullptr;
+
 
 	/// @brief プレイヤーのモデル
 	std::unique_ptr<Render3DSkinningModel> playerModel_ = nullptr;

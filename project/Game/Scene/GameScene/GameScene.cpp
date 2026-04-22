@@ -27,15 +27,16 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadSound("TEST_audio", engine_->LoadAudio("./Assets/Sounds/bgm/season_goes_around.mp3"));
+	// モーションマネージャを取得する
+	motionManager_ = MotionManager::GetInstance();
 
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		engine_->LoadAnimation("./Assets/Models/Character", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/Character", "bone.gltf"), "Player_Model");
+		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Player_Model");
 
 	// 敵のモデルの生成と初期化
 	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		engine_->LoadAnimation("./Assets/Models/Character", "bone.gltf"), engine_->LoadSkeleton("./Assets/Models/Character", "bone.gltf"), "Enemy_Model");
+		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Enemy_Model");
 
 	// プレイヤーの生成と初期化
 	Character::InitData playerInitData;
