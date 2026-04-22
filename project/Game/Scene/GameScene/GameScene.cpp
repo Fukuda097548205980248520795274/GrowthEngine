@@ -43,6 +43,8 @@ void GameScene::Initialize()
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
+	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
+	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
@@ -51,6 +53,8 @@ void GameScene::Initialize()
 	enemyInitData.position = Vector3(5.0f, 0.0f, 0.0f);
 	enemyInitData.hp = 100;
 	enemyInitData.model_ = enemyModel_.get();
+	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
+	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
 	enemy_->Initialize();
 

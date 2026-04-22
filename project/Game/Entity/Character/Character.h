@@ -2,6 +2,7 @@
 #define NOMINMAX
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
+#include "MotionManager/MotionManager.h"
 
 class Attack;
 class Move;
@@ -28,6 +29,12 @@ public:
 		
 		/// @brief モデル
 		Render3DSkinningModel* model_ = nullptr;
+
+		/// @brief 立ちモーション
+		AnimationHandle hStandMotion = 0;
+
+		/// @brief 構えモーション
+		AnimationHandle hStanceMotion = 0;
 	};
 
 
@@ -101,6 +108,9 @@ protected:
 
 	/// @brief エンジン
 	const GrowthEngine* engine_ = nullptr;
+
+	/// @brief モーションマネージャ
+	MotionManager* motionManager_;
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
@@ -219,5 +229,14 @@ protected:
 
 	// アニメーションの経過時間
 	float animationTime_ = 0.0f;
+
+
+protected:
+
+	/// @brief 立ちモーション
+	AnimationHandle hStandMotion_ = 0;
+
+	/// @brief 構えモーション
+	AnimationHandle hStanceMotion_ = 0;
 };
 

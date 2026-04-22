@@ -37,8 +37,12 @@ Character::Character(const InitData& initData) : Entity()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
+	// モーションマネージャのインスタンスを取得する
+	motionManager_ = MotionManager::GetInstance();
+
 	// タグを指定する
 	entityTag_ = EntityTag::Character;
+
 
 	// 位置
 	worldTransform_->translate_ = initData.position;
@@ -56,6 +60,9 @@ Character::Character(const InitData& initData) : Entity()
 		animationTime_ = engine_->GetAnimationTime(model_->param_->animation.hAnimation);
 	}
 
+	// モーション
+	hStandMotion_ = initData.hStandMotion;
+	hStanceMotion_ = initData.hStanceMotion;
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
@@ -144,6 +151,14 @@ void Character::Update()
 
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
+
+
+	SetAnimation(hStandMotion_, false);
+	if(isStance_)
+	{
+		SetAnimation(hStanceMotion_, false);
+	}
+
 
 	// アニメーションの更新
 	UpdateAnimation();
