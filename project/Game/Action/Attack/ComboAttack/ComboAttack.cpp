@@ -17,11 +17,8 @@ void ComboAttack::Exec()
 /// @brief 更新処理
 void ComboAttack::Update()
 {
-	// 現在のアニメーション再生時間を取得する
-	float animationTimer = owner_->GetAnimationTimer();
-
 	// コンボキャンセル受付時間内かチェック
-	if (animationTimer >= cancelStartTime_ && animationTimer <= cancelEndTime_)
+	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
 		// 先行入力をチェックするため、所有者がPlayerかどうかを確認
 		Player* player = static_cast<Player*>(owner_);

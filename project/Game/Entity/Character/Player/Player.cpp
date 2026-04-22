@@ -82,10 +82,10 @@ void Player::Initialize()
 	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
 
 
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0), 0.5f, 0.05f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1), 0.5f, 0.05f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2), 0.5f, 0.05f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3), 0.5f, 0.05f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0), 0.5f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1), 0.5f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2), 0.5f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3), 0.5f, 0.2f, 0.5f));
 
 	auto comboLight1 = comboAttacks_[0].get();
 	auto comboLight2 = comboAttacks_[1].get();
@@ -175,7 +175,7 @@ void Player::UpdateAttack()
 	if (inputLightAttack_ && inputLightAttack_->IsInput())
 	{
 		// 攻撃していない(待機・移動中) または、現在の攻撃から「弱」へ派生できる場合のみ
-		if (!currentAttack_ || currentAttack_->HasNextAttack(AttackInputType::Light))
+		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Light))
 		{
 			bufferedAttackInput_ = AttackInputType::Light;
 			attackInputBufferTime_ = 0.2f; // バッファ有効時間
@@ -184,7 +184,7 @@ void Player::UpdateAttack()
 	else if (inputHeavyAttack_ && inputHeavyAttack_->IsInput())
 	{
 		// 攻撃していない または、現在の攻撃から「強」へ派生できる場合のみ
-		if (!currentAttack_ || currentAttack_->HasNextAttack(AttackInputType::Heavy))
+		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Heavy))
 		{
 			bufferedAttackInput_ = AttackInputType::Heavy;
 			attackInputBufferTime_ = 0.2f;
@@ -192,7 +192,7 @@ void Player::UpdateAttack()
 	}
 
 	// 現在攻撃中でなく、かつバッファされた攻撃入力がある場合は攻撃を開始する
-	if (!currentAttack_ && bufferedAttackInput_ != AttackInputType::None)
+	if (!IsAttack() && bufferedAttackInput_ != AttackInputType::None)
 	{
 		if (bufferedAttackInput_ == AttackInputType::Light)
 		{
