@@ -478,6 +478,12 @@ namespace Engine
 		Particle3D::Param* GetParticle3DParam(const std::string& name) { return particle_->Get3DParticleParam(name); }
 
 
+		/// @brief アニメーションの時間を取得する
+		/// @param hAnimation 
+		/// @return 
+		float GetAnimationDuration(AnimationHandle hAnimation) { return animationStore_->GetDuration(hAnimation); }
+
+
 
 #ifdef _DEVELOPMENT
 

@@ -91,8 +91,16 @@ public:
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
 
+	/// @brief アニメーションを設定する
+	/// @param hAnimation 
+	/// @param isReset
+	void SetAnimation(AnimationHandle hAnimation, bool isReset);
+
 
 protected:
+
+	/// @brief エンジン
+	const GrowthEngine* engine_ = nullptr;
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
@@ -200,7 +208,16 @@ protected:
 
 protected:
 
+	/// @brief アニメーションの更新
+	void UpdateAnimation();
+
 	/// @brief モデル
 	Render3DSkinningModel* model_ = nullptr;
+
+	// アニメーションループ中かどうか
+	bool isAnimationLoop_ = true;
+
+	// アニメーションの経過時間
+	float animationTime_ = 0.0f;
 };
 

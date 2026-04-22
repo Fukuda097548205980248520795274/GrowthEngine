@@ -18,6 +18,11 @@ namespace Engine
 		/// @return 
 		Animation GetAnimation(AnimationHandle handle)const { return dataTable_[handle]->GetAnimation(); }
 
+		/// @brief アニメーションの経過時間を取得する
+		/// @param handle 
+		/// @return 
+		float GetDuration(AnimationHandle handle)const { return dataTable_[handle]->GetAnimation().duration; }
+
 
 	private:
 

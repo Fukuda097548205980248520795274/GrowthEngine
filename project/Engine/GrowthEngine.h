@@ -799,6 +799,11 @@ public:
 	Engine::Particle3D::Param* GetParticle3DParam(const std::string& name)const { return renderContext_->GetParticle3DParam(name); }
 
 
+	/// @brief アニメーションの時間を取得する
+	/// @param hAnimation 
+	/// @return 
+	float GetAnimationTime(AnimationHandle hAnimation)const { return renderContext_->GetAnimationDuration(hAnimation); }
+
 
 
 	/// @brief デバッグ用の線を描画する

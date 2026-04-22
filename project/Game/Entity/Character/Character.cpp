@@ -31,8 +31,11 @@ std::vector<Character*> Character::characters_{};
 /// @param position 
 Character::Character(const InitData& initData) : Entity()
 {
-  // インスタンスリストに登録する
+	// インスタンスリストに登録する
 	characters_.push_back(this);
+
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
 
 	// タグを指定する
 	entityTag_ = EntityTag::Character;
@@ -43,9 +46,15 @@ Character::Character(const InitData& initData) : Entity()
 	// 体力
 	hp_ = initData.hp;
 
-	// モデル
-	if(initData.model_)
+	// モデルデータ
+	if (initData.model_)
+	{
+		// モデル
 		model_ = initData.model_;
+
+		// アニメーションの時間を取得する
+		animationTime_ = engine_->GetAnimationTime(model_->param_->animation.hAnimation);
+	}
 
 
 	// ブラックボードの生成
@@ -64,7 +73,7 @@ Character::~Character()
 void Character::Update()
 {
 	// デルタタイム(秒)を取得する
-	const float deltaTime = std::max(GrowthEngine::GetInstance()->GetDeltaTime(), 0.0f);
+	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
 	// 現在の攻撃がある場合は更新する
 	if(currentAttack_)
@@ -135,6 +144,9 @@ void Character::Update()
 
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
+
+	// アニメーションの更新
+	UpdateAnimation();
 
 	// 基底クラスの更新
 	Entity::Update();
@@ -284,7 +296,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 void Character::UpdateLockOnTargets()
 {
 	// 構えていない場合はターゲット情報をクリアする
- if (!isStance_ && !canLockOnWithoutStance_)
+	if (!isStance_ && !canLockOnWithoutStance_)
 	{
 		lockOnTarget_ = nullptr;
 		return;
@@ -347,6 +359,50 @@ void Character::UpdateLockOnTargets()
 			// 内積が同じ場合は近い相手を優先する
 			bestDistance = distance;
 			lockOnTarget_ = character;
+		}
+	}
+}
+
+/// @brief アニメーションを設定する
+/// @param hAnimation 
+void Character::SetAnimation(AnimationHandle hAnimation, bool isReset)
+{
+	if (!model_)return;
+
+	if (!(model_->param_->animation.hAnimation == hAnimation))
+	{
+		// モデルのアニメーションハンドルを更新する
+		model_->param_->animation.hAnimation = hAnimation;
+
+		// アニメーションの時間を取得する
+		animationTime_ = GrowthEngine::GetInstance()->GetAnimationTime(model_->param_->animation.hAnimation);
+	}
+
+	// アニメーションをリセットする
+	if (isReset)
+		model_->param_->animation.timer = 0.0f;
+}
+
+/// @brief アニメーションの更新
+void Character::UpdateAnimation()
+{
+	if (!model_)return;
+
+	// アニメーションの時間よりもタイマーが小さい場合のみ更新する
+	if(model_->param_->animation.timer <= animationTime_)
+	{
+		// タイマーを進める
+		model_->param_->animation.timer += engine_->GetDeltaTime();
+
+		if (isAnimationLoop_)
+		{
+			// アニメーションをループさせる
+			model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, animationTime_);
+		}
+		else
+		{
+			// アニメーションの時間を超えないようにする
+			model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
 		}
 	}
 }
