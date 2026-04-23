@@ -85,14 +85,6 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
-	// 現在の攻撃がある場合は更新する
-	if(currentAttack_)
-		currentAttack_->Update();
-
-	// 現在の移動がある場合は更新する
-	if(currentMove_)
-		currentMove_->Update();
-
 	// 回避中は回避移動のみ更新する
 	if (isAvoid_)
 	{
@@ -454,6 +446,18 @@ void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLo
 
 	// アニメーションのループ設定を更新する
 	isAnimationLoop_ = isLoop;
+}
+
+/// @brief アクションの更新処理
+void Character::ActionUpdate()
+{
+	// 現在の攻撃がある場合は更新する
+	if (currentAttack_)
+		currentAttack_->Update();
+
+	// 現在の移動がある場合は更新する
+	if (currentMove_)
+		currentMove_->Update();
 }
 
 /// @brief アニメーションの更新

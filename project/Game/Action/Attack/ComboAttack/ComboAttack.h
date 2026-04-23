@@ -8,10 +8,17 @@ public:
 	/// @brief コンストラクタ
 	/// @param character 
 	/// @param hAttackMotion 
+	/// @param attackTime 
+	/// @param moveSpeed 
+	/// @param moveAcceleration 
+	/// @param moveDuration 
+	/// @param moveDelay 
 	/// @param cancelStartTime 
 	/// @param cancelEndTime 
-	ComboAttack(Character* character, AnimationHandle hAttackMotion, float attackTime, float cancelStartTime, float cancelEndTime)
-		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime) {}
+	ComboAttack(Character* character, AnimationHandle hAttackMotion,float attackTime,
+		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime)
+		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), moveSpeed_(moveSpeed),
+		moveStartTime_(moveStartTime), moveEndTime_(moveEndTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime) {}
 
 	/// @brief 実行
 	virtual void Exec() override;
@@ -37,17 +44,38 @@ private:
 	/// @brief 攻撃モーション
 	AnimationHandle hAttackMotion_ = 0;
 
+
+private:
+
 	// コンボキャンセル受付時間
 	float cancelStartTime_ = 0.0f;
 
 	// コンボキャンセル終了時間
 	float cancelEndTime_ = 0.0f;
 
+
+private:
+
 	/// @brief 攻撃時間
 	float attackTime_ = 0.0f;
 
 	/// @brief 攻撃タイマー
 	float attackTimer_ = 0.0f;
+
+
+private:
+
+	/// @brief 移動速度
+	float moveSpeed_ = 0.0f;
+
+	/// @brief 移動開始時間（攻撃開始からの遅延時間）
+	float moveStartTime_ = 0.0f;
+
+	/// @brief 移動終了時間
+	float moveEndTime_ = 0.0f;
+
+
+private:
 
 	/// @brief 次のライト攻撃
 	ComboAttack* nextLightAttack_ = nullptr;

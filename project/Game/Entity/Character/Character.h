@@ -74,10 +74,6 @@ public:
 	/// @param cameraYaw
 	void StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw);
 
-	/// @brief 回避中の更新処理
-	/// @param deltaTime
-	void UpdateAvoid(float deltaTime);
-
     /// @brief 連続回避を試行する
 	/// @param moveInputDirection
 	/// @param hasMoveInput
@@ -128,6 +124,10 @@ public:
 	/// @brief 現在のアニメーションの再生時間を取得する
 	/// @return 
 	float GetAnimationTimer()const { return model_->param_->animation.timer; }
+
+	/// @brief 位置を設定する
+	/// @param position 
+	void SetPosition(const Vector3& position) { worldTransform_->translate_ = position; }
 
 
 protected:
@@ -202,6 +202,10 @@ protected:
 	/// @return
 	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
 
+	/// @brief 回避中の更新処理
+	/// @param deltaTime
+	void UpdateAvoid(float deltaTime);
+
 
 protected:
 
@@ -234,6 +238,9 @@ protected:
 
 
 protected:
+
+	/// @brief アクションの更新処理
+	void ActionUpdate();
 
 	/// @brief 今の攻撃
 	Attack* currentAttack_ = nullptr;

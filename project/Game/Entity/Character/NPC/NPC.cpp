@@ -37,6 +37,9 @@ void NPC::Update()
 	// ビヘイビアツリーを実行する
 	behaviorTree_->Exec();
 
+	// アクションの更新
+	ActionUpdate();
+
 	// 基底クラスの更新
 	Character::Update();
 

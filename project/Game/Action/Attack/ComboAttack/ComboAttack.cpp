@@ -54,6 +54,17 @@ void ComboAttack::Update()
 	// 攻撃タイマーを更新する
 	attackTimer_ += engine_->GetDeltaTime();
 
+	if(attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)
+	{
+		// 方向と位置を取得する
+		Vector3 direction = owner_->GetDirection();
+		Vector3 position = owner_->GetPosition();
+
+		// 位置を更新する
+		position += moveSpeed_ * (direction * engine_->GetDeltaTime());
+		owner_->SetPosition(position);
+	}
+
 	// コンボキャンセル受付時間を過ぎたらこの攻撃を終了する
 	if (attackTimer_ >= attackTime_)
 	{

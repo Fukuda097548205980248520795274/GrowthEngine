@@ -82,10 +82,10 @@ void Player::Initialize()
 	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
 
 
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0), 0.5f, 0.2f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1), 0.5f, 0.2f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2), 0.5f, 0.2f, 0.5f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3), 0.5f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0), 0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1), 0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2), 0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3), 0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f));
 
 	auto comboLight1 = comboAttacks_[0].get();
 	auto comboLight2 = comboAttacks_[1].get();
@@ -102,6 +102,9 @@ void Player::Update()
 {
 	// 攻撃の更新処理
 	UpdateAttack();
+
+	// アクションの更新処理
+	ActionUpdate();
 
 	// 回避中は回避更新のみ行い、他の操作は受け付けない
 	if (isAvoid_)
@@ -128,7 +131,7 @@ void Player::Update()
 	// 構え中に回避ボタンを押したら回避を開始する
 	if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
 	{
-       StartAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
+		StartAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
 		Character::Update();
 		return;
 	}
@@ -142,7 +145,7 @@ void Player::Update()
 	if (hasMoveInput)
 	{
 		// カメラ基準の入力方向をワールド方向へ変換する
-       const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
+		const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
 		SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
 	}
 	else
