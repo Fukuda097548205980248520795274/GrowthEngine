@@ -18,7 +18,7 @@ public:
 	void Abort() override;
 
 
-private:
+protected:
 
 	/// @brief アクション
 	std::unique_ptr<Action> action_ = nullptr;

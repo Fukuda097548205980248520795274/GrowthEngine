@@ -5,6 +5,7 @@
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
 #include "Node/ConditionNode/ConditionNode.h"
 #include "Node/ActionNode/ActionNode.h"
+#include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Action/Action.h"
 
 class BehaviorTreeBuilder
@@ -36,6 +37,11 @@ public:
 	/// @param action 
 	/// @return 
 	BehaviorTreeBuilder& Action_(std::unique_ptr<Action> action);
+
+	/// @brief コンボ攻撃ノードを追加する
+	/// @param comboAttack 
+	/// @return 
+	BehaviorTreeBuilder& ComboAttack_(std::unique_ptr<ComboAttack> comboAttack);
 
 	/// @brief ノードの追加を終了する
 	/// @return 

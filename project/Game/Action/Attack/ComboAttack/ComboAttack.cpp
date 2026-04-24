@@ -20,17 +20,15 @@ void ComboAttack::Update()
 	// コンボキャンセル受付時間内かチェック
 	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
-		// 先行入力をチェックするため、所有者がPlayerかどうかを確認
-		Player* player = static_cast<Player*>(owner_);
-		if (player)
+		if (owner_)
 		{
-			AttackInputType bufferedInput = player->GetBufferedAttackInput();
+			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
 
 			// 弱攻撃の先行入力があり、派生先が設定されている場合
 			if (bufferedInput == AttackInputType::Light && nextLightAttack_)
 			{
 				// 先行入力を消化する
-				player->ConsumeBufferedAttackInput();
+				owner_->ConsumeBufferedAttackInput();
 
 				// この攻撃を終了して次の攻撃を実行する
 				this->Exit();
@@ -41,7 +39,7 @@ void ComboAttack::Update()
 			else if (bufferedInput == AttackInputType::Heavy && nextHeavyAttack_)
 			{
 				// 先行入力を消化する
-				player->ConsumeBufferedAttackInput();
+				owner_->ConsumeBufferedAttackInput();
 
 				// この攻撃を終了して次の攻撃を実行する
 				this->Exit();

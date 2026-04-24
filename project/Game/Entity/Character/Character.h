@@ -3,6 +3,7 @@
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"
+#include "Action/Attack/ComboAttack/ComboAttack.h"
 
 class Attack;
 class Move;
@@ -123,6 +124,10 @@ public:
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
 
+	/// @brief 現在の攻撃を取得する
+	/// @return 
+	Attack* GetCurrentAttack() const { return currentAttack_; }
+
 	/// @brief 現在の移動を設定する
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
@@ -143,6 +148,17 @@ public:
 	/// @brief 位置を設定する
 	/// @param position 
 	void SetPosition(const Vector3& position) { worldTransform_->translate_ = position; }
+
+	/// @brief バッファされた攻撃入力を取得する
+	/// @return 
+	AttackInputType GetBufferedAttackInput() const { return bufferedAttackInput_; }
+
+	/// @brief バッファされた攻撃入力を消化する
+	void ConsumeBufferedAttackInput() { bufferedAttackInput_ = AttackInputType::None; }
+
+	/// @brief バッファされた攻撃入力を設定する
+	/// @param input 
+	void SetBufferedAttackInput(AttackInputType input) { bufferedAttackInput_ = input; }
 
 
 protected:
@@ -250,6 +266,14 @@ protected:
 
 	// Characterインスタンスのリスト
 	static std::vector<Character*> characters_;
+
+
+
+protected:
+
+	// バッファされた攻撃入力
+	AttackInputType bufferedAttackInput_ = AttackInputType::None;
+
 
 
 protected:

@@ -16,7 +16,7 @@ void Avoid::Exec()
 
 	// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
 	float localZ = Dot(avoidDirection_, forward);
-	float localX = Dot(avoidDirection_, right);
+	float localX = -Dot(avoidDirection_, right);
 
 	// キャラクターの回避開始処理を呼ぶ
 	owner_->StartAvoid(Vector2(localX, localZ).Normalize(), true, 0.0f);

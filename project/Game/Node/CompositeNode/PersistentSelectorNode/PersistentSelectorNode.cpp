@@ -34,3 +34,13 @@ Node::State PersistentSelectorNode::Exec()
 	currentIndex_ = 0;
 	return State::Failure;
 }
+
+/// @brief 中断処理
+void PersistentSelectorNode::Abort()
+{
+	// 自分自身の記憶（インデックス）をリセットする
+	currentIndex_ = 0;
+
+	// 子ノードたちにも中断を伝える
+	CompositeNode::Abort();
+}

@@ -38,6 +38,14 @@ public:
 	/// @param nextHeavyAttack 
 	void SetNextHeavyAttack(ComboAttack* nextHeavyAttack) { nextHeavyAttack_ = nextHeavyAttack; }
 
+	/// @brief コンボキャンセル可能かどうか
+	/// @return 
+	bool IsCancelable() const { return (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_); }
+
+	/// @brief 次の攻撃に移行できるかどうか
+	/// @return 
+	bool IsCanNextCombo()const { return !IsExec() || (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_); }
+
 
 private:
 

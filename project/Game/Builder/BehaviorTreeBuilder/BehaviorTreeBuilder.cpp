@@ -51,6 +51,15 @@ BehaviorTreeBuilder& BehaviorTreeBuilder::Action_(std::unique_ptr<Action> action
 	return *this;
 }
 
+/// @brief コンボ攻撃ノードを追加する
+/// @param comboAttack 
+/// @return 
+BehaviorTreeBuilder& BehaviorTreeBuilder::ComboAttack_(std::unique_ptr<ComboAttack> comboAttack)
+{
+	nodes_.push_back(std::make_unique<ComboAttackNode>(std::move(comboAttack)));
+	return *this;
+}
+
 /// @brief ノードの追加を終了する
 /// @return 
 BehaviorTreeBuilder& BehaviorTreeBuilder::End()

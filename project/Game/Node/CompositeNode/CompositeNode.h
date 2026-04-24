@@ -16,6 +16,9 @@ public:
 	/// @param child 
 	void AddChild(std::unique_ptr<Node> child) { children_.push_back(std::move(child)); }
 
+	/// @brief 中断処理
+	virtual void Abort() override;
+
 
 protected:
 

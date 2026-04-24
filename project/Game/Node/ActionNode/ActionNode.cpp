@@ -35,7 +35,13 @@ Node::State ActionNode::Exec()
 /// @brief 中断処理
 void ActionNode::Abort()
 {
+	// アクションがない場合は何もしない
+	if (!action_)return;
+
 	// アクションが動いていたら強制終了
-	if (action_ && action_->IsExec())
+	if (action_->IsExec())
 		action_->Exit();
+
+	// アクションをリセットする
+	action_->Reset();
 }
