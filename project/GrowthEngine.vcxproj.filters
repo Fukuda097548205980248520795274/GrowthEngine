@@ -976,6 +976,9 @@
     <Filter Include="Game\Action\Attack\ComboAttack">
       <UniqueIdentifier>{3aaca3af-9e1f-4cc6-9b20-ac7e055084e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Avoid">
+      <UniqueIdentifier>{74545b92-1a70-4034-ad3b-d3412d2272a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1724,6 +1727,9 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Attack\ComboAttack\ComboAttack.cpp">
       <Filter>Game\Action\Attack\ComboAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Avoid\Avoid.cpp">
+      <Filter>Game\Action\Avoid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2581,6 +2587,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Attack\ComboAttack\ComboAttack.h">
       <Filter>Game\Action\Attack\ComboAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Avoid\Avoid.h">
+      <Filter>Game\Action\Avoid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

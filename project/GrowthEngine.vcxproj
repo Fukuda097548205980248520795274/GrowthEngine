@@ -971,6 +971,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Action.cpp" />
     <ClCompile Include="Game\Action\Attack\Attack.cpp" />
     <ClCompile Include="Game\Action\Attack\ComboAttack\ComboAttack.cpp" />
+    <ClCompile Include="Game\Action\Avoid\Avoid.cpp" />
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
@@ -1268,6 +1269,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Action.h" />
     <ClInclude Include="Game\Action\Attack\Attack.h" />
     <ClInclude Include="Game\Action\Attack\ComboAttack\ComboAttack.h" />
+    <ClInclude Include="Game\Action\Avoid\Avoid.h" />
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
