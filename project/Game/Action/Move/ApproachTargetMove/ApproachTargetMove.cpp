@@ -3,6 +3,9 @@
 /// @brief 実行
 void ApproachTargetMove::Exec()
 {
+    // 実行済みが処理しない
+    if (IsExec())return;
+
     // 基底クラスで実行
     Move::Exec();
 }
@@ -41,8 +44,4 @@ void ApproachTargetMove::Update()
 	// ターゲットへの方向を計算して移動入力を設定する
     const Vector2 moveDirection = Vector2(toTarget.x, toTarget.z).Normalize();
     owner_->SetMoveInputXZ(moveDirection, moveSpeed_);
-    owner_->SetCurrentMove(nullptr);
-
-	// 基底クラスで更新
-    Action::Update();
 }

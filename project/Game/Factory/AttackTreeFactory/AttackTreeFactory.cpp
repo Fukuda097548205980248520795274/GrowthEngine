@@ -13,19 +13,23 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 	BehaviorTreeBuilder builder;
 
 	return builder
-       .RestartingSequence()
+       // 繰り返し実行するシーケンス
+        .RestartingSequence()
 
-			// ロックオンしているターゲットがいるか
-			.Condition([character](){return character->GetLockOnTarget() != nullptr;})
-			.End()
+            // 1. そもそもターゲットがいるか？（いなければ失敗して最初に戻る）
+            .Condition([character](){ 
+                return character->GetLockOnTarget() != nullptr; 
+            }).End()
 
-			// 回避しているか
-			.Condition([character]() {return !character->IsAvoid(); })
-			.End()
+            // 2. ターゲットに近づく
+            // 第2引数(stopDistance): 2.0f (2メートルまで近づいたら次のノードへ)
+            // 第3引数(moveSpeed): 3.0f (移動速度)
+            .Action_(std::make_unique<ApproachTargetMove>(character, 2.0f, 3.0f)).End()
 
-			// 回避する
-			.Action_(std::make_unique<Avoid>(character, Vector3(0.0f, 0.0f, -1.0f)))
-			.End()
-		.End()
-		.Build();
+            // 3. 近づき終わったら、後ろへ回避する
+            // ターゲット方向の逆ベクトル（後ろ）を指定
+            .Action_(std::make_unique<Avoid>(character, Vector3(0.0f, 0.0f, -1.0f))).End()
+
+        .End()
+        .Build();
 }

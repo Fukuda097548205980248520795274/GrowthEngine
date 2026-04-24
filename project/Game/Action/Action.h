@@ -20,6 +20,9 @@ public:
 	/// @brief 更新処理
 	virtual void Update();
 
+	/// @brief リセット
+	void Reset();
+
 	/// @brief 終了、中断
 	void Exit();
 

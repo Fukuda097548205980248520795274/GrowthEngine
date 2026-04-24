@@ -4,31 +4,38 @@
 /// @return 
 Node::State ActionNode::Exec()
 {
-	// 攻撃がない場合は失敗
-	if (!action_)return State::Failure;
+	// アクションがない場合は失敗
+	if (!action_) return State::Failure;
 
-	// 実行する
-	action_->Exec();
+	
+	// アクションが実行されていない場合は実行する
+	if (!action_->IsExec() && !action_->IsSuccess() && !action_->IsFailure())
+		action_->Exec();
 
-	if(action_->IsExec())
-	{
-		// 実行中の場合は実行中
+	// アクションが実行中の場合は、ノードの状態も実行中
+	if (action_->IsExec())
 		return State::Running;
-	}
-	else
+
+	// アクションの状態に応じてノードの状態を返す
+	State result = State::Failure;
+	if (action_->IsSuccess())
 	{
-		// 実行終了後
-
-		// 成功している場合は成功
-		if (action_->IsSuccess())
-			return State::Success;
-
-		// 失敗している場合は失敗
-		if(action_->IsFailure())
-			return State::Failure;
+		result = State::Success;
+	} 
+	else if (action_->IsFailure())
+	{
+		result = State::Failure;
 	}
 
-	// ここには来ないはず
-	assert(false);
-	return State::Running;
+	// アクションをリセットする
+	action_->Reset();
+	return result;
+}
+
+/// @brief 中断処理
+void ActionNode::Abort()
+{
+	// アクションが動いていたら強制終了
+	if (action_ && action_->IsExec())
+		action_->Exit();
 }

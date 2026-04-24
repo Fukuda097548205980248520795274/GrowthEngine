@@ -31,6 +31,9 @@ void Avoid::Update()
 	// 実行されていない場合は何もしない
 	if (!IsExec()) return;
 
+	// 回避中であれば何もしない
+	if (owner_->IsAvoid())return;
+
 	// 回避が終了した場合は、成功フラグを立ててExit()を呼ぶ
 	Action::Update();
 

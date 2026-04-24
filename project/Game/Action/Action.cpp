@@ -27,6 +27,15 @@ void Action::Update()
 	Exit();
 }
 
+/// @brief リセット
+void Action::Reset()
+{
+	// フラグを初期化する
+	isExec_ = false;
+	isSuccess_ = false;
+	isFailure_ = false;
+}
+
 /// @brief 攻撃の終了、中断
 void Action::Exit()
 {

@@ -14,6 +14,9 @@ public:
 	/// @return 
 	State Exec() override;
 
+	/// @brief 中断処理
+	void Abort() override;
+
 
 private:
 

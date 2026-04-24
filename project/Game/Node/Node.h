@@ -31,6 +31,9 @@ public:
 	/// @return ノードの状態
 	virtual State Exec() = 0;
 
+	/// @brief 中断処理
+	virtual void Abort() {};
+
 
 protected:
 
