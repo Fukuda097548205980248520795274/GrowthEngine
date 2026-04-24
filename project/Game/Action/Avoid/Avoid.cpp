@@ -4,6 +4,9 @@
 /// @brief 実行
 void Avoid::Exec()
 {
+	// すでに実行されている場合は何もしない
+	if (IsExec()) return;
+
 	// 基底クラスの実行
 	Action::Exec();
 
@@ -15,12 +18,22 @@ void Avoid::Exec()
 	float localZ = Dot(avoidDirection_, forward);
 	float localX = Dot(avoidDirection_, right);
 
-	// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-	localAvoidDirection_ = Vector3(localX, 0.0f, localZ).Normalize();
+	// キャラクターの回避開始処理を呼ぶ
+	owner_->StartAvoid(Vector2(localX, localZ).Normalize(), true, 0.0f);
+
+	// 現在の回避を設定する
+	owner_->SetCurrentAvoid(this);
 }
 
 /// @brief 更新処理
 void Avoid::Update()
 {
+	// 実行されていない場合は何もしない
+	if (!IsExec()) return;
 
+	// 回避が終了した場合は、成功フラグを立ててExit()を呼ぶ
+	Action::Update();
+
+	// ポインタを消す
+	owner_->SetCurrentAvoid(nullptr);
 }

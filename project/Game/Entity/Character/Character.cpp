@@ -4,6 +4,7 @@
 
 #include "Action/Attack/Attack.h"
 #include "Action/Move/Move.h"
+#include "Action/Avoid/Avoid.h"
 
 namespace
 {
@@ -49,6 +50,10 @@ Character::Character(const InitData& initData) : Entity()
 
 	// 体力
 	hp_ = initData.hp;
+
+	// 回避時間と回避距離
+	avoidDuration_ = initData.avoidDuration;
+	avoidDistance_ = initData.avoidDistance;
 
 	// モデルデータ
 	if (initData.model_)
@@ -458,6 +463,10 @@ void Character::ActionUpdate()
 	// 現在の移動がある場合は更新する
 	if (currentMove_)
 		currentMove_->Update();
+
+	// 現在の回避がる場合は更新する
+	if (currentAvoid_)
+		currentAvoid_->Update();
 }
 
 /// @brief アニメーションの更新

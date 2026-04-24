@@ -21,8 +21,5 @@ private:
 
 	/// @brief 回避方向
 	Vector3 avoidDirection_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	// キャラクター視点による回避方向
-	Vector3 localAvoidDirection_ = Vector3(0.0f, 0.0f, 0.0f);
 };
 

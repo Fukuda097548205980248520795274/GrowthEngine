@@ -6,6 +6,7 @@
 
 class Attack;
 class Move;
+class Avoid;
 
 class Character : public Entity
 {
@@ -26,6 +27,12 @@ public:
 
 		/// @brief 体力
 		int hp = 0;
+
+		/// @brief 回避時間
+		float avoidDuration = 0.3f;
+
+		/// @brief 回避距離
+		float avoidDistance = 1.5f;
 		
 		/// @brief モデル
 		Render3DSkinningModel* model_ = nullptr;
@@ -108,6 +115,10 @@ public:
 	/// @return 
 	bool IsAttack()const { return currentAttack_ != nullptr; }
 
+	/// @brief 回避しているかどうか
+	/// @return 
+	bool IsAvoid() const { return isAvoid_; }
+
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
@@ -115,6 +126,10 @@ public:
 	/// @brief 現在の移動を設定する
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
+
+	/// @brief 現在の回避を設定する
+	/// @param avoid 
+	void SetCurrentAvoid(Avoid* avoid) { currentAvoid_ = avoid; }
 
 	/// @brief アニメーションを設定する
 	/// @param hAnimation 
@@ -247,6 +262,9 @@ protected:
 
 	/// @brief 今の移動
 	Move* currentMove_ = nullptr;
+
+	/// @brief 今の回避
+	Avoid* currentAvoid_ = nullptr;
 
 
 protected:

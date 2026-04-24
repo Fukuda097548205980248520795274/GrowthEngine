@@ -43,6 +43,8 @@ void GameScene::Initialize()
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
+	playerInitData.avoidDuration = 0.3f;
+	playerInitData.avoidDistance = 1.5f;
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
 	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 4);
 	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
@@ -58,6 +60,8 @@ void GameScene::Initialize()
 	Character::InitData enemyInitData;
 	enemyInitData.position = Vector3(5.0f, 0.0f, 0.0f);
 	enemyInitData.hp = 100;
+	enemyInitData.avoidDuration = 0.3f;
+	enemyInitData.avoidDistance = 1.5f;
 	enemyInitData.model_ = enemyModel_.get();
 	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
 	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
