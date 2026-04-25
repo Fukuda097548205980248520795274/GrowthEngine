@@ -21,12 +21,12 @@ bool Engine::CollisionCheckFunc(const Collision3D::Sphere& s1, const Collision3D
 /// @return 
 bool Engine::CollisionCheckFunc(const Collision3D::AABB& aabb1, const Collision3D::AABB& aabb2)
 {
-	if (aabb1.center.x + aabb1.radius.x >= aabb2.center.x - aabb2.center.x &&
-		aabb1.center.x - aabb1.radius.x <= aabb2.center.x + aabb2.center.x)
-		if (aabb1.center.y + aabb1.radius.y >= aabb2.center.y - aabb2.center.y &&
-			aabb1.center.y - aabb1.radius.y <= aabb2.center.y + aabb2.center.y)
-			if (aabb1.center.z + aabb1.radius.z >= aabb2.center.z - aabb2.center.z &&
-				aabb1.center.z - aabb1.radius.z <= aabb2.center.z + aabb2.center.z)
+	if (aabb1.center.x + aabb1.radius.x >= aabb2.center.x - aabb2.radius.x &&
+		aabb1.center.x - aabb1.radius.x <= aabb2.center.x + aabb2.radius.x)
+		if (aabb1.center.y + aabb1.radius.y >= aabb2.center.y - aabb2.radius.y &&
+			aabb1.center.y - aabb1.radius.y <= aabb2.center.y + aabb2.radius.y)
+			if (aabb1.center.z + aabb1.radius.z >= aabb2.center.z - aabb2.radius.z &&
+				aabb1.center.z - aabb1.radius.z <= aabb2.center.z + aabb2.radius.z)
 				return true;
 
 	return false;

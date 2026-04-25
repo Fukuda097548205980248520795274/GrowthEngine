@@ -26,7 +26,7 @@ void Engine::Collision3DBaseData::Initialize(Collision3DStore* collisionStore)
 /// @brief 更新処理
 void Engine::Collision3DBaseData::Update()
 {
-	instanceTable_.remove_if([](std::unique_ptr<BaseCollision3DInstance>& instance) {if (instance->IsDelete()) { return true; }return false; });
+	instanceTable_.remove_if([](std::unique_ptr<BaseCollision3DInstance>& instance) {instance->isCollision_ = false; if (instance->IsDelete()) { return true; }return false; });
 }
 
 /// @brief 衝突判定
@@ -47,8 +47,6 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			// 同じインスタンス同士は処理しない
 			if (myInstance == yourInstance)
 				continue;
-
-			myInstance->isCollision_ = false;
 
 			// 球 球
 			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Sphere)

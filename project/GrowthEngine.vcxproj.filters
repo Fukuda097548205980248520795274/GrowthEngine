@@ -982,6 +982,9 @@
     <Filter Include="Game\Node\ActionNode\ComboAttackNode">
       <UniqueIdentifier>{457fcf9d-c8a1-4fa2-b01b-07a46aaaaac2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\AppCollider">
+      <UniqueIdentifier>{b97cb22a-67aa-4ba5-a3f1-b5adedcb900e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1736,6 +1739,9 @@
     </ClCompile>
     <ClCompile Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.cpp">
       <Filter>Game\Node\ActionNode\ComboAttackNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\AppCollider\AppCollider.cpp">
+      <Filter>Game\AppCollider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2599,6 +2605,9 @@
     </ClInclude>
     <ClInclude Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.h">
       <Filter>Game\Node\ActionNode\ComboAttackNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AppCollider\AppCollider.h">
+      <Filter>Game\AppCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

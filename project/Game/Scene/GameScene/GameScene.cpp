@@ -38,6 +38,25 @@ void GameScene::Initialize()
 	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
 		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Enemy_Model");
 
+
+	
+	// プレイヤー側の当たり判定グループの生成と初期化
+	playerHurtboxGroup_ = std::make_unique<Collision3DBaseAABB>("PlayerSide_Hurtbox");
+	playerHitboxGroup_ = std::make_unique<Collision3DBaseAABB>("PlayerSide_Hitbox");
+
+	// 敵側の当たり判定グループの生成と初期化
+	enemyHurtboxGroup_ = std::make_unique<Collision3DBaseAABB>("EnemySide_Hurtbox");
+	enemyHitboxGroup_ = std::make_unique<Collision3DBaseAABB>("EnemySide_Hitbox");
+
+	// 「プレイヤーの攻撃」は「敵の体」に当たる
+	playerHitboxGroup_->SetCollisionTarget(enemyHurtboxGroup_->GetHandle());
+	enemyHurtboxGroup_->SetCollisionTarget(playerHitboxGroup_->GetHandle());
+
+	// 「敵の攻撃」は「プレイヤーの体」に当たる
+	enemyHitboxGroup_->SetCollisionTarget(playerHurtboxGroup_->GetHandle());
+	playerHurtboxGroup_->SetCollisionTarget(enemyHitboxGroup_->GetHandle());
+
+
 	// プレイヤーの生成と初期化
 	Character::InitData playerInitData;
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
@@ -53,6 +72,8 @@ void GameScene::Initialize()
 	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
 	playerInitData.hAvoidLeftMotion = 0;
 	playerInitData.hAvoidRightMotion = 0;
+	playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
+	playerInitData.hitboxGroup = playerHitboxGroup_.get();
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
@@ -71,6 +92,8 @@ void GameScene::Initialize()
 	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
 	enemyInitData.hAvoidLeftMotion = 0;
 	enemyInitData.hAvoidRightMotion = 0;
+	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
+	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
 	enemy_->Initialize();
 

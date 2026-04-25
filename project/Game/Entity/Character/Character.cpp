@@ -70,6 +70,14 @@ Character::Character(const InitData& initData) : Entity()
 	hStanceMotion_ = initData.hStanceMotion;
 	hWalkMotion_ = initData.hWalkMotion;
 	hDashMotion_ = initData.hDashMotion;
+
+	// 当たり判定グループ
+	hurtbox_.collider_ = initData.hurtboxGroup->CreateInstance();
+	hurtbox_.owner_ = this;
+	hurtbox_.type_ = ColliderType::Hurtbox;
+
+	// 攻撃判定グループ
+	hitboxGroup_ = initData.hitboxGroup;
 	
 
 	// ブラックボードの生成
@@ -87,6 +95,12 @@ Character::~Character()
 /// @brief 更新処理
 void Character::Update()
 {
+	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
+	collider->param_->center = worldTransform_->translate_ + Vector3(0.0f, 1.0f, 0.0f);
+
+	if (hurtbox_.IsHit())
+		ImGui::Text("Hit");
+
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 

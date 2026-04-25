@@ -12,6 +12,9 @@ void ComboAttack::Exec()
 
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
+
+	// 攻撃がヒットしたかどうかをリセットする
+	hasHit_ = false;
 }
 
 /// @brief 更新処理
@@ -52,6 +55,38 @@ void ComboAttack::Update()
 	// 攻撃タイマーを更新する
 	attackTimer_ += engine_->GetDeltaTime();
 
+	// 攻撃タイマーが攻撃判定の時間内であれば、攻撃判定を作成・更新する
+	if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
+	{
+		if (!hasHit_)
+		{
+			// まだ判定が作られていなければ、実体を作成する
+			if (hitbox_.collider_ == nullptr)
+				hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+
+			// 判定の位置を、剣の先端や拳の位置に合わせる
+			auto aabb = static_cast<Collision3DInstanceAABB*>(hitbox_.collider_);
+			aabb->param_->center = owner_->GetPosition();
+
+			// ヒットしているかチェックする
+			if (hitbox_.IsHit())
+			{
+				// 攻撃時間が終わったら、判定を削除する
+				DeleteHitbox();
+
+				// ヒットしたのでフラグを立てる
+				hasHit_ = true;
+			}
+		}
+	}
+	else
+	{
+		// 攻撃時間が終わったら、判定を削除する
+		DeleteHitbox();
+	}
+
+
+	// 移動時間内であれば移動する
 	if(attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)
 	{
 		// 方向と位置を取得する
@@ -71,6 +106,22 @@ void ComboAttack::Update()
 	}
 }
 
+/// @brief リセット
+void ComboAttack::Reset()
+{
+	// 基底のリセット
+	Action::Reset();
+
+	// 攻撃タイマーを初期化する
+	attackTimer_ = 0.0f;
+
+	// 攻撃がヒットしたかどうかをリセットする
+	hasHit_ = false;
+
+	// 攻撃判定が残っていれば削除する
+	DeleteHitbox();
+}
+
 /// @brief 次の攻撃があるかどうか
 /// @return 
 bool ComboAttack::HasNextAttack(AttackInputType inputType) const
@@ -84,4 +135,27 @@ bool ComboAttack::HasNextAttack(AttackInputType inputType) const
 		return nextHeavyAttack_ != nullptr; // 強の派生先がセットされていればtrue
 	}
 	return false;
+}
+
+/// @brief 終了、中断
+void ComboAttack::Exit()
+{
+	// 攻撃判定が残っていれば削除する
+	DeleteHitbox();
+
+	// 攻撃がヒットしたかどうかをリセットする
+	hasHit_ = false;
+
+	// 基底の終了処理
+	Attack::Exit();
+}
+
+/// @brief 攻撃判定を削除する
+void ComboAttack::DeleteHitbox()
+{
+	if (hitbox_.collider_ != nullptr)
+	{
+		hitbox_.collider_->Delete();
+		hitbox_.collider_ = nullptr;
+	}
 }

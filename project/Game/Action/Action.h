@@ -21,10 +21,10 @@ public:
 	virtual void Update();
 
 	/// @brief リセット
-	void Reset();
+	virtual void Reset();
 
 	/// @brief 終了、中断
-	void Exit();
+	virtual void Exit();
 
 	/// @brief 実行したかどうか
 	/// @return 

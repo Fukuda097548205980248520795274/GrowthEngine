@@ -1,5 +1,6 @@
 #pragma once
 #include "../Attack.h"
+#include "AppCollider/AppCollider.h"
 
 class ComboAttack : public Attack
 {
@@ -16,15 +17,22 @@ public:
 	/// @param cancelStartTime 
 	/// @param cancelEndTime 
 	ComboAttack(Character* character, AnimationHandle hAttackMotion,float attackTime,
-		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime)
+		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime , float hitboxStartTime, float hitboxEndTime)
 		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), moveSpeed_(moveSpeed),
-		moveStartTime_(moveStartTime), moveEndTime_(moveEndTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime) {}
+		moveStartTime_(moveStartTime), moveEndTime_(moveEndTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime),
+		hitboxStartTime_(hitboxStartTime), hitboxEndTime_(hitboxEndTime) {}
 
 	/// @brief 実行
 	virtual void Exec() override;
 
 	/// @brief 更新処理
 	virtual void Update() override;
+
+	/// @brief リセット
+	virtual void Reset() override;
+
+	/// @brief 終了、中断
+	virtual void Exit() override;
 
 	/// @brief 次の攻撃があるかどうか
 	/// @return 
@@ -90,5 +98,23 @@ private:
 
 	/// @brief 次のヘビー攻撃
 	ComboAttack* nextHeavyAttack_ = nullptr;
+
+
+private:
+
+	/// @brief 攻撃判定を削除する
+	void DeleteHitbox();
+
+	/// @brief 攻撃判定
+	AppCollider hitbox_;
+
+	/// @brief 攻撃判定開始時間
+	float hitboxStartTime_ = 0.0f;
+
+	/// @brief 攻撃判定終了時間
+	float hitboxEndTime_ = 0.0f;
+
+	/// @brief 攻撃判定がヒットしたかどうか
+	bool hasHit_ = false;
 };
 

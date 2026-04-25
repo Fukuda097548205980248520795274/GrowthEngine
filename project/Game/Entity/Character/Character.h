@@ -4,6 +4,7 @@
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"
 #include "Action/Attack/ComboAttack/ComboAttack.h"
+#include "AppCollider/AppCollider.h"
 
 class Attack;
 class Move;
@@ -61,6 +62,12 @@ public:
 
 		/// @brief 右回避モーション
 		AnimationHandle hAvoidRightMotion = 0;
+
+		/// @brief 当たり判定グループ
+		Collision3DBaseAABB* hurtboxGroup = nullptr;
+
+		/// @brief 攻撃判定グループ
+		Collision3DBaseAABB* hitboxGroup = nullptr;
 	};
 
 
@@ -171,6 +178,10 @@ public:
 	/// @brief バッファされた攻撃入力を設定する
 	/// @param input 
 	void SetBufferedAttackInput(AttackInputType input) { bufferedAttackInput_ = input; }
+
+	/// @brief 当たり判定を取得する
+	/// @return 
+	Collision3DBaseAABB* GetHitboxGroup() const { return hitboxGroup_; }
 
 
 protected:
@@ -343,5 +354,14 @@ protected:
 
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
+
+
+protected:
+
+	/// @brief 当たり判定
+	AppCollider hurtbox_;
+
+	/// @brief 攻撃判定グループ
+	Collision3DBaseAABB* hitboxGroup_ = nullptr;
 };
 

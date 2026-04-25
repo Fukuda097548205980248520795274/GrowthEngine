@@ -129,3 +129,6 @@ Phong
 Guizmo
 Downsample
 Upsample
+Hurtbox
+Hitbox
+Pushbox
