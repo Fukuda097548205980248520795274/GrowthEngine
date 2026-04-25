@@ -120,6 +120,10 @@ public:
 	/// @return 
 	bool IsAvoid() const { return isAvoid_; }
 
+	/// @brief 構えているかどうか
+	/// @return 
+	bool IsStance() const { return isStance_; }
+
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
 	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
@@ -132,9 +136,17 @@ public:
 	/// @param move 
 	void SetCurrentMove(Move* move) { currentMove_ = move; }
 
+	/// @brief 現在の移動を取得する
+	/// @return 
+	Move* GetCurrentMove() const { return currentMove_; }
+
 	/// @brief 現在の回避を設定する
 	/// @param avoid 
 	void SetCurrentAvoid(Avoid* avoid) { currentAvoid_ = avoid; }
+
+	/// @brief 現在の回避を取得する
+	/// @return 
+	Avoid* GetCurrentAvoid() const { return currentAvoid_; }
 
 	/// @brief アニメーションを設定する
 	/// @param hAnimation 

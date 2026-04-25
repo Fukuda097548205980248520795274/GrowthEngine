@@ -40,3 +40,14 @@ void Avoid::Update()
 	// ポインタを消す
 	owner_->SetCurrentAvoid(nullptr);
 }
+
+/// @brief 使用中かどうか
+/// @return 
+bool Avoid::IsUse() const
+{
+	// 実行していない場合は使用していないとみなす
+	if (!IsExec()) return false;
+
+	// 現在の回避がこの回避であればtrue
+	return this == owner_->GetCurrentAvoid();
+}

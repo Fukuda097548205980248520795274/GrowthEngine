@@ -22,7 +22,7 @@ Node::State ActionNode::Exec()
 	{
 		result = State::Success;
 	} 
-	else if (action_->IsFailure())
+	else if (action_->IsFailure() || !action_->IsUse())
 	{
 		result = State::Failure;
 	}

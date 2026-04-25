@@ -17,3 +17,11 @@ void Move::Update()
 	// 基底クラスのUpdateを呼び出す
 	Action::Update();
 }
+
+bool Move::IsUse() const
+{
+	// 実行していない場合は使用していないとみなす
+	if (!IsExec())return false;
+
+	return this == owner_->GetCurrentMove();
+}

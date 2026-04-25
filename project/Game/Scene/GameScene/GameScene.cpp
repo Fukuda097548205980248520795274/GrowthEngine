@@ -100,7 +100,7 @@ void GameScene::InitializeCameraControl()
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
-	pivotPoint_->GetData()->radius = 10.0f;
+	pivotPoint_->GetData()->radius = 8.0f;
 	pivotPoint_->GetData()->phi = -std::numbers::pi_v<float> / 2.0f;
 
 	// カメラ回転入力の生成
@@ -132,52 +132,107 @@ void GameScene::UpdateCameraControl(float deltaTime)
 /// @param deltaTime
 void GameScene::UpdatePivotFollow(float deltaTime)
 {
-	// データを取得する
+	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
-	// ピボット中心を補間しながらプレイヤー位置へ追従させる
-	const float followT = 1.0f - std::exp(-kPivotFollowSpeed * deltaTime);
-	pivotData->center = Lerp(pivotData->center, player_->GetPosition() + kPivotCenterOffset, followT);
+	// ターゲットの位置を計算する
+	Vector3 targetPivotPos = player_->GetPosition() + kPivotCenterOffset;
+
+	// ロックオン中はターゲットの左右どちらかにピボットをオフセットする
+	if (player_->IsStance() && player_->GetLockOnTarget() != nullptr)
+	{
+		// ターゲットの位置を取得する
+		Vector3 targetPos = player_->GetLockOnTarget()->GetPosition();
+		Vector3 playerPos = player_->GetPosition();
+
+		// ターゲットの方向ベクトルを計算する
+		Vector3 dir = targetPos - playerPos;
+		dir.y = 0.0f;
+		dir = dir.Normalize();
+
+		// ターゲットの右方向ベクトルを計算する
+		Vector3 rightDir = Vector3(dir.z, 0.0f, -dir.x);
+
+		// ターゲットの左右どちらにいるかを計算する
+		constexpr float kRightOffset = 1.0f;
+
+		// ターゲットの左右どちらにいるかでピボット位置をオフセットする
+		targetPivotPos += rightDir * kRightOffset;
+	}
+
+	// ピボット中心をターゲット位置へ補間して追従させる
+	Vector3 diff = targetPivotPos - pivotData->center;
+	pivotData->center += diff * kPivotFollowSpeed * deltaTime;
 }
 
 /// @brief ピボット回転入力を反映する
 /// @param deltaTime
 void GameScene::UpdatePivotRotateInput(float deltaTime)
 {
+	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
-	// キー入力でピボットを回転させる
-	if (engine_->GetKeyPress(DIK_LEFT))
-	{
-		pivotData->phi += kPivotRotateSpeed * deltaTime;
-	}
-	if (engine_->GetKeyPress(DIK_RIGHT))
-	{
-		pivotData->phi -= kPivotRotateSpeed * deltaTime;
-	}
-	if (engine_->GetKeyPress(DIK_DOWN))
-	{
-		pivotData->theta += kPivotRotateSpeed * deltaTime;
-	}
-	if (engine_->GetKeyPress(DIK_UP))
-	{
-		pivotData->theta -= kPivotRotateSpeed * deltaTime;
-	}
-
-	// キーでカメラ回転している間はゲームパッド回転を加算しない
+	// キー入力でカメラ回転しているかを判定する
 	const bool isKeyCameraRotate =
 		engine_->GetKeyPress(DIK_LEFT) || engine_->GetKeyPress(DIK_RIGHT) ||
 		engine_->GetKeyPress(DIK_DOWN) || engine_->GetKeyPress(DIK_UP);
 
-	// 右スティックでピボットを回転させる
-	if (!isKeyCameraRotate && inputCameraRotate_ && inputCameraRotate_->param_)
+	// ゲームパッドの右スティック入力を取得する
+	Vector2 rightStick(0.0f, 0.0f);
+	if (inputCameraRotate_ && inputCameraRotate_->param_)
 	{
-		const Vector2 rightStick = engine_->GetGamepadRightStick(inputCameraRotate_->param_->controller);
-		pivotData->phi += -rightStick.x * kPivotRotateSpeed * deltaTime;
-		pivotData->theta += -rightStick.y * kPivotRotateSpeed * deltaTime;
+		rightStick = engine_->GetGamepadRightStick(inputCameraRotate_->param_->controller);
 	}
 
-	// ピボットのX軸回転は70度以内に制限する
+	// キー入力または右スティック入力がある場合は手動でカメラ回転しているとみなす
+	bool isManualCameraControl = isKeyCameraRotate || (rightStick.Length() > 0.01f);
+	
+	// 手動でカメラ回転入力がある場合はピボットを回転させる
+	if (isManualCameraControl)
+	{
+		// 手動でカメラ回転入力がある場合はピボットを回転させる
+		if (!isKeyCameraRotate)
+		{
+			pivotData->phi += -rightStick.x * kPivotRotateSpeed * deltaTime;
+			pivotData->theta += -rightStick.y * kPivotRotateSpeed * deltaTime;
+		}
+	}
+	else if (player_->IsStance() && player_->GetLockOnTarget() != nullptr)
+	{
+		// ロックオン中はターゲットの方向にピボットを回転させる
+		Character* target = player_->GetLockOnTarget();
+		Vector3 targetPos = target->GetPosition();
+		targetPos.y += 1.0f;
+
+		// ターゲットの方向ベクトルを計算する
+		Vector3 dir = targetPos - pivotData->center;
+		dir.Normalize();
+
+		// ターゲットの方向からピボットの回転角度を計算する
+		float targetPhi = std::atan2(-dir.x, dir.z) - (std::numbers::pi_v<float> / 2.0f);
+		float targetTheta = std::atan2(-dir.y, std::sqrt(dir.x * dir.x + dir.z * dir.z));
+
+		// ターゲットの高さに合わせてピボットのX軸回転を制限する
+		constexpr float kLockOnMaxPitch = 20.0f * (std::numbers::pi_v<float> / 180.0f);
+		targetTheta = std::clamp(targetTheta, -kLockOnMaxPitch, kLockOnMaxPitch);
+
+		// ピボットのY軸回転とターゲットの方向の差を計算する
+		float diffPhi = targetPhi - pivotData->phi;
+
+		// 角度の差を-π～πの範囲に収める
+		while (diffPhi > std::numbers::pi_v<float>)  diffPhi -= 2.0f * std::numbers::pi_v<float>;
+		while (diffPhi < -std::numbers::pi_v<float>) diffPhi += 2.0f * std::numbers::pi_v<float>;
+
+		// ピボットのY軸回転はターゲットの方向に合わせて補間する
+		constexpr float kLockOnCameraFollowSpeed = 5.0f;
+		pivotData->phi += diffPhi * kLockOnCameraFollowSpeed * deltaTime;
+
+		// ピボットのX軸回転はターゲットの高さに合わせて補間する
+		float diffTheta = targetTheta - pivotData->theta;
+		pivotData->theta += diffTheta * kLockOnCameraFollowSpeed * deltaTime;
+	}
+
+	// ピボットのX軸回転は最大角度で制限する
 	pivotData->theta = std::clamp(pivotData->theta, -kPivotMaxPitch, kPivotMaxPitch);
 }
 

@@ -16,6 +16,10 @@ public:
 	/// @brief 更新処理
 	void Update() override;
 
+	/// @brief 使用中かどうか
+	/// @return 
+	bool IsUse() const override;
+
 
 private:
 

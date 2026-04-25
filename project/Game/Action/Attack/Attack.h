@@ -29,6 +29,6 @@ public:
 
 	/// @brief 攻撃中かどうか
 	/// @return 
-	bool IsUse() const;
+	bool IsUse() const override;
 };
 

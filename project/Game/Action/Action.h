@@ -38,6 +38,10 @@ public:
 	/// @return 
 	bool IsFailure() const { return isFailure_; }
 
+	/// @brief 使用中かどうか
+	/// @return 
+	virtual bool IsUse() const = 0;
+
 
 protected:
 
