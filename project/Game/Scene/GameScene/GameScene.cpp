@@ -100,7 +100,7 @@ void GameScene::InitializeCameraControl()
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
-	pivotPoint_->GetData()->radius = 8.0f;
+	pivotPoint_->GetData()->radius = 10.0f;
 	pivotPoint_->GetData()->phi = -std::numbers::pi_v<float> / 2.0f;
 
 	// カメラ回転入力の生成
@@ -135,13 +135,24 @@ void GameScene::UpdatePivotFollow(float deltaTime)
 	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
-	// ターゲットの位置を計算する
-	Vector3 targetPivotPos = player_->GetPosition() + kPivotCenterOffset;
+	// ターゲットの位置をプレイヤーの位置に設定する
+	Vector3 targetPivotPos = player_->GetPosition();
 
-	// ロックオン中はターゲットの左右どちらかにピボットをオフセットする
+	// プレイヤーの位置からピボット中心までの高さオフセットを加算する
+	if (player_->IsStance())
+	{
+		targetPivotPos.y += 1.2f;
+	}
+	else
+	{
+		// プレイヤーの位置からピボット中心までの高さオフセットを加算する
+		targetPivotPos.y += 1.2f;
+	}
+
+	// ロックオン中はターゲットの位置にピボットをオフセットする
 	if (player_->IsStance() && player_->GetLockOnTarget() != nullptr)
 	{
-		// ターゲットの位置を取得する
+		// ロックオン中はターゲットの位置にピボットをオフセットする
 		Vector3 targetPos = player_->GetLockOnTarget()->GetPosition();
 		Vector3 playerPos = player_->GetPosition();
 
@@ -150,17 +161,17 @@ void GameScene::UpdatePivotFollow(float deltaTime)
 		dir.y = 0.0f;
 		dir = dir.Normalize();
 
-		// ターゲットの右方向ベクトルを計算する
+		// ターゲットの左右方向ベクトルを計算する
 		Vector3 rightDir = Vector3(dir.z, 0.0f, -dir.x);
 
-		// ターゲットの左右どちらにいるかを計算する
-		constexpr float kRightOffset = 1.0f;
+		// ターゲットの左右どちらかにピボットをオフセットする量
+		constexpr float kRightOffset = 0.0f;
 
-		// ターゲットの左右どちらにいるかでピボット位置をオフセットする
+		// ターゲットの左右どちらかにピボットをオフセットする
 		targetPivotPos += rightDir * kRightOffset;
 	}
 
-	// ピボット中心をターゲット位置へ補間して追従させる
+	// ピボット中心をターゲット位置に向かって補間移動させる
 	Vector3 diff = targetPivotPos - pivotData->center;
 	pivotData->center += diff * kPivotFollowSpeed * deltaTime;
 }
@@ -224,7 +235,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 		while (diffPhi < -std::numbers::pi_v<float>) diffPhi += 2.0f * std::numbers::pi_v<float>;
 
 		// ピボットのY軸回転はターゲットの方向に合わせて補間する
-		constexpr float kLockOnCameraFollowSpeed = 5.0f;
+		constexpr float kLockOnCameraFollowSpeed = 3.0f;
 		pivotData->phi += diffPhi * kLockOnCameraFollowSpeed * deltaTime;
 
 		// ピボットのX軸回転はターゲットの高さに合わせて補間する
