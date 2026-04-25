@@ -26,5 +26,9 @@ public:
 	/// @brief 次の攻撃があるかどうか
 	/// @return 
 	virtual bool HasNextAttack(AttackInputType inputType) const { return false; }
+
+	/// @brief 攻撃中かどうか
+	/// @return 
+	bool IsUse() const;
 };
 

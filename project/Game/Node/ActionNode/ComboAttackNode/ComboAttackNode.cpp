@@ -10,8 +10,8 @@ Node::State ComboAttackNode::Exec()
     if (!combo->IsExec() && !combo->IsSuccess() && !combo->IsFailure())
         combo->Exec();
 
-	// 失敗したら失敗とする（コンボが失敗したら次の攻撃に進めないため）
-	if (combo->IsFailure())
+	// アクションが失敗している、あるいは使用されていない場合は失敗
+	if (combo->IsFailure() || !combo->IsUse())
 	{
 		combo->Reset();
 		return State::Failure;

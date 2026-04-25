@@ -17,3 +17,13 @@ void Attack::Update()
 	// 基底クラスのUpdateを呼び出す
 	Action::Update();
 }
+
+/// @brief 攻撃中かどうか
+/// @return 
+bool Attack::IsUse() const
+{
+	if (!IsExec()) return false;
+
+	// 現在の攻撃がこの攻撃であればtrue
+	return this == owner_->GetCurrentAttack();
+}
