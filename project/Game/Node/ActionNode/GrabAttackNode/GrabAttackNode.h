@@ -1,12 +1,12 @@
 #pragma once
 #include "../ActionNode.h"
-#include "Action/Attack/ComboAttack/ComboAttack.h"
+#include "Action/Attack/GrabAttack/GrabAttack.h"
 
-class ComboAttackNode : public ActionNode
+class GrabAttackNode : public ActionNode
 {
 public:
     // ActionNodeのコンストラクタを利用
-    ComboAttackNode(std::unique_ptr<ComboAttack> action)
+    GrabAttackNode(std::unique_ptr<GrabAttack> action)
         : ActionNode(std::move(action)) {
     }
 
@@ -16,6 +16,6 @@ public:
 private:
 
     // 便利に扱うためのキャスト用プロパティ
-    ComboAttack* GetComboAttack() { return static_cast<ComboAttack*>(action_.get()); }
+    GrabAttack* GetGrabAttack() { return static_cast<GrabAttack*>(action_.get()); }
 };
 

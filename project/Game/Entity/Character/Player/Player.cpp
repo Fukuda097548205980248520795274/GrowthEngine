@@ -63,6 +63,9 @@ void Player::Initialize()
 	// 強攻撃入力の生成
 	inputHeavyAttack_ = std::make_unique<InputGamepadButton>("Player_HeavyAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_Y);
 
+	// つかみ入力の生成
+	inputGrab_ = std::make_unique<InputGamepadButton>("Player_Grab", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
+
 	// 構え入力の生成
 	inputStance_ = std::make_unique<InputGamepadButton>("Player_Stance", InputState::Press, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
 
@@ -159,13 +162,28 @@ void Player::Initialize()
 	comboLight1->SetNextLightAttack(comboLight2);
 	comboLight2->SetNextLightAttack(comboLight3);
 	comboLight3->SetNextLightAttack(comboLight4);
+
+
+	// 掴み攻撃
+	GrabAttackInitData grabData;
+	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, 0);
+	grabData.attackTime = 1.0f;
+	grabData.moveSpeed = 3.0f;
+	grabData.moveStartTime = 0.1f;
+	grabData.moveEndTime = 0.3f;
+	grabData.grabPartName = "RightHand";
+	grabData.hitboxStartTime = 0.15f;
+	grabData.hitboxEndTime = 0.35f;
+	grabData.grabTime = 3.0f;
+
+	grabAttack_ = std::make_unique<GrabAttack>(this, grabData);
 }
 
 /// @brief 更新処理
 void Player::Update()
 {
 	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsStagger())
+	if (IsStagger() || IsGrabbed())
 	{
 		Character::Update();
 		return;
@@ -235,6 +253,22 @@ void Player::UpdateAttack()
 	// デルタタイムの取得
 	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime();
 
+	// 現在攻撃中なら攻撃の更新処理を行い、攻撃が終了していたらバッファされた攻撃入力を消す
+	if (currentAttack_)
+		return;
+
+	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
+	if (IsStagger() || IsGrabbing())
+		return;
+
+	// つかみ攻撃の入力を受け付け、条件を満たす場合はつかみ攻撃を実行する
+	if (inputGrab_ && inputGrab_->IsInput())
+	{
+		// つかみ攻撃を実行
+		grabAttack_->Exec();
+		return;
+	}
+
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
@@ -282,6 +316,13 @@ void Player::UpdateAttack()
 /// @brief 構え状態を更新する
 void Player::UpdateStanceState()
 {
+	// 掴み中は構え状態にならない
+	if(IsGrabbing())
+	{
+		isStance_ = false;
+		return;
+	}
+
 	// 構え入力中は構えフラグを立て、離したらフラグを下ろす
 	const bool isGamepadStance = (inputStance_ && inputStance_->IsInput());
 	const bool isKeyStance = (keyStance_ && keyStance_->IsInput());

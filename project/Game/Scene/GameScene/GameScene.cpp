@@ -30,9 +30,14 @@ void GameScene::Initialize()
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
 
+
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
 		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Player_Model");
+
+	// 味方のモデルの生成と初期化
+	allyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
+		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Ally_Model");
 
 	// 敵のモデルの生成と初期化
 	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
@@ -75,6 +80,26 @@ void GameScene::Initialize()
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
+	//// 味方の生成と初期化
+	//Character::InitData allyInitData;
+	//allyInitData.position = Vector3(-5.0f, 0.0f, 0.0f);
+	//allyInitData.hp = 100;
+	//allyInitData.avoidDuration = 0.3f;
+	//allyInitData.avoidDistance = 1.5f;
+	//allyInitData.model_ = allyModel_.get();
+	//allyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
+	//allyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 2);
+	//allyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
+	//allyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
+	//allyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
+	//allyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
+	//allyInitData.hAvoidLeftMotion = 0;
+	//allyInitData.hAvoidRightMotion = 0;
+	//allyInitData.hurtboxGroup = playerHurtboxGroup_.get();
+	//allyInitData.hitboxGroup = playerHitboxGroup_.get();
+	//ally_ = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
+	//ally_->Initialize();
+
 	// 敵の生成と初期化
 	Character::InitData enemyInitData;
 	enemyInitData.position = Vector3(5.0f, 0.0f, 0.0f);
@@ -107,6 +132,9 @@ void GameScene::Update()
 
 	// プレイヤーの更新
 	player_->Update();
+
+	//// 味方の更新
+	//ally_->Update();
 
 	// 敵の更新
 	enemy_->Update();
@@ -292,6 +320,9 @@ void GameScene::Draw()
 {
 	// プレイヤーの描画
 	player_->Draw();
+
+	//// 味方の描画
+	//ally_->Draw();
 
 	// 敵の描画
 	enemy_->Draw();

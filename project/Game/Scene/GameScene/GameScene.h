@@ -52,18 +52,32 @@ private:
 	MotionManager* motionManager_ = nullptr;
 
 
-	/// @brief プレイヤーのモデル
-	std::unique_ptr<Render3DSkinningModel> playerModel_ = nullptr;
-
-	/// @brief プレイヤー
-	std::unique_ptr<Player> player_ = nullptr;
-
 	/// @brief プレイヤーの当たり判定グループ
 	std::unique_ptr<Collision3DBaseSphere> playerHurtboxGroup_;
 
 	/// @brief プレイヤーの攻撃判定グループ
 	std::unique_ptr<Collision3DBaseSphere> playerHitboxGroup_;
 
+	/// @brief 敵の当たり判定グループ
+	std::unique_ptr<Collision3DBaseSphere> enemyHurtboxGroup_;
+
+	/// @brief 敵の攻撃判定グループ
+	std::unique_ptr<Collision3DBaseSphere> enemyHitboxGroup_;
+
+
+
+	/// @brief プレイヤーのモデル
+	std::unique_ptr<Render3DSkinningModel> playerModel_ = nullptr;
+
+	/// @brief プレイヤー
+	std::unique_ptr<Player> player_ = nullptr;
+
+
+	/// @brief 味方のモデル
+	std::unique_ptr<Render3DSkinningModel> allyModel_ = nullptr;
+
+	/// @brief 味方
+	std::unique_ptr<NPC> ally_ = nullptr;
 
 
 	/// @brief 敵のモデル
@@ -79,12 +93,6 @@ private:
 
 	/// @brief カメラ回転入力
 	std::unique_ptr<InputGamepadRightStick> inputCameraRotate_ = nullptr;
-	
-	/// @brief 敵の当たり判定グループ
-	std::unique_ptr<Collision3DBaseSphere> enemyHurtboxGroup_;
-
-	/// @brief 敵の攻撃判定グループ
-	std::unique_ptr<Collision3DBaseSphere> enemyHitboxGroup_;
 
 
 

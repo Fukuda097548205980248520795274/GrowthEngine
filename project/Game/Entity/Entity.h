@@ -39,6 +39,14 @@ public:
 	/// @return 
 	EntityTag GetEntityTag()const { return entityTag_; }
 
+	/// @brief 位置を取得する
+	/// @return 
+	Vector3 GetPosition()const { return worldTransform_->translate_; }
+
+	/// @brief ワールド座標を取得する
+	/// @return 
+	Vector3 GetWorldPosition()const { return worldTransform_->GetWorldPosition(); }
+
 
 protected:
 

@@ -985,6 +985,12 @@
     <Filter Include="Game\AppCollider">
       <UniqueIdentifier>{b97cb22a-67aa-4ba5-a3f1-b5adedcb900e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Attack\GrabAttack">
+      <UniqueIdentifier>{48fa2d25-51ff-451a-8446-a25f0dd090d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\GrabAttackNode">
+      <UniqueIdentifier>{391a44a0-fc85-4251-8815-fcfd1642a288}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1742,6 +1748,12 @@
     </ClCompile>
     <ClCompile Include="Game\AppCollider\AppCollider.cpp">
       <Filter>Game\AppCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Attack\GrabAttack\GrabAttack.cpp">
+      <Filter>Game\Action\Attack\GrabAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.cpp">
+      <Filter>Game\Node\ActionNode\GrabAttackNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2608,6 +2620,12 @@
     </ClInclude>
     <ClInclude Include="Game\AppCollider\AppCollider.h">
       <Filter>Game\AppCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Attack\GrabAttack\GrabAttack.h">
+      <Filter>Game\Action\Attack\GrabAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.h">
+      <Filter>Game\Node\ActionNode\GrabAttackNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

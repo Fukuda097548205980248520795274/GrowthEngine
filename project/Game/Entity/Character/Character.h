@@ -4,6 +4,7 @@
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"
 #include "Action/Attack/ComboAttack/ComboAttack.h"
+#include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "AppCollider/AppCollider.h"
 
 class Attack;
@@ -121,10 +122,6 @@ public:
 	/// @return
 	Vector3 GetDirection() const { return direction_; }
 
-	/// @brief 現在位置を取得する
-	/// @return
-	Vector3 GetPosition() const { return worldTransform_->translate_; }
-
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
@@ -209,6 +206,22 @@ public:
 	/// @brief ダメージを受けているかどうか
 	/// @return 
 	AppCollider& GetHurtbox() { return hurtbox_; }
+
+	/// @brief 相手をつかんでいるかどうか
+	/// @return 
+	bool IsGrabbing() const { return grabbedTarget_ != nullptr; }
+
+	/// @brief 自分をつかんでいる相手がいるかどうか
+	/// @return 
+	bool IsGrabbed() const { return grabber_ != nullptr; }
+
+	/// @brief 相手をつかむ
+	/// @param target 
+	/// @param duration つかむ時間
+	void ExecuteGrab(Character* target, float duration);
+
+	/// @brief 掴んだ相手を離す
+	void ReleaseGrab();
 
 
 protected:
@@ -368,6 +381,22 @@ protected:
 
 	/// @brief ノックバックの速度
 	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+
+
+protected:
+
+	/// @brief 自分がつかんでいるターゲット
+	Character* grabbedTarget_ = nullptr;
+
+	/// @brief 自分をつかんでいる相手
+	Character* grabber_ = nullptr;
+
+
+	/// @brief 掴んでいる時間の経過
+	float grabTimer_ = 0.0f;
+
+	/// @brief 最大つかみ時間（これを超えると自動的に離す）
+	float maxGrabTime_ = 3.0f;
 
 
 protected:

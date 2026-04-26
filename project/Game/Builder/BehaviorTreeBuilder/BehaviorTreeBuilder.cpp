@@ -60,6 +60,15 @@ BehaviorTreeBuilder& BehaviorTreeBuilder::ComboAttack_(std::unique_ptr<ComboAtta
 	return *this;
 }
 
+/// @brief つかみ攻撃ノードを追加する
+/// @param grabAttack 
+/// @return 
+BehaviorTreeBuilder& BehaviorTreeBuilder::GrabAttack_(std::unique_ptr<GrabAttack> grabAttack)
+{
+	nodes_.push_back(std::make_unique<GrabAttackNode>(std::move(grabAttack)));
+	return *this;
+}
+
 /// @brief ノードの追加を終了する
 /// @return 
 BehaviorTreeBuilder& BehaviorTreeBuilder::End()

@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "../Character.h"
 
 class Player : public Character
@@ -63,6 +62,9 @@ private:
 	/// @brief 強攻撃入力
 	std::unique_ptr<InputGamepadButton> inputHeavyAttack_ = nullptr;
 
+	/// @brief 掴み入力
+	std::unique_ptr<InputGamepadButton> inputGrab_ = nullptr;
+
 	/// @brief 構え入力
 	std::unique_ptr<InputGamepadButton> inputStance_ = nullptr;
 
@@ -97,5 +99,8 @@ private:
 
 	/// @brief コンボアタック
 	std::vector<std::unique_ptr<ComboAttack>> comboAttacks_;
+
+	/// @brief つかみ攻撃
+	std::unique_ptr<GrabAttack> grabAttack_ = nullptr;
 };
 

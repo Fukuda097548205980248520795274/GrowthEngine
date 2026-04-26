@@ -106,6 +106,40 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
+	// つかまれている場合は、つかみ時間を減らしながら、相手の位置を自分の手の位置に同期させる
+	if (IsGrabbing())
+	{
+		// つかみ時間を減らす
+		grabTimer_ -= engine_->GetDeltaTime();
+
+		// つかみ時間が切れたら（相手に振りほどかれたら）
+		if (grabTimer_ <= 0.0f)
+		{
+			ReleaseGrab(); // 離す
+			// ※ここで自分に怯みモーションを入れると「振りほどかれた感」が出ます
+		}
+		else
+		{
+			// 相手の座標を強制的に自分の手の位置（または目の前）に同期する
+			Matrix4x4 handMatrix = GetBoneMatrix("RightHand");
+			Vector3 handPos = Vector3(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
+			grabbedTarget_->SetPosition(handPos);
+
+			// 相手の向きを自分と向かい合わせるなどの処理
+		}
+	}
+
+	// つかまれている相手は自分の手の位置に固定されるため、抵抗しても移動できない状態になる
+	if (IsGrabbed())
+	{
+		// 抵抗する（レバガチャで相手の grabTimer_ を減らす）などの処理も可能
+
+		// 基底クラスの更新
+		Entity::Update();
+
+		return;
+	}
+
 	// ノックバックの更新
 	if (knockbackVelocity_.Length() > 0.01f)
 	{
@@ -208,6 +242,7 @@ void Character::Update()
 		// ダッシュしている場合はダッシュモーションを再生する
 		if (isDash_)
 			SetAnimation(hDashMotion_, false, true);
+
 		// 構え中は構えモーションを優先して再生する
 		if (isStance_)
 			SetAnimation(hStanceMotion_, false, true);
@@ -597,4 +632,26 @@ Matrix4x4 Character::GetBoneMatrix(const std::string& partName) const
 	// モーションマネージャからジョイント名を取得する
 	std::string jointName = motionManager_->GetJointName(partName);
 	return model_->GetBoneWorldMatrix(jointName);
+}
+
+/// @brief 相手をつかむ
+/// @param target 
+void Character::ExecuteGrab(Character* target, float duration)
+{
+	grabbedTarget_ = target;
+	target->grabber_ = this;
+	grabTimer_ = duration;
+
+	// 必要ならここで双方専用の「つかみ合い待機モーション」をセットする
+}
+
+/// @brief 掴んだ相手を離す
+void Character::ReleaseGrab()
+{
+	// 掴んでいる相手がいる場合は、相手のgrabber_をクリアする
+	if (grabbedTarget_) 
+	{
+		grabbedTarget_->grabber_ = nullptr;
+		grabbedTarget_ = nullptr;
+	}
 }

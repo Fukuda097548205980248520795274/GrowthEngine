@@ -6,6 +6,7 @@
 #include "Node/ConditionNode/ConditionNode.h"
 #include "Node/ActionNode/ActionNode.h"
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
+#include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
 #include "Action/Action.h"
 
 class BehaviorTreeBuilder
@@ -42,6 +43,11 @@ public:
 	/// @param comboAttack 
 	/// @return 
 	BehaviorTreeBuilder& ComboAttack_(std::unique_ptr<ComboAttack> comboAttack);
+
+	/// @brief つかみ攻撃ノードを追加する
+	/// @param grabAttack 
+	/// @return 
+	BehaviorTreeBuilder& GrabAttack_(std::unique_ptr<GrabAttack> grabAttack);
 
 	/// @brief ノードの追加を終了する
 	/// @return 
