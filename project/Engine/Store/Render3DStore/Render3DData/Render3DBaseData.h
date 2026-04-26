@@ -29,6 +29,7 @@ namespace Engine
 {
 	class Render3DParameter;
 	class Camera3DStore;
+	class SkyboxStore;
 
 	class Render3DBaseData
 	{
@@ -56,6 +57,19 @@ namespace Engine
 		/// @param parent 
 		void SetParent(WorldTransform3D* parent) { parent_ = parent; }
 
+		/// @brief コマンドリストに登録
+		/// @param viewProjection 
+		/// @param commandList 
+		/// @param pso 
+		/// @param lightStore 
+		virtual void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) = 0;
+
+		/// @brief コマンドリストに登録
+		/// @param viewProjection 
+		/// @param commandList 
+		/// @param pso 
+		virtual void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) = 0;
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }
@@ -75,6 +89,11 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @return 
 		virtual void* GetParam() = 0;
+
+		/// @brief ボーンのワールド行列を取得する
+		/// @param name 
+		/// @return 
+		virtual Matrix4x4 GetBoneWorldMatrix(const std::string& name) { return MakeIdentityMatrix4x4(); }
 
 
 	public:

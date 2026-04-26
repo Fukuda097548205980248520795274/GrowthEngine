@@ -191,6 +191,18 @@ namespace Engine
 		T* GetRender2DParam(const std::string& name) { return render_->GetRender2DParam<T>(name); }
 
 
+		/// @brief ボーンのワールド行列を取得する
+		/// @param handle 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(Render3DHandle handle, const std::string& boneName) { return render_->GetBoneWorldMatrix(handle, boneName); }
+
+		/// @brief ボーンのワールド行列を取得する
+		/// @param name 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(const std::string& name, const std::string& boneName) { return render_->GetBoneWorldMatrix(name, boneName); }
+
 
 		/// @brief 3D描画の親を設定する
 		/// @param handle 

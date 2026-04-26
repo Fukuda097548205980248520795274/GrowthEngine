@@ -456,11 +456,13 @@ void Engine::UpdateSkeleton(Skeleton& skeleton)
 		if (joint.parent)
 		{
 			joint.skeletonSpaceMatrix = joint.localMatrix * skeleton.joints[*joint.parent].skeletonSpaceMatrix;
+			joint.worldMatrix = joint.localMatrix * skeleton.joints[*joint.parent].worldMatrix;
 		}
 		else
 		{
 			// 親がいないので、ローカル行列とSkeletonSpaceMatrixは一致する
 			joint.skeletonSpaceMatrix = joint.localMatrix;
+			joint.worldMatrix = joint.localMatrix;
 		}
 	}
 }

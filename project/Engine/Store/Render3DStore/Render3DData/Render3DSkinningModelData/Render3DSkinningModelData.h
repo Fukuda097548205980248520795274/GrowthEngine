@@ -53,12 +53,17 @@ namespace Engine
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
 
 		/// @brief コマンドリスト
 		/// @param commandList 
 		/// @param pso 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
+
+		/// @brief ボーンのワールド行列を取得する
+		/// @param name 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(const std::string& name) override;
 
 
 	public:

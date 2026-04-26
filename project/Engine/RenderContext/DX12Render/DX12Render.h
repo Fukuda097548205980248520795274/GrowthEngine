@@ -156,6 +156,18 @@ namespace Engine
 		/// @param parent 
 		void SetRender3DParent(const std::string& name, WorldTransform3D* parent) { render3DStore_->SetParent(name, parent); }
 
+		/// @brief ボーンのワールド行列を取得する
+		/// @param handle 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(Render3DHandle handle, const std::string& boneName) { return render3DStore_->GetBoneWorldMatrix(handle, boneName); }
+
+		/// @brief ボーンのワールド行列を取得する
+		/// @param name 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(const std::string& name, const std::string& boneName) { return render3DStore_->GetBoneWorldMatrix(name, boneName); }
+
 
 	public:
 

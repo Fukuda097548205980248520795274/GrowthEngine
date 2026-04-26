@@ -101,35 +101,7 @@ void Engine::Render3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D1
 {
 	// 静的モデルデータ
 	for (auto& data : dataTable_)
-	{
-		// 静的モデル
-		if (data->GetType() == Render3D::Type::StaticModel)
-		{
-			auto p = static_cast<Render3DStaticModelData*>(data.get());
-			p->Register(viewProjection, commandList, pso);
-		}
-
-		// アニメーションモデル
-		if (data->GetType() == Render3D::Type::AnimationModel)
-		{
-			auto p = static_cast<Render3DAnimationModelData*>(data.get());
-			p->Register(viewProjection, commandList, pso);
-		}
-
-		// スキニングモデル
-		if (data->GetType() == Render3D::Type::SkinningModel)
-		{
-			auto p = static_cast<Render3DSkinningModelData*>(data.get());
-			p->Register(viewProjection, commandList, pso);
-		}
-
-		// UV球
-		if (data->GetType() == Render3D::Type::UVSphere)
-		{
-			auto p = static_cast<Render3DUVSphereData*>(data.get());
-			p->Register(viewProjection, commandList, pso);
-		}
-	}
+		data->Register(viewProjection, commandList, pso);
 }
 
 
@@ -215,37 +187,8 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	dataTable_[handle]->DebugGuizmo(cameraStore);
 #endif
 
-	// 静的モデル
-	if (dataTable_[handle]->GetType() == Render3D::Type::StaticModel)
-	{
-		auto p = static_cast<Render3DStaticModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// アニメーションモデル
-	if (dataTable_[handle]->GetType() == Render3D::Type::AnimationModel)
-	{
-		auto p = static_cast<Render3DAnimationModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// スキニングモデル
-	if (dataTable_[handle]->GetType() == Render3D::Type::SkinningModel)
-	{
-		auto p = static_cast<Render3DSkinningModelData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// UV球
-	if (dataTable_[handle]->GetType() == Render3D::Type::UVSphere)
-	{
-		auto p = static_cast<Render3DUVSphereData*>(dataTable_[handle].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
+	// コマンドリストの登録する
+	dataTable_[handle]->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 }
 
 /// @brief コマンドリストに登録する
@@ -261,37 +204,8 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore);
 #endif
 
-	// 静的モデル
-	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::StaticModel)
-	{
-		auto p = static_cast<Render3DStaticModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// アニメーションモデル
-	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::AnimationModel)
-	{
-		auto p = static_cast<Render3DAnimationModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// スキニングモデル
-	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::SkinningModel)
-	{
-		auto p = static_cast<Render3DSkinningModelData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
-
-	// UV球
-	if (dataTable_[nameTable_[name]]->GetType() == Render3D::Type::UVSphere)
-	{
-		auto p = static_cast<Render3DUVSphereData*>(dataTable_[nameTable_[name]].get());
-		p->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-		return;
-	}
+	// コマンドリストの登録する
+	dataTable_[nameTable_[name]]->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 }
 
 /// @brief デバッグパラメータ

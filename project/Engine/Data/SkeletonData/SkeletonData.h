@@ -27,6 +27,9 @@ namespace Engine
 		// ローカル行列
 		Matrix4x4 localMatrix;
 
+		// ワールド行列
+		Matrix4x4 worldMatrix;
+
 		// SkeletonSpaceでの変換行列
 		Matrix4x4 skeletonSpaceMatrix;
 

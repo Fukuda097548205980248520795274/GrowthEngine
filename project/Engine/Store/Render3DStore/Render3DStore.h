@@ -125,6 +125,18 @@ namespace Engine
 		/// @param parent 
 		void SetParent(const std::string& name, WorldTransform3D* parent) { dataTable_[nameTable_[name]]->SetParent(parent); }
 
+		/// @brief ボーンのワールド行列を取得する
+		/// @param handle 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(Render3DHandle handle, const std::string& boneName) { return dataTable_[handle]->GetBoneWorldMatrix(boneName); }
+
+		/// @brief ボーンのワールド行列を取得する
+		/// @param name 
+		/// @param boneName 
+		/// @return 
+		Matrix4x4 GetBoneWorldMatrix(const std::string& name, const std::string& boneName) { return dataTable_[nameTable_[name]]->GetBoneWorldMatrix(boneName); }
+
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 

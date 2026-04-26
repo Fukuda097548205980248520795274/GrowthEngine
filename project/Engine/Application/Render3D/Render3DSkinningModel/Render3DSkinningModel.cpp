@@ -19,6 +19,14 @@ Render3DSkinningModel::Render3DSkinningModel(ModelHandle hModel, AnimationHandle
 	param_ = engine_->GetRender3DParam<Engine::Render3D::SkinningModel::Param>(hRender3D_);
 }
 
+/// @brief ボーンのワールド行列を取得する
+/// @param boneName 
+/// @return 
+Matrix4x4 Render3DSkinningModel::GetBoneWorldMatrix(const std::string& boneName)
+{
+	return engine_->GetBoneWorldMatrix(hRender3D_, boneName);
+}
+
 /// @brief 描画処理
 void Render3DSkinningModel::Draw()
 {

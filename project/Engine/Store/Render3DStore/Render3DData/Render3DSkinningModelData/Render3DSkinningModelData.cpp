@@ -541,6 +541,26 @@ void Engine::Render3DSkinningModelData::Register(const Matrix4x4& viewProjection
 	}
 }
 
+/// @brief ボーンのワールド行列を取得する
+/// @param name 
+/// @return 
+Matrix4x4 Engine::Render3DSkinningModelData::GetBoneWorldMatrix(const std::string& name)
+{
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	Quaternion modelQuaternion =
+		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param_->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
+	if (parent_)worldMatrix = worldMatrix * parent_->GetWorldMatrix();
+
+	// ボーンのワールド行列を返す
+	return skeleton_.joints[skeleton_.jointMap[name]].worldMatrix * worldMatrix;
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::Render3DSkinningModelData::DebugParameter()
 {

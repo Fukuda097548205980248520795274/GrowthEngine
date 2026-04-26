@@ -42,13 +42,13 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		/// @param lightStore 
-		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
 
 		/// @brief コマンドリストに登録
 		/// @param viewProjection 
 		/// @param commandList 
 		/// @param pso 
-		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
+		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
 
 
 	public:
