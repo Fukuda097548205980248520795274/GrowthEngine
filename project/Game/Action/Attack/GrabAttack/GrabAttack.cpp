@@ -42,6 +42,13 @@ void GrabAttack::Update()
 {
 	attackTimer_ += engine_->GetDeltaTime();
 
+	// すでにつかんでいる、またはつかまれている状態なら、攻撃処理は行わずに終了する
+	if (owner_->IsGrabbed() || owner_->IsGrabbing())
+	{
+		Attack::Update();
+		return;
+	}
+
 	// ------------------------------------------
 	// 1. つかみ判定の処理
 	// ------------------------------------------

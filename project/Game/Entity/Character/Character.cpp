@@ -536,6 +536,7 @@ void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLo
 /// @brief アクションの更新処理
 void Character::ActionUpdate()
 {
+
 	// 現在の攻撃がある場合は更新する
 	if (currentAttack_)
 		currentAttack_->Update();
@@ -543,6 +544,9 @@ void Character::ActionUpdate()
 	// 現在の移動がある場合は更新する
 	if (currentMove_)
 		currentMove_->Update();
+
+	// 掴み掴まれの状態の場合は回避させない
+	if(IsGrabbed() || IsGrabbing())return;
 
 	// 現在の回避がる場合は更新する
 	if (currentAvoid_)
