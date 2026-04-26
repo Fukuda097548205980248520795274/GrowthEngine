@@ -60,9 +60,10 @@ void ComboAttack::Update()
 				nextLightAttack_->Exec();
 				return;
 			}
-			// 強攻撃の先行入力があり、派生先が設定されている場合
 			else if (bufferedInput == AttackInputType::Heavy && nextHeavyAttack_)
 			{
+				// 強攻撃の先行入力があり、派生先が設定されている場合
+
 				// 先行入力を消化する
 				owner_->ConsumeBufferedAttackInput();
 
@@ -86,6 +87,7 @@ void ComboAttack::Update()
 			if (hitbox_.collider_ == nullptr)
 				hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
 
+			// パーツ名が指定されていれば、そのパーツに攻撃判定を追従させる
 			if (!partName_.empty())
 			{
 				auto sphere = static_cast<Collision3DInstanceSphere*>(hitbox_.collider_);
@@ -94,22 +96,39 @@ void ComboAttack::Update()
 				sphere->param_->radius = 0.25f;
 			}
 
-			// ヒットしているかチェックする
-			if (hitbox_.IsHit())
+			// 全キャラクターをループしてチェック
+			for (Character* target : Character::GetCharacters())
 			{
-				// ヒットしている場合は、ロックオンしているターゲットにダメージを与える
-				Character* target = owner_->GetLockOnTarget();
-				if (target)
+				// ターゲットが自分自身の場合は無視する
+				if (target == owner_) continue;
+
+				// ターゲットが同じ陣営の場合は無視する
+				if (target->GetCharacterTag() == owner_->GetCharacterTag()) continue;
+
+				// ターゲットがすでに死亡している場合は無視する
+				if (target->IsDead()) continue;
+
+				// 攻撃判定とターゲットの当たり判定を更新して衝突をチェックする
+				if (hitbox_.IsHit())
 				{
-					// Attackクラスが持っているパラメータを渡す
-					target->OnDamage(damage_, staggerTime_, knockback_);
+					// ノックバックの方向を計算する（攻撃者からターゲットへのベクトルを正規化）
+					Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
+
+					// ターゲットにダメージを与える
+					target->OnDamage(damage_, staggerTime_, knockback_, knockDirection);
+
+					// ヒットエフェクトなどの処理があればここで行う
+					// PlayHitEffect(target->GetPosition());
+
+					// 今回の攻撃で「すでに誰かに当たった」フラグを立てる
+					hasHit_ = true;
+
+					// 攻撃判定を削除する（ヒット後は判定が消える仕様の場合）
+					DeleteHitbox();
+
+					// ループを抜ける（複数ヒットさせない場合）
+					break;
 				}
-
-				// 攻撃時間が終わったら、判定を削除する
-				DeleteHitbox();
-
-				// ヒットしたのでフラグを立てる
-				hasHit_ = true;
 			}
 		}
 	}

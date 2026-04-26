@@ -87,7 +87,11 @@ public:
 	/// @param damage 
 	/// @param staggerTime 
 	/// @param knockback
-	virtual void OnDamage(int damage, float staggerTime, float knockback);
+	/// @param knockDirection
+	virtual void OnDamage(int damage, float staggerTime, float knockback, const Vector3& knockDirection);
+
+	/// @brief 全キャラクターのリストを取得
+	static const std::vector<Character*>& GetCharacters() { return characters_; }
 
 	/// @brief 回避を開始する
 	/// @param moveInputDirection
@@ -136,6 +140,10 @@ public:
 	/// @brief 構えているかどうか
 	/// @return 
 	bool IsStance() const { return isStance_; }
+
+	/// @brief 死亡しているかどうか
+	/// @return 
+	bool IsDead() const { return isDead_; }
 
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
@@ -198,6 +206,10 @@ public:
 	/// @return 
 	bool IsStagger() const { return isStagger_; }
 
+	/// @brief ダメージを受けているかどうか
+	/// @return 
+	AppCollider& GetHurtbox() { return hurtbox_; }
+
 
 protected:
 
@@ -212,6 +224,8 @@ protected:
 
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
+
+	bool isDead_ = false;
 
 
 protected:
@@ -351,6 +365,9 @@ protected:
 
 	/// @brief 怯みの残り時間
 	float staggerTimer_ = 0.0f;
+
+	/// @brief ノックバックの速度
+	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 
 
 protected:

@@ -25,7 +25,7 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
 	attack1Data.staggerTime = 0.3f;
-	attack1Data.knockback = 0.0f;
+	attack1Data.knockback = 0.1f;
 
 	// 二段目の攻撃
 	CombAttackInitData attack2Data;
@@ -41,7 +41,7 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 	attack2Data.hitboxEndTime = 0.4f;
 	attack2Data.damage = 1;
 	attack2Data.staggerTime = 0.3f;
-	attack2Data.knockback = 0.0f;
+	attack2Data.knockback = 0.1f;
 
 	// 三段目の攻撃
 	CombAttackInitData attack3Data;
@@ -57,7 +57,7 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 	attack3Data.hitboxEndTime = 0.4f;
 	attack3Data.damage = 1;
 	attack3Data.staggerTime = 0.3f;
-	attack3Data.knockback = 0.0f;
+	attack3Data.knockback = 0.1f;
 
 	return builder
 		// 常に状況を監視してルートを切り替えるためRestartingSequenceを使用

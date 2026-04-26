@@ -96,7 +96,7 @@ void Player::Initialize()
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
 	attack1Data.staggerTime = 0.3f;
-	attack1Data.knockback = 0.5f;
+	attack1Data.knockback = 0.1f;
 
 	// 2段目の攻撃
 	CombAttackInitData attack2Data;
@@ -112,7 +112,7 @@ void Player::Initialize()
 	attack2Data.hitboxEndTime = 0.4f;
 	attack2Data.damage = 1;
 	attack2Data.staggerTime = 0.3f;
-	attack2Data.knockback = 0.5f;
+	attack2Data.knockback = 0.1f;
 
 	// 3段目の攻撃
 	CombAttackInitData attack3Data;
@@ -128,7 +128,7 @@ void Player::Initialize()
 	attack3Data.hitboxEndTime = 0.4f;
 	attack3Data.damage = 1;
 	attack3Data.staggerTime = 0.3f;
-	attack3Data.knockback = 0.5f;
+	attack3Data.knockback = 0.1f;
 
 	// 4段目の攻撃
 	CombAttackInitData attack4Data;
@@ -144,7 +144,7 @@ void Player::Initialize()
 	attack4Data.hitboxEndTime = 0.4f;
 	attack4Data.damage = 1;
 	attack4Data.staggerTime = 0.3f;
-	attack4Data.knockback = 0.5f;
+	attack4Data.knockback = 0.1f;
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));

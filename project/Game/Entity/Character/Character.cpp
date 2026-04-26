@@ -106,6 +106,23 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
+	// ノックバックの更新
+	if (knockbackVelocity_.Length() > 0.01f)
+	{
+		// ノックバックの速度に基づいて位置を更新する
+		Vector3 position = GetPosition();
+		position += knockbackVelocity_ * deltaTime;
+		SetPosition(position);
+
+		// ノックバックの速度を減衰させる
+		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, deltaTime);
+	}
+	else
+	{
+		// 十分に小さくなったらノックバックを止める
+		knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+	}
+
 	// 怯み中の場合は、怯み時間を減らしていき、0以下になったら怯み状態を解除する
 	if (isStagger_)
 	{
@@ -256,7 +273,8 @@ void Character::Update()
 /// @param damage 
 /// @param staggerTime
 /// @param knockback
-void Character::OnDamage(int damage, float staggerTime, float knockback)
+/// @param knockDirection
+void Character::OnDamage(int damage, float staggerTime, float knockback, const Vector3& knockDirection)
 {
 	// 体力を減らす
 	hp_ -= damage;
@@ -285,8 +303,12 @@ void Character::OnDamage(int damage, float staggerTime, float knockback)
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
-		// 後ろにノックバックさせる処理をここに書く
-		// 例: position -= forwardDirection * knockback;
+		// ノックバック方向を正規化する
+		Vector3 backDirection = knockDirection.Normalize();
+
+		// ノックバック力を初速として設定する
+		// ※減衰させながら移動するため、少し大きめの値（* 10.0f など）をかけると丁度良くなります
+		knockbackVelocity_ = backDirection * (knockback * 10.0f);
 	}
 }
 
