@@ -1,6 +1,7 @@
 #include "Character.h"
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 #include "Action/Attack/Attack.h"
 #include "Action/Move/Move.h"
@@ -75,6 +76,8 @@ Character::Character(const InitData& initData) : Entity()
 	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
 	hAvoidRightMotion_ = initData.hAvoidRightMotion;
 	hHurtMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, 0);
+	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, 0);
 
 	// 当たり判定グループ
 	hurtbox_.collider_ = initData.hurtboxGroup->CreateInstance();
@@ -106,38 +109,55 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
-	// つかまれている場合は、つかみ時間を減らしながら、相手の位置を自分の手の位置に同期させる
-	if (IsGrabbing())
-	{
-		// つかみ時間を減らす
-		grabTimer_ -= engine_->GetDeltaTime();
-
-		// つかみ時間が切れたら（相手に振りほどかれたら）
-		if (grabTimer_ <= 0.0f)
-		{
-			ReleaseGrab(); // 離す
-			// ※ここで自分に怯みモーションを入れると「振りほどかれた感」が出ます
-		}
-		else
-		{
-			// 相手の座標を強制的に自分の手の位置（または目の前）に同期する
-			Matrix4x4 handMatrix = GetBoneMatrix("RightHand");
-			Vector3 handPos = Vector3(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
-			grabbedTarget_->SetPosition(handPos);
-
-			// 相手の向きを自分と向かい合わせるなどの処理
-		}
-	}
-
 	// つかまれている相手は自分の手の位置に固定されるため、抵抗しても移動できない状態になる
 	if (IsGrabbed())
 	{
-		// 抵抗する（レバガチャで相手の grabTimer_ を減らす）などの処理も可能
+		// 掴まれているタイマーを進める
+		grabbedTimer_ += engine_->GetDeltaTime();
+
+		// ※もしプレイヤーなら、ここで「ボタン連打で grabbedTimer_ をさらに増やす」処理を入れるとレバガチャ抜けになります
+
+		// 限界時間に達したら、自力で振りほどく
+		if (grabbedTimer_ >= escapeTimeLimit_)
+		{
+			// 1. 相手（掴んでいた側）のポインタを解除し、少し怯ませる（振りほどかれたリアクション）
+			grabber_->grabbedTarget_ = nullptr;
+			grabber_->OnDamage(0, 0.5f, 0.0f, Vector3(0.0f, 0.0f, 0.0f)); // ダメージは0、怯み時間は0.5秒、ノックバックなし
+
+			// 2. 自分のポインタを解除し、タイマーをリセット
+			grabber_ = nullptr;
+			grabbedTimer_ = 0.0f;
+
+			// 3. 自分（抜け出した側）の向きを最後に確定させる（相手の方向を向く）
+			// ※必要に応じて、抜け出した直後の無敵時間などを設定
+		}
 
 		// 基底クラスの更新
 		Entity::Update();
 
+		// アニメーションの更新
+		UpdateAnimation();
+
 		return;
+	}
+
+	// つかまれている場合は、つかみ時間を減らしながら、相手の位置を自分の手の位置に同期させる
+	if (IsGrabbing())
+	{
+		// 相手の座標を強制的に自分の手の位置（または目の前）に同期する
+		Matrix4x4 handMatrix = GetBoneMatrix("RightHand");
+		Vector3 handPos = Vector3(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
+		const Vector3 grabOffset = Vector3(0.0f, -1.2f, 0.1f); // 手の前に少しオフセット
+		grabbedTarget_->SetPosition(handPos + grabOffset);
+
+		// 自分の回転を取得する
+		Quaternion myRotation = GetRotation();
+
+		// つかまれている相手は自分の回転に対して、Y軸に180度回転した向きになるようにする
+		Quaternion offsetRot = ToQuaternion(std::numbers::pi_v<float>, Vector3(0.0f, 1.0f, 0.0f));
+		Quaternion targetRotation = myRotation * offsetRot;
+
+		grabbedTarget_->SetRotation(targetRotation);
 	}
 
 	// ノックバックの更新
@@ -228,74 +248,6 @@ void Character::Update()
 
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
-
-
-	if (!currentAttack_ && !isStagger_)
-	{
-		// 立ちモーションを再生する
-		SetAnimation(hStandMotion_, false , true);
-
-		//　移動している場合は歩きモーションを再生する
-		if (targetVelocity_.Length() > 0.0f)
-			SetAnimation(hWalkMotion_, false, true);
-		
-		// ダッシュしている場合はダッシュモーションを再生する
-		if (isDash_)
-			SetAnimation(hDashMotion_, false, true);
-
-		// 構え中は構えモーションを優先して再生する
-		if (isStance_)
-			SetAnimation(hStanceMotion_, false, true);
-
-		// 回避中は回避モーションを優先して再生する
-		if (isAvoid_)
-		{
-			// 回避方向
-			Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
-
-			if (avoidDirection.Length() > 0.0f)
-			{
-				// キャラクターの向き（前）と右方向
-				Vector3 forward = direction_;
-				Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
-
-				// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
-				float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
-				float localX = Dot(avoidDirection, right);   // +なら右、-なら左
-
-				// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-				if (std::abs(localZ) > std::abs(localX))
-				{
-					// 前後への回避
-					if (localZ > 0.0f) 
-					{
-						// 前回避モーションを再生する
-						SetAnimation(hAvoidFrontMotion_, false, false);
-					} 
-					else
-					{
-						// 後ろ回避モーションを再生する
-						SetAnimation(hAvoidBackMotion_, false, false);
-					}
-				}
-				else
-				{
-					// 左右への回避
-					if (localX > 0.0f) 
-					{
-						// 右回避モーションを再生する
-						SetAnimation(hAvoidRightMotion_, false, false);
-					} 
-					else 
-					{
-						// 左回避モーションを再生する
-						SetAnimation(hAvoidLeftMotion_, false, false);
-					}
-				}
-			}
-		}
-	}
-
 
 	// アニメーションの更新
 	UpdateAnimation();
@@ -602,6 +554,83 @@ void Character::UpdateAnimation()
 {
 	if (!model_)return;
 
+	if (!currentAttack_ && !isStagger_)
+	{
+		// 立ちモーションを再生する
+		SetAnimation(hStandMotion_, false, true);
+
+		//　移動している場合は歩きモーションを再生する
+		if (targetVelocity_.Length() > 0.0f)
+			SetAnimation(hWalkMotion_, false, true);
+
+		// ダッシュしている場合はダッシュモーションを再生する
+		if (isDash_)
+			SetAnimation(hDashMotion_, false, true);
+
+		// 構え中は構えモーションを優先して再生する
+		if (isStance_)
+			SetAnimation(hStanceMotion_, false, true);
+
+		// 回避中は回避モーションを優先して再生する
+		if (isAvoid_)
+		{
+			// 回避方向
+			Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
+
+			if (avoidDirection.Length() > 0.0f)
+			{
+				// キャラクターの向き（前）と右方向
+				Vector3 forward = direction_;
+				Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
+
+				// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
+				float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
+				float localX = Dot(avoidDirection, right);   // +なら右、-なら左
+
+				// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
+				if (std::abs(localZ) > std::abs(localX))
+				{
+					// 前後への回避
+					if (localZ > 0.0f)
+					{
+						// 前回避モーションを再生する
+						SetAnimation(hAvoidFrontMotion_, false, false);
+					}
+					else
+					{
+						// 後ろ回避モーションを再生する
+						SetAnimation(hAvoidBackMotion_, false, false);
+					}
+				}
+				else
+				{
+					// 左右への回避
+					if (localX > 0.0f)
+					{
+						// 右回避モーションを再生する
+						SetAnimation(hAvoidRightMotion_, false, false);
+					}
+					else
+					{
+						// 左回避モーションを再生する
+						SetAnimation(hAvoidLeftMotion_, false, false);
+					}
+				}
+			}
+		}
+	}
+
+	// 掴まれモーションを優先して再生する
+	if (IsGrabbed())
+	{
+		SetAnimation(hGrabbedMotion_, false, true);
+	}
+	else if (IsGrabbing())
+	{
+		// つかみモーションを再生する
+		SetAnimation(hGrabMotion_, false, true);
+	}
+
 	if (isAnimationLoop_)
 	{
 		// タイマーを進める
@@ -640,7 +669,7 @@ void Character::ExecuteGrab(Character* target, float duration)
 {
 	grabbedTarget_ = target;
 	target->grabber_ = this;
-	grabTimer_ = duration;
+	target->grabbedTimer_ = 0.0f;
 
 	// 必要ならここで双方専用の「つかみ合い待機モーション」をセットする
 }

@@ -43,9 +43,21 @@ public:
 	/// @return 
 	Vector3 GetPosition()const { return worldTransform_->translate_; }
 
+	/// @brief 位置を設定する
+	/// @param position 
+	void SetPosition(const Vector3& position) { worldTransform_->translate_ = position; }
+
 	/// @brief ワールド座標を取得する
 	/// @return 
 	Vector3 GetWorldPosition()const { return worldTransform_->GetWorldPosition(); }
+
+	/// @brief 回転を取得する
+	/// @return 
+	Quaternion GetRotation()const { return worldTransform_->GetQuaternion(); }
+
+	/// @brief 回転を設定する
+	/// @param rotation 
+	void SetRotation(const Quaternion& rotation) { worldTransform_->SetRotate(rotation); }
 
 
 protected:

@@ -27,6 +27,10 @@ public:
 	/// @return 
 	Quaternion GetQuaternion()const { return quaternion_; }
 
+	/// @brief 回転を設定する
+	/// @param quaternion 
+	void SetRotate(const Quaternion& quaternion);
+
 	/// @brief ワールド座標を取得する
 	/// @return 
 	Vector3 GetWorldPosition()const;

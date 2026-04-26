@@ -50,6 +50,8 @@ void MotionManager::Initialize()
 	LoadAvoidRight(dir);
 	LoadAttack(dir);
 	LoadStagger(dir);
+	LoadGrab(dir);
+	LoadGrabbed(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -146,4 +148,18 @@ void MotionManager::LoadStagger(const std::string& dir)
 {
 	table_[MotionType::Stagger][0] = engine_->LoadAnimation(dir + "/stagger/stagger_000", "stagger_000.gltf");
 	table_[MotionType::Stagger][1] = engine_->LoadAnimation(dir + "/stagger/stagger_001", "stagger_001.gltf");
+}
+
+/// @brief 掴みモーション読み込み
+/// @param dir 
+void MotionManager::LoadGrab(const std::string& dir)
+{
+	table_[MotionType::Grab][0] = engine_->LoadAnimation(dir + "/grab/grab_000", "grab_000.gltf");
+}
+
+/// @brief 掴まれモーション読み込み
+/// @param dir 
+void MotionManager::LoadGrabbed(const std::string& dir)
+{
+	table_[MotionType::Grabbed][0] = engine_->LoadAnimation(dir + "/grabbed/grabbed_000", "grabbed_000.gltf");
 }

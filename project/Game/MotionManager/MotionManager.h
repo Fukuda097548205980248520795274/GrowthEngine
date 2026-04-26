@@ -14,6 +14,8 @@ enum class MotionType
 	AvoidLeft,
 	AvoidRight,
 	Stagger,
+	Grab,
+	Grabbed,
 };
 
 class MotionManager
@@ -94,6 +96,14 @@ private:
 	/// @brief 怯みモーション読み込み
 	/// @param dir 
 	void LoadStagger(const std::string& dir);
+
+	/// @brief 掴みモーション読み込み
+	/// @param dir 
+	void LoadGrab(const std::string& dir);
+
+	/// @brief 掴まれモーション読み込み
+	/// @param dir 
+	void LoadGrabbed(const std::string& dir);
 
 
 private:

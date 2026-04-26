@@ -1,4 +1,5 @@
 #include "WorldTransform3D.h"
+#include <cmath>
 
 /// @brief 更新処理
 void WorldTransform3D::Update()
@@ -20,6 +21,19 @@ void WorldTransform3D::Update()
 	{
 		worldMatrix_ *= parent_->GetWorldMatrix();
 	}
+}
+
+/// @brief 回転を設定する
+/// @param quaternion 
+void WorldTransform3D::SetRotate(const Quaternion& quaternion)
+{
+	// クォータニオンを設定する
+	quaternion_ = quaternion;
+
+	// クォータニオンから回転を取得する
+	rotate_.x = std::atan2f(2.0f * (quaternion_.w * quaternion_.x + quaternion_.y * quaternion_.z), 1.0f - 2.0f * (quaternion_.x * quaternion_.x + quaternion_.y * quaternion_.y));
+	rotate_.y = std::asinf(2.0f * (quaternion_.w * quaternion_.y - quaternion_.z * quaternion_.x));
+	rotate_.z = std::atan2f(2.0f * (quaternion_.w * quaternion_.z + quaternion_.x * quaternion_.y), 1.0f - 2.0f * (quaternion_.y * quaternion_.y + quaternion_.z * quaternion_.z));
 }
 
 /// @brief ワールド座標を取得する

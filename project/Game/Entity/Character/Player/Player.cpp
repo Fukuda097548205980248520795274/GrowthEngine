@@ -379,9 +379,9 @@ Vector2 Player::GetMoveInputDirection(bool& hasMoveInput) const
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
 {
-	// 構え中はダッシュできない
+	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_)
+	if (isStance_ || IsGrabbing() || IsStagger())
 	{
 		isDash_ = false;
 		return;

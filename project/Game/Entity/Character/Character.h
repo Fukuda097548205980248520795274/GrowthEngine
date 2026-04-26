@@ -122,6 +122,10 @@ public:
 	/// @return
 	Vector3 GetDirection() const { return direction_; }
 
+	/// @brief 向きを設定する
+	/// @param direction 
+	void SetDirection(const Vector3& direction) { direction_ = direction.Normalize(); }
+
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
@@ -174,10 +178,6 @@ public:
 	/// @brief 現在のアニメーションの再生時間を取得する
 	/// @return 
 	float GetAnimationTimer()const { return model_->param_->animation.timer; }
-
-	/// @brief 位置を設定する
-	/// @param position 
-	void SetPosition(const Vector3& position) { worldTransform_->translate_ = position; }
 
 	/// @brief バッファされた攻撃入力を取得する
 	/// @return 
@@ -392,11 +392,11 @@ protected:
 	Character* grabber_ = nullptr;
 
 
-	/// @brief 掴んでいる時間の経過
-	float grabTimer_ = 0.0f;
+	/// @brief 掴まれ時間
+	float grabbedTimer_ = 0.0f;
 
-	/// @brief 最大つかみ時間（これを超えると自動的に離す）
-	float maxGrabTime_ = 3.0f;
+	/// @brief つかみ時間の上限
+	float escapeTimeLimit_ = 3.0f;
 
 
 protected:
@@ -427,6 +427,12 @@ protected:
 
 	/// @brief 怯みモーション
 	AnimationHandle hHurtMotion_ = 0;
+
+	/// @brief つかみモーション
+	AnimationHandle hGrabMotion_ = 0;
+
+	/// @brief つかまれているモーション
+	AnimationHandle hGrabbedMotion_ = 0;
 
 
 protected:
