@@ -39,6 +39,11 @@ public:
 	/// @return 
 	SkeletonHandle GetSkeleton() { return hSkeleton_; }
 
+	/// @brief ジョイント名を取得する
+	/// @param partName 
+	/// @return 
+	std::string GetJointName(const std::string& partName) const;
+
 
 private:
 
@@ -100,6 +105,9 @@ private:
 	/// @brief テーブル
 	using MotionTable = std::unordered_map<MotionType, std::unordered_map<int32_t, AnimationHandle>>;
 	MotionTable table_;
+
+	/// @brief ジョイントマップ
+	std::unordered_map<std::string, std::string> jointMap_;
 
 	/// @brief 初期化したかどうか
 	bool isInit_ = false;

@@ -183,6 +183,11 @@ public:
 	/// @return 
 	Collision3DBaseAABB* GetHitboxGroup() const { return hitboxGroup_; }
 
+	/// @brief ボーン行列を取得する
+	/// @param partName 
+	/// @return 
+	Matrix4x4 GetBoneMatrix(const std::string& partName) const;
+
 
 protected:
 

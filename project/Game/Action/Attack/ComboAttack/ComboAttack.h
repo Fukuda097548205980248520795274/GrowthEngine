@@ -17,10 +17,11 @@ public:
 	/// @param cancelStartTime 
 	/// @param cancelEndTime 
 	ComboAttack(Character* character, AnimationHandle hAttackMotion,float attackTime,
-		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime , float hitboxStartTime, float hitboxEndTime)
+		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime , 
+		const std::string& partName, float hitboxStartTime, float hitboxEndTime)
 		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), moveSpeed_(moveSpeed),
 		moveStartTime_(moveStartTime), moveEndTime_(moveEndTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime),
-		hitboxStartTime_(hitboxStartTime), hitboxEndTime_(hitboxEndTime) {}
+		partName_(partName),hitboxStartTime_(hitboxStartTime), hitboxEndTime_(hitboxEndTime) {}
 
 	/// @brief 実行
 	virtual void Exec() override;
@@ -116,5 +117,8 @@ private:
 
 	/// @brief 攻撃判定がヒットしたかどうか
 	bool hasHit_ = false;
+
+	/// @brief パーツ名
+	std::string partName_{};
 };
 

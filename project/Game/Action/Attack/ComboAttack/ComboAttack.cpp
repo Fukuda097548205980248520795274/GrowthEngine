@@ -64,9 +64,13 @@ void ComboAttack::Update()
 			if (hitbox_.collider_ == nullptr)
 				hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
 
-			// 判定の位置を、剣の先端や拳の位置に合わせる
-			auto aabb = static_cast<Collision3DInstanceAABB*>(hitbox_.collider_);
-			aabb->param_->center = owner_->GetPosition();
+			if (!partName_.empty())
+			{
+				auto aabb = static_cast<Collision3DInstanceAABB*>(hitbox_.collider_);
+				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(partName_);
+				aabb->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+				aabb->param_->radius = Vector3(0.25f, 0.25f, 0.25f); // 仮の半径
+			}
 
 			// ヒットしているかチェックする
 			if (hitbox_.IsHit())

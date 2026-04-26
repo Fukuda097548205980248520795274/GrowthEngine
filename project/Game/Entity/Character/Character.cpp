@@ -509,3 +509,13 @@ void Character::UpdateAnimation()
 		model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
 	}
 }
+
+/// @brief ボーン行列を取得する
+/// @param partName 
+/// @return 
+Matrix4x4 Character::GetBoneMatrix(const std::string& partName) const
+{
+	// モーションマネージャからジョイント名を取得する
+	std::string jointName = motionManager_->GetJointName(partName);
+	return model_->GetBoneWorldMatrix(jointName);
+}

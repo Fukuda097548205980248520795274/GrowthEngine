@@ -43,14 +43,14 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 					// ② 弱攻撃 1段目
 					// (character, animation, アニメ時間, 移動速度, 移動開始, 移動終了, キャンセル開始, キャンセル終了, 攻撃判定開始, 攻撃判定終了)
 					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f)).End()
+						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f,"RightHand", 0.1f, 0.4f)).End()
 
 					// ③ 弱攻撃 2段目（1段目のキャンセル時間になったらここに進む）
 					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack,1),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f)).End()
+						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftHand", 0.1f, 0.4f)).End()
 					// ④ 強攻撃 3段目（フィニッシュ）
 					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack,2),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f)).End()
+						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "RightHand", 0.1f, 0.4f)).End()
 
 				.End() // コンボシーケンス終了
 

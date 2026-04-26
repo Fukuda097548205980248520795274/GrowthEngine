@@ -83,13 +83,13 @@ void Player::Initialize()
 
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f));
+		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f,"RightHand", 0.1f, 0.4f));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f));
+		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftHand", 0.1f, 0.4f));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f));
+		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "RightHand", 0.1f, 0.4f));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, 0.1f, 0.4f));
+		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftFoot", 0.1f, 0.4f));
 
 	auto comboLight1 = comboAttacks_[0].get();
 	auto comboLight2 = comboAttacks_[1].get();
