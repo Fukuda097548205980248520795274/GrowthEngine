@@ -1,6 +1,28 @@
 #include "ComboAttack.h"
 #include "Entity/Character/Player/Player.h"
 
+/// @brief コンストラクタ
+/// @param character 
+/// @param initData 
+ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initData)
+	: Attack(character)
+{
+	// 初期化データをメンバ変数にコピーする
+	hAttackMotion_ = initData.hAttackMotion;
+	attackTime_ = initData.attackTime;
+	moveSpeed_ = initData.moveSpeed;
+	moveStartTime_ = initData.moveStartTime;
+	moveEndTime_ = initData.moveEndTime;
+	cancelStartTime_ = initData.cancelStartTime;
+	cancelEndTime_ = initData.cancelEndTime;
+	partName_ = initData.partName;
+	hitboxStartTime_ = initData.hitboxStartTime;
+	hitboxEndTime_ = initData.hitboxEndTime;
+	damage_ = initData.damage;
+	staggerTime_ = initData.staggerTime;
+	knockback_ = initData.knockback;
+}
+
 /// @brief 実行
 void ComboAttack::Exec()
 {
@@ -66,15 +88,23 @@ void ComboAttack::Update()
 
 			if (!partName_.empty())
 			{
-				auto aabb = static_cast<Collision3DInstanceAABB*>(hitbox_.collider_);
+				auto sphere = static_cast<Collision3DInstanceSphere*>(hitbox_.collider_);
 				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(partName_);
-				aabb->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
-				aabb->param_->radius = Vector3(0.25f, 0.25f, 0.25f); // 仮の半径
+				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+				sphere->param_->radius = 0.25f;
 			}
 
 			// ヒットしているかチェックする
 			if (hitbox_.IsHit())
 			{
+				// ヒットしている場合は、ロックオンしているターゲットにダメージを与える
+				Character* target = owner_->GetLockOnTarget();
+				if (target)
+				{
+					// Attackクラスが持っているパラメータを渡す
+					target->OnDamage(damage_, staggerTime_, knockback_);
+				}
+
 				// 攻撃時間が終わったら、判定を削除する
 				DeleteHitbox();
 
@@ -152,14 +182,4 @@ void ComboAttack::Exit()
 
 	// 基底の終了処理
 	Attack::Exit();
-}
-
-/// @brief 攻撃判定を削除する
-void ComboAttack::DeleteHitbox()
-{
-	if (hitbox_.collider_ != nullptr)
-	{
-		hitbox_.collider_->Delete();
-		hitbox_.collider_ = nullptr;
-	}
 }

@@ -70,6 +70,11 @@ Character::Character(const InitData& initData) : Entity()
 	hStanceMotion_ = initData.hStanceMotion;
 	hWalkMotion_ = initData.hWalkMotion;
 	hDashMotion_ = initData.hDashMotion;
+	hAvoidFrontMotion_ = initData.hAvoidFrontMotion;
+	hAvoidBackMotion_ = initData.hAvoidBackMotion;
+	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
+	hAvoidRightMotion_ = initData.hAvoidRightMotion;
+	hHurtMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
 
 	// 当たり判定グループ
 	hurtbox_.collider_ = initData.hurtboxGroup->CreateInstance();
@@ -98,11 +103,18 @@ void Character::Update()
 	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
 	collider->param_->center = worldTransform_->translate_ + Vector3(0.0f, 1.0f, 0.0f);
 
-	if (hurtbox_.IsHit())
-		ImGui::Text("Hit");
-
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
+
+	// 怯み中の場合は、怯み時間を減らしていき、0以下になったら怯み状態を解除する
+	if (isStagger_)
+	{
+		staggerTimer_ -= deltaTime;
+		if (staggerTimer_ <= 0.0f)
+		{
+			isStagger_ = false; // 怯み終了
+		}
+	}
 
 	// 回避中は回避移動のみ更新する
 	if (isAvoid_)
@@ -167,7 +179,7 @@ void Character::Update()
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
 
 
-	if (!currentAttack_)
+	if (!currentAttack_ && !isStagger_)
 	{
 		// 立ちモーションを再生する
 		SetAnimation(hStandMotion_, false , true);
@@ -203,20 +215,27 @@ void Character::Update()
 				if (std::abs(localZ) > std::abs(localX))
 				{
 					// 前後への回避
-					if (localZ > 0.0f) {
+					if (localZ > 0.0f) 
+					{
 						// 前回避モーションを再生する
 						SetAnimation(hAvoidFrontMotion_, false, false);
-					} else {
+					} 
+					else
+					{
 						// 後ろ回避モーションを再生する
 						SetAnimation(hAvoidBackMotion_, false, false);
 					}
-				} else
+				}
+				else
 				{
 					// 左右への回避
-					if (localX > 0.0f) {
+					if (localX > 0.0f) 
+					{
 						// 右回避モーションを再生する
 						SetAnimation(hAvoidRightMotion_, false, false);
-					} else {
+					} 
+					else 
+					{
 						// 左回避モーションを再生する
 						SetAnimation(hAvoidLeftMotion_, false, false);
 					}
@@ -231,6 +250,44 @@ void Character::Update()
 
 	// 基底クラスの更新
 	Entity::Update();
+}
+
+/// @brief ダメージを受ける
+/// @param damage 
+/// @param staggerTime
+/// @param knockback
+void Character::OnDamage(int damage, float staggerTime, float knockback)
+{
+	// 体力を減らす
+	hp_ -= damage;
+	if (hp_ < 0) hp_ = 0;
+
+	// 怯み状態に移行する
+	isStagger_ = true;
+	staggerTimer_ = staggerTime;
+
+	// 移動を強制停止
+	MoveStop();
+
+	// 現在実行中のアクションを強制キャンセル
+	currentAttack_ = nullptr;
+	currentMove_ = nullptr;
+	currentAvoid_ = nullptr;
+
+	// 状態フラグのリセット
+	isAvoid_ = false;
+	isDash_ = false;
+	bufferedAttackInput_ = AttackInputType::None;
+
+	// 怯みモーションを再生する
+	SetAnimation(hHurtMotion_, true, false);
+
+	// ノックバック処理
+	if (knockback > 0.0f)
+	{
+		// 後ろにノックバックさせる処理をここに書く
+		// 例: position -= forwardDirection * knockback;
+	}
 }
 
 /// @brief 回避を開始する

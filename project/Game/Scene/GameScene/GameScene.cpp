@@ -41,20 +41,18 @@ void GameScene::Initialize()
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
-	playerHurtboxGroup_ = std::make_unique<Collision3DBaseAABB>("PlayerSide_Hurtbox");
-	playerHitboxGroup_ = std::make_unique<Collision3DBaseAABB>("PlayerSide_Hitbox");
+	playerHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("PlayerSide_Hurtbox");
+	playerHitboxGroup_ = std::make_unique<Collision3DBaseSphere>("PlayerSide_Hitbox");
 
 	// 敵側の当たり判定グループの生成と初期化
-	enemyHurtboxGroup_ = std::make_unique<Collision3DBaseAABB>("EnemySide_Hurtbox");
-	enemyHitboxGroup_ = std::make_unique<Collision3DBaseAABB>("EnemySide_Hitbox");
+	enemyHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("EnemySide_Hurtbox");
+	enemyHitboxGroup_ = std::make_unique<Collision3DBaseSphere>("EnemySide_Hitbox");
 
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
 	playerHitboxGroup_->SetCollisionTarget(enemyHurtboxGroup_->GetHandle());
-	enemyHurtboxGroup_->SetCollisionTarget(playerHitboxGroup_->GetHandle());
 
 	// 「敵の攻撃」は「プレイヤーの体」に当たる
 	enemyHitboxGroup_->SetCollisionTarget(playerHurtboxGroup_->GetHandle());
-	playerHurtboxGroup_->SetCollisionTarget(enemyHitboxGroup_->GetHandle());
 
 
 	// プレイヤーの生成と初期化

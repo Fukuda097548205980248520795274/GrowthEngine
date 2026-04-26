@@ -64,10 +64,10 @@ public:
 		AnimationHandle hAvoidRightMotion = 0;
 
 		/// @brief 当たり判定グループ
-		Collision3DBaseAABB* hurtboxGroup = nullptr;
+		Collision3DBaseSphere* hurtboxGroup = nullptr;
 
 		/// @brief 攻撃判定グループ
-		Collision3DBaseAABB* hitboxGroup = nullptr;
+		Collision3DBaseSphere* hitboxGroup = nullptr;
 	};
 
 
@@ -82,6 +82,12 @@ public:
 
 	/// @brief 更新処理
 	virtual void Update() override;
+
+	/// @brief ダメージを受ける
+	/// @param damage 
+	/// @param staggerTime 
+	/// @param knockback
+	virtual void OnDamage(int damage, float staggerTime, float knockback);
 
 	/// @brief 回避を開始する
 	/// @param moveInputDirection
@@ -181,12 +187,16 @@ public:
 
 	/// @brief 当たり判定を取得する
 	/// @return 
-	Collision3DBaseAABB* GetHitboxGroup() const { return hitboxGroup_; }
+	Collision3DBaseSphere* GetHitboxGroup() const { return hitboxGroup_; }
 
 	/// @brief ボーン行列を取得する
 	/// @param partName 
 	/// @return 
 	Matrix4x4 GetBoneMatrix(const std::string& partName) const;
+
+	/// @brief 怯み状態かどうか
+	/// @return 
+	bool IsStagger() const { return isStagger_; }
 
 
 protected:
@@ -336,6 +346,15 @@ protected:
 
 protected:
 
+	/// @brief 怯み状態かどうか
+	bool isStagger_ = false;
+
+	/// @brief 怯みの残り時間
+	float staggerTimer_ = 0.0f;
+
+
+protected:
+
 	/// @brief 立ちモーション
 	AnimationHandle hStandMotion_ = 0;
 
@@ -360,6 +379,9 @@ protected:
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
 
+	/// @brief 怯みモーション
+	AnimationHandle hHurtMotion_ = 0;
+
 
 protected:
 
@@ -367,6 +389,8 @@ protected:
 	AppCollider hurtbox_;
 
 	/// @brief 攻撃判定グループ
-	Collision3DBaseAABB* hitboxGroup_ = nullptr;
+	Collision3DBaseSphere* hitboxGroup_ = nullptr;
+
+
 };
 

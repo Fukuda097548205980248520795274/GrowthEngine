@@ -1,5 +1,6 @@
 #pragma once
 #include "../Action.h"
+#include "AppCollider/AppCollider.h"
 
 /// @brief 攻撃入力の種類
 enum class AttackInputType
@@ -30,5 +31,77 @@ public:
 	/// @brief 攻撃中かどうか
 	/// @return 
 	bool IsUse() const override;
+
+	/// @brief 攻撃力を取得する
+	/// @return 
+	int GetDamage() const { return damage_; }
+
+	/// @brief 怯み時間を取得する
+	/// @return 
+	float GetStaggerTime() const { return staggerTime_; }
+
+	/// @brief ノックバック力を取得する
+	/// @return 
+	float GetKnockback() const { return knockback_; }
+
+
+protected:
+
+	// 攻撃モーションのハンドル
+	AnimationHandle hAttackMotion_ = 0;
+
+
+protected:
+
+	/// @brief 攻撃時間
+	float attackTime_ = 0.0f;
+
+	/// @brief 攻撃タイマー
+	float attackTimer_ = 0.0f;
+
+
+protected:
+
+	/// @brief 移動速度
+	float moveSpeed_ = 0.0f;
+
+	/// @brief 移動開始時間（攻撃開始からの遅延時間）
+	float moveStartTime_ = 0.0f;
+
+	/// @brief 移動終了時間
+	float moveEndTime_ = 0.0f;
+
+
+protected:
+
+	/// @brief 攻撃力
+	int damage_ = 10;
+
+	/// @brief 怯み時間（秒）
+	float staggerTime_ = 0.3f;
+
+	/// @brief ノックバック力（吹き飛ばす強さ）
+	float knockback_ = 0.0f;
+
+
+protected:
+
+	/// @brief 攻撃判定を削除する
+	void DeleteHitbox();
+
+	/// @brief 攻撃判定
+	AppCollider hitbox_;
+
+	/// @brief 攻撃判定開始時間
+	float hitboxStartTime_ = 0.0f;
+
+	/// @brief 攻撃判定終了時間
+	float hitboxEndTime_ = 0.0f;
+
+	/// @brief 攻撃判定がヒットしたかどうか
+	bool hasHit_ = false;
+
+	/// @brief パーツ名
+	std::string partName_{};
 };
 

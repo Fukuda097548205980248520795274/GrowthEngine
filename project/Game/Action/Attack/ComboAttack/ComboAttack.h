@@ -1,6 +1,22 @@
 #pragma once
 #include "../Attack.h"
-#include "AppCollider/AppCollider.h"
+
+struct CombAttackInitData
+{
+	AnimationHandle hAttackMotion = 0;
+	float attackTime = 0.0f;
+	float moveSpeed = 0.0f;
+	float moveStartTime = 0.0f;
+	float moveEndTime = 0.0f;
+	float cancelStartTime = 0.0f;
+	float cancelEndTime = 0.0f;
+	std::string partName{};
+	float hitboxStartTime = 0.0f;
+	float hitboxEndTime = 0.0f;
+	int32_t damage = 10;
+	float staggerTime = 0.3f;
+	float knockback = 0.0f;
+};
 
 class ComboAttack : public Attack
 {
@@ -8,20 +24,8 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param character 
-	/// @param hAttackMotion 
-	/// @param attackTime 
-	/// @param moveSpeed 
-	/// @param moveAcceleration 
-	/// @param moveDuration 
-	/// @param moveDelay 
-	/// @param cancelStartTime 
-	/// @param cancelEndTime 
-	ComboAttack(Character* character, AnimationHandle hAttackMotion,float attackTime,
-		float moveSpeed,float moveStartTime, float moveEndTime, float cancelStartTime, float cancelEndTime , 
-		const std::string& partName, float hitboxStartTime, float hitboxEndTime)
-		: Attack(character), hAttackMotion_(hAttackMotion), attackTime_(attackTime), moveSpeed_(moveSpeed),
-		moveStartTime_(moveStartTime), moveEndTime_(moveEndTime), cancelStartTime_(cancelStartTime), cancelEndTime_(cancelEndTime),
-		partName_(partName),hitboxStartTime_(hitboxStartTime), hitboxEndTime_(hitboxEndTime) {}
+	/// @param initData 
+	ComboAttack(Character* character, const CombAttackInitData& initData);
 
 	/// @brief 実行
 	virtual void Exec() override;
@@ -58,12 +62,6 @@ public:
 
 private:
 
-	/// @brief 攻撃モーション
-	AnimationHandle hAttackMotion_ = 0;
-
-
-private:
-
 	// コンボキャンセル受付時間
 	float cancelStartTime_ = 0.0f;
 
@@ -73,52 +71,10 @@ private:
 
 private:
 
-	/// @brief 攻撃時間
-	float attackTime_ = 0.0f;
-
-	/// @brief 攻撃タイマー
-	float attackTimer_ = 0.0f;
-
-
-private:
-
-	/// @brief 移動速度
-	float moveSpeed_ = 0.0f;
-
-	/// @brief 移動開始時間（攻撃開始からの遅延時間）
-	float moveStartTime_ = 0.0f;
-
-	/// @brief 移動終了時間
-	float moveEndTime_ = 0.0f;
-
-
-private:
-
 	/// @brief 次のライト攻撃
 	ComboAttack* nextLightAttack_ = nullptr;
 
 	/// @brief 次のヘビー攻撃
 	ComboAttack* nextHeavyAttack_ = nullptr;
-
-
-private:
-
-	/// @brief 攻撃判定を削除する
-	void DeleteHitbox();
-
-	/// @brief 攻撃判定
-	AppCollider hitbox_;
-
-	/// @brief 攻撃判定開始時間
-	float hitboxStartTime_ = 0.0f;
-
-	/// @brief 攻撃判定終了時間
-	float hitboxEndTime_ = 0.0f;
-
-	/// @brief 攻撃判定がヒットしたかどうか
-	bool hasHit_ = false;
-
-	/// @brief パーツ名
-	std::string partName_{};
 };
 

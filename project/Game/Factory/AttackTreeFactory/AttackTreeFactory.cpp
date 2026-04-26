@@ -11,10 +11,53 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 {
 	BehaviorTreeBuilder builder;
 
-	// アニメーションハンドルの仮定義（実際のゲーム内のモーションIDに合わせてください）
-	constexpr AnimationHandle kCombo1Anim = 1;
-	constexpr AnimationHandle kCombo2Anim = 2;
-	constexpr AnimationHandle kCombo3Anim = 3;
+	// 一段目の攻撃
+	CombAttackInitData attack1Data;
+	attack1Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0);
+	attack1Data.attackTime = 0.5f;
+	attack1Data.moveSpeed = 9.0f;
+	attack1Data.moveStartTime = 0.01f;
+	attack1Data.moveEndTime = 0.07f;
+	attack1Data.cancelStartTime = 0.2f;
+	attack1Data.cancelEndTime = 0.5f;
+	attack1Data.partName = "RightHand";
+	attack1Data.hitboxStartTime = 0.1f;
+	attack1Data.hitboxEndTime = 0.4f;
+	attack1Data.damage = 1;
+	attack1Data.staggerTime = 0.3f;
+	attack1Data.knockback = 0.0f;
+
+	// 二段目の攻撃
+	CombAttackInitData attack2Data;
+	attack2Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1);
+	attack2Data.attackTime = 0.5f;
+	attack2Data.moveSpeed = 9.0f;
+	attack2Data.moveStartTime = 0.01f;
+	attack2Data.moveEndTime = 0.07f;
+	attack2Data.cancelStartTime = 0.2f;
+	attack2Data.cancelEndTime = 0.5f;
+	attack2Data.partName = "LeftHand";
+	attack2Data.hitboxStartTime = 0.1f;
+	attack2Data.hitboxEndTime = 0.4f;
+	attack2Data.damage = 1;
+	attack2Data.staggerTime = 0.3f;
+	attack2Data.knockback = 0.0f;
+
+	// 三段目の攻撃
+	CombAttackInitData attack3Data;
+	attack3Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2);
+	attack3Data.attackTime = 0.5f;
+	attack3Data.moveSpeed = 9.0f;
+	attack3Data.moveStartTime = 0.01f;
+	attack3Data.moveEndTime = 0.07f;
+	attack3Data.cancelStartTime = 0.2f;
+	attack3Data.cancelEndTime = 0.5f;
+	attack3Data.partName = "RightHand";
+	attack3Data.hitboxStartTime = 0.1f;
+	attack3Data.hitboxEndTime = 0.4f;
+	attack3Data.damage = 1;
+	attack3Data.staggerTime = 0.3f;
+	attack3Data.knockback = 0.0f;
 
 	return builder
 		// 常に状況を監視してルートを切り替えるためRestartingSequenceを使用
@@ -38,19 +81,14 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 
 					Vector3 toTarget = target->GetPosition() - character->GetPosition();
 					// 例：距離が2.5メートル以内なら攻撃可能
-					return toTarget.Length() <= 5.0f;}).End()
+					return toTarget.Length() <= 2.5f;}).End()
 
 					// ② 弱攻撃 1段目
-					// (character, animation, アニメ時間, 移動速度, 移動開始, 移動終了, キャンセル開始, キャンセル終了, 攻撃判定開始, 攻撃判定終了)
-					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f,"RightHand", 0.1f, 0.4f)).End()
-
+					.ComboAttack_(std::make_unique<ComboAttack>(character, attack1Data)).End()
 					// ③ 弱攻撃 2段目（1段目のキャンセル時間になったらここに進む）
-					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack,1),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftHand", 0.1f, 0.4f)).End()
+					.ComboAttack_(std::make_unique<ComboAttack>(character, attack2Data)).End()
 					// ④ 強攻撃 3段目（フィニッシュ）
-					.ComboAttack_(std::make_unique<ComboAttack>(character, MotionManager::GetInstance()->GetMotion(MotionType::Attack,2),
-						0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "RightHand", 0.1f, 0.4f)).End()
+					.ComboAttack_(std::make_unique<ComboAttack>(character, attack3Data)).End()
 
 				.End() // コンボシーケンス終了
 

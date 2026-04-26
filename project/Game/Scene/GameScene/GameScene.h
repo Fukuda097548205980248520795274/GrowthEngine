@@ -59,10 +59,10 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 
 	/// @brief プレイヤーの当たり判定グループ
-	std::unique_ptr<Collision3DBaseAABB> playerHurtboxGroup_;
+	std::unique_ptr<Collision3DBaseSphere> playerHurtboxGroup_;
 
 	/// @brief プレイヤーの攻撃判定グループ
-	std::unique_ptr<Collision3DBaseAABB> playerHitboxGroup_;
+	std::unique_ptr<Collision3DBaseSphere> playerHitboxGroup_;
 
 
 
@@ -81,10 +81,10 @@ private:
 	std::unique_ptr<InputGamepadRightStick> inputCameraRotate_ = nullptr;
 	
 	/// @brief 敵の当たり判定グループ
-	std::unique_ptr<Collision3DBaseAABB> enemyHurtboxGroup_;
+	std::unique_ptr<Collision3DBaseSphere> enemyHurtboxGroup_;
 
 	/// @brief 敵の攻撃判定グループ
-	std::unique_ptr<Collision3DBaseAABB> enemyHitboxGroup_;
+	std::unique_ptr<Collision3DBaseSphere> enemyHitboxGroup_;
 
 
 

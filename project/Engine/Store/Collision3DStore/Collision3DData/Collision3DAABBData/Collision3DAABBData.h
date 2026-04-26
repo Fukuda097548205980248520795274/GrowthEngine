@@ -21,6 +21,9 @@ namespace Engine
 		/// @return 
 		void* GetParam() override { return param_.get(); }
 
+
+	public:
+
 		/// @brief デバッグ用の線を描画する
 		void DebugDrawLine() override;
 
@@ -29,9 +32,6 @@ namespace Engine
 
 		/// @brief エンジン
 		const GrowthEngine* engine_ = nullptr;
-
-
-	private:
 
 		// パラメータ
 		std::unique_ptr<Collision3D::AABB> param_ = nullptr;

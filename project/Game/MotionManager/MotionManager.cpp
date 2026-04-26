@@ -49,7 +49,7 @@ void MotionManager::Initialize()
 	LoadAvoidLeft(dir);
 	LoadAvoidRight(dir);
 	LoadAttack(dir);
-
+	LoadStagger(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -138,4 +138,12 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack][1] = engine_->LoadAnimation(dir + "/attack/attack_001", "attack_001.gltf");
 	table_[MotionType::Attack][2] = engine_->LoadAnimation(dir + "/attack/attack_002", "attack_002.gltf");
 	table_[MotionType::Attack][3] = engine_->LoadAnimation(dir + "/attack/attack_003", "attack_003.gltf");
+}
+
+/// @brief 怯みモーション読み込み
+/// @param dir 
+void MotionManager::LoadStagger(const std::string& dir)
+{
+	table_[MotionType::Stagger][0] = engine_->LoadAnimation(dir + "/stagger/stagger_000", "stagger_000.gltf");
+	table_[MotionType::Stagger][1] = engine_->LoadAnimation(dir + "/stagger/stagger_001", "stagger_001.gltf");
 }

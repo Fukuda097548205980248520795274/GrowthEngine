@@ -82,14 +82,74 @@ void Player::Initialize()
 	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
 
 
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f,"RightHand", 0.1f, 0.4f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftHand", 0.1f, 0.4f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "RightHand", 0.1f, 0.4f));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3),
-		0.5f, 9.0f, 0.01f, 0.07f, 0.2f, 0.5f, "LeftFoot", 0.1f, 0.4f));
+	// 1段目の攻撃
+	CombAttackInitData attack1Data;
+	attack1Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0);
+	attack1Data.attackTime = 0.5f;
+	attack1Data.moveSpeed = 9.0f;
+	attack1Data.moveStartTime = 0.01f;
+	attack1Data.moveEndTime = 0.07f;
+	attack1Data.cancelStartTime = 0.2f;
+	attack1Data.cancelEndTime = 0.5f;
+	attack1Data.partName = "RightHand";
+	attack1Data.hitboxStartTime = 0.1f;
+	attack1Data.hitboxEndTime = 0.4f;
+	attack1Data.damage = 1;
+	attack1Data.staggerTime = 0.3f;
+	attack1Data.knockback = 0.5f;
+
+	// 2段目の攻撃
+	CombAttackInitData attack2Data;
+	attack2Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1);
+	attack2Data.attackTime = 0.5f;
+	attack2Data.moveSpeed = 9.0f;
+	attack2Data.moveStartTime = 0.01f;
+	attack2Data.moveEndTime = 0.07f;
+	attack2Data.cancelStartTime = 0.2f;
+	attack2Data.cancelEndTime = 0.5f;
+	attack2Data.partName = "LeftHand";
+	attack2Data.hitboxStartTime = 0.1f;
+	attack2Data.hitboxEndTime = 0.4f;
+	attack2Data.damage = 1;
+	attack2Data.staggerTime = 0.3f;
+	attack2Data.knockback = 0.5f;
+
+	// 3段目の攻撃
+	CombAttackInitData attack3Data;
+	attack3Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2);
+	attack3Data.attackTime = 0.5f;
+	attack3Data.moveSpeed = 9.0f;
+	attack3Data.moveStartTime = 0.01f;
+	attack3Data.moveEndTime = 0.07f;
+	attack3Data.cancelStartTime = 0.2f;
+	attack3Data.cancelEndTime = 0.5f;
+	attack3Data.partName = "RightHand";
+	attack3Data.hitboxStartTime = 0.1f;
+	attack3Data.hitboxEndTime = 0.4f;
+	attack3Data.damage = 1;
+	attack3Data.staggerTime = 0.3f;
+	attack3Data.knockback = 0.5f;
+
+	// 4段目の攻撃
+	CombAttackInitData attack4Data;
+	attack4Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3);
+	attack4Data.attackTime = 0.5f;
+	attack4Data.moveSpeed = 9.0f;
+	attack4Data.moveStartTime = 0.01f;
+	attack4Data.moveEndTime = 0.07f;
+	attack4Data.cancelStartTime = 0.2f;
+	attack4Data.cancelEndTime = 0.5f;
+	attack4Data.partName = "LeftFoot";
+	attack4Data.hitboxStartTime = 0.1f;
+	attack4Data.hitboxEndTime = 0.4f;
+	attack4Data.damage = 1;
+	attack4Data.staggerTime = 0.3f;
+	attack4Data.knockback = 0.5f;
+
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack3Data));
+	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack4Data));
 
 	auto comboLight1 = comboAttacks_[0].get();
 	auto comboLight2 = comboAttacks_[1].get();
@@ -104,6 +164,13 @@ void Player::Initialize()
 /// @brief 更新処理
 void Player::Update()
 {
+	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
+	if (IsStagger())
+	{
+		Character::Update();
+		return;
+	}
+
 	// 攻撃の更新処理
 	UpdateAttack();
 
