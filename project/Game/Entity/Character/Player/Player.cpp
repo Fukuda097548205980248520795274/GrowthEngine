@@ -98,7 +98,7 @@ void Player::Initialize()
 	attack1Data.hitboxStartTime = 0.1f;
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
-	attack1Data.staggerTime = 0.3f;
+	attack1Data.damageReaction = DamageReaction::LightStagger;
 	attack1Data.knockback = 0.1f;
 
 	// 2段目の攻撃
@@ -114,7 +114,7 @@ void Player::Initialize()
 	attack2Data.hitboxStartTime = 0.1f;
 	attack2Data.hitboxEndTime = 0.4f;
 	attack2Data.damage = 1;
-	attack2Data.staggerTime = 0.3f;
+	attack2Data.damageReaction = DamageReaction::LightStagger;
 	attack2Data.knockback = 0.1f;
 
 	// 3段目の攻撃
@@ -130,7 +130,7 @@ void Player::Initialize()
 	attack3Data.hitboxStartTime = 0.1f;
 	attack3Data.hitboxEndTime = 0.4f;
 	attack3Data.damage = 1;
-	attack3Data.staggerTime = 0.3f;
+	attack3Data.damageReaction = DamageReaction::LightStagger;
 	attack3Data.knockback = 0.1f;
 
 	// 4段目の攻撃
@@ -146,7 +146,7 @@ void Player::Initialize()
 	attack4Data.hitboxStartTime = 0.1f;
 	attack4Data.hitboxEndTime = 0.4f;
 	attack4Data.damage = 1;
-	attack4Data.staggerTime = 0.3f;
+	attack4Data.damageReaction = DamageReaction::LightStagger;
 	attack4Data.knockback = 0.1f;
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
@@ -183,7 +183,7 @@ void Player::Initialize()
 void Player::Update()
 {
 	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsStagger() || IsGrabbed())
+	if (IsDamageReaction() || IsGrabbed())
 	{
 		Character::Update();
 		return;
@@ -258,7 +258,7 @@ void Player::UpdateAttack()
 		return;
 
 	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
-	if (IsStagger() || IsGrabbing())
+	if (IsDamageReaction() || IsGrabbing() || IsGrabbed())
 		return;
 
 	// つかみ攻撃の入力を受け付け、条件を満たす場合はつかみ攻撃を実行する
@@ -317,7 +317,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 掴み中は構え状態にならない
-	if(IsGrabbing())
+	if(IsGrabbing() || IsGrabbed())
 	{
 		isStance_ = false;
 		return;
@@ -381,7 +381,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsStagger())
+	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed())
 	{
 		isDash_ = false;
 		return;

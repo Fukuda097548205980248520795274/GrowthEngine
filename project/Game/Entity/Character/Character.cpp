@@ -75,7 +75,12 @@ Character::Character(const InitData& initData) : Entity()
 	hAvoidBackMotion_ = initData.hAvoidBackMotion;
 	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
 	hAvoidRightMotion_ = initData.hAvoidRightMotion;
-	hHurtMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+
+	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+	hDownMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+	hGetUpMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, 0);
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, 0);
 
@@ -122,7 +127,7 @@ void Character::Update()
 		{
 			// 1. 相手（掴んでいた側）のポインタを解除し、少し怯ませる（振りほどかれたリアクション）
 			grabber_->grabbedTarget_ = nullptr;
-			grabber_->OnDamage(0, 0.5f, 0.0f, Vector3(0.0f, 0.0f, 0.0f)); // ダメージは0、怯み時間は0.5秒、ノックバックなし
+			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.0f, Vector3(0.0f, 0.0f, 0.0f)); // ダメージは0、怯み時間は0.5秒、ノックバックなし
 
 			// 2. 自分のポインタを解除し、タイマーをリセット
 			grabber_ = nullptr;
@@ -177,13 +182,13 @@ void Character::Update()
 		knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 
-	// 怯み中の場合は、怯み時間を減らしていき、0以下になったら怯み状態を解除する
-	if (isStagger_)
+	// 怯み状態の更新
+	if (IsDamageReaction())
 	{
-		staggerTimer_ -= deltaTime;
-		if (staggerTimer_ <= 0.0f)
+		damageReactionTimer_ -= deltaTime;
+		if (damageReactionTimer_ <= 0.0f)
 		{
-			isStagger_ = false; // 怯み終了
+			currentDamageReaction_ = DamageReaction::None; // 怯み終了
 		}
 	}
 
@@ -261,15 +266,11 @@ void Character::Update()
 /// @param staggerTime
 /// @param knockback
 /// @param knockDirection
-void Character::OnDamage(int damage, float staggerTime, float knockback, const Vector3& knockDirection)
+void Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection)
 {
 	// 体力を減らす
 	hp_ -= damage;
 	if (hp_ < 0) hp_ = 0;
-
-	// 怯み状態に移行する
-	isStagger_ = true;
-	staggerTimer_ = staggerTime;
 
 	// 移動を強制停止
 	MoveStop();
@@ -284,9 +285,6 @@ void Character::OnDamage(int damage, float staggerTime, float knockback, const V
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
-	// 怯みモーションを再生する
-	SetAnimation(hHurtMotion_, true, false);
-
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
@@ -296,6 +294,29 @@ void Character::OnDamage(int damage, float staggerTime, float knockback, const V
 		// ノックバック力を初速として設定する
 		// ※減衰させながら移動するため、少し大きめの値（* 10.0f など）をかけると丁度良くなります
 		knockbackVelocity_ = backDirection * (knockback * 10.0f);
+	}
+
+
+	// リアクション状態を更新
+	currentDamageReaction_ = damageReaction;
+
+	// 状態に合わせてモーションを再生し、タイマーを設定する
+	switch (currentDamageReaction_)
+	{
+	case DamageReaction::LightStagger:
+		SetAnimation(hDamageLightMotion_, true, false); // ループしない
+		damageReactionTimer_ = 0.3f; // 弱怯み時間
+		break;
+
+	case DamageReaction::HeavyStagger:
+		SetAnimation(hDamageHeavyMotion_, true, false);
+		damageReactionTimer_ = 1.0f; // 強怯み時間
+		break;
+
+	case DamageReaction::Down:
+		SetAnimation(hDownMotion_, true, false);
+		damageReactionTimer_ = 2.0f; // ダウンして寝転がっている時間
+		break;
 	}
 }
 
@@ -558,7 +579,7 @@ void Character::UpdateAnimation()
 {
 	if (!model_)return;
 
-	if (!currentAttack_ && !isStagger_)
+	if (!currentAttack_ && !IsDamageReaction())
 	{
 		// 立ちモーションを再生する
 		SetAnimation(hStandMotion_, false, true);

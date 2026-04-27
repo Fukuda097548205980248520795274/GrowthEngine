@@ -10,6 +10,15 @@ enum class AttackInputType
 	Heavy
 };
 
+enum class DamageReaction
+{
+	None, // ダメージなし
+	LightStagger, // 軽い怯み
+	HeavyStagger, // 重い怯み
+	Down, // ダウン
+	BlowAway, // 吹き飛び
+};
+
 class Attack : public Action
 {
 public:
@@ -35,10 +44,6 @@ public:
 	/// @brief 攻撃力を取得する
 	/// @return 
 	int GetDamage() const { return damage_; }
-
-	/// @brief 怯み時間を取得する
-	/// @return 
-	float GetStaggerTime() const { return staggerTime_; }
 
 	/// @brief ノックバック力を取得する
 	/// @return 
@@ -77,8 +82,8 @@ protected:
 	/// @brief 攻撃力
 	int damage_ = 10;
 
-	/// @brief 怯み時間（秒）
-	float staggerTime_ = 0.3f;
+	/// @brief ダメージリアクション
+	DamageReaction damageReaction_ = DamageReaction::LightStagger;
 
 	/// @brief ノックバック力（吹き飛ばす強さ）
 	float knockback_ = 0.0f;

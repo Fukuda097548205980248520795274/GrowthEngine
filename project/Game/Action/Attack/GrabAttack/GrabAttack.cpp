@@ -15,7 +15,7 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 
 	grabMaxTime_ = initData.grabTime;
 	damage_ = 0;
-	staggerTime_ = 0.0f;
+	damageReaction_ = DamageReaction::None;
 	knockback_ = 0.0f;
 }
 
