@@ -16,6 +16,9 @@ enum class MotionType
 	Stagger,
 	Grab,
 	Grabbed,
+	DownFall,
+	DownLying,
+	DowoGetUp
 };
 
 class MotionManager
@@ -104,6 +107,18 @@ private:
 	/// @brief 掴まれモーション読み込み
 	/// @param dir 
 	void LoadGrabbed(const std::string& dir);
+
+	/// @brief ダウンモーション読み込み
+	/// @param dir 
+	void LoadDownFall(const std::string& dir);
+
+	/// @brief ダウン中モーション読み込み
+	/// @param dir 
+	void LoadDownLying(const std::string& dir);
+
+	/// @brief ダウンから起き上がるモーション読み込み
+	/// @param dir 
+	void LoadDownGetUp(const std::string& dir);
 
 
 private:

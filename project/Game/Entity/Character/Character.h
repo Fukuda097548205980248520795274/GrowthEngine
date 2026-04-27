@@ -89,7 +89,7 @@ public:
 	/// @param staggerTime 
 	/// @param knockback
 	/// @param knockDirection
-	virtual void OnDamage(int damage, float staggerTime, float knockback, const Vector3& knockDirection);
+	virtual void OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection);
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
@@ -199,9 +199,13 @@ public:
 	/// @return 
 	Matrix4x4 GetBoneMatrix(const std::string& partName) const;
 
-	/// @brief 怯み状態かどうか
+	/// @brief ダメージリアクション中かどうか
 	/// @return 
-	bool IsStagger() const { return isStagger_; }
+	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReaction::None; }
+
+	/// @brief ダウン中かどうか
+	/// @return 
+	bool IsDown()const { return currentDamageReaction_ == DamageReaction::DownFalling || currentDamageReaction_ == DamageReaction::DownLying || currentDamageReaction_ == DamageReaction::DownGettingUp; }
 
 	/// @brief ダメージを受けているかどうか
 	/// @return 
@@ -373,14 +377,14 @@ protected:
 
 protected:
 
-	/// @brief 怯み状態かどうか
-	bool isStagger_ = false;
-
-	/// @brief 怯みの残り時間
-	float staggerTimer_ = 0.0f;
-
 	/// @brief ノックバックの速度
 	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+
+	/// @brief 現在のダメージリアクション
+	DamageReaction currentDamageReaction_ = DamageReaction::None;
+
+	/// @brief ダメージリアクションの経過時間
+	float damageReactionTimer_ = 0.0f;
 
 
 protected:
@@ -413,6 +417,7 @@ protected:
 	/// @brief ダッシュモーション
 	AnimationHandle hDashMotion_ = 0;
 
+
 	/// @brief 前回避モーション
 	AnimationHandle hAvoidFrontMotion_ = 0;
 
@@ -425,8 +430,23 @@ protected:
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
 
-	/// @brief 怯みモーション
-	AnimationHandle hHurtMotion_ = 0;
+
+	/// @brief 軽い怯みモーション
+	AnimationHandle hDamageLightMotion_ = 0;
+
+	/// @brief 重い怯みモーション
+	AnimationHandle hDamageHeavyMotion_ = 0;
+
+
+	/// @brief ダウンモーション
+	AnimationHandle hDownFallMotion_ = 0;
+
+	/// @brief ダウン中モーション
+	AnimationHandle hDownLyingMotion_ = 0;
+
+	/// @brief 立ち上がりモーション
+	AnimationHandle hDownGetUpMotion_ = 0;
+
 
 	/// @brief つかみモーション
 	AnimationHandle hGrabMotion_ = 0;

@@ -14,7 +14,7 @@ struct CombAttackInitData
 	float hitboxStartTime = 0.0f;
 	float hitboxEndTime = 0.0f;
 	int32_t damage = 10;
-	float staggerTime = 0.3f;
+	DamageReaction damageReaction = DamageReaction::LightStagger;
 	float knockback = 0.0f;
 };
 

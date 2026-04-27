@@ -33,14 +33,7 @@ void NPC::Initialize()
 void NPC::Update()
 {
 	// 怯み状態、または「つかまれている状態」なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsStagger() || IsGrabbed())
-	{
-		Character::Update();
-		return;
-	}
-
-	// 怯み状態の場合はビヘイビアツリーを実行せず、基底クラスの更新のみ行う
-	if (IsStagger())
+	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
 		Character::Update();
 		return;

@@ -19,8 +19,8 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	hitboxStartTime_ = initData.hitboxStartTime;
 	hitboxEndTime_ = initData.hitboxEndTime;
 	damage_ = initData.damage;
-	staggerTime_ = initData.staggerTime;
 	knockback_ = initData.knockback;
+	damageReaction_ = initData.damageReaction;
 }
 
 /// @brief 実行
@@ -115,7 +115,7 @@ void ComboAttack::Update()
 					Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
 
 					// ターゲットにダメージを与える
-					target->OnDamage(damage_, staggerTime_, knockback_, knockDirection);
+					target->OnDamage(damage_, damageReaction_, knockback_, knockDirection);
 
 					// ヒットエフェクトなどの処理があればここで行う
 					// PlayHitEffect(target->GetPosition());
