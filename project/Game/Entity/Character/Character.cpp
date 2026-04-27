@@ -78,8 +78,10 @@ Character::Character(const InitData& initData) : Entity()
 
 	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
 	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
-	hDownMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
-	hGetUpMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+
+	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, 0);
+	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, 0);
+	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, 0);
 
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, 0);
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, 0);
@@ -186,9 +188,38 @@ void Character::Update()
 	if (IsDamageReaction())
 	{
 		damageReactionTimer_ -= deltaTime;
+		
+		// タイマーが0以下になったら、次の状態へ移行する
 		if (damageReactionTimer_ <= 0.0f)
 		{
-			currentDamageReaction_ = DamageReaction::None; // 怯み終了
+			// 怯みの状態遷移
+			switch (currentDamageReaction_)
+			{
+			case DamageReaction::LightStagger:
+			case DamageReaction::HeavyStagger:
+				// 怯みが終わったら通常状態へ
+				currentDamageReaction_ = DamageReaction::None;
+				break;
+
+			case DamageReaction::DownFalling:
+				// ダウン落下が終わったら、ダウン中状態へ
+				currentDamageReaction_ = DamageReaction::DownLying;
+				damageReactionTimer_ = 2.0f;
+				SetAnimation(hDownLyingMotion_, true, true);
+				break;
+
+			case DamageReaction::DownLying:
+				// ダウン中が終わったら、立ち上がり状態へ
+				currentDamageReaction_ = DamageReaction::DownGettingUp;
+				damageReactionTimer_ = 1.0f;
+				SetAnimation(hDownGetUpMotion_, true, false);
+				break;
+
+			case DamageReaction::DownGettingUp:
+				// 立ち上がりが終わったら、通常状態へ
+				currentDamageReaction_ = DamageReaction::None;
+				break;
+			}
 		}
 	}
 
@@ -313,9 +344,9 @@ void Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		damageReactionTimer_ = 1.0f; // 強怯み時間
 		break;
 
-	case DamageReaction::Down:
-		SetAnimation(hDownMotion_, true, false);
-		damageReactionTimer_ = 2.0f; // ダウンして寝転がっている時間
+	case DamageReaction::DownFalling:
+		SetAnimation(hDownFallMotion_, true, false);
+		damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
 		break;
 	}
 }

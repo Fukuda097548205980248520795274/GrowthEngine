@@ -183,7 +183,7 @@ void Player::Initialize()
 void Player::Update()
 {
 	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsDamageReaction() || IsGrabbed())
+	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
 		Character::Update();
 		return;
@@ -253,12 +253,8 @@ void Player::UpdateAttack()
 	// デルタタイムの取得
 	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime();
 
-	// 現在攻撃中なら攻撃の更新処理を行い、攻撃が終了していたらバッファされた攻撃入力を消す
-	if (currentAttack_)
-		return;
-
 	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
-	if (IsDamageReaction() || IsGrabbing() || IsGrabbed())
+	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown())
 		return;
 
 	// つかみ攻撃の入力を受け付け、条件を満たす場合はつかみ攻撃を実行する
@@ -317,7 +313,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 掴み中は構え状態にならない
-	if(IsGrabbing() || IsGrabbed())
+	if(IsGrabbing() || IsGrabbed() || IsDown())
 	{
 		isStance_ = false;
 		return;
@@ -381,7 +377,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed())
+	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown())
 	{
 		isDash_ = false;
 		return;

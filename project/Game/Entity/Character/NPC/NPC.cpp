@@ -33,7 +33,7 @@ void NPC::Initialize()
 void NPC::Update()
 {
 	// 怯み状態、または「つかまれている状態」なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsDamageReaction() || IsGrabbed())
+	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
 		Character::Update();
 		return;

@@ -52,6 +52,9 @@ void MotionManager::Initialize()
 	LoadStagger(dir);
 	LoadGrab(dir);
 	LoadGrabbed(dir);
+	LoadDownFall(dir);
+	LoadDownLying(dir);
+	LoadDownGetUp(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -162,4 +165,25 @@ void MotionManager::LoadGrab(const std::string& dir)
 void MotionManager::LoadGrabbed(const std::string& dir)
 {
 	table_[MotionType::Grabbed][0] = engine_->LoadAnimation(dir + "/grabbed/grabbed_000", "grabbed_000.gltf");
+}
+
+/// @brief ダウンモーション読み込み
+/// @param dir 
+void MotionManager::LoadDownFall(const std::string& dir)
+{
+	table_[MotionType::DownFall][0] = engine_->LoadAnimation(dir + "/downFall/downFall_000", "downFall_000.gltf");
+}
+
+/// @brief ダウン中モーション読み込み
+/// @param dir 
+void MotionManager::LoadDownLying(const std::string& dir)
+{
+	table_[MotionType::DownLying][0] = engine_->LoadAnimation(dir + "/downLying/downLying_000", "downLying_000.gltf");
+}
+
+/// @brief ダウンから起き上がるモーション読み込み
+/// @param dir 
+void MotionManager::LoadDownGetUp(const std::string& dir)
+{
+	table_[MotionType::DowoGetUp][0] = engine_->LoadAnimation(dir + "/downGetUp/downGetUp_000", "downGetUp_000.gltf");
 }

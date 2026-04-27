@@ -15,8 +15,15 @@ enum class DamageReaction
 	None, // ダメージなし
 	LightStagger, // 軽い怯み
 	HeavyStagger, // 重い怯み
-	Down, // ダウン
-	BlowAway, // 吹き飛び
+	
+	// ダウン
+	DownFalling,
+
+	// ダウン中
+	DownLying,
+
+	// 立ち上がり
+	DownGettingUp
 };
 
 class Attack : public Action

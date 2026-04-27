@@ -52,11 +52,13 @@ void GrabAttack::Update()
 	// ------------------------------------------
 	// 1. つかみ判定の処理
 	// ------------------------------------------
-	if (!hasHit_)
+
+	// 判定の発生時間内かチェック
+	if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
 	{
-		// 判定の発生時間内かチェック
-		if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
+		if (!hasHit_)
 		{
+			// 当たり判定がまだ生成されていない場合は生成する
 			if (hitbox_.collider_ == nullptr)
 				hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
 
@@ -66,14 +68,20 @@ void GrabAttack::Update()
 				auto sphere = static_cast<Collision3DInstanceSphere*>(hitbox_.collider_);
 				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(partName_);
 				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
-				sphere->param_->radius = 0.5f; // つかみ判定は少し大きめに設定
+				sphere->param_->radius = 0.25f;
 			}
 
 			// 当たり判定チェック
 			for (Character* target : Character::GetCharacters())
 			{
-				// 自分自身、味方、死体は除外
-				if (target == owner_ || target->GetCharacterTag() == owner_->GetCharacterTag() || target->IsDead()) continue;
+				// 自分自身は判定しない
+				if (target == owner_) continue;
+
+				// 同じ陣営は判定しない（例：プレイヤー側の攻撃はプレイヤー側には当たらない）
+				if (target->GetCharacterTag() == owner_->GetCharacterTag())continue;
+
+				// 死亡しているキャラクターは判定しない
+				if (target->IsDead())continue;
 
 				if (hitbox_.IsHit()) // ※実際の衝突判定処理に合わせてください
 				{
@@ -82,7 +90,7 @@ void GrabAttack::Update()
 					DeleteHitbox();
 
 					// Characterクラスへ状態を移行する（時間はCharacter側で管理するか、引数で渡す）
-					owner_->ExecuteGrab(target , grabMaxTime_);
+					owner_->ExecuteGrab(target, grabMaxTime_);
 
 					// アクションを即座に終了させ、Character::Update のホールド処理に移行させる
 					Attack::Update();
@@ -91,7 +99,7 @@ void GrabAttack::Update()
 			}
 		}
 	}
-	else if (!hasHit_ && attackTimer_ > hitboxEndTime_)
+	else
 	{
 		// 発生時間を過ぎたら判定を消す（空振り）
 		DeleteHitbox();

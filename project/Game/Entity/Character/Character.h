@@ -203,6 +203,10 @@ public:
 	/// @return 
 	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReaction::None; }
 
+	/// @brief ダウン中かどうか
+	/// @return 
+	bool IsDown()const { return currentDamageReaction_ == DamageReaction::DownFalling || currentDamageReaction_ == DamageReaction::DownLying || currentDamageReaction_ == DamageReaction::DownGettingUp; }
+
 	/// @brief ダメージを受けているかどうか
 	/// @return 
 	AppCollider& GetHurtbox() { return hurtbox_; }
@@ -413,6 +417,7 @@ protected:
 	/// @brief ダッシュモーション
 	AnimationHandle hDashMotion_ = 0;
 
+
 	/// @brief 前回避モーション
 	AnimationHandle hAvoidFrontMotion_ = 0;
 
@@ -425,17 +430,23 @@ protected:
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
 
+
 	/// @brief 軽い怯みモーション
 	AnimationHandle hDamageLightMotion_ = 0;
 
 	/// @brief 重い怯みモーション
 	AnimationHandle hDamageHeavyMotion_ = 0;
 
-	/// @brief ダウンモーション
-	AnimationHandle hDownMotion_ = 0;
 
-	/// @brief 起き上がりモーション
-	AnimationHandle hGetUpMotion_ = 0;
+	/// @brief ダウンモーション
+	AnimationHandle hDownFallMotion_ = 0;
+
+	/// @brief ダウン中モーション
+	AnimationHandle hDownLyingMotion_ = 0;
+
+	/// @brief 立ち上がりモーション
+	AnimationHandle hDownGetUpMotion_ = 0;
+
 
 	/// @brief つかみモーション
 	AnimationHandle hGrabMotion_ = 0;
