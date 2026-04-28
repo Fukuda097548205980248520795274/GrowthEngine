@@ -270,8 +270,8 @@ void Engine::RenderContext::PostDraw()
 	lightStore_->DebugDrawLine();
 
 	// 線の描画
-	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
-	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPMatrix());
+	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
 #endif
 
 	// コマンドリスト・アロケータの取得
@@ -357,6 +357,20 @@ SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory,
 	return skeletonHandle;
 }
 
+
+/// @brief ポストエフェクトを読み込む
+/// @param name 
+/// @param type 
+/// @param log 
+/// @return 
+PostEffectHandle Engine::RenderContext::LoadPostEffect(const std::string& name, PostEffect::Type type, Log* log)
+{
+	// TAAの場合、カメラストアでジッタリングを有効にする
+	if(type == PostEffect::Type::TAA)
+		camera3DStore_->SetEnableJitter(true);
+
+	return offscreen_->LoadPostEffect(name, type, core_->GetDevice(), commandList_, log);
+}
 
 /// @brief ポストエフェクトを描画する
 /// @param hPostEffect 

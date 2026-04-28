@@ -126,7 +126,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float4 cMax = mean + gParams.gamma * stddev;
 
     // 履歴の色をAABBでクリップ
-    //tmHistory = ClipAABB(cMin, cMax, tmHistory, mean);
+    tmHistory = ClipAABB(cMin, cMax, tmHistory, mean);
     
     // ブレンド
     float4 tmFinal = lerp(tmHistory, tmCurrent, gParams.blendFactor);

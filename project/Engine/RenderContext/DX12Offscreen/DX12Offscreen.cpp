@@ -323,14 +323,14 @@ void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
 
 	// 書き込み対象 -> 読み込ませテクスチャ
 	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// TAAの描画コマンドを登録する
 	postEffectStore_->DrawTAA(context);
 
 	// 読み込ませテクスチャ -> 書き込み対象
 	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }
 
 /// @brief デバッグ用パラメータ
