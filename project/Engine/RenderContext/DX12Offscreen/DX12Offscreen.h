@@ -84,6 +84,10 @@ namespace Engine
 		/// @param prefab 
 		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab);
 
+		/// @brief TAAを描画する
+		/// @param context 
+		void DrawTAA(ID3D12GraphicsCommandList* commandList);
+
 
 		/// @brief ポストエフェクトのパラメータを取得する
 		/// @tparam T 

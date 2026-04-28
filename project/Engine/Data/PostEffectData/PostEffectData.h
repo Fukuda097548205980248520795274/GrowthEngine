@@ -125,5 +125,15 @@ namespace Engine
 			// ブルームのブレンド強度
 			float knee;
 		};
+
+		/// @brief TAA
+		struct TAA
+		{
+			// ブレンドファクター
+			float blendFactor;
+
+			// ガンマ補正
+			float gamma;
+		};
 	}
 }

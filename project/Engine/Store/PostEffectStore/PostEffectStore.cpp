@@ -16,6 +16,7 @@
 #include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
 #include "PostEffectData/PostEffectDOFData/PostEffectDOFData.h"
 #include "PostEffectData/PostEffectBloomData/PostEffectBloomData.h"
+#include "PostEffectData/PostEffectTAAData/PostEffectTAAData.h"
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -103,6 +104,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePSOHighLuminanceExtraction_ = std::make_unique<ComputePSOHighLuminanceExtraction>();
 	computePSOHighLuminanceExtraction_->Initialize(device, compiler, log);
 
+	// CS TAA PSO
+	computePSOTAA_ = std::make_unique<ComputePSOTAA>();
+	computePSOTAA_->Initialize(device, compiler, log);
+
 
 	// モーションベクトルのピクセルシェーダーのコンパイル
 	motionVectorPixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/MotionVector/MotionVector.PS.hlsl", L"ps_6_0");
@@ -151,6 +156,22 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		{
 			data->Reset();
 			return data->GetHandle();
+		}
+	}
+
+	// TAAは特別扱いする。理由は、TAAは前フレームの結果を参照するため、同じ名前で複数回読み込むことがあるから。
+	if (isLoadTAA_)
+	{
+		if (PostEffect::Type::TAA == type)
+		{
+			for (auto& data : dataTable_)
+			{
+				if (type == data->GetType())
+				{
+					data->Reset();
+					return data->GetHandle();
+				}
+			}
 		}
 	}
 
@@ -265,8 +286,18 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	// TAA
 	if (type == PostEffect::Type::TAA)
 	{
+		std::unique_ptr<PostEffectTAAData> data = std::make_unique<PostEffectTAAData>(name, type, handle, parameter_.get());
+		data->Initialize(device, commandList, heap_, buffering, computePSOTAA_.get(), log);
+		dataTable_.push_back(std::move(data));
+
 		// TAAはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
 		enableMotionVector_ = true;
+
+		// TAAのハンドルを保存しておく
+		isLoadTAA_ = true;
+		hTAA_ = handle;
+
+		return handle;
 	}
 
 	assert(false);
@@ -278,6 +309,9 @@ void Engine::PostEffectStore::PerSceneReset()
 {
 	// モーションベクトル有効化を初期化
 	enableMotionVector_ = false;
+
+	// TAAの読み込みフラグを初期化
+	isLoadTAA_ = false;
 }
 
 /// @brief モーションベクトルの描画処理をコマンドリストに登録する
@@ -295,6 +329,24 @@ void Engine::PostEffectStore::DrawMotionVector(ID3D12GraphicsCommandList* comman
 	// レンダーとプレハブを使ってモーションベクトルを描画
 	render->DrawMotionVector(commandList, psoMotionVectorRender_.get());
 	prefab->DrawMotionVector(commandList, psoMotionVectorPrefab_.get());
+}
+
+/// @brief TAAの描画処理をコマンドリストに登録する
+/// @param context 
+void Engine::PostEffectStore::DrawTAA(const PostEffectRenderContext& context)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!enableMotionVector_)return;
+
+	// TAAがない場合は描画しない
+	if (!isLoadTAA_)return;
+
+	// TAAの描画処理をコマンドリストに登録する
+	PostEffectRenderContext renderContext = context;
+	renderContext.motionVectorTextureResource = motionVectorTextureResource_.get();
+
+	// TAAの描画処理をコマンドリストに登録する
+	dataTable_[hTAA_]->Register(renderContext);
 }
 
 /// @brief デバッグ用パラメータ

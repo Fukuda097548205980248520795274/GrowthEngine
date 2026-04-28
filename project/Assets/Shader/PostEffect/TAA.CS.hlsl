@@ -6,6 +6,17 @@ RWTexture2D<float4> outputTex : register(u0);
 
 SamplerState gSampler : register(s0);
 
+// パラメータ構造体
+struct Params
+{
+    // ブレンドファクター（0.0fなら完全に履歴、1.0fなら完全に現在のフレーム）
+    float blendFactor;
+    
+    // ガンマ値（クランプ範囲を広げるために使用）
+    float gamma;
+};
+ConstantBuffer<Params> gParams : register(b0);
+
 // トーンマップ関数（圧縮）
 float4 Tonemap(float4 c)
 {
@@ -111,16 +122,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float4 stddev = sqrt(variance);
 
     // ガンマ値を上げてクランプ範囲を広げる
-    float gamma = 1.5f;
-    float4 cMin = mean - gamma * stddev;
-    float4 cMax = mean + gamma * stddev;
+    float4 cMin = mean - gParams.gamma * stddev;
+    float4 cMax = mean + gParams.gamma * stddev;
 
     // 履歴の色をAABBでクリップ
-    tmHistory = ClipAABB(cMin, cMax, tmHistory, mean);
+    //tmHistory = ClipAABB(cMin, cMax, tmHistory, mean);
     
     // ブレンド
-    float blendFactor = 0.5f;
-    float4 tmFinal = lerp(tmHistory, tmCurrent, blendFactor);
+    float4 tmFinal = lerp(tmHistory, tmCurrent, gParams.blendFactor);
 
     // --- 線形空間に戻す ---
     float4 finalColor = InverseTonemap(tmFinal);

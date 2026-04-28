@@ -255,6 +255,9 @@ void Engine::RenderContext::PostDraw()
 	// モーションベクトルの描画
 	offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 
+	// TAAの描画
+	offscreen_->DrawTAA(commandList_);
+
 #ifdef _DEVELOPMENT
 	// 衝突ストアのデバッグ線
 	collision3DStore_->DebugDrawLine();

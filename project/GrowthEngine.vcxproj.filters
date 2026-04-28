@@ -1012,6 +1012,9 @@
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOTAA">
       <UniqueIdentifier>{0bb8f30f-a469-4527-8321-9563ce93c118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData">
+      <UniqueIdentifier>{d40fd5d1-86a2-4b66-8c62-334786c7dbaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1790,6 +1793,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOTAA\ComputePSOTAA.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTAA</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2680,6 +2686,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTAA\ComputePSOTAA.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTAA</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

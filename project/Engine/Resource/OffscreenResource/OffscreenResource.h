@@ -26,6 +26,12 @@ namespace Engine
 		/// @param buffering 
 		void Resize(ID3D12Device* device, DX12Buffering* buffering);
 
+		/// @brief バリアを張る
+		/// @param commandList 
+		/// @param before 
+		/// @param after 
+		void Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+
 		/// @brief レンダーターゲットの設定とクリア
 		/// @param commandList 
 		/// @param dsvHandle 

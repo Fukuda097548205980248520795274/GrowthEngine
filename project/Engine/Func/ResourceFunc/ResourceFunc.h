@@ -23,6 +23,18 @@ namespace Engine
 	/// @param commandList 
 	void UAVBarrier(ID3D12Resource* resource, ID3D12GraphicsCommandList* commandList);
 
+	/// @brief テクスチャリソースをコピーする
+	/// @param commandList 
+	/// @param dstResource 
+	/// @param desBefore 
+	/// @param dstAfter 
+	/// @param srcResource 
+	/// @param srcBefore 
+	/// @param srcAfter 
+	void CopyTextureResource(ID3D12GraphicsCommandList* commandList,
+		ID3D12Resource* dstResource, D3D12_RESOURCE_STATES desBefore, D3D12_RESOURCE_STATES dstAfter,
+		ID3D12Resource* srcResource, D3D12_RESOURCE_STATES srcBefore, D3D12_RESOURCE_STATES srcAfter);
+
 	/// @brief バッファリソースを生成する
 	/// @param device 
 	/// @param sizeInBytes 

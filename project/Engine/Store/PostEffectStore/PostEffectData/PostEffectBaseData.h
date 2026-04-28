@@ -7,16 +7,19 @@
 #include "Data/PostEffectData/PostEffectData.h"
 #include "DataForGPU/PostEffectDataForGPU/PostEffectDataForGPU.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+#include "Resource/RWTexture2DBufferResource/RWTexture2DBufferResource.h"
+#include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Handle/Handle.h"
 
 namespace Engine
 {
-	class OffscreenResource;
     class DepthResource;
 	class Camera3DStore;
 	class BasePSOPostEffect;
 	class BaseComputePSO;
 	class PostEffectParameter;
+	class MotionVectorTextureResource;
+	class PSOCopyImage;
 
 	/// @brief 各ポストエフェクトが必要とする入力データの種類
 	/// @details 新しい入力が必要になった場合はここにフラグを追加する
@@ -42,6 +45,8 @@ namespace Engine
 		OffscreenResource* offscreenRenderTargetResource = nullptr;
 		DepthResource* depthResource = nullptr;
 		Camera3DStore* camera3DStore = nullptr;
+		MotionVectorTextureResource* motionVectorTextureResource = nullptr;
+		PSOCopyImage* psoCopyImage = nullptr;
 	};
 
 	class PostEffectBaseData

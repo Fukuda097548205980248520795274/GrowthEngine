@@ -25,6 +25,7 @@
 #include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
 #include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
 #include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
+#include "PSO/ComputePSO/ComputePSOTAA/ComputePSOTAA.h"
 
 #include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
 #include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
@@ -91,6 +92,10 @@ namespace Engine
 		/// @param dsvHandle 
 		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, DX12Render* render, DX12Prefab* prefab);
 
+		/// @brief TAAの描画処理をコマンドリストに登録する
+		/// @param context 
+		void DrawTAA(const PostEffectRenderContext& context);
+
 
 
 		/// @brief 指定入力が必要かどうか
@@ -111,6 +116,10 @@ namespace Engine
 		/// @param name 
 		/// @return 
 		bool IsBloom(const std::string& name) { return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::Bloom; }
+
+		/// @brief TAAを読み込んでいるかどうか
+		/// @return 
+		bool IsLoadTAA()const { return isLoadTAA_; }
 
 		/// @brief 指定入力が必要かどうか
 		/// @param name
@@ -217,6 +226,9 @@ namespace Engine
 		/// @brief CS高輝度抽出PSO
 		std::unique_ptr<ComputePSOHighLuminanceExtraction> computePSOHighLuminanceExtraction_ = nullptr;
 
+		/// @brief CS TAA PSO
+		std::unique_ptr<ComputePSOTAA> computePSOTAA_ = nullptr;
+
 
 	private:
 
@@ -234,7 +246,15 @@ namespace Engine
 		std::unique_ptr<MotionVectorTextureResource> motionVectorTextureResource_ = nullptr;
 
 		/// @brief モーションベクトルを有効にするかどうか
-		bool enableMotionVector_ = true;
+		bool enableMotionVector_ = false;
+
+
+	private:
+
+		/// @brief TAAのハンドル
+		PostEffectHandle hTAA_ = 0;
+
+		bool isLoadTAA_ = false;
 
 
 	private:

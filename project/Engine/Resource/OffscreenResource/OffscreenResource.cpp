@@ -115,6 +115,15 @@ void Engine::OffscreenResource::Resize(ID3D12Device* device, DX12Buffering* buff
 	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
 }
 
+/// @brief バリアを張る
+/// @param commandList 
+/// @param before 
+/// @param after 
+void Engine::OffscreenResource::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+	TransitionBarrier(resource_.Get(), before, after, commandList);
+}
+
 /// @brief レンダーターゲットの設定とクリア
 /// @param commandList 
 /// @param dsvHandle 

@@ -132,5 +132,17 @@ namespace Engine
 
 			float padding[2]; // 16バイトアラインメントのためのパディング
         };
+
+        /// @brief GPUに送るTAA
+        struct TAADataForGPU
+        {
+			// ブレンドファクター
+			float blendFactor;
+
+			// ガンマ補正値
+            float gamma;
+
+			float padding[2]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

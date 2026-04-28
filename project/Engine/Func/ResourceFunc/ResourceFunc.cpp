@@ -46,6 +46,50 @@ void Engine::UAVBarrier(ID3D12Resource* resource, ID3D12GraphicsCommandList* com
 	commandList->ResourceBarrier(1, &barrier);
 }
 
+/// @brief テクスチャリソースをコピーする
+/// @param commandList 
+/// @param dstResource 
+/// @param desBefore 
+/// @param dstAfter 
+/// @param srcResource 
+/// @param srcBefore 
+/// @param srcAfter 
+void Engine::CopyTextureResource(ID3D12GraphicsCommandList* commandList,
+	ID3D12Resource* dstResource, D3D12_RESOURCE_STATES dstBefore, D3D12_RESOURCE_STATES dstAfter,
+	ID3D12Resource* srcResource, D3D12_RESOURCE_STATES srcBefore, D3D12_RESOURCE_STATES srcAfter)
+{
+	// コピー前のバリア
+	D3D12_RESOURCE_BARRIER barriers[2]{};
+
+	// src
+	barriers[0].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barriers[0].Transition.pResource = srcResource;
+	barriers[0].Transition.StateBefore = srcBefore;
+	barriers[0].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_SOURCE;
+	barriers[0].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	// dst
+	barriers[1].Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barriers[1].Transition.pResource = dstResource;
+	barriers[1].Transition.StateBefore = dstBefore;
+	barriers[1].Transition.StateAfter = D3D12_RESOURCE_STATE_COPY_DEST;
+	barriers[1].Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	commandList->ResourceBarrier(2, barriers);
+
+	// コピー
+	commandList->CopyResource(dstResource, srcResource);
+
+	// コピー後のバリア（元に戻す）
+	barriers[0].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_SOURCE;
+	barriers[0].Transition.StateAfter = srcAfter;
+
+	barriers[1].Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barriers[1].Transition.StateAfter = dstAfter;
+
+	commandList->ResourceBarrier(2, barriers);
+}
+
 /// @brief バッファリソースを生成する
 /// @param device 
 /// @param sizeInBytes 

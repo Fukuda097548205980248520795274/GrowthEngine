@@ -860,6 +860,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1252,6 +1253,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectRadialBlurData\PostEffectRadialBlurData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectSmoothingData\PostEffectSmoothingData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectVignettingData\PostEffectVignettingData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectStore.h" />

@@ -293,6 +293,46 @@ void Engine::DX12Offscreen::DrawMotionVector(ID3D12GraphicsCommandList* commandL
 	offscreenResource_[currentOffscreen_]->SetRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
 }
 
+/// @brief TAAを描画する
+/// @param context 
+void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!postEffectStore_->IsEnableMotionVector())return;
+
+	// TAAを読み込んでいない場合は描画しない
+	if (!postEffectStore_->IsLoadTAA())return;
+
+	// nullptrチェック
+	assert(commandList);
+
+	const int32_t sourceOffscreenIndex = currentOffscreen_;
+
+	// カウントする
+	++currentOffscreen_;
+	currentOffscreen_ = currentOffscreen_ % 2;
+
+	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
+	ClearRenderTarget(commandList);
+
+	PostEffectRenderContext context{};
+	context.commandList = commandList;
+	context.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.psoCopyImage = psoCopyImage_.get();
+
+	// 書き込み対象 -> 読み込ませテクスチャ
+	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
+	// TAAの描画コマンドを登録する
+	postEffectStore_->DrawTAA(context);
+
+	// 読み込ませテクスチャ -> 書き込み対象
+	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::DX12Offscreen::DebugParameter()
 {

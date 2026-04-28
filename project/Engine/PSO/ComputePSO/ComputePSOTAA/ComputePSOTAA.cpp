@@ -54,7 +54,7 @@ void Engine::ComputePSOTAA::Initialize(ID3D12Device* device, ShaderCompiler* com
 		ルートパラメータ
 	---------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[4];
+	D3D12_ROOT_PARAMETER rootParameter[5];
 
 	// SRV DescriptorTable t0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -79,6 +79,12 @@ void Engine::ComputePSOTAA::Initialize(ID3D12Device* device, ShaderCompiler* com
 	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[3].DescriptorTable.pDescriptorRanges = writeTextureDescriptor;
 	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(writeTextureDescriptor);
+
+	// 定数バッファ RootConstant b0
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[4].Constants.ShaderRegister = 0;
+	rootParameter[4].Constants.RegisterSpace = 0;
 
 
 	/*--------------------
