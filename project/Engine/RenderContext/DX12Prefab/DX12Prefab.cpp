@@ -117,15 +117,6 @@ void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12Gr
 	prefab3DStore_->ShadowMapDraw(viewProjection, commandList, pso);
 }
 
-/// @brief プレハブ描画処理
-/// @param skyboxStore 
-/// @param commandList 
-void Engine::DX12Prefab::DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
-{
-	prefab3DStore_->Register(skyboxStore, commandList, psoPrefab3D_.get());
-	prefab2DStore_->Register(commandList, psoPrefab2D_.get());
-}
-
 /// @brief リセット
 void Engine::DX12Prefab::PrefabReset()
 {

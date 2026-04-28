@@ -244,16 +244,13 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
-
-	// スカイボックスの描画
-	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
 }
 
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// プレハブ描画
-	prefab_->DrawPrefab(skyboxStore_.get(), commandList_);
+	// スカイボックスの描画
+	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
 
 #ifdef _DEVELOPMENT
 	// 衝突ストアのデバッグ線

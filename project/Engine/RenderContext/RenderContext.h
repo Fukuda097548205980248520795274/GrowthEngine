@@ -246,10 +246,10 @@ namespace Engine
 		/// @param hSkeleton 
 		/// @param log 
 		/// @return 
-		Prefab3DHandle LoadPrefabPrimitive(const std::string& name, Prefab3D::Type type,uint32_t numInstance, 
+		Prefab3DHandle LoadPrefab3D(const std::string& name, Prefab3D::Type type,uint32_t numInstance, 
 			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, Log* log)
 		{
-			return prefab_->LoadPrimitive(name, type, numInstance,hTexture, hModel, hAnimation, hSkeleton, core_->GetDevice(), commandList_, log);
+			return prefab_->Load3D(name, type, numInstance,hTexture, hModel, hAnimation, hSkeleton, core_->GetDevice(), commandList_, log);
 		}
 
 		/// @brief スプライト用プレハブを読み込む
@@ -258,9 +258,9 @@ namespace Engine
 		/// @param numInstance 
 		/// @param log 
 		/// @return 
-		Prefab2DHandle LoadPrefabSprite(const std::string& name,TextureHandle hTexture, uint32_t numInstance, Log* log)
+		Prefab2DHandle LoadPrefab2D(const std::string& name,TextureHandle hTexture, uint32_t numInstance, Log* log)
 		{
-			return prefab_->LoadSprite(name, hTexture, numInstance, textureStore_.get(),camera2DStore_.get(), heap_.get(), core_->GetDevice(), log);
+			return prefab_->Load2D(name, hTexture, numInstance, textureStore_.get(),camera2DStore_.get(), heap_.get(), core_->GetDevice(), log);
 		}
 
 
@@ -322,6 +322,28 @@ namespace Engine
 		T* CreatePrefab2DInstance(const std::string& name) { return prefab_->CreatePrefab2DInstance<T>(name); }
 
 
+		/// @brief 全ての3Dプレハブの描画処理
+		void AllDrawPrefab3D() { prefab_->AllDrawPrefab3D(skyboxStore_.get(), commandList_); }
+
+		/// @brief 3Dプレハブの描画処理
+		/// @param hPrefab3D 
+		void DrawPrefab3D(Prefab3DHandle hPrefab3D) { prefab_->DrawPrefab3D(hPrefab3D, skyboxStore_.get(), commandList_); }
+
+		/// @brief 3Dプレハブの描画処理
+		/// @param name 
+		void DrawPrefab3D(const std::string& name) { prefab_->DrawPrefab3D(name, skyboxStore_.get(), commandList_); }
+
+		
+		/// @brief 全ての2Dプレハブの描画処理
+		void AllDrawPrefab2D() { prefab_->AllDrawPrefab2D(commandList_); }
+
+		/// @brief 2Dプレハブの描画処理
+		/// @param hPrefab2D 
+		void DrawPrefab2D(Prefab2DHandle hPrefab2D) { prefab_->DrawPrefab2D(hPrefab2D, commandList_); }
+
+		/// @brief 2Dプレハブの描画処理
+		/// @param name 
+		void DrawPrefab2D(const std::string& name) { prefab_->DrawPrefab2D(name, commandList_); }
 
 
 	public:

@@ -606,10 +606,10 @@ public:
 	/// @param hAnimation 
 	/// @param hSkeleton 
 	/// @return 
-	Prefab3DHandle LoadPrefabPrimitive(const std::string& name, Engine::Prefab3D::Type type,uint32_t numInstance,
+	Prefab3DHandle LoadPrefab3D(const std::string& name, Engine::Prefab3D::Type type,uint32_t numInstance,
 		TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton) const
 	{
-		return renderContext_->LoadPrefabPrimitive(name, type, numInstance, hTexture, hModel, hAnimation, hSkeleton, log_.get());
+		return renderContext_->LoadPrefab3D(name, type, numInstance, hTexture, hModel, hAnimation, hSkeleton, log_.get());
 	}
 
 	/// @brief プレハブスプライトの読み込み
@@ -617,9 +617,9 @@ public:
 	/// @param numInstance 
 	/// @param hTexture 
 	/// @return 
-	Prefab2DHandle LoadPrefabSprite(const std::string& name, uint32_t numInstance, TextureHandle hTexture) const
+	Prefab2DHandle LoadPrefab2D(const std::string& name, uint32_t numInstance, TextureHandle hTexture) const
 	{
-		return renderContext_->LoadPrefabSprite(name, hTexture, numInstance, log_.get());
+		return renderContext_->LoadPrefab2D(name, hTexture, numInstance, log_.get());
 	}
 
 
@@ -679,6 +679,29 @@ public:
 	/// @return 
 	template<typename T>
 	T* CreatePrefab2DInstance(const std::string& name) const { return renderContext_->CreatePrefab2DInstance<T>(name); }
+
+
+	/// @brief 全ての3Dプレハブを描画する
+	void AllDrawPrefab3D()const { renderContext_->AllDrawPrefab3D(); }
+
+	/// @brief 3Dプレハブを描画する
+	/// @param hPrefab3D 
+	void DrawPrefab3D(Prefab3DHandle hPrefab3D)const { renderContext_->DrawPrefab3D(hPrefab3D); }
+
+	/// @brief 3Dプレハブを描画する
+	/// @param name 
+	void DrawPrefab3D(const std::string& name)const { renderContext_->DrawPrefab3D(name); }
+
+	/// @brief 全ての2Dプレハブを描画する
+	void AllDrawPrefab2D()const { renderContext_->AllDrawPrefab2D(); }
+
+	/// @brief 2Dプレハブを描画する
+	/// @param hPrefab2D 
+	void DrawPrefab2D(Prefab2DHandle hPrefab2D)const { renderContext_->DrawPrefab2D(hPrefab2D); }
+
+	/// @brief 2Dプレハブを描画する
+	/// @param name 
+	void DrawPrefab2D(const std::string& name)const { renderContext_->DrawPrefab2D(name); }
 
 
 

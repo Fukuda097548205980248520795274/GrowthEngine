@@ -57,7 +57,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param log 
 		/// @return 
-		Prefab3DHandle LoadPrimitive(const std::string& name, Prefab3D::Type type, uint32_t numInstance,
+		Prefab3DHandle Load3D(const std::string& name, Prefab3D::Type type, uint32_t numInstance,
 			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, Log* log)
 		{
@@ -72,10 +72,10 @@ namespace Engine
 		/// @param heap 
 		/// @param device 
 		/// @param log 
-		Prefab2DHandle LoadSprite(const std::string& name, TextureHandle hTexture,uint32_t numInstance, 
-			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
+		Prefab2DHandle Load2D(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
+			TextureStore* textureStore, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 		{
-			return prefab2DStore_->Load(name, hTexture, numInstance, textureStore,cameraStore, heap, device, log);
+			return prefab2DStore_->Load(name, hTexture, numInstance, textureStore, cameraStore, heap, device, log);
 		}
 
 
@@ -86,10 +86,37 @@ namespace Engine
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
 
-		/// @brief プレハブ描画処理
+		/// @brief 全ての3Dプレハブの描画処理
 		/// @param skyboxStore 
 		/// @param commandList 
-		void DrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList);
+		void AllDrawPrefab3D(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->AllDrawPrefab(skyboxStore, commandList, psoPrefab3D_.get()); }
+
+		/// @brief 3Dプレハブの描画処理
+		/// @param hPrefab3D 
+		/// @param skyboxStore 
+		/// @param commandList 
+		void DrawPrefab3D(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(hPrefab3D, skyboxStore, commandList, psoPrefab3D_.get()); }
+
+		/// @brief 3Dプレハブの描画処理
+		/// @param name 
+		/// @param skyboxStore 
+		/// @param commandList 
+		void DrawPrefab3D(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(name, skyboxStore, commandList, psoPrefab3D_.get()); }
+
+
+		/// @brief 全ての2Dプレハブの描画処理
+		/// @param commandList 
+		void AllDrawPrefab2D(ID3D12GraphicsCommandList* commandList) { prefab2DStore_->AllDrawPrefab(commandList, psoPrefab2D_.get()); }
+
+		/// @brief 2Dプレハブの描画処理
+		/// @param hPrefab2D 
+		/// @param commandList 
+		void DrawPrefab2D(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(hPrefab2D, commandList, psoPrefab2D_.get()); }
+
+		/// @brief 2Dプレハブの描画処理
+		/// @param name 
+		/// @param commandList 
+		void DrawPrefab2D(const std::string& name, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(name, commandList, psoPrefab2D_.get()); }
 
 
 		/// @brief プリミティブのパラメータを取得する

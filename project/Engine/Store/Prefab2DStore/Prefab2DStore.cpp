@@ -100,9 +100,27 @@ Prefab2DHandle Engine::Prefab2DStore::Load(const std::string& name, TextureHandl
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab2DStore::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DStore::AllDrawPrefab(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	for (auto& data : dataTable_)data->Register(commandList, pso);
+}
+
+/// @brief プレハブの描画処理
+/// @param hPrefab2D 
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab2DStore::DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[hPrefab2D]->Register(commandList, pso);
+}
+
+/// @brief プレハブの描画処理
+/// @param name 
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab2DStore::DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[nameTable_[name]]->Register(commandList, pso);
 }
 
 /// @brief リセット

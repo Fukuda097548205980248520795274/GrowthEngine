@@ -17,6 +17,9 @@ public:
 	[[nodiscard]]
 	PrefabInstanceCube* CreateInstance();
 
+	/// @brief 描画処理
+	void Draw() override;
+
 	// パラメータ
 	Engine::Prefab3D::Cube::Base::Param* param_ = nullptr;
 

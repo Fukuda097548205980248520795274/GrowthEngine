@@ -36,10 +36,22 @@ namespace Engine
 		Prefab2DHandle Load(const std::string& name, TextureHandle hTexture, uint32_t numInstance,
 			TextureStore* textureStore,Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log);
 
-		/// @brief コマンドリストに登録する
+		/// @brief すべてのプレハブの描画処理
 		/// @param commandList 
 		/// @param pso 
-		void Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void AllDrawPrefab(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief プレハブの描画処理
+		/// @param hPrefab2D 
+		/// @param commandList 
+		/// @param pso 
+		void DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief プレハブの描画処理
+		/// @param name 
+		/// @param commandList 
+		/// @param pso 
+		void DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 

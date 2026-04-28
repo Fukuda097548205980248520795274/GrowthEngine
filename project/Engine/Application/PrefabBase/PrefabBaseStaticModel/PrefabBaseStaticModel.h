@@ -17,6 +17,9 @@ public:
 	[[nodiscard]]
 	PrefabInstanceStaticModel* CreateInstance();
 
+	/// @brief 描画処理
+	void Draw() override;
+
 	// パラメータ
 	Engine::Prefab3D::StaticModel::Base::Param* param_ = nullptr;
 

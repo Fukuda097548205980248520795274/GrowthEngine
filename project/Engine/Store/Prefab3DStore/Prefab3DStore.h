@@ -62,11 +62,25 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
-		/// @brief コマンドリストに登録する
+		/// @brief すべての描画処理
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param pso 
-		void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief プレハブの描画処理
+		/// @param hPrefab3D 
+		/// @param skyboxStore 
+		/// @param commandList 
+		/// @param pso 
+		void DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+
+		/// @brief プレハブの描画処理
+		/// @param name 
+		/// @param skyboxStore 
+		/// @param commandList 
+		/// @param pso 
+		void DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
 
 		/// @brief シャドウマップの描画処理
 		/// @param viewProjection 

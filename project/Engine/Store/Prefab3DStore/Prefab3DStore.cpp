@@ -116,13 +116,33 @@ void Engine::Prefab3DStore::Update()
 	for (auto& data : dataTable_)data->Update();
 }
 
-/// @brief コマンドリストに登録する
-/// @param hPrefabPrimitive 
+/// @brief すべての描画処理
+/// @param skyboxStore 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DStore::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, pso);
+}
+
+/// @brief プレハブの描画処理
+/// @param hPrefab3D 
+/// @param skyboxStore 
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[hPrefab3D]->Register(skyboxStore, commandList, pso);
+}
+
+/// @brief プレハブの描画処理
+/// @param name 
+/// @param skyboxStore 
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStore::DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+{
+	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, pso);
 }
 
 /// @brief シャドウマップの描画処理

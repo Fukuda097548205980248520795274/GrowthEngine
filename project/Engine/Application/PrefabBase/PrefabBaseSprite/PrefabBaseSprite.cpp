@@ -9,7 +9,7 @@ PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance,
 	: BasePrefabBase(name)
 {
 	// 読み込む
-	handle_ = engine_->LoadPrefabSprite(name_, numInstance, hTexture);
+	handle_ = engine_->LoadPrefab2D(name_, numInstance, hTexture);
 
 	// パラメータを取得する
 	param_ = engine_->GetPrefab2DParam<Engine::Prefab2D::Sprite::Base::Param>(handle_);
@@ -20,4 +20,10 @@ PrefabBaseSprite::PrefabBaseSprite(TextureHandle hTexture, uint32_t numInstance,
 PrefabInstanceSprite* PrefabBaseSprite::CreateInstance()
 {
 	return engine_->CreatePrefab2DInstance<PrefabInstanceSprite>(handle_);
+}
+
+/// @brief 描画処理
+void PrefabBaseSprite::Draw()
+{
+	engine_->DrawPrefab2D(handle_);
 }
