@@ -41,6 +41,33 @@ void Engine::DebugCamera3DResource::Update()
 	// 有効でないと処理しない
 	if (!enable_)return;
 
+	// ピボットポイントの更新
+	PivotPointUpdate();
+
+	// カメラの更新
+	camera3d_->Update();
+}
+
+/// @brief ジッタリングして更新処理
+void Engine::DebugCamera3DResource::JitterUpdate()
+{
+	// F1キーで有効
+	if (engine_->GetKeyTrigger(DIK_F1))
+		enable_ = !enable_;
+
+	// 有効でないと処理しない
+	if (!enable_)return;
+
+	// ピボットポイントの更新
+	PivotPointUpdate();
+
+	// カメラの更新
+	camera3d_->JitterUpdate();
+}
+
+/// @brief ピボットポイントの更新
+void Engine::DebugCamera3DResource::PivotPointUpdate()
+{
 	// パラメータを取得する
 	Camera3DData::Param* param = camera3d_->GetParam();
 
@@ -101,7 +128,4 @@ void Engine::DebugCamera3DResource::Update()
 	// 球面座標系の位置を取得する
 	param->transform.translate =
 		pivotPoint_ + SphericalCoordinate(pointLength_, param->transform.rotate.x, -(std::numbers::pi_v<float> / 2.0f) - param->transform.rotate.y);
-
-	// カメラの更新
-	camera3d_->Update();
 }

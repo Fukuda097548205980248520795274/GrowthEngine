@@ -36,6 +36,9 @@ void Engine::Camera3DStore::Initialize(ID3D12Device* device, Log* log)
 void Engine::Camera3DStore::PerSceneReset()
 {
 	for (auto& data : dataTable_)data->PerSceneReset();
+
+	// ジッタリング無効
+	enableJitter_ = false;
 }
 
 /// @brief 読み込み
@@ -74,14 +77,16 @@ Camera3DHandle Engine::Camera3DStore::Load(const std::string& name)
 void Engine::Camera3DStore::Update()
 {
 	// 指定されたカメラの更新
-	dataTable_[selectHCamera_]->Update();
+	if(!enableJitter_)dataTable_[selectHCamera_]->Update();
+	else dataTable_[selectHCamera_]->JitterUpdate();
 
 	Vector3 cameraPosition = dataTable_[selectHCamera_]->GetCamera3D().GetWorldPosition();
 
 #ifdef _DEVELOPMENT
 
 	// デバッグカメラ更新
-	debugCamera_->Update();
+	if(!enableJitter_)debugCamera_->Update();
+	else debugCamera_->JitterUpdate();
 
 	// デバッグカメラ有効時
 	if (debugCamera_->IsEnable())

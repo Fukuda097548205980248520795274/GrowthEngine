@@ -26,6 +26,11 @@
 #include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
 #include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
 
+#include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
+#include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
+
+#include "Resource/MotionVectorTextureResource/MotionVectorTextureResource.h"
+
 namespace Engine
 {
 	class ShaderCompiler;
@@ -36,6 +41,8 @@ namespace Engine
 	class Camera3DStore;
 	class DX12Buffering;
 	class DX12Heap;
+	class DX12Render;
+	class DX12Prefab;
 
 	class PostEffectStore
 	{
@@ -48,7 +55,8 @@ namespace Engine
 		/// @param device 
 		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, TextureStore* textureStore, Log* log);
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob, 
+			DX12Heap* heap,TextureStore* textureStore,int32_t width , int32_t height, Log* log);
 
 		/// @brief リサイズ
 		/// @param device 
@@ -63,23 +71,27 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		PostEffectHandle Load(const std::string& name, PostEffect::Type type,
-			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap, Log* log);
+			ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, Log* log);
+
+		/// @brief シーン前のリセット処理
+		void PerSceneReset();
 
         /// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect
 		/// @param context
-		void DrawPostEffect(PostEffectHandle hPostEffect, const PostEffectRenderContext& context)
-		{
-			dataTable_[hPostEffect]->Register(context);
-		}
+		void DrawPostEffect(PostEffectHandle hPostEffect, const PostEffectRenderContext& context) { dataTable_[hPostEffect]->Register(context); }
 
         /// @brief 描画処理をコマンドリストに登録する
 		/// @param name
 		/// @param context
-		void DrawPostEffect(const std::string& name, const PostEffectRenderContext& context)
-		{
-			dataTable_[nameTable_[name]]->Register(context);
-		}
+		void DrawPostEffect(const std::string& name, const PostEffectRenderContext& context) { dataTable_[nameTable_[name]]->Register(context); }
+
+		/// @brief モーションベクトルの描画処理をコマンドリストに登録する
+		/// @param commandList 
+		/// @param dsvHandle 
+		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, DX12Render* render, DX12Prefab* prefab);
+
+
 
 		/// @brief 指定入力が必要かどうか
 		/// @param hPostEffect
@@ -90,17 +102,15 @@ namespace Engine
 			return (static_cast<uint32_t>(dataTable_[hPostEffect]->GetRequiredInputs()) & static_cast<uint32_t>(input)) != 0;
 		}
 
-		// @brief 指定のポストエフェクトがBloomかどうか
-		bool IsBloom(PostEffectHandle hPostEffect) const
-		{
-			return dataTable_[hPostEffect]->GetType() == PostEffect::Type::Bloom;
-		}
+		/// @brief 指定のポストエフェクトがBloomかどうか
+		/// @param hPostEffect 
+		/// @return 
+		bool IsBloom(PostEffectHandle hPostEffect) const { return dataTable_[hPostEffect]->GetType() == PostEffect::Type::Bloom; }
 
-		// @brief 指定のポストエフェクトがBloomかどうか
-		bool IsBloom(const std::string& name)
-		{
-			return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::Bloom;
-		}
+		/// @brief 指定のポストエフェクトがBloomかどうか
+		/// @param name 
+		/// @return 
+		bool IsBloom(const std::string& name) { return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::Bloom; }
 
 		/// @brief 指定入力が必要かどうか
 		/// @param name
@@ -114,10 +124,11 @@ namespace Engine
 		/// @brief DX12Offscreen側のRTV/DSV設定を使うかどうか
 		/// @param hPostEffect
 		/// @return
-		bool IsUseOffscreenRenderTarget(PostEffectHandle hPostEffect) const
-		{
-			return dataTable_[hPostEffect]->GetType() != PostEffect::Type::DOF;
-		}
+		bool IsUseOffscreenRenderTarget(PostEffectHandle hPostEffect) const { return dataTable_[hPostEffect]->GetType() != PostEffect::Type::DOF; }
+
+		/// @brief モーションベクトルが有効かどうか
+		/// @return 
+		bool IsEnableMotionVector() const { return enableMotionVector_; }
 
 
 		/// @brief パラメータを取得する
@@ -208,6 +219,28 @@ namespace Engine
 
 
 	private:
+
+		/// @brief モーションベクトルのピクセルシェーダデータ
+		Microsoft::WRL::ComPtr<IDxcBlob> motionVectorPixelShaderBlob_ = nullptr;
+
+		/// @brief モーションベクトル描画PSO
+		std::unique_ptr<PSOMotionVectorRender> psoMotionVectorRender_ = nullptr;
+
+		/// @brief モーションベクトルPrefab描画PSO
+		std::unique_ptr<PSOMotionVectorPrefab> psoMotionVectorPrefab_ = nullptr;
+
+
+		/// @brief モーションベクトルテクスチャリソース
+		std::unique_ptr<MotionVectorTextureResource> motionVectorTextureResource_ = nullptr;
+
+		/// @brief モーションベクトルを有効にするかどうか
+		bool enableMotionVector_ = true;
+
+
+	private:
+
+		/// @brief DX12ヒープ
+		DX12Heap* heap_ = nullptr;
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;

@@ -13,9 +13,25 @@ namespace Engine
 		/// @brief 更新処理
 		virtual void Update() = 0;
 
-		/// @brief ビュー正射影行列を取得する
+		/// @brief ジッタリングして更新処理
+		virtual void JitterUpdate() = 0;
+
+
+		/// @brief 現在のビュー正射影行列を取得する
 		/// @return 
-		Matrix4x4 GetViewProjectionMatrix()const { return viewProjectionMatrix_; }
+		Matrix4x4 GetCurrentVPMatrix()const { return currentVPMatrix_; }
+
+		/// @brief 前フレームのビュー正射影行列を取得する
+		/// @return 
+		Matrix4x4 GetPrevVPMatrix()const { return prevVPMatrix_; }
+
+		/// @brief ジッタリングなしの現在のビュー正射影行列を取得する
+		/// @return 
+		Matrix4x4 GetCurrentVPUnJitterMatrix()const { return currentVPUnJitterMatrix_; }
+
+		/// @brief ジッタリングなしの前フレームのビュー正射影行列を取得する
+		/// @return 
+		Matrix4x4 GetPrevVPUnJitterMatrix()const { return prevVPUnJitterMatrix_; }
 
 		/// @brief 正射影行列を取得する
 		/// @return 
@@ -42,7 +58,22 @@ namespace Engine
 		// 正射影行列
 		Matrix4x4 projectionMatrix_ = MakeIdentityMatrix4x4();
 
-		// ビュー正射影行列
-		Matrix4x4 viewProjectionMatrix_ = MakeIdentityMatrix4x4();
+
+	protected:
+
+		// ジッタリングのインデックス
+		int32_t jitterIndex_ = 0;
+
+		// 現在のビュー正射影行列
+		Matrix4x4 currentVPMatrix_ = MakeIdentityMatrix4x4();
+
+		// 前フレームのビュー正射影行列
+		Matrix4x4 prevVPMatrix_ = MakeIdentityMatrix4x4();
+
+		// ジッタリングなしの現在のビュー正射影行列
+		Matrix4x4 currentVPUnJitterMatrix_ = MakeIdentityMatrix4x4();
+
+		// ジッタリングなしの前フレームのビュー正射影行列
+		Matrix4x4 prevVPUnJitterMatrix_ = MakeIdentityMatrix4x4();
 	};
 }

@@ -28,12 +28,19 @@ Engine::Camera2D::Camera2D()
 		MakeOrthographicMatrix4x4(0.0f, param_->aspect.height, param_->aspect.width, 0.0f, param_->setting.nearClip, param_->setting.farClip);
 
 	// ビュー正射影行列を作成する
-	viewProjectionMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
+	currentVPMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
+	currentVPUnJitterMatrix_ = currentVPMatrix_;
+	prevVPMatrix_ = currentVPMatrix_;
+	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
 }
 
 /// @brief 更新処理
 void Engine::Camera2D::Update()
 {
+	// 前フレームのビュー正射影行列を保存する
+	prevVPMatrix_ = currentVPMatrix_;
+	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
+
 	// 画面の幅を取得する
 	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
 	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
@@ -48,5 +55,31 @@ void Engine::Camera2D::Update()
 		MakeOrthographicMatrix4x4(0.0f, param_->aspect.height, param_->aspect.width, 0.0f, param_->setting.nearClip, param_->setting.farClip);
 
 	// ビュー正射影行列を作成する
-	viewProjectionMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
+	currentVPMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
+	currentVPUnJitterMatrix_ = currentVPMatrix_;
+}
+
+/// @brief ジッタリングして更新処理
+void Engine::Camera2D::JitterUpdate()
+{
+	// 前フレームのビュー正射影行列を保存する
+	prevVPMatrix_ = currentVPMatrix_;
+	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
+
+	// 画面の幅を取得する
+	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
+	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
+
+	// ワールド行列を生成する
+	worldMatrix_ = Make3DScaleMatrix4x4(Vector3(param_->transform.scale.x, param_->transform.scale.y, 1.0f)) *
+		Make3DRotateZMatrix4x4(param_->transform.rotate) *
+		Make3DTranslateMatrix4x4(Vector3(param_->transform.translate.x, param_->transform.translate.y, -0.01f));
+
+	// 正射影行列を作成する
+	projectionMatrix_ =
+		MakeOrthographicMatrix4x4(0.0f, param_->aspect.height, param_->aspect.width, 0.0f, param_->setting.nearClip, param_->setting.farClip);
+
+	// ビュー正射影行列を作成する
+	currentVPMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;
+	currentVPUnJitterMatrix_ = currentVPMatrix_;
 }

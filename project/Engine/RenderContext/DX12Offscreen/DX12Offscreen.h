@@ -64,7 +64,7 @@ namespace Engine
 		/// @return 
 		PostEffectHandle LoadPostEffect(const std::string& name, PostEffect::Type type, ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log) 
 		{
-			return postEffectStore_->Load(name, type, device, commandList, buffering_, heap_, log);
+			return postEffectStore_->Load(name, type, device, commandList, buffering_, log);
 		}
 
 
@@ -77,6 +77,12 @@ namespace Engine
 		/// @param name 
 		/// @param commandList 
 		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const PostEffectRenderContext& context);
+
+		/// @brief モーションベクトルを描画する
+		/// @param commandList 
+		/// @param render 
+		/// @param prefab 
+		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab);
 
 
 		/// @brief ポストエフェクトのパラメータを取得する

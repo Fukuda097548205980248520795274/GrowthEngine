@@ -51,6 +51,11 @@ namespace Engine
 		/// @param pso 
 		void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
 
+		/// @brief コマンドリストに登録
+		/// @param commandList 
+		/// @param pso 
+		void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) override;
+
 
 	public:
 
@@ -110,11 +115,11 @@ namespace Engine
 		// マテリアルリソース
 		std::unique_ptr<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>> materialResources_;
 
-
-	private:
-
 		// シャドウマップ用座標変換リソース
 		std::unique_ptr<ConstantBufferResource<Matrix4x4>> shadowMapTransformationResource_;
+
+		/// @brief モーションベクトルリソース
+		std::unique_ptr<ConstantBufferResource<MotionVectorDataForGPU>> motionVectorResource_;
 
 
 	private:

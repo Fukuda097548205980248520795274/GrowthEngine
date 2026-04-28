@@ -1,9 +1,9 @@
 #pragma once
-#include "../BasePSOShadowMap.h"
+#include "../BaseComputePSO.h"
 
 namespace Engine
 {
-	class PSOShadowMap : public BasePSOShadowMap
+	class ComputePSOTAA : public BaseComputePSO
 	{
 	public:
 

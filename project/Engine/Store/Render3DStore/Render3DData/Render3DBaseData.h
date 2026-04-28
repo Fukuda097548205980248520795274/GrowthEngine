@@ -12,6 +12,7 @@
 #include "PSO/PSOShadowMap/BasePSOShadowMap.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "PSO/ComputePSO/BaseComputePSO.h"
+#include "PSO/PSOMotionVector/BasePSOMotionVector.h"
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"
@@ -21,6 +22,7 @@
 #include "DataForGPU/MaterialDataForGPU/MaterialDataForGPU.h"
 #include "DataForGPU/PrimitiveDataForGPU/PrimitiveDataForGPU.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
+#include "DataForGPU/MotionVectorDataForGPU/MotionVectorDataForGPU.h"
 
 class GrowthEngine;
 class WorldTransform3D;
@@ -69,6 +71,11 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		virtual void Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) = 0;
+
+		/// @brief コマンドリストに登録
+		/// @param commandList 
+		/// @param pso 
+		virtual void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) = 0;
 
 		/// @brief 名前を取得する
 		/// @return 

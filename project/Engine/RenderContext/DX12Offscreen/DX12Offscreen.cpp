@@ -49,7 +49,8 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 
 	// ポストエフェクトストアの生成
 	postEffectStore_ = std::make_unique<PostEffectStore>();
-	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(), textureStore, log);
+	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(),
+		heap, textureStore, static_cast<int32_t>(buffering_->GetSwapChainDesc().Width), static_cast<int32_t>(buffering_->GetSwapChainDesc().Height), log);
 }
 
 /// @brief サイズを作り直す
@@ -268,6 +269,28 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 	}
+}
+
+/// @brief モーションベクトルを描画する
+/// @param commandList 
+/// @param render 
+/// @param prefab 
+void Engine::DX12Offscreen::DrawMotionVector(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!postEffectStore_->IsEnableMotionVector())
+		return;
+
+	// nullptrチェック
+	assert(commandList);
+	assert(render);
+	assert(prefab);
+
+	// モーションベクトルの描画コマンドを登録する
+	postEffectStore_->DrawMotionVector(commandList, depthResource_->GetDsvCpuHandle(), render, prefab);
+
+	// レンダーターゲットを戻す
+	offscreenResource_[currentOffscreen_]->SetRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
 }
 
 /// @brief デバッグ用パラメータ

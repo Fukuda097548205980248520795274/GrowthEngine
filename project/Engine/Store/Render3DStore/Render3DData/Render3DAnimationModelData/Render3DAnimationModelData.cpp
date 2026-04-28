@@ -76,6 +76,7 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	motionVectorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// ファイルパス
 	textureFilePathTable_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -134,6 +135,7 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 		// 座標変換リソース
 		meshTransformationResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
 		meshTransformationResources_[meshIndex]->Initialize(device, log);
+		meshTransformationResources_[meshIndex]->data_->worldMatrix = MakeIdentityMatrix4x4();
 
 		// マテリアルリソース
 		meshMaterialResources_[meshIndex] = std::make_unique<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>();
@@ -142,6 +144,10 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 		// シャドウマップ用座標変換リソース
 		shadowMapTransformationResource_[meshIndex] = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, log);
+
+		// モーションベクトルリソース
+		motionVectorResources_[meshIndex] = std::make_unique<ConstantBufferResource<MotionVectorDataForGPU>>();
+		motionVectorResources_[meshIndex]->Initialize(device, log);
 	}
 
 	// 値を反映させる
@@ -248,7 +254,9 @@ void Engine::Render3DAnimationModelData::Register(Camera3DStore* cameraStore, Sk
 	if (parent_)worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 	// ビュープロジェクション行列を取得する
-	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
+	Matrix4x4 prevVPUnJitter = cameraStore->GetCamera3D().GetPrevVPUnJitterMatrix();
+	Matrix4x4 currentVPUnJitter = cameraStore->GetCamera3D().GetCurrentVPUnJitterMatrix();
 
 
 	// PSOの設定
@@ -281,9 +289,17 @@ void Engine::Render3DAnimationModelData::Register(Camera3DStore* cameraStore, Sk
 		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param_->meshTransforms[meshIndex].scale, meshQuaternion, param_->meshTransforms[meshIndex].translate);
 
 
+		// 前フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_->prevWVPMatrix =
+			meshTransformationResources_[meshIndex]->data_->worldMatrix * prevVPUnJitter;
+
 		// ワールド座標
 		meshTransformationResources_[meshIndex]->data_->worldMatrix =
 			localMatrix * animationMatrix * nodeMatrix * worldMatrix;
+
+		// 現フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_->currentWVPMatrix =
+			meshTransformationResources_[meshIndex]->data_->worldMatrix * currentVPUnJitter;
 
 		// ワールドビュー正射影行列
 		meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix =
@@ -433,6 +449,36 @@ void Engine::Render3DAnimationModelData::Register(const Matrix4x4& viewProjectio
 
 		// 座標変換の設定
 		shadowMapTransformationResource_[meshIndex]->RegisterGraphics(commandList, 0);
+
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+	}
+}
+
+/// @brief コマンドリストに登録する
+/// @param commandList 
+/// @param pso 
+void Engine::Render3DAnimationModelData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 今フレーム描画していないと処理しない
+	if (!isDrew_)return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		// モーションベクター用座標変換の設定
+		motionVectorResources_[meshIndex]->RegisterGraphics(commandList, 0);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

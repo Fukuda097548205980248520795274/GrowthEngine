@@ -74,6 +74,7 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	primitiveResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	motionVectorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// ファイルパス
 	textureFilePathTable_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -134,6 +135,10 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		// シャドウマップ
 		shadowMapTransformationResource_[meshIndex] = std::make_unique<StructuredBufferResource<Matrix4x4>>();
 		shadowMapTransformationResource_[meshIndex]->Initialize(device, heap, numInstance_, log);
+
+		// モーションベクター
+		motionVectorResources_[meshIndex] = std::make_unique<StructuredBufferResource<MotionVectorDataForGPU>>();
+		motionVectorResources_[meshIndex]->Initialize(device, heap, numInstance_, log);
 	}
 
 	// 値を反映させる
@@ -330,6 +335,42 @@ void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProject
 
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), useInstance, 0, 0, 0);
+	}
+}
+
+/// @brief モーションベクターを描画する
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStaticModelData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス描画命令を行っていないときは処理しない
+	if (numUseInstance_ <= 0)
+		return;
+
+
+	// モデルデータを取得する
+	ModelData modelData = modelStore_->GetModelData(hModel_);
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// メッシュごとに処理
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
+	{
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		// モーションベクトルの設定
+		motionVectorResources_[meshIndex]->RegisterGraphics(commandList, 0);
+
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), numUseInstance_, 0, 0, 0);
 	}
 }
 
@@ -567,6 +608,13 @@ void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::S
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->modelTransform.scale, modelQuaternion, param->modelTransform.translate);
 
+
+	// ビュープロジェクション行列を取得する
+	Matrix4x4 viewProjection = cameraStore_->GetCamera3D().GetCurrentVPMatrix();
+	Matrix4x4 prevVPUnJitter = cameraStore_->GetCamera3D().GetPrevVPUnJitterMatrix();
+	Matrix4x4 currentVPUnJitter = cameraStore_->GetCamera3D().GetCurrentVPUnJitterMatrix();
+
+
 	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
 	{
 		// ノード行列
@@ -581,13 +629,21 @@ void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::S
 		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param->meshTransforms[meshIndex].scale, meshQuaternion, param->meshTransforms[meshIndex].translate);
 
 
+		// 前フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].prevWVPMatrix =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * prevVPUnJitter;
+
 		// ワールド座標
 		primitiveResource_[meshIndex]->data_[numUseInstance_].world =
 			localMatrix * nodeMatrix * worldMatrix;
+		
+		// 現フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].currentWVPMatrix =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * currentVPUnJitter;
 
 		// ワールドビュー正射影行列
 		primitiveResource_[meshIndex]->data_[numUseInstance_].worldViewProjection =
-			primitiveResource_[meshIndex]->data_[numUseInstance_].world * cameraStore_->GetCamera3D().GetViewProjectionMatrix();
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * viewProjection;
 
 		// 逆転置ワールド行列
 		primitiveResource_[meshIndex]->data_[numUseInstance_].worldInverseTranspose =

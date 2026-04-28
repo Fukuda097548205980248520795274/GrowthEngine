@@ -31,8 +31,8 @@ void Engine::LightStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	assert(heap);
 
 	// シャドウマップPSOの生成と初期化
-	psoShadowMap_ = std::make_unique<PSOShadowMap>();
-	psoShadowMap_->Initialize(device, compiler, log);
+	psoShadowMapRender_ = std::make_unique<PSOShadowMapRender>();
+	psoShadowMapRender_->Initialize(device, compiler, log);
 
 	// プレハブ用シャドウマップPSOの生成と初期化
 	psoShadowMapPrefab_ = std::make_unique<PSOShadowMapPrefab>();
@@ -203,7 +203,7 @@ void Engine::LightStore::ShadowMap(ID3D12GraphicsCommandList* commandList, DX12R
 		Matrix4x4 viewProjectionMatrix = directionalLightData->GetViewProjectionMatrix();
 
 		// シャドウマップ用に描画
-		render->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMap_.get());
+		render->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapRender_.get());
 		prefab->ShadowMapDraw(viewProjectionMatrix, commandList, psoShadowMapPrefab_.get());
 
 		// データを渡す

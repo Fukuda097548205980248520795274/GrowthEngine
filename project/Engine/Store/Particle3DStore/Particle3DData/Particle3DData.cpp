@@ -351,7 +351,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 
 	// データを渡す
-	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
 
 	// ビルボードの有効化
 	if (param_->enableBillboard)

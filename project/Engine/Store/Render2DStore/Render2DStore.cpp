@@ -157,12 +157,12 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* ca
 	// スプライト
 	if (dataTable_[hRender2D]->GetType() == Render2D::Type::Sprite)
 	{
-		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoRender2D_.get());
+		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoRender2D_.get());
 	}
 	else if(dataTable_[hRender2D]->GetType() == Render2D::Type::Text)
 	{
 		// テキスト
-		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoText_.get());
+		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoText_.get());
 	}
 }
 
@@ -181,12 +181,12 @@ void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cam
 	// スプライト
 	if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Sprite)
 	{
-		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoRender2D_.get());
+		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoRender2D_.get());
 	}
 	else if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Text)
 	{
 		// テキスト
-		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetViewProjectionMatrix(), commandList, psoText_.get());
+		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoText_.get());
 	}
 }
 

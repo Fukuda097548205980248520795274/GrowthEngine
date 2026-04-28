@@ -31,6 +31,11 @@ namespace Engine
 		/// @param dsvHandle 
 		void ClearRenderTarget(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
+		/// @brief レンダーターゲットの設定
+		/// @param commandList 
+		/// @param dsvHandle 
+		void SetRenderTarget(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
+
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param rootParameterIndex 

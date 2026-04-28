@@ -41,6 +41,13 @@ void Engine::Camera3DResource::Update()
 	camera3d_->Update();
 }
 
+/// @brief ジッタリングして更新処理
+void Engine::Camera3DResource::JitterUpdate()
+{
+	// カメラの更新
+	camera3d_->JitterUpdate();
+}
+
 /// @brief リセット
 void Engine::Camera3DResource::Reset()
 {

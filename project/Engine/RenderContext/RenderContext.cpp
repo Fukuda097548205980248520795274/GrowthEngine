@@ -250,7 +250,10 @@ void Engine::RenderContext::PreDraw()
 void Engine::RenderContext::PostDraw()
 {
 	// スカイボックスの描画
-	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
+	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
+
+	// モーションベクトルの描画
+	offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 
 #ifdef _DEVELOPMENT
 	// 衝突ストアのデバッグ線
@@ -264,8 +267,8 @@ void Engine::RenderContext::PostDraw()
 	lightStore_->DebugDrawLine();
 
 	// 線の描画
-	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetViewProjectionMatrix());
-	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetViewProjectionMatrix());
+	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
+	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPMatrix());
 #endif
 
 	// コマンドリスト・アロケータの取得

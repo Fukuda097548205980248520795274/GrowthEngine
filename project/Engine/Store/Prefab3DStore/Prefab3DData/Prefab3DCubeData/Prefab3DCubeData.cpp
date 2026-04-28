@@ -64,6 +64,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	shadowMapTransformationResource_ = std::make_unique<StructuredBufferResource<Matrix4x4>>();
 	shadowMapTransformationResource_->Initialize(device, heap, numInstance_, log);
 
+	// モーションベクターリソースの生成と初期化
+	motionVectorResource_ = std::make_unique<StructuredBufferResource<MotionVectorDataForGPU>>();
+	motionVectorResource_->Initialize(device, heap, numInstance_, log);
+
 
 	// トランスフォーム
 	param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
@@ -270,6 +274,34 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 	commandList->DrawIndexedInstanced(36, useInstance, 0, 0, 0);
 }
 
+/// @brief モーションベクターを描画する
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DCubeData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス描画命令を行っていないときは処理しない
+	if (numUseInstance_ <= 0)
+		return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+
+	// モーションベクトルの設定
+	motionVectorResource_->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
+}
+
 /// @brief インスタンスのドローコール
 void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::Instance::Param* param)
 {
@@ -287,14 +319,26 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->transform.scale, modelQuaternion, param->transform.translate);
 
+	// ビュープロジェクション行列を取得する
+	Matrix4x4 viewProjection = cameraStore_->GetCamera3D().GetCurrentVPMatrix();
+	Matrix4x4 prevVPUnJitter = cameraStore_->GetCamera3D().GetPrevVPUnJitterMatrix();
+	Matrix4x4 currentVPUnJitter = cameraStore_->GetCamera3D().GetCurrentVPUnJitterMatrix();
 
+
+	// 前フレームのWVP行列
+	motionVectorResource_->data_[numUseInstance_].prevWVPMatrix =
+		primitiveResource_->data_[numUseInstance_].world * prevVPUnJitter;
 
 	// ワールド座標
 	primitiveResource_->data_[numUseInstance_].world = worldMatrix;
 
+	// 現フレームのWVP行列
+	motionVectorResource_->data_[numUseInstance_].currentWVPMatrix =
+		primitiveResource_->data_[numUseInstance_].world * currentVPUnJitter;
+
 	// ワールドビュー正射影行列
 	primitiveResource_->data_[numUseInstance_].worldViewProjection =
-		primitiveResource_->data_[numUseInstance_].world * cameraStore_->GetCamera3D().GetViewProjectionMatrix();
+		primitiveResource_->data_[numUseInstance_].world * viewProjection;
 
 	// 逆転置ワールド行列
 	primitiveResource_->data_[numUseInstance_].worldInverseTranspose =

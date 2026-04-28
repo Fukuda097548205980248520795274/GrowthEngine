@@ -85,6 +85,11 @@ namespace Engine
 		/// @param pso 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
+		/// @brief モーションベクターの描画処理
+		/// @param commandList 
+		/// @param pso 
+		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso);
+
 
 		/// @brief 全ての3Dプレハブの描画処理
 		/// @param skyboxStore 

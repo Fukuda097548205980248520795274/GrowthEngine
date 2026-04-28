@@ -117,6 +117,14 @@ void Engine::DX12Prefab::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12Gr
 	prefab3DStore_->ShadowMapDraw(viewProjection, commandList, pso);
 }
 
+/// @brief モーションベクターの描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::DX12Prefab::DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	prefab3DStore_->DrawMotionVector(commandList, pso);
+}
+
 /// @brief リセット
 void Engine::DX12Prefab::PrefabReset()
 {

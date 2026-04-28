@@ -4,12 +4,15 @@
 #include "Data/Prefab3DData/Prefab3DData.h"
 
 #include "DataForGPU/PrefabDataForGPU/PrefabDataForGPU.h"
+#include "DataForGPU/MotionVectorDataForGPU/MotionVectorDataForGPU.h"
 #include <memory>
 #include <list>
 #include <string>
 
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
 #include "Resource/StructuredBufferResource/StructuredBufferResource.h"
+
+#include "PSO/PSOMotionVector/BasePSOMotionVector.h"
 
 namespace Engine
 {
@@ -62,6 +65,11 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		virtual void DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) = 0;
+
+		/// @brief モーションベクターを描画する
+		/// @param commandList 
+		/// @param pso 
+		virtual void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) = 0;
 
 		/// @brief パラメータを取得する
 		/// @return 

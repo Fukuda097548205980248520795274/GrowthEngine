@@ -352,9 +352,6 @@
     <Filter Include="Engine\Include\Application\SceneManager">
       <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMap">
-      <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab">
       <UniqueIdentifier>{d86e0a75-7686-49ef-94e3-812802ec9be5}</UniqueIdentifier>
     </Filter>
@@ -991,6 +988,30 @@
     <Filter Include="Game\Node\ActionNode\GrabAttackNode">
       <UniqueIdentifier>{391a44a0-fc85-4251-8815-fcfd1642a288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\MotionVector">
+      <UniqueIdentifier>{27112296-acc9-4c12-987a-efd369d80b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOMotionVector">
+      <UniqueIdentifier>{cb3c0fb0-7ab3-40df-9a53-4c360f0feea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOMotionVector\PSOMotionVectorRender">
+      <UniqueIdentifier>{1b4ab052-71bd-4514-9798-a00e34004f4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOMotionVector\PSOMotionVectorPrefab">
+      <UniqueIdentifier>{888b1303-8130-4434-9940-dfe924a83ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapRender">
+      <UniqueIdentifier>{e7f292b8-bb52-405f-9df9-b7135de5008c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Resource\MotionVectorTextureResource">
+      <UniqueIdentifier>{b81bccd0-54d7-4739-b67c-d9e523dfc786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\DataForGPU\MotionVectorDataForGPU">
+      <UniqueIdentifier>{55bcb0d9-467a-4aa2-a6ff-f161fe704d53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOTAA">
+      <UniqueIdentifier>{0bb8f30f-a469-4527-8321-9563ce93c118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1194,8 +1215,8 @@
     <ClCompile Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMap\PSOShadowMap.cpp">
-      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMap</Filter>
+    <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapRender\PSOShadowMapRender.cpp">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapRender</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
@@ -1755,6 +1776,21 @@
     <ClCompile Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.cpp">
       <Filter>Game\Node\ActionNode\GrabAttackNode</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOMotionVector\BasePSOMotionVector.cpp">
+      <Filter>Engine\Include\PSO\PSOMotionVector</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOMotionVector\PSOMotionVectorRender\PSOMotionVectorRender.cpp">
+      <Filter>Engine\Include\PSO\PSOMotionVector\PSOMotionVectorRender</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOMotionVector\PSOMotionVectorPrefab\PSOMotionVectorPrefab.cpp">
+      <Filter>Engine\Include\PSO\PSOMotionVector\PSOMotionVectorPrefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\MotionVectorTextureResource\MotionVectorTextureResource.cpp">
+      <Filter>Engine\Include\Resource\MotionVectorTextureResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOTAA\ComputePSOTAA.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTAA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -1988,8 +2024,8 @@
     <ClInclude Include="Engine\PSO\PSOShadowMap\BasePSOShadowMap.h">
       <Filter>Engine\Include\PSO\PSOShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMap\PSOShadowMap.h">
-      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMap</Filter>
+    <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapRender\PSOShadowMapRender.h">
+      <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapRender</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOLightCulling\ComputePSOLightCulling.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOLightCulling</Filter>
@@ -2627,6 +2663,24 @@
     <ClInclude Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.h">
       <Filter>Game\Node\ActionNode\GrabAttackNode</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOMotionVector\BasePSOMotionVector.h">
+      <Filter>Engine\Include\PSO\PSOMotionVector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOMotionVector\PSOMotionVectorRender\PSOMotionVectorRender.h">
+      <Filter>Engine\Include\PSO\PSOMotionVector\PSOMotionVectorRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOMotionVector\PSOMotionVectorPrefab\PSOMotionVectorPrefab.h">
+      <Filter>Engine\Include\PSO\PSOMotionVector\PSOMotionVectorPrefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\MotionVectorTextureResource\MotionVectorTextureResource.h">
+      <Filter>Engine\Include\Resource\MotionVectorTextureResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\MotionVectorDataForGPU\MotionVectorDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\MotionVectorDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTAA\ComputePSOTAA.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTAA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2656,6 +2710,9 @@
     <None Include="Assets\Shader\Random\Random.hlsli">
       <Filter>Engine\Shader\Random</Filter>
     </None>
+    <None Include="Assets\Shader\MotionVector\MotionVector.hlsli">
+      <Filter>Engine\Shader\MotionVector</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Fullscreen\Fullscreen.VS.hlsl">
@@ -2670,7 +2727,7 @@
     <FxCompile Include="Assets\Shader\Render\Render3D\Render3D.PS.hlsl">
       <Filter>Engine\Shader\Render\Render3D</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMap.VS.hlsl">
+    <FxCompile Include="Assets\Shader\ShadowMap\ShadowMapRender.VS.hlsl">
       <Filter>Engine\Shader\ShadowMap</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\LightCulling\LightCulling.CS.hlsl">
@@ -2789,6 +2846,18 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Particle3D\Emitter\Particle3DEmitterSphere.CS.hlsl">
       <Filter>Engine\Shader\Particle3D\Emitter</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\MotionVector\MotionVector.PS.hlsl">
+      <Filter>Engine\Shader\MotionVector</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\MotionVector\MotionVectorRender.VS.hlsl">
+      <Filter>Engine\Shader\MotionVector</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\MotionVector\MotionVectorPrefab.VS.hlsl">
+      <Filter>Engine\Shader\MotionVector</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\TAA.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

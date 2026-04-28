@@ -2,6 +2,9 @@
 #include <cassert>
 #include "ShaderCompiler/ShaderCompiler.h"
 
+#include "RenderContext/DX12Render/DX12Render.h"
+#include "RenderContext/DX12Prefab/DX12Prefab.h"
+
 #include "PostEffectData/PostEffectGrayscaleData/PostEffectGrayscaleData.h"
 #include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"
@@ -25,15 +28,18 @@ Engine::PostEffectStore::PostEffectStore()
 /// @param device 
 /// @param compiler 
 /// @param log 
-void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob,TextureStore* textureStore, Log* log)
+void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, IDxcBlob* vertexShaderBlob,
+	DX12Heap* heap, TextureStore* textureStore, int32_t width, int32_t height, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(compiler);
 	assert(vertexShaderBlob);
+	assert(heap);
 	assert(textureStore);
 
 	// 引数を受け取る
+	heap_ = heap;
 	textureStore_ = textureStore;
 
 	// コピー加算PSO
@@ -96,6 +102,22 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// CS高輝度抽出PSO
 	computePSOHighLuminanceExtraction_ = std::make_unique<ComputePSOHighLuminanceExtraction>();
 	computePSOHighLuminanceExtraction_->Initialize(device, compiler, log);
+
+
+	// モーションベクトルのピクセルシェーダーのコンパイル
+	motionVectorPixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/MotionVector/MotionVector.PS.hlsl", L"ps_6_0");
+
+	// モーションベクトル描画用PSOの初期化
+	psoMotionVectorRender_ = std::make_unique<PSOMotionVectorRender>();
+	psoMotionVectorRender_->Initialize(device, compiler, motionVectorPixelShaderBlob_.Get(), log);
+
+	// モーションベクトルPrefab描画用PSOの初期化
+	psoMotionVectorPrefab_ = std::make_unique<PSOMotionVectorPrefab>();
+	psoMotionVectorPrefab_->Initialize(device, compiler, motionVectorPixelShaderBlob_.Get(), log);
+
+	// モーションベクトルテクスチャリソースの初期化
+	motionVectorTextureResource_ = std::make_unique<MotionVectorTextureResource>();
+	motionVectorTextureResource_->Initialize(device, width, height, heap_, log);
 }
 
 /// @brief リサイズ
@@ -105,10 +127,13 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 /// @param height 
 void Engine::PostEffectStore::Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int32_t width, int32_t height)
 {
+	// データテーブル内の全てのデータをリサイズする
 	for(auto& data : dataTable_)
-	{
 		data->Resize(device, commandList, width, height);
-	}
+
+	// モーションベクトルテクスチャリソースをリサイズする
+	if (motionVectorTextureResource_)
+		motionVectorTextureResource_->Resize(device, width, height);
 }
 
 /// @brief 読み込み
@@ -117,7 +142,7 @@ void Engine::PostEffectStore::Resize(ID3D12Device* device, ID3D12GraphicsCommand
 /// @param device 
 /// @param log 
 PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffect::Type type,
-	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap, Log* log)
+	ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, Log* log)
 {
 	// 同じデータがあるかどうか
 	for (auto& data : dataTable_)
@@ -221,7 +246,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::DOF)
 	{
 		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
-		data->Initialize(device, commandList, buffering, heap, psoDOF_.get(),
+		data->Initialize(device, commandList, buffering, heap_, psoDOF_.get(),
 			computePSOGaussianFilter_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -231,14 +256,45 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Bloom)
 	{
 		std::unique_ptr<PostEffectBloomData> data = std::make_unique<PostEffectBloomData>(name, type, handle, parameter_.get());
-		data->Initialize(device, commandList, buffering, heap, psoCopyImageAdd_.get(),
+		data->Initialize(device, commandList, buffering, heap_, psoCopyImageAdd_.get(),
 			computePSOHighLuminanceExtraction_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}
 
+	// TAA
+	if (type == PostEffect::Type::TAA)
+	{
+		// TAAはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
+		enableMotionVector_ = true;
+	}
+
 	assert(false);
 	return handle;
+}
+
+/// @brief シーン前のリセット処理
+void Engine::PostEffectStore::PerSceneReset()
+{
+	// モーションベクトル有効化を初期化
+	enableMotionVector_ = false;
+}
+
+/// @brief モーションベクトルの描画処理をコマンドリストに登録する
+/// @param commandList 
+/// @param dsvHandle 
+void Engine::PostEffectStore::DrawMotionVector(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle,
+	DX12Render* render, DX12Prefab* prefab)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!enableMotionVector_)return;
+
+	// モーションベクトルテクスチャをレンダーターゲットに設定
+	motionVectorTextureResource_->ClearRenderTarget(commandList, dsvHandle);
+
+	// レンダーとプレハブを使ってモーションベクトルを描画
+	render->DrawMotionVector(commandList, psoMotionVectorRender_.get());
+	prefab->DrawMotionVector(commandList, psoMotionVectorPrefab_.get());
 }
 
 /// @brief デバッグ用パラメータ

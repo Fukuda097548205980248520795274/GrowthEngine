@@ -16,7 +16,7 @@ void Engine::ShadowMapTextureResource::Initialize(DX12Heap* heap, ID3D12Device* 
 
 
 	// シャドウマップのリソースを作成する
-	resource_ = CreateShadowMapTextureResource(device, width, height, log);
+	resource_ = CreateDepthStencilTextureResource(device, width, height, log);
 
 
 	/*------------------
@@ -92,7 +92,7 @@ void Engine::ShadowMapTextureResource::Resize(ID3D12Device* device, int32_t widt
 	resource_.Reset();
 
 	// シャドウマップのリソースを作成する
-	resource_ = CreateShadowMapTextureResource(device, width, height, nullptr);
+	resource_ = CreateDepthStencilTextureResource(device, width, height, nullptr);
 
 
 	/*------------------

@@ -55,6 +55,11 @@ namespace Engine
 		/// @param pso 
 		void DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso) override;
 
+		/// @brief モーションベクターを描画する
+		/// @param commandList 
+		/// @param pso 
+		void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) override;
+
 
 		/// @brief パラメータを取得する
 		/// @return 
@@ -94,6 +99,10 @@ namespace Engine
 
 		/// @brief シャドウマップ座標変換用リソース
 		std::unique_ptr<StructuredBufferResource<Matrix4x4>> shadowMapTransformationResource_;
+
+		/// @brief モーションベクターリソース
+		std::unique_ptr<StructuredBufferResource<MotionVectorDataForGPU>> motionVectorResource_;
+
 
 		/// @brief 立方体頂点リソース
 		CubeVertexResource* vertexResource_ = nullptr;

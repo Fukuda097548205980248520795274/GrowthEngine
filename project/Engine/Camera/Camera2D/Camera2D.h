@@ -17,6 +17,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update() override;
 
+		/// @brief ジッタリングして更新処理
+		void JitterUpdate() override;
+
 		/// @brief パラメータを取得する
 		/// @return 
 		Camera2DData::Param* GetParam() const { return param_.get(); }

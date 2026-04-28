@@ -403,46 +403,53 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateDepthStencilTextureResource
 	return resource;
 }
 
-/// @brief シャドウマップテクスチャリソースを生成する
+/// @brief モーションベクターテクスチャリソースを生成する
 /// @param device 
 /// @param width 
 /// @param height 
+/// @param clearColor 
 /// @param log 
 /// @return 
-Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateShadowMapTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log)
+Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateMotionVectorResource(ID3D12Device* device, uint32_t width, uint32_t height, Vector4 clearColor, Log* log)
 {
-	/*------------------
-		リソースの設定
-	------------------*/
+	/*-----------------------
+		リソースの設定を行う
+	-----------------------*/
 
 	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Width = width;
-	resourceDesc.Height = height;
-	resourceDesc.MipLevels = 1;
-	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-	resourceDesc.SampleDesc.Count = 1;
+
+	resourceDesc.Width = UINT(width);
+	resourceDesc.Height = UINT(height);
+	resourceDesc.Format = DXGI_FORMAT_R16G16_FLOAT;
+
+	// 書き込める設定
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 
 
-	/*----------------
-		ヒープの設定
-	----------------*/
+	/*----------------------
+		ヒープの設定を行う
+	----------------------*/
 
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 
 
 	/*----------------------
-		深度値のクリア設定
+		クリア最適値の設定
 	----------------------*/
 
-	D3D12_CLEAR_VALUE depthClearValue{};
-
-	// 1.0fでクリアする
-	depthClearValue.DepthStencil.Depth = 1.0f;
-	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	D3D12_CLEAR_VALUE clearValue;
+	clearValue.Format = DXGI_FORMAT_R16G16_FLOAT;
+	clearValue.Color[0] = clearColor.x;
+	clearValue.Color[1] = clearColor.y;
+	clearValue.Color[2] = clearColor.z;
+	clearValue.Color[3] = clearColor.w;
 
 
 	if (log)
@@ -454,40 +461,29 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateShadowMapTextureResource(ID
 		log->Logging(std::format("DepthOrArraySize : {}", resourceDesc.DepthOrArraySize));
 		log->Logging(std::format("MipLevels : {}", resourceDesc.MipLevels));
 		log->Logging(std::format("SampleDesc.Count : {}", resourceDesc.SampleDesc.Count));
-		log->Logging("Format : R24G8_TYPELESS");
-		log->Logging("Flags : ALLOW_DEPTH_STENCIL");
-		log->Logging(std::format("Clear DepthStencilDepth : {}", depthClearValue.DepthStencil.Depth));
-		log->Logging("Clear Format : D24_UNORM_S8_UINT");
+		log->Logging("Layout : UNKNOWN");
+		log->Logging("Flags : ALLOW_RENDER_TARGET");
+		log->Logging(std::format("Clear : {},{},{},{}", clearColor.x, clearColor.y, clearColor.z, clearColor.w));
 	}
 
 
-	/*----------------------
-		リソースを生成する
-	----------------------*/
+	/*-------------------
+		リソースの生成
+	-------------------*/
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 	HRESULT hr = device->CreateCommittedResource(
-		// ヒープの設定
 		&heapProperties,
-
-		// ヒープの特殊な設定
 		D3D12_HEAP_FLAG_NONE,
-
-		// リソースの設定
 		&resourceDesc,
-
-		// 深度値を書き込む設定
-		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-
-		// クリア最適地
-		&depthClearValue,
-
+		D3D12_RESOURCE_STATE_RENDER_TARGET,
+		&clearValue,
 		IID_PPV_ARGS(&resource)
 	);
 	assert(SUCCEEDED(hr));
 
 	// 生成成功ログ
-	if (log)log->Logging("CreateCommitted ShadowMapTextureResource \n");
+	if (log)log->Logging("CreateCommitted MotionVectorResource \n");
 
 	return resource;
 }

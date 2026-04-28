@@ -154,6 +154,14 @@ void Engine::Prefab3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D1
 	for (auto& data : dataTable_)data->DrawShadowMap(viewProjection, commandList, pso);
 }
 
+/// @brief モーションベクターの描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStore::DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	for (auto& data : dataTable_)data->RegisterMotionVector(commandList, pso);
+}
+
 /// @brief リセット
 void Engine::Prefab3DStore::Reset()
 {

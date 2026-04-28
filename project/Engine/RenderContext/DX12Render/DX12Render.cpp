@@ -54,6 +54,14 @@ void Engine::DX12Render::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12Gr
 	render3DStore_->ShadowMapDraw(viewProjection, commandList, pso);
 }
 
+/// @brief モーションベクター用描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::DX12Render::DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	render3DStore_->DrawMotionVector(commandList, pso);
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::DX12Render::DebugParameter()
 {

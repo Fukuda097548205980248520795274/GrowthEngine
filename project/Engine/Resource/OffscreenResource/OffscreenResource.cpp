@@ -131,6 +131,18 @@ void Engine::OffscreenResource::ClearRenderTarget(ID3D12GraphicsCommandList* com
 	commandList->ClearRenderTargetView(rtvCpuHandle_, clearColor, 0, nullptr);
 }
 
+/// @brief レンダーターゲットの設定
+/// @param commandList 
+/// @param dsvHandle 
+void Engine::OffscreenResource::SetRenderTarget(ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle)
+{
+	// nullptrチェック
+	assert(commandList);
+
+	// 設定
+	commandList->OMSetRenderTargets(1, &rtvCpuHandle_, false, &dsvHandle);
+}
+
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param rootParameterIndex 

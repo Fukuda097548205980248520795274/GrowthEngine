@@ -70,6 +70,10 @@ namespace Engine
 		/// @param rootParameterIndex 
 		void RegisterCameraResource(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) { cameraResource_->RegisterGraphics(commandList, rootParameterIndex); }
 
+		/// @brief ジッタリングの設定
+		/// @param enable 
+		void SetEnableJitter(bool enable) { enableJitter_ = enable; }
+
 
 	public:
 
@@ -100,6 +104,9 @@ namespace Engine
 
 		/// @brief パラメータ
 		std::unique_ptr<Camera3DParameter> parameter_ = nullptr;
+
+		/// @brief ジッタリングを有効にするかどうか
+		bool enableJitter_ = false;
 
 
 	private:

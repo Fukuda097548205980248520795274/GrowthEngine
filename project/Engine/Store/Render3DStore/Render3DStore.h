@@ -65,6 +65,11 @@ namespace Engine
 		/// @param pso 
 		void ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso);
 
+		/// @brief モーションベクター用の描画処理
+		/// @param commandList 
+		/// @param pso 
+		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso);
+
 		/// @brief プリミティブを読み込む
 		/// @param device 
 		/// @param commandList 

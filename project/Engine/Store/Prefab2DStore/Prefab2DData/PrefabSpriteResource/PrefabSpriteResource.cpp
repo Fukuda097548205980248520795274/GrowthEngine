@@ -197,7 +197,7 @@ void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Inst
 	resource_->data_[useInstance_].worldViewProjection =
 		Make2DScaleMatrix4x4((Vector2(param->transform.scale.x * param->texture.size.x, param->transform.scale.y * param->texture.size.y)))
 		* Make3DRotateZMatrix4x4(param->transform.rotate) * Make2DTranslateMatrix4x4(param->transform.translate)
-		* cameraStore_->GetCamera2D().GetViewProjectionMatrix();
+		* cameraStore_->GetCamera2D().GetCurrentVPMatrix();
 
 	// アンカー
 	resource_->data_[useInstance_].anchor = param_->texture.anchor;

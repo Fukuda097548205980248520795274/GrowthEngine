@@ -113,6 +113,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	// 座標変換リソースの生成
 	transformationResources_ = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
 	transformationResources_->Initialize(device, log);
+	transformationResources_->data_->worldMatrix = MakeIdentityMatrix4x4();
 
 	// マテリアルリソースの生成
 	materialResources_ = std::make_unique<ConstantBufferResource<PrimitiveModelMaterialDataForGPU>>();
@@ -121,6 +122,10 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	// シャドウマップ用座標変換リソースの生成
 	shadowMapTransformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
 	shadowMapTransformationResource_->Initialize(device, log);
+
+	// モーションベクトルリソースの生成
+	motionVectorResource_ = std::make_unique<ConstantBufferResource<MotionVectorDataForGPU>>();
+	motionVectorResource_->Initialize(device, log);
 }
 
 /// @brief 更新処理
@@ -220,7 +225,9 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 		worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 	// ビュープロジェクション行列を取得する
-	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetViewProjectionMatrix();
+	Matrix4x4 viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
+	Matrix4x4 prevVPUnJitter = cameraStore->GetCamera3D().GetPrevVPUnJitterMatrix();
+	Matrix4x4 currentVPUnJitter = cameraStore->GetCamera3D().GetCurrentVPUnJitterMatrix();
 
 
 	/*------------------------
@@ -239,8 +246,14 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	// ライトの設定
 	lightStore_->LightRegister(commandList, 7, 8, 9, 10);
 
+	// 前フレームのWVP行列
+	motionVectorResource_->data_->prevWVPMatrix = transformationResources_->data_->worldMatrix * prevVPUnJitter;
+
 	// ワールド座標
 	transformationResources_->data_->worldMatrix = worldMatrix;
+
+	// 現フレームのWVP行列
+	motionVectorResource_->data_->currentWVPMatrix = transformationResources_->data_->worldMatrix * currentVPUnJitter;
 
 	// ワールドビュー正射影行列
 	transformationResources_->data_->worldViewProjectionMatrix =
@@ -419,6 +432,53 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
+
+/// @brief コマンドリストに登録
+/// @param commandList 
+/// @param pso 
+void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 今フレーム描画していないと処理しない
+	if (!isDrew_)return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// バリアを張る
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
+	// 頂点の設定
+	D3D12_VERTEX_BUFFER_VIEW vbv = {};
+	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
+	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
+	vbv.StrideInBytes = sizeof(VertexDataForGPU);
+	commandList->IASetVertexBuffers(0, 1, &vbv);
+
+	// インデックスの設定
+	D3D12_INDEX_BUFFER_VIEW ibv = {};
+	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
+	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
+	ibv.Format = DXGI_FORMAT_R32_UINT;
+	commandList->IASetIndexBuffer(&ibv);
+
+	// モーションベクトルの設定
+	motionVectorResource_->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
+
+	// バリアを張る
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+}
+
 
 /// @brief デバッグ用パラメータ
 void Engine::Render3DUVSphereData::DebugParameter()

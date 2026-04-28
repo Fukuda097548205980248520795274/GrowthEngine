@@ -21,7 +21,8 @@ namespace Engine
 			Dissolve,
 			WhiteNoise,
 			DOF,
-			Bloom
+			Bloom,
+			TAA
 		};
 
 		/// @brief ラジアルブラー

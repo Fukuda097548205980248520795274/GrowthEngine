@@ -63,11 +63,12 @@ namespace Engine
 	/// @return 
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log);
 
-	/// @brief シャドウマップテクスチャリソースを生成する
+	/// @brief モーションベクターテクスチャリソースを生成する
 	/// @param device 
 	/// @param width 
 	/// @param height 
+	/// @param clearColor 
 	/// @param log 
 	/// @return 
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateShadowMapTextureResource(ID3D12Device* device, int32_t width, int32_t height, Log* log);
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateMotionVectorResource(ID3D12Device* device, uint32_t width, uint32_t height, Vector4 clearColor, Log* log);
 }

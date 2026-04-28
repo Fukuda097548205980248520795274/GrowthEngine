@@ -99,9 +99,17 @@ void Engine::Render3DStore::PerSceneReset()
 /// @param pso 
 void Engine::Render3DStore::ShadowMapDraw(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
-	// 静的モデルデータ
 	for (auto& data : dataTable_)
 		data->Register(viewProjection, commandList, pso);
+}
+
+/// @brief モーションベクター用の描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::Render3DStore::DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+{
+	for(auto& data : dataTable_)
+		data->RegisterMotionVector(commandList, pso);
 }
 
 

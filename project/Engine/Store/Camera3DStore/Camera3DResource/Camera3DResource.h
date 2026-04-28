@@ -26,6 +26,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief ジッタリングして更新処理
+		void JitterUpdate();
+
 		/// @brief リセット
 		void Reset();
 

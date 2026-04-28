@@ -18,6 +18,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update() override;
 
+		/// @brief ジッタリングして更新処理
+		void JitterUpdate() override;
+
 		/// @brief クォータニオンを取得する
 		/// @return 
 		Quaternion GetQuaternion()const { return quaternion_; }

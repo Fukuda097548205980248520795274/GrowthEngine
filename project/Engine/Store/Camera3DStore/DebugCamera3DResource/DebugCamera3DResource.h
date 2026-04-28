@@ -21,6 +21,9 @@ namespace Engine
 		/// @brief 更新処理
 		void Update();
 
+		/// @brief ジッタリングして更新処理
+		void JitterUpdate();
+
 		/// @brief カメラデータを取得する
 		/// @return 
 		const Camera3D& GetCamera3D() { return *camera3d_; }
@@ -47,6 +50,9 @@ namespace Engine
 
 
 	private:
+
+		/// @brief ピボットポイントの更新
+		void PivotPointUpdate();
 
 		// ピボットポイント
 		Vector3 pivotPoint_ = Vector3(0.0f, 0.0f, 0.0f);
