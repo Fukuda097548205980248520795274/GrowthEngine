@@ -40,7 +40,7 @@ void Engine::PostEffectSmoothingData::Register(const PostEffectRenderContext& co
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenPixelShaderResource->Register(commandList, 0);
+	offscreenPixelShaderResource->RegisterGraphics(commandList, 0);
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

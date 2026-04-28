@@ -82,7 +82,7 @@ void Engine::PostEffectVignettingData::Register(const PostEffectRenderContext& c
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenPixelShaderResource->Register(commandList, 0);
+	offscreenPixelShaderResource->RegisterGraphics(commandList, 0);
 
 	// パラメータの設定
 	resource_->RegisterGraphics(commandList, 1);

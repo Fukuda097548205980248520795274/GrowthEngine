@@ -152,7 +152,7 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	highLuminanceExtractionPSO_->Register(commandList);
 
 	// 読み込みテクスチャを設定
-	offscreenRenderTargetResource->ComputeRegister(commandList, 0);
+	offscreenRenderTargetResource->RegisterCompute(commandList, 0);
 
 	// 書き込みテクスチャを設定
 	dualBlurTextureResources_[0]->RegisterComputeUAV(commandList, 1);

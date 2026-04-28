@@ -96,7 +96,7 @@ void Engine::DX12Offscreen::RenderSwapChain(ID3D12GraphicsCommandList* commandLi
 	psoCopyImage_->Register(commandList);
 
 	// テクスチャ
-	offscreenResource_[currentOffscreen_]->Register(commandList, 0);
+	offscreenResource_[currentOffscreen_]->RegisterGraphics(commandList, 0);
 
 	// 形状は三角形
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

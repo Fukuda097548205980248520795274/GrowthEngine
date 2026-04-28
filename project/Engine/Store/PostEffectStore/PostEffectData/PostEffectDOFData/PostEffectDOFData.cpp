@@ -152,7 +152,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	downsamplePSO_->Register(commandList);
 
 	// ブラー用のテクスチャを設定
-	offscreenPixelShaderResource->ComputeRegister(commandList, 0);
+	offscreenPixelShaderResource->RegisterCompute(commandList, 0);
 
 	// ブラー用のテクスチャを設定
 	dualBlurTextureResources_[0]->RegisterComputeUAV(commandList, 1);
@@ -257,7 +257,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 	pso_->Register(commandList);
 
 	// テクスチャの設定
-	offscreenPixelShaderResource->Register(commandList, 0);
+	offscreenPixelShaderResource->RegisterGraphics(commandList, 0);
 
 	// ブラー用オフスクリーンのテクスチャを設定
 	dualBlurTextureResources_[0]->RegisterGraphicsSRV(commandList, 1);

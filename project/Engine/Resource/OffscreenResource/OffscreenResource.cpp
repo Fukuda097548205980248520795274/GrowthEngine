@@ -134,7 +134,7 @@ void Engine::OffscreenResource::ClearRenderTarget(ID3D12GraphicsCommandList* com
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param rootParameterIndex 
-void Engine::OffscreenResource::Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+void Engine::OffscreenResource::RegisterGraphics(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	// nullptrチェック
 	assert(commandList);
@@ -143,10 +143,10 @@ void Engine::OffscreenResource::Register(ID3D12GraphicsCommandList* commandList,
 	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
 }
 
-/// @brief コンピュートシェーダー用にコマンドリストに登録する
+/// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param rootParameterIndex 
-void Engine::OffscreenResource::ComputeRegister(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+void Engine::OffscreenResource::RegisterCompute(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
 {
 	// nullptrチェック
 	assert(commandList);
