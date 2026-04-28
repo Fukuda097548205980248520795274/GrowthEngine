@@ -57,7 +57,8 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	param_->material.enableHalfLambert = true;
 	param_->material.enableSpecular = true;
 	param_->material.enableBlinnPhong = true;
-	param_->material.enableShadowMap = true;
+	param_->material.drawShadowMap = true;
+	param_->material.enableShadow = true;
 
 	// 分割
 	param_->division.slices = 32;
@@ -86,7 +87,8 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 		parameter_->SetValue(group_, "Material_Enable_HalfLambert", &param_->material.enableHalfLambert);
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
-		parameter_->SetValue(group_, "Material_Enable_ShadowMap", &param_->material.enableShadowMap);
+		parameter_->SetValue(group_, "Material_Draw_ShadowMap", &param_->material.drawShadowMap);
+		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
 		parameter_->SetValue(group_, "Division_Rings", &param_->division.rings);
@@ -163,7 +165,8 @@ void Engine::Render3DUVSphereData::Reset()
 		param_->material.enableHalfLambert = true;
 		param_->material.enableSpecular = true;
 		param_->material.enableBlinnPhong = true;
-		param_->material.enableShadowMap = true;
+		param_->material.drawShadowMap = true;
+		param_->material.enableShadow = true;
 
 		// 分割
 		param_->division.slices = 32;
@@ -278,6 +281,9 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	// ブリンフォン有効化
 	materialResources_->data_->enableBlinnPhong = static_cast<int32_t>(param_->material.enableBlinnPhong);
 
+	// シャドウ有効化
+	materialResources_->data_->enableShadow = static_cast<int32_t>(param_->material.enableShadow);
+
 	/*------------------------
 		コマンドリストに登録
 	------------------------*/
@@ -346,7 +352,7 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 	if (!isLoad_)return;
 
 	// シャドウマップを描画しないときは処理しない
-	if (!param_->material.enableShadowMap)return;
+	if (!param_->material.drawShadowMap)return;
 
 	// 直前で描画されているときのみ
 	if (!IsDrew())return;
@@ -498,11 +504,11 @@ void Engine::Render3DUVSphereData::DebugParameter()
 			// ライティング有効化
 			ImGui::Checkbox("Lighting", &param_->material.enableLighting);
 
+			// シャドウマップを描画するか
+			ImGui::Checkbox("DrawShadowMap", &param_->material.drawShadowMap);
+
 			if (param_->material.enableLighting)
 			{
-				// シャドウマップ有効化
-				ImGui::Checkbox("ShadowMap", &param_->material.enableShadowMap);
-
 				// ディフューズ有効化
 				ImGui::Checkbox("Diffuse", &param_->material.enableDiffuse);
 
@@ -522,6 +528,9 @@ void Engine::Render3DUVSphereData::DebugParameter()
 					// 光沢度
 					ImGui::DragFloat("Shininess", &param_->material.shininess, 0.1f);
 				}
+
+				// シャドウ有効化
+				ImGui::Checkbox("Shadow", &param_->material.enableShadow);
 
 				// 環境
 				ImGui::SliderFloat("Environment", &param_->material.environment, 0.0f, 1.0f);

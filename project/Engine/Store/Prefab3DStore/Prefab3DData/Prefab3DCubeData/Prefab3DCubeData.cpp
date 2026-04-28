@@ -83,6 +83,7 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	param_->material.enableHalfLambert = true;
 	param_->material.enableSpecular = true;
 	param_->material.enableBlinnPhong = true;
+	param_->material.enableShadow = true;
 
 	// テクスチャファイルパス
 	textureFilePath_ = textureStore_->GetFilePath(hTexture_);
@@ -107,6 +108,7 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_Enable_HalfLambert", &param_->material.enableHalfLambert);
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
+		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
 
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 
@@ -152,6 +154,7 @@ void Engine::Prefab3DCubeData::Reset()
 		param_->material.enableHalfLambert = true;
 		param_->material.enableSpecular = true;
 		param_->material.enableBlinnPhong = true;
+		param_->material.enableShadow = true;
 	}
 
 	// 読み込まれたことにする
@@ -329,6 +332,9 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	// ブリンフォン有効化
 	primitiveResource_->data_[numUseInstance_].enableBlinnPhong = static_cast<int32_t>(param->material.enableBlinnPhong);
 
+	// シャドウ有効化
+	primitiveResource_->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->material.enableShadow);
+
 	numUseInstance_++;
 }
 
@@ -467,6 +473,9 @@ void Engine::Prefab3DCubeData::DebugParameter()
 					// 光沢度
 					ImGui::DragFloat("Shininess", &param_->material.shininess, 0.1f);
 				}
+
+				// シャドウ有効化
+				ImGui::Checkbox("Shadow", &param_->material.enableShadow);
 
 				// 環境
 				ImGui::SliderFloat("Environment", &param_->material.environment, 0.0f, 1.0f);

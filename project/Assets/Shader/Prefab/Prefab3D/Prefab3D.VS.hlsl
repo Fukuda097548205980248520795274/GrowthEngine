@@ -40,6 +40,9 @@ struct Primitive
     
     // ブリンフォン有効化
     int enableBlinnPhong;
+    
+    // シャドウ有効化
+    int enableShadow;
 };
 StructuredBuffer<Primitive> gPrimitive : register(t0);
 
@@ -85,6 +88,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     // ブリンフォン有効化
     output.enableBlinnPhong = gPrimitive[instanceID].enableBlinnPhong;
+    
+    // シャドウ有効化
+    output.enableShadow = gPrimitive[instanceID].enableShadow;
     
     return output;
 }

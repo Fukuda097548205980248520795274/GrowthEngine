@@ -34,7 +34,8 @@ namespace Engine
         // ブリンフォン有効化
         int enableBlinnPhong;
 
-        float padding0[1];
+		/// @brief シャドウ有効化
+		int enableShadow;
 	};
 
 	namespace Sprite

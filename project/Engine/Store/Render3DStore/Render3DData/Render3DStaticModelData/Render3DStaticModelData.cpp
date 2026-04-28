@@ -90,7 +90,8 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		param_->meshMaterial[meshIndex].enableHalfLambert = true;
 		param_->meshMaterial[meshIndex].enableSpecular = true;
 		param_->meshMaterial[meshIndex].enableBlinnPhong = true;
-		param_->meshMaterial[meshIndex].enableShadowMap = true;
+		param_->meshMaterial[meshIndex].drawShadowMap = true;
+		param_->meshMaterial[meshIndex].enableShadow = true;
 
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -114,7 +115,8 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_HalfLambert", &param_->meshMaterial[meshIndex].enableHalfLambert);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
-			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_ShadowMap", &param_->meshMaterial[meshIndex].enableShadowMap);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Draw_ShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Shadow", &param_->meshMaterial[meshIndex].enableShadow);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -191,7 +193,8 @@ void Engine::Render3DStaticModelData::Reset()
 			param_->meshMaterial[meshIndex].enableHalfLambert = true;
 			param_->meshMaterial[meshIndex].enableSpecular = true;
 			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
-			param_->meshMaterial[meshIndex].enableShadowMap = true;
+			param_->meshMaterial[meshIndex].drawShadowMap = true;
+			param_->meshMaterial[meshIndex].enableShadow = true;
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -300,6 +303,8 @@ void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, Skybo
 		// ブリンフォン有効化
 		meshMaterialResources_[meshIndex]->data_->enableBlinnPhong = static_cast<int32_t>(param_->meshMaterial[meshIndex].enableBlinnPhong);
 
+		// シャドウ有効化
+		meshMaterialResources_[meshIndex]->data_->enableShadow = static_cast<int32_t>(param_->meshMaterial[meshIndex].enableShadow);
 
 
 		/*------------------------
@@ -365,7 +370,7 @@ void Engine::Render3DStaticModelData::Register(const Matrix4x4& viewProjection, 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
 		// シャドウマップを描画しないときは処理しない
-		if (!param_->meshMaterial[meshIndex].enableShadowMap)
+		if (!param_->meshMaterial[meshIndex].drawShadowMap)
 			continue;
 
 		/*-----------------
@@ -518,6 +523,9 @@ void Engine::Render3DStaticModelData::DebugParameter()
 						// ライティング有効化
 						ImGui::Checkbox("Lighting", &param_->meshMaterial[meshIndex].enableLighting);
 
+						// シャドウマップ描画
+						ImGui::Checkbox("DrawShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
+
 						if (param_->meshMaterial[meshIndex].enableLighting)
 						{
 							// ディフューズ有効化
@@ -541,11 +549,11 @@ void Engine::Render3DStaticModelData::DebugParameter()
 								ImGui::DragFloat("Shininess", &param_->meshMaterial[meshIndex].shininess, 0.1f);
 							}
 
+							// シャドウ有効化
+							ImGui::Checkbox("Shadow", &param_->meshMaterial[meshIndex].enableShadow);
+
 							// 環境
 							ImGui::SliderFloat("Environment", &param_->meshMaterial[meshIndex].environment, 0.0f, 1.0f);
-
-							// シャドウマップ有効化
-							ImGui::Checkbox("ShadowMap", &param_->meshMaterial[meshIndex].enableShadowMap);
 						}
 
 

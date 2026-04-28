@@ -35,6 +35,9 @@ struct Material
     
     // ブリンフォン有効化
     int enableBlinnPhong;
+    
+    // シャドウ有効化
+    int enableShadow;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 
@@ -339,22 +342,48 @@ PixelShaderOutput main(VertexShaderOutput input)
     // テクスチャの色
     float4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
     
+    // a = 0は描画しない
+    if (gMaterial.color.a * textureColor.a == 0.0f)
+        discard;
+    
+    // 法線を正規化する
+    float3 normal = normalize(input.normal);
+    
     
     if(gMaterial.enableLighting != 0)
     {
-        // ワールド座標をライト空間に変換
-        float4 shadowPos = mul(float4(input.worldPosition, 1.0f), gShadowTransformation.viewProjection);
-        shadowPos.xyz /= shadowPos.w;
+        float shadowFactor = 1.0f;
         
-        // [-1,1] → [0,1]
-        float2 shadowUV = ((float2) shadowPos + float2(1, -1)) * float2(0.5, -0.5);
-        
-        float shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - 0.005f);
-        float shadowFactor = lerp(0.5f, 1.0f, shadow); // 影の濃さ調整
+        if(gMaterial.enableShadow != 0)
+        {
+            // ワールド座標をシャドウマップ用の座標に変換する
+            float4 shadowPos = mul(float4(input.worldPosition, 1.0f), gShadowTransformation.viewProjection);
+
+            // NDC空間からテクスチャ空間に変換する
+            float2 shadowUV = shadowPos.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
+
+            // シャドウマップのサンプリング結果
+            float shadow = 1.0f;
+
+            // シャドウマップの範囲内にあるかつ、平行光源が存在する場合はシャドウマップをサンプリングする
+            if (all(shadowUV >= 0.0f) && all(shadowUV <= 1.0f) && shadowPos.z <= 1.0f && gNumLight.directionalLight > 0)
+            {
+                // シャドウマップをサンプリングする際のバイアスを計算する
+                float NdotL = dot(normal, -gDirectionalLight[0].direction);
+                float bias = max(0.005f * (1.0f - NdotL), 0.001f);
     
+                // シャドウマップをサンプリングする
+                shadow = gShadowMap.SampleCmpLevelZero(gShadowSampler, shadowUV, shadowPos.z - bias);
+            }
+
+            // シャドウマップのサンプリング結果から影の強さを計算する
+            shadowFactor = lerp(0.5f, 1.0f, shadow);
+        }
+        
+        
         // 環境光
         float3 cameraToPosition = normalize(input.worldPosition - gCamera.worldPosition);
-        float3 reflectedVector = reflect(cameraToPosition, normalize(input.normal));
+        float3 reflectedVector = reflect(cameraToPosition, normal);
         float4 environmentColor = gEnvironmentTexture.Sample(gSampler, reflectedVector) * gMaterial.environment;
         
         // カメラへの方向を算出
@@ -493,12 +522,6 @@ PixelShaderOutput main(VertexShaderOutput input)
     {
         // 色
         output.color = gMaterial.color * textureColor;
-    }
-    
-    // a = 0は描画しない
-    if (output.color.a == 0.0f || textureColor.a == 0.0f)
-    {
-        discard;
     }
     
     return output;

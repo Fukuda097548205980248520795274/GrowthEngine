@@ -105,7 +105,7 @@ void Engine::PSOShadowMapPrefab::Initialize(ID3D12Device* device, ShaderCompiler
 
 	// ラスタライズの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_FRONT;
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 	rasterizerDesc.FrontCounterClockwise = false;
 	rasterizerDesc.DepthClipEnable = true;

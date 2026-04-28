@@ -59,6 +59,9 @@ namespace Engine
 
 			// ブリンフォン有効化
 			int enableBlinnPhong;
+
+			// シャドウ有効化
+			int enableShadow;
 		};
 	}
 }

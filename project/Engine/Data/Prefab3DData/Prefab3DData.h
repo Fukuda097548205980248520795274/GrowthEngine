@@ -80,6 +80,9 @@ namespace Engine
 
 					// ブリンフォン有効化
 					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
 				};
 
 				/// @brief パラメータ
@@ -155,6 +158,9 @@ namespace Engine
 
 					// ブリンフォン有効化
 					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
 				};
 
 				/// @brief パラメータ
@@ -237,6 +243,9 @@ namespace Engine
 
 					// ブリンフォン有効化
 					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
 				};
 
 				/// @brief パラメータ
@@ -308,6 +317,9 @@ namespace Engine
 
 					// ブリンフォン有効化
 					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
 				};
 
 				/// @brief パラメータ

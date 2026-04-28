@@ -16,4 +16,5 @@ struct VertexShaderOutput
     int enableHalfLambert : ENABLE2;
     int enableSpecular : ENABLE3;
     int enableBlinnPhong : ENABLE4;
+    int enableShadow : ENABLE5;
 };

@@ -22,6 +22,7 @@ PrefabInstanceCube::PrefabInstanceCube(std::function<void(const Engine::Prefab3D
 	param_.material.enableHalfLambert = param->material.enableHalfLambert;
 	param_.material.enableSpecular = param->material.enableSpecular;
 	param_.material.enableBlinnPhong = param->material.enableBlinnPhong;
+	param_.material.enableShadow = param->material.enableShadow;
 }
 
 /// @brief 描画処理

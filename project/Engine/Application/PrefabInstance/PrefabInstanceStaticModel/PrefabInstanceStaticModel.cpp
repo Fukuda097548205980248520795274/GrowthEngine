@@ -33,6 +33,7 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 		param_.meshMaterial[meshIndex].enableHalfLambert = param->meshMaterial[meshIndex].enableHalfLambert;
 		param_.meshMaterial[meshIndex].enableSpecular = param->meshMaterial[meshIndex].enableSpecular;
 		param_.meshMaterial[meshIndex].enableBlinnPhong = param->meshMaterial[meshIndex].enableBlinnPhong;
+		param_.meshMaterial[meshIndex].enableShadow = param->meshMaterial[meshIndex].enableShadow;
 	}
 }
 
