@@ -27,7 +27,7 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
+	engine_->LoadParticle3D("Test", 1000, engine_->LoadModel("./Assets/Models/particlePlane", "particlePlane.obj"));
 
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
@@ -143,6 +143,21 @@ void GameScene::Update()
 
 	// カメラ制御の更新
 	UpdateCameraControl(deltaTime);
+}
+
+/// @brief 描画処理
+void GameScene::Draw()
+{
+	// プレイヤーの描画
+	player_->Draw();
+
+	//// 味方の描画
+	//ally_->Draw();
+
+	// 敵の描画
+	enemy_->Draw();
+
+	engine_->DrawParticle3D("Test");
 }
 
 /// @brief カメラ制御の初期化
@@ -315,17 +330,4 @@ void GameScene::ApplyCameraFromPivot()
 		const float pitch = std::atan2(-lookDirection.y, horizontal);
 		cameraParam->transform.rotate = Vector3(pitch, yaw, 0.0f);
 	}
-}
-
-/// @brief 描画処理
-void GameScene::Draw()
-{
-	// プレイヤーの描画
-	player_->Draw();
-
-	//// 味方の描画
-	//ally_->Draw();
-
-	// 敵の描画
-	enemy_->Draw();
 }

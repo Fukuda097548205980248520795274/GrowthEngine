@@ -244,14 +244,14 @@ void Engine::RenderContext::PreDraw()
 
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
+
+	// スカイボックスの描画
+	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
 }
 
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// スカイボックスの描画
-	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
-
 	// モーションベクトルの描画
 	offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 

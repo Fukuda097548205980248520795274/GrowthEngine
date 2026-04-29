@@ -51,8 +51,10 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
 	param_->enableAttract = false;
-	param_->attractPos = Vector3(0.0f, 0.0f, 0.0f);
+	param_->attractDirection = Vector3(0.0f, 1.0f, 0.0f);
+	param_->attractLength = 1.0f;
 	param_->attractAcceleration = 1.0f;
+	param_->swapEmitterAttract = false;
 
 	// グループを設定する
 	group_ = "Particle3D_" + name_;
@@ -76,7 +78,9 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
 		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
 		parameter_->SetValue(group_, "EnableAttract", &param_->enableAttract);
-		parameter_->SetValue(group_, "AttractPos", &param_->attractPos);
+		parameter_->SetValue(group_, "AttractDirection", &param_->attractDirection);
+		parameter_->SetValue(group_, "AttractLength", &param_->attractLength);
+		parameter_->SetValue(group_, "SwapEmitterAttract", &param_->swapEmitterAttract);
 		
 
 		// グループを登録及び反映
@@ -125,7 +129,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// 引力リソースを生成する
 	particleAttractResource_ = std::make_unique<ConstantBufferResource<Particle3DAttractDataForGPU>>();
 	particleAttractResource_->Initialize(device, log);
-	particleAttractResource_->data_->position = param_->position + param_->attractPos;
+	particleAttractResource_->data_->position = param_->position + (param_->attractDirection * param_->attractLength);
 	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
 
 	// パーティクルフレームリソースを生成する
@@ -196,8 +200,10 @@ void Engine::Particle3DData::Reset()
 		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
 		param_->enableAttract = false;
-		param_->attractPos = Vector3(0.0f, 0.0f, 0.0f);
+		param_->attractDirection = Vector3(0.0f, 1.0f, 0.0f);
+		param_->attractLength = 1.0f;
 		param_->attractAcceleration = 1.0f;
+		param_->swapEmitterAttract = false;
 	}
 
 	// ロードしたこととする
@@ -237,7 +243,6 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 		particleEmitterPointResource_->data_->emit = 0;
 	}
 
-
 	// エミッタのパラメータを更新する
 	particleEmitterPointResource_->data_->translate = param_->position;
 	particleEmitterPointResource_->data_->count = param_->count;
@@ -251,11 +256,22 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
 	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
 
+	// エミッター形状のパラメータを更新する
 	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
 	particleEmitterShapeResource_->data_->radius3 = param_->radius3;
 
-	particleAttractResource_->data_->position = param_->position + param_->attractPos;
+	// 引力のパラメータを更新する
+	param_->attractDirection = param_->attractDirection.Normalize();
+	particleAttractResource_->data_->position = param_->position + (param_->attractDirection * param_->attractLength);
 	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
+
+	// エミッターと引力の位置を入れ替える
+	if(param_->enableAttract && param_->swapEmitterAttract)
+	{
+		Vector3 tempPosition = particleEmitterPointResource_->data_->translate;
+		particleEmitterPointResource_->data_->translate = particleAttractResource_->data_->position;
+		particleAttractResource_->data_->position = tempPosition;
+	}
 
 
 	/*------------
@@ -507,8 +523,14 @@ void Engine::Particle3DData::DebugParameter()
 
 		if (param_->enableAttract)
 		{
-			// 引力の位置
-			ImGui::DragFloat3("AttractPos", &param_->attractPos.x, 0.01f, -100000.0f, 100000.0f);
+			// 引力と放出の場所を入れ替える
+			ImGui::Checkbox("SwapEmitterAttract", &param_->swapEmitterAttract);
+
+			// 引力の方向
+			ImGui::DragFloat3("AttractDirection", &param_->attractDirection.x, 0.01f, -1.0f, 1.0f);
+
+			// 引力の距離
+			ImGui::DragFloat("AttractLength", &param_->attractLength, 0.01f, 0.0f, 100000.0f);
 
 			// 吸引加速度
 			ImGui::DragFloat("AttractAcceleration", &param_->attractAcceleration, 0.01f, 0.01f, 100000.0f);

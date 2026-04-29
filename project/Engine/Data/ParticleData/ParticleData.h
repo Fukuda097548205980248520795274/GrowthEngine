@@ -89,11 +89,17 @@ namespace Engine
 			/// @brief 引力の有無
 			bool enableAttract;
 
-			/// @brief 引力の位置
-			Vector3 attractPos;
-
 			// 吸引加速度
 			float attractAcceleration;
+
+			/// @brief 引力の方向
+			Vector3 attractDirection;
+
+			/// @brief 引力の距離
+			float attractLength;
+
+			// 放出と引力の場所を入れ替える
+			bool swapEmitterAttract;
 		};
 	}
 }
