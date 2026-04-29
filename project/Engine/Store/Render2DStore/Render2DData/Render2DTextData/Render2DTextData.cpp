@@ -39,6 +39,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 	// テクスチャ
 	param_->texture.anchor = Vector2(0.0f, 0.0f);
 
+	// 画面のアンカー
+	param_->screenAnchor = Render2D::ScreenAnchor::LeftBottom;
+
 
 	// パラメータに記録と反映
 	group_ = "Text_" + name_;
@@ -51,6 +54,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 
 		// テクスチャ
 		parameter_->SetValue(group_, "Texture_Anchor", &param_->texture.anchor);
+
+		// 画面のアンカー
+		parameter_->SetValue(group_, "ScreenAnchor", &param_->screenAnchor);
 	}
 
 
@@ -136,6 +142,9 @@ void Engine::Render2DTextData::Reset()
 		// テクスチャ
 		param_->texture.anchor = Vector2(0.0f, 0.0f);
 
+		// 画面のアンカー
+		param_->screenAnchor = Render2D::ScreenAnchor::LeftBottom;
+
 		// テキストデータを取得する
 		TextData* textData = fontStore_->GetTextData(hText_);
 
@@ -172,9 +181,58 @@ void Engine::Render2DTextData::Reset()
 /// @param commandList 
 void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
+	Vector2 screenSize = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
+
+	switch (param_->screenAnchor)
+	{
+	case Render2D::ScreenAnchor::LeftBottom:
+		// 左下
+		screenSize = Vector2(0.0f, 0.0f);
+		break;
+
+	case Render2D::ScreenAnchor::LeftTop:
+		// 左上
+		screenSize.x = 0.0f;
+		break;
+
+	case Render2D::ScreenAnchor::RightBottom:
+		// 右下
+		screenSize.y = 0.0f;
+		break;
+
+	case Render2D::ScreenAnchor::Center:
+		// 中心
+		screenSize /= 2.0f;
+		break;
+
+	case Render2D::ScreenAnchor::Left:
+		// 左
+		screenSize.x = 0.0f;
+		screenSize.y /= 2.0f;
+		break;
+
+	case Render2D::ScreenAnchor::Right:
+		// 右
+		screenSize.y /= 2.0f;
+		break;
+
+	case Render2D::ScreenAnchor::Top:
+		// 上
+		screenSize.x /= 2.0f;
+		break;
+
+	case Render2D::ScreenAnchor::Bottom:
+		// 下
+		screenSize.x /= 2.0f;
+		screenSize.y = 0.0f;
+		break;
+	}
+
+	Vector2 translate = param_->transform.translate + screenSize;
+
 	// ワールド行列
-	Matrix4x4 worldMatrix = 
-		Make2DScaleMatrix4x4(param_->transform.scale) * Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(param_->transform.translate);
+	Matrix4x4 worldMatrix =
+		Make2DScaleMatrix4x4(param_->transform.scale) * Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(translate);
 
 	// テキストデータを取得する
 	TextData* textData = fontStore_->GetTextData(hText_);
@@ -282,6 +340,15 @@ void Engine::Render2DTextData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// 画面アンカー
+		const char* type[] = { "LeftTop", "Top", "RightTop" , "Left" , "Center" , "Right","LeftBottom", "Bottom", "RightBottom" };
+		int32_t shapeIndex = static_cast<int32_t>(param_->screenAnchor);
+		if (ImGui::Combo("Screen Anchor", &shapeIndex, type, IM_ARRAYSIZE(type)))
+		{
+			param_->screenAnchor = static_cast<Render2D::ScreenAnchor>(shapeIndex);
+		}
+
+
 		// トランスフォーム
 		if (ImGui::TreeNode("Transform"))
 		{

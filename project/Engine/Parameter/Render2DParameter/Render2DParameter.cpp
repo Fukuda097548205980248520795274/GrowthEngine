@@ -103,6 +103,13 @@ void Engine::Render2DParameter::RegisterGroupDataReflection(const std::string& f
 				std::string** ptr = std::get_if<std::string*>(&item);
 				**ptr = value;
 			}
+			else if (itItem->is_number_integer() && std::holds_alternative<Render2D::ScreenAnchor*>(item))
+			{
+				// 列挙体
+				Render2D::ScreenAnchor value = static_cast<Render2D::ScreenAnchor>(itItem->get<int32_t>());
+				Render2D::ScreenAnchor** ptr = std::get_if<Render2D::ScreenAnchor*>(&item);
+				**ptr = value;
+			}
 
 
 			break;
@@ -179,6 +186,12 @@ void Engine::Render2DParameter::SaveFile(const std::string& fileName)
 		{
 			std::string* value = std::get<std::string*>(item);
 			root[fileName][itemName] = *value;
+		}
+		else if (std::holds_alternative<Render2D::ScreenAnchor*>(item))
+		{
+			// 列挙体 ScreenAnchor
+			Render2D::ScreenAnchor* value = std::get<Render2D::ScreenAnchor*>(item);
+			root[fileName][itemName] = static_cast<int32_t>(*value);
 		}
 	}
 

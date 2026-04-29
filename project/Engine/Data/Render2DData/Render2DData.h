@@ -15,6 +15,20 @@ namespace Engine
 			Text
 		};
 
+		// @brief スクリーンアンカー
+		enum class ScreenAnchor
+		{
+			LeftTop,
+			Top,
+			RightTop,
+			Left,
+			Center,
+			Right,
+			LeftBottom,
+			Bottom,
+			RightBottom
+		};
+
 		/// @brief 矩形
 		namespace Sprite
 		{
@@ -57,6 +71,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief 画面のアンカー
+				ScreenAnchor screenAnchor = ScreenAnchor::LeftBottom;
+
 				/// @brief トランスフォーム
 				Transform transform;
 
@@ -100,6 +117,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief 画面のアンカー
+				ScreenAnchor screenAnchor = ScreenAnchor::LeftBottom;
+
 				/// @brief トランスフォーム
 				Transform transform;
 
