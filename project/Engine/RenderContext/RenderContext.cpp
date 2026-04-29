@@ -255,6 +255,9 @@ void Engine::RenderContext::PostDraw()
 	// モーションベクトルの描画
 	offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 
+	// モーションブラーの描画
+	offscreen_->DrawMotionBlur(commandList_);
+
 	// TAAの描画
 	offscreen_->DrawTAA(commandList_);
 

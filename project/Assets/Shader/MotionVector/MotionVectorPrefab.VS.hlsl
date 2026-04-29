@@ -17,16 +17,16 @@ struct Transformation
 };
 StructuredBuffer<Transformation> gTransformation : register(t0);
 
-VertexShaderOutput main(VertexShaderInput input, uint vertexID : SV_VertexID)
+VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
 {
     VertexShaderOutput output;
     
     // 現在の座標を計算
-    output.position = mul(input.position, gTransformation[vertexID].currentWVP);
+    output.position = mul(input.position, gTransformation[instanceID].currentWVP);
     output.currentPos = output.position;
     
     // 前のフレームでの座標を計算
-    output.prevPos = mul(input.position, gTransformation[vertexID].prevWVP);
+    output.prevPos = mul(input.position, gTransformation[instanceID].prevWVP);
     
     return output;
 }

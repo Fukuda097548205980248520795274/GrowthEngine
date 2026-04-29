@@ -144,5 +144,17 @@ namespace Engine
 
 			float padding[2]; // 16バイトアラインメントのためのパディング
         };
+
+		/// @brief GPUに送るモーションブラー
+        struct MotionBlurDataForGPU
+        {
+            // ブラー強度
+			uint32_t numSamples;
+
+			// ブラーのスケール
+            float blurScale;
+
+			float padding[3]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

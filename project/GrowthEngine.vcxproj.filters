@@ -1015,6 +1015,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData">
       <UniqueIdentifier>{d40fd5d1-86a2-4b66-8c62-334786c7dbaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOMotionBlur">
+      <UniqueIdentifier>{ab6f48bd-d528-43b6-aff2-a5fd42b65202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData">
+      <UniqueIdentifier>{64caf53e-2ffe-4739-b96b-4e95149b5ce8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1796,6 +1802,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOMotionBlur\ComputePSOMotionBlur.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOMotionBlur</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData\PostEffectMotionBlurData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2690,6 +2702,12 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectTAAData\PostEffectTAAData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectTAAData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOMotionBlur\ComputePSOMotionBlur.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOMotionBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData\PostEffectMotionBlurData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2866,6 +2884,9 @@
       <Filter>Engine\Shader\MotionVector</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\TAA.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\MotionBlur.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

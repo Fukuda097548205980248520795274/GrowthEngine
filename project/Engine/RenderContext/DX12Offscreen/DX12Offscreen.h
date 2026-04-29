@@ -88,6 +88,10 @@ namespace Engine
 		/// @param context 
 		void DrawTAA(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief モーションブラーを描画する
+		/// @param commandList 
+		void DrawMotionBlur(ID3D12GraphicsCommandList* commandList);
+
 
 		/// @brief ポストエフェクトのパラメータを取得する
 		/// @tparam T 

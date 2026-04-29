@@ -27,7 +27,7 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadParticle3D("Test", 1000, engine_->LoadModel("./Assets/Models/particlePlane", "particlePlane.obj"));
+	engine_->LoadPostEffect("MotionBlur", Engine::PostEffect::Type::MotionBlur);
 
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
@@ -156,8 +156,6 @@ void GameScene::Draw()
 
 	// 敵の描画
 	enemy_->Draw();
-
-	engine_->DrawParticle3D("Test");
 }
 
 /// @brief カメラ制御の初期化

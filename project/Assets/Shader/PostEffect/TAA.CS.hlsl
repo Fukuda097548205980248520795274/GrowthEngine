@@ -1,6 +1,6 @@
 Texture2D<float4> currentTex : register(t0);
 Texture2D<float4> prevTex : register(t1);
-Texture2D<float2> velocityTex : register(t2);
+Texture2D<float4> velocityTex : register(t2);
 
 RWTexture2D<float4> outputTex : register(u0);
 
@@ -69,7 +69,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float4 linearCurrentColor = currentTex[pos];
 
     // ベロシティテクスチャから現在のピクセルのベロシティを取得
-    float2 bestVelocity = velocityTex[pos];
+    float2 bestVelocity = velocityTex[pos].xy;
     float maxVelocitySq = dot(bestVelocity, bestVelocity);
 
     // 3x3の近傍をサンプリングして最大のベロシティを見つける
@@ -79,7 +79,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
         {
             // 近傍のベロシティをサンプリングして最大のものを見つける
             int2 samplePos = clamp(pos + int2(x, y), int2(0, 0), maxPos);
-            float2 v = velocityTex[samplePos];
+            float2 v = velocityTex[samplePos].xy;
             float vSq = dot(v, v);
             if (vSq > maxVelocitySq)
             {

@@ -17,6 +17,7 @@
 #include "PostEffectData/PostEffectDOFData/PostEffectDOFData.h"
 #include "PostEffectData/PostEffectBloomData/PostEffectBloomData.h"
 #include "PostEffectData/PostEffectTAAData/PostEffectTAAData.h"
+#include "PostEffectData/PostEffectMotionBlurData/PostEffectMotionBlurData.h"
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -108,6 +109,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePSOTAA_ = std::make_unique<ComputePSOTAA>();
 	computePSOTAA_->Initialize(device, compiler, log);
 
+	// CSモーションブラーPSO
+	computePSOMotionBlur_ = std::make_unique<ComputePSOMotionBlur>();
+	computePSOMotionBlur_->Initialize(device, compiler, log);
+
 
 	// モーションベクトルのピクセルシェーダーのコンパイル
 	motionVectorPixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/MotionVector/MotionVector.PS.hlsl", L"ps_6_0");
@@ -159,10 +164,10 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		}
 	}
 
-	// TAAは特別扱いする。理由は、TAAは前フレームの結果を参照するため、同じ名前で複数回読み込むことがあるから。
-	if (isLoadTAA_)
+	// TAAやモーションブラーはモーションベクトルを必要とするため、すでに読み込まれている場合はリセットしてハンドルを返す
+	if (isLoadTAA_ || isLoadMotionBlur_)
 	{
-		if (PostEffect::Type::TAA == type)
+		if (PostEffect::Type::TAA == type || PostEffect::Type::MotionBlur == type)
 		{
 			for (auto& data : dataTable_)
 			{
@@ -300,6 +305,23 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		return handle;
 	}
 
+	// モーションブラー
+	if (type == PostEffect::Type::MotionBlur)
+	{
+		std::unique_ptr<PostEffectMotionBlurData> data = std::make_unique<PostEffectMotionBlurData>(name, type, handle, parameter_.get());
+		data->Initialize(device, commandList, heap_, buffering, computePSOMotionBlur_.get(), log);
+		dataTable_.push_back(std::move(data));
+
+		// モーションブラーはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
+		enableMotionVector_ = true;
+
+		// モーションブラーのハンドルを保存しておく
+		isLoadMotionBlur_ = true;
+		hMotionBlur_ = handle;
+
+		return handle;
+	}
+
 	assert(false);
 	return handle;
 }
@@ -310,8 +332,9 @@ void Engine::PostEffectStore::PerSceneReset()
 	// モーションベクトル有効化を初期化
 	enableMotionVector_ = false;
 
-	// TAAの読み込みフラグを初期化
+	// 読み込みフラグを初期化
 	isLoadTAA_ = false;
+	isLoadMotionBlur_ = false;
 }
 
 /// @brief モーションベクトルの描画処理をコマンドリストに登録する
@@ -347,6 +370,24 @@ void Engine::PostEffectStore::DrawTAA(const PostEffectRenderContext& context)
 
 	// TAAの描画処理をコマンドリストに登録する
 	dataTable_[hTAA_]->Register(renderContext);
+}
+
+/// @brief モーションブラーの描画処理をコマンドリストに登録する
+/// @param context 
+void Engine::PostEffectStore::DrawMotionBlur(const PostEffectRenderContext& context)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!enableMotionVector_)return;
+
+	// モーションブラーがない場合は描画しない
+	if (!isLoadMotionBlur_)return;
+
+	// モーションブラーの描画処理をコマンドリストに登録する
+	PostEffectRenderContext renderContext = context;
+	renderContext.motionVectorTextureResource = motionVectorTextureResource_.get();
+
+	// モーションブラーの描画処理をコマンドリストに登録する
+	dataTable_[hMotionBlur_]->Register(renderContext);
 }
 
 /// @brief デバッグ用パラメータ

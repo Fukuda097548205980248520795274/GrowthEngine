@@ -22,7 +22,8 @@ namespace Engine
 			WhiteNoise,
 			DOF,
 			Bloom,
-			TAA
+			TAA,
+			MotionBlur,
 		};
 
 		/// @brief ラジアルブラー
@@ -134,6 +135,14 @@ namespace Engine
 
 			// ガンマ補正
 			float gamma;
+		};
+
+		/// @brief モーションブラー
+		struct MotionBlur
+		{
+			uint32_t numSamples; // サンプル数
+
+			float blurScale; // ブラーの強さ
 		};
 	}
 }

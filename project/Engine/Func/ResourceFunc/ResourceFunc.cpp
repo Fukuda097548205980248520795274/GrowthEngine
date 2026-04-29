@@ -464,7 +464,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateMotionVectorResource(ID3D12
 
 	resourceDesc.Width = UINT(width);
 	resourceDesc.Height = UINT(height);
-	resourceDesc.Format = DXGI_FORMAT_R16G16_FLOAT;
+	resourceDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 
 	// 書き込める設定
 	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
@@ -489,7 +489,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateMotionVectorResource(ID3D12
 	----------------------*/
 
 	D3D12_CLEAR_VALUE clearValue;
-	clearValue.Format = DXGI_FORMAT_R16G16_FLOAT;
+	clearValue.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	clearValue.Color[0] = clearColor.x;
 	clearValue.Color[1] = clearColor.y;
 	clearValue.Color[2] = clearColor.z;

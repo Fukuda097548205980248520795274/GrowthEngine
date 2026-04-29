@@ -26,6 +26,7 @@
 #include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
 #include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
 #include "PSO/ComputePSO/ComputePSOTAA/ComputePSOTAA.h"
+#include "PSO/ComputePSO/ComputePSOMotionBlur/ComputePSOMotionBlur.h"
 
 #include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
 #include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
@@ -96,6 +97,10 @@ namespace Engine
 		/// @param context 
 		void DrawTAA(const PostEffectRenderContext& context);
 
+		/// @brief モーションブラーの描画処理をコマンドリストに登録する
+		/// @param context 
+		void DrawMotionBlur(const PostEffectRenderContext& context);
+
 
 
 		/// @brief 指定入力が必要かどうか
@@ -120,6 +125,10 @@ namespace Engine
 		/// @brief TAAを読み込んでいるかどうか
 		/// @return 
 		bool IsLoadTAA()const { return isLoadTAA_; }
+
+		/// @brief モーションブラーを読み込んでいるかどうか
+		/// @return 
+		bool IsLoadMotionBlur() const { return isLoadMotionBlur_; }
 
 		/// @brief 指定入力が必要かどうか
 		/// @param name
@@ -229,6 +238,9 @@ namespace Engine
 		/// @brief CS TAA PSO
 		std::unique_ptr<ComputePSOTAA> computePSOTAA_ = nullptr;
 
+		/// @brief CSモーションブラーPSO
+		std::unique_ptr<ComputePSOMotionBlur> computePSOMotionBlur_ = nullptr;
+
 
 	private:
 
@@ -254,8 +266,17 @@ namespace Engine
 		/// @brief TAAのハンドル
 		PostEffectHandle hTAA_ = 0;
 
+		/// @brief TAAを読み込んでいるかどうか
 		bool isLoadTAA_ = false;
 
+
+	private:
+
+		/// @brief モーションブラーのハンドル
+		PostEffectHandle hMotionBlur_ = 0;
+
+		/// @brief モーションブラーを読み込んでいるかどうか
+		bool isLoadMotionBlur_ = false;
 
 	private:
 
