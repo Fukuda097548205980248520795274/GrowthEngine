@@ -24,6 +24,7 @@ namespace Engine
 			Bloom,
 			TAA,
 			MotionBlur,
+			AfterImage
 		};
 
 		/// @brief ラジアルブラー
@@ -143,6 +144,12 @@ namespace Engine
 			uint32_t numSamples; // サンプル数
 
 			float blurScale; // ブラーの強さ
+		};
+
+		/// @brief 残像
+		struct AfterImage
+		{
+			float decay; // 残像の減衰率
 		};
 	}
 }

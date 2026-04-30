@@ -18,6 +18,7 @@
 #include "PostEffectData/PostEffectBloomData/PostEffectBloomData.h"
 #include "PostEffectData/PostEffectTAAData/PostEffectTAAData.h"
 #include "PostEffectData/PostEffectMotionBlurData/PostEffectMotionBlurData.h"
+#include "PostEffectData/PostEffectAfterImageData/PostEffectAfterImageData.h"
 
 bool Engine::PostEffectStore::isLoadMotionBlur_ = false;
 bool Engine::PostEffectStore::isLoadAfterImage_ = false;
@@ -120,6 +121,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// CS速度膨張PSO
 	computePSOVelocityDilation_ = std::make_unique<ComputePSOVelocityDilation>();
 	computePSOVelocityDilation_->Initialize(device, compiler, log);
+
+	// CS残像PSO
+	computePSOAfterImage_ = std::make_unique<ComputePSOAfterImage>();
+	computePSOAfterImage_->Initialize(device, compiler, log);
 
 
 	// モーションベクトルのピクセルシェーダーのコンパイル
@@ -330,6 +335,23 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		return handle;
 	}
 
+	// 残像
+	if (type == PostEffect::Type::AfterImage)
+	{
+		std::unique_ptr<PostEffectAfterImageData> data = std::make_unique<PostEffectAfterImageData>(name, type, handle, parameter_.get());
+		data->Initialize(device, commandList, heap_, buffering, computePSOAfterImage_.get(), log);
+		dataTable_.push_back(std::move(data));
+
+		// 残像はモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
+		enableMotionVector_ = true;
+
+		// 残像のハンドルを保存しておく
+		isLoadAfterImage_ = true;
+		hAfterImage_ = handle;
+
+		return handle;
+	}
+
 	assert(false);
 	return handle;
 }
@@ -397,6 +419,24 @@ void Engine::PostEffectStore::DrawMotionBlur(const PostEffectRenderContext& cont
 
 	// モーションブラーの描画処理をコマンドリストに登録する
 	dataTable_[hMotionBlur_]->Register(renderContext);
+}
+
+/// @brief 残像の描画処理をコマンドリストに登録する
+/// @param context 
+void Engine::PostEffectStore::DrawAfterImage(const PostEffectRenderContext& context)
+{
+	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
+	if (!enableMotionVector_)return;
+
+	// 残像がない場合は描画しない
+	if (!isLoadAfterImage_)return;
+
+	// 残像の描画処理をコマンドリストに登録する
+	PostEffectRenderContext renderContext = context;
+	renderContext.motionVectorTextureResource = motionVectorTextureResource_.get();
+
+	// 残像の描画処理をコマンドリストに登録する
+	dataTable_[hAfterImage_]->Register(renderContext);
 }
 
 /// @brief デバッグ用パラメータ

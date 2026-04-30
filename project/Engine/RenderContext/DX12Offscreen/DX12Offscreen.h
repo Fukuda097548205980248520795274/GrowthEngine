@@ -92,6 +92,11 @@ namespace Engine
 		/// @param commandList 
 		void DrawMotionBlur(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief 残像を描画する
+		/// @param commandList 
+		/// @param cameraStore
+		void DrawAfterImage(ID3D12GraphicsCommandList* commandList , Camera3DStore* cameraStore);
+
 
 		/// @brief ポストエフェクトのパラメータを取得する
 		/// @tparam T 

@@ -27,6 +27,12 @@ namespace Engine
 		/// @param buffering 
 		void Resize(ID3D12Device* device, DX12Buffering* buffering);
 
+		/// @brief バリアを張る
+		/// @param commandList 
+		/// @param before 
+		/// @param after 
+		void Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+
 		/// @brief デプスステンシルのクリア
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
@@ -43,6 +49,11 @@ namespace Engine
 		/// @param commandList
 		/// @param rootParameterIndex
 		void Register(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
+
+		/// @brief SRVをコマンドリストに登録する
+		/// @param commandList 
+		/// @param rootParameterIndex 
+		void RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
 
 	private:

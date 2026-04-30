@@ -106,6 +106,15 @@ void Engine::DepthResource::Resize(ID3D12Device* device, DX12Buffering* bufferin
 	device->CreateShaderResourceView(resource_.Get(), &srvDesc, srvHandle_.first);
 }
 
+/// @brief バリアを張る
+/// @param commandList 
+/// @param before 
+/// @param after 
+void Engine::DepthResource::Barrier(ID3D12GraphicsCommandList* commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+	TransitionBarrier(resource_.Get(), before, after, commandList);
+}
+
 /// @brief デプスステンシルのクリア
 /// @param commandList 
 void Engine::DepthResource::ClearDepthStencil(ID3D12GraphicsCommandList* commandList)
@@ -121,4 +130,13 @@ void Engine::DepthResource::Register(ID3D12GraphicsCommandList* commandList, UIN
 {
 	assert(commandList);
 	commandList->SetGraphicsRootDescriptorTable(rootParameterIndex, srvHandle_.second);
+}
+
+/// @brief SRVをコマンドリストに登録する
+/// @param commandList 
+/// @param rootParameterIndex 
+void Engine::DepthResource::RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)
+{
+	assert(commandList);
+	commandList->SetComputeRootDescriptorTable(rootParameterIndex, srvHandle_.second);
 }

@@ -258,6 +258,9 @@ void Engine::RenderContext::PostDraw()
 	// モーションブラーの描画
 	offscreen_->DrawMotionBlur(commandList_);
 
+	// 残像の描画
+	offscreen_->DrawAfterImage(commandList_ , camera3DStore_.get());
+
 	// TAAの描画
 	offscreen_->DrawTAA(commandList_);
 

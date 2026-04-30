@@ -430,6 +430,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOAfterImage\ComputePSOAfterImage.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -840,6 +841,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData\PostEffectAfterImageData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1154,6 +1156,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Parameter\Render2DParameter\Render2DParameter.h" />
     <ClInclude Include="Engine\Parameter\SoundParameter\SoundParameter.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\BaseComputePSO.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOAfterImage\ComputePSOAfterImage.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurDownsample\ComputePSODualBlurDownsample.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSODualBlurUpsample\ComputePSODualBlurUpsample.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOGaussianFilter\ComputePSOGaussianFilter.h" />
@@ -1266,6 +1269,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\ModelStore\ModelStore.h" />
     <ClInclude Include="Engine\Store\Particle3DStore\Particle3DData\Particle3DData.h" />
     <ClInclude Include="Engine\Store\Particle3DStore\Particle3DStore.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData\PostEffectAfterImageData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBloomData\PostEffectBloomData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h" />
@@ -1528,6 +1532,17 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\AfterImage.CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

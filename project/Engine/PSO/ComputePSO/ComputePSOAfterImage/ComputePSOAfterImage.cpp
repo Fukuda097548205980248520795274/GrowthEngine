@@ -1,0 +1,180 @@
+#include "ComputePSOAfterImage.h"
+#include "Log/Log.h"
+#include "ShaderCompiler/ShaderCompiler.h"
+#include <cassert>
+
+/// @brief 初期化
+/// @param device 
+/// @param compiler 
+/// @param log 
+void Engine::ComputePSOAfterImage::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
+{
+	// シェーダのバイナリデータを取得する
+	computeShaderBlob_ = compiler->Compile(L"./Assets/Shader/PostEffect/AfterImage.CS.hlsl", L"cs_6_0");
+	assert(computeShaderBlob_ != nullptr);
+
+
+	/*-----------------------
+		ディスクリプタレンジ
+	-----------------------*/
+
+	// ディスクリプタレンジを設定する1
+	D3D12_DESCRIPTOR_RANGE currentTextureDescriptor[1];
+	currentTextureDescriptor[0].BaseShaderRegister = 0;
+	currentTextureDescriptor[0].RegisterSpace = 0;
+	currentTextureDescriptor[0].NumDescriptors = 1;
+	currentTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	currentTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_DESCRIPTOR_RANGE velocityTextureDescriptor[1];
+	velocityTextureDescriptor[0].BaseShaderRegister = 1;
+	velocityTextureDescriptor[0].RegisterSpace = 0;
+	velocityTextureDescriptor[0].NumDescriptors = 1;
+	velocityTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	velocityTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_DESCRIPTOR_RANGE prevAfterImageTextureDescriptor[1];
+	prevAfterImageTextureDescriptor[0].BaseShaderRegister = 2;
+	prevAfterImageTextureDescriptor[0].RegisterSpace = 0;
+	prevAfterImageTextureDescriptor[0].NumDescriptors = 1;
+	prevAfterImageTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	prevAfterImageTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_DESCRIPTOR_RANGE depthTextureDescriptor[1];
+	depthTextureDescriptor[0].BaseShaderRegister = 3;
+	depthTextureDescriptor[0].RegisterSpace = 0;
+	depthTextureDescriptor[0].NumDescriptors = 1;
+	depthTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	depthTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	// ディスクリプタレンジを設定する2
+	D3D12_DESCRIPTOR_RANGE writeTextureDescriptor[1];
+	writeTextureDescriptor[0].BaseShaderRegister = 0;
+	writeTextureDescriptor[0].RegisterSpace = 0;
+	writeTextureDescriptor[0].NumDescriptors = 1;
+	writeTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	writeTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	D3D12_DESCRIPTOR_RANGE PerAfterImageDataDescriptor[1];
+	PerAfterImageDataDescriptor[0].BaseShaderRegister = 1;
+	PerAfterImageDataDescriptor[0].RegisterSpace = 0;
+	PerAfterImageDataDescriptor[0].NumDescriptors = 1;
+	PerAfterImageDataDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+	PerAfterImageDataDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+
+
+	/*---------------------
+		ルートパラメータ
+	---------------------*/
+
+	D3D12_ROOT_PARAMETER rootParameter[7];
+
+	// SRV DescriptorTable t0
+	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[0].DescriptorTable.pDescriptorRanges = currentTextureDescriptor;
+	rootParameter[0].DescriptorTable.NumDescriptorRanges = _countof(currentTextureDescriptor);
+
+	// SRV DescriptorTable t1
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = velocityTextureDescriptor;
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(velocityTextureDescriptor);
+
+	// SRV DescriptorTable t2
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].DescriptorTable.pDescriptorRanges = prevAfterImageTextureDescriptor;
+	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(prevAfterImageTextureDescriptor);
+
+	// SRV DescriptorTable t3
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = depthTextureDescriptor;
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(depthTextureDescriptor);
+
+	// UAV DescriptorTable u0
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[4].DescriptorTable.pDescriptorRanges = writeTextureDescriptor;
+	rootParameter[4].DescriptorTable.NumDescriptorRanges = _countof(writeTextureDescriptor);
+
+	// UAV DescriptorTable u1
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[5].DescriptorTable.pDescriptorRanges = PerAfterImageDataDescriptor;
+	rootParameter[5].DescriptorTable.NumDescriptorRanges = _countof(PerAfterImageDataDescriptor);
+
+	// 定数バッファ RootConstant b0
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[6].Constants.ShaderRegister = 0;
+	rootParameter[6].Constants.RegisterSpace = 0;
+
+
+	/*--------------------
+		サンプラーの設定
+	--------------------*/
+
+	// s0
+	D3D12_STATIC_SAMPLER_DESC samplers[1] = {};
+	samplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	samplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+	samplers[0].MipLODBias = 0.0f;
+	samplers[0].MaxAnisotropy = 1;
+	samplers[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	samplers[0].MinLOD = 0.0f;
+	samplers[0].MaxLOD = D3D12_FLOAT32_MAX;
+	samplers[0].ShaderRegister = 0;
+	samplers[0].RegisterSpace = 0;
+	samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+
+	/*-------------------------
+		ルートシグネチャの生成
+	-------------------------*/
+
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+	descriptionRootSignature.Flags =
+		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	// ルートパラメータを設定する
+	descriptionRootSignature.pParameters = rootParameter;
+	descriptionRootSignature.NumParameters = _countof(rootParameter);
+
+	// サンプラーを設定する
+	descriptionRootSignature.pStaticSamplers = samplers;
+	descriptionRootSignature.NumStaticSamplers = _countof(samplers);
+
+	// シリアライズしてバイナリにする
+	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
+
+	// エラーのとき、情報を出力し停止させる
+	if (FAILED(hr))
+	{
+		if (log)log->Logging(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
+		assert(false);
+	}
+
+	// バイナリを元に生成
+	hr = device->CreateRootSignature(0,
+		signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
+	assert(SUCCEEDED(hr));
+
+
+	/*------------------
+		PSOを生成する
+	------------------*/
+
+	D3D12_COMPUTE_PIPELINE_STATE_DESC computePipelineStateDesc{};
+	computePipelineStateDesc.CS = { computeShaderBlob_->GetBufferPointer(), computeShaderBlob_->GetBufferSize() };
+	computePipelineStateDesc.pRootSignature = rootSignature_.Get();
+
+	hr = device->CreateComputePipelineState(&computePipelineStateDesc, IID_PPV_ARGS(&pipelineState_));
+	assert(SUCCEEDED(hr));
+}

@@ -35,6 +35,9 @@
 #include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
 #include "Application/PrefabBase/PrefabBaseStaticModel/PrefabBaseStaticModel.h"
 
+#include "Application/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
+#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
+
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
 
 #include "Application/Scene/Scene.h"

@@ -372,6 +372,42 @@ void Engine::DX12Offscreen::DrawMotionBlur(ID3D12GraphicsCommandList* commandLis
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }
 
+/// @brief 残像を描画する
+/// @param commandList 
+void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandList, Camera3DStore* cameraStore)
+{
+	// 残像を読み込んでいない場合は描画しない
+	if (!postEffectStore_->IsLoadAfterImage())return;
+
+	// nullptrチェック
+	assert(commandList);
+	assert(cameraStore);
+	const int32_t sourceOffscreenIndex = currentOffscreen_;
+
+	// カウントする
+	++currentOffscreen_;
+	currentOffscreen_ = currentOffscreen_ % 2;
+
+	PostEffectRenderContext context{};
+	context.commandList = commandList;
+	context.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.camera3DStore = cameraStore;
+	context.depthResource = depthResource_.get();
+	context.psoCopyImage = psoCopyImage_.get();
+
+	// 書き込み対象 -> 読み込ませテクスチャ
+	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+
+	// 残像の描画コマンドを登録する
+	postEffectStore_->DrawAfterImage(context);
+
+	// 読み込ませテクスチャ -> 書き込み対象
+	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::DX12Offscreen::DebugParameter()
 {

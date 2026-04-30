@@ -27,7 +27,7 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadPostEffect("MotionBlur", Engine::PostEffect::Type::MotionBlur);
+	engine_->LoadPostEffect("AfterImage", Engine::PostEffect::Type::AfterImage);
 
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();

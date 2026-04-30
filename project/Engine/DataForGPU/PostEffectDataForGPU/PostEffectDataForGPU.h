@@ -154,7 +154,19 @@ namespace Engine
 			// ブラーのスケール
             float blurScale;
 
-			float padding[3]; // 16バイトアラインメントのためのパディング
+			float padding[2]; // 16バイトアラインメントのためのパディング
+        };
+
+		/// @brief GPUに送る残像
+		struct AfterImageDataForGPU
+        {
+			float decay; // 残像の減衰率
+
+            float padding[3];
+
+			Matrix4x4 InvCurrentViewProjection; // 現在のフレームのビュー射影行列の逆行列
+
+			Matrix4x4 PrevViewProjection; // 前のフレームのビュー射影行列
         };
 	}
 }

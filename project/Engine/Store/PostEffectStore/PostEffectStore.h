@@ -28,6 +28,7 @@
 #include "PSO/ComputePSO/ComputePSOTAA/ComputePSOTAA.h"
 #include "PSO/ComputePSO/ComputePSOMotionBlur/ComputePSOMotionBlur.h"
 #include "PSO/ComputePSO/ComputePSOVelocityDilation/ComputePSOVelocityDilation.h"
+#include "PSO/ComputePSO/ComputePSOAfterImage/ComputePSOAfterImage.h"
 
 #include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
 #include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
@@ -101,6 +102,10 @@ namespace Engine
 		/// @brief モーションブラーの描画処理をコマンドリストに登録する
 		/// @param context 
 		void DrawMotionBlur(const PostEffectRenderContext& context);
+
+		/// @brief 残像の描画処理をコマンドリストに登録する
+		/// @param context 
+		void DrawAfterImage(const PostEffectRenderContext& context);
 
 
 
@@ -249,6 +254,9 @@ namespace Engine
 		/// @brief CS速度膨張PSO
 		std::unique_ptr<ComputePSOVelocityDilation> computePSOVelocityDilation_ = nullptr;
 
+		/// @brief CS残像PSO
+		std::unique_ptr<ComputePSOAfterImage> computePSOAfterImage_ = nullptr;
+
 
 	private:
 
@@ -288,6 +296,9 @@ namespace Engine
 
 
 	private:
+
+		/// @brief 残像のハンドル
+		PostEffectHandle hAfterImage_ = 0;
 
 		/// @brief 残像を読み込んでいるかどうか
 		static bool isLoadAfterImage_;
