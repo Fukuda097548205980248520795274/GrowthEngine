@@ -14,6 +14,14 @@ struct Transformation
     
     // 前のWVP行列
     float4x4 prevWVP;
+    
+    // 残像マスク（0.0f: 残像なし, 1.0f: 完全残像）
+    float afterImageMask;
+    
+    // モーションブラーマスク（0.0f: ブラーなし, 1.0f: 完全ブラー）
+    float motionBlurMask;
+    
+    float2 padding; // 16バイトアラインメントのためのパディング
 };
 StructuredBuffer<Transformation> gTransformation : register(t0);
 
@@ -27,6 +35,9 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     // 前のフレームでの座標を計算
     output.prevPos = mul(input.position, gTransformation[instanceID].prevWVP);
+    
+    // ブラーマスクを設定
+    output.blurMask = float2(gTransformation[instanceID].afterImageMask, gTransformation[instanceID].motionBlurMask);
     
     return output;
 }

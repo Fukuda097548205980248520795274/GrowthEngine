@@ -64,6 +64,10 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	param_->division.slices = 32;
 	param_->division.rings = 16;
 
+	// ブラー
+	param_->blur.afterImageMask = 0.0f;
+	param_->blur.motionBlurMask = 0.0f;
+
 	// テクスチャ
 	param_->material.hTexture = hTexture_;
 	textureFilePath_ = textureStore_->GetFilePath(param_->material.hTexture);
@@ -92,6 +96,8 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
 		parameter_->SetValue(group_, "Division_Rings", &param_->division.rings);
+		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
+		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 
 		// 値を反映させる
 		parameter_->RegisterGroupDataReflection(group_);
@@ -176,6 +182,10 @@ void Engine::Render3DUVSphereData::Reset()
 		// 分割
 		param_->division.slices = 32;
 		param_->division.rings = 16;
+
+		// ブラー
+		param_->blur.afterImageMask = 0.0f;
+		param_->blur.motionBlurMask = 0.0f;
 	}
 
 	// 読み込み
@@ -296,6 +306,11 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 
 	// シャドウ有効化
 	materialResources_->data_->enableShadow = static_cast<int32_t>(param_->material.enableShadow);
+
+
+	// ブラー
+	motionVectorResource_->data_->afterImageMask = param_->blur.afterImageMask;
+	motionVectorResource_->data_->motionBlurMask = param_->blur.motionBlurMask;
 
 	/*------------------------
 		コマンドリストに登録
@@ -600,6 +615,23 @@ void Engine::Render3DUVSphereData::DebugParameter()
 			ImGui::TreePop();
 		}
 
+		// ブラー
+		if (PostEffectStore::IsEnableMotionVector())
+		{
+			if (ImGui::TreeNode("Blur"))
+			{
+				// 残像
+				if (PostEffectStore::IsLoadAfterImage())
+					ImGui::DragFloat("AfterImageMask", &param_->blur.afterImageMask, 0.01f, 0.0f, 1.0f);
+
+				// モーションブラー
+				if (PostEffectStore::IsLoadMotionBlur())
+					ImGui::DragFloat("MotionBlurMask", &param_->blur.motionBlurMask, 0.01f, 0.0f, 1.0f);
+
+				// 終了
+				ImGui::TreePop();
+			}
+		}
 
 		// 分割数
 		if (ImGui::TreeNode("Division"))

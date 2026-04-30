@@ -19,6 +19,10 @@
 #include "PostEffectData/PostEffectTAAData/PostEffectTAAData.h"
 #include "PostEffectData/PostEffectMotionBlurData/PostEffectMotionBlurData.h"
 
+bool Engine::PostEffectStore::isLoadMotionBlur_ = false;
+bool Engine::PostEffectStore::isLoadAfterImage_ = false;
+bool Engine::PostEffectStore::enableMotionVector_ = false;
+
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
 {
@@ -169,7 +173,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	}
 
 	// TAAやモーションブラーはモーションベクトルを必要とするため、すでに読み込まれている場合はリセットしてハンドルを返す
-	if (isLoadTAA_ || isLoadMotionBlur_)
+	if (isLoadTAA_ || isLoadMotionBlur_ || isLoadAfterImage_)
 	{
 		if (PostEffect::Type::TAA == type || PostEffect::Type::MotionBlur == type)
 		{
@@ -339,6 +343,7 @@ void Engine::PostEffectStore::PerSceneReset()
 	// 読み込みフラグを初期化
 	isLoadTAA_ = false;
 	isLoadMotionBlur_ = false;
+	isLoadAfterImage_ = false;
 }
 
 /// @brief モーションベクトルの描画処理をコマンドリストに登録する

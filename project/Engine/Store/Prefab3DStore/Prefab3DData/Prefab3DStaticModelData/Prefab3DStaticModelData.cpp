@@ -7,6 +7,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
+#include "Store/PostEffectStore/PostEffectStore.h"
 
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
@@ -72,6 +73,7 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	// 領域確保
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
+	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
 	primitiveResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	motionVectorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -102,6 +104,10 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 		param_->meshMaterial[meshIndex].enableShadow = true;
 
+		// ブラー
+		param_->meshBlur[meshIndex].afterImageMask = 0.0f;
+		param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
+
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 
@@ -124,6 +130,9 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Shadow", &param_->meshMaterial[meshIndex].enableShadow);
+
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -196,6 +205,10 @@ void Engine::Prefab3DStaticModelData::Reset()
 			param_->meshMaterial[meshIndex].enableSpecular = true;
 			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 			param_->meshMaterial[meshIndex].enableShadow = true;
+
+			// ブラー
+			param_->meshBlur[meshIndex].afterImageMask = 0.0f;
+			param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -545,6 +558,24 @@ void Engine::Prefab3DStaticModelData::DebugParameter()
 						ImGui::TreePop();
 					}
 
+					// ブラー
+					if (PostEffectStore::IsEnableMotionVector())
+					{
+						if (ImGui::TreeNode("Blur"))
+						{
+							// 残像
+							if (PostEffectStore::IsLoadAfterImage())
+								ImGui::DragFloat("AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask, 0.01f, 0.0f, 1.0f);
+
+							// モーションブラー
+							if (PostEffectStore::IsLoadMotionBlur())
+								ImGui::DragFloat("MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask, 0.01f, 0.0f, 1.0f);
+
+							// 終了
+							ImGui::TreePop();
+						}
+					}
+
 					// 終了
 					ImGui::TreePop();
 				}
@@ -683,6 +714,11 @@ void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::S
 
 		// シャドウ有効化
 		primitiveResource_[meshIndex]->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->meshMaterial[meshIndex].enableShadow);
+
+
+		// ブラー
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].afterImageMask = param->meshBlur[meshIndex].afterImageMask;
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].motionBlurMask = param->meshBlur[meshIndex].motionBlurMask;
 	}
 
 	numUseInstance_++;

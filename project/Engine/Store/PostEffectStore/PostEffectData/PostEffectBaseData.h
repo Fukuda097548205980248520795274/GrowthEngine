@@ -43,6 +43,8 @@ namespace Engine
 		ID3D12GraphicsCommandList* commandList = nullptr;
 		OffscreenResource* offscreenPixelShaderResource = nullptr;
 		OffscreenResource* offscreenRenderTargetResource = nullptr;
+		RWTexture2DBufferResource* firstOutputResource = nullptr;
+		RWTexture2DBufferResource* secondOutputResource = nullptr;
 		DepthResource* depthResource = nullptr;
 		Camera3DStore* camera3DStore = nullptr;
 		MotionVectorTextureResource* motionVectorTextureResource = nullptr;

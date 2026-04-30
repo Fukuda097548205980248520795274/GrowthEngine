@@ -125,11 +125,15 @@ namespace Engine
 
 		/// @brief TAAを読み込んでいるかどうか
 		/// @return 
-		bool IsLoadTAA()const { return isLoadTAA_; }
+		bool IsLoadTAA() { return isLoadTAA_; }
 
 		/// @brief モーションブラーを読み込んでいるかどうか
 		/// @return 
-		bool IsLoadMotionBlur() const { return isLoadMotionBlur_; }
+		static bool IsLoadMotionBlur() { return isLoadMotionBlur_; }
+
+		/// @brief 残像を読み込んでいるかどうか
+		/// @return 
+		static bool IsLoadAfterImage() { return isLoadAfterImage_; }
 
 		/// @brief 指定入力が必要かどうか
 		/// @param name
@@ -147,7 +151,7 @@ namespace Engine
 
 		/// @brief モーションベクトルが有効かどうか
 		/// @return 
-		bool IsEnableMotionVector() const { return enableMotionVector_; }
+		static bool IsEnableMotionVector() { return enableMotionVector_; }
 
 
 		/// @brief パラメータを取得する
@@ -262,7 +266,7 @@ namespace Engine
 		std::unique_ptr<MotionVectorTextureResource> motionVectorTextureResource_ = nullptr;
 
 		/// @brief モーションベクトルを有効にするかどうか
-		bool enableMotionVector_ = false;
+		static bool enableMotionVector_;
 
 
 	private:
@@ -271,7 +275,7 @@ namespace Engine
 		PostEffectHandle hTAA_ = 0;
 
 		/// @brief TAAを読み込んでいるかどうか
-		bool isLoadTAA_ = false;
+		bool isLoadTAA_;
 
 
 	private:
@@ -280,7 +284,14 @@ namespace Engine
 		PostEffectHandle hMotionBlur_ = 0;
 
 		/// @brief モーションブラーを読み込んでいるかどうか
-		bool isLoadMotionBlur_ = false;
+		static bool isLoadMotionBlur_;
+
+
+	private:
+
+		/// @brief 残像を読み込んでいるかどうか
+		static bool isLoadAfterImage_;
+
 
 	private:
 

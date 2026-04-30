@@ -33,6 +33,6 @@ PixelShaderOutput main(VertexShaderOutput input)
     if (any(isnan(velocity)) || any(isinf(velocity)) || velocitySq > (kMaxVelocity * kMaxVelocity))
         return output;
 
-    output.color = float4(velocity, 0.0f, 1.0f);
+    output.color = float4(velocity, input.blurMask.x, input.blurMask.y);
     return output;
 }

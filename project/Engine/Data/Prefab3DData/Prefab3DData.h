@@ -85,6 +85,16 @@ namespace Engine
 					bool enableShadow;
 				};
 
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
 				/// @brief パラメータ
 				struct Param
 				{
@@ -97,6 +107,9 @@ namespace Engine
 
 					/// @brief メッシュマテリアル
 					std::vector<Material> meshMaterial;
+
+					/// @brief ブラー
+					std::vector<Blur> meshBlur;
 				};
 			}
 
@@ -163,6 +176,16 @@ namespace Engine
 					bool enableShadow;
 				};
 
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
 				/// @brief パラメータ
 				struct Param
 				{
@@ -175,6 +198,9 @@ namespace Engine
 
 					/// @brief メッシュマテリアル
 					std::vector<Material> meshMaterial;
+
+					/// @brief ブラー
+					std::vector<Blur> meshBlur;
 				};
 			}
 		}
@@ -248,6 +274,16 @@ namespace Engine
 					bool enableShadow;
 				};
 
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
 				/// @brief パラメータ
 				struct Param
 				{
@@ -256,6 +292,9 @@ namespace Engine
 
 					/// @brief マテリアル
 					Material material;
+
+					/// @brief ブラー
+					Blur blur;
 				};
 			}
 
@@ -322,6 +361,16 @@ namespace Engine
 					bool enableShadow;
 				};
 
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
 				/// @brief パラメータ
 				struct Param
 				{
@@ -330,6 +379,9 @@ namespace Engine
 
 					/// @brief マテリアル
 					Material material;
+
+					/// @brief ブラー
+					Blur blur;
 				};
 			}
 		}

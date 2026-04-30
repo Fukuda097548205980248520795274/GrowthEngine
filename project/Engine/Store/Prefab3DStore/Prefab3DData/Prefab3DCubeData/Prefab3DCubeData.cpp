@@ -6,6 +6,7 @@
 #include "Store/TextureStore/TextureStore.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
+#include "Store/PostEffectStore/PostEffectStore.h"
 
 #include "PSO/PSOModel/BasePSOModel.h"
 
@@ -89,6 +90,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	param_->material.enableBlinnPhong = true;
 	param_->material.enableShadow = true;
 
+	// ブラー
+	param_->blur.afterImageMask = 0.0f;
+	param_->blur.motionBlurMask = 0.0f;
+
 	// テクスチャファイルパス
 	textureFilePath_ = textureStore_->GetFilePath(hTexture_);
 
@@ -113,6 +118,9 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
 		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
+
+		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
+		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 
@@ -159,6 +167,10 @@ void Engine::Prefab3DCubeData::Reset()
 		param_->material.enableSpecular = true;
 		param_->material.enableBlinnPhong = true;
 		param_->material.enableShadow = true;
+
+		// ブラー
+		param_->blur.afterImageMask = 0.0f;
+		param_->blur.motionBlurMask = 0.0f;
 	}
 
 	// 読み込まれたことにする
@@ -379,6 +391,12 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	// シャドウ有効化
 	primitiveResource_->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->material.enableShadow);
 
+
+	// ブラー
+	motionVectorResource_->data_[numUseInstance_].afterImageMask = param->blur.afterImageMask;
+	motionVectorResource_->data_[numUseInstance_].motionBlurMask = param->blur.motionBlurMask;
+
+
 	numUseInstance_++;
 }
 
@@ -525,7 +543,23 @@ void Engine::Prefab3DCubeData::DebugParameter()
 				ImGui::SliderFloat("Environment", &param_->material.environment, 0.0f, 1.0f);
 			}
 
+			// ブラー
+			if (PostEffectStore::IsEnableMotionVector())
+			{
+				if (ImGui::TreeNode("Blur"))
+				{
+					// 残像
+					if (PostEffectStore::IsLoadAfterImage())
+						ImGui::DragFloat("AfterImageMask", &param_->blur.afterImageMask, 0.01f, 0.0f, 1.0f);
 
+					// モーションブラー
+					if (PostEffectStore::IsLoadMotionBlur())
+						ImGui::DragFloat("MotionBlurMask", &param_->blur.motionBlurMask, 0.01f, 0.0f, 1.0f);
+
+					// 終了
+					ImGui::TreePop();
+				}
+			}
 
 			// 終了
 			ImGui::TreePop();

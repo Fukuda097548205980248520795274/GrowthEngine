@@ -61,6 +61,7 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	// パラメータ領域確保
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
+	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// リソース領域確保
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -94,6 +95,10 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		param_->meshMaterial[meshIndex].drawShadowMap = true;
 		param_->meshMaterial[meshIndex].enableShadow = true;
 
+		// ブラー
+		param_->meshBlur[meshIndex].afterImageMask = 0.0f;
+		param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
+
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 
@@ -118,6 +123,9 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Draw_ShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Shadow", &param_->meshMaterial[meshIndex].enableShadow);
+
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
 
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
@@ -201,6 +209,10 @@ void Engine::Render3DStaticModelData::Reset()
 			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 			param_->meshMaterial[meshIndex].drawShadowMap = true;
 			param_->meshMaterial[meshIndex].enableShadow = true;
+
+			// ブラー
+			param_->meshBlur[meshIndex].afterImageMask = 0.0f;
+			param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -321,6 +333,11 @@ void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, Skybo
 
 		// シャドウ有効化
 		meshMaterialResources_[meshIndex]->data_->enableShadow = static_cast<int32_t>(param_->meshMaterial[meshIndex].enableShadow);
+
+
+		// ブラー
+		motionVectorResources_[meshIndex]->data_->afterImageMask = param_->meshBlur[meshIndex].afterImageMask;
+		motionVectorResources_[meshIndex]->data_->motionBlurMask = param_->meshBlur[meshIndex].motionBlurMask;
 
 
 		/*------------------------
@@ -606,6 +623,24 @@ void Engine::Render3DStaticModelData::DebugParameter()
 
 						// 終了
 						ImGui::TreePop();
+					}
+
+					// ブラー
+					if (PostEffectStore::IsEnableMotionVector())
+					{
+						if (ImGui::TreeNode("Blur"))
+						{
+							// 残像
+							if (PostEffectStore::IsLoadAfterImage())
+								ImGui::DragFloat("AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask, 0.01f, 0.0f, 1.0f);
+
+							// モーションブラー
+							if (PostEffectStore::IsLoadMotionBlur())
+								ImGui::DragFloat("MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask, 0.01f, 0.0f, 1.0f);
+
+							// 終了
+							ImGui::TreePop();
+						}
 					}
 
 					// 終了
