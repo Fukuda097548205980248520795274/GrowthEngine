@@ -27,6 +27,7 @@
 #include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
 #include "PSO/ComputePSO/ComputePSOTAA/ComputePSOTAA.h"
 #include "PSO/ComputePSO/ComputePSOMotionBlur/ComputePSOMotionBlur.h"
+#include "PSO/ComputePSO/ComputePSOVelocityDilation/ComputePSOVelocityDilation.h"
 
 #include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
 #include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
@@ -240,6 +241,9 @@ namespace Engine
 
 		/// @brief CSモーションブラーPSO
 		std::unique_ptr<ComputePSOMotionBlur> computePSOMotionBlur_ = nullptr;
+
+		/// @brief CS速度膨張PSO
+		std::unique_ptr<ComputePSOVelocityDilation> computePSOVelocityDilation_ = nullptr;
 
 
 	private:

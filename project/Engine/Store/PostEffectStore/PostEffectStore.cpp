@@ -113,6 +113,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePSOMotionBlur_ = std::make_unique<ComputePSOMotionBlur>();
 	computePSOMotionBlur_->Initialize(device, compiler, log);
 
+	// CS速度膨張PSO
+	computePSOVelocityDilation_ = std::make_unique<ComputePSOVelocityDilation>();
+	computePSOVelocityDilation_->Initialize(device, compiler, log);
+
 
 	// モーションベクトルのピクセルシェーダーのコンパイル
 	motionVectorPixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/MotionVector/MotionVector.PS.hlsl", L"ps_6_0");
@@ -309,7 +313,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::MotionBlur)
 	{
 		std::unique_ptr<PostEffectMotionBlurData> data = std::make_unique<PostEffectMotionBlurData>(name, type, handle, parameter_.get());
-		data->Initialize(device, commandList, heap_, buffering, computePSOMotionBlur_.get(), log);
+		data->Initialize(device, commandList, heap_, buffering, computePSOMotionBlur_.get(), computePSOVelocityDilation_.get(), log);
 		dataTable_.push_back(std::move(data));
 
 		// モーションブラーはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる

@@ -9,8 +9,8 @@
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::PostEffectMotionBlurData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-	DX12Heap* heap, DX12Buffering* buffering, BaseComputePSO* psoMotionBlur, Log* log)
+void Engine::PostEffectMotionBlurData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, DX12Buffering* buffering,
+	BaseComputePSO* psoMotionBlur, BaseComputePSO* psoVelocityDilation, Log* log)
 {
 	// nullptrチェック
 	assert(device);
@@ -18,9 +18,11 @@ void Engine::PostEffectMotionBlurData::Initialize(ID3D12Device* device, ID3D12Gr
 	assert(heap);
 	assert(buffering);
 	assert(psoMotionBlur);
+	assert(psoVelocityDilation);
 
 	// 引数を受け取る
 	psoMotionBlur_ = psoMotionBlur;
+	psoVelocityDilation_ = psoVelocityDilation;
 
 	// パラメータの生成
 	param_ = std::make_unique<PostEffect::MotionBlur>();
@@ -42,6 +44,10 @@ void Engine::PostEffectMotionBlurData::Initialize(ID3D12Device* device, ID3D12Gr
 	resource_->Initialize(device, log);
 	resource_->data_->numSamples = param_->numSamples;
 	resource_->data_->blurScale = param_->blurScale;
+
+	// 速度膨張用のリソース生成
+	velocityDilationResource_ = std::make_unique<RWTexture2DBufferResource>();
+	velocityDilationResource_->Initialize(device, commandList, heap, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, log);
 
 	// 出力リソース生成
 	outputResource_ = std::make_unique<RWTexture2DBufferResource>();
@@ -95,11 +101,33 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 
 
 	/*---------------
-		TAAの処理
+	    速度膨張
 	---------------*/
 
 	// バリアを張る
 	motionVectorTextureResource->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+
+	// PSOを登録
+	psoVelocityDilation_->Register(commandList);
+
+	// ピクセルシェーダに書くリソースをSRVとして登録する
+	motionVectorTextureResource->RegisterComputeSRV(commandList, 0);
+
+	// TAA用の出力リソースをUAVとして登録する
+	velocityDilationResource_->RegisterComputeUAV(commandList, 1);
+
+	commandList->Dispatch((velocityDilationResource_->GetWidth() + 7) / 8, (velocityDilationResource_->GetHeight() + 7) / 8, 1);
+
+	// バリアを張る
+	motionVectorTextureResource->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+
+	/*---------------
+		TAAの処理
+	---------------*/
+
+	// バリアを張る
+	velocityDilationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
 	// PSOを登録
 	psoMotionBlur_->Register(commandList);
@@ -108,7 +136,7 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	offscreenPixelShaderResource->RegisterCompute(commandList, 0);
 
 	// TAA用のリソースをSRVとして登録する
-	motionVectorTextureResource->RegisterComputeSRV(commandList, 1);
+	velocityDilationResource_->RegisterComputeSRV(commandList, 1);
 
 	// TAA用の出力リソースをUAVとして登録する
 	outputResource_->RegisterComputeUAV(commandList, 2);
@@ -120,7 +148,7 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	commandList->Dispatch((outputResource_->GetWidth() + 7) / 8, (outputResource_->GetHeight() + 7) / 8, 1);
 
 	// バリアを張る
-	motionVectorTextureResource->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	velocityDilationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 
 	/*------------------------------------------------------

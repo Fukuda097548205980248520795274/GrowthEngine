@@ -1021,6 +1021,9 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData">
       <UniqueIdentifier>{64caf53e-2ffe-4739-b96b-4e95149b5ce8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOVelocityDilation">
+      <UniqueIdentifier>{ac665a71-dc6d-4702-877e-90baddd490ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1808,6 +1811,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData\PostEffectMotionBlurData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOVelocityDilation\ComputePSOVelocityDilation.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOVelocityDilation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2708,6 +2714,9 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData\PostEffectMotionBlurData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectMotionBlurData</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOVelocityDilation\ComputePSOVelocityDilation.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOVelocityDilation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2887,6 +2896,9 @@
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\MotionBlur.CS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\VelocityDilation.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>

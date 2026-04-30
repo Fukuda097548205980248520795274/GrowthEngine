@@ -22,7 +22,8 @@ namespace Engine
 		/// @param buffering 
 		/// @param psoMotionBlur 
 		/// @param log 
-		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, DX12Buffering* buffering, BaseComputePSO* psoMotionBlur, Log* log);
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Heap* heap, DX12Buffering* buffering, 
+			BaseComputePSO* psoMotionBlur,BaseComputePSO* psoVelocityDilation, Log* log);
 
 		/// @brief リセット
 		void Reset() override;
@@ -54,10 +55,16 @@ namespace Engine
 		// リソース
 		std::unique_ptr<ConstantBufferResource<PostEffect::MotionBlurDataForGPU>> resource_ = nullptr;
 
+		/// @brief 速度膨張用のリソース
+		std::unique_ptr<RWTexture2DBufferResource> velocityDilationResource_ = nullptr;
+
 		// 出力リソース
 		std::unique_ptr<RWTexture2DBufferResource> outputResource_ = nullptr;
 
 		/// @brief モーションブラー用のPSO
 		BaseComputePSO* psoMotionBlur_ = nullptr;
+
+		/// @brief 速度膨張用のPSO
+		BaseComputePSO* psoVelocityDilation_ = nullptr;
 	};
 }
