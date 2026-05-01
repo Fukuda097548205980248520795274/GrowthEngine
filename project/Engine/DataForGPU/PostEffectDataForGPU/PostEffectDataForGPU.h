@@ -160,13 +160,24 @@ namespace Engine
 		/// @brief GPUに送る残像
 		struct AfterImageDataForGPU
         {
-			float decay; // 残像の減衰率
+            // 残像の減衰率
+			float decay;
 
-            float padding[3];
+            // 残像の強度
+			float intensity;
 
-			Matrix4x4 InvCurrentViewProjection; // 現在のフレームのビュー射影行列の逆行列
+			float padding0[2]; // 16バイトアラインメントのためのパディング
 
-			Matrix4x4 PrevViewProjection; // 前のフレームのビュー射影行列
+            // 残像の色
+			Vector3 color;
+
+			float padding1[1]; // 16バイトアラインメントのためのパディング
+
+            // 現在のフレームのビュー射影行列の逆行列
+			Matrix4x4 InvCurrentViewProjection;
+
+            // 前のフレームのビュー射影行列
+			Matrix4x4 PrevViewProjection;
         };
 	}
 }

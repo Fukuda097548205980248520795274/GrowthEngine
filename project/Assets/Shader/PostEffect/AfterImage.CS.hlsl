@@ -22,13 +22,20 @@ SamplerState LinearSampler : register(s0);
 // パラメータバッファ
 cbuffer TemporalParams : register(b0)
 {
+    // 履歴の減衰率（0.0f から 1.0f の範囲で設定）
     float g_Decay;
     
-    float3 padding;
+    // 残像の強さを調整するためのパラメータ
+    float g_Intensity;
     
-    float4x4 g_InvCurrentVP; // 現在のフレームの逆ビュー射影行列
+    // 残像の色調補正用のパラメータ（例: RGBそれぞれに乗算する値）
+    float3 g_TintColor;
     
-    float4x4 g_PrevVP; // 前フレームのビュー射影行列
+    // 現在のフレームの逆ビュー射影行列
+    float4x4 g_InvCurrentVP;
+    
+    // 前フレームのビュー射影行列
+    float4x4 g_PrevVP;
 }
 
 [numthreads(8, 8, 1)]
@@ -100,14 +107,14 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float isMoving = (speed > 0.001f) ? 1.0f : 0.0f;
 
     // マスクの値に基づいて、現在のフレームの色を残像として使用するかどうかを決定
-    float3 currentTrail = currentColor.rgb * mask_b * isMoving;
+    float3 currentTrail = currentColor.rgb * g_TintColor * mask_b * isMoving;
 
     // 次のフレームに渡す履歴を保存
     float3 nextTrail = max(historyTrail, currentTrail);
     HistoryOut[DTid.xy] = float4(nextTrail, 1.0f);
 
     // 最終的な色の合成
-    float3 finalRGB = currentColor.rgb + (historyTrail * (1.0f - mask_b));
+    float3 finalRGB = currentColor.rgb + (historyTrail * g_Intensity * (1.0f - mask_b));
     
     // 出力にアルファを維持
     OutputColor[DTid.xy] = float4(finalRGB, currentColor.a);

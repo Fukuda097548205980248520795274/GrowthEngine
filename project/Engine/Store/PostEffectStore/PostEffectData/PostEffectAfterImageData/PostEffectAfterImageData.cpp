@@ -25,12 +25,16 @@ void Engine::PostEffectAfterImageData::Initialize(ID3D12Device* device, ID3D12Gr
 	// パラメータの生成
 	param_ = std::make_unique<PostEffect::AfterImage>();
 	param_->decay = 0.9f;
+	param_->intensity = 0.5f;
+	param_->tintColor = Vector3(1.0f, 1.0f, 1.0f);
 
 	// パラメータを記録する
 	group_ = "AfterImage_" + name_;
 	if (parameter_)
 	{
 		parameter_->SetValue(group_, "Decay", &param_->decay);
+		parameter_->SetValue(group_, "Intensity", &param_->intensity);
+		parameter_->SetValue(group_, "TintColor", &param_->tintColor);
 
 		parameter_->RegisterGroupDataReflection(group_);
 	}
@@ -39,6 +43,8 @@ void Engine::PostEffectAfterImageData::Initialize(ID3D12Device* device, ID3D12Gr
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::AfterImageDataForGPU>>();
 	resource_->Initialize(device, log);
 	resource_->data_->decay = param_->decay;
+	resource_->data_->intensity = param_->intensity;
+	resource_->data_->color = param_->tintColor;
 	resource_->data_->InvCurrentViewProjection = MakeIdentityMatrix4x4();
 	resource_->data_->PrevViewProjection = MakeIdentityMatrix4x4();
 
@@ -66,6 +72,8 @@ void Engine::PostEffectAfterImageData::Reset()
 	else
 	{
 		param_->decay = 0.9f;
+		param_->intensity = 0.5f;
+		param_->tintColor = Vector3(1.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -102,6 +110,8 @@ void Engine::PostEffectAfterImageData::Register(const PostEffectRenderContext& c
 
 	// パラメータをGPU用のデータに転送
 	resource_->data_->decay = param_->decay;
+	resource_->data_->intensity = param_->intensity;
+	resource_->data_->color = param_->tintColor;
 	resource_->data_->InvCurrentViewProjection = camera3DStore->GetCamera3D().GetCurrentVPUnJitterMatrix().Inverse();
 	resource_->data_->PrevViewProjection = camera3DStore->GetCamera3D().GetPrevVPUnJitterMatrix();
 
@@ -203,6 +213,9 @@ void Engine::PostEffectAfterImageData::DebugParameter()
 	if (ImGui::TreeNode((name_ + "_AfterImage").c_str()))
 	{
 		ImGui::DragFloat("Decay", &param_->decay, 0.001f, 0.0f, 20.0f);
+		ImGui::DragFloat("Intensity", &param_->intensity, 0.001f, 0.0f, 20.0f);
+		ImGui::ColorEdit3("TintColor", &param_->tintColor.x);
+
 		ImGui::Text("\n");
 
 		// 保存ボタン

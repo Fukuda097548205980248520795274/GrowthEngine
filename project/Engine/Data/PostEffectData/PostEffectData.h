@@ -150,6 +150,10 @@ namespace Engine
 		struct AfterImage
 		{
 			float decay; // 残像の減衰率
+
+			float intensity; // 残像の強度
+
+			Vector3 tintColor; // 残像の色
 		};
 	}
 }
