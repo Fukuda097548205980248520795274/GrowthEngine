@@ -1036,6 +1036,9 @@
     <Filter Include="Game\Action\Guard">
       <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Math\Shape">
+      <UniqueIdentifier>{bc142630-e615-470c-b7ba-b83bbc4df33c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2752,6 +2755,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Guard\Guard.h">
       <Filter>Game\Action\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Shape\Shape.h">
+      <Filter>Engine\Include\Math\Shape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1158,6 +1158,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Math\Matrix\Matrix3x3\Matrix3x3.h" />
     <ClInclude Include="Engine\Math\Matrix\Matrix4x4\Matrix4x4.h" />
     <ClInclude Include="Engine\Math\Quaternion\Quaternion.h" />
+    <ClInclude Include="Engine\Math\Shape\Shape.h" />
     <ClInclude Include="Engine\Math\Vector\Vector2\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector\Vector3\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4\Vector4.h" />

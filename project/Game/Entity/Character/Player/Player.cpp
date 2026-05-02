@@ -288,8 +288,8 @@ void Player::UpdateAttack()
 	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown())
 		return;
 
-	// つかみ攻撃の入力を受け付け、条件を満たす場合はつかみ攻撃を実行する
-	if (inputGrab_ && inputGrab_->IsInput())
+	// つかみ攻撃の入力があって、現在攻撃中でない場合はつかみ攻撃を実行する
+	if (inputGrab_ && inputGrab_->IsInput() && !IsAttack())
 	{
 		// つかみ攻撃を実行
 		grabAttack_->Exec();

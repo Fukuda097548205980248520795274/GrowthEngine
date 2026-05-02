@@ -127,6 +127,8 @@ void Character::Update()
 			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
 			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
 
+			worldTransform_->rotate_ = Vector3(0.0f, std::numbers::pi_v<float> -grabber_->GetWorldTransform()->rotate_.y, 0.0f);
+
 			// 相手のつかみ状態を解除する
 			grabber_->grabbedTarget_ = nullptr;
 
@@ -135,11 +137,14 @@ void Character::Update()
 			grabbedTimer_ = 0.0f;
 		}
 
-		// 基底クラスの更新
-		Entity::Update();
+		// 押し出し判定の更新
+		UpdatePushOut();
 
 		// アニメーションの更新
 		UpdateAnimation();
+
+		// 基底クラスの更新
+		Entity::Update();
 
 		return;
 	}
@@ -225,11 +230,6 @@ void Character::Update()
 		UpdateAvoid(deltaTime);
 	}
 
-	// 現在のY回転から向いている方向ベクトルを更新する
-	direction_.x = std::sin(worldTransform_->rotate_.y);
-	direction_.y = 0.0f;
-	direction_.z = std::cos(worldTransform_->rotate_.y);
-
 	// 構え中のみロックオン候補を更新する
 	UpdateLockOnTargets();
 
@@ -252,34 +252,26 @@ void Character::Update()
 	// 目標回転が有効な場合、現在の回転と目標回転の差を計算して、線形補間で回転を更新する
 	if (hasTargetYaw_)
 	{
-		// 現在の回転と目標回転の差を計算する
-		const float currentYaw = worldTransform_->rotate_.y;
-		const float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
-
-        // 目標回転に向かって秒基準の補間で回転を更新する
-		constexpr float kRotateLerpSpeedPerSecond = 12.0f;
-		const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * deltaTime);
-		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
-
-		// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
-		if ((deltaYaw * deltaYaw) <= kRotateThreshold)
+		// 掴み中の意図しない回転を防ぐ
+		if (!IsGrabbing())
 		{
-			worldTransform_->rotate_.y = targetYaw_;
-			hasTargetYaw_ = false;
+			// 現在の回転と目標回転の差を計算する
+			const float currentYaw = worldTransform_->rotate_.y;
+			const float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
+
+			// 目標回転に向かって秒基準の補間で回転を更新する
+			constexpr float kRotateLerpSpeedPerSecond = 12.0f;
+			const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * deltaTime);
+			worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
+
+			// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
+			if ((deltaYaw * deltaYaw) <= kRotateThreshold)
+			{
+				worldTransform_->rotate_.y = targetYaw_;
+				hasTargetYaw_ = false;
+			}
 		}
 	}
-
-	// 補間後のY回転から向いている方向ベクトルを更新する
-	direction_.x = std::sin(worldTransform_->rotate_.y);
-	direction_.y = 0.0f;
-	direction_.z = std::cos(worldTransform_->rotate_.y);
-
-	// 速度の更新
-    const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * deltaTime);
-	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, velocityLerpT);
-
-	// 位置の更新
-	worldTransform_->translate_ += currentVelocity_ * deltaTime;
 
 
 	// ガードリアクション中は、目標回転に向かって回転を補間する
@@ -308,6 +300,22 @@ void Character::Update()
 		worldTransform_->rotate_.y = currentRotationY;
 	}
 
+
+	// 補間後のY回転から向いている方向ベクトルを更新する
+	direction_.x = std::sin(worldTransform_->rotate_.y);
+	direction_.y = 0.0f;
+	direction_.z = std::cos(worldTransform_->rotate_.y);
+
+	// 速度の更新
+	const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * deltaTime);
+	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, velocityLerpT);
+
+	// 位置の更新
+	worldTransform_->translate_ += currentVelocity_ * deltaTime;
+
+
+	// 押し出し判定の更新
+	UpdatePushOut();
 
 	// アニメーションの更新
 	UpdateAnimation();
@@ -820,5 +828,60 @@ void Character::ReleaseGrab()
 	{
 		grabbedTarget_->grabber_ = nullptr;
 		grabbedTarget_ = nullptr;
+	}
+}
+
+/// @brief 押し出し判定処理
+void Character::UpdatePushOut()
+{
+	// キャラクターの押し出し半径（ゲームのモデルサイズに合わせて調整してください）
+	constexpr float kHeight = 1.6f; // キャラクターの高さ
+	constexpr float kPushRadius = 0.25f; // 押し出し半径
+	constexpr float kDistanceLimit = kPushRadius * 2.0f; // 2人の半径の和
+
+	// 全キャラクターのリストを取得
+	const auto& characters = Character::GetCharacters();
+
+	for (auto* other : characters)
+	{
+		// 自分自身とは判定しない
+		if (this == other) continue;
+
+		// ダウン中や掴み・掴まれ中など、めり込みを許容したい状態の場合は判定をスキップする
+		if (IsDown() || other->IsDown() || IsGrabbed() || other->IsGrabbed() || IsGrabbing() || other->IsGrabbing())
+		{
+			continue;
+		}
+
+		// 自分と相手の位置を取得する（Y軸はキャラクターの中心の高さに合わせる）
+		Vector3 myPos = GetPosition();
+		Vector3 otherPos = other->GetPosition();
+
+		// Y軸方向の重なりもあるか確認する（高さが同じくらいの相手のみ押し出す）
+		if (myPos.y <= otherPos.y + kHeight && myPos.y + kHeight >= otherPos.y)
+		{
+			// XZ平面での距離を計算（高さ(Y軸)は無視して円柱状に判定する）
+			Vector3 diff = myPos - otherPos;
+			diff.y = 0.0f;
+
+			// 距離の二乗を計算する（平方根を取る前に比較して効率化する）
+			float distSq = diff.x * diff.x + diff.z * diff.z;
+
+			// 距離が0より大きく、かつ押し出し半径の2倍以内の場合は押し出す
+			if (distSq > 0.0f && distSq < (kDistanceLimit * kDistanceLimit))
+			{
+				float dist = std::sqrt(distSq);
+
+				// めり込んでいる距離を計算
+				float penetration = kDistanceLimit - dist;
+
+				// 押し出し方向の単位ベクトルを計算
+				Vector3 pushDir = diff / dist;
+
+				// お互いのUpdateで処理されるため、自分をめり込み量の半分だけ移動させる
+				Vector3 newPos = myPos + pushDir * (penetration * 0.5f);
+				SetPosition(newPos); // 位置を更新
+			}
+		}
 	}
 }

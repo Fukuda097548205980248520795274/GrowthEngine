@@ -505,5 +505,9 @@ protected:
 	Collision3DBaseSphere* hitboxGroup_ = nullptr;
 
 
+protected:
+
+	/// @brief 押し出し判定処理
+	void UpdatePushOut();
 };
 

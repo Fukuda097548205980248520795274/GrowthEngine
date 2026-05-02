@@ -59,6 +59,10 @@ public:
 	/// @param rotation 
 	void SetRotation(const Quaternion& rotation) { worldTransform_->SetRotate(rotation); }
 
+	/// @brief ワールドトランスフォームを取得する
+	/// @return 
+	WorldTransform3D* GetWorldTransform()const { return worldTransform_.get(); }
+
 
 protected:
 
