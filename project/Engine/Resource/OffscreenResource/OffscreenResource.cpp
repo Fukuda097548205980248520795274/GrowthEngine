@@ -11,16 +11,14 @@
 /// @param buffering 
 /// @param heap 
 /// @param log 
-void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log)
+void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Heap* heap, int32_t width, int32_t height, Log* log)
 {
 	// nullptrチェック
 	assert(device);
-	assert(buffering);
 	assert(heap);
 
 	// 書き込み可能なリソーステクスチャを生成する
-	resource_ = CreateRenderTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height,
-		buffering->GetSwapChainDesc().Format, buffering->GetRtvDesc().Format, Vector4(0.1f, 0.1f, 0.1f, 1.0f), log);
+	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.1f, 0.1f, 0.1f, 1.0f), log);
 
 	/*----------------
 		RTVの設定
@@ -28,8 +26,8 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* 
 
 	// スワップチェーンのRTV設定を反映させる
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
-	rtvDesc.Format = buffering->GetRtvDesc().Format;
-	rtvDesc.ViewDimension = buffering->GetRtvDesc().ViewDimension;
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Texture2D.MipSlice = 0;
 	rtvDesc.Texture2D.PlaneSlice = 0;
 
@@ -53,9 +51,9 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* 
 	---------------*/
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = buffering->GetRtvDesc().Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
 	srvDesc.Texture2D.PlaneSlice = 0;
@@ -81,22 +79,20 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Buffering* 
 /// @brief サイズを作り直す
 /// @param device 
 /// @param buffering 
-void Engine::OffscreenResource::Resize(ID3D12Device* device, DX12Buffering* buffering)
+void Engine::OffscreenResource::Resize(ID3D12Device* device, int32_t width, int32_t height)
 {
 	assert(device);
-	assert(buffering);
 
 	// リソース開放
 	resource_.Reset();
 
 	// 新たなサイズで作り直す
-	resource_ = CreateRenderTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height,
-		buffering->GetSwapChainDesc().Format, buffering->GetRtvDesc().Format, Vector4(0.1f, 0.1f, 0.1f, 1.0f), nullptr);
+	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.1f, 0.1f, 0.1f, 1.0f), nullptr);
 
 	// スワップチェーンのRTV設定を反映させる
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
-	rtvDesc.Format = buffering->GetRtvDesc().Format;
-	rtvDesc.ViewDimension = buffering->GetRtvDesc().ViewDimension;
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	rtvDesc.Texture2D.MipSlice = 0;
 	rtvDesc.Texture2D.PlaneSlice = 0;
 
@@ -105,9 +101,9 @@ void Engine::OffscreenResource::Resize(ID3D12Device* device, DX12Buffering* buff
 
 	// SRV設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = buffering->GetRtvDesc().Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
 

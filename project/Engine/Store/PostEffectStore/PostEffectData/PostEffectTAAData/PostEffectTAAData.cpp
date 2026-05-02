@@ -49,7 +49,8 @@ void Engine::PostEffectTAAData::Initialize(ID3D12Device* device, ID3D12GraphicsC
 
 	// 前フレームのリソース生成
 	prevFrameResource_ = std::make_unique<OffscreenResource>();
-	prevFrameResource_->Initialize(device, buffering, heap, log);
+	prevFrameResource_->Initialize(device, heap,
+		static_cast<int32_t>(buffering->GetSwapChainDesc().Width), static_cast<int32_t>(buffering->GetSwapChainDesc().Height), log);
 	prevFrameResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 }
 
@@ -76,6 +77,10 @@ void Engine::PostEffectTAAData::Resize(ID3D12Device* device, ID3D12GraphicsComma
 {
 	// リソースのリサイズ
 	outputTAAResource_->Resize(device, commandList, width, height);
+
+	
+	prevFrameResource_->Resize(device, width, height);
+	prevFrameResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 }
 
 /// @brief コマンドリストに登録する

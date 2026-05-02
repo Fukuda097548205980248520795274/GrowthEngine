@@ -27,16 +27,20 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 	heap_ = heap;
 	buffering_ = buffering;
 
+	int width = static_cast<int32_t>(buffering->GetSwapChainDesc().Width);
+	int height = static_cast<int32_t>(buffering->GetSwapChainDesc().Height);
+
 	// オフスクリーンのリソースを生成する
 	for (int32_t i = 0; i < kMaxOffscreenCount; ++i)
 	{
 		offscreenResource_[i] = std::make_unique<OffscreenResource>();
-		offscreenResource_[i]->Initialize(device, buffering, heap, log);
+		offscreenResource_[i]->Initialize(device, heap,
+			static_cast<int32_t>(buffering->GetSwapChainDesc().Width), static_cast<int32_t>(buffering->GetSwapChainDesc().Height), log);
 	}
 
 	// 深度リソースを生成する
 	depthResource_ = std::make_unique<DepthResource>();
-	depthResource_->Initialize(device, buffering, heap, log);
+	depthResource_->Initialize(device, width, height, heap, log);
 
 
 	// 頂点シェーダを読み込む
@@ -58,12 +62,15 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 /// @param buffering 
 void Engine::DX12Offscreen::Resize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering)
 {
-	offscreenResource_[0]->Resize(device, buffering);
-	offscreenResource_[1]->Resize(device, buffering);
-	depthResource_->Resize(device, buffering);
+	int width = static_cast<int32_t>(buffering->GetSwapChainDesc().Width);
+	int height = static_cast<int32_t>(buffering->GetSwapChainDesc().Height);
+
+	offscreenResource_[0]->Resize(device, width, height);
+	offscreenResource_[1]->Resize(device, width, height);
+	depthResource_->Resize(device, width, height);
 
 	// ポストエフェクトストアのリサイズ
-	postEffectStore_->Resize(device, commandList, buffering->GetSwapChainDesc().Width , buffering_->GetSwapChainDesc().Height);
+	postEffectStore_->Resize(device, commandList, width, height);
 }
 
 /// @brief クリア

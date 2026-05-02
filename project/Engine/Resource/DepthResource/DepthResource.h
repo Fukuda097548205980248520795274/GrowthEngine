@@ -20,12 +20,12 @@ namespace Engine
 		/// @param buffering 
 		/// @param heap 
 		/// @param log 
-		void Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log);
+		void Initialize(ID3D12Device* device, int32_t width , int32_t height, DX12Heap* heap, Log* log);
 
 		/// @brief サイズを作り直す
 		/// @param device 
 		/// @param buffering 
-		void Resize(ID3D12Device* device, DX12Buffering* buffering);
+		void Resize(ID3D12Device* device, int32_t width, int32_t height);
 
 		/// @brief バリアを張る
 		/// @param commandList 

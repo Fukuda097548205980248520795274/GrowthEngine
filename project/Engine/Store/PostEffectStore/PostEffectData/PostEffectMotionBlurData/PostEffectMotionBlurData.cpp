@@ -77,6 +77,7 @@ void Engine::PostEffectMotionBlurData::Resize(ID3D12Device* device, ID3D12Graphi
 {
 	// リソースのリサイズ
 	outputResource_->Resize(device, commandList, width, height);
+	velocityDilationResource_->Resize(device, commandList, width, height);
 }
 
 /// @brief コマンドリストに登録する

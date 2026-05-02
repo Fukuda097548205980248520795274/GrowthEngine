@@ -10,15 +10,14 @@
 /// @param buffering 
 /// @param heap 
 /// @param log 
-void Engine::DepthResource::Initialize(ID3D12Device* device, DX12Buffering* buffering, DX12Heap* heap, Log* log)
+void Engine::DepthResource::Initialize(ID3D12Device* device, int32_t width, int32_t height, DX12Heap* heap, Log* log)
 {
 	// nullptrチェック
 	assert(device);
-	assert(buffering);
 	assert(heap);
 
 	// 深度テクスチャリソースを生成する
-	resource_ = CreateDepthStencilTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, log);
+	resource_ = CreateDepthStencilTextureResource(device, width, height, log);
 
 	/*---------------
 		DSVの設定
@@ -74,16 +73,15 @@ void Engine::DepthResource::Initialize(ID3D12Device* device, DX12Buffering* buff
 /// @brief サイズを作り直す
 /// @param device 
 /// @param buffering 
-void Engine::DepthResource::Resize(ID3D12Device* device, DX12Buffering* buffering)
+void Engine::DepthResource::Resize(ID3D12Device* device, int32_t width, int32_t height)
 {
 	assert(device);
-	assert(buffering);
 
 	// リソース開放
 	resource_.Reset();
 
 	// 新たなサイズで再生成
-	resource_ = CreateDepthStencilTextureResource(device, buffering->GetSwapChainDesc().Width, buffering->GetSwapChainDesc().Height, nullptr);
+	resource_ = CreateDepthStencilTextureResource(device, width, height, nullptr);
 
 
 	// DSV 同じ設定

@@ -199,8 +199,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateUAVResource(ID3D12Device* d
 /// @param rtvFormat 
 /// @param clearColor 
 /// @return 
-Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height,
-	DXGI_FORMAT swapChainFormat, DXGI_FORMAT rtvFormat, Vector4 clearColor, Log* log)
+Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateRenderTextureResource(ID3D12Device* device, uint32_t width, uint32_t height,Vector4 clearColor, Log* log)
 {
 	/*-----------------------
 		リソースの設定を行う
@@ -210,7 +209,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateRenderTextureResource(ID3D1
 
 	resourceDesc.Width = UINT(width);
 	resourceDesc.Height = UINT(height);
-	resourceDesc.Format = swapChainFormat;
+	resourceDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	// 書き込める設定
 	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
@@ -236,7 +235,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Engine::CreateRenderTextureResource(ID3D1
 	----------------------*/
 
 	D3D12_CLEAR_VALUE clearValue;
-	clearValue.Format = rtvFormat;
+	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	clearValue.Color[0] = clearColor.x;
 	clearValue.Color[1] = clearColor.y;
 	clearValue.Color[2] = clearColor.z;

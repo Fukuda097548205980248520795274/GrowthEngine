@@ -50,7 +50,8 @@ void Engine::PostEffectAfterImageData::Initialize(ID3D12Device* device, ID3D12Gr
 
 	// 前フレームの残像用リソース生成
 	prevFrameOffscreenResource_ = std::make_unique<OffscreenResource>();
-	prevFrameOffscreenResource_->Initialize(device, buffering, heap, log);
+	prevFrameOffscreenResource_->Initialize(device, heap,
+		static_cast<int32_t>(buffering->GetSwapChainDesc().Width), static_cast<int32_t>(buffering->GetSwapChainDesc().Height), log);
 	prevFrameOffscreenResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
 	// 出力リソース生成
@@ -86,6 +87,11 @@ void Engine::PostEffectAfterImageData::Resize(ID3D12Device* device, ID3D12Graphi
 {
 	// リソースのリサイズ
 	outputResource_->Resize(device, commandList, width, height);
+
+	prevAfterImageOutputResource_->Resize(device, commandList, width, height);
+
+	prevFrameOffscreenResource_->Resize(device,  width, height);
+	prevFrameOffscreenResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 }
 
 /// @brief コマンドリストに登録する
