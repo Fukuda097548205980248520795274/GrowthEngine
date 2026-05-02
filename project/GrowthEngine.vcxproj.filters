@@ -1030,6 +1030,12 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData">
       <UniqueIdentifier>{bfc4dd19-921d-40e9-9faf-c7936974d2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\TitleScene">
+      <UniqueIdentifier>{9954f7e1-9515-42b7-94fc-9140e1f0f3f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Guard">
+      <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1826,6 +1832,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData\PostEffectAfterImageData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp">
+      <Filter>Game\Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Guard\Guard.cpp">
+      <Filter>Game\Action\Guard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2734,6 +2746,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData\PostEffectAfterImageData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h">
+      <Filter>Game\Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Guard\Guard.h">
+      <Filter>Game\Action\Guard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

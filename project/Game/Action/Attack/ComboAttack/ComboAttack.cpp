@@ -115,7 +115,11 @@ void ComboAttack::Update()
 					Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
 
 					// ターゲットにダメージを与える
-					target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
+					bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
+
+					// 防御されたら移動速度が半減する
+					if (!isHit)
+						moveSpeed_ *= 0.5f;
 
 					// ヒットエフェクトなどの処理があればここで行う
 					// PlayHitEffect(target->GetPosition());

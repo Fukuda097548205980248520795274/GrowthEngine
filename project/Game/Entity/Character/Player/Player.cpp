@@ -72,6 +72,10 @@ void Player::Initialize()
 	// 防御入力の生成
 	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
 
+	// 掴まれ解き入力の生成
+	inputEscapeMash_ = std::make_unique<InputGamepadButton>("Player_EscapeMash", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+
+
 	// キーの前移動入力の生成
 	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
 
@@ -188,6 +192,18 @@ void Player::Update()
 	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
 	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
+		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
+		if (IsGrabbed())
+		{
+			bool isStruggleInput = false;
+			if (inputEscapeMash_ && inputEscapeMash_->IsInput()) isStruggleInput = true;
+
+			if (isStruggleInput)
+			{
+				grabbedTimer_ += 0.2f;
+			}
+		}
+
 		Character::Update();
 		return;
 	}

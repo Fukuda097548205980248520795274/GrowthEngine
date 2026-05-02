@@ -27,6 +27,19 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 	attack1Data.damageReaction = DamageReaction::DownFalling;
 	attack1Data.knockback = 0.1f;
 
+	// 掴み攻撃
+	GrabAttackInitData grabData;
+	grabData.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0);
+	grabData.attackTime = 1.0f;
+	grabData.moveSpeed = 3.0f;
+	grabData.moveStartTime = 0.1f;
+	grabData.moveEndTime = 0.3f;
+	grabData.grabPartName = "RightHand";
+	grabData.hitboxStartTime = 0.15f;
+	grabData.hitboxEndTime = 0.35f;
+	grabData.grabTime = 3.0f;
+
+
 	return builder
 		// 常に状況を監視してルートを切り替えるためRestartingSequenceを使用
 		.RestartingSequence()
@@ -42,7 +55,7 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 				// ----------------------------------------------------
 				.PersistentSequence()
 
-					// ① ターゲットとの距離が近いか（攻撃範囲内か）を判定する
+					// ターゲットが攻撃圏内にいるか？（例：距離が2.5メートル以内）
 					.Condition([character]() {
 					Character* target = character->GetLockOnTarget();
 					if (!target) return false;
@@ -51,11 +64,11 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 					// 例：距離が2.5メートル以内なら攻撃可能
 					return toTarget.Length() <= 2.5f;}).End()
 
-						// ターゲットがダウンしていないか（ダウンしている相手には攻撃しない）
-					.Condition([character]() {return !character->GetLockOnTarget()->IsDown(); }).End()
+					// ターゲットを掴んでいるか？（掴んでいないとコンボ攻撃できない）
+					.Condition([character]() {return !character->IsGrabbing(); }).End()
 
-					// ② 弱攻撃 1段目
-					.ComboAttack_(std::make_unique<ComboAttack>(character, attack1Data)).End()
+					// 掴み攻撃を実行する
+					.GrabAttack_(std::make_unique<GrabAttack>(character, grabData)).End()
 
 				.End() // コンボシーケンス終了
 

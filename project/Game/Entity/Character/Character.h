@@ -96,7 +96,7 @@ public:
 	/// @param knockback 
 	/// @param knockDirection 
 	/// @param enemyPosition 
-	virtual void OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition);
+	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition);
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }

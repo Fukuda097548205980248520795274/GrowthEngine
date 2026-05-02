@@ -71,6 +71,9 @@ private:
 	/// @brief 防御入力
 	std::unique_ptr<InputGamepadButton> inputGuard_ = nullptr;
 
+	/// @brief 掴まれ解き入力
+	std::unique_ptr<InputGamepadButton> inputEscapeMash_ = nullptr;
+
 
 	/// @brief 前方移動入力
 	std::unique_ptr<InputKey> keyFrontMove_ = nullptr;

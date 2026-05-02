@@ -118,19 +118,14 @@ void Character::Update()
 	// デルタタイム(秒)を取得する
 	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
 
-	// つかまれている相手は自分の手の位置に固定されるため、抵抗しても移動できない状態になる
+	// つかまれている場合は、限界時間に達するまで自力で振りほどく処理を行う
 	if (IsGrabbed())
 	{
-		// 掴まれているタイマーを進める
-		grabbedTimer_ += engine_->GetDeltaTime();
-
-		// ※もしプレイヤーなら、ここで「ボタン連打で grabbedTimer_ をさらに増やす」処理を入れるとレバガチャ抜けになります
-
 		// 限界時間に達したら、自力で振りほどく
 		if (grabbedTimer_ >= escapeTimeLimit_)
 		{
 			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
-			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.0f, Vector3(0.0f, 0.0f, 0.0f), grabbedTarget_->GetPosition());
+			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
 
 			// 相手のつかみ状態を解除する
 			grabber_->grabbedTarget_ = nullptr;
@@ -138,9 +133,6 @@ void Character::Update()
 			// 自分のポインタを解除し、タイマーをリセット
 			grabber_ = nullptr;
 			grabbedTimer_ = 0.0f;
-
-			// 自分（抜け出した側）の向きを最後に確定させる（相手の方向を向く）
-			// ※必要に応じて、抜け出した直後の無敵時間などを設定
 		}
 
 		// 基底クラスの更新
@@ -302,11 +294,11 @@ void Character::Update()
 		// 角度の差分を -π ～ +π ( -180度 ～ 180度 ) の範囲に正規化する
 		while (diff > std::numbers::pi)
 		{
-			diff -= 2.0f * std::numbers::pi;
+			diff -= 2.0f * std::numbers::pi_v<float>;
 		}
 		while (diff < -std::numbers::pi)
 		{
-			diff += 2.0f * std::numbers::pi;
+			diff += 2.0f * std::numbers::pi_v<float>;
 		}
 
 		// 補間（デルタタイムを掛けてフレームレート非依存にする）
@@ -329,7 +321,7 @@ void Character::Update()
 /// @param staggerTime
 /// @param knockback
 /// @param knockDirection
-void Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition)
+bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition)
 {
 	if (IsGuard())
 	{
@@ -366,6 +358,9 @@ void Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		// 防御成功モーションを再生
 		SetAnimation(hGuardHitMotion_, false, true);
+
+		// ガードされ、ダメージが通らなかったことを返す
+		return false;
 	}
 	else
 	{
@@ -419,6 +414,9 @@ void Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
 			break;
 		}
+
+		// ダメージが通ったことを返す
+		return true;
 	}
 }
 

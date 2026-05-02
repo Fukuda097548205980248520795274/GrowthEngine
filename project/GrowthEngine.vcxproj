@@ -1020,6 +1020,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Attack\ComboAttack\ComboAttack.cpp" />
     <ClCompile Include="Game\Action\Attack\GrabAttack\GrabAttack.cpp" />
     <ClCompile Include="Game\Action\Avoid\Avoid.cpp" />
+    <ClCompile Include="Game\Action\Guard\Guard.cpp" />
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\AppCollider\AppCollider.cpp" />
@@ -1047,6 +1048,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Node\Node.cpp" />
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1334,6 +1336,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Attack\ComboAttack\ComboAttack.h" />
     <ClInclude Include="Game\Action\Attack\GrabAttack\GrabAttack.h" />
     <ClInclude Include="Game\Action\Avoid\Avoid.h" />
+    <ClInclude Include="Game\Action\Guard\Guard.h" />
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />
@@ -1359,6 +1362,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Node\Node.h" />
     <ClInclude Include="Game\PivotPoint\PivotPoint.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
+    <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

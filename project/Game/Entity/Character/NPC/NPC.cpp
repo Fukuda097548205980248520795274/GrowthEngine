@@ -35,6 +35,12 @@ void NPC::Update()
 	// 怯み状態、または「つかまれている状態」なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
 	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
+		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
+		if(IsGrabbed())
+		{
+			grabbedTimer_ += engine_->GetDeltaTime();
+		}
+
 		Character::Update();
 		return;
 	}
