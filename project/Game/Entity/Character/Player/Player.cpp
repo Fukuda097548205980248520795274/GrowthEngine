@@ -69,6 +69,9 @@ void Player::Initialize()
 	// 構え入力の生成
 	inputStance_ = std::make_unique<InputGamepadButton>("Player_Stance", InputState::Press, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
 
+	// 防御入力の生成
+	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
+
 	// キーの前移動入力の生成
 	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
 
@@ -195,6 +198,9 @@ void Player::Update()
 	// アクションの更新処理
 	ActionUpdate();
 
+	// 防御状態を更新する
+	UpdateGuardState();
+
 	// 回避中は回避更新のみ行い、他の操作は受け付けない
 	if (isAvoid_)
 	{
@@ -245,6 +251,15 @@ void Player::Update()
 
 	// 基底クラスの更新
 	Character::Update();
+}
+
+/// @brief 描画処理
+void Player::Draw()
+{
+	assert(model_);
+
+	// モデルを描画する
+	model_->Draw();
 }
 
 /// @brief 攻撃処理を更新する
@@ -400,6 +415,10 @@ void Player::UpdateDashState(bool hasMoveInput)
 /// @return
 float Player::GetCurrentMoveSpeed() const
 {
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中は移動速度が0になる
+	if (isGuard_ || IsGrabbed() || IsDown() || IsDamageReaction() || IsAttack())
+		return 0.0f;
+
 	// 構え中は移動速度を半分にする
 	// Character側で速度補間しているため、通常速度↔構え速度の切り替えも補間される
 	float moveSpeed = isStance_ ? (kNormalMoveSpeed * kStanceMoveSpeedMultiplier) : kNormalMoveSpeed;
@@ -425,11 +444,23 @@ float Player::GetCameraYaw() const
 	return 0.0f;
 }
 
-/// @brief 描画処理
-void Player::Draw()
+/// @brief 防御状態を更新する
+void Player::UpdateGuardState()
 {
-	assert(model_);
+	// 怯み状態、または構え状態、または「つかまれている状態」なら防御状態にならない
+	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack())
+	{
+		isGuard_ = false;
+		return;
+	}
 
-	// モデルを描画する
-	model_->Draw();
+	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
+	if(inputGuard_ && inputGuard_->IsInput())
+	{
+		isGuard_ = true;
+	}
+	else
+	{
+		isGuard_ = false;
+	}
 }

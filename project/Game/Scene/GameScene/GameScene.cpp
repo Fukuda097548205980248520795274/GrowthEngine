@@ -27,7 +27,7 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadPostEffect("AfterImage", Engine::PostEffect::Type::AfterImage);
+	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
 
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
@@ -75,6 +75,8 @@ void GameScene::Initialize()
 	playerInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
 	playerInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
 	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
+	playerInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, 0);
+	playerInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, 1);
 	playerInitData.hAvoidLeftMotion = 0;
 	playerInitData.hAvoidRightMotion = 0;
 	playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
@@ -117,6 +119,8 @@ void GameScene::Initialize()
 	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
 	enemyInitData.hAvoidLeftMotion = 0;
 	enemyInitData.hAvoidRightMotion = 0;
+	enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, 0);
+	enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, 1);
 	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
 	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);

@@ -64,6 +64,12 @@ public:
 		/// @brief 右回避モーション
 		AnimationHandle hAvoidRightMotion = 0;
 
+		/// @brief 防御モーション
+		AnimationHandle hGuardMotion = 0;
+
+		/// @brief 防御成功モーション
+		AnimationHandle hGuardHitMotion = 0;
+
 		/// @brief 当たり判定グループ
 		Collision3DBaseSphere* hurtboxGroup = nullptr;
 
@@ -84,12 +90,13 @@ public:
 	/// @brief 更新処理
 	virtual void Update() override;
 
-	/// @brief ダメージを受ける
+	/// @brief ダメージを受けたときの処理
 	/// @param damage 
-	/// @param staggerTime 
-	/// @param knockback
-	/// @param knockDirection
-	virtual void OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection);
+	/// @param damageReaction 
+	/// @param knockback 
+	/// @param knockDirection 
+	/// @param enemyPosition 
+	virtual void OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition);
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
@@ -227,6 +234,14 @@ public:
 	/// @brief 掴んだ相手を離す
 	void ReleaseGrab();
 
+	/// @brief 防御しているかどうか
+	/// @return 
+	bool IsGuard() const { return isGuard_; }
+
+	/// @brief 防御を設定する
+	/// @param isGuard 
+	void SetGuard(bool isGuard) { isGuard_ = isGuard; }
+
 
 protected:
 
@@ -261,6 +276,14 @@ protected:
 
 	/// @brief 現在の速度
 	Vector3 currentVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+
+protected:
+
+	/// @brief 現在の目標Y軸回転角度（ラジアン）
+	float targetRotationY_ = 0.0f;
+
+	/// @brief 回転の補間スピード（数値が大きいほど素早く振り向く）
+	float rotationSpeed_ = 10.0f;
 
 
 protected:
@@ -336,6 +359,17 @@ protected:
 	// Characterインスタンスのリスト
 	static std::vector<Character*> characters_;
 
+
+protected:
+
+	/// @brief 防御中かどうか
+	bool isGuard_ = false;
+
+	/// @brief 防御のリアクション中かどうか
+	bool isGuardReaction_ = false;
+
+	/// @brief 防御のリアクションの経過時間
+	float guardReactionTimer_ = 0.0f;
 
 
 protected:
@@ -453,6 +487,13 @@ protected:
 
 	/// @brief つかまれているモーション
 	AnimationHandle hGrabbedMotion_ = 0;
+
+
+	// 防御モーション
+	AnimationHandle hGuardMotion_ = 0;
+
+	// 防御成功モーション
+	AnimationHandle hGuardHitMotion_ = 0;
 
 
 protected:

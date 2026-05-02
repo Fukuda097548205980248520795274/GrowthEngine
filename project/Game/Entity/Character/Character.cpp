@@ -75,6 +75,8 @@ Character::Character(const InitData& initData) : Entity()
 	hAvoidBackMotion_ = initData.hAvoidBackMotion;
 	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
 	hAvoidRightMotion_ = initData.hAvoidRightMotion;
+	hGuardMotion_ = initData.hGuardMotion;
+	hGuardHitMotion_ = initData.hGuardHitMotion;
 
 	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
 	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
@@ -127,15 +129,17 @@ void Character::Update()
 		// 限界時間に達したら、自力で振りほどく
 		if (grabbedTimer_ >= escapeTimeLimit_)
 		{
-			// 1. 相手（掴んでいた側）のポインタを解除し、少し怯ませる（振りほどかれたリアクション）
-			grabber_->grabbedTarget_ = nullptr;
-			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.0f, Vector3(0.0f, 0.0f, 0.0f)); // ダメージは0、怯み時間は0.5秒、ノックバックなし
+			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
+			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.0f, Vector3(0.0f, 0.0f, 0.0f), grabbedTarget_->GetPosition());
 
-			// 2. 自分のポインタを解除し、タイマーをリセット
+			// 相手のつかみ状態を解除する
+			grabber_->grabbedTarget_ = nullptr;
+
+			// 自分のポインタを解除し、タイマーをリセット
 			grabber_ = nullptr;
 			grabbedTimer_ = 0.0f;
 
-			// 3. 自分（抜け出した側）の向きを最後に確定させる（相手の方向を向く）
+			// 自分（抜け出した側）の向きを最後に確定させる（相手の方向を向く）
 			// ※必要に応じて、抜け出した直後の無敵時間などを設定
 		}
 
@@ -285,6 +289,34 @@ void Character::Update()
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * deltaTime;
 
+
+	// ガードリアクション中は、目標回転に向かって回転を補間する
+	if (isGuardReaction_)
+	{
+		// 現在のY軸回転角度を取得
+		float currentRotationY = worldTransform_->rotate_.y;
+
+		// 目標角度との差分を計算
+		float diff = targetRotationY_ - currentRotationY;
+
+		// 角度の差分を -π ～ +π ( -180度 ～ 180度 ) の範囲に正規化する
+		while (diff > std::numbers::pi)
+		{
+			diff -= 2.0f * std::numbers::pi;
+		}
+		while (diff < -std::numbers::pi)
+		{
+			diff += 2.0f * std::numbers::pi;
+		}
+
+		// 補間（デルタタイムを掛けてフレームレート非依存にする）
+		currentRotationY += diff * rotationSpeed_ * engine_->GetDeltaTime();
+
+		// モデルに新しい角度を適用
+		worldTransform_->rotate_.y = currentRotationY;
+	}
+
+
 	// アニメーションの更新
 	UpdateAnimation();
 
@@ -297,57 +329,96 @@ void Character::Update()
 /// @param staggerTime
 /// @param knockback
 /// @param knockDirection
-void Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection)
+void Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition)
 {
-	// 体力を減らす
-	hp_ -= damage;
-	if (hp_ < 0) hp_ = 0;
-
-	// 移動を強制停止
-	MoveStop();
-
-	// 現在実行中のアクションを強制キャンセル
-	currentAttack_ = nullptr;
-	currentMove_ = nullptr;
-	currentAvoid_ = nullptr;
-
-	// 状態フラグのリセット
-	isAvoid_ = false;
-	isDash_ = false;
-	bufferedAttackInput_ = AttackInputType::None;
-
-	// ノックバック処理
-	if (knockback > 0.0f)
+	if (IsGuard())
 	{
-		// ノックバック方向を正規化する
-		Vector3 backDirection = knockDirection.Normalize();
+		// 移動を強制停止
+		MoveStop();
 
-		// ノックバック力を初速として設定する
-		// ※減衰させながら移動するため、少し大きめの値（* 10.0f など）をかけると丁度良くなります
-		knockbackVelocity_ = backDirection * (knockback * 10.0f);
+		// 現在実行中のアクションを強制キャンセル
+		currentAttack_ = nullptr;
+		currentMove_ = nullptr;
+		currentAvoid_ = nullptr;
+
+		// 状態フラグのリセット
+		isAvoid_ = false;
+		isDash_ = false;
+		bufferedAttackInput_ = AttackInputType::None;
+
+		// 自身から攻撃者へのベクトルを計算
+		Vector3 dirToAttacker = enemyPosition - GetWorldPosition();
+		dirToAttacker.y = 0.0f; // Y軸(高さ)は無視して水平方向のみにする
+		if (dirToAttacker.Length() > 0.0f)
+		{
+			dirToAttacker = dirToAttacker.Normalize();
+			
+			// 目標回転を攻撃者の方向に設定する（ガード成功のリアクションで振り向くため）
+			targetRotationY_ = std::atan2(dirToAttacker.x, dirToAttacker.z);
+		}
+
+		// ガード成功のフラグを立てる
+		isGuardReaction_ = true;
+		guardReactionTimer_ = 0.0f;
+
+		// ノックバック用のベクトルを設定（攻撃方向の逆、または後退ベクトルなど）
+		// knockbackVelocity_ = -dirToAttacker * 2.0f; 
+
+		// 防御成功モーションを再生
+		// SetAnimation(hGuardHitMotion_, false, true);
 	}
-
-
-	// リアクション状態を更新
-	currentDamageReaction_ = damageReaction;
-
-	// 状態に合わせてモーションを再生し、タイマーを設定する
-	switch (currentDamageReaction_)
+	else
 	{
-	case DamageReaction::LightStagger:
-		SetAnimation(hDamageLightMotion_, true, false); // ループしない
-		damageReactionTimer_ = 0.3f; // 弱怯み時間
-		break;
+		// 体力を減らす
+		hp_ -= damage;
+		if (hp_ < 0) hp_ = 0;
 
-	case DamageReaction::HeavyStagger:
-		SetAnimation(hDamageHeavyMotion_, true, false);
-		damageReactionTimer_ = 1.0f; // 強怯み時間
-		break;
+		// 移動を強制停止
+		MoveStop();
 
-	case DamageReaction::DownFalling:
-		SetAnimation(hDownFallMotion_, true, false);
-		damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
-		break;
+		// 現在実行中のアクションを強制キャンセル
+		currentAttack_ = nullptr;
+		currentMove_ = nullptr;
+		currentAvoid_ = nullptr;
+
+		// 状態フラグのリセット
+		isAvoid_ = false;
+		isDash_ = false;
+		bufferedAttackInput_ = AttackInputType::None;
+
+		// ノックバック処理
+		if (knockback > 0.0f)
+		{
+			// ノックバック方向を正規化する
+			Vector3 backDirection = knockDirection.Normalize();
+
+			// ノックバック力を初速として設定する
+			// ※減衰させながら移動するため、少し大きめの値（* 10.0f など）をかけると丁度良くなります
+			knockbackVelocity_ = backDirection * (knockback * 10.0f);
+		}
+
+
+		// リアクション状態を更新
+		currentDamageReaction_ = damageReaction;
+
+		// 状態に合わせてモーションを再生し、タイマーを設定する
+		switch (currentDamageReaction_)
+		{
+		case DamageReaction::LightStagger:
+			SetAnimation(hDamageLightMotion_, true, false); // ループしない
+			damageReactionTimer_ = 0.3f; // 弱怯み時間
+			break;
+
+		case DamageReaction::HeavyStagger:
+			SetAnimation(hDamageHeavyMotion_, true, false);
+			damageReactionTimer_ = 1.0f; // 強怯み時間
+			break;
+
+		case DamageReaction::DownFalling:
+			SetAnimation(hDownFallMotion_, true, false);
+			damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
+			break;
+		}
 	}
 }
 
@@ -627,6 +698,10 @@ void Character::UpdateAnimation()
 		if (isStance_)
 			SetAnimation(hStanceMotion_, false, true);
 
+		// 防御の待機モーションを再生する
+		if(IsGuard())
+			SetAnimation(hGuardMotion_, true, false);
+
 		// 回避中は回避モーションを優先して再生する
 		if (isAvoid_)
 		{
@@ -680,6 +755,15 @@ void Character::UpdateAnimation()
 	if (IsGrabbed())
 	{
 		SetAnimation(hGrabbedMotion_, false, true);
+	}
+	else if (isGuardReaction_)
+	{
+		// 防御成功時のノックバック中
+		guardReactionTimer_ += engine_->GetDeltaTime();
+		if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
+		{
+			isGuardReaction_ = false;
+		}
 	}
 	else if (IsGrabbing())
 	{

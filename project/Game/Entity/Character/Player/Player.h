@@ -68,6 +68,9 @@ private:
 	/// @brief 構え入力
 	std::unique_ptr<InputGamepadButton> inputStance_ = nullptr;
 
+	/// @brief 防御入力
+	std::unique_ptr<InputGamepadButton> inputGuard_ = nullptr;
+
 
 	/// @brief 前方移動入力
 	std::unique_ptr<InputKey> keyFrontMove_ = nullptr;
@@ -102,5 +105,11 @@ private:
 
 	/// @brief つかみ攻撃
 	std::unique_ptr<GrabAttack> grabAttack_ = nullptr;
+
+
+private:
+
+	/// @brief 防御状態を更新する
+	void UpdateGuardState();
 };
 

@@ -55,6 +55,7 @@ void MotionManager::Initialize()
 	LoadDownFall(dir);
 	LoadDownLying(dir);
 	LoadDownGetUp(dir);
+	LoadGuard(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -186,4 +187,12 @@ void MotionManager::LoadDownLying(const std::string& dir)
 void MotionManager::LoadDownGetUp(const std::string& dir)
 {
 	table_[MotionType::DowoGetUp][0] = engine_->LoadAnimation(dir + "/downGetUp/downGetUp_000", "downGetUp_000.gltf");
+}
+
+/// @brief 防御モーション読み込み
+/// @param dir
+void MotionManager::LoadGuard(const std::string& dir)
+{
+	table_[MotionType::Guard][0] = engine_->LoadAnimation(dir + "/guard/guard_000", "guard_000.gltf");
+	table_[MotionType::Guard][1] = engine_->LoadAnimation(dir + "/guard/guard_001", "guard_001.gltf");
 }

@@ -115,7 +115,7 @@ void ComboAttack::Update()
 					Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
 
 					// ターゲットにダメージを与える
-					target->OnDamage(damage_, damageReaction_, knockback_, knockDirection);
+					target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
 
 					// ヒットエフェクトなどの処理があればここで行う
 					// PlayHitEffect(target->GetPosition());
