@@ -361,11 +361,11 @@ void Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardReaction_ = true;
 		guardReactionTimer_ = 0.0f;
 
-		// ノックバック用のベクトルを設定（攻撃方向の逆、または後退ベクトルなど）
-		// knockbackVelocity_ = -dirToAttacker * 2.0f; 
+		//ノックバック用のベクトルを設定（攻撃方向の逆、または後退ベクトルなど）
+		knockbackVelocity_ = -dirToAttacker * 2.0f; 
 
 		// 防御成功モーションを再生
-		// SetAnimation(hGuardHitMotion_, false, true);
+		SetAnimation(hGuardHitMotion_, false, true);
 	}
 	else
 	{
