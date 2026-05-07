@@ -20,8 +20,8 @@ Engine::Camera2D::Camera2D()
 	param_->setting.farClip = 100.0f;
 
 	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
+	param_->aspect.width = 1280.0f;
+	param_->aspect.height = 720.0f;
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
@@ -40,10 +40,6 @@ void Engine::Camera2D::Update()
 	// 前フレームのビュー正射影行列を保存する
 	prevVPMatrix_ = currentVPMatrix_;
 	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
-
-	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// ワールド行列を生成する
 	worldMatrix_ = Make3DScaleMatrix4x4(Vector3(param_->transform.scale.x, param_->transform.scale.y, 1.0f)) *
@@ -65,10 +61,6 @@ void Engine::Camera2D::JitterUpdate()
 	// 前フレームのビュー正射影行列を保存する
 	prevVPMatrix_ = currentVPMatrix_;
 	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
-
-	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// ワールド行列を生成する
 	worldMatrix_ = Make3DScaleMatrix4x4(Vector3(param_->transform.scale.x, param_->transform.scale.y, 1.0f)) *

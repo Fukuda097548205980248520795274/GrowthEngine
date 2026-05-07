@@ -44,8 +44,8 @@ Engine::Camera3D::Camera3D()
 	param_->setting.farClip = 800.0f;
 
 	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
+	param_->aspect.width = 1280.0f;
+	param_->aspect.height = 720.0f;
 
 	// 正射影行列を作成する
 	projectionMatrix_ =
@@ -64,10 +64,6 @@ void Engine::Camera3D::Update()
 	// 前フレームのビュー正射影行列を保存する
 	prevVPMatrix_ = currentVPMatrix_;
 	prevVPUnJitterMatrix_ = currentVPUnJitterMatrix_;
-
-	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// 3軸の回転を合成する
 	quaternion_ =
@@ -104,10 +100,6 @@ void Engine::Camera3D::JitterUpdate()
 	// 0から7の範囲でループさせる
 	jitterIndex_ = jitterIndex_ % 8;
 
-	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
-
 	// X軸には素数の「2」を指定
 	float haltonX = GetHaltonSequence(jitterIndex_, 2); // 0.0 ～ 1.0の値になる
 	// Y軸には素数の「3」を指定
@@ -121,10 +113,6 @@ void Engine::Camera3D::JitterUpdate()
 	float ndcOffsetX = (jitterX_in_Pixels * 2.0f) / static_cast<float>(param_->aspect.width);
 	float ndcOffsetY = (jitterY_in_Pixels * 2.0f) / static_cast<float>(param_->aspect.height);
 
-
-	// 画面の幅を取得する
-	param_->aspect.width = static_cast<float>(engine_->GetScreenWidth());
-	param_->aspect.height = static_cast<float>(engine_->GetScreenHeight());
 
 	// 3軸の回転を合成する
 	quaternion_ =
