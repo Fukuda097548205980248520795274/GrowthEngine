@@ -149,6 +149,9 @@ void Engine::RenderContext::PerScene()
 	// プレハブのリセット
 	prefab_->PerSceneReset();
 
+	// オフスクリーンのリセット
+	offscreen_->PerSceneReset();
+
 	// ライトストアのリセット
 	lightStore_->PerSceneReset();
 

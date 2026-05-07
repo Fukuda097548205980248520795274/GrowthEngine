@@ -252,24 +252,26 @@ void Character::Update()
 	// 目標回転が有効な場合、現在の回転と目標回転の差を計算して、線形補間で回転を更新する
 	if (hasTargetYaw_)
 	{
-		// 掴み中の意図しない回転を防ぐ
-		if (!IsGrabbing())
+		float currentYaw = worldTransform_->rotate_.y;
+		float target = targetYaw_;
+
+		// つかんでいる場合は、目標回転を180度回転させる（相手の正面に立つため）
+		if (IsGrabbing())
+			target += std::numbers::pi_v<float>;
+
+		// 現在の回転と目標回転の差を計算する (targetYaw_ の代わりに target を使用)
+		const float deltaYaw = std::atan2(std::sin(target - currentYaw), std::cos(target - currentYaw));
+
+		// 目標回転に向かって秒基準の補間で回転を更新する
+		constexpr float kRotateLerpSpeedPerSecond = 12.0f;
+		const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * deltaTime);
+		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
+
+		// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
+		if ((deltaYaw * deltaYaw) <= kRotateThreshold)
 		{
-			// 現在の回転と目標回転の差を計算する
-			const float currentYaw = worldTransform_->rotate_.y;
-			const float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
-
-			// 目標回転に向かって秒基準の補間で回転を更新する
-			constexpr float kRotateLerpSpeedPerSecond = 12.0f;
-			const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * deltaTime);
-			worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
-
-			// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
-			if ((deltaYaw * deltaYaw) <= kRotateThreshold)
-			{
-				worldTransform_->rotate_.y = targetYaw_;
-				hasTargetYaw_ = false;
-			}
+			worldTransform_->rotate_.y = target; // ここも target に変更
+			hasTargetYaw_ = false;
 		}
 	}
 

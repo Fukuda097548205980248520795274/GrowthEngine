@@ -57,6 +57,12 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 		heap, textureStore, static_cast<int32_t>(buffering_->GetSwapChainDesc().Width), static_cast<int32_t>(buffering_->GetSwapChainDesc().Height), log);
 }
 
+/// @brief シーン前のリセット
+void Engine::DX12Offscreen::PerSceneReset()
+{
+	postEffectStore_->PerSceneReset();
+}
+
 /// @brief サイズを作り直す
 /// @param device 
 /// @param buffering 

@@ -283,6 +283,10 @@ void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProject
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// シャドウインスタンスがないときは処理しない
+	if (numShadowInstance_ <= 0)return;
+
+
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
 
@@ -294,37 +298,14 @@ void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProject
 	{
 		UINT useInstance = 0;
 
-		// インスタンスごとに処理
-		for (auto& instance : instanceTable_)
+		for (useInstance = 0; useInstance < numShadowInstance_; ++useInstance)
 		{
 			// インスタンス数を越えたら処理しない
-			if (useInstance >= numInstance_)
-				break;
+			if (useInstance >= numInstance_)break;
 
-			Quaternion modelQuaternion =
-				ToQuaternion(instance->param_.modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-				ToQuaternion(instance->param_.modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-				ToQuaternion(instance->param_.modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-			Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(instance->param_.modelTransform.scale, modelQuaternion, instance->param_.modelTransform.translate);
-
-			// ノード行列
-			Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-			if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
-			Quaternion meshQuaternion =
-				ToQuaternion(instance->param_.meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-				ToQuaternion(instance->param_.meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-				ToQuaternion(instance->param_.meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-			Matrix4x4 localMatrix = Make3DAffineMatrix4x4(instance->param_.meshTransforms[meshIndex].scale, meshQuaternion, instance->param_.meshTransforms[meshIndex].translate);
-
-
-			// ワールド座標
-			shadowMapTransformationResource_[meshIndex]->data_[useInstance] = localMatrix * nodeMatrix * worldMatrix * viewProjection;
-
-			// 使用インスタンスをカウントする
-			useInstance++;
+			// シャドウマップ用座標変換の計算
+			shadowMapTransformationResource_[meshIndex]->data_[useInstance] = 
+				primitiveResource_[meshIndex]->data_[useInstance].world * viewProjection;
 		}
 
 
@@ -349,6 +330,9 @@ void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProject
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), useInstance, 0, 0, 0);
 	}
+
+	// シャドウインスタンスをリセットする
+	numShadowInstance_ = 0;
 }
 
 /// @brief モーションベクターを描画する
@@ -408,6 +392,114 @@ void* Engine::Prefab3DStaticModelData::CreateInstance()
 void Engine::Prefab3DStaticModelData::DestroyAllInstance()
 {
 	instanceTable_.clear();
+}
+
+/// @brief インスタンスのドローコール
+/// @param param 
+void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::StaticModel::Instance::Param* param)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス数を越えたら処理しない
+	if (numUseInstance_ >= numInstance_)
+		return;
+
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
+	Quaternion modelQuaternion =
+		ToQuaternion(param->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+		ToQuaternion(param->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+		ToQuaternion(param->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->modelTransform.scale, modelQuaternion, param->modelTransform.translate);
+
+
+	// ビュープロジェクション行列を取得する
+	Matrix4x4 viewProjection = cameraStore_->GetCamera3D().GetCurrentVPMatrix();
+	Matrix4x4 prevVPUnJitter = cameraStore_->GetCamera3D().GetPrevVPUnJitterMatrix();
+	Matrix4x4 currentVPUnJitter = cameraStore_->GetCamera3D().GetCurrentVPUnJitterMatrix();
+
+
+	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
+	{
+		// ノード行列
+		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
+		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
+
+		Quaternion meshQuaternion =
+			ToQuaternion(param->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+			ToQuaternion(param->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+			ToQuaternion(param->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param->meshTransforms[meshIndex].scale, meshQuaternion, param->meshTransforms[meshIndex].translate);
+
+
+		// 前フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].prevWVPMatrix =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * prevVPUnJitter;
+
+		// ワールド座標
+		primitiveResource_[meshIndex]->data_[numUseInstance_].world =
+			localMatrix * nodeMatrix * worldMatrix;
+
+		// 現フレームのWVP行列
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].currentWVPMatrix =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * currentVPUnJitter;
+
+		// ワールドビュー正射影行列
+		primitiveResource_[meshIndex]->data_[numUseInstance_].worldViewProjection =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world * viewProjection;
+
+		// 逆転置ワールド行列
+		primitiveResource_[meshIndex]->data_[numUseInstance_].worldInverseTranspose =
+			primitiveResource_[meshIndex]->data_[numUseInstance_].world.Transpose().Inverse();
+
+
+
+		// 色
+		primitiveResource_[meshIndex]->data_[numUseInstance_].color = param->meshMaterial[meshIndex].color;
+
+		// 環境
+		primitiveResource_[meshIndex]->data_[numUseInstance_].environment = param->meshMaterial[meshIndex].environment;
+
+		// 光沢度
+		primitiveResource_[meshIndex]->data_[numUseInstance_].shininess = param->meshMaterial[meshIndex].shininess;
+
+		// UV行列
+		primitiveResource_[meshIndex]->data_[numUseInstance_].uvTransform =
+			Make3DScaleMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.scale.x, param->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
+			Make3DRotateZMatrix4x4(param->meshMaterial[meshIndex].uv.radius) *
+			Make3DTranslateMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.translate.x, param->meshMaterial[meshIndex].uv.translate.y, 0.0f));
+
+		// ライティング有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableLighting = static_cast<int32_t>(param->meshMaterial[meshIndex].enableLighting);
+
+		// ディフューズ有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableDiffuse = static_cast<int32_t>(param->meshMaterial[meshIndex].enableDiffuse);
+
+		// ハーフランバード有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableHalfLambert = static_cast<int32_t>(param->meshMaterial[meshIndex].enableHalfLambert);
+
+		// スペキュラー有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableSpecular = static_cast<int32_t>(param->meshMaterial[meshIndex].enableSpecular);
+
+		// ブリンフォン有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableBlinnPhong = static_cast<int32_t>(param->meshMaterial[meshIndex].enableBlinnPhong);
+
+		// シャドウ有効化
+		primitiveResource_[meshIndex]->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->meshMaterial[meshIndex].enableShadow);
+
+
+		// ブラー
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].afterImageMask = param->meshBlur[meshIndex].afterImageMask;
+		motionVectorResources_[meshIndex]->data_[numUseInstance_].motionBlurMask = param->meshBlur[meshIndex].motionBlurMask;
+	}
+
+	// 使用インスタンスをカウントする
+	numUseInstance_++;
+	numShadowInstance_++;
 }
 
 /// @brief デバッグ用パラメータ
@@ -617,109 +709,4 @@ void Engine::Prefab3DStaticModelData::DebugParameter()
 	}
 
 #endif
-}
-
-/// @brief インスタンスのドローコール
-void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::StaticModel::Instance::Param* param)
-{
-	// 読み込まれていないときは処理しない
-	if (!isLoad_)return;
-
-	// インスタンス数を越えたら処理しない
-	if (numUseInstance_ >= numInstance_)
-		return;
-
-	// モデルデータを取得する
-	const ModelData& modelData = modelStore_->GetModelData(hModel_);
-
-	Quaternion modelQuaternion =
-		ToQuaternion(param->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-		ToQuaternion(param->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-		ToQuaternion(param->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->modelTransform.scale, modelQuaternion, param->modelTransform.translate);
-
-
-	// ビュープロジェクション行列を取得する
-	Matrix4x4 viewProjection = cameraStore_->GetCamera3D().GetCurrentVPMatrix();
-	Matrix4x4 prevVPUnJitter = cameraStore_->GetCamera3D().GetPrevVPUnJitterMatrix();
-	Matrix4x4 currentVPUnJitter = cameraStore_->GetCamera3D().GetCurrentVPUnJitterMatrix();
-
-
-	for (int meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
-	{
-		// ノード行列
-		Matrix4x4 nodeMatrix = MakeIdentityMatrix4x4();
-		if (!modelData.nodes.empty())nodeMatrix = modelData.nodes[static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()) - 1 - meshIndex].worldMatrix;
-
-		Quaternion meshQuaternion =
-			ToQuaternion(param->meshTransforms[meshIndex].rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(param->meshTransforms[meshIndex].rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(param->meshTransforms[meshIndex].rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		Matrix4x4 localMatrix = Make3DAffineMatrix4x4(param->meshTransforms[meshIndex].scale, meshQuaternion, param->meshTransforms[meshIndex].translate);
-
-
-		// 前フレームのWVP行列
-		motionVectorResources_[meshIndex]->data_[numUseInstance_].prevWVPMatrix =
-			primitiveResource_[meshIndex]->data_[numUseInstance_].world * prevVPUnJitter;
-
-		// ワールド座標
-		primitiveResource_[meshIndex]->data_[numUseInstance_].world =
-			localMatrix * nodeMatrix * worldMatrix;
-		
-		// 現フレームのWVP行列
-		motionVectorResources_[meshIndex]->data_[numUseInstance_].currentWVPMatrix =
-			primitiveResource_[meshIndex]->data_[numUseInstance_].world * currentVPUnJitter;
-
-		// ワールドビュー正射影行列
-		primitiveResource_[meshIndex]->data_[numUseInstance_].worldViewProjection =
-			primitiveResource_[meshIndex]->data_[numUseInstance_].world * viewProjection;
-
-		// 逆転置ワールド行列
-		primitiveResource_[meshIndex]->data_[numUseInstance_].worldInverseTranspose =
-			primitiveResource_[meshIndex]->data_[numUseInstance_].world.Transpose().Inverse();
-
-
-
-		// 色
-		primitiveResource_[meshIndex]->data_[numUseInstance_].color = param->meshMaterial[meshIndex].color;
-
-		// 環境
-		primitiveResource_[meshIndex]->data_[numUseInstance_].environment = param->meshMaterial[meshIndex].environment;
-
-		// 光沢度
-		primitiveResource_[meshIndex]->data_[numUseInstance_].shininess = param->meshMaterial[meshIndex].shininess;
-
-		// UV行列
-		primitiveResource_[meshIndex]->data_[numUseInstance_].uvTransform =
-			Make3DScaleMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.scale.x, param->meshMaterial[meshIndex].uv.scale.y, 1.0f)) *
-			Make3DRotateZMatrix4x4(param->meshMaterial[meshIndex].uv.radius) *
-			Make3DTranslateMatrix4x4(Vector3(param->meshMaterial[meshIndex].uv.translate.x, param->meshMaterial[meshIndex].uv.translate.y, 0.0f));
-
-		// ライティング有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableLighting = static_cast<int32_t>(param->meshMaterial[meshIndex].enableLighting);
-
-		// ディフューズ有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableDiffuse = static_cast<int32_t>(param->meshMaterial[meshIndex].enableDiffuse);
-
-		// ハーフランバード有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableHalfLambert = static_cast<int32_t>(param->meshMaterial[meshIndex].enableHalfLambert);
-
-		// スペキュラー有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableSpecular = static_cast<int32_t>(param->meshMaterial[meshIndex].enableSpecular);
-
-		// ブリンフォン有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableBlinnPhong = static_cast<int32_t>(param->meshMaterial[meshIndex].enableBlinnPhong);
-
-		// シャドウ有効化
-		primitiveResource_[meshIndex]->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->meshMaterial[meshIndex].enableShadow);
-
-
-		// ブラー
-		motionVectorResources_[meshIndex]->data_[numUseInstance_].afterImageMask = param->meshBlur[meshIndex].afterImageMask;
-		motionVectorResources_[meshIndex]->data_[numUseInstance_].motionBlurMask = param->meshBlur[meshIndex].motionBlurMask;
-	}
-
-	numUseInstance_++;
 }

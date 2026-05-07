@@ -35,6 +35,9 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log);
 
+		/// @brief シーン前のリセット
+		void PerSceneReset();
+
 		/// @brief サイズを作り直す
 		/// @param device 
 		/// @param buffering 

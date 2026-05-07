@@ -230,6 +230,9 @@ void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12Graphics
 /// @param pso 
 void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
+	// シャドウマップ用インスタンス数が0のときは処理しない
+	if (numShadowInstance_ <= 0)return;
+
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
@@ -237,30 +240,16 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 	if (isDebug_)return;
 
 
-	// PSOの設定
-	pso->Register(commandList);
-
 	UINT useInstance = 0;
 
 	// インスタンスごとに処理
-	for (auto& instance : instanceTable_)
+	for (useInstance = 0 ; useInstance < numShadowInstance_ ; ++useInstance)
 	{
 		// インスタンス数を越えたら処理しない
-		if (useInstance >= numInstance_)
-			break;
-
-		Quaternion modelQuaternion =
-			ToQuaternion(instance->param_.transform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
-			ToQuaternion(instance->param_.transform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
-			ToQuaternion(instance->param_.transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
-
-		Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(instance->param_.transform.scale, modelQuaternion, instance->param_.transform.translate);
+		if (useInstance >= numInstance_)break;
 
 		// ワールド座標
-		shadowMapTransformationResource_->data_[useInstance] = worldMatrix * viewProjection;
-
-		// 使用インスタンスをカウントする
-		useInstance++;
+		shadowMapTransformationResource_->data_[useInstance] = primitiveResource_->data_[useInstance].world * viewProjection;
 	}
 
 
@@ -273,6 +262,9 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 		コマンドリストに登録
 	------------------------*/
 
+	// PSOの設定
+	pso->Register(commandList);
+
 	// 頂点の設定
 	vertexResource_->Register(commandList);
 
@@ -284,6 +276,10 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(36, useInstance, 0, 0, 0);
+
+
+	// 記録したシャドウインスタンスをリセットする
+	numShadowInstance_ = 0;
 }
 
 /// @brief モーションベクターを描画する
@@ -396,8 +392,9 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	motionVectorResource_->data_[numUseInstance_].afterImageMask = param->blur.afterImageMask;
 	motionVectorResource_->data_[numUseInstance_].motionBlurMask = param->blur.motionBlurMask;
 
-
+	// 使用インスタンスをカウントする
 	numUseInstance_++;
+	numShadowInstance_++;
 }
 
 

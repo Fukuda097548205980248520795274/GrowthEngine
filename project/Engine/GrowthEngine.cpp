@@ -156,10 +156,6 @@ void GrowthEngine::NewFrame()
 	// 最初のデルタタイムは0にする
 	if(isDeltaTimeFirst_)
 		deltaTime_ = 0.0f;
-		
-
-	// ウィンドウの更新
-	winApp_->Update();
 
 	// 全ての入力情報を取得する
 	input_->CheckInputInfo();
@@ -191,6 +187,9 @@ void GrowthEngine::NewFrame()
 
 	// 新フレーム処理
 	renderContext_->NewFrame();
+
+	// ウィンドウの更新
+	winApp_->Update();
 }
 
 /// @brief 描画前処理

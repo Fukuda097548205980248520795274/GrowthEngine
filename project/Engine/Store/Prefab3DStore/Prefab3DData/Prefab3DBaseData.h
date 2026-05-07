@@ -43,6 +43,9 @@ namespace Engine
 		/// @brief シーン前のリセット
 		void PerSceneReset();
 
+		/// @brief リセット
+		void InstanceReset() { numUseInstance_ = 0; }
+
 		/// @brief 名前を取得する
 		/// @return 
 		std::string GetName()const { return name_; }
@@ -82,9 +85,6 @@ namespace Engine
 
 	public:
 
-		/// @brief リセット
-		void InstanceReset() { numUseInstance_ = 0; }
-
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
@@ -109,6 +109,9 @@ namespace Engine
 
 		// 使用インスタンス数
 		uint32_t numUseInstance_ = 0;
+
+		/// @brief シャドウマップ用インスタンス数
+		uint32_t numShadowInstance_ = 0;
 
 
 		/// @brief 読み込まれたかどうか
