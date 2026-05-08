@@ -127,7 +127,7 @@ void Character::Update()
 			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
 			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
 
-			worldTransform_->rotate_ = Vector3(0.0f, std::numbers::pi_v<float> -grabber_->GetWorldTransform()->rotate_.y, 0.0f);
+			worldTransform_->rotate_ = Vector3(0.0f, grabber_->GetWorldTransform()->rotate_.y + std::numbers::pi_v<float>, 0.0f);
 
 			// 相手のつかみ状態を解除する
 			grabber_->grabbedTarget_ = nullptr;
@@ -234,7 +234,7 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	// ロックオンターゲットがいる場合は、ターゲット方向を向く
-	if (lockOnTarget_)
+	if (lockOnTarget_ && !IsGrabbing())
 	{
 		// 自分からターゲットへの方向を計算する
 		Vector3 toTarget = lockOnTarget_->worldTransform_->translate_ - worldTransform_->translate_;
@@ -253,14 +253,9 @@ void Character::Update()
 	if (hasTargetYaw_)
 	{
 		float currentYaw = worldTransform_->rotate_.y;
-		float target = targetYaw_;
 
-		// つかんでいる場合は、目標回転を180度回転させる（相手の正面に立つため）
-		if (IsGrabbing())
-			target += std::numbers::pi_v<float>;
-
-		// 現在の回転と目標回転の差を計算する (targetYaw_ の代わりに target を使用)
-		const float deltaYaw = std::atan2(std::sin(target - currentYaw), std::cos(target - currentYaw));
+		// 現在の回転と目標回転の差を計算する
+		const float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
 
 		// 目標回転に向かって秒基準の補間で回転を更新する
 		constexpr float kRotateLerpSpeedPerSecond = 12.0f;
@@ -270,7 +265,7 @@ void Character::Update()
 		// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
 		if ((deltaYaw * deltaYaw) <= kRotateThreshold)
 		{
-			worldTransform_->rotate_.y = target; // ここも target に変更
+			worldTransform_->rotate_.y = targetYaw_;
 			hasTargetYaw_ = false;
 		}
 	}
@@ -562,11 +557,24 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	targetVelocity_.y = 0.0f;
 	targetVelocity_.z = direction.y * moveSpeed;
 
-	// 目標速度のXZ成分の長さが回転の閾値より大きい場合、目標回転を更新する
-	if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
+	
+	if (!IsGrabbing())
 	{
-		targetYaw_ = std::atan2(direction.x, direction.y);
-		hasTargetYaw_ = true;
+		// 目標速度のXZ成分の長さが回転の閾値より大きい場合、目標回転を更新する
+		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
+		{
+			targetYaw_ = std::atan2(direction.x, direction.y);
+			hasTargetYaw_ = true;
+		}
+	}
+	else
+	{
+		// 目標速度のXZ成分の長さが回転の閾値より大きい場合、目標回転を更新する
+		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
+		{
+			targetYaw_ = std::atan2(-direction.x, -direction.y);
+			hasTargetYaw_ = true;
+		}
 	}
 }
 
