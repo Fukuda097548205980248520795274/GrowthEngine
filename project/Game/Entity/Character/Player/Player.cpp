@@ -75,6 +75,9 @@ void Player::Initialize()
 	// 掴まれ解き入力の生成
 	inputEscapeMash_ = std::make_unique<InputGamepadButton>("Player_EscapeMash", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
 
+	// ダウン後起き上がり入力の生成
+	inputGetUp_ = std::make_unique<InputGamepadButton>("Player_GetUp", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+
 
 	// キーの前移動入力の生成
 	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
@@ -105,7 +108,7 @@ void Player::Initialize()
 	attack1Data.hitboxStartTime = 0.1f;
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
-	attack1Data.damageReaction = DamageReaction::LightStagger;
+	attack1Data.damageReaction = DamageReaction::DownFalling;
 	attack1Data.knockback = 0.1f;
 
 	// 2段目の攻撃
@@ -458,6 +461,19 @@ float Player::GetCameraYaw() const
 	}
 
 	return 0.0f;
+}
+
+/// @brief ダウン後起き上がり条件を満たしているかどうか
+/// @return 
+bool Player::CheckGetUpCondition()
+{
+	// 起き上がりボタンが入力されたら true を返す
+	if (inputGetUp_ && inputGetUp_->IsInput())
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /// @brief 防御状態を更新する

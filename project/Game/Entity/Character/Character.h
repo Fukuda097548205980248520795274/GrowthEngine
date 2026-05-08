@@ -411,6 +411,10 @@ protected:
 
 protected:
 
+	/// @brief ダウンからの起き上がり条件を満たしているかどうか
+	/// @return 
+	virtual bool CheckGetUpCondition();
+
 	/// @brief ノックバックの速度
 	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 

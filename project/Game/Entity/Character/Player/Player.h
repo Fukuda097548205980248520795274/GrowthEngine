@@ -44,6 +44,10 @@ private:
 	/// @return
 	float GetCameraYaw() const;
 
+	/// @brief ダウン後起き上がり条件を満たしているかどうか
+	/// @return 
+	bool CheckGetUpCondition()override;
+
 
 private:
 
@@ -73,6 +77,9 @@ private:
 
 	/// @brief 掴まれ解き入力
 	std::unique_ptr<InputGamepadButton> inputEscapeMash_ = nullptr;
+
+	/// @brief ダウン後起き上がり入力
+	std::unique_ptr<InputGamepadButton> inputGetUp_ = nullptr;
 
 
 	/// @brief 前方移動入力

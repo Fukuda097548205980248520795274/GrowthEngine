@@ -115,8 +115,8 @@ void Character::Update()
 	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
 	collider->param_->center = worldTransform_->translate_ + Vector3(0.0f, 1.0f, 0.0f);
 
-	// デルタタイム(秒)を取得する
-	const float deltaTime = std::max(engine_->GetDeltaTime(), 0.0f);
+	// デルタタイムの取得
+	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
 
 	// つかまれている場合は、限界時間に達するまで自力で振りほどく処理を行う
 	if (IsGrabbed())
@@ -173,11 +173,11 @@ void Character::Update()
 	{
 		// ノックバックの速度に基づいて位置を更新する
 		Vector3 position = GetPosition();
-		position += knockbackVelocity_ * deltaTime;
+		position += knockbackVelocity_ * dt;
 		SetPosition(position);
 
 		// ノックバックの速度を減衰させる
-		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, deltaTime);
+		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, dt);
 	}
 	else
 	{
@@ -188,10 +188,24 @@ void Character::Update()
 	// 怯み状態の更新
 	if (IsDamageReaction())
 	{
-		damageReactionTimer_ -= deltaTime;
+		damageReactionTimer_ -= dt;
+
+		// 次の状態へ移行するかどうかのフラグ
+		bool shouldTransition = false;
+
+		// ダウン中のリアクションは、タイマーではなく、立ち上がり条件で判定する
+		if (currentDamageReaction_ == DamageReaction::DownLying)
+		{
+			shouldTransition = CheckGetUpCondition();
+		} 
+		else
+		{
+			// それ以外のリアクションはタイマーで判定
+			shouldTransition = (damageReactionTimer_ <= 0.0f);
+		}
 		
 		// タイマーが0以下になったら、次の状態へ移行する
-		if (damageReactionTimer_ <= 0.0f)
+		if (shouldTransition)
 		{
 			// 怯みの状態遷移
 			switch (currentDamageReaction_)
@@ -227,7 +241,7 @@ void Character::Update()
 	// 回避中は回避移動のみ更新する
 	if (isAvoid_)
 	{
-		UpdateAvoid(deltaTime);
+		UpdateAvoid(dt);
 	}
 
 	// 構え中のみロックオン候補を更新する
@@ -259,7 +273,7 @@ void Character::Update()
 
 		// 目標回転に向かって秒基準の補間で回転を更新する
 		constexpr float kRotateLerpSpeedPerSecond = 12.0f;
-		const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * deltaTime);
+		const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * dt);
 		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
 
 		// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
@@ -304,11 +318,11 @@ void Character::Update()
 	direction_.z = std::cos(worldTransform_->rotate_.y);
 
 	// 速度の更新
-	const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * deltaTime);
+	const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * dt);
 	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, velocityLerpT);
 
 	// 位置の更新
-	worldTransform_->translate_ += currentVelocity_ * deltaTime;
+	worldTransform_->translate_ += currentVelocity_ * dt;
 
 
 	// 押し出し判定の更新
@@ -423,6 +437,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// ダメージが通ったことを返す
 		return true;
 	}
+}
+
+/// @brief ダウンからの起き上がり条件を満たしているかどうか
+/// @return 
+bool Character::CheckGetUpCondition()
+{
+	// ダウン中の時間が十分経過しているかどうか
+	return damageReactionTimer_ <= 0.0f && currentDamageReaction_ == DamageReaction::DownLying;
 }
 
 /// @brief 回避を開始する
@@ -557,10 +579,10 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	targetVelocity_.y = 0.0f;
 	targetVelocity_.z = direction.y * moveSpeed;
 
-	
+	// つかまれていない場合は入力方向を向く。つかんでいる場合は入力方向の逆を向く
 	if (!IsGrabbing())
 	{
-		// 目標速度のXZ成分の長さが回転の閾値より大きい場合、目標回転を更新する
+		// つかまれていない場合は入力方向を向く
 		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
 		{
 			targetYaw_ = std::atan2(direction.x, direction.y);
@@ -569,7 +591,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	}
 	else
 	{
-		// 目標速度のXZ成分の長さが回転の閾値より大きい場合、目標回転を更新する
+		// つかんでいる場合は入力方向の逆を向く
 		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
 		{
 			targetYaw_ = std::atan2(-direction.x, -direction.y);

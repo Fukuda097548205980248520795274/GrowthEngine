@@ -64,11 +64,11 @@ std::unique_ptr<Node> AttackTreeFactory::CreateTestTree(Character* character)
 					// 例：距離が2.5メートル以内なら攻撃可能
 					return toTarget.Length() <= 2.5f;}).End()
 
-					// ターゲットを掴んでいるか？（掴んでいないとコンボ攻撃できない）
-					.Condition([character]() {return !character->IsGrabbing(); }).End()
+					// ターゲットがダウンしていないか？（ダウンしている相手には攻撃しない）
+					.Condition([character]() {return !character->GetLockOnTarget()->IsDown(); }).End()
 
-					// 掴み攻撃を実行する
-					.GrabAttack_(std::make_unique<GrabAttack>(character, grabData)).End()
+					// 攻撃
+					.ComboAttack_(std::make_unique<ComboAttack>(character, attack1Data)).End()
 
 				.End() // コンボシーケンス終了
 
