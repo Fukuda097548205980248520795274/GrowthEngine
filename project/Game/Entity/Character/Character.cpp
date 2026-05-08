@@ -385,7 +385,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	{
 		// 体力を減らす
 		hp_ -= damage;
-		if (hp_ < 0) hp_ = 0;
 
 		// 移動を強制停止
 		MoveStop();
@@ -432,6 +431,13 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			SetAnimation(hDownFallMotion_, true, false);
 			damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
 			break;
+		}
+
+		// 体力が0以下になったら死亡フラグを立てる
+		if (hp_ <= 0)
+		{
+			hp_ = 0;
+			isDead_ = true;
 		}
 
 		// ダメージが通ったことを返す
