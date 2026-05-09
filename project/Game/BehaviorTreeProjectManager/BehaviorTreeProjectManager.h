@@ -46,6 +46,17 @@ public:
     /// @return 
     std::vector<std::string> GetFileList();
 
+	/// @brief プロジェクトファイルを削除する
+	/// @param fileName 
+	/// @return 
+	bool DeleteProjectFile(const std::string& fileName);
+
+	/// @brief プロジェクトファイルをコピーする
+	/// @param sourceFileName 
+	/// @param destFileName 
+	/// @return 
+	bool CopyProjectFile(const std::string& sourceFileName, const std::string& destFileName);
+
 private:
 
 	// ツリー構造の保存先ディレクトリパス

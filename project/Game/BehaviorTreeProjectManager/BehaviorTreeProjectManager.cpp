@@ -24,3 +24,33 @@ std::vector<std::string> BehaviorTreeProjectManager::GetFileList()
     }
     return files;
 }
+
+/// @brief プロジェクトファイルを削除する
+/// @param fileName 
+/// @return 
+bool BehaviorTreeProjectManager::DeleteProjectFile(const std::string& fileName)
+{
+    std::string filePath = directoryPath_ + fileName + ".json";
+    // ファイルが存在すれば削除する
+    if (std::filesystem::exists(filePath))
+    {
+        return std::filesystem::remove(filePath);
+    }
+    return false;
+}
+
+/// @brief プロジェクトファイルをコピーする
+/// @param sourceFileName 
+/// @param destFileName 
+/// @return 
+bool BehaviorTreeProjectManager::CopyProjectFile(const std::string& sourceFileName, const std::string& destFileName)
+{
+    std::string srcPath = directoryPath_ + sourceFileName + ".json";
+    std::string dstPath = directoryPath_ + destFileName + ".json";
+
+    // コピー先が既に存在する場合は上書きするオプションを指定
+    std::error_code ec;
+    bool success = std::filesystem::copy_file(srcPath, dstPath, std::filesystem::copy_options::overwrite_existing, ec);
+
+    return success;
+}
