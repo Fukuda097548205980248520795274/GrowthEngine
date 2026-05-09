@@ -20,7 +20,7 @@ NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 
 	// ビヘイビアツリーを作成する
 	AttackTreeFactory attackTreeFactory;
-   behaviorTree_ = std::make_unique<BehaviorTree>(attackTreeFactory.CreateTestTree(this));
+	behaviorTree_ = std::make_unique<BehaviorTree>(attackTreeFactory.CreateTestTree(this));
 }
 
 /// @brief 初期化
@@ -48,7 +48,8 @@ void NPC::Update()
 	UpdateStanceStateByTargetDistance();
 
 	// ビヘイビアツリーを実行する
-	behaviorTree_->Exec();
+	if(behaviorTree_)
+		behaviorTree_->Exec();
 
 	// アクションの更新
 	ActionUpdate();

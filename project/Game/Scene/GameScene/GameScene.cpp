@@ -32,6 +32,9 @@ void GameScene::Initialize()
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
 
+	// ビヘイビアツリーエディタの生成と初期化
+	behaviorTreeEditor_ = std::make_unique<BehaviorTreeEditor>();
+
 
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
@@ -136,40 +139,6 @@ void GameScene::Update()
 	// デルタタイムを取得する
 	const float deltaTime = engine_->GetDeltaTime();
 
-	ImGui::Begin("Node Editor Window");
-
-	// ノードエディタの開始
-	ImNodes::BeginNodeEditor();
-
-	// --- ノードの作成 ---
-	const int node_id = 1;
-	ImNodes::BeginNode(node_id);
-
-	// ノードのタイトルバー
-	ImNodes::BeginNodeTitleBar();
-	ImGui::TextUnformatted("My First Node");
-	ImNodes::EndNodeTitleBar();
-
-	// 入力ピン（左側）
-	const int input_pin_id = 2;
-	ImNodes::BeginInputAttribute(input_pin_id);
-	ImGui::Text("Input");
-	ImNodes::EndInputAttribute();
-
-	// 出力ピン（右側）
-	const int output_pin_id = 3;
-	ImNodes::BeginOutputAttribute(output_pin_id);
-	ImGui::Text("Output");
-	ImNodes::EndOutputAttribute();
-
-	ImNodes::EndNode();
-	// --------------------
-
-	// ノードエディタの終了
-	ImNodes::EndNodeEditor();
-
-	ImGui::End();
-
 	// プレイヤーの更新
 	player_->Update();
 
@@ -186,6 +155,9 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
+	// ビヘイビアツリーエディタの描画
+	behaviorTreeEditor_->DrawNodeTable();
+
 	// プレイヤーの描画
 	player_->Draw();
 

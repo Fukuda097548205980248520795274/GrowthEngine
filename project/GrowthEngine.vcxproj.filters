@@ -1042,6 +1042,18 @@
     <Filter Include="Game\Entity\Item">
       <UniqueIdentifier>{9982c0d2-b308-478d-8f0f-11648b1c94dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BehaviorTreeEditor">
+      <UniqueIdentifier>{2b6a445a-c6cc-450d-b18c-a180ec237ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTreeFactory">
+      <UniqueIdentifier>{a33959bb-4e20-4db3-8214-e032e805759c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTreeSetting">
+      <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTreeProjectManager">
+      <UniqueIdentifier>{b03b1a91-505d-428c-874e-f4e6adecb6fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1847,6 +1859,18 @@
     </ClCompile>
     <ClCompile Include="Game\Entity\Item\Item.cpp">
       <Filter>Game\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.cpp">
+      <Filter>Game\BehaviorTreeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.cpp">
+      <Filter>Game\BehaviorTreeFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.cpp">
+      <Filter>Game\BehaviorTreeSetting</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
+      <Filter>Game\BehaviorTreeProjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2767,6 +2791,18 @@
     </ClInclude>
     <ClInclude Include="Game\Entity\Item\Item.h">
       <Filter>Game\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.h">
+      <Filter>Game\BehaviorTreeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.h">
+      <Filter>Game\BehaviorTreeFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.h">
+      <Filter>Game\BehaviorTreeSetting</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
+      <Filter>Game\BehaviorTreeProjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

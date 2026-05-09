@@ -6,6 +6,7 @@
 #include "Entity/Character/NPC/NPC.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
+#include "BehaviorTreeEditor/BehaviorTreeEditor.h"
 
 class GameScene : public Scene
 {
@@ -50,6 +51,9 @@ private:
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
+
+	// ビヘイビアツリーエディタ
+	std::unique_ptr<BehaviorTreeEditor> behaviorTreeEditor_ = nullptr;
 
 
 	/// @brief プレイヤーの当たり判定グループ
