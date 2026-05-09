@@ -55,6 +55,20 @@ void BehaviorTreeEditor::AddConditionNode()
     nodes_.push_back(node);
 }
 
+/// @brief コンボ攻撃ノードを追加する
+void BehaviorTreeEditor::AddActionNode()
+{
+    EditorNode node;
+	node.id = GetNextId();
+	node.type = EditorNodeType::Action;
+    node.inputPinId = GetNextId();
+	node.outputPinId = -1;
+	node.actionName = "None"; // アクション名を設定
+	nodes_.push_back(node);
+}
+
+
+
 /// @brief ノードテーブルを描画する
 void BehaviorTreeEditor::DrawNodeTable()
 {
@@ -223,10 +237,17 @@ void BehaviorTreeEditor::DrawNodeTable()
     if (ImGui::Button("Add Restarting Sequence")) AddRestartingSequenceNode();
     ImGui::SameLine();
     if (ImGui::Button("Add Condition")) AddConditionNode();
+    ImGui::SameLine();
+    if (ImGui::Button("Add Action")) AddActionNode();
+    
 
 
 	// ノードエディタの開始
     ImNodes::BeginNodeEditor();
+
+	// コピーとペーストの処理
+    HandleCopy();
+    HandlePaste();
 
 	// ノードの描画
     for (auto& node : nodes_)
@@ -241,6 +262,7 @@ void BehaviorTreeEditor::DrawNodeTable()
         if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("Restarting Selector");
         if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("Restarting Sequence");
         if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("Condition");
+		if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("Action");
         ImNodes::EndNodeTitleBar();
 
 		// 入力ピンの描画
@@ -269,6 +291,42 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImNodes::EndOutputAttribute();
         }
 
+		// アクションノードの場合はアクション選択UIを描画
+        if (node.type == EditorNodeType::Action)
+        {
+            // 選択されたアクションに応じたパラメータの入力UI
+            if (node.actionName == "ComboAttack")
+            {
+
+            }
+            else if (node.actionName == "GrabAttack")
+            {
+
+            }
+
+            // アクション選択用のコンボボックス
+            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack" };
+
+            // 現在選択されているインデックスを探す
+            int currentItem = 0;
+            for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i) 
+            {
+                if (node.actionName == actionTypes[i])
+                {
+                    currentItem = i;
+                    break;
+                }
+            }
+
+            ImGui::PushItemWidth(120.0f);
+            if (ImGui::Combo("##ActionType", &currentItem, actionTypes, IM_ARRAYSIZE(actionTypes)))
+            {
+                // 選択された文字列をノードに保存
+                node.actionName = actionTypes[currentItem];
+            }
+            ImGui::PopItemWidth();
+        }
+
 		// ノードの終了
         ImNodes::EndNode();
     }
@@ -277,6 +335,12 @@ void BehaviorTreeEditor::DrawNodeTable()
     for (auto& link : links_)
     {
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
+    }
+
+	// DeleteキーまたはBackspaceキーが押された場合、選択されているノードを削除する
+    if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+    {
+        DeleteSelectedNodes();
     }
 
 	// ノードエディタの終了
@@ -363,5 +427,165 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
     for (const auto& node : nodes_)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+    }
+}
+
+/// @brief 選択されているノードを削除する
+void BehaviorTreeEditor::DeleteSelectedNodes()
+{
+    // 1. 選択されているノードの数を取得
+    int numSelected = ImNodes::NumSelectedNodes();
+    if (numSelected <= 0) return;
+
+    // 選択されたノードのIDをすべて取得
+    std::vector<int> selectedNodes(numSelected);
+    ImNodes::GetSelectedNodes(selectedNodes.data());
+
+    for (int nodeId : selectedNodes)
+    {
+        // 削除対象のノードを見つける
+        auto nodeIt = std::find_if(nodes_.begin(), nodes_.end(),
+            [nodeId](const EditorNode& n) { return n.id == nodeId; });
+
+        if (nodeIt != nodes_.end())
+        {
+            int inPin = nodeIt->inputPinId;
+            int outPin = nodeIt->outputPinId;
+
+            // 2. そのノードのピンに繋がっていたリンクをすべて削除
+            links_.erase(
+                std::remove_if(links_.begin(), links_.end(),
+                    [inPin, outPin](const EditorLink& link) {
+                        return link.startPinId == outPin || link.endPinId == inPin;
+                    }),
+                links_.end()
+            );
+
+            // 3. ノード自体を削除
+            nodes_.erase(nodeIt);
+        }
+    }
+
+    // ImNodes側の選択状態もクリアしておく
+    ImNodes::ClearNodeSelection();
+}
+
+/// @brief コピーしたノードとリンクの情報をクリップボードに保存する
+void BehaviorTreeEditor::HandleCopy()
+{
+    // Ctrl + C が押されたか判定
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
+    {
+        // 選択されているノードの数を取得
+        int numSelectedNodes = ImNodes::NumSelectedNodes();
+        if (numSelectedNodes > 0)
+        {
+            // 選択されたノードのIDを取得
+            std::vector<int> selectedNodeIds(numSelectedNodes);
+            ImNodes::GetSelectedNodes(selectedNodeIds.data());
+
+            clipboardNodes_.clear();
+            clipboardLinks_.clear();
+
+            // 1. ノードをクリップボードにコピー
+            std::vector<int> copiedPinIds; // リンク判定用にピンIDを記録
+            for (int id : selectedNodeIds)
+            {
+                auto it = std::find_if(nodes_.begin(), nodes_.end(), [id](const EditorNode& n) { return n.id == id; });
+                if (it != nodes_.end())
+                {
+                    clipboardNodes_.push_back(*it);
+                    copiedPinIds.push_back(it->inputPinId);
+                    copiedPinIds.push_back(it->outputPinId);
+                }
+            }
+
+            // 2. リンクをクリップボードにコピー
+            // 「開始ピン」と「終了ピン」の両方がコピー対象ノードに含まれているリンクのみコピーする
+            for (const auto& link : links_)
+            {
+                bool startInCopied = std::find(copiedPinIds.begin(), copiedPinIds.end(), link.startPinId) != copiedPinIds.end();
+                bool endInCopied = std::find(copiedPinIds.begin(), copiedPinIds.end(), link.endPinId) != copiedPinIds.end();
+
+                if (startInCopied && endInCopied)
+                {
+                    clipboardLinks_.push_back(link);
+                }
+            }
+        }
+    }
+}
+
+/// @brief コピーしたノードとリンクの情報をクリップボードに保存する
+void BehaviorTreeEditor::HandlePaste()
+{
+    // Ctrl + V が押されたか判定
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+    {
+        if (clipboardNodes_.empty()) return;
+
+        // ペースト時に既存の選択状態を解除する
+        ImNodes::ClearNodeSelection();
+        ImNodes::ClearLinkSelection();
+
+        // コピー元のピンID -> 新しく生成したピンID の変換マップ
+        std::unordered_map<int, int> oldToNewPinId;
+        std::vector<int> newlyAddedNodeIds;
+
+        // マウスの現在位置（グリッド座標）を取得し、ペースト先の基準点にする
+        ImVec2 mouseGridPos = ImGui::GetMousePos();
+
+        // クリップボード内のノード群の「左上の座標」を計算（マウス位置に一番左上のノードを合わせるため）
+        float minX = 999999.0f;
+        float minY = 999999.0f;
+        for (const auto& clipNode : clipboardNodes_)
+        {
+            if (clipNode.pos.x < minX) minX = clipNode.pos.x;
+            if (clipNode.pos.y < minY) minY = clipNode.pos.y;
+        }
+
+        // 1. ノードのペースト
+        for (const auto& clipNode : clipboardNodes_)
+        {
+            EditorNode newNode = clipNode; // 種類や設定値をそのままコピー
+
+            // 新しいIDを発行
+            newNode.id = GetNextId();
+            newNode.inputPinId = GetNextId();
+            newNode.outputPinId = GetNextId();
+
+            // リンク復元のために新旧ピンIDの対応を記録
+            oldToNewPinId[clipNode.inputPinId] = newNode.inputPinId;
+            oldToNewPinId[clipNode.outputPinId] = newNode.outputPinId;
+
+            // マウス位置に合わせて座標をずらす
+            newNode.pos.x = clipNode.pos.x - minX + mouseGridPos.x;
+            newNode.pos.y = clipNode.pos.y - minY + mouseGridPos.y;
+
+            nodes_.push_back(newNode);
+            newlyAddedNodeIds.push_back(newNode.id);
+
+            // ImNodesの内部座標にも即座に反映させる
+            ImNodes::SetNodeGridSpacePos(newNode.id, ImVec2(newNode.pos.x, newNode.pos.y));
+        }
+
+        // 2. リンクのペースト
+        for (const auto& clipLink : clipboardLinks_)
+        {
+            EditorLink newLink;
+            newLink.id = GetNextId();
+
+            // 変換マップを使って、新しく生成したピン同士をつなぐ
+            newLink.startPinId = oldToNewPinId[clipLink.startPinId];
+            newLink.endPinId = oldToNewPinId[clipLink.endPinId];
+
+            links_.push_back(newLink);
+        }
+
+        // 3. ペーストしたばかりのノードを選択状態にする（そのままドラッグで動かせるように）
+        for (int id : newlyAddedNodeIds)
+        {
+            ImNodes::SelectNode(id);
+        }
     }
 }

@@ -11,6 +11,7 @@ enum class EditorNodeType
 	RestartingSelector,
 	RestartingSequence,
 	Condition,
+	Action,
 };
 
 // エディタ上のノードを表す構造体
@@ -23,6 +24,8 @@ struct EditorNode
 	int outputPinId; // 出力ピンのID（子とつなげる）
 
 	Vector2 pos; // ノードの位置
+
+	std::string actionName{}; // アクションノードの場合のアクション名
 
 	std::string conditionName; // 条件ノードの場合の条件名
 };
