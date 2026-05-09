@@ -104,6 +104,9 @@ DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Sel
 /// @brief デストラクタ
 Engine::ImGuiRender::~ImGuiRender()
 {
+	// ImNodesの破棄
+	ImNodes::DestroyContext();
+
 	// ImGuiの終了処理
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
@@ -138,6 +141,9 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	// ImGuiを初期化する
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+
+	// ImNodesの初期化
+	ImNodes::CreateContext();
 
 	ImGuiIO& io = ImGui::GetIO();
 
