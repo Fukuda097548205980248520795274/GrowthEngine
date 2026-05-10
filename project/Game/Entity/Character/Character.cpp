@@ -445,6 +445,22 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 }
 
+/// @brief 状態を変更する
+/// @param newState 
+void Character::ChangeState(std::unique_ptr<ICharacterState> newState)
+{
+	// 現在の状態があれば終了処理を呼ぶ
+	if (currentState_)
+		currentState_->Exit(this);
+
+	// 新しい状態に切り替え
+	currentState_ = std::move(newState);
+
+	// 新しい状態の開始処理を呼ぶ
+	if (currentState_)
+		currentState_->Enter(this);
+}
+
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
 /// @return 
 bool Character::CheckGetUpCondition()
@@ -723,97 +739,8 @@ void Character::ActionUpdate()
 /// @brief アニメーションの更新
 void Character::UpdateAnimation()
 {
-	if (!model_)return;
-
-	if (!currentAttack_ && !IsDamageReaction())
-	{
-		// 立ちモーションを再生する
-		SetAnimation(hStandMotion_, false, true);
-
-		//　移動している場合は歩きモーションを再生する
-		if (targetVelocity_.Length() > 0.0f)
-			SetAnimation(hWalkMotion_, false, true);
-
-		// ダッシュしている場合はダッシュモーションを再生する
-		if (isDash_)
-			SetAnimation(hDashMotion_, false, true);
-
-		// 構え中は構えモーションを優先して再生する
-		if (isStance_)
-			SetAnimation(hStanceMotion_, false, true);
-
-		// 防御の待機モーションを再生する
-		if(IsGuard())
-			SetAnimation(hGuardMotion_, true, false);
-
-		// 回避中は回避モーションを優先して再生する
-		if (isAvoid_)
-		{
-			// 回避方向
-			Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
-
-			if (avoidDirection.Length() > 0.0f)
-			{
-				// キャラクターの向き（前）と右方向
-				Vector3 forward = direction_;
-				Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
-
-				// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
-				float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
-				float localX = Dot(avoidDirection, right);   // +なら右、-なら左
-
-				// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-				if (std::abs(localZ) > std::abs(localX))
-				{
-					// 前後への回避
-					if (localZ > 0.0f)
-					{
-						// 前回避モーションを再生する
-						SetAnimation(hAvoidFrontMotion_, false, false);
-					}
-					else
-					{
-						// 後ろ回避モーションを再生する
-						SetAnimation(hAvoidBackMotion_, false, false);
-					}
-				}
-				else
-				{
-					// 左右への回避
-					if (localX > 0.0f)
-					{
-						// 右回避モーションを再生する
-						SetAnimation(hAvoidRightMotion_, false, false);
-					}
-					else
-					{
-						// 左回避モーションを再生する
-						SetAnimation(hAvoidLeftMotion_, false, false);
-					}
-				}
-			}
-		}
-	}
-
-	// 掴まれモーションを優先して再生する
-	if (IsGrabbed())
-	{
-		SetAnimation(hGrabbedMotion_, false, true);
-	}
-	else if (isGuardReaction_)
-	{
-		// 防御成功時のノックバック中
-		guardReactionTimer_ += engine_->GetDeltaTime();
-		if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
-		{
-			isGuardReaction_ = false;
-		}
-	}
-	else if (IsGrabbing())
-	{
-		// つかみモーションを再生する
-		SetAnimation(hGrabMotion_, false, true);
-	}
+	// 状態に応じたアニメーションの更新
+	if (currentState_)currentState_->Update(this);
 
 	if (isAnimationLoop_)
 	{
