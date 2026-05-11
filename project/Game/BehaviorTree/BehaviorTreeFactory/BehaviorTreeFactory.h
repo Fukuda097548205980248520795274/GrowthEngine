@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviorTreeEditor/BehaviorTreeEditor.h"
+#include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "BehaviorTree/BehaviorTree.h"
 
 class Character;

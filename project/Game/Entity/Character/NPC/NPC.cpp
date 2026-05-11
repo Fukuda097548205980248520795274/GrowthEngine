@@ -1,5 +1,4 @@
 #include "NPC.h"
-#include "Factory/AttackTreeFactory/AttackTreeFactory.h"
 
 namespace
 {
@@ -17,15 +16,14 @@ NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 
    // 構え状態でなくてもロックオン候補を更新する
 	canLockOnWithoutStance_ = true;
-
-	// ビヘイビアツリーを作成する
-	AttackTreeFactory attackTreeFactory;
-	behaviorTree_ = std::make_unique<BehaviorTree>(attackTreeFactory.CreateTestTree(this));
 }
 
 /// @brief 初期化
-void NPC::Initialize()
+void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree)
 {
+	// ビヘイビアツリーを設定する
+	behaviorTree_ = std::move(behaviorTree);
+
 	// モデルをワールドトランスフォームの子にする
 	model_->SetParent(worldTransform_.get());
 }

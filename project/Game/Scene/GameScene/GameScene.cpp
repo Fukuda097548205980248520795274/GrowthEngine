@@ -127,7 +127,7 @@ void GameScene::Initialize()
 	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
 	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
-	enemy_->Initialize();
+	enemy_->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy_.get()));
 
 	// カメラ制御の初期化
 	InitializeCameraControl();

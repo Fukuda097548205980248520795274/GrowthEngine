@@ -934,12 +934,6 @@
     <Filter Include="Game\Builder\BehaviorTreeBuilder">
       <UniqueIdentifier>{9bb31c0b-fcdf-4429-ac1b-41c3bcedf1d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Factory">
-      <UniqueIdentifier>{e447235c-2673-416c-a57e-4f447a6061c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Factory\AttackTreeFactory">
-      <UniqueIdentifier>{7cde76f7-628d-4be1-9abb-243ea12d1cc8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Action">
       <UniqueIdentifier>{d722b712-93ca-4983-a25d-c49b1c2054e0}</UniqueIdentifier>
     </Filter>
@@ -1042,17 +1036,17 @@
     <Filter Include="Game\Entity\Item">
       <UniqueIdentifier>{9982c0d2-b308-478d-8f0f-11648b1c94dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\BehaviorTreeEditor">
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor">
       <UniqueIdentifier>{2b6a445a-c6cc-450d-b18c-a180ec237ab6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\BehaviorTreeFactory">
+    <Filter Include="Game\BehaviorTree\BehaviorTreeFactory">
       <UniqueIdentifier>{a33959bb-4e20-4db3-8214-e032e805759c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\BehaviorTreeSetting">
-      <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\BehaviorTreeProjectManager">
+    <Filter Include="Game\BehaviorTree\BehaviorTreeProjectManager">
       <UniqueIdentifier>{b03b1a91-505d-428c-874e-f4e6adecb6fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeSetting">
+      <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1779,9 +1773,6 @@
     <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp">
       <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.cpp">
-      <Filter>Game\Factory\AttackTreeFactory</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Action\Action.cpp">
       <Filter>Game\Action</Filter>
     </ClCompile>
@@ -1860,17 +1851,17 @@
     <ClCompile Include="Game\Entity\Item\Item.cpp">
       <Filter>Game\Entity\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.cpp">
-      <Filter>Game\BehaviorTreeEditor</Filter>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.cpp">
-      <Filter>Game\BehaviorTreeFactory</Filter>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeFactory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.cpp">
-      <Filter>Game\BehaviorTreeSetting</Filter>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeSetting</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
-      <Filter>Game\BehaviorTreeProjectManager</Filter>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2705,9 +2696,6 @@
     <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h">
       <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h">
-      <Filter>Game\Factory\AttackTreeFactory</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Action\Action.h">
       <Filter>Game\Action</Filter>
     </ClInclude>
@@ -2792,17 +2780,17 @@
     <ClInclude Include="Game\Entity\Item\Item.h">
       <Filter>Game\Entity\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.h">
-      <Filter>Game\BehaviorTreeEditor</Filter>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.h">
-      <Filter>Game\BehaviorTreeFactory</Filter>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeFactory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.h">
-      <Filter>Game\BehaviorTreeSetting</Filter>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeSetting</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
-      <Filter>Game\BehaviorTreeProjectManager</Filter>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

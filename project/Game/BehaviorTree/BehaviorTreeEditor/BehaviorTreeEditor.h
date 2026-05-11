@@ -1,7 +1,10 @@
 #pragma once
 #include "GrowthEngine.h"
-#include "BehaviorTreeSetting/BehaviorTreeSetting.h"
-#include "BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeSetting/BehaviorTreeSetting.h"
+#include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+
+class Character;
 
 // ビヘイビアツリーエディタ
 class BehaviorTreeEditor
@@ -27,6 +30,11 @@ public:
 	void AddActionNode();
 
 
+
+	/// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
+	/// @param fileName 
+	/// @return 
+	std::unique_ptr<BehaviorTree> CreateTree(const std::string& fileName, Character* character);
 
 	/// @brief ノードテーブルを描画する
 	void DrawNodeTable();

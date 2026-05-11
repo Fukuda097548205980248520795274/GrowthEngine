@@ -12,7 +12,7 @@ public:
 	NPC(const InitData& initData, CharacterTag characterTag);
 
 	/// @brief 初期化
-	void Initialize();
+	void Initialize(std::unique_ptr<BehaviorTree> behaviorTree);
 
 	/// @brief 更新処理
 	virtual void Update() override;

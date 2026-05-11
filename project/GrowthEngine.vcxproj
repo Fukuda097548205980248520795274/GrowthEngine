@@ -1024,17 +1024,16 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\AppCollider\AppCollider.cpp" />
-    <ClCompile Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.cpp" />
-    <ClCompile Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.cpp" />
-    <ClCompile Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp" />
-    <ClCompile Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp" />
     <ClCompile Include="Game\Entity\Character\Character.cpp" />
     <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\Player.cpp" />
     <ClCompile Include="Game\Entity\Item\Item.cpp" />
-    <ClCompile Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.cpp" />
     <ClCompile Include="Game\Game.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1346,10 +1345,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />
-    <ClInclude Include="Game\BehaviorTreeEditor\BehaviorTreeEditor.h" />
-    <ClInclude Include="Game\BehaviorTreeFactory\BehaviorTreeFactory.h" />
-    <ClInclude Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h" />
-    <ClInclude Include="Game\BehaviorTreeSetting\BehaviorTreeSetting.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h" />
@@ -1357,7 +1356,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Entity\Character\NPC\NPC.h" />
     <ClInclude Include="Game\Entity\Character\Player\Player.h" />
     <ClInclude Include="Game\Entity\Item\Item.h" />
-    <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Entity\Entity.h" />
     <ClInclude Include="Game\MotionManager\MotionManager.h" />

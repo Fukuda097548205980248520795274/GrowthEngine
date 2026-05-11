@@ -137,12 +137,11 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
             }
         }
 
-		// 子ノードをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
+        // 子ノードをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
         std::sort(child_editor_nodes.begin(), child_editor_nodes.end(),
             [](const EditorNode* a, const EditorNode* b) {
-                ImVec2 pos_a = ImNodes::GetNodeGridSpacePos(a->id);
-                ImVec2 pos_b = ImNodes::GetNodeGridSpacePos(b->id);
-                return pos_a.y < pos_b.y;
+                // ImNodesの関数を使わず、ロード済みの EditorNode のデータ(pos)を直接比較する
+                return a->pos.y < b->pos.y;
             });
 
 		// 子ノードを再帰的に構築してコンポジットノードに追加する

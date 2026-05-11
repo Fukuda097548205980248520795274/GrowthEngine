@@ -6,7 +6,7 @@
 #include "Entity/Character/NPC/NPC.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
-#include "BehaviorTreeEditor/BehaviorTreeEditor.h"
+#include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 
 class GameScene : public Scene
 {

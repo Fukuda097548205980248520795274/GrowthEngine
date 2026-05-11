@@ -1,1 +1,81 @@
-null
+{
+    "links": [
+        {
+            "end": 5,
+            "id": 7,
+            "start": 3
+        },
+        {
+            "end": 9,
+            "id": 11,
+            "start": 6
+        },
+        {
+            "end": 13,
+            "id": 15,
+            "start": 6
+        },
+        {
+            "end": 17,
+            "id": 19,
+            "start": 6
+        }
+    ],
+    "nodes": [
+        {
+            "id": 1,
+            "input_pin": 2,
+            "output_pin": 3,
+            "params": -1,
+            "pos": [
+                217.0,
+                101.0
+            ],
+            "type": 2
+        },
+        {
+            "id": 4,
+            "input_pin": 5,
+            "output_pin": 6,
+            "params": -1,
+            "pos": [
+                405.0,
+                150.0
+            ],
+            "type": 3
+        },
+        {
+            "id": 8,
+            "input_pin": 9,
+            "output_pin": 10,
+            "params": -1,
+            "pos": [
+                605.0,
+                103.0
+            ],
+            "type": 2
+        },
+        {
+            "id": 12,
+            "input_pin": 13,
+            "output_pin": 14,
+            "params": -1,
+            "pos": [
+                599.0,
+                219.0
+            ],
+            "type": 1
+        },
+        {
+            "id": 16,
+            "input_pin": 17,
+            "output_pin": 18,
+            "params": -1,
+            "pos": [
+                598.0,
+                322.0
+            ],
+            "type": 0
+        }
+    ]
+}

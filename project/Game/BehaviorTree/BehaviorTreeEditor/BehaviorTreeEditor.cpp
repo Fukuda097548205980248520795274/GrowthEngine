@@ -1,4 +1,5 @@
 #include "BehaviorTreeEditor.h"
+#include "BehaviorTree/BehaviorTreeFactory/BehaviorTreeFactory.h"
 
 /// @brief セレクタノードを追加する
 void BehaviorTreeEditor::AddPersistentSelectorNode()
@@ -428,6 +429,34 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+}
+
+/// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
+/// @param fileName 
+/// @return 
+std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& fileName, Character* character)
+{
+    std::vector<EditorNode> nodes;
+    std::vector<EditorLink> links;
+
+	// ファイルからノードとリンクの情報を読み込む
+	saver_.LoadTree(fileName, nodes, links);
+
+	// ノードIDとノードのマッピングを作成
+    for (const auto& n : nodes_)
+    {
+        if (n.id >= nextId_) nextId_ = n.id + 1;
+        if (n.inputPinId >= nextId_) nextId_ = n.inputPinId + 1;
+        if (n.outputPinId >= nextId_) nextId_ = n.outputPinId + 1;
+    }
+
+	// リンクIDの最大値も確認
+    for (const auto& l : links_)
+    {
+        if (l.id >= nextId_) nextId_ = l.id + 1;
+    }
+
+	return BehaviorTreeFactory::CreateTree(nodes, links, character);
 }
 
 /// @brief 選択されているノードを削除する
