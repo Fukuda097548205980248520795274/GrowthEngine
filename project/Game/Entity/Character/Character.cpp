@@ -445,22 +445,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 }
 
-/// @brief 状態を変更する
-/// @param newState 
-void Character::ChangeState(std::unique_ptr<ICharacterState> newState)
-{
-	// 現在の状態があれば終了処理を呼ぶ
-	if (currentState_)
-		currentState_->Exit(this);
-
-	// 新しい状態に切り替え
-	currentState_ = std::move(newState);
-
-	// 新しい状態の開始処理を呼ぶ
-	if (currentState_)
-		currentState_->Enter(this);
-}
-
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
 /// @return 
 bool Character::CheckGetUpCondition()

@@ -1040,7 +1040,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\Entity\Entity.cpp" />
-    <ClCompile Include="Game\ICharacterState\StateStand\StateStand.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManager.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ActionNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.cpp" />
@@ -1361,8 +1360,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Factory\AttackTreeFactory\AttackTreeFactory.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Entity\Entity.h" />
-    <ClInclude Include="Game\ICharacterState\ICharacterState.h" />
-    <ClInclude Include="Game\ICharacterState\StateStand\StateStand.h" />
     <ClInclude Include="Game\MotionManager\MotionManager.h" />
     <ClInclude Include="Game\Node\ActionNode\ActionNode.h" />
     <ClInclude Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.h" />

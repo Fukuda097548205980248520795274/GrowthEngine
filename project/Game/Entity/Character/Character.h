@@ -6,7 +6,6 @@
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "AppCollider/AppCollider.h"
-#include "ICharacterState/ICharacterState.h"
 
 class Attack;
 class Move;
@@ -101,10 +100,6 @@ public:
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
-
-	/// @brief 状態を変更する
-	/// @param newState 
-	void ChangeState(std::unique_ptr<ICharacterState> newState);
 
 	/// @brief 回避を開始する
 	/// @param moveInputDirection
@@ -403,9 +398,6 @@ protected:
 
 	/// @brief アニメーションの更新
 	void UpdateAnimation();
-
-	/// @brief 現在の状態
-	std::unique_ptr<ICharacterState> currentState_ = nullptr;
 
 	/// @brief モデル
 	Render3DSkinningModel* model_ = nullptr;

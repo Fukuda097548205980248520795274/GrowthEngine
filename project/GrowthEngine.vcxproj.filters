@@ -1054,12 +1054,6 @@
     <Filter Include="Game\BehaviorTreeProjectManager">
       <UniqueIdentifier>{b03b1a91-505d-428c-874e-f4e6adecb6fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\ICharacterState">
-      <UniqueIdentifier>{e74d83bf-32b1-40c4-8d8d-b3f81f850bcb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\ICharacterState\StateStand">
-      <UniqueIdentifier>{1a0bc468-580c-466e-9781-caa44235eda2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1877,9 +1871,6 @@
     </ClCompile>
     <ClCompile Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
       <Filter>Game\BehaviorTreeProjectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\ICharacterState\StateStand\StateStand.cpp">
-      <Filter>Game\ICharacterState\StateStand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2812,12 +2803,6 @@
     </ClInclude>
     <ClInclude Include="Game\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
       <Filter>Game\BehaviorTreeProjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ICharacterState\ICharacterState.h">
-      <Filter>Game\ICharacterState</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\ICharacterState\StateStand\StateStand.h">
-      <Filter>Game\ICharacterState\StateStand</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
