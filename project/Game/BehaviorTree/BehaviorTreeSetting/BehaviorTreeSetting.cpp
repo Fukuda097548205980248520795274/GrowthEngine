@@ -18,7 +18,11 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
         n["pos"] = { node.pos.x, node.pos.y };
         n["input_pin"] = node.inputPinId;
         n["output_pin"] = node.outputPinId;
-        n["condition_type"] = static_cast<int>(node.conditionType);
+
+        if (node.type == EditorNodeType::Condition)
+        {
+            n["condition_type"] = static_cast<int>(node.conditionType);
+        }
 
         // アクションノードの場合、アクション名とパラメータも保存
         if (node.type == EditorNodeType::Action)
@@ -157,10 +161,10 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                 }
             }
 
-			// ノード固有のパラメータも読み込む （必要に応じて拡張可能）
-            if (n.contains("params"))
+			// 条件ノードの場合は条件の種類も読み込む
+            if (node.type == EditorNodeType::Condition)
             {
-                node.conditionType = static_cast<ConditionType>(n["params"].get<int>());
+				node.conditionType = static_cast<ConditionType>(n.value("condition_type", 0));
             }
 
             out_nodes.push_back(node);
