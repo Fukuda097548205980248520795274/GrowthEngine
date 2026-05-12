@@ -137,6 +137,10 @@ public:
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
 
+	/// @brief ターゲットがいるかどうか
+	/// @return 
+	bool HasTarget() const { return lockOnTarget_ != nullptr; }
+
 	/// @brief 攻撃しているかどうか
 	/// @return 
 	bool IsAttack()const { return currentAttack_ != nullptr; }

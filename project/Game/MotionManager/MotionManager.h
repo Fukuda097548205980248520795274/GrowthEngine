@@ -9,10 +9,7 @@ enum class MotionType
 	Walk,
 	Dash,
 	Attack,
-	AvoidFont,
-	AvoidBack,
-	AvoidLeft,
-	AvoidRight,
+	Avoid,
 	Stagger,
 	Grab,
 	Grabbed,
@@ -40,7 +37,7 @@ public:
 	/// @param type 
 	/// @param index
 	/// @return 
-	AnimationHandle GetMotion(MotionType type, int32_t index) { return table_[type][index]; }
+	AnimationHandle GetMotion(MotionType type, const std::string& name) { return table_[type][name]; }
 
 	/// @brief スケルトンを取得する
 	/// @return 
@@ -50,6 +47,15 @@ public:
 	/// @param partName 
 	/// @return 
 	std::string GetJointName(const std::string& partName) const;
+
+	/// @brief モーション名のリストを取得する
+	/// @param type 
+	/// @return 
+	std::vector<std::string> GetMotionNames(MotionType type) const;
+
+	/// @brief モーションテーブルを取得する
+	/// @return 
+	const auto& GetMotionTable() const { return table_; }
 
 
 private:
@@ -77,21 +83,9 @@ private:
 	/// @param dir 
 	void LoadDash(const std::string& dir);
 
-	/// @brief 前回避モーション
+	/// @brief 回避モーション
 	/// @param dir 
-	void LoadAvoidFront(const std::string& dir);
-
-	/// @brief 後ろ回避モーション
-	/// @param dir 
-	void LoadAvoidBack(const std::string& dir);
-
-	/// @brief 左回避モーション
-	/// @param dir 
-	void LoadAvoidLeft(const std::string& dir);
-
-	/// @brief 右回避モーション
-	/// @param dir 
-	void LoadAvoidRight(const std::string& dir);
+	void LoadAvoid(const std::string& dir);
 
 	/// @brief 攻撃モーション読み込み
 	/// @param dir 
@@ -138,7 +132,7 @@ private:
 	SkeletonHandle hSkeleton_;
 
 	/// @brief テーブル
-	using MotionTable = std::unordered_map<MotionType, std::unordered_map<int32_t, AnimationHandle>>;
+	using MotionTable = std::unordered_map<MotionType, std::unordered_map<std::string, AnimationHandle>>;
 	MotionTable table_;
 
 	/// @brief ジョイントマップ

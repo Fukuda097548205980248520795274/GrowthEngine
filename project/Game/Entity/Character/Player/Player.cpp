@@ -97,7 +97,7 @@ void Player::Initialize()
 
 	// 1段目の攻撃
 	CombAttackInitData attack1Data;
-	attack1Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 0);
+	attack1Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_1");
 	attack1Data.attackTime = 0.5f;
 	attack1Data.moveSpeed = 9.0f;
 	attack1Data.moveStartTime = 0.01f;
@@ -113,7 +113,7 @@ void Player::Initialize()
 
 	// 2段目の攻撃
 	CombAttackInitData attack2Data;
-	attack2Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 1);
+	attack2Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_2");
 	attack2Data.attackTime = 0.5f;
 	attack2Data.moveSpeed = 9.0f;
 	attack2Data.moveStartTime = 0.01f;
@@ -129,7 +129,7 @@ void Player::Initialize()
 
 	// 3段目の攻撃
 	CombAttackInitData attack3Data;
-	attack3Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 2);
+	attack3Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_3");
 	attack3Data.attackTime = 0.5f;
 	attack3Data.moveSpeed = 9.0f;
 	attack3Data.moveStartTime = 0.01f;
@@ -145,7 +145,7 @@ void Player::Initialize()
 
 	// 4段目の攻撃
 	CombAttackInitData attack4Data;
-	attack4Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, 3);
+	attack4Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_4");
 	attack4Data.attackTime = 0.5f;
 	attack4Data.moveSpeed = 9.0f;
 	attack4Data.moveStartTime = 0.01f;
@@ -176,7 +176,7 @@ void Player::Initialize()
 
 	// 掴み攻撃
 	GrabAttackInitData grabData;
-	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, 0);
+	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, "Front");
 	grabData.attackTime = 1.0f;
 	grabData.moveSpeed = 3.0f;
 	grabData.moveStartTime = 0.1f;

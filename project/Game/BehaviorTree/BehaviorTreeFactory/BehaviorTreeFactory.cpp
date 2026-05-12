@@ -1,4 +1,5 @@
 #include "BehaviorTreeFactory.h"
+#include "Entity/Character/Character.h"
 #include "Node/ConditionNode/ConditionNode.h"
 #include "Node/CompositeNode/PersistentSelectorNode/PersistentSelectorNode.h"
 #include "Node/CompositeNode/PersistentSequenceNode/PersistentSequenceNode.h"
@@ -62,6 +63,9 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	// editor_node の種類に応じて対応するランタイムノードを生成する
     std::unique_ptr<Node> runtime_node = nullptr;
 
+	// 条件関数の宣言（条件ノードの場合に使用）
+    std::function<bool()> conditionFunc{};
+
 	// ノードの種類に応じて対応するランタイムノードを生成
     switch (editor_node.type)
     {
@@ -82,9 +86,25 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
         break;
 
     case EditorNodeType::Condition:
+
+		// エディタで設定した条件の種類に応じて、条件関数を生成する
+        switch (editor_node.conditionType)
+        {
+		// 関数なし、常に true を返す条件
+        case ConditionType::None:
+        default:
+            conditionFunc = []() { return true; };
+		break;
+
+		// ターゲットがいるかどうかをチェックする条件
+        case ConditionType::HasTarget:
+            conditionFunc = [character]() { return character->HasTarget(); };
+		break;
+        }
+
         // 実際は editor_node.condition_name 等をもとに、
         // 登録済みの関数辞書から std::function を引いてきてバインドします
-        runtime_node = std::make_unique<ConditionNode>([]() { return true; /* 仮の処理 */ });
+        runtime_node = std::make_unique<ConditionNode>(conditionFunc);
         break;
 
     case EditorNodeType::Action:
@@ -92,17 +112,17 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
         // エディターで設定した文字列（actionName）に応じて生成するノードを変える
         if (editor_node.actionName == "ComboAttack")
         {
-            // ※本来は JSON や外部データから攻撃パラメータを読み込むのが理想です
-            CombAttackInitData initData;
-            // initData.attackTime = editor_node.customFloat; のように
-            // EditorNodeに持たせたパラメータをここで代入することも可能です
+            // エディタ上で設定した初期化データを使用
+			CombAttackInitData initData = editor_node.comboAttackInitData;
 
             auto comboAction = std::make_unique<ComboAttack>(character, initData);
             runtime_node = std::make_unique<ComboAttackNode>(std::move(comboAction));
         }
         else if (editor_node.actionName == "GrabAttack")
         {
-            GrabAttackInitData initData;
+			// エディタ上で設定した初期化データを使用
+			GrabAttackInitData initData = editor_node.grabAttackInitData;
+
             auto grabAction = std::make_unique<GrabAttack>(character, initData);
             runtime_node = std::make_unique<GrabAttackNode>(std::move(grabAction));
         }

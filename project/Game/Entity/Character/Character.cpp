@@ -78,15 +78,15 @@ Character::Character(const InitData& initData) : Entity()
 	hGuardMotion_ = initData.hGuardMotion;
 	hGuardHitMotion_ = initData.hGuardHitMotion;
 
-	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
-	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, 0);
+	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
+	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
 
-	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, 0);
-	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, 0);
-	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, 0);
+	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
+	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
+	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, "Front");
 
-	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, 0);
-	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, 0);
+	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
+	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");
 
 	// 当たり判定グループ
 	hurtbox_.collider_ = initData.hurtboxGroup->CreateInstance();

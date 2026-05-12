@@ -32,21 +32,24 @@ void GameScene::Initialize()
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
 
+	// モーションマネージャのエディタの生成と初期化
+	motionManagerEditor_ = std::make_unique<MotionManagerEditor>();
+
 	// ビヘイビアツリーエディタの生成と初期化
 	behaviorTreeEditor_ = std::make_unique<BehaviorTreeEditor>();
 
 
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Player_Model");
+		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Player_Model");
 
 	// 味方のモデルの生成と初期化
 	allyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Ally_Model");
+		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model");
 
 	// 敵のモデルの生成と初期化
 	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stance, 0), motionManager_->GetSkeleton(), "Enemy_Model");
+		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Enemy_Model");
 
 
 	
@@ -72,14 +75,14 @@ void GameScene::Initialize()
 	playerInitData.model_ = playerModel_.get();
 	playerInitData.avoidDuration = 0.3f;
 	playerInitData.avoidDistance = 1.5f;
-	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
-	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 4);
-	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
-	playerInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
-	playerInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
-	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
-	playerInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, 0);
-	playerInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, 1);
+	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
+	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Nimble");
+	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
+	playerInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
+	playerInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
+	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
+	playerInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
+	playerInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
 	playerInitData.hAvoidLeftMotion = 0;
 	playerInitData.hAvoidRightMotion = 0;
 	playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
@@ -114,16 +117,16 @@ void GameScene::Initialize()
 	enemyInitData.avoidDuration = 0.3f;
 	enemyInitData.avoidDistance = 1.5f;
 	enemyInitData.model_ = enemyModel_.get();
-	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
-	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 1);
-	enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
-	enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
-	enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
-	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
+	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
+	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
+	enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
+	enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
+	enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
+	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
 	enemyInitData.hAvoidLeftMotion = 0;
 	enemyInitData.hAvoidRightMotion = 0;
-	enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, 0);
-	enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, 1);
+	enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
+	enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
 	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
 	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
@@ -155,8 +158,9 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
-	// ビヘイビアツリーエディタの描画
+	// エディタの描画
 	behaviorTreeEditor_->DrawNodeTable();
+	motionManagerEditor_->Draw();
 
 	// プレイヤーの描画
 	player_->Draw();

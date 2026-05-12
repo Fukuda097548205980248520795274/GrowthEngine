@@ -6,6 +6,7 @@
 #include "Entity/Character/NPC/NPC.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
+#include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 
 class GameScene : public Scene
@@ -51,6 +52,10 @@ private:
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
+
+
+	// モーションマネージャエディタ
+	std::unique_ptr<MotionManagerEditor> motionManagerEditor_ = nullptr;
 
 	// ビヘイビアツリーエディタ
 	std::unique_ptr<BehaviorTreeEditor> behaviorTreeEditor_ = nullptr;

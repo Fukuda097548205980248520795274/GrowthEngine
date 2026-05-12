@@ -2,6 +2,9 @@
 #include "Math/Vector/Vector2/Vector2.h"
 #include <vector>
 #include <string>
+#include "Action/Attack/ComboAttack/ComboAttack.h"
+#include "Action/Attack/GrabAttack/GrabAttack.h"
+#include "MotionManager/MotionManager.h"
 
 // ノードの種類
 enum class EditorNodeType
@@ -12,6 +15,14 @@ enum class EditorNodeType
 	RestartingSequence,
 	Condition,
 	Action,
+};
+
+enum class ConditionType
+{
+	None = 0,
+
+	// ターゲットがいるかどうか
+	HasTarget,
 };
 
 // エディタ上のノードを表す構造体
@@ -27,7 +38,15 @@ struct EditorNode
 
 	std::string actionName{}; // アクションノードの場合のアクション名
 
-	std::string conditionName; // 条件ノードの場合の条件名
+	// 条件ノードの場合の条件の種類
+	ConditionType conditionType = ConditionType::None;
+
+	MotionType motionType = MotionType::Stand; // 条件ノードでモーションを条件にする場合のモーションの種類
+	std::string motionName{}; 
+
+	// 初期化用データ（アクションノードの種類に応じて使用）
+	CombAttackInitData comboAttackInitData;
+	GrabAttackInitData grabAttackInitData;
 };
 
 // エディタ上のリンクを表す構造体

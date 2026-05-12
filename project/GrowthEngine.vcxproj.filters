@@ -928,12 +928,6 @@
     <Filter Include="Game\BehaviorTree">
       <UniqueIdentifier>{73701787-fcb1-4668-9dc6-8ef69af6a343}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Builder">
-      <UniqueIdentifier>{bc179230-9cb4-43e4-a975-f501fcbb7479}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Builder\BehaviorTreeBuilder">
-      <UniqueIdentifier>{9bb31c0b-fcdf-4429-ac1b-41c3bcedf1d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Action">
       <UniqueIdentifier>{d722b712-93ca-4983-a25d-c49b1c2054e0}</UniqueIdentifier>
     </Filter>
@@ -1047,6 +1041,9 @@
     </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeSetting">
       <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MotionEditor">
+      <UniqueIdentifier>{d2697e88-bb55-4daf-aaa8-d5932f28beb4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1770,9 +1767,6 @@
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp">
       <Filter>Game\BehaviorTree</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.cpp">
-      <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Action\Action.cpp">
       <Filter>Game\Action</Filter>
     </ClCompile>
@@ -1862,6 +1856,9 @@
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp">
+      <Filter>Game\MotionEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2693,9 +2690,6 @@
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h">
       <Filter>Game\BehaviorTree</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Builder\BehaviorTreeBuilder\BehaviorTreeBuilder.h">
-      <Filter>Game\Builder\BehaviorTreeBuilder</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Action\Action.h">
       <Filter>Game\Action</Filter>
     </ClInclude>
@@ -2791,6 +2785,9 @@
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h">
+      <Filter>Game\MotionEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

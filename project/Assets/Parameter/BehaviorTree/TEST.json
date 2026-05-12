@@ -1,11 +1,6 @@
 {
     "links": [
         {
-            "end": 5,
-            "id": 7,
-            "start": 3
-        },
-        {
             "end": 9,
             "id": 11,
             "start": 6
@@ -19,25 +14,19 @@
             "end": 17,
             "id": 19,
             "start": 6
+        },
+        {
+            "end": 2,
+            "id": 3,
+            "start": 10
         }
     ],
     "nodes": [
         {
-            "id": 1,
-            "input_pin": 2,
-            "output_pin": 3,
-            "params": -1,
-            "pos": [
-                217.0,
-                101.0
-            ],
-            "type": 2
-        },
-        {
+            "condition_type": 0,
             "id": 4,
             "input_pin": 5,
             "output_pin": 6,
-            "params": -1,
             "pos": [
                 405.0,
                 150.0
@@ -45,10 +34,10 @@
             "type": 3
         },
         {
+            "condition_type": 0,
             "id": 8,
             "input_pin": 9,
             "output_pin": 10,
-            "params": -1,
             "pos": [
                 605.0,
                 103.0
@@ -56,10 +45,10 @@
             "type": 2
         },
         {
+            "condition_type": 0,
             "id": 12,
             "input_pin": 13,
             "output_pin": 14,
-            "params": -1,
             "pos": [
                 599.0,
                 219.0
@@ -67,15 +56,43 @@
             "type": 1
         },
         {
+            "condition_type": 0,
             "id": 16,
             "input_pin": 17,
             "output_pin": 18,
-            "params": -1,
             "pos": [
                 598.0,
                 322.0
             ],
             "type": 0
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.6600000262260437,
+                "cancelEndTime": 0.8600000143051147,
+                "cancelStartTime": 0.3199999928474426,
+                "damage": 10,
+                "damageReaction": 1,
+                "hitboxEndTime": 0.8299999833106995,
+                "hitboxStartTime": 0.33000001311302185,
+                "knockback": 1.399999976158142,
+                "moveEndTime": 0.36000001430511475,
+                "moveSpeed": 7.199999809265137,
+                "moveStartTime": 0.11999999731779099,
+                "partName": "RightHand"
+            },
+            "condition_type": 0,
+            "id": 1,
+            "input_pin": 2,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "output_pin": -1,
+            "pos": [
+                829.0,
+                65.0
+            ],
+            "type": 5
         }
     ]
 }
