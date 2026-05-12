@@ -76,7 +76,7 @@ void Engine::SkyboxStore::Initialize(ID3D12Device* device, ID3D12GraphicsCommand
 
 
 	// 初期読み込み
-	currentHandle_ = InitialLoad(textureStore->Load("./Assets/Textures/rostock_laage_airport_4k.dds", heap, device, commandList, log), textureStore, device, log);
+	currentHandle_ = InitialLoad(textureStore->Load("./Assets/Textures/white_skybox.dds", heap, device, commandList, log), textureStore, device, log);
 }
 
 /// @brief 読み込む
@@ -119,7 +119,7 @@ SkyboxHandle Engine::SkyboxStore::InitialLoad(TextureHandle hTexture, TextureSto
 	// データを生成
 	std::unique_ptr<SkyboxResource> data = std::make_unique<SkyboxResource>("Initial", hTexture, hSkybox);
 	data->Initialize(textureStore, device, indexResource_.get(), vertexResource_.get(), log);
-	data->GetParam()->material.color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	data->GetParam()->material.color = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
 	dataTable_.push_back(std::move(data));
 
 	return hSkybox;
