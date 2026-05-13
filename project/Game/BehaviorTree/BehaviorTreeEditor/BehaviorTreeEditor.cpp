@@ -4,6 +4,9 @@
 /// @brief セレクタノードを追加する
 void BehaviorTreeEditor::AddPersistentSelectorNode()
 {
+	// ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
     node.id = GetNextId();
     node.type = EditorNodeType::PersistentSelector;
@@ -18,6 +21,9 @@ void BehaviorTreeEditor::AddPersistentSelectorNode()
 /// @brief シーケンスノードを追加する
 void BehaviorTreeEditor::AddPersistentSequenceNode()
 {
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
     node.id = GetNextId();
     node.type = EditorNodeType::PersistentSequence;
@@ -32,6 +38,9 @@ void BehaviorTreeEditor::AddPersistentSequenceNode()
 /// @brief セレクタノードを追加する
 void BehaviorTreeEditor::AddRestartingSelectorNode()
 {
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
     node.id = GetNextId();
     node.type = EditorNodeType::RestartingSelector;
@@ -46,6 +55,9 @@ void BehaviorTreeEditor::AddRestartingSelectorNode()
 /// @brief シーケンスノードを追加する
 void BehaviorTreeEditor::AddRestartingSequenceNode()
 {
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
     node.id = GetNextId();
     node.type = EditorNodeType::RestartingSequence;
@@ -60,6 +72,9 @@ void BehaviorTreeEditor::AddRestartingSequenceNode()
 /// @brief 条件ノードを追加する
 void BehaviorTreeEditor::AddConditionNode()
 {
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
     node.id = GetNextId();
     node.type = EditorNodeType::Condition;
@@ -74,6 +89,9 @@ void BehaviorTreeEditor::AddConditionNode()
 /// @brief コンボ攻撃ノードを追加する
 void BehaviorTreeEditor::AddActionNode()
 {
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::Action;
@@ -263,10 +281,6 @@ void BehaviorTreeEditor::DrawNodeTable()
 
 	// ノードエディタの開始
     ImNodes::BeginNodeEditor();
-
-	// コピーとペーストの処理
-    HandleCopy();
-    HandlePaste();
 
 	// ノードの描画
     for (auto& node : nodes_)
@@ -470,14 +484,31 @@ void BehaviorTreeEditor::DrawNodeTable()
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
     }
 
-	// DeleteキーまたはBackspaceキーが押された場合、選択されているノードを削除する
+	// ノードエディタの終了
+    ImNodes::EndNodeEditor();
+
+
+    // コピーとペーストの処理
+    HandleCopy();
+    HandlePaste();
+
+    // DeleteキーまたはBackspaceキーが押された場合、選択されているノードを削除する
     if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
     {
         DeleteSelectedNodes();
     }
 
-	// ノードエディタの終了
-    ImNodes::EndNodeEditor();
+    // Ctrl+ZでUndo、Ctrl+YでRedoを実行する
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
+    {
+        Undo();
+    }
+
+    // Ctrl+YでRedoを実行
+    if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
+    {
+        Redo();
+    }
     
 
 
@@ -487,6 +518,9 @@ void BehaviorTreeEditor::DrawNodeTable()
 	// リンクが作成された場合
     if (ImNodes::IsLinkCreated(&start_pin, &end_pin))
     {
+        // ノード追加前の状態を履歴に保存する
+        SaveHistory();
+
 		// 新しいリンクを追加
         EditorLink new_link;
         new_link.id = GetNextId();
@@ -502,6 +536,9 @@ void BehaviorTreeEditor::DrawNodeTable()
 	// ImNodes::IsLinkDestroyedは削除されたリンクのIDを返す関数
     if (ImNodes::IsLinkDestroyed(&link_id))
     {
+        // ノード追加前の状態を履歴に保存する
+        SaveHistory();
+
         auto it = std::find_if(links_.begin(), links_.end(),
             [link_id](const EditorLink& link) { return link.id == link_id; });
         if (it != links_.end()) {
@@ -519,7 +556,9 @@ void BehaviorTreeEditor::ClearEditor()
     nodes_.clear();
     links_.clear();
     currentId_ = 1;
-    // ImNodesの内部状態（キャンバス位置など）もリセット可能
+    
+    undoHistory_.clear();
+    redoHistory_.clear();
 }
 
 void BehaviorTreeEditor::SaveCurrentTree()
@@ -609,6 +648,9 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
     int numSelected = ImNodes::NumSelectedNodes();
     if (numSelected <= 0) return;
 
+    // ノード追加前の状態を履歴に保存する
+    SaveHistory();
+
     // 選択されたノードのIDをすべて取得
     std::vector<int> selectedNodes(numSelected);
     ImNodes::GetSelectedNodes(selectedNodes.data());
@@ -696,6 +738,9 @@ void BehaviorTreeEditor::HandlePaste()
     {
         if (clipboardNodes_.empty()) return;
 
+        // ノード追加前の状態を履歴に保存する
+        SaveHistory();
+
         // ペースト時に既存の選択状態を解除する
         ImNodes::ClearNodeSelection();
         ImNodes::ClearLinkSelection();
@@ -761,4 +806,95 @@ void BehaviorTreeEditor::HandlePaste()
             ImNodes::SelectNode(id);
         }
     }
+}
+
+/// @brief 現在の状態を履歴に保存する
+void BehaviorTreeEditor::SaveHistory()
+{
+    // 最新のグリッド座標をImNodesから取得してノードデータに反映
+    for (auto& node : nodes_)
+    {
+        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
+        node.pos.x = pos.x;
+        node.pos.y = pos.y;
+    }
+
+    // 現在の状態をスナップショットとして保存
+    EditorSnapshot snapshot;
+    snapshot.nodes = nodes_;
+    snapshot.links = links_;
+    snapshot.currentId = currentId_;
+
+    undoHistory_.push_back(snapshot);
+    redoHistory_.clear(); // 新しい操作が行われたらRedo履歴は破棄する
+
+    // 履歴の最大数を制限（メモリ節約のため、例として50回まで）
+    if (undoHistory_.size() > 50)
+    {
+        undoHistory_.erase(undoHistory_.begin());
+    }
+}
+
+/// @brief Undo（元に戻す）を実行する
+void BehaviorTreeEditor::Undo()
+{
+    if (undoHistory_.empty()) return;
+
+    // 現在の状態をRedo履歴に保存しておく
+    for (auto& node : nodes_)
+    {
+        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
+        node.pos.x = pos.x;
+        node.pos.y = pos.y;
+    }
+    EditorSnapshot currentSnapshot = { nodes_, links_, currentId_ };
+    redoHistory_.push_back(currentSnapshot);
+
+    // Undo履歴の最後尾から状態を復元
+    EditorSnapshot snapshot = undoHistory_.back();
+    undoHistory_.pop_back();
+
+    nodes_ = snapshot.nodes;
+    links_ = snapshot.links;
+    currentId_ = snapshot.currentId;
+
+    // 復元した座標をImNodesに反映
+    for (const auto& node : nodes_)
+    {
+        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+    }
+    ImNodes::ClearNodeSelection();
+    ImNodes::ClearLinkSelection();
+}
+
+/// @brief Redo（やり直す）を実行する
+void BehaviorTreeEditor::Redo()
+{
+    if (redoHistory_.empty()) return;
+
+    // 現在の状態をUndo履歴に保存しておく
+    for (auto& node : nodes_)
+    {
+        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
+        node.pos.x = pos.x;
+        node.pos.y = pos.y;
+    }
+    EditorSnapshot currentSnapshot = { nodes_, links_, currentId_ };
+    undoHistory_.push_back(currentSnapshot);
+
+    // Redo履歴の最後尾から状態を復元
+    EditorSnapshot snapshot = redoHistory_.back();
+    redoHistory_.pop_back();
+
+    nodes_ = snapshot.nodes;
+    links_ = snapshot.links;
+    currentId_ = snapshot.currentId;
+
+    // 復元した座標をImNodesに反映
+    for (const auto& node : nodes_)
+    {
+        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+    }
+    ImNodes::ClearNodeSelection();
+    ImNodes::ClearLinkSelection();
 }

@@ -104,5 +104,31 @@ private:
 
 	/// @brief コピーしたリンクの情報を保持する変数
 	std::vector<EditorLink> clipboardLinks_;
+
+
+private:
+
+	/// @brief エディタのスナップショット
+	struct EditorSnapshot
+	{
+		std::vector<EditorNode> nodes; // ノードのリスト
+		std::vector<EditorLink> links; // リンクのリスト
+		int currentId; // 現在のIDカウンタ
+	};
+
+	// Undoの履歴
+	std::vector<EditorSnapshot> undoHistory_;
+
+	// Redoの履歴
+	std::vector<EditorSnapshot> redoHistory_;
+
+	/// @brief 現在の状態を履歴に保存する
+	void SaveHistory();
+
+	/// @brief Undo（元に戻す）を実行する
+	void Undo();
+
+	/// @brief Redo（やり直す）を実行する
+	void Redo();
 };
 
