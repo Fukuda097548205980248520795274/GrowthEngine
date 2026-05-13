@@ -1,24 +1,38 @@
 {
     "links": [
         {
-            "end": 12,
-            "id": 14,
+            "end": 30,
+            "id": 32,
             "start": 6
         },
         {
             "end": 4,
-            "id": 15,
-            "start": 13
+            "id": 33,
+            "start": 31
         },
         {
             "end": 7,
-            "id": 16,
-            "start": 13
+            "id": 34,
+            "start": 31
+        },
+        {
+            "end": 18,
+            "id": 35,
+            "start": 31
+        },
+        {
+            "end": 21,
+            "id": 36,
+            "start": 31
+        },
+        {
+            "end": 39,
+            "id": 41,
+            "start": 31
         }
     ],
     "nodes": [
         {
-            "condition_type": 0,
             "id": 4,
             "input_pin": 5,
             "output_pin": 6,
@@ -49,34 +63,97 @@
                 "damageReaction": 1,
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
-                "knockback": 2.799999952316284,
+                "knockback": 0.30000001192092896,
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
                 "moveStartTime": 0.11999999731779099,
                 "partName": "RightHand"
             },
-            "condition_type": 0,
             "id": 6,
             "input_pin": 7,
             "motionName": "Player_Combo_1",
             "motionType": 4,
             "output_pin": -1,
             "pos": [
-                811.0,
-                180.0
+                822.0,
+                303.0
             ],
             "type": 5
         },
         {
-            "condition_type": 0,
-            "id": 11,
-            "input_pin": 12,
-            "output_pin": 13,
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.30000001192092896,
+                "cancelEndTime": 0.3400000035762787,
+                "cancelStartTime": 0.23999999463558197,
+                "damage": 10,
+                "damageReaction": 1,
+                "hitboxEndTime": 0.2800000011920929,
+                "hitboxStartTime": 0.15000000596046448,
+                "knockback": 0.30000001192092896,
+                "moveEndTime": 0.2199999988079071,
+                "moveSpeed": 9.199999809265137,
+                "moveStartTime": 0.11999999731779099,
+                "partName": "LeftHand"
+            },
+            "id": 17,
+            "input_pin": 18,
+            "motionName": "Player_Combo_2",
+            "motionType": 4,
+            "output_pin": 19,
             "pos": [
-                595.0,
-                150.0
+                829.0,
+                416.0
             ],
-            "type": 3
+            "type": 5
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.30000001192092896,
+                "cancelEndTime": 0.3400000035762787,
+                "cancelStartTime": 0.23999999463558197,
+                "damage": 10,
+                "damageReaction": 2,
+                "hitboxEndTime": 0.2800000011920929,
+                "hitboxStartTime": 0.15000000596046448,
+                "knockback": 0.30000001192092896,
+                "moveEndTime": 0.2199999988079071,
+                "moveSpeed": 9.199999809265137,
+                "moveStartTime": 0.11999999731779099,
+                "partName": "RightHand"
+            },
+            "id": 20,
+            "input_pin": 21,
+            "motionName": "Player_Combo_3",
+            "motionType": 4,
+            "output_pin": 22,
+            "pos": [
+                829.0,
+                525.0
+            ],
+            "type": 5
+        },
+        {
+            "id": 29,
+            "input_pin": 30,
+            "output_pin": 31,
+            "pos": [
+                594.0,
+                167.0
+            ],
+            "type": 1
+        },
+        {
+            "condition_type": 3,
+            "id": 38,
+            "input_pin": 39,
+            "output_pin": 40,
+            "pos": [
+                817.0,
+                195.0
+            ],
+            "type": 4
         }
     ]
 }

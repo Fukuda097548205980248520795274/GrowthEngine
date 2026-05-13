@@ -127,7 +127,9 @@ void Character::Update()
 			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
 			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
 
+			// 自分の座標を相手の手の位置から少し前にオフセットした位置に移動する
 			worldTransform_->rotate_ = Vector3(0.0f, grabber_->GetWorldTransform()->rotate_.y + std::numbers::pi_v<float>, 0.0f);
+			worldTransform_->translate_.y = grabber_->GetWorldPosition().y;
 
 			// 相手のつかみ状態を解除する
 			grabber_->grabbedTarget_ = nullptr;
@@ -248,7 +250,7 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	// ロックオンターゲットがいる場合は、ターゲット方向を向く
-	if (lockOnTarget_ && !IsGrabbing())
+	if (lockOnTarget_ && !IsGrabbing() && !IsDown())
 	{
 		// 自分からターゲットへの方向を計算する
 		Vector3 toTarget = lockOnTarget_->worldTransform_->translate_ - worldTransform_->translate_;

@@ -23,6 +23,12 @@ enum class ConditionType
 
 	// ターゲットがいるかどうか
 	HasTarget,
+
+	// ターゲットがダウンしているかどうか
+	IsTargetDown,
+
+	/// @brief ターゲットがダウンしていないかどうか
+	IsNotTargetDown,
 };
 
 // エディタ上のノードを表す構造体

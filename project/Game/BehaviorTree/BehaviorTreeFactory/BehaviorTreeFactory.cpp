@@ -94,12 +94,22 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
         case ConditionType::None:
         default:
             conditionFunc = []() { return true; };
-		break;
+		    break;
 
 		// ターゲットがいるかどうかをチェックする条件
         case ConditionType::HasTarget:
             conditionFunc = [character]() { return character->HasTarget(); };
-		break;
+		    break;
+
+		// ターゲットがダウンしているかどうかをチェックする条件
+        case ConditionType::IsTargetDown:
+			conditionFunc = [character]() { return character->HasTarget() && character->GetLockOnTarget()->IsDown(); };
+            break;
+
+		// ターゲットがダウンしていないかどうかをチェックする条件
+        case ConditionType::IsNotTargetDown:
+            conditionFunc = [character]() { return !character->HasTarget() || !character->GetLockOnTarget()->IsDown(); };
+            break;
         }
 
         // 実際は editor_node.condition_name 等をもとに、

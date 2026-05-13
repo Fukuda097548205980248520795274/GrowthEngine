@@ -295,7 +295,7 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImGui::Text("Function:");
 
             // コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
-            const char* conditionNames[] = { "None", "HasTarget" };
+            const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown"};
 
             // 現在のEnumの値をintにキャスト
             int currentItem = static_cast<int>(node.conditionType);
@@ -349,101 +349,108 @@ void BehaviorTreeEditor::DrawNodeTable()
             // 選択されているアクションに応じてパラメータ設定UIを切り替える
             if (node.actionName == "ComboAttack")
             {
-                ImGui::Text("--- Combo Attack Settings ---");
-
-                // DragFloatを使うと、マウスをドラッグして直感的に数値を調整できます (0.01fは変化の速度)
-                ImGui::DragFloat("Attack Time", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
-                ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
-				ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
-				ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
-                ImGui::DragFloat("Hitbox Start", &node.comboAttackInitData.hitboxStartTime, 0.01f);
-                ImGui::DragFloat("Hitbox End", &node.comboAttackInitData.hitboxEndTime, 0.01f);
-				ImGui::DragFloat("Cancel Start", &node.comboAttackInitData.cancelStartTime, 0.01f);
-				ImGui::DragFloat("Cancel End", &node.comboAttackInitData.cancelEndTime, 0.01f);
-				ImGui::DragFloat("Knockback", &node.comboAttackInitData.knockback, 0.1f);
-
-                // int型の場合は InputInt や DragInt を使用
-                ImGui::InputInt("Damage", &node.comboAttackInitData.damage);
-
-                // ダメージリアクション
-				const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger" };
-				int currentReaction = static_cast<int>(node.comboAttackInitData.damageReaction);
-				if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                if (ImGui::TreeNode("Combo Attack Settings"))
                 {
-                    node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
-                }
+                    // DragFloatを使うと、マウスをドラッグして直感的に数値を調整できます (0.01fは変化の速度)
+                    ImGui::DragFloat("Attack Time", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+                    ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
+                    ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
+                    ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
+                    ImGui::DragFloat("Hitbox Start", &node.comboAttackInitData.hitboxStartTime, 0.01f);
+                    ImGui::DragFloat("Hitbox End", &node.comboAttackInitData.hitboxEndTime, 0.01f);
+                    ImGui::DragFloat("Cancel Start", &node.comboAttackInitData.cancelStartTime, 0.01f);
+                    ImGui::DragFloat("Cancel End", &node.comboAttackInitData.cancelEndTime, 0.01f);
+                    ImGui::DragFloat("Knockback", &node.comboAttackInitData.knockback, 0.1f);
 
+                    // int型の場合は InputInt や DragInt を使用
+                    ImGui::InputInt("Damage", &node.comboAttackInitData.damage);
 
-                // 文字列(ボーン名など)の入力
-                char partNameBuf[64];
-                strcpy_s(partNameBuf, node.comboAttackInitData.partName.c_str());
-                if (ImGui::InputText("Part Name", partNameBuf, sizeof(partNameBuf))) {
-                    node.comboAttackInitData.partName = partNameBuf;
+                    // ダメージリアクション
+                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger" };
+                    int currentReaction = static_cast<int>(node.comboAttackInitData.damageReaction);
+                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                    {
+                        node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                    }
+
+                    // 文字列(ボーン名など)の入力
+                    char partNameBuf[64];
+                    strcpy_s(partNameBuf, node.comboAttackInitData.partName.c_str());
+                    if (ImGui::InputText("Part Name", partNameBuf, sizeof(partNameBuf))) {
+                        node.comboAttackInitData.partName = partNameBuf;
+                    }
+
+                    ImGui::TreePop();
                 }
             }
             else if (node.actionName == "GrabAttack")
             {
-                ImGui::Text("--- Grab Attack Settings ---");
+                if (ImGui::TreeNode("Grab Attack Settings"))
+                {
+                    ImGui::DragFloat("Attack Time", &node.grabAttackInitData.attackTime, 0.01f);
+                    ImGui::DragFloat("Grab Time", &node.grabAttackInitData.grabTime, 0.01f);
+                    ImGui::DragFloat("Move Speed", &node.grabAttackInitData.moveSpeed, 0.1f);
+                    ImGui::DragFloat("Move Start", &node.grabAttackInitData.moveStartTime, 0.01f);
+                    ImGui::DragFloat("Move End", &node.grabAttackInitData.moveEndTime, 0.01f);
+                    ImGui::DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
+                    ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
 
-                ImGui::DragFloat("Attack Time", &node.grabAttackInitData.attackTime, 0.01f);
-                ImGui::DragFloat("Grab Time", &node.grabAttackInitData.grabTime, 0.01f);
-                ImGui::DragFloat("Move Speed", &node.grabAttackInitData.moveSpeed, 0.1f);
-				ImGui::DragFloat("Move Start", &node.grabAttackInitData.moveStartTime, 0.01f);
-				ImGui::DragFloat("Move End", &node.grabAttackInitData.moveEndTime, 0.01f);
-                ImGui::DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
-                ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
+                    char grabPartBuf[64];
+                    strcpy_s(grabPartBuf, node.grabAttackInitData.grabPartName.c_str());
+                    if (ImGui::InputText("Grab Part Name", grabPartBuf, sizeof(grabPartBuf))) {
+                        node.grabAttackInitData.grabPartName = grabPartBuf;
+                    }
 
-                char grabPartBuf[64];
-                strcpy_s(grabPartBuf, node.grabAttackInitData.grabPartName.c_str());
-                if (ImGui::InputText("Grab Part Name", grabPartBuf, sizeof(grabPartBuf))) {
-                    node.grabAttackInitData.grabPartName = grabPartBuf;
+                    ImGui::TreePop();
                 }
             }
 
 			// アクションがNoneでない場合はモーション設定UIも表示
             if (node.actionName != "None")
             {
-                ImGui::Text("Motion Settings");
-
-				// モーションタイプ選択用のコンボボックス
-                const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };
-                int currentType = static_cast<int>(node.motionType);
-
-				// コンボボックスを描画し、変更があったらEnumにキャストして戻す
-                if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames))) 
+				if (ImGui::TreeNode("Motion Settings"))
                 {
-                    node.motionType = static_cast<MotionType>(currentType);
-                    node.motionName = ""; 
-                }
+                    // モーションタイプ選択用のコンボボックス
+                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };
+                    int currentType = static_cast<int>(node.motionType);
 
-				// 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-                std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.motionType);
-
-				// モーション名のリストが空の場合はエラーメッセージを表示
-                if (motionNames.empty()) 
-                {
-                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
-                } 
-                else 
-                {
-					// 現在選択されているモーション名をプレビュー用の文字列として設定
-                    const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
-
-					// モーション名選択用のコンボボックスを描画
-                    if (ImGui::BeginCombo("Motion Name", previewValue)) 
+                    // コンボボックスを描画し、変更があったらEnumにキャストして戻す
+                    if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
                     {
-                        for (const auto& name : motionNames) 
-                        {
-							// 現在のモーション名と同じものが選択されている状態にする
-                            bool isSelected = (node.motionName == name);
-                            if (ImGui::Selectable(name.c_str(), isSelected)) 
-                            {
-                                node.motionName = name;
-                            }
-                            if (isSelected) ImGui::SetItemDefaultFocus();
-                        }
-                        ImGui::EndCombo();
+                        node.motionType = static_cast<MotionType>(currentType);
+                        node.motionName = "";
                     }
+
+                    // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+                    std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.motionType);
+
+                    // モーション名のリストが空の場合はエラーメッセージを表示
+                    if (motionNames.empty())
+                    {
+                        ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                    } else
+                    {
+                        // 現在選択されているモーション名をプレビュー用の文字列として設定
+                        const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+
+                        // モーション名選択用のコンボボックスを描画
+                        if (ImGui::BeginCombo("Motion Name", previewValue))
+                        {
+                            for (const auto& name : motionNames)
+                            {
+                                // 現在のモーション名と同じものが選択されている状態にする
+                                bool isSelected = (node.motionName == name);
+                                if (ImGui::Selectable(name.c_str(), isSelected))
+                                {
+                                    node.motionName = name;
+                                }
+                                if (isSelected) ImGui::SetItemDefaultFocus();
+                            }
+                            ImGui::EndCombo();
+                        }
+                    }
+
+                    ImGui::TreePop();
                 }
             }
 
