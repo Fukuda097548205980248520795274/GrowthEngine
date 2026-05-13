@@ -85,6 +85,10 @@ private:
 	/// @param fileName 
 	void LoadTree(const std::string& fileName);
 
+	/// @brief ノードをウィンドウの中心に配置する
+	/// @param node 
+	void SetNodeWindowCenter(EditorNode node);
+
 
 private:
 

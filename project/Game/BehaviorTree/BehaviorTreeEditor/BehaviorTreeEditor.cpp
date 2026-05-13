@@ -10,6 +10,9 @@ void BehaviorTreeEditor::AddPersistentSelectorNode()
     node.inputPinId = GetNextId();
     node.outputPinId = GetNextId();
     nodes_.push_back(node);
+
+	// ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 /// @brief シーケンスノードを追加する
@@ -21,6 +24,9 @@ void BehaviorTreeEditor::AddPersistentSequenceNode()
     node.inputPinId = GetNextId();
     node.outputPinId = GetNextId();
     nodes_.push_back(node);
+
+    // ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 /// @brief セレクタノードを追加する
@@ -32,6 +38,9 @@ void BehaviorTreeEditor::AddRestartingSelectorNode()
     node.inputPinId = GetNextId();
     node.outputPinId = GetNextId();
     nodes_.push_back(node);
+
+    // ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 /// @brief シーケンスノードを追加する
@@ -43,6 +52,9 @@ void BehaviorTreeEditor::AddRestartingSequenceNode()
     node.inputPinId = GetNextId();
     node.outputPinId = GetNextId();
     nodes_.push_back(node);
+
+    // ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 /// @brief 条件ノードを追加する
@@ -54,6 +66,9 @@ void BehaviorTreeEditor::AddConditionNode()
     node.inputPinId = GetNextId();
     node.outputPinId = -1;
     nodes_.push_back(node);
+
+    // ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 /// @brief コンボ攻撃ノードを追加する
@@ -66,6 +81,9 @@ void BehaviorTreeEditor::AddActionNode()
 	node.outputPinId = -1;
 	node.actionName = "None"; // アクション名を設定
 	nodes_.push_back(node);
+
+    // ノードをウィンドウの中心に配置する
+    SetNodeWindowCenter(node);
 }
 
 
@@ -490,7 +508,7 @@ void BehaviorTreeEditor::ClearEditor()
 {
     nodes_.clear();
     links_.clear();
-    nextId_ = 1;
+    currentId_ = 1;
     // ImNodesの内部状態（キャンバス位置など）もリセット可能
 }
 
@@ -518,14 +536,14 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
     // IDの最大値を見つけて、次に振るIDが被らないようにする
     for (const auto& n : nodes_)
     {
-        if (n.id >= nextId_) nextId_ = n.id + 1;
-        if (n.inputPinId >= nextId_) nextId_ = n.inputPinId + 1;
-        if (n.outputPinId >= nextId_) nextId_ = n.outputPinId + 1;
+        if (n.id >= currentId_) currentId_ = n.id + 1;
+        if (n.inputPinId >= currentId_) currentId_ = n.inputPinId + 1;
+        if (n.outputPinId >= currentId_) currentId_ = n.outputPinId + 1;
     }
 
     for (const auto& l : links_)
     {
-        if (l.id >= nextId_) nextId_ = l.id + 1;
+        if (l.id >= currentId_) currentId_ = l.id + 1;
     }
 
     // ノードの座標をImNodesに適用（次の描画フレームで反映される）
@@ -533,6 +551,17 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+}
+
+/// @brief ノードをウィンドウの中心に配置する
+/// @param node 
+void BehaviorTreeEditor::SetNodeWindowCenter(EditorNode node)
+{
+    // ノードをウィンドウの中心に配置する
+    ImVec2 windowCenter(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
+
+    // ImNodesを使用してノードの位置を設定
+    ImNodes::SetNodeScreenSpacePos(node.id, windowCenter);
 }
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
@@ -665,8 +694,8 @@ void BehaviorTreeEditor::HandlePaste()
         std::unordered_map<int, int> oldToNewPinId;
         std::vector<int> newlyAddedNodeIds;
 
-        // マウスの現在位置（グリッド座標）を取得し、ペースト先の基準点にする
-        ImVec2 mouseGridPos = ImGui::GetMousePos();
+		// マウスの位置
+        ImVec2 mouseScreenPos = ImGui::GetMousePos();
 
         // クリップボード内のノード群の「左上の座標」を計算（マウス位置に一番左上のノードを合わせるため）
         float minX = 999999.0f;
@@ -691,15 +720,16 @@ void BehaviorTreeEditor::HandlePaste()
             oldToNewPinId[clipNode.inputPinId] = newNode.inputPinId;
             oldToNewPinId[clipNode.outputPinId] = newNode.outputPinId;
 
-            // マウス位置に合わせて座標をずらす
-            newNode.pos.x = clipNode.pos.x - minX + mouseGridPos.x;
-            newNode.pos.y = clipNode.pos.y - minY + mouseGridPos.y;
+            // グリッド座標系での「相対距離（オフセット）」を計算
+            float offsetX = clipNode.pos.x - minX;
+            float offsetY = clipNode.pos.y - minY;
 
             nodes_.push_back(newNode);
             newlyAddedNodeIds.push_back(newNode.id);
 
-            // ImNodesの内部座標にも即座に反映させる
-            ImNodes::SetNodeGridSpacePos(newNode.id, ImVec2(newNode.pos.x, newNode.pos.y));
+			// ノードの位置をマウス位置に合わせて設定
+            ImVec2 targetScreenPos(mouseScreenPos.x + offsetX, mouseScreenPos.y + offsetY);
+            ImNodes::SetNodeScreenSpacePos(newNode.id, targetScreenPos);
         }
 
         // 2. リンクのペースト
