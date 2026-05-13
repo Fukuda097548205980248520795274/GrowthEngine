@@ -176,7 +176,7 @@ void Player::Initialize()
 
 	// 掴み攻撃
 	GrabAttackInitData grabData;
-	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, "Front");
+	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1");
 	grabData.attackTime = 1.0f;
 	grabData.moveSpeed = 3.0f;
 	grabData.moveStartTime = 0.1f;
@@ -192,6 +192,9 @@ void Player::Initialize()
 /// @brief 更新処理
 void Player::Update()
 {
+	// 更新処理開始前のリセット
+	StartUpdate();
+
 	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
 	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{

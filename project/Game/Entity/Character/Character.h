@@ -90,6 +90,9 @@ public:
 	/// @brief 更新処理
 	virtual void Update() override;
 
+	/// @brief 更新処理開始前のリセット
+	virtual void StartUpdate();
+
 	/// @brief ダメージを受けたときの処理
 	/// @param damage 
 	/// @param damageReaction 
@@ -148,6 +151,10 @@ public:
 	/// @brief 回避しているかどうか
 	/// @return 
 	bool IsAvoid() const { return isAvoid_; }
+
+	/// @brief 回避した瞬間かどうか
+	/// @return 
+	bool IsJustAvoided() const { return isJustAvoided_ || isJustAvoidedPrev_; }
 
 	/// @brief 構えているかどうか
 	/// @return 
@@ -300,6 +307,10 @@ protected:
 
 	/// @brief 回避フラグ
 	bool isAvoid_ = false;
+
+	/// @brief 回避した瞬間かどうか
+	bool isJustAvoided_ = false;
+	bool isJustAvoidedPrev_ = false;
 
 	/// @brief 回避開始位置
 	Vector3 avoidStartPosition_ = Vector3(0.0f, 0.0f, 0.0f);

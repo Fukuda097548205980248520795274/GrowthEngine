@@ -30,6 +30,9 @@ void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree)
 
 void NPC::Update()
 {
+	// 更新処理開始前のリセット
+	StartUpdate();
+
 	// 怯み状態、または「つかまれている状態」なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
 	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{

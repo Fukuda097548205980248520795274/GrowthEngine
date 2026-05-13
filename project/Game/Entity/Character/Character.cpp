@@ -337,6 +337,14 @@ void Character::Update()
 	Entity::Update();
 }
 
+/// @brief 更新処理開始前のリセット
+void Character::StartUpdate()
+{
+	// 回避直後のフラグを更新する
+	isJustAvoidedPrev_ = isJustAvoided_;
+	isJustAvoided_ = false;
+}
+
 /// @brief ダメージを受ける
 /// @param damage 
 /// @param staggerTime
@@ -478,6 +486,9 @@ void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput,
 	avoidElapsedTime_ = 0.0f;
 	avoidStartPosition_ = worldTransform_->translate_;
 	avoidEndPosition_ = avoidStartPosition_ + Vector3(avoidDirection.x * avoidDistance_, 0.0f, avoidDirection.y * avoidDistance_);
+
+	// 回避瞬間のフラグを立てる
+	isJustAvoided_ = true;
 
 	// 通常移動は停止して回避移動へ移行する
 	MoveStop();

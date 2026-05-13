@@ -42,6 +42,13 @@ void ComboAttack::Exec()
 /// @brief 更新処理
 void ComboAttack::Update()
 {
+	// 回避直後ならこの攻撃をキャンセルする
+	if(owner_->IsJustAvoided())
+	{
+		this->Exit();
+		return;
+	}
+
 	// コンボキャンセル受付時間内かチェック
 	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
