@@ -63,11 +63,11 @@
                 "damageReaction": 1,
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
+                "jointType": 9,
                 "knockback": 0.30000001192092896,
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099,
-                "partName": "RightHand"
+                "moveStartTime": 0.11999999731779099
             },
             "id": 6,
             "input_pin": 7,
@@ -75,8 +75,8 @@
             "motionType": 4,
             "output_pin": -1,
             "pos": [
-                822.0,
-                303.0
+                820.0,
+                293.0
             ],
             "type": 5
         },
@@ -90,11 +90,11 @@
                 "damageReaction": 1,
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
+                "jointType": 8,
                 "knockback": 0.30000001192092896,
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099,
-                "partName": "LeftHand"
+                "moveStartTime": 0.11999999731779099
             },
             "id": 17,
             "input_pin": 18,
@@ -102,8 +102,8 @@
             "motionType": 4,
             "output_pin": 19,
             "pos": [
-                829.0,
-                416.0
+                824.0,
+                407.0
             ],
             "type": 5
         },
@@ -117,11 +117,11 @@
                 "damageReaction": 2,
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
+                "jointType": 9,
                 "knockback": 0.30000001192092896,
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099,
-                "partName": "RightHand"
+                "moveStartTime": 0.11999999731779099
             },
             "id": 20,
             "input_pin": 21,

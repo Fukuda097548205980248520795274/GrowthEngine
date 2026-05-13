@@ -208,7 +208,7 @@ public:
 	/// @brief ボーン行列を取得する
 	/// @param partName 
 	/// @return 
-	Matrix4x4 GetBoneMatrix(const std::string& partName) const;
+	Matrix4x4 GetBoneMatrix(const JointType& jointType) const;
 
 	/// @brief ダメージリアクション中かどうか
 	/// @return 

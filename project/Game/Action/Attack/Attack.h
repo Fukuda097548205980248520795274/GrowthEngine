@@ -1,6 +1,7 @@
 #pragma once
 #include "../Action.h"
 #include "AppCollider/AppCollider.h"
+#include "MotionManager/MotionManager.h"
 
 /// @brief 攻撃入力の種類
 enum class AttackInputType
@@ -113,7 +114,7 @@ protected:
 	/// @brief 攻撃判定がヒットしたかどうか
 	bool hasHit_ = false;
 
-	/// @brief パーツ名
-	std::string partName_{};
+	/// @brief 攻撃判定を出すジョイント
+	JointType jointType_ = JointType::HandR; // デフォルトは右手
 };
 

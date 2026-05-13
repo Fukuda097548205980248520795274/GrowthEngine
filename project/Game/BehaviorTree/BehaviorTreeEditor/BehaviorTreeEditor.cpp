@@ -373,11 +373,12 @@ void BehaviorTreeEditor::DrawNodeTable()
                         node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
                     }
 
-                    // 文字列(ボーン名など)の入力
-                    char partNameBuf[64];
-                    strcpy_s(partNameBuf, node.comboAttackInitData.partName.c_str());
-                    if (ImGui::InputText("Part Name", partNameBuf, sizeof(partNameBuf))) {
-                        node.comboAttackInitData.partName = partNameBuf;
+					// ジョイントタイプ
+                    const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+                    int currentJoint = static_cast<int>(node.comboAttackInitData.jointType);
+					if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    {
+                        node.comboAttackInitData.jointType = static_cast<JointType>(currentJoint);
                     }
 
                     ImGui::TreePop();
@@ -395,10 +396,12 @@ void BehaviorTreeEditor::DrawNodeTable()
                     ImGui::DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
                     ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
 
-                    char grabPartBuf[64];
-                    strcpy_s(grabPartBuf, node.grabAttackInitData.grabPartName.c_str());
-                    if (ImGui::InputText("Grab Part Name", grabPartBuf, sizeof(grabPartBuf))) {
-                        node.grabAttackInitData.grabPartName = grabPartBuf;
+                    // ジョイントタイプ
+                    const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+                    int currentJoint = static_cast<int>(node.grabAttackInitData.jointType);
+                    if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    {
+                        node.grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
                     }
 
                     ImGui::TreePop();

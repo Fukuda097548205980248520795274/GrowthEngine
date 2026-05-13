@@ -104,7 +104,7 @@ void Player::Initialize()
 	attack1Data.moveEndTime = 0.07f;
 	attack1Data.cancelStartTime = 0.2f;
 	attack1Data.cancelEndTime = 0.5f;
-	attack1Data.partName = "RightHand";
+	attack1Data.jointType = JointType::HandR;
 	attack1Data.hitboxStartTime = 0.1f;
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
@@ -120,7 +120,7 @@ void Player::Initialize()
 	attack2Data.moveEndTime = 0.07f;
 	attack2Data.cancelStartTime = 0.2f;
 	attack2Data.cancelEndTime = 0.5f;
-	attack2Data.partName = "LeftHand";
+	attack2Data.jointType = JointType::HandL;
 	attack2Data.hitboxStartTime = 0.1f;
 	attack2Data.hitboxEndTime = 0.4f;
 	attack2Data.damage = 1;
@@ -136,7 +136,7 @@ void Player::Initialize()
 	attack3Data.moveEndTime = 0.07f;
 	attack3Data.cancelStartTime = 0.2f;
 	attack3Data.cancelEndTime = 0.5f;
-	attack3Data.partName = "RightHand";
+	attack3Data.jointType = JointType::HandR;
 	attack3Data.hitboxStartTime = 0.1f;
 	attack3Data.hitboxEndTime = 0.4f;
 	attack3Data.damage = 1;
@@ -152,7 +152,7 @@ void Player::Initialize()
 	attack4Data.moveEndTime = 0.07f;
 	attack4Data.cancelStartTime = 0.2f;
 	attack4Data.cancelEndTime = 0.5f;
-	attack4Data.partName = "LeftFoot";
+	attack4Data.jointType = JointType::FootL;
 	attack4Data.hitboxStartTime = 0.1f;
 	attack4Data.hitboxEndTime = 0.4f;
 	attack4Data.damage = 1;
@@ -181,7 +181,7 @@ void Player::Initialize()
 	grabData.moveSpeed = 3.0f;
 	grabData.moveStartTime = 0.1f;
 	grabData.moveEndTime = 0.3f;
-	grabData.grabPartName = "RightHand";
+	grabData.jointType = JointType::HandR;
 	grabData.hitboxStartTime = 0.15f;
 	grabData.hitboxEndTime = 0.35f;
 	grabData.grabTime = 3.0f;

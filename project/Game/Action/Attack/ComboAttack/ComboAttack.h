@@ -10,7 +10,7 @@ struct CombAttackInitData
 	float moveEndTime = 0.0f;
 	float cancelStartTime = 0.0f;
 	float cancelEndTime = 0.0f;
-	std::string partName{};
+	JointType jointType = JointType::HandR;
 	float hitboxStartTime = 0.0f;
 	float hitboxEndTime = 0.0f;
 	int32_t damage = 10;

@@ -37,7 +37,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
                 n["combo_data"]["damage"] = node.comboAttackInitData.damage;
                 n["combo_data"]["hitboxStartTime"] = node.comboAttackInitData.hitboxStartTime;
 				n["combo_data"]["hitboxEndTime"] = node.comboAttackInitData.hitboxEndTime;
-				n["combo_data"]["partName"] = node.comboAttackInitData.partName;
+				n["combo_data"]["jointType"] = static_cast<int>(node.comboAttackInitData.jointType);
 				n["combo_data"]["moveStartTime"] = node.comboAttackInitData.moveStartTime;
 				n["combo_data"]["moveEndTime"] = node.comboAttackInitData.moveEndTime;
 				n["combo_data"]["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
@@ -54,7 +54,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
                 n["grab_data"]["moveSpeed"] = node.grabAttackInitData.moveSpeed;
 				n["grab_data"]["moveStartTime"] = node.grabAttackInitData.moveStartTime;
 				n["grab_data"]["moveEndTime"] = node.grabAttackInitData.moveEndTime;
-				n["grab_data"]["grabPartName"] = node.grabAttackInitData.grabPartName;
+				n["grab_data"]["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
             }
 
 			if (node.actionName != "None")
@@ -132,7 +132,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                     node.comboAttackInitData.damage = n["combo_data"].value("damage", 10);
 					node.comboAttackInitData.hitboxStartTime = n["combo_data"].value("hitboxStartTime", 0.0f);
 					node.comboAttackInitData.hitboxEndTime = n["combo_data"].value("hitboxEndTime", 0.0f);
-					node.comboAttackInitData.partName = n["combo_data"].value("partName", "");
+					node.comboAttackInitData.jointType = static_cast<JointType>(n["combo_data"].value("jointType", 0));
 					node.comboAttackInitData.moveStartTime = n["combo_data"].value("moveStartTime", 0.0f);
 					node.comboAttackInitData.moveEndTime = n["combo_data"].value("moveEndTime", 0.0f);
 					node.comboAttackInitData.cancelStartTime = n["combo_data"].value("cancelStartTime", 0.0f);
@@ -150,7 +150,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabAttackInitData.moveSpeed = n["grab_data"].value("moveSpeed", 0.0f);
 					node.grabAttackInitData.moveStartTime = n["grab_data"].value("moveStartTime", 0.0f);
 					node.grabAttackInitData.moveEndTime = n["grab_data"].value("moveEndTime", 0.0f);
-					node.grabAttackInitData.grabPartName = n["grab_data"].value("grabPartName", "");
+					node.grabAttackInitData.jointType = static_cast<JointType>(n["grab_data"].value("jointType", 0));
 					node.grabAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
                 }
 

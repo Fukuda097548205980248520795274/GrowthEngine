@@ -155,7 +155,7 @@ void Character::Update()
 	if (IsGrabbing())
 	{
 		// 相手の座標を強制的に自分の手の位置（または目の前）に同期する
-		Matrix4x4 handMatrix = GetBoneMatrix("RightHand");
+		Matrix4x4 handMatrix = GetBoneMatrix(JointType::HandR);
 		Vector3 handPos = Vector3(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
 		const Vector3 grabOffset = Vector3(0.0f, -1.2f, 0.1f); // 手の前に少しオフセット
 		grabbedTarget_->SetPosition(handPos + grabOffset);
@@ -843,10 +843,10 @@ void Character::UpdateAnimation()
 /// @brief ボーン行列を取得する
 /// @param partName 
 /// @return 
-Matrix4x4 Character::GetBoneMatrix(const std::string& partName) const
+Matrix4x4 Character::GetBoneMatrix(const JointType& jointType) const
 {
 	// モーションマネージャからジョイント名を取得する
-	std::string jointName = motionManager_->GetJointName(partName);
+	std::string jointName = motionManager_->GetJointName(jointType);
 	return model_->GetBoneWorldMatrix(jointName);
 }
 

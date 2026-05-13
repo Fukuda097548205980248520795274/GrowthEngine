@@ -33,10 +33,10 @@ void MotionManager::Initialize()
 	hSkeleton_ = engine_->LoadSkeleton(dir , "bone.gltf");
 
 	// ジョイントマップを作成する
-	jointMap_["LeftHand"] = "ボーン.007";
-	jointMap_["RightHand"] = "ボーン.015";
-	jointMap_["LeftFoot"] = "ボーン.011";
-	jointMap_["RightFoot"] = "ボーン.019";
+	jointMap_[JointType::HandL] = "ボーン.007";
+	jointMap_[JointType::HandR] = "ボーン.015";
+	jointMap_[JointType::FootL] = "ボーン.011";
+	jointMap_[JointType::FootR] = "ボーン.019";
 
 	// モーション読み込み
 	LoadStand(dir);
@@ -61,9 +61,9 @@ void MotionManager::Initialize()
 /// @brief ジョイント名を取得する
 /// @param partName 
 /// @return 
-std::string MotionManager::GetJointName(const std::string& partName) const
+std::string MotionManager::GetJointName(const JointType& jointType) const
 {
-	auto it = jointMap_.find(partName);
+	auto it = jointMap_.find(jointType);
 	if (it != jointMap_.end())
 	{
 		return it->second;
@@ -71,7 +71,7 @@ std::string MotionManager::GetJointName(const std::string& partName) const
 
 	// ここに来るのは想定外
 	assert(false);
-	return partName;
+	return "Error";
 }
 
 /// @brief モーション名のリストを取得する

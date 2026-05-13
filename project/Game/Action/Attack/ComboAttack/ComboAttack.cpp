@@ -15,7 +15,7 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	moveEndTime_ = initData.moveEndTime;
 	cancelStartTime_ = initData.cancelStartTime;
 	cancelEndTime_ = initData.cancelEndTime;
-	partName_ = initData.partName;
+	jointType_ = initData.jointType;
 	hitboxStartTime_ = initData.hitboxStartTime;
 	hitboxEndTime_ = initData.hitboxEndTime;
 	damage_ = initData.damage;
@@ -78,68 +78,68 @@ void ComboAttack::Update()
 	// 攻撃タイマーを更新する
 	attackTimer_ += engine_->GetDeltaTime();
 
-	// 攻撃タイマーが攻撃判定の時間内であれば、攻撃判定を作成・更新する
-	if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
+	if (jointType_ != JointType::None)
 	{
-		if (!hasHit_)
+		// 攻撃タイマーが攻撃判定の時間内であれば、攻撃判定を作成・更新する
+		if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
 		{
-			// まだ判定が作られていなければ、実体を作成する
-			if (hitbox_.collider_ == nullptr)
-				hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
-
-			// パーツ名が指定されていれば、そのパーツに攻撃判定を追従させる
-			if (!partName_.empty())
+			if (!hasHit_)
 			{
+				// まだ判定が作られていなければ、実体を作成する
+				if (hitbox_.collider_ == nullptr)
+					hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+
+				// ジョイントの位置に攻撃判定を配置する
 				auto sphere = static_cast<Collision3DInstanceSphere*>(hitbox_.collider_);
-				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(partName_);
+				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(jointType_);
 				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 				sphere->param_->radius = 0.25f;
-			}
 
-			// 全キャラクターをループしてチェック
-			for (Character* target : Character::GetCharacters())
-			{
-				// ターゲットが自分自身の場合は無視する
-				if (target == owner_) continue;
-
-				// ターゲットが同じ陣営の場合は無視する
-				if (target->GetCharacterTag() == owner_->GetCharacterTag()) continue;
-
-				// ターゲットがすでに死亡している場合は無視する
-				if (target->IsDead()) continue;
-
-				// 攻撃判定とターゲットの当たり判定を更新して衝突をチェックする
-				if (hitbox_.IsHit())
+				// 全キャラクターをループしてチェック
+				for (Character* target : Character::GetCharacters())
 				{
-					// ノックバックの方向を計算する（攻撃者からターゲットへのベクトルを正規化）
-					Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
+					// ターゲットが自分自身の場合は無視する
+					if (target == owner_) continue;
 
-					// ターゲットにダメージを与える
-					bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
+					// ターゲットが同じ陣営の場合は無視する
+					if (target->GetCharacterTag() == owner_->GetCharacterTag()) continue;
 
-					// 防御されたら移動速度が半減する
-					if (!isHit)
-						moveSpeed_ *= 0.5f;
+					// ターゲットがすでに死亡している場合は無視する
+					if (target->IsDead()) continue;
 
-					// ヒットエフェクトなどの処理があればここで行う
-					// PlayHitEffect(target->GetPosition());
+					// 攻撃判定とターゲットの当たり判定を更新して衝突をチェックする
+					if (hitbox_.IsHit())
+					{
+						// ノックバックの方向を計算する（攻撃者からターゲットへのベクトルを正規化）
+						Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
 
-					// 今回の攻撃で「すでに誰かに当たった」フラグを立てる
-					hasHit_ = true;
+						// ターゲットにダメージを与える
+						bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
 
-					// 攻撃判定を削除する（ヒット後は判定が消える仕様の場合）
-					DeleteHitbox();
+						// 防御されたら移動速度が半減する
+						if (!isHit)
+							moveSpeed_ *= 0.5f;
 
-					// ループを抜ける（複数ヒットさせない場合）
-					break;
+						// ヒットエフェクトなどの処理があればここで行う
+						// PlayHitEffect(target->GetPosition());
+
+						// 今回の攻撃で「すでに誰かに当たった」フラグを立てる
+						hasHit_ = true;
+
+						// 攻撃判定を削除する（ヒット後は判定が消える仕様の場合）
+						DeleteHitbox();
+
+						// ループを抜ける（複数ヒットさせない場合）
+						break;
+					}
 				}
 			}
+		} 
+		else
+		{
+			// 攻撃時間が終わったら、判定を削除する
+			DeleteHitbox();
 		}
-	}
-	else
-	{
-		// 攻撃時間が終わったら、判定を削除する
-		DeleteHitbox();
 	}
 
 

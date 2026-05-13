@@ -8,7 +8,7 @@ struct GrabAttackInitData
 	float moveSpeed = 0.0f;            // 踏み込み速度
 	float moveStartTime = 0.0f;
 	float moveEndTime = 0.0f;
-	std::string grabPartName{};        // つかむ手のボーン名（"RightHand"など）
+	JointType jointType = JointType::HandR; // つかみ判定を行うジョイント
 	float hitboxStartTime = 0.0f;      // つかみ判定の開始時間
 	float hitboxEndTime = 0.0f;        // つかみ判定の終了時間
 	float grabTime = 0.0f;           // つかんでいる時間（投げるまでの時間）

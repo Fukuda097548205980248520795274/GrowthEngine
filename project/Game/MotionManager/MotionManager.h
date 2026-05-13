@@ -19,6 +19,24 @@ enum class MotionType
 	Guard
 };
 
+enum class JointType
+{
+	None,
+	Root,
+	Spine,
+	Chest,
+	Neck,
+	Head,
+	ArmL,
+	ArmR,
+	HandL,
+	HandR,
+	LegL,
+	LegR,
+	FootL,
+	FootR
+};
+
 class MotionManager
 {
 public:
@@ -46,7 +64,7 @@ public:
 	/// @brief ジョイント名を取得する
 	/// @param partName 
 	/// @return 
-	std::string GetJointName(const std::string& partName) const;
+	std::string GetJointName(const JointType& jointType) const;
 
 	/// @brief モーション名のリストを取得する
 	/// @param type 
@@ -136,7 +154,7 @@ private:
 	MotionTable table_;
 
 	/// @brief ジョイントマップ
-	std::unordered_map<std::string, std::string> jointMap_;
+	std::unordered_map<JointType, std::string> jointMap_;
 
 	/// @brief 初期化したかどうか
 	bool isInit_ = false;
