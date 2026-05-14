@@ -70,7 +70,7 @@ void NPC::UpdateStanceStateByTargetDistance()
 		return;
 	}
 
-	Vector3 toTarget = lockOnTarget_->GetPosition() - GetPosition();
+	Vector3 toTarget = lockOnTarget_->GetWorldPosition() - GetWorldPosition();
 	toTarget.y = 0.0f;
 
 	const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;

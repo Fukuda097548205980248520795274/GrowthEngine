@@ -1042,8 +1042,11 @@
     <Filter Include="Game\BehaviorTree\BehaviorTreeSetting">
       <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MotionManager\MotionManagerEditor">
+    <Filter Include="Game\MotionEditor">
       <UniqueIdentifier>{d2697e88-bb55-4daf-aaa8-d5932f28beb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageObject">
+      <UniqueIdentifier>{59b57385-7d35-4a9b-a2da-282cf2de65a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1858,7 +1861,10 @@
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp">
-      <Filter>Game\MotionManager\MotionManagerEditor</Filter>
+      <Filter>Game\MotionEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\StageObject.cpp">
+      <Filter>Game\StageObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2787,7 +2793,10 @@
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h">
-      <Filter>Game\MotionManager\MotionManagerEditor</Filter>
+      <Filter>Game\MotionEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageObject\StageObject.h">
+      <Filter>Game\StageObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

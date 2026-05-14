@@ -18,6 +18,7 @@ public:
 	/// @brief キャラクターのタグ
 	enum class CharacterTag
 	{
+		None,
 		PlayerSide,
 		EnemySide,
 	};

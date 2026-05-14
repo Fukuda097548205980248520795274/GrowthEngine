@@ -9,6 +9,7 @@ public:
 	/// @note プレイヤーや敵などの識別に使用する
 	enum EntityTag
 	{
+		None,
 		Character,
 		Item,
 	};

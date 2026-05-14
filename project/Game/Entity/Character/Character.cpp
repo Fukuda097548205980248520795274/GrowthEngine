@@ -113,7 +113,7 @@ Character::~Character()
 void Character::Update()
 {
 	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
-	collider->param_->center = worldTransform_->translate_ + Vector3(0.0f, 1.0f, 0.0f);
+	collider->param_->center = GetWorldPosition() + Vector3(0.0f, 1.0f, 0.0f);
 
 	// デルタタイムの取得
 	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
@@ -253,7 +253,7 @@ void Character::Update()
 	if (lockOnTarget_ && !IsGrabbing() && !IsDown())
 	{
 		// 自分からターゲットへの方向を計算する
-		Vector3 toTarget = lockOnTarget_->worldTransform_->translate_ - worldTransform_->translate_;
+		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;
 
 		// 十分な距離がある場合のみ目標回転を更新する
@@ -642,7 +642,7 @@ void Character::UpdateLockOnTargets()
 
 	// 自分とは反対側の陣営を候補にする
 	const CharacterTag targetSide = (characterTag_ == CharacterTag::PlayerSide) ? CharacterTag::EnemySide : CharacterTag::PlayerSide;
-	const Vector3 selfPosition = worldTransform_->translate_;
+	const Vector3 selfPosition = GetWorldPosition();
 
 	for (Character* character : characters_)
 	{
@@ -655,7 +655,7 @@ void Character::UpdateLockOnTargets()
 			continue;
 
 		// 自分から相手へのベクトルを計算する
-		Vector3 toTarget = character->worldTransform_->translate_ - selfPosition;
+		Vector3 toTarget = character->GetWorldPosition() - selfPosition;
 		toTarget.y = 0.0f;
 
 		// 距離の二乗を計算する
