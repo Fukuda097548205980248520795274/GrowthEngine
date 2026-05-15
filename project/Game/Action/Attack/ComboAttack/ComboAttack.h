@@ -16,6 +16,7 @@ struct CombAttackInitData
 	int32_t damage = 10;
 	DamageReaction damageReaction = DamageReaction::LightStagger;
 	float knockback = 0.0f;
+	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 };
 
 class ComboAttack : public Attack

@@ -108,8 +108,9 @@ void Player::Initialize()
 	attack1Data.hitboxStartTime = 0.1f;
 	attack1Data.hitboxEndTime = 0.4f;
 	attack1Data.damage = 1;
-	attack1Data.damageReaction = DamageReaction::DownFalling;
+	attack1Data.damageReaction = DamageReaction::LightStagger;
 	attack1Data.knockback = 0.1f;
+	attack1Data.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 2段目の攻撃
 	CombAttackInitData attack2Data;
@@ -126,6 +127,7 @@ void Player::Initialize()
 	attack2Data.damage = 1;
 	attack2Data.damageReaction = DamageReaction::LightStagger;
 	attack2Data.knockback = 0.1f;
+	attack2Data.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 3段目の攻撃
 	CombAttackInitData attack3Data;
@@ -142,6 +144,7 @@ void Player::Initialize()
 	attack3Data.damage = 1;
 	attack3Data.damageReaction = DamageReaction::LightStagger;
 	attack3Data.knockback = 0.1f;
+	attack3Data.knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	// 4段目の攻撃
 	CombAttackInitData attack4Data;
@@ -156,8 +159,9 @@ void Player::Initialize()
 	attack4Data.hitboxStartTime = 0.1f;
 	attack4Data.hitboxEndTime = 0.4f;
 	attack4Data.damage = 1;
-	attack4Data.damageReaction = DamageReaction::LightStagger;
-	attack4Data.knockback = 0.1f;
+	attack4Data.damageReaction = DamageReaction::DownFalling;
+	attack4Data.knockback = 0.5f;
+	attack4Data.knockbackDirection = Vector3(1.0f, 1.0f, 1.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));
@@ -195,7 +199,7 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
-	// 怯み状態なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
+	// 怯み状態、つかみ状態、つかまれ状態、ダウン状態なら移動や攻撃の更新は行わず、つかまれ解き入力の受付やダウンからの起き上がり条件のチェックのみ行う
 	if (IsDamageReaction() || IsGrabbed() || IsDown())
 	{
 		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
@@ -349,8 +353,8 @@ void Player::UpdateAttack()
 /// @brief 構え状態を更新する
 void Player::UpdateStanceState()
 {
-	// 掴み中は構え状態にならない
-	if(IsGrabbing() || IsGrabbed() || IsDown())
+	// 怯み状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら構え状態にならない
+	if(IsGrabbing() || IsGrabbed() || IsDown() || !IsGrounded())
 	{
 		isStance_ = false;
 		return;
@@ -414,7 +418,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown())
+	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown() || !IsGrounded())
 	{
 		isDash_ = false;
 		return;
@@ -482,8 +486,8 @@ bool Player::CheckGetUpCondition()
 /// @brief 防御状態を更新する
 void Player::UpdateGuardState()
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」なら防御状態にならない
-	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack())
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら防御状態にならない
+	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack() || !IsGrounded())
 	{
 		isGuard_ = false;
 		return;

@@ -44,6 +44,8 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["combo_data"]["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
 				n["combo_data"]["damageReaction"] = static_cast<int>(node.comboAttackInitData.damageReaction);
 				n["combo_data"]["knockback"] = node.comboAttackInitData.knockback;
+				n["combo_data"]["knockbackDirection"] = 
+                { node.comboAttackInitData.knockbackDirection.x, node.comboAttackInitData.knockbackDirection.y, node.comboAttackInitData.knockbackDirection.z };
             } 
             else if (node.actionName == "GrabAttack")
             {
@@ -139,6 +141,9 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.comboAttackInitData.cancelEndTime = n["combo_data"].value("cancelEndTime", 0.0f);
 					node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(n["combo_data"].value("damageReaction", 0));
 					node.comboAttackInitData.knockback = n["combo_data"].value("knockback", 0.0f);
+					node.comboAttackInitData.knockbackDirection.x = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
+					node.comboAttackInitData.knockbackDirection.y = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
+					node.comboAttackInitData.knockbackDirection.z = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2];
                     node.comboAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
                 } 
                 else if (node.actionName == "GrabAttack" && n.contains("grab_data"))

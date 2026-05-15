@@ -20,6 +20,7 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	hitboxEndTime_ = initData.hitboxEndTime;
 	damage_ = initData.damage;
 	knockback_ = initData.knockback;
+	knockbackDirection_ = initData.knockbackDirection.Normalize();
 	damageReaction_ = initData.damageReaction;
 }
 
@@ -117,11 +118,47 @@ void ComboAttack::Update()
 					// 攻撃判定とターゲットの当たり判定を更新して衝突をチェックする
 					if (hitbox_.IsHit())
 					{
-						// ノックバックの方向を計算する（攻撃者からターゲットへのベクトルを正規化）
-						Vector3 knockDirection = (target->GetPosition() - owner_->GetPosition()).Normalize();
+						// ターゲットの位置と攻撃者の位置から、攻撃者から見たターゲットの方向を計算する
+						Vector3 forward = target->GetPosition() - owner_->GetPosition();
+						forward.y = 0.0f;
+
+						// forwardベクトルの長さが0でないことを確認してから正規化する
+						if (forward.Length() > 0.0f)
+						{
+							forward = forward.Normalize();
+						} 
+						else 
+						{
+							forward = owner_->GetDirection();
+						}
+
+						// ワールドの上方向ベクトル
+						Vector3 worldUp(0.0f, 1.0f, 0.0f);
+
+						// forwardベクトルとworldUpベクトルから、攻撃者のローカル座標での右方向ベクトルを計算する
+						Vector3 right;
+						right.x = worldUp.y * forward.z - worldUp.z * forward.y;
+						right.y = worldUp.z * forward.x - worldUp.x * forward.z;
+						right.z = worldUp.x * forward.y - worldUp.y * forward.x;
+						right = right.Normalize();
+
+						Vector3 up;
+						up.x = forward.y * right.z - forward.z * right.y;
+						up.y = forward.z * right.x - forward.x * right.z;
+						up.z = forward.x * right.y - forward.y * right.x;
+						up = up.Normalize();
+
+						// 攻撃者のローカル座標でのノックバック方向をワールド座標に変換する
+						Vector3 knockBackDirection;
+						knockBackDirection.x = right.x * knockbackDirection_.x + up.x * knockbackDirection_.y + forward.x * knockbackDirection_.z;
+						knockBackDirection.y = right.y * knockbackDirection_.x + up.y * knockbackDirection_.y + forward.y * knockbackDirection_.z;
+						knockBackDirection.z = right.z * knockbackDirection_.x + up.z * knockbackDirection_.y + forward.z * knockbackDirection_.z;
+
+						// ノックバック方向を正規化する
+						knockBackDirection = knockBackDirection.Normalize();
 
 						// ターゲットにダメージを与える
-						bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockDirection, owner_->GetWorldPosition());
+						bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition());
 
 						// 防御されたら移動速度が半減する
 						if (!isHit)

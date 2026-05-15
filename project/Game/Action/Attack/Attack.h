@@ -96,6 +96,9 @@ protected:
 	/// @brief ノックバック力（吹き飛ばす強さ）
 	float knockback_ = 0.0f;
 
+	/// @brief ノックバック方向（ワールド座標での方向ベクトル、通常は攻撃者から見た被攻撃者の方向を設定）
+	Vector3 knockbackDirection_ = Vector3(0.0f, 0.0f, 1.0f);
+
 
 protected:
 

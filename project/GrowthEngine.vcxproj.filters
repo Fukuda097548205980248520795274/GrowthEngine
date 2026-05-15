@@ -1054,6 +1054,9 @@
     <Filter Include="Game\StageObject\Wall">
       <UniqueIdentifier>{ad13a1a5-9256-42e0-a3a8-9e40d9707917}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageObject\Stairs">
+      <UniqueIdentifier>{c41f22ec-2c79-456d-9e80-cdec9b98a281}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1877,6 +1880,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageObject\Wall\Wall.cpp">
       <Filter>Game\StageObject\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp">
+      <Filter>Game\StageObject\Stairs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2815,6 +2821,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageObject\Wall\Wall.h">
       <Filter>Game\StageObject\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageObject\Stairs\Stairs.h">
+      <Filter>Game\StageObject\Stairs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

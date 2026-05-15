@@ -65,6 +65,11 @@
                 "hitboxStartTime": 0.15000000596046448,
                 "jointType": 9,
                 "knockback": 0.30000001192092896,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
                 "moveStartTime": 0.11999999731779099
@@ -92,6 +97,11 @@
                 "hitboxStartTime": 0.15000000596046448,
                 "jointType": 8,
                 "knockback": 0.30000001192092896,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
                 "moveStartTime": 0.11999999731779099
@@ -114,11 +124,16 @@
                 "cancelEndTime": 0.3400000035762787,
                 "cancelStartTime": 0.23999999463558197,
                 "damage": 10,
-                "damageReaction": 2,
+                "damageReaction": 3,
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
                 "jointType": 9,
                 "knockback": 0.30000001192092896,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
                 "moveStartTime": 0.11999999731779099

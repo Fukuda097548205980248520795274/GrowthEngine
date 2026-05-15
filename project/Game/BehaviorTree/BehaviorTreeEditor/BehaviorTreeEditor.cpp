@@ -375,12 +375,13 @@ void BehaviorTreeEditor::DrawNodeTable()
                     ImGui::DragFloat("Cancel Start", &node.comboAttackInitData.cancelStartTime, 0.01f);
                     ImGui::DragFloat("Cancel End", &node.comboAttackInitData.cancelEndTime, 0.01f);
                     ImGui::DragFloat("Knockback", &node.comboAttackInitData.knockback, 0.1f);
+					ImGui::DragFloat3("Knockback Direction", &node.comboAttackInitData.knockbackDirection.x, 0.1f);
 
                     // int型の場合は InputInt や DragInt を使用
                     ImGui::InputInt("Damage", &node.comboAttackInitData.damage);
 
                     // ダメージリアクション
-                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger" };
+                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down"};
                     int currentReaction = static_cast<int>(node.comboAttackInitData.damageReaction);
                     if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
                     {
