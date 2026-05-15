@@ -128,11 +128,11 @@
                 "hitboxEndTime": 0.2800000011920929,
                 "hitboxStartTime": 0.15000000596046448,
                 "jointType": 9,
-                "knockback": 0.30000001192092896,
+                "knockback": 1.5,
                 "knockbackDirection": [
                     0.0,
-                    0.0,
-                    1.0
+                    0.32487446069717407,
+                    0.9457572102546692
                 ],
                 "moveEndTime": 0.2199999988079071,
                 "moveSpeed": 9.199999809265137,
