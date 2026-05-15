@@ -7,6 +7,9 @@ struct FloorInitData
 	/// @brief 床の位置
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
+	/// 床の大きさ
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
 	// 地面の衝突判定
 	Collision3DInstanceAABB* collision = nullptr;
 

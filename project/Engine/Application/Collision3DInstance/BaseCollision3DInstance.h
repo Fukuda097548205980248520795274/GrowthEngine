@@ -26,6 +26,9 @@ namespace Engine
 		/// @brief 衝突したかどうか
 		bool isCollision_ = false;
 
+		/// @brief 衝突した相手の衝突判定インスタンス
+		BaseCollision3DInstance* hitOpponent_ = nullptr;
+
 	protected:
 
 		/// @brief 種類

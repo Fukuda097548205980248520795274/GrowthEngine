@@ -18,6 +18,9 @@ void Floor::Initialize(const FloorInitData& initData)
 	// 位置
 	worldTransform_->translate_ = initData.position;
 
+	//　大きさ
+	worldTransform_->scale_ = initData.scale;
+
 	// 衝突判定
 	collision_ = initData.collision;
 

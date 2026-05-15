@@ -147,6 +147,7 @@ void GameScene::Initialize()
 	// 床
 	FloorInitData floorInitData;
 	floorInitData.position = Vector3(0.0f, -2.0f, 0.0f);
+	floorInitData.scale = Vector3(20.0f, 1.0f, 20.0f);
 	floorInitData.collision = floorCollision_->CreateInstance();
 	floorInitData.model = nullptr;
 	floor_ = std::make_unique<Floor>();

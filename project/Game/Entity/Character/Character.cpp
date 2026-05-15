@@ -99,7 +99,7 @@ Character::Character(const InitData& initData) : Entity()
 	// 着地判定
 	landingCollision_ = initData.landingCollision;
 	landingCollision_->param_->center = GetWorldPosition();
-	landingCollision_->param_->radius = Vector3(0.25f, 0.1f, 0.25f);
+	landingCollision_->param_->radius = Vector3(0.25f, 0.03f, 0.25f);
 	
 
 	// ブラックボードの生成
@@ -913,31 +913,30 @@ void Character::FallUpdate(float deltaTime)
 		// Y方向の位置を更新する
 		worldTransform_->translate_.y += velocityY_ * deltaTime;
 	}
-
-	// 着地フラグをリセットする
-	isGrounded_ = false;
 }
 
 /// @brief 着地判定の更新
 void Character::LandingCheck()
 {
+	// 着地しているかどうかのフラグをリセットする
+	isGrounded_ = false;
+
 	// コリジョンがないと処理しない
 	if (!landingCollision_)return;
 
 	// コリジョンの状態を確認する
 	if (landingCollision_->isCollision_)
 	{
+		// コリジョンの当たり判定がAABBであることを前提に、床との接触位置を計算する
+		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
+		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+
 		// 着地していると判定する
 		isGrounded_ = true;
 
 		// Y方向の速度をリセットする（着地したので落下を止める）
 		velocityY_ = 0.0f;
 	} 
-	else
-	{
-		// 着地していないと判定する
-		isGrounded_ = false;
-	}
 }
 
 /// @brief 押し出し判定処理
