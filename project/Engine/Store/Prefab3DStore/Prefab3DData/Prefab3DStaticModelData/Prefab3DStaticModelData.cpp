@@ -11,6 +11,8 @@
 
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
+#include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
+
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 /// @brief コンストラクタ
@@ -414,6 +416,9 @@ void Engine::Prefab3DStaticModelData::DrawCallInstance(const Engine::Prefab3D::S
 		ToQuaternion(param->modelTransform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->modelTransform.scale, modelQuaternion, param->modelTransform.translate);
+
+	// 親子関係のあるモデルのときは、親のワールド行列を掛ける
+	if (param->parent)worldMatrix = worldMatrix * param->parent->GetWorldMatrix();
 
 
 	// ビュープロジェクション行列を取得する

@@ -1042,11 +1042,17 @@
     <Filter Include="Game\BehaviorTree\BehaviorTreeSetting">
       <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\MotionEditor">
-      <UniqueIdentifier>{d2697e88-bb55-4daf-aaa8-d5932f28beb4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\StageObject">
       <UniqueIdentifier>{59b57385-7d35-4a9b-a2da-282cf2de65a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MotionManager\MotionManagerEditor">
+      <UniqueIdentifier>{d2697e88-bb55-4daf-aaa8-d5932f28beb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageObject\Floor">
+      <UniqueIdentifier>{b5e9c4a6-36da-4140-b34d-267ef46ba8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageObject\Wall">
+      <UniqueIdentifier>{ad13a1a5-9256-42e0-a3a8-9e40d9707917}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1861,10 +1867,16 @@
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp">
-      <Filter>Game\MotionEditor</Filter>
+      <Filter>Game\MotionManager\MotionManagerEditor</Filter>
     </ClCompile>
     <ClCompile Include="Game\StageObject\StageObject.cpp">
       <Filter>Game\StageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\Floor\Floor.cpp">
+      <Filter>Game\StageObject\Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\Wall\Wall.cpp">
+      <Filter>Game\StageObject\Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2793,10 +2805,16 @@
       <Filter>Game\BehaviorTree\BehaviorTreeProjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h">
-      <Filter>Game\MotionEditor</Filter>
+      <Filter>Game\MotionManager\MotionManagerEditor</Filter>
     </ClInclude>
     <ClInclude Include="Game\StageObject\StageObject.h">
       <Filter>Game\StageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageObject\Floor\Floor.h">
+      <Filter>Game\StageObject\Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageObject\Wall\Wall.h">
+      <Filter>Game\StageObject\Wall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

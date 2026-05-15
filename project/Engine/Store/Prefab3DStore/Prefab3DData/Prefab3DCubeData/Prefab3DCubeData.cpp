@@ -8,6 +8,8 @@
 #include "Store/SkyboxStore/SkyboxStore.h"
 #include "Store/PostEffectStore/PostEffectStore.h"
 
+#include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
+
 #include "PSO/PSOModel/BasePSOModel.h"
 
 #include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
@@ -326,6 +328,9 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 		ToQuaternion(param->transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param->transform.scale, modelQuaternion, param->transform.translate);
+
+	// 親トランスフォームがあるときは親トランスフォームを掛ける
+	if (param->parent)worldMatrix = worldMatrix * param->parent->GetWorldMatrix();
 
 	// ビュープロジェクション行列を取得する
 	Matrix4x4 viewProjection = cameraStore_->GetCamera3D().GetCurrentVPMatrix();

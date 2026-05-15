@@ -4,6 +4,7 @@
 
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
+#include "StageObject/Floor/Floor.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
@@ -67,11 +68,19 @@ private:
 	/// @brief プレイヤーの攻撃判定グループ
 	std::unique_ptr<Collision3DBaseSphere> playerHitboxGroup_;
 
+
 	/// @brief 敵の当たり判定グループ
 	std::unique_ptr<Collision3DBaseSphere> enemyHurtboxGroup_;
 
 	/// @brief 敵の攻撃判定グループ
 	std::unique_ptr<Collision3DBaseSphere> enemyHitboxGroup_;
+
+
+	/// @brief 着地の当たり判定グループ
+	std::unique_ptr<Collision3DBaseAABB> landingCollision_ = nullptr;
+
+	/// @brief 床の当たり判定グループ
+	std::unique_ptr<Collision3DBaseAABB> floorCollision_ = nullptr;
 
 
 
@@ -95,6 +104,9 @@ private:
 	/// @brief 敵
 	std::unique_ptr<NPC> enemy_;
 
+
+	// 床
+	std::unique_ptr<Floor> floor_ = nullptr;
 
 
 	/// @brief カメラのピボットポイント

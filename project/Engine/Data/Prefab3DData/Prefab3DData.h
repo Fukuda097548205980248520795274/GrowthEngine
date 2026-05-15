@@ -5,6 +5,8 @@
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
 
+class WorldTransform3D;
+
 namespace Engine
 {
 	/// @brief プレハブ
@@ -192,6 +194,9 @@ namespace Engine
 					/// @brief モデルトランスフォーム
 					Transform modelTransform;
 
+					// 親トランスフォーム
+					WorldTransform3D* parent = nullptr;
+
 
 					/// @brief メッシュトランスフォーム
 					std::vector<Transform> meshTransforms;
@@ -376,6 +381,9 @@ namespace Engine
 				{
 					/// @brief トランスフォーム
 					Transform transform;
+
+					// 親トランスフォーム
+					WorldTransform3D* parent = nullptr;
 
 					/// @brief マテリアル
 					Material material;

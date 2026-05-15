@@ -76,6 +76,9 @@ public:
 
 		/// @brief 攻撃判定グループ
 		Collision3DBaseSphere* hitboxGroup = nullptr;
+
+		/// @brief 着地判定グループ
+		Collision3DInstanceAABB* landingCollision = nullptr;
 	};
 
 
@@ -253,6 +256,10 @@ public:
 	/// @brief 防御を設定する
 	/// @param isGuard 
 	void SetGuard(bool isGuard) { isGuard_ = isGuard; }
+
+	/// @brief 着地しているかどうか
+	/// @return 
+	bool IsGrounded() const { return isGrounded_; }
 
 
 protected:
@@ -523,6 +530,31 @@ protected:
 
 	/// @brief 攻撃判定グループ
 	Collision3DBaseSphere* hitboxGroup_ = nullptr;
+
+
+protected:
+
+	/// @brief 落下の更新
+	/// @param deltaTime 
+	void FallUpdate(float deltaTime);
+
+	/// @brief 着地判定の更新
+	void LandingCheck();
+
+	/// @brief 着地判定
+	Collision3DInstanceAABB* landingCollision_ = nullptr;
+
+	// 現在の落下速度
+	float velocityY_ = 0.0f;
+
+	// 地面に接地しているかどうか
+	bool isGrounded_ = false;
+
+	// 重力加速度
+	const float kGravity = -9.8f;
+
+	// 最大落下速度
+	const float kMaxFallSpeed = -20.0f;
 
 
 protected:

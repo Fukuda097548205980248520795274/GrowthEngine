@@ -61,11 +61,20 @@ void GameScene::Initialize()
 	enemyHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("EnemySide_Hurtbox");
 	enemyHitboxGroup_ = std::make_unique<Collision3DBaseSphere>("EnemySide_Hitbox");
 
+	// 着地の当たり判定グループの生成と初期化
+	landingCollision_ = std::make_unique<Collision3DBaseAABB>("Landing_Collision");
+	floorCollision_ = std::make_unique<Collision3DBaseAABB>("Floor_Collision");
+
+
+
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
 	playerHitboxGroup_->SetCollisionTarget(enemyHurtboxGroup_->GetHandle());
 
 	// 「敵の攻撃」は「プレイヤーの体」に当たる
 	enemyHitboxGroup_->SetCollisionTarget(playerHurtboxGroup_->GetHandle());
+
+	// 「キャラクターの足」は「床」に当たる
+	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
 
 
 	// プレイヤーの生成と初期化
@@ -87,6 +96,7 @@ void GameScene::Initialize()
 	playerInitData.hAvoidRightMotion = 0;
 	playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 	playerInitData.hitboxGroup = playerHitboxGroup_.get();
+	playerInitData.landingCollision = landingCollision_->CreateInstance();
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize();
 
@@ -129,8 +139,19 @@ void GameScene::Initialize()
 	enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
 	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
 	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
+	enemyInitData.landingCollision = landingCollision_->CreateInstance();
 	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
 	enemy_->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy_.get()));
+
+
+	// 床
+	FloorInitData floorInitData;
+	floorInitData.position = Vector3(0.0f, -2.0f, 0.0f);
+	floorInitData.collision = floorCollision_->CreateInstance();
+	floorInitData.model = nullptr;
+	floor_ = std::make_unique<Floor>();
+	floor_->Initialize(floorInitData);
+
 
 	// カメラ制御の初期化
 	InitializeCameraControl();
@@ -141,6 +162,9 @@ void GameScene::Update()
 {
 	// デルタタイムを取得する
 	const float deltaTime = engine_->GetDeltaTime();
+
+	// 床の更新
+	floor_->Update();
 
 	// プレイヤーの更新
 	player_->Update();

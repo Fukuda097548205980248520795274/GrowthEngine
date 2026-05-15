@@ -1,0 +1,49 @@
+#include "Floor.h"
+
+/// @brief コンストラクタ
+/// @param initData 
+Floor::Floor() : StageObject()
+{
+	// タグ
+	tag_ = StageObjectTag::Floor;
+}
+
+/// @brief 初期化
+/// @param initData 
+void Floor::Initialize(const FloorInitData& initData)
+{
+	// nullptr
+	assert(initData.collision != nullptr);
+
+	// 位置
+	worldTransform_->translate_ = initData.position;
+
+	// 衝突判定
+	collision_ = initData.collision;
+
+	// モデル
+	if (initData.model)
+	{
+		model_ = initData.model;
+
+		// 親
+		model_->param_.parent = worldTransform_.get();
+	}
+}
+
+/// @brief 更新処理
+void Floor::Update()
+{
+	// 基底クラスの更新処理
+	StageObject::Update();
+
+	// 衝突判定のパラメータを更新
+	collision_->param_->center = GetWorldPosition();
+	collision_->param_->radius = worldTransform_->scale_;
+}
+
+/// @brief 描画処理
+void Floor::Draw()
+{
+	if (model_)model_->Draw();
+}

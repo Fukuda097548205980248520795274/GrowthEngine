@@ -95,6 +95,11 @@ Character::Character(const InitData& initData) : Entity()
 
 	// 攻撃判定グループ
 	hitboxGroup_ = initData.hitboxGroup;
+
+	// 着地判定
+	landingCollision_ = initData.landingCollision;
+	landingCollision_->param_->center = GetWorldPosition();
+	landingCollision_->param_->radius = Vector3(0.25f, 0.1f, 0.25f);
 	
 
 	// ブラックボードの生成
@@ -117,6 +122,9 @@ void Character::Update()
 
 	// デルタタイムの取得
 	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
+
+	// 着地しているかどうか
+	LandingCheck();
 
 	// つかまれている場合は、限界時間に達するまで自力で振りほどく処理を行う
 	if (IsGrabbed())
@@ -147,6 +155,9 @@ void Character::Update()
 
 		// 基底クラスの更新
 		Entity::Update();
+
+		// 着地判定の更新
+		if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
 
 		return;
 	}
@@ -325,7 +336,9 @@ void Character::Update()
 
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * dt;
-
+	
+	// 落下の更新
+	FallUpdate(dt);
 
 	// 押し出し判定の更新
 	UpdatePushOut();
@@ -335,6 +348,9 @@ void Character::Update()
 
 	// 基底クラスの更新
 	Entity::Update();
+
+	// 着地判定の更新
+	if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
 }
 
 /// @brief 更新処理開始前のリセット
@@ -880,6 +896,47 @@ void Character::ReleaseGrab()
 	{
 		grabbedTarget_->grabber_ = nullptr;
 		grabbedTarget_ = nullptr;
+	}
+}
+
+/// @brief 落下の更新
+/// @param deltaTime 
+void Character::FallUpdate(float deltaTime)
+{
+	// 重力による落下処理
+	if (!isGrounded_)
+	{
+		// 落下速度を更新する
+		velocityY_ += kGravity * deltaTime;
+		if (velocityY_ < kMaxFallSpeed) velocityY_ = kMaxFallSpeed;
+
+		// Y方向の位置を更新する
+		worldTransform_->translate_.y += velocityY_ * deltaTime;
+	}
+
+	// 着地フラグをリセットする
+	isGrounded_ = false;
+}
+
+/// @brief 着地判定の更新
+void Character::LandingCheck()
+{
+	// コリジョンがないと処理しない
+	if (!landingCollision_)return;
+
+	// コリジョンの状態を確認する
+	if (landingCollision_->isCollision_)
+	{
+		// 着地していると判定する
+		isGrounded_ = true;
+
+		// Y方向の速度をリセットする（着地したので落下を止める）
+		velocityY_ = 0.0f;
+	} 
+	else
+	{
+		// 着地していないと判定する
+		isGrounded_ = false;
 	}
 }
 
