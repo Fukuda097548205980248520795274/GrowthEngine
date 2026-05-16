@@ -1057,6 +1057,12 @@
     <Filter Include="Game\StageObject\Stairs">
       <UniqueIdentifier>{c41f22ec-2c79-456d-9e80-cdec9b98a281}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Attack\GrabStrikeAttack">
+      <UniqueIdentifier>{4e85c7fe-b069-4287-8795-fa7ec6ca3b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\GrabStrikeAttackNode">
+      <UniqueIdentifier>{f035dd18-d9ab-4669-937d-49bc36072975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1883,6 +1889,12 @@
     </ClCompile>
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp">
       <Filter>Game\StageObject\Stairs</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Attack\GrabStrikeAttack\GrabStrikeAttack.cpp">
+      <Filter>Game\Action\Attack\GrabStrikeAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.cpp">
+      <Filter>Game\Node\ActionNode\GrabStrikeAttackNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2824,6 +2836,12 @@
     </ClInclude>
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h">
       <Filter>Game\StageObject\Stairs</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Attack\GrabStrikeAttack\GrabStrikeAttack.h">
+      <Filter>Game\Action\Attack\GrabStrikeAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.h">
+      <Filter>Game\Node\ActionNode\GrabStrikeAttackNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

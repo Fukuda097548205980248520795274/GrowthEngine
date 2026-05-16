@@ -4,6 +4,7 @@
 #include <string>
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
+#include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "MotionManager/MotionManager.h"
 
 // ノードの種類
@@ -29,6 +30,10 @@ enum class ConditionType
 
 	/// @brief ターゲットがダウンしていないかどうか
 	IsNotTargetDown,
+
+	IsGrabbing, // 掴んでいるかどうか
+
+	IsNotGrabbing, // 掴んでいないかどうか
 };
 
 // エディタ上のノードを表す構造体
@@ -50,9 +55,13 @@ struct EditorNode
 	MotionType motionType = MotionType::Stand; // 条件ノードでモーションを条件にする場合のモーションの種類
 	std::string motionName{}; 
 
+	MotionType targetMotionType = MotionType::Stand; // 条件ノードでターゲットのモーションを条件にする場合のモーションの種類
+	std::string targetMotionName{};
+
 	// 初期化用データ（アクションノードの種類に応じて使用）
 	CombAttackInitData comboAttackInitData;
 	GrabAttackInitData grabAttackInitData;
+	GrabStrikeAttackInitData grabStrikeAttackInitData;
 };
 
 // エディタ上のリンクを表す構造体

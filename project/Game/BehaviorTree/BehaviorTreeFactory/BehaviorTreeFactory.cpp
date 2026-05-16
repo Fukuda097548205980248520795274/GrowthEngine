@@ -7,6 +7,7 @@
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
+#include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param editor_nodes 
@@ -110,6 +111,16 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
         case ConditionType::IsNotTargetDown:
             conditionFunc = [character]() { return !character->HasTarget() || !character->GetLockOnTarget()->IsDown(); };
             break;
+
+			// 掴んでいるかどうかをチェックする条件
+		case ConditionType::IsGrabbing:
+			conditionFunc = [character]() { return character->IsGrabbing(); };
+			break;
+
+			// 掴んでいないかどうかをチェックする条件
+		case ConditionType::IsNotGrabbing:
+			conditionFunc = [character]() { return !character->IsGrabbing(); };
+			break;
         }
 
         // 実際は editor_node.condition_name 等をもとに、
@@ -135,6 +146,13 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
             auto grabAction = std::make_unique<GrabAttack>(character, initData);
             runtime_node = std::make_unique<GrabAttackNode>(std::move(grabAction));
+        }
+        else if (editor_node.actionName == "GrabStrikeAttack")
+        {
+			// エディタ上で設定した初期化データを使用
+			GrabStrikeAttackInitData initData = editor_node.grabStrikeAttackInitData;
+			auto grabStrikeAction = std::make_unique<GrabStrikeAttack>(character, initData);
+			runtime_node = std::make_unique<GrabStrikeAttackNode>(std::move(grabStrikeAction));
         }
         else
         {

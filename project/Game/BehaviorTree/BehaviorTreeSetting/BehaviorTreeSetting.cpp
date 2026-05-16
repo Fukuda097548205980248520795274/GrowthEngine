@@ -66,6 +66,32 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["grab_data"]["moveEndTime"] = node.grabAttackInitData.moveEndTime;
 				n["grab_data"]["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
             }
+            else if (node.actionName == "GrabStrikeAttack")
+            {
+                n["grab_strike_data"]["attackTime"] = node.grabStrikeAttackInitData.attackTime;
+                n["grab_strike_data"]["moveSpeed"] = node.grabStrikeAttackInitData.moveSpeed;
+				n["grab_strike_data"]["moveStartTime"] = node.grabStrikeAttackInitData.moveStartTime;
+				n["grab_strike_data"]["moveEndTime"] = node.grabStrikeAttackInitData.moveEndTime;
+				n["grab_strike_data"]["knockback"] = node.grabStrikeAttackInitData.knockback;
+				n["grab_strike_data"]["knockbackDirection"] = { node.grabStrikeAttackInitData.knockbackDirection.x, node.grabStrikeAttackInitData.knockbackDirection.y, node.grabStrikeAttackInitData.knockbackDirection.z };
+				n["grab_strike_data"]["isRelease"] = node.grabStrikeAttackInitData.isRelease;
+				n["grab_strike_data"]["releaseTime"] = node.grabStrikeAttackInitData.releaseTime;
+                n["grab_strike_data"]["damageReaction"] = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
+
+				n["grab_strike_data"]["targetMotionType"] = static_cast<int>(node.targetMotionType);
+				n["grab_strike_data"]["targetMotionName"] = node.targetMotionName;
+
+                 // ヒットの配列データを構築
+				json hitsJson = json::array();
+				for (const auto& def : node.grabStrikeAttackInitData.hits)
+				{
+					json h;
+					h["targetHitJoint"] = static_cast<int>(def.targetHitJoint);
+					h["hitTime"] = def.hitTime;
+					h["damage"] = def.damage;
+					hitsJson.push_back(h);
+				}
+            }
 
 			if (node.actionName != "None")
             {
@@ -187,6 +213,50 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabAttackInitData.moveEndTime = n["grab_data"].value("moveEndTime", 0.0f);
 					node.grabAttackInitData.jointType = static_cast<JointType>(n["grab_data"].value("jointType", 0));
 					node.grabAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
+                }
+                else if (node.actionName == "GrabStrikeAttack" && n.contains("grab_strike_data"))
+                {
+                    node.grabStrikeAttackInitData.attackTime = n["grab_strike_data"].value("attackTime", 0.0f);
+                    node.grabStrikeAttackInitData.moveSpeed = n["grab_strike_data"].value("moveSpeed", 0.0f);
+					node.grabStrikeAttackInitData.moveStartTime = n["grab_strike_data"].value("moveStartTime", 0.0f);
+					node.grabStrikeAttackInitData.moveEndTime = n["grab_strike_data"].value("moveEndTime", 0.0f);
+					node.grabStrikeAttackInitData.knockback = n["grab_strike_data"].value("knockback", 0.0f);
+					node.grabStrikeAttackInitData.hAttackAnimation = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
+					node.grabStrikeAttackInitData.isRelease = n["grab_strike_data"].value("isRelease", false);
+					node.grabStrikeAttackInitData.releaseTime = n["grab_strike_data"].value("releaseTime", 0.0f);
+					node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(n["grab_strike_data"].value("damageReaction", 0));
+
+					// ノックバックの方向は配列で保存されているので、読み込むときは配列からVector3に変換する
+                    if (n.contains("knockbackDirection") && n["knockbackDirection"].is_array() && n["knockbackDirection"].size() == 3)
+                    {
+                        node.grabStrikeAttackInitData.knockbackDirection.x = n["knockbackDirection"][0];
+                        node.grabStrikeAttackInitData.knockbackDirection.y = n["knockbackDirection"][1];
+                        node.grabStrikeAttackInitData.knockbackDirection.z = n["knockbackDirection"][2];
+                    }
+                    else
+                    {
+                        node.grabStrikeAttackInitData.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+                    }
+
+					node.targetMotionName = n["grab_strike_data"].value("targetMotionName", "");
+					node.targetMotionType = static_cast<MotionType>(n["grab_strike_data"].value("targetMotionType", 0));
+					node.grabStrikeAttackInitData.hTargetAnimation = MotionManager::GetInstance()->GetMotion(node.targetMotionType, node.targetMotionName);
+
+                    // 配列の読み込み
+                    node.grabStrikeAttackInitData.hits.clear();
+                    if (n["grab_strike_data"].contains("hits") && n["grab_strike_data"]["hits"].is_array())
+                    {
+                        for (const auto& h : n["grab_strike_data"]["hits"])
+                        {
+                            HitDefinition def;
+                            def.targetHitJoint = static_cast<JointType>(h.value("targetHitJoint", 0));
+                            def.hitTime = h.value("hitTime", 0.0f);
+                            def.damage = h.value("damage", 10);
+
+							// 読み込んだヒットをノードのリストに追加
+							node.grabStrikeAttackInitData.hits.push_back(def);
+                        }
+                    }
                 }
 
                 if (node.actionName != "None")

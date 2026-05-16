@@ -309,7 +309,7 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImGui::Text("Function:");
 
             // コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
-            const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown"};
+            const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing" };
 
             // 現在のEnumの値をintにキャスト
             int currentItem = static_cast<int>(node.conditionType);
@@ -340,7 +340,7 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImGui::PushItemWidth(120.0f);
 
             // アクション選択用のコンボボックス
-            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "SpinThrowAttack" };
+            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack" };
             int currentItem = 0;
             for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
             {
@@ -455,6 +455,97 @@ void BehaviorTreeEditor::DrawNodeTable()
                     }
 
                     ImGui::TreePop();
+                }
+            }
+            else if(node.actionName == "GrabStrikeAttack")
+            {
+                if (ImGui::TreeNode("Grab Strike Attack Settings"))
+                {
+					ImGui::DragFloat("Attack Time", &node.grabStrikeAttackInitData.attackTime, 0.01f);
+					ImGui::DragFloat("Move Speed", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
+					ImGui::DragFloat("Move Start", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
+					ImGui::DragFloat("Move End", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
+					ImGui::DragFloat("Knockback", &node.grabStrikeAttackInitData.knockback, 0.1f);
+					ImGui::DragFloat3("Knockback Direction", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
+                    ImGui::Checkbox("Release", &node.grabStrikeAttackInitData.isRelease);
+
+					// 離すタイミングの入力は、isReleaseがtrueの場合にのみ表示
+                    if(node.grabStrikeAttackInitData.isRelease)
+                        ImGui::DragFloat("Release Time", &node.grabStrikeAttackInitData.releaseTime, 0.01f);
+
+					// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
+					node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
+
+
+                    // モーションタイプ選択用のコンボボックス
+                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };
+                    int currentType = static_cast<int>(node.targetMotionType);
+
+					// ターゲットのモーションタイプ選択用のコンボボックス
+                    if (ImGui::TreeNode("Target Motion"))
+                    {
+                        // コンボボックスを描画し、変更があったらEnumにキャストして戻す
+                        if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
+                        {
+                            node.targetMotionType = static_cast<MotionType>(currentType);
+                            node.targetMotionName = "";
+                        }
+
+                        // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+                        std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.targetMotionType);
+
+                        // モーション名のリストが空の場合はエラーメッセージを表示
+                        if (motionNames.empty())
+                        {
+                            ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                        }
+                        else
+                        {
+                            // 現在選択されているモーション名をプレビュー用の文字列として設定
+                            const char* previewValue = node.targetMotionName.empty() ? "Select Motion..." : node.targetMotionName.c_str();
+
+                            // モーション名選択用のコンボボックスを描画
+                            if (ImGui::BeginCombo("Motion Name", previewValue))
+                            {
+                                for (const auto& name : motionNames)
+                                {
+                                    // 現在のモーション名と同じものが選択されている状態にする
+                                    bool isSelected = (node.targetMotionName == name);
+                                    if (ImGui::Selectable(name.c_str(), isSelected))
+                                    {
+                                        node.targetMotionName = name;
+                                    }
+                                    if (isSelected) ImGui::SetItemDefaultFocus();
+                                }
+                                ImGui::EndCombo();
+                            }
+                        }
+
+                        ImGui::TreePop();
+                    }
+
+
+                    // ジョイントタイプ
+                    const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+					auto& hits = node.grabStrikeAttackInitData.hits;
+                    for (size_t i = 0; i < hits.size(); ++i)
+                    {
+                        ImGui::PushID(static_cast<int>(i));
+                        if (ImGui::TreeNode((std::string("Hit ") + std::to_string(i + 1)).c_str()))
+                        {
+                            ImGui::DragFloat("Hit Time", &hits[i].hitTime, 0.01f);
+                            ImGui::InputInt("Damage", &hits[i].damage);
+
+							// ターゲットのジョイントタイプ
+                            int targetJoint = static_cast<int>(node.grabAttackInitData.jointType);
+                            if (ImGui::Combo("Joint Type", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                            {
+                                node.grabStrikeAttackInitData.hits[i].targetHitJoint = static_cast<JointType>(targetJoint);
+                            }
+                        }
+                    }
+
+					ImGui::TreePop();
                 }
             }
 

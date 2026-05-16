@@ -393,6 +393,18 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	return true; // ダメージが通った
 }
 
+/// @brief 掴みダメージを受けた時の処理
+/// @param damage 
+void Character::OnGrabDamage(int damage)
+{
+	// 体力を減らし、0未満にならないようにする
+	hp_ = std::max(0, hp_ - damage);
+
+	// 死亡判定
+	if (hp_ == 0)
+		isDead_ = true;
+}
+
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
 /// @return 
 bool Character::CheckGetUpCondition()

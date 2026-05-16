@@ -1,11 +1,6 @@
 {
     "links": [
         {
-            "end": 30,
-            "id": 32,
-            "start": 6
-        },
-        {
             "end": 4,
             "id": 33,
             "start": 31
@@ -14,27 +9,47 @@
             "end": 39,
             "id": 41,
             "start": 31
+        },
+        {
+            "end": 43,
+            "id": 44,
+            "start": 31
+        },
+        {
+            "end": 46,
+            "id": 47,
+            "start": 31
+        },
+        {
+            "end": 53,
+            "id": 55,
+            "start": 50
+        },
+        {
+            "end": 57,
+            "id": 58,
+            "start": 50
+        },
+        {
+            "end": 30,
+            "id": 62,
+            "start": 61
+        },
+        {
+            "end": 49,
+            "id": 63,
+            "start": 61
         }
     ],
     "nodes": [
-        {
-            "id": 4,
-            "input_pin": 5,
-            "output_pin": 6,
-            "pos": [
-                405.0,
-                150.0
-            ],
-            "type": 3
-        },
         {
             "condition_type": 1,
             "id": 3,
             "input_pin": 4,
             "output_pin": -1,
             "pos": [
-                805.0,
-                65.0
+                844.0,
+                1.0
             ],
             "type": 4
         },
@@ -54,10 +69,105 @@
             "input_pin": 39,
             "output_pin": 40,
             "pos": [
-                817.0,
-                195.0
+                848.0,
+                115.0
             ],
             "type": 4
+        },
+        {
+            "action_name": "GrabAttack",
+            "grab_data": {
+                "attackTime": 1.0,
+                "grabTime": 1.0,
+                "hitboxEndTime": 1.0,
+                "hitboxStartTime": 0.5,
+                "jointType": 9,
+                "moveEndTime": 0.699999988079071,
+                "moveSpeed": 0.4000000059604645,
+                "moveStartTime": 0.20000000298023224
+            },
+            "id": 42,
+            "input_pin": 43,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "output_pin": -1,
+            "pos": [
+                869.0,
+                224.0
+            ],
+            "type": 5
+        },
+        {
+            "condition_type": 5,
+            "id": 45,
+            "input_pin": 46,
+            "output_pin": -1,
+            "pos": [
+                818.1312866210938,
+                -119.29672241210938
+            ],
+            "type": 4
+        },
+        {
+            "id": 48,
+            "input_pin": 49,
+            "output_pin": 50,
+            "pos": [
+                607.0,
+                395.0
+            ],
+            "type": 1
+        },
+        {
+            "condition_type": 4,
+            "id": 52,
+            "input_pin": 53,
+            "output_pin": 54,
+            "pos": [
+                824.0,
+                365.0
+            ],
+            "type": 4
+        },
+        {
+            "action_name": "GrabStrikeAttack",
+            "grab_strike_data": {
+                "attackTime": 1.0,
+                "damageReaction": 0,
+                "isRelease": true,
+                "knockback": 1.0,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "moveEndTime": 1.0,
+                "moveSpeed": 5.5,
+                "moveStartTime": 0.0,
+                "releaseTime": 0.9100000262260437,
+                "targetMotionName": "Front",
+                "targetMotionType": 5
+            },
+            "id": 56,
+            "input_pin": 57,
+            "motionName": "Fighter",
+            "motionType": 1,
+            "output_pin": -1,
+            "pos": [
+                832.0,
+                488.0
+            ],
+            "type": 5
+        },
+        {
+            "id": 59,
+            "input_pin": 60,
+            "output_pin": 61,
+            "pos": [
+                407.0,
+                268.0
+            ],
+            "type": 2
         }
     ]
 }

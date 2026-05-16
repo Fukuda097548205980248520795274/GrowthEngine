@@ -105,6 +105,10 @@ public:
 	/// @param enemyPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition);
 
+	/// @brief 掴みダメージを受けた時の処理
+	/// @param damage 
+	virtual void OnGrabDamage(int damage);
+
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
 
@@ -260,6 +264,10 @@ public:
 	/// @brief 着地しているかどうか
 	/// @return 
 	bool IsGrounded() const { return isGrounded_; }
+
+	/// @brief 掴んでいる相手を取得する
+	/// @return 
+	Character* GetGrabTarget() const { return grabbedTarget_; }
 
 
 protected:

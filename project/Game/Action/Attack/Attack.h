@@ -16,7 +16,8 @@ enum class AttackType
 {
 	None,
 	Combo,
-	Grab
+	Grab,
+	GrabStrike
 };
 
 enum class DamageReaction
@@ -126,4 +127,17 @@ struct HitboxState
 			hitbox.collider_ = nullptr;
 		}
 	}
+};
+
+
+struct HitDefinition
+{
+	// ダメージ量
+	int32_t damage = 10;
+
+	// ヒットする時間（攻撃開始からの遅延時間）
+	float hitTime = 0.0f;
+
+	// 相手に当たるジョイント
+	JointType targetHitJoint = JointType::None;
 };
