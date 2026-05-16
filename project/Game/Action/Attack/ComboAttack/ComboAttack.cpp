@@ -24,7 +24,6 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	{
 		HitboxState state;
 		state.def = def;
-		state.hasHit = false;
 		hitStates_.push_back(state);
 	}
 }
@@ -44,11 +43,11 @@ void ComboAttack::Exec()
 	// 移動速度を初期化する
 	currentMoveSpeed_ = moveSpeed_;
 
-	// 当たり判定は攻撃の中盤～終盤に出すのが自然なので、最初は当たり判定なしの状態にしておく
+	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)
 	{
-		state.hasHit = false;
-		state.DeleteHitbox(); // 念のため削除
+		state.hitCharacters.clear();
+		state.DeleteHitbox();
 	}
 }
 
@@ -100,70 +99,66 @@ void ComboAttack::Update()
 
 		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
 		{
-			if (!state.hasHit)
+			// 当たり判定がまだ存在しない場合は作成する
+			if (state.hitbox.collider_ == nullptr)
+				state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+
+			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
+			auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
+			Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
+			sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+			sphere->param_->radius = state.def.radius;
+
+			// ターゲットのリストを取得する
+			for (Character* target : Character::GetCharacters())
 			{
-				// 当たり判定がまだ存在しない場合は作成する
-				if (state.hitbox.collider_ == nullptr)
-					state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+				// ターゲットが自分自身、同じ陣営、またはすでに倒れている場合はスキップする
+				if (target == owner_ || target->GetCharacterTag() == owner_->GetCharacterTag() || target->IsDead()) continue;
 
-				// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
-				auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
-				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
-				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
-				sphere->param_->radius = state.def.radius;
+				// すでにこの攻撃でヒットしているターゲットはスキップする
+				if (std::find(state.hitCharacters.begin(), state.hitCharacters.end(), target) != state.hitCharacters.end())
+					continue;
 
-				// ターゲットのリストを取得する
-				for (Character* target : Character::GetCharacters())
+				// 当たり判定がヒットした場合の処理
+				if (state.hitbox.IsHit())
 				{
-					// ターゲットが自分自身、同じ陣営、またはすでに倒れている場合はスキップする
-					if (target == owner_ || target->GetCharacterTag() == owner_->GetCharacterTag() || target->IsDead()) continue;
+					// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
+					Vector3 forward = target->GetPosition() - owner_->GetPosition();
+					forward.y = 0.0f;
+					forward = (forward.Length() > 0.0f) ? forward.Normalize() : owner_->GetDirection();
 
-					// 当たり判定がヒットした場合の処理
-					if (state.hitbox.IsHit())
-					{
-						// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
-						Vector3 forward = target->GetPosition() - owner_->GetPosition();
-						forward.y = 0.0f;
-						forward = (forward.Length() > 0.0f) ? forward.Normalize() : owner_->GetDirection();
+					// ワールドの上方向（Y軸）を定義する
+					Vector3 worldUp(0.0f, 1.0f, 0.0f);
 
-						// ワールドの上方向（Y軸）を定義する
-						Vector3 worldUp(0.0f, 1.0f, 0.0f);
+					// 前方とワールドの上方向から右方向を計算する
+					Vector3 right;
+					right.x = worldUp.y * forward.z - worldUp.z * forward.y;
+					right.y = worldUp.z * forward.x - worldUp.x * forward.z;
+					right.z = worldUp.x * forward.y - worldUp.y * forward.x;
+					right = right.Normalize();
 
-						// 前方とワールドの上方向から右方向を計算する
-						Vector3 right;
-						right.x = worldUp.y * forward.z - worldUp.z * forward.y;
-						right.y = worldUp.z * forward.x - worldUp.x * forward.z;
-						right.z = worldUp.x * forward.y - worldUp.y * forward.x;
-						right = right.Normalize();
+					Vector3 up;
+					up.x = forward.y * right.z - forward.z * right.y;
+					up.y = forward.z * right.x - forward.x * right.z;
+					up.z = forward.x * right.y - forward.y * right.x;
+					up = up.Normalize();
 
-						Vector3 up;
-						up.x = forward.y * right.z - forward.z * right.y;
-						up.y = forward.z * right.x - forward.x * right.z;
-						up.z = forward.x * right.y - forward.y * right.x;
-						up = up.Normalize();
+					// 攻撃の定義に基づいて、ノックバックの方向を計算する
+					Vector3 knockBackDirection;
+					knockBackDirection.x = right.x * state.def.knockbackDirection.x + up.x * state.def.knockbackDirection.y + forward.x * state.def.knockbackDirection.z;
+					knockBackDirection.y = right.y * state.def.knockbackDirection.x + up.y * state.def.knockbackDirection.y + forward.y * state.def.knockbackDirection.z;
+					knockBackDirection.z = right.z * state.def.knockbackDirection.x + up.z * state.def.knockbackDirection.y + forward.z * state.def.knockbackDirection.z;
+					knockBackDirection = knockBackDirection.Normalize();
 
-						// 攻撃の定義に基づいて、ノックバックの方向を計算する
-						Vector3 knockBackDirection;
-						knockBackDirection.x = right.x * state.def.knockbackDirection.x + up.x * state.def.knockbackDirection.y + forward.x * state.def.knockbackDirection.z;
-						knockBackDirection.y = right.y * state.def.knockbackDirection.x + up.y * state.def.knockbackDirection.y + forward.y * state.def.knockbackDirection.z;
-						knockBackDirection.z = right.z * state.def.knockbackDirection.x + up.z * state.def.knockbackDirection.y + forward.z * state.def.knockbackDirection.z;
-						knockBackDirection = knockBackDirection.Normalize();
+					// ターゲットにダメージを与える
+					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition());
 
-						// ターゲットにダメージを与える
-						bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition());
+					// ヒットしなかった場合は、移動速度を半減させる（ガードされた場合など）
+					if (!isHit)
+						currentMoveSpeed_ = moveSpeed_ * 0.5f;
 
-						// ヒットしなかった場合は、移動速度を半減させる（ガードされた場合など）
-						if (!isHit)
-							currentMoveSpeed_ *= 0.5f;
-
-						// ヒットしたことを記録する
-						state.hasHit = true;
-						
-						// ヒットしたら当たり判定を削除する（1回ヒットしたらその判定はもう当たらないようにする）
-						state.DeleteHitbox();
-
-						break;
-					}
+					// この攻撃でヒットしたターゲットをリストに追加する
+					state.hitCharacters.push_back(target);
 				}
 			}
 		} 
@@ -199,10 +194,10 @@ void ComboAttack::Reset()
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
 
-	// すべての判定をリセット・削除
+	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)
 	{
-		state.hasHit = false;
+		state.hitCharacters.clear();
 		state.DeleteHitbox();
 	}
 }
@@ -225,10 +220,10 @@ bool ComboAttack::HasNextAttack(AttackInputType inputType) const
 /// @brief 終了、中断
 void ComboAttack::Exit()
 {
-	// すべての判定を削除
+	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)
 	{
-		state.hasHit = false;
+		state.hitCharacters.clear();
 		state.DeleteHitbox();
 	}
 

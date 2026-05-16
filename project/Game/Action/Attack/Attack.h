@@ -113,7 +113,9 @@ struct HitboxState
 {
 	HitboxDefinition def;
 	AppCollider hitbox;
-	bool hasHit = false;
+
+	/// @brief ヒットしたキャラクターのリスト
+	std::vector<Character*> hitCharacters;
 
 	// この判定を削除するヘルパー関数
 	void DeleteHitbox()
