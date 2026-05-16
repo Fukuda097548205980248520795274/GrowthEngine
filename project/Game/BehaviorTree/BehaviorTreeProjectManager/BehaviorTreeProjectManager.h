@@ -4,6 +4,7 @@
 #include <string>
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
+#include "Action/Attack/SpinThrowAttack/SpinThrowAttack.h"
 #include "MotionManager/MotionManager.h"
 
 // ノードの種類
@@ -53,6 +54,7 @@ struct EditorNode
 	// 初期化用データ（アクションノードの種類に応じて使用）
 	CombAttackInitData comboAttackInitData;
 	GrabAttackInitData grabAttackInitData;
+	SpinThrowAttackInitData spinThrowAttackInitData;
 };
 
 // エディタ上のリンクを表す構造体

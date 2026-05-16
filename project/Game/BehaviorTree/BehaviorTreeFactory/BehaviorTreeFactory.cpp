@@ -7,6 +7,7 @@
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
+#include "Node/ActionNode/SpinThrowAttackNode/SpinThrowAttackNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param editor_nodes 
@@ -135,6 +136,14 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
             auto grabAction = std::make_unique<GrabAttack>(character, initData);
             runtime_node = std::make_unique<GrabAttackNode>(std::move(grabAction));
+        }
+        else if (editor_node.actionName == "SpinThrowAttack")
+        {
+			// エディタ上で設定した初期化データを使用
+			SpinThrowAttackInitData initData = editor_node.spinThrowAttackInitData;
+
+            auto spinThrowAction = std::make_unique<SpinThrowAttack>(character, initData);
+            runtime_node = std::make_unique<SpinThrowAttackNode>(std::move(spinThrowAction));
         }
         else
         {

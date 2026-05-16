@@ -58,6 +58,18 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["grab_data"]["moveEndTime"] = node.grabAttackInitData.moveEndTime;
 				n["grab_data"]["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
             }
+            else if (node.actionName == "SpinThrowAttack")
+            {
+				n["spin_throw_data"]["attackTime"] = node.spinThrowAttackInitData.attackTime;
+				n["spin_throw_data"]["moveSpeed"] = node.spinThrowAttackInitData.moveSpeed;
+				n["spin_throw_data"]["moveStartTime"] = node.spinThrowAttackInitData.moveStartTime;
+				n["spin_throw_data"]["moveEndTime"] = node.spinThrowAttackInitData.moveEndTime;
+				n["spin_throw_data"]["hitboxStartTime"] = node.spinThrowAttackInitData.hitboxStartTime;
+				n["spin_throw_data"]["hitboxEndTime"] = node.spinThrowAttackInitData.hitboxEndTime;
+				n["spin_throw_data"]["knockback"] = node.spinThrowAttackInitData.knockback;
+				n["spin_throw_data"]["knockbackDirection"] =
+				{ node.spinThrowAttackInitData.knockbackDirection.x, node.spinThrowAttackInitData.knockbackDirection.y, node.spinThrowAttackInitData.knockbackDirection.z };
+            }
 
 			if (node.actionName != "None")
             {
@@ -157,6 +169,17 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabAttackInitData.moveEndTime = n["grab_data"].value("moveEndTime", 0.0f);
 					node.grabAttackInitData.jointType = static_cast<JointType>(n["grab_data"].value("jointType", 0));
 					node.grabAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
+                }
+				else if (node.actionName == "SpinThrowAttack" && n.contains("spin_throw_data"))
+                {
+                    node.spinThrowAttackInitData.attackTime = n["spin_throw_data"].value("attackTime", 0.0f);
+                    node.spinThrowAttackInitData.hitboxStartTime = n["spin_throw_data"].value("hitboxStartTime", 0.0f);
+                    node.spinThrowAttackInitData.hitboxEndTime = n["spin_throw_data"].value("hitboxEndTime", 0.0f);
+                    node.spinThrowAttackInitData.moveSpeed = n["spin_throw_data"].value("moveSpeed", 0.0f);
+                    node.spinThrowAttackInitData.moveStartTime = n["spin_throw_data"].value("moveStartTime", 0.0f);
+                    node.spinThrowAttackInitData.moveEndTime = n["spin_throw_data"].value("moveEndTime", 0.0f);
+                    node.spinThrowAttackInitData.jointType = static_cast<JointType>(n["spin_throw_data"].value("jointType", 0));
+                    node.spinThrowAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
                 }
 
                 if (node.actionName != "None")

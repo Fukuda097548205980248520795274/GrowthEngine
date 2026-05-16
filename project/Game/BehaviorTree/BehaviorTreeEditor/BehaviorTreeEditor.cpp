@@ -340,9 +340,7 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImGui::PushItemWidth(120.0f);
 
             // アクション選択用のコンボボックス
-            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack" };
-
-            // 現在選択されているインデックスを探す
+            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "SpinThrowAttack" };
             int currentItem = 0;
             for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
             {
@@ -425,6 +423,43 @@ void BehaviorTreeEditor::DrawNodeTable()
                     ImGui::TreePop();
                 }
             }
+			else if (node.actionName == "SpinThrowAttack")
+			{
+				if (ImGui::TreeNode("Spin Throw Settings"))
+				{
+					ImGui::DragFloat("Attack Time", &node.spinThrowAttackInitData.attackTime, 0.01f);
+					ImGui::DragFloat("Move Speed", &node.spinThrowAttackInitData.moveSpeed, 0.1f);
+					ImGui::DragFloat("Move Start", &node.spinThrowAttackInitData.moveStartTime, 0.01f);
+					ImGui::DragFloat("Move End", &node.spinThrowAttackInitData.moveEndTime, 0.01f);
+					ImGui::DragFloat("Hitbox Start", &node.spinThrowAttackInitData.hitboxStartTime, 0.01f);
+					ImGui::DragFloat("Hitbox End", &node.spinThrowAttackInitData.hitboxEndTime, 0.01f);
+                    ImGui::DragFloat("Knockback", &node.spinThrowAttackInitData.knockback, 0.1f);
+                    ImGui::DragFloat3("Knockback Direction", &node.spinThrowAttackInitData.knockbackDirection.x, 0.1f);
+
+                    // ノックバック方向を正規化
+                    node.spinThrowAttackInitData.knockbackDirection = node.spinThrowAttackInitData.knockbackDirection.Normalize();
+
+                    // int型の場合は InputInt や DragInt を使用
+                    ImGui::InputInt("Damage", &node.spinThrowAttackInitData.damage);
+
+                    // ダメージリアクション
+                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+                    int currentReaction = static_cast<int>(node.spinThrowAttackInitData.damageReaction);
+                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                    {
+                        node.spinThrowAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                    }
+
+					// ジョイントタイプ
+					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+					int currentJoint = static_cast<int>(node.spinThrowAttackInitData.jointType);
+					if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+					{
+						node.spinThrowAttackInitData.jointType = static_cast<JointType>(currentJoint);
+					}
+					ImGui::TreePop();
+				}
+			}
 
 			// アクションがNoneでない場合はモーション設定UIも表示
             if (node.actionName != "None")

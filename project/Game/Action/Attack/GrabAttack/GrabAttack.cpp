@@ -17,6 +17,9 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 	damage_ = 0;
 	damageReaction_ = DamageReaction::None;
 	knockback_ = 0.0f;
+
+	// 攻撃の種類を掴みに設定する
+	attackType_ = AttackType::Grab;
 }
 
 /// @brief 実行

@@ -121,5 +121,8 @@ private:
 
 	/// @brief 防御状態を更新する
 	void UpdateGuardState();
+
+	/// @brief 回転掴み攻撃の更新処理
+	void SpinThrowAttackUpdate() override;
 };
 

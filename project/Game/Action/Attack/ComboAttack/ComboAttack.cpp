@@ -22,6 +22,9 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	knockback_ = initData.knockback;
 	knockbackDirection_ = initData.knockbackDirection.Normalize();
 	damageReaction_ = initData.damageReaction;
+
+	// 攻撃の種類をコンボに設定する
+	attackType_ = AttackType::Combo;
 }
 
 /// @brief 実行

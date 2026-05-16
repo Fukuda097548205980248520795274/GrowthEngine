@@ -261,6 +261,10 @@ public:
 	/// @return 
 	bool IsGrounded() const { return isGrounded_; }
 
+	/// @brief 掴み回転投げ攻撃中かどうか
+	/// @return 
+	bool IsSpinThrowAttacking()const { return currentAttack_ != nullptr && currentAttack_->GetType() == AttackType::SpinThrow; }
+
 
 protected:
 
@@ -406,6 +410,9 @@ protected:
 
 	/// @brief アクションの更新処理
 	void ActionUpdate();
+
+	/// @brief 回転掴み攻撃の更新処理
+	virtual void SpinThrowAttackUpdate();
 
 	/// @brief 今の攻撃
 	Attack* currentAttack_ = nullptr;

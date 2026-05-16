@@ -11,23 +11,13 @@
             "start": 31
         },
         {
-            "end": 7,
-            "id": 34,
-            "start": 31
-        },
-        {
-            "end": 18,
-            "id": 35,
-            "start": 31
-        },
-        {
-            "end": 21,
-            "id": 36,
-            "start": 31
-        },
-        {
             "end": 39,
             "id": 41,
+            "start": 31
+        },
+        {
+            "end": 43,
+            "id": 44,
             "start": 31
         }
     ],
@@ -54,102 +44,6 @@
             "type": 4
         },
         {
-            "action_name": "ComboAttack",
-            "combo_data": {
-                "attackTime": 0.30000001192092896,
-                "cancelEndTime": 0.3400000035762787,
-                "cancelStartTime": 0.23999999463558197,
-                "damage": 10,
-                "damageReaction": 1,
-                "hitboxEndTime": 0.2800000011920929,
-                "hitboxStartTime": 0.15000000596046448,
-                "jointType": 9,
-                "knockback": 0.30000001192092896,
-                "knockbackDirection": [
-                    0.0,
-                    0.0,
-                    1.0
-                ],
-                "moveEndTime": 0.2199999988079071,
-                "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099
-            },
-            "id": 6,
-            "input_pin": 7,
-            "motionName": "Player_Combo_1",
-            "motionType": 4,
-            "output_pin": -1,
-            "pos": [
-                820.0,
-                293.0
-            ],
-            "type": 5
-        },
-        {
-            "action_name": "ComboAttack",
-            "combo_data": {
-                "attackTime": 0.30000001192092896,
-                "cancelEndTime": 0.3400000035762787,
-                "cancelStartTime": 0.23999999463558197,
-                "damage": 10,
-                "damageReaction": 1,
-                "hitboxEndTime": 0.2800000011920929,
-                "hitboxStartTime": 0.15000000596046448,
-                "jointType": 8,
-                "knockback": 0.30000001192092896,
-                "knockbackDirection": [
-                    0.0,
-                    0.0,
-                    1.0
-                ],
-                "moveEndTime": 0.2199999988079071,
-                "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099
-            },
-            "id": 17,
-            "input_pin": 18,
-            "motionName": "Player_Combo_2",
-            "motionType": 4,
-            "output_pin": 19,
-            "pos": [
-                824.0,
-                407.0
-            ],
-            "type": 5
-        },
-        {
-            "action_name": "ComboAttack",
-            "combo_data": {
-                "attackTime": 0.30000001192092896,
-                "cancelEndTime": 0.3400000035762787,
-                "cancelStartTime": 0.23999999463558197,
-                "damage": 10,
-                "damageReaction": 3,
-                "hitboxEndTime": 0.2800000011920929,
-                "hitboxStartTime": 0.15000000596046448,
-                "jointType": 9,
-                "knockback": 1.5,
-                "knockbackDirection": [
-                    0.0,
-                    0.32487446069717407,
-                    0.9457572102546692
-                ],
-                "moveEndTime": 0.2199999988079071,
-                "moveSpeed": 9.199999809265137,
-                "moveStartTime": 0.11999999731779099
-            },
-            "id": 20,
-            "input_pin": 21,
-            "motionName": "Player_Combo_3",
-            "motionType": 4,
-            "output_pin": 22,
-            "pos": [
-                829.0,
-                525.0
-            ],
-            "type": 5
-        },
-        {
             "id": 29,
             "input_pin": 30,
             "output_pin": 31,
@@ -169,6 +63,33 @@
                 195.0
             ],
             "type": 4
+        },
+        {
+            "action_name": "SpinThrowAttack",
+            "id": 42,
+            "input_pin": 43,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "output_pin": -1,
+            "pos": [
+                835.0,
+                297.0
+            ],
+            "spin_throw_data": {
+                "attackTime": 5.0,
+                "hitboxEndTime": 4.0,
+                "hitboxStartTime": 0.5,
+                "knockback": 0.0,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "moveEndTime": 4.0,
+                "moveSpeed": 1.0,
+                "moveStartTime": 1.0
+            },
+            "type": 5
         }
     ]
 }

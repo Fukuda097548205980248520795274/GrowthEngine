@@ -1057,6 +1057,12 @@
     <Filter Include="Game\StageObject\Stairs">
       <UniqueIdentifier>{c41f22ec-2c79-456d-9e80-cdec9b98a281}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Attack\SpinThrowAttack">
+      <UniqueIdentifier>{88e82c74-4ab7-4ac7-8b3c-bc196eb9c696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\SpinThrowAttackNode">
+      <UniqueIdentifier>{53adfbb1-7fa2-462b-af4b-a01b168584ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1883,6 +1889,12 @@
     </ClCompile>
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp">
       <Filter>Game\StageObject\Stairs</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Attack\SpinThrowAttack\SpinThrowAttack.cpp">
+      <Filter>Game\Action\Attack\SpinThrowAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\SpinThrowAttackNode\SpinThrowAttackNode.cpp">
+      <Filter>Game\Node\ActionNode\SpinThrowAttackNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2824,6 +2836,12 @@
     </ClInclude>
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h">
       <Filter>Game\StageObject\Stairs</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Attack\SpinThrowAttack\SpinThrowAttack.h">
+      <Filter>Game\Action\Attack\SpinThrowAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\SpinThrowAttackNode\SpinThrowAttackNode.h">
+      <Filter>Game\Node\ActionNode\SpinThrowAttackNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

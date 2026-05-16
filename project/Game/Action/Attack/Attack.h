@@ -11,6 +11,15 @@ enum class AttackInputType
 	Heavy
 };
 
+// 攻撃の種類（コンボ、スピン投げ、掴みなど）を表す列挙型
+enum class AttackType
+{
+	None,
+	Combo,
+	SpinThrow,
+	Grab
+};
+
 enum class DamageReaction
 {
 	None, // ダメージなし
@@ -56,6 +65,10 @@ public:
 	/// @brief ノックバック力を取得する
 	/// @return 
 	float GetKnockback() const { return knockback_; }
+
+	/// @brief 攻撃の種類を取得する
+	/// @return 
+	AttackType GetType() const { return attackType_; }
 
 
 protected:
@@ -122,5 +135,8 @@ protected:
 
 	/// @brief 攻撃判定を出すジョイント
 	JointType jointType_ = JointType::HandR; // デフォルトは右手
+
+	/// @brief 攻撃の種類
+	AttackType attackType_ = AttackType::None;
 };
 

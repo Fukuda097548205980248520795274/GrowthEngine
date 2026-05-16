@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Action/Attack/SpinThrowAttack/SpinThrowAttack.h"
 
 #include <cmath>
 
@@ -501,5 +502,34 @@ void Player::UpdateGuardState()
 	else
 	{
 		isGuard_ = false;
+	}
+}
+
+/// @brief 回転掴み攻撃の更新処理
+void Player::SpinThrowAttackUpdate()
+{
+	if (!IsSpinThrowAttacking()) return;
+
+	auto spinThrowAttack = static_cast<SpinThrowAttack*>(currentAttack_);
+
+	// プレイヤーの移動入力を取得
+	bool hasMoveInput = false;
+	Vector2 inputDir = GetMoveInputDirection(hasMoveInput);
+
+	// 入力がある場合のみ、その方向に回転移動・投げ方向を更新する
+	if (hasMoveInput)
+	{
+		// カメラ基準の入力をワールド方向(XZ平面の3Dベクトル)へ変換する
+		Vector2 worldDir2D = ToWorldMoveDirectionFromCamera(inputDir, GetCameraYaw());
+		Vector3 worldDir3D(worldDir2D.x, 0.0f, worldDir2D.y);
+
+		// 攻撃クラスに入力方向を伝える
+		spinThrowAttack->SetInputDirection(worldDir3D);
+	}
+	else
+	{
+		// 入力がない場合は「今向いている方向」にするため、基底クラス（Character）の処理を呼び出す
+		// これにより、スティックを離したときはその場で現在の向きのまま回り、その方向に投げ飛ばします
+		Character::SpinThrowAttackUpdate();
 	}
 }
