@@ -16,7 +16,6 @@ enum class AttackType
 {
 	None,
 	Combo,
-	SpinThrow,
 	Grab
 };
 
