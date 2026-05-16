@@ -36,6 +36,9 @@ void ComboAttack::Exec()
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
 
+	// 移動速度を初期化する
+	currentMoveSpeed_ = moveSpeed_;
+
 	// 攻撃がヒットしたかどうかをリセットする
 	hasHit_ = false;
 }
@@ -162,7 +165,7 @@ void ComboAttack::Update()
 
 						// 防御されたら移動速度が半減する
 						if (!isHit)
-							moveSpeed_ *= 0.5f;
+							currentMoveSpeed_ *= 0.5f;
 
 						// ヒットエフェクトなどの処理があればここで行う
 						// PlayHitEffect(target->GetPosition());
@@ -195,7 +198,7 @@ void ComboAttack::Update()
 		Vector3 position = owner_->GetPosition();
 
 		// 位置を更新する
-		position += moveSpeed_ * (direction * engine_->GetDeltaTime());
+		position += currentMoveSpeed_ * (direction * engine_->GetDeltaTime());
 		owner_->SetPosition(position);
 	}
 

@@ -117,179 +117,152 @@ Character::~Character()
 /// @brief 更新処理
 void Character::Update()
 {
+	// 当たり判定の位置を更新する
 	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
 	collider->param_->center = GetWorldPosition() + Vector3(0.0f, 1.0f, 0.0f);
 
-	// デルタタイムの取得
+	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
 
-	// 着地しているかどうか
+	// 着地判定をチェックする
 	LandingCheck();
 
-	// つかまれている場合は、限界時間に達するまで自力で振りほどく処理を行う
+	// 最後のまとめた処理
+	auto FinalizeUpdate = [&]()
+		{
+			// 押し出し処理
+			UpdatePushOut();
+
+			// アニメーションの更新
+			UpdateAnimation();
+
+			// 基底クラスの更新処理
+			Entity::Update();
+
+			// 着地判定の位置を更新する
+			if (landingCollision_)
+				landingCollision_->param_->center = GetWorldPosition();
+		};
+
+	// 掴まれている場合の処理
 	if (IsGrabbed())
 	{
-		// 限界時間に達したら、自力で振りほどく
+		
 		if (grabbedTimer_ >= escapeTimeLimit_)
 		{
-			// つかみ状態を解除する前に、相手に軽い怯みを与える（振りほどいたことへのリアクション）
+			// 振りほどかれた際の怯みを入れる
 			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
 
-			// 自分の座標を相手の手の位置から少し前にオフセットした位置に移動する
+			// 掴んでいる相手から離れる
 			worldTransform_->rotate_ = Vector3(0.0f, grabber_->GetWorldTransform()->rotate_.y + std::numbers::pi_v<float>, 0.0f);
 			worldTransform_->translate_.y = grabber_->GetWorldPosition().y;
 
-			// 相手のつかみ状態を解除する
+			// 掴んでいる相手から離れる
 			grabber_->grabbedTarget_ = nullptr;
-
-			// 自分のポインタを解除し、タイマーをリセット
 			grabber_ = nullptr;
 			grabbedTimer_ = 0.0f;
 		}
 
-		// 押し出し判定の更新
-		UpdatePushOut();
-
-		// アニメーションの更新
-		UpdateAnimation();
-
-		// 基底クラスの更新
-		Entity::Update();
-
-		// 着地判定の更新
-		if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
-
+		// まとめた後処理を呼んで終了
+		FinalizeUpdate();
 		return;
 	}
 
-	// つかまれている場合は、つかみ時間を減らしながら、相手の位置を自分の手の位置に同期させる
+	// 掴んでいる場合の処理
 	if (IsGrabbing())
 	{
-		// 相手の座標を強制的に自分の手の位置（または目の前）に同期する
+		// 掴んでいる相手の位置を、掴んでいる自分の手の位置に合わせる
 		Matrix4x4 handMatrix = GetBoneMatrix(JointType::HandR);
-		Vector3 handPos = Vector3(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
-		const Vector3 grabOffset = Vector3(0.0f, -1.2f, 0.1f); // 手の前に少しオフセット
-		grabbedTarget_->SetPosition(handPos + grabOffset);
+		Vector3 handPos(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
+		grabbedTarget_->SetPosition(handPos + Vector3(0.0f, -1.2f, 0.1f));
 
-		// 自分の回転を取得する
-		Quaternion myRotation = GetRotation();
-
-		// つかまれている相手は自分の回転に対して、Y軸に180度回転した向きになるようにする
+		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる
 		Quaternion offsetRot = ToQuaternion(std::numbers::pi_v<float>, Vector3(0.0f, 1.0f, 0.0f));
-		Quaternion targetRotation = myRotation * offsetRot;
-
-		grabbedTarget_->SetRotation(targetRotation);
+		grabbedTarget_->SetRotation(GetRotation() * offsetRot);
 	}
 
 	// ノックバックの更新
 	if (knockbackVelocity_.Length() > 0.01f)
 	{
-		// ノックバックの速度に基づいて位置を更新する
-		Vector3 position = GetPosition();
-		position += knockbackVelocity_ * dt;
-		SetPosition(position);
-
-		// ノックバックの速度を減衰させる
+		// ノックバックの移動
+		SetPosition(GetPosition() + knockbackVelocity_ * dt);
 		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, dt);
 	}
 	else
 	{
-		// 十分に小さくなったらノックバックを止める
+		// ノックバックの速度が十分小さくなったら、ノックバックを終了する
 		knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 
-	// 怯み状態の更新
+	// ダメージリアクションの更新
 	if (IsDamageReaction())
 	{
 		damageReactionTimer_ -= dt;
 
-		// 次の状態へ移行するかどうかのフラグ
-		bool shouldTransition = false;
+		// ダメージリアクションがダウン中の場合は、起き上がり条件をチェックし、それ以外の場合はダメージリアクションの時間が十分経過したかをチェックする
+		bool shouldTransition = (currentDamageReaction_ == DamageReaction::DownLying)
+			? CheckGetUpCondition()
+			: (damageReactionTimer_ <= 0.0f);
 
-		// ダウン中のリアクションは、タイマーではなく、立ち上がり条件で判定する
-		if (currentDamageReaction_ == DamageReaction::DownLying)
-		{
-			shouldTransition = CheckGetUpCondition();
-		} 
-		else
-		{
-			// それ以外のリアクションはタイマーで判定
-			shouldTransition = (damageReactionTimer_ <= 0.0f);
-		}
-		
-		// タイマーが0以下になったら、次の状態へ移行する
 		if (shouldTransition)
 		{
-			// 怯みの状態遷移
 			switch (currentDamageReaction_)
 			{
+				// ダメージリアクションが終了したら、通常状態へ移行する
 			case DamageReaction::LightStagger:
 			case DamageReaction::HeavyStagger:
-				// 怯みが終わったら通常状態へ
+			case DamageReaction::DownGettingUp:
 				currentDamageReaction_ = DamageReaction::None;
 				break;
 
+				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
 			case DamageReaction::DownFalling:
-				// ダウン落下が終わったら、ダウン中状態へ
 				currentDamageReaction_ = DamageReaction::DownLying;
 				damageReactionTimer_ = 2.0f;
 				SetAnimation(hDownLyingMotion_, true, true);
 				break;
 
+				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
 			case DamageReaction::DownLying:
-				// ダウン中が終わったら、立ち上がり状態へ
 				currentDamageReaction_ = DamageReaction::DownGettingUp;
 				damageReactionTimer_ = 1.0f;
 				SetAnimation(hDownGetUpMotion_, true, false);
-				break;
-
-			case DamageReaction::DownGettingUp:
-				// 立ち上がりが終わったら、通常状態へ
-				currentDamageReaction_ = DamageReaction::None;
 				break;
 			}
 		}
 	}
 
-	// 回避中は回避移動のみ更新する
+	// 回避の更新
 	if (isAvoid_)
-	{
 		UpdateAvoid(dt);
-	}
 
-	// 構え中のみロックオン候補を更新する
+	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
-	// ロックオンターゲットがいる場合は、ターゲット方向を向く
+	// ロックオンターゲットがいて、掴んでおらず、ダウンしていない場合は、ターゲットの方向を向くようにする
 	if (lockOnTarget_ && !IsGrabbing() && !IsDown())
 	{
-		// 自分からターゲットへの方向を計算する
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;
 
-		// 十分な距離がある場合のみ目標回転を更新する
-		const float targetLengthSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-		if (targetLengthSq > kRotateThreshold)
+		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
+		if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
 		{
 			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
 			hasTargetYaw_ = true;
 		}
 	}
 
-	// 目標回転が有効な場合、現在の回転と目標回転の差を計算して、線形補間で回転を更新する
+	// ターゲットの方向へ向く処理
 	if (hasTargetYaw_)
 	{
 		float currentYaw = worldTransform_->rotate_.y;
+		float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
 
-		// 現在の回転と目標回転の差を計算する
-		const float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
-
-		// 目標回転に向かって秒基準の補間で回転を更新する
-		constexpr float kRotateLerpSpeedPerSecond = 12.0f;
-		const float rotateLerpT = 1.0f - std::exp(-kRotateLerpSpeedPerSecond * dt);
+		const float rotateLerpT = 1.0f - std::exp(-12.0f * dt);
 		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
 
-		// 回転が目標回転に十分近い場合、回転を目標回転に設定して、目標回転を無効にする
+		// 角度が十分近くなったら、ターゲットの方向を向ききったとみなす
 		if ((deltaYaw * deltaYaw) <= kRotateThreshold)
 		{
 			worldTransform_->rotate_.y = targetYaw_;
@@ -297,35 +270,20 @@ void Character::Update()
 		}
 	}
 
-
-	// ガードリアクション中は、目標回転に向かって回転を補間する
+	// ガードリアクション中は、攻撃してきた相手の方向を向くようにする
 	if (isGuardReaction_)
 	{
-		// 現在のY軸回転角度を取得
-		float currentRotationY = worldTransform_->rotate_.y;
+		float diff = targetRotationY_ - worldTransform_->rotate_.y;
+		const float pi = std::numbers::pi_v<float>;
 
-		// 目標角度との差分を計算
-		float diff = targetRotationY_ - currentRotationY;
+		// 角度の正規化
+		while (diff > pi) diff -= 2.0f * pi;
+		while (diff < -pi) diff += 2.0f * pi;
 
-		// 角度の差分を -π ～ +π ( -180度 ～ 180度 ) の範囲に正規化する
-		while (diff > std::numbers::pi)
-		{
-			diff -= 2.0f * std::numbers::pi_v<float>;
-		}
-		while (diff < -std::numbers::pi)
-		{
-			diff += 2.0f * std::numbers::pi_v<float>;
-		}
-
-		// 補間（デルタタイムを掛けてフレームレート非依存にする）
-		currentRotationY += diff * rotationSpeed_ * engine_->GetDeltaTime();
-
-		// モデルに新しい角度を適用
-		worldTransform_->rotate_.y = currentRotationY;
+		worldTransform_->rotate_.y += diff * rotationSpeed_ * dt;
 	}
 
-
-	// 補間後のY回転から向いている方向ベクトルを更新する
+	// 向きの更新
 	direction_.x = std::sin(worldTransform_->rotate_.y);
 	direction_.y = 0.0f;
 	direction_.z = std::cos(worldTransform_->rotate_.y);
@@ -336,21 +294,12 @@ void Character::Update()
 
 	// 位置の更新
 	worldTransform_->translate_ += currentVelocity_ * dt;
-	
-	// 落下の更新
+
+	// 落下処理
 	FallUpdate(dt);
 
-	// 押し出し判定の更新
-	UpdatePushOut();
-
-	// アニメーションの更新
-	UpdateAnimation();
-
-	// 基底クラスの更新
-	Entity::Update();
-
-	// 着地判定の更新
-	if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
+	// 最後のまとめた処理
+	FinalizeUpdate();
 }
 
 /// @brief 更新処理開始前のリセット
@@ -368,107 +317,80 @@ void Character::StartUpdate()
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition)
 {
+	// 攻撃や移動をキャンセルする
+	MoveStop();
+	currentAttack_ = nullptr;
+	currentMove_ = nullptr;
+	currentAvoid_ = nullptr;
+
+	// 回避とダッシュのフラグをリセットする
+	isAvoid_ = false;
+	isDash_ = false;
+	bufferedAttackInput_ = AttackInputType::None;
+
+	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
-		// 移動を強制停止
-		MoveStop();
-
-		// 現在実行中のアクションを強制キャンセル
-		currentAttack_ = nullptr;
-		currentMove_ = nullptr;
-		currentAvoid_ = nullptr;
-
-		// 状態フラグのリセット
-		isAvoid_ = false;
-		isDash_ = false;
-		bufferedAttackInput_ = AttackInputType::None;
-
-		// 自身から攻撃者へのベクトルを計算
 		Vector3 dirToAttacker = enemyPosition - GetWorldPosition();
-		dirToAttacker.y = 0.0f; // Y軸(高さ)は無視して水平方向のみにする
+		dirToAttacker.y = 0.0f; // 水平方向のみ
+
 		if (dirToAttacker.Length() > 0.0f)
 		{
 			dirToAttacker = dirToAttacker.Normalize();
-			
-			// 目標回転を攻撃者の方向に設定する（ガード成功のリアクションで振り向くため）
 			targetRotationY_ = std::atan2(dirToAttacker.x, dirToAttacker.z);
 		}
 
-		// ガード成功のフラグを立てる
 		isGuardReaction_ = true;
 		guardReactionTimer_ = 0.0f;
+		knockbackVelocity_ = -dirToAttacker * 2.0f;
 
-		//ノックバック用のベクトルを設定（攻撃方向の逆、または後退ベクトルなど）
-		knockbackVelocity_ = -dirToAttacker * 2.0f; 
-
-		// 防御成功モーションを再生
 		SetAnimation(hGuardHitMotion_, false, true);
 
-		// ガードされ、ダメージが通らなかったことを返す
-		return false;
+		return false; // ガード成功によりダメージ無効
 	}
-	else
+
+
+	// ダメージを受ける処理
+
+	// 体力を減らし、0未満にならないようにする
+	hp_ = std::max(0, hp_ - damage);
+
+	// ノックバック処理
+	if (knockback > 0.0f)
 	{
-		// 体力を減らす
-		hp_ -= damage;
-
-		// 移動を強制停止
-		MoveStop();
-
-		// 現在実行中のアクションを強制キャンセル
-		currentAttack_ = nullptr;
-		currentMove_ = nullptr;
-		currentAvoid_ = nullptr;
-
-		// 状態フラグのリセット
-		isAvoid_ = false;
-		isDash_ = false;
-		bufferedAttackInput_ = AttackInputType::None;
-
-		// ノックバック処理
-		if (knockback > 0.0f)
-		{
-			// ノックバック方向を正規化する
-			Vector3 backDirection = knockDirection.Normalize();
-
-			// ノックバック力を初速として設定する
-			// ※減衰させながら移動するため、少し大きめの値（* 10.0f など）をかけると丁度良くなります
-			knockbackVelocity_ = backDirection * (knockback * 10.0f);
-		}
-
-
-		// リアクション状態を更新
-		currentDamageReaction_ = damageReaction;
-
-		// 状態に合わせてモーションを再生し、タイマーを設定する
-		switch (currentDamageReaction_)
-		{
-		case DamageReaction::LightStagger:
-			SetAnimation(hDamageLightMotion_, true, false); // ループしない
-			damageReactionTimer_ = 0.3f; // 弱怯み時間
-			break;
-
-		case DamageReaction::HeavyStagger:
-			SetAnimation(hDamageHeavyMotion_, true, false);
-			damageReactionTimer_ = 1.0f; // 強怯み時間
-			break;
-
-		case DamageReaction::DownFalling:
-			SetAnimation(hDownFallMotion_, true, false);
-			damageReactionTimer_ = 0.3f; // 最初の倒れ込み時間
-			break;
-		}
-
-		// 体力が0以下になったら死亡フラグを立てる
-		if (hp_ <= 0)
-		{
-			hp_ = 0;
-			isDead_ = true;
-		}
-
-		// ダメージが通ったことを返す
-		return true;
+		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
 	}
+
+	// リアクションの更新とモーション再生
+	currentDamageReaction_ = damageReaction;
+	switch (currentDamageReaction_)
+	{
+		// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
+	case DamageReaction::LightStagger:
+		SetAnimation(hDamageLightMotion_, true, false);
+		damageReactionTimer_ = 0.3f;
+		break;
+
+		// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
+	case DamageReaction::HeavyStagger:
+		SetAnimation(hDamageHeavyMotion_, true, false);
+		damageReactionTimer_ = 1.0f;
+		break;
+
+		// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
+	case DamageReaction::DownFalling:
+		SetAnimation(hDownFallMotion_, true, false);
+		damageReactionTimer_ = 0.3f;
+		break;
+	}
+
+	// 死亡判定
+	if (hp_ == 0)
+	{
+		isDead_ = true;
+	}
+
+	return true; // ダメージが通った
 }
 
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
@@ -598,8 +520,8 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	// 入力された方向の長さを計算する
 	const float length = direction.Length();
 
-	// 長さが0以下の場合、目標速度を0にして終了する
-	if (length <= 0.0f)
+	// 長さが0の場合 や 地面に接していない場合は移動しない
+	if (length <= 0.0f || !IsGrounded())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;

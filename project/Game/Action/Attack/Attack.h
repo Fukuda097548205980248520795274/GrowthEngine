@@ -78,6 +78,9 @@ protected:
 	/// @brief 移動速度
 	float moveSpeed_ = 0.0f;
 
+	/// @brief 現在の移動速度
+	float currentMoveSpeed_ = 0.0f;
+
 	/// @brief 移動開始時間（攻撃開始からの遅延時間）
 	float moveStartTime_ = 0.0f;
 
