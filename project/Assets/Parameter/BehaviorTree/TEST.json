@@ -14,11 +14,6 @@
             "end": 39,
             "id": 41,
             "start": 31
-        },
-        {
-            "end": 43,
-            "id": 44,
-            "start": 31
         }
     ],
     "nodes": [
@@ -63,33 +58,6 @@
                 195.0
             ],
             "type": 4
-        },
-        {
-            "action_name": "SpinThrowAttack",
-            "id": 42,
-            "input_pin": 43,
-            "motionName": "Player_Combo_1",
-            "motionType": 4,
-            "output_pin": -1,
-            "pos": [
-                835.0,
-                297.0
-            ],
-            "spin_throw_data": {
-                "attackTime": 5.0,
-                "hitboxEndTime": 4.0,
-                "hitboxStartTime": 0.5,
-                "knockback": 0.0,
-                "knockbackDirection": [
-                    0.0,
-                    0.0,
-                    1.0
-                ],
-                "moveEndTime": 4.0,
-                "moveSpeed": 1.0,
-                "moveStartTime": 1.0
-            },
-            "type": 5
         }
     ]
 }

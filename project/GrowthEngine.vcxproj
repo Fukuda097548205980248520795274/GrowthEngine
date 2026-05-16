@@ -1019,7 +1019,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Attack\Attack.cpp" />
     <ClCompile Include="Game\Action\Attack\ComboAttack\ComboAttack.cpp" />
     <ClCompile Include="Game\Action\Attack\GrabAttack\GrabAttack.cpp" />
-    <ClCompile Include="Game\Action\Attack\SpinThrowAttack\SpinThrowAttack.cpp" />
     <ClCompile Include="Game\Action\Avoid\Avoid.cpp" />
     <ClCompile Include="Game\Action\Guard\Guard.cpp" />
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
@@ -1044,7 +1043,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Node\ActionNode\ActionNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.cpp" />
-    <ClCompile Include="Game\Node\ActionNode\SpinThrowAttackNode\SpinThrowAttackNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\CompositeNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.cpp" />
@@ -1346,7 +1344,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Attack\Attack.h" />
     <ClInclude Include="Game\Action\Attack\ComboAttack\ComboAttack.h" />
     <ClInclude Include="Game\Action\Attack\GrabAttack\GrabAttack.h" />
-    <ClInclude Include="Game\Action\Attack\SpinThrowAttack\SpinThrowAttack.h" />
     <ClInclude Include="Game\Action\Avoid\Avoid.h" />
     <ClInclude Include="Game\Action\Guard\Guard.h" />
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
@@ -1369,7 +1366,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Node\ActionNode\ActionNode.h" />
     <ClInclude Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.h" />
     <ClInclude Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.h" />
-    <ClInclude Include="Game\Node\ActionNode\SpinThrowAttackNode\SpinThrowAttackNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\CompositeNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\PersistentSelectorNode\PersistentSelectorNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\PersistentSequenceNode\PersistentSequenceNode.h" />

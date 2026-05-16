@@ -4,7 +4,6 @@
 #include <numbers>
 
 #include "Action/Attack/Attack.h"
-#include "Action/Attack/SpinThrowAttack/SpinThrowAttack.h"
 #include "Action/Move/Move.h"
 #include "Action/Avoid/Avoid.h"
 
@@ -655,9 +654,6 @@ void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLo
 /// @brief アクションの更新処理
 void Character::ActionUpdate()
 {
-	// 掴み回転攻撃の更新処理
-	SpinThrowAttackUpdate();
-
 	// 現在の攻撃がある場合は更新する
 	if (currentAttack_)
 		currentAttack_->Update();
@@ -672,17 +668,6 @@ void Character::ActionUpdate()
 	// 現在の回避がる場合は更新する
 	if (currentAvoid_)
 		currentAvoid_->Update();
-}
-
-/// @brief 回転投げ攻撃の更新処理
-void Character::SpinThrowAttackUpdate()
-{
-	// 掴み回転投げ攻撃中でない場合は何もしない
-	if (!IsSpinThrowAttacking())return;
-
-	// 回転投げ攻撃に更新する
-	auto spinThrowAttack = static_cast<SpinThrowAttack*>(currentAttack_);
-	spinThrowAttack->SetInputDirection(direction_);
 }
 
 /// @brief アニメーションの更新
