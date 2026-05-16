@@ -10,13 +10,9 @@ struct CombAttackInitData
 	float moveEndTime = 0.0f;
 	float cancelStartTime = 0.0f;
 	float cancelEndTime = 0.0f;
-	JointType jointType = JointType::HandR;
-	float hitboxStartTime = 0.0f;
-	float hitboxEndTime = 0.0f;
-	int32_t damage = 10;
-	DamageReaction damageReaction = DamageReaction::LightStagger;
-	float knockback = 0.0f;
-	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+
+	// 当たり判定
+	std::vector<HitboxDefinition> hitDefinitions;
 };
 
 class ComboAttack : public Attack
@@ -77,5 +73,10 @@ private:
 
 	/// @brief 次のヘビー攻撃
 	ComboAttack* nextHeavyAttack_ = nullptr;
+
+
+private:
+
+	std::vector<HitboxState> hitStates_;
 };
 

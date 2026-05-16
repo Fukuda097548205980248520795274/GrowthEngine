@@ -12,11 +12,7 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 	jointType_ = initData.jointType;
 	hitboxStartTime_ = initData.hitboxStartTime;
 	hitboxEndTime_ = initData.hitboxEndTime;
-
 	grabMaxTime_ = initData.grabTime;
-	damage_ = 0;
-	damageReaction_ = DamageReaction::None;
-	knockback_ = 0.0f;
 
 	// 攻撃の種類を掴みに設定する
 	attackType_ = AttackType::Grab;
@@ -143,4 +139,14 @@ void GrabAttack::Exit()
 {
 	DeleteHitbox();
 	Attack::Exit();
+}
+
+/// @brief 攻撃判定を削除する
+void GrabAttack::DeleteHitbox()
+{
+	if (hitbox_.collider_ != nullptr)
+	{
+		hitbox_.collider_->Delete();
+		hitbox_.collider_ = nullptr;
+	}
 }

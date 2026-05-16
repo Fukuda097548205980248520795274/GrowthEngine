@@ -104,13 +104,14 @@ void Player::Initialize()
 	attack1Data.moveEndTime = 0.07f;
 	attack1Data.cancelStartTime = 0.2f;
 	attack1Data.cancelEndTime = 0.5f;
-	attack1Data.jointType = JointType::HandR;
-	attack1Data.hitboxStartTime = 0.1f;
-	attack1Data.hitboxEndTime = 0.4f;
-	attack1Data.damage = 1;
-	attack1Data.damageReaction = DamageReaction::LightStagger;
-	attack1Data.knockback = 0.1f;
-	attack1Data.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+	attack1Data.hitDefinitions.resize(1);
+	attack1Data.hitDefinitions[0].jointType = JointType::HandR;
+	attack1Data.hitDefinitions[0].startTime = 0.1f;
+	attack1Data.hitDefinitions[0].endTime = 0.4f;
+	attack1Data.hitDefinitions[0].damage = 1;
+	attack1Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
+	attack1Data.hitDefinitions[0].knockback = 0.1f;
+	attack1Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 2段目の攻撃
 	CombAttackInitData attack2Data;
@@ -121,13 +122,14 @@ void Player::Initialize()
 	attack2Data.moveEndTime = 0.07f;
 	attack2Data.cancelStartTime = 0.2f;
 	attack2Data.cancelEndTime = 0.5f;
-	attack2Data.jointType = JointType::HandL;
-	attack2Data.hitboxStartTime = 0.1f;
-	attack2Data.hitboxEndTime = 0.4f;
-	attack2Data.damage = 1;
-	attack2Data.damageReaction = DamageReaction::LightStagger;
-	attack2Data.knockback = 0.1f;
-	attack2Data.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+	attack2Data.hitDefinitions.resize(1);
+	attack2Data.hitDefinitions[0].jointType = JointType::HandL;
+	attack2Data.hitDefinitions[0].startTime = 0.1f;
+	attack2Data.hitDefinitions[0].endTime = 0.4f;
+	attack2Data.hitDefinitions[0].damage = 1;
+	attack2Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
+	attack2Data.hitDefinitions[0].knockback = 0.1f;
+	attack2Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 3段目の攻撃
 	CombAttackInitData attack3Data;
@@ -138,13 +140,14 @@ void Player::Initialize()
 	attack3Data.moveEndTime = 0.07f;
 	attack3Data.cancelStartTime = 0.2f;
 	attack3Data.cancelEndTime = 0.5f;
-	attack3Data.jointType = JointType::HandR;
-	attack3Data.hitboxStartTime = 0.1f;
-	attack3Data.hitboxEndTime = 0.4f;
-	attack3Data.damage = 1;
-	attack3Data.damageReaction = DamageReaction::LightStagger;
-	attack3Data.knockback = 0.1f;
-	attack3Data.knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
+	attack3Data.hitDefinitions.resize(1);
+	attack3Data.hitDefinitions[0].jointType = JointType::HandR;
+	attack3Data.hitDefinitions[0].startTime = 0.1f;
+	attack3Data.hitDefinitions[0].endTime = 0.4f;
+	attack3Data.hitDefinitions[0].damage = 1;
+	attack3Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
+	attack3Data.hitDefinitions[0].knockback = 0.1f;
+	attack3Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	// 4段目の攻撃
 	CombAttackInitData attack4Data;
@@ -155,13 +158,14 @@ void Player::Initialize()
 	attack4Data.moveEndTime = 0.07f;
 	attack4Data.cancelStartTime = 0.2f;
 	attack4Data.cancelEndTime = 0.5f;
-	attack4Data.jointType = JointType::FootL;
-	attack4Data.hitboxStartTime = 0.1f;
-	attack4Data.hitboxEndTime = 0.4f;
-	attack4Data.damage = 1;
-	attack4Data.damageReaction = DamageReaction::DownFalling;
-	attack4Data.knockback = 0.5f;
-	attack4Data.knockbackDirection = Vector3(1.0f, 1.0f, 1.0f);
+	attack4Data.hitDefinitions.resize(1);
+	attack4Data.hitDefinitions[0].jointType = JointType::FootL;
+	attack4Data.hitDefinitions[0].startTime = 0.1f;
+	attack4Data.hitDefinitions[0].endTime = 0.4f;
+	attack4Data.hitDefinitions[0].damage = 1;
+	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::DownFalling;
+	attack4Data.hitDefinitions[0].knockback = 0.5f;
+	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(1.0f, 1.0f, 1.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));

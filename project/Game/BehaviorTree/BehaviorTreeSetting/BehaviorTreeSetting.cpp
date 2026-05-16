@@ -34,18 +34,26 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
             {
                 n["combo_data"]["attackTime"] = node.comboAttackInitData.attackTime;
                 n["combo_data"]["moveSpeed"] = node.comboAttackInitData.moveSpeed;
-                n["combo_data"]["damage"] = node.comboAttackInitData.damage;
-                n["combo_data"]["hitboxStartTime"] = node.comboAttackInitData.hitboxStartTime;
-				n["combo_data"]["hitboxEndTime"] = node.comboAttackInitData.hitboxEndTime;
-				n["combo_data"]["jointType"] = static_cast<int>(node.comboAttackInitData.jointType);
 				n["combo_data"]["moveStartTime"] = node.comboAttackInitData.moveStartTime;
 				n["combo_data"]["moveEndTime"] = node.comboAttackInitData.moveEndTime;
 				n["combo_data"]["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
 				n["combo_data"]["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
-				n["combo_data"]["damageReaction"] = static_cast<int>(node.comboAttackInitData.damageReaction);
-				n["combo_data"]["knockback"] = node.comboAttackInitData.knockback;
-				n["combo_data"]["knockbackDirection"] = 
-                { node.comboAttackInitData.knockbackDirection.x, node.comboAttackInitData.knockbackDirection.y, node.comboAttackInitData.knockbackDirection.z };
+
+                // 当たり判定の配列データを構築
+                json hitboxesJson = json::array();
+                for (const auto& def : node.comboAttackInitData.hitDefinitions)
+                {
+                    json h;
+                    h["jointType"] = static_cast<int>(def.jointType);
+                    h["startTime"] = def.startTime;
+                    h["endTime"] = def.endTime;
+                    h["radius"] = def.radius;
+                    h["damage"] = def.damage;
+                    h["damageReaction"] = static_cast<int>(def.damageReaction);
+                    h["knockback"] = def.knockback;
+                    h["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
+                    hitboxesJson.push_back(h);
+                }
             } 
             else if (node.actionName == "GrabAttack")
             {
@@ -131,20 +139,42 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                 {
                     node.comboAttackInitData.attackTime = n["combo_data"].value("attackTime", 0.0f);
                     node.comboAttackInitData.moveSpeed = n["combo_data"].value("moveSpeed", 0.0f);
-                    node.comboAttackInitData.damage = n["combo_data"].value("damage", 10);
-					node.comboAttackInitData.hitboxStartTime = n["combo_data"].value("hitboxStartTime", 0.0f);
-					node.comboAttackInitData.hitboxEndTime = n["combo_data"].value("hitboxEndTime", 0.0f);
-					node.comboAttackInitData.jointType = static_cast<JointType>(n["combo_data"].value("jointType", 0));
 					node.comboAttackInitData.moveStartTime = n["combo_data"].value("moveStartTime", 0.0f);
 					node.comboAttackInitData.moveEndTime = n["combo_data"].value("moveEndTime", 0.0f);
 					node.comboAttackInitData.cancelStartTime = n["combo_data"].value("cancelStartTime", 0.0f);
 					node.comboAttackInitData.cancelEndTime = n["combo_data"].value("cancelEndTime", 0.0f);
-					node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(n["combo_data"].value("damageReaction", 0));
-					node.comboAttackInitData.knockback = n["combo_data"].value("knockback", 0.0f);
-					node.comboAttackInitData.knockbackDirection.x = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
-					node.comboAttackInitData.knockbackDirection.y = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
-					node.comboAttackInitData.knockbackDirection.z = n["combo_data"].value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2];
                     node.comboAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
+
+                    // 配列の読み込み
+                    node.comboAttackInitData.hitDefinitions.clear();
+                    if (n["combo_data"].contains("hitDefinitions") && n["combo_data"]["hitDefinitions"].is_array())
+                    {
+                        for (const auto& h : n["combo_data"]["hitDefinitions"])
+                        {
+                            HitboxDefinition def;
+                            def.jointType = static_cast<JointType>(h.value("jointType", 0));
+                            def.startTime = h.value("startTime", 0.0f);
+                            def.endTime = h.value("endTime", 0.0f);
+                            def.radius = h.value("radius", 0.25f);
+                            def.damage = h.value("damage", 10);
+                            def.damageReaction = static_cast<DamageReaction>(h.value("damageReaction", 0));
+                            def.knockback = h.value("knockback", 0.0f);
+
+                            if (h.contains("knockbackDirection") && h["knockbackDirection"].is_array() && h["knockbackDirection"].size() == 3)
+                            {
+                                def.knockbackDirection.x = h["knockbackDirection"][0];
+                                def.knockbackDirection.y = h["knockbackDirection"][1];
+                                def.knockbackDirection.z = h["knockbackDirection"][2];
+                            }
+                            else
+                            {
+                                def.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+                            }
+
+							// 読み込んだ当たり判定をノードのリストに追加
+                            node.comboAttackInitData.hitDefinitions.push_back(def);
+                        }
+                    }
                 } 
                 else if (node.actionName == "GrabAttack" && n.contains("grab_data"))
                 {

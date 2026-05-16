@@ -368,33 +368,67 @@ void BehaviorTreeEditor::DrawNodeTable()
                     ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
                     ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
                     ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
-                    ImGui::DragFloat("Hitbox Start", &node.comboAttackInitData.hitboxStartTime, 0.01f);
-                    ImGui::DragFloat("Hitbox End", &node.comboAttackInitData.hitboxEndTime, 0.01f);
                     ImGui::DragFloat("Cancel Start", &node.comboAttackInitData.cancelStartTime, 0.01f);
                     ImGui::DragFloat("Cancel End", &node.comboAttackInitData.cancelEndTime, 0.01f);
-                    ImGui::DragFloat("Knockback", &node.comboAttackInitData.knockback, 0.1f);
-					ImGui::DragFloat3("Knockback Direction", &node.comboAttackInitData.knockbackDirection.x, 0.1f);
 
-					// ノックバック方向を正規化
-					node.comboAttackInitData.knockbackDirection = node.comboAttackInitData.knockbackDirection.Normalize();
+                    ImGui::Text("Hitboxes (Multiple)");
 
-                    // int型の場合は InputInt や DragInt を使用
-                    ImGui::InputInt("Damage", &node.comboAttackInitData.damage);
-
-                    // ダメージリアクション
-                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down"};
-                    int currentReaction = static_cast<int>(node.comboAttackInitData.damageReaction);
-                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+					// 当たり判定のリストを描画
+                    auto& hitDefs = node.comboAttackInitData.hitDefinitions;
+                    for (size_t i = 0; i < hitDefs.size(); ++i)
                     {
-                        node.comboAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+						// 各当たり判定のUIを描画するためにIDをプッシュ
+                        ImGui::PushID(static_cast<int>(i));
+
+                        if (ImGui::TreeNode((std::string("Hitbox ") + std::to_string(i + 1)).c_str()))
+                        {
+                            ImGui::DragFloat("Start Time", &hitDefs[i].startTime, 0.01f);
+                            ImGui::DragFloat("End Time", &hitDefs[i].endTime, 0.01f);
+                            ImGui::DragFloat("Radius", &hitDefs[i].radius, 0.01f);
+                            ImGui::InputInt("Damage", &hitDefs[i].damage);
+                            ImGui::DragFloat("Knockback", &hitDefs[i].knockback, 0.1f);
+                            ImGui::DragFloat3("Knockback Direction", &hitDefs[i].knockbackDirection.x, 0.1f);
+
+							// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
+                            hitDefs[i].knockbackDirection = hitDefs[i].knockbackDirection.Normalize();
+
+                            // ダメージリアクション
+                            const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+                            int currentReaction = static_cast<int>(hitDefs[i].damageReaction);
+                            if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames))) {
+                                hitDefs[i].damageReaction = static_cast<DamageReaction>(currentReaction);
+                            }
+
+                            // ジョイントタイプ
+                            const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+                            int currentJoint = static_cast<int>(hitDefs[i].jointType);
+                            if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames))) {
+                                hitDefs[i].jointType = static_cast<JointType>(currentJoint);
+                            }
+
+                            // 削除ボタン
+                            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+                            if (ImGui::Button("Delete Hitbox"))
+                            {
+                                hitDefs.erase(hitDefs.begin() + i);
+                                ImGui::PopStyleColor();
+                                ImGui::TreePop();
+                                ImGui::PopID();
+                                break; // 要素を削除した場合はループを抜ける（次のフレームで再描画される）
+                            }
+                            ImGui::PopStyleColor();
+
+                            ImGui::TreePop();
+                        }
+                        ImGui::PopID();
                     }
 
-					// ジョイントタイプ
-                    const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
-                    int currentJoint = static_cast<int>(node.comboAttackInitData.jointType);
-					if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    // 新しい判定を追加するボタン
+                    if (ImGui::Button("Add Hitbox"))
                     {
-                        node.comboAttackInitData.jointType = static_cast<JointType>(currentJoint);
+                        HitboxDefinition newDef;
+                        // 必要ならデフォルト値を設定
+                        hitDefs.push_back(newDef);
                     }
 
                     ImGui::TreePop();

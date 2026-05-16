@@ -15,16 +15,18 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	moveEndTime_ = initData.moveEndTime;
 	cancelStartTime_ = initData.cancelStartTime;
 	cancelEndTime_ = initData.cancelEndTime;
-	jointType_ = initData.jointType;
-	hitboxStartTime_ = initData.hitboxStartTime;
-	hitboxEndTime_ = initData.hitboxEndTime;
-	damage_ = initData.damage;
-	knockback_ = initData.knockback;
-	knockbackDirection_ = initData.knockbackDirection.Normalize();
-	damageReaction_ = initData.damageReaction;
 
 	// 攻撃の種類をコンボに設定する
 	attackType_ = AttackType::Combo;
+
+	// 当たり判定の定義からHitboxStateを作成してリストに追加する
+	for (const auto& def : initData.hitDefinitions)
+	{
+		HitboxState state;
+		state.def = def;
+		state.hasHit = false;
+		hitStates_.push_back(state);
+	}
 }
 
 /// @brief 実行
@@ -42,46 +44,44 @@ void ComboAttack::Exec()
 	// 移動速度を初期化する
 	currentMoveSpeed_ = moveSpeed_;
 
-	// 攻撃がヒットしたかどうかをリセットする
-	hasHit_ = false;
+	// 当たり判定は攻撃の中盤～終盤に出すのが自然なので、最初は当たり判定なしの状態にしておく
+	for (auto& state : hitStates_)
+	{
+		state.hasHit = false;
+		state.DeleteHitbox(); // 念のため削除
+	}
 }
 
 /// @brief 更新処理
 void ComboAttack::Update()
 {
-	// 回避直後ならこの攻撃をキャンセルする
+	// 攻撃中に回避した場合は攻撃を終了する
 	if(owner_->IsJustAvoided())
 	{
 		this->Exit();
 		return;
 	}
 
-	// コンボキャンセル受付時間内かチェック
+	// コンボキャンセル受付時間内であれば、次の攻撃への入力をチェックする
 	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
 		if (owner_)
 		{
+			// バッファされた攻撃入力を取得する
 			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
 
-			// 弱攻撃の先行入力があり、派生先が設定されている場合
 			if (bufferedInput == AttackInputType::Light && nextLightAttack_)
 			{
-				// 先行入力を消化する
+				// ライト攻撃への移行は、ヘビー攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
 				owner_->ConsumeBufferedAttackInput();
-
-				// この攻撃を終了して次の攻撃を実行する
 				this->Exit();
 				nextLightAttack_->Exec();
 				return;
 			}
 			else if (bufferedInput == AttackInputType::Heavy && nextHeavyAttack_)
 			{
-				// 強攻撃の先行入力があり、派生先が設定されている場合
-
-				// 先行入力を消化する
+				// ヘビー攻撃への移行は、ライト攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
 				owner_->ConsumeBufferedAttackInput();
-
-				// この攻撃を終了して次の攻撃を実行する
 				this->Exit();
 				nextHeavyAttack_->Exec();
 				return;
@@ -92,56 +92,44 @@ void ComboAttack::Update()
 	// 攻撃タイマーを更新する
 	attackTimer_ += engine_->GetDeltaTime();
 
-	if (jointType_ != JointType::None)
+	// 各当たり判定の状態を更新する
+	for (auto& state : hitStates_)
 	{
-		// 攻撃タイマーが攻撃判定の時間内であれば、攻撃判定を作成・更新する
-		if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)
+		// ジョイントタイプがNoneの場合は当たり判定を出さない
+		if (state.def.jointType == JointType::None) continue;
+
+		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
 		{
-			if (!hasHit_)
+			if (!state.hasHit)
 			{
-				// まだ判定が作られていなければ、実体を作成する
-				if (hitbox_.collider_ == nullptr)
-					hitbox_.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+				// 当たり判定がまだ存在しない場合は作成する
+				if (state.hitbox.collider_ == nullptr)
+					state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
 
-				// ジョイントの位置に攻撃判定を配置する
-				auto sphere = static_cast<Collision3DInstanceSphere*>(hitbox_.collider_);
-				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(jointType_);
+				// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
+				auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
+				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
 				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
-				sphere->param_->radius = 0.25f;
+				sphere->param_->radius = state.def.radius;
 
-				// 全キャラクターをループしてチェック
+				// ターゲットのリストを取得する
 				for (Character* target : Character::GetCharacters())
 				{
-					// ターゲットが自分自身の場合は無視する
-					if (target == owner_) continue;
+					// ターゲットが自分自身、同じ陣営、またはすでに倒れている場合はスキップする
+					if (target == owner_ || target->GetCharacterTag() == owner_->GetCharacterTag() || target->IsDead()) continue;
 
-					// ターゲットが同じ陣営の場合は無視する
-					if (target->GetCharacterTag() == owner_->GetCharacterTag()) continue;
-
-					// ターゲットがすでに死亡している場合は無視する
-					if (target->IsDead()) continue;
-
-					// 攻撃判定とターゲットの当たり判定を更新して衝突をチェックする
-					if (hitbox_.IsHit())
+					// 当たり判定がヒットした場合の処理
+					if (state.hitbox.IsHit())
 					{
-						// ターゲットの位置と攻撃者の位置から、攻撃者から見たターゲットの方向を計算する
+						// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
 						Vector3 forward = target->GetPosition() - owner_->GetPosition();
 						forward.y = 0.0f;
+						forward = (forward.Length() > 0.0f) ? forward.Normalize() : owner_->GetDirection();
 
-						// forwardベクトルの長さが0でないことを確認してから正規化する
-						if (forward.Length() > 0.0f)
-						{
-							forward = forward.Normalize();
-						} 
-						else 
-						{
-							forward = owner_->GetDirection();
-						}
-
-						// ワールドの上方向ベクトル
+						// ワールドの上方向（Y軸）を定義する
 						Vector3 worldUp(0.0f, 1.0f, 0.0f);
 
-						// forwardベクトルとworldUpベクトルから、攻撃者のローカル座標での右方向ベクトルを計算する
+						// 前方とワールドの上方向から右方向を計算する
 						Vector3 right;
 						right.x = worldUp.y * forward.z - worldUp.z * forward.y;
 						right.y = worldUp.z * forward.x - worldUp.x * forward.z;
@@ -154,32 +142,26 @@ void ComboAttack::Update()
 						up.z = forward.x * right.y - forward.y * right.x;
 						up = up.Normalize();
 
-						// 攻撃者のローカル座標でのノックバック方向をワールド座標に変換する
+						// 攻撃の定義に基づいて、ノックバックの方向を計算する
 						Vector3 knockBackDirection;
-						knockBackDirection.x = right.x * knockbackDirection_.x + up.x * knockbackDirection_.y + forward.x * knockbackDirection_.z;
-						knockBackDirection.y = right.y * knockbackDirection_.x + up.y * knockbackDirection_.y + forward.y * knockbackDirection_.z;
-						knockBackDirection.z = right.z * knockbackDirection_.x + up.z * knockbackDirection_.y + forward.z * knockbackDirection_.z;
-
-						// ノックバック方向を正規化する
+						knockBackDirection.x = right.x * state.def.knockbackDirection.x + up.x * state.def.knockbackDirection.y + forward.x * state.def.knockbackDirection.z;
+						knockBackDirection.y = right.y * state.def.knockbackDirection.x + up.y * state.def.knockbackDirection.y + forward.y * state.def.knockbackDirection.z;
+						knockBackDirection.z = right.z * state.def.knockbackDirection.x + up.z * state.def.knockbackDirection.y + forward.z * state.def.knockbackDirection.z;
 						knockBackDirection = knockBackDirection.Normalize();
 
 						// ターゲットにダメージを与える
-						bool isHit = target->OnDamage(damage_, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition());
+						bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition());
 
-						// 防御されたら移動速度が半減する
+						// ヒットしなかった場合は、移動速度を半減させる（ガードされた場合など）
 						if (!isHit)
 							currentMoveSpeed_ *= 0.5f;
 
-						// ヒットエフェクトなどの処理があればここで行う
-						// PlayHitEffect(target->GetPosition());
+						// ヒットしたことを記録する
+						state.hasHit = true;
+						
+						// ヒットしたら当たり判定を削除する（1回ヒットしたらその判定はもう当たらないようにする）
+						state.DeleteHitbox();
 
-						// 今回の攻撃で「すでに誰かに当たった」フラグを立てる
-						hasHit_ = true;
-
-						// 攻撃判定を削除する（ヒット後は判定が消える仕様の場合）
-						DeleteHitbox();
-
-						// ループを抜ける（複数ヒットさせない場合）
 						break;
 					}
 				}
@@ -187,28 +169,23 @@ void ComboAttack::Update()
 		} 
 		else
 		{
-			// 攻撃時間が終わったら、判定を削除する
-			DeleteHitbox();
+			// 攻撃の時間帯を過ぎたら当たり判定を削除する
+			state.DeleteHitbox();
 		}
 	}
 
-
-	// 移動時間内であれば移動する
+	// 攻撃の特定の時間帯は移動する
 	if(attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)
 	{
-		// 方向と位置を取得する
 		Vector3 direction = owner_->GetDirection();
 		Vector3 position = owner_->GetPosition();
-
-		// 位置を更新する
 		position += currentMoveSpeed_ * (direction * engine_->GetDeltaTime());
 		owner_->SetPosition(position);
 	}
 
-	// コンボキャンセル受付時間を過ぎたらこの攻撃を終了する
+	// 攻撃時間が経過したら基底の更新処理を呼び出す
 	if (attackTimer_ >= attackTime_)
 	{
-		// 既定の更新
 		Attack::Update();
 	}
 }
@@ -222,11 +199,12 @@ void ComboAttack::Reset()
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
 
-	// 攻撃がヒットしたかどうかをリセットする
-	hasHit_ = false;
-
-	// 攻撃判定が残っていれば削除する
-	DeleteHitbox();
+	// すべての判定をリセット・削除
+	for (auto& state : hitStates_)
+	{
+		state.hasHit = false;
+		state.DeleteHitbox();
+	}
 }
 
 /// @brief 次の攻撃があるかどうか
@@ -247,11 +225,12 @@ bool ComboAttack::HasNextAttack(AttackInputType inputType) const
 /// @brief 終了、中断
 void ComboAttack::Exit()
 {
-	// 攻撃判定が残っていれば削除する
-	DeleteHitbox();
-
-	// 攻撃がヒットしたかどうかをリセットする
-	hasHit_ = false;
+	// すべての判定を削除
+	for (auto& state : hitStates_)
+	{
+		state.hasHit = false;
+		state.DeleteHitbox();
+	}
 
 	// 基底の終了処理
 	Attack::Exit();

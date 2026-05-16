@@ -27,13 +27,3 @@ bool Attack::IsUse() const
 	// 現在の攻撃がこの攻撃であればtrue
 	return this == owner_->GetCurrentAttack();
 }
-
-/// @brief 攻撃判定を削除する
-void Attack::DeleteHitbox()
-{
-	if (hitbox_.collider_ != nullptr)
-	{
-		hitbox_.collider_->Delete();
-		hitbox_.collider_ = nullptr;
-	}
-}

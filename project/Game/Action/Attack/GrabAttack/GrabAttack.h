@@ -45,5 +45,26 @@ private:
 
 	// 投げ飛ばしが完了したか
 	bool hasThrown_ = false;
+
+
+private:
+
+	/// @brief 攻撃判定を削除する
+	void DeleteHitbox();
+
+	/// @brief 攻撃判定
+	AppCollider hitbox_;
+
+	/// @brief 攻撃判定開始時間
+	float hitboxStartTime_ = 0.0f;
+
+	/// @brief 攻撃判定終了時間
+	float hitboxEndTime_ = 0.0f;
+
+	/// @brief 攻撃判定がヒットしたかどうか
+	bool hasHit_ = false;
+
+	/// @brief 攻撃判定を出すジョイント
+	JointType jointType_ = JointType::HandR; // デフォルトは右手
 };
 

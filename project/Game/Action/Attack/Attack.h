@@ -57,14 +57,6 @@ public:
 	/// @return 
 	bool IsUse() const override;
 
-	/// @brief 攻撃力を取得する
-	/// @return 
-	int GetDamage() const { return damage_; }
-
-	/// @brief ノックバック力を取得する
-	/// @return 
-	float GetKnockback() const { return knockback_; }
-
 	/// @brief 攻撃の種類を取得する
 	/// @return 
 	AttackType GetType() const { return attackType_; }
@@ -99,43 +91,37 @@ protected:
 	/// @brief 移動終了時間
 	float moveEndTime_ = 0.0f;
 
-
-protected:
-
-	/// @brief 攻撃力
-	int damage_ = 10;
-
-	/// @brief ダメージリアクション
-	DamageReaction damageReaction_ = DamageReaction::LightStagger;
-
-	/// @brief ノックバック力（吹き飛ばす強さ）
-	float knockback_ = 0.0f;
-
-	/// @brief ノックバック方向（ワールド座標での方向ベクトル、通常は攻撃者から見た被攻撃者の方向を設定）
-	Vector3 knockbackDirection_ = Vector3(0.0f, 0.0f, 1.0f);
-
-
-protected:
-
-	/// @brief 攻撃判定を削除する
-	void DeleteHitbox();
-
-	/// @brief 攻撃判定
-	AppCollider hitbox_;
-
-	/// @brief 攻撃判定開始時間
-	float hitboxStartTime_ = 0.0f;
-
-	/// @brief 攻撃判定終了時間
-	float hitboxEndTime_ = 0.0f;
-
-	/// @brief 攻撃判定がヒットしたかどうか
-	bool hasHit_ = false;
-
-	/// @brief 攻撃判定を出すジョイント
-	JointType jointType_ = JointType::HandR; // デフォルトは右手
-
 	/// @brief 攻撃の種類
 	AttackType attackType_ = AttackType::None;
 };
 
+
+
+struct HitboxDefinition
+{
+	JointType jointType = JointType::HandR;
+	float startTime = 0.0f;
+	float endTime = 0.0f;
+	int32_t damage = 10;
+	DamageReaction damageReaction = DamageReaction::LightStagger;
+	float knockback = 0.0f;
+	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+	float radius = 0.25f;
+};
+
+struct HitboxState
+{
+	HitboxDefinition def;
+	AppCollider hitbox;
+	bool hasHit = false;
+
+	// この判定を削除するヘルパー関数
+	void DeleteHitbox()
+	{
+		if (hitbox.collider_ != nullptr)
+		{
+			hitbox.collider_->Delete();
+			hitbox.collider_ = nullptr;
+		}
+	}
+};
