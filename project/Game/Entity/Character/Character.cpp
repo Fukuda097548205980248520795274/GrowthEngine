@@ -176,9 +176,9 @@ void Character::Update()
 		Vector3 handPos(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
 		grabbedTarget_->SetPosition(handPos + Vector3(0.0f, -1.2f, 0.1f));
 
-		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる
-		Quaternion offsetRot = ToQuaternion(std::numbers::pi_v<float>, Vector3(0.0f, 1.0f, 0.0f));
-		grabbedTarget_->SetRotation(GetRotation() * offsetRot);
+		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる (Y軸のみ180度反転させる)
+		// Quaternionでの計算を避け、直接オイラー角を指定する
+		grabbedTarget_->worldTransform_->rotate_ = Vector3(0.0f, worldTransform_->rotate_.y + std::numbers::pi_v<float>, 0.0f);
 	}
 
 	// ノックバックの更新
@@ -757,24 +757,28 @@ void Character::UpdateAnimation()
 		}
 	}
 
-	// 掴まれモーションを優先して再生する
-	if (IsGrabbed())
+	// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
+	if (!IsGrabStrikeAttack())
 	{
-		SetAnimation(hGrabbedMotion_, false, true);
-	}
-	else if (isGuardReaction_)
-	{
-		// 防御成功時のノックバック中
-		guardReactionTimer_ += engine_->GetDeltaTime();
-		if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
+		// 掴まれている場合は掴まれモーションを再生する
+		if (IsGrabbed() && !IsGrabbedDamage())
 		{
-			isGuardReaction_ = false;
+			SetAnimation(hGrabbedMotion_, false, true);
 		}
-	} 
-	else if (IsGrabbing())
-	{
-		// つかみモーションを再生する
-		SetAnimation(hGrabMotion_, false, true);
+		else if (isGuardReaction_)
+		{
+			// 防御成功時のノックバック中
+			guardReactionTimer_ += engine_->GetDeltaTime();
+			if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
+			{
+				isGuardReaction_ = false;
+			}
+		}
+		else if (IsGrabbing())
+		{
+			// つかみモーションを再生する
+			SetAnimation(hGrabMotion_, false, true);
+		}
 	}
 
 
@@ -830,6 +834,26 @@ void Character::ReleaseGrab()
 		grabbedTarget_->grabber_ = nullptr;
 		grabbedTarget_ = nullptr;
 	}
+}
+
+/// @brief 掴んだ状態の攻撃をしているかどうか
+/// @return 
+bool Character::IsGrabStrikeAttack() const
+{
+	if (!currentAttack_)return false;
+
+	// 現在の攻撃が掴み攻撃かどうかは、攻撃のタイプが掴み攻撃かどうかで判断する
+	return currentAttack_->GetType() == AttackType::GrabStrike;
+}
+
+/// @brief 掴まれた状態で攻撃されているかどうか
+/// @return 
+bool Character::IsGrabbedDamage()const
+{
+	if (!grabber_)return false;
+
+	// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
+	return grabber_->IsGrabStrikeAttack();
 }
 
 /// @brief 落下の更新

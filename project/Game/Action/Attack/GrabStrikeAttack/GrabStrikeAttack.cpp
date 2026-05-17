@@ -40,8 +40,8 @@ void GrabStrikeAttack::Exec()
 		Exit();
 
 	// アニメーションを設定（ループなし）
-	owner_->SetAnimation(hAttackMotion_, false, false);
-	grabbedTarget_->SetAnimation(hTargetAnimation_, false, false);
+	owner_->SetAnimation(hAttackMotion_, true, false);
+	grabbedTarget_->SetAnimation(hTargetAnimation_, true, false);
 
 	// タイマーとフラグをリセット
 	attackTimer_ = 0.0f;
@@ -75,8 +75,8 @@ void GrabStrikeAttack::Update()
 	{
 		if (grabbedTarget_)
 		{
-			// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
-			Vector3 forward = grabbedTarget_->GetPosition() - owner_->GetPosition();
+			// まず、攻撃者の前方ベクトルを取得する
+			Vector3 forward = owner_->GetDirection();
 			forward.y = 0.0f;
 			forward = (forward.Length() > 0.0f) ? forward.Normalize() : owner_->GetDirection();
 

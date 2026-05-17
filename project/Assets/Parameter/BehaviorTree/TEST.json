@@ -132,25 +132,25 @@
         {
             "action_name": "GrabStrikeAttack",
             "grab_strike_data": {
-                "attackTime": 1.0,
-                "damageReaction": 0,
+                "attackTime": 3.0,
+                "damageReaction": 3,
                 "isRelease": true,
-                "knockback": 1.0,
+                "knockback": 2.0999999046325684,
                 "knockbackDirection": [
                     0.0,
-                    0.0,
-                    1.0
+                    0.7511799931526184,
+                    0.6600974798202515
                 ],
                 "moveEndTime": 1.0,
                 "moveSpeed": 5.5,
                 "moveStartTime": 0.0,
-                "releaseTime": 0.9100000262260437,
+                "releaseTime": 2.9000000953674316,
                 "targetMotionName": "Front",
-                "targetMotionType": 5
+                "targetMotionType": 10
             },
             "id": 56,
             "input_pin": 57,
-            "motionName": "Fighter",
+            "motionName": "Nimble",
             "motionType": 1,
             "output_pin": -1,
             "pos": [

@@ -476,6 +476,14 @@ void BehaviorTreeEditor::DrawNodeTable()
 					// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
 					node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
 
+                    // ダメージリアクション
+                    const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+                    int currentReaction = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
+                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                    {
+                        node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                    }
+
 
                     // モーションタイプ選択用のコンボボックス
                     const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };

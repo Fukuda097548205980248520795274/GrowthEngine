@@ -227,11 +227,12 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(n["grab_strike_data"].value("damageReaction", 0));
 
 					// ノックバックの方向は配列で保存されているので、読み込むときは配列からVector3に変換する
-                    if (n.contains("knockbackDirection") && n["knockbackDirection"].is_array() && n["knockbackDirection"].size() == 3)
+                    if (n.contains("grab_strike_data") && n["grab_strike_data"].contains("knockbackDirection") && 
+                        n["grab_strike_data"]["knockbackDirection"].is_array() && n["grab_strike_data"]["knockbackDirection"].size() == 3)
                     {
-                        node.grabStrikeAttackInitData.knockbackDirection.x = n["knockbackDirection"][0];
-                        node.grabStrikeAttackInitData.knockbackDirection.y = n["knockbackDirection"][1];
-                        node.grabStrikeAttackInitData.knockbackDirection.z = n["knockbackDirection"][2];
+                        node.grabStrikeAttackInitData.knockbackDirection.x = n["grab_strike_data"]["knockbackDirection"][0];
+                        node.grabStrikeAttackInitData.knockbackDirection.y = n["grab_strike_data"]["knockbackDirection"][1];
+                        node.grabStrikeAttackInitData.knockbackDirection.z = n["grab_strike_data"]["knockbackDirection"][2];
                     }
                     else
                     {

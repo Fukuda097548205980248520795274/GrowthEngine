@@ -268,6 +268,14 @@ public:
 	/// @brief 掴んでいる相手を取得する
 	/// @return 
 	Character* GetGrabTarget() const { return grabbedTarget_; }
+	
+	/// @brief 掴んだ状態の攻撃をしているかどうか
+	/// @return 
+	bool IsGrabStrikeAttack() const;
+
+	/// @brief 掴まれた状態で攻撃されているかどうか
+	/// @return 
+	bool IsGrabbedDamage()const;
 
 
 protected:
