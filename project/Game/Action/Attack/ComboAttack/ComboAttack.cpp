@@ -109,6 +109,9 @@ void ComboAttack::Update()
 			sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 			sphere->param_->radius = state.def.radius;
 
+			// 受け流したかどうかを示すフラグ
+			bool isParried = false;
+
 			// ターゲットのリストを取得する
 			for (Character* target : Character::GetCharacters())
 			{
@@ -151,7 +154,7 @@ void ComboAttack::Update()
 					knockBackDirection = knockBackDirection.Normalize();
 
 					// ターゲットにダメージを与える
-					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition());
+					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition() , owner_);
 
 					// ヒットしなかった場合は、移動速度を半減させる（ガードされた場合など）
 					if (!isHit)
@@ -167,6 +170,13 @@ void ComboAttack::Update()
 			// 攻撃の時間帯を過ぎたら当たり判定を削除する
 			state.DeleteHitbox();
 		}
+	}
+
+	// 攻撃中に受け流された場合は攻撃を終了する
+	if (owner_->IsParried())
+	{
+		this->Exit();
+		return;
 	}
 
 	// 攻撃の特定の時間帯は移動する

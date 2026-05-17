@@ -493,17 +493,17 @@ void Player::UpdateGuardState()
 	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら防御状態にならない
 	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack() || !IsGrounded())
 	{
-		isGuard_ = false;
+		SetGuard(false);
 		return;
 	}
 
 	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
 	if(inputGuard_ && inputGuard_->IsInput())
 	{
-		isGuard_ = true;
+		SetGuard(true);
 	}
 	else
 	{
-		isGuard_ = false;
+		SetGuard(false);
 	}
 }

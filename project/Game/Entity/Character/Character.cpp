@@ -206,6 +206,9 @@ void Character::Update()
 
 		if (shouldTransition)
 		{
+			// ダメージリアクションが終了したので、通常状態へ移行する
+			isParried_ = false;
+
 			switch (currentDamageReaction_)
 			{
 				// ダメージリアクションが終了したら、通常状態へ移行する
@@ -231,6 +234,10 @@ void Character::Update()
 			}
 		}
 	}
+
+	// ガードタイマーの更新
+	if (isGuard_)
+		guardActiveTimer_ += dt;
 
 	// 回避の更新
 	if (isAvoid_)
@@ -315,7 +322,8 @@ void Character::StartUpdate()
 /// @param staggerTime
 /// @param knockback
 /// @param knockDirection
-bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition)
+bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker)
 {
 	// 攻撃や移動をキャンセルする
 	MoveStop();
@@ -331,6 +339,20 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
+		// ガードが有効な時間内で、攻撃者が自分の前方にいる場合は、受け流し成功とする
+		if (guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		{
+			// 受け流す
+			ExecuteParry(attacker);
+
+			// 必要であれば自分に専用の受け流し成功モーションを設定
+			// SetAnimation(hParrySuccessMotion_, false, false);
+
+			// ダメージ無効
+			return false;
+		}
+
+
 		Vector3 dirToAttacker = enemyPosition - GetWorldPosition();
 		dirToAttacker.y = 0.0f; // 水平方向のみ
 
@@ -836,6 +858,14 @@ void Character::ReleaseGrab()
 	}
 }
 
+/// @brief 防御を設定する
+/// @param isGuard 
+void Character::SetGuard(bool isGuard)
+{
+	if (isGuard && !isGuard_) guardActiveTimer_ = 0.0f; // ガードした瞬間にリセット
+	isGuard_ = isGuard;
+}
+
 /// @brief 掴んだ状態の攻撃をしているかどうか
 /// @return 
 bool Character::IsGrabStrikeAttack() const
@@ -854,6 +884,30 @@ bool Character::IsGrabbedDamage()const
 
 	// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
 	return grabber_->IsGrabStrikeAttack();
+}
+
+/// @brief 受け流しを実行する
+/// @param attacker 
+void Character::ExecuteParry(Character* attacker)
+{
+	// 相手がいないときは処理しない
+	if (!attacker)return;
+
+	// 受け流しの位置と方向を計算する
+	Vector3 myPos = GetWorldPosition();
+	Vector3 myForward = GetDirection();
+
+	// 受け流しの位置は、相手から見て自分の正面方向の少し前にする
+	attacker->SetPosition(myPos - myForward * 0.2f);
+
+	// 受け流しのノックバックは、相手を自分の正面方向に吹き飛ばすようにする
+	float parryKnockbackPower = 1.0f;
+
+	// 相手にノックバックと怯みを与える
+	attacker->OnDamage(0, DamageReaction::HeavyStagger, parryKnockbackPower, attacker->GetDirection(), myPos);
+
+	// 受け流し状態を設定する
+	attacker->SetParried(true);
 }
 
 /// @brief 落下の更新
@@ -913,7 +967,10 @@ void Character::UpdatePushOut()
 		if (this == other) continue;
 
 		// ダウン中や掴み・掴まれ中など、めり込みを許容したい状態の場合は判定をスキップする
-		if (IsDown() || other->IsDown() || IsGrabbed() || other->IsGrabbed() || IsGrabbing() || other->IsGrabbing())
+		if (IsDown() || other->IsDown() ||
+			IsGrabbed() || other->IsGrabbed() ||
+			IsGrabbing() || other->IsGrabbing() ||
+			IsParried() || other->IsParried())
 		{
 			continue;
 		}

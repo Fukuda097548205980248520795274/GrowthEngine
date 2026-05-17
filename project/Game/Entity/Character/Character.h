@@ -103,7 +103,9 @@ public:
 	/// @param knockback 
 	/// @param knockDirection 
 	/// @param enemyPosition 
-	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback, const Vector3& knockDirection, const Vector3& enemyPosition);
+	/// @param attacker 
+	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr);
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
@@ -259,7 +261,7 @@ public:
 
 	/// @brief 防御を設定する
 	/// @param isGuard 
-	void SetGuard(bool isGuard) { isGuard_ = isGuard; }
+	void SetGuard(bool isGuard);
 
 	/// @brief 着地しているかどうか
 	/// @return 
@@ -276,6 +278,18 @@ public:
 	/// @brief 掴まれた状態で攻撃されているかどうか
 	/// @return 
 	bool IsGrabbedDamage()const;
+
+	/// @brief 受け流しを実行する
+	/// @param attacker 
+	void ExecuteParry(Character* attacker);
+
+	/// @brief 受け流されている状態を設定する
+	/// @param isParried 
+	void SetParried(bool isParried) { isParried_ = isParried; }
+
+	/// @brief 受け流されているかどうか
+	/// @return 
+	bool IsParried() const { return isParried_; }
 
 
 protected:
@@ -409,6 +423,18 @@ protected:
 
 	/// @brief 防御のリアクションの経過時間
 	float guardReactionTimer_ = 0.0f;
+
+
+protected:
+
+	// ガードしてからの経過時間
+	float guardActiveTimer_ = 0.0f;
+
+	// ジャストガード（受け流し）の受付時間
+	const float kJustGuardTime = 0.5f;
+
+	// 受け流されて体勢を崩している状態か
+	bool isParried_ = false;
 
 
 protected:

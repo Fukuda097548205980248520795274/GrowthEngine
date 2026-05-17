@@ -54,6 +54,9 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
                     h["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
                     hitboxesJson.push_back(h);
                 }
+
+				// コンボ攻撃のデータに当たり判定の配列を追加
+                n["combo_data"]["hitDefinitions"] = hitboxesJson;
             } 
             else if (node.actionName == "GrabAttack")
             {
@@ -91,6 +94,9 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 					h["damage"] = def.damage;
 					hitsJson.push_back(h);
 				}
+
+				// グラブストライク攻撃のデータにヒットの配列を追加
+				n["grab_strike_data"]["hits"] = hitsJson;
             }
 
 			if (node.actionName != "None")
