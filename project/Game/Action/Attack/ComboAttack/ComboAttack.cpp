@@ -54,8 +54,8 @@ void ComboAttack::Exec()
 /// @brief 更新処理
 void ComboAttack::Update()
 {
-	// 攻撃中に回避した場合は攻撃を終了する
-	if(owner_->IsJustAvoided())
+	// 攻撃中に回避、スタイルチェンジが行われた場合は、攻撃を終了する
+	if(owner_->IsJustAvoided() || owner_->IsStyleChanging())
 	{
 		this->Exit();
 		return;

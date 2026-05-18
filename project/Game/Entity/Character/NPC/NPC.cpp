@@ -77,6 +77,38 @@ void NPC::UpdateStanceStateByTargetDistance()
 	isStance_ = (distanceSq <= kNpcStanceDistanceSq);
 }
 
+/// @brief スタイルが変化したときの処理
+/// @param newStyle 
+void NPC::OnStyleChanged(FightStyle newStyle)
+{
+	// スタイルに応じたビヘイビアツリーを生成して設定する
+	behaviorTree_ = CreateBehaviorTreeForStyle(newStyle);
+}
+
+/// @brief スタイルに応じたビヘイビアツリーを生成する
+/// @param style 
+/// @return 
+std::unique_ptr<BehaviorTree> NPC::CreateBehaviorTreeForStyle(FightStyle style)
+{
+	// ビヘイビアツリー
+	std::unique_ptr<BehaviorTree> behaviorTree = nullptr;
+
+	switch (style)
+	{
+	// 旋嵐スタイル
+	case FightStyle::Tempest:
+
+		break;
+
+	// 撃鉄スタイル
+	case FightStyle::Hammer:
+
+		break;
+	}
+
+	return behaviorTree;
+}
+
 /// @brief 描画処理
 void NPC::Draw()
 {

@@ -33,7 +33,10 @@ enum class DamageReaction
 	DownLying,
 
 	// 立ち上がり
-	DownGettingUp
+	DownGettingUp,
+
+	// 受け流され
+	Parried
 };
 
 class Attack : public Action

@@ -26,6 +26,15 @@ private:
 	/// @brief ターゲットとの距離で構え状態を更新する
 	void UpdateStanceStateByTargetDistance();
 
+	/// @brief スタイルが変化したときの処理
+	/// @param newStyle 
+	void OnStyleChanged(FightStyle newStyle) override;
+
+	/// @brief スタイルに応じたビヘイビアツリーを生成する
+	/// @param style 
+	/// @return 
+	std::unique_ptr<BehaviorTree> CreateBehaviorTreeForStyle(FightStyle style);
+
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 

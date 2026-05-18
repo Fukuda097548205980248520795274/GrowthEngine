@@ -11,6 +11,13 @@ class Attack;
 class Move;
 class Avoid;
 
+enum class FightStyle
+{
+	None,
+	Tempest, // 旋嵐
+	Hammer, // 撃鉄
+};
+
 class Character : public Entity
 {
 public:
@@ -106,6 +113,12 @@ public:
 	/// @param attacker 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
 		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr);
+
+	/// @brief 受け流されたときの処理
+	/// @param pullPosition 
+	/// @param pushDirection 
+	/// @return 
+	virtual void OnParried(const Vector3& pullPosition, const Vector3& pushDirection);
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
@@ -283,13 +296,21 @@ public:
 	/// @param attacker 
 	void ExecuteParry(Character* attacker);
 
-	/// @brief 受け流されている状態を設定する
-	/// @param isParried 
-	void SetParried(bool isParried) { isParried_ = isParried; }
-
 	/// @brief 受け流されているかどうか
 	/// @return 
-	bool IsParried() const { return isParried_; }
+	bool IsParried() const { return currentDamageReaction_ == DamageReaction::Parried; }
+
+	/// @brief スタイルチェンジを開始する
+	/// @param style 
+	void StartStyleChange(FightStyle style);
+
+	/// @brief 現在のスタイルを取得する
+	/// @return 
+	FightStyle GetCurrentStyle() const { return currentStyle_; }
+
+	/// @brief スタイルチェンジ中かどうか
+	/// @return 
+	bool IsStyleChanging() const { return isStyleChanging_; }
 
 
 protected:
@@ -427,14 +448,25 @@ protected:
 
 protected:
 
+	/// @brief スタイルが変化したときの処理
+	/// @param newStyle 
+	virtual void OnStyleChanged(FightStyle newStyle) {}
+
+	/// @brief スタイルチェンジの更新処理
+	/// @param dt 
+	void UpdateStyleChange(float dt);
+
+	// 現在のスタイル
+	FightStyle currentStyle_ = FightStyle::None;
+
+	// 次のスタイル（スタイルチェンジ予約用）
+	FightStyle nextStyle_ = FightStyle::None;
+
 	// ガードしてからの経過時間
 	float guardActiveTimer_ = 0.0f;
 
 	// ジャストガード（受け流し）の受付時間
 	const float kJustGuardTime = 0.5f;
-
-	// 受け流されて体勢を崩している状態か
-	bool isParried_ = false;
 
 
 protected:
@@ -442,6 +474,17 @@ protected:
 	// バッファされた攻撃入力
 	AttackInputType bufferedAttackInput_ = AttackInputType::None;
 
+
+protected:
+
+	// スタイルチェンジのタイマー
+	float styleChangeTimer_ = 0.0f;
+
+	// スタイルチェンジ中かどうか
+	bool isStyleChanging_ = false;
+
+	// スタイルチェンジの継続時間
+	constexpr static float kStyleChangeDuration = 0.5f;
 
 
 protected:

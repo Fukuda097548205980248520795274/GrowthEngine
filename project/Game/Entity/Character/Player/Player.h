@@ -48,6 +48,13 @@ private:
 	/// @return 
 	bool CheckGetUpCondition()override;
 
+	/// @brief スタイルが変化したときの処理
+	/// @param newStyle 
+	void OnStyleChanged(FightStyle newStyle) override;
+
+	/// @brief スタイルチェンジ処理
+	void StyleChange();
+
 
 private:
 
@@ -80,6 +87,9 @@ private:
 
 	/// @brief ダウン後起き上がり入力
 	std::unique_ptr<InputGamepadButton> inputGetUp_ = nullptr;
+
+	/// @brief スタイルチェンジ入力
+	std::unique_ptr<InputGamepadButton> inputStyleChange_ = nullptr;
 
 
 	/// @brief 前方移動入力

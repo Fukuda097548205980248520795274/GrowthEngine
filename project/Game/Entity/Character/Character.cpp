@@ -130,6 +130,9 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// スタイル変化の更新
+			UpdateStyleChange(dt);
+
 			// 押し出し処理
 			UpdatePushOut();
 
@@ -206,15 +209,13 @@ void Character::Update()
 
 		if (shouldTransition)
 		{
-			// ダメージリアクションが終了したので、通常状態へ移行する
-			isParried_ = false;
-
 			switch (currentDamageReaction_)
 			{
 				// ダメージリアクションが終了したら、通常状態へ移行する
 			case DamageReaction::LightStagger:
 			case DamageReaction::HeavyStagger:
 			case DamageReaction::DownGettingUp:
+			case DamageReaction::Parried:
 				currentDamageReaction_ = DamageReaction::None;
 				break;
 
@@ -247,7 +248,7 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	// ロックオンターゲットがいて、掴んでおらず、ダウンしていない場合は、ターゲットの方向を向くようにする
-	if (lockOnTarget_ && !IsGrabbing() && !IsDown())
+	if (lockOnTarget_ && !IsGrabbing() && !IsDown() && !IsParried())
 	{
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;
@@ -415,6 +416,35 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	return true; // ダメージが通った
 }
 
+/// @brief 受け流されたときの処理
+/// @param pullPosition 
+/// @param pushDirection 
+/// @return 
+void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirection)
+{
+	// 攻撃や移動をキャンセルする
+	MoveStop();
+	currentAttack_ = nullptr;
+	currentMove_ = nullptr;
+	currentAvoid_ = nullptr;
+	isAvoid_ = false;
+	isDash_ = false;
+	bufferedAttackInput_ = AttackInputType::None;
+
+	// 受け流し成功の位置を設定する
+	SetPosition(pullPosition);
+
+	// 受け流し成功のリアクションを設定する
+	currentDamageReaction_ = DamageReaction::Parried;
+	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間（調整可）
+
+	// 受け流し成功のノックバックを設定する（相手を押し出す）
+	knockbackVelocity_ = pushDirection * 4.0f;
+
+	// 受け流し成功モーションを再生する
+	SetAnimation(hDamageHeavyMotion_, true, false);
+}
+
 /// @brief 掴みダメージを受けた時の処理
 /// @param damage 
 void Character::OnGrabDamage(int damage)
@@ -555,7 +585,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	const float length = direction.Length();
 
 	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || !IsGrounded())
+	if (length <= 0.0f || !IsGrounded() || IsStyleChanging())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;
@@ -890,24 +920,53 @@ bool Character::IsGrabbedDamage()const
 /// @param attacker 
 void Character::ExecuteParry(Character* attacker)
 {
-	// 相手がいないときは処理しない
-	if (!attacker)return;
+	if (!attacker) return;
 
-	// 受け流しの位置と方向を計算する
+	// 自分の位置と向きを取得する
 	Vector3 myPos = GetWorldPosition();
 	Vector3 myForward = GetDirection();
 
-	// 受け流しの位置は、相手から見て自分の正面方向の少し前にする
-	attacker->SetPosition(myPos - myForward * 0.2f);
+	// 引き込む位置
+	Vector3 pullPos = myPos - myForward * 0.2f;
 
-	// 受け流しのノックバックは、相手を自分の正面方向に吹き飛ばすようにする
-	float parryKnockbackPower = 1.0f;
+	// 受け流され処理を実行
+	attacker->OnParried(pullPos, attacker->GetDirection());
+}
 
-	// 相手にノックバックと怯みを与える
-	attacker->OnDamage(0, DamageReaction::HeavyStagger, parryKnockbackPower, attacker->GetDirection(), myPos);
+/// @brief スタイルチェンジを開始する
+/// @param style 
+void Character::StartStyleChange(FightStyle style)
+{
+	// すでにそのスタイルの場合や、スタイルチェンジ中の場合は何もしない
+	if (currentStyle_ == style || isStyleChanging_) return;
 
-	// 受け流し状態を設定する
-	attacker->SetParried(true);
+	// ダウン中や掴み・掴まれ中など、スタイルチェンジを許容しない状態の場合は何もしない
+	if (IsDown() || IsGrabbed()) return;
+
+	nextStyle_ = style;
+	styleChangeTimer_ = kStyleChangeDuration;
+	isStyleChanging_ = true;
+}
+
+/// @brief スタイルチェンジの更新処理
+/// @param dt 
+void Character::UpdateStyleChange(float dt)
+{
+	// スタイルチェンジ中でない場合は何もしない
+	if (!isStyleChanging_) return;
+
+	styleChangeTimer_ -= dt;
+
+	// スタイルチェンジの時間が十分経過したら、スタイルを変更する
+	if (styleChangeTimer_ <= 0.0f)
+	{
+		// スタイルを変更する
+		currentStyle_ = nextStyle_;
+		isStyleChanging_ = false;
+
+		// プレイヤーやNPCにスタイルが変更されたことを通知
+		OnStyleChanged(currentStyle_);
+	}
 }
 
 /// @brief 落下の更新

@@ -36,6 +36,9 @@ Player::Player(const InitData& initData) : Character(initData)
 {
 	// タグを指定する
 	characterTag_ = CharacterTag::PlayerSide;
+
+	// 戦闘スタイルを指定する
+	currentStyle_ = FightStyle::Tempest;
 }
 
 /// @brief 初期化
@@ -77,6 +80,9 @@ void Player::Initialize()
 
 	// ダウン後起き上がり入力の生成
 	inputGetUp_ = std::make_unique<InputGamepadButton>("Player_GetUp", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+
+	// スタイルチェンジ入力の生成
+	inputStyleChange_ = std::make_unique<InputGamepadButton>("Player_StyleChange", InputState::Trigger, 0, XINPUT_GAMEPAD_DPAD_DOWN);
 
 
 	// キーの前移動入力の生成
@@ -203,8 +209,8 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
-	// 怯み状態、つかみ状態、つかまれ状態、ダウン状態なら移動や攻撃の更新は行わず、つかまれ解き入力の受付やダウンからの起き上がり条件のチェックのみ行う
-	if (IsDamageReaction() || IsGrabbed() || IsDown())
+	// 怯み状態、つかみ状態、つかまれ状態、ダウン状態、スタイルチェンジ状態なら移動や攻撃の更新は行わず、つかまれ解き入力の受付やダウンからの起き上がり条件のチェックのみ行う
+	if (IsDamageReaction() || IsGrabbed() || IsDown() || IsStyleChanging())
 	{
 		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
 		if (IsGrabbed())
@@ -221,6 +227,9 @@ void Player::Update()
 		Character::Update();
 		return;
 	}
+
+	// スタイルチェンジ入力があればスタイルチェンジ処理を行う
+	StyleChange();
 
 	// 攻撃の更新処理
 	UpdateAttack();
@@ -299,7 +308,7 @@ void Player::UpdateAttack()
 	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime();
 
 	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
-	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown())
+	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsStyleChanging())
 		return;
 
 	// つかみ攻撃の入力があって、現在攻撃中でない場合はつかみ攻撃を実行する
@@ -358,7 +367,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 怯み状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら構え状態にならない
-	if(IsGrabbing() || IsGrabbed() || IsDown() || !IsGrounded())
+	if(IsGrabbing() || IsGrabbed() || IsDown() || !IsGrounded() || IsStyleChanging())
 	{
 		isStance_ = false;
 		return;
@@ -422,7 +431,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown() || !IsGrounded())
+	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown() || !IsGrounded() || IsStyleChanging())
 	{
 		isDash_ = false;
 		return;
@@ -446,7 +455,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 float Player::GetCurrentMoveSpeed() const
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中は移動速度が0になる
-	if (isGuard_ || IsGrabbed() || IsDown() || IsDamageReaction() || IsAttack())
+	if (isGuard_ || IsGrabbed() || IsDown() || IsDamageReaction() || IsAttack() || IsStyleChanging())
 		return 0.0f;
 
 	// 構え中は移動速度を半分にする
@@ -487,11 +496,40 @@ bool Player::CheckGetUpCondition()
 	return false;
 }
 
+/// @brief スタイルが変化したときの処理
+/// @param newStyle 
+void Player::OnStyleChanged(FightStyle newStyle)
+{
+	switch (newStyle)
+	{
+		// 旋嵐スタイル
+	case FightStyle::Tempest:
+
+		break;
+
+		// 撃鉄スタイル
+	case FightStyle::Hammer:
+
+		break;
+	}
+}
+
+/// @brief スタイルチェンジ処理
+void Player::StyleChange()
+{
+	// スタイルチェンジ入力があればスタイルを切り替える
+	if (inputStyleChange_ && inputStyleChange_->IsInput())
+	{
+		if (currentStyle_ == FightStyle::Tempest) { StartStyleChange(FightStyle::Hammer); }
+		if (currentStyle_ == FightStyle::Hammer) { StartStyleChange(FightStyle::Tempest); }
+	}
+}
+
 /// @brief 防御状態を更新する
 void Player::UpdateGuardState()
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら防御状態にならない
-	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack() || !IsGrounded())
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態、またはスタイルチェンジ状態なら防御状態にならない
+	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack() || !IsGrounded() || IsStyleChanging())
 	{
 		SetGuard(false);
 		return;
