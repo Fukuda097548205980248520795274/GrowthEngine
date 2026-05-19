@@ -31,16 +31,38 @@ private:
 	    スタイルチェンジ
 	---------------------*/
 
-	/// @brief スタイルチェンジ中のグレースケールエフェクト
-	std::unique_ptr<PostEffectGrayscale> styleChangeGrayscaleEffect_ = nullptr;
+
+	/// @brief スタイルチェンジ中のグレースケール
+	std::unique_ptr<PostEffectGrayscale> styleChangeGrayscale_ = nullptr;
 
 	// スタイルチェンジ中のグレースケールエフェクトの強さ
-	static constexpr float kStyleChangeGrayscaleIntensity = 0.3f;
+	static constexpr float kStyleChangeGrayscaleIntensity = 0.15f;
 
-	/// @brief 旋嵐スタイルのエフェクトカラー
-	static constexpr Vector3 kTempestStyleColor = Vector3(0.7f, 0.7f, 1.0f);
+	/// @brief 旋嵐スタイルのグレースケールカラー
+	static constexpr Vector3 kTempestStyleGrayscaleColor = Vector3(0.7f, 0.7f, 1.0f);
 
-	/// @brief 撃鉄スタイルのエフェクトカラー
-	static constexpr Vector3 kHammerStyleColor = Vector3(1.0f, 0.7f, 0.2f);
+	/// @brief 撃鉄スタイルのグレースケールカラー
+	static constexpr Vector3 kHammerStyleGrayscaleColor = Vector3(1.0f, 0.7f, 0.2f);
+
+
+
+	/// @brief スタイルチェンジ中の放射状ブラー
+	std::unique_ptr<PostEffectRadialBlur> styleChangeRadialBlur_ = nullptr;
+
+	// スタイルチェンジ中の放射状ブラーの強さ
+	static constexpr float kStyleChangeRadialBlurPower = 0.1f;
+
+
+	/// @brief スタイルチェンジ中のビネット
+	std::unique_ptr<PostEffectVignetting> styleChangeVignetting_ = nullptr;
+
+	// スタイルチェンジ中のビネットの強さ
+	static constexpr float kStyleChangeVignettingIntensity = 0.05f;
+
+	/// @brief 旋嵐スタイルのビネットカラー
+	static constexpr Vector3 kTempestStyleVignettingColor = Vector3(0.0f, 0.0f, 0.5f);
+
+	/// @brief 撃鉄スタイルのビネットカラー
+	static constexpr Vector3 kHammerStyleVignettingColor = Vector3(0.3f, 0.3f, 0.0f);
 };
 

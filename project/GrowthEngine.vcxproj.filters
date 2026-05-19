@@ -1069,6 +1069,9 @@
     <Filter Include="Engine\Include\Application\PostEffect\PostEffectGrayscale">
       <UniqueIdentifier>{1ab28f50-3f7b-4767-b1e1-391d3bdff1e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\PostEffect\PostEffectVignetting">
+      <UniqueIdentifier>{ee25eb5f-15ea-428b-bc1a-9931090546ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1907,6 +1910,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp">
       <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.cpp">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2860,6 +2866,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h">
       <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.h">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

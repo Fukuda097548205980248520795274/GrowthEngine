@@ -258,6 +258,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.cpp" />
     <ClCompile Include="Engine\Application\PrefabBase\BasePrefabBase.cpp" />
     <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp" />
     <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp">
@@ -1109,6 +1110,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h" />
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.h" />
     <ClInclude Include="Engine\Application\PrefabBase\BasePrefabBase.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h" />

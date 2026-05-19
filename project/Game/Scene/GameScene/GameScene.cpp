@@ -202,6 +202,7 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());
+
 }
 
 /// @brief カメラ制御の初期化
