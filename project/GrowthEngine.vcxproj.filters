@@ -1072,6 +1072,12 @@
     <Filter Include="Engine\Include\Application\PostEffect\PostEffectVignetting">
       <UniqueIdentifier>{ee25eb5f-15ea-428b-bc1a-9931090546ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Trail">
+      <UniqueIdentifier>{61c2c151-09f2-4588-940b-1bdb29f9fc20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOTrail">
+      <UniqueIdentifier>{4a9b7a07-97ba-4e6f-9faf-d4487478aa2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1913,6 +1919,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.cpp">
       <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOTrail\PSOTrail.cpp">
+      <Filter>Engine\Include\PSO\PSOTrail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2870,6 +2879,9 @@
     <ClInclude Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.h">
       <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOTrail\PSOTrail.h">
+      <Filter>Engine\Include\PSO\PSOTrail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -2901,6 +2913,9 @@
     </None>
     <None Include="Assets\Shader\MotionVector\MotionVector.hlsli">
       <Filter>Engine\Shader\MotionVector</Filter>
+    </None>
+    <None Include="Assets\Shader\Trail\Trail.hlsli">
+      <Filter>Engine\Shader\Trail</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -3056,6 +3071,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\AfterImage.CS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Trail\Trail.VS.hlsl">
+      <Filter>Engine\Shader\Trail</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Trail\Trail.PS.hlsl">
+      <Filter>Engine\Shader\Trail</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
