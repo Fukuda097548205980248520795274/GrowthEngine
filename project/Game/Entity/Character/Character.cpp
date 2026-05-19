@@ -80,6 +80,7 @@ Character::Character(const InitData& initData) : Entity()
 
 	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
 	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
+	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
 
 	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
 	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
@@ -150,7 +151,7 @@ void Character::Update()
 	// 掴まれている場合の処理
 	if (IsGrabbed())
 	{
-		
+		// 掴まれタイマーが過ぎたら、掴まれ状態を解除する
 		if (grabbedTimer_ >= escapeTimeLimit_)
 		{
 			// 振りほどかれた際の怯みを入れる
@@ -164,6 +165,9 @@ void Character::Update()
 			grabber_->grabbedTarget_ = nullptr;
 			grabber_ = nullptr;
 			grabbedTimer_ = 0.0f;
+
+			// ダメージリアクションを解除する
+			currentDamageReaction_ = DamageReaction::None;
 		}
 
 		// まとめた後処理を呼んで終了
@@ -221,6 +225,13 @@ void Character::Update()
 
 				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
 			case DamageReaction::DownFalling:
+				currentDamageReaction_ = DamageReaction::DownLying;
+				damageReactionTimer_ = 2.0f;
+				SetAnimation(hDownLyingMotion_, true, true);
+				break;
+
+				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
+			case DamageReaction::DownStagger:
 				currentDamageReaction_ = DamageReaction::DownLying;
 				damageReactionTimer_ = 2.0f;
 				SetAnimation(hDownLyingMotion_, true, true);
@@ -375,6 +386,45 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 	// ダメージを受ける処理
 
+	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
+	if (currentDamageReaction_ == DamageReaction::DownLying || currentDamageReaction_ == DamageReaction::DownStagger)
+	{
+		currentDamageReaction_ = DamageReaction::DownStagger;
+		SetAnimation(hDownStaggerMotion_, true, false);
+		damageReactionTimer_ = 0.3f;
+
+		// ダウン中はノックバックが入らない
+		knockback = 0.0f;
+	}
+	else
+	{
+		// リアクションの更新とモーション再生
+		currentDamageReaction_ = damageReaction;
+
+		switch (currentDamageReaction_)
+		{
+			// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
+		case DamageReaction::LightStagger:
+			SetAnimation(hDamageLightMotion_, true, false);
+			damageReactionTimer_ = 0.3f;
+			break;
+
+			// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
+		case DamageReaction::HeavyStagger:
+			SetAnimation(hDamageHeavyMotion_, true, false);
+			damageReactionTimer_ = 1.0f;
+			break;
+
+			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
+		case DamageReaction::DownFalling:
+			SetAnimation(hDownFallMotion_, true, false);
+			damageReactionTimer_ = 0.3f;
+			break;
+		}
+	}
+
+
+
 	// 体力を減らし、0未満にならないようにする
 	hp_ = std::max(0, hp_ - damage);
 
@@ -382,29 +432,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	if (knockback > 0.0f)
 	{
 		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
-	}
-
-	// リアクションの更新とモーション再生
-	currentDamageReaction_ = damageReaction;
-	switch (currentDamageReaction_)
-	{
-		// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
-	case DamageReaction::LightStagger:
-		SetAnimation(hDamageLightMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
-		break;
-
-		// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
-	case DamageReaction::HeavyStagger:
-		SetAnimation(hDamageHeavyMotion_, true, false);
-		damageReactionTimer_ = 1.0f;
-		break;
-
-		// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-	case DamageReaction::DownFalling:
-		SetAnimation(hDownFallMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
-		break;
 	}
 
 	// 死亡判定

@@ -595,6 +595,9 @@ protected:
 	/// @brief 重い怯みモーション
 	AnimationHandle hDamageHeavyMotion_ = 0;
 
+	/// @brief ダウン怯みモーション
+	AnimationHandle hDownStaggerMotion_ = 0;
+
 
 	/// @brief ダウンモーション
 	AnimationHandle hDownFallMotion_ = 0;

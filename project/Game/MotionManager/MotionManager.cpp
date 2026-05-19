@@ -145,6 +145,7 @@ void MotionManager::LoadStagger(const std::string& dir)
 {
 	table_[MotionType::Stagger]["Front"] = engine_->LoadAnimation(dir + "/stagger/stagger_000", "stagger_000.gltf");
 	table_[MotionType::Stagger]["Back"] = engine_->LoadAnimation(dir + "/stagger/stagger_001", "stagger_001.gltf");
+	table_[MotionType::Stagger]["Front_Down"] = engine_->LoadAnimation(dir + "/stagger/stagger_002", "stagger_002.gltf");
 }
 
 /// @brief 掴みモーション読み込み
