@@ -92,3 +92,13 @@ Vector3 Lerp(const Vector3& start, const Vector3& end, float t)
 {
 	return (1.0f - t) * start + t * end;
 }
+
+/// @brief 線形補間
+/// @param start 
+/// @param end 
+/// @param t 
+/// @return 
+float Lerp(float start, float end, float t)
+{
+	return (1.0f - t) * start + t * end;
+}

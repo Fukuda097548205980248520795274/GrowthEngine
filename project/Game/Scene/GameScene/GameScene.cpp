@@ -32,6 +32,10 @@ void GameScene::Initialize()
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
 
+	// ポストエフェクトマネージャの生成と初期化
+	postEffectManager_ = std::make_unique<PostEffectManager>();
+	postEffectManager_->Initialize();
+
 	// モーションマネージャのエディタの生成と初期化
 	motionManagerEditor_ = std::make_unique<MotionManagerEditor>();
 
@@ -195,6 +199,9 @@ void GameScene::Draw()
 
 	// 敵の描画
 	enemy_->Draw();
+
+	// ポストエフェクトの描画処理
+	postEffectManager_->Draw(player_.get());
 }
 
 /// @brief カメラ制御の初期化

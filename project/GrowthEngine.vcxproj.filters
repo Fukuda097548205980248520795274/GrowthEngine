@@ -1063,6 +1063,12 @@
     <Filter Include="Game\Node\ActionNode\GrabStrikeAttackNode">
       <UniqueIdentifier>{f035dd18-d9ab-4669-937d-49bc36072975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\PostEffectManager">
+      <UniqueIdentifier>{03a9b087-0f93-4549-b1fd-b5bac2a9dcac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PostEffect\PostEffectGrayscale">
+      <UniqueIdentifier>{1ab28f50-3f7b-4767-b1e1-391d3bdff1e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1895,6 +1901,12 @@
     </ClCompile>
     <ClCompile Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.cpp">
       <Filter>Game\Node\ActionNode\GrabStrikeAttackNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PostEffectManager\PostEffectManager.cpp">
+      <Filter>Game\PostEffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2842,6 +2854,12 @@
     </ClInclude>
     <ClInclude Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.h">
       <Filter>Game\Node\ActionNode\GrabStrikeAttackNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PostEffectManager\PostEffectManager.h">
+      <Filter>Game\PostEffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

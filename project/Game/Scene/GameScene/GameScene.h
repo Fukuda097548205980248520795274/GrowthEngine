@@ -7,6 +7,7 @@
 #include "StageObject/Floor/Floor.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
+#include "PostEffectManager/PostEffectManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 
@@ -53,6 +54,9 @@ private:
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
+
+	/// @brief ポストエフェクトマネージャ
+	std::unique_ptr<PostEffectManager> postEffectManager_ = nullptr;
 
 
 	// モーションマネージャエディタ

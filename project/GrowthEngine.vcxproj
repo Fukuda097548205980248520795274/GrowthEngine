@@ -253,6 +253,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp" />
     <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp" />
     <ClCompile Include="Engine\Application\Light\BaseLight.cpp" />
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1053,6 +1054,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Node\ConditionNode\ConditionNode.cpp" />
     <ClCompile Include="Game\Node\Node.cpp" />
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp" />
+    <ClCompile Include="Game\PostEffectManager\PostEffectManager.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
@@ -1105,6 +1107,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h" />
     <ClInclude Include="Engine\Application\Light\BaseLight.h" />
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h" />
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h" />
     <ClInclude Include="Engine\Application\PrefabBase\BasePrefabBase.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h" />
@@ -1378,6 +1381,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Node\ConditionNode\ConditionNode.h" />
     <ClInclude Include="Game\Node\Node.h" />
     <ClInclude Include="Game\PivotPoint\PivotPoint.h" />
+    <ClInclude Include="Game\PostEffectManager\PostEffectManager.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
     <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />

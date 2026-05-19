@@ -39,6 +39,7 @@
 #include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
 
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
+#include "Application/PostEffect/PostEffectGrayscale/PostEffectGrayscale.h"
 
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"

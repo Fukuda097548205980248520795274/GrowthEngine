@@ -195,3 +195,10 @@ Vector3 SphericalCoordinate(float radius, float theta, float phi);
 /// @param t
 /// @return 
 Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+
+/// @brief 線形補間
+/// @param start 
+/// @param end 
+/// @param t 
+/// @return 
+float Lerp(float start, float end, float t);

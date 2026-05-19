@@ -308,6 +308,18 @@ public:
 	/// @return 
 	FightStyle GetCurrentStyle() const { return currentStyle_; }
 
+	/// @brief 次のスタイルを取得する
+	/// @return 
+	FightStyle GetNextStyle() const { return nextStyle_; }
+
+	/// @brief スタイルチェンジの経過時間を取得する
+	/// @return 
+	float GetStyleChangeTimer() const { return styleChangeTimer_; }
+
+	/// @brief スタイルチェンジの時間を取得する
+	/// @return 
+	float GetStyleChangeDuration() const { return kStyleChangeDuration; }
+
 	/// @brief スタイルチェンジ中かどうか
 	/// @return 
 	bool IsStyleChanging() const { return isStyleChanging_; }
