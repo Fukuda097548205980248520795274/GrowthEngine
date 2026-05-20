@@ -59,7 +59,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->emitTime.emit = 0.1f;
 	param_->speed.start = 6.0f;
 	param_->speed.end = 6.0f;
-	param_->blendMode = Particle3D::BlendMode::Add;
+	param_->blendMode = BlendMode::kAdd;
 	param_->count = 1;
 	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
@@ -246,7 +246,7 @@ void Engine::Particle3DData::Reset()
 		param_->emitTime.emit = 0.1f;
 		param_->speed.start = 6.0f;
 		param_->speed.end = 6.0f;
-		param_->blendMode = Particle3D::BlendMode::Add;
+		param_->blendMode = BlendMode::kAdd;
 		param_->count = 1;
 		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
@@ -523,7 +523,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	------------------------*/
 
 	// PSOの設定
-	psoDraw_->Register(commandList , static_cast<int32_t>(param_->blendMode));
+	psoDraw_->Register(commandList , param_->blendMode);
 
 	// 頂点を登録する
 	modelStore_->Register(commandList, param_->hModel, 0);
@@ -562,7 +562,7 @@ void Engine::Particle3DData::DebugParameter()
 		int32_t blendModeIndex = static_cast<int32_t>(param_->blendMode);
 		if (ImGui::Combo("BlendMode", &blendModeIndex, blendMode, IM_ARRAYSIZE(blendMode)))
 		{
-			param_->blendMode = static_cast<Particle3D::BlendMode>(blendModeIndex);
+			param_->blendMode = static_cast<BlendMode>(blendModeIndex);
 		}
 		
 		ImGui::Text("\n");

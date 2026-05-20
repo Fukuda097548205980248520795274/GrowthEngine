@@ -4,6 +4,7 @@
 #include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
+#include "PSO/EnumBlendMode/EnumBlendMode.h"
 
 namespace Engine
 {
@@ -22,17 +23,6 @@ namespace Engine
 		{
 			Direction,
 			Position
-		};
-
-		// ブレンドモード
-		enum class BlendMode
-		{
-			None,
-			Normal,
-			Add,
-			Subtract,
-			Multiply,
-			Screen,
 		};
 
 		struct Emitter
@@ -146,6 +136,9 @@ namespace Engine
 		/// @brief パラメータ
 		struct Param
 		{
+			// ブレンドモード
+			BlendMode blendMode = BlendMode::kAdd;
+
 			// 位置
 			std::vector<Emitter> emitter;
 
@@ -190,9 +183,6 @@ namespace Engine
 			// 引力
 			Attract attract;
 
-
-			// ブレンドモード
-			BlendMode blendMode = BlendMode::Add;
 
 			/// @brief テクスチャハンドル
 			TextureHandle hTexture;

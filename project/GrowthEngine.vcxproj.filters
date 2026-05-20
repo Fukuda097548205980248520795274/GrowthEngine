@@ -2917,6 +2917,9 @@
     <None Include="Assets\Shader\Trail\Trail.hlsli">
       <Filter>Engine\Shader\Trail</Filter>
     </None>
+    <None Include="Assets\Shader\Particle3D\Particle3D.hlsli">
+      <Filter>Engine\Shader\Particle3D</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Fullscreen\Fullscreen.VS.hlsl">
