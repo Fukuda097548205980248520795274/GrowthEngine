@@ -1,4 +1,4 @@
-#include "PrefabSpriteResource.h"
+#include "Prefab2DSpriteData.h"
 #include "Store/TextureStore/TextureStore.h"
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
@@ -15,7 +15,7 @@
 /// @param heap 
 /// @param device 
 /// @param log 
-void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
+void Engine::Prefab2DSpriteData::Initialize(VertexBufferResource<SpriteVertexData>* vertexResource, IndexBufferResource* indexResource,
 	TextureStore* textureStore, TextureHandle hTexture, Camera2DStore* cameraStore, DX12Heap* heap, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
@@ -93,14 +93,14 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 }
 
 /// @brief 更新処理
-void Engine::PrefabSpriteResource::Update()
+void Engine::Prefab2DSpriteData::Update()
 {
 	// 終了したインスタンスを削除する
 	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceSprite>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット
-void Engine::PrefabSpriteResource::Reset()
+void Engine::Prefab2DSpriteData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -139,7 +139,7 @@ void Engine::PrefabSpriteResource::Reset()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DSpriteData::Register(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// 読み込まれていないと処理しない
 	if (!isLoad_)return;
@@ -173,7 +173,7 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 
 /// @brief インスタンスを作成する
 /// @return 
-void* Engine::PrefabSpriteResource::CreateInstance()
+void* Engine::Prefab2DSpriteData::CreateInstance()
 {
 	// インスタンスを生成する
 	std::unique_ptr<PrefabInstanceSprite> instance =
@@ -190,7 +190,7 @@ void* Engine::PrefabSpriteResource::CreateInstance()
 
 /// @brief インスタンスのドローコール
 /// @param param 
-void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Instance::Param* param)
+void Engine::Prefab2DSpriteData::InstanceDrawCall(const Prefab2D::Sprite::Instance::Param* param)
 {
 	// nullptrチェック
 	assert(param);
@@ -224,7 +224,7 @@ void Engine::PrefabSpriteResource::InstanceDrawCall(const Prefab2D::Sprite::Inst
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::PrefabSpriteResource::DebugParameter()
+void Engine::Prefab2DSpriteData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 

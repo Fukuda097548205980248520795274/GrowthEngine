@@ -8,7 +8,7 @@ class PrefabInstanceSprite;
 
 namespace Engine
 {
-	class PrefabSpriteResource : public Prefab2DBaseData
+	class Prefab2DSpriteData : public Prefab2DBaseData
 	{
 	public:
 
@@ -17,7 +17,7 @@ namespace Engine
 		/// @param hTexture 
 		/// @param numInstance 
 		/// @param name 
-		PrefabSpriteResource(Prefab2DHandle hPrefab2D, uint32_t numInstance, const std::string& name, Prefab2DParameter* parameter)
+		Prefab2DSpriteData(Prefab2DHandle hPrefab2D, uint32_t numInstance, const std::string& name, Prefab2DParameter* parameter)
 			: Prefab2DBaseData(hPrefab2D, numInstance, name, parameter) {
 		}
 

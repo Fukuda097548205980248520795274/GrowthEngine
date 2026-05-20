@@ -1,5 +1,5 @@
 #include "Prefab2DStore.h"
-#include "Prefab2DData/PrefabSpriteResource/PrefabSpriteResource.h"
+#include "Prefab2DData/Prefab2DSpriteData/Prefab2DSpriteData.h"
 
 /// @brief コンストラクタ
 Engine::Prefab2DStore::Prefab2DStore()
@@ -90,7 +90,7 @@ Prefab2DHandle Engine::Prefab2DStore::Load(const std::string& name, TextureHandl
 	nameTable_[name] = handle;
 
 	// データの生成と初期化
-	std::unique_ptr<PrefabSpriteResource> data = std::make_unique<PrefabSpriteResource>(handle, numInstance, name, parameter_.get());
+	std::unique_ptr<Prefab2DSpriteData> data = std::make_unique<Prefab2DSpriteData>(handle, numInstance, name, parameter_.get());
 	data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, cameraStore, heap, device, log);
 	dataTable_.push_back(std::move(data));
 

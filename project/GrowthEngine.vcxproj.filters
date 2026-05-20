@@ -679,9 +679,6 @@
     <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData">
       <UniqueIdentifier>{e3b231d0-9f62-448c-ad19-a3d5dd89111c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource">
-      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Math\Vector\VectorInt2">
       <UniqueIdentifier>{e3770771-401f-4778-8eb7-96988475fa60}</UniqueIdentifier>
     </Filter>
@@ -1078,6 +1075,9 @@
     <Filter Include="Engine\Include\PSO\PSOTrail">
       <UniqueIdentifier>{4a9b7a07-97ba-4e6f-9faf-d4487478aa2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData">
+      <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1356,8 +1356,8 @@
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.cpp">
-      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource</Filter>
+    <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData\Prefab2DSpriteData.cpp">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectStore.cpp">
       <Filter>Engine\Include\Store\PostEffectStore</Filter>
@@ -2261,8 +2261,8 @@
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource\PrefabSpriteResource.h">
-      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\PrefabSpriteResource</Filter>
+    <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData\Prefab2DSpriteData.h">
+      <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\PrefabDataForGPU\PrefabDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\PrefabDataForGPU</Filter>
