@@ -23,20 +23,50 @@ namespace Engine
 		/// @brief 色
 		Vector4 color;
 
+		/// @brief 初期の色
+		Vector4 startColor;
+
+		/// @brief 最後の色
+		Vector4 endColor;
+
 		/// @brief 方向
 		Vector3 direction;
 
+		// 初期の速度
+		float startSpeed;
+
 		/// @brief 放出位置
 		Vector3 emitPos;
+
+		// 最後の速度
+		float endSpeed;
+
+		// 回転
+		Quaternion rotation;
+
+		// 初期の回転
+		Quaternion startRotation;
+
+		// 最後の回転
+		Quaternion endRotation;
+
+		// 初期の大きさ
+		Vector3 startScale;
+
+		// 最後の大きさ
+		Vector3 endScale;
 	};
 
 	/// @brief GPUに送るパーティクルの数のデータ
 	struct ParticleNumDataForGPU
 	{
-		// 数
-		int num;
+		// パーティクル数
+		int particleNum;
 
-		float padding[3];
+		// エミッター数
+		int emitterNum;
+
+		float padding[2];
 	};
 
 	/// @brief GPUに送るパーティクルのビューデータ
@@ -49,26 +79,9 @@ namespace Engine
 		Matrix4x4 billboard;
 	};
 
-	/// @brief GPUに送るパーティクルエミッタのデータ
-	struct Particle3DEmitterPointDataForGPU
+	/// @brief GPUに送る放出設定のデータ
+	struct Particle3DEmitOptionDataForGPU
 	{
-		// 位置
-		Vector3 translate;
-
-		// 放出数
-		uint32_t count;
-
-		// 放出間隔の時間
-		float frequency;
-
-		// 放出間隔のタイマー
-		float frequencyTimer;
-
-		// 放出フラグ
-		uint32_t emit;
-
-		float padding0[1]; // パディング
-
 		/// @brief 初期の色
 		Vector4 startColor;
 
@@ -94,6 +107,31 @@ namespace Engine
 		float endSpeed;
 
 		float padding2[2]; // パディング
+
+		// 初期の回転
+		Quaternion startRotation;
+
+		// 最後の回転
+		Quaternion endRotation;
+	};
+
+	// @brief GPUに送るエミッターのデータ
+	struct Particle3DEmitterDataForGPU
+	{
+		// 放出位置
+		Vector4 position;
+
+		// 放出数
+		uint32_t count;
+
+		// 放出間隔の時間
+		float frequency;
+
+		// 放出間隔のタイマー
+		float frequencyTimer;
+
+		// 放出フラグ
+		uint32_t emit;
 	};
 
 	// @brief GPUに送るパーティクルの引き寄せのデータ

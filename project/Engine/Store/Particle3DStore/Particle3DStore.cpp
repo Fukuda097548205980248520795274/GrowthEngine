@@ -66,20 +66,28 @@ void Engine::Particle3DStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 /// @param name 
 /// @param numInstance 
 /// @param log 
-Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel,
-	const std::string& name, uint32_t numInstance, Log* log)
+Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, const std::string& name,
+	uint32_t numInstance, uint32_t emitterNum, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(commandList);
 
-	// 同じデータがあるか調べる
-	for(auto& data : dataTable_)
-		if (name == data->GetName())
+ // 同じ名前がある場合はデータを作り直す（emitter数変更を反映するため）
+	for (size_t i = 0; i < dataTable_.size(); ++i)
+	{
+		if (name != dataTable_[i]->GetName())
 		{
-			data->Reset();
-			return data->GetHandle();
+			continue;
 		}
+
+		const Particle3DHandle handle = static_cast<Particle3DHandle>(i);
+		std::unique_ptr<Particle3DData> data = std::make_unique<Particle3DData>(name, hModel, numInstance, emitterNum);
+		data->Initialize(device, commandList, heap_, parameter_.get(), modelStore_, textureStore_, psoParticle_.get(), computePsoParticle3DInit_.get(), log);
+		dataTable_[i] = std::move(data);
+		nameTable_[name] = handle;
+		return handle;
+	}
 
 	// ハンドルを取得する
 	Particle3DHandle handle = static_cast<Particle3DHandle>(dataTable_.size());
@@ -88,11 +96,17 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 	nameTable_[name] = handle;
 
 	// データを生成する
-	std::unique_ptr<Particle3DData> data = std::make_unique<Particle3DData>(name, hModel, numInstance);
+	std::unique_ptr<Particle3DData> data = std::make_unique<Particle3DData>(name, hModel, numInstance, emitterNum);
 	data->Initialize(device, commandList, heap_,parameter_.get(), modelStore_, textureStore_, psoParticle_.get(), computePsoParticle3DInit_.get(), log);
 	dataTable_.push_back(std::move(data));
 
 	return handle;
+}
+
+/// @brief シーン前のリセット処理
+void Engine::Particle3DStore::PerSceneReset()
+{
+	for (auto& data : dataTable_)data->PerSceneReset();
 }
 
 /// @brief 更新処理

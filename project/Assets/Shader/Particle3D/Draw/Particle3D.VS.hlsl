@@ -1,4 +1,5 @@
 #include "Particle3D.hlsli"
+#include "../Particle3D.hlsli"
 
 // 頂点シェーダ入力
 struct VertexShaderInput
@@ -8,29 +9,6 @@ struct VertexShaderInput
 };
 
 // パーティクル
-struct Particle
-{
-    // 位置
-    float3 translate;
-    
-    // 生存時間
-    float lifeTime;
-    
-    // 大きさ
-    float3 scale;
-
-    // 現在の時間
-    float currentTime;
-    
-    // 色
-    float4 color;
-    
-    // 速度
-    float3 direction;
-    
-    // 放出位置
-    float3 emitPos;
-};
 StructuredBuffer<Particle> gParticles : register(t0);
 
 // ビュー
@@ -51,14 +29,23 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     // パーティクルの情報を取得
     Particle particle = gParticles[instanceID];
     
-    // ワールド行列を作成
-    float4x4 worldMatrix = gView.billboard;
+    
+    float3x3 rotMatrix = QuaternionToMatrix(particle.rotation);
+    
+    float4x4 worldMatrix = float4x4(
+        float4(rotMatrix[0], 0.0f),
+        float4(rotMatrix[1], 0.0f),
+        float4(rotMatrix[2], 0.0f),
+        float4(0.0f, 0.0f, 0.0f, 1.0f)
+    );
+    
     worldMatrix[0] *= particle.scale.x;
     worldMatrix[1] *= particle.scale.y;
     worldMatrix[2] *= particle.scale.z;
+    
     worldMatrix[3].xyz = particle.translate;
     
-    output.position = mul(input.position, mul(worldMatrix, gView.viewProjection));
+    output.position = mul(input.position, mul(mul(worldMatrix, gView.billboard), gView.viewProjection));
     output.texcoord = input.texcoord;
     output.color = particle.color;
     

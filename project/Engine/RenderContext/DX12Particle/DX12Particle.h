@@ -26,14 +26,18 @@ namespace Engine
 		/// @param numInstance 
 		/// @param log 
 		/// @return 
-		Particle3DHandle LoadParticle3D(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, const std::string& name, uint32_t numInstance, Log* log)
+		Particle3DHandle LoadParticle3D(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, const std::string& name,
+			uint32_t numInstance,uint32_t emitterNum, Log* log)
 		{
-			return particle3DStore_->Load(device, commandList, hModel, name, numInstance, log);
+			return particle3DStore_->Load(device, commandList, hModel, name, numInstance,emitterNum, log);
 		}
 
 		/// @brief 更新処理
 		/// @param commandList 
 		void Update(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief シーン前のリセット処理
+		void PerSceneReset() { particle3DStore_->PerSceneReset(); }
 
 
 		/// @brief 3Dパーティクル描画処理
@@ -50,11 +54,27 @@ namespace Engine
 
 		/// @brief 3Dパーティクルのパラメータを取得する
 		/// @param hParticle 
-		Particle3D::Param* Get3DParticleParam(Particle3DHandle hParticle) { particle3DStore_->GetParam(hParticle); }
+		Particle3D::Param* Get3DParticleParam(Particle3DHandle hParticle) { return particle3DStore_->GetParam(hParticle); }
 
 		/// @brief 3Dパーティクルのパラメータを取得する
 		/// @param name 
-		Particle3D::Param* Get3DParticleParam(const std::string& name) { particle3DStore_->GetParam(name); }
+		Particle3D::Param* Get3DParticleParam(const std::string& name) { return particle3DStore_->GetParam(name); }
+
+		/// @brief 放出開始
+		/// @param handle 
+		void Emit3D(Particle3DHandle handle, int32_t emitterIndex) { particle3DStore_->Emit(handle, emitterIndex); }
+
+		/// @brief 放出開始
+		/// @param name 
+		void Emit3D(const std::string& name, int32_t emitterIndex) { particle3DStore_->Emit(name, emitterIndex); }
+
+		/// @brief 放出停止
+		/// @param handle 
+		void Stop3D(Particle3DHandle handle, int32_t emitterIndex) { particle3DStore_->Stop(handle, emitterIndex); }
+
+		/// @brief 放出停止
+		/// @param name 
+		void Stop3D(const std::string& name, int32_t emitterIndex) { particle3DStore_->Stop(name, emitterIndex); }
 
 
 	public:

@@ -6,6 +6,7 @@
 #include "GrowthEngine.h"
 #include "Parameter/Particle3DParameter/Particle3DParameter.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
+#include "Func/RandomFunc/RandomFunc.h"
 
 /// @brief 初期化
 /// @param device 
@@ -24,6 +25,9 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	assert(parameter);
 	assert(heap);
 
+	// 0は作成できない
+	assert(emitterNum_ > 0);
+
 	// 引数を受け取る
 	psoDraw_ = psoDraw;
 	modelStore_ = modelStore;
@@ -35,27 +39,55 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Particle3D::Param>();
-	param_->blendMode = BlendMode::kAdd;
-	param_->position = Vector3(0.0f, 0.0f, 0.0f);
 	param_->shape = Particle3D::EmitterShape::Point;
 	param_->radius1 = 1.0f;
 	param_->radius3 = Vector3(1.0f, 1.0f, 1.0f);
 	param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	param_->color.randomColor = false;
+	param_->color.startAlpha = 1.0f;
+	param_->color.endAlpha = 1.0f;
 	param_->scale.start = 1.0f;
 	param_->scale.end = 1.0f;
+	param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
+	param_->rotate.start = 0.0f;
+	param_->rotate.end = 0.0f;
 	param_->lifeTime.min = 2.0f;
 	param_->lifeTime.max = 2.0f;
+	param_->emitTime.isLoop = true;
+	param_->emitTime.pause = 0.0f;
+	param_->emitTime.emit = 0.1f;
 	param_->speed.start = 6.0f;
 	param_->speed.end = 6.0f;
+	param_->blendMode = Particle3D::BlendMode::Add;
 	param_->count = 1;
 	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
-	param_->enableAttract = false;
-	param_->attractDirection = Vector3(0.0f, 1.0f, 0.0f);
-	param_->attractLength = 1.0f;
-	param_->attractAcceleration = 1.0f;
-	param_->swapEmitterAttract = false;
+	param_->attract.enableAttract = false;
+	param_->attract.positionType = Particle3D::AttractPostitionType::Direction;
+	param_->attract.attractCenter = Vector3(0.0f, 0.0f, 0.0f);
+	param_->attract.attractDirection = Vector3(0.0f, 1.0f, 0.0f);
+	param_->attract.attractLength = 1.0f;
+	param_->attract.attractPosition = Vector3(0.0f, 0.0f, 0.0f);
+	param_->attract.attractAcceleration = 1.0f;
+	param_->attract.swapEmitterAttract = false;
+	param_->hModel = hModel_;
+
+	// エミッターの設定
+	param_->emitter.resize(emitterNum_);
+	for (auto& emitter : param_->emitter)
+	{
+		emitter.position = Vector3(0.0f, 0.0f, 0.0f);
+        emitter.isStart = false;
+		emitter.timer = 0.0f;
+	}
+
+	// テクスチャを取得する
+	hTexture_ = modelStore_->GetModelData(param_->hModel).meshes[0].material.handle;
+	param_->hTexture = hTexture_;
+
+	// テクスチャのファイルパスを取得する
+	textureFilePath_ = textureStore_->GetFilePath(param_->hTexture);
 
 	// グループを設定する
 	group_ = "Particle3D_" + name_;
@@ -63,30 +95,41 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	if (parameter_)
 	{
 		// パラメータを登録する
-		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
-		parameter_->SetValue(group_, "Position", &param_->position);
 		parameter_->SetValue(group_, "Shape", &param_->shape);
 		parameter_->SetValue(group_, "Radius1", &param_->radius1);
 		parameter_->SetValue(group_, "Radius3", &param_->radius3);
 		parameter_->SetValue(group_, "StartColor", &param_->color.start);
 		parameter_->SetValue(group_, "EndColor", &param_->color.end);
+		parameter_->SetValue(group_, "RandomColor", &param_->color.randomColor);
+		parameter_->SetValue(group_, "StartAlpha", &param_->color.startAlpha);
+		parameter_->SetValue(group_, "EndAlpha", &param_->color.endAlpha);
 		parameter_->SetValue(group_, "StartScale", &param_->scale.start);
 		parameter_->SetValue(group_, "EndScale", &param_->scale.end);
+		parameter_->SetValue(group_, "RotateAxis", &param_->rotate.axis);
+		parameter_->SetValue(group_, "StartRotate", &param_->rotate.start);
+		parameter_->SetValue(group_, "EndRotate", &param_->rotate.end);
 		parameter_->SetValue(group_, "MinLifeTime", &param_->lifeTime.min);
 		parameter_->SetValue(group_, "MaxLifeTime", &param_->lifeTime.max);
+		parameter_->SetValue(group_, "IsLoop", &param_->emitTime.isLoop);
+		parameter_->SetValue(group_, "EmitTime", &param_->emitTime.emit);
+		parameter_->SetValue(group_, "PauseTime", &param_->emitTime.pause);
 		parameter_->SetValue(group_, "StartSpeed", &param_->speed.start);
 		parameter_->SetValue(group_, "EndSpeed", &param_->speed.end);
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Count", &param_->count);
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
 		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
-		parameter_->SetValue(group_, "EnableAttract", &param_->enableAttract);
-		parameter_->SetValue(group_, "AttractDirection", &param_->attractDirection);
-		parameter_->SetValue(group_, "AttractLength", &param_->attractLength);
-		parameter_->SetValue(group_, "SwapEmitterAttract", &param_->swapEmitterAttract);
+		parameter_->SetValue(group_, "EnableAttract", &param_->attract.enableAttract);
+		parameter_->SetValue(group_, "AttractDirection", &param_->attract.attractDirection);
+		parameter_->SetValue(group_, "AttractLength", &param_->attract.attractLength);
+		parameter_->SetValue(group_, "AttractPosition", &param_->attract.attractPosition);
+		parameter_->SetValue(group_, "SwapEmitterAttract", &param_->attract.swapEmitterAttract);
+		parameter_->SetValue(group_, "AttractPositionType", &param_->attract.positionType);
+		parameter_->SetValue(group_, "TextureFilePath", &textureFilePath_);
 		
-
-		// グループを登録及び反映
+		// 値を反映させる
 		parameter_->RegisterGroupDataReflection(group_);
+		param_->hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
 
 
@@ -97,30 +140,26 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// パーティクル数リソースを生成する
 	particleNumResource_ = std::make_unique<ConstantBufferResource<ParticleNumDataForGPU>>();
 	particleNumResource_->Initialize(device,log);
-	particleNumResource_->data_->num = numInstance_;
+	particleNumResource_->data_->particleNum = numInstance_;
+	particleNumResource_->data_->emitterNum = emitterNum_;
 
 	// パーティクルビューリソースを生成する
 	particleViewResource_ = std::make_unique<ConstantBufferResource<ParticlePreViewDataForGPU>>();
 	particleViewResource_->Initialize(device, log);
 
-	// エミッターリソースを生成する
-	particleEmitterPointResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterPointDataForGPU>>();
-	particleEmitterPointResource_->Initialize(device, log);
-
-	particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
-	particleEmitterPointResource_->data_->emit = 0;
-
-	particleEmitterPointResource_->data_->translate = param_->position;
-	particleEmitterPointResource_->data_->count = param_->count;
-	particleEmitterPointResource_->data_->frequency = param_->frequency;
-	particleEmitterPointResource_->data_->startColor = param_->color.start;
-	particleEmitterPointResource_->data_->endColor = param_->color.end;
-	particleEmitterPointResource_->data_->startScale = param_->scale.start;
-	particleEmitterPointResource_->data_->endScale = param_->scale.end;
-	particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
-	particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
-	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
-	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+	// 放出設定リソースを生成する
+	emitOptionResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitOptionDataForGPU>>();
+	emitOptionResource_->Initialize(device, log);
+	emitOptionResource_->data_->startColor = param_->color.start;
+	emitOptionResource_->data_->endColor = param_->color.end;
+	emitOptionResource_->data_->startScale = param_->scale.start;
+	emitOptionResource_->data_->endScale = param_->scale.end;
+	emitOptionResource_->data_->minLifeTime = param_->lifeTime.min;
+	emitOptionResource_->data_->maxLifeTime = param_->lifeTime.max;
+	emitOptionResource_->data_->startSpeed = param_->speed.start;
+	emitOptionResource_->data_->endSpeed = param_->speed.end;
+	emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
+	emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
 
 	// エミッター形状リソースを生成する
 	particleEmitterShapeResource_ = std::make_unique<ConstantBufferResource<Particle3DEmitterShapeDataForGPU>>();
@@ -128,11 +167,15 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
 	particleEmitterShapeResource_->data_->radius3 = param_->radius3;
 
+	// エミッターリソースを生成する
+	emitterResource_ = std::make_unique<StructuredBufferResource<Particle3DEmitterDataForGPU>>();
+	emitterResource_->Initialize(device, heap, emitterNum_, log);
+
 	// 引力リソースを生成する
 	particleAttractResource_ = std::make_unique<ConstantBufferResource<Particle3DAttractDataForGPU>>();
 	particleAttractResource_->Initialize(device, log);
-	particleAttractResource_->data_->position = param_->position + (param_->attractDirection * param_->attractLength);
-	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
+	particleAttractResource_->data_->position = param_->attract.attractCenter + (param_->attract.attractDirection * param_->attract.attractLength);
+	particleAttractResource_->data_->acceleration = param_->attract.attractAcceleration;
 
 	// パーティクルフレームリソースを生成する
 	particlePerFrameResource_ = std::make_unique<ConstantBufferResource<ParticlePerFrameDataForGPU>>();
@@ -147,10 +190,6 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	// フリーリストリソースを生成する
 	freeListResource_ = std::make_unique<RWSTructuredBufferResource<uint32_t>>();
 	freeListResource_->Initialize(device, commandList, heap, numInstance_, log);
-
-
-	// テクスチャを取得する
-	hTexture_ = modelStore_->GetModelData(hModel_).meshes[0].material.handle;
 
 
 	/*-----------------------
@@ -183,34 +222,60 @@ void Engine::Particle3DData::Reset()
 	{
 		// グループを登録及び反映
 		parameter_->RegisterGroupDataReflection(group_);
+		param_->hTexture = textureStore_->GetHandle(textureFilePath_);
 	}
 	else
 	{
-		param_->blendMode = BlendMode::kAdd;
-		param_->position = Vector3(0.0f, 0.0f, 0.0f);
 		param_->shape = Particle3D::EmitterShape::Point;
 		param_->radius1 = 1.0f;
 		param_->radius3 = Vector3(1.0f, 1.0f, 1.0f);
 		param_->color.start = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		param_->color.end = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		param_->color.randomColor = false;
+		param_->color.startAlpha = 1.0f;
+		param_->color.endAlpha = 1.0f;
 		param_->scale.start = 1.0f;
 		param_->scale.end = 1.0f;
+		param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
+		param_->rotate.start = 0.0f;
+		param_->rotate.end = 0.0f;
 		param_->lifeTime.min = 2.0f;
 		param_->lifeTime.max = 2.0f;
+		param_->emitTime.isLoop = true;
+		param_->emitTime.pause = 0.0f;
+		param_->emitTime.emit = 0.1f;
 		param_->speed.start = 6.0f;
 		param_->speed.end = 6.0f;
+		param_->blendMode = Particle3D::BlendMode::Add;
 		param_->count = 1;
 		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
-		param_->enableAttract = false;
-		param_->attractDirection = Vector3(0.0f, 1.0f, 0.0f);
-		param_->attractLength = 1.0f;
-		param_->attractAcceleration = 1.0f;
-		param_->swapEmitterAttract = false;
+		param_->attract.enableAttract = false;
+		param_->attract.attractDirection = Vector3(0.0f, 1.0f, 0.0f);
+		param_->attract.attractLength = 1.0f;
+		param_->attract.attractAcceleration = 1.0f;
+		param_->attract.attractPosition = Vector3(0.0f, 0.0f, 0.0f);
+		param_->attract.positionType = Particle3D::AttractPostitionType::Direction;
+		param_->attract.swapEmitterAttract = false;
+		param_->hModel = hModel_;
+		param_->hTexture = hTexture_;
+
+		for (auto& emitter : param_->emitter)
+		{
+			emitter.position = Vector3(0.0f, 0.0f, 0.0f);
+            emitter.isStart = false;
+			emitter.timer = 0.0f;
+		}
 	}
 
 	// ロードしたこととする
 	isLoad_ = true;
+}
+
+/// @brief シーン前のリセット処理
+void Engine::Particle3DData::PerSceneReset()
+{
+	isLoad_ = false;
 }
 
 /// @brief 更新処理
@@ -227,53 +292,123 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	assert(psoEmitter);
 	assert(psoUpdate);
 
+	// デルタタイム
+	float dt = engine_->GetDeltaTime();
 
-	// タイマーを進める
-	particleEmitterPointResource_->data_->frequencyTimer += engine_->GetDeltaTime();
-	particlePerFrameResource_->data_->time += engine_->GetDeltaTime();
+	// エミッターを更新する
+	for (int i = 0; i < static_cast<int32_t>(emitterNum_); ++i)
+	{
+		if (param_->emitter[i].isStart)
+		{
+			// 放出時間のタイマーを進める
+			param_->emitter[i].timer += dt;
+
+			if (param_->emitter[i].timer >= param_->emitTime.pause)
+			{
+				// 放出時間を過ぎたときの処理
+				if (param_->emitter[i].timer >= param_->emitTime.pause + param_->emitTime.emit)
+				{
+					if (param_->emitTime.isLoop)
+					{
+						// タイマーをリセットする
+						param_->emitter[i].timer = 0.0f;
+					}
+					else
+					{
+						// 放出終了
+						param_->emitter[i].isStart = false;
+					}
+				}
+
+				// エミッターの位置と放出数、放出間隔を更新する
+				emitterResource_->data_[i].position = Vector4(param_->emitter[i].position.x, param_->emitter[i].position.y, param_->emitter[i].position.z, 1.0f);
+				emitterResource_->data_[i].count = param_->count;
+				emitterResource_->data_[i].frequency = param_->frequency;
+
+				// 放出間隔のタイマーを進める
+				emitterResource_->data_[i].frequencyTimer += dt;
+				emitterResource_->data_[i].frequencyTimer = std::min(emitterResource_->data_[i].frequencyTimer, emitterResource_->data_[i].frequency);
+
+				// タイマーが時間を超えたら放出する
+				if (emitterResource_->data_[i].frequencyTimer >= emitterResource_->data_[i].frequency)
+				{
+					emitterResource_->data_[i].emit = 1;
+					emitterResource_->data_[i].frequencyTimer = 0.0f;
+				}
+				else
+				{
+					// 放出しない
+					emitterResource_->data_[i].emit = 0;
+				}
+			}
+		}
+		else
+		{
+			// 放出しない
+			emitterResource_->data_[i].emit = 0;
+		}
+	}
+
+
+	particlePerFrameResource_->data_->time += dt;
+	particlePerFrameResource_->data_->time = std::fmod(particlePerFrameResource_->data_->time, 1000.0f); // 時間が大きくなりすぎないようにする
 
 	// デルタタイムを取得する
-	particlePerFrameResource_->data_->deltaTime = engine_->GetDeltaTime();
+	particlePerFrameResource_->data_->deltaTime = dt;
 
-	// タイマーが時間を超えたら放出する
-	if(particleEmitterPointResource_->data_->frequencyTimer >= particleEmitterPointResource_->data_->frequency)
+	// 色のランダムを有効にしているかどうかで処理を分ける
+	if (param_->color.randomColor)
 	{
-		particleEmitterPointResource_->data_->emit = 1;
-		particleEmitterPointResource_->data_->frequencyTimer = 0.0f;
+		emitOptionResource_->data_->startColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.startAlpha);
+		emitOptionResource_->data_->endColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.endAlpha);
 	}
 	else
 	{
-		particleEmitterPointResource_->data_->emit = 0;
+		// エミッタの色を更新する
+		emitOptionResource_->data_->startColor = param_->color.start;
+		emitOptionResource_->data_->endColor = param_->color.end;
 	}
 
 	// エミッタのパラメータを更新する
-	particleEmitterPointResource_->data_->translate = param_->position;
-	particleEmitterPointResource_->data_->count = param_->count;
-	particleEmitterPointResource_->data_->frequency = param_->frequency;
-	particleEmitterPointResource_->data_->startColor = param_->color.start;
-	particleEmitterPointResource_->data_->endColor = param_->color.end;
-	particleEmitterPointResource_->data_->startScale = param_->scale.start;
-	particleEmitterPointResource_->data_->endScale = param_->scale.end;
-	particleEmitterPointResource_->data_->minLifeTime = param_->lifeTime.min;
-	particleEmitterPointResource_->data_->maxLifeTime = param_->lifeTime.max;
-	particleEmitterPointResource_->data_->startSpeed = param_->speed.start;
-	particleEmitterPointResource_->data_->endSpeed = param_->speed.end;
+	emitOptionResource_->data_->startScale = param_->scale.start;
+	emitOptionResource_->data_->endScale = param_->scale.end;
+	emitOptionResource_->data_->minLifeTime = param_->lifeTime.min;
+	emitOptionResource_->data_->maxLifeTime = param_->lifeTime.max;
+	emitOptionResource_->data_->startSpeed = param_->speed.start;
+	emitOptionResource_->data_->endSpeed = param_->speed.end;
+
+	// 回転はクォータニオンに変換して渡す
+	param_->rotate.axis = param_->rotate.axis.Normalize();
+	emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
+	emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
 
 	// エミッター形状のパラメータを更新する
 	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
 	particleEmitterShapeResource_->data_->radius3 = param_->radius3;
 
-	// 引力のパラメータを更新する
-	param_->attractDirection = param_->attractDirection.Normalize();
-	particleAttractResource_->data_->position = param_->position + (param_->attractDirection * param_->attractLength);
-	particleAttractResource_->data_->acceleration = param_->attractAcceleration;
-
-	// エミッターと引力の位置を入れ替える
-	if(param_->enableAttract && param_->swapEmitterAttract)
+	// 引力の位置のタイプによって引力の位置を更新する
+	switch (param_->attract.positionType)
 	{
-		Vector3 tempPosition = particleEmitterPointResource_->data_->translate;
-		particleEmitterPointResource_->data_->translate = particleAttractResource_->data_->position;
-		particleAttractResource_->data_->position = tempPosition;
+	case Particle3D::AttractPostitionType::Direction:
+		// 引力の位置をエミッターの位置から引力の方向と長さで計算する
+		param_->attract.attractDirection = param_->attract.attractDirection.Normalize();
+		particleAttractResource_->data_->position = param_->emitter[0].position + (param_->attract.attractDirection * param_->attract.attractLength);
+		break;
+
+	case Particle3D::AttractPostitionType::Position:
+		// 引力の位置を引力の位置で設定する
+		particleAttractResource_->data_->position = param_->attract.attractPosition;
+		break;
+	}
+
+	particleAttractResource_->data_->acceleration = param_->attract.attractAcceleration;
+
+	if(param_->attract.swapEmitterAttract)
+	{
+		// エミッターと引力の位置を入れ替える
+		Vector3 temp = particleAttractResource_->data_->position;
+		particleAttractResource_->data_->position = param_->emitter[0].position;
+		param_->emitter[0].position = temp;
 	}
 
 
@@ -287,8 +422,8 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// パーティクルリソースを登録する
 	particleResource_->RegisterComputeUAV(commandList, 0);
 
-	// エミッターリソースを登録する
-	particleEmitterPointResource_->RegisterCompute(commandList, 1);
+	// 放出設定リソースを登録する
+	emitOptionResource_->RegisterCompute(commandList, 1);
 
 	// パーティクル数リソースを登録する
 	particleNumResource_->RegisterCompute(commandList, 2);
@@ -302,14 +437,17 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// フリーリストリソースを登録する
 	freeListResource_->RegisterComputeUAV(commandList, 5);
 
-	if(param_->shape != Particle3D::EmitterShape::Point)
+	// エミッターリソースを登録する
+	emitterResource_->RegisterCompute(commandList, 6);
+
+	if (param_->shape != Particle3D::EmitterShape::Point)
 	{
 		// エミッター形状リソースを登録する
-		particleEmitterShapeResource_->RegisterCompute(commandList, 6);
+		particleEmitterShapeResource_->RegisterCompute(commandList, 7);
 	}
 
 	// ディスパッチする
-	commandList->Dispatch(1, 1, 1);
+	commandList->Dispatch((emitterNum_ + 255) / 256, 1, 1);
 
 
 	// UAVバリアを張る
@@ -340,13 +478,10 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// フリーリストリソースを登録する
 	freeListResource_->RegisterComputeUAV(commandList, 4);
 
-	// エミッターリソースを登録する
-	particleEmitterPointResource_->RegisterCompute(commandList, 5);
-
-	if(param_->enableAttract)
+	if(param_->attract.enableAttract)
 	{
 		// 引力リソースを登録する
-		particleAttractResource_->RegisterCompute(commandList, 6);
+		particleAttractResource_->RegisterCompute(commandList, 5);
 	}
 
 	// ディスパッチする
@@ -388,10 +523,10 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	------------------------*/
 
 	// PSOの設定
-	psoDraw_->Register(commandList, param_->blendMode);
+	psoDraw_->Register(commandList , static_cast<int32_t>(param_->blendMode));
 
 	// 頂点を登録する
-	modelStore_->Register(commandList, hModel_, 0);
+	modelStore_->Register(commandList, param_->hModel, 0);
 
 	// パーティクルリソースを登録する
 	particleResource_->RegisterGraphicsSRV(commandList, 0);
@@ -400,10 +535,10 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	particleViewResource_->RegisterGraphics(commandList, 1);
 
 	// テクスチャを登録する
-	commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(hTexture_));
+	commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(param_->hTexture));
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[0].indices.size()), numInstance_, 0, 0, 0);
+	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
 
 
 
@@ -423,23 +558,74 @@ void Engine::Particle3DData::DebugParameter()
 	if (ImGui::TreeNode(name_.c_str()))
 	{
 		// ブレンドモード
-		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
-		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
-		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		const char* blendMode[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t blendModeIndex = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &blendModeIndex, blendMode, IM_ARRAYSIZE(blendMode)))
 		{
-			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+			param_->blendMode = static_cast<Particle3D::BlendMode>(blendModeIndex);
 		}
-
-
-		// 位置
-		ImGui::DragFloat3("Position" , &param_->position.x, 0.01f, -100000.0f, 100000.0f);
 		
 		ImGui::Text("\n");
 
+		// エミッター
+		if (ImGui::TreeNode("Emitter"))
+		{
+			for (int i = 0; i < static_cast<int32_t>(emitterNum_); ++i)
+			{
+				if (ImGui::TreeNode(std::to_string(i).c_str()))
+				{
+					// 放出開始
+					if (ImGui::Button("Emit Start"))
+					{
+						param_->emitter[i].isStart = true;
+						param_->emitter[i].timer = 0.0f;
+					}
+
+					// 位置
+					ImGui::DragFloat3(("Position" + std::to_string(i)).c_str(), &param_->emitter[i].position.x, 0.01f, -1000000.0f, 1000000.0f);
+
+					ImGui::TreePop();
+				}
+			}
+			ImGui::TreePop();
+		}
+		
+		ImGui::Text("\n");
+
+		// テクスチャ
+		ImGui::Text("Texture");
+
+		ImGui::ImageButton(
+			textureStore_->GetFilePath(param_->hTexture).c_str(),
+			textureStore_->GetSrvGpuHandle(param_->hTexture).ptr,
+			ImVec2(32.0f, 32.0f),
+			ImVec2(0, 0),
+			ImVec2(1, 1),
+			ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
+			ImVec4(1, 1, 1, 1)
+		);
+
+		// --- ドロップ処理 ---
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
+			{
+				int droppedIndex = *(const int*)payload->Data;
+
+				// droppedIndex が dataTable_ の index
+				// ここでマテリアルなどに設定する
+				param_->hTexture = static_cast<uint32_t>(droppedIndex);
+				textureFilePath_ = textureStore_->GetFilePath(param_->hTexture);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		ImGui::Text("\n");
+
 		// エミッターの図形
-		const char* type[] = { "Point", "AABB", "Sphere" };
+		const char* emitterType[] = { "Point", "AABB", "Sphere" };
 		int32_t shapeIndex = static_cast<int32_t>(param_->shape);
-		if (ImGui::Combo("Shape", &shapeIndex, type, IM_ARRAYSIZE(type)))
+		if (ImGui::Combo("Shape", &shapeIndex, emitterType, IM_ARRAYSIZE(emitterType)))
 		{
 			param_->shape = static_cast<Particle3D::EmitterShape>(shapeIndex);
 		}
@@ -486,14 +672,47 @@ void Engine::Particle3DData::DebugParameter()
 			ImGui::TreePop();
 		}
 
+		// 放出時間
+		if (ImGui::TreeNode("EmitTime"))
+		{
+			// ループ
+			ImGui::Checkbox("Loop", &param_->emitTime.isLoop);
+
+			// ポーズ
+			ImGui::DragFloat("Pause", &param_->emitTime.pause, 0.01f, 0.0f, 100000.0f);
+
+			// 放出
+			ImGui::DragFloat("Emit", &param_->emitTime.emit, 0.01f, 0.0f, 100000.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
 		// 色
 		if (ImGui::TreeNode("Color"))
 		{
-			// 開始
-			ImGui::ColorEdit4("Start", &param_->color.start.x);
+			// ランダムカラー
+			ImGui::Checkbox("RandomColor", &param_->color.randomColor);
 
-			// 終了
-			ImGui::ColorEdit4("End", &param_->color.end.x);
+			// ランダムカラーでないときは開始色と終了色を設定できるようにする
+			if (!param_->color.randomColor)
+			{
+				// 開始
+				ImGui::ColorEdit4("Start", &param_->color.start.x);
+
+				// 終了
+				ImGui::ColorEdit4("End", &param_->color.end.x);
+			}
+			else
+			{
+				// ランダムカラーのときはアルファ値のみ設定できるようにする
+
+				// 開始
+				ImGui::SliderFloat("Start_Alpha", &param_->color.startAlpha, 0.0f, 1.0f);
+
+				// 終了
+				ImGui::SliderFloat("End_Alpha", &param_->color.endAlpha, 0.0f, 1.0f);
+			}
 
 			// 終了
 			ImGui::TreePop();
@@ -512,7 +731,23 @@ void Engine::Particle3DData::DebugParameter()
 			ImGui::TreePop();
 		}
 
-		if (!param_->enableAttract)
+		// 回転
+		if (ImGui::TreeNode("Rotate"))
+		{
+			// 軸
+			ImGui::DragFloat3("Axis", &param_->rotate.axis.x, 0.01f, -1.0f, 1.0f);
+
+			// 開始
+			ImGui::DragFloat("Start", &param_->rotate.start, 0.01f, -360.0f, 360.0f);
+
+			// 終了
+			ImGui::DragFloat("End", &param_->rotate.end, 0.01f, -360.0f, 360.0f);
+
+			// 終了
+			ImGui::TreePop();
+		}
+
+		if (!param_->attract.enableAttract)
 		{
 			// 速度
 			if (ImGui::TreeNode("Speed"))
@@ -531,21 +766,43 @@ void Engine::Particle3DData::DebugParameter()
 		ImGui::Text("\n");
 
 		// 引力有効化
-		ImGui::Checkbox("Attract", &param_->enableAttract);
+		ImGui::Checkbox("Attract", &param_->attract.enableAttract);
 
-		if (param_->enableAttract)
+		if (param_->attract.enableAttract)
 		{
 			// 引力と放出の場所を入れ替える
-			ImGui::Checkbox("SwapEmitterAttract", &param_->swapEmitterAttract);
+			ImGui::Checkbox("SwapEmitterAttract", &param_->attract.swapEmitterAttract);
 
-			// 引力の方向
-			ImGui::DragFloat3("AttractDirection", &param_->attractDirection.x, 0.01f, -1.0f, 1.0f);
+			// 引力位置の種類
+			const char* atrractPositionType[] = { "Direction", "Position" };
+			int32_t atrractPositionIndex = static_cast<int32_t>(param_->attract.positionType);
+			if (ImGui::Combo("AttractPositionType", &atrractPositionIndex, atrractPositionType, IM_ARRAYSIZE(atrractPositionType)))
+			{
+				param_->attract.positionType = static_cast<Particle3D::AttractPostitionType>(atrractPositionIndex);
+			}
 
-			// 引力の距離
-			ImGui::DragFloat("AttractLength", &param_->attractLength, 0.01f, 0.0f, 100000.0f);
+			switch (param_->attract.positionType)
+			{
+			case Particle3D::AttractPostitionType::Position:
+
+				// 引力の位置
+				ImGui::DragFloat3("AttractPosition", &param_->attract.attractPosition.x, 0.01f, -100000.0f, 100000.0f);
+
+				break;
+
+			case Particle3D::AttractPostitionType::Direction:
+
+				// 引力の方向
+				ImGui::DragFloat3("AttractDirection", &param_->attract.attractDirection.x, 0.01f, -1.0f, 1.0f);
+
+				// 引力の距離
+				ImGui::DragFloat("AttractLength", &param_->attract.attractLength, 0.01f, 0.0f, 100000.0f);
+
+				break;
+			}
 
 			// 吸引加速度
-			ImGui::DragFloat("AttractAcceleration", &param_->attractAcceleration, 0.01f, 0.01f, 100000.0f);
+			ImGui::DragFloat("AttractAcceleration", &param_->attract.attractAcceleration, 0.01f, 0.01f, 100000.0f);
 		}
 
 		

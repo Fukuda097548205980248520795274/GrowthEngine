@@ -1,105 +1,35 @@
 #include "../../Random/Random.hlsli"
+#include "../Particle3D.hlsli"
 
-// パーティクル
-struct Particle
-{
-    // 位置
-    float3 translate;
-    
-    // 生存時間
-    float lifeTime;
-    
-    // 大きさ
-    float3 scale;
-
-    // 現在の時間
-    float currentTime;
-    
-    // 色
-    float4 color;
-    
-    // 方向
-    float3 direction;
-    
-    // 放出位置
-    float3 emitPos;
-};
-RWStructuredBuffer<Particle> gParticles : register(u0);
-
-// エミッター
-struct Emitter
-{
-    // 位置
-    float3 translate;
-
-	// 放出数
-    uint count;
-
-	// 放出間隔の時間
-    float frequency;
-
-	// 放出間隔のタイマー
-    float frequencyTimer;
-
-    // 放出フラグ
-    uint emit;
-    
-    /// @brief 初期の色
-    float4 startColor;
-
-	/// @brief 最後の色
-    float4 endColor;
-    
-    // 初期の大きさ
-    float startScale;
-
-	// 最後の大きさ
-    float endScale;
-    
-    // 最小の生存時間
-    float minLifeTime;
-
-	// 最大の生存時間
-    float maxLifeTime;
-    
-    // 初期の速度
-    float startSpeed;
-    
-    // 最後の速度
-    float endSpeed;
-};
-ConstantBuffer<Emitter> gEmitter : register(b0);
-
-// パーティクルの最大数
-struct ParticleMaxNum
-{
-    uint num;
-};
-ConstantBuffer<ParticleMaxNum> gParticleMaxNum : register(b1);
-
-// フレームごとのデータ
-struct PerFrame
-{
-    float deltaTime;
-    float time;
-};
+ConstantBuffer<EmitOption> gEmitOption : register(b0);
+ConstantBuffer<MaxNum> gMaxNum : register(b1);
 ConstantBuffer<PerFrame> gPerFrame : register(b2);
 
+StructuredBuffer<Emitter> gEmitter : register(t0);
+
+RWStructuredBuffer<Particle> gParticles : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
-[numthreads(1, 1, 1)]
+[numthreads(256, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
+    // エミッターインデックス
+    int emitterIndex = DTid.x;
+    
+    // エミッター最大数を超えたら処理しない
+    if (emitterIndex >= gMaxNum.emitterNum)
+        return;
+    
     // 放出フラグが立っていない場合は処理しない
-    if (gEmitter.emit == 0)
+    if (gEmitter[emitterIndex].emit == 0)
         return;
     
     // 乱数生成期
     RandomGenerator generator;
     generator.seed = (DTid + gPerFrame.time) * gPerFrame.time;
 
-    for (uint countIndex = 0; countIndex < gEmitter.count; ++countIndex)
+    for (uint countIndex = 0; countIndex < gEmitter[emitterIndex].count; ++countIndex)
     {
         int freeListIndex;
         
@@ -107,16 +37,25 @@ void main( uint3 DTid : SV_DispatchThreadID )
         InterlockedAdd(gFreeListIndex[0], -1, freeListIndex);
         
         // 取得したインデックスが有効な場合は、フリーリストからパーティクルのインデックスを取得
-        if(0 <= freeListIndex && freeListIndex <= gParticleMaxNum.num)
+        if (0 <= freeListIndex && freeListIndex <= gMaxNum.particleNum)
         {
             uint particleIndex = gFreeList[freeListIndex];
             
-            gParticles[particleIndex].translate = gEmitter.translate;
+            gParticles[particleIndex].translate = gEmitter[emitterIndex].position.xyz;
             gParticles[particleIndex].emitPos = gParticles[particleIndex].translate;
-            gParticles[particleIndex].lifeTime = gEmitter.maxLifeTime - generator.Generate1d() * (gEmitter.maxLifeTime - gEmitter.minLifeTime);
-            gParticles[particleIndex].scale = float3(1.0f, 1.0f, 1.0f);
+            gParticles[particleIndex].lifeTime = gEmitOption.maxLifeTime - generator.Generate1d() * (gEmitOption.maxLifeTime - gEmitOption.minLifeTime);
+            gParticles[particleIndex].scale = gEmitOption.startScale;
+            gParticles[particleIndex].startScale = gEmitOption.startScale;
+            gParticles[particleIndex].endScale = gEmitOption.endScale;
+            gParticles[particleIndex].startSpeed = gEmitOption.startSpeed;
+            gParticles[particleIndex].endSpeed = gEmitOption.endSpeed;
             gParticles[particleIndex].currentTime = 0.0f;
-            gParticles[particleIndex].color = gEmitter.startColor;
+            gParticles[particleIndex].color = gEmitOption.startColor;
+            gParticles[particleIndex].startColor = gEmitOption.startColor;
+            gParticles[particleIndex].endColor = gEmitOption.endColor;
+            gParticles[particleIndex].rotation = gEmitOption.startRotation;
+            gParticles[particleIndex].startRotation = gEmitOption.startRotation;
+            gParticles[particleIndex].endRotation = gEmitOption.endRotation;
             
             // Emitter.hlsl 側の修正提案（より綺麗に飛ばすため）
             float3 randomDir = (generator.Generate3d() * 2.0f) - float3(1.0f, 1.0f, 1.0f);
