@@ -16,7 +16,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     uint inWidth, inHeight;
     gInputTexture.GetDimensions(inWidth, inHeight);
     
-    if (DTid.x >= outWidth || DTid.y >= outHeight)
+    if (DTid.x >= outWidth || DTid.y >= outHeight || DTid.x >= inWidth || DTid.y >= inHeight)
         return;
     
     float2 inverseInputSize = float2(rcp(float(inWidth)), rcp(float(inHeight)));
