@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelResource/ModelResource.h"
+#include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
 
 namespace Engine
 {
@@ -36,5 +37,11 @@ namespace Engine
 
 		// データテーブル
 		std::vector<std::unique_ptr<ModelResource>> dataTable_;
+
+
+	private:
+
+		/// @brief 立方体頂点リソース
+		std::unique_ptr<CubeVertexResource> cubeVertexResource_ = nullptr;
 	};
 }

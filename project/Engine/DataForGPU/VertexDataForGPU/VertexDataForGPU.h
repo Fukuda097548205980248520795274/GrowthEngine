@@ -17,4 +17,15 @@ namespace Engine
 		/// @brief 法線
 		Vector3 normal;
 	};
+
+	/// @brief GPUに送るトレイル用頂点データ
+	struct TrailVertexDataForGPU
+	{
+		/// @brief 位置
+		Vector4 position;
+		/// @brief テクスチャ座標
+		Vector2 texcoord;
+		/// @brief 色
+		Vector4 color;
+	};
 }

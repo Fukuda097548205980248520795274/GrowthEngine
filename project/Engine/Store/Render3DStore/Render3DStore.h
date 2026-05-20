@@ -2,9 +2,6 @@
 #include "Render3DData/Render3DBaseData.h"
 #include <memory>
 #include <vector>
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <wrl.h>
 
 #include "PSO/PSOModel/PSORender3D/PSORender3D.h"
 

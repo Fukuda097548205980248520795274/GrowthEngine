@@ -7,21 +7,25 @@
 /// @brief 初期化
 /// @param device 
 /// @param shaderCompiler 
-void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, DX12Heap* heap,
+void Engine::DX12Render::Initialize(ID3D12Device* device, ShaderCompiler* shaderCompiler, DX12Heap* heap, Camera3DStore* cameraStore,
 	ModelStore* modelStore, TextureStore* textureStore, AnimationStore* animationStore, SkeletonStore* skeletonStore, LightStore* lightStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(shaderCompiler);
+	assert(cameraStore);
 
-
-	// プリミティブストアの生成と初期化
+	// 3D描画ストアの生成と初期化
 	render3DStore_ = std::make_unique<Render3DStore>();
 	render3DStore_->Initialize(device, shaderCompiler, heap, modelStore, textureStore, animationStore, skeletonStore, lightStore, log);
 
-	// スプライトストアの生成と初期化
+	// 2D描画ストアの生成と初期化
 	render2DStore_ = std::make_unique<Render2DStore>();
 	render2DStore_->Initialize(device, shaderCompiler, log);
+
+	// トレイルストアの生成と初期化
+	trailStore_ = std::make_unique<TrailStore>();
+	trailStore_->Initialize(device, shaderCompiler, textureStore, cameraStore, log);
 }
 
 /// @brief 更新処理
@@ -30,6 +34,7 @@ void Engine::DX12Render::Update(ID3D12GraphicsCommandList* commandList)
 {
 	render3DStore_->Update(commandList);
 	render2DStore_->Update();
+	trailStore_->Update();
 }
 
 /// @brief シーン前のリセット

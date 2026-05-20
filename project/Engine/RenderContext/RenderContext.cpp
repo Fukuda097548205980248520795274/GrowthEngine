@@ -98,7 +98,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Modelの生成と初期化
 	render_ = std::make_unique<DX12Render>();
-	render_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
+	render_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(), camera3DStore_.get(),
 		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), log);
 
 	// DX12Prefabの生成と初期化

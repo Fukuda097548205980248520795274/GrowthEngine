@@ -1078,6 +1078,12 @@
     <Filter Include="Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData">
       <UniqueIdentifier>{5d3e93a4-d1c1-4815-9ba2-c0ea86bb38f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\TrailStore">
+      <UniqueIdentifier>{a275dda1-b90c-4778-8985-ad8ea52f6b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\TrailStore\TrailData">
+      <UniqueIdentifier>{d1c1f213-54a4-4b71-a657-807959e2ae4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1922,6 +1928,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOTrail\PSOTrail.cpp">
       <Filter>Engine\Include\PSO\PSOTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\TrailStore\TrailStore.cpp">
+      <Filter>Engine\Include\Store\TrailStore</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\TrailStore\TrailData\TrailData.cpp">
+      <Filter>Engine\Include\Store\TrailStore\TrailData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2881,6 +2893,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOTrail\PSOTrail.h">
       <Filter>Engine\Include\PSO\PSOTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\TrailStore\TrailStore.h">
+      <Filter>Engine\Include\Store\TrailStore</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\TrailStore\TrailData\TrailData.h">
+      <Filter>Engine\Include\Store\TrailStore\TrailData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

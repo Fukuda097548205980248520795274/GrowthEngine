@@ -22,18 +22,53 @@ void Engine::PSOTrail::Initialize(ID3D12Device* device, ShaderCompiler* compiler
 	assert(pixelShaderBlob_ != nullptr);
 
 
+	/*----------------------------
+		ディスクリプタレンジの設定
+	----------------------------*/
+
+	// SRV t0 テクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorTexture[1];
+	descriptorTexture[0].BaseShaderRegister = 0;
+	descriptorTexture[0].RegisterSpace = 0;
+	descriptorTexture[0].NumDescriptors = 1;
+	descriptorTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[1];
+	D3D12_ROOT_PARAMETER rootParameter[2];
 
 	// CBV VertexShader b0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	rootParameter[0].Descriptor.ShaderRegister = 0;
 	rootParameter[0].Descriptor.RegisterSpace = 0;
+
+	// SRV PixelShader t0
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = descriptorTexture;
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
+
+
+	/*--------------------
+		サンプラーの設定
+	--------------------*/
+
+	D3D12_STATIC_SAMPLER_DESC samplers[1] = {};
+
+	// サンプラー
+	samplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	samplers[0].MaxLOD = D3D12_FLOAT32_MAX;
+	samplers[0].ShaderRegister = 0;
+	samplers[0].RegisterSpace = 0;
+	samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 
 	/*---------------------------------------
@@ -47,6 +82,10 @@ void Engine::PSOTrail::Initialize(ID3D12Device* device, ShaderCompiler* compiler
 	// ルートパラメータを設定する
 	descriptionRootSignature.pParameters = rootParameter;
 	descriptionRootSignature.NumParameters = _countof(rootParameter);
+
+	// サンプラーを設定する
+	descriptionRootSignature.pStaticSamplers = samplers;
+	descriptionRootSignature.NumStaticSamplers = _countof(samplers);
 
 	// シリアライズしてバイナリにする
 	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature,
@@ -174,8 +213,8 @@ void Engine::PSOTrail::Initialize(ID3D12Device* device, ShaderCompiler* compiler
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::PSOTrail::Register(ID3D12GraphicsCommandList* commandList) const
+void Engine::PSOTrail::Register(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) const
 {
-	commandList->SetPipelineState(graphicsPipelineState_[blendMode_].Get());
+	commandList->SetPipelineState(graphicsPipelineState_[static_cast<int>(blendMode)].Get());
 	commandList->SetGraphicsRootSignature(rootSignature_.Get());
 }

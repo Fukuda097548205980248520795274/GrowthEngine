@@ -75,3 +75,6 @@ using Particle3DHandle = uint32_t;
 
 /// @brief 2Dパーティクルハンドル
 using Particle2DHandle = uint32_t;
+
+/// @brief トレイルハンドル
+using TrailHandle = uint32_t;

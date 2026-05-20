@@ -9,6 +9,8 @@
 #include "WinApp/WinApp.h"
 #include "Input/Input.h"
 
+#include "Func/RandomFunc/RandomFunc.h"
+
 #include "Store/AudioStore/AudioStore.h"
 #include "Store/SoundStore/SoundStore.h"
 #include "Store/InputStore/InputStore.h"
@@ -588,6 +590,31 @@ public:
 	/// @brief スプライトを描画する
 	/// @param name 
 	void DrawRender2D(const std::string& name)const { renderContext_->DrawRender2D(name); }
+
+	/// @brief トレイルを読み込む
+	/// @param name 
+	/// @param maxLifetime 
+	/// @param hTexture 
+	/// @return 
+	TrailHandle LoadTrail(const std::string& name,float maxLifetime, TextureHandle hTexture) const { return renderContext_->LoadTrail(name, maxLifetime, hTexture, log_.get()); }
+
+	/// @brief トレイルのパラメータを取得する
+	/// @param handle 
+	/// @return 
+	Engine::TrailData::Param* GetTrailParam(TrailHandle handle)const { return renderContext_->GetTrailParam(handle); }
+
+	/// @brief トレイルのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::TrailData::Param* GetTrailParam(const std::string& name)const { return renderContext_->GetTrailParam(name); }
+
+	/// @brief トレイルを描画する
+	/// @param handle 
+	void DrawTrail(TrailHandle handle)const { renderContext_->DrawTrail(handle); }
+
+	/// @brief トレイルを描画する
+	/// @param name 
+	void DrawTrail(const std::string& name)const { renderContext_->DrawTrail(name); }
 
 
 

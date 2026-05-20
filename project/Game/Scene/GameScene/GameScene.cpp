@@ -27,7 +27,7 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
+	engine_->LoadTrail("Test", 0.5f, engine_->LoadTexture("./Assets/Textures/white2x2.png"));
 
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
@@ -182,6 +182,11 @@ void GameScene::Update()
 
 	// カメラ制御の更新
 	UpdateCameraControl(deltaTime);
+
+	auto trail = engine_->GetTrailParam("Test");
+	testTimer_ += deltaTime * 12.0f;
+	trail->basePosition = Vector3(std::cos(testTimer_), std::sin(testTimer_), 0.0f) * 2.0f;
+	trail->color = Vector4(GetRandomRange<float>(0.0f , 1.0f), GetRandomRange<float>(0.0f , 1.0f), GetRandomRange<float>(0.0f , 1.0f), 1.0f);
 }
 
 /// @brief 描画処理
@@ -199,6 +204,8 @@ void GameScene::Draw()
 
 	// 敵の描画
 	enemy_->Draw();
+
+	engine_->DrawTrail("Test");
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());

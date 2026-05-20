@@ -1010,6 +1010,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\TrailStore\TrailData\TrailData.cpp" />
+    <ClCompile Include="Engine\Store\TrailStore\TrailStore.cpp" />
     <ClCompile Include="Engine\WinApp\WinApp.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1347,6 +1349,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\SoundStore\SoundData\SoundData.h" />
     <ClInclude Include="Engine\Store\SoundStore\SoundStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />
+    <ClInclude Include="Engine\Store\TrailStore\TrailData\TrailData.h" />
+    <ClInclude Include="Engine\Store\TrailStore\TrailStore.h" />
     <ClInclude Include="Engine\WinApp\WinApp.h" />
     <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h" />
     <ClInclude Include="Game\Action\Action.h" />

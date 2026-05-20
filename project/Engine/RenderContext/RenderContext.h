@@ -237,6 +237,17 @@ namespace Engine
 			return render_->LoadRender2D(name, type, hTexture, hText, textureStore_.get(), fontStore_.get(), core_->GetDevice(), log);
 		}
 
+		/// @brief トレイル読み込み
+		/// @param name 
+		/// @param maxLifetime 
+		/// @param hTexture 
+		/// @param log 
+		/// @return 
+		TrailHandle LoadTrail(const std::string& name,float maxLifetime, TextureHandle hTexture, Log* log)
+		{
+			return render_->LoadTrail(name, maxLifetime, hTexture, core_->GetDevice(), log);
+		}
+
 		/// @brief プリミティブ用プレハブを読み込む
 		/// @param name 
 		/// @param type 
@@ -292,6 +303,15 @@ namespace Engine
 		template<typename T>
 		T* GetPrefab2DParam(const std::string& name) { return prefab_->GetPrefab2DParam<T>(name); }
 
+		/// @brief トレイルのパラメータを取得する
+		/// @param hTrail 
+		/// @return 
+		TrailData::Param* GetTrailParam(TrailHandle hTrail) { return render_->GetTrailParam(hTrail); }
+
+		/// @brief トレイルのパラメータを取得する
+		/// @param name 
+		/// @return 
+		TrailData::Param* GetTrailParam(const std::string& name) { return render_->GetTrailParam(name); }
 
 		/// @brief プリミティブ用インスタンスを作成する
 		/// @tparam T 
@@ -374,6 +394,20 @@ namespace Engine
 		void DrawRender2D(const std::string& name)
 		{
 			render_->DrawRender2D(name, camera2DStore_.get(), commandList_);
+		}
+
+		/// @brief トレイルの描画処理
+		/// @param handle 
+		void DrawTrail(TrailHandle handle)
+		{
+			render_->DrawTrail(handle, commandList_);
+		}
+
+		/// @brief トレイルの描画処理
+		/// @param name 
+		void DrawTrail(const std::string& name)
+		{
+			render_->DrawTrail(name, commandList_);
 		}
 
 

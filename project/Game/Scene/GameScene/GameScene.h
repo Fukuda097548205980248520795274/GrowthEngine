@@ -123,5 +123,11 @@ private:
 
 	/// @brief 太陽光
 	std::unique_ptr<LightDirectional> sunLight_ = nullptr;
+
+
+
+private:
+
+	float testTimer_ = 0.0f;
 };
 
