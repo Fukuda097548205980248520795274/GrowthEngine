@@ -22,24 +22,56 @@ enum class AttackType
 
 enum class DamageReaction
 {
-	None, // ダメージなし
-	LightStagger, // 軽い怯み
-	HeavyStagger, // 重い怯み
+	// 怯みなし
+	None,
+
+	// 小怯み
+	LightStagger, 
+
+	// 大怯み
+	HeavyStagger,
 	
 	// ダウン
-	DownFalling,
+	Down,
+};
+
+enum class DamageReactionState
+{
+	// 怯みなし
+	None,
+
+	// 小怯み
+	LightStaggerFront,
+	LightStaggerBack,
+	LightStaggerLeft,
+	LightStaggerRight,
+
+	// 大怯み
+	HeavyStaggerFront,
+	HeavyStaggerBack,
+	HeavyStaggerLeft,
+	HeavyStaggerRight,
+
+	// 倒れこみ
+	DownFallingFront,
+	DownFallingBack,
+	DownFallingLeft,
+	DownFallingRight,
 
 	// ダウン中
-	DownLying,
+	DownLyingFront,
+	DownLyingBack,
 
-	// 立ち上がり
-	DownGettingUp,
+	// 起き上がり
+	DownGettingUpFront,
+	DownGettingUpBack,
+
+	// ダウン中の怯み
+	DownStaggerFront,
+	DownStaggerBack,
 
 	// 受け流され
 	Parried,
-
-	// ダウン中の怯み
-	DownStagger,
 };
 
 class Attack : public Action

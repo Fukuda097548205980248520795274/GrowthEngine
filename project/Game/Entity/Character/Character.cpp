@@ -167,7 +167,7 @@ void Character::Update()
 			grabbedTimer_ = 0.0f;
 
 			// ダメージリアクションを解除する
-			currentDamageReaction_ = DamageReaction::None;
+			currentDamageReaction_ = DamageReactionState::None;
 		}
 
 		// まとめた後処理を呼んで終了
@@ -207,39 +207,68 @@ void Character::Update()
 		damageReactionTimer_ -= dt;
 
 		// ダメージリアクションがダウン中の場合は、起き上がり条件をチェックし、それ以外の場合はダメージリアクションの時間が十分経過したかをチェックする
-		bool shouldTransition = (currentDamageReaction_ == DamageReaction::DownLying)
-			? CheckGetUpCondition()
-			: (damageReactionTimer_ <= 0.0f);
+		bool shouldTransition = (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack)
+			? CheckGetUpCondition() : (damageReactionTimer_ <= 0.0f);
 
 		if (shouldTransition)
 		{
 			switch (currentDamageReaction_)
 			{
 				// ダメージリアクションが終了したら、通常状態へ移行する
-			case DamageReaction::LightStagger:
-			case DamageReaction::HeavyStagger:
-			case DamageReaction::DownGettingUp:
-			case DamageReaction::Parried:
-				currentDamageReaction_ = DamageReaction::None;
+			case DamageReactionState::LightStaggerFront:
+			case DamageReactionState::LightStaggerBack:
+			case DamageReactionState::LightStaggerLeft:
+			case DamageReactionState::LightStaggerRight:
+			case DamageReactionState::HeavyStaggerFront:
+			case DamageReactionState::HeavyStaggerBack:
+			case DamageReactionState::HeavyStaggerLeft:
+			case DamageReactionState::HeavyStaggerRight:
+			case DamageReactionState::DownGettingUpFront:
+			case DamageReactionState::DownGettingUpBack:
+			case DamageReactionState::Parried:
+				currentDamageReaction_ = DamageReactionState::None;
 				break;
 
 				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
-			case DamageReaction::DownFalling:
-				currentDamageReaction_ = DamageReaction::DownLying;
+			case DamageReactionState::DownFallingFront:
+				currentDamageReaction_ = DamageReactionState::DownLyingFront;
+				damageReactionTimer_ = 2.0f;
+				SetAnimation(hDownLyingMotion_, true, true);
+				break;
+
+				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
+			case DamageReactionState::DownFallingBack:
+			case DamageReactionState::DownFallingLeft:
+			case DamageReactionState::DownFallingRight:
+				currentDamageReaction_ = DamageReactionState::DownLyingBack;
 				damageReactionTimer_ = 2.0f;
 				SetAnimation(hDownLyingMotion_, true, true);
 				break;
 
 				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
-			case DamageReaction::DownStagger:
-				currentDamageReaction_ = DamageReaction::DownLying;
+			case DamageReactionState::DownStaggerFront:
+				currentDamageReaction_ = DamageReactionState::DownLyingFront;
+				damageReactionTimer_ = 2.0f;
+				SetAnimation(hDownLyingMotion_, true, true);
+				break;
+
+				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
+			case DamageReactionState::DownStaggerBack:
+				currentDamageReaction_ = DamageReactionState::DownLyingBack;
 				damageReactionTimer_ = 2.0f;
 				SetAnimation(hDownLyingMotion_, true, true);
 				break;
 
 				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
-			case DamageReaction::DownLying:
-				currentDamageReaction_ = DamageReaction::DownGettingUp;
+			case DamageReactionState::DownLyingFront:
+				currentDamageReaction_ = DamageReactionState::DownGettingUpFront;
+				damageReactionTimer_ = 1.0f;
+				SetAnimation(hDownGetUpMotion_, true, false);
+				break;
+
+				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
+			case DamageReactionState::DownLyingBack:
+				currentDamageReaction_ = DamageReactionState::DownGettingUpBack;
 				damageReactionTimer_ = 1.0f;
 				SetAnimation(hDownGetUpMotion_, true, false);
 				break;
@@ -387,9 +416,18 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ダメージを受ける処理
 
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
-	if (currentDamageReaction_ == DamageReaction::DownLying || currentDamageReaction_ == DamageReaction::DownStagger)
+	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
 	{
-		currentDamageReaction_ = DamageReaction::DownStagger;
+		currentDamageReaction_ = DamageReactionState::DownStaggerFront;
+		SetAnimation(hDownStaggerMotion_, true, false);
+		damageReactionTimer_ = 0.3f;
+
+		// ダウン中はノックバックが入らない
+		knockback = 0.0f;
+	}
+	else if (currentDamageReaction_ == DamageReactionState::DownLyingBack || currentDamageReaction_ == DamageReactionState::DownStaggerBack)
+	{
+		currentDamageReaction_ = DamageReactionState::DownStaggerBack;
 		SetAnimation(hDownStaggerMotion_, true, false);
 		damageReactionTimer_ = 0.3f;
 
@@ -398,25 +436,26 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 	else
 	{
-		// リアクションの更新とモーション再生
-		currentDamageReaction_ = damageReaction;
 
-		switch (currentDamageReaction_)
+		switch (damageReaction)
 		{
 			// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
 		case DamageReaction::LightStagger:
+			currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
 			SetAnimation(hDamageLightMotion_, true, false);
 			damageReactionTimer_ = 0.3f;
 			break;
 
 			// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
 		case DamageReaction::HeavyStagger:
+			currentDamageReaction_ = DamageReactionState::HeavyStaggerFront; // ここではとりあえず前方向の怯みを設定。
 			SetAnimation(hDamageHeavyMotion_, true, false);
 			damageReactionTimer_ = 1.0f;
 			break;
 
 			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-		case DamageReaction::DownFalling:
+		case DamageReaction::Down:
+			currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
 			SetAnimation(hDownFallMotion_, true, false);
 			damageReactionTimer_ = 0.3f;
 			break;
@@ -462,7 +501,7 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 	SetPosition(pullPosition);
 
 	// 受け流し成功のリアクションを設定する
-	currentDamageReaction_ = DamageReaction::Parried;
+	currentDamageReaction_ = DamageReactionState::Parried;
 	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間（調整可）
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
@@ -489,7 +528,8 @@ void Character::OnGrabDamage(int damage)
 bool Character::CheckGetUpCondition()
 {
 	// ダウン中の時間が十分経過しているかどうか
-	return damageReactionTimer_ <= 0.0f && currentDamageReaction_ == DamageReaction::DownLying;
+	return damageReactionTimer_ <= 0.0f &&
+		currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack;
 }
 
 /// @brief 回避を開始する
@@ -893,6 +933,38 @@ Matrix4x4 Character::GetBoneMatrix(const JointType& jointType) const
 	return model_->GetBoneWorldMatrix(jointName);
 }
 
+/// @brief ダウン中かどうか
+/// @return 
+bool Character::IsDown()const
+{
+	// ダウン中の状態は、ダウン落下、ダウン中、ダウン起き上がりのいずれかの状態である
+	return 
+		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
+		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
+		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
+		currentDamageReaction_ == DamageReactionState::DownFallingRight ||
+
+		currentDamageReaction_ == DamageReactionState::DownLyingFront ||
+		currentDamageReaction_ == DamageReactionState::DownLyingBack ||
+
+		currentDamageReaction_ == DamageReactionState::DownStaggerFront ||
+		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
+
+		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
+		currentDamageReaction_ == DamageReactionState::DownGettingUpBack;
+}
+
+/// @brief 倒れこみ中かどうか
+/// @return 
+bool Character::IsDownFalling() const
+{
+	return
+		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
+		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
+		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
+		currentDamageReaction_ == DamageReactionState::DownFallingRight; 
+}
+
 /// @brief 相手をつかむ
 /// @param target 
 void Character::ExecuteGrab(Character* target, float duration)
@@ -969,6 +1041,9 @@ void Character::StartStyleChange(FightStyle style)
 
 	// ダウン中や掴み・掴まれ中など、スタイルチェンジを許容しない状態の場合は何もしない
 	if (IsDown() || IsGrabbed()) return;
+
+	// 移動を止める
+	MoveStop();
 
 	nextStyle_ = style;
 	styleChangeTimer_ = kStyleChangeDuration;

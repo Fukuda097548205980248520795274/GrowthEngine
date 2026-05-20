@@ -169,7 +169,7 @@ void Player::Initialize()
 	attack4Data.hitDefinitions[0].startTime = 0.1f;
 	attack4Data.hitDefinitions[0].endTime = 0.4f;
 	attack4Data.hitDefinitions[0].damage = 1;
-	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::DownFalling;
+	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
 	attack4Data.hitDefinitions[0].knockback = 0.5f;
 	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(1.0f, 1.0f, 1.0f);
 

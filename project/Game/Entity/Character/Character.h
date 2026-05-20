@@ -242,11 +242,23 @@ public:
 
 	/// @brief ダメージリアクション中かどうか
 	/// @return 
-	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReaction::None; }
+	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReactionState::None; }
 
 	/// @brief ダウン中かどうか
 	/// @return 
-	bool IsDown()const { return currentDamageReaction_ == DamageReaction::DownFalling || currentDamageReaction_ == DamageReaction::DownLying || currentDamageReaction_ == DamageReaction::DownGettingUp; }
+	bool IsDown()const;
+
+	/// @brief 倒れこみ中かどうか
+	/// @return 
+	bool IsDownFalling() const;
+
+	/// @brief ダウン中かどうか
+	/// @return 
+	bool IsDownLying() const { return currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack; }
+
+	/// @brief 起き上がり中かどうか
+	/// @return 
+	bool IsGettingUp() const { return currentDamageReaction_ == DamageReactionState::DownGettingUpFront || currentDamageReaction_ == DamageReactionState::DownGettingUpBack; }
 
 	/// @brief ダメージを受けているかどうか
 	/// @return 
@@ -298,7 +310,7 @@ public:
 
 	/// @brief 受け流されているかどうか
 	/// @return 
-	bool IsParried() const { return currentDamageReaction_ == DamageReaction::Parried; }
+	bool IsParried() const { return currentDamageReaction_ == DamageReactionState::Parried; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -339,6 +351,7 @@ protected:
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
 
+	// やられたかどうか
 	bool isDead_ = false;
 
 
@@ -539,7 +552,7 @@ protected:
 	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 
 	/// @brief 現在のダメージリアクション
-	DamageReaction currentDamageReaction_ = DamageReaction::None;
+	DamageReactionState currentDamageReaction_ = DamageReactionState::None;
 
 	/// @brief ダメージリアクションの経過時間
 	float damageReactionTimer_ = 0.0f;
