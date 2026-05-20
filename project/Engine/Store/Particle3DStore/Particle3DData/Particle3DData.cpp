@@ -35,6 +35,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Particle3D::Param>();
+	param_->blendMode = BlendMode::kAdd;
 	param_->position = Vector3(0.0f, 0.0f, 0.0f);
 	param_->shape = Particle3D::EmitterShape::Point;
 	param_->radius1 = 1.0f;
@@ -62,6 +63,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	if (parameter_)
 	{
 		// パラメータを登録する
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Position", &param_->position);
 		parameter_->SetValue(group_, "Shape", &param_->shape);
 		parameter_->SetValue(group_, "Radius1", &param_->radius1);
@@ -184,6 +186,7 @@ void Engine::Particle3DData::Reset()
 	}
 	else
 	{
+		param_->blendMode = BlendMode::kAdd;
 		param_->position = Vector3(0.0f, 0.0f, 0.0f);
 		param_->shape = Particle3D::EmitterShape::Point;
 		param_->radius1 = 1.0f;
@@ -385,7 +388,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	------------------------*/
 
 	// PSOの設定
-	psoDraw_->Register(commandList);
+	psoDraw_->Register(commandList, param_->blendMode);
 
 	// 頂点を登録する
 	modelStore_->Register(commandList, hModel_, 0);
@@ -419,6 +422,15 @@ void Engine::Particle3DData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
+
 		// 位置
 		ImGui::DragFloat3("Position" , &param_->position.x, 0.01f, -100000.0f, 100000.0f);
 		

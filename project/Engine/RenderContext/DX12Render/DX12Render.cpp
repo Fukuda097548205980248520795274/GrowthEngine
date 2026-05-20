@@ -32,13 +32,6 @@ void Engine::DX12Render::Update(ID3D12GraphicsCommandList* commandList)
 	render2DStore_->Update();
 }
 
-/// @brief リセット
-void Engine::DX12Render::Reset()
-{
-	render2DStore_->Reset();
-	render3DStore_->Reset();
-}
-
 /// @brief シーン前のリセット
 void Engine::DX12Render::PerSceneReset()
 {

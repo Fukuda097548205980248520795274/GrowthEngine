@@ -36,9 +36,6 @@ namespace Engine
 		/// @param viewProjection 
 		void Update(ID3D12GraphicsCommandList* commandList);
 
-		/// @brief リセット
-		void Reset();
-
 		/// @brief シーン前のリセット
 		void PerSceneReset();
 

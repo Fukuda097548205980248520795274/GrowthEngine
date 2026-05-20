@@ -23,12 +23,6 @@ void Engine::DX12Particle::Initialize(ID3D12Device* device, ShaderCompiler* comp
 	particle3DStore_->Initialize(device, compiler, heap, modelStore, textureStore, log);
 }
 
-/// @brief リセット
-void Engine::DX12Particle::Reset()
-{
-	particle3DStore_->Reset();
-}
-
 /// @brief 更新処理
 /// @param commandList 
 void Engine::DX12Particle::Update(ID3D12GraphicsCommandList* commandList)

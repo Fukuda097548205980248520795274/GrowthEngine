@@ -103,6 +103,13 @@ void Engine::Prefab3DParameter::RegisterGroupDataReflection(const std::string& f
 				std::string** ptr = std::get_if<std::string*>(&item);
 				**ptr = value;
 			}
+			else if (itItem->is_number_integer() && std::holds_alternative<BlendMode*>(item))
+			{
+				// 列挙体 BlendMode
+				BlendMode value = static_cast<BlendMode>(itItem->get<int32_t>());
+				BlendMode** ptr = std::get_if<BlendMode*>(&item);
+				**ptr = value;
+			}
 
 
 			break;
@@ -179,6 +186,12 @@ void Engine::Prefab3DParameter::SaveFile(const std::string& fileName)
 		{
 			std::string* value = std::get<std::string*>(item);
 			root[fileName][itemName] = *value;
+		}
+		else if (std::holds_alternative<BlendMode*>(item))
+		{
+			// 列挙体 BlendMode
+			BlendMode* value = std::get<BlendMode*>(item);
+			root[fileName][itemName] = static_cast<int32_t>(*value);
 		}
 	}
 

@@ -31,6 +31,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Render2D::Text::Param>();
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNormal;
+
 	// トランスフォーム
 	param_->transform.scale = Vector2(1.0f, 1.0f);
 	param_->transform.rotate = 0.0f;
@@ -47,6 +50,9 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 	group_ = "Text_" + name_;
 	if (parameter_)
 	{
+		// ブレンドモード
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
+
 		// トランスフォーム
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
@@ -134,6 +140,9 @@ void Engine::Render2DTextData::Reset()
 	}
 	else
 	{
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNormal;
+
 		// トランスフォーム
 		param_->transform.scale = Vector2(1.0f, 1.0f);
 		param_->transform.rotate = 0.0f;
@@ -284,7 +293,7 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 
 
 	// psoの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// 頂点の設定
 	indexResource_->Register(commandList);
@@ -340,6 +349,14 @@ void Engine::Render2DTextData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// 画面アンカー
 		const char* type[] = { "LeftTop", "Top", "RightTop" , "Left" , "Center" , "Right","LeftBottom", "Bottom", "RightBottom" };
 		int32_t shapeIndex = static_cast<int32_t>(param_->screenAnchor);

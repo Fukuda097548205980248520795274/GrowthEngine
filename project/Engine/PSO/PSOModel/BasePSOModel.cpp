@@ -3,11 +3,15 @@
 
 /// @brief コマンドリストに登録する
 /// @param commandList 
-void Engine::BasePSOModel::Register(ID3D12GraphicsCommandList* commandList) const
+/// @param blendMode 
+void Engine::BasePSOModel::Register(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) const
 {
 	// nullptrチェック
 	assert(commandList);
 
+	// ルートシグネチャを設定する
 	commandList->SetGraphicsRootSignature(rootSignature_.Get());
-	commandList->SetPipelineState(graphicsPipelineState_[blendMode_].Get());
+
+	// ブレンドモードに応じたPSOを設定する
+	commandList->SetPipelineState(graphicsPipelineState_[static_cast<int32_t>(blendMode)].Get());
 }

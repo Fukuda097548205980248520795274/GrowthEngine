@@ -73,13 +73,6 @@ void Engine::Render2DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	psoText_->Initialize(device, render2DVS_.Get(), textPS_.Get(), log);
 }
 
-/// @brief リセット
-void Engine::Render2DStore::Reset()
-{
-	psoRender2D_->ResetBlendMode();
-	psoText_->ResetBlendMode();
-}
-
 /// @brief 更新処理
 void Engine::Render2DStore::Update()
 {

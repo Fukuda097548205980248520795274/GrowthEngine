@@ -59,12 +59,6 @@ void Engine::Particle3DStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePsoParticle3DUpdateAttract_->Initialize(device, compiler, log);
 }
 
-/// @brief リセット
-void Engine::Particle3DStore::Reset()
-{
-	psoParticle_->ResetBlendMode();
-}
-
 /// @brief 読み込む
 /// @param device 
 /// @param commandList 

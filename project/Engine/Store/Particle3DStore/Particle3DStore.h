@@ -42,9 +42,6 @@ namespace Engine
 		/// @param textureStore 
 		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, DX12Heap* heap, ModelStore* modelStore, TextureStore* textureStore, Log* log);
 
-		/// @brief リセット
-		void Reset();
-
 		/// @brief 読み込む
 		/// @param device 
 		/// @param commandList 

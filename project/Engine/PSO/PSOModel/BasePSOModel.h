@@ -25,16 +25,10 @@ namespace Engine
 		/// @param log 
 		virtual void Initialize(ID3D12Device* device, IDxcBlob* vertexShaderBlob, IDxcBlob* pixelShaderBlob, Log* log) = 0;
 
-		/// @brief ブレンドモードの設定
-		/// @param blendMode 
-		void SetBlendMode(BlendMode blendMode) { blendMode_ = static_cast<int>(blendMode); }
-
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
-		void Register(ID3D12GraphicsCommandList* commandList) const;
-
-		/// @brief ブレンドモードを初期化する
-		virtual void ResetBlendMode() = 0;
+		/// @param blendMode 
+		void Register(ID3D12GraphicsCommandList* commandList, BlendMode blendMode) const;
 
 
 		template<class T>
@@ -56,10 +50,5 @@ namespace Engine
 
 		// PSO
 		ComPtr<ID3D12PipelineState> graphicsPipelineState_[static_cast<int>(BlendMode::kNumBlendMode)];
-
-
-
-		// 現在のブレンドモード
-		int32_t blendMode_ = static_cast<int>(BlendMode::kNone);
 	};
 }

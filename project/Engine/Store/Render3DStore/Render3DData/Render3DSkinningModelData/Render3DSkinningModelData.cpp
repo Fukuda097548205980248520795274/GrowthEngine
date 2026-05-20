@@ -48,6 +48,9 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 	param_ = std::make_unique<Render3D::SkinningModel::Param>();
 
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNone;
+
 	// モデルトランスフォーム
 	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -62,10 +65,10 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 	group_ = "SkinningModel_" + name_;
 	if (parameter_)
 	{
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Model_Transform_Scale", &param_->modelTransform.scale);
 		parameter_->SetValue(group_, "Model_Transform_Rotate", &param_->modelTransform.rotate);
 		parameter_->SetValue(group_, "Model_Transform_Translate", &param_->modelTransform.translate);
-
 		parameter_->SetValue(group_, "Animation_Timer", &param_->animation.timer);
 	}
 
@@ -255,6 +258,9 @@ void Engine::Render3DSkinningModelData::Reset()
 	{
 		// ファイルがないとき
 
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNone;
+
 		// モデルトランスフォーム
 		param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -362,7 +368,7 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// カメラリソースの設定
 	cameraStore->RegisterCameraResource(commandList, 5);
@@ -657,6 +663,14 @@ void Engine::Render3DSkinningModelData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Model_Transform"))
 		{

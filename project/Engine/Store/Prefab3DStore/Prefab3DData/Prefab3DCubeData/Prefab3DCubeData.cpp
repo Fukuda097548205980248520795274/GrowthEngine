@@ -72,6 +72,9 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	motionVectorResource_->Initialize(device, heap, numInstance_, log);
 
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNone;
+
 	// トランスフォーム
 	param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -104,10 +107,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 
 	if (parameter_)
 	{
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
 		parameter_->SetValue(group_, "Transform_Translate", &param_->transform.translate);
-
 		parameter_->SetValue(group_, "Material_Color", &param_->material.color);
 		parameter_->SetValue(group_, "Material_UV_Scale", &param_->material.uv.scale);
 		parameter_->SetValue(group_, "Material_UV_Rotate", &param_->material.uv.radius);
@@ -120,10 +123,8 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
 		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
-
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
-
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 
 		// 値を反映させる
@@ -150,6 +151,9 @@ void Engine::Prefab3DCubeData::Reset()
 	}
 	else
 	{
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNone;
+
 		// モデルトランスフォーム
 		param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -193,7 +197,7 @@ void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12Graphics
 
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// カメラの設定
 	cameraStore_->RegisterCameraResource(commandList, 4);
@@ -441,6 +445,14 @@ void Engine::Prefab3DCubeData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Model_Transform"))
 		{

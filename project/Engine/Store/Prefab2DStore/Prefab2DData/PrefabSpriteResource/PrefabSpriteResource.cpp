@@ -35,6 +35,9 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	// パラメータの生成
 	param_ = std::make_unique<Prefab2D::Sprite::Base::Param>();
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNormal;
+
 	// トラスフォーム
 	param_->transform.scale = Vector2(1.0f, 1.0f);
 	param_->transform.rotate = 0.0f;
@@ -60,6 +63,9 @@ void Engine::PrefabSpriteResource::Initialize(VertexBufferResource<SpriteVertexD
 	group_ = "Sprite_" + name_;
 	if (parameter_)
 	{
+		// ブレンドモード
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
+
 		// トランスフォーム
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
@@ -104,6 +110,9 @@ void Engine::PrefabSpriteResource::Reset()
 	}
 	else
 	{
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNormal;
+
 		// トラスフォーム
 		param_->transform.scale = Vector2(1.0f, 1.0f);
 		param_->transform.rotate = 0.0f;
@@ -141,7 +150,7 @@ void Engine::PrefabSpriteResource::Register(ID3D12GraphicsCommandList* commandLi
 
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// インデックスの設定
 	indexResource_->Register(commandList);
@@ -225,6 +234,14 @@ void Engine::PrefabSpriteResource::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Transform"))
 		{

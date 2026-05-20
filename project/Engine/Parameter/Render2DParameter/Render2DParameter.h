@@ -4,6 +4,7 @@
 #include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
+#include "PSO/EnumBlendMode/EnumBlendMode.h"
 
 namespace Engine
 {
@@ -46,7 +47,7 @@ namespace Engine
 	protected:
 
 		// 項目
-		using Item = std::variant<bool*, int32_t*, uint32_t*, float*, Vector2*, Vector3*, Vector4*, std::string*, Render2D::ScreenAnchor*>;
+		using Item = std::variant<bool*, int32_t*, uint32_t*, float*, Vector2*, Vector3*, Vector4*, std::string*,BlendMode*, Render2D::ScreenAnchor*>;
 
 		// グループ
 		using Group = std::map<std::string, Item>;

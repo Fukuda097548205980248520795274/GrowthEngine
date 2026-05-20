@@ -90,9 +90,6 @@ void Engine::DX12Prefab::Update()
 /// @brief リセット
 void Engine::DX12Prefab::Reset()
 {
-	psoPrefab3D_->ResetBlendMode();
-	psoPrefab2D_->ResetBlendMode();
-
 #ifdef _DEVELOPMENT
 
 	// 描画数

@@ -3,6 +3,7 @@
 #include "Math/Vector/Vector2/Vector2.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
+#include "PSO/EnumBlendMode/EnumBlendMode.h"
 #include <vector>
 
 namespace Engine
@@ -100,6 +101,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief ブレンドモード
+				BlendMode blendMode;
+
 				/// @brief モデルトランスフォーム
 				Transform modelTransform;
 
@@ -207,6 +211,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief ブレンドモード
+				BlendMode blendMode;
+
 				/// @brief モデルトランスフォーム
 				Transform modelTransform;
 
@@ -320,6 +327,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief ブレンドモード
+				BlendMode blendMode;
+
 				/// @brief モデルトランスフォーム
 				Transform modelTransform;
 
@@ -429,6 +439,9 @@ namespace Engine
 			/// @brief パラメータ
 			struct Param
 			{
+				/// @brief ブレンドモード
+				BlendMode blendMode;
+
 				/// @brief トランスフォーム
 				Transform transform;
 

@@ -23,9 +23,6 @@ namespace Engine
 		/// @param log 
 		void Initialize(ID3D12Device* device,ShaderCompiler* compiler, Log* log);
 
-		/// @brief リセット
-		void Reset();
-
 		/// @brief 更新処理
 		void Update();
 

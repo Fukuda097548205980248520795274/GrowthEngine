@@ -58,6 +58,9 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	// モデルデータを取得する
 	ModelData modelData = modelStore_->GetModelData(hModel_);
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNone;
+
 	// モデルトランスフォーム
 	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -67,6 +70,7 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	group_ = "StaticModel_" + name_;
 	if (parameter_)
 	{
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Model_Transform_Scale", &param_->modelTransform.scale);
 		parameter_->SetValue(group_, "Model_Transform_Rotate", &param_->modelTransform.rotate);
 		parameter_->SetValue(group_, "Model_Transform_Translate", &param_->modelTransform.translate);
@@ -119,7 +123,6 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Scale", &param_->meshTransforms[meshIndex].scale);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Rotate", &param_->meshTransforms[meshIndex].rotate);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Transform_Translate", &param_->meshTransforms[meshIndex].translate);
-
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Color", &param_->meshMaterial[meshIndex].color);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Scale", &param_->meshMaterial[meshIndex].uv.scale);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_UV_Rotate", &param_->meshMaterial[meshIndex].uv.radius);
@@ -132,10 +135,8 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Shadow", &param_->meshMaterial[meshIndex].enableShadow);
-
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
-
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
 
@@ -180,6 +181,9 @@ void Engine::Prefab3DStaticModelData::Reset()
 	}
 	else
 	{
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNone;
+
 		// モデルトランスフォーム
 		param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -239,7 +243,7 @@ void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12G
 
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// カメラの設定
 	cameraStore_->RegisterCameraResource(commandList, 4);
@@ -518,6 +522,14 @@ void Engine::Prefab3DStaticModelData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Model_Transform"))
 		{

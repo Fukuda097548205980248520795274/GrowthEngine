@@ -33,6 +33,9 @@ void Engine::Render2DSpriteData::Initialize(VertexBufferResource<SpriteVertexDat
 	// パラメータの生成と初期化
 	param_ = std::make_unique<Render2D::Sprite::Param>();
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNormal;
+
 	// トラスフォーム
 	param_->transform.scale = Vector2(1.0f, 1.0f);
 	param_->transform.rotate = 0.0f;
@@ -61,6 +64,9 @@ void Engine::Render2DSpriteData::Initialize(VertexBufferResource<SpriteVertexDat
 	group_ = "Sprite_" + name_;
 	if (parameter_)
 	{
+		// ブレンドモード
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
+
 		// トランスフォーム
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
@@ -105,6 +111,9 @@ void Engine::Render2DSpriteData::Reset()
 	}
 	else
 	{
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNormal;
+
 		// トラスフォーム
 		param_->transform.scale = Vector2(1.0f, 1.0f);
 		param_->transform.rotate = 0.0f;
@@ -207,7 +216,7 @@ void Engine::Render2DSpriteData::Register(const Matrix4x4& viewProjection, ID3D1
 	--------------------------*/
 
 	// PSOの登録
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// インデックスリソースの設定
 	indexResource_->Register(commandList);
@@ -242,6 +251,14 @@ void Engine::Render2DSpriteData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// 画面アンカー
 		const char* type[] = { "LeftTop", "Top", "RightTop" , "Left" , "Center" , "Right","LeftBottom", "Bottom", "RightBottom" };
 		int32_t shapeIndex = static_cast<int32_t>(param_->screenAnchor);

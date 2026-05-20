@@ -39,6 +39,9 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	param_ = std::make_unique<Render3D::StaticModel::Param>();
 
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNone;
+
 	// モデルトランスフォーム
 	param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -48,6 +51,7 @@ void Engine::Render3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	group_ = "StaticModel_" + name_;
 	if (parameter_)
 	{
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Model_Transform_Scale", &param_->modelTransform.scale);
 		parameter_->SetValue(group_, "Model_Transform_Rotate", &param_->modelTransform.rotate);
 		parameter_->SetValue(group_, "Model_Transform_Translate", &param_->modelTransform.translate);
@@ -182,6 +186,9 @@ void Engine::Render3DStaticModelData::Reset()
 	{
 		// ファイルがないとき
 
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNone;
+
 		// モデルトランスフォーム
 		param_->modelTransform.scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -250,7 +257,7 @@ void Engine::Render3DStaticModelData::Register(Camera3DStore* cameraStore, Skybo
 
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// カメラリソースの設定
 	cameraStore->RegisterCameraResource(commandList, 5);
@@ -485,6 +492,14 @@ void Engine::Render3DStaticModelData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Model_Transform"))
 		{

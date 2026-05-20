@@ -40,6 +40,9 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	// パラメータの生成
 	param_ = std::make_unique<Render3D::UVSphere::Param>();
 
+	// ブレンドモード
+	param_->blendMode = BlendMode::kNone;
+
 	// トランスフォーム
 	param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -77,6 +80,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	group_ = "UVSphere_" + name_;
 	if (parameter_)
 	{
+		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
 		parameter_->SetValue(group_, "Transform_Scale", &param_->transform.scale);
 		parameter_->SetValue(group_, "Transform_Rotate", &param_->transform.rotate);
 		parameter_->SetValue(group_, "Transform_Translate", &param_->transform.translate);
@@ -157,6 +161,9 @@ void Engine::Render3DUVSphereData::Reset()
 	else
 	{
 		// ファイルがないとき
+
+		// ブレンドモード
+		param_->blendMode = BlendMode::kNone;
 
 		// トランスフォーム
 		param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
@@ -245,7 +252,7 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	------------------------*/
 
 	// PSOの設定
-	pso->Register(commandList);
+	pso->Register(commandList, param_->blendMode);
 
 	// カメラリソースの設定
 	cameraStore->RegisterCameraResource(commandList, 5);
@@ -506,6 +513,14 @@ void Engine::Render3DUVSphereData::DebugParameter()
 	// モデル名
 	if (ImGui::TreeNode(name_.c_str()))
 	{
+		// ブレンドモード
+		const char* blendModeStr[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+		int32_t currentBlendMode = static_cast<int32_t>(param_->blendMode);
+		if (ImGui::Combo("BlendMode", &currentBlendMode, blendModeStr, IM_ARRAYSIZE(blendModeStr)))
+		{
+			param_->blendMode = static_cast<BlendMode>(currentBlendMode);
+		}
+
 		// モデルトランスフォーム
 		if (ImGui::TreeNode("Transform"))
 		{

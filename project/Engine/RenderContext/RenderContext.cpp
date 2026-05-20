@@ -176,9 +176,7 @@ void Engine::RenderContext::NewFrame()
 #endif
 
 	// リセット
-	render_->Reset();
 	prefab_->Reset();
-	particle_->Reset();
 	lightStore_->FrameReset();
 
 	// コマンドリストの取得

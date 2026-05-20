@@ -81,13 +81,6 @@ void Engine::Render3DStore::Update(ID3D12GraphicsCommandList* commandList)
 	}
 }
 
-/// @brief リセット
-void Engine::Render3DStore::Reset()
-{
-	// データリセット
-	psoRender3D_->ResetBlendMode();
-}
-
 /// @brief シーン前のリセット
 void Engine::Render3DStore::PerSceneReset()
 {
