@@ -479,9 +479,9 @@ namespace Engine
 		/// @param hModel 
 		/// @param log 
 		/// @return 
-		Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance, ModelHandle hModel, Log* log)
+		Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance,uint32_t numEmitter, ModelHandle hModel, Log* log)
 		{
-			return particle_->LoadParticle3D(core_->GetDevice(), commandList_, hModel, name, numInstance, log);
+			return particle_->LoadParticle3D(core_->GetDevice(), commandList_, hModel, name, numInstance,numEmitter, log);
 		}
 
 		/// @brief 3Dパーティクルを描画する

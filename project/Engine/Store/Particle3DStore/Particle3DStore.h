@@ -49,7 +49,11 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param log 
-		Particle3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,ModelHandle hModel, const std::string& name, uint32_t numInstance, Log* log);
+		Particle3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, ModelHandle hModel, const std::string& name,
+			uint32_t numInstance, uint32_t emitterNum, Log* log);
+
+		/// @brief シーン前のリセット処理
+		void PerSceneReset();
 
 		/// @brief 更新処理
 		/// @param commandList 
@@ -66,6 +70,22 @@ namespace Engine
 		/// @param name 
 		/// @param viewProjection 
 		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore);
+
+		/// @brief 放出開始
+		/// @param handle 
+		void Emit(Particle3DHandle handle, int32_t emitterIndex) { dataTable_[handle]->Emit(emitterIndex); }
+
+		/// @brief 放出開始
+		/// @param name 
+		void Emit(const std::string& name, int32_t emitterIndex) { dataTable_[nameTable_[name]]->Emit(emitterIndex); }
+
+		/// @brief 放出停止
+		/// @param handle 
+		void Stop(Particle3DHandle handle, int32_t emitterIndex) { dataTable_[handle]->Stop(emitterIndex); }
+
+		/// @brief 放出停止
+		/// @param name 
+		void Stop(const std::string& name, int32_t emitterIndex) { dataTable_[nameTable_[name]]->Stop(emitterIndex); }
 
 		/// @brief パラメータを取得する
 		/// @param handle 

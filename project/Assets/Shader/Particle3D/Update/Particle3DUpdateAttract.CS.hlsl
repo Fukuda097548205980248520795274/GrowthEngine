@@ -1,88 +1,8 @@
+#include "../Particle3D.hlsli"
 
-// パーティクル
-struct Particle
-{
-    // 位置
-    float3 translate;
-    
-    // 生存時間
-    float lifeTime;
-    
-    // 大きさ
-    float3 scale;
 
-    // 現在の時間
-    float currentTime;
-    
-    // 色
-    float4 color;
-    
-    // 方向
-    float3 direction;
-    
-    // 放出位置
-    float3 emitPos;
-};
-RWStructuredBuffer<Particle> gParticles : register(u0);
-
-// パーティクルの最大数
-struct ParticleMaxNum
-{
-    uint num;
-};
-ConstantBuffer<ParticleMaxNum> gParticleMaxNum : register(b0);
-
-// フレームごとのデータ
-struct PerFrame
-{
-    float deltaTime;
-    float time;
-};
+ConstantBuffer<MaxNum> gMaxNum : register(b0);
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
-
-// エミッター
-struct Emitter
-{
-    // 位置
-    float3 translate;
-
-	// 放出数
-    uint count;
-
-	// 放出間隔の時間
-    float frequency;
-
-	// 放出間隔のタイマー
-    float frequencyTimer;
-
-    // 放出フラグ
-    uint emit;
-    
-    /// @brief 初期の色
-    float4 startColor;
-
-	/// @brief 最後の色
-    float4 endColor;
-    
-    // 初期の大きさ
-    float startScale;
-
-	// 最後の大きさ
-    float endScale;
-    
-    // 最小の生存時間
-    float minLifeTime;
-
-	// 最大の生存時間
-    float maxLifeTime;
-    
-    // 初期の速度
-    float startSpeed;
-    
-    // 最後の速度
-    float endSpeed;
-};
-ConstantBuffer<Emitter> gEmitter : register(b2);
 
 // 引き寄せ
 struct Attract
@@ -93,8 +13,9 @@ struct Attract
     // 加速度
     float acceleration;
 };
-ConstantBuffer<Attract> gAttract : register(b3);
+ConstantBuffer<Attract> gAttract : register(b2);
 
+RWStructuredBuffer<Particle> gParticles : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
 
@@ -105,7 +26,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     uint particleIndex = DTid.x;
     
     // パーティクルの最大数を超えている場合は処理しない
-    if (particleIndex >= gParticleMaxNum.num)
+    if (particleIndex >= gMaxNum.particleNum)
         return;
     
     // 寿命が0以下の場合は処理しない
@@ -119,14 +40,17 @@ void main( uint3 DTid : SV_DispatchThreadID )
         float t = gParticles[particleIndex].currentTime / gParticles[particleIndex].lifeTime;
         
         // 色
-        gParticles[particleIndex].color = lerp(gEmitter.startColor, gEmitter.endColor, t);
+        gParticles[particleIndex].color = lerp(gParticles[particleIndex].startColor, gParticles[particleIndex].endColor, t);
         
         // 移動
         gParticles[particleIndex].translate = lerp(gParticles[particleIndex].emitPos, gAttract.position, pow(t, gAttract.acceleration));
         
+        // 回転
+        gParticles[particleIndex].rotation = slerp(gParticles[particleIndex].startRotation, gParticles[particleIndex].endRotation, t);
+        
         // 大きさ
-        float scale = lerp(gEmitter.startScale, gEmitter.endScale, t);
-        gParticles[particleIndex].scale = float3(scale, scale, scale);
+        float3 scale = lerp(gParticles[particleIndex].startScale, gParticles[particleIndex].endScale, t);
+        gParticles[particleIndex].scale = scale;
         
         // タイマーを進める
         gParticles[particleIndex].currentTime += gPerFrame.deltaTime;
@@ -148,7 +72,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
             InterlockedAdd(gFreeListIndex[0], 1, freeListIndex);
             
             // フリーリストの次のインデックスに、パーティクルのインデックスを追加
-            if ((freeListIndex + 1) < gParticleMaxNum.num)
+            if ((freeListIndex + 1) < gMaxNum.particleNum)
             {
                 gFreeList[freeListIndex + 1] = particleIndex;
             }

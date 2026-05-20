@@ -39,13 +39,20 @@ void Engine::ComputePSOParticle3DEmitterSphere::Initialize(ID3D12Device* device,
 	freeListDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
 	freeListDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	D3D12_DESCRIPTOR_RANGE emitPositionDescriptor[1];
+	emitPositionDescriptor[0].BaseShaderRegister = 0;
+	emitPositionDescriptor[0].RegisterSpace = 0;
+	emitPositionDescriptor[0].NumDescriptors = 1;
+	emitPositionDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	emitPositionDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 
 	/*---------------------
 		ルートパラメータ
 	---------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[7];
+	D3D12_ROOT_PARAMETER rootParameter[8];
 
 	// UAV DescriptorTable u0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -83,11 +90,17 @@ void Engine::ComputePSOParticle3DEmitterSphere::Initialize(ID3D12Device* device,
 	rootParameter[5].DescriptorTable.pDescriptorRanges = freeListDescriptor;
 	rootParameter[5].DescriptorTable.NumDescriptorRanges = _countof(freeListDescriptor);
 
-	// CBV b3
-	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	// SRV DescriptorTable t0
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[6].Descriptor.RegisterSpace = 0;
-	rootParameter[6].Descriptor.ShaderRegister = 3;
+	rootParameter[6].DescriptorTable.pDescriptorRanges = emitPositionDescriptor;
+	rootParameter[6].DescriptorTable.NumDescriptorRanges = _countof(emitPositionDescriptor);
+
+	// CBV b3
+	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[7].Descriptor.RegisterSpace = 0;
+	rootParameter[7].Descriptor.ShaderRegister = 3;
 
 
 	/*-------------------------

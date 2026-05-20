@@ -123,6 +123,13 @@ void Engine::Particle3DParameter::RegisterGroupDataReflection(const std::string&
 				Particle3D::EmitterShape** ptr = std::get_if<Particle3D::EmitterShape*>(&item);
 				**ptr = value;
 			}
+			else if (itItem->is_number_integer() && std::holds_alternative<Particle3D::AttractPostitionType*>(item))
+			{
+				// 列挙体 AttractPostitionType
+				Particle3D::AttractPostitionType value = static_cast<Particle3D::AttractPostitionType>(itItem->get<int32_t>());
+				Particle3D::AttractPostitionType** ptr = std::get_if<Particle3D::AttractPostitionType*>(&item);
+				**ptr = value;
+			}
 
 			break;
 		}
@@ -215,6 +222,12 @@ void Engine::Particle3DParameter::SaveFile(const std::string& fileName)
 		{
 			// 列挙体 EmitterShape
 			Particle3D::EmitterShape* value = std::get<Particle3D::EmitterShape*>(item);
+			root[fileName][itemName] = static_cast<int32_t>(*value);
+		}
+		else if (std::holds_alternative<Particle3D::AttractPostitionType*>(item))
+		{
+			// 列挙体 AttractPostitionType
+			Particle3D::AttractPostitionType* value = std::get<Particle3D::AttractPostitionType*>(item);
 			root[fileName][itemName] = static_cast<int32_t>(*value);
 		}
 	}

@@ -47,7 +47,8 @@ namespace Engine
 	protected:
 
 		// 項目
-		using Item = std::variant<bool*, int32_t*, uint32_t*, float*, Vector2*, Vector3*, Vector4*, std::string*, Particle3D::EmitterShape* , BlendMode*>;
+		using Item = std::variant<bool*, int32_t*, uint32_t*, float*, Vector2*, Vector3*, Vector4*, std::string*, BlendMode*,
+			Particle3D::EmitterShape* , Particle3D::AttractPostitionType*>;
 
 		// グループ
 		using Group = std::map<std::string, Item>;

@@ -1,9 +1,11 @@
 #pragma once
+#define NOMINMAX
 #include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
 #include "Data/ParticleData/ParticleData.h"
 #include "Handle/Handle.h"
 #include "Resource/RWStructuredBufferResource/RWStructuredBufferResource.h"
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
+#include "Resource/StructuredBufferResource/StructuredBufferResource.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
 class GrowthEngine;
@@ -25,8 +27,8 @@ namespace Engine
 		/// @param name 
 		/// @param hModel 
 		/// @param numInstance 
-		Particle3DData(const std::string& name, ModelHandle hModel, uint32_t numInstance) :
-			name_(name), hModel_(hModel), numInstance_(numInstance) {
+		Particle3DData(const std::string& name, ModelHandle hModel, uint32_t numInstance, uint32_t emitterNum) :
+			name_(name), hModel_(hModel), numInstance_(numInstance), emitterNum_(emitterNum) {
 			isLoad_ = true;
 		}
 
@@ -43,11 +45,22 @@ namespace Engine
 		/// @brief リセット
 		void Reset();
 
+		/// @brief シーン前のリセット処理
+		void PerSceneReset();
+
 		/// @brief 更新処理
 		/// @param commandList 
 		/// @param psoEmitter 
 		/// @param psoUpdate 
 		void Update(ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoEmitter, BaseComputePSO* psoUpdate);
+
+		/// @brief 放出開始
+		/// @param emitterIndex 
+		void Emit(int32_t emitterIndex) { param_->emitter[emitterIndex].isStart = true; }
+
+		/// @brief 放出停止
+		/// @param emitterIndex 
+		void Stop(int32_t emitterIndex) { param_->emitter[emitterIndex].isStart = false; }
 
 		/// @brief 描画処理
 		/// @param commandList 
@@ -61,7 +74,7 @@ namespace Engine
 
 		/// @brief ハンドルを取得する
 		/// @return 
-		ModelHandle GetHandle()const { return hModel_; }
+		ModelHandle GetHandle()const { return param_->hModel; }
 
 		/// @brief パラメータを取得する
 		/// @return 
@@ -69,7 +82,7 @@ namespace Engine
 
 		/// @brief 引力を有効にしているかどうか
 		/// @return 
-		bool EnableAttract()const { return param_->enableAttract; }
+		bool EnableAttract()const { return param_->attract.enableAttract; }
 
 		/// @brief エミッターの形状IDを取得する
 		/// @return 
@@ -90,11 +103,14 @@ namespace Engine
 		/// @brief パーティクル数リソース
 		std::unique_ptr<ConstantBufferResource<ParticleNumDataForGPU>> particleNumResource_ = nullptr;
 
+		/// @brief エミッターリソース
+		std::unique_ptr<StructuredBufferResource<Particle3DEmitterDataForGPU>> emitterResource_ = nullptr;
+
 		/// @brief パーティクルビューリソース
 		std::unique_ptr<ConstantBufferResource<ParticlePreViewDataForGPU>> particleViewResource_ = nullptr;
 
-		/// @brief エミッターリソース
-		std::unique_ptr<ConstantBufferResource<Particle3DEmitterPointDataForGPU>> particleEmitterPointResource_ = nullptr;
+		/// @brief 放出設定リソース
+		std::unique_ptr<ConstantBufferResource<Particle3DEmitOptionDataForGPU>> emitOptionResource_ = nullptr;
 
 		/// @brief エミッター形状リソース
 		std::unique_ptr<ConstantBufferResource<Particle3DEmitterShapeDataForGPU>> particleEmitterShapeResource_ = nullptr;
@@ -120,14 +136,20 @@ namespace Engine
 		/// @brief グループ
 		std::string group_{};
 
+		/// @brief インスタンス数
+		uint32_t numInstance_ = 0;
+
+		// エミッター数
+		uint32_t emitterNum_ = 0;
+
 		/// @brief モデルハンドル
 		ModelHandle hModel_ = 0;
 
 		/// @brief テクスチャハンドル
 		TextureHandle hTexture_ = 0;
 
-		/// @brief インスタンス数
-		uint32_t numInstance_ = 0;
+		/// @brief テクスチャのファイルパス
+		std::string textureFilePath_{};
 
 		/// @brief ロードフラグ
 		bool isLoad_ = false;

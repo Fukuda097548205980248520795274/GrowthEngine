@@ -815,9 +815,9 @@ public:
 	/// @param numInstance 
 	/// @param hModel 
 	/// @return 
-	Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance, ModelHandle hModel) const
+	Particle3DHandle LoadParticle3D(const std::string& name, uint32_t numInstance, uint32_t numEmitter, ModelHandle hModel) const
 	{
-		return renderContext_->LoadParticle3D(name, numInstance, hModel, log_.get());
+		return renderContext_->LoadParticle3D(name, numInstance,numEmitter, hModel, log_.get());
 	}
 
 	/// @brief 3Dパーティクルを描画する

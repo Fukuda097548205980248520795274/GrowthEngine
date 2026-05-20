@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <vector>
+#include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
 #include "PSO/EnumBlendMode/EnumBlendMode.h"
@@ -16,12 +18,39 @@ namespace Engine
 			Sphere
 		};
 
+		// 引力の位置のタイプ
+		enum AttractPostitionType
+		{
+			Direction,
+			Position
+		};
+
+		struct Emitter
+		{
+			Vector3 position;
+
+			// 放出開始
+			bool isStart;
+
+			// タイマー
+			float timer;
+		};
+
 		/// @brief 色
 		struct Color
 		{
+			// ランダムな色を使用するかどうか
+			bool randomColor;
+
 			Vector4 start;
 
 			Vector4 end;
+
+			// アルファ値の開始値
+			float startAlpha;
+
+			// アルファ値の終了値
+			float endAlpha;
 		};
 
 		/// @brief 大きさ
@@ -48,15 +77,70 @@ namespace Engine
 			float max;
 		};
 
+		// 放出時間
+		struct EmitTime
+		{
+			// ループするかどうか
+			bool isLoop;
+
+			// 放出時間
+			float emit;
+
+			// 待機時間
+			float pause;
+		};
+
+		// 回転
+		struct Rotate
+		{
+			// 回転の軸
+			Vector3 axis;
+
+			// 回転の初期値
+			float start;
+
+			// 回転の最後の値
+			float end;
+		};
+
+		struct Attract
+		{
+			// 引力有効化
+			bool enableAttract;
+
+			// 引力の位置のタイプ
+			AttractPostitionType positionType;
+
+			// 引力の加速度
+			float attractAcceleration;
+
+
+			// 引力の中心点
+			Vector3 attractCenter;
+
+			// 引力の方向
+			Vector3 attractDirection;
+
+			// 引力の位置
+			float attractLength;
+
+
+			// 引力の位置
+			Vector3 attractPosition;
+
+
+			// エミッターと引力の位置を入れ替える
+			bool swapEmitterAttract;
+		};
+
 		/// @brief パラメータ
 		struct Param
 		{
-			/// @brief ブレンドモード
-			BlendMode blendMode;
+			// ブレンドモード
+			BlendMode blendMode = BlendMode::kAdd;
 
-			/// @brief 位置
-			Vector3 position;
-
+			// 位置
+			std::vector<Emitter> emitter;
 
 			// エミッターの図形
 			EmitterShape shape;
@@ -80,6 +164,12 @@ namespace Engine
 			/// @brief 生存期間
 			LifeTime lifeTime;
 
+			/// @brief 放出時間
+			EmitTime emitTime;
+
+			// 回転
+			Rotate rotate;
+
 			/// @brief 放出数
 			int32_t count;
 
@@ -90,20 +180,15 @@ namespace Engine
 			bool enableBillboard;
 
 
-			/// @brief 引力の有無
-			bool enableAttract;
+			// 引力
+			Attract attract;
 
-			// 吸引加速度
-			float attractAcceleration;
 
-			/// @brief 引力の方向
-			Vector3 attractDirection;
+			/// @brief テクスチャハンドル
+			TextureHandle hTexture;
 
-			/// @brief 引力の距離
-			float attractLength;
-
-			// 放出と引力の場所を入れ替える
-			bool swapEmitterAttract;
+			/// @brief モデルハンドル
+			ModelHandle hModel;
 		};
 	}
 }
