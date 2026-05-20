@@ -91,11 +91,29 @@ Size=352,490
 Collapsed=0
 DockId=0x00000002,5
 
+[Window][Sound]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,6
+
+[Window][Behavior Tree Editor]
+Pos=0,18
+Size=926,490
+Collapsed=0
+DockId=0x00000001,1
+
+[Window][Motion Manager Editor]
+Pos=0,18
+Size=926,490
+Collapsed=0
+DockId=0x00000001,2
+
 [Docking][Data]
 DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
   DockNode    ID=0x00000003 Parent=0x14621557 SizeRef=1280,490 Split=X
     DockNode  ID=0x00000001 Parent=0x00000003 SizeRef=926,702 CentralNode=1 Selected=0xCD8A0BD6
-    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x3AD7C986
+    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x216DA292
   DockNode    ID=0x00000004 Parent=0x14621557 SizeRef=1280,210 Split=X Selected=0xBE78FE5F
     DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=1222,170 Selected=0xFFE73297
     DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=56,170 Selected=0xFDB80A1C
