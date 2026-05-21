@@ -7,7 +7,7 @@ public:
 
 	/// @brief タグ
 	/// @note プレイヤーや敵などの識別に使用する
-	enum EntityTag
+	enum class EntityTag
 	{
 		None,
 		Character,
@@ -31,10 +31,6 @@ public:
 	/// @brief 終了したかどうか
 	/// @return 
 	bool IsFinished()const { return isFinished_; }
-
-	/// @brief 体力を取得する
-	/// @return 
-	int GetHp()const { return hp_; }
 
 	/// @brief エンティティのタグを取得する
 	/// @return 
@@ -75,8 +71,5 @@ protected:
 
 	/// @brief ワールドトランスフォーム
 	std::unique_ptr<WorldTransform3D> worldTransform_ = nullptr;
-
-	/// @brief 体力
-	int hp_ = 0;
 };
 

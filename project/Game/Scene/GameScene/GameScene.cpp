@@ -30,7 +30,7 @@ void GameScene::Initialize()
 	// モーションマネージャを取得する
 	motionManager_ = MotionManager::GetInstance();
 
-	engine_->LoadParticle3D("Test", 1000, 1, engine_->LoadModel("./Assets/Models/particlePlane", "particlePlane.obj"));
+	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
 
 	// ポストエフェクトマネージャの生成と初期化
 	postEffectManager_ = std::make_unique<PostEffectManager>();
@@ -199,8 +199,6 @@ void GameScene::Draw()
 
 	// 敵の描画
 	enemy_->Draw();
-
-	engine_->DrawParticle3D("Test");
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());

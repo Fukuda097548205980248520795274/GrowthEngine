@@ -10,6 +10,7 @@
 class Attack;
 class Move;
 class Avoid;
+class Weapon;
 
 enum class FightStyle
 {
@@ -126,6 +127,10 @@ public:
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
+
+	/// @brief 体力を取得する
+	/// @return 
+	int GetHp()const { return hp_; }
 
 	/// @brief 回避を開始する
 	/// @param moveInputDirection
@@ -351,8 +356,21 @@ protected:
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
 
+
+	/// @brief 体力
+	int hp_ = 0;
+
 	// やられたかどうか
 	bool isDead_ = false;
+
+
+protected:
+
+	/// @brief 武器所持の更新
+	void UpdateWeapon();
+
+	/// @brief 所持している武器
+	Weapon* weapon_ = nullptr;
 
 
 protected:

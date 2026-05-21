@@ -1,30 +1,37 @@
-#include "Item.h"
+#include "Weapon.h"
+#include "Entity/Character/Character.h"
 
-// アイテムインスタンスの共有リスト
-std::vector<Item*> Item::items_{};
+// 武器インスタンスの共有リスト
+std::vector<Weapon*> Weapon::weapons_{};
 
 /// @brief コンストラクタ
 /// @param initData 
-Item::Item(const InitData& initData)
+Weapon::Weapon(const InitData& initData)
 {
 	// インスタンスリストに登録する
-	items_.push_back(this);
+	weapons_.push_back(this);
 
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 }
 
 /// @brief デストラクタ
-Item::~Item()
+Weapon::~Weapon()
 {
 	// インスタンスリストから自分を除外する
-	auto it = std::remove(items_.begin(), items_.end(), this);
-	items_.erase(it, items_.end());
+	auto it = std::remove(weapons_.begin(), weapons_.end(), this);
+	weapons_.erase(it, weapons_.end());
 }
 
 /// @brief 更新処理
-void Item::Update()
+void Weapon::Update()
 {
+	// 持ち主がいるときは持ち主の位置に追従する
+	if (owner_)
+	{
+
+	}
+
 	// 耐久力が0以下なら壊れる
 	if (durability_ <= 0)
 	{

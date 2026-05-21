@@ -1024,9 +1024,6 @@
     <Filter Include="Engine\Include\Math\Shape">
       <UniqueIdentifier>{bc142630-e615-470c-b7ba-b83bbc4df33c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Entity\Item">
-      <UniqueIdentifier>{9982c0d2-b308-478d-8f0f-11648b1c94dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor">
       <UniqueIdentifier>{2b6a445a-c6cc-450d-b18c-a180ec237ab6}</UniqueIdentifier>
     </Filter>
@@ -1086,6 +1083,9 @@
     </Filter>
     <Filter Include="Engine\Include\DataForGPU\CameraDataForGPU">
       <UniqueIdentifier>{441880c1-0157-4ae2-8d9e-317d3068c1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Entity\Weapon">
+      <UniqueIdentifier>{9982c0d2-b308-478d-8f0f-11648b1c94dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1884,8 +1884,8 @@
     <ClCompile Include="Game\Action\Guard\Guard.cpp">
       <Filter>Game\Action\Guard</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Entity\Item\Item.cpp">
-      <Filter>Game\Entity\Item</Filter>
+    <ClCompile Include="Game\Entity\Weapon\Weapon.cpp">
+      <Filter>Game\Entity\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor</Filter>
@@ -2849,8 +2849,8 @@
     <ClInclude Include="Engine\Math\Shape\Shape.h">
       <Filter>Engine\Include\Math\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Entity\Item\Item.h">
-      <Filter>Game\Entity\Item</Filter>
+    <ClInclude Include="Game\Entity\Weapon\Weapon.h">
+      <Filter>Game\Entity\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor</Filter>

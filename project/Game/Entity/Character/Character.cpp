@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numbers>
+#include "Entity/Weapon/Weapon.h"
 
 #include "Action/Attack/Attack.h"
 #include "Action/Move/Move.h"
@@ -1069,6 +1070,13 @@ void Character::UpdateStyleChange(float dt)
 		// プレイヤーやNPCにスタイルが変更されたことを通知
 		OnStyleChanged(currentStyle_);
 	}
+}
+
+/// @brief 武器所持の更新
+void Character::UpdateWeapon()
+{
+	// 武器を持っていないときは処理しない
+	if (!weapon_)return;
 }
 
 /// @brief 落下の更新
