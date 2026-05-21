@@ -63,13 +63,13 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param cameraStore 
-		void Draw(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore);
+		void Draw(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore, DepthResource* depthResource);
 
 		/// @brief 描画処理
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore);
+		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore, DepthResource* depthResource);
 
 		/// @brief 放出開始
 		/// @param handle 
@@ -149,6 +149,9 @@ namespace Engine
 
 		/// @brief CSパーティクル引力更新PSO
 		std::unique_ptr<ComputePSOParticle3DUpdateAttract> computePsoParticle3DUpdateAttract_ = nullptr;
+
+
+	private:
 
 
 	private:

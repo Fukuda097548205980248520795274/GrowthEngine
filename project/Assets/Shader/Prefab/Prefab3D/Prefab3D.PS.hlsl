@@ -16,6 +16,12 @@ ConstantBuffer<ShadowTransformation> gShadowTransformation : register(b0);
 struct Camera
 {
     float3 worldPosition;
+    
+    // ニアクリップ距離
+    float nearZ;
+    
+    // ファークリップ距離
+    float farZ;
 };
 ConstantBuffer<Camera> gCamera : register(b1);
 

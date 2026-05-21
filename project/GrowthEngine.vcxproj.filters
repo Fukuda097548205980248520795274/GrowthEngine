@@ -1084,6 +1084,9 @@
     <Filter Include="Engine\Include\Store\TrailStore\TrailData">
       <UniqueIdentifier>{d1c1f213-54a4-4b71-a657-807959e2ae4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\DataForGPU\CameraDataForGPU">
+      <UniqueIdentifier>{441880c1-0157-4ae2-8d9e-317d3068c1da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2899,6 +2902,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\TrailStore\TrailData\TrailData.h">
       <Filter>Engine\Include\Store\TrailStore\TrailData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DataForGPU\CameraDataForGPU\CameraDataForGPU.h">
+      <Filter>Engine\Include\DataForGPU\CameraDataForGPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

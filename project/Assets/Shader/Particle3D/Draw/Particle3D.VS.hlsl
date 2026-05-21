@@ -48,6 +48,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     output.position = mul(input.position, mul(mul(worldMatrix, gView.billboard), gView.viewProjection));
     output.texcoord = input.texcoord;
     output.color = particle.color;
+    output.clipPos = output.position;
     
     return output;
 }

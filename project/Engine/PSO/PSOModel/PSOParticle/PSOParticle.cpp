@@ -35,12 +35,20 @@ void Engine::PSOParticle::Initialize(ID3D12Device* device, IDxcBlob* vertexShade
 	particleDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	particleDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+	// SRV t1 深度テクスチャ
+	D3D12_DESCRIPTOR_RANGE descriptorDepthTexture[1];
+	descriptorDepthTexture[0].BaseShaderRegister = 1;
+	descriptorDepthTexture[0].RegisterSpace = 0;
+	descriptorDepthTexture[0].NumDescriptors = 1;
+	descriptorDepthTexture[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorDepthTexture[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 
 	/*-------------------------
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[3];
+	D3D12_ROOT_PARAMETER rootParameter[5];
 
 	// DescriptorTable VertexShader パーティクル
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -59,6 +67,18 @@ void Engine::PSOParticle::Initialize(ID3D12Device* device, IDxcBlob* vertexShade
 	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[2].DescriptorTable.pDescriptorRanges = descriptorTexture;
 	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorTexture);
+
+	// DescriptorTable PixelShader 深度テクスチャ
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = descriptorDepthTexture;
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorDepthTexture);
+
+	// CBV PixelShader カメラ
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[4].Descriptor.RegisterSpace = 0;
+	rootParameter[4].Descriptor.ShaderRegister = 0;
 
 
 	/*--------------------

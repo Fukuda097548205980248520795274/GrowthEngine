@@ -491,7 +491,7 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 /// @brief 描画処理
 /// @param commandList 
 /// @param psoDraw 
-void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore)
+void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore, DepthResource* depthResource)
 {
 	// ロードしていなかったら処理しない
 	if (!isLoad_)return;
@@ -502,6 +502,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 	// バリアを張る
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 
 	// データを渡す
@@ -516,6 +517,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	{
 		particleViewResource_->data_->billboard = MakeIdentityMatrix4x4();
 	}
+
 
 
 	/*------------------------
@@ -537,12 +539,19 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	// テクスチャを登録する
 	commandList->SetGraphicsRootDescriptorTable(2, textureStore_->GetSrvGpuHandle(param_->hTexture));
 
+	// 深度リソースを登録する
+	depthResource->Register(commandList, 3);
+
+	// カメラを登録する
+	cameraStore->RegisterCameraResource(commandList, 4);
+
 	// ドローコール
 	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
 
 
 
 	// バリアを張る
+	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 

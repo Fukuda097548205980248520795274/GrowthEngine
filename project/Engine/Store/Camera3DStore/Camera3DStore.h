@@ -5,6 +5,7 @@
 #include "Camera3DResource/Camera3DResource.h"
 #include "DebugCamera3DResource/DebugCamera3DResource.h"
 #include "Parameter/Camera3DParameter/Camera3DParameter.h"
+#include "DataForGPU/CameraDataForGPU/CameraDataForGPU.h"
 
 #include <unordered_map>
 
@@ -68,7 +69,7 @@ namespace Engine
 		/// @brief カメラリソースをコマンドリストに登録
 		/// @param commandList 
 		/// @param rootParameterIndex 
-		void RegisterCameraResource(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex) { cameraResource_->RegisterGraphics(commandList, rootParameterIndex); }
+		void RegisterCameraResource(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex)const { cameraResource_->RegisterGraphics(commandList, rootParameterIndex); }
 
 		/// @brief ジッタリングの設定
 		/// @param enable 
@@ -100,7 +101,7 @@ namespace Engine
 		Camera3DHandle selectHCamera_ = 0;
 
 		/// @brief カメラリソース
-		std::unique_ptr<ConstantBufferResource<Vector4>> cameraResource_ = nullptr;
+		std::unique_ptr<ConstantBufferResource<CameraDataForGPU>> cameraResource_ = nullptr;
 
 		/// @brief パラメータ
 		std::unique_ptr<Camera3DParameter> parameter_ = nullptr;

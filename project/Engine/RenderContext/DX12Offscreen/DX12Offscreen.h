@@ -59,6 +59,10 @@ namespace Engine
 		/// @return 
 		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return offscreenResource_[currentOffscreen_]->GetSrvGpuHandle(); }
 
+		/// @brief 深度リソースを取得する
+		/// @return 
+		DepthResource* GetDepthResource() { return depthResource_.get(); }
+
 		/// @brief ポストエフェクトを読み込む
 		/// @param name 
 		/// @param type 

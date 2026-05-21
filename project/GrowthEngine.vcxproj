@@ -1135,6 +1135,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.h" />
     <ClInclude Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.h" />
     <ClInclude Include="Engine\Application\Scene\Scene.h" />
+    <ClInclude Include="Engine\DataForGPU\CameraDataForGPU\CameraDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\LightDataForGPU\LightDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h" />
     <ClInclude Include="Engine\DataForGPU\MotionVectorDataForGPU\MotionVectorDataForGPU.h" />

@@ -28,7 +28,7 @@ void Engine::Camera3DStore::Initialize(ID3D12Device* device, Log* log)
 	assert(device);
 
 	// カメラリソースの生成と初期化
-	cameraResource_ = std::make_unique<ConstantBufferResource<Vector4>>();
+	cameraResource_ = std::make_unique<ConstantBufferResource<CameraDataForGPU>>();
 	cameraResource_->Initialize(device, log);
 }
 
@@ -95,7 +95,9 @@ void Engine::Camera3DStore::Update()
 #endif
 
 	// 指定されたカメラのデータ
-	*cameraResource_->data_ = Vector4(cameraPosition.x, cameraPosition.y, cameraPosition.z, 0.0f);
+	cameraResource_->data_->position = cameraPosition;
+	cameraResource_->data_->nearZ = dataTable_[selectHCamera_]->GetCamera3D().GetParam()->setting.nearClip;
+	cameraResource_->data_->farZ = dataTable_[selectHCamera_]->GetCamera3D().GetParam()->setting.farClip;
 }
 
 /// @brief 3Dカメラデータを取得する
