@@ -648,8 +648,23 @@ Matrix4x4 Engine::Render3DSkinningModelData::GetBoneWorldMatrix(const std::strin
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->modelTransform.scale, modelQuaternion, param_->modelTransform.translate);
 	if (parent_)worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
+	// ボーンのローカル行列を取得する
+	Matrix4x4 boneMatrix = skeleton_.joints[skeleton_.jointMap[name]].worldMatrix;
+	Vector3 xVector = Vector3(boneMatrix.m[0][0], boneMatrix.m[0][1], boneMatrix.m[0][2]);
+	Vector3 yVector = Vector3(boneMatrix.m[1][0], boneMatrix.m[1][1], boneMatrix.m[1][2]);
+	Vector3 zVector = Vector3(boneMatrix.m[2][0], boneMatrix.m[2][1], boneMatrix.m[2][2]);
+
+	Vector3 xRotate = xVector.Normalize();
+	Vector3 yRotate = yVector.Normalize();
+	Vector3 zRotate = zVector.Normalize();
+
+	// ボーンのローカル行列から回転行列を作成する
+	boneMatrix.m[0][0] = xRotate.x; boneMatrix.m[0][1] = xRotate.y; boneMatrix.m[0][2] = xRotate.z;
+	boneMatrix.m[1][0] = yRotate.x; boneMatrix.m[1][1] = yRotate.y; boneMatrix.m[1][2] = yRotate.z;
+	boneMatrix.m[2][0] = zRotate.x; boneMatrix.m[2][1] = zRotate.y; boneMatrix.m[2][2] = zRotate.z;
+
 	// ボーンのワールド行列を返す
-	return skeleton_.joints[skeleton_.jointMap[name]].worldMatrix * worldMatrix;
+	return boneMatrix * worldMatrix;
 }
 
 /// @brief デバッグ用パラメータ

@@ -49,6 +49,10 @@ public:
 		/// @brief モデル
 		Render3DSkinningModel* model_ = nullptr;
 
+		/// @brief 武器
+		Weapon* weapon = nullptr;
+
+
 		/// @brief 立ちモーション
 		AnimationHandle hStandMotion = 0;
 

@@ -17,10 +17,36 @@ void WorldTransform3D::Update()
 	worldMatrix_ = Make3DAffineMatrix4x4(scale_, quaternion_, translate_);
 
 	// 親
-	if (parent_)
+	if (beParent_)
 	{
-		worldMatrix_ *= parent_->GetWorldMatrix();
+		// 親行列を掛ける
+		worldMatrix_ *= parentMatrix_;
+
+		// 親フラグをリセットする
+		beParent_ = false;
 	}
+	else
+	{
+		// 親行列を掛ける
+		if (parent_)
+		{
+			worldMatrix_ *= parent_->GetWorldMatrix();
+		}
+	}
+}
+
+/// @brief 親を設定する
+/// @param parentMatrix 
+void WorldTransform3D::SetParent(const Matrix4x4& parentMatrix)
+{
+	// 親行列を取得する
+	parentMatrix_ = parentMatrix;
+
+	// 親フラグを立てる
+	beParent_ = true;
+
+	// 親をリセットする
+	parent_ = nullptr;
 }
 
 /// @brief 回転を設定する

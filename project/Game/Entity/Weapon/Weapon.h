@@ -18,6 +18,17 @@ public:
 	{
 		// 位置
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+		// 耐久力
+		int durability = 100;
+
+		/// @brief 攻撃力
+		float attackPower = 1.0f;
+
+		WeaponCategory category = WeaponCategory::None;
+
+		/// @brief モデル
+		Render3DStaticModel* model = nullptr;
 	};
 
 public:
@@ -31,6 +42,9 @@ public:
 
 	/// @brief 更新処理
 	void Update() override;
+
+	/// @brief 描画処理
+	void Draw();
 
 	/// @brief 壊れたかどうか
 	/// @return 
@@ -48,11 +62,18 @@ public:
 	/// @return 
 	WeaponCategory GetCategory() const { return category_; }
 
+	/// @brief 所持者を設定する
+	/// @param owner 
+	void SetOwner(Character* owner) { owner_ = owner; }
+
 
 protected:
 
 	// エンジン
 	const GrowthEngine* engine_ = nullptr;
+
+	/// @brief モデル
+	Render3DStaticModel* model_ = nullptr;
 
 	/// @brief 武器のリスト
 	static std::vector<Weapon*> weapons_;

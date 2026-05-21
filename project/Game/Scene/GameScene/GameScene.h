@@ -4,6 +4,9 @@
 
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
+
+#include "Entity/Weapon/Weapon.h"
+
 #include "StageObject/Floor/Floor.h"
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
@@ -93,6 +96,12 @@ private:
 
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
+
+	/// @brief プレイヤーの武器のモデル
+	std::unique_ptr<Render3DStaticModel> playerWeaponModel_ = nullptr;
+
+	/// @brief プレイヤーの武器
+	std::unique_ptr<Weapon> playerWeapon_ = nullptr;
 
 
 	/// @brief 味方のモデル

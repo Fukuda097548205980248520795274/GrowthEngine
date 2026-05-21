@@ -67,6 +67,16 @@ Character::Character(const InitData& initData) : Entity()
 		animationTime_ = engine_->GetAnimationTime(model_->param_->animation.hAnimation);
 	}
 
+	// 武器
+	if (initData.weapon)
+	{
+		weapon_ = initData.weapon;
+
+		// 武器の持ち主を自分に設定する
+		weapon_->SetOwner(this);
+		weapon_->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	}
+
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;

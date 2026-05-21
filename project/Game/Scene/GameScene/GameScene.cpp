@@ -81,11 +81,24 @@ void GameScene::Initialize()
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
 
 
+	// プレイヤーの武器のモデルの生成と初期化
+	playerWeaponModel_ = std::make_unique<Render3DStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), "Player_Weapon_Model");
+
+	// プレイヤーの武器の生成と初期化
+	Weapon::InitData playerWeaponInitData;
+	playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
+	playerWeaponInitData.model = playerWeaponModel_.get();
+	playerWeaponInitData.durability = 100;
+	playerWeaponInitData.attackPower = 1.0f;
+	playerWeaponInitData.category = WeaponCategory::OneHanded;
+	playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
+
 	// プレイヤーの生成と初期化
 	Character::InitData playerInitData;
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
+	playerInitData.weapon = playerWeapon_.get();
 	playerInitData.avoidDuration = 0.3f;
 	playerInitData.avoidDistance = 1.5f;
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
@@ -173,6 +186,7 @@ void GameScene::Update()
 
 	// プレイヤーの更新
 	player_->Update();
+	playerWeapon_->Update();
 
 	//// 味方の更新
 	//ally_->Update();
@@ -193,6 +207,7 @@ void GameScene::Draw()
 
 	// プレイヤーの描画
 	player_->Draw();
+	playerWeapon_->Draw();
 
 	//// 味方の描画
 	//ally_->Draw();

@@ -19,6 +19,10 @@ public:
 	/// @param parent 
 	void SetParent(WorldTransform3D* parent) { parent_ = parent; }
 
+	/// @brief 親を設定する
+	/// @param parentMatrix 
+	void SetParent(const Matrix4x4& parentMatrix);
+
 	/// @brief ワールド行列を取得する
 	/// @return 
 	Matrix4x4 GetWorldMatrix()const { return worldMatrix_; }
@@ -58,5 +62,14 @@ private:
 
 	// 親
 	WorldTransform3D* parent_ = nullptr;
+
+
+private:
+
+	/// @brief 親がいるかどうか
+	bool beParent_ = false;
+
+	/// @brief 親の行列
+	Matrix4x4 parentMatrix_ = MakeIdentityMatrix4x4();
 };
 
