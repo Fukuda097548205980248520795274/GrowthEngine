@@ -19,6 +19,7 @@ namespace Engine
 	class Particle3DParameter;
 	class Camera3DStore;
 	class DepthResource;
+	class OffscreenResource;
 
 	class Particle3DData
 	{
@@ -67,7 +68,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param psoDraw 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore, DepthResource* depthResource);
+		void Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore,OffscreenResource* offscreenResource, DepthResource* depthResource);
 
 		/// @brief 名前を取得する
 		/// @return 

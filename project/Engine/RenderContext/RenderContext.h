@@ -522,14 +522,14 @@ namespace Engine
 		/// @param hParticle 
 		void DrawParticle3D(Particle3DHandle hParticle)
 		{
-			particle_->Draw3DParticle(commandList_, hParticle, camera3DStore_.get(), offscreen_->GetDepthResource());
+			particle_->Draw3DParticle(commandList_, hParticle, camera3DStore_.get(),offscreen_->GetCurrentOffscreenResource(), offscreen_->GetDepthResource());
 		}
 
 		/// @brief 3Dパーティクルを描画する
 		/// @param name 
 		void DrawParticle3D(const std::string& name)
 		{
-			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get(), offscreen_->GetDepthResource());
+			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get(), offscreen_->GetCurrentOffscreenResource(), offscreen_->GetDepthResource());
 		}
 
 		/// @brief 3Dパーティクルのパラメータを取得する

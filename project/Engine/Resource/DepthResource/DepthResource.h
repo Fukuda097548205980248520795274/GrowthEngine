@@ -55,6 +55,10 @@ namespace Engine
 		/// @param rootParameterIndex 
 		void RegisterComputeSRV(ID3D12GraphicsCommandList* commandList, UINT rootParameterIndex);
 
+		/// @brief DSV用CPUハンドル（読み取り専用）を取得する
+		/// @return 
+		D3D12_CPU_DESCRIPTOR_HANDLE GetDsvReadOnlyCpuHandle() { return dsvReadOnlyCPUHandle_; }
+
 
 	private:
 
@@ -66,5 +70,8 @@ namespace Engine
 
 		// DSV用CPUハンドル
 		D3D12_CPU_DESCRIPTOR_HANDLE dsvCPUHandle_{};
+
+		/// @brief DSV用CPUハンドル（読み取り専用）
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvReadOnlyCPUHandle_{};
 	};
 }

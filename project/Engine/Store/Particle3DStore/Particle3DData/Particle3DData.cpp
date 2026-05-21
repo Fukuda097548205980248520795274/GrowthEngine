@@ -491,7 +491,7 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 /// @brief 描画処理
 /// @param commandList 
 /// @param psoDraw 
-void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore, DepthResource* depthResource)
+void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const Camera3DStore* cameraStore, OffscreenResource* offscreenResource, DepthResource* depthResource)
 {
 	// ロードしていなかったら処理しない
 	if (!isLoad_)return;
@@ -500,10 +500,14 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	// nullptrチェック
 	assert(commandList);
 
+	// レンダーターゲットと深度バッファをセットする
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = offscreenResource->GetRtvCpuHandle();
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthResource->GetDsvReadOnlyCpuHandle(); // Read-Only版
+	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
+
 	// バリアを張る
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
+	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_DEPTH_READ | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// データを渡す
 	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
@@ -551,8 +555,12 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 
 	// バリアを張る
-	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	depthResource->Barrier(commandList, D3D12_RESOURCE_STATE_DEPTH_READ | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 	particleResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+	// 描画後は通常の深度バッファをセットする
+	D3D12_CPU_DESCRIPTOR_HANDLE originalDsvHandle = depthResource->GetDsvCpuHandle(); // 通常版
+	commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &originalDsvHandle);
 }
 
 /// @brief デバッグパラメータ

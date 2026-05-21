@@ -44,13 +44,19 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param cameraStore 
-		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore, DepthResource* depthResource) { particle3DStore_->Draw(commandList, handle , cameraStore, depthResource); }
+		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore, OffscreenResource* offscreenResource, DepthResource* depthResource)
+		{
+			particle3DStore_->Draw(commandList, handle , cameraStore,offscreenResource, depthResource); 
+		}
 
 		/// @brief 3Dパーティクル描画処理
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
-		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore, DepthResource* depthResource) { particle3DStore_->Draw(commandList, name, cameraStore, depthResource); }
+		void Draw3DParticle(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore,OffscreenResource* offscreenResource, DepthResource* depthResource)
+		{ 
+			particle3DStore_->Draw(commandList, name, cameraStore, offscreenResource, depthResource);
+		}
 
 		/// @brief 3Dパーティクルのパラメータを取得する
 		/// @param hParticle 

@@ -63,6 +63,10 @@ namespace Engine
 		/// @return 
 		DepthResource* GetDepthResource() { return depthResource_.get(); }
 
+		/// @brief 現在使用中のオフスクリーンリソースを取得する
+		/// @return 
+		OffscreenResource* GetCurrentOffscreenResource() { return offscreenResource_[currentOffscreen_].get(); }
+
 		/// @brief ポストエフェクトを読み込む
 		/// @param name 
 		/// @param type 

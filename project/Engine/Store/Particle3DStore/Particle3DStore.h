@@ -28,6 +28,8 @@ namespace Engine
 	class ModelStore;
 	class TextureStore;
 	class Camera3DStore;
+	class OffscreenResource;
+	class DepthResource;
 	class Log;
 
 	class Particle3DStore
@@ -63,13 +65,13 @@ namespace Engine
 		/// @param commandList 
 		/// @param handle 
 		/// @param cameraStore 
-		void Draw(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore, DepthResource* depthResource);
+		void Draw(ID3D12GraphicsCommandList* commandList, Particle3DHandle handle, const Camera3DStore* cameraStore,OffscreenResource* offscreenResource, DepthResource* depthResource);
 
 		/// @brief 描画処理
 		/// @param commandList 
 		/// @param name 
 		/// @param viewProjection 
-		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore, DepthResource* depthResource);
+		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore, OffscreenResource* offscreenResource, DepthResource* depthResource);
 
 		/// @brief 放出開始
 		/// @param handle 
