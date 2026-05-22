@@ -98,6 +98,11 @@ void Engine::DepthResource::Resize(ID3D12Device* device, int32_t width, int32_t 
 	device->CreateDepthStencilView(resource_.Get(), &dsvDesc, dsvCPUHandle_);
 
 
+	// 読み取り専用のDSVを生成する
+	dsvDesc.Flags = D3D12_DSV_FLAG_READ_ONLY_DEPTH; // 深度書き込みを禁止するフラグ
+	device->CreateDepthStencilView(resource_.Get(), &dsvDesc, dsvReadOnlyCPUHandle_);
+
+
 	// SRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
