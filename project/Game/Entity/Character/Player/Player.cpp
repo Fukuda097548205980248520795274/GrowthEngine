@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Entity/Weapon/Weapon.h"
 
 #include <cmath>
 
@@ -42,9 +43,25 @@ Player::Player(const InitData& initData) : Character(initData)
 }
 
 /// @brief 初期化
-void Player::Initialize()
+void Player::Initialize(Weapon* baton)
 {
 	assert(model_);
+	assert(baton);
+
+	// 引数を受け取る
+	baton_ = baton;
+
+	// 武器の有効状態をスタイルに応じて設定する
+	if (currentStyle_ == FightStyle::Hammer)
+	{
+		baton_->SetActive(true);
+		GrabWeapon(baton_);
+	}
+	else
+	{
+		baton_->SetActive(false);
+		ReleaseWeapon();
+	}
 
 
 	// モデルをワールドトランスフォームの子にする
@@ -494,6 +511,49 @@ bool Player::CheckGetUpCondition()
 	}
 
 	return false;
+}
+
+/// @brief スタイルチェンジ開始時の処理
+void Player::StyleChangeStart()
+{
+	switch (nextStyle_)
+	{
+		// 旋嵐スタイル（武器なし・他の武器を拾える）
+	case FightStyle::Tempest:
+
+		// 現在持っているのが「警棒」だった場合
+		if (weapon_ != nullptr && weapon_ == baton_)
+		{
+			// 警棒の描画や当たり判定を無効にする
+			baton_->SetActive(false);
+
+			// 警棒を手放す
+			ReleaseWeapon();
+		}
+		break;
+
+		// 撃鉄スタイル（警棒を装備）
+	case FightStyle::Hammer:
+
+		// もし旋嵐スタイル中にフィールドの「別の武器」を拾って持っていたら、落とす
+		if (weapon_ != nullptr && weapon_ != baton_)
+		{
+			ReleaseWeapon(); // ※キャラクタークラスの既存関数で手放す
+		}
+
+		// 警棒を再度装備する
+		GrabWeapon(baton_);
+
+		// 警棒の描画や当たり判定を有効にする
+		if (baton_)
+		{
+			baton_->SetActive(true);
+		}
+		break;
+	}
+
+	// 既定のスタイルチェンジ処理
+	Character::StyleChangeStart();
 }
 
 /// @brief スタイルが変化したときの処理

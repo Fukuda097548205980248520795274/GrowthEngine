@@ -32,6 +32,9 @@ public:
 
 		/// @brief モデル
 		Render3DStaticModel* model = nullptr;
+
+		/// @brief 着地判定グループ
+		Collision3DInstanceAABB* landingCollision = nullptr;
 	};
 
 public:
@@ -77,6 +80,14 @@ public:
 	/// @param damage 
 	void TakeDamage(int damage);
 
+	/// @brief 有効かどうかを設定する
+	/// @param isActive 
+	void SetActive(bool isActive) { isActive_ = isActive; }
+
+	/// @brief 有効かどうかを取得する
+	/// @return 
+	bool IsActive() const { return isActive_; }
+
 
 protected:
 
@@ -106,5 +117,33 @@ protected:
 
 	/// @brief 壊れない武器かどうか
 	bool isUnbreakable_ = false;
+
+	/// @brief 有効かどうか
+	bool isActive_ = true;
+
+
+protected:
+
+	/// @brief 落下の更新
+	/// @param deltaTime 
+	void FallUpdate(float deltaTime);
+
+	/// @brief 着地判定の更新
+	void LandingCheck();
+
+	/// @brief 着地判定
+	Collision3DInstanceAABB* landingCollision_ = nullptr;
+
+	// 現在の落下速度
+	float velocityY_ = 0.0f;
+
+	// 地面に接地しているかどうか
+	bool isGrounded_ = false;
+
+	// 重力加速度
+	const float kGravity = -9.8f;
+
+	// 最大落下速度
+	const float kMaxFallSpeed = -20.0f;
 };
 

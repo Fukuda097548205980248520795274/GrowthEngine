@@ -31,6 +31,16 @@ Weapon::Weapon(const InitData& initData) : Entity()
 	// 壊れない武器かどうか
 	isUnbreakable_ = initData.isUnbreakable;
 
+	// 着地判定
+	if (initData.landingCollision)
+	{
+		landingCollision_ = initData.landingCollision;
+
+		// コリジョンの位置を武器の位置に設定する
+		landingCollision_->param_->center = GetWorldPosition();
+		landingCollision_->param_->radius = Vector3(0.05f, 0.05f, 0.05f); 
+	}
+
 	// モデル
 	if (initData.model)
 	{
@@ -44,6 +54,10 @@ Weapon::Weapon(const InitData& initData) : Entity()
 /// @brief デストラクタ
 Weapon::~Weapon()
 {
+	// 当たり判定を削除する
+	if (landingCollision_)landingCollision_->Delete();
+	landingCollision_ = nullptr;
+
 	// インスタンスリストから自分を除外する
 	auto it = std::remove(weapons_.begin(), weapons_.end(), this);
 	weapons_.erase(it, weapons_.end());
@@ -52,40 +66,73 @@ Weapon::~Weapon()
 /// @brief 更新処理
 void Weapon::Update()
 {
-	// 持ち主がいるときは持ち主の位置に追従する
-	if (owner_)
+	// 有効でないときは更新しない
+	if (!isActive_)return;
+
+	// デルタタイムを取得する
+	float dt = engine_->GetDeltaTime();
+
+	if (!isBreak_)
 	{
-		switch (category_)
+		// 着地しているかどうか
+		LandingCheck();
+
+		// 持ち主がいるときは持ち主の位置に追従する
+		if (IsEquipped())
 		{
-		case WeaponCategory::OneHanded:
-			worldTransform_->rotate_.x = std::numbers::pi_v<float> / 2.0f; // 90度回転させる
-			break;
+			// カテゴリに応じてトランスフォームを調整する
+			switch (category_)
+			{
+				// 片手武器
+			case WeaponCategory::OneHanded:
 
-		case WeaponCategory::TwoHanded:
+				// 90度回転させる
+				worldTransform_->rotate_.x = std::numbers::pi_v<float> / 2.0f;
 
-			break;
+				// ワールドトランスフォームの親を持ち主の右手に設定する
+				worldTransform_->SetParent(owner_->GetBoneMatrix(JointType::HandR));
+
+				break;
+
+
+				// 両手武器
+			case WeaponCategory::TwoHanded:
+
+				break;
+			}
 		}
 
-		// ワールドトランスフォームの親を持ち主の右手に設定する
-		worldTransform_->SetParent(owner_->GetBoneMatrix(JointType::HandR));
-	}
+		// 落下の更新
+		FallUpdate(dt);
 
-	// 耐久力が0以下なら壊れる
-	if (durability_ <= 0)
-	{
-		isBreak_ = true;
-		return;
-	}
+		// 基底クラスの更新
+		Entity::Update();
 
-	// 基底クラスの更新
-	Entity::Update();
+		// 耐久力が0以下で壊れない武器でないときは壊れる
+		if (durability_ <= 0 && !isUnbreakable_)
+		{
+			isBreak_ = true;
+
+			// 当たり判定を削除する
+			if (landingCollision_)landingCollision_->Delete();
+			landingCollision_ = nullptr;
+
+			return;
+		}
+
+		// 着地判定の位置を更新する
+		if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
+	}
 }
 
 /// @brief 描画処理
 void Weapon::Draw()
 {
-	// 耐久力が0以下なら描画しない
-	if (durability_ <= 0) return;
+	// 有効でないときは描画しない
+	if (!isActive_)return;
+
+	// 壊れている武器は描画しない
+	if (isBreak_) return;
 
 	// モデルがあるときは描画する
 	if (model_)model_->Draw();
@@ -100,4 +147,55 @@ void Weapon::TakeDamage(int damage)
 
 	// 耐久力を減らす
 	durability_ -= damage;
+}
+
+/// @brief 落下の更新
+/// @param deltaTime 
+void Weapon::FallUpdate(float deltaTime)
+{
+	// 重力による落下処理
+	if (!isGrounded_)
+	{
+		// 落下速度を更新する
+		velocityY_ += kGravity * deltaTime;
+		if (velocityY_ < kMaxFallSpeed) velocityY_ = kMaxFallSpeed;
+
+		// Y方向の位置を更新する
+		worldTransform_->translate_.y += velocityY_ * deltaTime;
+	}
+}
+
+/// @brief 着地判定の更新
+void Weapon::LandingCheck()
+{
+	// 着地しているかどうかのフラグをリセットする
+	isGrounded_ = false;
+
+	// 所持者がいる場合、着地している
+	if (IsEquipped())
+	{
+		isGrounded_ = true;
+
+		// Y方向の速度をリセットする（着地したので落下を止める）
+		velocityY_ = 0.0f;
+
+		return;
+	}
+
+	// コリジョンがないと処理しない
+	if (!landingCollision_)return;
+
+	// コリジョンの状態を確認する
+	if (landingCollision_->isCollision_)
+	{
+		// コリジョンの当たり判定がAABBであることを前提に、床との接触位置を計算する
+		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
+		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+
+		// 着地していると判定する
+		isGrounded_ = true;
+
+		// Y方向の速度をリセットする（着地したので落下を止める）
+		velocityY_ = 0.0f;
+	}
 }

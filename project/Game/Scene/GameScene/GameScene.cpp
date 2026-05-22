@@ -77,7 +77,7 @@ void GameScene::Initialize()
 	// 「敵の攻撃」は「プレイヤーの体」に当たる
 	enemyHitboxGroup_->SetCollisionTarget(playerHurtboxGroup_->GetHandle());
 
-	// 「キャラクターの足」は「床」に当たる
+	// 「床」に当たる
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
 
 
@@ -88,10 +88,11 @@ void GameScene::Initialize()
 	Weapon::InitData playerWeaponInitData;
 	playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerWeaponInitData.model = playerWeaponModel_.get();
-	playerWeaponInitData.durability = 3;
+	playerWeaponInitData.durability = 0;
 	playerWeaponInitData.attackPower = 1.0f;
 	playerWeaponInitData.category = WeaponCategory::OneHanded;
-	playerWeaponInitData.isUnbreakable = false;
+	playerWeaponInitData.isUnbreakable = true;
+	playerWeaponInitData.landingCollision = landingCollision_->CreateInstance();
 	playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
 
 	// プレイヤーの生成と初期化
@@ -99,7 +100,7 @@ void GameScene::Initialize()
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
-	playerInitData.weapon = playerWeapon_.get();
+	playerInitData.weapon = nullptr;
 	playerInitData.avoidDuration = 0.3f;
 	playerInitData.avoidDistance = 1.5f;
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
@@ -116,7 +117,7 @@ void GameScene::Initialize()
 	playerInitData.hitboxGroup = playerHitboxGroup_.get();
 	playerInitData.landingCollision = landingCollision_->CreateInstance();
 	player_ = std::make_unique<Player>(playerInitData);
-	player_->Initialize();
+	player_->Initialize(playerWeapon_.get());
 
 	//// 味方の生成と初期化
 	//Character::InitData allyInitData;

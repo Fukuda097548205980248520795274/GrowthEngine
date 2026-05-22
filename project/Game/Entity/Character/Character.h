@@ -83,6 +83,8 @@ public:
 		/// @brief 防御成功モーション
 		AnimationHandle hGuardHitMotion = 0;
 
+
+
 		/// @brief 当たり判定グループ
 		Collision3DBaseSphere* hurtboxGroup = nullptr;
 
@@ -353,6 +355,10 @@ public:
 	/// @return 
 	Weapon* GetWeapon() const { return weapon_; }
 
+	/// @brief 武器を掴む
+	/// @param weapon 
+	void GrabWeapon(Weapon* weapon);
+
 	/// @brief 武器を離す
 	void ReleaseWeapon();
 
@@ -505,6 +511,9 @@ protected:
 
 
 protected:
+
+	/// @brief スタイルチェンジ開始時の処理
+	virtual void StyleChangeStart();
 
 	/// @brief スタイルが変化したときの処理
 	/// @param newStyle 

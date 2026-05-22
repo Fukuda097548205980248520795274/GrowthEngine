@@ -10,7 +10,7 @@ public:
 	Player(const InitData& initData);
 
 	/// @brief 初期化
-	void Initialize();
+	void Initialize(Weapon* baton);
 
 	/// @brief 更新処理
 	virtual void Update() override;
@@ -47,6 +47,9 @@ private:
 	/// @brief ダウン後起き上がり条件を満たしているかどうか
 	/// @return 
 	bool CheckGetUpCondition()override;
+
+	/// @brief スタイルチェンジ開始時の処理
+	void StyleChangeStart() override;
 
 	/// @brief スタイルが変化したときの処理
 	/// @param newStyle 
@@ -112,6 +115,12 @@ private:
 
 	/// @brief キーのカメラ右回転入力
 	std::unique_ptr<InputKey> keyCameraRotateRight_ = nullptr;
+
+
+private:
+
+	/// @brief 警棒
+	Weapon* baton_ = nullptr;
 
 
 private:

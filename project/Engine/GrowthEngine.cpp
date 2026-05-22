@@ -216,6 +216,16 @@ void GrowthEngine::PreDraw()
 /// @brief 描画後処理
 void GrowthEngine::PostDraw()
 {
+#ifdef _DEVELOPMENT
+
+	if (ImGui::Begin("FPS Overlay"))
+	{
+		ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+		ImGui::Text("%.3f ms", 1000.0f / ImGui::GetIO().Framerate);
+	}
+	ImGui::End();
+#endif
+
 	// 描画後処理
 	renderContext_->PostDraw();
 

@@ -68,14 +68,7 @@ Character::Character(const InitData& initData) : Entity()
 	}
 
 	// 武器
-	if (initData.weapon)
-	{
-		weapon_ = initData.weapon;
-
-		// 武器の持ち主を自分に設定する
-		weapon_->SetOwner(this);
-		weapon_->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-	}
+	GrabWeapon(initData.weapon);
 
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
@@ -121,6 +114,13 @@ Character::Character(const InitData& initData) : Entity()
 /// @brief デストラクタ
 Character::~Character()
 {
+	// 当たり判定の削除
+	if (landingCollision_)landingCollision_->Delete();
+	landingCollision_ = nullptr;
+
+	if (hurtbox_.collider_) hurtbox_.collider_->Delete();
+	hurtbox_.collider_ = nullptr;
+
 	// インスタンスリストから自分を除外する
 	auto it = std::remove(characters_.begin(), characters_.end(), this);
 	characters_.erase(it, characters_.end());
@@ -142,10 +142,10 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
-			// 武器の耐久力が0以下の場合は、武器を手放す
+			// 壊れたブキを持っている場合は、ブキを離す
 			if (HasWeapon())
 			{
-				if (weapon_->GetDurability() <= 0)
+				if (weapon_->IsBreak())
 					ReleaseWeapon();
 			}
 
@@ -485,7 +485,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	int finalDamage = damage;
 
 	// 武器の攻撃力を考慮する
-	if (attacker->HasWeapon())
+	if (attacker != nullptr && attacker->HasWeapon())
 	{
 		finalDamage = static_cast<int>(static_cast<float>(damage) * attacker->GetWeapon()->GetAttackPower());
 
@@ -1044,6 +1044,23 @@ bool Character::IsGrabbedDamage()const
 	return grabber_->IsGrabStrikeAttack();
 }
 
+/// @brief 武器を掴む
+/// @param weapon 
+void Character::GrabWeapon(Weapon* weapon)
+{
+	// 無効な武器の場合は処理しない
+	if (weapon == nullptr)return;
+
+	// 武器を持っていないときは処理しない
+	if (HasWeapon())return;
+
+	weapon_ = weapon;
+
+	// 武器の持ち主を自分に設定する
+	weapon_->SetOwner(this);
+	weapon_->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+}
+
 /// @brief 武器を離す
 void Character::ReleaseWeapon()
 {
@@ -1089,6 +1106,26 @@ void Character::StartStyleChange(FightStyle style)
 	nextStyle_ = style;
 	styleChangeTimer_ = kStyleChangeDuration;
 	isStyleChanging_ = true;
+
+	// スタイルチェンジ開始のイベントを発生させる
+	StyleChangeStart();
+}
+
+/// @brief スタイルチェンジ開始のイベント
+void Character::StyleChangeStart()
+{
+	switch(nextStyle_)
+	{
+		// 旋嵐
+	case FightStyle::Tempest:
+
+		break;
+
+		// 撃鉄
+	case FightStyle::Hammer:
+
+		break;
+	}
 }
 
 /// @brief スタイルチェンジの更新処理
@@ -1156,7 +1193,7 @@ void Character::LandingCheck()
 
 		// Y方向の速度をリセットする（着地したので落下を止める）
 		velocityY_ = 0.0f;
-	} 
+	}
 }
 
 /// @brief 押し出し判定処理

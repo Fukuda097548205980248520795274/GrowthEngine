@@ -326,7 +326,7 @@ void Engine::RenderContext::PostDraw()
 	command_->GetCommandQueue()->ExecuteCommandLists(1, commandLists);
 
 	// GPUとOSに画面の交換を行うよう通知する
-	buffering_->GetSwapChain()->Present(1, 0);
+	buffering_->GetSwapChain()->Present(0, 0);
 
 	// GPUにシグナルを送る
 	fence_->SendSignal(command_->GetCommandQueue());
@@ -413,27 +413,17 @@ void Engine::RenderContext::UpdateFixFPS()
 	// 1/60 秒ぴったりの時間
 	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
 
-	// 1/60 秒よりわずかに短い時間
-	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
-
-
 	// 現在時間を取得する
 	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
-	// 前回の記録から経過時間を取得する
-	std::chrono::microseconds elapsed =
-		std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-
-
-	// 1/60 秒、経過していない場合
-	if (elapsed < kMinCheckTime)
+	// 1/60 秒経過するまで、スリープせずにループで待つ（ビジーウェイト）
+	while (std::chrono::steady_clock::now() - reference_ < kMinTime)
 	{
-		// 1/60 秒経過するまで微小なスリープを繰り返す
-		while (std::chrono::steady_clock::now() - reference_ < kMinTime)
-		{
-			// 1マイクロ秒スリープ
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
-		}
+		// 何もせず待つことで、1マイクロ秒の狂いもなく正確に60FPSに固定します
+#if defined(_MSC_VER)
+		// CPUの無駄な負荷をわずかに抑えるヒント命令（オプション）
+		__nop();
+#endif
 	}
 
 	// 現在の時間を記録する
