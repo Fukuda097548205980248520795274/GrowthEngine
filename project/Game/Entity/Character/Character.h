@@ -3,6 +3,7 @@
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"
+#include "SoundManager/SoundManager.h"
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "AppCollider/AppCollider.h"
@@ -382,6 +383,9 @@ protected:
 	/// @brief モーションマネージャ
 	MotionManager* motionManager_;
 
+	/// @brief サウンドマネージャ
+	SoundManager* soundManager_;
+
 	// キャラクターのタグ
 	CharacterTag characterTag_;
 
@@ -523,6 +527,21 @@ protected:
 
 protected:
 
+	// ガードしてからの経過時間
+	float guardActiveTimer_ = 0.0f;
+
+	// ジャストガード（受け流し）の受付時間
+	const float kJustGuardTime = 0.5f;
+
+
+protected:
+
+	// バッファされた攻撃入力
+	AttackInputType bufferedAttackInput_ = AttackInputType::None;
+
+
+protected:
+
 	/// @brief スタイルチェンジ開始時の処理
 	virtual void StyleChangeStart();
 
@@ -539,21 +558,6 @@ protected:
 
 	// 次のスタイル（スタイルチェンジ予約用）
 	FightStyle nextStyle_ = FightStyle::None;
-
-	// ガードしてからの経過時間
-	float guardActiveTimer_ = 0.0f;
-
-	// ジャストガード（受け流し）の受付時間
-	const float kJustGuardTime = 0.5f;
-
-
-protected:
-
-	// バッファされた攻撃入力
-	AttackInputType bufferedAttackInput_ = AttackInputType::None;
-
-
-protected:
 
 	// スタイルチェンジのタイマー
 	float styleChangeTimer_ = 0.0f;
@@ -640,6 +644,9 @@ protected:
 
 	/// @brief ダッシュモーション
 	AnimationHandle hDashMotion_ = 0;
+
+	/// @brief スタイルチェンジモーション
+	AnimationHandle hStyleChangeMotion_ = 0;
 
 
 	/// @brief 前回避モーション

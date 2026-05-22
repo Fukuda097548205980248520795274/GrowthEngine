@@ -16,7 +16,8 @@ enum class MotionType
 	DownFall,
 	DownLying,
 	DowoGetUp,
-	Guard
+	Guard,
+	StyleChange,
 };
 
 enum class JointType
@@ -136,6 +137,10 @@ private:
 	/// @brief 防御モーション読み込み
 	/// @param dir
 	void LoadGuard(const std::string& dir);
+
+	/// @brief スタイルチェンジモーション読み込み
+	/// @param dir 
+	void LoadStyleChange(const std::string& dir);
 
 
 private:

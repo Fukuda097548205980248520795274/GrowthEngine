@@ -11,6 +11,7 @@ MotionManager* MotionManager::GetInstance()
 	if(instance_ == nullptr)
 	{
 		instance_.reset(new MotionManager());
+		instance_->Initialize();
 	}
 
 	return instance_.get();
@@ -56,6 +57,7 @@ void MotionManager::Initialize()
 	LoadDownLying(dir);
 	LoadDownGetUp(dir);
 	LoadGuard(dir);
+	LoadStyleChange(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -108,6 +110,8 @@ void MotionManager::LoadStance(const std::string& dir)
 	table_[MotionType::Stance]["Gang"] = engine_->LoadAnimation(dir + "/stance/stance_002", "stance_002.gltf");
 	table_[MotionType::Stance]["WeekMan"] = engine_->LoadAnimation(dir + "/stance/stance_003", "stance_003.gltf");
 	table_[MotionType::Stance]["Nimble"] = engine_->LoadAnimation(dir + "/stance/stance_004", "stance_004.gltf");
+	table_[MotionType::Stance]["Senran"] = engine_->LoadAnimation(dir + "/stance/stance_Senran", "stance_Senran.gltf");
+	table_[MotionType::Stance]["Gekitetu"] = engine_->LoadAnimation(dir + "/stance/stance_Gekitetu", "stance_Gekitetu.gltf");
 }
 
 /// @brief 歩きモーション読み込み
@@ -192,4 +196,12 @@ void MotionManager::LoadGuard(const std::string& dir)
 {
 	table_[MotionType::Guard]["BothHands"] = engine_->LoadAnimation(dir + "/guard/guard_000", "guard_000.gltf");
 	table_[MotionType::Guard]["OneLeg"] = engine_->LoadAnimation(dir + "/guard/guard_001", "guard_001.gltf");
+}
+
+/// @brief スタイルチェンジモーション読み込み
+/// @param dir 
+void MotionManager::LoadStyleChange(const std::string& dir)
+{
+	table_[MotionType::StyleChange]["Senran"] = engine_->LoadAnimation(dir + "/styleChange/styleChange_Senran", "styleChange_Senran.gltf");
+	table_[MotionType::StyleChange]["Gekitetu"] = engine_->LoadAnimation(dir + "/styleChange/styleChange_Gekitetu", "styleChange_Gekitetu.gltf");
 }

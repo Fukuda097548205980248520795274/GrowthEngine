@@ -22,3 +22,10 @@ void Sound::Stop()const
 {
 	engine_->SoundStop(hSound_);
 }
+
+/// @brief 再生されているかどうか
+/// @return 
+bool Sound::IsPlaying()const
+{
+	return engine_->IsSoundPlay(hSound_);
+}

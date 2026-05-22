@@ -21,6 +21,10 @@ public:
 	/// @brief 停止
 	void Stop()const;
 
+	/// @brief 再生されているかどうか
+	/// @return 
+	bool IsPlaying()const;
+
 	/// @brief パラメータ
 	Engine::SoundParam* param_ = nullptr;
 

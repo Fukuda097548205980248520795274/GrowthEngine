@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "MotionManager/MotionManager.h"
+#include "SoundManager/SoundManager.h"
 
 /// @brief 初期化
 void Game::Initialize()
@@ -7,9 +8,10 @@ void Game::Initialize()
 	// シーンマネージャの生成
 	sceneManager_ = std::make_unique<SceneManager>("Game");
 
-	// モーションマネージャの生成と初期化
+	// マネージャの生成と初期化
 	MotionManager* motionManager = MotionManager::GetInstance();
-	motionManager->Initialize();
+	SoundManager* soundManager = SoundManager::GetInstance();
+
 }
 
 /// @brief 更新処理

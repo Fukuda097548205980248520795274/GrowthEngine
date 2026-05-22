@@ -54,11 +54,13 @@ void Player::Initialize(Weapon* baton)
 	// 武器の有効状態をスタイルに応じて設定する
 	if (currentStyle_ == FightStyle::Hammer)
 	{
+		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Gekitetu");
 		baton_->SetActive(true);
 		GrabWeapon(baton_);
 	}
 	else
 	{
+		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Senran");
 		baton_->SetActive(false);
 		ReleaseWeapon();
 	}
@@ -564,12 +566,12 @@ void Player::OnStyleChanged(FightStyle newStyle)
 	{
 		// 旋嵐スタイル
 	case FightStyle::Tempest:
-
+		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Senran");
 		break;
 
 		// 撃鉄スタイル
 	case FightStyle::Hammer:
-
+		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Gekitetu");
 		break;
 	}
 }
