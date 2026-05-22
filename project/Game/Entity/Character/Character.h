@@ -251,6 +251,9 @@ public:
 	/// @return 
 	Matrix4x4 GetBoneMatrix(const JointType& jointType) const;
 
+	/// @brief ボーンの位置を取得する
+	Vector3 GetBonePosition(const JointType& jointType) const;
+
 	/// @brief ダメージリアクション中かどうか
 	/// @return 
 	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReactionState::None; }
@@ -271,9 +274,17 @@ public:
 	/// @return 
 	bool IsGettingUp() const { return currentDamageReaction_ == DamageReactionState::DownGettingUpFront || currentDamageReaction_ == DamageReactionState::DownGettingUpBack; }
 
-	/// @brief ダメージを受けているかどうか
+	/// @brief 頭の当たり判定を取得する
 	/// @return 
-	AppCollider& GetHurtbox() { return hurtbox_; }
+	AppCollider& GetHurtboxHead() { return hurtboxHead_; }
+
+	/// @brief 胴の当たり判定を取得する
+	/// @return 
+	AppCollider& GetHurtboxChest() { return hurtboxChest_; }
+
+	/// @brief 腰の当たり判定を取得する
+	/// @return 
+	AppCollider& GetHurtboxRoot() { return hurtboxRoot_; }
 
 	/// @brief 相手をつかんでいるかどうか
 	/// @return 
@@ -681,7 +692,9 @@ protected:
 protected:
 
 	/// @brief 当たり判定
-	AppCollider hurtbox_;
+	AppCollider hurtboxHead_;
+	AppCollider hurtboxChest_;
+	AppCollider hurtboxRoot_;
 
 	/// @brief 攻撃判定グループ
 	Collision3DBaseSphere* hitboxGroup_ = nullptr;

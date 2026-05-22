@@ -1087,6 +1087,12 @@
     <Filter Include="Game\Entity\Weapon">
       <UniqueIdentifier>{9982c0d2-b308-478d-8f0f-11648b1c94dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SoundManager">
+      <UniqueIdentifier>{9d00b6c9-4c46-470a-9b64-c90dc33d4eaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Sound">
+      <UniqueIdentifier>{d8d3949f-ba85-41d5-b6d8-270890aa6240}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1937,6 +1943,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\TrailStore\TrailData\TrailData.cpp">
       <Filter>Engine\Include\Store\TrailStore\TrailData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SoundManager\SoundManager.cpp">
+      <Filter>Game\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Sound\Sound.cpp">
+      <Filter>Engine\Include\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2905,6 +2917,12 @@
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\CameraDataForGPU\CameraDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\CameraDataForGPU</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SoundManager\SoundManager.h">
+      <Filter>Game\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Sound\Sound.h">
+      <Filter>Engine\Include\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -93,10 +93,21 @@ Character::Character(const InitData& initData) : Entity()
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");
 
+
+
 	// 当たり判定グループ
-	hurtbox_.collider_ = initData.hurtboxGroup->CreateInstance();
-	hurtbox_.owner_ = this;
-	hurtbox_.type_ = ColliderType::Hurtbox;
+	hurtboxHead_.collider_ = initData.hurtboxGroup->CreateInstance();
+	hurtboxHead_.owner_ = this;
+	hurtboxHead_.type_ = ColliderType::Hurtbox;
+
+	hurtboxChest_.collider_ = initData.hurtboxGroup->CreateInstance();
+	hurtboxChest_.owner_ = this;
+	hurtboxChest_.type_ = ColliderType::Hurtbox;
+
+	hurtboxRoot_.collider_ = initData.hurtboxGroup->CreateInstance();
+	hurtboxRoot_.owner_ = this;
+	hurtboxRoot_.type_ = ColliderType::Hurtbox;
+
 
 	// 攻撃判定グループ
 	hitboxGroup_ = initData.hitboxGroup;
@@ -118,8 +129,15 @@ Character::~Character()
 	if (landingCollision_)landingCollision_->Delete();
 	landingCollision_ = nullptr;
 
-	if (hurtbox_.collider_) hurtbox_.collider_->Delete();
-	hurtbox_.collider_ = nullptr;
+	if (hurtboxHead_.collider_) hurtboxHead_.collider_->Delete();
+	hurtboxHead_.collider_ = nullptr;
+
+	if (hurtboxChest_.collider_) hurtboxChest_.collider_->Delete();
+	hurtboxChest_.collider_ = nullptr;
+
+	if (hurtboxRoot_.collider_) hurtboxRoot_.collider_->Delete();
+	hurtboxRoot_.collider_ = nullptr;
+
 
 	// インスタンスリストから自分を除外する
 	auto it = std::remove(characters_.begin(), characters_.end(), this);
@@ -129,10 +147,6 @@ Character::~Character()
 /// @brief 更新処理
 void Character::Update()
 {
-	// 当たり判定の位置を更新する
-	auto collider = static_cast<Collision3DInstanceAABB*>(hurtbox_.collider_);
-	collider->param_->center = GetWorldPosition() + Vector3(0.0f, 1.0f, 0.0f);
-
 	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
 
@@ -164,6 +178,27 @@ void Character::Update()
 			// 着地判定の位置を更新する
 			if (landingCollision_)
 				landingCollision_->param_->center = GetWorldPosition();
+
+			if (hurtboxHead_.collider_)
+			{
+				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxHead_.collider_);
+				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				collider->param_->center = GetBonePosition(JointType::Head);
+			}
+
+			if (hurtboxChest_.collider_)
+			{
+				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxChest_.collider_);
+				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				collider->param_->center = GetBonePosition(JointType::Chest);
+			}
+
+			if (hurtboxRoot_.collider_)
+			{
+				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxRoot_.collider_);
+				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				collider->param_->center = GetBonePosition(JointType::Root);
+			}
 		};
 
 	// 掴まれている場合の処理
@@ -960,6 +995,15 @@ Matrix4x4 Character::GetBoneMatrix(const JointType& jointType) const
 	// モーションマネージャからジョイント名を取得する
 	std::string jointName = motionManager_->GetJointName(jointType);
 	return model_->GetBoneWorldMatrix(jointName);
+}
+
+/// @brief ボーンの位置を取得する
+/// @param jointType 
+/// @return 
+Vector3 Character::GetBonePosition(const JointType& jointType) const
+{
+	Matrix4x4 boneMatrix = GetBoneMatrix(jointType);
+	return Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 }
 
 /// @brief ダウン中かどうか

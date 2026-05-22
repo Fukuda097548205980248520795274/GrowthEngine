@@ -37,6 +37,9 @@ void MotionManager::Initialize()
 	jointMap_[JointType::HandR] = "ボーン.015";
 	jointMap_[JointType::FootL] = "ボーン.011";
 	jointMap_[JointType::FootR] = "ボーン.019";
+	jointMap_[JointType::Chest] = "ボーン.001";
+	jointMap_[JointType::Head] = "ボーン.003";
+	jointMap_[JointType::Root] = "ボーン";
 
 	// モーション読み込み
 	LoadStand(dir);

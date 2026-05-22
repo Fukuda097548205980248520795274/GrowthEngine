@@ -47,6 +47,8 @@
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
 
+#include "Application/Sound/Sound.h"
+
 #include "Application/Collision3DBase/Collision3DBaseSphere/Collision3DBaseSphere.h"
 #include "Application/Collision3DBase/Collision3DBaseAABB/Collision3DBaseAABB.h"
 #include "Application/Collision3DBase/Collision3DBaseOBB/Collision3DBaseOBB.h"
