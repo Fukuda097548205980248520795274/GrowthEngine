@@ -28,6 +28,9 @@ Weapon::Weapon(const InitData& initData) : Entity()
 	// カテゴリ
 	category_ = initData.category;
 
+	// 壊れない武器かどうか
+	isUnbreakable_ = initData.isUnbreakable;
+
 	// モデル
 	if (initData.model)
 	{
@@ -81,6 +84,20 @@ void Weapon::Update()
 /// @brief 描画処理
 void Weapon::Draw()
 {
+	// 耐久力が0以下なら描画しない
+	if (durability_ <= 0) return;
+
 	// モデルがあるときは描画する
 	if (model_)model_->Draw();
+}
+
+/// @brief 武器に入るダメージ
+/// @param damage 
+void Weapon::TakeDamage(int damage)
+{
+	// 壊れない武器なら、耐久力を減らさない
+	if (isUnbreakable_) return;
+
+	// 耐久力を減らす
+	durability_ -= damage;
 }

@@ -345,6 +345,17 @@ public:
 	/// @return 
 	bool IsStyleChanging() const { return isStyleChanging_; }
 
+	/// @brief 武器を持っているかどうか
+	/// @return 
+	bool HasWeapon() const { return weapon_ != nullptr; }
+
+	/// @brief 所持している武器を取得する
+	/// @return 
+	Weapon* GetWeapon() const { return weapon_; }
+
+	/// @brief 武器を離す
+	void ReleaseWeapon();
+
 
 protected:
 

@@ -27,6 +27,9 @@ public:
 
 		WeaponCategory category = WeaponCategory::None;
 
+		/// @brief 壊れない武器かどうか
+		bool isUnbreakable = false;
+
 		/// @brief モデル
 		Render3DStaticModel* model = nullptr;
 	};
@@ -66,6 +69,14 @@ public:
 	/// @param owner 
 	void SetOwner(Character* owner) { owner_ = owner; }
 
+	/// @brief 所持されているかどうか
+	/// @return 
+	bool IsEquipped() const { return owner_ != nullptr; }
+
+	/// @brief 武器に入るダメージ
+	/// @param damage 
+	void TakeDamage(int damage);
+
 
 protected:
 
@@ -92,5 +103,8 @@ protected:
 
 	// 武器の持ち主
 	Character* owner_ = nullptr;
+
+	/// @brief 壊れない武器かどうか
+	bool isUnbreakable_ = false;
 };
 

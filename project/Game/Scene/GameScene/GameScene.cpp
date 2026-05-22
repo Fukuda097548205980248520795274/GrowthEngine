@@ -88,9 +88,10 @@ void GameScene::Initialize()
 	Weapon::InitData playerWeaponInitData;
 	playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
 	playerWeaponInitData.model = playerWeaponModel_.get();
-	playerWeaponInitData.durability = 100;
+	playerWeaponInitData.durability = 3;
 	playerWeaponInitData.attackPower = 1.0f;
 	playerWeaponInitData.category = WeaponCategory::OneHanded;
+	playerWeaponInitData.isUnbreakable = false;
 	playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
 
 	// プレイヤーの生成と初期化

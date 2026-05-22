@@ -142,6 +142,13 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// 武器の耐久力が0以下の場合は、武器を手放す
+			if (HasWeapon())
+			{
+				if (weapon_->GetDurability() <= 0)
+					ReleaseWeapon();
+			}
+
 			// スタイル変化の更新
 			UpdateStyleChange(dt);
 
@@ -474,9 +481,20 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 
 
+	// 最終的な攻撃力を計算する
+	int finalDamage = damage;
+
+	// 武器の攻撃力を考慮する
+	if (attacker->HasWeapon())
+	{
+		finalDamage = static_cast<int>(static_cast<float>(damage) * attacker->GetWeapon()->GetAttackPower());
+
+		// 武器の耐久力を1減らす
+		attacker->GetWeapon()->TakeDamage(1);
+	}
 
 	// 体力を減らし、0未満にならないようにする
-	hp_ = std::max(0, hp_ - damage);
+	hp_ = std::max(0, hp_ - finalDamage);
 
 	// ノックバック処理
 	if (knockback > 0.0f)
@@ -1024,6 +1042,18 @@ bool Character::IsGrabbedDamage()const
 
 	// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
 	return grabber_->IsGrabStrikeAttack();
+}
+
+/// @brief 武器を離す
+void Character::ReleaseWeapon()
+{
+	// 武器を持っていないときは処理しない
+	if (!HasWeapon())return;
+
+	// 武器の所有者をクリアする
+	weapon_->SetOwner(nullptr);
+	weapon_->SetPosition(weapon_->GetWorldPosition());
+	weapon_ = nullptr;
 }
 
 /// @brief 受け流しを実行する
