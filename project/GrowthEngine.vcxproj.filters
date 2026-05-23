@@ -1090,8 +1090,14 @@
     <Filter Include="Game\SoundManager">
       <UniqueIdentifier>{9d00b6c9-4c46-470a-9b64-c90dc33d4eaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Sound">
+    <Filter Include="Engine\Include\Application\Sound">
       <UniqueIdentifier>{d8d3949f-ba85-41d5-b6d8-270890aa6240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOTube">
+      <UniqueIdentifier>{adba3ada-89d5-4740-959f-59ae2a71cad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOModel\PSOPrefab3DTube">
+      <UniqueIdentifier>{6beab4a2-508e-4a48-b2e0-dfff14224b16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1948,7 +1954,13 @@
       <Filter>Game\SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Application\Sound\Sound.cpp">
-      <Filter>Engine\Include\Sound</Filter>
+      <Filter>Engine\Include\Application\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.cpp">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTube</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.cpp">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3DTube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2922,7 +2934,13 @@
       <Filter>Game\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Application\Sound\Sound.h">
-      <Filter>Engine\Include\Sound</Filter>
+      <Filter>Engine\Include\Application\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.h">
+      <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTube</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.h">
+      <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3DTube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3078,10 +3096,7 @@
     <FxCompile Include="Assets\Shader\Primitive\UVSphere.CS.hlsl">
       <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Ring.CS.hlsl">
-      <Filter>Engine\Shader\Primitive</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Cylinder.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Primitive\Tube.CS.hlsl">
       <Filter>Engine\Shader\Primitive</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Primitive\Skinning.CS.hlsl">
@@ -3122,6 +3137,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Trail\Trail.PS.hlsl">
       <Filter>Engine\Shader\Trail</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Prefab\Prefab3D\Prefab3DTube.VS.hlsl">
+      <Filter>Engine\Shader\Prefab\Prefab3D</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

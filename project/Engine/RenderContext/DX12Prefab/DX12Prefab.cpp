@@ -41,33 +41,7 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 
 	// スプライト用プレハブストアの生成
 	prefab2DStore_ = std::make_unique<Prefab2DStore>();
-	prefab2DStore_->Initialize(device, log);
-
-
-	// 3Dプレハブ頂点シェーダ
-	prefab3DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.VS.hlsl", L"vs_6_0");
-	assert(prefab3DVS_);
-
-	// 3Dプレハブピクセルシェーダ
-	prefab3DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.PS.hlsl", L"ps_6_0");
-	assert(prefab3DPS_);
-
-	// 2Dプレハブ頂点シェーダ
-	prefab2DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.VS.hlsl", L"vs_6_0");
-	assert(prefab2DVS_);
-
-	// 2Dプレハブピクセルシェーダ
-	prefab2DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.PS.hlsl", L"ps_6_0");
-	assert(prefab2DPS_);
-
-
-	// 3Dプレハブ用PSO
-	psoPrefab3D_ = std::make_unique<PSOPrefab3D>();
-	psoPrefab3D_->Initialize(device, prefab3DVS_.Get(), prefab3DPS_.Get(), log);
-
-	// 2Dプレハブ用PSO
-	psoPrefab2D_ = std::make_unique<PSOPrefab2D>();
-	psoPrefab2D_->Initialize(device, prefab2DVS_.Get(), prefab2DPS_.Get(), log);
+	prefab2DStore_->Initialize(device, compiler, log);
 
 #ifdef _DEVELOPMENT
 

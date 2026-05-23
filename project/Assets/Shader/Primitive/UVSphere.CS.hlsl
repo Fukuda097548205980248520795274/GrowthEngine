@@ -20,8 +20,8 @@ struct SphereParam
     // スライス数
     uint slices;
     
-    // リング数
-    uint rings;
+    // セグメント数
+    uint segments;
 };
 
 // パラメータ
@@ -41,15 +41,15 @@ void main( uint3 DTid : SV_DispatchThreadID )
     uint t = DTid.y; // 緯度のインデックス
 
     // ----------------------------------------------------
-    // 1. 頂点計算 (slices + 1, rings + 1 の範囲で実行)
+    // 1. 頂点計算 (slices + 1, segments + 1 の範囲で実行)
     // ----------------------------------------------------
-    if (s > gParam.slices || t > gParam.rings)
+    if (s > gParam.slices || t > gParam.segments)
     {
         return; // 完全な範囲外のスレッドはここで終了
     }
 
     float phi = (2.0 * PI * s) / gParam.slices;
-    float theta = (PI * t) / gParam.rings;
+    float theta = (PI * t) / gParam.segments;
 
     float3 pos;
     pos.x = sin(theta) * cos(phi);
@@ -57,7 +57,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     pos.z = sin(theta) * sin(phi);
 
     float3 normal = normalize(pos);
-    float2 uv = float2((float) s / gParam.slices, (float) t / gParam.rings);
+    float2 uv = float2((float) s / gParam.slices, (float) t / gParam.segments);
 
     uint stride = gParam.slices + 1;
     uint vertexIndex = s + t * stride;
@@ -69,11 +69,11 @@ void main( uint3 DTid : SV_DispatchThreadID )
     gVertex[vertexIndex] = v;
 
     // ----------------------------------------------------
-    // 2. インデックス計算 (slices, rings の範囲でのみ実行)
+    // 2. インデックス計算 (slices, segments の範囲でのみ実行)
     // ----------------------------------------------------
-    // 端の頂点 (s == slices または t == rings) は
+    // 端の頂点 (s == slices または t == segments) は
     // 新たな四角形の起点にはならないためスキップする
-    if (s < gParam.slices && t < gParam.rings)
+    if (s < gParam.slices && t < gParam.segments)
     {
         
         uint topLeft = s + t * stride;

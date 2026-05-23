@@ -499,6 +499,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.cpp" />
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -520,6 +521,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.cpp" />
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1214,12 +1216,14 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOParticle3DUpdateVelocity\ComputePSOParticle3DUpdateVelocity.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOSkinning\ComputePSOSkinning.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTAA\ComputePSOTAA.h" />
+    <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOUVSphere\ComputePSOUVSphere.h" />
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOVelocityDilation\ComputePSOVelocityDilation.h" />
     <ClInclude Include="Engine\PSO\EnumBlendMode\EnumBlendMode.h" />
     <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h" />
     <ClInclude Include="Engine\PSO\PSOModel\BasePSOModel.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOParticle\PSOParticle.h" />
+    <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab2D\PSOPrefab2D.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSORender3D\PSORender3D.h" />
@@ -1803,18 +1807,15 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Cylinder.CS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    <FxCompile Include="Assets\Shader\Prefab\Prefab3D\Prefab3DTube.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Primitive\Ring.CS.hlsl">
+    <FxCompile Include="Assets\Shader\Primitive\Tube.CS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Development|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>

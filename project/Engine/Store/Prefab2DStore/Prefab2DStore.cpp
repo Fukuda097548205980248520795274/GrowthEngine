@@ -1,6 +1,8 @@
 #include "Prefab2DStore.h"
 #include "Prefab2DData/Prefab2DSpriteData/Prefab2DSpriteData.h"
 
+#include "ShaderCompiler/ShaderCompiler.h"
+
 /// @brief コンストラクタ
 Engine::Prefab2DStore::Prefab2DStore()
 {
@@ -10,11 +12,27 @@ Engine::Prefab2DStore::Prefab2DStore()
 
 /// @brief 初期化
 /// @param device 
+/// @param compiler 
 /// @param log 
-void Engine::Prefab2DStore::Initialize(ID3D12Device* device, Log* log)
+void Engine::Prefab2DStore::Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log)
 {
 	// nullptrチェック
 	assert(device);
+
+
+	// 2Dプレハブ頂点シェーダ
+	prefab2DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.VS.hlsl", L"vs_6_0");
+	assert(prefab2DVS_);
+
+	// 2Dプレハブピクセルシェーダ
+	prefab2DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab2D/Prefab2D.PS.hlsl", L"ps_6_0");
+	assert(prefab2DPS_);
+
+	// 2Dプレハブ用PSO
+	psoPrefab2D_ = std::make_unique<PSOPrefab2D>();
+	psoPrefab2D_->Initialize(device, prefab2DVS_.Get(), prefab2DPS_.Get(), log);
+
+
 
 	// 頂点リソースの生成と初期化
 	vertexResource_ = std::make_unique<VertexBufferResource<SpriteVertexData>>();
@@ -100,27 +118,27 @@ Prefab2DHandle Engine::Prefab2DStore::Load(const std::string& name, TextureHandl
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab2DStore::AllDrawPrefab(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DStore::AllDrawPrefab(ID3D12GraphicsCommandList* commandList)
 {
-	for (auto& data : dataTable_)data->Register(commandList, pso);
+	for (auto& data : dataTable_)data->Register(commandList, psoPrefab2D_.get());
 }
 
 /// @brief プレハブの描画処理
 /// @param hPrefab2D 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab2DStore::DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DStore::DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[hPrefab2D]->Register(commandList, pso);
+	dataTable_[hPrefab2D]->Register(commandList, psoPrefab2D_.get());
 }
 
 /// @brief プレハブの描画処理
 /// @param name 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab2DStore::DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab2DStore::DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[nameTable_[name]]->Register(commandList, pso);
+	dataTable_[nameTable_[name]]->Register(commandList, psoPrefab2D_.get());
 }
 
 /// @brief リセット

@@ -6,6 +6,7 @@
 
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
+#include "PSO/PSOModel/PSOPrefab3D/PSOPrefab3D.h"
 #include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
 
 namespace Engine
@@ -66,21 +67,21 @@ namespace Engine
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param pso 
-		void AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief プレハブの描画処理
 		/// @param hPrefab3D 
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param pso 
-		void DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief プレハブの描画処理
 		/// @param name 
 		/// @param skyboxStore 
 		/// @param commandList 
 		/// @param pso 
-		void DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief シャドウマップの描画処理
 		/// @param viewProjection 
@@ -147,6 +148,11 @@ namespace Engine
 		void DebugParameter();
 
 
+		// Microsoft::WRL 省略
+		template<typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+
 	private:
 
 		/// @brief データテーブル
@@ -157,6 +163,21 @@ namespace Engine
 
 		// パラメータ
 		std::unique_ptr<Prefab3DParameter> parameter_ = nullptr;
+
+
+	private:
+
+		// 3Dプレハブ頂点シェーダ
+		ComPtr<IDxcBlob> prefab3DVS_ = nullptr;
+
+		// 3Dプレハブピクセルシェーダ
+		ComPtr<IDxcBlob> prefab3DPS_ = nullptr;
+
+
+	private:
+
+		/// @brief 3Dプレハブ用PSO
+		std::unique_ptr<PSOPrefab3D> psoPrefab3D_ = nullptr;
 
 
 	private:

@@ -3,6 +3,7 @@
 
 #include "Prefab3DData/Prefab3DStaticModelData/Prefab3DStaticModelData.h"
 #include "Prefab3DData/Prefab3DCubeData/Prefab3DCubeData.h"
+#include "ShaderCompiler/ShaderCompiler.h"
 
 /// @brief コンストラクタ
 Engine::Prefab3DStore::Prefab3DStore()
@@ -45,6 +46,20 @@ void Engine::Prefab3DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	skeletonStore_ = skeletonStore;
 	lightStore_ = lightStore;
 	cameraStore_ = cameraStore;
+
+
+	// 3Dプレハブ頂点シェーダ
+	prefab3DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.VS.hlsl", L"vs_6_0");
+	assert(prefab3DVS_);
+
+	// 3Dプレハブピクセルシェーダ
+	prefab3DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.PS.hlsl", L"ps_6_0");
+	assert(prefab3DPS_);
+
+	// 3Dプレハブ用PSO
+	psoPrefab3D_ = std::make_unique<PSOPrefab3D>();
+	psoPrefab3D_->Initialize(device, prefab3DVS_.Get(), prefab3DPS_.Get(), log);
+
 
 	// 立方体頂点リソースの生成と初期化
 	cubeVertexResource_ = std::make_unique<CubeVertexResource>();
@@ -120,9 +135,9 @@ void Engine::Prefab3DStore::Update()
 /// @param skyboxStore 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, pso);
+	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, psoPrefab3D_.get());
 }
 
 /// @brief プレハブの描画処理
@@ -130,9 +145,9 @@ void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12Graphi
 /// @param skyboxStore 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[hPrefab3D]->Register(skyboxStore, commandList, pso);
+	dataTable_[hPrefab3D]->Register(skyboxStore, commandList, psoPrefab3D_.get());
 }
 
 /// @brief プレハブの描画処理
@@ -140,9 +155,9 @@ void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* sk
 /// @param skyboxStore 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DStore::DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStore::DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, pso);
+	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, psoPrefab3D_.get());
 }
 
 /// @brief シャドウマップの描画処理

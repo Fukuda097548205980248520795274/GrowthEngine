@@ -1,7 +1,5 @@
 #pragma once
 #include <memory>
-#include "PSO/PSOModel/PSOPrefab2D/PSOPrefab2D.h"
-#include "PSO/PSOModel/PSOPrefab3D/PSOPrefab3D.h"
 
 #include "Store/Prefab3DStore/Prefab3DStore.h"
 #include "Store/Prefab2DStore/Prefab2DStore.h"
@@ -94,34 +92,34 @@ namespace Engine
 		/// @brief 全ての3Dプレハブの描画処理
 		/// @param skyboxStore 
 		/// @param commandList 
-		void AllDrawPrefab3D(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->AllDrawPrefab(skyboxStore, commandList, psoPrefab3D_.get()); }
+		void AllDrawPrefab3D(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->AllDrawPrefab(skyboxStore, commandList); }
 
 		/// @brief 3Dプレハブの描画処理
 		/// @param hPrefab3D 
 		/// @param skyboxStore 
 		/// @param commandList 
-		void DrawPrefab3D(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(hPrefab3D, skyboxStore, commandList, psoPrefab3D_.get()); }
+		void DrawPrefab3D(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(hPrefab3D, skyboxStore, commandList); }
 
 		/// @brief 3Dプレハブの描画処理
 		/// @param name 
 		/// @param skyboxStore 
 		/// @param commandList 
-		void DrawPrefab3D(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(name, skyboxStore, commandList, psoPrefab3D_.get()); }
+		void DrawPrefab3D(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) { prefab3DStore_->DrawPrefab(name, skyboxStore, commandList); }
 
 
 		/// @brief 全ての2Dプレハブの描画処理
 		/// @param commandList 
-		void AllDrawPrefab2D(ID3D12GraphicsCommandList* commandList) { prefab2DStore_->AllDrawPrefab(commandList, psoPrefab2D_.get()); }
+		void AllDrawPrefab2D(ID3D12GraphicsCommandList* commandList) { prefab2DStore_->AllDrawPrefab(commandList); }
 
 		/// @brief 2Dプレハブの描画処理
 		/// @param hPrefab2D 
 		/// @param commandList 
-		void DrawPrefab2D(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(hPrefab2D, commandList, psoPrefab2D_.get()); }
+		void DrawPrefab2D(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(hPrefab2D, commandList); }
 
 		/// @brief 2Dプレハブの描画処理
 		/// @param name 
 		/// @param commandList 
-		void DrawPrefab2D(const std::string& name, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(name, commandList, psoPrefab2D_.get()); }
+		void DrawPrefab2D(const std::string& name, ID3D12GraphicsCommandList* commandList) { prefab2DStore_->DrawPrefab(name, commandList); }
 
 
 		/// @brief プリミティブのパラメータを取得する
@@ -205,28 +203,6 @@ namespace Engine
 		void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color);
 
 #endif
-
-	private:
-
-		// 3Dプレハブ頂点シェーダ
-		ComPtr<IDxcBlob> prefab3DVS_ = nullptr;
-
-		// 3Dプレハブピクセルシェーダ
-		ComPtr<IDxcBlob> prefab3DPS_ = nullptr;
-
-		// 2Dプレハブ頂点シェーダ
-		ComPtr<IDxcBlob> prefab2DVS_ = nullptr;
-
-		// 2Dプレハブピクセルシェーダ
-		ComPtr<IDxcBlob> prefab2DPS_ = nullptr;
-
-	private:
-
-		/// @brief 3Dプレハブ用PSO
-		std::unique_ptr<PSOPrefab3D> psoPrefab3D_ = nullptr;
-
-		/// @brief 2Dプレハブ用PSO
-		std::unique_ptr<PSOPrefab2D> psoPrefab2D_ = nullptr;
 
 
 	private:

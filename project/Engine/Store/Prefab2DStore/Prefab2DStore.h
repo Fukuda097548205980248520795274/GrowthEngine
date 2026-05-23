@@ -1,12 +1,15 @@
 #pragma once
 #include "Prefab2DData/Prefab2DBaseData.h"
 #include "Resource/IndexBufferResource/IndexBufferResource.h"
+#include "PSO/PSOModel/PSOPrefab2D/PSOPrefab2D.h"
 #include <vector>
 
 #include "Parameter/Prefab2DParameter/Prefab2DParameter.h"
 
 namespace Engine
 {
+	class ShaderCompiler;
+
 	class Prefab2DStore
 	{
 	public:
@@ -16,8 +19,9 @@ namespace Engine
 
 		/// @brief 初期化
 		/// @param device 
+		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, Log* log);
+		void Initialize(ID3D12Device* device, ShaderCompiler* compiler, Log* log);
 
 		/// @brief 更新処理
 		void Update();
@@ -39,19 +43,19 @@ namespace Engine
 		/// @brief すべてのプレハブの描画処理
 		/// @param commandList 
 		/// @param pso 
-		void AllDrawPrefab(ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void AllDrawPrefab(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief プレハブの描画処理
 		/// @param hPrefab2D 
 		/// @param commandList 
 		/// @param pso 
-		void DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void DrawPrefab(Prefab2DHandle hPrefab2D, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief プレハブの描画処理
 		/// @param name 
 		/// @param commandList 
 		/// @param pso 
-		void DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso);
+		void DrawPrefab(const std::string& name, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief パラメータを取得する
 		/// @tparam T 
@@ -88,6 +92,11 @@ namespace Engine
 		void DebugParameter();
 
 
+		// Microsoft::WRL 省略
+		template<typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+
 	private:
 
 		/// @brief データテーブル
@@ -98,6 +107,20 @@ namespace Engine
 
 		// パラメータ
 		std::unique_ptr<Prefab2DParameter> parameter_ = nullptr;
+
+
+	private:
+
+		// 2Dプレハブ頂点シェーダ
+		ComPtr<IDxcBlob> prefab2DVS_ = nullptr;
+
+		// 2Dプレハブピクセルシェーダ
+		ComPtr<IDxcBlob> prefab2DPS_ = nullptr;
+
+	private:
+
+		/// @brief 2Dプレハブ用PSO
+		std::unique_ptr<PSOPrefab2D> psoPrefab2D_ = nullptr;
 
 
 	private:
