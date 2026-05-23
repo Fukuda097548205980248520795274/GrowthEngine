@@ -1,5 +1,6 @@
 #include "ComboAttack.h"
-#include "Entity/Character/Player/Player.h"
+#include "Entity/Character/Character.h"
+#include "Entity/Weapon/Weapon.h"
 
 /// @brief コンストラクタ
 /// @param character 
@@ -97,6 +98,9 @@ void ComboAttack::Update()
 		// ジョイントタイプがNoneの場合は当たり判定を出さない
 		if (state.def.jointType == JointType::None) continue;
 
+		// 武器のジョイントタイプの場合は、攻撃者が武器を持っているかどうかを確認する
+		if (state.def.jointType == JointType::Weapon && owner_->GetWeapon() == nullptr)continue;
+
 		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
 		{
 			// 当たり判定がまだ存在しない場合は作成する
@@ -105,8 +109,16 @@ void ComboAttack::Update()
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
 			auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
-			Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
-			sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+			if (state.def.jointType == JointType::Weapon)
+			{
+				// 武器の当たり判定は、武器の位置とサイズを使用する
+				sphere->param_->center = owner_->GetWeapon()->GetWorldPosition();
+			}
+			else
+			{
+				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
+				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+			}
 			sphere->param_->radius = state.def.radius;
 
 			// 受け流したかどうかを示すフラグ

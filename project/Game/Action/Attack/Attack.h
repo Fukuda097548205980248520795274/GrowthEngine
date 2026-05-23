@@ -26,7 +26,7 @@ enum class DamageReaction
 	None,
 
 	// 小怯み
-	LightStagger, 
+	LightStagger,
 
 	// 大怯み
 	HeavyStagger,

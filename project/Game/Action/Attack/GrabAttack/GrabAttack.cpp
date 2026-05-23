@@ -53,7 +53,7 @@ void GrabAttack::Update()
 	// ------------------------------------------
 
 	// JointType::None なら当たり判定を出さない
-	if (jointType_ != JointType::None)
+	if (jointType_ != JointType::None && jointType_ != JointType::Weapon)
 	{
 		// 判定の発生時間内かチェック
 		if (attackTimer_ >= hitboxStartTime_ && attackTimer_ <= hitboxEndTime_)

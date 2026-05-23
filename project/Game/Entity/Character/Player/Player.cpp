@@ -130,7 +130,7 @@ void Player::Initialize(Weapon* baton)
 	attack1Data.cancelStartTime = 0.2f;
 	attack1Data.cancelEndTime = 0.5f;
 	attack1Data.hitDefinitions.resize(1);
-	attack1Data.hitDefinitions[0].jointType = JointType::HandR;
+	attack1Data.hitDefinitions[0].jointType = JointType::Weapon;
 	attack1Data.hitDefinitions[0].startTime = 0.1f;
 	attack1Data.hitDefinitions[0].endTime = 0.4f;
 	attack1Data.hitDefinitions[0].damage = 1;
@@ -166,7 +166,7 @@ void Player::Initialize(Weapon* baton)
 	attack3Data.cancelStartTime = 0.2f;
 	attack3Data.cancelEndTime = 0.5f;
 	attack3Data.hitDefinitions.resize(1);
-	attack3Data.hitDefinitions[0].jointType = JointType::HandR;
+	attack3Data.hitDefinitions[0].jointType = JointType::Weapon;
 	attack3Data.hitDefinitions[0].startTime = 0.1f;
 	attack3Data.hitDefinitions[0].endTime = 0.4f;
 	attack3Data.hitDefinitions[0].damage = 1;

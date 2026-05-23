@@ -35,7 +35,8 @@ enum class JointType
 	LegL,
 	LegR,
 	FootL,
-	FootR
+	FootR,
+	Weapon,
 };
 
 class MotionManager

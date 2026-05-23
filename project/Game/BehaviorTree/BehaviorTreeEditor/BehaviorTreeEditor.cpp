@@ -400,7 +400,7 @@ void BehaviorTreeEditor::DrawNodeTable()
                             }
 
                             // ジョイントタイプ
-                            const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
+                            const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
                             int currentJoint = static_cast<int>(hitDefs[i].jointType);
                             if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames))) {
                                 hitDefs[i].jointType = static_cast<JointType>(currentJoint);
