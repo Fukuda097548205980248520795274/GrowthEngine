@@ -182,22 +182,22 @@ void Character::Update()
 
 			if (hurtboxHead_.collider_)
 			{
-				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxHead_.collider_);
-				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxHead_.collider_);
+				collider->param_->radius = 0.2f;
 				collider->param_->center = GetBonePosition(JointType::Head);
 			}
 
 			if (hurtboxChest_.collider_)
 			{
-				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxChest_.collider_);
-				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxChest_.collider_);
+				collider->param_->radius = 0.2f;
 				collider->param_->center = GetBonePosition(JointType::Chest);
 			}
 
 			if (hurtboxRoot_.collider_)
 			{
-				auto collider = static_cast<Collision3DInstanceAABB*>(hurtboxRoot_.collider_);
-				collider->param_->radius = Vector3(0.2f, 0.2f, 0.2f);
+				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxRoot_.collider_);
+				collider->param_->radius = 0.2f;
 				collider->param_->center = GetBonePosition(JointType::Root);
 			}
 		};
