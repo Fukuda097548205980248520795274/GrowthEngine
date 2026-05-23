@@ -6,7 +6,7 @@
 void Game::Initialize()
 {
 	// シーンマネージャの生成
-	sceneManager_ = std::make_unique<SceneManager>("Game");
+	sceneManager_ = std::make_unique<SceneManager>("Title");
 
 	// マネージャの生成と初期化
 	MotionManager* motionManager = MotionManager::GetInstance();

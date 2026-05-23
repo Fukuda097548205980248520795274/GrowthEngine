@@ -1099,6 +1099,15 @@
     <Filter Include="Engine\Include\PSO\PSOModel\PSOPrefab3DTube">
       <UniqueIdentifier>{6beab4a2-508e-4a48-b2e0-dfff14224b16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData">
+      <UniqueIdentifier>{871c04b9-b1d7-4c71-8a92-7e86e6871656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseTube">
+      <UniqueIdentifier>{667dbd39-8f43-47aa-85c0-1cd743ad78ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceTube">
+      <UniqueIdentifier>{3d2bc46b-b6d1-4ce0-96e3-1f3d3df10a32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1961,6 +1970,15 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3DTube</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.cpp">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.cpp">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseTube</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.cpp">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2941,6 +2959,15 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3DTube\PSOPrefab3DTube.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3DTube</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.h">
+      <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.h">
+      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseTube</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.h">
+      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

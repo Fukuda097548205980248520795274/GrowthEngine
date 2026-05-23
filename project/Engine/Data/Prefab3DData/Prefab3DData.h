@@ -16,7 +16,8 @@ namespace Engine
 		enum class Type
 		{
 			StaticModel,
-			Cube
+			Cube,
+			Tube
 		};
 
 		/// @brief 静的モデル
@@ -397,6 +398,233 @@ namespace Engine
 
 					/// @brief ブラー
 					Blur blur;
+				};
+			}
+		}
+
+		namespace Tube
+		{
+			/// @brief 基底
+			namespace Base
+			{
+				/// @brief トランスフォーム
+				struct Transform
+				{
+					// 拡縮
+					Vector3 scale;
+
+					// 回転
+					Vector3 rotate;
+
+					// 移動
+					Vector3 translate;
+				};
+
+				/// @brief 分割数
+				struct Division
+				{
+					int32_t slices; // 円周方向の分割数
+				};
+
+				/// @brief サイズ
+				struct Size
+				{
+					/// @brief 高さ
+					float height;
+
+					/// @brief 上の半径
+					float radiusTop;
+
+					/// @brief 下の半径
+					float radiusBottom;
+				};
+
+				/// @brief UVトランスフォーム
+				struct UVTransform
+				{
+					// 拡縮
+					Vector2 scale;
+
+					// 回転
+					float radius;
+
+					// 移動
+					Vector2 translate;
+				};
+
+				/// @brief マテリアル
+				struct Material
+				{
+					/// @brief テクスチャハンドル
+					TextureHandle hTexture;
+
+					/// @brief 色
+					Vector4 color;
+
+					/// @brief UV
+					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
+
+					// 光沢度
+					float shininess;
+
+					// ライティング有効化
+					bool enableLighting;
+
+					// ディフューズ
+					bool enableDiffuse;
+
+					// ハーフランバート有効化
+					bool enableHalfLambert;
+
+					// スペキュラー有効化
+					bool enableSpecular;
+
+					// ブリンフォン有効化
+					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
+				};
+
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
+				/// @brief パラメータ
+				struct Param
+				{
+					/// @brief ブレンドモード
+					BlendMode blendMode;
+
+					/// @brief トランスフォーム
+					Transform transform;
+
+					/// @brief マテリアル
+					Material material;
+
+					/// @brief ブラー
+					Blur blur;
+
+					/// @brief 分割
+					Division division;
+
+					/// @brief サイズ
+					Size size;
+				};
+			}
+
+			/// @brief インスタンス
+			namespace Instance
+			{
+				/// @brief トランスフォーム
+				struct Transform
+				{
+					// 拡縮
+					Vector3 scale;
+
+					// 回転
+					Vector3 rotate;
+
+					// 移動
+					Vector3 translate;
+				};
+
+				/// @brief サイズ
+				struct Size
+				{
+					/// @brief 高さ
+					float height;
+
+					/// @brief 上の半径
+					float radiusTop;
+
+					/// @brief 下の半径
+					float radiusBottom;
+				};
+
+				/// @brief UVトランスフォーム
+				struct UVTransform
+				{
+					// 拡縮
+					Vector2 scale;
+
+					// 回転
+					float radius;
+
+					// 移動
+					Vector2 translate;
+				};
+
+				/// @brief マテリアル
+				struct Material
+				{
+					/// @brief 色
+					Vector4 color;
+
+					/// @brief UV
+					UVTransform uv;
+
+					/// @brief 環境
+					float environment;
+
+					// 光沢度
+					float shininess;
+
+					// ライティング有効化
+					bool enableLighting;
+
+					// ディフューズ
+					bool enableDiffuse;
+
+					// ハーフランバート有効化
+					bool enableHalfLambert;
+
+					// スペキュラー有効化
+					bool enableSpecular;
+
+					// ブリンフォン有効化
+					bool enableBlinnPhong;
+
+					// シャドウ有効化
+					bool enableShadow;
+				};
+
+				/// @brief ブラー
+				struct Blur
+				{
+					// 残像用マスク
+					float afterImageMask;
+
+					// モーションブラー用マスク
+					float motionBlurMask;
+				};
+
+				/// @brief パラメータ
+				struct Param
+				{
+					/// @brief トランスフォーム
+					Transform transform;
+
+					// 親トランスフォーム
+					WorldTransform3D* parent = nullptr;
+
+					/// @brief マテリアル
+					Material material;
+
+					/// @brief ブラー
+					Blur blur;
+
+					/// @brief サイズ
+					Size size;
 				};
 			}
 		}

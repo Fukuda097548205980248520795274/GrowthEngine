@@ -16,5 +16,13 @@ namespace Engine
 
 			float padding[2]; // 16バイトアラインメントのためのパディング
 		};
+
+		struct TubeDivisionDataForGPU
+		{
+			// スライス数
+			int32_t slices;
+
+			float padding[3]; // 16バイトアラインメントのためのパディング
+		};
 	}
 }

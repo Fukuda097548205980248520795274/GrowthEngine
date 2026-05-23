@@ -7,6 +7,9 @@
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
 #include "PSO/PSOModel/PSOPrefab3D/PSOPrefab3D.h"
+#include "PSO/PSOModel/PSOPrefab3DTube/PSOPrefab3DTube.h"
+#include "PSO/ComputePSO/ComputePSOTube/ComputePSOTube.h"
+
 #include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
 
 namespace Engine
@@ -170,6 +173,9 @@ namespace Engine
 		// 3Dプレハブ頂点シェーダ
 		ComPtr<IDxcBlob> prefab3DVS_ = nullptr;
 
+		/// @brief 3Dプレハブチューブ頂点シェーダ
+		ComPtr<IDxcBlob> prefab3DTubeVS_ = nullptr;
+
 		// 3Dプレハブピクセルシェーダ
 		ComPtr<IDxcBlob> prefab3DPS_ = nullptr;
 
@@ -178,6 +184,12 @@ namespace Engine
 
 		/// @brief 3Dプレハブ用PSO
 		std::unique_ptr<PSOPrefab3D> psoPrefab3D_ = nullptr;
+
+		/// @brief 3Dプレハブチューブ用PSO
+		std::unique_ptr<PSOPrefab3DTube> psoPrefab3DTube_ = nullptr;
+
+		/// @brief CSチューブ用PSO
+		std::unique_ptr<ComputePSOTube> computePSOTube_ = nullptr;
 
 
 	private:

@@ -3,6 +3,7 @@
 
 #include "Prefab3DData/Prefab3DStaticModelData/Prefab3DStaticModelData.h"
 #include "Prefab3DData/Prefab3DCubeData/Prefab3DCubeData.h"
+#include "Prefab3DData/Prefab3DTubeData/Prefab3DTubeData.h"
 #include "ShaderCompiler/ShaderCompiler.h"
 
 /// @brief コンストラクタ
@@ -52,13 +53,26 @@ void Engine::Prefab3DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	prefab3DVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.VS.hlsl", L"vs_6_0");
 	assert(prefab3DVS_);
 
+	// 3Dプレハブチューブ頂点シェーダ
+	prefab3DTubeVS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3DTube.VS.hlsl", L"vs_6_0");
+	assert(prefab3DTubeVS_);
+
 	// 3Dプレハブピクセルシェーダ
 	prefab3DPS_ = compiler->Compile(L"./Assets/Shader/Prefab/Prefab3D/Prefab3D.PS.hlsl", L"ps_6_0");
 	assert(prefab3DPS_);
 
+
 	// 3Dプレハブ用PSO
 	psoPrefab3D_ = std::make_unique<PSOPrefab3D>();
 	psoPrefab3D_->Initialize(device, prefab3DVS_.Get(), prefab3DPS_.Get(), log);
+
+	// 3Dプレハブチューブ用PSO
+	psoPrefab3DTube_ = std::make_unique<PSOPrefab3DTube>();
+	psoPrefab3DTube_->Initialize(device, prefab3DTubeVS_.Get(), prefab3DPS_.Get(), log);
+
+	// CSチューブ用PSO
+	computePSOTube_ = std::make_unique<ComputePSOTube>();
+	computePSOTube_->Initialize(device, compiler, log);
 
 
 	// 立方体頂点リソースの生成と初期化
@@ -104,7 +118,7 @@ Prefab3DHandle Engine::Prefab3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// 静的モデルプレハブデータ
 	if (type == Prefab3D::Type::StaticModel)
 	{
-		std::unique_ptr<Prefab3DStaticModelData> data = std::make_unique<Prefab3DStaticModelData>(name, numInstance, handle, hModel, parameter_.get());
+		std::unique_ptr<Prefab3DStaticModelData> data = std::make_unique<Prefab3DStaticModelData>(name, numInstance, handle, hModel, psoPrefab3D_.get(), parameter_.get());
 		data->Initialize(modelStore_, textureStore_, lightStore_, cameraStore_, heap_, device, log);
 		dataTable_.push_back(std::move(data));
 
@@ -114,10 +128,19 @@ Prefab3DHandle Engine::Prefab3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// 立方体プレハブデータ
 	if (type == Prefab3D::Type::Cube)
 	{
-		std::unique_ptr<Prefab3DCubeData> data = std::make_unique<Prefab3DCubeData>(name, numInstance, handle, hTexture, parameter_.get());
+		std::unique_ptr<Prefab3DCubeData> data = std::make_unique<Prefab3DCubeData>(name, numInstance, handle, hTexture, psoPrefab3D_.get(), parameter_.get());
 		data->Initialize(textureStore_, lightStore_, cameraStore_,cubeVertexResource_.get(), heap_, device, log);
 		dataTable_.push_back(std::move(data));
 
+		return handle;
+	}
+
+	// チューブプレハブデータ
+	if (type == Prefab3D::Type::Tube)
+	{
+		std::unique_ptr<Prefab3DTubeData> data = std::make_unique<Prefab3DTubeData>(name, numInstance, handle, hTexture, psoPrefab3DTube_.get(), computePSOTube_.get(), parameter_.get());
+		data->Initialize(textureStore_, lightStore_, cameraStore_, heap_, device, commandList, log);
+		dataTable_.push_back(std::move(data));
 		return handle;
 	}
 
@@ -137,7 +160,7 @@ void Engine::Prefab3DStore::Update()
 /// @param pso 
 void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	for (auto& data : dataTable_)data->Register(skyboxStore, commandList, psoPrefab3D_.get());
+	for (auto& data : dataTable_)data->Register(skyboxStore, commandList);
 }
 
 /// @brief プレハブの描画処理
@@ -147,7 +170,7 @@ void Engine::Prefab3DStore::AllDrawPrefab(SkyboxStore* skyboxStore, ID3D12Graphi
 /// @param pso 
 void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[hPrefab3D]->Register(skyboxStore, commandList, psoPrefab3D_.get());
+	dataTable_[hPrefab3D]->Register(skyboxStore, commandList);
 }
 
 /// @brief プレハブの描画処理
@@ -157,7 +180,7 @@ void Engine::Prefab3DStore::DrawPrefab(Prefab3DHandle hPrefab3D, SkyboxStore* sk
 /// @param pso 
 void Engine::Prefab3DStore::DrawPrefab(const std::string& name, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
-	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList, psoPrefab3D_.get());
+	dataTable_[nameTable_[name]]->Register(skyboxStore, commandList);
 }
 
 /// @brief シャドウマップの描画処理

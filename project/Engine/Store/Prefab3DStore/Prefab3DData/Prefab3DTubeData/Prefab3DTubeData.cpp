@@ -1,5 +1,4 @@
-#include "Prefab3DCubeData.h"
-
+#include "Prefab3DTubeData.h"
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
 #include "Store/LightStore/LightStore.h"
@@ -20,18 +19,14 @@
 /// @param hPrefab 
 /// @param hTexture 
 /// @param parameter 
-Engine::Prefab3DCubeData::Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, BasePSOModel* pso, Prefab3DParameter* parameter)
-	: hTexture_(hTexture), Prefab3DBaseData(name, numInstance, hPrefab3D, pso, parameter)
+Engine::Prefab3DTubeData::Prefab3DTubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, BasePSOModel* pso, BaseComputePSO* csPso, Prefab3DParameter* parameter)
+	: hTexture_(hTexture), csTubePSO_(csPso), Prefab3DBaseData(name, numInstance, hPrefab3D, pso, parameter)
 {
 	// 種類
-	type_ = Prefab3D::Type::Cube;
+	type_ = Prefab3D::Type::Tube;
 
 	// パラメータを生成する
-	param_ = std::make_unique<Prefab3D::Cube::Base::Param>();
-
-	// 特定の名前のオブジェクトはデバッグ用となる
-	if (name == "Debug_Object_Cube")
-		isDebug_ = true;
+	param_ = std::make_unique<Prefab3D::Tube::Base::Param>();
 }
 
 /// @brief 初期化
@@ -41,14 +36,13 @@ Engine::Prefab3DCubeData::Prefab3DCubeData(const std::string& name, uint32_t num
 /// @param heap 
 /// @param device 
 /// @param log 
-void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
-	CubeVertexResource* vertexResource, DX12Heap* heap, ID3D12Device* device, Log* log)
+void Engine::Prefab3DTubeData::Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
+	DX12Heap* heap, ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
 	assert(lightStore);
 	assert(cameraStore);
-	assert(vertexResource);
 	assert(heap);
 	assert(device);
 
@@ -56,12 +50,27 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	textureStore_ = textureStore;
 	lightStore_ = lightStore;
 	cameraStore_ = cameraStore;
-	vertexResource_ = vertexResource;
 
+
+	// 頂点リソースの生成と初期化
+	vertexResource_ = std::make_unique<RWStructuredVertexBufferResource<VertexDataForGPU>>();
+	vertexResource_->Initialize(device, commandList, heap, (kMaxSlices + 1) * 2, log);
+
+	// インデックスリソースの生成と初期化
+	indexResource_ = std::make_unique<RWStructuredVertexBufferResource<uint32_t>>();
+	indexResource_->Initialize(device,commandList, heap, kMaxSlices * 6, log);
 
 	// プリミティブリソースの生成と初期化
-	primitiveResource_ = std::make_unique<StructuredBufferResource<Prefab::PrimitiveDataForGPU>>();
+	primitiveResource_ = std::make_unique<StructuredBufferResource<Prefab::TubeDataForGPU>>();
 	primitiveResource_->Initialize(device, heap, numInstance_, log);
+
+	// 分割リソースの生成と初期化
+	divisionResource_ = std::make_unique<ConstantBufferResource<PrimitiveDataForGPU::TubeDivisionDataForGPU>>();
+	divisionResource_->Initialize(device, log);
+
+	// ビュー変換用リソースの生成と初期化
+	viewResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
+	viewResource_->Initialize(device, log);
 
 	// シャドウマップリソースの生成と初期化
 	shadowMapTransformationResource_ = std::make_unique<StructuredBufferResource<Matrix4x4>>();
@@ -99,11 +108,17 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	param_->blur.afterImageMask = 0.0f;
 	param_->blur.motionBlurMask = 0.0f;
 
+	// 分割とサイズ
+	param_->division.slices = 24;
+	param_->size.height = 1.0f;
+	param_->size.radiusTop = 0.5f;
+	param_->size.radiusBottom = 0.5f;
+
 	// テクスチャファイルパス
 	textureFilePath_ = textureStore_->GetFilePath(hTexture_);
 
 	// パラメータの記録
-	group_ = "Cube_" + name_;
+	group_ = "Tube_" + name_;
 
 	if (parameter_)
 	{
@@ -126,6 +141,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
+		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
+		parameter_->SetValue(group_, "Size_Height", &param_->size.height);
+		parameter_->SetValue(group_, "Size_RadiusTop", &param_->size.radiusTop);
+		parameter_->SetValue(group_, "Size_RadiusBottom", &param_->size.radiusBottom);
 
 		// 値を反映させる
 		parameter_->RegisterGroupDataReflection(group_);
@@ -134,14 +153,14 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 }
 
 /// @brief 更新処理
-void Engine::Prefab3DCubeData::Update()
+void Engine::Prefab3DTubeData::Update()
 {
 	// 削除されたインスタンスをリストから除外する
-	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceCube>& instance) {if (instance->isDelete_) { return true; }return false; });
+	instanceTable_.remove_if([](std::unique_ptr<PrefabInstanceTube>& instance) {if (instance->isDelete_) { return true; }return false; });
 }
 
 /// @brief リセット
-void Engine::Prefab3DCubeData::Reset()
+void Engine::Prefab3DTubeData::Reset()
 {
 	if (parameter_->IsFileFound(group_))
 	{
@@ -177,6 +196,12 @@ void Engine::Prefab3DCubeData::Reset()
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
 		param_->blur.motionBlurMask = 0.0f;
+
+		// 分割とサイズ
+		param_->division.slices = 16;
+		param_->size.height = 1.0f;
+		param_->size.radiusTop = 0.5f;
+		param_->size.radiusBottom = 0.5f;
 	}
 
 	// 読み込まれたことにする
@@ -186,7 +211,7 @@ void Engine::Prefab3DCubeData::Reset()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
+void Engine::Prefab3DTubeData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -196,20 +221,57 @@ void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12Graphics
 		return;
 
 
+	/*---------
+	    計算
+	---------*/
+
+	if (perSlices_ != param_->division.slices)
+	{
+		// PSOの設定
+		csTubePSO_->Register(commandList);
+
+		// スライス数をクランプする
+		param_->division.slices = std::clamp(param_->division.slices, 3, static_cast<int32_t>(kMaxSlices));
+
+		// 分割の設定
+		divisionResource_->data_->slices = param_->division.slices;
+		divisionResource_->RegisterCompute(commandList, 0);
+
+		// 頂点の設定
+		vertexResource_->RegisterCompute(commandList, 1);
+
+		// インデックスの設定
+		indexResource_->RegisterCompute(commandList, 2);
+
+		// ディスパッチ
+		commandList->Dispatch((param_->division.slices + 1 + 15) / 16, 1, 1);
+	}
+
+
+	/*---------
+	    描画
+	---------*/
+
+	// バリアを張る
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
 	// PSOの設定
 	pso_->Register(commandList, param_->blendMode);
 
-	// カメラの設定
-	cameraStore_->RegisterCameraResource(commandList, 4);
-
-	// スカイボックスの設定
-	skyboxStore->RegisterCubeMapTexture(commandList, 5);
-
-	// ライトの設定
-	lightStore_->LightRegister(commandList, 6, 7, 8, 9);
-
 	// 頂点の設定
-	vertexResource_->Register(commandList);
+	D3D12_VERTEX_BUFFER_VIEW vbv = {};
+	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
+	vbv.SizeInBytes = sizeof(VertexDataForGPU) * (kMaxSlices + 1) * 2;
+	vbv.StrideInBytes = sizeof(VertexDataForGPU);
+	commandList->IASetVertexBuffers(0, 1, &vbv);
+
+	// インデックスの設定
+	D3D12_INDEX_BUFFER_VIEW ibv = {};
+	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
+	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * 6;
+	ibv.Format = DXGI_FORMAT_R32_UINT;
+	commandList->IASetIndexBuffer(&ibv);
 
 	// プリミティブの設定
 	primitiveResource_->RegisterGraphics(commandList, 0);
@@ -223,18 +285,39 @@ void Engine::Prefab3DCubeData::Register(SkyboxStore* skyboxStore, ID3D12Graphics
 	// シャドウ用座標変換の設定
 	lightStore_->GetShadowMapTransformationResource()->RegisterGraphics(commandList, 3);
 
+	// カメラの設定
+	cameraStore_->RegisterCameraResource(commandList, 4);
+
+	// スカイボックスの設定
+	skyboxStore->RegisterCubeMapTexture(commandList, 5);
+
+	// ライトの設定
+	lightStore_->LightRegister(commandList, 6, 7, 8, 9);
+
+	// ビュー変換の設定
+	*viewResource_->data_ = cameraStore_->GetCamera3D().GetCurrentVPMatrix();
+	viewResource_->RegisterGraphics(commandList, 10);
+
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
+	commandList->DrawIndexedInstanced(param_->division.slices * 6, numUseInstance_, 0, 0, 0);
+
+	// バリアを張る
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+
+	// スライス数を記録する
+	perSlices_ = param_->division.slices;
 }
 
 /// @brief シャドウマップを描画する
 /// @param viewProjection 
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::Prefab3DTubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	// シャドウマップ用インスタンス数が0のときは処理しない
 	if (numShadowInstance_ <= 0)return;
@@ -249,7 +332,7 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 	UINT useInstance = 0;
 
 	// インスタンスごとに処理
-	for (useInstance = 0 ; useInstance < numShadowInstance_ ; ++useInstance)
+	for (useInstance = 0; useInstance < numShadowInstance_; ++useInstance)
 	{
 		// インスタンス数を越えたら処理しない
 		if (useInstance >= numInstance_)break;
@@ -268,11 +351,26 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 		コマンドリストに登録
 	------------------------*/
 
+	// バリアを張る
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
 	// PSOの設定
 	pso->Register(commandList);
 
 	// 頂点の設定
-	vertexResource_->Register(commandList);
+	D3D12_VERTEX_BUFFER_VIEW vbv = {};
+	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
+	vbv.SizeInBytes = sizeof(VertexDataForGPU) * (kMaxSlices + 1) * 2;
+	vbv.StrideInBytes = sizeof(VertexDataForGPU);
+	commandList->IASetVertexBuffers(0, 1, &vbv);
+
+	// インデックスの設定
+	D3D12_INDEX_BUFFER_VIEW ibv = {};
+	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
+	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * 6;
+	ibv.Format = DXGI_FORMAT_R32_UINT;
+	commandList->IASetIndexBuffer(&ibv);
 
 	// 座標変換の設定
 	shadowMapTransformationResource_->RegisterGraphics(commandList, 0);
@@ -281,17 +379,21 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(36, useInstance, 0, 0, 0);
+	commandList->DrawIndexedInstanced(perSlices_ * 6, useInstance, 0, 0, 0);
 
 
 	// 記録したシャドウインスタンスをリセットする
 	numShadowInstance_ = 0;
+
+	// バリアを張る
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 
 /// @brief モーションベクターを描画する
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DCubeData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+void Engine::Prefab3DTubeData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -300,11 +402,26 @@ void Engine::Prefab3DCubeData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 	if (numUseInstance_ <= 0)
 		return;
 
+
+	// バリアを張る
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
 	// PSOの設定
 	pso->Register(commandList);
 
 	// 頂点の設定
-	vertexResource_->Register(commandList);
+	D3D12_VERTEX_BUFFER_VIEW vbv = {};
+	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
+	vbv.SizeInBytes = sizeof(VertexDataForGPU) * (kMaxSlices + 1) * 2;
+	vbv.StrideInBytes = sizeof(VertexDataForGPU);
+	commandList->IASetVertexBuffers(0, 1, &vbv);
+
+	// インデックスの設定
+	D3D12_INDEX_BUFFER_VIEW ibv = {};
+	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
+	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * 6;
+	ibv.Format = DXGI_FORMAT_R32_UINT;
 
 	// モーションベクトルの設定
 	motionVectorResource_->RegisterGraphics(commandList, 0);
@@ -313,11 +430,15 @@ void Engine::Prefab3DCubeData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
+	commandList->DrawIndexedInstanced(perSlices_ * 6, numUseInstance_, 0, 0, 0);
+
+	// バリアを張る
+	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 
 /// @brief インスタンスのドローコール
-void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::Instance::Param* param)
+void Engine::Prefab3DTubeData::DrawCallInstance(const Engine::Prefab3D::Tube::Instance::Param* param)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -352,10 +473,6 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	// 現フレームのWVP行列
 	motionVectorResource_->data_[numUseInstance_].currentWVPMatrix =
 		primitiveResource_->data_[numUseInstance_].world * currentVPUnJitter;
-
-	// ワールドビュー正射影行列
-	primitiveResource_->data_[numUseInstance_].worldViewProjection =
-		primitiveResource_->data_[numUseInstance_].world * viewProjection;
 
 	// 逆転置ワールド行列
 	primitiveResource_->data_[numUseInstance_].worldInverseTranspose =
@@ -397,6 +514,12 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 	primitiveResource_->data_[numUseInstance_].enableShadow = static_cast<int32_t>(param->material.enableShadow);
 
 
+	// サイズ
+	primitiveResource_->data_[numUseInstance_].height = param->size.height;
+	primitiveResource_->data_[numUseInstance_].topRadius = param->size.radiusTop;
+	primitiveResource_->data_[numUseInstance_].bottomRadius = param->size.radiusBottom;
+
+
 	// ブラー
 	motionVectorResource_->data_[numUseInstance_].afterImageMask = param->blur.afterImageMask;
 	motionVectorResource_->data_[numUseInstance_].motionBlurMask = param->blur.motionBlurMask;
@@ -410,14 +533,14 @@ void Engine::Prefab3DCubeData::DrawCallInstance(const Engine::Prefab3D::Cube::In
 
 /// @brief インスタンスを生成する
 /// @return 
-void* Engine::Prefab3DCubeData::CreateInstance()
+void* Engine::Prefab3DTubeData::CreateInstance()
 {
 	// インスタンスを生成する
-	std::unique_ptr<PrefabInstanceCube> instance =
-		std::make_unique<PrefabInstanceCube>([this](const Prefab3D::Cube::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
+	std::unique_ptr<PrefabInstanceTube> instance =
+		std::make_unique<PrefabInstanceTube>([this](const Prefab3D::Tube::Instance::Param* param) {DrawCallInstance(param); }, param_.get());
 
 	// ポインタを保存する
-	PrefabInstanceCube* pInstance = instance.get();
+	PrefabInstanceTube* pInstance = instance.get();
 
 	// テーブルに追加する
 	instanceTable_.push_back(std::move(instance));
@@ -426,7 +549,7 @@ void* Engine::Prefab3DCubeData::CreateInstance()
 }
 
 /// @brief 全てのインスタンスを削除する
-void Engine::Prefab3DCubeData::DestroyAllInstance()
+void Engine::Prefab3DTubeData::DestroyAllInstance()
 {
 	// デバッグ用は削除しない
 	if (isDebug_)return;
@@ -435,7 +558,7 @@ void Engine::Prefab3DCubeData::DestroyAllInstance()
 }
 
 /// @brief デバッグ用パラメータ
-void Engine::Prefab3DCubeData::DebugParameter()
+void Engine::Prefab3DTubeData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
@@ -576,6 +699,18 @@ void Engine::Prefab3DCubeData::DebugParameter()
 			}
 
 			// 終了
+			ImGui::TreePop();
+		}
+
+		// スライス
+		ImGui::DragInt("Slices", &param_->division.slices, 1.0f, 3, kMaxSlices);
+
+		// サイズ
+		if (ImGui::TreeNode("Size"))
+		{
+			ImGui::DragFloat("Height", &param_->size.height, 0.01f, 0.0f, 100000.0f);
+			ImGui::DragFloat("RadiusTop", &param_->size.radiusTop, 0.01f, 0.0f, 100000.0f);
+			ImGui::DragFloat("RadiusBottom", &param_->size.radiusBottom, 0.01f, 0.0f, 100000.0f);
 			ImGui::TreePop();
 		}
 

@@ -23,7 +23,7 @@ namespace Engine
 		/// @param numInstance 
 		/// @param hPrefab 
 		/// @param hTexture 
-		Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, Prefab3DParameter* parameter);
+		Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, BasePSOModel* pso, Prefab3DParameter* parameter);
 
 		/// @brief 初期化
 		/// @param modelStore 
@@ -45,7 +45,7 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 
-		void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) override;
+		void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) override;
 
 		/// @brief シャドウマップを描画する
 		/// @param viewProjection 

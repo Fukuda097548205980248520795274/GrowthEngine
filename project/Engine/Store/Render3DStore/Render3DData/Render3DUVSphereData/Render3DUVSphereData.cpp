@@ -208,26 +208,28 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	if (preSlices_ != param_->division.slices || preRings_ != param_->division.rings)
+	{
+		// PSOの設定
+		psoUVSphere_->Register(commandList);
 
-	// PSOの設定
-	psoUVSphere_->Register(commandList);
+		param_->division.slices = std::clamp(param_->division.slices, 3, kMaxSlices);
+		param_->division.rings = std::clamp(param_->division.rings, 3, kMaxRings);
 
-	param_->division.slices = std::clamp(param_->division.slices, 3, kMaxSlices);
-	param_->division.rings = std::clamp(param_->division.rings, 3, kMaxRings);
+		// 分割の設定
+		divisionResource_->data_->slices = param_->division.slices;
+		divisionResource_->data_->rings = param_->division.rings;
+		divisionResource_->RegisterCompute(commandList, 0);
 
-	// 分割の設定
-	divisionResource_->data_->slices = param_->division.slices;
-	divisionResource_->data_->rings = param_->division.rings;
-	divisionResource_->RegisterCompute(commandList, 0);
+		// 頂点の設定
+		vertexResource_->RegisterCompute(commandList, 1);
 
-	// 頂点の設定
-	vertexResource_->RegisterCompute(commandList, 1);
+		// インデックスの設定
+		indexResource_->RegisterCompute(commandList, 2);
 
-	// インデックスの設定
-	indexResource_->RegisterCompute(commandList, 2);
-
-	// ディスパッチ
-	commandList->Dispatch((param_->division.slices + 1 + 15) / 16, (param_->division.rings + 1 + 15) / 16, 1);
+		// ディスパッチ
+		commandList->Dispatch((param_->division.slices + 1 + 15) / 16, (param_->division.rings + 1 + 15) / 16, 1);
+	}
 
 
 

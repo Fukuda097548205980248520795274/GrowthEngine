@@ -1,8 +1,10 @@
 #pragma once
 #include "../Prefab3DBaseData.h"
-#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
+#include "Application/PrefabInstance/PrefabInstanceTube/PrefabInstanceTube.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
-
+#include "DataForGPU/PrimitiveDataForGPU/PrimitiveDataForGPU.h"
+#include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"
+#include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 namespace Engine
@@ -12,9 +14,9 @@ namespace Engine
 	class Camera3DStore;
 	class Log;
 	class SkyboxStore;
-	class CubeVertexResource;
+	class BaseComputePSO;
 
-	class Prefab3DCubeData : public Prefab3DBaseData
+	class Prefab3DTubeData : public Prefab3DBaseData
 	{
 	public:
 
@@ -24,7 +26,8 @@ namespace Engine
 		/// @param hPrefab 
 		/// @param hTexture 
 		/// @param parameter 
-		Prefab3DCubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture, BasePSOModel* pso, Prefab3DParameter* parameter);
+		Prefab3DTubeData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, TextureHandle hTexture,
+			BasePSOModel* pso, BaseComputePSO* csPso, Prefab3DParameter* parameter);
 
 		/// @brief 初期化
 		/// @param textureStore 
@@ -35,7 +38,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(TextureStore* textureStore, LightStore* lightStore, Camera3DStore* cameraStore,
-			CubeVertexResource* vertexResource, DX12Heap* heap, ID3D12Device* device, Log* log);
+			DX12Heap* heap, ID3D12Device* device,ID3D12GraphicsCommandList* commandList, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -79,7 +82,7 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<Prefab3D::Cube::Base::Param> param_ = nullptr;
+		std::unique_ptr<Prefab3D::Tube::Base::Param> param_ = nullptr;
 
 
 		// テクスチャハンドル
@@ -88,14 +91,35 @@ namespace Engine
 		// テクスチャファイルパス
 		std::string textureFilePath_{};
 
-
+		/// @brief CSTubePSO
+		BaseComputePSO* csTubePSO_ = nullptr;
 
 
 
 	private:
 
+		// 最大分割数
+		static constexpr uint32_t kMaxSlices = 32;
+
+		uint32_t perSlices_ = 0;
+
+		/// @brief 頂点リソース
+		std::unique_ptr<RWStructuredVertexBufferResource<VertexDataForGPU>> vertexResource_;
+
+		/// @brief インデックスリソース
+		std::unique_ptr<RWStructuredVertexBufferResource<uint32_t>> indexResource_;
+
+
+	private:
+
 		/// @brief プリミティブリソース
-		std::unique_ptr<StructuredBufferResource<Prefab::PrimitiveDataForGPU>> primitiveResource_;
+		std::unique_ptr<StructuredBufferResource<Prefab::TubeDataForGPU>> primitiveResource_;
+
+		/// @brief 分割リソース
+		std::unique_ptr<ConstantBufferResource<PrimitiveDataForGPU::TubeDivisionDataForGPU>> divisionResource_;
+
+		/// @brief ビュー変換用リソース
+		std::unique_ptr<ConstantBufferResource<Matrix4x4>> viewResource_;
 
 		/// @brief シャドウマップ座標変換用リソース
 		std::unique_ptr<StructuredBufferResource<Matrix4x4>> shadowMapTransformationResource_;
@@ -104,17 +128,13 @@ namespace Engine
 		std::unique_ptr<StructuredBufferResource<MotionVectorDataForGPU>> motionVectorResource_;
 
 
-		/// @brief 立方体頂点リソース
-		CubeVertexResource* vertexResource_ = nullptr;
-
-
 	private:
 
 		/// @brief インスタンスのドローコール
-		void DrawCallInstance(const Engine::Prefab3D::Cube::Instance::Param* param);
+		void DrawCallInstance(const Engine::Prefab3D::Tube::Instance::Param* param);
 
 		/// @brief インスタンステーブル
-		std::list<std::unique_ptr<PrefabInstanceCube>> instanceTable_;
+		std::list<std::unique_ptr<PrefabInstanceTube>> instanceTable_;
 
 
 	private:

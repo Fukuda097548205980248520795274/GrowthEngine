@@ -20,8 +20,8 @@
 /// @param numInstance 
 /// @param hPrefab 
 /// @param hTexture 
-Engine::Prefab3DStaticModelData::Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel, Prefab3DParameter* parameter)
-	: hModel_(hModel), Prefab3DBaseData(name, numInstance, hPrefab3D, parameter)
+Engine::Prefab3DStaticModelData::Prefab3DStaticModelData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, ModelHandle hModel,BasePSOModel* pso, Prefab3DParameter* parameter)
+	: hModel_(hModel), Prefab3DBaseData(name, numInstance, hPrefab3D, pso, parameter)
 {
 	// 種類
 	type_ = Prefab3D::Type::StaticModel;
@@ -228,7 +228,7 @@ void Engine::Prefab3DStaticModelData::Reset()
 /// @brief コマンドリストに登録する
 /// @param commandList 
 /// @param pso 
-void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -243,7 +243,7 @@ void Engine::Prefab3DStaticModelData::Register(SkyboxStore* skyboxStore, ID3D12G
 
 
 	// PSOの設定
-	pso->Register(commandList, param_->blendMode);
+	pso_->Register(commandList, param_->blendMode);
 
 	// カメラの設定
 	cameraStore_->RegisterCameraResource(commandList, 4);

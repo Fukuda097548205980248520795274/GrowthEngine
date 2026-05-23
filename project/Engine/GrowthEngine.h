@@ -40,6 +40,9 @@
 #include "Application/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
 #include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
 
+#include "Application/PrefabBase/PrefabBaseTube/PrefabBaseTube.h"
+#include "Application/PrefabInstance/PrefabInstanceTube/PrefabInstanceTube.h"
+
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
 #include "Application/PostEffect/PostEffectGrayscale/PostEffectGrayscale.h"
 #include "Application/PostEffect/PostEffectVignetting/PostEffectVignetting.h"

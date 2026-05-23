@@ -269,6 +269,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.cpp" />
     <ClCompile Include="Engine\Application\PrefabInstance\BasePrefabInstance.cpp" />
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.cpp" />
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
@@ -279,6 +280,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.cpp" />
     <ClCompile Include="Engine\Application\Render3D\BaseRender3D.cpp" />
     <ClCompile Include="Engine\Application\Sound\Sound.cpp" />
     <ClCompile Include="Engine\Application\Sprite\Sprite.cpp">
@@ -944,6 +946,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.cpp" />
     <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1122,10 +1125,12 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h" />
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.h" />
+    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\BasePrefabInstance.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h" />
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h" />
+    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.h" />
     <ClInclude Include="Engine\Application\Render3D\BaseRender3D.h" />
     <ClInclude Include="Engine\Application\Sound\Sound.h" />
     <ClInclude Include="Engine\Application\Sprite\Sprite.h" />
@@ -1339,6 +1344,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DStore.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DBaseData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DStaticModelData\Prefab3DStaticModelData.h" />
+    <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h" />

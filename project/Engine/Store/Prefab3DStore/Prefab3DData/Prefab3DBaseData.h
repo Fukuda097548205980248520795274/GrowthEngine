@@ -29,7 +29,7 @@ namespace Engine
 		/// @param name 
 		/// @param numInstance 
 		/// @param hPrefab 
-		Prefab3DBaseData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, Prefab3DParameter* parameter);
+		Prefab3DBaseData(const std::string& name, uint32_t numInstance, Prefab3DHandle hPrefab3D, BasePSOModel* pso, Prefab3DParameter* parameter);
 
 		/// @brief 仮想デストラクタ
 		virtual ~Prefab3DBaseData() = default;
@@ -61,7 +61,7 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		/// @param pso 
-		virtual void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso) = 0;
+		virtual void Register(SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList) = 0;
 
 		/// @brief シャドウマップを描画する
 		/// @param viewProjection 
@@ -102,6 +102,9 @@ namespace Engine
 
 		// ハンドル
 		Prefab3DHandle hPrefab3D_ = 0;
+
+		/// @brief PSO
+		BasePSOModel* pso_ = nullptr;
 
 
 		// インスタンス数
