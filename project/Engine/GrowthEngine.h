@@ -870,6 +870,27 @@ public:
 	/// @return 
 	Engine::Particle3D::Param* GetParticle3DParam(const std::string& name)const { return renderContext_->GetParticle3DParam(name); }
 
+	/// @brief 3Dパーティクルを放出する
+	/// @param hParticle 
+	/// @param emitterIndex 
+	void EmittParticle3D(Particle3DHandle hParticle, int32_t emitterIndex)const { renderContext_->EmittParticle3D(hParticle, emitterIndex); }
+
+	/// @brief 3Dパーティクルを放出する
+	/// @param name 
+	/// @param emitterIndex 
+	void EmittParticle3D(const std::string& name, int32_t emitterIndex)const { renderContext_->EmittParticle3D(name, emitterIndex); }
+
+	/// @brief 3Dパーティクルを停止する
+	/// @param hParticle 
+	/// @param emitterIndex 
+	void StopParticle3D(Particle3DHandle hParticle, int32_t emitterIndex)const { renderContext_->StopParticle3D(hParticle, emitterIndex); }
+
+	/// @brief 3Dパーティクルを停止する
+	/// @param name 
+	/// @param emitterIndex 
+	void StopParticle3D(const std::string& name, int32_t emitterIndex)const { renderContext_->StopParticle3D(name, emitterIndex); }
+
+
 
 	/// @brief アニメーションの時間を取得する
 	/// @param hAnimation 

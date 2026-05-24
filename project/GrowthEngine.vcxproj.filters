@@ -1108,6 +1108,9 @@
     <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceTube">
       <UniqueIdentifier>{3d2bc46b-b6d1-4ce0-96e3-1f3d3df10a32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\EffectManager">
+      <UniqueIdentifier>{57bbb7f5-81bb-4032-b0e6-e373fa96dc6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1979,6 +1982,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.cpp">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EffectManager\EffectManager.cpp">
+      <Filter>Game\EffectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2968,6 +2974,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.h">
       <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EffectManager\EffectManager.h">
+      <Filter>Game\EffectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -220,6 +220,9 @@ void Player::Initialize(Weapon* baton)
 	grabData.grabTime = 3.0f;
 
 	grabAttack_ = std::make_unique<GrabAttack>(this, grabData);
+
+	// スタイルチェンジ開始時の処理
+	OnStyleChanged(currentStyle_);
 }
 
 /// @brief 更新処理
@@ -574,6 +577,9 @@ void Player::OnStyleChanged(FightStyle newStyle)
 		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Gekitetu");
 		break;
 	}
+
+	// 既定のスタイルチェンジ処理
+	Character::OnStyleChanged(newStyle);
 }
 
 /// @brief スタイルチェンジ処理

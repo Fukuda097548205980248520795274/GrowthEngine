@@ -1041,6 +1041,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
+    <ClCompile Include="Game\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Game\Entity\Character\Character.cpp" />
     <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\Player.cpp" />
@@ -1383,6 +1384,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
+    <ClInclude Include="Game\EffectManager\EffectManager.h" />
     <ClInclude Include="Game\Entity\Character\Character.h" />
     <ClInclude Include="Game\Entity\Character\NPC\NPC.h" />
     <ClInclude Include="Game\Entity\Character\Player\Player.h" />

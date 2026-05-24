@@ -280,6 +280,7 @@ void Character::Update()
 			case DamageReactionState::DownGettingUpFront:
 			case DamageReactionState::DownGettingUpBack:
 			case DamageReactionState::Parried:
+			case DamageReactionState::Deflect:
 				currentDamageReaction_ = DamageReactionState::None;
 				break;
 
@@ -434,8 +435,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
-		// ガードが有効な時間内で、攻撃者が自分の前方にいる場合は、受け流し成功とする
-		if (guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
+		if (canParry_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteParry(attacker);
@@ -443,6 +444,19 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 必要であれば自分に専用の受け流し成功モーションを設定
 			// SetAnimation(hParrySuccessMotion_, false, false);
 
+			// ダメージ無効
+			return false;
+		}
+
+		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
+		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		{
+			// 受け流す
+			ExecuteDeflect(attacker);
+
+			// 必要であれば自分に専用の弾き成功モーションを設定
+			// SetAnimation(hDeflectSuccessMotion_, false, false);
+			
 			// ダメージ無効
 			return false;
 		}
@@ -514,6 +528,34 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			damageReactionTimer_ = 0.3f;
 			break;
 		}
+	}
+
+	// 受け流しは、ダメージリアクションを受け流しに設定して、受け流しモーションを再生する
+	if (damageReaction == DamageReaction::Parried)
+	{
+		currentDamageReaction_ = DamageReactionState::Parried;
+		SetAnimation(hGuardHitMotion_, false, true);
+		damageReactionTimer_ = 2.0f;
+
+		// ノックバックを入れる
+		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
+
+		// ダメージ無効
+		return false;
+	}
+
+	// 弾きは、ダメージリアクションを弾きに設定して、弾きモーションを再生する
+	if (damageReaction == DamageReaction::Deflect)
+	{
+		currentDamageReaction_ = DamageReactionState::Deflect;
+		SetAnimation(hGuardHitMotion_, false, true);
+		damageReactionTimer_ = 1.0f;
+
+		// ノックバックを入れる
+		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
+
+		// ダメージ無効
+		return false;
 	}
 
 
@@ -1139,6 +1181,25 @@ void Character::ExecuteParry(Character* attacker)
 	attacker->OnParried(pullPos, attacker->GetDirection());
 }
 
+/// @brief 弾きを実行する
+/// @param attacker 
+void Character::ExecuteDeflect(Character* attacker)
+{
+	if (!attacker) return;
+
+	// 相手の攻撃を弾いたことによる反動（ノックバック方向）を計算
+	Vector3 pushDir = attacker->GetWorldPosition() - GetWorldPosition();
+	pushDir.y = 0.0f;
+
+	// ノックバック方向を正規化する
+	pushDir = pushDir.Normalize();
+
+	// 相手に弾きのダメージとリアクションを与える
+	attacker->OnDamage(0, DamageReaction::Deflect, 0.2f, pushDir, GetWorldPosition(), this);
+
+	// soundManager_->SeDeflect();
+}
+
 /// @brief スタイルチェンジを開始する
 /// @param style 
 void Character::StartStyleChange(FightStyle style)
@@ -1175,6 +1236,26 @@ void Character::StyleChangeStart()
 	case FightStyle::Hammer:
 		SetAnimation(motionManager_->GetMotion(MotionType::StyleChange, "Gekitetu"), true, false);
 		soundManager_->SeStyleChangeGekitetu();
+		break;
+	}
+}
+
+/// @brief スタイルが変化したときの処理
+/// @param newStyle 
+void Character::OnStyleChanged(FightStyle newStyle)
+{
+	switch (newStyle)
+	{
+		// 旋嵐
+	case FightStyle::Tempest:
+		canParry_ = true; // 旋嵐スタイルは受け流しが可能になる
+		canDeflect_ = false; // 旋嵐スタイルは弾きが不可能になる
+		break;
+
+		// 撃鉄
+	case FightStyle::Hammer:
+		canParry_ = false; // 撃鉄スタイルは受け流しが不可能になる
+		canDeflect_ = true; // 撃鉄スタイルは弾きが可能になる
 		break;
 	}
 }

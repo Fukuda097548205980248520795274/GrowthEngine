@@ -331,6 +331,10 @@ public:
 	/// @param attacker 
 	void ExecuteParry(Character* attacker);
 
+	/// @brief 弾きを実行する
+	/// @param attacker 
+	void ExecuteDeflect(Character* attacker);
+
 	/// @brief 受け流されているかどうか
 	/// @return 
 	bool IsParried() const { return currentDamageReaction_ == DamageReactionState::Parried; }
@@ -373,6 +377,14 @@ public:
 
 	/// @brief 武器を離す
 	void ReleaseWeapon();
+
+	/// @brief 受け流しが可能かどうかを取得する
+	/// @return 
+	bool CanParry() const { return canParry_; }
+
+	/// @brief 弾きが可能かどうかを取得する
+	/// @return 
+	bool CanDeflect() const { return canDeflect_; }
 
 
 protected:
@@ -533,6 +545,12 @@ protected:
 	// ジャストガード（受け流し）の受付時間
 	const float kJustGuardTime = 0.5f;
 
+	/// @brief 受け流しが可能かどうか
+	bool canParry_ = false;
+
+	/// @brief 弾きが可能かどうか
+	bool canDeflect_ = false;
+
 
 protected:
 
@@ -547,7 +565,7 @@ protected:
 
 	/// @brief スタイルが変化したときの処理
 	/// @param newStyle 
-	virtual void OnStyleChanged(FightStyle newStyle) {}
+	virtual void OnStyleChanged(FightStyle newStyle);
 
 	/// @brief スタイルチェンジの更新処理
 	/// @param dt 

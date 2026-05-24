@@ -33,6 +33,12 @@ enum class DamageReaction
 	
 	// ダウン
 	Down,
+
+	// 受け流され
+	Parried,
+
+	// 弾き
+	Deflect,
 };
 
 enum class DamageReactionState
@@ -72,6 +78,9 @@ enum class DamageReactionState
 
 	// 受け流され
 	Parried,
+
+	// 弾き
+	Deflect,
 };
 
 class Attack : public Action

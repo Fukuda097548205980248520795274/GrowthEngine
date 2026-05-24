@@ -542,6 +542,26 @@ namespace Engine
 		/// @return 
 		Particle3D::Param* GetParticle3DParam(const std::string& name) { return particle_->Get3DParticleParam(name); }
 
+		/// @brief 3Dパーティクルを放出する
+		/// @param hParticle 
+		/// @param emitterIndex 
+		void EmittParticle3D(Particle3DHandle hParticle, int32_t emitterIndex) { particle_->Emit3D(hParticle, emitterIndex); }
+
+		/// @brief 3Dパーティクルを放出する
+		/// @param name 
+		/// @param emitterIndex 
+		void EmittParticle3D(const std::string& name, int32_t emitterIndex) { particle_->Emit3D(name, emitterIndex); }
+
+		/// @brief 3Dパーティクルを停止する
+		/// @param hParticle 
+		/// @param emitterIndex 
+		void StopParticle3D(Particle3DHandle hParticle, int32_t emitterIndex) { particle_->Stop3D(hParticle, emitterIndex); }
+
+		/// @brief 3Dパーティクルを停止する
+		/// @param name 
+		/// @param emitterIndex 
+		void StopParticle3D(const std::string& name, int32_t emitterIndex) { particle_->Stop3D(name, emitterIndex); }
+
 
 		/// @brief アニメーションの時間を取得する
 		/// @param hAnimation 
