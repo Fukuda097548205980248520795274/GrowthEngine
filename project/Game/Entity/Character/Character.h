@@ -405,6 +405,9 @@ protected:
 	// キャラクターのタグ
 	CharacterTag characterTag_;
 
+	/// @brief このインスタンスがプレイヤーかどうか
+	bool isPlayer_ = false;
+
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
 

@@ -37,6 +37,7 @@ Player::Player(const InitData& initData) : Character(initData)
 {
 	// タグを指定する
 	characterTag_ = CharacterTag::PlayerSide;
+	isPlayer_ = true;
 
 	// 戦闘スタイルを指定する
 	currentStyle_ = FightStyle::Tempest;
@@ -521,6 +522,9 @@ bool Player::CheckGetUpCondition()
 /// @brief スタイルチェンジ開始時の処理
 void Player::StyleChangeStart()
 {
+	// スタイルチェンジ開始時にスローモーションを開始する
+	GrowthEngine::GetInstance()->StartSlowMotion(0.25f, 0.5f);
+
 	switch (nextStyle_)
 	{
 		// 旋嵐スタイル（武器なし・他の武器を拾える）

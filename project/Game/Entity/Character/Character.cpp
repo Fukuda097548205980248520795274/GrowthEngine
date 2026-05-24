@@ -150,6 +150,7 @@ void Character::Update()
 {
 	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
+	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
 
 	// 着地判定をチェックする
 	LandingCheck();
@@ -164,8 +165,17 @@ void Character::Update()
 					ReleaseWeapon();
 			}
 
-			// スタイル変化の更新
-			UpdateStyleChange(dt);
+			// スタイルチェンジの更新
+			if (isStyleChanging_ && isPlayer_)
+			{
+				// プレイヤーはスローモーションの影響を受けない
+				UpdateStyleChange(unscaledDt);
+			}
+			else
+			{
+				// プレイヤー以外はスローモーションの影響を受ける
+				UpdateStyleChange(dt);
+			}
 
 			// 押し出し処理
 			UpdatePushOut();
@@ -913,6 +923,12 @@ void Character::UpdateAnimation()
 {
 	if (!model_)return;
 
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+	// プレイヤーのスタイルチェンジモーションはtimeScaleの影響を受けないようにする
+	if (isStyleChanging_ && isPlayer_)
+		dt = engine_->GetDeltaTime();
+
 	// スタイルチェンジ中でない場合は、通常のモーションを再生する
 	if (!IsStyleChanging())
 	{
@@ -997,7 +1013,7 @@ void Character::UpdateAnimation()
 			else if (isGuardReaction_)
 			{
 				// 防御成功時のノックバック中
-				guardReactionTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
+				guardReactionTimer_ += dt;
 				if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
 				{
 					isGuardReaction_ = false;
@@ -1014,8 +1030,8 @@ void Character::UpdateAnimation()
 
 	if (isAnimationLoop_)
 	{
-		// タイマーを進める
-		model_->param_->animation.timer += engine_->GetDeltaTime() * engine_->GetTimeScale();
+		// それ以外のモーションはtimeScaleの影響を受けるようにする
+		model_->param_->animation.timer += dt;
 
 		// アニメーションをループさせる
 		model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, animationTime_);
@@ -1026,8 +1042,8 @@ void Character::UpdateAnimation()
 		if (model_->param_->animation.timer > animationTime_)
 			return;
 
-		// タイマーを進める
-		model_->param_->animation.timer += engine_->GetDeltaTime() * engine_->GetTimeScale();
+		// プレイヤーのスタイルチェンジモーションはtimeScaleの影響を受けないようにする
+		model_->param_->animation.timer += dt;
 
 		// アニメーションの時間を超えないようにする
 		model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
@@ -1249,6 +1265,10 @@ void Character::ExecuteDeflect(Character* attacker)
 		// 武器を吹き飛ばす
 		attacker->ReleaseWeapon(blowVelocity);
 	}
+
+	// プレイヤーが攻撃を弾いた場合は、スローモーションを開始する
+	if(isPlayer_)
+		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.5f);
 
 	// se弾き
 	soundManager_->SeDeflect();
