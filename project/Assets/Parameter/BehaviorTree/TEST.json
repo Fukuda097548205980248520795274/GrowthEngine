@@ -111,39 +111,39 @@
             "input_pin": 99,
             "output_pin": 100,
             "pos": [
-                794.0,
-                502.0
+                806.8294067382813,
+                367.14599609375
             ],
             "type": 4
         },
         {
             "action_name": "GrabStrikeAttack",
             "grab_strike_data": {
-                "attackTime": 3.0,
+                "attackTime": 1.0,
                 "damageReaction": 3,
                 "hits": [],
                 "isRelease": true,
                 "knockback": 1.0,
                 "knockbackDirection": [
                     0.0,
-                    0.6533946394920349,
-                    0.7570174336433411
+                    0.0,
+                    1.0
                 ],
-                "moveEndTime": 0.0,
+                "moveEndTime": 1.0,
                 "moveSpeed": 0.0,
-                "moveStartTime": 0.0,
-                "releaseTime": 2.5,
-                "targetMotionName": "Dash",
-                "targetMotionType": 3
+                "moveStartTime": 0.5,
+                "releaseTime": 1.0,
+                "targetMotionName": "000",
+                "targetMotionType": 15
             },
             "id": 102,
             "input_pin": 103,
-            "motionName": "Player_Combo_4",
-            "motionType": 4,
+            "motionName": "000",
+            "motionType": 14,
             "output_pin": -1,
             "pos": [
-                816.0,
-                620.0
+                828.8294067382813,
+                485.14599609375
             ],
             "type": 5
         },

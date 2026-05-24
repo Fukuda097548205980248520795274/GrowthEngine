@@ -486,7 +486,8 @@ void BehaviorTreeEditor::DrawNodeTable()
 
 
                     // モーションタイプ選択用のコンボボックス
-                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };
+                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed",
+                        "DownFall", "DownLying", "DowoGetUp", "Guard","styleChange", "grabStrikeAttacker", "grabStrikeTarget" };
                     int currentType = static_cast<int>(node.targetMotionType);
 
 					// ターゲットのモーションタイプ選択用のコンボボックス
@@ -563,7 +564,8 @@ void BehaviorTreeEditor::DrawNodeTable()
 				if (ImGui::TreeNode("Motion Settings"))
                 {
                     // モーションタイプ選択用のコンボボックス
-                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", "DownFall", "DownLying", "DowoGetUp", "Guard" };
+                    const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed", 
+                        "DownFall", "DownLying", "DowoGetUp", "Guard", "styleChange", "grabStrikeAttacker", "grabStrikeTarget" };
                     int currentType = static_cast<int>(node.motionType);
 
                     // コンボボックスを描画し、変更があったらEnumにキャストして戻す

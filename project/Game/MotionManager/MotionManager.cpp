@@ -58,6 +58,8 @@ void MotionManager::Initialize()
 	LoadDownGetUp(dir);
 	LoadGuard(dir);
 	LoadStyleChange(dir);
+	LoadGrabStrikeAttacker(dir);
+	LoadGrabStrikeTarget(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -204,4 +206,18 @@ void MotionManager::LoadStyleChange(const std::string& dir)
 {
 	table_[MotionType::StyleChange]["Senran"] = engine_->LoadAnimation(dir + "/styleChange/styleChange_Senran", "styleChange_Senran.gltf");
 	table_[MotionType::StyleChange]["Gekitetu"] = engine_->LoadAnimation(dir + "/styleChange/styleChange_Gekitetu", "styleChange_Gekitetu.gltf");
+}
+
+/// @brief 掴み攻撃（攻撃側）モーション読み込み
+/// @param dir 
+void MotionManager::LoadGrabStrikeAttacker(const std::string& dir)
+{
+	table_[MotionType::GrabStrikeAttacker]["000"] = engine_->LoadAnimation(dir + "/grabStrike/grabStrike_00/attacker", "attacker.gltf");
+}
+
+/// @brief 掴み攻撃（被攻撃側）モーション読み込み
+/// @param dir 
+void MotionManager::LoadGrabStrikeTarget(const std::string& dir)
+{
+	table_[MotionType::GrabStrikeTarget]["000"] = engine_->LoadAnimation(dir + "/grabStrike/grabStrike_00/target", "target.gltf");
 }

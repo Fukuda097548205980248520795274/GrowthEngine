@@ -18,6 +18,8 @@ enum class MotionType
 	DowoGetUp,
 	Guard,
 	StyleChange,
+	GrabStrikeAttacker,
+	GrabStrikeTarget
 };
 
 enum class JointType
@@ -142,6 +144,14 @@ private:
 	/// @brief スタイルチェンジモーション読み込み
 	/// @param dir 
 	void LoadStyleChange(const std::string& dir);
+
+	/// @brief 掴み攻撃（攻撃側）モーション読み込み
+	/// @param dir 
+	void LoadGrabStrikeAttacker(const std::string& dir);
+
+	/// @brief 掴み攻撃（被攻撃側）モーション読み込み
+	/// @param dir 
+	void LoadGrabStrikeTarget(const std::string& dir);
 
 
 private:

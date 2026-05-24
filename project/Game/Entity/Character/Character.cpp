@@ -1090,10 +1090,22 @@ bool Character::IsDownFalling() const
 void Character::ExecuteGrab(Character* target, float duration)
 {
 	grabbedTarget_ = target;
-	target->grabber_ = this;
-	target->grabbedTimer_ = 0.0f;
 
-	// 必要ならここで双方専用の「つかみ合い待機モーション」をセットする
+	// 掴まれた相手の処理を呼び出す
+	target->OnGrabbed(this);
+}
+
+/// @brief 掴まれた相手の処理
+void Character::OnGrabbed(Character* grabber)
+{
+	// 自分を掴んでいる相手を設定する
+	grabber_ = grabber;
+	grabbedTimer_ = 0.0f;
+
+	// 掴まれた状態になったときの処理をここに書く
+	isGuard_ = false;
+	isDash_ = false;
+	isAvoid_ = false;
 }
 
 /// @brief 掴んだ相手を離す

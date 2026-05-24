@@ -300,6 +300,9 @@ public:
 	/// @param duration つかむ時間
 	void ExecuteGrab(Character* target, float duration);
 
+	/// @brief 掴まれた相手の処理
+	void OnGrabbed(Character* grabber);
+
 	/// @brief 掴んだ相手を離す
 	void ReleaseGrab();
 
