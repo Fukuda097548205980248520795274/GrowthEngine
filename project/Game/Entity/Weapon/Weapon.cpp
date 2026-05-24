@@ -70,7 +70,7 @@ void Weapon::Update()
 	if (!isActive_)return;
 
 	// デルタタイムを取得する
-	float dt = engine_->GetDeltaTime();
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	if (!isBreak_)
 	{
@@ -149,53 +149,71 @@ void Weapon::TakeDamage(int damage)
 	durability_ -= damage;
 }
 
+/// @brief 武器を吹き飛ばす
+/// @param velocity 
+void Weapon::BlowAway(const Vector3& velocity)
+{
+	// 親を外す
+	if (worldTransform_)
+	{
+		worldTransform_->SetParent(nullptr);
+	}
+
+	// 吹き飛び速度を設定
+	velocity_ = velocity;
+	isGrounded_ = false;
+}
+
 /// @brief 落下の更新
 /// @param deltaTime 
 void Weapon::FallUpdate(float deltaTime)
 {
-	// 重力による落下処理
 	if (!isGrounded_)
 	{
-		// 落下速度を更新する
-		velocityY_ += kGravity * deltaTime;
-		if (velocityY_ < kMaxFallSpeed) velocityY_ = kMaxFallSpeed;
+		// 重力による落下処理（Y軸のみ加速）
+		velocity_.y += kGravity * deltaTime;
+		if (velocity_.y < kMaxFallSpeed) velocity_.y = kMaxFallSpeed;
 
-		// Y方向の位置を更新する
-		worldTransform_->translate_.y += velocityY_ * deltaTime;
+		// X, Y, Z 全て方向の速度を位置に反映する
+		worldTransform_->translate_ += velocity_ * deltaTime;
+
+		// 速度の減衰率を計算する
+		float drag = std::pow(0.5f, deltaTime);
+		velocity_.x *= drag;
+		velocity_.z *= drag;
 	}
 }
 
 /// @brief 着地判定の更新
 void Weapon::LandingCheck()
 {
-	// 着地しているかどうかのフラグをリセットする
+	// 着地フラグをリセットする
 	isGrounded_ = false;
 
-	// 所持者がいる場合、着地している
+	// 所持されているときは着地しているとみなす
 	if (IsEquipped())
 	{
 		isGrounded_ = true;
 
-		// Y方向の速度をリセットする（着地したので落下を止める）
-		velocityY_ = 0.0f;
-
+		// 所持されている間は速度をリセット
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;
 	}
 
-	// コリジョンがないと処理しない
-	if (!landingCollision_)return;
+	// 着地判定の衝突判定がないときは着地していないとみなす
+	if (!landingCollision_) return;
 
-	// コリジョンの状態を確認する
+	// 着地判定の衝突があるかどうか
 	if (landingCollision_->isCollision_)
 	{
-		// コリジョンの当たり判定がAABBであることを前提に、床との接触位置を計算する
+		// 着地したときの位置を計算する
 		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
 		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
 
-		// 着地していると判定する
+		// 着地したので接地フラグを立てる
 		isGrounded_ = true;
 
-		// Y方向の速度をリセットする（着地したので落下を止める）
-		velocityY_ = 0.0f;
+		// 着地したので吹き飛び・落下速度を完全にリセットする
+		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 }

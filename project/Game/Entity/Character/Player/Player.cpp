@@ -327,7 +327,7 @@ void Player::Draw()
 void Player::UpdateAttack()
 {
 	// デルタタイムの取得
-	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime();
+	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
 	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
 	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsStyleChanging())

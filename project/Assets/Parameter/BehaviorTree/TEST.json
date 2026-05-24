@@ -21,23 +21,8 @@
             "start": 86
         },
         {
-            "end": 95,
-            "id": 97,
-            "start": 61
-        },
-        {
-            "end": 99,
-            "id": 101,
-            "start": 96
-        },
-        {
-            "end": 103,
-            "id": 104,
-            "start": 96
-        },
-        {
-            "end": 106,
-            "id": 107,
+            "end": 112,
+            "id": 113,
             "start": 86
         }
     ],
@@ -48,8 +33,8 @@
             "input_pin": 4,
             "output_pin": -1,
             "pos": [
-                753.0,
-                8.0
+                832.0,
+                35.0
             ],
             "type": 4
         },
@@ -59,8 +44,8 @@
             "input_pin": 39,
             "output_pin": 40,
             "pos": [
-                780.0,
-                116.0
+                859.0,
+                143.0
             ],
             "type": 4
         },
@@ -90,83 +75,45 @@
             "input_pin": 92,
             "output_pin": -1,
             "pos": [
-                700.0,
-                -109.0
+                779.0,
+                -82.0
             ],
             "type": 4
         },
         {
-            "id": 94,
-            "input_pin": 95,
-            "output_pin": 96,
-            "pos": [
-                592.0,
-                323.0
-            ],
-            "type": 3
-        },
-        {
-            "condition_type": 4,
-            "id": 98,
-            "input_pin": 99,
-            "output_pin": 100,
-            "pos": [
-                806.8294067382813,
-                367.14599609375
-            ],
-            "type": 4
-        },
-        {
-            "action_name": "GrabStrikeAttack",
-            "grab_strike_data": {
+            "action_name": "ComboAttack",
+            "combo_data": {
                 "attackTime": 1.0,
-                "damageReaction": 3,
-                "hits": [],
-                "isRelease": true,
-                "knockback": 1.0,
-                "knockbackDirection": [
-                    0.0,
-                    0.0,
-                    1.0
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.800000011920929,
+                "hitDefinitions": [
+                    {
+                        "damage": 5,
+                        "damageReaction": 1,
+                        "endTime": 0.5,
+                        "jointType": 9,
+                        "knockback": 0.5,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
                 ],
-                "moveEndTime": 1.0,
-                "moveSpeed": 0.0,
-                "moveStartTime": 0.5,
-                "releaseTime": 1.0,
-                "targetMotionName": "000",
-                "targetMotionType": 15
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.0
             },
-            "id": 102,
-            "input_pin": 103,
-            "motionName": "000",
-            "motionType": 14,
+            "id": 111,
+            "input_pin": 112,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
             "output_pin": -1,
             "pos": [
-                828.8294067382813,
-                485.14599609375
-            ],
-            "type": 5
-        },
-        {
-            "action_name": "GrabAttack",
-            "grab_data": {
-                "attackTime": 1.0,
-                "grabTime": 2.009999990463257,
-                "hitboxEndTime": 0.800000011920929,
-                "hitboxStartTime": 0.20000000298023224,
-                "jointType": 9,
-                "moveEndTime": 0.25,
-                "moveSpeed": 4.099999904632568,
-                "moveStartTime": 0.05000000074505806
-            },
-            "id": 105,
-            "input_pin": 106,
-            "motionName": "Front",
-            "motionType": 7,
-            "output_pin": -1,
-            "pos": [
-                812.0,
-                234.0
+                851.0,
+                276.0
             ],
             "type": 5
         }

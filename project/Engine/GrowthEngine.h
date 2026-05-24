@@ -141,6 +141,14 @@ public:
 	/// @return 
 	float GetDeltaTime()const { return deltaTime_; }
 
+	/// @brief スローモーションを開始する
+	/// @param scale 
+	/// @param duration 
+	void StartSlowMotion(float scale, float duration);
+
+	/// @brief 現在のタイムスケールを取得する
+	float GetTimeScale() const { return timeScale_; }
+
 	/// @brief フルスクリーン切り替え
 	void FullscreenSwitch()const { winApp_->Fullscreen(); }
 
@@ -1055,13 +1063,24 @@ private:
 
 private:
 
+	/// @brief タイムスケールのタイマーを更新する
+	/// @param realDeltaTime 
+	void UpdateTimeScale();
+
 	using Clock = std::chrono::high_resolution_clock;
 	using TimePoint = std::chrono::time_point<Clock>;
 
 	// 前のフレームの時間
 	TimePoint previousTime_;
 
+	// デルタタイム
 	float deltaTime_ = 0.0f;
+
+	/// @brief 時間のスケール
+	float timeScale_ = 1.0f;
+
+	/// @brief スロー状態の継続時間
+	float slowDuration_ = 0.0f;
 
 	// 最初のデルタタイムは0にするためのフラグ
 	bool isDeltaTimeFirst_ = true;

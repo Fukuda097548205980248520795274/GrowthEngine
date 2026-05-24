@@ -379,7 +379,8 @@ public:
 	void GrabWeapon(Weapon* weapon);
 
 	/// @brief 武器を離す
-	void ReleaseWeapon();
+	/// @param blowVelocity 
+	void ReleaseWeapon(const Vector3& blowVelocity = Vector3(0.0f, 0.0f, 0.0f));
 
 	/// @brief 受け流しが可能かどうかを取得する
 	/// @return 

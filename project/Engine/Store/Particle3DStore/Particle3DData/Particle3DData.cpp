@@ -293,7 +293,7 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	assert(psoUpdate);
 
 	// デルタタイム
-	float dt = engine_->GetDeltaTime();
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// エミッターを更新する
 	for (int i = 0; i < static_cast<int32_t>(emitterNum_); ++i)

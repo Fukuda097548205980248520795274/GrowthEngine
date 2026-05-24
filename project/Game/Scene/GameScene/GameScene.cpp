@@ -196,7 +196,7 @@ void GameScene::Initialize()
 void GameScene::Update()
 {
 	// デルタタイムを取得する
-	const float deltaTime = engine_->GetDeltaTime();
+	const float deltaTime = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// 床の更新
 	floor_->Update();

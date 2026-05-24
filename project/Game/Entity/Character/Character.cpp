@@ -149,7 +149,7 @@ Character::~Character()
 void Character::Update()
 {
 	// デルタタイムを取得する
-	const float dt = std::max(engine_->GetDeltaTime(), 0.0f);
+	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 
 	// 着地判定をチェックする
 	LandingCheck();
@@ -997,7 +997,7 @@ void Character::UpdateAnimation()
 			else if (isGuardReaction_)
 			{
 				// 防御成功時のノックバック中
-				guardReactionTimer_ += engine_->GetDeltaTime();
+				guardReactionTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 				if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
 				{
 					isGuardReaction_ = false;
@@ -1015,7 +1015,7 @@ void Character::UpdateAnimation()
 	if (isAnimationLoop_)
 	{
 		// タイマーを進める
-		model_->param_->animation.timer += engine_->GetDeltaTime();
+		model_->param_->animation.timer += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 		// アニメーションをループさせる
 		model_->param_->animation.timer = std::fmod(model_->param_->animation.timer, animationTime_);
@@ -1027,7 +1027,7 @@ void Character::UpdateAnimation()
 			return;
 
 		// タイマーを進める
-		model_->param_->animation.timer += engine_->GetDeltaTime();
+		model_->param_->animation.timer += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 		// アニメーションの時間を超えないようにする
 		model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
@@ -1165,7 +1165,7 @@ void Character::GrabWeapon(Weapon* weapon)
 }
 
 /// @brief 武器を離す
-void Character::ReleaseWeapon()
+void Character::ReleaseWeapon(const Vector3& blowVelocity)
 {
 	// 武器を持っていないときは処理しない
 	if (!HasWeapon())return;
@@ -1173,6 +1173,13 @@ void Character::ReleaseWeapon()
 	// 武器の所有者をクリアする
 	weapon_->SetOwner(nullptr);
 	weapon_->SetPosition(weapon_->GetWorldPosition());
+
+	// 吹き飛び速度が指定されている場合は武器を飛ばす
+	if (blowVelocity.Length() > 0.001f) 
+	{
+		weapon_->BlowAway(blowVelocity);
+	}
+
 	weapon_ = nullptr;
 }
 
@@ -1215,7 +1222,32 @@ void Character::ExecuteDeflect(Character* attacker)
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())
 	{
-		attacker->ReleaseWeapon();
+		// 自分から相手への水平ベクトルを計算（吹き飛ぶ大まかな方向）
+		Vector3 blowDir = attacker->GetWorldPosition() - GetWorldPosition();
+		blowDir.y = 0.0f;
+
+		// 吹き飛ぶ方向を正規化する。もし位置が完全に重なっている場合は、相手の後ろ方向にする
+		if (blowDir.Length() > 0.01f) 
+		{
+			blowDir = blowDir.Normalize();
+		}
+		else 
+		{
+			// 位置が完全に重なっている場合は相手の後ろ方向にする
+			blowDir = -attacker->GetDirection();
+		}
+
+		// 吹き飛ぶ方向に自分の右方向を少し加える
+		Vector3 myRight = Vector3(GetDirection().z, 0.0f, -GetDirection().x);
+		blowDir = (blowDir + myRight * 0.5f).Normalize();
+
+		// 吹き飛ぶ速度を計算（調整可能な定数を使用）
+		float horizontalForce = 5.0f;
+		float upwardForce = 6.0f;
+		Vector3 blowVelocity = (blowDir * horizontalForce) + Vector3(0.0f, upwardForce, 0.0f);
+
+		// 武器を吹き飛ばす
+		attacker->ReleaseWeapon(blowVelocity);
 	}
 
 	// se弾き

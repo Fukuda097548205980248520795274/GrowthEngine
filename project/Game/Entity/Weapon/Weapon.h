@@ -88,6 +88,10 @@ public:
 	/// @return 
 	bool IsActive() const { return isActive_; }
 
+	/// @brief 武器を吹き飛ばす
+	/// @param velocity 
+	void BlowAway(const Vector3& velocity);
+
 
 protected:
 
@@ -134,8 +138,8 @@ protected:
 	/// @brief 着地判定
 	Collision3DInstanceAABB* landingCollision_ = nullptr;
 
-	// 現在の落下速度
-	float velocityY_ = 0.0f;
+	// 現在の速度
+	Vector3 velocity_ = Vector3(0.0f, 0.0f, 0.0f);
 
 	// 地面に接地しているかどうか
 	bool isGrounded_ = false;

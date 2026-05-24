@@ -90,7 +90,7 @@ void ComboAttack::Update()
 	}
 
 	// 攻撃タイマーを更新する
-	attackTimer_ += engine_->GetDeltaTime();
+	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// 各当たり判定の状態を更新する
 	for (auto& state : hitStates_)
@@ -196,7 +196,7 @@ void ComboAttack::Update()
 	{
 		Vector3 direction = owner_->GetDirection();
 		Vector3 position = owner_->GetPosition();
-		position += currentMoveSpeed_ * (direction * engine_->GetDeltaTime());
+		position += currentMoveSpeed_ * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale());
 		owner_->SetPosition(position);
 	}
 

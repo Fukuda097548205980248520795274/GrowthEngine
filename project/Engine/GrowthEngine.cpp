@@ -143,6 +143,10 @@ void GrowthEngine::PerScene()
 
 	// デルタタイムの初期化
 	isDeltaTimeFirst_ = true;
+
+	// タイムスケールの初期化
+	timeScale_ = 1.0f;
+	slowDuration_ = 0.0f;
 }
 
 /// @brief 新フレーム処理
@@ -190,6 +194,9 @@ void GrowthEngine::NewFrame()
 
 	// ウィンドウの更新
 	winApp_->Update();
+
+	// タイムスケールのタイマーを更新する
+	UpdateTimeScale();
 }
 
 /// @brief 描画前処理
@@ -234,6 +241,31 @@ void GrowthEngine::PostDraw()
 
 	// デルタタイム一週目を終わらせる
 	isDeltaTimeFirst_ = false;
+}
+
+/// @brief スローモーションを開始する
+/// @param scale 
+/// @param duration 
+void GrowthEngine::StartSlowMotion(float scale, float duration)
+{
+	timeScale_ = scale;
+	slowDuration_ = duration;
+}
+
+/// @brief タイムスケールのタイマーを更新する
+void GrowthEngine::UpdateTimeScale()
+{
+	// スローモーションの時間を減らす
+	if (slowDuration_ > 0.0f)
+	{
+		slowDuration_ -= GetDeltaTime();
+
+		// スローモーションの時間が0以下になったらタイムスケールを元に戻す
+		if (slowDuration_ <= 0.0f)
+		{
+			timeScale_ = 1.0f;
+		}
+	}
 }
 
 /// @brief マウスの位置を取得する

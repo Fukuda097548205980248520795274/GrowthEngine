@@ -39,7 +39,7 @@ void GrabAttack::Exec()
 /// @brief 更新処理
 void GrabAttack::Update()
 {
-	attackTimer_ += engine_->GetDeltaTime();
+	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// すでにつかんでいる、またはつかまれている状態なら、攻撃処理は行わずに終了する
 	if (owner_->IsGrabbed() || owner_->IsGrabbing())
@@ -112,7 +112,7 @@ void GrabAttack::Update()
 	{
 		Vector3 direction = owner_->GetDirection();
 		Vector3 position = owner_->GetPosition();
-		position += moveSpeed_ * (direction * engine_->GetDeltaTime());
+		position += moveSpeed_ * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale());
 		owner_->SetPosition(position);
 	}
 

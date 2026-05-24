@@ -11,7 +11,7 @@ void Guard::Exec()
 
 void Guard::Update()
 {
-    guardTimer_ += engine_->GetDeltaTime();
+    guardTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
     // 一定時間ガードしたら終了
     if (guardTimer_ >= guardDuration_)
