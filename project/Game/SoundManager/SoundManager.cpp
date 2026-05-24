@@ -40,6 +40,12 @@ void SoundManager::Initialize()
 	seStyleGekitetu1_ = std::make_unique<Sound>(engine_->LoadSound("Style_Gekitetu1", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu1.mp3")));
 	seStyleGekitetu2_ = std::make_unique<Sound>(engine_->LoadSound("Style_Gekitetu2", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu2.mp3")));
 	seStyleGekitetu3_ = std::make_unique<Sound>(engine_->LoadSound("Style_Gekitetu3", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu3.mp3")));
+
+	// 受け流しのSE
+	seParried_ = std::make_unique<Sound>(engine_->LoadSound("Parried", engine_->LoadAudio("./Assets/Sounds/se/parried.mp3")));
+
+	// 弾きのSE
+	seDeflect_ = std::make_unique<Sound>(engine_->LoadSound("Deflect", engine_->LoadAudio("./Assets/Sounds/se/deflect.mp3")));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

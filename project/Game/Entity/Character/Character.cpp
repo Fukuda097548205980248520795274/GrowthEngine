@@ -183,21 +183,21 @@ void Character::Update()
 			if (hurtboxHead_.collider_)
 			{
 				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxHead_.collider_);
-				collider->param_->radius = 0.2f;
+				collider->param_->radius = 0.25f;
 				collider->param_->center = GetBonePosition(JointType::Head);
 			}
 
 			if (hurtboxChest_.collider_)
 			{
 				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxChest_.collider_);
-				collider->param_->radius = 0.2f;
+				collider->param_->radius = 0.25f;
 				collider->param_->center = GetBonePosition(JointType::Chest);
 			}
 
 			if (hurtboxRoot_.collider_)
 			{
 				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxRoot_.collider_);
-				collider->param_->radius = 0.2f;
+				collider->param_->radius = 0.25f;
 				collider->param_->center = GetBonePosition(JointType::Root);
 			}
 		};
@@ -916,7 +916,7 @@ void Character::UpdateAnimation()
 	// スタイルチェンジ中でない場合は、通常のモーションを再生する
 	if (!IsStyleChanging())
 	{
-		if (!currentAttack_ && !IsDamageReaction())
+		if (!currentAttack_ && !IsDamageReaction() && !IsGrabbedDamage())
 		{
 			// 立ちモーションを再生する
 			SetAnimation(hStandMotion_, false, true);
@@ -1179,6 +1179,9 @@ void Character::ExecuteParry(Character* attacker)
 
 	// 受け流され処理を実行
 	attacker->OnParried(pullPos, attacker->GetDirection());
+
+	// se受け流し
+	soundManager_->SeParried();
 }
 
 /// @brief 弾きを実行する
@@ -1197,7 +1200,14 @@ void Character::ExecuteDeflect(Character* attacker)
 	// 相手に弾きのダメージとリアクションを与える
 	attacker->OnDamage(0, DamageReaction::Deflect, 0.2f, pushDir, GetWorldPosition(), this);
 
-	// soundManager_->SeDeflect();
+	// 相手が武器を持っている場合は、武器を落とさせる
+	if (attacker->HasWeapon())
+	{
+		attacker->ReleaseWeapon();
+	}
+
+	// se弾き
+	soundManager_->SeDeflect();
 }
 
 /// @brief スタイルチェンジを開始する

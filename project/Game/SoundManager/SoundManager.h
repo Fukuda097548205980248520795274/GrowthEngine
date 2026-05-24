@@ -27,6 +27,13 @@ public:
 	/// @brief 撃鉄スタイルチェンジのSE
 	void SeStyleChangeGekitetu()const;
 
+	/// @brief 受け流しのSE
+	void SeParried() { if (seParried_)seParried_->Play(); }
+
+	/// @brief 弾きのSE
+	void SeDeflect() { if (seDeflect_)seDeflect_->Play(); }
+
+
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Sound> bgmStyleSenran_ = nullptr;
 
@@ -49,6 +56,12 @@ private:
 	std::unique_ptr<Sound> seStyleGekitetu1_ = nullptr;
 	std::unique_ptr<Sound> seStyleGekitetu2_ = nullptr;
 	std::unique_ptr<Sound> seStyleGekitetu3_ = nullptr;
+
+	/// @brief 受け流しのSE
+	std::unique_ptr<Sound> seParried_ = nullptr;
+
+	/// @brief 弾きのSE
+	std::unique_ptr<Sound> seDeflect_ = nullptr;
 
 
 private:

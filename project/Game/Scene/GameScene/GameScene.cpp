@@ -139,6 +139,20 @@ void GameScene::Initialize()
 	//ally_ = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
 	//ally_->Initialize();
 
+	// 敵の武器のモデルの生成と初期化
+	enemyWeaponModel_ = std::make_unique<Render3DStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), "Enemy_Weapon_Model");
+
+	// 敵の武器の生成と初期化
+	Weapon::InitData enemyWeaponInitData;
+	enemyWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
+	enemyWeaponInitData.model = enemyWeaponModel_.get();
+	enemyWeaponInitData.durability = 0;
+	enemyWeaponInitData.attackPower = 1.0f;
+	enemyWeaponInitData.category = WeaponCategory::OneHanded;
+	enemyWeaponInitData.isUnbreakable = true;
+	enemyWeaponInitData.landingCollision = landingCollision_->CreateInstance();
+	enemyWeapon_ = std::make_unique<Weapon>(enemyWeaponInitData);
+
 	// 敵の生成と初期化
 	Character::InitData enemyInitData;
 	enemyInitData.position = Vector3(5.0f, 0.0f, 0.0f);
@@ -146,6 +160,7 @@ void GameScene::Initialize()
 	enemyInitData.avoidDuration = 0.3f;
 	enemyInitData.avoidDistance = 1.5f;
 	enemyInitData.model_ = enemyModel_.get();
+	enemyInitData.weapon = enemyWeapon_.get();
 	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
 	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
 	enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
@@ -195,6 +210,7 @@ void GameScene::Update()
 
 	// 敵の更新
 	enemy_->Update();
+	enemyWeapon_->Update();
 
 	// カメラ制御の更新
 	UpdateCameraControl(deltaTime);
@@ -216,6 +232,7 @@ void GameScene::Draw()
 
 	// 敵の描画
 	enemy_->Draw();
+	enemyWeapon_->Draw();
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());

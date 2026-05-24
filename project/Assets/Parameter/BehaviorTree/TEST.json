@@ -16,8 +16,28 @@
             "start": 86
         },
         {
-            "end": 43,
-            "id": 90,
+            "end": 92,
+            "id": 93,
+            "start": 86
+        },
+        {
+            "end": 95,
+            "id": 97,
+            "start": 61
+        },
+        {
+            "end": 99,
+            "id": 101,
+            "start": 96
+        },
+        {
+            "end": 103,
+            "id": 104,
+            "start": 96
+        },
+        {
+            "end": 106,
+            "id": 107,
             "start": 86
         }
     ],
@@ -28,8 +48,8 @@
             "input_pin": 4,
             "output_pin": -1,
             "pos": [
-                844.0,
-                1.0
+                753.0,
+                8.0
             ],
             "type": 4
         },
@@ -39,47 +59,10 @@
             "input_pin": 39,
             "output_pin": 40,
             "pos": [
-                848.0,
-                115.0
+                780.0,
+                116.0
             ],
             "type": 4
-        },
-        {
-            "action_name": "ComboAttack",
-            "combo_data": {
-                "attackTime": 0.800000011920929,
-                "cancelEndTime": 0.8100000023841858,
-                "cancelStartTime": 0.699999988079071,
-                "hitDefinitions": [
-                    {
-                        "damage": 3,
-                        "damageReaction": 1,
-                        "endTime": 0.4099999964237213,
-                        "jointType": 9,
-                        "knockback": 2.0999999046325684,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.10999999940395355
-                    }
-                ],
-                "moveEndTime": 0.5099999904632568,
-                "moveSpeed": 4.699999809265137,
-                "moveStartTime": 0.05000000074505806
-            },
-            "id": 42,
-            "input_pin": 43,
-            "motionName": "Player_Combo_1",
-            "motionType": 4,
-            "output_pin": -1,
-            "pos": [
-                869.0,
-                224.0
-            ],
-            "type": 5
         },
         {
             "id": 59,
@@ -100,6 +83,92 @@
                 160.0
             ],
             "type": 3
+        },
+        {
+            "condition_type": 5,
+            "id": 91,
+            "input_pin": 92,
+            "output_pin": -1,
+            "pos": [
+                700.0,
+                -109.0
+            ],
+            "type": 4
+        },
+        {
+            "id": 94,
+            "input_pin": 95,
+            "output_pin": 96,
+            "pos": [
+                592.0,
+                323.0
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 4,
+            "id": 98,
+            "input_pin": 99,
+            "output_pin": 100,
+            "pos": [
+                794.0,
+                502.0
+            ],
+            "type": 4
+        },
+        {
+            "action_name": "GrabStrikeAttack",
+            "grab_strike_data": {
+                "attackTime": 3.0,
+                "damageReaction": 3,
+                "hits": [],
+                "isRelease": true,
+                "knockback": 1.0,
+                "knockbackDirection": [
+                    0.0,
+                    0.6533946394920349,
+                    0.7570174336433411
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0,
+                "releaseTime": 2.5,
+                "targetMotionName": "Dash",
+                "targetMotionType": 3
+            },
+            "id": 102,
+            "input_pin": 103,
+            "motionName": "Player_Combo_4",
+            "motionType": 4,
+            "output_pin": -1,
+            "pos": [
+                816.0,
+                620.0
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "GrabAttack",
+            "grab_data": {
+                "attackTime": 1.0,
+                "grabTime": 2.009999990463257,
+                "hitboxEndTime": 0.800000011920929,
+                "hitboxStartTime": 0.20000000298023224,
+                "jointType": 9,
+                "moveEndTime": 0.25,
+                "moveSpeed": 4.099999904632568,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 105,
+            "input_pin": 106,
+            "motionName": "Front",
+            "motionType": 7,
+            "output_pin": -1,
+            "pos": [
+                812.0,
+                234.0
+            ],
+            "type": 5
         }
     ]
 }

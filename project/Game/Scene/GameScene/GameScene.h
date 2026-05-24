@@ -117,6 +117,12 @@ private:
 	/// @brief 敵
 	std::unique_ptr<NPC> enemy_;
 
+	/// @brief 敵の武器のモデル
+	std::unique_ptr<Render3DStaticModel> enemyWeaponModel_ = nullptr;
+
+	/// @brief 敵の武器
+	std::unique_ptr<Weapon> enemyWeapon_ = nullptr;
+
 
 	// 床
 	std::unique_ptr<Floor> floor_ = nullptr;
