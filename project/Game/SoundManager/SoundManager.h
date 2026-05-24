@@ -33,6 +33,12 @@ public:
 	/// @brief 弾きのSE
 	void SeDeflect() { if (seDeflect_)seDeflect_->Play(); }
 
+	/// @brief ガードのSE
+	void SeGuard() { if (seGuard_)seGuard_->Play(); }
+
+	/// @brief 回避のSE
+	void SeAvoid() { if (seAvoid_)seAvoid_->Play(); }
+
 
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Sound> bgmStyleSenran_ = nullptr;
@@ -62,6 +68,12 @@ private:
 
 	/// @brief 弾きのSE
 	std::unique_ptr<Sound> seDeflect_ = nullptr;
+
+	/// @brief ガードのSE
+	std::unique_ptr<Sound> seGuard_ = nullptr;
+
+	/// @brief 回避のSE
+	std::unique_ptr<Sound> seAvoid_ = nullptr;
 
 
 private:

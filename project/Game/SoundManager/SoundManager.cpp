@@ -46,6 +46,12 @@ void SoundManager::Initialize()
 
 	// 弾きのSE
 	seDeflect_ = std::make_unique<Sound>(engine_->LoadSound("Deflect", engine_->LoadAudio("./Assets/Sounds/se/deflect.mp3")));
+
+	// ガードのSE
+	seGuard_ = std::make_unique<Sound>(engine_->LoadSound("Guard", engine_->LoadAudio("./Assets/Sounds/se/guard.mp3")));
+
+	// 回避のSE
+	seAvoid_ = std::make_unique<Sound>(engine_->LoadSound("Avoid", engine_->LoadAudio("./Assets/Sounds/se/avoid.mp3")));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

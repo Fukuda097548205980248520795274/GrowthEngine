@@ -20,7 +20,7 @@ EffectManager* EffectManager::GetInstance()
 /// @brief 初期化処理
 void EffectManager::Initialize()
 {
-
+	
 }
 
 /// @brief 更新処理

@@ -485,6 +485,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		guardReactionTimer_ = 0.0f;
 		knockbackVelocity_ = -dirToAttacker * 2.0f;
 
+		// ガードse
+		soundManager_->SeGuard();
+
 		SetAnimation(hGuardHitMotion_, false, true);
 
 		return false; // ガード成功によりダメージ無効
@@ -675,6 +678,9 @@ void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput,
 
 	// 回避瞬間のフラグを立てる
 	isJustAvoided_ = true;
+
+	// 回避se
+	soundManager_->SeAvoid();
 
 	// 通常移動は停止して回避移動へ移行する
 	MoveStop();

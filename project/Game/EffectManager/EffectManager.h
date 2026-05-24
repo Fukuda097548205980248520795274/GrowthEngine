@@ -24,6 +24,9 @@ private:
 	/// @brief 初期化処理
 	void Initialize();
 
+	/// @brief エンジンのインスタンス
+	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
+
 
 private:
 
