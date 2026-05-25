@@ -2007,7 +2007,7 @@
     <ClCompile Include="Game\EffectManager\Effect\Effect.cpp">
       <Filter>Game\EffectManager\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TD3\project\Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp">
+    <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3011,7 +3011,7 @@
     <ClInclude Include="Game\EffectManager\Effect\Effect.h">
       <Filter>Game\EffectManager\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TD3\project\Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h">
+    <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClInclude>
   </ItemGroup>

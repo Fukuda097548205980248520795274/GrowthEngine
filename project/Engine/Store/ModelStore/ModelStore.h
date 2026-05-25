@@ -1,6 +1,7 @@
 #pragma once
 #include "ModelResource/ModelResource.h"
 #include "Resource/VertexBufferResource/CubeVertexResource/CubeVertexResource.h"
+#include "Resource/VertexBufferResource/PlaneVertexResource/PlaneVertexResource.h"
 
 namespace Engine
 {
@@ -11,6 +12,11 @@ namespace Engine
 	class ModelStore
 	{
 	public:
+
+		/// @brief 初期化
+		/// @param device 
+		/// @param log 
+		void Initilaize(ID3D12Device* device, Log* log);
 
 		/// @brief 読み込み
 		/// @param directory 
@@ -26,6 +32,14 @@ namespace Engine
 		/// @param modelHandle 
 		/// @param meshIndex 
 		void Register(ID3D12GraphicsCommandList* commandList, ModelHandle modelHandle, int32_t meshIndex);
+
+		/// @brief 立方体の頂点リソースをコマンドリストに登録する
+		/// @param commandList 
+		void CubeVertexRegiseter(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief 平面の頂点リソースをコマンドリストに登録する
+		/// @param commandList 
+		void PlaneVertexRegiseter(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief モデルデータを取得する
 		/// @param handle 
@@ -43,5 +57,8 @@ namespace Engine
 
 		/// @brief 立方体頂点リソース
 		std::unique_ptr<CubeVertexResource> cubeVertexResource_ = nullptr;
+
+		/// @brief 平面頂点リソース
+		std::unique_ptr<PlaneVertexResource> planeVertexResource_ = nullptr;
 	};
 }

@@ -72,6 +72,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// モデルストアの生成
 	modelStore_ = std::make_unique<ModelStore>();
+	modelStore_->Initilaize(core_->GetDevice(), log);
 
 	// アニメーションストアの生成
 	animationStore_ = std::make_unique<AnimationStore>();

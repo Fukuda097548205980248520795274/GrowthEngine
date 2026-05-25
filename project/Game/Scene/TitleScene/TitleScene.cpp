@@ -21,6 +21,9 @@ void TitleScene::Initialize()
 	instanceTube2_ = prefabTube_->CreateInstance();
 	instanceTube2_->param_.transform.translate = { 2.0f, 0.0f, 0.0f };
 	instanceTube2_->param_.size.radiusBottom = 0.25f;
+
+
+	particle3D_ = std::make_unique<Particle3D>("Test", 500, 1 , engine_->LoadModel("./Assets/Models/spark", "spark.obj"));
 }
 
 /// @brief 更新処理
@@ -36,4 +39,7 @@ void TitleScene::Draw()
 	instanceTube1_->Draw();
 	instanceTube2_->Draw();
 	prefabTube_->Draw();
+
+	// パーティクルの描画
+	particle3D_->Draw();
 }

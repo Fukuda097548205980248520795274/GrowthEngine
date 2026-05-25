@@ -1,6 +1,23 @@
 #include "ModelStore.h"
 #include <cassert>
 
+/// @brief 初期化
+/// @param device 
+/// @param log 
+void Engine::ModelStore::Initilaize(ID3D12Device* device, Log* log)
+{
+	// nullptrチェック
+	assert(device);
+	
+	// 立方体頂点リソースの生成と初期化
+	cubeVertexResource_ = std::make_unique<CubeVertexResource>();
+	cubeVertexResource_->Initialize(device, log);
+
+	// 平面頂点リソースの生成と初期化
+	planeVertexResource_ = std::make_unique<PlaneVertexResource>();
+	planeVertexResource_->Initialize(device, log);
+}
+
 /// @brief 読み込み
 /// @param directory 
 /// @param fileName 
@@ -38,4 +55,18 @@ ModelHandle Engine::ModelStore::Load(const std::string& directory, const std::st
 void Engine::ModelStore::Register(ID3D12GraphicsCommandList* commandList, ModelHandle modelHandle, int32_t meshIndex)
 {
 	dataTable_[modelHandle]->Register(commandList, meshIndex);
+}
+
+/// @brief 立方体の頂点リソースをコマンドリストに登録する
+/// @param commandList 
+void Engine::ModelStore::CubeVertexRegiseter(ID3D12GraphicsCommandList* commandList)
+{
+	cubeVertexResource_->Register(commandList);
+}
+
+/// @brief 平面の頂点リソースをコマンドリストに登録する
+/// @param commandList 
+void Engine::ModelStore::PlaneVertexRegiseter(ID3D12GraphicsCommandList* commandList)
+{
+	planeVertexResource_->Register(commandList);
 }

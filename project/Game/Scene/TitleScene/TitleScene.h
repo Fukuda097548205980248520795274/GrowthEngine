@@ -26,5 +26,8 @@ private:
 	PrefabInstanceTube* instanceTube0_ = nullptr;
 	PrefabInstanceTube* instanceTube1_ = nullptr;
 	PrefabInstanceTube* instanceTube2_ = nullptr;
+
+	/// @brief パーティクル
+	std::unique_ptr<Particle3D> particle3D_;
 };
 

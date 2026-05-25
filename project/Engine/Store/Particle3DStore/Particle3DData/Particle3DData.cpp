@@ -540,7 +540,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	psoDraw_->Register(commandList , param_->blendMode);
 
 	// 頂点を登録する
-	modelStore_->Register(commandList, param_->hModel, 0);
+	modelStore_->PlaneVertexRegiseter(commandList);
 
 	// パーティクルリソースを登録する
 	particleResource_->RegisterGraphicsSRV(commandList, 0);
