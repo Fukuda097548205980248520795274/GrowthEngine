@@ -48,7 +48,7 @@ void Engine::PSOParticle::Initialize(ID3D12Device* device, IDxcBlob* vertexShade
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[5];
+	D3D12_ROOT_PARAMETER rootParameter[6];
 
 	// DescriptorTable VertexShader パーティクル
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -79,6 +79,12 @@ void Engine::PSOParticle::Initialize(ID3D12Device* device, IDxcBlob* vertexShade
 	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[4].Descriptor.RegisterSpace = 0;
 	rootParameter[4].Descriptor.ShaderRegister = 0;
+
+	// CBV PixelShader 有効化フラグ
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[5].Descriptor.RegisterSpace = 0;
+	rootParameter[5].Descriptor.ShaderRegister = 1;
 
 
 	/*--------------------

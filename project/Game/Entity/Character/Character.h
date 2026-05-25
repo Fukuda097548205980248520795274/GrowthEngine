@@ -550,7 +550,7 @@ protected:
 	float guardActiveTimer_ = 0.0f;
 
 	// ジャストガード（受け流し）の受付時間
-	const float kJustGuardTime = 0.5f;
+	const float kJustGuardTime = 0.35f;
 
 	/// @brief 受け流しが可能かどうか
 	bool canParry_ = false;

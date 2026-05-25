@@ -63,6 +63,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->count = 1;
 	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
+	param_->enableSoftParticle = false;
 	param_->attract.enableAttract = false;
 	param_->attract.positionType = Particle3D::AttractPostitionType::Direction;
 	param_->attract.attractCenter = Vector3(0.0f, 0.0f, 0.0f);
@@ -119,6 +120,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "Count", &param_->count);
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
 		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
+		parameter_->SetValue(group_, "EnableSoftParticle", &param_->enableSoftParticle);
 		parameter_->SetValue(group_, "EnableAttract", &param_->attract.enableAttract);
 		parameter_->SetValue(group_, "AttractDirection", &param_->attract.attractDirection);
 		parameter_->SetValue(group_, "AttractLength", &param_->attract.attractLength);
@@ -191,6 +193,10 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	freeListResource_ = std::make_unique<RWSTructuredBufferResource<uint32_t>>();
 	freeListResource_->Initialize(device, commandList, heap, numInstance_, log);
 
+	// 有効化フラグリソースを生成する
+	enableResource_ = std::make_unique<ConstantBufferResource<ParticleEnableDataForGPU>>();
+	enableResource_->Initialize(device, log);
+
 
 	/*-----------------------
 	    パーティクルの初期化
@@ -250,6 +256,7 @@ void Engine::Particle3DData::Reset()
 		param_->count = 1;
 		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
+		param_->enableSoftParticle = false;
 		param_->attract.enableAttract = false;
 		param_->attract.attractDirection = Vector3(0.0f, 1.0f, 0.0f);
 		param_->attract.attractLength = 1.0f;
@@ -511,6 +518,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 	// データを渡す
 	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
+	enableResource_->data_->softParticle = static_cast<int32_t>(param_->enableSoftParticle);
 
 	// ビルボードの有効化
 	if (param_->enableBillboard)
@@ -548,6 +556,9 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 	// カメラを登録する
 	cameraStore->RegisterCameraResource(commandList, 4);
+
+	// 有効化フラグを登録する
+	enableResource_->RegisterGraphics(commandList, 5);
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
@@ -674,6 +685,9 @@ void Engine::Particle3DData::DebugParameter()
 
 		// ビルボード有効化
 		ImGui::Checkbox("Billboard", &param_->enableBillboard);
+
+		// ソフトパーティクル有効化
+		ImGui::Checkbox("SoftParticle", &param_->enableSoftParticle);
 
 
 		// 生存期間

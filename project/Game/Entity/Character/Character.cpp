@@ -3,6 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include "Entity/Weapon/Weapon.h"
+#include "EffectManager/EffectManager.h"
 
 #include "Action/Attack/Attack.h"
 #include "Action/Move/Move.h"
@@ -487,6 +488,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		// ガードse
 		soundManager_->SeGuard();
+
+		// ガードエフェクト
+		EffectManager::GetInstance()->CreateGuardEffect(GetWorldPosition(), Vector3(0.0f, 0.0f, 0.0f));
 
 		SetAnimation(hGuardHitMotion_, false, true);
 

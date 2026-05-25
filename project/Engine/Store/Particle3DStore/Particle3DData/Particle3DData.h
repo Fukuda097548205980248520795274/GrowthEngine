@@ -129,6 +129,9 @@ namespace Engine
 		/// @brief フリーリストリソース
 		std::unique_ptr<RWSTructuredBufferResource<uint32_t>> freeListResource_ = nullptr;
 
+		/// @brief 有効化フラグリソース
+		std::unique_ptr<ConstantBufferResource<ParticleEnableDataForGPU>> enableResource_ = nullptr;
+
 
 	private:
 

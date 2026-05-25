@@ -24,6 +24,8 @@ void SoundManager::Initialize()
 
 	// 旋嵐スタイルのBGM
 	bgmStyleSenran_ = std::make_unique<Sound>(engine_->LoadSound("Style_Senran", engine_->LoadAudio("./Assets/Sounds/bgm/Style_Senran.mp3")));
+	bgmStyleSenran_->param_->enableLoop = true; // ループ再生を有効にする
+	bgmStyleSenran_->param_->volume = 0.25f; // 音量を調整する
 
 	// 旋嵐スタイルチェンジのSE
 	seStyleSenran0_ = std::make_unique<Sound>(engine_->LoadSound("Style_Senran0", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran0.mp3")));
@@ -34,6 +36,8 @@ void SoundManager::Initialize()
 
 	// 撃鉄スタイルのBGM
 	bgmStyleGekitetu_ = std::make_unique<Sound>(engine_->LoadSound("Style_Gekitetu", engine_->LoadAudio("./Assets/Sounds/bgm/Style_Gekitetu.mp3")));
+	bgmStyleGekitetu_->param_->enableLoop = true; // ループ再生を有効にする
+	bgmStyleGekitetu_->param_->volume = 0.25f; // 音量を調整する
 
 	// 撃鉄スタイルチェンジのSE
 	seStyleGekitetu0_ = std::make_unique<Sound>(engine_->LoadSound("Style_Gekitetu0", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu0.mp3")));

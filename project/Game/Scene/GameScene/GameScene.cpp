@@ -27,8 +27,10 @@ void GameScene::Initialize()
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
-	// モーションマネージャを取得する
+	// マネージャの生成と初期化
 	motionManager_ = MotionManager::GetInstance();
+	soundManager_ = SoundManager::GetInstance();
+	effectManager_ = EffectManager::GetInstance();
 
 	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
 
@@ -212,6 +214,9 @@ void GameScene::Update()
 	enemy_->Update();
 	enemyWeapon_->Update();
 
+	// エフェクトの更新
+	effectManager_->Update();
+
 	// カメラ制御の更新
 	UpdateCameraControl(deltaTime);
 }
@@ -233,6 +238,9 @@ void GameScene::Draw()
 	// 敵の描画
 	enemy_->Draw();
 	enemyWeapon_->Draw();
+
+	// エフェクトの描画
+	effectManager_->Draw();
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());

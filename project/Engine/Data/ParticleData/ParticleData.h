@@ -179,6 +179,9 @@ namespace Engine
 			/// @brief ビルボード有効化
 			bool enableBillboard;
 
+			/// @brief ソフトパーティクル有効化
+			bool enableSoftParticle;
+
 
 			// 引力
 			Attract attract;

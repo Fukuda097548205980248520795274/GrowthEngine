@@ -157,8 +157,8 @@ void GrowthEngine::NewFrame()
 	previousTime_ = currentTime;
 	deltaTime_ = deltaTime.count();
 
-	// 最初のデルタタイムは0にする
-	if(isDeltaTimeFirst_)
+	// デルタタイムが一週目のとき、または二週目のときはデルタタイムを0にする
+	if(isDeltaTimeFirst_ || isDeltaTimeSecond_)
 		deltaTime_ = 0.0f;
 
 	// 全ての入力情報を取得する
@@ -238,6 +238,10 @@ void GrowthEngine::PostDraw()
 
 	// 全ての入力情報をコピーする
 	input_->CopyInputInfo();
+
+	// デルタタイム二週目を終わらせる
+	if(!isDeltaTimeFirst_)
+		isDeltaTimeSecond_ = false;
 
 	// デルタタイム一週目を終わらせる
 	isDeltaTimeFirst_ = false;

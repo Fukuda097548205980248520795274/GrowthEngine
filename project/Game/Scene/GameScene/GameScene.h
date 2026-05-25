@@ -11,6 +11,7 @@
 #include "PivotPoint/PivotPoint.h"
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
+#include "EffectManager/EffectManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 
@@ -57,6 +58,8 @@ private:
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
+	SoundManager* soundManager_ = nullptr;
+	EffectManager* effectManager_ = nullptr;
 
 	/// @brief ポストエフェクトマネージャ
 	std::unique_ptr<PostEffectManager> postEffectManager_ = nullptr;

@@ -25,6 +25,8 @@
 #include "Application/GameCamera/GameCamera3D/GameCamera3D.h"
 #include "Application/GameCamera/GameCamera2D/GameCamera2D.h"
 
+#include "Application/Particle3D/Particle3D.h"
+
 #include "Application/Render3D/Render3DStaticModel/Render3DStaticModel.h"
 #include "Application/Render3D/Render3DAnimationModel/Render3DAnimationModel.h"
 #include "Application/Render3D/Render3DSkinningModel/Render3DSkinningModel.h"
@@ -1082,8 +1084,9 @@ private:
 	/// @brief スロー状態の継続時間
 	float slowDuration_ = 0.0f;
 
-	// 最初のデルタタイムは0にするためのフラグ
+	// 最初の2フレームはデルタタイムは0にするためのフラグ
 	bool isDeltaTimeFirst_ = true;
+	bool isDeltaTimeSecond_ = true;
 
 
 private:

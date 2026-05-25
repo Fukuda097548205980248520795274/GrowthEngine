@@ -46,12 +46,12 @@ void main( uint3 DTid : SV_DispatchThreadID )
     // vは上(t=0)なら0.0、下(t=1)なら1.0になる
     float v = (float) t;
 
-    // 円柱の頂点位置の計算 (yは 上=0.5, 下=-0.5)
-    float y = 0.5f - v;
-    float3 pos = float3(cos(phi), y, sin(phi));
-    
+    // 円柱の頂点位置の計算 (zは 奥=0.5, 手前=-0.5)
+    float z = 0.5f - v;
+    float3 pos = float3(cos(phi), sin(phi), z);
+
     // 基準の法線
-    float3 normal = float3(pos.x, 0.0f, pos.z);
+    float3 normal = float3(pos.x, pos.y, 0.0f);
 
     // 頂点インデックスの計算 (strideは slices + 1)
     uint stride = gParam.slices + 1;

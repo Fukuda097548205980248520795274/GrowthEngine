@@ -8,12 +8,6 @@ void Game::Initialize()
 {
 	// シーンマネージャの生成
 	sceneManager_ = std::make_unique<SceneManager>("Game");
-
-	// マネージャの生成と初期化
-	MotionManager* motionManager = MotionManager::GetInstance();
-	SoundManager* soundManager = SoundManager::GetInstance();
-	EffectManager* effectManager = EffectManager::GetInstance();
-
 }
 
 /// @brief 更新処理

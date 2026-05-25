@@ -253,6 +253,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp" />
     <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp" />
     <ClCompile Include="Engine\Application\Light\BaseLight.cpp" />
+    <ClCompile Include="Engine\Application\Particle3D\Particle3D.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -1042,6 +1043,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\EffectManager\EffectManager.cpp" />
+    <ClCompile Include="Game\EffectManager\Effect\Effect.cpp" />
+    <ClCompile Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.cpp" />
     <ClCompile Include="Game\Entity\Character\Character.cpp" />
     <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\Player.cpp" />
@@ -1118,6 +1121,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.h" />
     <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h" />
     <ClInclude Include="Engine\Application\Light\BaseLight.h" />
+    <ClInclude Include="Engine\Application\Particle3D\Particle3D.h" />
     <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h" />
@@ -1385,6 +1389,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\EffectManager\EffectManager.h" />
+    <ClInclude Include="Game\EffectManager\Effect\Effect.h" />
+    <ClInclude Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.h" />
     <ClInclude Include="Game\Entity\Character\Character.h" />
     <ClInclude Include="Game\Entity\Character\NPC\NPC.h" />
     <ClInclude Include="Game\Entity\Character\Player\Player.h" />

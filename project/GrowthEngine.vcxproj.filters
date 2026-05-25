@@ -1111,6 +1111,15 @@
     <Filter Include="Game\EffectManager">
       <UniqueIdentifier>{57bbb7f5-81bb-4032-b0e6-e373fa96dc6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Particle3D">
+      <UniqueIdentifier>{4cb1885d-ab4f-4e53-ab71-5a44aaa013d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EffectManager\Effect">
+      <UniqueIdentifier>{ce9941f7-6584-4eb4-89e8-bbcfb3e67538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\EffectManager\Effect\GuardEffect">
+      <UniqueIdentifier>{d37da5c7-12a0-4db2-9a1c-3da779b868b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1985,6 +1994,15 @@
     </ClCompile>
     <ClCompile Include="Game\EffectManager\EffectManager.cpp">
       <Filter>Game\EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Particle3D\Particle3D.cpp">
+      <Filter>Engine\Include\Application\Particle3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.cpp">
+      <Filter>Game\EffectManager\Effect\GuardEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EffectManager\Effect\Effect.cpp">
+      <Filter>Game\EffectManager\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2977,6 +2995,15 @@
     </ClInclude>
     <ClInclude Include="Game\EffectManager\EffectManager.h">
       <Filter>Game\EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Particle3D\Particle3D.h">
+      <Filter>Engine\Include\Application\Particle3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.h">
+      <Filter>Game\EffectManager\Effect\GuardEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EffectManager\Effect\Effect.h">
+      <Filter>Game\EffectManager\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

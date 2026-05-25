@@ -165,4 +165,13 @@ namespace Engine
 
 		float padding[2]; // パディング
 	};
+
+	// @brief GPUに送るパーティクルの有効フラグのデータ
+	struct ParticleEnableDataForGPU
+	{
+		// パーティクル有効フラグ
+		int32_t softParticle;
+
+		float padding[3]; // パディング
+	};
 }
