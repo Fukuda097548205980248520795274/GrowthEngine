@@ -540,7 +540,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	psoDraw_->Register(commandList , param_->blendMode);
 
 	// 頂点を登録する
-	modelStore_->Register(commandList, param_->hModel, 0);
+	modelStore_->PlaneVertexRegiseter(commandList);
 
 	// パーティクルリソースを登録する
 	particleResource_->RegisterGraphicsSRV(commandList, 0);
@@ -561,7 +561,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	enableResource_->RegisterGraphics(commandList, 5);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
+	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetPlaneNumIndex()), numInstance_, 0, 0, 0);
 
 
 

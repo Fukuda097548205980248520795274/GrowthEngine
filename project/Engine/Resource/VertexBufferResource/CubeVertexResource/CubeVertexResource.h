@@ -18,6 +18,10 @@ namespace Engine
 		/// @param commandList 
 		void Register(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief インデックス数を取得する
+		/// @return 
+		int32_t GetNumIndex() const { return numIndex_; }
+
 
 	private:
 
@@ -26,5 +30,8 @@ namespace Engine
 
 		/// @brief インデックスリソース
 		std::unique_ptr<IndexBufferResource> indexResource_ = nullptr;
+
+		/// @brief インデックス数
+		int32_t numIndex_ = 36;
 	};
 }

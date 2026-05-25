@@ -37,9 +37,17 @@ namespace Engine
 		/// @param commandList 
 		void CubeVertexRegiseter(ID3D12GraphicsCommandList* commandList);
 
+		/// @brief 立方体のインデックス数を取得する
+		/// @return 
+		int32_t GetCubeNumIndex() { return cubeVertexResource_->GetNumIndex(); }
+
 		/// @brief 平面の頂点リソースをコマンドリストに登録する
 		/// @param commandList 
 		void PlaneVertexRegiseter(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief 平面のインデックス数を取得する
+		/// @return 
+		int32_t GetPlaneNumIndex() { return planeVertexResource_->GetNumIndex(); }
 
 		/// @brief モデルデータを取得する
 		/// @param handle 
