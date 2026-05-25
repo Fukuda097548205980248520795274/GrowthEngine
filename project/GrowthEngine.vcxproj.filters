@@ -1120,6 +1120,9 @@
     <Filter Include="Game\EffectManager\Effect\GuardEffect">
       <UniqueIdentifier>{d37da5c7-12a0-4db2-9a1c-3da779b868b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Resource\VertexBufferResource\PlaneVertexResource">
+      <UniqueIdentifier>{e85efb4c-fa70-4690-85ad-cb9d1755207a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2003,6 +2006,9 @@
     </ClCompile>
     <ClCompile Include="Game\EffectManager\Effect\Effect.cpp">
       <Filter>Game\EffectManager\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TD3\project\Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp">
+      <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3004,6 +3010,9 @@
     </ClInclude>
     <ClInclude Include="Game\EffectManager\Effect\Effect.h">
       <Filter>Game\EffectManager\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TD3\project\Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h">
+      <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
