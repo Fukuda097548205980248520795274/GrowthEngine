@@ -89,13 +89,13 @@ namespace Engine
 		Vector4 endColor;
 
 		// 初期の大きさ
-		float startScale;
-
-		// 最後の大きさ
-		float endScale;
+		Vector3 startScale;
 
 		// 最小の生存時間
 		float minLifeTime;
+
+		// 最後の大きさ
+		Vector3 endScale;
 
 		// 最大の生存時間
 		float maxLifeTime;

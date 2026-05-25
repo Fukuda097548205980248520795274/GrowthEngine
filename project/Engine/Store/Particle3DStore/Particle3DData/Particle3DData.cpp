@@ -7,6 +7,7 @@
 #include "Parameter/Particle3DParameter/Particle3DParameter.h"
 #include "Store/Camera3DStore/Camera3DStore.h"
 #include "Func/RandomFunc/RandomFunc.h"
+#include <numbers>
 
 /// @brief 初期化
 /// @param device 
@@ -47,8 +48,9 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->color.randomColor = false;
 	param_->color.startAlpha = 1.0f;
 	param_->color.endAlpha = 1.0f;
-	param_->scale.start = 1.0f;
-	param_->scale.end = 1.0f;
+	param_->scale.start = Vector3(1.0f, 1.0f, 1.0f);
+	param_->scale.end = Vector3(1.0f, 1.0f, 1.0f);
+	param_->rotate.isRandom = false;
 	param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
 	param_->rotate.start = 0.0f;
 	param_->rotate.end = 0.0f;
@@ -106,6 +108,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "EndAlpha", &param_->color.endAlpha);
 		parameter_->SetValue(group_, "StartScale", &param_->scale.start);
 		parameter_->SetValue(group_, "EndScale", &param_->scale.end);
+		parameter_->SetValue(group_, "IsRandomRotate", &param_->rotate.isRandom);
 		parameter_->SetValue(group_, "RotateAxis", &param_->rotate.axis);
 		parameter_->SetValue(group_, "StartRotate", &param_->rotate.start);
 		parameter_->SetValue(group_, "EndRotate", &param_->rotate.end);
@@ -240,8 +243,9 @@ void Engine::Particle3DData::Reset()
 		param_->color.randomColor = false;
 		param_->color.startAlpha = 1.0f;
 		param_->color.endAlpha = 1.0f;
-		param_->scale.start = 1.0f;
-		param_->scale.end = 1.0f;
+		param_->scale.start = Vector3(1.0f, 1.0f, 1.0f);
+		param_->scale.end = Vector3(1.0f, 1.0f, 1.0f);
+		param_->rotate.isRandom = false;
 		param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
 		param_->rotate.start = 0.0f;
 		param_->rotate.end = 0.0f;
@@ -385,9 +389,19 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	emitOptionResource_->data_->endSpeed = param_->speed.end;
 
 	// 回転はクォータニオンに変換して渡す
-	param_->rotate.axis = param_->rotate.axis.Normalize();
-	emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
-	emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
+	if (param_->rotate.isRandom)
+	{
+		Vector3 randomAxis = Vector3(GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f)).Normalize();
+		float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
+		emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, randomAxis);
+		emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, randomAxis);
+	}
+	else
+	{
+		param_->rotate.axis = param_->rotate.axis.Normalize();
+		emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
+		emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
+	}
 
 	// エミッター形状のパラメータを更新する
 	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
@@ -540,7 +554,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	psoDraw_->Register(commandList , param_->blendMode);
 
 	// 頂点を登録する
-	modelStore_->Register(commandList, param_->hModel, 0);
+	modelStore_->PlaneVertexRegiseter(commandList);
 
 	// パーティクルリソースを登録する
 	particleResource_->RegisterGraphicsSRV(commandList, 0);
@@ -561,7 +575,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	enableResource_->RegisterGraphics(commandList, 5);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
+	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetPlaneNumIndex()), numInstance_, 0, 0, 0);
 
 
 
@@ -753,10 +767,10 @@ void Engine::Particle3DData::DebugParameter()
 		if (ImGui::TreeNode("Scale"))
 		{
 			// 開始
-			ImGui::DragFloat("Start", &param_->scale.start, 0.01f, 0.0f, 100000.0f);
+			ImGui::DragFloat3("Start", &param_->scale.start.x, 0.01f, 0.0f, 100000.0f);
 
 			// 終了
-			ImGui::DragFloat("End", &param_->scale.end, 0.01f, 0.0f, 100000.0f);
+			ImGui::DragFloat3("End", &param_->scale.end.x, 0.01f, 0.0f, 100000.0f);
 
 			// 終了
 			ImGui::TreePop();
@@ -765,14 +779,19 @@ void Engine::Particle3DData::DebugParameter()
 		// 回転
 		if (ImGui::TreeNode("Rotate"))
 		{
-			// 軸
-			ImGui::DragFloat3("Axis", &param_->rotate.axis.x, 0.01f, -1.0f, 1.0f);
+			ImGui::Checkbox("Random", &param_->rotate.isRandom);
 
-			// 開始
-			ImGui::DragFloat("Start", &param_->rotate.start, 0.01f, -360.0f, 360.0f);
+			if (!param_->rotate.isRandom)
+			{
+				// 軸
+				ImGui::DragFloat3("Axis", &param_->rotate.axis.x, 0.01f, -1.0f, 1.0f);
 
-			// 終了
-			ImGui::DragFloat("End", &param_->rotate.end, 0.01f, -360.0f, 360.0f);
+				// 開始
+				ImGui::DragFloat("Start", &param_->rotate.start, 0.01f, -360.0f, 360.0f);
+
+				// 終了
+				ImGui::DragFloat("End", &param_->rotate.end, 0.01f, -360.0f, 360.0f);
+			}
 
 			// 終了
 			ImGui::TreePop();

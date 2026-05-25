@@ -40,11 +40,11 @@ struct EmitOption
 
     float4 endColor;
     
-    float startScale;
-
-    float endScale;
+    float3 startScale;
     
     float minLifeTime;
+    
+    float3 endScale;
 
     float maxLifeTime;
     

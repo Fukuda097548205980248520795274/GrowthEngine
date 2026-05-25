@@ -1,0 +1,71 @@
+{
+    "Particle3D_Test": {
+        "AttractDirection": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "AttractLength": 1.0,
+        "AttractPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttractPositionType": 0,
+        "BlendMode": 2,
+        "Count": 5,
+        "EmitTime": 0.0,
+        "EnableAttract": false,
+        "EnableBillboard": false,
+        "EnableSoftParticle": false,
+        "EndAlpha": 1.0,
+        "EndColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EndRotate": 0.0,
+        "EndScale": [
+            0.10000000149011612,
+            1.0,
+            1.0
+        ],
+        "EndSpeed": 0.0,
+        "Frequency": 0.0,
+        "IsLoop": true,
+        "IsRandomRotate": true,
+        "MaxLifeTime": 0.30000001192092896,
+        "MinLifeTime": 0.1599999964237213,
+        "PauseTime": 0.0,
+        "Radius1": 1.0,
+        "Radius3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "RandomColor": true,
+        "RotateAxis": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Shape": 0,
+        "StartAlpha": 1.0,
+        "StartColor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StartRotate": 0.0,
+        "StartScale": [
+            0.10000000149011612,
+            1.0,
+            1.0
+        ],
+        "StartSpeed": 0.0,
+        "SwapEmitterAttract": false,
+        "TextureFilePath": "./Assets/Models/spark/spark.png"
+    }
+}

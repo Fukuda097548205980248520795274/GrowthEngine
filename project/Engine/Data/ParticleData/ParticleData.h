@@ -56,9 +56,9 @@ namespace Engine
 		/// @brief 大きさ
 		struct Scale
 		{
-			float start;
+			Vector3 start;
 
-			float end;
+			Vector3 end;
 		};
 
 		/// @brief 速度
@@ -93,6 +93,9 @@ namespace Engine
 		// 回転
 		struct Rotate
 		{
+			// ランダム
+			bool isRandom;
+
 			// 回転の軸
 			Vector3 axis;
 
