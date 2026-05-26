@@ -24,8 +24,6 @@ void GameScene::Initialize()
 {
 	engine_->LoadCamera3D("MainCamera");
 
-	engine_->LoadPostEffect("Smoothing", Engine::PostEffect::Type::Smoothing);
-
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 
@@ -265,9 +263,6 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());
-
-
-	engine_->DrawPostEffect("Smoothing");
 
 }
 
