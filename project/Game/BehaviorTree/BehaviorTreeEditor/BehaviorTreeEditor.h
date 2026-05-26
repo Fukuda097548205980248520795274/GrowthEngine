@@ -78,9 +78,6 @@ private:
 	// ノードとリンクのID生成用カウンタ
 	int currentId_ = 1;
 
-	// 次に割り当てるID
-	int nextId_ = 1;
-
 
 private:
 
@@ -102,7 +99,7 @@ private:
 
 	/// @brief ノードをウィンドウの中心に配置する
 	/// @param node 
-	void SetNodeWindowCenter(EditorNode node);
+	void SetNodeWindowCenter(const EditorNode& node);
 
 
 private:

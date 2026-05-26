@@ -15,6 +15,10 @@ BehaviorTreeProjectManager::BehaviorTreeProjectManager()
 std::vector<std::string> BehaviorTreeProjectManager::GetFileList()
 {
     std::vector<std::string> files;
+
+	// ディレクトリが存在しない場合は空のリストを返す
+    if (!std::filesystem::exists(directoryPath_)) return files;
+
     for (const auto& entry : std::filesystem::directory_iterator(directoryPath_))
     {
         if (entry.path().extension() == ".json")
@@ -31,11 +35,13 @@ std::vector<std::string> BehaviorTreeProjectManager::GetFileList()
 bool BehaviorTreeProjectManager::DeleteProjectFile(const std::string& fileName)
 {
     std::string filePath = directoryPath_ + fileName + ".json";
+
     // ファイルが存在すれば削除する
     if (std::filesystem::exists(filePath))
     {
         return std::filesystem::remove(filePath);
     }
+
     return false;
 }
 

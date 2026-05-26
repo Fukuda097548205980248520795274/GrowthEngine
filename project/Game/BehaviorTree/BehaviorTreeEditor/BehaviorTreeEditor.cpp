@@ -112,6 +112,7 @@ void BehaviorTreeEditor::AddActionNode()
     SetNodeWindowCenter(node);
 }
 
+/// @brief エディタを初期状態にリセットする
 void BehaviorTreeEditor::ClearEditor()
 {
     nodes_.clear();
@@ -122,6 +123,7 @@ void BehaviorTreeEditor::ClearEditor()
 	history_->Clear();
 }
 
+/// @brief 現在のツリー構造をファイルに保存する
 void BehaviorTreeEditor::SaveCurrentTree()
 {
     if (currentFileName_.empty()) return;
@@ -137,6 +139,8 @@ void BehaviorTreeEditor::SaveCurrentTree()
     saver_.SaveTree(currentFileName_, nodes_, links_);
 }
 
+/// @brief ファイルからツリー構造を読み込む
+/// @param fileName 
 void BehaviorTreeEditor::LoadTree(const std::string& fileName)
 {
     ClearEditor();
@@ -165,7 +169,7 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
 
 /// @brief ノードをウィンドウの中心に配置する
 /// @param node 
-void BehaviorTreeEditor::SetNodeWindowCenter(EditorNode node)
+void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 {
     // ノードをウィンドウの中心に配置する
     ImVec2 windowCenter(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
@@ -188,15 +192,15 @@ std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& 
 	// ノードIDとノードのマッピングを作成
     for (const auto& n : nodes_)
     {
-        if (n.id >= nextId_) nextId_ = n.id + 1;
-        if (n.inputPinId >= nextId_) nextId_ = n.inputPinId + 1;
-        if (n.outputPinId >= nextId_) nextId_ = n.outputPinId + 1;
+        if (n.id >= currentId_) currentId_ = n.id + 1;
+        if (n.inputPinId >= currentId_) currentId_ = n.inputPinId + 1;
+        if (n.outputPinId >= currentId_) currentId_ = n.outputPinId + 1;
     }
 
 	// リンクIDの最大値も確認
     for (const auto& l : links_)
     {
-        if (l.id >= nextId_) nextId_ = l.id + 1;
+        if (l.id >= currentId_) currentId_ = l.id + 1;
     }
 
 	return BehaviorTreeFactory::CreateTree(nodes, links, character);
@@ -205,7 +209,7 @@ std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& 
 /// @brief 選択されているノードを削除する
 void BehaviorTreeEditor::DeleteSelectedNodes()
 {
-    // 1. 選択されているノードの数を取得
+	// 選択されているノードの数を取得
     int numSelected = ImNodes::NumSelectedNodes();
     if (numSelected <= 0) return;
 
@@ -227,7 +231,7 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
             int inPin = nodeIt->inputPinId;
             int outPin = nodeIt->outputPinId;
 
-            // 2. そのノードのピンに繋がっていたリンクをすべて削除
+			// ノードに接続されているリンクをすべて削除する
             links_.erase(
                 std::remove_if(links_.begin(), links_.end(),
                     [inPin, outPin](const EditorLink& link) {
@@ -236,7 +240,7 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
                 links_.end()
             );
 
-            // 3. ノード自体を削除
+			// ノードを削除
             nodes_.erase(nodeIt);
         }
     }
