@@ -576,6 +576,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 
 
+
+	// ダメージで怯んだらロックオンを解除する
+	lockOnTarget_ = nullptr;
+
 	// 最終的な攻撃力を計算する
 	int finalDamage = damage;
 
@@ -818,8 +822,8 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 // 構え中のロックオン候補を更新する
 void Character::UpdateLockOnTargets()
 {
-	// 構えていない場合はターゲット情報をクリアする
-	if (!isStance_ && !canLockOnWithoutStance_)
+	// 構え中でない場合、ダウン中の場合、ダメージリアクション中の場合で、構えなしでロックオンできない設定の場合は、ロックオンターゲットを解除する
+	if (!isStance_ && !canLockOnWithoutStance_ || IsDown())
 	{
 		lockOnTarget_ = nullptr;
 		return;
@@ -832,9 +836,9 @@ void Character::UpdateLockOnTargets()
 	// ターゲットをクリアする
 	lockOnTarget_ = nullptr;
 
-	// 視線方向との内積が最大の相手を優先ターゲットにする
+	// 最も視線方向に近い相手を探す
+	float bestDistance = std::numeric_limits<float>::max();
 	float bestDot = -1.0f;
-	float bestDistance = 0.0f;
 
 	// 自分とは反対側の陣営を候補にする
 	const CharacterTag targetSide = (characterTag_ == CharacterTag::PlayerSide) ? CharacterTag::EnemySide : CharacterTag::PlayerSide;
@@ -869,18 +873,20 @@ void Character::UpdateLockOnTargets()
 		// 距離と相手ポインタを登録する
 		const float distance = std::sqrt(distanceSq);
 
-		// 視線方向との内積が1.0fに最も近い相手を優先する
+		// 視線方向との内積を計算する
 		const float viewDot = Dot(direction_, toTargetDirection);
-		if (viewDot > bestDot)
+
+		// まず距離が最も近い相手を優先する
+		if (distance < bestDistance)
 		{
-			bestDot = viewDot;
 			bestDistance = distance;
+			bestDot = viewDot;
 			lockOnTarget_ = character;
 		}
-		else if (viewDot == bestDot && distance < bestDistance)
+		else if (distance == bestDistance && viewDot > bestDot)
 		{
-			// 内積が同じ場合は近い相手を優先する
-			bestDistance = distance;
+			// 距離が同じ場合は、視線方向に最も近い相手を優先する
+			bestDot = viewDot;
 			lockOnTarget_ = character;
 		}
 	}

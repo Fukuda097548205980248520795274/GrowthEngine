@@ -1144,6 +1144,15 @@
     <Filter Include="Game\Node\ActionNode\ReleaseTokenNode">
       <UniqueIdentifier>{a2c00318-d793-4090-adea-1e8bc34ac2ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory">
+      <UniqueIdentifier>{91eebf13-34e9-421e-813f-8a6ed1b4cade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI">
+      <UniqueIdentifier>{91fa0e3e-ac1a-4573-8ab1-bc734153a817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard">
+      <UniqueIdentifier>{6ac75813-9328-4f7e-a615-6d1fdd7629f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2051,6 +2060,15 @@
     </ClCompile>
     <ClCompile Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.cpp">
       <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI\BehaviorTreeEditorUI.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3076,6 +3094,12 @@
     </ClInclude>
     <ClInclude Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.h">
       <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

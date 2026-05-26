@@ -3,6 +3,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeSetting/BehaviorTreeSetting.h"
 #include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "BehaviorTreeEditorClipboard/BehaviorTreeEditorClipboard.h"
+#include "BehaviorTreeEditorHistory/BehaviorTreeEditorHistory.h"
 
 class Character;
 
@@ -10,6 +12,9 @@ class Character;
 class BehaviorTreeEditor
 {
 public:
+
+	/// @brief コンストラクタ
+	BehaviorTreeEditor();
 
 	/// @brief セレクタノードを追加する
 	void AddPersistentSelectorNode();
@@ -52,6 +57,16 @@ private:
 	BehaviorTreeSetting saver_{ "BehaviorTree" };
 
 
+	/// @brief 履歴管理クラス
+	std::unique_ptr<BehaviorTreeEditorHistory> history_ = nullptr;
+
+	/// @brief クリップボード管理クラス
+	std::unique_ptr<BehaviorTreeEditorClipboard> clipboard_ = nullptr;
+
+	// エディタのUI描画に使用するフラグ
+	friend class BehaviorTreeEditorHistory;
+	friend class BehaviorTreeEditorClipboard;
+
 private:
 
 	// ノードリスト
@@ -92,43 +107,19 @@ private:
 
 private:
 
-	/// @brief コピーしたノードとリンクの情報を保持する変数
-	void HandleCopy();
+	/// @brief ノードエディタのキャンバスを描画する
+	void DrawNodeEditorCanvas();
 
-	/// @brief コピーしたノードとリンクの情報をクリップボードに保存する
-	void HandlePaste();
+	/// @brief ノードの内容を描画する
+	/// @param node 
+	void DrawNodeContent(EditorNode& node);
 
+	/// @brief 条件ノードの設定UIを描画する
+	/// @param node 
+	void DrawCondtionNodeSettings(EditorNode& node);
 
-	/// @brief コピーしたノードの情報を保持する変数
-	std::vector<EditorNode> clipboardNodes_;
-
-	/// @brief コピーしたリンクの情報を保持する変数
-	std::vector<EditorLink> clipboardLinks_;
-
-
-private:
-
-	/// @brief エディタのスナップショット
-	struct EditorSnapshot
-	{
-		std::vector<EditorNode> nodes; // ノードのリスト
-		std::vector<EditorLink> links; // リンクのリスト
-		int currentId; // 現在のIDカウンタ
-	};
-
-	// Undoの履歴
-	std::vector<EditorSnapshot> undoHistory_;
-
-	// Redoの履歴
-	std::vector<EditorSnapshot> redoHistory_;
-
-	/// @brief 現在の状態を履歴に保存する
-	void SaveHistory();
-
-	/// @brief Undo（元に戻す）を実行する
-	void Undo();
-
-	/// @brief Redo（やり直す）を実行する
-	void Redo();
+	/// @brief アクションノードの設定UIを描画する
+	/// @param node 
+	void DrawActionNodeSettings(EditorNode& node);
 };
 

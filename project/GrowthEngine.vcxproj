@@ -1043,6 +1043,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\AssetManager\AssetManager.cpp" />
     <ClCompile Include="Game\BattleDirector\BattleDirector.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI\BehaviorTreeEditorUI.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
@@ -1396,6 +1399,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\AssetManager\AssetManager.h" />
     <ClInclude Include="Game\BattleDirector\BattleDirector.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeFactory\BehaviorTreeFactory.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeSetting\BehaviorTreeSetting.h" />

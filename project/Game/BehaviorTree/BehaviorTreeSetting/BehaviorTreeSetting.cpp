@@ -19,11 +19,6 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
         n["input_pin"] = node.inputPinId;
         n["output_pin"] = node.outputPinId;
 
-        if (node.type == EditorNodeType::Condition)
-        {
-            n["condition_type"] = static_cast<int>(node.conditionType);
-        }
-
         // アクションノードの場合、アクション名とパラメータも保存
         if (node.type == EditorNodeType::Action)
         {
@@ -105,6 +100,17 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["motionName"] = node.motionName;
             }
         }
+		else if (node.type == EditorNodeType::Condition)
+		{
+			// 条件ノードのパラメータを設定
+			n["condition_type"] = static_cast<int>(node.conditionType);
+
+			// 条件の種類によって保存するパラメータを変える
+			if (node.conditionType == ConditionType::IsTargetInRange || node.conditionType == ConditionType::IsTargetOutOfRange)
+			{
+				n["condition_param"]["distance_to_target"] = node.conditionParam.distanceToTarget;
+			}
+		}
 
         root["nodes"].push_back(n);
     }
@@ -272,11 +278,17 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                     node.motionName = n.value("motionName", "");
                 }
             }
-
-			// 条件ノードの場合は条件の種類も読み込む
-            if (node.type == EditorNodeType::Condition)
+            else if (node.type == EditorNodeType::Condition)
             {
+                // 条件ノードの場合は条件の種類も読み込む
+
 				node.conditionType = static_cast<ConditionType>(n.value("condition_type", 0));
+
+				// 条件の種類によって読み込むパラメータを変える
+                if (node.conditionType == ConditionType::IsTargetInRange || node.conditionType == ConditionType::IsTargetOutOfRange)
+                {
+					node.conditionParam.distanceToTarget = n["condition_param"].value("distance_to_target", 0.0f);
+                }
             }
 
             out_nodes.push_back(node);

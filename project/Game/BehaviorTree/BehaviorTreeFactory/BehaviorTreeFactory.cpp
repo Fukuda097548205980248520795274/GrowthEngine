@@ -123,6 +123,26 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		case ConditionType::IsNotGrabbing:
 			conditionFunc = [character]() { return !character->IsGrabbing(); };
 			break;
+
+			// ターゲットが一定距離内にいるかどうかをチェックする条件
+		case ConditionType::IsTargetInRange:
+            conditionFunc = [character, editor_node]() 
+                {
+				    if (!character->HasTarget()) return false;
+                    float distance = (character->GetLockOnTarget()->GetWorldPosition() - character->GetWorldPosition()).Length();
+					return distance <= editor_node.conditionParam.distanceToTarget;
+				};
+            break;
+
+			// ターゲットが一定距離外にいるかどうかをチェックする条件
+		case ConditionType::IsTargetOutOfRange:
+			conditionFunc = [character, editor_node]()
+				{
+					if (!character->HasTarget()) return true;
+					float distance = (character->GetLockOnTarget()->GetWorldPosition() - character->GetWorldPosition()).Length();
+					return distance > editor_node.conditionParam.distanceToTarget;
+				};
+			break;
         }
 
         // 実際は editor_node.condition_name 等をもとに、

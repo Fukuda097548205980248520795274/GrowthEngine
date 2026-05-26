@@ -34,6 +34,16 @@ enum class ConditionType
 	IsGrabbing, // 掴んでいるかどうか
 
 	IsNotGrabbing, // 掴んでいないかどうか
+
+	IsTargetInRange, // ターゲットが一定距離内にいるかどうか
+
+	IsTargetOutOfRange, // ターゲットが一定距離外にいるかどうか
+};
+
+/// @brief 条件ノードパラメータ
+struct CondtionNodeParam
+{
+	float distanceToTarget = 0.0f; // ターゲットとの距離
 };
 
 // エディタ上のノードを表す構造体
@@ -62,6 +72,9 @@ struct EditorNode
 	CombAttackInitData comboAttackInitData;
 	GrabAttackInitData grabAttackInitData;
 	GrabStrikeAttackInitData grabStrikeAttackInitData;
+
+	// 条件ノードのパラメータ
+	CondtionNodeParam conditionParam;
 };
 
 // エディタ上のリンクを表す構造体
