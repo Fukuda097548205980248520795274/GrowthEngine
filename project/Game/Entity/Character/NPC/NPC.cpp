@@ -21,6 +21,15 @@ NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 /// @brief 初期化
 void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree)
 {
+	if (characterTag_ == CharacterTag::PlayerSide)
+	{
+		model_->param_->meshMaterial[0].color = Vector4(0.1f, 0.1f, 1.0f, 1.0f);
+	}
+	else if (characterTag_ == CharacterTag::EnemySide)
+	{
+		model_->param_->meshMaterial[0].color = Vector4(1.0f, 0.1f, 0.1f, 1.0f);
+	}
+
 	// ビヘイビアツリーを設定する
 	behaviorTree_ = std::move(behaviorTree);
 

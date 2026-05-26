@@ -1123,6 +1123,12 @@
     <Filter Include="Engine\Include\Resource\VertexBufferResource\PlaneVertexResource">
       <UniqueIdentifier>{e85efb4c-fa70-4690-85ad-cb9d1755207a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ObjectEditor">
+      <UniqueIdentifier>{d08aa625-6332-4a00-b04e-f32ca04a81bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AssetManager">
+      <UniqueIdentifier>{b894b85a-3ade-4632-aaac-e21af4df7d8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2009,6 +2015,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ObjectEditor\ObjectEditor.cpp">
+      <Filter>Game\ObjectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\AssetManager\AssetManager.cpp">
+      <Filter>Game\AssetManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3013,6 +3025,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ObjectEditor\ObjectEditor.h">
+      <Filter>Game\ObjectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AssetManager\AssetManager.h">
+      <Filter>Game\AssetManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

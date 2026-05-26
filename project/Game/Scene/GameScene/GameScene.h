@@ -107,24 +107,12 @@ private:
 	std::unique_ptr<Weapon> playerWeapon_ = nullptr;
 
 
-	/// @brief 味方のモデル
-	std::unique_ptr<Render3DSkinningModel> allyModel_ = nullptr;
 
-	/// @brief 味方
-	std::unique_ptr<NPC> ally_ = nullptr;
+	/// @brief NPCのモデルリスト
+	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
-
-	/// @brief 敵のモデル
-	std::unique_ptr<Render3DSkinningModel> enemyModel_ = nullptr;
-
-	/// @brief 敵
-	std::unique_ptr<NPC> enemy_;
-
-	/// @brief 敵の武器のモデル
-	std::unique_ptr<Render3DStaticModel> enemyWeaponModel_ = nullptr;
-
-	/// @brief 敵の武器
-	std::unique_ptr<Weapon> enemyWeapon_ = nullptr;
+	/// @brief NPCのリスト
+	std::list<std::unique_ptr<NPC>> npcs_;
 
 
 	// 床

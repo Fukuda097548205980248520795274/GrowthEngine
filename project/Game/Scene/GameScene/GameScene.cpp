@@ -49,14 +49,6 @@ void GameScene::Initialize()
 	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
 		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Player_Model");
 
-	// 味方のモデルの生成と初期化
-	allyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model");
-
-	// 敵のモデルの生成と初期化
-	enemyModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Enemy_Model");
-
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -74,10 +66,10 @@ void GameScene::Initialize()
 
 
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
-	playerHitboxGroup_->SetCollisionTarget(enemyHurtboxGroup_->GetHandle());
+	enemyHurtboxGroup_->SetCollisionTarget(playerHitboxGroup_->GetHandle());
 
 	// 「敵の攻撃」は「プレイヤーの体」に当たる
-	enemyHitboxGroup_->SetCollisionTarget(playerHurtboxGroup_->GetHandle());
+	playerHurtboxGroup_->SetCollisionTarget(enemyHitboxGroup_->GetHandle());
 
 	// 「床」に当たる
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
@@ -141,49 +133,81 @@ void GameScene::Initialize()
 	//ally_ = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
 	//ally_->Initialize();
 
-	// 敵の武器のモデルの生成と初期化
-	enemyWeaponModel_ = std::make_unique<Render3DStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), "Enemy_Weapon_Model");
+	// 味方の生成と初期化
+	for (int i = 0; i < 4; ++i)
+	{
+		std::unique_ptr<Render3DSkinningModel> allyModel = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
+			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model_" + std::to_string(i));
 
-	// 敵の武器の生成と初期化
-	Weapon::InitData enemyWeaponInitData;
-	enemyWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
-	enemyWeaponInitData.model = enemyWeaponModel_.get();
-	enemyWeaponInitData.durability = 0;
-	enemyWeaponInitData.attackPower = 1.0f;
-	enemyWeaponInitData.category = WeaponCategory::OneHanded;
-	enemyWeaponInitData.isUnbreakable = true;
-	enemyWeaponInitData.landingCollision = landingCollision_->CreateInstance();
-	enemyWeapon_ = std::make_unique<Weapon>(enemyWeaponInitData);
+		Character::InitData allyInitData;
+		allyInitData.position = Vector3(-5.0f * (i + 1), 0.0f, 0.0f);
+		allyInitData.hp = 100;
+		allyInitData.avoidDuration = 0.3f;
+		allyInitData.avoidDistance = 1.5f;
+		allyInitData.model_ = allyModel.get();
+		allyInitData.weapon = nullptr;
+		allyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
+		allyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
+		allyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
+		allyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
+		allyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
+		allyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
+		allyInitData.hAvoidLeftMotion = 0;
+		allyInitData.hAvoidRightMotion = 0;
+		allyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
+		allyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
+		allyInitData.hurtboxGroup = playerHurtboxGroup_.get();
+		allyInitData.hitboxGroup = playerHitboxGroup_.get();
+		allyInitData.landingCollision = landingCollision_->CreateInstance();
 
-	// 敵の生成と初期化
-	Character::InitData enemyInitData;
-	enemyInitData.position = Vector3(5.0f, 0.0f, 0.0f);
-	enemyInitData.hp = 100;
-	enemyInitData.avoidDuration = 0.3f;
-	enemyInitData.avoidDistance = 1.5f;
-	enemyInitData.model_ = enemyModel_.get();
-	enemyInitData.weapon = enemyWeapon_.get();
-	enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
-	enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
-	enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
-	enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
-	enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
-	enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
-	enemyInitData.hAvoidLeftMotion = 0;
-	enemyInitData.hAvoidRightMotion = 0;
-	enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
-	enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
-	enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
-	enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
-	enemyInitData.landingCollision = landingCollision_->CreateInstance();
-	enemy_ = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
-	enemy_->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy_.get()));
+
+		std::unique_ptr<NPC> ally = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
+		ally->Initialize(behaviorTreeEditor_->CreateTree("TEST", ally.get()));
+
+		npcModels_.push_back(std::move(allyModel));
+		npcs_.push_back(std::move(ally));
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		// 敵のモデルの生成と初期化
+		std::unique_ptr<Render3DSkinningModel> enemyModel = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
+			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Enemy_Model_" + std::to_string(i));
+
+		// 敵の生成と初期化
+		Character::InitData enemyInitData;
+		enemyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 0.0f);
+		enemyInitData.hp = 100;
+		enemyInitData.avoidDuration = 0.3f;
+		enemyInitData.avoidDistance = 1.5f;
+		enemyInitData.model_ = enemyModel.get();
+		enemyInitData.weapon = nullptr;
+		enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
+		enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
+		enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
+		enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
+		enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
+		enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
+		enemyInitData.hAvoidLeftMotion = 0;
+		enemyInitData.hAvoidRightMotion = 0;
+		enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
+		enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
+		enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
+		enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
+		enemyInitData.landingCollision = landingCollision_->CreateInstance();
+
+		std::unique_ptr<NPC> enemy = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
+		enemy->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy.get()));
+
+		npcModels_.push_back(std::move(enemyModel));
+		npcs_.push_back(std::move(enemy));
+	}
 
 
 	// 床
 	FloorInitData floorInitData;
 	floorInitData.position = Vector3(0.0f, -2.0f, 0.0f);
-	floorInitData.scale = Vector3(20.0f, 1.0f, 20.0f);
+	floorInitData.scale = Vector3(50.0f, 1.0f, 20.0f);
 	floorInitData.collision = floorCollision_->CreateInstance();
 	floorInitData.model = nullptr;
 	floor_ = std::make_unique<Floor>();
@@ -207,12 +231,8 @@ void GameScene::Update()
 	player_->Update();
 	playerWeapon_->Update();
 
-	//// 味方の更新
-	//ally_->Update();
-
 	// 敵の更新
-	enemy_->Update();
-	enemyWeapon_->Update();
+	for (auto& npc : npcs_)npc->Update();
 
 	// エフェクトの更新
 	effectManager_->Update();
@@ -236,8 +256,7 @@ void GameScene::Draw()
 	//ally_->Draw();
 
 	// 敵の描画
-	enemy_->Draw();
-	enemyWeapon_->Draw();
+	for (auto& npc : npcs_)npc->Draw();
 
 	// エフェクトの描画
 	effectManager_->Draw();

@@ -135,7 +135,7 @@ void ComboAttack::Update()
 					continue;
 
 				// 当たり判定がヒットした場合の処理
-				if (state.hitbox.IsHit())
+				if (target->GetHurtboxChest().IsHit() || target->GetHurtboxHead().IsHit() || target->GetHurtboxRoot().IsHit())
 				{
 					// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
 					Vector3 forward = target->GetPosition() - owner_->GetPosition();
