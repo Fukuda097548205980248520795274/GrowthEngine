@@ -340,7 +340,7 @@ void BehaviorTreeEditor::DrawNodeTable()
             ImGui::PushItemWidth(120.0f);
 
             // アクション選択用のコンボボックス
-            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack" };
+            const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken" };
             int currentItem = 0;
             for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
             {
@@ -558,8 +558,8 @@ void BehaviorTreeEditor::DrawNodeTable()
                 }
             }
 
-			// アクションがNoneでない場合はモーション設定UIも表示
-            if (node.actionName != "None")
+			// None RequestToken ReleaseToke 以外のアクションが選択されている場合はモーション設定UIを表示
+            if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken")
             {
 				if (ImGui::TreeNode("Motion Settings"))
                 {

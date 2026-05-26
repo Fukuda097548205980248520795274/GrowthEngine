@@ -1129,6 +1129,21 @@
     <Filter Include="Game\AssetManager">
       <UniqueIdentifier>{b894b85a-3ade-4632-aaac-e21af4df7d8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BattleDirector">
+      <UniqueIdentifier>{87762a2c-b2e3-43c8-a5c6-ea118a114765}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\RequestToken">
+      <UniqueIdentifier>{e1f7027a-9e38-4e05-b9b5-b7472fbd8b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\ReleaseToken">
+      <UniqueIdentifier>{b21642b8-ea0b-4bd8-9c92-6cac5f4ffd4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\RequestTokenNode">
+      <UniqueIdentifier>{9e4c99de-3988-4a53-8ae1-1a554f015e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\ReleaseTokenNode">
+      <UniqueIdentifier>{a2c00318-d793-4090-adea-1e8bc34ac2ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2021,6 +2036,21 @@
     </ClCompile>
     <ClCompile Include="Game\AssetManager\AssetManager.cpp">
       <Filter>Game\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BattleDirector\BattleDirector.cpp">
+      <Filter>Game\BattleDirector</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\RequestToken\RequestToken.cpp">
+      <Filter>Game\Action\RequestToken</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\ReleaseToken\ReleaseToken.cpp">
+      <Filter>Game\Action\ReleaseToken</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.cpp">
+      <Filter>Game\Node\ActionNode\ReleaseTokenNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.cpp">
+      <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3031,6 +3061,21 @@
     </ClInclude>
     <ClInclude Include="Game\AssetManager\AssetManager.h">
       <Filter>Game\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BattleDirector\BattleDirector.h">
+      <Filter>Game\BattleDirector</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\RequestToken\RequestToken.h">
+      <Filter>Game\Action\RequestToken</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\ReleaseToken\ReleaseToken.h">
+      <Filter>Game\Action\ReleaseToken</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.h">
+      <Filter>Game\Node\ActionNode\ReleaseTokenNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.h">
+      <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

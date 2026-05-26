@@ -1,4 +1,5 @@
 #include "NPC.h"
+#include "BattleDirector/BattleDirector.h"
 
 namespace
 {
@@ -50,6 +51,9 @@ void NPC::Update()
 		{
 			grabbedTimer_ += engine_->GetDeltaTime();
 		}
+
+		// 攻撃トークンを返却する
+		BattleDirector::GetInstance().ReleaseAttackToken(this);
 
 		Character::Update();
 		return;

@@ -8,6 +8,8 @@
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
+#include "Node/ActionNode/RequestTokenNode/RequestTokenNode.h"
+#include "Node/ActionNode/ReleaseTokenNode/ReleaseTokenNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param editor_nodes 
@@ -154,10 +156,20 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			auto grabStrikeAction = std::make_unique<GrabStrikeAttack>(character, initData);
 			runtime_node = std::make_unique<GrabStrikeAttackNode>(std::move(grabStrikeAction));
         }
+		else if (editor_node.actionName == "RequestToken")
+		{
+			// トークン要求ノードの生成
+            runtime_node = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character));
+		} 
+        else if (editor_node.actionName == "ReleaseToken")
+		{
+			// トークン解放ノードの生成
+            runtime_node = std::make_unique<ReleaseTokenNode>(std::make_unique<ReleaseToken>(character));
+		}
         else
         {
             // 何も設定されていない、または該当しない場合（何もしないノードにする等）
-            // runtime_node = nullptr;
+            runtime_node = nullptr;
         }
 
         break;
