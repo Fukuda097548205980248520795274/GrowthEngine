@@ -68,9 +68,15 @@ namespace Engine
 	/// @return 
 	int32_t CreateJoint(const std::vector<ModelNode>& nodes, const ModelNode& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
-	/// @brief スケルトンを更新する
+	/// @brief スケルトンのフォワードキネマティクス
 	/// @param skeleton 
-	void UpdateSkeleton(Skeleton& skeleton);
+	void ForwardKinematices(Skeleton& skeleton);
+
+	/// @brief スケルトンのインバースキネマティクス
+	/// @param skeleton 
+	/// @param boneName 
+	/// @param targetPosition
+	void InverseKinematices(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition);
 
 	/// @brief 任意の時刻の値を取得する
 	/// @param keyframe 

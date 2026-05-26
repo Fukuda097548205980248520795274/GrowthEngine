@@ -27,6 +27,14 @@ private:
 	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
 
 
+	/*---------------
+	    通常画面
+	---------------*/
+
+	/// @brief 通常画面内のヴィネッティング
+	std::unique_ptr<PostEffectVignetting> normalVignetting_ = nullptr;
+
+
 	/*--------------------
 	    スタイルチェンジ
 	---------------------*/
@@ -57,7 +65,7 @@ private:
 	std::unique_ptr<PostEffectVignetting> styleChangeVignetting_ = nullptr;
 
 	// スタイルチェンジ中のビネットの強さ
-	static constexpr float kStyleChangeVignettingIntensity = 0.05f;
+	static constexpr float kStyleChangeVignettingIntensity = 0.1f;
 
 	/// @brief 旋嵐スタイルのビネットカラー
 	static constexpr Vector3 kTempestStyleVignettingColor = Vector3(0.0f, 0.0f, 0.5f);

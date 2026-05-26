@@ -2,6 +2,7 @@
 #include "Store/TextureStore/TextureStore.h"
 
 #include <cassert>
+#include <unordered_map>
 #include <list>
 #include "Func/Interpolation/Interpolation.h"
 
@@ -411,7 +412,7 @@ Engine::Skeleton Engine::CreateSkeleton(const std::vector<ModelNode>& nodes)
 	}
 
 	// スケルトンを更新する
-	UpdateSkeleton(skeleton);
+	ForwardKinematices(skeleton);
 
 	return skeleton;
 }
@@ -442,9 +443,9 @@ int32_t Engine::CreateJoint(const std::vector<ModelNode>& nodes, const ModelNode
 	return joint.index;
 }
 
-/// @brief スケルトンを更新する
+/// @brief スケルトンのフォワードキネマティクスを行う
 /// @param skeleton 
-void Engine::UpdateSkeleton(Skeleton& skeleton)
+void Engine::ForwardKinematices(Skeleton& skeleton)
 {
 	// 全てのjointを更新する
 	for (Joint& joint : skeleton.joints)
@@ -463,6 +464,83 @@ void Engine::UpdateSkeleton(Skeleton& skeleton)
 			// 親がいないので、ローカル行列とSkeletonSpaceMatrixは一致する
 			joint.skeletonSpaceMatrix = joint.localMatrix;
 			joint.worldMatrix = joint.localMatrix;
+		}
+	}
+}
+
+/// @brief スケルトンのインバースキネマティクス
+/// @param skeleton 
+void Engine::InverseKinematices(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition)
+{
+	// 末端のジョイントのインデックス
+	const int32_t effectedBoneIndex = skeleton.jointMap[effectedBoneName];
+
+	// 反復回数
+	const int32_t kMaxIteration = 5;
+
+	// 許容誤差
+	const float kThreshold = 0.01f;
+
+	for (int i = 0; i < kMaxIteration; ++i)
+	{
+		// 末端のジョイントからたどるためのインデックス
+		int32_t currentIndex = effectedBoneIndex;
+
+		// 親がいなくなるまでループ
+		while (true)
+		{
+			// 現在のジョイントと末端のジョイント
+			Joint& currentJoint = skeleton.joints[currentIndex];
+			Joint& effectedJoint = skeleton.joints[effectedBoneIndex];
+
+			// 現在のジョイントの位置と末端のジョイントの位置
+			Vector3 currentPosition = Vector3(currentJoint.worldMatrix.m[3][0], currentJoint.worldMatrix.m[3][1], currentJoint.worldMatrix.m[3][2]);
+			Vector3 effectedPosition = Vector3(effectedJoint.worldMatrix.m[3][0], effectedJoint.worldMatrix.m[3][1], effectedJoint.worldMatrix.m[3][2]);
+
+			// ターゲットと末端の距離が十分に近ければ終了
+			if ((targetPosition - effectedPosition).Length() < kThreshold)
+				return;
+
+			// 現在のジョイントから見た末端のジョイントとターゲットの方向
+			Vector3 toEffected = (effectedPosition - currentPosition).Normalize();
+			Vector3 toTarget = (targetPosition - currentPosition).Normalize();
+
+			// 回転軸を求める
+			float dot = Dot(toEffected, toTarget);
+			dot = std::clamp(dot, -1.0f, 1.0f);
+			float angle = std::acos(dot);
+			Vector3 axis = Cross(toEffected, toTarget).Normalize();
+
+			
+			if (std::abs(angle) > 0.001f && axis.Length() > 0.0f)
+			{
+				Vector3 localAxis = axis;
+
+				if (currentJoint.parent)
+				{
+					// 親の逆ワールド行列
+					Matrix4x4 inverseParentWorldMatrix = skeleton.joints[*currentJoint.parent].worldMatrix.Inverse();
+
+					// 回転軸をローカル空間に変換して回転を適用する
+					localAxis = TransformNormal(localAxis, inverseParentWorldMatrix).Normalize();
+				}
+
+				// 回転をクォータニオンに変換する
+				Quaternion deltaRotation = ToQuaternion(angle, localAxis);
+
+				// 回転を適用する
+				currentJoint.transform.rotate = currentJoint.transform.rotate * deltaRotation;
+				currentJoint.transform.rotate = currentJoint.transform.rotate.Normalize();
+
+				// 回転を適用した後は、フォワードキネマティクスで行列を更新する必要がある
+				ForwardKinematices(skeleton);
+			}
+
+			// 親がいなければ終了
+			if (!currentJoint.parent)
+				break;
+
+			currentIndex = *currentJoint.parent;
 		}
 	}
 }

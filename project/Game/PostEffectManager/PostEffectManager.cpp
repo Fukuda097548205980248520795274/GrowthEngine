@@ -4,6 +4,8 @@
 /// @brief 初期化
 void PostEffectManager::Initialize()
 {
+	normalVignetting_ = std::make_unique<PostEffectVignetting>("Normal_Vignetting");
+
 	// スタイルチェンジ中のグレースケールの生成と初期化
 	styleChangeGrayscale_ = std::make_unique<PostEffectGrayscale>("StyleChange_Grayscale");
 
@@ -19,6 +21,9 @@ void PostEffectManager::Initialize()
 /// @param player 
 void PostEffectManager::Draw(Player* player)
 {
+	// 通常画面のビネットを描画する
+	normalVignetting_->Draw();
+
 	// プレイヤーによる描画処理の後にポストエフェクトを描画する
 	if (player)
 	{
