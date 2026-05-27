@@ -13,11 +13,11 @@ public:
 	/// @brief 実行
 	void Exec() override;
 
-	/// @brief 更新処理
-	void Update() override;
+	/// @brief 更新処理 ここでは特に何もしない
+	void Update() override {}
 
-	/// @brief 使用中かどうか
+	/// @brief 使用中かどうか ここでは常に使用していないとみなす
 	/// @return 
-	bool IsUse() const override;
+	bool IsUse() const override { return false; }
 };
 

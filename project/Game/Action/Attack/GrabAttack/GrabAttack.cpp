@@ -82,7 +82,8 @@ void GrabAttack::Update()
 					// 死亡しているキャラクターは判定しない
 					if (target->IsDead())continue;
 
-					if (hitbox_.IsHit()) // ※実際の衝突判定処理に合わせてください
+					// ヒットしたかどうか
+					if (target->GetHurtboxChest().IsHit() || target->GetHurtboxHead().IsHit() || target->GetHurtboxRoot().IsHit())
 					{
 						// 【つかみ成功】
 						hasHit_ = true;

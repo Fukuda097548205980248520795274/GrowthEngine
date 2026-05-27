@@ -10,25 +10,26 @@ Node::State ComboAttackNode::Exec()
     if (!combo->IsExec() && !combo->IsSuccess() && !combo->IsFailure())
         combo->Exec();
 
-	// アクションが失敗している、あるいは使用されていない場合は失敗
-	if (combo->IsFailure() || !combo->IsUse())
+	// アクションが失敗していて、かつ使用中でない場合は失敗とする
+	if (combo->IsFailure() && !combo->IsUse())
 	{
-		combo->Reset();
 		return State::Failure;
+		combo->Reset();
 	}
 
 	// コンボキャンセル可能な状態なら成功とする
 	if (combo->IsCanNextCombo())
 	{
-		combo->Reset();
 		return State::Success;
+		combo->Reset();
 	}
     
 	// アクションの状態に応じてノードの状態を返す
 	State result = State::Failure;
 	if (combo->IsSuccess() ||combo->IsFailure())
 	{
-		// アクションをリセットする
+		// アクションの状態に応じてノードの状態を返す
+		result = combo->IsSuccess() ? State::Success : State::Failure;
 		action_->Reset();
 	}
 	else

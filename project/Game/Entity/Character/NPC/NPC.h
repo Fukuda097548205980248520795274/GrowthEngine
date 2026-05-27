@@ -20,6 +20,14 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief 現在の攻撃のクールタイムを取得する
+	/// @return 
+	float GetAttackCooltime()const override { return attackCooltime_; }
+
+	/// @brief 攻撃のクールタイムを設定する
+	/// @param cooltime 
+	void SetAttackCooltime(float cooltime)override { attackCooltime_ = cooltime; }
+
 
 private:
 
@@ -40,5 +48,16 @@ private:
 
 	/// @brief ビヘイビアツリー
 	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
+
+
+
+private:
+
+	/// @brief 攻撃クールタイムの更新処理
+	/// @param deltaTime 
+	void UpdateAttackCooltime(float deltaTime);
+
+	/// @brief 攻撃のクールタイム
+	float attackCooltime_ = 0.0f;
 };
 

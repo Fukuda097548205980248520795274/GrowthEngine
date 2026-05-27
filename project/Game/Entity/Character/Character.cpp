@@ -547,34 +547,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 	}
 
-	// 受け流しは、ダメージリアクションを受け流しに設定して、受け流しモーションを再生する
-	if (damageReaction == DamageReaction::Parried)
-	{
-		currentDamageReaction_ = DamageReactionState::Parried;
-		SetAnimation(hGuardHitMotion_, false, true);
-		damageReactionTimer_ = 2.0f;
-
-		// ノックバックを入れる
-		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
-
-		// ダメージ無効
-		return false;
-	}
-
-	// 弾きは、ダメージリアクションを弾きに設定して、弾きモーションを再生する
-	if (damageReaction == DamageReaction::Deflect)
-	{
-		currentDamageReaction_ = DamageReactionState::Deflect;
-		SetAnimation(hGuardHitMotion_, false, true);
-		damageReactionTimer_ = 1.0f;
-
-		// ノックバックを入れる
-		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
-
-		// ダメージ無効
-		return false;
-	}
-
 
 
 	// ダメージで怯んだらロックオンを解除する
@@ -637,6 +609,32 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 
 	// 受け流し成功モーションを再生する
 	SetAnimation(hDamageHeavyMotion_, true, false);
+}
+
+/// @brief 弾かれた時の処理
+/// @param pushDirection 
+void Character::OnDeflect(const Vector3& pushDirection, float knockBackPower)
+{
+	// 攻撃や移動をキャンセルする
+	MoveStop();
+	currentAttack_ = nullptr;
+	currentMove_ = nullptr;
+	currentAvoid_ = nullptr;
+
+	// 回避とダッシュのフラグをリセットする
+	isAvoid_ = false;
+	isDash_ = false;
+	bufferedAttackInput_ = AttackInputType::None;
+
+	// 弾き成功のリアクションを設定する
+	currentDamageReaction_ = DamageReactionState::Deflect;
+	damageReactionTimer_ = 1.0f;
+
+	// ノックバックを入れる
+	knockbackVelocity_ = pushDirection * knockBackPower;
+
+	// 弾き成功モーションを再生する
+	SetAnimation(hGuardHitMotion_, true, false);
 }
 
 /// @brief 掴みダメージを受けた時の処理
@@ -1248,8 +1246,8 @@ void Character::ExecuteDeflect(Character* attacker)
 	// ノックバック方向を正規化する
 	pushDir = pushDir.Normalize();
 
-	// 相手に弾きのダメージとリアクションを与える
-	attacker->OnDamage(0, DamageReaction::Deflect, 0.2f, pushDir, GetWorldPosition(), this);
+	// 相手に弾きのリアクションを与える
+	attacker->OnDeflect(pushDir, 5.0f);
 
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())

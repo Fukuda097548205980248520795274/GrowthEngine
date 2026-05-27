@@ -128,6 +128,10 @@ public:
 	/// @return 
 	virtual void OnParried(const Vector3& pullPosition, const Vector3& pushDirection);
 
+	/// @brief 弾かれた時の処理
+	/// @param pushDirection 
+	virtual void OnDeflect(const Vector3& pushDirection, float knockBackPower);
+
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
 	virtual void OnGrabDamage(int damage);
@@ -201,7 +205,15 @@ public:
 
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
-	void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
+	virtual void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
+
+	/// @brief 現在の攻撃のクールタイムを取得する
+	/// @return 
+	virtual float GetAttackCooltime()const { return 0.0f; }
+
+	/// @brief 攻撃のクールタイムを設定する
+	/// @param cooltime 
+	virtual void SetAttackCooltime(float cooltime) { (void)cooltime; }
 
 	/// @brief 現在の攻撃を取得する
 	/// @return 
@@ -342,6 +354,10 @@ public:
 	/// @return 
 	bool IsParried() const { return currentDamageReaction_ == DamageReactionState::Parried; }
 
+	/// @brief 弾かれたかどうか
+	/// @return 
+	bool IsDeflect() const { return currentDamageReaction_ == DamageReactionState::Deflect; }
+
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
 	void StartStyleChange(FightStyle style);
@@ -389,6 +405,9 @@ public:
 	/// @brief 弾きが可能かどうかを取得する
 	/// @return 
 	bool CanDeflect() const { return canDeflect_; }
+
+	/// @brief プレイヤーかどうかを取得する
+	bool IsPlayer() const { return isPlayer_; }
 
 
 protected:

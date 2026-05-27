@@ -24,6 +24,6 @@ bool Attack::IsUse() const
 {
 	if (!IsExec()) return false;
 
-	// 現在の攻撃がこの攻撃であればtrue
+	// 現在の攻撃が自分自身かどうか
 	return this == owner_->GetCurrentAttack();
 }

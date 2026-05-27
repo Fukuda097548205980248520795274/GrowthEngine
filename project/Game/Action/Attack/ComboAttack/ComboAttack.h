@@ -54,7 +54,7 @@ public:
 
 	/// @brief 次の攻撃に移行できるかどうか
 	/// @return 
-	bool IsCanNextCombo()const { return !IsExec() || (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_); }
+	bool IsCanNextCombo()const;
 
 
 private:

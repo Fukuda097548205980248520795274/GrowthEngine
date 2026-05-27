@@ -55,13 +55,6 @@ void ComboAttack::Exec()
 /// @brief 更新処理
 void ComboAttack::Update()
 {
-	// 攻撃中に回避、スタイルチェンジが行われた場合は、攻撃を終了する
-	if(owner_->IsJustAvoided() || owner_->IsStyleChanging())
-	{
-		this->Exit();
-		return;
-	}
-
 	// コンボキャンセル受付時間内であれば、次の攻撃への入力をチェックする
 	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
@@ -185,7 +178,7 @@ void ComboAttack::Update()
 	}
 
 	// 攻撃中に受け流された場合は攻撃を終了する
-	if (owner_->IsParried())
+	if (owner_->IsParried() || owner_->IsDeflect() || owner_->IsJustAvoided() || owner_->IsStyleChanging())
 	{
 		this->Exit();
 		return;
@@ -251,4 +244,15 @@ void ComboAttack::Exit()
 
 	// 基底の終了処理
 	Attack::Exit();
+}
+
+/// @brief 次の攻撃に移行できるかどうか
+/// @return 
+bool ComboAttack::IsCanNextCombo()const
+{
+	// プレイヤー以外のキャラクターはコンボキャンセルできないと仮定する
+	if (!owner_->IsPlayer())return false;
+
+	// 攻撃タイマーがコンボキャンセル受付時間内であれば、次の攻撃に移行できると仮定する
+	return !IsExec() || (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_); 
 }
