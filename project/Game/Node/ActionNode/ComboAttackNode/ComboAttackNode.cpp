@@ -13,15 +13,15 @@ Node::State ComboAttackNode::Exec()
 	// アクションが失敗していて、かつ使用中でない場合は失敗とする
 	if (combo->IsFailure() && !combo->IsUse())
 	{
-		return State::Failure;
 		combo->Reset();
+		return State::Failure;
 	}
 
 	// コンボキャンセル可能な状態なら成功とする
 	if (combo->IsCanNextCombo())
 	{
-		return State::Success;
 		combo->Reset();
+		return State::Success;
 	}
     
 	// アクションの状態に応じてノードの状態を返す

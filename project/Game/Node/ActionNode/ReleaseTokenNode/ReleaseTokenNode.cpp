@@ -12,3 +12,14 @@ Node::State ReleaseTokenNode::Exec()
 
 	return State::Success;
 }
+
+/// @brief 中断処理
+void ReleaseTokenNode::Abort()
+{
+	// アクションがない場合は失敗
+	ReleaseToken* token = GetReleaseToken();
+	if (!token)return;
+
+	// 実行と更新
+	token->Exec();
+}

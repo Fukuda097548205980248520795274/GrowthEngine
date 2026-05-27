@@ -15,7 +15,7 @@ public:
 	State Exec() override;
 
 	/// @brief 中断処理
-	void Abort() override;
+	virtual void Abort() override;
 
 
 protected:
