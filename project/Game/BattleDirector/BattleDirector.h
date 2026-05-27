@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 #include <set>
+#include <unordered_map>
 
 class Character;
 
@@ -29,7 +30,10 @@ private:
 	// 最大攻撃トークン数
 	size_t maxAttackTokens_ = 1;
 
-	// 攻撃トークンを保持しているNPCのセット
-	std::set<Character*> tokenHolders_;
+	/// @brief 攻撃トークンを保持しているキャラクターのセット
+	std::unordered_map<Character*, std::set<Character*>> targetTokenHolders_;
+
+	/// @brief NPCとそのターゲットのマッピング
+	std::unordered_map<Character*, Character*> npcToTargetMap_;
 };
 

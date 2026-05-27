@@ -1,4 +1,5 @@
 #include "BattleDirector.h"
+#include "Entity/Character/Character.h"
 
 /// @brief インスタンスを取得する
 /// @return 
@@ -13,20 +14,38 @@ BattleDirector& BattleDirector::GetInstance()
 /// @return 
 bool BattleDirector::RequestAttackToken(Character* npc)
 {
-	// すでにトークンを保持しているNPCなら、要求を許可する
-	if (tokenHolders_.find(npc) != tokenHolders_.end())
+	// NPCが現在狙っているターゲットを取得
+	Character* target = npc->GetLockOnTarget();
+
+	// ターゲットがいない場合は、攻撃トークンの要求を許可する
+	if (!target)return true;
+
+	// 現在の攻撃トークン保持者を取得
+	auto it = npcToTargetMap_.find(npc);
+	if (it != npcToTargetMap_.end())
 	{
+		// すでに攻撃トークンを保持している場合は、同じターゲットに対する要求かどうかを確認する
+		if (it->second == target)return true;
+
+		// 別のターゲットに対する要求の場合は、現在の攻撃トークンを返却する
+		ReleaseAttackToken(npc);
+	}
+
+	// 現在の攻撃トークン保持者を取得
+	auto& holders = targetTokenHolders_[target];
+
+	// 攻撃トークンの最大数に達していない場合は、攻撃トークンを許可する
+	if (holders.size() < maxAttackTokens_)
+	{
+		// 攻撃トークンを保持しているキャラクターのセットにNPCを追加する
+		holders.insert(npc);
+
+		// NPCとそのターゲットのマッピングを更新する
+		npcToTargetMap_[npc] = target;
 		return true;
 	}
 
-	// トークン保持NPCの数が最大数未満なら、要求を許可してNPCをセットに追加する
-	if (tokenHolders_.size() < maxAttackTokens_)
-	{
-		tokenHolders_.insert(npc);
-		return true;
-	}
-
-	// それ以外の場合は、要求を拒否する
+	// 攻撃トークンの最大数に達している場合は、攻撃トークンの要求を拒否する
 	return false;
 }
 
@@ -34,5 +53,24 @@ bool BattleDirector::RequestAttackToken(Character* npc)
 /// @param npc 
 void BattleDirector::ReleaseAttackToken(Character* npc)
 {
-	tokenHolders_.erase(npc);
+	// NPCが現在狙っているターゲットを取得
+	auto it = npcToTargetMap_.find(npc);
+	if (it == npcToTargetMap_.end())return;
+
+	// 現在の攻撃トークン保持者を取得
+	Character* target = it->second;
+
+	// NPCとそのターゲットのマッピングを削除する
+	auto targetIt = targetTokenHolders_.find(target);
+	if (targetIt != targetTokenHolders_.end())
+	{
+		targetIt->second.erase(npc);
+
+		// NPCとそのターゲットのマッピングを削除する
+		if (targetIt->second.empty())
+			targetTokenHolders_.erase(targetIt);
+	}
+
+	// NPCとそのターゲットのマッピングを削除する
+	npcToTargetMap_.erase(it);
 }
