@@ -32,6 +32,13 @@ void ApproachTargetMove::Update()
 	// ターゲットとの距離の二乗を計算する
     const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
 
+	// 動けない状態や回避中の場合は移動を停止して終了する
+    if (owner_->IsJustAvoided() ||  owner_->IsGrabbing() || owner_->IsIncapacitated())
+    {
+        this->Exit();
+        return;
+    }
+
 	// ターゲットとの距離が停止距離以内の場合は移動を停止して終了する
     if (distanceSq <= stopDistanceSq_)
     {

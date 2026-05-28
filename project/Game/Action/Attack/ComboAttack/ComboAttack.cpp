@@ -177,8 +177,8 @@ void ComboAttack::Update()
 		}
 	}
 
-	// 攻撃の特定の時間帯は、ダメージリアクション、回避成功、スタイルチェンジなどの状態をチェックして、攻撃を中断する
-	if (owner_->IsDamageReaction() || owner_->IsJustAvoided() || owner_->IsStyleChanging())
+	// 攻撃の特定の時間帯は、攻撃者が回避、掴み、または無力化されているかどうかを確認する
+	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
 	{
 		this->Exit();
 		return;

@@ -140,7 +140,8 @@ void GameScene::Initialize()
 			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model_" + std::to_string(i));
 
 		Character::InitData allyInitData;
-		allyInitData.position = Vector3(-5.0f * (i + 1), 0.0f, 0.0f);
+		allyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 5.0f);
+		allyInitData.rotate = Vector3(0.0f, std::numbers::pi_v<float>, 0.0f);
 		allyInitData.hp = 100;
 		allyInitData.avoidDuration = 0.3f;
 		allyInitData.avoidDistance = 1.5f;
@@ -177,6 +178,7 @@ void GameScene::Initialize()
 		// 敵の生成と初期化
 		Character::InitData enemyInitData;
 		enemyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 0.0f);
+		enemyInitData.rotate = Vector3(0.0f, 0.0f, 0.0f);
 		enemyInitData.hp = 100;
 		enemyInitData.avoidDuration = 0.3f;
 		enemyInitData.avoidDistance = 1.5f;

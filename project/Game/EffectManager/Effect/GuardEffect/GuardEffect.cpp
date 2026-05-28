@@ -34,7 +34,6 @@ void GuardEffect::Update()
 	{
 		float t2 = t / 0.5f;
 		instanceModel_->param_.size.radiusTop = Lerp(0.25f, 0.75f, t2);
-		instanceModel_->param_.material.color.w = Lerp(0.25f, 0.0f, t2);
 	}
 
 	// 基底クラスの更新

@@ -52,6 +52,9 @@ Character::Character(const InitData& initData) : Entity()
 	// 位置
 	worldTransform_->translate_ = initData.position;
 
+	// 回転
+	worldTransform_->rotate_ = initData.rotate.Normalize();
+
 	// 体力
 	hp_ = initData.hp;
 
@@ -353,8 +356,8 @@ void Character::Update()
 	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
-	// ロックオンしているターゲットがいて、掴まれておらず、ダメージリアクション中でない場合は、ターゲットの方向を向くようにする
-	if (lockOnTarget_ && !IsGrabbing() && !IsDown() && !IsParried() && !IsDamageReaction())
+	// ロックオンしているターゲットがいて、掴んでおらず、無力化されていない場合は、ターゲットの方向を向くようにする
+	if (lockOnTarget_ && !IsGrabbing() && !IsIncapacitated())
 	{
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;
@@ -432,11 +435,11 @@ void Character::StartUpdate()
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
 	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker)
 {
-	// 攻撃や移動をキャンセルする
+	// すでに死亡している場合は、ダメージを受けない
+	if (IsDead())return false;
+
+	// 攻撃をキャンセルする
 	MoveStop();
-	currentAttack_ = nullptr;
-	currentMove_ = nullptr;
-	currentAvoid_ = nullptr;
 
 	// 回避とダッシュのフラグをリセットする
 	isAvoid_ = false;
@@ -549,9 +552,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 
 
-	// ダメージで怯んだらロックオンを解除する
-	lockOnTarget_ = nullptr;
-
 	// 最終的な攻撃力を計算する
 	int finalDamage = damage;
 
@@ -577,6 +577,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	if (hp_ == 0)
 	{
 		isDead_ = true;
+		SetAnimation(hDownFallMotion_, true, false);
 	}
 
 	return true; // ダメージが通った
@@ -588,11 +589,13 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 /// @return 
 void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirection)
 {
+	// すでに死亡している場合は、何もしない
+	if (IsDead())return;
+
 	// 攻撃や移動をキャンセルする
 	MoveStop();
-	currentAttack_ = nullptr;
-	currentMove_ = nullptr;
-	currentAvoid_ = nullptr;
+
+	// 回避とダッシュのフラグをリセットする
 	isAvoid_ = false;
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
@@ -615,11 +618,11 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 /// @param pushDirection 
 void Character::OnDeflect(const Vector3& pushDirection, float knockBackPower)
 {
+	// すでに死亡している場合は、何もしない
+	if (IsDead())return;
+
 	// 攻撃や移動をキャンセルする
 	MoveStop();
-	currentAttack_ = nullptr;
-	currentMove_ = nullptr;
-	currentAvoid_ = nullptr;
 
 	// 回避とダッシュのフラグをリセットする
 	isAvoid_ = false;
@@ -820,8 +823,8 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 // 構え中のロックオン候補を更新する
 void Character::UpdateLockOnTargets()
 {
-	// 構え中でない場合、ダウン中の場合、ダメージリアクション中の場合で、構えなしでロックオンできない設定の場合は、ロックオンターゲットを解除する
-	if (!isStance_ && !canLockOnWithoutStance_ || IsDown())
+	// 構え中でない場合、構えなしでロックオンできない設定の場合、ダウン中の場合、すでにロックオンしている相手が死んでいる場合は、ロックオンを解除する
+	if ((!isStance_ && !canLockOnWithoutStance_) || IsDown() || (lockOnTarget_ && lockOnTarget_->IsDead()))
 	{
 		lockOnTarget_ = nullptr;
 		return;
@@ -845,12 +848,13 @@ void Character::UpdateLockOnTargets()
 	for (Character* character : characters_)
 	{
 		// 無効または自分自身は除外する
-		if (!character || character == this)
-			continue;
+		if (!character || character == this)continue;
 
 		// 別の側ではない相手は除外する
-		if (character->GetCharacterTag() != targetSide)
-			continue;
+		if (character->GetCharacterTag() != targetSide)continue;
+
+		// 死んでいる相手は除外する
+		if(character->IsDead())continue;
 
 		// 自分から相手へのベクトルを計算する
 		Vector3 toTarget = character->GetWorldPosition() - selfPosition;
@@ -943,100 +947,104 @@ void Character::UpdateAnimation()
 	if (isStyleChanging_ && isPlayer_)
 		dt = engine_->GetDeltaTime();
 
-	// スタイルチェンジ中でない場合は、通常のモーションを再生する
-	if (!IsStyleChanging())
+	// 死亡していない場合は、通常のモーションを再生する
+	if (!IsDead())
 	{
-		if (!currentAttack_ && !IsDamageReaction() && !IsGrabbedDamage())
+		// スタイルチェンジ中でない場合は、通常のモーションを再生する
+		if (!IsStyleChanging())
 		{
-			// 立ちモーションを再生する
-			SetAnimation(hStandMotion_, false, true);
-
-			//　移動している場合は歩きモーションを再生する
-			if (targetVelocity_.Length() > 0.0f)
-				SetAnimation(hWalkMotion_, false, true);
-
-			// ダッシュしている場合はダッシュモーションを再生する
-			if (isDash_)
-				SetAnimation(hDashMotion_, false, true);
-
-			// 構え中は構えモーションを優先して再生する
-			if (isStance_)
-				SetAnimation(hStanceMotion_, false, true);
-
-			// 防御の待機モーションを再生する
-			if (IsGuard())
-				SetAnimation(hGuardMotion_, true, false);
-
-			// 回避中は回避モーションを優先して再生する
-			if (isAvoid_)
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbedDamage())
 			{
-				// 回避方向
-				Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
+				// 立ちモーションを再生する
+				SetAnimation(hStandMotion_, false, true);
 
-				if (avoidDirection.Length() > 0.0f)
+				//　移動している場合は歩きモーションを再生する
+				if (targetVelocity_.Length() > 0.0f)
+					SetAnimation(hWalkMotion_, false, true);
+
+				// ダッシュしている場合はダッシュモーションを再生する
+				if (isDash_)
+					SetAnimation(hDashMotion_, false, true);
+
+				// 構え中は構えモーションを優先して再生する
+				if (isStance_)
+					SetAnimation(hStanceMotion_, false, true);
+
+				// 防御の待機モーションを再生する
+				if (IsGuard())
+					SetAnimation(hGuardMotion_, true, false);
+
+				// 回避中は回避モーションを優先して再生する
+				if (isAvoid_)
 				{
-					// キャラクターの向き（前）と右方向
-					Vector3 forward = direction_;
-					Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
+					// 回避方向
+					Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
 
-					// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
-					float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
-					float localX = Dot(avoidDirection, right);   // +なら右、-なら左
-
-					// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-					if (std::abs(localZ) > std::abs(localX))
+					if (avoidDirection.Length() > 0.0f)
 					{
-						// 前後への回避
-						if (localZ > 0.0f)
+						// キャラクターの向き（前）と右方向
+						Vector3 forward = direction_;
+						Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
+
+						// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
+						float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
+						float localX = Dot(avoidDirection, right);   // +なら右、-なら左
+
+						// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
+						if (std::abs(localZ) > std::abs(localX))
 						{
-							// 前回避モーションを再生する
-							SetAnimation(hAvoidFrontMotion_, false, false);
+							// 前後への回避
+							if (localZ > 0.0f)
+							{
+								// 前回避モーションを再生する
+								SetAnimation(hAvoidFrontMotion_, false, false);
+							}
+							else
+							{
+								// 後ろ回避モーションを再生する
+								SetAnimation(hAvoidBackMotion_, false, false);
+							}
 						}
 						else
 						{
-							// 後ろ回避モーションを再生する
-							SetAnimation(hAvoidBackMotion_, false, false);
-						}
-					}
-					else
-					{
-						// 左右への回避
-						if (localX > 0.0f)
-						{
-							// 右回避モーションを再生する
-							SetAnimation(hAvoidRightMotion_, false, false);
-						}
-						else
-						{
-							// 左回避モーションを再生する
-							SetAnimation(hAvoidLeftMotion_, false, false);
+							// 左右への回避
+							if (localX > 0.0f)
+							{
+								// 右回避モーションを再生する
+								SetAnimation(hAvoidRightMotion_, false, false);
+							}
+							else
+							{
+								// 左回避モーションを再生する
+								SetAnimation(hAvoidLeftMotion_, false, false);
+							}
 						}
 					}
 				}
 			}
-		}
 
-		// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
-		if (!IsGrabStrikeAttack())
-		{
-			// 掴まれている場合は掴まれモーションを再生する
-			if (IsGrabbed() && !IsGrabbedDamage())
+			// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
+			if (!IsGrabStrikeAttack())
 			{
-				SetAnimation(hGrabbedMotion_, false, true);
-			}
-			else if (isGuardReaction_)
-			{
-				// 防御成功時のノックバック中
-				guardReactionTimer_ += dt;
-				if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
+				// 掴まれている場合は掴まれモーションを再生する
+				if (IsGrabbed() && !IsGrabbedDamage())
 				{
-					isGuardReaction_ = false;
+					SetAnimation(hGrabbedMotion_, false, true);
 				}
-			}
-			else if (IsGrabbing())
-			{
-				// つかみモーションを再生する
-				SetAnimation(hGrabMotion_, false, true);
+				else if (isGuardReaction_)
+				{
+					// 防御成功時のノックバック中
+					guardReactionTimer_ += dt;
+					if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
+					{
+						isGuardReaction_ = false;
+					}
+				}
+				else if (IsGrabbing())
+				{
+					// つかみモーションを再生する
+					SetAnimation(hGrabMotion_, false, true);
+				}
 			}
 		}
 	}

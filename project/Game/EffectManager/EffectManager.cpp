@@ -22,7 +22,7 @@ void EffectManager::Initialize()
 {
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
-	guardEffectModel_->param_->blendMode = BlendMode::kAdd;
+	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
 }
 
 /// @brief 更新処理

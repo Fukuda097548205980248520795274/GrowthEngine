@@ -43,14 +43,28 @@ void NPC::Update()
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
+	// 動けない状態かどうか
+	bool isIncapacitated = IsIncapacitated();
+
 	// 更新処理開始前のリセット
 	StartUpdate();
 
 	// 攻撃のクールタイムの更新
 	UpdateAttackCooltime(dt);
 
-	// 怯み状態、または「つかまれている状態」なら攻撃や移動の更新は行わず、基底クラスの更新のみ行う
-	if (IsDamageReaction() || IsGrabbed() || IsDown())
+	// 動ける状態なら、ビヘイビアツリーを実行する
+	if (!isIncapacitated)
+	{
+		// ビヘイビアツリーを実行する
+		if (behaviorTree_)
+			behaviorTree_->Exec();
+	}
+
+	// アクションの更新
+	ActionUpdate();
+
+	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
+	if (isIncapacitated)
 	{
 		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
 		if(IsGrabbed())
@@ -66,13 +80,6 @@ void NPC::Update()
 	}
 
 	UpdateStanceStateByTargetDistance();
-
-	// ビヘイビアツリーを実行する
-	if(behaviorTree_)
-		behaviorTree_->Exec();
-
-	// アクションの更新
-	ActionUpdate();
 
 	// 基底クラスの更新
 	Character::Update();

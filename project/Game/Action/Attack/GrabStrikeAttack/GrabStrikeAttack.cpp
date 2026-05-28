@@ -112,6 +112,13 @@ void GrabStrikeAttack::Update()
 		isReleased_ = true; // 解除済みフラグを立てる
 	}
 
+	// 攻撃の特定の時間帯は、攻撃者が回避または無力化されているかどうかを確認する
+	if (owner_->IsJustAvoided() || owner_->IsIncapacitated())
+	{
+		this->Exit();
+		return;
+	}
+
 	// 攻撃時間が経過したら、攻撃を終了する
 	if (attackTimer_ >= attackTime_)
 	{

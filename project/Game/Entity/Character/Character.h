@@ -38,6 +38,9 @@ public:
 		/// @brief 位置
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
+		/// @brief 回転
+		Vector3 rotate = Vector3(0.0f, 0.0f, 0.0f);
+
 		/// @brief 体力
 		int hp = 0;
 
@@ -408,6 +411,10 @@ public:
 
 	/// @brief プレイヤーかどうかを取得する
 	bool IsPlayer() const { return isPlayer_; }
+
+	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
+	/// @return 
+	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead(); }
 
 
 protected:

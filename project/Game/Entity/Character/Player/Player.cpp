@@ -238,8 +238,75 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
-	// 怯み状態、つかみ状態、つかまれ状態、ダウン状態、スタイルチェンジ状態なら移動や攻撃の更新は行わず、つかまれ解き入力の受付やダウンからの起き上がり条件のチェックのみ行う
-	if (IsDamageReaction() || IsGrabbed() || IsDown() || IsStyleChanging())
+	// 動けない状態かどうか
+	bool isIncapacitatedState = IsIncapacitated();
+
+	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
+	if (!isIncapacitatedState)
+	{
+		// スタイルチェンジ入力があればスタイルチェンジ処理を行う
+		StyleChange();
+
+		// 攻撃の更新処理
+		UpdateAttack();
+
+		// 防御状態を更新する
+		UpdateGuardState();
+
+		// 回避中は回避更新のみ行い、他の操作は受け付けない
+		if (isAvoid_)
+		{
+			// 回避中でも回避ボタン入力があれば次の回避を予約する
+			bool hasMoveInput = false;
+			const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
+			if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+			{
+				ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
+			}
+
+			Character::Update();
+			return;
+		}
+
+		// 構え状態を更新する
+		UpdateStanceState();
+
+		// 移動入力方向を取得する
+		bool hasMoveInput = false;
+		const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
+
+		// 構え中に回避ボタンを押したら回避を開始する
+		if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+		{
+			StartAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
+			Character::Update();
+			return;
+		}
+
+		// ダッシュ状態を更新する
+		UpdateDashState(hasMoveInput);
+
+		// 状態に応じた移動速度を計算する
+		const float moveSpeed = GetCurrentMoveSpeed();
+
+		if (hasMoveInput)
+		{
+			// カメラ基準の入力方向をワールド方向へ変換する
+			const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
+			SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
+		}
+		else
+		{
+			// 入力がない場合は移動を停止する
+			SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
+		}
+	}
+
+	// アクションの更新処理
+	ActionUpdate();
+
+	// 動けない状態なら、攻撃やスタイルチェンジなどの入力は受け付けず、状態の更新と描画のみ行う
+	if (isIncapacitatedState)
 	{
 		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
 		if (IsGrabbed())
@@ -252,69 +319,6 @@ void Player::Update()
 				grabbedTimer_ += 0.2f;
 			}
 		}
-
-		Character::Update();
-		return;
-	}
-
-	// スタイルチェンジ入力があればスタイルチェンジ処理を行う
-	StyleChange();
-
-	// 攻撃の更新処理
-	UpdateAttack();
-
-	// アクションの更新処理
-	ActionUpdate();
-
-	// 防御状態を更新する
-	UpdateGuardState();
-
-	// 回避中は回避更新のみ行い、他の操作は受け付けない
-	if (isAvoid_)
-	{
-        // 回避中でも回避ボタン入力があれば次の回避を予約する
-		bool hasMoveInput = false;
-		const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
-		if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
-		{
-			ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
-		}
-
-		Character::Update();
-		return;
-	}
-
-    // 構え状態を更新する
-	UpdateStanceState();
-
-	// 移動入力方向を取得する
-	bool hasMoveInput = false;
-	const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
-
-	// 構え中に回避ボタンを押したら回避を開始する
-	if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
-	{
-		StartAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
-		Character::Update();
-		return;
-	}
-
-	// ダッシュ状態を更新する
-	UpdateDashState(hasMoveInput);
-
-	// 状態に応じた移動速度を計算する
-	const float moveSpeed = GetCurrentMoveSpeed();
-
-	if (hasMoveInput)
-	{
-		// カメラ基準の入力方向をワールド方向へ変換する
-		const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
-		SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
-	}
-	else
-	{
-		// 入力がない場合は移動を停止する
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
 	}
 
 	// 基底クラスの更新
@@ -395,8 +399,8 @@ void Player::UpdateAttack()
 /// @brief 構え状態を更新する
 void Player::UpdateStanceState()
 {
-	// 怯み状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態なら構え状態にならない
-	if(IsGrabbing() || IsGrabbed() || IsDown() || !IsGrounded() || IsStyleChanging())
+	// 怯み状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら構え状態にならない
+	if(IsGrabbing() || IsIncapacitated())
 	{
 		isStance_ = false;
 		return;
@@ -458,9 +462,9 @@ Vector2 Player::GetMoveInputDirection(bool& hasMoveInput) const
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」ならダッシュ状態にならない
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中ならダッシュにならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsDamageReaction() || IsGrabbed() || IsDown() || !IsGrounded() || IsStyleChanging())
+	if (isStance_ || IsGrabbing() || IsIncapacitated())
 	{
 		isDash_ = false;
 		return;
@@ -483,8 +487,8 @@ void Player::UpdateDashState(bool hasMoveInput)
 /// @return
 float Player::GetCurrentMoveSpeed() const
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中は移動速度が0になる
-	if (isGuard_ || IsGrabbed() || IsDown() || IsDamageReaction() || IsAttack() || IsStyleChanging())
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら移動速度は0
+	if (isGuard_ || IsIncapacitated())
 		return 0.0f;
 
 	// 構え中は移動速度を半分にする
@@ -621,8 +625,8 @@ void Player::StyleChange()
 /// @brief 防御状態を更新する
 void Player::UpdateGuardState()
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン状態、または地面にいない状態、またはスタイルチェンジ状態なら防御状態にならない
-	if(IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsAttack() || !IsGrounded() || IsStyleChanging())
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら防御状態にならない
+	if(IsGrabbing() || IsAttack() || IsIncapacitated())
 	{
 		SetGuard(false);
 		return;
