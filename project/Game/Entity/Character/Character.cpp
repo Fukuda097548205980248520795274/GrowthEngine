@@ -490,7 +490,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		soundManager_->SeGuard();
 
 		// ガードエフェクト
-		EffectManager::GetInstance()->CreateGuardEffect(GetWorldPosition(), worldTransform_->rotate_);
+		EffectManager::GetInstance()->CreateGuardEffect(GetWorldPosition() + Vector3(0.0f, 1.0f, 0.0f), worldTransform_->rotate_);
 
 		SetAnimation(hGuardHitMotion_, false, true);
 
