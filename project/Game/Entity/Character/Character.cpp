@@ -125,6 +125,10 @@ Character::Character(const InitData& initData) : Entity()
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
+
+
+	// ワールド座標を更新
+	worldTransform_->Update();
 }
 
 /// @brief デストラクタ
@@ -865,31 +869,51 @@ void Character::UpdateLockOnTargets()
 		if (distanceSq <= 0.0f)
 			continue;
 
-		// 目の前にいる相手のみリストに登録する
-		const Vector3 toTargetDirection = toTarget.Normalize();
-		if (Dot(direction_, toTargetDirection) <= 0.0f)
+		// ロックオン可能な距離内にいる相手のみを候補にする
+		if (isPlayer_)
 		{
-			continue;
+			// プレイヤーの場合は、目の前にいる相手のみロックオン候補にする
+
+			// 目の前にいる相手のみリストに登録する
+			const Vector3 toTargetDirection = toTarget.Normalize();
+			if (Dot(direction_, toTargetDirection) <= 0.0f)
+			{
+				continue;
+			}
+
+			// 距離と相手ポインタを登録する
+			const float distance = std::sqrt(distanceSq);
+
+			// 視線方向との内積を計算する
+			const float viewDot = Dot(direction_, toTargetDirection);
+
+			// まず距離が最も近い相手を優先する
+			if (distance < bestDistance)
+			{
+				bestDistance = distance;
+				bestDot = viewDot;
+				lockOnTarget_ = character;
+			}
+			else if (distance == bestDistance && viewDot > bestDot)
+			{
+				// 距離が同じ場合は、視線方向に最も近い相手を優先する
+				bestDot = viewDot;
+				lockOnTarget_ = character;
+			}
 		}
-
-		// 距離と相手ポインタを登録する
-		const float distance = std::sqrt(distanceSq);
-
-		// 視線方向との内積を計算する
-		const float viewDot = Dot(direction_, toTargetDirection);
-
-		// まず距離が最も近い相手を優先する
-		if (distance < bestDistance)
+		else
 		{
-			bestDistance = distance;
-			bestDot = viewDot;
-			lockOnTarget_ = character;
-		}
-		else if (distance == bestDistance && viewDot > bestDot)
-		{
-			// 距離が同じ場合は、視線方向に最も近い相手を優先する
-			bestDot = viewDot;
-			lockOnTarget_ = character;
+			// NPCの場合は、距離が近い相手をロックオン候補にする
+
+			// 距離と相手ポインタを登録する
+			const float distance = std::sqrt(distanceSq);
+
+			// まず距離が最も近い相手を優先する
+			if (distance < bestDistance)
+			{
+				bestDistance = distance;
+				lockOnTarget_ = character;
+			}
 		}
 	}
 }
