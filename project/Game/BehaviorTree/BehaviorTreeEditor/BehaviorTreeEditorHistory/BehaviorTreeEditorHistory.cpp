@@ -16,7 +16,7 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
     // 最新のグリッド座標をImNodesから取得してノードデータに反映
     for (auto& node : snapshot.nodes)
     {
-        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
+        ImVec2 pos = ImNode::GetNodePosition(node.id);
         node.pos.x = pos.x;
         node.pos.y = pos.y;
     }
@@ -52,13 +52,14 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
     editor.links_ = snapshot.links;
     editor.currentId_ = snapshot.currentId;
 
-    // 復元した座標をImNodesに反映
+	// 復元した座標をImNodeに反映
     for (const auto& node : editor.nodes_)
     {
-        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+        ImNode::SetNodePosition(node.id, ImVec2(node.pos.x, node.pos.y));
     }
-    ImNodes::ClearNodeSelection();
-    ImNodes::ClearLinkSelection();
+
+	// ノードとリンクの選択をクリア
+    ImNode::ClearSelection();
 }
 
 /// @brief Redo（やり直す）を実行する
@@ -82,13 +83,14 @@ void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
     editor.links_ = snapshot.links;
     editor.currentId_ = snapshot.currentId;
 
-    // 復元した座標をImNodesに反映
+    // 復元した座標をImNodeに反映
     for (const auto& node : editor.nodes_)
     {
-        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+        ImNode::SetNodePosition(node.id, ImVec2(node.pos.x, node.pos.y));
     }
-    ImNodes::ClearNodeSelection();
-    ImNodes::ClearLinkSelection();
+
+	// ノードとリンクの選択をクリア
+    ImNode::ClearSelection();
 }
 
 /// @brief 履歴をクリアする

@@ -9,21 +9,24 @@ void BehaviorTreeEditorClipboard::HandleCopy(const std::vector<EditorNode>& sour
     // Ctrl + C が押されたか判定
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
     {
+        ImNode::SetCurrentEditor(nodeEditorContext_);
+
         // 選択されているノードの数を取得
-        int numSelectedNodes = ImNodes::NumSelectedNodes();
+        int numSelectedNodes = ImNode::GetSelectedObjectCount();
         if (numSelectedNodes > 0)
         {
             // 選択されたノードのIDを取得
-            std::vector<int> selectedNodeIds(numSelectedNodes);
-            ImNodes::GetSelectedNodes(selectedNodeIds.data());
+            std::vector<ImNode::NodeId> selectedNodes(numSelectedNodes);
+            int actualCount = ImNode::GetSelectedNodes(selectedNodes.data(), static_cast<int>(selectedNodes.size()));
 
             clipboardNodes_.clear();
             clipboardLinks_.clear();
 
 			// コピーしたノードのピンIDを記録するリスト（リンクの復元に使用）
             std::vector<int> copiedPinIds;
-            for (int id : selectedNodeIds)
+            for (ImNode::NodeId nodeID : selectedNodes)
             {
+				int id = static_cast<int>(nodeID.Get());
                 auto it = std::find_if(sourceNodes.begin(), sourceNodes.end(), [id](const EditorNode& n) { return n.id == id; });
                 if (it != sourceNodes.end())
                 {
@@ -45,6 +48,8 @@ void BehaviorTreeEditorClipboard::HandleCopy(const std::vector<EditorNode>& sour
                 }
             }
         }
+
+        ImNode::SetCurrentEditor(nullptr);
     }
 }
 
@@ -61,8 +66,7 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
         editor.history_->SaveHistory(editor.nodes_, editor.links_, editor.currentId_);
 
         // ペースト時に既存の選択状態を解除する
-        ImNodes::ClearNodeSelection();
-        ImNodes::ClearLinkSelection();
+        ImNode::ClearSelection();
 
         // コピー元のピンID -> 新しく生成したピンID の変換マップ
         std::unordered_map<int, int> oldToNewPinId;
@@ -101,9 +105,12 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
             editor.nodes_.push_back(newNode);
             newlyAddedNodeIds.push_back(newNode.id);
 
-            // ノードの位置をマウス位置に合わせて設定
-            ImVec2 targetScreenPos(mouseScreenPos.x + offsetX, mouseScreenPos.y + offsetY);
-            ImNodes::SetNodeScreenSpacePos(newNode.id, targetScreenPos);
+            // スクリーン座標（マウス位置）を、キャンバス座標（エディタ内座標）に変換
+            ImVec2 canvasMousePos = ImNode::ScreenToCanvas(mouseScreenPos);
+            ImVec2 targetCanvasPos(canvasMousePos.x + offsetX, canvasMousePos.y + offsetY);
+
+            // imgui-node-editorの関数で座標を設定
+            ImNode::SetNodePosition(newNode.id, targetCanvasPos);
         }
 
 		// クリップボード内のリンク情報をもとに、エディタのリンクリストに新しいリンクを追加する
@@ -122,7 +129,7 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
 		// ペーストしたノードを選択状態にする
         for (int id : newlyAddedNodeIds)
         {
-            ImNodes::SelectNode(id);
+            ImNode::SelectNode(id);
         }
     }
 }

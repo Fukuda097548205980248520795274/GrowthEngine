@@ -137,8 +137,6 @@
     <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="imgui_node_editor.h" />
     <ClInclude Include="imgui_node_editor_internal.h" />
-    <ClInclude Include="imnodes.h" />
-    <ClInclude Include="imnodes_internal.h" />
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
@@ -172,7 +170,6 @@
     <ClCompile Include="imgui_widgets.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
     </ClCompile>
-    <ClCompile Include="imnodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

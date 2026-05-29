@@ -198,44 +198,6 @@ void BehaviorTreeEditor::DrawNodeTable()
         history_->Redo(*this);
     }
 
-
-
-    // リンクの作成と削除の処理
-    int start_pin, end_pin;
-
-    // リンクが作成された場合
-    if (ImNodes::IsLinkCreated(&start_pin, &end_pin))
-    {
-        // ノード追加前の状態を履歴に保存する
-        history_->SaveHistory(nodes_, links_, currentId_);
-
-        // 新しいリンクを追加
-        EditorLink new_link;
-        new_link.id = GetNextId();
-        new_link.startPinId = start_pin;
-        new_link.endPinId = end_pin;
-        links_.push_back(new_link);
-    }
-
-
-    // リンクが削除された場合
-    int link_id;
-
-    // ImNodes::IsLinkDestroyedは削除されたリンクのIDを返す関数
-    if (ImNodes::IsLinkDestroyed(&link_id))
-    {
-        // ノード追加前の状態を履歴に保存する
-        history_->SaveHistory(nodes_, links_, currentId_);
-
-        auto it = std::find_if(links_.begin(), links_.end(),
-            [link_id](const EditorLink& link) { return link.id == link_id; });
-        if (it != links_.end()) {
-            links_.erase(it);
-        }
-    }
-
-    ImGui::End();
-
 #endif
 }
 
@@ -247,14 +209,19 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 	// プロパティウィンドウの開始
     ImGui::Begin("Node Properties");
 
-    // 選択されているノードの数を取得
-    int numSelected = ImNodes::NumSelectedNodes();
+    ImNode::SetCurrentEditor(nodeEditorContext_);
 
-    if (numSelected == 1)
+    // 選択されているオブジェクト（ノードやリンク）の数を取得
+    int numSelected = ImNode::GetSelectedObjectCount();
+
+    // まず、選択されているノードだけを取得したいので配列を用意する
+    std::vector<ImNode::NodeId> selectedNodes(numSelected);
+    int nodeCount = ImNode::GetSelectedNodes(selectedNodes.data(), static_cast<int>(selectedNodes.size()));
+
+    if (nodeCount == 1)
     {
         // 1つだけ選択されている場合、そのノードのIDを取得
-        int selectedNodeId;
-        ImNodes::GetSelectedNodes(&selectedNodeId);
+        int selectedNodeId = static_cast<int>(selectedNodes[0].Get());
 
         // IDからノードを検索
         auto it = std::find_if(nodes_.begin(), nodes_.end(),
@@ -294,6 +261,8 @@ void BehaviorTreeEditor::DrawPropertyWindow()
         // 未選択時のメッセージ
         ImGui::Text("No node selected.");
     }
+
+    ImNode::SetCurrentEditor(nullptr);
 
     ImGui::End();
 
@@ -393,7 +362,8 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
 
     // ノードエディタの開始
-    ImNodes::BeginNodeEditor();
+    ImNode::SetCurrentEditor(nodeEditorContext_);
+	ImNode::Begin("Behavior Tree Editor Canvas");
 
     // ノードの描画
     for (auto& node : nodes_)
@@ -404,16 +374,13 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		// ノードの位置をImNodesに反映する必要がある場合は、SetNodeGridSpacePosを呼び出して位置を更新する
         if (node.needSetPos)
         {
-            ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+            ImNode::SetNodePosition(node.id, ImVec2(node.pos.x, node.pos.y));
             node.needSetPos = false;
         }
 
         // ノードの開始
-        ImNodes::BeginNode(node.id);
+        ImNode::BeginNode(node.id);
 
-
-        // ノードタイトルの描画
-        ImNodes::BeginNodeTitleBar();
 
 		// セレクタノードとシーケンスノードの場合は、折りたたみ/展開のトグルボタンを描画する
         if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::RestartingSelector ||
@@ -433,22 +400,25 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("Restarting Sequence");
         if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("Condition");
         if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("Action");
-        ImNodes::EndNodeTitleBar();
+        
+        ImGui::TextUnformatted("Persistent Selector");
+        ImGui::Dummy(ImVec2(0, 4)); // 少し余白を空ける
+        ImGui::Separator();         // 線で区切る
 
 
         // 入力ピンの描画
-        ImNodes::BeginInputAttribute(node.inputPinId);
+        ImNode::BeginPin(node.inputPinId, ImNode::PinKind::Input);
         ImGui::Text("In");
-        ImNodes::EndInputAttribute();
+        ImNode::EndPin();
 
 		// ノードの内容の描画
         DrawNodeContent(node);
 
         // ノードの終了
-        ImNodes::EndNode();
+        ImNode::EndNode();
 
 		// ノードの位置をImNodesから取得してノードデータに保存する
-        ImVec2 currentPos = ImNodes::GetNodeGridSpacePos(node.id);
+        ImVec2 currentPos = ImNode::GetNodePosition(node.id);
         if (currentPos.x > -99999.0f && currentPos.y > -99999.0f) 
         {
             node.pos.x = currentPos.x;
@@ -471,11 +441,56 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		if (hiddenNodes.count(startNode) > 0 || hiddenNodes.count(endNode) > 0)continue;
 
 		// リンクを描画する
-        ImNodes::Link(link.id, link.startPinId, link.endPinId);
+        ImNode::Link(link.id, link.startPinId, link.endPinId);
     }
 
+    // --- リンクの作成処理 ---
+    if (ImNode::BeginCreate())
+    {
+        ImNode::PinId start_pin, end_pin;
+        if (ImNode::QueryNewLink(&start_pin, &end_pin))
+        {
+            if (start_pin && end_pin)
+            {
+                if (ImNode::AcceptNewItem())
+                {
+                    history_->SaveHistory(nodes_, links_, currentId_);
+                    EditorLink new_link;
+                    new_link.id = GetNextId();
+                    new_link.startPinId = static_cast<int>(start_pin.Get());
+                    new_link.endPinId = static_cast<int>(end_pin.Get());
+                    links_.push_back(new_link);
+                }
+            }
+        }
+    }
+    ImNode::EndCreate();
+
+    // --- リンク（またはノード）の削除処理 ---
+    if (ImNode::BeginDelete())
+    {
+        ImNode::LinkId deleted_link_id;
+        if (ImNode::QueryDeletedLink(&deleted_link_id))
+        {
+            if (ImNode::AcceptDeletedItem())
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                int link_id = static_cast<int>(deleted_link_id.Get());
+                auto it = std::find_if(links_.begin(), links_.end(),
+                    [link_id](const EditorLink& link) { return link.id == link_id; });
+                if (it != links_.end()) {
+                    links_.erase(it);
+                }
+            }
+        }
+    }
+    ImNode::EndDelete();
+
     // ノードエディタの終了
-    ImNodes::EndNodeEditor();
+    ImNode::End();
+    ImNode::SetCurrentEditor(nullptr);
+
+    ImGui::End();
 
 	// 現在のフレームで展開されているノードのIDを更新する
     prevHiddenNodes_ = hiddenNodes;
@@ -507,12 +522,12 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
     if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::PersistentSequence ||
         node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence)
     {
-        ImNodes::BeginOutputAttribute(node.outputPinId);
+        ImNode::BeginPin(node.outputPinId, ImNode::PinKind::Output);
 
         // 出力ピンを右側に配置するためにインデントを追加
         ImGui::Indent(60);
         ImGui::Text("Out");
-        ImNodes::EndOutputAttribute();
+        ImNode::EndPin();
     }
 
     // アクションノードの場合はアクション選択UIを描画

@@ -122,8 +122,12 @@ DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Sel
 /// @brief デストラクタ
 Engine::ImGuiRender::~ImGuiRender()
 {
-	// ImNodesの破棄
-	ImNodes::DestroyContext();
+	// imgui-node-editor のコンテキストを破棄する
+	if (nodeEditorContext_ != nullptr)
+	{
+		ax::NodeEditor::DestroyEditor(nodeEditorContext_);
+		nodeEditorContext_ = nullptr;
+	}
 
 	// ImGuiの終了処理
 	ImGui_ImplDX12_Shutdown();
@@ -160,8 +164,13 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	// ImNodesの初期化
-	ImNodes::CreateContext();
+	// ImguiNodeEditorの初期化
+	if (nodeEditorContext_ == nullptr)
+	{
+		ax::NodeEditor::Config config;
+		config.SettingsFile = "NodeEditor.json"; // 設定を保存するファイル名（任意）
+		nodeEditorContext_ = ax::NodeEditor::CreateEditor(&config);
+	}
 
 	ImGuiIO& io = ImGui::GetIO();
 

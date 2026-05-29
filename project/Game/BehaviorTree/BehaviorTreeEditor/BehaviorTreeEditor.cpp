@@ -157,22 +157,34 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
         if (l.id >= currentId_) currentId_ = l.id + 1;
     }
 
+	// ノードエディタのコンテキストをImNodesに設定する
+    if (nodeEditorContext_)
+    {
+        ImNode::SetCurrentEditor(nodeEditorContext_);
+    }
+
     // ノードの座標をImNodesに適用（次の描画フレームで反映される）
     for (const auto& node : nodes_)
     {
-        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+        ImNode::SetNodePosition(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+
+	// 読み込み後はノードの展開状態をすべて展開された状態にする
+    ImNode::SetCurrentEditor(nullptr);
 }
 
 /// @brief ノードをウィンドウの中心に配置する
 /// @param node 
 void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 {
-    // ノードをウィンドウの中心に配置する
+    // ウィンドウの中心座標（スクリーン座標）を計算
     ImVec2 windowCenter(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
 
-    // ImNodesを使用してノードの位置を設定
-    ImNodes::SetNodeScreenSpacePos(node.id, windowCenter);
+    // スクリーン座標を、ノードエディタ内のキャンバス座標に変換する
+    ImVec2 canvasCenter = ImNode::ScreenToCanvas(windowCenter);
+
+    // imgui-node-editor を使用してノードの位置を設定
+    ImNode::SetNodePosition(node.id, canvasCenter);
 }
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
@@ -206,22 +218,31 @@ std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& 
 /// @brief 選択されているノードを削除する
 void BehaviorTreeEditor::DeleteSelectedNodes()
 {
+    ImNode::SetCurrentEditor(nodeEditorContext_);
+
 	// 選択されているノードの数を取得
-    int numSelected = ImNodes::NumSelectedNodes();
-    if (numSelected <= 0) return;
+    int numSelected = ImNode::GetSelectedObjectCount();
+    if (numSelected <= 0)
+    {
+        ImNode::SetCurrentEditor(nullptr);
+        return;
+    }
 
     // ノード追加前の状態を履歴に保存する
     history_->SaveHistory(nodes_, links_, currentId_);
 
     // 選択されたノードのIDをすべて取得
-    std::vector<int> selectedNodes(numSelected);
-    ImNodes::GetSelectedNodes(selectedNodes.data());
+    std::vector<ImNode::NodeId> selectedNodes(numSelected);
+    ImNode::GetSelectedNodes(selectedNodes.data(), static_cast<int>(selectedNodes.size()));
 
-    for (int nodeId : selectedNodes)
+    for (ImNode::NodeId nodeID : selectedNodes)
     {
+		// ImNodesのNodeIdから整数のノードIDを取得
+		int id = static_cast<int>(nodeID.Get());
+
         // 削除対象のノードを見つける
         auto nodeIt = std::find_if(nodes_.begin(), nodes_.end(),
-            [nodeId](const EditorNode& n) { return n.id == nodeId; });
+            [id](const EditorNode& n) { return n.id == id; });
 
         if (nodeIt != nodes_.end())
         {
@@ -243,5 +264,7 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
     }
 
     // ImNodes側の選択状態もクリアしておく
-    ImNodes::ClearNodeSelection();
+    ImNode::ClearSelection();
+
+    ImNode::SetCurrentEditor(nullptr);
 }
