@@ -128,14 +128,7 @@ void BehaviorTreeEditor::SaveCurrentTree()
 {
     if (currentFileName_.empty()) return;
 
-    // 最新の座標を反映
-    for (auto& node : nodes_)
-    {
-        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-        node.pos.x = pos.x;
-        node.pos.y = pos.y;
-    }
-
+	// 変更を保存する
     saver_.SaveTree(currentFileName_, nodes_, links_);
 }
 
@@ -143,9 +136,13 @@ void BehaviorTreeEditor::SaveCurrentTree()
 /// @param fileName 
 void BehaviorTreeEditor::LoadTree(const std::string& fileName)
 {
+	// ファイルから読み込む前にエディタを初期状態にリセットする
     ClearEditor();
     currentFileName_ = fileName;
     saver_.LoadTree(fileName, nodes_, links_);
+
+	// ノードの展開状態を管理するマップと前のフレームで展開されていたノードのセットをクリアする
+	prevHiddenNodes_.clear();
 
     // IDの最大値を見つけて、次に振るIDが被らないようにする
     for (const auto& n : nodes_)

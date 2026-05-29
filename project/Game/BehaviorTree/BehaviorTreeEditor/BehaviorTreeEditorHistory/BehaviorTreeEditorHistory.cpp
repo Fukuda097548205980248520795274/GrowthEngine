@@ -36,13 +36,10 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 {
     if (undoHistory_.empty()) return;
 
-    // 現在の状態をRedo履歴に保存しておく
+	// 現在の状態をRedo履歴に保存しておく
     for (auto& node : editor.nodes_)
-    {
-        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-        node.pos.x = pos.x;
-        node.pos.y = pos.y;
-    }
+        node.needSetPos = true;
+
     EditorSnapshot currentSnapshot = { editor.nodes_, editor.links_, editor.currentId_ };
     redoHistory_.push_back(currentSnapshot);
 
@@ -70,11 +67,8 @@ void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
 
     // 現在の状態をUndo履歴に保存しておく
     for (auto& node : editor.nodes_)
-    {
-        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-        node.pos.x = pos.x;
-        node.pos.y = pos.y;
-    }
+        node.needSetPos = true;
+
     EditorSnapshot currentSnapshot = { editor.nodes_, editor.links_, editor.currentId_ };
     undoHistory_.push_back(currentSnapshot);
 

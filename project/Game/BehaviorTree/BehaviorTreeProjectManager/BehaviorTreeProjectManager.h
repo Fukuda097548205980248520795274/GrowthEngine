@@ -75,6 +75,12 @@ struct EditorNode
 
 	// 条件ノードのパラメータ
 	CondtionNodeParam conditionParam;
+
+	// ノードが展開されているかどうかを示すフラグ（条件ノードの設定UIを表示するかどうかの判定に使用）
+	bool isCollapsed = false;
+
+	// ノードの位置を次の描画フレームでImNodesに反映する必要があるかどうかを示すフラグ
+	bool needSetPos = true;
 };
 
 // エディタ上のリンクを表す構造体

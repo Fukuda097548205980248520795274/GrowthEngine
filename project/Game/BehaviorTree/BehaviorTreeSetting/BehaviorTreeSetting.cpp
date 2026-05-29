@@ -18,6 +18,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
         n["pos"] = { node.pos.x, node.pos.y };
         n["input_pin"] = node.inputPinId;
         n["output_pin"] = node.outputPinId;
+		n["is_collapsed"] = node.isCollapsed;
 
         // アクションノードの場合、アクション名とパラメータも保存
         if (node.type == EditorNodeType::Action)
@@ -164,6 +165,8 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
             node.pos.y = n["pos"][1];
             node.inputPinId = n["input_pin"];
             node.outputPinId = n["output_pin"];
+			node.isCollapsed = n.value("is_collapsed", false);
+			node.needSetPos = true; // 読み込んだノードは位置をImNodesに反映する必要があるのでフラグを立てる
 
             // nodeの復元部分に追加
             if (node.type == EditorNodeType::Action)

@@ -377,22 +377,18 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
             }
         };
 
-	// 展開状態が折りたたまれているノードをすべて非表示にする
+	// 折りたたまれているノードの子ノードをすべて非表示にする
     for (const auto& node : nodes_)
     {
-		if (collapsedNodes_[node.id])
+        if (node.isCollapsed)
             dfsHide(node.id);
     }
 
-	// 前のフレームで展開されていたノードのIDを更新する
+	// ノードの位置を更新する必要があるかどうかを示すフラグをリセットする
     for (auto& node : nodes_)
     {
-        if (prevHiddenNodes_.count(node.id) == 0)
-        {
-            ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-            node.pos.x = pos.x;
-            node.pos.y = pos.y;
-        }
+        if (hiddenNodes.count(node.id) > 0)
+            node.needSetPos = true;
     }
 
 
@@ -405,9 +401,12 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		// ノードが非表示のセットに含まれている場合は描画をスキップする
 		if (hiddenNodes.count(node.id) > 0) continue;
 
-		// ノードの位置を前のフレームで展開されていたノードの位置に更新する
-        if (prevHiddenNodes_.count(node.id) > 0)
+		// ノードの位置をImNodesに反映する必要がある場合は、SetNodeGridSpacePosを呼び出して位置を更新する
+        if (node.needSetPos)
+        {
             ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+            node.needSetPos = false;
+        }
 
         // ノードの開始
         ImNodes::BeginNode(node.id);
@@ -420,10 +419,11 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::RestartingSelector ||
             node.type == EditorNodeType::PersistentSequence || node.type == EditorNodeType::RestartingSequence)
         {
-			if (ImGui::Button(collapsedNodes_[node.id] ? "+" : "-"))
+			if (ImGui::ArrowButton(node.isCollapsed ? "+" : "-", node.isCollapsed ? ImGuiDir_Right : ImGuiDir_Down))
 			{
-				// ノードの展開状態を切り替える
-				collapsedNodes_[node.id] = !collapsedNodes_[node.id];
+				// ノードの展開状態をトグルする
+                node.isCollapsed = !node.isCollapsed;
+                history_->SaveHistory(nodes_, links_, currentId_);
 			}
         }
 
@@ -446,6 +446,14 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
         // ノードの終了
         ImNodes::EndNode();
+
+		// ノードの位置をImNodesから取得してノードデータに保存する
+        ImVec2 currentPos = ImNodes::GetNodeGridSpacePos(node.id);
+        if (currentPos.x > -99999.0f && currentPos.y > -99999.0f) 
+        {
+            node.pos.x = currentPos.x;
+            node.pos.y = currentPos.y;
+        }
     }
 
     // リンクの描画
