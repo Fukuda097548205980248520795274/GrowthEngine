@@ -23,9 +23,11 @@ public:
 	void SaveHistory(const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, int currentId);
 
 	/// @brief Undo（元に戻す）を実行する
+	/// @param editor 
 	void Undo(BehaviorTreeEditor& editor);
 
 	/// @brief Redo（やり直す）を実行する
+	/// @param editor 
 	void Redo(BehaviorTreeEditor& editor);
 
 	/// @brief 履歴をクリアする

@@ -32,6 +32,7 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
 }
 
 /// @brief Undo（元に戻す）を実行する
+/// @param editor 
 void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 {
     if (undoHistory_.empty()) return;
@@ -61,6 +62,7 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 }
 
 /// @brief Redo（やり直す）を実行する
+/// @param editor 
 void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
 {
     if (redoHistory_.empty()) return;

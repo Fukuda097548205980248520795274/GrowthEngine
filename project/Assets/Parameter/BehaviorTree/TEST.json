@@ -84,7 +84,7 @@
         {
             "id": 59,
             "input_pin": 60,
-            "is_collapsed": false,
+            "is_collapsed": true,
             "output_pin": 61,
             "pos": [
                 414.0,
@@ -171,7 +171,7 @@
         {
             "id": 134,
             "input_pin": 135,
-            "is_collapsed": true,
+            "is_collapsed": false,
             "output_pin": 136,
             "pos": [
                 782.0,
