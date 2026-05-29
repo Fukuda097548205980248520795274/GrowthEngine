@@ -5,6 +5,7 @@
 #include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 #include "BehaviorTreeEditorClipboard/BehaviorTreeEditorClipboard.h"
 #include "BehaviorTreeEditorHistory/BehaviorTreeEditorHistory.h"
+#include <unordered_set>
 
 class Character;
 
@@ -69,6 +70,16 @@ private:
 	// エディタのUI描画に使用するフラグ
 	friend class BehaviorTreeEditorHistory;
 	friend class BehaviorTreeEditorClipboard;
+
+
+private:
+
+	// ノードの展開状態を管理するマップ（ノードIDと展開状態のペア）
+	std::unordered_map<int, bool> collapsedNodes_;
+
+	// 前のフレームで展開されていたノードのIDを保持するセット
+	std::unordered_set<int> prevHiddenNodes_;
+
 
 private:
 

@@ -303,17 +303,130 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 /// @brief ノードエディタのキャンバスを描画する
 void BehaviorTreeEditor::DrawNodeEditorCanvas()
 {
+	// ピンIDからノードIDと出力ピンか入力ピンかを取得するラムダ関数
+    auto getNodeFromPin = [this](int pinID, bool& outIsOutput) -> int
+        {
+            for (const auto& node : nodes_)
+            {
+                // 出力ピンが一致する場合はそのノードIDを返す
+                if (node.inputPinId == pinID)
+                {
+                    outIsOutput = false;
+                    return node.id;
+                }
+
+                // 入力ピンが一致する場合はそのノードIDを返す
+                if (node.outputPinId == pinID)
+                {
+                    outIsOutput = true;
+                    return node.id;
+                }
+            }
+
+			// どちらも一致しない場合は-1を返す
+            return -1;
+        };
+
+	// ノードIDをキー、子ノードIDのリストを値とする隣接リストを作成
+    std::unordered_map<int, std::vector<int>> adjList;
+
+	// すべてのリンクを処理して隣接リストを構築
+	for (const auto& link : links_)
+	{
+        // 開始ピンIDからノードIDと出力ピンか入力ピンかを取得
+		bool startIsOutput = false;
+		int startNode = getNodeFromPin(link.startPinId, startIsOutput);
+
+        // 終了ピンIDからノードIDと出力ピンか入力ピンかを取得
+		bool endIsOutput = false;
+		int endNode = getNodeFromPin(link.endPinId, endIsOutput);
+
+		// どちらも有効なノードIDが取得できた場合のみ隣接リストに追加
+        if (startNode != -1 && endNode != -1)
+        {
+			// 出力ピンから入力ピンへのリンクの場合は、開始ノードを親、終了ノードを子として隣接リストに追加
+            if (startIsOutput && !endIsOutput)
+            {
+				adjList[startNode].push_back(endNode);
+            }
+            else
+            {
+				// 逆向きのリンクが存在する場合は両方のノードを隣接リストに追加
+				adjList[endNode].push_back(startNode);
+            }
+        }
+	}
+
+	// ノードの展開状態を管理するためのセット
+    std::unordered_set<int> hiddenNodes;
+
+	// ノードを非表示にするためのDFS関数
+    std::function<void(int)> dfsHide = [&](int nodeID)
+        {
+            // 子ノードがいない場合は終了
+            if (adjList.find(nodeID) == adjList.end()) return;
+
+            // 子ノードをすべて非表示にする
+            for (int childID : adjList[nodeID])
+            {
+                if (hiddenNodes.find(childID) == hiddenNodes.end())
+                {
+                    hiddenNodes.insert(childID);
+                    dfsHide(childID);
+                }
+            }
+        };
+
+	// 展開状態が折りたたまれているノードをすべて非表示にする
+    for (const auto& node : nodes_)
+    {
+		if (collapsedNodes_[node.id])
+            dfsHide(node.id);
+    }
+
+	// 前のフレームで展開されていたノードのIDを更新する
+    for (auto& node : nodes_)
+    {
+        if (prevHiddenNodes_.count(node.id) == 0)
+        {
+            ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
+            node.pos.x = pos.x;
+            node.pos.y = pos.y;
+        }
+    }
+
+
     // ノードエディタの開始
     ImNodes::BeginNodeEditor();
 
     // ノードの描画
     for (auto& node : nodes_)
     {
+		// ノードが非表示のセットに含まれている場合は描画をスキップする
+		if (hiddenNodes.count(node.id) > 0) continue;
+
+		// ノードの位置を前のフレームで展開されていたノードの位置に更新する
+        if (prevHiddenNodes_.count(node.id) > 0)
+            ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+
         // ノードの開始
         ImNodes::BeginNode(node.id);
 
+
         // ノードタイトルの描画
         ImNodes::BeginNodeTitleBar();
+
+		// セレクタノードとシーケンスノードの場合は、折りたたみ/展開のトグルボタンを描画する
+        if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::RestartingSelector ||
+            node.type == EditorNodeType::PersistentSequence || node.type == EditorNodeType::RestartingSequence)
+        {
+			if (ImGui::Button(collapsedNodes_[node.id] ? "+" : "-"))
+			{
+				// ノードの展開状態を切り替える
+				collapsedNodes_[node.id] = !collapsedNodes_[node.id];
+			}
+        }
+
         if (node.type == EditorNodeType::PersistentSelector) ImGui::TextUnformatted("Persistent Selector");
         if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("Persistent Sequence");
         if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("Restarting Selector");
@@ -321,6 +434,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("Condition");
         if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("Action");
         ImNodes::EndNodeTitleBar();
+
 
         // 入力ピンの描画
         ImNodes::BeginInputAttribute(node.inputPinId);
@@ -337,11 +451,26 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
     // リンクの描画
     for (auto& link : links_)
     {
+		// リンクの開始ピンと終了ピンからノードIDと出力ピンか入力ピンかを取得する
+		bool startIsOutput = false;
+		int startNode = getNodeFromPin(link.startPinId, startIsOutput);
+
+		// リンクの開始ピンと終了ピンからノードIDと出力ピンか入力ピンかを取得する
+		bool endIsOutput = false;
+		int endNode = getNodeFromPin(link.endPinId, endIsOutput);
+
+		// どちらも有効なノードIDが取得できない場合は描画をスキップする
+		if (hiddenNodes.count(startNode) > 0 || hiddenNodes.count(endNode) > 0)continue;
+
+		// リンクを描画する
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
     }
 
     // ノードエディタの終了
     ImNodes::EndNodeEditor();
+
+	// 現在のフレームで展開されているノードのIDを更新する
+    prevHiddenNodes_ = hiddenNodes;
 }
 
 /// @brief ノードの内容を描画する
