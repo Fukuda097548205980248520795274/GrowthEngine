@@ -31,8 +31,6 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
                 n["combo_data"]["moveSpeed"] = node.comboAttackInitData.moveSpeed;
 				n["combo_data"]["moveStartTime"] = node.comboAttackInitData.moveStartTime;
 				n["combo_data"]["moveEndTime"] = node.comboAttackInitData.moveEndTime;
-				n["combo_data"]["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
-				n["combo_data"]["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
 
                 // 当たり判定の配列データを構築
                 json hitboxesJson = json::array();
@@ -179,8 +177,8 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                     node.comboAttackInitData.moveSpeed = n["combo_data"].value("moveSpeed", 0.0f);
 					node.comboAttackInitData.moveStartTime = n["combo_data"].value("moveStartTime", 0.0f);
 					node.comboAttackInitData.moveEndTime = n["combo_data"].value("moveEndTime", 0.0f);
-					node.comboAttackInitData.cancelStartTime = n["combo_data"].value("cancelStartTime", 0.0f);
-					node.comboAttackInitData.cancelEndTime = n["combo_data"].value("cancelEndTime", 0.0f);
+					node.comboAttackInitData.cancelStartTime = 0.0f;
+					node.comboAttackInitData.cancelEndTime = 0.0f;
                     node.comboAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
 
                     // 配列の読み込み
@@ -194,7 +192,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                             def.startTime = h.value("startTime", 0.0f);
                             def.endTime = h.value("endTime", 0.0f);
                             def.radius = h.value("radius", 0.25f);
-                            def.damage = h.value("damage", 10);
+                            def.damage = h.value("damage", 1);
                             def.damageReaction = static_cast<DamageReaction>(h.value("damageReaction", 0));
                             def.knockback = h.value("knockback", 0.0f);
 

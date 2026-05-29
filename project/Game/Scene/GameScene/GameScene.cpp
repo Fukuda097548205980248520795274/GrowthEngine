@@ -248,6 +248,7 @@ void GameScene::Draw()
 {
 	// エディタの描画
 	behaviorTreeEditor_->DrawNodeTable();
+	behaviorTreeEditor_->DrawPropertyWindow();
 	motionManagerEditor_->Draw();
 
 	// プレイヤーの描画

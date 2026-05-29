@@ -44,6 +44,9 @@ public:
 	/// @brief ノードテーブルを描画する
 	void DrawNodeTable();
 
+	/// @brief プロパティウィンドウを描画する
+	void DrawPropertyWindow();
+
 
 private:
 

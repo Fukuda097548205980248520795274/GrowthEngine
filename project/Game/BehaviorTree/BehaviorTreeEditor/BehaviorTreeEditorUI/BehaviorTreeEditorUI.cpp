@@ -239,6 +239,67 @@ void BehaviorTreeEditor::DrawNodeTable()
 #endif
 }
 
+/// @brief プロパティウィンドウを描画する
+void BehaviorTreeEditor::DrawPropertyWindow()
+{
+#ifdef _DEVELOPMENT
+
+	// プロパティウィンドウの開始
+    ImGui::Begin("Node Properties");
+
+    // 選択されているノードの数を取得
+    int numSelected = ImNodes::NumSelectedNodes();
+
+    if (numSelected == 1)
+    {
+        // 1つだけ選択されている場合、そのノードのIDを取得
+        int selectedNodeId;
+        ImNodes::GetSelectedNodes(&selectedNodeId);
+
+        // IDからノードを検索
+        auto it = std::find_if(nodes_.begin(), nodes_.end(),
+            [selectedNodeId](const EditorNode& n) { return n.id == selectedNodeId; });
+
+        if (it != nodes_.end())
+        {
+            EditorNode& node = *it;
+
+            // ノードの種類などを表示
+            ImGui::Text("Node ID: %d", node.id);
+            ImGui::Separator();
+
+            // ノードの種類に応じて、パラメータ設定UIをここで描画する
+            if (node.type == EditorNodeType::Condition)
+            {
+                DrawCondtionNodeSettings(node);
+            }
+            else if (node.type == EditorNodeType::Action)
+            {
+                DrawActionNodeSettings(node);
+            }
+            else
+            {
+                ImGui::Text("No properties to edit for this node type.");
+            }
+        }
+    }
+    else if (numSelected > 1)
+    {
+        // 複数選択時のメッセージ
+        ImGui::Text("Multiple nodes selected.");
+        ImGui::Text("Please select only one node to edit its properties.");
+    }
+    else
+    {
+        // 未選択時のメッセージ
+        ImGui::Text("No node selected.");
+    }
+
+    ImGui::End();
+
+#endif
+}
+
 /// @brief ノードエディタのキャンバスを描画する
 void BehaviorTreeEditor::DrawNodeEditorCanvas()
 {
@@ -290,7 +351,19 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
     // 条件ノードの場合は関数選択UIを描画
     if (node.type == EditorNodeType::Condition)
     {
-        DrawCondtionNodeSettings(node);
+		// 条件の種類に応じてUIを切り替える
+        switch(node.conditionType)
+        {
+            // 設定なし
+        case ConditionType::None:
+            ImGui::Text("None");
+            break;
+
+			// ターゲットがいるかどうか
+		case ConditionType::HasTarget:
+			ImGui::Text("Has Target");
+			break;
+        }
     }
 
     // 出力ピンの描画（条件ノード以外）
@@ -308,7 +381,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
     // アクションノードの場合はアクション選択UIを描画
     if (node.type == EditorNodeType::Action)
     {
-        DrawActionNodeSettings(node);
+		ImGui::Text("%s", node.actionName.c_str());
     }
 }
 
@@ -371,8 +444,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
             ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
             ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
-            ImGui::DragFloat("Cancel Start", &node.comboAttackInitData.cancelStartTime, 0.01f);
-            ImGui::DragFloat("Cancel End", &node.comboAttackInitData.cancelEndTime, 0.01f);
 
             ImGui::Text("Hitboxes (Multiple)");
 
