@@ -3,6 +3,8 @@
 #include "Render3DData/Render3DAnimationModelData/Render3DAnimationModelData.h"
 #include "Render3DData/Render3DSkinningModelData/Render3DSkinningModelData.h"
 #include "Render3DData/Render3DUVSphereData/Render3DUVSphereData.h"
+#include "Render3DData/Render3DRingData/Render3DRingData.h"
+#include "Render3DData/Render3DCylinderData/Render3DCylinderData.h"
 
 #include "ShaderCompiler/ShaderCompiler.h"
 
@@ -169,6 +171,24 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	{
 		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle, parameter_.get());
 		data->Initialize(textureStore_, lightStore_, heap_, device, commandList, psoUVSphere_.get(), log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// リング
+	if (type == Render3D::Type::Ring)
+	{
+		std::unique_ptr<Render3DRingData> data = std::make_unique<Render3DRingData>(name, hTexture, handle, parameter_.get());
+		data->Initialize(textureStore_, lightStore_, device, log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// 円柱
+	if (type == Render3D::Type::Cylinder)
+	{
+		std::unique_ptr<Render3DCylinderData> data = std::make_unique<Render3DCylinderData>(name, hTexture, handle, parameter_.get());
+		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

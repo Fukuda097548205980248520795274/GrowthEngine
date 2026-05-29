@@ -1,4 +1,4 @@
-#include "Render3DUVSphereData.h"
+#include "Render3DCylinderData.h"
 #include <cassert>
 #include <algorithm>
 #include <numbers>
@@ -6,27 +6,26 @@
 #include "GrowthEngine.h"
 
 /// @brief 初期化
-/// @param modelStore 
+/// @param textureStore 
+/// @param lightStore 
 /// @param device 
-void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightStore* lightStore, 
-	DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoUVSphere, Log* log)
+/// @param commandList 
+/// @param log 
+void Engine::Render3DCylinderData::Initialize(TextureStore* textureStore, LightStore* lightStore,
+	ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
 	assert(lightStore);
-	assert(heap);
 	assert(device);
-	assert(commandList);
-	assert(psoUVSphere);
 
 	// 引数を受け取る
 	textureStore_ = textureStore;
 	lightStore_ = lightStore;
-	psoUVSphere_ = psoUVSphere;
 
 
 	// パラメータの生成
-	param_ = std::make_unique<Render3D::UVSphere::Param>();
+	param_ = std::make_unique<Render3D::Cylinder::Param>();
 
 	// ブレンドモード
 	param_->blendMode = BlendMode::kNone;
@@ -53,7 +52,11 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 
 	// 分割
 	param_->division.slices = 32;
-	param_->division.rings = 16;
+
+	// サイズ
+	param_->size.topRadius = 1.0f;
+	param_->size.bottomRadius = 1.0f;
+	param_->size.height = 1.0f;
 
 	// ブラー
 	param_->blur.afterImageMask = 0.0f;
@@ -65,7 +68,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 
 
 	// パラメータの記録
-	group_ = "UVSphere_" + name_;
+	group_ = "Cylinder_" + name_;
 	if (parameter_)
 	{
 		parameter_->SetValue(group_, "BlendMode", &param_->blendMode);
@@ -87,7 +90,9 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
-		parameter_->SetValue(group_, "Division_Rings", &param_->division.rings);
+		parameter_->SetValue(group_, "Size_TopRadius", &param_->size.topRadius);
+		parameter_->SetValue(group_, "Size_BottomRadius", &param_->size.bottomRadius);
+		parameter_->SetValue(group_, "Size_Height", &param_->size.height);
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 
@@ -97,16 +102,16 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	}
 
 	// 頂点リソースの生成
-	vertexResource_ = std::make_unique<RWStructuredVertexBufferResource<VertexDataForGPU>>();
-	vertexResource_->Initialize(device, commandList, heap, ((kMaxSlices + 1) * (kMaxRings + 1)), log);
+	vertexResource_ = std::make_unique<VertexBufferResource<VertexDataForGPU>>();
+	vertexResource_->Initialize(device, kMaxSlices * 4, log);
 
 	// インデックスリソースの生成
-	indexResource_ = std::make_unique<RWStructuredVertexBufferResource<uint32_t>>();
-	indexResource_->Initialize(device, commandList, heap, (kMaxSlices * kMaxRings * 6), log);
+	indexResource_ = std::make_unique<IndexBufferResource>();
+	indexResource_->Initialize(device, kMaxSlices * 6, log);
 
-	// 分割リソースの生成
-	divisionResource_ = std::make_unique<ConstantBufferResource<PrimitiveDataForGPU::UVSphereDivisionDataForGPU>>();
-	divisionResource_->Initialize(device, log);
+	// 頂点の計算
+	VertexCalculate();
+
 
 	// 座標変換リソースの生成
 	transformationResources_ = std::make_unique<ConstantBufferResource<PrimitiveModelTransformationDataForGPU>>();
@@ -127,7 +132,7 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 }
 
 /// @brief 更新処理
-void Engine::Render3DUVSphereData::Update()
+void Engine::Render3DCylinderData::Update()
 {
 	// 描画を記録する
 	isPreDrew_ = isDrew_;
@@ -135,7 +140,7 @@ void Engine::Render3DUVSphereData::Update()
 }
 
 /// @brief リセット
-void Engine::Render3DUVSphereData::Reset()
+void Engine::Render3DCylinderData::Reset()
 {
 	// jsonファイルがあるかどうか
 	if (parameter_->IsFileFound(group_))
@@ -176,12 +181,19 @@ void Engine::Render3DUVSphereData::Reset()
 
 		// 分割
 		param_->division.slices = 32;
-		param_->division.rings = 16;
+		
+		// サイズ
+		param_->size.topRadius = 1.0f;
+		param_->size.bottomRadius = 1.0f;
+		param_->size.height = 1.0f;
 
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
 		param_->blur.motionBlurMask = 0.0f;
 	}
+
+	// 頂点の計算
+	VertexCalculate();
 
 	// 読み込み
 	isLoad_ = true;
@@ -191,35 +203,15 @@ void Engine::Render3DUVSphereData::Reset()
 /// @param commandList 
 /// @param pso 
 /// @param textureStore 
-void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
+void Engine::Render3DCylinderData::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
-	if (preSlices_ != param_->division.slices || preRings_ != param_->division.rings)
-	{
-		// PSOの設定
-		psoUVSphere_->Register(commandList);
-
-		param_->division.slices = std::clamp(param_->division.slices, 3, kMaxSlices);
-		param_->division.rings = std::clamp(param_->division.rings, 3, kMaxRings);
-
-		// 分割の設定
-		divisionResource_->data_->slices = param_->division.slices;
-		divisionResource_->data_->rings = param_->division.rings;
-		divisionResource_->RegisterCompute(commandList, 0);
-
-		// 頂点の設定
-		vertexResource_->RegisterCompute(commandList, 1);
-
-		// インデックスの設定
-		indexResource_->RegisterCompute(commandList, 2);
-
-		// ディスパッチ
-		commandList->Dispatch((param_->division.slices + 1 + 15) / 16, (param_->division.rings + 1 + 15) / 16, 1);
-	}
-
-
+	// 頂点の再計算
+	if (preSlices_ != param_->division.slices || preTopRadius_ != param_->size.topRadius || 
+		preBottomRadius_ != param_->size.bottomRadius || preHeight_ != param_->size.height)
+		VertexCalculate();
 
 
 	Quaternion modelQuaternion =
@@ -228,7 +220,7 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 		ToQuaternion(param_->transform.rotate.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
 
 	Matrix4x4 worldMatrix = Make3DAffineMatrix4x4(param_->transform.scale, modelQuaternion, param_->transform.translate);
-	if(parent_)
+	if (parent_)
 		worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 	// ビュープロジェクション行列を取得する
@@ -313,25 +305,11 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 		コマンドリストに登録
 	------------------------*/
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-
-
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
+	vertexResource_->Register(commandList);
 
 	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	indexResource_->Register(commandList);
 
 	// 座標変換の設定
 	transformationResources_->RegisterGraphics(commandList, 0);
@@ -352,26 +330,17 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(param_->division.slices * param_->division.rings * 6, 1, 0, 0, 0);
+	commandList->DrawIndexedInstanced(param_->division.slices * 6, 1, 0, 0, 0);
 
-
-
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	// 描画した
 	isDrew_ = true;
-
-	// 分割数を記録する
-	preSlices_ = param_->division.slices;
-	preRings_ = param_->division.rings;
 }
 
 /// @brief コマンドリスト
 /// @param commandList 
 /// @param pso 
-void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
+void Engine::Render3DCylinderData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOShadowMap* pso)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -410,25 +379,12 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 		コマンドリストに登録
 	------------------------*/
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-
 
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
+	vertexResource_->Register(commandList);
 
 	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	indexResource_->Register(commandList);
 
 	// 座標変換の設定
 	shadowMapTransformationResource_->RegisterGraphics(commandList, 0);
@@ -437,18 +393,13 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
-
-
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	commandList->DrawIndexedInstanced(preSlices_ * 6, 1, 0, 0, 0);
 }
 
 /// @brief コマンドリストに登録
 /// @param commandList 
 /// @param pso 
-void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
+void Engine::Render3DCylinderData::RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso)
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
@@ -459,23 +410,11 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 	// PSOの設定
 	pso->Register(commandList);
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
+	vertexResource_->Register(commandList);
 
 	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	indexResource_->Register(commandList);
 
 	// モーションベクトルの設定
 	motionVectorResource_->RegisterGraphics(commandList, 0);
@@ -484,16 +423,68 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// ドローコール
-	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
+	commandList->DrawIndexedInstanced(preSlices_ * 6, 1, 0, 0, 0);
+}
 
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+/// @brief 頂点計算
+void Engine::Render3DCylinderData::VertexCalculate()
+{
+	const float radianPerDivid = 2.0f * std::numbers::pi_v<float> / static_cast<float>(param_->division.slices);
+
+	// インデックスの計算
+	for (int i = 0; i < param_->division.slices; ++i)
+	{
+		int startIndex = i * 6;
+		int vertexOffset = i * 4;
+
+		indexResource_->data_[startIndex + 0] = vertexOffset + 0;
+		indexResource_->data_[startIndex + 1] = vertexOffset + 1;
+		indexResource_->data_[startIndex + 2] = vertexOffset + 2;
+		indexResource_->data_[startIndex + 3] = vertexOffset + 2;
+		indexResource_->data_[startIndex + 4] = vertexOffset + 1;
+		indexResource_->data_[startIndex + 5] = vertexOffset + 3;
+	}
+
+	// 頂点の計算
+	for (int i = 0; i < param_->division.slices; ++i)
+	{
+		float sin = std::sin(i * radianPerDivid);
+		float cos = std::cos(i * radianPerDivid);
+		float sinNext = std::sin((i + 1) * radianPerDivid);
+		float cosNext = std::cos((i + 1) * radianPerDivid);
+		float u = float(i) / static_cast<float>(param_->division.slices);
+		float uNext = float(i + 1) / static_cast<float>(param_->division.slices);
+
+		int startIndex = i * 4;
+
+		vertexResource_->data_[startIndex].position = Vector4(-sin * param_->size.topRadius, param_->size.height, cos * param_->size.topRadius, 1.0f);
+		vertexResource_->data_[startIndex].texcoord = Vector2(u, 0.0f);
+		vertexResource_->data_[startIndex].normal = Vector3(-sin, 0.0f, cos);
+
+		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * param_->size.topRadius, param_->size.height, cosNext * param_->size.topRadius, 1.0f);
+		vertexResource_->data_[startIndex + 1].texcoord = Vector2(uNext, 0.0f);
+		vertexResource_->data_[startIndex + 1].normal = Vector3(-sinNext, 0.0f, cosNext);
+
+		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * param_->size.bottomRadius, 0.0f, cos * param_->size.bottomRadius, 1.0f);
+		vertexResource_->data_[startIndex + 2].texcoord = Vector2(u, 1.0f);
+		vertexResource_->data_[startIndex + 2].normal = Vector3(-sin, 0.0f, cos);
+
+		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * param_->size.bottomRadius, 0.0f, cosNext * param_->size.bottomRadius, 1.0f);
+		vertexResource_->data_[startIndex + 3].texcoord = Vector2(uNext, 1.0f);
+		vertexResource_->data_[startIndex + 3].normal = Vector3(-sinNext, 0.0f, cosNext);
+	}
+
+	// 分割数を記録する
+	preSlices_ = param_->division.slices;
+	preTopRadius_ = param_->size.topRadius;
+	preBottomRadius_ = param_->size.bottomRadius;
+	preHeight_ = param_->size.height;
 }
 
 
 /// @brief デバッグ用パラメータ
-void Engine::Render3DUVSphereData::DebugParameter()
+void Engine::Render3DCylinderData::DebugParameter()
 {
 #ifdef _DEVELOPMENT
 
@@ -644,8 +635,21 @@ void Engine::Render3DUVSphereData::DebugParameter()
 			// スライス
 			ImGui::DragInt("Slices", &param_->division.slices, 1.0f, 3, kMaxSlices);
 
-			// リング
-			ImGui::DragInt("Rings", &param_->division.rings, 1.0f, 3, kMaxRings);
+			// 終了
+			ImGui::TreePop();
+		}
+
+		// サイズ
+		if (ImGui::TreeNode("Size"))
+		{
+			// 上半径
+			ImGui::DragFloat("TopRadius", &param_->size.topRadius, 0.01f, 0.0f, 100000.0f);
+
+			// 下半径
+			ImGui::DragFloat("BottomRadius", &param_->size.bottomRadius, 0.01f, 0.0f, 100000.0f);
+
+			// 高さ
+			ImGui::DragFloat("Height", &param_->size.height, 0.01f, 0.0f, 100000.0f);
 
 			// 終了
 			ImGui::TreePop();
@@ -684,7 +688,7 @@ void Engine::Render3DUVSphereData::DebugParameter()
 /// @brief デバッグ用レイピッキング
 /// @param ray 
 /// @param pickList 
-void Engine::Render3DUVSphereData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
+void Engine::Render3DCylinderData::DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
 	// 選択初期化
 	if (guizmoData_.isSelect)
@@ -711,7 +715,7 @@ void Engine::Render3DUVSphereData::DebugRayPicker(const Collision3D::Ray& ray, s
 
 /// @brief Guizmo操作
 /// @return 
-void Engine::Render3DUVSphereData::DebugGuizmo(Camera3DStore* cameraStore)
+void Engine::Render3DCylinderData::DebugGuizmo(Camera3DStore* cameraStore)
 {
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;

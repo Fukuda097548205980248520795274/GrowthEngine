@@ -90,6 +90,9 @@
 #include "Application/Input/InputGamepadRightTrigger/InputGamepadRightTrigger.h"
 #include "Application/Input/InputKey/InputKey.h"
 
+#include "Func/CollisionFunc/CollisionFunc.h"
+#include "Func/RandomFunc/RandomFunc.h"
+
 
 // マウスボタン
 enum MouseButton
@@ -1001,6 +1004,24 @@ public:
 	Render3DHandle LoadUVSphere(TextureHandle hTexture, const std::string& name) const
 	{
 		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::UVSphere, log_.get());
+	}
+
+	/// @brief リングを読み込む
+	/// @param hTexture 
+	/// @param name 
+	/// @return 
+	Render3DHandle LoadRing(TextureHandle hTexture, const std::string& name) const
+	{
+		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::Ring, log_.get());
+	}
+
+	/// @brief 円柱を読み込む
+	/// @param hTexture 
+	/// @param name 
+	/// @return 
+	Render3DHandle LoadCylinder(TextureHandle hTexture, const std::string& name) const
+	{
+		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::Cylinder, log_.get());
 	}
 
 	/// @brief スプライトを読み込む

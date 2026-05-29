@@ -1153,6 +1153,12 @@
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard">
       <UniqueIdentifier>{6ac75813-9328-4f7e-a615-6d1fdd7629f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DRingData">
+      <UniqueIdentifier>{a1f9a65b-eefe-4230-ae6a-ace70f8f6806}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DCylinderData">
+      <UniqueIdentifier>{be6624c2-1da0-4e4f-9b49-903d949f7698}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2069,6 +2075,12 @@
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DCylinderData\Render3DCylinderData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DCylinderData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DRingData\Render3DRingData.cpp">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DRingData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3100,6 +3112,12 @@
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DCylinderData\Render3DCylinderData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DCylinderData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DRingData\Render3DRingData.h">
+      <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DRingData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
