@@ -50,16 +50,22 @@ void BehaviorTreeEditor::DrawNodeTable()
 		SaveCurrentTree();
 	}
 
-    // Ctrl+ZでUndo、Ctrl+YでRedoを実行する
+	// Ctrl+ZでUndoを実行
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
     {
         history_->Undo(*this);
+
+        // 変更があったのでフラグを立てる
+        isDirty_ = true;
     }
 
     // Ctrl+YでRedoを実行
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
     {
         history_->Redo(*this);
+
+        // 変更があったのでフラグを立てる
+        isDirty_ = true;
     }
 
 
@@ -79,6 +85,9 @@ void BehaviorTreeEditor::DrawNodeTable()
         new_link.startPinId = start_pin;
         new_link.endPinId = end_pin;
         links_.push_back(new_link);
+
+        // 変更があったのでフラグを立てる
+        isDirty_ = true;
     }
 
 
@@ -96,6 +105,9 @@ void BehaviorTreeEditor::DrawNodeTable()
         if (it != links_.end()) {
             links_.erase(it);
         }
+
+        // 変更があったのでフラグを立てる
+        isDirty_ = true;
     }
 
     ImGui::End();
@@ -171,6 +183,9 @@ void BehaviorTreeEditor::DrawProjectWindow()
 	
     ImGui::Begin("Tree Project Assets");
 
+	// 次に読み込むファイル名を保留するための変数
+    bool requestSavePopup = false;
+
     // 新規ツリーボタン
     if (ImGui::Button("New Tree"))
     {
@@ -184,12 +199,25 @@ void BehaviorTreeEditor::DrawProjectWindow()
         static char newFileName[64] = "";
         ImGui::InputText("File Name", newFileName, 64);
 
-		// ツリー作成ボタン
+		// 新しいツリーを作成する前に、未保存の変更があるかどうかを確認する
         if (ImGui::Button("Create"))
         {
-            currentFileName_ = newFileName;
-            ClearEditor();
-            SaveCurrentTree();
+            if (isDirty_)
+            {
+                // 未保存の変更があれば保留
+                pendingFileName_ = newFileName;
+                isPendingNewTree_ = true;
+                ImGui::OpenPopup("SaveConfirmationPopup");
+                requestSavePopup = true;
+            }
+            else
+            {
+                // 変更がなければそのまま作成
+                currentFileName_ = newFileName;
+                ClearEditor();
+                SaveCurrentTree();
+                isDirty_ = false;
+            }
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -234,19 +262,17 @@ void BehaviorTreeEditor::DrawProjectWindow()
                 ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.5f, 0.8f, 0.5f)));
             }
 
-			// アイコンがある場合はImageButtonで表示、ない場合は通常のボタンでファイル名を表示
-            if (iconTexture)
+			// アイコンまたはボタンがクリックされたときの処理
+            if (ImGui::ImageButton(file.c_str(), iconTexture, ImVec2(thumbnailSize, thumbnailSize)))
             {
-				// アイコンがある場合はImageButtonで表示
-                if (ImGui::ImageButton(file.c_str(), iconTexture, ImVec2(thumbnailSize, thumbnailSize)))
+                if (isDirty_ && currentFileName_ != file)
                 {
-                    LoadTree(file);
+                    // 未保存の変更があれば保留してポップアップを開く
+                    pendingFileName_ = file;
+                    isPendingNewTree_ = false;
+                    requestSavePopup = true;
                 }
-            }
-            else
-            {
-				// アイコンがない場合は通常のボタンでファイル名を表示
-                if (ImGui::Button("ICON", ImVec2(thumbnailSize, thumbnailSize)))
+                else
                 {
                     LoadTree(file);
                 }
@@ -295,7 +321,83 @@ void BehaviorTreeEditor::DrawProjectWindow()
 
             ImGui::PopID();
         }
+
         ImGui::EndTable();
+    }
+
+
+	// 未保存の変更がある場合、保存確認のポップアップを開く
+    if (requestSavePopup)
+    {
+        ImGui::OpenPopup("SaveConfirmationPopup");
+    }
+
+	// 保存確認のポップアップ
+    if (ImGui::BeginPopupModal("SaveConfirmationPopup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("You have unsaved changes.\nDo you want to save the current tree before leaving?");
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // [セーブボタン] 現在の状態を保存してから、保留していた操作を実行する
+        if (ImGui::Button("Save", ImVec2(120, 0)))
+        {
+            // 保存
+            SaveCurrentTree();
+
+            if (isPendingNewTree_)
+            {
+                // 保留していたのが「新規作成」だった場合
+                currentFileName_ = pendingFileName_;
+                ClearEditor();
+                SaveCurrentTree();
+            }
+            else
+            {
+                // 保留していたのが「別のファイルの読み込み」だった場合
+                LoadTree(pendingFileName_);
+            }
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+		// [キャンセルボタン] 保存せずに保留していた操作を実行する
+        if (ImGui::Button("Cancel", ImVec2(100, 0)))
+        {
+            if (isPendingNewTree_)
+            {
+                // 保存せずに新規作成へ進む
+                currentFileName_ = pendingFileName_;
+                ClearEditor();
+                SaveCurrentTree();
+            }
+            else
+            {
+                // 保存せずにクリックしたファイルを読み込む
+                LoadTree(pendingFileName_);
+            }
+
+            // フラグ類をリセットしてポップアップを閉じる
+            pendingFileName_ = "";
+            isPendingNewTree_ = false;
+            isDirty_ = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+		// [戻るボタン] 何もせずに保留していた操作をキャンセルしてポップアップを閉じる
+        if (ImGui::Button("Back", ImVec2(100, 0)))
+        {
+            // 何もせず、保留データだけクリアしてポップアップを閉じる
+            pendingFileName_ = "";
+            isPendingNewTree_ = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
     }
 
 
@@ -529,6 +631,10 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         ImVec2 currentPos = ImNodes::GetNodeGridSpacePos(node.id);
         if (currentPos.x > -99999.0f && currentPos.y > -99999.0f) 
         {
+			// ノードの位置が変更された場合は、ノードデータを更新して変更フラグを立てる
+            if (node.pos.x != currentPos.x || node.pos.y != currentPos.y)
+                isDirty_ = true;
+
             node.pos.x = currentPos.x;
             node.pos.y = currentPos.y;
         }

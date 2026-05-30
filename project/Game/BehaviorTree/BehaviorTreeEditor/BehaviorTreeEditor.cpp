@@ -27,6 +27,9 @@ void BehaviorTreeEditor::AddPersistentSelectorNode()
 
 	// ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+	isDirty_ = true;
 }
 
 /// @brief シーケンスノードを追加する
@@ -44,6 +47,9 @@ void BehaviorTreeEditor::AddPersistentSequenceNode()
 
     // ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }
 
 /// @brief セレクタノードを追加する
@@ -61,6 +67,9 @@ void BehaviorTreeEditor::AddRestartingSelectorNode()
 
     // ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }
 
 /// @brief シーケンスノードを追加する
@@ -78,6 +87,9 @@ void BehaviorTreeEditor::AddRestartingSequenceNode()
 
     // ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }
 
 /// @brief 条件ノードを追加する
@@ -95,6 +107,9 @@ void BehaviorTreeEditor::AddConditionNode()
 
     // ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }
 
 /// @brief コンボ攻撃ノードを追加する
@@ -113,6 +128,9 @@ void BehaviorTreeEditor::AddActionNode()
 
     // ノードをウィンドウの中心に配置する
     SetNodeWindowCenter(node);
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }
 
 /// @brief エディタを初期状態にリセットする
@@ -133,6 +151,9 @@ void BehaviorTreeEditor::SaveCurrentTree()
 
 	// 変更を保存する
     saver_.SaveTree(currentFileName_, nodes_, links_);
+
+	// 変更が保存されたのでフラグを下ろす
+    isDirty_ = false;
 }
 
 /// @brief ファイルからツリー構造を読み込む
@@ -165,6 +186,9 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+
+	// 読み込んだ瞬間は変更がない状態なのでフラグを下ろす
+    isDirty_ = false;
 }
 
 /// @brief ノードをウィンドウの中心に配置する
@@ -247,4 +271,7 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
 
     // ImNodes側の選択状態もクリアしておく
     ImNodes::ClearNodeSelection();
+
+    // 変更があったのでフラグを立てる
+    isDirty_ = true;
 }

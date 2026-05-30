@@ -107,6 +107,18 @@ private:
 
 private:
 
+	// 未保存の変更があるかどうかのフラグ
+	bool isDirty_ = false;
+
+	// 次に読み込む、または新規作成するファイル名
+	std::string pendingFileName_ = "";
+
+	// 保留中の操作が「新規作成」かどうか
+	bool isPendingNewTree_ = false;
+
+
+private:
+
 	// 次のIDを取得してインクリメントする
 	int GetNextId() { return currentId_++; }
 
