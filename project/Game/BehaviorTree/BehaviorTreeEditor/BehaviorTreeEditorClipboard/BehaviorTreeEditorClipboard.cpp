@@ -62,6 +62,8 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
     {
         if (clipboardNodes_.empty()) return;
 
+        ImNode::SetCurrentEditor(nodeEditorContext_);
+
         // ノード追加前の状態を履歴に保存する
         editor.history_->SaveHistory(editor.nodes_, editor.links_, editor.currentId_);
 
@@ -131,5 +133,7 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
         {
             ImNode::SelectNode(id);
         }
+        
+        ImNode::SetCurrentEditor(nullptr);
     }
 }

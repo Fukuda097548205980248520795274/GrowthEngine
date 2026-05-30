@@ -7,6 +7,11 @@
 /// @param currentId 
 void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, int currentId)
 {
+    // 呼び出し前のエディタコンテキストを退避しておく
+    auto prevEditor = ImNode::GetCurrentEditor();
+
+	ImNode:SetCurrentEditor(nodeEditorContext_);
+
     // 現在の状態をスナップショットとして保存
     EditorSnapshot snapshot;
     snapshot.nodes = nodes;
@@ -29,6 +34,8 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
     {
         undoHistory_.erase(undoHistory_.begin());
     }
+
+	ImNode::SetCurrentEditor(prevEditor);
 }
 
 /// @brief Undo（元に戻す）を実行する
@@ -36,6 +43,8 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
 void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 {
     if (undoHistory_.empty()) return;
+
+    ImNode::SetCurrentEditor(nodeEditorContext_);
 
 	// 現在の状態をRedo履歴に保存しておく
     for (auto& node : editor.nodes_)
@@ -60,6 +69,8 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 
 	// ノードとリンクの選択をクリア
     ImNode::ClearSelection();
+
+    ImNode::SetCurrentEditor(nullptr);
 }
 
 /// @brief Redo（やり直す）を実行する
@@ -67,6 +78,8 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
 void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
 {
     if (redoHistory_.empty()) return;
+
+    ImNode::SetCurrentEditor(nodeEditorContext_);
 
     // 現在の状態をUndo履歴に保存しておく
     for (auto& node : editor.nodes_)
@@ -91,6 +104,8 @@ void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
 
 	// ノードとリンクの選択をクリア
     ImNode::ClearSelection();
+
+    ImNode::SetCurrentEditor(nullptr);
 }
 
 /// @brief 履歴をクリアする

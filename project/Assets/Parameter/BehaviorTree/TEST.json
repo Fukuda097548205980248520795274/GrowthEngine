@@ -64,8 +64,8 @@
             "is_collapsed": false,
             "output_pin": -1,
             "pos": [
-                994.0,
-                17.0
+                930.0,
+                38.0
             ],
             "type": 4
         },
@@ -76,19 +76,19 @@
             "is_collapsed": false,
             "output_pin": 40,
             "pos": [
-                1002.0,
-                106.0
+                930.0,
+                134.0
             ],
             "type": 4
         },
         {
             "id": 59,
             "input_pin": 60,
-            "is_collapsed": true,
+            "is_collapsed": false,
             "output_pin": 61,
             "pos": [
-                414.0,
-                250.0
+                416.0,
+                272.0
             ],
             "type": 2
         },
@@ -99,8 +99,8 @@
             "is_collapsed": false,
             "output_pin": -1,
             "pos": [
-                1009.0,
-                175.0
+                930.0,
+                214.0
             ],
             "type": 4
         },
@@ -135,8 +135,8 @@
             "motionType": 4,
             "output_pin": -1,
             "pos": [
-                759.951904296875,
-                579.1491088867188
+                759.0,
+                579.0
             ],
             "type": 5
         },
@@ -149,8 +149,8 @@
             "motionType": 0,
             "output_pin": -1,
             "pos": [
-                756.5830078125,
-                663.2085571289063
+                756.0,
+                663.0
             ],
             "type": 5
         },
@@ -163,8 +163,8 @@
             "motionType": 0,
             "output_pin": 122,
             "pos": [
-                751.0213623046875,
-                249.8125
+                754.0,
+                230.0
             ],
             "type": 5
         },

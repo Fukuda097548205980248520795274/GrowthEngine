@@ -167,9 +167,9 @@ void Engine::ImGuiRender::Initialize(ID3D12Device* device, WinApp* winApp, DX12H
 	// ImguiNodeEditorの初期化
 	if (nodeEditorContext_ == nullptr)
 	{
-		ax::NodeEditor::Config config;
+		ImNode::Config config;
 		config.SettingsFile = "NodeEditor.json"; // 設定を保存するファイル名（任意）
-		nodeEditorContext_ = ax::NodeEditor::CreateEditor(&config);
+		nodeEditorContext_ = ImNode::CreateEditor(&config);
 	}
 
 	ImGuiIO& io = ImGui::GetIO();

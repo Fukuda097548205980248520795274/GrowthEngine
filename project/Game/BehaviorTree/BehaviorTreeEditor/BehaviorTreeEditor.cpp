@@ -177,6 +177,8 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
 /// @param node 
 void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 {
+	ImNode::SetCurrentEditor(nodeEditorContext_);
+
     // ウィンドウの中心座標（スクリーン座標）を計算
     ImVec2 windowCenter(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
 
@@ -185,6 +187,8 @@ void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 
     // imgui-node-editor を使用してノードの位置を設定
     ImNode::SetNodePosition(node.id, canvasCenter);
+
+    ImNode::SetCurrentEditor(nullptr);
 }
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する

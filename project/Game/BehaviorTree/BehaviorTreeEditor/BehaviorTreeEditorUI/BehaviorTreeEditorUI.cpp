@@ -365,6 +365,22 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
     ImNode::SetCurrentEditor(nodeEditorContext_);
 	ImNode::Begin("Behavior Tree Editor Canvas");
 
+    ImNode::Style& style = ImNode::GetStyle();
+
+    // エディタ全体の背景とグリッド
+    style.Colors[ImNode::StyleColor_Bg] = ImColor(20, 20, 20, 255);        // ワークスペース背景
+    style.Colors[ImNode::StyleColor_Grid] = ImColor(50, 50, 50, 255);      // グリッド線
+
+    // ノード自体の背景と枠線
+    style.Colors[ImNode::StyleColor_NodeBg] = ImColor(35, 35, 35, 255);    // ノードの背景
+    style.Colors[ImNode::StyleColor_NodeBorder] = ImColor(80, 80, 80, 255); // ノードの基本枠線
+    style.Colors[ImNode::StyleColor_HovNodeBorder] = ImColor(120, 120, 120, 255); // ホバー時の枠線
+    style.Colors[ImNode::StyleColor_SelNodeBorder] = ImColor(200, 150, 50, 255);  // 選択時の枠線
+
+    // リンク（接続線）の設定
+    style.Colors[ImNode::StyleColor_HovLinkBorder] = ImColor(150, 150, 150, 255);
+    style.Colors[ImNode::StyleColor_SelLinkBorder] = ImColor(200, 150, 50, 255);
+
     // ノードの描画
     for (auto& node : nodes_)
     {
