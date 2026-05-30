@@ -15,23 +15,64 @@ void BehaviorTreeEditor::DrawNodeTable()
     }
 
 
+	// ノード追加のためのボタン
+    if (ImGui::Button("＋ Add Node..."))
+    {
+        ImGui::OpenPopup("AddNodePopup");
+    }
 
-    // ノード追加ボタン
-    if (ImGui::Button("Add Persistent Selector")) AddPersistentSelectorNode();
-    ImGui::SameLine();
-    if (ImGui::Button("Add Persistent Sequence")) AddPersistentSequenceNode();
-    ImGui::SameLine();
-    if (ImGui::Button("Add Restarting Selector")) AddRestartingSelectorNode();
-    ImGui::SameLine();
-    if (ImGui::Button("Add Restarting Sequence")) AddRestartingSequenceNode();
-    ImGui::SameLine();
-    if (ImGui::Button("Add Condition")) AddConditionNode();
-    ImGui::SameLine();
-    if (ImGui::Button("Add Action")) AddActionNode();
+	// ノード追加のポップアップメニュー
+    if (ImGui::BeginPopup("AddNodePopup"))
+    {
+        ImGui::SeparatorText("Composites");
+        if (ImGui::MenuItem("Persistent Selector")) AddPersistentSelectorNode();
+        if (ImGui::MenuItem("Persistent Sequence")) AddPersistentSequenceNode();
+        if (ImGui::MenuItem("Restarting Selector")) AddRestartingSelectorNode();
+        if (ImGui::MenuItem("Restarting Sequence")) AddRestartingSequenceNode();
+
+        ImGui::SeparatorText("Tasks");
+        if (ImGui::MenuItem("Condition")) AddConditionNode();
+        if (ImGui::MenuItem("Action")) AddActionNode();
+
+        ImGui::EndPopup();
+    }
 
 
 	// ノードエディタのキャンバスを描画
     DrawNodeEditorCanvas();
+
+
+	// キャンバスが右クリックされたときのコンテキストメニュー
+    if (ImNodes::IsEditorHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+    {
+        ImGui::OpenPopup("CanvasContextMenu");
+    }
+
+	// キャンバスのコンテキストメニュー
+    if (ImGui::BeginPopup("CanvasContextMenu"))
+    {
+        ImGui::SeparatorText("Add Node");
+
+		// Compositesノード追加のためのサブメニュー
+        if (ImGui::BeginMenu("Composites"))
+        {
+            if (ImGui::MenuItem("Persistent Selector")) AddPersistentSelectorNode();
+            if (ImGui::MenuItem("Persistent Sequence")) AddPersistentSequenceNode();
+            if (ImGui::MenuItem("Restarting Selector")) AddRestartingSelectorNode();
+            if (ImGui::MenuItem("Restarting Sequence")) AddRestartingSequenceNode();
+            ImGui::EndMenu();
+        }
+
+		// Tasksノード追加のためのサブメニュー
+        if (ImGui::BeginMenu("Tasks"))
+        {
+            if (ImGui::MenuItem("Condition")) AddConditionNode();
+            if (ImGui::MenuItem("Action")) AddActionNode();
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndPopup();
+    }
 
 
     // コピーとペーストの処理
