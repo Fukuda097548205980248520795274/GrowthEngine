@@ -195,11 +195,8 @@ void BehaviorTreeEditor::LoadTree(const std::string& fileName)
 /// @param node 
 void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 {
-    // ノードをウィンドウの中心に配置する
-    ImVec2 windowCenter(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
-
-    // ImNodesを使用してノードの位置を設定
-    ImNodes::SetNodeScreenSpacePos(node.id, windowCenter);
+	// ノードのIDを保留中の中心配置ノードIDとして保存する
+    pendingCenterNodeId_ = node.id;
 }
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する

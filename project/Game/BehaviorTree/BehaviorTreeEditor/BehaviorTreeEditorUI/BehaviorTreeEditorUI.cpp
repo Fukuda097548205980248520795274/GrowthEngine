@@ -42,8 +42,8 @@ void BehaviorTreeEditor::DrawNodeTable()
     DrawNodeEditorCanvas();
 
 
-	// キャンバスが右クリックされたときのコンテキストメニュー
-    if (ImNodes::IsEditorHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+	// キャンバスがホバーされていて、右クリックが離された場合にコンテキストメニューを開く
+    if (ImNodes::IsEditorHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
     {
         ImGui::OpenPopup("CanvasContextMenu");
     }
@@ -615,6 +615,35 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
     // ノードエディタの開始
     ImNodes::BeginNodeEditor();
+
+	// 特定のノードをエディタウィンドウの中心に配置する処理を行う
+    if (pendingCenterNodeId_ != -1)
+    {
+        // エディタウィンドウの現在の中心（ウィンドウ相対）を計算
+        ImVec2 viewCenter = ImVec2(ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowSize().y * 0.5f);
+
+        // ImNodes の現在のスクロール（パン）量を取得
+        ImVec2 panning = ImNodes::EditorContextGetPanning();
+
+        // スクロール状態を考慮した「グリッド空間上の中心座標」を算出
+        ImVec2 gridCenter = ImVec2(viewCenter.x - panning.x, viewCenter.y - panning.y);
+
+        // 対象のノードを探して計算した座標を代入し、ImNodesへの適用フラグを立てる
+        for (auto& node : nodes_)
+        {
+            if (node.id == pendingCenterNodeId_)
+            {
+                node.pos.x = gridCenter.x;
+                node.pos.y = gridCenter.y;
+                node.needSetPos = true;
+                break;
+            }
+        }
+
+        // 保留状態を解除
+        pendingCenterNodeId_ = -1;
+    }
+
 
     // ノードの描画
     for (auto& node : nodes_)

@@ -105,6 +105,10 @@ private:
 	int currentId_ = 1;
 
 
+	// ノードをウィンドウの中心に配置するための保留中のノードID
+	int pendingCenterNodeId_ = -1;
+
+
 private:
 
 	// 未保存の変更があるかどうかのフラグ
