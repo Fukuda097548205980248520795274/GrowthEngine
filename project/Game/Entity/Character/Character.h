@@ -1,5 +1,4 @@
 #pragma once
-#define NOMINMAX
 #include "../Entity.h"
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"

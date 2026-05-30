@@ -48,6 +48,9 @@ public:
 	/// @brief プロパティウィンドウを描画する
 	void DrawPropertyWindow();
 
+	/// @brief　プロジェクトウィンドウを描画する
+	void DrawProjectWindow();
+
 
 private:
 
@@ -79,6 +82,15 @@ private:
 
 	// 前のフレームで展開されていたノードのIDを保持するセット
 	std::unordered_set<int> prevHiddenNodes_;
+
+
+private:
+
+	/// @brief エンジンのインスタンス
+	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
+
+	// ファイルアイコンのSRVのGPUハンドル
+	D3D12_GPU_DESCRIPTOR_HANDLE btFileIcon_;
 
 
 private:

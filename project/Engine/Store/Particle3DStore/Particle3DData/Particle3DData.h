@@ -1,5 +1,4 @@
 #pragma once
-#define NOMINMAX
 #include "DataForGPU/ParticleDataForGPU/ParticleDataForGPU.h"
 #include "Data/ParticleData/ParticleData.h"
 #include "Handle/Handle.h"

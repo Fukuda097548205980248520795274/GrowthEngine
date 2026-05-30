@@ -7,148 +7,6 @@ void BehaviorTreeEditor::DrawNodeTable()
 
     ImGui::Begin("Behavior Tree Editor");
 
-    // 新規ツリーボタン
-    if (ImGui::Button("New Tree"))
-    {
-        ImGui::OpenPopup("NewTreePopup");
-    }
-
-    // 新規ツリーポップアップ
-    if (ImGui::BeginPopup("NewTreePopup"))
-    {
-        // 新しいツリーのファイル名入力
-        static char newFileName[64] = "";
-        ImGui::InputText("File Name", newFileName, 64);
-
-        // ツリー作成ボタン
-        if (ImGui::Button("Create"))
-        {
-            // ファイル名が空でないことを確認
-            currentFileName_ = newFileName;
-            ClearEditor();
-            SaveCurrentTree();
-
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-
-    ImGui::SameLine();
-
-
-    // 保存されているツリーの一覧を表示
-    ImGui::Text("Saved Trees:");
-    auto files = projectManager_.GetFileList();
-
-    // 各ファイルに対して選択、コピー、削除のUIを表示
-    for (const auto& file : files)
-    {
-        // ファイル名をIDとしてプッシュ
-        ImGui::PushID(file.c_str());
-
-        // 現在のファイルが選択されているかどうかを判定
-        bool isSelected = (currentFileName_ == file);
-
-        // ファイル名を選択可能なアイテムとして表示
-        if (ImGui::Selectable(file.c_str(), isSelected, 0, ImVec2(ImGui::GetContentRegionAvail().x - 840, 0)))
-        {
-            LoadTree(file);
-        }
-
-        ImGui::SameLine();
-
-        // コピー用のボタンを表示
-        if (ImGui::Button("Copy"))
-        {
-            ImGui::OpenPopup("CopyPopup");
-        }
-
-        // コピー用のポップアップ
-        if (ImGui::BeginPopup("CopyPopup"))
-        {
-            // コピー先のファイル名入力
-            static char newFileName[64] = "";
-            ImGui::Text("Copy to:");
-            ImGui::InputText("##newname", newFileName, 64);
-
-            // コピー実行ボタン
-            if (ImGui::Button("Execute Copy"))
-            {
-                // ファイル名が空でないことを確認してコピーを実行
-                if (strlen(newFileName) > 0)
-                {
-                    projectManager_.CopyProjectFile(file, newFileName);
-                    ImGui::CloseCurrentPopup();
-
-                    // コピー後のファイル名をリセット
-                    memset(newFileName, 0, sizeof(newFileName));
-                }
-            }
-            ImGui::EndPopup();
-        }
-
-        ImGui::SameLine();
-
-
-        // 削除用のボタンを表示（赤色にする）
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.1f, 1.0f));
-        if (ImGui::Button("Del"))
-        {
-            ImGui::OpenPopup("DeletePopup");
-        }
-        ImGui::PopStyleColor();
-
-        // 削除用のポップアップ
-        if (ImGui::BeginPopupModal("DeletePopup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            // 削除確認のメッセージを表示
-            ImGui::Text("Are you sure you want to delete '%s'?", file.c_str());
-            ImGui::Separator();
-
-            // 削除実行ボタン
-            if (ImGui::Button("Yes, Delete", ImVec2(120, 0)))
-            {
-                // ファイルを削除
-                projectManager_.DeleteProjectFile(file);
-
-                // 現在編集中のファイルが削除された場合はエディタをクリア
-                if (currentFileName_ == file)
-                {
-                    ClearEditor();
-                    currentFileName_ = "";
-                }
-                ImGui::CloseCurrentPopup();
-            }
-
-            // デフォルトで削除実行ボタンにフォーカスを当てる
-            ImGui::SetItemDefaultFocus();
-
-            ImGui::SameLine();
-
-            // 削除キャンセルボタン
-            if (ImGui::Button("Cancel", ImVec2(120, 0)))
-            {
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::EndPopup();
-        }
-
-
-        ImGui::PopID();
-    }
-
-    ImGui::SameLine();
-
-    // 現在のファイル名を表示して保存ボタンを配置
-    if (!currentFileName_.empty())
-    {
-        ImGui::Text("Editing: %s", currentFileName_.c_str());
-        if (ImGui::Button("Save (Ctrl+S)"))
-        {
-            SaveCurrentTree();
-        }
-    }
-
     // ファイルが選択されていない場合はノードエディタを描画せずに終了
     if (currentFileName_.empty())
     {
@@ -185,6 +43,12 @@ void BehaviorTreeEditor::DrawNodeTable()
     {
         DeleteSelectedNodes();
     }
+
+	// Ctrl+Sで現在のツリーを保存する
+	if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+	{
+		SaveCurrentTree();
+	}
 
     // Ctrl+ZでUndo、Ctrl+YでRedoを実行する
     if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
@@ -293,6 +157,220 @@ void BehaviorTreeEditor::DrawPropertyWindow()
     {
         // 未選択時のメッセージ
         ImGui::Text("No node selected.");
+    }
+
+    ImGui::End();
+
+#endif
+}
+
+/// @brief　プロジェクトウィンドウを描画する
+void BehaviorTreeEditor::DrawProjectWindow()
+{
+#ifdef _DEVELOPMENT
+	
+    ImGui::Begin("Tree Project Assets");
+
+    // 新規ツリーボタン
+    if (ImGui::Button("New Tree"))
+    {
+		ImGui::OpenPopup("New Tree Popup");
+    }
+
+    // 新規ツリーポップアップ
+    if (ImGui::BeginPopup("New Tree Popup"))
+    {
+		// 新しいツリーのファイル名入力
+        static char newFileName[64] = "";
+        ImGui::InputText("File Name", newFileName, 64);
+
+		// ツリー作成ボタン
+        if (ImGui::Button("Create"))
+        {
+            currentFileName_ = newFileName;
+            ClearEditor();
+            SaveCurrentTree();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    ImGui::Separator();
+
+	// 保存されているツリーの一覧を表示
+    ImGui::Text("Saved Trees:");
+    auto files = projectManager_.GetFileList();
+    ImGui::Spacing();
+
+    // グリッドレイアウトの計算
+    float thumbnailSize = 64.0f;
+    float padding = 16.0f;
+    float cellSize = thumbnailSize + padding;
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+
+    // ウィンドウ幅に収まる列数を計算（最低1列）
+    int columnCount = std::max(1, static_cast<int>(panelWidth / cellSize));
+
+    // ポップアップを開くための状態管理変数
+    static std::string fileToCopy = "";
+    static std::string fileToDelete = "";
+
+	// ImGuiのテーブルを使用してグリッドレイアウトを作成
+    if (ImGui::BeginTable("AssetGrid", columnCount))
+    {
+        for (const auto& file : files)
+        {
+			// 次の列に移動
+            ImGui::TableNextColumn();
+            ImGui::PushID(file.c_str());
+
+			// アイコンのSRVハンドルをImGuiのテクスチャIDに変換
+            ImTextureID iconTexture = (ImTextureID)btFileIcon_.ptr;
+
+            // アイコンが選択されているかどうかのハイライト（背景色）
+            bool isSelected = (currentFileName_ == file);
+            if (isSelected)
+            {
+                ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ImVec4(0.3f, 0.5f, 0.8f, 0.5f)));
+            }
+
+			// アイコンがある場合はImageButtonで表示、ない場合は通常のボタンでファイル名を表示
+            if (iconTexture)
+            {
+				// アイコンがある場合はImageButtonで表示
+                if (ImGui::ImageButton(file.c_str(), iconTexture, ImVec2(thumbnailSize, thumbnailSize)))
+                {
+                    LoadTree(file);
+                }
+            }
+            else
+            {
+				// アイコンがない場合は通常のボタンでファイル名を表示
+                if (ImGui::Button("ICON", ImVec2(thumbnailSize, thumbnailSize)))
+                {
+                    LoadTree(file);
+                }
+            }
+
+			// アイコンまたはボタンを右クリックしたときのコンテキストメニュー
+            if (ImGui::BeginPopupContextItem("FileContextMenu"))
+            {
+				// 現在のファイルが選択されているかどうかを判定する変数
+                bool isCurrentFile = (currentFileName_ == file);
+
+				// Saveは現在のファイルが選択されているときのみ表示
+                if (ImGui::MenuItem("Save", "Ctrl+S", false, isCurrentFile))
+                {
+                    SaveCurrentTree();
+                }
+
+				// Loadは常に表示
+                if (ImGui::MenuItem("Load"))
+                {
+                    LoadTree(file);
+                }
+
+                ImGui::Separator();
+
+				// CopyとDeleteはファイルが選択されているときのみ表示
+                if (ImGui::MenuItem("Copy"))
+                {
+                    fileToCopy = file;
+                }
+
+				// Deleteは危険な操作なので、赤いテキストで表示して強調する
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+                if (ImGui::MenuItem("Delete"))
+                {
+                    fileToDelete = file;
+                }
+
+                ImGui::PopStyleColor();
+
+                ImGui::EndPopup();
+            }
+
+			// ファイル名をアイコンの下に表示
+            ImGui::TextWrapped("%s", file.c_str());
+
+            ImGui::PopID();
+        }
+        ImGui::EndTable();
+    }
+
+
+	// コピー用のポップアップ
+    if (!fileToCopy.empty())
+    {
+        ImGui::OpenPopup("CopyPopup");
+    }
+
+	// コピー用のポップアップの内容
+    if (ImGui::BeginPopup("CopyPopup"))
+    {
+		// コピー先のファイル名を入力するためのテキストボックス
+        static char newFileName[64] = "";
+        ImGui::Text("Copy '%s' to:", fileToCopy.c_str());
+        ImGui::InputText("##newname", newFileName, 64);
+
+		// コピー実行ボタンとキャンセルボタン
+        if (ImGui::Button("Execute Copy"))
+        {
+            if (strlen(newFileName) > 0)
+            {
+                projectManager_.CopyProjectFile(fileToCopy, newFileName);
+                fileToCopy = "";
+                memset(newFileName, 0, sizeof(newFileName));
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        ImGui::SameLine();
+
+		// コピー操作は危険な操作ではないので、通常のボタンでキャンセルを表示
+        if (ImGui::Button("Cancel"))
+        {
+            fileToCopy = "";
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+	// 削除用のポップアップ
+    if (!fileToDelete.empty())
+    {
+        ImGui::OpenPopup("DeletePopup");
+    }
+
+	// 削除用のポップアップの内容
+    if (ImGui::BeginPopupModal("DeletePopup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+		// 重要な操作なので、赤いテキストで警告を表示して強調する
+        ImGui::Text("Are you sure you want to delete '%s'?", fileToDelete.c_str());
+        ImGui::Separator();
+
+		// 削除実行ボタンは赤いテキストで表示して強調する
+        if (ImGui::Button("Yes, Delete", ImVec2(120, 0)))
+        {
+            projectManager_.DeleteProjectFile(fileToDelete);
+            if (currentFileName_ == fileToDelete)
+            {
+                ClearEditor();
+                currentFileName_ = "";
+            }
+            fileToDelete = "";
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+
+		// 削除操作は危険な操作なので、赤いテキストで表示して強調する
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            fileToDelete = "";
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
 
     ImGui::End();

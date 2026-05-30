@@ -83,6 +83,11 @@ namespace Engine
 		/// @param log 
 		TextureHandle LoadTexture(const std::string& filePath, Log* log) { return textureStore_->Load(filePath, heap_.get(), core_->GetDevice(), command_->GetCommandList(), log); }
 
+		/// @brief テクスチャのSRVのGPUハンドルを取得する
+		/// @param handle 
+		/// @return 
+		D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvGpuHandle(TextureHandle handle) { return textureStore_->GetSrvGpuHandle(handle); }
+
 		/// @brief モデルを読み込む
 		/// @param directory 
 		/// @param fileName 

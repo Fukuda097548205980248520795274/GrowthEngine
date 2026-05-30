@@ -7,6 +7,9 @@ BehaviorTreeEditor::BehaviorTreeEditor()
 	// 履歴管理クラスとクリップボード管理クラスのインスタンスを作成
 	history_ = std::make_unique<BehaviorTreeEditorHistory>();
 	clipboard_ = std::make_unique<BehaviorTreeEditorClipboard>();
+
+	// ファイルアイコンのSRVのGPUハンドルを取得
+    btFileIcon_ = engine_->GetTextureSrvGpuHandle(engine_->LoadTexture("./Assets/Textures/uvChecker.png"));
 }
 
 /// @brief セレクタノードを追加する

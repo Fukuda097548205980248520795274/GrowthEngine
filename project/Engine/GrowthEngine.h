@@ -191,6 +191,11 @@ public:
 	/// @return 
 	TextureHandle LoadTexture(const std::string& filePath) const { return renderContext_->LoadTexture(filePath, log_.get()); }
 
+	/// @brief テクスチャのSRVのGPUハンドルを取得する
+	/// @param handle 
+	/// @return 
+	D3D12_GPU_DESCRIPTOR_HANDLE GetTextureSrvGpuHandle(TextureHandle handle)const { return renderContext_->GetTextureSrvGpuHandle(handle); }
+
 	/// @brief オーディオを読み込む
 	/// @param filePath 
 	/// @return 
