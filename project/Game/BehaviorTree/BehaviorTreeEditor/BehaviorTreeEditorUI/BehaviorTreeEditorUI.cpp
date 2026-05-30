@@ -42,12 +42,6 @@ void BehaviorTreeEditor::DrawNodeTable()
     DrawNodeEditorCanvas();
 
 
-	// キャンバスがホバーされていて、右クリックが離された場合にコンテキストメニューを開く
-    if (ImNodes::IsEditorHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
-    {
-        ImGui::OpenPopup("CanvasContextMenu");
-    }
-
 	// キャンバスのコンテキストメニュー
     if (ImGui::BeginPopup("CanvasContextMenu"))
     {
@@ -728,8 +722,21 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
     }
 
+	// キャンバスの空いている部分を右クリックしたときのコンテキストメニューを開くためのフラグ
+    bool shouldOpenPopup = false;
+    if (ImNodes::IsEditorHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+    {
+        shouldOpenPopup = true;
+    }
+
     // ノードエディタの終了
     ImNodes::EndNodeEditor();
+
+	// キャンバスの空いている部分を右クリックしたときのコンテキストメニューを開く
+    if (shouldOpenPopup)
+    {
+        ImGui::OpenPopup("CanvasContextMenu");
+    }
 
 	// 現在のフレームで展開されているノードのIDを更新する
     prevHiddenNodes_ = hiddenNodes;
