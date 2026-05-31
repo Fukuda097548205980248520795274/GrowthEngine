@@ -136,7 +136,7 @@ void GrabAttack::Update()
 /// @brief アクションが成功したとき、または再度実行されたときに呼ばれる
 void GrabAttack::Reset()
 {
-	Action::Reset();
+	Attack::Reset();
 	attackTimer_ = 0.0f;
 	hasHit_ = false;
 	DeleteHitbox();

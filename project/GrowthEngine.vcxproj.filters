@@ -1159,6 +1159,9 @@
     <Filter Include="Engine\Include\Store\Render3DStore\Render3DData\Render3DCylinderData">
       <UniqueIdentifier>{be6624c2-1da0-4e4f-9b49-903d949f7698}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Node\ActionNode\AvoidNode">
+      <UniqueIdentifier>{c3e92c3b-28c4-44eb-a86e-3773253712bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2081,6 +2084,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DRingData\Render3DRingData.cpp">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DRingData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\AvoidNode\AvoidNode.cpp">
+      <Filter>Game\Node\ActionNode\AvoidNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3118,6 +3124,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DRingData\Render3DRingData.h">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DRingData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\AvoidNode\AvoidNode.h">
+      <Filter>Game\Node\ActionNode\AvoidNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

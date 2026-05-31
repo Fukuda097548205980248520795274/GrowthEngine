@@ -94,6 +94,12 @@ public:
 	/// @brief 実行
 	virtual void Exec() override;
 
+	/// @brief 中断・終了
+	virtual void Exit() override;
+
+	/// @brief リセット
+	virtual void Reset() override;
+
 	/// @brief 更新処理
 	virtual void Update() override;
 

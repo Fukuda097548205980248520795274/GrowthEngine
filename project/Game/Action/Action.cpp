@@ -45,7 +45,4 @@ void Action::Exit()
 	// 成功していない場合は、失敗フラグを立てる
 	if (!isSuccess_)
 		isFailure_ = true;
-
-	// キャラクターの攻撃を解除する
-	owner_->SetCurrentAttack(nullptr);
 }

@@ -129,7 +129,7 @@ void GrabStrikeAttack::Update()
 /// @brief リセット
 void GrabStrikeAttack::Reset()
 {
-	Action::Reset();
+	Attack::Reset();
 	attackTimer_ = 0.0f;
 	isReleased_ = false;
 	grabbedTarget_ = nullptr;
@@ -144,5 +144,5 @@ void GrabStrikeAttack::Exit()
 		owner_->ReleaseGrab();
 	}
 
-	Action::Exit();
+	Attack::Exit();
 }

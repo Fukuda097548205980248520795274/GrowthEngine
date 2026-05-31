@@ -1,17 +1,35 @@
 #pragma once
 #include "../Action.h"
 
+struct AvoidInitData
+{
+	// 回避方向
+	Vector2 localDirection = Vector2(0.0f, -1.0f);
+
+	// 回避時間
+	float time = 0.3f;
+
+	// 回避距離
+	float distance = 1.0f;
+};
+
 class Avoid : public Action
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param character 
-	/// @param avoidDirection 
-	Avoid(Character* character, const Vector3& avoidDirection) : Action(character), avoidDirection_(avoidDirection) {}
+	/// @param initData 
+	Avoid(Character* character, const AvoidInitData& initData);
 
 	/// @brief 実行
 	void Exec() override;
+
+	/// @brief 終了、中断
+	void Exit() override;
+
+	/// @brief リセット
+	void Reset() override;
 
 	/// @brief 更新処理
 	void Update() override;
@@ -23,7 +41,19 @@ public:
 
 private:
 
-	/// @brief 回避方向
-	Vector3 avoidDirection_ = Vector3(0.0f, 0.0f, 0.0f);
+	// 回避方向 ローカル
+	Vector2 localDirection_ = Vector2(0.0f, -1.0f);
+
+	// 回避時間
+	float time_ = 0.3f;
+
+	// 回避距離
+	float distance_ = 1.0f;
+
+
+private:
+
+	// タイマー
+	float timer_ = 0.0f;
 };
 

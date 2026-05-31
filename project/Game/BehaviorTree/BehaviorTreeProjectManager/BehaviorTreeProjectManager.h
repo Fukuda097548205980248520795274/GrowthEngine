@@ -5,6 +5,7 @@
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
+#include "Action/Avoid/Avoid.h"
 #include "MotionManager/MotionManager.h"
 
 // ノードの種類
@@ -72,6 +73,7 @@ struct EditorNode
 	CombAttackInitData comboAttackInitData;
 	GrabAttackInitData grabAttackInitData;
 	GrabStrikeAttackInitData grabStrikeAttackInitData;
+	AvoidInitData avoidInitData;
 
 	// 条件ノードのパラメータ
 	CondtionNodeParam conditionParam;

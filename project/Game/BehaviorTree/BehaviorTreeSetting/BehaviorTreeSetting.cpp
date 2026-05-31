@@ -92,6 +92,12 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				// グラブストライク攻撃のデータにヒットの配列を追加
 				n["grab_strike_data"]["hits"] = hitsJson;
             }
+            else if (node.actionName == "Avoid")
+            {
+				n["avoid_data"]["Duration"] = node.avoidInitData.time;
+				n["avoid_data"]["Distance"] = node.avoidInitData.distance;
+				n["avoid_data"]["LocalDirection"] = { node.avoidInitData.localDirection.x, node.avoidInitData.localDirection.y };
+            }
 
 			if (node.actionName != "None")
             {
@@ -269,6 +275,27 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 
 							// 読み込んだヒットをノードのリストに追加
 							node.grabStrikeAttackInitData.hits.push_back(def);
+                        }
+                    }
+                }
+                else if (node.actionName == "Avoid")
+                {
+                    if (n.contains("avoid_data") && n["avoid_data"].is_object())
+                    {
+                        // 参照を作っておくと、記述がスッキリし、無駄なアクセスも減ります
+                        const auto& avoid_data = n["avoid_data"];
+
+                        node.avoidInitData.time = avoid_data.value("Duration", 0.0f);
+                        node.avoidInitData.distance = avoid_data.value("Distance", 0.0f);
+
+                        if (avoid_data.contains("LocalDirection") &&
+                            avoid_data["LocalDirection"].is_array() &&
+                            avoid_data["LocalDirection"].size() == 2)
+                        {
+                            // 2. get<float>() を使って明示的に型を変換して代入する
+                            // ※ x, y が double 型の場合は get<double>() に変更してください
+                            node.avoidInitData.localDirection.x = avoid_data["LocalDirection"][0].get<float>();
+                            node.avoidInitData.localDirection.y = avoid_data["LocalDirection"][1].get<float>();
                         }
                     }
                 }

@@ -114,9 +114,6 @@ void ComboAttack::Update()
 			}
 			sphere->param_->radius = state.def.radius;
 
-			// 受け流したかどうかを示すフラグ
-			bool isParried = false;
-
 			// ターゲットのリストを取得する
 			for (Character* target : Character::GetCharacters())
 			{
@@ -204,7 +201,7 @@ void ComboAttack::Update()
 void ComboAttack::Reset()
 {
 	// 基底のリセット
-	Action::Reset();
+	Attack::Reset();
 
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;

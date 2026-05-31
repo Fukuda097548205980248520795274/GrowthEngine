@@ -1,0 +1,40 @@
+{
+    "links": [
+        {
+            "end": 5,
+            "id": 6,
+            "start": 3
+        }
+    ],
+    "nodes": [
+        {
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "output_pin": 3,
+            "pos": [
+                248.0,
+                226.0
+            ],
+            "type": 2
+        },
+        {
+            "action_name": "Avoid",
+            "avoidDirection": [
+                0.0,
+                -1.0
+            ],
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                455.0,
+                203.0
+            ],
+            "type": 5
+        }
+    ]
+}

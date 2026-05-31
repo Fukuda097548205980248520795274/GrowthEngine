@@ -814,7 +814,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     ImGui::PushItemWidth(120.0f);
 
     // アクション選択用のコンボボックス
-    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken" };
+    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken", "Avoid" };
     int currentItem = 0;
     for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
     {
@@ -1029,9 +1029,22 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             ImGui::TreePop();
         }
     }
+	else if (node.actionName == "Avoid")
+	{
+		if (ImGui::TreeNode("Avoid Settings"))
+		{
+			ImGui::DragFloat2("Direction", &node.avoidInitData.localDirection.x, 0.01f);
+			ImGui::DragFloat("Distance", &node.avoidInitData.distance, 0.01f);
+			ImGui::DragFloat("Duration", &node.avoidInitData.time, 0.01f);
+
+			node.avoidInitData.localDirection = node.avoidInitData.localDirection.Normalize();
+
+			ImGui::TreePop();
+		}
+	}
 
     // None RequestToken ReleaseToke 以外のアクションが選択されている場合はモーション設定UIを表示
-    if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken")
+    if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken" && node.actionName != "Avoid")
     {
         if (ImGui::TreeNode("Motion Settings"))
         {

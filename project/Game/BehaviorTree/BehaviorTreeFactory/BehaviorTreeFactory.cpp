@@ -186,6 +186,11 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// トークン解放ノードの生成
             runtime_node = std::make_unique<ReleaseTokenNode>(std::make_unique<ReleaseToken>(character));
 		}
+        else if (editor_node.actionName == "Avoid")
+        {
+			// 回避ノードの生成
+            runtime_node = std::make_unique<ActionNode>(std::make_unique<Avoid>(character, editor_node.avoidInitData));
+        }
         else
         {
             // 何も設定されていない、または該当しない場合（何もしないノードにする等）
