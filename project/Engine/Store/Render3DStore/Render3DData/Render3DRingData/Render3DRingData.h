@@ -103,8 +103,12 @@ namespace Engine
 
 		// 円柱の前回の値
 		int32_t preSlices_ = 0;
-		float preInRadius_ = 0.0f;
-		float preOutRadius_ = 0.0f;
+		float preStartInRadius_ = 0.0f;
+		float preStartOutRadius_ = 0.0f;
+		float preStartAngle_ = 0.0f;
+		float preEndAngle_ = 0.0f;
+		float preEndInRadius_ = 0.0f;
+		float preEndOutRadius_ = 0.0f;
 
 	private:
 

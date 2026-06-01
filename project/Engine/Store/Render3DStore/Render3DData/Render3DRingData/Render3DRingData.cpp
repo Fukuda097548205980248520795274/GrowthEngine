@@ -54,8 +54,12 @@ void Engine::Render3DRingData::Initialize(TextureStore* textureStore, LightStore
 	param_->division.slices = 32;
 
 	// サイズ
-	param_->size.inRadius = 0.5f;
-	param_->size.outRadius = 1.0f;
+	param_->size.startInRadius = 0.5f;
+	param_->size.startOutRadius = 1.0f;
+	param_->size.startAngle = 0.0f;
+	param_->size.endAngle = std::numbers::pi_v<float> *2.0f;
+	param_->size.endInRadius = 0.5f;
+	param_->size.endOutRadius = 1.0f;
 
 	// ブラー
 	param_->blur.afterImageMask = 0.0f;
@@ -89,8 +93,12 @@ void Engine::Render3DRingData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 		parameter_->SetValue(group_, "Division_Slices", &param_->division.slices);
-		parameter_->SetValue(group_, "Size_InRadius", &param_->size.inRadius);
-		parameter_->SetValue(group_, "Size_OutRadius", &param_->size.outRadius);
+		parameter_->SetValue(group_, "Size_StartInRadius", &param_->size.startInRadius);
+		parameter_->SetValue(group_, "Size_StartOutRadius", &param_->size.startOutRadius);
+		parameter_->SetValue(group_, "Size_StartAngle", &param_->size.startAngle);
+		parameter_->SetValue(group_, "Size_EndAngle", &param_->size.endAngle);
+		parameter_->SetValue(group_, "Size_EndInRadius", &param_->size.endInRadius);
+		parameter_->SetValue(group_, "Size_EndOutRadius", &param_->size.endOutRadius);
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 
@@ -181,8 +189,12 @@ void Engine::Render3DRingData::Reset()
 		param_->division.slices = 32;
 
 		// サイズ
-		param_->size.inRadius = 0.5f;
-		param_->size.outRadius = 1.0f;
+		param_->size.startInRadius = 0.5f;
+		param_->size.startOutRadius = 1.0f;
+		param_->size.startAngle = 0.0f;
+		param_->size.endAngle = std::numbers::pi_v<float> *2.0f;
+		param_->size.endInRadius = 0.5f;
+		param_->size.endOutRadius = 1.0f;
 
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
@@ -206,8 +218,10 @@ void Engine::Render3DRingData::Register(Camera3DStore* cameraStore, SkyboxStore*
 	if (!isLoad_)return;
 
 	// 頂点の再計算
-	if (preSlices_ != param_->division.slices || preInRadius_ != param_->size.inRadius ||
-		preOutRadius_ != param_->size.outRadius)
+	if (preSlices_ != param_->division.slices || preStartInRadius_ != param_->size.startInRadius ||
+		preStartOutRadius_ != param_->size.startOutRadius || preStartAngle_ != param_->size.startAngle ||
+		preEndAngle_ != param_->size.endAngle || preEndInRadius_ != param_->size.endInRadius ||
+		preEndOutRadius_ != param_->size.endOutRadius)
 		VertexCalculate();
 
 
@@ -446,36 +460,53 @@ void Engine::Render3DRingData::VertexCalculate()
 	// 頂点の計算
 	for (int i = 0; i < param_->division.slices; ++i)
 	{
-		float sin = std::sin(i * radianPerDivid);
-		float cos = std::cos(i * radianPerDivid);
-		float sinNext = std::sin((i + 1) * radianPerDivid);
-		float cosNext = std::cos((i + 1) * radianPerDivid);
+		float currentAngle = param_->size.startAngle + i * radianPerDivid;
+		float nextAngle = param_->size.startAngle + (i + 1) * radianPerDivid;
+
+		float sin = std::sin(currentAngle);
+		float cos = std::cos(currentAngle);
+		float sinNext = std::sin(nextAngle);
+		float cosNext = std::cos(nextAngle);
+
 		float u = float(i) / static_cast<float>(param_->division.slices);
 		float uNext = float(i + 1) / static_cast<float>(param_->division.slices);
 
+		float t = float(i) / static_cast<float>(param_->division.slices);
+		float tNext = float(i + 1) / static_cast<float>(param_->division.slices);
+
+		float currentInRadius = (1.0f - t) * param_->size.startInRadius + t * param_->size.endInRadius;
+		float currentOutRadius = (1.0f - t) * param_->size.startOutRadius + t * param_->size.endOutRadius;
+
+		float nextInRadius = (1.0f - tNext) * param_->size.startInRadius + tNext * param_->size.endInRadius;
+		float nextOutRadius = (1.0f - tNext) * param_->size.startOutRadius + tNext * param_->size.endOutRadius;
+
 		int startIndex = i * 4;
 
-		vertexResource_->data_[startIndex].position = Vector4(-sin * param_->size.outRadius, cos * param_->size.outRadius, 0.0f, 1.0f);
+		vertexResource_->data_[startIndex].position = Vector4(-sin * currentOutRadius, cos * currentOutRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex].texcoord = Vector2(u, 0.0f);
 		vertexResource_->data_[startIndex].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * param_->size.outRadius, cosNext * param_->size.outRadius, 0.0f, 1.0f);
+		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * nextOutRadius, cosNext * nextOutRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 1].texcoord = Vector2(uNext, 0.0f);
 		vertexResource_->data_[startIndex + 1].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * param_->size.inRadius,cos * param_->size.inRadius, 0.0f, 1.0f);
+		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * currentInRadius, cos * currentInRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 2].texcoord = Vector2(u, 1.0f);
 		vertexResource_->data_[startIndex + 2].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * param_->size.inRadius, cosNext * param_->size.inRadius, 0.0f, 1.0f);
+		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * nextInRadius, cosNext * nextInRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 3].texcoord = Vector2(uNext, 1.0f);
 		vertexResource_->data_[startIndex + 3].normal = Vector3(0.0f, 0.0f, 1.0f);
 	}
 
 	// 分割数を記録する
 	preSlices_ = param_->division.slices;
-	preInRadius_ = param_->size.inRadius;
-	preOutRadius_ = param_->size.outRadius;
+	preStartInRadius_ = param_->size.startInRadius;
+	preStartOutRadius_ = param_->size.startOutRadius;
+	preStartAngle_ = param_->size.startAngle;
+	preEndAngle_ = param_->size.endAngle;
+	preEndInRadius_ = param_->size.endInRadius;
+	preEndOutRadius_ = param_->size.endOutRadius;
 }
 
 
@@ -638,11 +669,23 @@ void Engine::Render3DRingData::DebugParameter()
 		// サイズ
 		if (ImGui::TreeNode("Size"))
 		{
-			// 内半径
-			ImGui::DragFloat("InRadius", &param_->size.inRadius, 0.01f, 0.0f, 100000.0f);
+			// 開始内半径
+			ImGui::DragFloat("StartInRadius", &param_->size.startInRadius, 0.01f, 0.0f, 100000.0f);
 
-			// 外半径
-			ImGui::DragFloat("OutRadius", &param_->size.outRadius, 0.01f, 0.0f, 100000.0f);
+			// 開始外半径
+			ImGui::DragFloat("StartOutRadius", &param_->size.startOutRadius, 0.01f, 0.0f, 100000.0f);
+
+			// 開始角度
+			ImGui::DragFloat("StartAngle", &param_->size.startAngle, 0.01f, -100000.0f, 100000.0f);
+
+			// 終了内半径
+			ImGui::DragFloat("EndInRadius", &param_->size.endInRadius, 0.01f, 0.0f, 100000.0f);
+
+			// 終了外半径
+			ImGui::DragFloat("EndOutRadius", &param_->size.endOutRadius, 0.01f, 0.0f, 100000.0f);
+
+			// 終了角度
+			ImGui::DragFloat("EndAngle", &param_->size.endAngle, 0.01f, -100000.0f, 100000.0f);
 
 			// 終了
 			ImGui::TreePop();

@@ -538,11 +538,24 @@ namespace Engine
 			// サイズ
 			struct Size
 			{
-				// 内半径
-				float inRadius;
+				// 開始内半径
+				float startInRadius;
 
-				// 外半径
-				float outRadius;
+				// 開始外半径
+				float startOutRadius;
+
+				// 開始角度
+				float startAngle;
+
+
+				// 終了内半径
+				float endInRadius;
+
+				// 終了外半径
+				float endOutRadius;
+
+				// 終了角度
+				float endAngle;
 			};
 
 			/// @brief ブラー
