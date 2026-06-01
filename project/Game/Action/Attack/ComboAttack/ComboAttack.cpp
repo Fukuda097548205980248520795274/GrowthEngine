@@ -114,6 +114,23 @@ void ComboAttack::Update()
 			}
 			sphere->param_->radius = state.def.radius;
 
+
+			// 当たり判定がヒットしているかどうかをチェックするためのラムダ関数を定義する
+			auto IsSphereHit = [](Engine::BaseCollision3DInstance* hitbox, Engine::BaseCollision3DInstance* hurtbox) -> bool
+				{
+					if (!hitbox || !hurtbox) return false;
+
+					auto s1 = static_cast<Collision3DInstanceSphere*>(hitbox);
+					auto s2 = static_cast<Collision3DInstanceSphere*>(hurtbox);
+
+					// 中心点同士の距離を求める
+					Vector3 diff = s1->param_->center - s2->param_->center;
+
+					// 距離が、2つの球の半径の合計値以下なら当たっている
+					return diff.Length() <= (s1->param_->radius + s2->param_->radius);
+				};
+
+
 			// ターゲットのリストを取得する
 			for (Character* target : Character::GetCharacters())
 			{
@@ -125,7 +142,9 @@ void ComboAttack::Update()
 					continue;
 
 				// 当たり判定がヒットした場合の処理
-				if (target->GetHurtboxChest().IsHit() || target->GetHurtboxHead().IsHit() || target->GetHurtboxRoot().IsHit())
+				if (IsSphereHit(state.hitbox.collider_, target->GetHurtboxChest().collider_) ||
+					IsSphereHit(state.hitbox.collider_, target->GetHurtboxHead().collider_) ||
+					IsSphereHit(state.hitbox.collider_, target->GetHurtboxRoot().collider_))
 				{
 					// ターゲットに対してノックバックの方向を計算するためのベクトルを定義する
 					Vector3 forward = target->GetPosition() - owner_->GetPosition();
