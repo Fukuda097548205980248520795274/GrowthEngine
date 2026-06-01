@@ -109,13 +109,31 @@ Size=926,490
 Collapsed=0
 DockId=0x00000001,2
 
+[Window][FPS Overlay]
+Pos=0,510
+Size=1222,210
+Collapsed=0
+DockId=0x00000005,1
+
+[Window][Tree Project Assets]
+Pos=0,510
+Size=1222,210
+Collapsed=0
+DockId=0x00000005,2
+
+[Window][Node Properties]
+Pos=928,18
+Size=352,490
+Collapsed=0
+DockId=0x00000002,7
+
 [Docking][Data]
 DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
   DockNode    ID=0x00000003 Parent=0x14621557 SizeRef=1280,490 Split=X
-    DockNode  ID=0x00000001 Parent=0x00000003 SizeRef=926,702 CentralNode=1 Selected=0xCD8A0BD6
-    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x216DA292
+    DockNode  ID=0x00000001 Parent=0x00000003 SizeRef=926,702 CentralNode=1 Selected=0xFCC94F6D
+    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x370D40C7
   DockNode    ID=0x00000004 Parent=0x14621557 SizeRef=1280,210 Split=X Selected=0xBE78FE5F
-    DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=1222,170 Selected=0xFFE73297
+    DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=1222,170 Selected=0xB4599F82
     DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=56,170 Selected=0xFDB80A1C
 )";
 

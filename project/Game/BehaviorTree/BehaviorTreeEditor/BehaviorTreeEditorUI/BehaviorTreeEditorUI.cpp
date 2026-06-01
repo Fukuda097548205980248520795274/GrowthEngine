@@ -764,9 +764,10 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
         }
     }
 
-    // 出力ピンの描画（条件ノード以外）
-    if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::PersistentSequence ||
-        node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence)
+	// 出力ピンの描画 閉じられていないセレクタノードとシーケンスノードのみ出力ピンを描画する
+    if (!node.isCollapsed &&
+        (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::PersistentSequence ||
+            node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence))
     {
         ImNodes::BeginOutputAttribute(node.outputPinId);
 
