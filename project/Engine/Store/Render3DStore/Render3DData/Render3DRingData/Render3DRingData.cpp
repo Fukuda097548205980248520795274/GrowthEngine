@@ -457,19 +457,19 @@ void Engine::Render3DRingData::VertexCalculate()
 
 		vertexResource_->data_[startIndex].position = Vector4(-sin * param_->size.outRadius, cos * param_->size.outRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex].texcoord = Vector2(u, 0.0f);
-		vertexResource_->data_[startIndex].normal = Vector3(-sin, 0.0f, cos);
+		vertexResource_->data_[startIndex].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * param_->size.outRadius, cosNext * param_->size.outRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 1].texcoord = Vector2(uNext, 0.0f);
-		vertexResource_->data_[startIndex + 1].normal = Vector3(-sinNext, 0.0f, cosNext);
+		vertexResource_->data_[startIndex + 1].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * param_->size.inRadius,cos * param_->size.inRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 2].texcoord = Vector2(u, 1.0f);
-		vertexResource_->data_[startIndex + 2].normal = Vector3(-sin, 0.0f, cos);
+		vertexResource_->data_[startIndex + 2].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * param_->size.inRadius, cosNext * param_->size.inRadius, 0.0f, 1.0f);
 		vertexResource_->data_[startIndex + 3].texcoord = Vector2(uNext, 1.0f);
-		vertexResource_->data_[startIndex + 3].normal = Vector3(-sinNext, 0.0f, cosNext);
+		vertexResource_->data_[startIndex + 3].normal = Vector3(0.0f, 0.0f, 1.0f);
 	}
 
 	// 分割数を記録する
