@@ -1,25 +1,26 @@
 #pragma once
 #include "../StageObject.h"
 
-// 床の初期化データ
-struct FloorInitData
-{
-	/// @brief 床の位置
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// 床の大きさ
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
-
-	// 地面の衝突判定
-	Collision3DInstanceAABB* collision = nullptr;
-
-	/// @brief 地面のモデル
-	PrefabInstanceStaticModel* model = nullptr;
-};
-
 /// @brief 床
 class Floor : public StageObject
 {
+public:
+
+	struct InitData
+	{
+		/// @brief 床の位置
+		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+		/// 床の大きさ
+		Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+		// 地面の衝突判定
+		Collision3DInstanceAABB* collision = nullptr;
+
+		/// @brief 地面のモデル
+		PrefabInstanceStaticModel* model = nullptr;
+	};
+
 public:
 
 	/// @brief コンストラクタ
@@ -28,7 +29,7 @@ public:
 
 	/// @brief 初期化
 	/// @param initData 
-	void Initialize(const FloorInitData& initData);
+	void Initialize(const InitData& initData);
 
 	/// @brief 更新処理
 	virtual void Update() override;

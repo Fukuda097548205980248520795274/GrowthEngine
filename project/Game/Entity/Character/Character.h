@@ -41,16 +41,10 @@ public:
 		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
 		/// @brief 回転
-		Vector3 rotate = Vector3(0.0f, 0.0f, 0.0f);
+		float rotateY = 0.0f;
 
 		/// @brief 体力
 		int hp = 0;
-
-		/// @brief 回避時間
-		float avoidDuration = 0.3f;
-
-		/// @brief 回避距離
-		float avoidDistance = 1.5f;
 		
 		/// @brief モデル
 		Render3DSkinningModel* model_ = nullptr;

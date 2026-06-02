@@ -12,8 +12,10 @@
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
 #include "EffectManager/EffectManager.h"
+
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
+#include "StageEditor/StageEditor.h"
 
 class GameScene : public Scene
 {
@@ -31,6 +33,25 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
+
+
+public:
+
+	/// @brief キャラクターを生成する
+	/// @param initData 
+	/// @return 
+	Character* CreateCharacter(const Character::InitData& initData, Character::CharacterTag tag);
+
+	/// @brief 武器を生成する
+	/// @param position 
+	/// @return 
+	Weapon* CreateWeapon(const Weapon::InitData& initData);
+
+	/// @brief 床オブジェクトを生成する
+	/// @param position 
+	/// @param scale 
+	/// @return 
+	Floor* CreateFloorObject(const Floor::InitData& initData);
 
 
 private:
@@ -71,6 +92,9 @@ private:
 	// ビヘイビアツリーエディタ
 	std::unique_ptr<BehaviorTreeEditor> behaviorTreeEditor_ = nullptr;
 
+	// ステージエディタ
+	std::unique_ptr<StageEditor> stageEditor_ = nullptr;
+
 
 	/// @brief プレイヤーの当たり判定グループ
 	std::unique_ptr<Collision3DBaseSphere> playerHurtboxGroup_;
@@ -107,16 +131,24 @@ private:
 	std::unique_ptr<Weapon> playerWeapon_ = nullptr;
 
 
+	// キャラクターのモデル用ハンドル
+	ModelHandle hCharacterModel_ = 0;
+	AnimationHandle hCharacterAnimation_ = 0;
+	SkeletonHandle hCharacterSkeleton_ = 0;
 
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
+
+
 	/// @brief NPCのリスト
 	std::list<std::unique_ptr<NPC>> npcs_;
 
+	/// @brief 武器のリスト
+	std::list<std::unique_ptr<Weapon>> weapons_;
 
-	// 床
-	std::unique_ptr<Floor> floor_ = nullptr;
+	/// @brief ステージオブジェクトのリスト
+	std::list<std::unique_ptr<StageObject>> objects_;
 
 
 	/// @brief カメラのピボットポイント

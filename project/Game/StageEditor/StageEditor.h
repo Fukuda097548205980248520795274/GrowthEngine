@@ -1,12 +1,13 @@
 #pragma once
 #include "GrowthEngine.h"
+#include "MotionManager/MotionManager.h"
 
 class GameScene;
 
-enum class PlacementType 
+// 配置するオブジェクトの種類
+enum class EditCategory
 {
-    Player,
-    NPC,
+    Character,
     Object,
     Weapon
 };
@@ -14,12 +15,44 @@ enum class PlacementType
 // ステージエディターで配置するオブジェクトのデータ構造
 struct PlacementData 
 {
-    PlacementType type;
+	// 配置するオブジェクトの種類
+    EditCategory category;
+
+    // キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
+	int subType;
+
+    // 位置
     Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
-    // エディターのUI表示用一時変数（実機インスタンスへのポインタなどがあると便利）
+	// 回転（Y軸のみ）
+	float rotateY = 0.0f;
+
+	// 拡縮
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+	// HP (キャラクターの場合)
+	int32_t hp = 100;
+
+	// 耐久力 (武器の場合)
+	int32_t durability = 100;
+
+	float attackPower = 1.0f; // 攻撃力 (武器の場合)
+
+	// モーションのハンドル（キャラクターの場合）
+    AnimationHandle hStandMotion = 0;
+    AnimationHandle hStanceMotion = 0;
+    AnimationHandle hWalkMotion = 0;
+    AnimationHandle hDashMotion = 0;
+    AnimationHandle hAvoidFrontMotion = 0;
+    AnimationHandle hAvoidBackMotion = 0;
+    AnimationHandle hAvoidLeftMotion = 0;
+    AnimationHandle hAvoidRightMotion = 0;
+
+    // 生成された実体へのポインタ
     void* instancePtr = nullptr;
 };
+
+using json = nlohmann::json;
 
 class StageEditor
 {
@@ -56,6 +89,9 @@ private:
     /// @brief シーン
     GameScene* scene_ = nullptr;
 
+    // モーションマネージャ
+	MotionManager* motionManager_ = nullptr;
+
 	// 配置するオブジェクトのリスト
     std::vector<PlacementData> placementList_;
 
@@ -72,5 +108,10 @@ private:
 	/// @brief 実際のゲーム内エンティティを削除する
     /// @param data 
     void DeleteActualEntity(PlacementData& data);
+
+    /// @brief モーションの選択UIを表示する
+    /// @param motionType 
+    /// @param motionName 
+    void MotionSelecter(const char* label, MotionType& motionType, std::string& motionName);
 };
 

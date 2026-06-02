@@ -53,7 +53,7 @@ Character::Character(const InitData& initData) : Entity()
 	worldTransform_->translate_ = initData.position;
 
 	// 回転
-	worldTransform_->rotate_ = initData.rotate.Normalize();
+	worldTransform_->rotate_ = Vector3(0.0f, initData.rotateY, 0.0f);
 
 	// 体力
 	hp_ = initData.hp;

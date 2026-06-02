@@ -42,10 +42,18 @@ void GameScene::Initialize()
 	// ビヘイビアツリーエディタの生成と初期化
 	behaviorTreeEditor_ = std::make_unique<BehaviorTreeEditor>();
 
+	// ステージエディタの生成と初期化
+	stageEditor_ = std::make_unique<StageEditor>(this);
+	stageEditor_->Initialize();
+
+	// キャラクターモデルの読み込み
+	hCharacterModel_ = engine_->LoadModel("./Assets/Models/Character", "bone.gltf");
+	hCharacterAnimation_ = motionManager_->GetMotion(MotionType::Stand, "Standing");
+	hCharacterSkeleton_ = motionManager_->GetSkeleton();
+
 
 	// プレイヤーのモデルの生成と初期化
-	playerModel_ = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-		motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Player_Model");
+	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
 
 
 	
@@ -90,11 +98,10 @@ void GameScene::Initialize()
 	// プレイヤーの生成と初期化
 	Character::InitData playerInitData;
 	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
+	playerInitData.rotateY = 0.0f;
 	playerInitData.hp = 100;
 	playerInitData.model_ = playerModel_.get();
 	playerInitData.weapon = nullptr;
-	playerInitData.avoidDuration = 0.3f;
-	playerInitData.avoidDistance = 1.5f;
 	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
 	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Nimble");
 	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
@@ -111,38 +118,16 @@ void GameScene::Initialize()
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize(playerWeapon_.get());
 
-	//// 味方の生成と初期化
-	//Character::InitData allyInitData;
-	//allyInitData.position = Vector3(-5.0f, 0.0f, 0.0f);
-	//allyInitData.hp = 100;
-	//allyInitData.avoidDuration = 0.3f;
-	//allyInitData.avoidDistance = 1.5f;
-	//allyInitData.model_ = allyModel_.get();
-	//allyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, 0);
-	//allyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, 2);
-	//allyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, 0);
-	//allyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, 0);
-	//allyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::AvoidFont, 0);
-	//allyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::AvoidBack, 0);
-	//allyInitData.hAvoidLeftMotion = 0;
-	//allyInitData.hAvoidRightMotion = 0;
-	//allyInitData.hurtboxGroup = playerHurtboxGroup_.get();
-	//allyInitData.hitboxGroup = playerHitboxGroup_.get();
-	//ally_ = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
-	//ally_->Initialize();
-
 	// 味方の生成と初期化
 	for (int i = 0; i < 4; ++i)
 	{
-		std::unique_ptr<Render3DSkinningModel> allyModel = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model_" + std::to_string(i));
+		std::unique_ptr<Render3DSkinningModel> allyModel = std::make_unique<Render3DSkinningModel>(hCharacterModel_,
+			hCharacterAnimation_, hCharacterSkeleton_, "Ally_Model_" + std::to_string(i));
 
 		Character::InitData allyInitData;
 		allyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 5.0f);
-		allyInitData.rotate = Vector3(0.0f, std::numbers::pi_v<float>, 0.0f);
+		allyInitData.rotateY = std::numbers::pi_v<float>;
 		allyInitData.hp = 100;
-		allyInitData.avoidDuration = 0.3f;
-		allyInitData.avoidDistance = 1.5f;
 		allyInitData.model_ = allyModel.get();
 		allyInitData.weapon = nullptr;
 		allyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
@@ -170,16 +155,14 @@ void GameScene::Initialize()
 	for (int i = 0; i < 5; ++i)
 	{
 		// 敵のモデルの生成と初期化
-		std::unique_ptr<Render3DSkinningModel> enemyModel = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
-			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Enemy_Model_" + std::to_string(i));
+		std::unique_ptr<Render3DSkinningModel> enemyModel = std::make_unique<Render3DSkinningModel>(hCharacterModel_,
+			hCharacterAnimation_, hCharacterSkeleton_, "Enemy_Model_" + std::to_string(i));
 
 		// 敵の生成と初期化
 		Character::InitData enemyInitData;
 		enemyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 0.0f);
-		enemyInitData.rotate = Vector3(0.0f, 0.0f, 0.0f);
+		enemyInitData.rotateY = std::numbers::pi_v<float>;
 		enemyInitData.hp = 100;
-		enemyInitData.avoidDuration = 0.3f;
-		enemyInitData.avoidDistance = 1.5f;
 		enemyInitData.model_ = enemyModel.get();
 		enemyInitData.weapon = nullptr;
 		enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
@@ -204,16 +187,6 @@ void GameScene::Initialize()
 	}
 
 
-	// 床
-	FloorInitData floorInitData;
-	floorInitData.position = Vector3(0.0f, -2.0f, 0.0f);
-	floorInitData.scale = Vector3(50.0f, 1.0f, 20.0f);
-	floorInitData.collision = floorCollision_->CreateInstance();
-	floorInitData.model = nullptr;
-	floor_ = std::make_unique<Floor>();
-	floor_->Initialize(floorInitData);
-
-
 	// カメラ制御の初期化
 	InitializeCameraControl();
 }
@@ -224,15 +197,35 @@ void GameScene::Update()
 	// デルタタイムを取得する
 	const float deltaTime = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
-	// 床の更新
-	floor_->Update();
+	// ステージエディタの更新
+	stageEditor_->Update(deltaTime);
 
 	// プレイヤーの更新
 	player_->Update();
 	playerWeapon_->Update();
 
-	// 敵の更新
-	for (auto& npc : npcs_)npc->Update();
+	// オブジェクトの更新
+	for (auto& object : objects_)object->Update();
+
+	// NPCの更新
+	npcs_.remove_if(
+		[](const std::unique_ptr<NPC>& npc)
+		{
+			npc->Update();
+			return npc->IsFinished();
+		}
+	);
+
+	// 武器の更新
+	weapons_.remove_if(
+		[](const std::unique_ptr<Weapon>& weapon) 
+		{
+			weapon->Update();
+			return weapon->IsFinished(); 
+		}
+	);
+
+
 
 	// エフェクトの更新
 	effectManager_->Update();
@@ -245,6 +238,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// エディタの描画
+	stageEditor_->DrawUI();
 	behaviorTreeEditor_->DrawProjectWindow();
 	behaviorTreeEditor_->DrawNodeTable();
 	behaviorTreeEditor_->DrawPropertyWindow();
@@ -254,11 +248,12 @@ void GameScene::Draw()
 	player_->Draw();
 	playerWeapon_->Draw();
 
-	//// 味方の描画
-	//ally_->Draw();
-
 	// 敵の描画
 	for (auto& npc : npcs_)npc->Draw();
+
+	// 武器の描画
+	for (auto& weapon : weapons_)weapon->Draw();
+
 
 	// エフェクトの描画
 	effectManager_->Draw();
@@ -267,6 +262,92 @@ void GameScene::Draw()
 	postEffectManager_->Draw(player_.get());
 
 }
+
+
+/// @brief キャラクターを生成する
+/// @param initData 
+/// @return 
+Character* GameScene::CreateCharacter(const Character::InitData& initData, Character::CharacterTag tag)
+{
+	Character* character = nullptr;
+
+	if(tag == Character::CharacterTag::Player)
+	{
+		Character::InitData playerInitData = initData;
+		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
+		playerInitData.hitboxGroup = playerHitboxGroup_.get();
+		playerInitData.landingCollision = landingCollision_->CreateInstance();
+
+		// プレイヤーの生成処理
+		std::unique_ptr<Player> player = std::make_unique<Player>(initData);
+		player->Initialize(playerWeapon_.get());
+		character = player.get();
+		player_ = std::move(player);
+	}
+	else
+	{
+		Character::InitData npcInitData = initData;
+
+		// NPCの当たり判定グループの設定
+		if (tag == Character::CharacterTag::Ally || tag == Character::CharacterTag::Vip)
+		{
+			npcInitData.hurtboxGroup = playerHurtboxGroup_.get();
+			npcInitData.hitboxGroup = playerHitboxGroup_.get();
+		}
+		else if (tag == Character::CharacterTag::EnemyNormal || tag == Character::CharacterTag::EnemyBoss)
+		{
+			npcInitData.hurtboxGroup = enemyHurtboxGroup_.get();
+			npcInitData.hitboxGroup = enemyHitboxGroup_.get();
+		}
+
+		// 着地判定グループの設定
+		npcInitData.landingCollision = landingCollision_->CreateInstance();
+
+		// NPCの生成処理
+		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
+		npc->Initialize(behaviorTreeEditor_->CreateTree("TEST", npc.get()));
+		character = npc.get();
+		npcs_.push_back(std::move(npc));
+	}
+
+	return character;
+}
+
+/// @brief 武器を生成する
+/// @param position 
+/// @return 
+Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData)
+{
+	Weapon* weapon = nullptr;
+
+	Weapon::InitData weaponInitData = initData;
+	weaponInitData.landingCollision = landingCollision_->CreateInstance();
+
+	// 武器の生成処理
+	std::unique_ptr<Weapon> newWeapon = std::make_unique<Weapon>(initData);
+	weapon = newWeapon.get();
+	weapons_.push_back(std::move(newWeapon));
+
+	return weapon;
+}
+
+/// @brief 床オブジェクトを生成する
+/// @param position 
+/// @param scale 
+/// @return 
+Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
+{
+	// 床
+	Floor::InitData floorInitData = initData;
+	floorInitData.collision = floorCollision_->CreateInstance();
+
+	std::unique_ptr<Floor> newFloor = std::make_unique<Floor>();
+	Floor* floor = newFloor.get();
+
+	newFloor->Initialize(floorInitData);
+	return floor;
+}
+
 
 /// @brief カメラ制御の初期化
 void GameScene::InitializeCameraControl()

@@ -1,0 +1,30 @@
+{
+    "StageObjects": [
+        {
+            "attackPower": 1.0,
+            "category": 1,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                -9.800000190734863,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                91.80000305175781,
+                1.0,
+                75.69999694824219
+            ],
+            "subType": 1
+        }
+    ]
+}

@@ -10,7 +10,7 @@ Floor::Floor() : StageObject()
 
 /// @brief 初期化
 /// @param initData 
-void Floor::Initialize(const FloorInitData& initData)
+void Floor::Initialize(const InitData& initData)
 {
 	// nullptr
 	assert(initData.collision != nullptr);
