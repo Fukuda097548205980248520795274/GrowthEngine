@@ -8,6 +8,8 @@ void TitleScene::Initialize()
 
 	engine_->LoadLight("DirectionalLight", Engine::Light::Type::Directional);
 
+	engine_->LoadPostEffect("GaussianFilter", Engine::PostEffect::Type::GaussianFilter);
+
 	engine_->LoadRing(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "Test_Ring");
 	engine_->LoadCylinder(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "Test_Cylinder");
 	engine_->LoadUVSphere(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), "Test_UVSphere");
@@ -26,4 +28,6 @@ void TitleScene::Draw()
 	engine_->DrawRender3D("Test_Cylinder");
 
 	engine_->DrawRender3D("Test_UVSphere");
+
+	engine_->DrawPostEffect("GaussianFilter");
 }

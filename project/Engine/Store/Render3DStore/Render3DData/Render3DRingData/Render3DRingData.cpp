@@ -441,7 +441,7 @@ void Engine::Render3DRingData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 /// @brief 頂点計算
 void Engine::Render3DRingData::VertexCalculate()
 {
-	const float radianPerDivid = 2.0f * std::numbers::pi_v<float> / static_cast<float>(param_->division.slices);
+	const float radianPerDivid = (param_->size.endAngle - param_->size.startAngle) / static_cast<float>(param_->division.slices);
 
 	// インデックスの計算
 	for (int i = 0; i < param_->division.slices; ++i)
@@ -462,6 +462,17 @@ void Engine::Render3DRingData::VertexCalculate()
 	{
 		float currentAngle = param_->size.startAngle + i * radianPerDivid;
 		float nextAngle = param_->size.startAngle + (i + 1) * radianPerDivid;
+
+		// 最後のスライスで、全体の角度が2πに近い場合は、誤差を考慮して次の角度をスタート角度にする
+		if (i == param_->division.slices - 1)
+		{
+			float totalAngle = param_->size.endAngle - param_->size.startAngle;
+			// 誤差を考慮して 2π と比較
+			if (std::abs(totalAngle - (std::numbers::pi_v<float> *2.0f)) < 0.0001f)
+			{
+				nextAngle = param_->size.startAngle;
+			}
+		}
 
 		float sin = std::sin(currentAngle);
 		float cos = std::cos(currentAngle);
