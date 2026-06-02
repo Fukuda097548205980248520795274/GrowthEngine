@@ -170,7 +170,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	if (type == Render3D::Type::UVSphere)
 	{
 		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle, parameter_.get());
-		data->Initialize(textureStore_, lightStore_, heap_, device, commandList, psoUVSphere_.get(), log);
+		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

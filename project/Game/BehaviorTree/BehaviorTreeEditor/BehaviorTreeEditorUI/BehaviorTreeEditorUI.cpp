@@ -790,13 +790,118 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 {
     ImGui::Text("Function:");
 
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数
+    auto DragFloatClamp = [&](const char* label, float* value, float speed, float min, float max)
+        {
+            // 値が変更された場合は、履歴に保存して変更フラグを立てる
+            if (ImGui::DragFloat(label, value, speed, min, max))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+    auto DragFloat = [&](const char* label, float* value, float speed)
+        {
+            if (ImGui::DragFloat(label, value, speed))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float2版）
+    auto DragFloat2Clamp = [&](const char* label, float* value, float speed, float min, float max)
+        {
+            if (ImGui::DragFloat2(label, value, speed, min, max))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+    auto DragFloat2 = [&](const char* label, float* value, float speed)
+        {
+            if (ImGui::DragFloat2(label, value, speed))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float3版）
+    auto DragFloat3Clamp = [&](const char* label, float* value, float speed, float min, float max)
+        {
+            if (ImGui::DragFloat3(label, value, speed, min, max))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+    auto DragFloat3 = [&](const char* label, float* value, float speed)
+        {
+            if (ImGui::DragFloat3(label, value, speed))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（int版）
+    auto InputIntClamp = [&](const char* label, int* value, int min, int max)
+        {
+            if (ImGui::InputInt(label, value))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+    auto InputInt = [&](const char* label, int* value)
+        {
+            if (ImGui::InputInt(label, value))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（コンボボックス版）
+    auto Combo = [&](const char* label, int* currentItem, const char* const items[], int itemCount) -> bool
+        {
+            if (ImGui::Combo(label, currentItem, items, itemCount))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+
+                return true;
+            }
+
+            return false;
+        };
+
+    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（チェックボックス版）
+    auto Checkbox = [&](const char* label, bool* value)
+        {
+            if (ImGui::Checkbox(label, value))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
     // コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
     const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing", "IsTargetInRange", "IsTargetOutOfRange" };
 
     // コンボボックスを描画し、変更があったらEnumにキャストして戻す
     int currentItem = static_cast<int>(node.conditionType);
     ImGui::PushItemWidth(120.0f);
-    if (ImGui::Combo("Condition", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
+    if (Combo("Condition", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
     {
         node.conditionType = static_cast<ConditionType>(currentItem);
     }
@@ -804,7 +909,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
     // ターゲットとの距離を条件にする場合は、距離の入力UIを表示
     if (node.conditionType == ConditionType::IsTargetInRange || node.conditionType == ConditionType::IsTargetOutOfRange)
     {
-        ImGui::DragFloat("Distance to Target", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
+        DragFloatClamp("Distance to Target", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
     }
 }
 
@@ -813,6 +918,112 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 {
     ImGui::PushItemWidth(120.0f);
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数
+    auto DragFloatClamp = [&](const char* label, float* value, float speed, float min, float max)
+        {
+            // 値が変更された場合は、履歴に保存して変更フラグを立てる
+            if (ImGui::DragFloat(label, value, speed, min, max))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+	auto DragFloat = [&](const char* label, float* value, float speed)
+		{
+			if (ImGui::DragFloat(label, value, speed))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float2版）
+	auto DragFloat2Clamp = [&](const char* label, float* value, float speed, float min, float max)
+		{
+			if (ImGui::DragFloat2(label, value, speed, min, max))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+	auto DragFloat2 = [&](const char* label, float* value, float speed)
+		{
+			if (ImGui::DragFloat2(label, value, speed))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float3版）
+	auto DragFloat3Clamp = [&](const char* label, float* value, float speed, float min, float max)
+		{
+			if (ImGui::DragFloat3(label, value, speed, min, max))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+    auto DragFloat3 = [&](const char* label, float* value, float speed)
+        {
+            if (ImGui::DragFloat3(label, value, speed))
+            {
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+            }
+        };
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（int版）
+	auto InputIntClamp = [&](const char* label, int* value, int min, int max)
+		{
+			if (ImGui::InputInt(label, value))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
+	auto InputInt = [&](const char* label, int* value)
+		{
+			if (ImGui::InputInt(label, value))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（コンボボックス版）
+	auto Combo = [&](const char* label, int* currentItem, const char* const items[], int itemCount) -> bool
+		{
+			if (ImGui::Combo(label, currentItem, items, itemCount))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+
+                return true;
+			}
+
+            return false;
+		};
+
+	// 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（チェックボックス版）
+	auto Checkbox = [&](const char* label, bool* value)
+		{
+			if (ImGui::Checkbox(label, value))
+			{
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+			}
+		};
+
 
     // アクション選択用のコンボボックス
     const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken", "Avoid" };
@@ -839,10 +1050,10 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
         if (ImGui::TreeNode("Combo Attack Settings"))
         {
             // DragFloatを使うと、マウスをドラッグして直感的に数値を調整できます (0.01fは変化の速度)
-            ImGui::DragFloat("Attack Time", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
-            ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
-            ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
-            ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
+            DragFloatClamp("Attack Time", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+            DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
+            DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
+            DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
 
             ImGui::Text("Hitboxes (Multiple)");
 
@@ -855,12 +1066,12 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
                 if (ImGui::TreeNode((std::string("Hitbox ") + std::to_string(i + 1)).c_str()))
                 {
-                    ImGui::DragFloat("Start Time", &hitDefs[i].startTime, 0.01f);
-                    ImGui::DragFloat("End Time", &hitDefs[i].endTime, 0.01f);
-                    ImGui::DragFloat("Radius", &hitDefs[i].radius, 0.01f);
-                    ImGui::InputInt("Damage", &hitDefs[i].damage);
-                    ImGui::DragFloat("Knockback", &hitDefs[i].knockback, 0.1f);
-                    ImGui::DragFloat3("Knockback Direction", &hitDefs[i].knockbackDirection.x, 0.1f);
+                    DragFloat("Start Time", &hitDefs[i].startTime, 0.01f);
+                    DragFloat("End Time", &hitDefs[i].endTime, 0.01f);
+                    DragFloat("Radius", &hitDefs[i].radius, 0.01f);
+                    InputInt("Damage", &hitDefs[i].damage);
+                    DragFloat("Knockback", &hitDefs[i].knockback, 0.1f);
+                    DragFloat3("Knockback Direction", &hitDefs[i].knockbackDirection.x, 0.1f);
 
                     // ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
                     hitDefs[i].knockbackDirection = hitDefs[i].knockbackDirection.Normalize();
@@ -868,14 +1079,15 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                     // ダメージリアクション
                     const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
                     int currentReaction = static_cast<int>(hitDefs[i].damageReaction);
-                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames))) {
+                    if (Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                    {
                         hitDefs[i].damageReaction = static_cast<DamageReaction>(currentReaction);
                     }
 
                     // ジョイントタイプ
                     const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
                     int currentJoint = static_cast<int>(hitDefs[i].jointType);
-                    if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames))) {
+                    if (Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames))) {
                         hitDefs[i].jointType = static_cast<JointType>(currentJoint);
                     }
 
@@ -883,12 +1095,17 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
                     if (ImGui::Button("Delete Hitbox"))
                     {
+						// 当たり判定を削除する前に、履歴に保存して変更フラグを立てる
+                        history_->SaveHistory(nodes_, links_, currentId_);
+                        isDirty_ = true;
+
                         hitDefs.erase(hitDefs.begin() + i);
                         ImGui::PopStyleColor();
                         ImGui::TreePop();
                         ImGui::PopID();
                         break; // 要素を削除した場合はループを抜ける（次のフレームで再描画される）
                     }
+
                     ImGui::PopStyleColor();
 
                     ImGui::TreePop();
@@ -899,6 +1116,10 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // 新しい判定を追加するボタン
             if (ImGui::Button("Add Hitbox"))
             {
+				// 新しい当たり判定を追加する前に、履歴に保存して変更フラグを立てる
+                history_->SaveHistory(nodes_, links_, currentId_);
+                isDirty_ = true;
+
                 HitboxDefinition newDef;
                 // 必要ならデフォルト値を設定
                 hitDefs.push_back(newDef);
@@ -911,18 +1132,18 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     {
         if (ImGui::TreeNode("Grab Attack Settings"))
         {
-            ImGui::DragFloat("Attack Time", &node.grabAttackInitData.attackTime, 0.01f);
-            ImGui::DragFloat("Grab Time", &node.grabAttackInitData.grabTime, 0.01f);
-            ImGui::DragFloat("Move Speed", &node.grabAttackInitData.moveSpeed, 0.1f);
-            ImGui::DragFloat("Move Start", &node.grabAttackInitData.moveStartTime, 0.01f);
-            ImGui::DragFloat("Move End", &node.grabAttackInitData.moveEndTime, 0.01f);
-            ImGui::DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
-            ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
+            DragFloat("Attack Time", &node.grabAttackInitData.attackTime, 0.01f);
+            DragFloat("Grab Time", &node.grabAttackInitData.grabTime, 0.01f);
+            DragFloat("Move Speed", &node.grabAttackInitData.moveSpeed, 0.1f);
+            DragFloat("Move Start", &node.grabAttackInitData.moveStartTime, 0.01f);
+            DragFloat("Move End", &node.grabAttackInitData.moveEndTime, 0.01f);
+            DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
+            DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
 
             // ジョイントタイプ
             const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
             int currentJoint = static_cast<int>(node.grabAttackInitData.jointType);
-            if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+            if (Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
             {
                 node.grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
             }
@@ -934,13 +1155,13 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     {
         if (ImGui::TreeNode("Grab Strike Attack Settings"))
         {
-            ImGui::DragFloat("Attack Time", &node.grabStrikeAttackInitData.attackTime, 0.01f);
-            ImGui::DragFloat("Move Speed", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
-            ImGui::DragFloat("Move Start", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
-            ImGui::DragFloat("Move End", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
-            ImGui::DragFloat("Knockback", &node.grabStrikeAttackInitData.knockback, 0.1f);
-            ImGui::DragFloat3("Knockback Direction", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
-            ImGui::Checkbox("Release", &node.grabStrikeAttackInitData.isRelease);
+            DragFloat("Attack Time", &node.grabStrikeAttackInitData.attackTime, 0.01f);
+            DragFloat("Move Speed", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
+            DragFloat("Move Start", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
+            DragFloat("Move End", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
+            DragFloat("Knockback", &node.grabStrikeAttackInitData.knockback, 0.1f);
+            DragFloat3("Knockback Direction", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
+            Checkbox("Release", &node.grabStrikeAttackInitData.isRelease);
 
             // 離すタイミングの入力は、isReleaseがtrueの場合にのみ表示
             if (node.grabStrikeAttackInitData.isRelease)
@@ -952,7 +1173,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // ダメージリアクション
             const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
             int currentReaction = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
-            if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+            if (Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
             {
                 node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
             }
@@ -967,7 +1188,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             if (ImGui::TreeNode("Target Motion"))
             {
                 // コンボボックスを描画し、変更があったらEnumにキャストして戻す
-                if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
+                if (Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
                 {
                     node.targetMotionType = static_cast<MotionType>(currentType);
                     node.targetMotionName = "";
@@ -1015,12 +1236,12 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                 ImGui::PushID(static_cast<int>(i));
                 if (ImGui::TreeNode((std::string("Hit ") + std::to_string(i + 1)).c_str()))
                 {
-                    ImGui::DragFloat("Hit Time", &hits[i].hitTime, 0.01f);
-                    ImGui::InputInt("Damage", &hits[i].damage);
+                    DragFloat("Hit Time", &hits[i].hitTime, 0.01f);
+                    InputInt("Damage", &hits[i].damage);
 
                     // ターゲットのジョイントタイプ
                     int targetJoint = static_cast<int>(node.grabAttackInitData.jointType);
-                    if (ImGui::Combo("Joint Type", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    if (Combo("Joint Type", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
                     {
                         node.grabStrikeAttackInitData.hits[i].targetHitJoint = static_cast<JointType>(targetJoint);
                     }
@@ -1034,9 +1255,9 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	{
 		if (ImGui::TreeNode("Avoid Settings"))
 		{
-			ImGui::DragFloat2("Direction", &node.avoidInitData.localDirection.x, 0.01f);
-			ImGui::DragFloat("Distance", &node.avoidInitData.distance, 0.01f);
-			ImGui::DragFloat("Duration", &node.avoidInitData.time, 0.01f);
+			DragFloat2("Direction", &node.avoidInitData.localDirection.x, 0.01f);
+			DragFloat("Distance", &node.avoidInitData.distance, 0.01f);
+			DragFloat("Duration", &node.avoidInitData.time, 0.01f);
 
 			node.avoidInitData.localDirection = node.avoidInitData.localDirection.Normalize();
 
@@ -1055,7 +1276,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             int currentType = static_cast<int>(node.motionType);
 
             // コンボボックスを描画し、変更があったらEnumにキャストして戻す
-            if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
+            if (Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
             {
                 node.motionType = static_cast<MotionType>(currentType);
                 node.motionName = "";

@@ -1,6 +1,8 @@
 #pragma once
 #include "../Render3DBaseData.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
+#include "Resource/VertexBufferResource/VertexBufferResource.h"
+#include "Resource/IndexBufferResource/IndexBufferResource.h"
 
 namespace Engine
 {
@@ -25,8 +27,7 @@ namespace Engine
 		/// @brief 初期化
 		/// @param modelStore 
 		/// @param device 
-		void Initialize(TextureStore* textureStore, LightStore* lightStore, DX12Heap* heap,
-			ID3D12Device* device,ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoUVSphere, Log* log);
+		void Initialize(TextureStore* textureStore, LightStore* lightStore, ID3D12Device* device, Log* log);
 
 		/// @brief 更新処理
 		void Update() override;
@@ -89,11 +90,14 @@ namespace Engine
 
 	private:
 
+		/// @brief 頂点計算
+		void VertexCalculation();
+
 		// 頂点リソース
-		std::unique_ptr<RWStructuredVertexBufferResource<VertexDataForGPU>> vertexResource_ = nullptr;
+		std::unique_ptr<VertexBufferResource<VertexDataForGPU>> vertexResource_ = nullptr;
 
 		// インデックスリソース
-		std::unique_ptr<RWStructuredVertexBufferResource<uint32_t>> indexResource_ = nullptr;
+		std::unique_ptr<IndexBufferResource> indexResource_ = nullptr;
 
 		// 分割リソース
 		std::unique_ptr<ConstantBufferResource<PrimitiveDataForGPU::UVSphereDivisionDataForGPU>> divisionResource_ = nullptr;

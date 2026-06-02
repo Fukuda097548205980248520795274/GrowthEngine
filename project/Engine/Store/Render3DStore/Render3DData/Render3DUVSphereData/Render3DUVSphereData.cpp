@@ -8,21 +8,16 @@
 /// @brief 初期化
 /// @param modelStore 
 /// @param device 
-void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightStore* lightStore, 
-	DX12Heap* heap, ID3D12Device* device, ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoUVSphere, Log* log)
+void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightStore* lightStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
 	assert(lightStore);
-	assert(heap);
 	assert(device);
-	assert(commandList);
-	assert(psoUVSphere);
 
 	// 引数を受け取る
 	textureStore_ = textureStore;
 	lightStore_ = lightStore;
-	psoUVSphere_ = psoUVSphere;
 
 
 	// パラメータの生成
@@ -97,12 +92,12 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	}
 
 	// 頂点リソースの生成
-	vertexResource_ = std::make_unique<RWStructuredVertexBufferResource<VertexDataForGPU>>();
-	vertexResource_->Initialize(device, commandList, heap, ((kMaxSlices + 1) * (kMaxRings + 1)), log);
+	vertexResource_ = std::make_unique<VertexBufferResource<VertexDataForGPU>>();
+	vertexResource_->Initialize(device, kMaxSlices * kMaxRings * 4, log);
 
 	// インデックスリソースの生成
-	indexResource_ = std::make_unique<RWStructuredVertexBufferResource<uint32_t>>();
-	indexResource_->Initialize(device, commandList, heap, (kMaxSlices * kMaxRings * 6), log);
+	indexResource_ = std::make_unique<IndexBufferResource>();
+	indexResource_->Initialize(device, kMaxSlices * kMaxRings * 6, log);
 
 	// 分割リソースの生成
 	divisionResource_ = std::make_unique<ConstantBufferResource<PrimitiveDataForGPU::UVSphereDivisionDataForGPU>>();
@@ -124,6 +119,10 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	// モーションベクトルリソースの生成
 	motionVectorResource_ = std::make_unique<ConstantBufferResource<MotionVectorDataForGPU>>();
 	motionVectorResource_->Initialize(device, log);
+
+
+	// 頂点計算
+	VertexCalculation();
 }
 
 /// @brief 更新処理
@@ -185,6 +184,9 @@ void Engine::Render3DUVSphereData::Reset()
 
 	// 読み込み
 	isLoad_ = true;
+
+	// 頂点計算
+	VertexCalculation();
 }
 
 /// @brief コマンドリストに登録する
@@ -196,30 +198,9 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// 頂点計算
 	if (preSlices_ != param_->division.slices || preRings_ != param_->division.rings)
-	{
-		// PSOの設定
-		psoUVSphere_->Register(commandList);
-
-		param_->division.slices = std::clamp(param_->division.slices, 3, kMaxSlices);
-		param_->division.rings = std::clamp(param_->division.rings, 3, kMaxRings);
-
-		// 分割の設定
-		divisionResource_->data_->slices = param_->division.slices;
-		divisionResource_->data_->rings = param_->division.rings;
-		divisionResource_->RegisterCompute(commandList, 0);
-
-		// 頂点の設定
-		vertexResource_->RegisterCompute(commandList, 1);
-
-		// インデックスの設定
-		indexResource_->RegisterCompute(commandList, 2);
-
-		// ディスパッチ
-		commandList->Dispatch((param_->division.slices + 1 + 15) / 16, (param_->division.rings + 1 + 15) / 16, 1);
-	}
-
-
+		VertexCalculation();
 
 
 	Quaternion modelQuaternion =
@@ -313,25 +294,9 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 		コマンドリストに登録
 	------------------------*/
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-
-
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
-
-	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	vertexResource_->Register(commandList);
+	indexResource_->Register(commandList);
 
 	// 座標変換の設定
 	transformationResources_->RegisterGraphics(commandList, 0);
@@ -355,17 +320,8 @@ void Engine::Render3DUVSphereData::Register(Camera3DStore* cameraStore, SkyboxSt
 	commandList->DrawIndexedInstanced(param_->division.slices * param_->division.rings * 6, 1, 0, 0, 0);
 
 
-
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
 	// 描画した
 	isDrew_ = true;
-
-	// 分割数を記録する
-	preSlices_ = param_->division.slices;
-	preRings_ = param_->division.rings;
 }
 
 /// @brief コマンドリスト
@@ -410,25 +366,9 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 		コマンドリストに登録
 	------------------------*/
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-
-
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
-
-	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	vertexResource_->Register(commandList);
+	indexResource_->Register(commandList);
 
 	// 座標変換の設定
 	shadowMapTransformationResource_->RegisterGraphics(commandList, 0);
@@ -438,11 +378,6 @@ void Engine::Render3DUVSphereData::Register(const Matrix4x4& viewProjection, ID3
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
-
-
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 }
 
 /// @brief コマンドリストに登録
@@ -459,23 +394,9 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 	// PSOの設定
 	pso->Register(commandList);
 
-	// バリアを張る
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
 	// 頂点の設定
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = vertexResource_->GetResource()->GetGPUVirtualAddress();
-	vbv.SizeInBytes = sizeof(VertexDataForGPU) * ((kMaxSlices + 1) * (kMaxRings + 1));
-	vbv.StrideInBytes = sizeof(VertexDataForGPU);
-	commandList->IASetVertexBuffers(0, 1, &vbv);
-
-	// インデックスの設定
-	D3D12_INDEX_BUFFER_VIEW ibv = {};
-	ibv.BufferLocation = indexResource_->GetResource()->GetGPUVirtualAddress();
-	ibv.SizeInBytes = sizeof(uint32_t) * kMaxSlices * kMaxRings * 6;
-	ibv.Format = DXGI_FORMAT_R32_UINT;
-	commandList->IASetIndexBuffer(&ibv);
+	vertexResource_->Register(commandList);
+	indexResource_->Register(commandList);
 
 	// モーションベクトルの設定
 	motionVectorResource_->RegisterGraphics(commandList, 0);
@@ -485,10 +406,90 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
+}
 
-	// バリアを張る
-	indexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_INDEX_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-	vertexResource_->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
+/// @brief 頂点計算
+void Engine::Render3DUVSphereData::VertexCalculation()
+{
+	// インデックス計算
+	for (int32_t latIndex = 0; latIndex < param_->division.rings; ++latIndex)
+	{
+		for (int32_t lonIndex = 0; lonIndex < param_->division.slices; ++lonIndex)
+		{
+			int startIndex = (latIndex * param_->division.slices + lonIndex) * 6;
+			int index = (latIndex * param_->division.slices + lonIndex) * 4;
+
+			indexResource_->data_[startIndex] = index;
+			indexResource_->data_[startIndex + 1] = index + 1;
+			indexResource_->data_[startIndex + 2] = index + 2;
+			indexResource_->data_[startIndex + 3] = index + 1;
+			indexResource_->data_[startIndex + 4] = index + 3;
+			indexResource_->data_[startIndex + 5] = index + 2;
+		}
+	}
+
+
+
+	float kLonEvery = std::numbers::pi_v<float> *2.0f / float(param_->division.slices);
+	float kLatEvery = std::numbers::pi_v<float> / float(param_->division.rings);
+
+	// 頂点計算
+	for (int32_t latIndex = 0; latIndex < param_->division.rings; ++latIndex)
+	{
+		float lat = -std::numbers::pi_v<float> / 2.0f + kLatEvery * latIndex;
+
+		for (int32_t lonIndex = 0; lonIndex < param_->division.slices; ++lonIndex)
+		{
+			float lon = kLonEvery * lonIndex;
+
+			int startIndex = (latIndex * param_->division.slices + lonIndex) * 4;
+
+			vertexResource_->data_[startIndex].position.x = std::cos(lat) * std::cos(lon);
+			vertexResource_->data_[startIndex].position.y = std::sin(lat);
+			vertexResource_->data_[startIndex].position.z = std::cos(lat) * std::sin(lon);
+			vertexResource_->data_[startIndex].position.w = 1.0f;
+			vertexResource_->data_[startIndex].texcoord.x = float(lonIndex) / float(param_->division.slices);
+			vertexResource_->data_[startIndex].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
+			vertexResource_->data_[startIndex].normal.x = vertexResource_->data_[startIndex].position.x;
+			vertexResource_->data_[startIndex].normal.y = vertexResource_->data_[startIndex].position.y;
+			vertexResource_->data_[startIndex].normal.z = vertexResource_->data_[startIndex].position.z;
+
+			vertexResource_->data_[startIndex + 1].position.x = std::cos(lat + kLatEvery) * std::cos(lon);
+			vertexResource_->data_[startIndex + 1].position.y = std::sin(lat + kLatEvery);
+			vertexResource_->data_[startIndex + 1].position.z = std::cos(lat + kLatEvery) * std::sin(lon);
+			vertexResource_->data_[startIndex + 1].position.w = 1.0f;
+			vertexResource_->data_[startIndex + 1].texcoord.x = float(lonIndex) / float(param_->division.slices);
+			vertexResource_->data_[startIndex + 1].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
+			vertexResource_->data_[startIndex + 1].normal.x = vertexResource_->data_[startIndex + 1].position.x;
+			vertexResource_->data_[startIndex + 1].normal.y = vertexResource_->data_[startIndex + 1].position.y;
+			vertexResource_->data_[startIndex + 1].normal.z = vertexResource_->data_[startIndex + 1].position.z;
+
+			vertexResource_->data_[startIndex + 2].position.x = std::cos(lat) * std::cos(lon + kLonEvery);
+			vertexResource_->data_[startIndex + 2].position.y = std::sin(lat);
+			vertexResource_->data_[startIndex + 2].position.z = std::cos(lat) * std::sin(lon + kLonEvery);
+			vertexResource_->data_[startIndex + 2].position.w = 1.0f;
+			vertexResource_->data_[startIndex + 2].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
+			vertexResource_->data_[startIndex + 2].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
+			vertexResource_->data_[startIndex + 2].normal.x = vertexResource_->data_[startIndex + 2].position.x;
+			vertexResource_->data_[startIndex + 2].normal.y = vertexResource_->data_[startIndex + 2].position.y;
+			vertexResource_->data_[startIndex + 2].normal.z = vertexResource_->data_[startIndex + 2].position.z;
+
+			vertexResource_->data_[startIndex + 3].position.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
+			vertexResource_->data_[startIndex + 3].position.y = std::sin(lat + kLatEvery);
+			vertexResource_->data_[startIndex + 3].position.z = std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery);
+			vertexResource_->data_[startIndex + 3].position.w = 1.0f;
+			vertexResource_->data_[startIndex + 3].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
+			vertexResource_->data_[startIndex + 3].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
+			vertexResource_->data_[startIndex + 3].normal.x = vertexResource_->data_[startIndex + 3].position.x;
+			vertexResource_->data_[startIndex + 3].normal.y = vertexResource_->data_[startIndex + 3].position.y;
+			vertexResource_->data_[startIndex + 3].normal.z = vertexResource_->data_[startIndex + 3].position.z;
+		}
+	}
+
+	// 分割数を記録する
+	preRings_ = param_->division.rings;
+	preSlices_ = param_->division.slices;
 }
 
 
