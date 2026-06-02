@@ -27,6 +27,9 @@ public:
 	/// @param initData 
 	Floor();
 
+	/// @brief デストラクタ
+	~Floor();
+
 	/// @brief 初期化
 	/// @param initData 
 	void Initialize(const InitData& initData);

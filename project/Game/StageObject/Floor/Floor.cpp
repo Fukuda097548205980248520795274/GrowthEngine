@@ -8,6 +8,17 @@ Floor::Floor() : StageObject()
 	tag_ = StageObjectTag::Floor;
 }
 
+/// @brief デストラクタ
+Floor::~Floor()
+{
+	// 衝突判定の削除
+	if (collision_)
+	{
+		collision_->Delete();
+		collision_ = nullptr;
+	}
+}
+
 /// @brief 初期化
 /// @param initData 
 void Floor::Initialize(const InitData& initData)

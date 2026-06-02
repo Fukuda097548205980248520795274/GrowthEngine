@@ -118,74 +118,6 @@ void GameScene::Initialize()
 	player_ = std::make_unique<Player>(playerInitData);
 	player_->Initialize(playerWeapon_.get());
 
-	// 味方の生成と初期化
-	for (int i = 0; i < 4; ++i)
-	{
-		std::unique_ptr<Render3DSkinningModel> allyModel = std::make_unique<Render3DSkinningModel>(hCharacterModel_,
-			hCharacterAnimation_, hCharacterSkeleton_, "Ally_Model_" + std::to_string(i));
-
-		Character::InitData allyInitData;
-		allyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 5.0f);
-		allyInitData.rotateY = std::numbers::pi_v<float>;
-		allyInitData.hp = 100;
-		allyInitData.model_ = allyModel.get();
-		allyInitData.weapon = nullptr;
-		allyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
-		allyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
-		allyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
-		allyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
-		allyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
-		allyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
-		allyInitData.hAvoidLeftMotion = 0;
-		allyInitData.hAvoidRightMotion = 0;
-		allyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
-		allyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
-		allyInitData.hurtboxGroup = playerHurtboxGroup_.get();
-		allyInitData.hitboxGroup = playerHitboxGroup_.get();
-		allyInitData.landingCollision = landingCollision_->CreateInstance();
-
-
-		std::unique_ptr<NPC> ally = std::make_unique<NPC>(allyInitData, Character::CharacterTag::Ally);
-		ally->Initialize(behaviorTreeEditor_->CreateTree("TEST", ally.get()));
-
-		npcModels_.push_back(std::move(allyModel));
-		npcs_.push_back(std::move(ally));
-	}
-
-	for (int i = 0; i < 5; ++i)
-	{
-		// 敵のモデルの生成と初期化
-		std::unique_ptr<Render3DSkinningModel> enemyModel = std::make_unique<Render3DSkinningModel>(hCharacterModel_,
-			hCharacterAnimation_, hCharacterSkeleton_, "Enemy_Model_" + std::to_string(i));
-
-		// 敵の生成と初期化
-		Character::InitData enemyInitData;
-		enemyInitData.position = Vector3(5.0f * (i + 1), 0.0f, 0.0f);
-		enemyInitData.rotateY = std::numbers::pi_v<float>;
-		enemyInitData.hp = 100;
-		enemyInitData.model_ = enemyModel.get();
-		enemyInitData.weapon = nullptr;
-		enemyInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
-		enemyInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Fighter");
-		enemyInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
-		enemyInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
-		enemyInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
-		enemyInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
-		enemyInitData.hAvoidLeftMotion = 0;
-		enemyInitData.hAvoidRightMotion = 0;
-		enemyInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
-		enemyInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
-		enemyInitData.hurtboxGroup = enemyHurtboxGroup_.get();
-		enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
-		enemyInitData.landingCollision = landingCollision_->CreateInstance();
-
-		std::unique_ptr<NPC> enemy = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemyNormal);
-		enemy->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy.get()));
-
-		npcModels_.push_back(std::move(enemyModel));
-		npcs_.push_back(std::move(enemy));
-	}
-
 
 	// カメラ制御の初期化
 	InitializeCameraControl();
@@ -277,16 +209,26 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
 		playerInitData.landingCollision = landingCollision_->CreateInstance();
+		playerInitData.model_ = playerModel_.get();
 
 		// プレイヤーの生成処理
 		std::unique_ptr<Player> player = std::make_unique<Player>(initData);
 		player->Initialize(playerWeapon_.get());
 		character = player.get();
+
+		// プレイヤーはリストに追加せず、専用のメンバ変数で管理する
 		player_ = std::move(player);
 	}
 	else
 	{
 		Character::InitData npcInitData = initData;
+
+		// NPCのモデルの生成と初期化
+		std::unique_ptr<Render3DSkinningModel> npcModel =
+			std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterSkeleton_, hCharacterAnimation_, "Enemy_Model_" + std::to_string(npcCount_));
+
+		// NPCのモデルを初期化データに設定する
+		npcInitData.model_ = npcModel.get();
 
 		// NPCの当たり判定グループの設定
 		if (tag == Character::CharacterTag::Ally || tag == Character::CharacterTag::Vip)
@@ -307,7 +249,13 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
 		npc->Initialize(behaviorTreeEditor_->CreateTree("TEST", npc.get()));
 		character = npc.get();
+
+		// NPCのリストに追加する
 		npcs_.push_back(std::move(npc));
+		npcModels_.push_back(std::move(npcModel));
+
+		// NPCをカウントする
+		npcCount_++;
 	}
 
 	return character;
@@ -326,6 +274,8 @@ Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData)
 	// 武器の生成処理
 	std::unique_ptr<Weapon> newWeapon = std::make_unique<Weapon>(initData);
 	weapon = newWeapon.get();
+
+	// 武器のリストに追加する
 	weapons_.push_back(std::move(newWeapon));
 
 	return weapon;
@@ -342,9 +292,12 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 	floorInitData.collision = floorCollision_->CreateInstance();
 
 	std::unique_ptr<Floor> newFloor = std::make_unique<Floor>();
+	newFloor->Initialize(floorInitData);
 	Floor* floor = newFloor.get();
 
-	newFloor->Initialize(floorInitData);
+	// ステージオブジェクトのリストに追加する
+	objects_.push_back(std::move(newFloor));
+
 	return floor;
 }
 

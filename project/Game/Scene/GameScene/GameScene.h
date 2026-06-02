@@ -136,8 +136,11 @@ private:
 	AnimationHandle hCharacterAnimation_ = 0;
 	SkeletonHandle hCharacterSkeleton_ = 0;
 
+
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
+
+	int npcCount_ = 0;
 
 
 
@@ -161,11 +164,5 @@ private:
 
 	/// @brief 太陽光
 	std::unique_ptr<LightDirectional> sunLight_ = nullptr;
-
-
-
-private:
-
-	float testTimer_ = 0.0f;
 };
 

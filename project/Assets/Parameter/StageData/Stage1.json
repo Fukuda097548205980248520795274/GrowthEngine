@@ -25,6 +25,188 @@
                 75.69999694824219
             ],
             "subType": 1
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 2
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
+        },
+        {
+            "attackPower": 1.0,
+            "category": 0,
+            "durability": 100,
+            "hAvoidBackMotion": 15,
+            "hAvoidFrontMotion": 14,
+            "hAvoidLeftMotion": 14,
+            "hAvoidRightMotion": 15,
+            "hDashMotion": 9,
+            "hStanceMotion": 2,
+            "hStandMotion": 0,
+            "hWalkMotion": 8,
+            "hp": 100,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateY": 0.0,
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "subType": 4
         }
     ]
 }
