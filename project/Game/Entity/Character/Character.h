@@ -27,8 +27,11 @@ public:
 	enum class CharacterTag
 	{
 		None,
-		PlayerSide,
-		EnemySide,
+		Player,
+		Ally,
+		Vip,
+		EnemyNormal,
+		EnemyBoss,
 	};
 
 	/// @brief 初期化用データ
@@ -403,11 +406,19 @@ public:
 	bool CanDeflect() const { return canDeflect_; }
 
 	/// @brief プレイヤーかどうかを取得する
-	bool IsPlayer() const { return isPlayer_; }
+	bool IsPlayer() const { return characterTag_ == CharacterTag::Player; }
 
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
 	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead(); }
+
+	/// @brief プレイヤー側かどうか
+	/// @return 
+	bool IsPlayerSide() const { return characterTag_ == CharacterTag::Player || characterTag_ == CharacterTag::Ally || characterTag_ == CharacterTag::Vip; }
+
+	/// @brief 敵側かどうか
+	/// @return 
+	bool IsEnemySide() const { return characterTag_ == CharacterTag::EnemyNormal || characterTag_ == CharacterTag::EnemyBoss; }
 
 
 protected:
@@ -423,9 +434,6 @@ protected:
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
-
-	/// @brief このインスタンスがプレイヤーかどうか
-	bool isPlayer_ = false;
 
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;

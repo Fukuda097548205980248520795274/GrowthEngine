@@ -170,7 +170,7 @@ void Character::Update()
 			}
 
 			// スタイルチェンジの更新
-			if (isStyleChanging_ && isPlayer_)
+			if (isStyleChanging_ && IsPlayer())
 			{
 				// プレイヤーはスローモーションの影響を受けない
 				UpdateStyleChange(unscaledDt);
@@ -820,17 +820,18 @@ void Character::UpdateLockOnTargets()
 	float bestDistance = std::numeric_limits<float>::max();
 	float bestDot = -1.0f;
 
-	// 自分とは反対側の陣営を候補にする
-	const CharacterTag targetSide = (characterTag_ == CharacterTag::PlayerSide) ? CharacterTag::EnemySide : CharacterTag::PlayerSide;
 	const Vector3 selfPosition = GetWorldPosition();
+
+	// ロックオン対象の側を決定する
+	const bool isSelfPlayerSide = IsPlayerSide();
 
 	for (Character* character : characters_)
 	{
 		// 無効または自分自身は除外する
 		if (!character || character == this)continue;
 
-		// 別の側ではない相手は除外する
-		if (character->GetCharacterTag() != targetSide)continue;
+		// 自分と同じ側の相手は除外する
+		if (isSelfPlayerSide == character->IsPlayerSide()) continue;
 
 		// 死んでいる相手は除外する
 		if(character->IsDead())continue;
@@ -845,7 +846,7 @@ void Character::UpdateLockOnTargets()
 			continue;
 
 		// ロックオン可能な距離内にいる相手のみを候補にする
-		if (isPlayer_)
+		if (IsPlayer())
 		{
 			// プレイヤーの場合は、目の前にいる相手のみロックオン候補にする
 
@@ -943,7 +944,7 @@ void Character::UpdateAnimation()
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// プレイヤーのスタイルチェンジモーションはtimeScaleの影響を受けないようにする
-	if (isStyleChanging_ && isPlayer_)
+	if (isStyleChanging_ && IsPlayer())
 		dt = engine_->GetDeltaTime();
 
 	// 死亡していない場合は、通常のモーションを再生する
@@ -1288,7 +1289,7 @@ void Character::ExecuteDeflect(Character* attacker)
 	}
 
 	// プレイヤーが攻撃を弾いた場合は、スローモーションを開始する
-	if(isPlayer_)
+	if(IsPlayer())
 		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.5f);
 
 	// se弾き

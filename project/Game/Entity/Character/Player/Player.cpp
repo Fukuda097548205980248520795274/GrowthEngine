@@ -36,8 +36,7 @@ namespace
 Player::Player(const InitData& initData) : Character(initData)
 {
 	// タグを指定する
-	characterTag_ = CharacterTag::PlayerSide;
-	isPlayer_ = true;
+	characterTag_ = CharacterTag::Player;
 
 	// 戦闘スタイルを指定する
 	currentStyle_ = FightStyle::Tempest;

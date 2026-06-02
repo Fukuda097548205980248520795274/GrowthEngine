@@ -32,8 +32,6 @@ void GameScene::Initialize()
 	soundManager_ = SoundManager::GetInstance();
 	effectManager_ = EffectManager::GetInstance();
 
-	engine_->LoadPostEffect("TAA", Engine::PostEffect::Type::TAA);
-
 	// ポストエフェクトマネージャの生成と初期化
 	postEffectManager_ = std::make_unique<PostEffectManager>();
 	postEffectManager_->Initialize();
@@ -162,7 +160,7 @@ void GameScene::Initialize()
 		allyInitData.landingCollision = landingCollision_->CreateInstance();
 
 
-		std::unique_ptr<NPC> ally = std::make_unique<NPC>(allyInitData, Character::CharacterTag::PlayerSide);
+		std::unique_ptr<NPC> ally = std::make_unique<NPC>(allyInitData, Character::CharacterTag::Ally);
 		ally->Initialize(behaviorTreeEditor_->CreateTree("TEST", ally.get()));
 
 		npcModels_.push_back(std::move(allyModel));
@@ -198,7 +196,7 @@ void GameScene::Initialize()
 		enemyInitData.hitboxGroup = enemyHitboxGroup_.get();
 		enemyInitData.landingCollision = landingCollision_->CreateInstance();
 
-		std::unique_ptr<NPC> enemy = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemySide);
+		std::unique_ptr<NPC> enemy = std::make_unique<NPC>(enemyInitData, Character::CharacterTag::EnemyNormal);
 		enemy->Initialize(behaviorTreeEditor_->CreateTree("TEST", enemy.get()));
 
 		npcModels_.push_back(std::move(enemyModel));
