@@ -1042,7 +1042,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\ReleaseToken\ReleaseToken.cpp" />
     <ClCompile Include="Game\Action\RequestToken\RequestToken.cpp" />
     <ClCompile Include="Game\AppCollider\AppCollider.cpp" />
-    <ClCompile Include="Game\AssetManager\AssetManager.cpp" />
     <ClCompile Include="Game\BattleDirector\BattleDirector.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.cpp" />
@@ -1080,12 +1079,12 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.cpp" />
     <ClCompile Include="Game\Node\ConditionNode\ConditionNode.cpp" />
     <ClCompile Include="Game\Node\Node.cpp" />
-    <ClCompile Include="Game\ObjectEditor\ObjectEditor.cpp" />
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp" />
     <ClCompile Include="Game\PostEffectManager\PostEffectManager.cpp" />
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Game\SoundManager\SoundManager.cpp" />
+    <ClCompile Include="Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
     <ClCompile Include="Game\StageObject\StageObject.cpp" />
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
@@ -1401,7 +1400,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\ReleaseToken\ReleaseToken.h" />
     <ClInclude Include="Game\Action\RequestToken\RequestToken.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />
-    <ClInclude Include="Game\AssetManager\AssetManager.h" />
     <ClInclude Include="Game\BattleDirector\BattleDirector.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.h" />
@@ -1436,12 +1434,12 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Node\CompositeNode\RestartingSequenceNode\RestartingSequenceNode.h" />
     <ClInclude Include="Game\Node\ConditionNode\ConditionNode.h" />
     <ClInclude Include="Game\Node\Node.h" />
-    <ClInclude Include="Game\ObjectEditor\ObjectEditor.h" />
     <ClInclude Include="Game\PivotPoint\PivotPoint.h" />
     <ClInclude Include="Game\PostEffectManager\PostEffectManager.h" />
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
     <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Game\SoundManager\SoundManager.h" />
+    <ClInclude Include="Game\StageEditor\StageEditor.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
     <ClInclude Include="Game\StageObject\StageObject.h" />
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />

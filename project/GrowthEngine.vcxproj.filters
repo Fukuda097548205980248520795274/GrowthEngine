@@ -1123,12 +1123,6 @@
     <Filter Include="Engine\Include\Resource\VertexBufferResource\PlaneVertexResource">
       <UniqueIdentifier>{e85efb4c-fa70-4690-85ad-cb9d1755207a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\ObjectEditor">
-      <UniqueIdentifier>{d08aa625-6332-4a00-b04e-f32ca04a81bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\AssetManager">
-      <UniqueIdentifier>{b894b85a-3ade-4632-aaac-e21af4df7d8f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\BattleDirector">
       <UniqueIdentifier>{87762a2c-b2e3-43c8-a5c6-ea118a114765}</UniqueIdentifier>
     </Filter>
@@ -1161,6 +1155,9 @@
     </Filter>
     <Filter Include="Game\Node\ActionNode\AvoidNode">
       <UniqueIdentifier>{c3e92c3b-28c4-44eb-a86e-3773253712bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor">
+      <UniqueIdentifier>{0af6a7cc-57a3-412e-87e4-97ef3bddc32f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2049,12 +2046,6 @@
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ObjectEditor\ObjectEditor.cpp">
-      <Filter>Game\ObjectEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\AssetManager\AssetManager.cpp">
-      <Filter>Game\AssetManager</Filter>
-    </ClCompile>
     <ClCompile Include="Game\BattleDirector\BattleDirector.cpp">
       <Filter>Game\BattleDirector</Filter>
     </ClCompile>
@@ -2087,6 +2078,9 @@
     </ClCompile>
     <ClCompile Include="Game\Node\ActionNode\AvoidNode\AvoidNode.cpp">
       <Filter>Game\Node\ActionNode\AvoidNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditor.cpp">
+      <Filter>Game\StageEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3092,12 +3086,6 @@
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource\PlaneVertexResource</Filter>
     </ClInclude>
-    <ClInclude Include="Game\ObjectEditor\ObjectEditor.h">
-      <Filter>Game\ObjectEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\AssetManager\AssetManager.h">
-      <Filter>Game\AssetManager</Filter>
-    </ClInclude>
     <ClInclude Include="Game\BattleDirector\BattleDirector.h">
       <Filter>Game\BattleDirector</Filter>
     </ClInclude>
@@ -3127,6 +3115,9 @@
     </ClInclude>
     <ClInclude Include="Game\Node\ActionNode\AvoidNode\AvoidNode.h">
       <Filter>Game\Node\ActionNode\AvoidNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditor.h">
+      <Filter>Game\StageEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
