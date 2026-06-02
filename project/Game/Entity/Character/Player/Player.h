@@ -27,6 +27,12 @@ private:
 	/// @brief 構え状態を更新する
 	void UpdateStanceState();
 
+	/// @brief 連続回避を試行する
+	/// @param moveInputDirection
+	/// @param hasMoveInput
+	/// @param cameraYaw
+	void ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw);
+
 	/// @brief 移動入力方向を取得する
 	/// @param hasMoveInput
 	/// @return

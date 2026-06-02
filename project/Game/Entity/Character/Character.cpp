@@ -58,10 +58,6 @@ Character::Character(const InitData& initData) : Entity()
 	// 体力
 	hp_ = initData.hp;
 
-	// 回避時間と回避距離
-	avoidDuration_ = initData.avoidDuration;
-	avoidDistance_ = initData.avoidDistance;
-
 	// モデルデータ
 	if (initData.model_)
 	{
@@ -666,10 +662,10 @@ bool Character::CheckGetUpCondition()
 }
 
 /// @brief 回避を開始する
-/// @param moveInputDirection
-/// @param hasMoveInput
-/// @param cameraYaw
-void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
+/// @param direction 
+/// @param distance 
+/// @param time 
+void Character::StartAvoid(const Vector3& direction, float distance, float time)
 {
 	// 新しい連続回避の開始時に回数を初期化する
 	if (!isAvoid_ && currentAvoidCount_ == 0)
@@ -680,14 +676,12 @@ void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput,
 	// 回避開始時にダッシュは解除する
 	isDash_ = false;
 
-	// 回避方向を決定する
-	const Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, cameraYaw);
-
 	// 回避パラメータを初期化する
 	isAvoid_ = true;
-	avoidElapsedTime_ = 0.0f;
+	avoidElapsedTime_ = time;
+	avoidDuration_ = time;
 	avoidStartPosition_ = worldTransform_->translate_;
-	avoidEndPosition_ = avoidStartPosition_ + Vector3(avoidDirection.x * avoidDistance_, 0.0f, avoidDirection.y * avoidDistance_);
+	avoidEndPosition_ = avoidStartPosition_ + Vector3(direction.x * distance, 0.0f, direction.z * distance);
 
 	// 回避瞬間のフラグを立てる
 	isJustAvoided_ = true;
@@ -699,38 +693,19 @@ void Character::StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput,
 	MoveStop();
 }
 
-/// @brief 連続回避を試行する
-/// @param moveInputDirection
-/// @param hasMoveInput
-/// @param cameraYaw
-void Character::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
-{
-	// 回避中でない場合は何もしない
-	if (!isAvoid_)
-	{
-		return;
-	}
-
-	// 最大連続回避回数に達している場合は連続回避できない
-	if (currentAvoidCount_ >= maxConsecutiveAvoidCount_)
-	{
-		return;
-	}
-
-    // 現在位置から次の連続回避を即時開始する
-	++currentAvoidCount_;
-	StartAvoid(moveInputDirection, hasMoveInput, cameraYaw);
-}
-
 /// @brief 回避中の更新処理
 /// @param deltaTime
 void Character::UpdateAvoid(float deltaTime)
 {
+	// 回避時間が0以下だったら処理しない
+	if (avoidDuration_ <= 0.0f)
+		return;
+
 	// 回避時間を進める
-	avoidElapsedTime_ += deltaTime;
+	avoidElapsedTime_ -= deltaTime;
 
 	// 開始位置から終了位置まで線形補間で移動する
-	const float t = std::clamp<float>(avoidElapsedTime_ / avoidDuration_, 0.0f, 1.0f);
+	const float t = std::clamp<float>(1.0f - (avoidElapsedTime_ / avoidDuration_), 0.0f, 1.0f);
 	const float easeOutT = 1.0f - std::powf(1.0f - t, 3); // イーズアウト補間
 	worldTransform_->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
 

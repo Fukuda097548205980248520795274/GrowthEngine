@@ -146,16 +146,10 @@ public:
 	int GetHp()const { return hp_; }
 
 	/// @brief 回避を開始する
-	/// @param moveInputDirection
-	/// @param hasMoveInput
-	/// @param cameraYaw
-	void StartAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw);
-
-    /// @brief 連続回避を試行する
-	/// @param moveInputDirection
-	/// @param hasMoveInput
-	/// @param cameraYaw
-	void ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw);
+	/// @param direction 
+	/// @param distance 
+	/// @param time 
+	void StartAvoid(const Vector3& direction, float distance, float time);
 
 	/// @brief キャラクターのタグを取得する
 	/// @return 
@@ -505,9 +499,6 @@ protected:
 
 	/// @brief 回避時間
 	float avoidDuration_ = 0.3f;
-
-	/// @brief 回避距離
-	float avoidDistance_ = 1.5f;
 
 	/// @brief 連続回避の最大回数
 	int maxConsecutiveAvoidCount_ = 3;

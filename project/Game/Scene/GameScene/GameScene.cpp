@@ -134,7 +134,7 @@ void GameScene::Initialize()
 	//ally_->Initialize();
 
 	// 味方の生成と初期化
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		std::unique_ptr<Render3DSkinningModel> allyModel = std::make_unique<Render3DSkinningModel>(engine_->LoadModel("./Assets/Models/Character", "bone.gltf"),
 			motionManager_->GetMotion(MotionType::Stand, "Standing"), motionManager_->GetSkeleton(), "Ally_Model_" + std::to_string(i));

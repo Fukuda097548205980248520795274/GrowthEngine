@@ -29,7 +29,7 @@ void Avoid::Exec()
 	float localX = -Dot(Vector3(localDirection_.x, 0.0f, localDirection_.y), right);
 
 	// キャラクターの回避開始処理を呼ぶ
-	owner_->StartAvoid(Vector2(localX, localZ).Normalize(), true, 0.0f);
+	owner_->StartAvoid(Vector3(localX, 0.0f, localZ).Normalize(), distance_, time_);
 
 
 	// タイマーをリセット
