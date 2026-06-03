@@ -80,5 +80,5 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 /// @param data 
 void StageSpawner::DeleteActualEntity(PlacementData& data)
 {
-
+	
 }

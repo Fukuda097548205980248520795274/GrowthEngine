@@ -214,7 +214,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.model_ = playerModel_.get();
 
 		// プレイヤーの生成処理
-		std::unique_ptr<Player> player = std::make_unique<Player>(initData);
+		std::unique_ptr<Player> player = std::make_unique<Player>(playerInitData);
 		player->Initialize(playerWeapon_.get());
 		character = player.get();
 
