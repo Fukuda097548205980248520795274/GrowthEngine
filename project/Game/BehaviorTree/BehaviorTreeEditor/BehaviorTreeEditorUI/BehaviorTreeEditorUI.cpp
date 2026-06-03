@@ -486,7 +486,8 @@ void BehaviorTreeEditor::DrawProjectWindow()
         ImGui::Separator();
 
 		// 削除実行ボタンは赤いテキストで表示して強調する
-        if (ImGui::Button("Yes, Delete", ImVec2(120, 0)))
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+        if (ImGui::Button("Delete", ImVec2(120, 0)))
         {
             projectManager_.DeleteProjectFile(fileToDelete);
             if (currentFileName_ == fileToDelete)
@@ -497,6 +498,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
             fileToDelete = "";
             ImGui::CloseCurrentPopup();
         }
+        ImGui::PopStyleColor();
 
         ImGui::SetItemDefaultFocus();
         ImGui::SameLine();

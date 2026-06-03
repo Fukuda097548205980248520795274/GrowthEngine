@@ -1159,6 +1159,18 @@
     <Filter Include="Game\StageEditor">
       <UniqueIdentifier>{0af6a7cc-57a3-412e-87e4-97ef3bddc32f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageData">
+      <UniqueIdentifier>{14f0772e-a1ba-441d-971e-fc88ddcf1c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor\StageFileManager">
+      <UniqueIdentifier>{36987e57-d978-4d1f-96de-ecaa35bf624b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor\StageSpawner">
+      <UniqueIdentifier>{0bcfff72-0c65-40fe-a116-553bda392ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI">
+      <UniqueIdentifier>{eb40b218-49d6-4855-886f-736b422999f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2081,6 +2093,15 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditor.cpp">
       <Filter>Game\StageEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUI.cpp">
+      <Filter>Game\StageEditor\StageEditorUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageSpawner\StageSpawner.cpp">
+      <Filter>Game\StageEditor\StageSpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageFileManager\StageFileManager.cpp">
+      <Filter>Game\StageEditor\StageFileManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3118,6 +3139,18 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditor.h">
       <Filter>Game\StageEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageData\StageData.h">
+      <Filter>Game\StageEditor\StageData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUI.h">
+      <Filter>Game\StageEditor\StageEditorUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageSpawner\StageSpawner.h">
+      <Filter>Game\StageEditor\StageSpawner</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageFileManager\StageFileManager.h">
+      <Filter>Game\StageEditor\StageFileManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

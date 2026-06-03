@@ -1,67 +1,10 @@
 #pragma once
-#include "GrowthEngine.h"
-#include "MotionManager/MotionManager.h"
+#include "StageData/StageData.h"
+#include "StageEditorUI/StageEditorUI.h"
+#include "StageFileManager/StageFileManager.h"
+#include "StageSpawner/StageSpawner.h"
 
 class GameScene;
-
-// 配置するオブジェクトの種類
-enum class EditCategory
-{
-    Character,
-    Object,
-    Weapon
-};
-
-
-struct MotionConfig
-{
-	MotionType type;
-	std::string name;
-	AnimationHandle handle = 0;
-};
-
-
-// ステージエディターで配置するオブジェクトのデータ構造
-struct PlacementData 
-{
-	// 配置するオブジェクトの種類
-    EditCategory category = EditCategory::Character;
-
-    // キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
-	int subType = 0;
-
-    // 位置
-    Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 回転（Y軸のみ）
-	float rotateY = 0.0f;
-
-	// 拡縮
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
-
-	// HP (キャラクターの場合)
-	int32_t hp = 100;
-
-	// 耐久力 (武器の場合)
-	int32_t durability = 100;
-
-	float attackPower = 1.0f; // 攻撃力 (武器の場合)
-
-	// モーション設定 (キャラクターの場合)
-	MotionConfig standMotion;
-	MotionConfig stanceMotion;
-	MotionConfig walkMotion;
-	MotionConfig dashMotion;
-	MotionConfig avoidFrontMotion;
-	MotionConfig avoidBackMotion;
-	MotionConfig avoidLeftMotion;
-	MotionConfig avoidRightMotion;
-
-    // 生成された実体へのポインタ
-    void* instancePtr = nullptr;
-};
-
-using json = nlohmann::json;
 
 class StageEditor
 {
@@ -87,52 +30,31 @@ public:
 	/// @brief アセットウィンドウの描画
     void DrawAssetWindow();
 
-	/// @brief ファイルにステージデータを保存する
-    /// @param filename 
-    void SaveToFile(const std::string& filename);
-
-	/// @brief ファイルからステージデータを読み込む
-    /// @param filename 
-    void LoadFromFile(const std::string& filename);
-
 
 private:
     
     /// @brief シーン
     GameScene* scene_ = nullptr;
 
-    // モーションマネージャ
-	MotionManager* motionManager_ = nullptr;
-
 	// 配置するオブジェクトのリスト
     std::vector<PlacementData> placementList_;
 
-    // 現在選択中のオブジェクトのインデックス
-    int selectedIndex_ = -1;
+
+private:
+
+	// エディタUIを担当するクラス
+    std::unique_ptr<StageEditorUI> editorUI_;
+
+	// ステージファイルの読み書きを担当するクラス
+    std::unique_ptr<StageFileManager> fileManager_;
+
+	// ステージ上にオブジェクトを配置・削除するためのクラス
+    std::unique_ptr<StageSpawner> spawner_;
 
 
 private:
 
     /// @brief 現在編集中のファイル名
     std::string currentFileName_ = "";
-
-    /// @brief ステージデータの保存先ディレクトリ
-    const std::string stageDataDir_ = "./Assets/Parameter/StageData/";
-
-
-private:
-
-	/// @brief 実際のゲーム内エンティティを生成する
-    /// @param data 
-    void SpawnActualEntity(PlacementData& data);
-
-	/// @brief 実際のゲーム内エンティティを削除する
-    /// @param data 
-    void DeleteActualEntity(PlacementData& data);
-
-    /// @brief モーションの選択UIを表示する
-    /// @param motionType 
-    /// @param motionName 
-    void MotionSelecter(const char* label, MotionType& motionType, std::string& motionName);
 };
 

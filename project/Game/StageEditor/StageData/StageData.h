@@ -1,0 +1,65 @@
+#pragma once
+#include "GrowthEngine.h"
+#include "MotionManager/MotionManager.h"
+
+// 配置するオブジェクトの種類
+enum class EditCategory
+{
+	Character,
+	Object,
+	Weapon
+};
+
+// 大分類と小分類の表示用文字列
+inline const char* categoryNames[] = { "Character (NPC)", "StageObject", "Weapon" };
+inline const char* characterTagNames[] = { "None", "Player", "Ally", "Vip", "EnemyNormal", "EnemyBoss" };
+inline const char* stageObjectTagNames[] = { "None", "Floor", "Wall" };
+inline const char* weaponCategoryNames[] = { "None", "OneHanded", "TwoHanded" };
+
+struct MotionConfig
+{
+	MotionType type;
+	std::string name;
+	AnimationHandle handle = 0;
+};
+
+
+// ステージエディターで配置するオブジェクトのデータ構造
+struct PlacementData
+{
+	// 配置するオブジェクトの種類
+	EditCategory category = EditCategory::Character;
+
+	// キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
+	int subType = 0;
+
+	// 位置
+	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+	// 回転（Y軸のみ）
+	float rotateY = 0.0f;
+
+	// 拡縮
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+	// HP (キャラクターの場合)
+	int32_t hp = 100;
+
+	// 耐久力 (武器の場合)
+	int32_t durability = 100;
+
+	float attackPower = 1.0f; // 攻撃力 (武器の場合)
+
+	// モーション設定 (キャラクターの場合)
+	MotionConfig standMotion;
+	MotionConfig stanceMotion;
+	MotionConfig walkMotion;
+	MotionConfig dashMotion;
+	MotionConfig avoidFrontMotion;
+	MotionConfig avoidBackMotion;
+	MotionConfig avoidLeftMotion;
+	MotionConfig avoidRightMotion;
+
+	// 生成された実体へのポインタ
+	void* instancePtr = nullptr;
+};

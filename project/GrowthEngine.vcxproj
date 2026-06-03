@@ -1085,6 +1085,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Game\SoundManager\SoundManager.cpp" />
     <ClCompile Include="Game\StageEditor\StageEditor.cpp" />
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUI.cpp" />
+    <ClCompile Include="Game\StageEditor\StageFileManager\StageFileManager.cpp" />
+    <ClCompile Include="Game\StageEditor\StageSpawner\StageSpawner.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
     <ClCompile Include="Game\StageObject\StageObject.cpp" />
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
@@ -1439,7 +1442,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Scene\GameScene\GameScene.h" />
     <ClInclude Include="Game\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Game\SoundManager\SoundManager.h" />
+    <ClInclude Include="Game\StageEditor\StageData\StageData.h" />
     <ClInclude Include="Game\StageEditor\StageEditor.h" />
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUI.h" />
+    <ClInclude Include="Game\StageEditor\StageFileManager\StageFileManager.h" />
+    <ClInclude Include="Game\StageEditor\StageSpawner\StageSpawner.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
     <ClInclude Include="Game\StageObject\StageObject.h" />
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />
