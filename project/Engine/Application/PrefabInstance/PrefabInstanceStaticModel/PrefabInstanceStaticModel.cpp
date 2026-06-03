@@ -13,6 +13,7 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 	// 領域確保
 	param_.meshMaterial.resize(static_cast<int32_t>(param->meshMaterial.size()));
 	param_.meshTransforms.resize(static_cast<int32_t>(param->meshMaterial.size()));
+	param_.meshBlur.resize(static_cast<int32_t>(param->meshMaterial.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(param->meshMaterial.size()); ++meshIndex)
 	{

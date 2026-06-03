@@ -55,6 +55,9 @@ void GameScene::Initialize()
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
 
+	// 片手武器モデルの読み込み
+	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
+
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -80,14 +83,10 @@ void GameScene::Initialize()
 	// 「床」に当たる
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
 
-
-	// プレイヤーの武器のモデルの生成と初期化
-	playerWeaponModel_ = std::make_unique<Render3DStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), "Player_Weapon_Model");
-
 	// プレイヤーの武器の生成と初期化
 	Weapon::InitData playerWeaponInitData;
 	playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
-	playerWeaponInitData.model = playerWeaponModel_.get();
+	playerWeaponInitData.model = oneHandedWeaponModel_->CreateInstance();
 	playerWeaponInitData.durability = 0;
 	playerWeaponInitData.attackPower = 1.0f;
 	playerWeaponInitData.category = WeaponCategory::OneHanded;
@@ -170,6 +169,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// エディタの描画
+	stageEditor_->DrawAssetWindow();
 	stageEditor_->DrawUI();
 	behaviorTreeEditor_->DrawProjectWindow();
 	behaviorTreeEditor_->DrawNodeTable();
@@ -186,6 +186,8 @@ void GameScene::Draw()
 	// 武器の描画
 	for (auto& weapon : weapons_)weapon->Draw();
 
+	// プレハブの描画処理
+	oneHandedWeaponModel_->Draw();
 
 	// エフェクトの描画
 	effectManager_->Draw();
@@ -270,9 +272,10 @@ Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData)
 
 	Weapon::InitData weaponInitData = initData;
 	weaponInitData.landingCollision = landingCollision_->CreateInstance();
+	weaponInitData.model = oneHandedWeaponModel_->CreateInstance();
 
 	// 武器の生成処理
-	std::unique_ptr<Weapon> newWeapon = std::make_unique<Weapon>(initData);
+	std::unique_ptr<Weapon> newWeapon = std::make_unique<Weapon>(weaponInitData);
 	weapon = newWeapon.get();
 
 	// 武器のリストに追加する

@@ -217,6 +217,14 @@ void GrowthEngine::PreDraw()
 
 	// メニューバー
 	MenuBer();
+
+	// ImGuiがキーボード入力をキャプチャしているときはデルタタイムを0にする
+	if (ImGui::GetIO().WantCaptureKeyboard)
+	{
+		isDeltaTimeFirst_ = true;
+		isDeltaTimeSecond_ = true;
+	}
+
 #endif
 }
 

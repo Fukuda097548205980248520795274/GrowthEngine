@@ -441,11 +441,15 @@ void Engine::Render3DRingData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 /// @brief 頂点計算
 void Engine::Render3DRingData::VertexCalculate()
 {
+	// スライスごとの角度の計算
 	const float radianPerDivid = (param_->size.endAngle - param_->size.startAngle) / static_cast<float>(param_->division.slices);
 
-	// インデックスの計算
 	for (int i = 0; i < param_->division.slices; ++i)
 	{
+		/*---------------------
+		    インデックス計算
+		---------------------*/
+
 		int startIndex = i * 6;
 		int vertexOffset = i * 4;
 
@@ -455,11 +459,13 @@ void Engine::Render3DRingData::VertexCalculate()
 		indexResource_->data_[startIndex + 3] = vertexOffset + 2;
 		indexResource_->data_[startIndex + 4] = vertexOffset + 1;
 		indexResource_->data_[startIndex + 5] = vertexOffset + 3;
-	}
 
-	// 頂点の計算
-	for (int i = 0; i < param_->division.slices; ++i)
-	{
+
+
+		/*--------------
+		    頂点計算
+		--------------*/
+
 		float currentAngle = param_->size.startAngle + i * radianPerDivid;
 		float nextAngle = param_->size.startAngle + (i + 1) * radianPerDivid;
 
@@ -474,40 +480,43 @@ void Engine::Render3DRingData::VertexCalculate()
 			}
 		}
 
+		// 角度からサインとコサインを計算
 		float sin = std::sin(currentAngle);
 		float cos = std::cos(currentAngle);
 		float sinNext = std::sin(nextAngle);
 		float cosNext = std::cos(nextAngle);
 
+		// UV座標の計算
 		float u = float(i) / static_cast<float>(param_->division.slices);
 		float uNext = float(i + 1) / static_cast<float>(param_->division.slices);
 
+		// 内半径と外半径の線形補間
 		float t = float(i) / static_cast<float>(param_->division.slices);
 		float tNext = float(i + 1) / static_cast<float>(param_->division.slices);
 
+		// 内半径と外半径の線形補間
 		float currentInRadius = (1.0f - t) * param_->size.startInRadius + t * param_->size.endInRadius;
 		float currentOutRadius = (1.0f - t) * param_->size.startOutRadius + t * param_->size.endOutRadius;
 
+		// 次のスライスの内半径と外半径の線形補間
 		float nextInRadius = (1.0f - tNext) * param_->size.startInRadius + tNext * param_->size.endInRadius;
 		float nextOutRadius = (1.0f - tNext) * param_->size.startOutRadius + tNext * param_->size.endOutRadius;
 
-		int startIndex = i * 4;
+		vertexResource_->data_[vertexOffset].position = Vector4(-sin * currentOutRadius, cos * currentOutRadius, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset].texcoord = Vector2(u, 0.0f);
+		vertexResource_->data_[vertexOffset].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex].position = Vector4(-sin * currentOutRadius, cos * currentOutRadius, 0.0f, 1.0f);
-		vertexResource_->data_[startIndex].texcoord = Vector2(u, 0.0f);
-		vertexResource_->data_[startIndex].normal = Vector3(0.0f, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 1].position = Vector4(-sinNext * nextOutRadius, cosNext * nextOutRadius, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 1].texcoord = Vector2(uNext, 0.0f);
+		vertexResource_->data_[vertexOffset + 1].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * nextOutRadius, cosNext * nextOutRadius, 0.0f, 1.0f);
-		vertexResource_->data_[startIndex + 1].texcoord = Vector2(uNext, 0.0f);
-		vertexResource_->data_[startIndex + 1].normal = Vector3(0.0f, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 2].position = Vector4(-sin * currentInRadius, cos * currentInRadius, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 2].texcoord = Vector2(u, 1.0f);
+		vertexResource_->data_[vertexOffset + 2].normal = Vector3(0.0f, 0.0f, 1.0f);
 
-		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * currentInRadius, cos * currentInRadius, 0.0f, 1.0f);
-		vertexResource_->data_[startIndex + 2].texcoord = Vector2(u, 1.0f);
-		vertexResource_->data_[startIndex + 2].normal = Vector3(0.0f, 0.0f, 1.0f);
-
-		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * nextInRadius, cosNext * nextInRadius, 0.0f, 1.0f);
-		vertexResource_->data_[startIndex + 3].texcoord = Vector2(uNext, 1.0f);
-		vertexResource_->data_[startIndex + 3].normal = Vector3(0.0f, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 3].position = Vector4(-sinNext * nextInRadius, cosNext * nextInRadius, 0.0f, 1.0f);
+		vertexResource_->data_[vertexOffset + 3].texcoord = Vector2(uNext, 1.0f);
+		vertexResource_->data_[vertexOffset + 3].normal = Vector3(0.0f, 0.0f, 1.0f);
 	}
 
 	// 分割数を記録する

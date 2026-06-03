@@ -31,7 +31,7 @@ public:
 		bool isUnbreakable = false;
 
 		/// @brief モデル
-		Render3DStaticModel* model = nullptr;
+		PrefabInstanceStaticModel* model = nullptr;
 
 		/// @brief 着地判定グループ
 		Collision3DInstanceAABB* landingCollision = nullptr;
@@ -99,7 +99,7 @@ protected:
 	const GrowthEngine* engine_ = nullptr;
 
 	/// @brief モデル
-	Render3DStaticModel* model_ = nullptr;
+	PrefabInstanceStaticModel* model_ = nullptr;
 
 	/// @brief 武器のリスト
 	static std::vector<Weapon*> weapons_;

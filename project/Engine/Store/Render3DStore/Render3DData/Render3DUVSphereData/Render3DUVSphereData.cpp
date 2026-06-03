@@ -412,11 +412,22 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 /// @brief 頂点計算
 void Engine::Render3DUVSphereData::VertexCalculation()
 {
+	// 経度と緯度の1区切りの角度を計算
+	float kLonEvery = std::numbers::pi_v<float> *2.0f / float(param_->division.slices);
+	float kLatEvery = std::numbers::pi_v<float> / float(param_->division.rings);
+
 	// インデックス計算
 	for (int32_t latIndex = 0; latIndex < param_->division.rings; ++latIndex)
 	{
+		// 緯度を計算
+		float lat = -std::numbers::pi_v<float> / 2.0f + kLatEvery * latIndex;
+
 		for (int32_t lonIndex = 0; lonIndex < param_->division.slices; ++lonIndex)
 		{
+			/*--------------------
+			    インデックス計算
+			---------------------*/
+
 			int startIndex = (latIndex * param_->division.slices + lonIndex) * 6;
 			int index = (latIndex * param_->division.slices + lonIndex) * 4;
 
@@ -426,64 +437,54 @@ void Engine::Render3DUVSphereData::VertexCalculation()
 			indexResource_->data_[startIndex + 3] = index + 1;
 			indexResource_->data_[startIndex + 4] = index + 3;
 			indexResource_->data_[startIndex + 5] = index + 2;
-		}
-	}
 
 
+			/*--------------
+			    頂点計算
+			--------------*/
 
-	float kLonEvery = std::numbers::pi_v<float> *2.0f / float(param_->division.slices);
-	float kLatEvery = std::numbers::pi_v<float> / float(param_->division.rings);
-
-	// 頂点計算
-	for (int32_t latIndex = 0; latIndex < param_->division.rings; ++latIndex)
-	{
-		float lat = -std::numbers::pi_v<float> / 2.0f + kLatEvery * latIndex;
-
-		for (int32_t lonIndex = 0; lonIndex < param_->division.slices; ++lonIndex)
-		{
+			// 経度を計算
 			float lon = kLonEvery * lonIndex;
 
-			int startIndex = (latIndex * param_->division.slices + lonIndex) * 4;
+			vertexResource_->data_[index].position.x = std::cos(lat) * std::cos(lon);
+			vertexResource_->data_[index].position.y = std::sin(lat);
+			vertexResource_->data_[index].position.z = std::cos(lat) * std::sin(lon);
+			vertexResource_->data_[index].position.w = 1.0f;
+			vertexResource_->data_[index].texcoord.x = float(lonIndex) / float(param_->division.slices);
+			vertexResource_->data_[index].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
+			vertexResource_->data_[index].normal.x = vertexResource_->data_[index].position.x;
+			vertexResource_->data_[index].normal.y = vertexResource_->data_[index].position.y;
+			vertexResource_->data_[index].normal.z = vertexResource_->data_[index].position.z;
 
-			vertexResource_->data_[startIndex].position.x = std::cos(lat) * std::cos(lon);
-			vertexResource_->data_[startIndex].position.y = std::sin(lat);
-			vertexResource_->data_[startIndex].position.z = std::cos(lat) * std::sin(lon);
-			vertexResource_->data_[startIndex].position.w = 1.0f;
-			vertexResource_->data_[startIndex].texcoord.x = float(lonIndex) / float(param_->division.slices);
-			vertexResource_->data_[startIndex].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
-			vertexResource_->data_[startIndex].normal.x = vertexResource_->data_[startIndex].position.x;
-			vertexResource_->data_[startIndex].normal.y = vertexResource_->data_[startIndex].position.y;
-			vertexResource_->data_[startIndex].normal.z = vertexResource_->data_[startIndex].position.z;
+			vertexResource_->data_[index + 1].position.x = std::cos(lat + kLatEvery) * std::cos(lon);
+			vertexResource_->data_[index + 1].position.y = std::sin(lat + kLatEvery);
+			vertexResource_->data_[index + 1].position.z = std::cos(lat + kLatEvery) * std::sin(lon);
+			vertexResource_->data_[index + 1].position.w = 1.0f;
+			vertexResource_->data_[index + 1].texcoord.x = float(lonIndex) / float(param_->division.slices);
+			vertexResource_->data_[index + 1].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
+			vertexResource_->data_[index + 1].normal.x = vertexResource_->data_[index + 1].position.x;
+			vertexResource_->data_[index + 1].normal.y = vertexResource_->data_[index + 1].position.y;
+			vertexResource_->data_[index + 1].normal.z = vertexResource_->data_[index + 1].position.z;
 
-			vertexResource_->data_[startIndex + 1].position.x = std::cos(lat + kLatEvery) * std::cos(lon);
-			vertexResource_->data_[startIndex + 1].position.y = std::sin(lat + kLatEvery);
-			vertexResource_->data_[startIndex + 1].position.z = std::cos(lat + kLatEvery) * std::sin(lon);
-			vertexResource_->data_[startIndex + 1].position.w = 1.0f;
-			vertexResource_->data_[startIndex + 1].texcoord.x = float(lonIndex) / float(param_->division.slices);
-			vertexResource_->data_[startIndex + 1].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
-			vertexResource_->data_[startIndex + 1].normal.x = vertexResource_->data_[startIndex + 1].position.x;
-			vertexResource_->data_[startIndex + 1].normal.y = vertexResource_->data_[startIndex + 1].position.y;
-			vertexResource_->data_[startIndex + 1].normal.z = vertexResource_->data_[startIndex + 1].position.z;
+			vertexResource_->data_[index + 2].position.x = std::cos(lat) * std::cos(lon + kLonEvery);
+			vertexResource_->data_[index + 2].position.y = std::sin(lat);
+			vertexResource_->data_[index + 2].position.z = std::cos(lat) * std::sin(lon + kLonEvery);
+			vertexResource_->data_[index + 2].position.w = 1.0f;
+			vertexResource_->data_[index + 2].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
+			vertexResource_->data_[index + 2].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
+			vertexResource_->data_[index + 2].normal.x = vertexResource_->data_[index + 2].position.x;
+			vertexResource_->data_[index + 2].normal.y = vertexResource_->data_[index + 2].position.y;
+			vertexResource_->data_[index + 2].normal.z = vertexResource_->data_[index + 2].position.z;
 
-			vertexResource_->data_[startIndex + 2].position.x = std::cos(lat) * std::cos(lon + kLonEvery);
-			vertexResource_->data_[startIndex + 2].position.y = std::sin(lat);
-			vertexResource_->data_[startIndex + 2].position.z = std::cos(lat) * std::sin(lon + kLonEvery);
-			vertexResource_->data_[startIndex + 2].position.w = 1.0f;
-			vertexResource_->data_[startIndex + 2].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
-			vertexResource_->data_[startIndex + 2].texcoord.y = 1.0f - (float(latIndex) / float(param_->division.rings));
-			vertexResource_->data_[startIndex + 2].normal.x = vertexResource_->data_[startIndex + 2].position.x;
-			vertexResource_->data_[startIndex + 2].normal.y = vertexResource_->data_[startIndex + 2].position.y;
-			vertexResource_->data_[startIndex + 2].normal.z = vertexResource_->data_[startIndex + 2].position.z;
-
-			vertexResource_->data_[startIndex + 3].position.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
-			vertexResource_->data_[startIndex + 3].position.y = std::sin(lat + kLatEvery);
-			vertexResource_->data_[startIndex + 3].position.z = std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery);
-			vertexResource_->data_[startIndex + 3].position.w = 1.0f;
-			vertexResource_->data_[startIndex + 3].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
-			vertexResource_->data_[startIndex + 3].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
-			vertexResource_->data_[startIndex + 3].normal.x = vertexResource_->data_[startIndex + 3].position.x;
-			vertexResource_->data_[startIndex + 3].normal.y = vertexResource_->data_[startIndex + 3].position.y;
-			vertexResource_->data_[startIndex + 3].normal.z = vertexResource_->data_[startIndex + 3].position.z;
+			vertexResource_->data_[index + 3].position.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
+			vertexResource_->data_[index + 3].position.y = std::sin(lat + kLatEvery);
+			vertexResource_->data_[index + 3].position.z = std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery);
+			vertexResource_->data_[index + 3].position.w = 1.0f;
+			vertexResource_->data_[index + 3].texcoord.x = float(lonIndex + 1) / float(param_->division.slices);
+			vertexResource_->data_[index + 3].texcoord.y = 1.0f - (float(latIndex + 1) / float(param_->division.rings));
+			vertexResource_->data_[index + 3].normal.x = vertexResource_->data_[index + 3].position.x;
+			vertexResource_->data_[index + 3].normal.y = vertexResource_->data_[index + 3].position.y;
+			vertexResource_->data_[index + 3].normal.z = vertexResource_->data_[index + 3].position.z;
 		}
 	}
 

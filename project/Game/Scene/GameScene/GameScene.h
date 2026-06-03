@@ -124,9 +124,6 @@ private:
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 
-	/// @brief プレイヤーの武器のモデル
-	std::unique_ptr<Render3DStaticModel> playerWeaponModel_ = nullptr;
-
 	/// @brief プレイヤーの武器
 	std::unique_ptr<Weapon> playerWeapon_ = nullptr;
 
@@ -136,6 +133,9 @@ private:
 	AnimationHandle hCharacterAnimation_ = 0;
 	SkeletonHandle hCharacterSkeleton_ = 0;
 
+
+	// 片手武器モデル
+	std::unique_ptr<PrefabBaseStaticModel> oneHandedWeaponModel_ = nullptr;
 
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;

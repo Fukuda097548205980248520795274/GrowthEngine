@@ -47,7 +47,7 @@ Weapon::Weapon(const InitData& initData) : Entity()
 		model_ = initData.model;
 
 		// ワールドトランスフォームの親をモデルに設定する
-		model_->SetParent(worldTransform_.get());
+		model_->param_.parent = worldTransform_.get();
 	}
 }
 
@@ -57,6 +57,10 @@ Weapon::~Weapon()
 	// 当たり判定を削除する
 	if (landingCollision_)landingCollision_->Delete();
 	landingCollision_ = nullptr;
+
+	// モデルを削除する
+	if (model_)model_->isDelete_ = true;
+	model_ = nullptr;
 
 	// インスタンスリストから自分を除外する
 	auto it = std::remove(weapons_.begin(), weapons_.end(), this);

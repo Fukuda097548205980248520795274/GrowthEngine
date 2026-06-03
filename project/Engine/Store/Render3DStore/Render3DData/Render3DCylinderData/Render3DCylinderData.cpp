@@ -435,6 +435,10 @@ void Engine::Render3DCylinderData::VertexCalculate()
 	// インデックスの計算
 	for (int i = 0; i < param_->division.slices; ++i)
 	{
+		/*---------------------
+		    インデックス計算
+		---------------------*/
+
 		int startIndex = i * 6;
 		int vertexOffset = i * 4;
 
@@ -444,35 +448,37 @@ void Engine::Render3DCylinderData::VertexCalculate()
 		indexResource_->data_[startIndex + 3] = vertexOffset + 2;
 		indexResource_->data_[startIndex + 4] = vertexOffset + 1;
 		indexResource_->data_[startIndex + 5] = vertexOffset + 3;
-	}
 
-	// 頂点の計算
-	for (int i = 0; i < param_->division.slices; ++i)
-	{
+
+		/*--------------
+		    頂点計算
+		--------------*/
+
+		// 円周上の位置を計算する
 		float sin = std::sin(i * radianPerDivid);
 		float cos = std::cos(i * radianPerDivid);
 		float sinNext = std::sin((i + 1) * radianPerDivid);
 		float cosNext = std::cos((i + 1) * radianPerDivid);
+
+		// UVの計算
 		float u = float(i) / static_cast<float>(param_->division.slices);
 		float uNext = float(i + 1) / static_cast<float>(param_->division.slices);
 
-		int startIndex = i * 4;
+		vertexResource_->data_[vertexOffset].position = Vector4(-sin * param_->size.topRadius, param_->size.height, cos * param_->size.topRadius, 1.0f);
+		vertexResource_->data_[vertexOffset].texcoord = Vector2(u, 0.0f);
+		vertexResource_->data_[vertexOffset].normal = Vector3(-sin, 0.0f, cos);
 
-		vertexResource_->data_[startIndex].position = Vector4(-sin * param_->size.topRadius, param_->size.height, cos * param_->size.topRadius, 1.0f);
-		vertexResource_->data_[startIndex].texcoord = Vector2(u, 0.0f);
-		vertexResource_->data_[startIndex].normal = Vector3(-sin, 0.0f, cos);
+		vertexResource_->data_[vertexOffset + 1].position = Vector4(-sinNext * param_->size.topRadius, param_->size.height, cosNext * param_->size.topRadius, 1.0f);
+		vertexResource_->data_[vertexOffset + 1].texcoord = Vector2(uNext, 0.0f);
+		vertexResource_->data_[vertexOffset + 1].normal = Vector3(-sinNext, 0.0f, cosNext);
 
-		vertexResource_->data_[startIndex + 1].position = Vector4(-sinNext * param_->size.topRadius, param_->size.height, cosNext * param_->size.topRadius, 1.0f);
-		vertexResource_->data_[startIndex + 1].texcoord = Vector2(uNext, 0.0f);
-		vertexResource_->data_[startIndex + 1].normal = Vector3(-sinNext, 0.0f, cosNext);
+		vertexResource_->data_[vertexOffset + 2].position = Vector4(-sin * param_->size.bottomRadius, 0.0f, cos * param_->size.bottomRadius, 1.0f);
+		vertexResource_->data_[vertexOffset + 2].texcoord = Vector2(u, 1.0f);
+		vertexResource_->data_[vertexOffset + 2].normal = Vector3(-sin, 0.0f, cos);
 
-		vertexResource_->data_[startIndex + 2].position = Vector4(-sin * param_->size.bottomRadius, 0.0f, cos * param_->size.bottomRadius, 1.0f);
-		vertexResource_->data_[startIndex + 2].texcoord = Vector2(u, 1.0f);
-		vertexResource_->data_[startIndex + 2].normal = Vector3(-sin, 0.0f, cos);
-
-		vertexResource_->data_[startIndex + 3].position = Vector4(-sinNext * param_->size.bottomRadius, 0.0f, cosNext * param_->size.bottomRadius, 1.0f);
-		vertexResource_->data_[startIndex + 3].texcoord = Vector2(uNext, 1.0f);
-		vertexResource_->data_[startIndex + 3].normal = Vector3(-sinNext, 0.0f, cosNext);
+		vertexResource_->data_[vertexOffset + 3].position = Vector4(-sinNext * param_->size.bottomRadius, 0.0f, cosNext * param_->size.bottomRadius, 1.0f);
+		vertexResource_->data_[vertexOffset + 3].texcoord = Vector2(uNext, 1.0f);
+		vertexResource_->data_[vertexOffset + 3].normal = Vector3(-sinNext, 0.0f, cosNext);
 	}
 
 	// 分割数を記録する

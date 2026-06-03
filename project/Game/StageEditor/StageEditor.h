@@ -12,14 +12,23 @@ enum class EditCategory
     Weapon
 };
 
+
+struct MotionConfig
+{
+	MotionType type;
+	std::string name;
+	AnimationHandle handle = 0;
+};
+
+
 // ステージエディターで配置するオブジェクトのデータ構造
 struct PlacementData 
 {
 	// 配置するオブジェクトの種類
-    EditCategory category;
+    EditCategory category = EditCategory::Character;
 
     // キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
-	int subType;
+	int subType = 0;
 
     // 位置
     Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
@@ -38,15 +47,15 @@ struct PlacementData
 
 	float attackPower = 1.0f; // 攻撃力 (武器の場合)
 
-	// モーションのハンドル（キャラクターの場合）
-    AnimationHandle hStandMotion = 0;
-    AnimationHandle hStanceMotion = 0;
-    AnimationHandle hWalkMotion = 0;
-    AnimationHandle hDashMotion = 0;
-    AnimationHandle hAvoidFrontMotion = 0;
-    AnimationHandle hAvoidBackMotion = 0;
-    AnimationHandle hAvoidLeftMotion = 0;
-    AnimationHandle hAvoidRightMotion = 0;
+	// モーション設定 (キャラクターの場合)
+	MotionConfig standMotion;
+	MotionConfig stanceMotion;
+	MotionConfig walkMotion;
+	MotionConfig dashMotion;
+	MotionConfig avoidFrontMotion;
+	MotionConfig avoidBackMotion;
+	MotionConfig avoidLeftMotion;
+	MotionConfig avoidRightMotion;
 
     // 生成された実体へのポインタ
     void* instancePtr = nullptr;
@@ -75,6 +84,9 @@ public:
     /// @brief 描画処理（デバッグ用）
     void DrawUI();
 
+	/// @brief アセットウィンドウの描画
+    void DrawAssetWindow();
+
 	/// @brief ファイルにステージデータを保存する
     /// @param filename 
     void SaveToFile(const std::string& filename);
@@ -97,6 +109,15 @@ private:
 
     // 現在選択中のオブジェクトのインデックス
     int selectedIndex_ = -1;
+
+
+private:
+
+    /// @brief 現在編集中のファイル名
+    std::string currentFileName_ = "";
+
+    /// @brief ステージデータの保存先ディレクトリ
+    const std::string stageDataDir_ = "./Assets/Parameter/StageData/";
 
 
 private:
