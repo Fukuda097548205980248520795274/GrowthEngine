@@ -83,8 +83,6 @@ void NPC::Update()
 		return;
 	}
 
-	UpdateStanceStateByTargetDistance();
-
 	// 基底クラスの更新
 	Character::Update();
 

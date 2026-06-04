@@ -1,6 +1,11 @@
 #include "NavMeshMove.h"
 #include "Entity/Character/Character.h"
 
+namespace {
+    constexpr float kRepathDistanceSq = 1.0f * 1.0f; // 再計算するターゲットの移動距離の二乗
+    constexpr float kMinMoveDistance = 0.001f;       // 移動入力を行う最小距離
+}
+
 /// @brief コンストラクタ
 /// @param character 
 /// @param initData
@@ -91,7 +96,7 @@ void NavMeshMove::Update()
 		// ターゲットが1m以上動いていたら経路を再計算
 		lastTargetPosition_ = currentTargetPos;
 
-        if ((dx * dx + dz * dz) > 1.0f) // 1mの二乗
+        if ((dx * dx + dz * dz) > kRepathDistanceSq)
         {
             // 経路を再計算してインデックスをリセット
             path_ = navMesh->FindPath(owner_->GetWorldPosition(), target->GetWorldPosition() );
@@ -139,7 +144,7 @@ void NavMeshMove::Update()
             {
                 // 次の中継点へのベクトルを再計算
                 waypoint = path_[currentPathIndex_];
-                toWaypoint = waypoint - owner_->GetPosition();
+                toWaypoint = waypoint - owner_->GetWorldPosition();
                 toWaypoint.y = 0.0f;
                 distSq = toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z;
             }
@@ -148,7 +153,7 @@ void NavMeshMove::Update()
 
     // 中継点に向けて移動入力を与える
     float len = std::sqrt(distSq);
-    if (len > 0.001f)
+    if (len > kMinMoveDistance)
     {
         Vector2 moveDirection = Vector2(toWaypoint.x / len, toWaypoint.z / len);
         owner_->SetMoveInputXZ(moveDirection, moveSpeed_);
