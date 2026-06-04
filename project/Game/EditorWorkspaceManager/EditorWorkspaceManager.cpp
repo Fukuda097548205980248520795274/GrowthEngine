@@ -44,6 +44,8 @@ void EditorWorkspaceManager::DrawUI()
 /// @brief ワークスペース切り替え用のタブバーを描画する
 void EditorWorkspaceManager::DrawWorkspaceTabBar()
 {
+#ifdef _DEVELOPMENT
+
     // 画面の最上部にメニューバーを描画
     if (ImGui::BeginMainMenuBar())
     {
@@ -72,4 +74,6 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
         }
         ImGui::EndMainMenuBar();
     }
+
+#endif
 }
