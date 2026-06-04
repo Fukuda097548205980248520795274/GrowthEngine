@@ -135,6 +135,10 @@ private:
 	SkeletonHandle hCharacterSkeleton_ = 0;
 
 
+	/// @brief ナビゲーションメッシュ
+	std::unique_ptr<NavMesh> navMesh_ = nullptr;
+
+
 	// 片手武器モデル
 	std::unique_ptr<PrefabBaseStaticModel> oneHandedWeaponModel_ = nullptr;
 

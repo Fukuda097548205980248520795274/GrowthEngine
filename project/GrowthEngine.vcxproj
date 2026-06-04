@@ -1040,6 +1040,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Guard\Guard.cpp" />
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
+    <ClCompile Include="Game\Action\Move\NavMeshMove\NavMeshMove.cpp" />
     <ClCompile Include="Game\Action\ReleaseToken\ReleaseToken.cpp" />
     <ClCompile Include="Game\Action\RequestToken\RequestToken.cpp" />
     <ClCompile Include="Game\AppCollider\AppCollider.cpp" />
@@ -1403,6 +1404,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Guard\Guard.h" />
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
+    <ClInclude Include="Game\Action\Move\NavMeshMove\NavMeshMove.h" />
     <ClInclude Include="Game\Action\ReleaseToken\ReleaseToken.h" />
     <ClInclude Include="Game\Action\RequestToken\RequestToken.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />

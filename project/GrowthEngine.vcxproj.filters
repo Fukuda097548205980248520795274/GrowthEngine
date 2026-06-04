@@ -1180,6 +1180,9 @@
     <Filter Include="Game\NavMesh">
       <UniqueIdentifier>{8284cf40-93e2-40df-9dfe-3f81f4382e89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Move\NavMeshMove">
+      <UniqueIdentifier>{4485a032-4577-45b8-93e0-c53288274498}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2117,6 +2120,9 @@
     </ClCompile>
     <ClCompile Include="Game\NavMesh\NavMesh.cpp">
       <Filter>Game\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Move\NavMeshMove\NavMeshMove.cpp">
+      <Filter>Game\Action\Move\NavMeshMove</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3172,6 +3178,9 @@
     </ClInclude>
     <ClInclude Include="Game\NavMesh\NavMesh.h">
       <Filter>Game\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Move\NavMeshMove\NavMeshMove.h">
+      <Filter>Game\Action\Move\NavMeshMove</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

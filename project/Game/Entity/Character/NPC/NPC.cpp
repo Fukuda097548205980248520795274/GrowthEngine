@@ -9,7 +9,8 @@ namespace
 
 /// @brief コンストラクタ
 /// @param initData 
-NPC::NPC(const InitData& initData, CharacterTag characterTag) : 
+/// @param navMesh 
+NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 	Character(initData)
 {
 	// タグを指定する
@@ -20,8 +21,11 @@ NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 }
 
 /// @brief 初期化
-void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree)
+void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
 {
+	// ナビゲーションメッシュを設定する
+	navMesh_ = navMesh;
+
 	if (IsPlayerSide())
 	{
 		model_->param_->meshMaterial[0].color = Vector4(0.1f, 0.1f, 1.0f, 1.0f);

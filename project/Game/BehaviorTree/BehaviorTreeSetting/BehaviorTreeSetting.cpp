@@ -98,6 +98,16 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["avoid_data"]["Distance"] = node.avoidInitData.distance;
 				n["avoid_data"]["LocalDirection"] = { node.avoidInitData.localDirection.x, node.avoidInitData.localDirection.y };
             }
+            else if (node.actionName == "ApproachTargetMove")
+            {
+				n["approach_target_move_data"]["moveSpeed"] = node.approachTargetMoveInitData.moveSpeed;
+				n["approach_target_move_data"]["stopDistance"] = node.approachTargetMoveInitData.stopDistance;
+            }
+            else if (node.actionName == "NavMeshMove")
+            {
+				n["nav_mesh_move_data"]["moveSpeed"] = node.navMeshMoveInitData.moveSpeed;
+				n["nav_mesh_move_data"]["stopDistance"] = node.navMeshMoveInitData.stopDistance;
+            }
 
 			if (node.actionName != "None")
             {
@@ -299,6 +309,24 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                         }
                     }
                 }
+                else if (node.actionName == "ApproachTargetMove")
+                {
+                    if (n.contains("approach_target_move_data") && n["approach_target_move_data"].is_object())
+                    {
+						const auto& move_data = n["approach_target_move_data"];
+						node.approachTargetMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
+						node.approachTargetMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+                    }
+                }
+				else if (node.actionName == "NavMeshMove")
+				{
+                    if (n.contains("nav_mesh_move_data") && n["nav_mesh_move_data"].is_object())
+                    {
+                        const auto& move_data = n["nav_mesh_move_data"];
+                        node.navMeshMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
+                        node.navMeshMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+                    }
+				}
 
                 if (node.actionName != "None")
                 {

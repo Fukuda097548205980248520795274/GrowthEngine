@@ -1028,7 +1028,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
     // アクション選択用のコンボボックス
-    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken", "Avoid" };
+    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken", "Avoid", "ApproachTargetMove", "NavMeshMove" };
     int currentItem = 0;
     for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
     {
@@ -1263,6 +1263,24 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 			node.avoidInitData.localDirection = node.avoidInitData.localDirection.Normalize();
 
+			ImGui::TreePop();
+		}
+	}
+    else if (node.actionName == "ApproachTargetMove")
+    {
+        if (ImGui::TreeNode("Approach Target Move Settings"))
+        {
+            DragFloat("Move Speed", &node.approachTargetMoveInitData.moveSpeed, 0.1f);
+            DragFloat("Stop Distance", &node.approachTargetMoveInitData.stopDistance, 0.01f);
+            ImGui::TreePop();
+        }
+    }
+	else if (node.actionName == "NavMeshMove")
+	{
+		if (ImGui::TreeNode("NavMesh Move Settings"))
+		{
+			DragFloat("Move Speed", &node.navMeshMoveInitData.moveSpeed, 0.1f);
+			DragFloat("Stop Distance", &node.navMeshMoveInitData.stopDistance, 0.01f);
 			ImGui::TreePop();
 		}
 	}

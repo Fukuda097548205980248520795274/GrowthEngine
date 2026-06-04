@@ -191,6 +191,16 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// 回避ノードの生成
             runtime_node = std::make_unique<ActionNode>(std::make_unique<Avoid>(character, editor_node.avoidInitData));
         }
+        else if (editor_node.actionName == "ApproachTargetMove")
+        {
+			// ターゲットに近づく移動ノードの生成
+			runtime_node = std::make_unique<ActionNode>(std::make_unique<ApproachTargetMove>(character, editor_node.approachTargetMoveInitData));
+        }
+		else if (editor_node.actionName == "NavMeshMove")
+		{
+			// NavMeshを使用した移動ノードの生成
+			runtime_node = std::make_unique<ActionNode>(std::make_unique<NavMeshMove>(character, editor_node.navMeshMoveInitData));
+		}
         else
         {
             // 何も設定されていない、または該当しない場合（何もしないノードにする等）

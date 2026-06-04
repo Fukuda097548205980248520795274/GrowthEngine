@@ -6,6 +6,8 @@
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "Action/Avoid/Avoid.h"
+#include "Action/Move/ApproachTargetMove/ApproachTargetMove.h"
+#include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "MotionManager/MotionManager.h"
 
 // ノードの種類
@@ -74,6 +76,8 @@ struct EditorNode
 	GrabAttackInitData grabAttackInitData;
 	GrabStrikeAttackInitData grabStrikeAttackInitData;
 	AvoidInitData avoidInitData;
+	ApproachTargetMoveInitData approachTargetMoveInitData;
+	NavMeshMoveInitData navMeshMoveInitData;
 
 	// 条件ノードのパラメータ
 	CondtionNodeParam conditionParam;

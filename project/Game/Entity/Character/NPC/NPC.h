@@ -2,6 +2,8 @@
 #include "../Character.h"
 #include "BehaviorTree/BehaviorTree.h"
 
+class NavMesh;
+
 class NPC : public Character
 {
 public:
@@ -9,10 +11,11 @@ public:
 	/// @brief コンストラクタ
 	/// @param initData 
 	/// @param characterTag 
+	/// @param navMesh 
 	NPC(const InitData& initData, CharacterTag characterTag);
 
 	/// @brief 初期化
-	void Initialize(std::unique_ptr<BehaviorTree> behaviorTree);
+	void Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
 
 	/// @brief 更新処理
 	virtual void Update() override;
@@ -27,6 +30,10 @@ public:
 	/// @brief 攻撃のクールタイムを設定する
 	/// @param cooltime 
 	void SetAttackCooltime(float cooltime)override { attackCooltime_ = cooltime; }
+
+	/// @brief ナビゲーションメッシュを取得する
+	/// @return 
+	const NavMesh* GetNavMesh() const override { return navMesh_; }
 
 
 private:
@@ -48,6 +55,9 @@ private:
 
 	/// @brief ビヘイビアツリー
 	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
+
+	/// @brief ナビメッシュ
+	const NavMesh* navMesh_ = nullptr;
 
 
 

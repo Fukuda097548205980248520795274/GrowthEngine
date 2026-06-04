@@ -2,16 +2,21 @@
 #include "../Move.h"
 #include "Entity/Character/Character.h"
 
+struct ApproachTargetMoveInitData
+{
+	float stopDistance = 1.0f; // 停止距離[m]
+	float moveSpeed = 3.0f;    // 移動速度[m/s]
+};
+
 class ApproachTargetMove : public Move
 {
 public:
 
     /// @brief コンストラクタ
     /// @param character
-    /// @param stopDistance 停止距離[m]
-    /// @param moveSpeed 移動速度[m/s]
-    ApproachTargetMove(Character* character, float stopDistance = 1.0f, float moveSpeed = 3.0f)
-        : Move(character), stopDistanceSq_(stopDistance * stopDistance), moveSpeed_(moveSpeed) {}
+	/// @param initData
+    ApproachTargetMove(Character* character, const ApproachTargetMoveInitData& initData)
+        : Move(character), stopDistanceSq_(initData.stopDistance * initData.stopDistance), moveSpeed_(initData.moveSpeed) {}
 
     /// @brief 実行
     void Exec() override;

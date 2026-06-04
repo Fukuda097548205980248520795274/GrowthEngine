@@ -11,6 +11,7 @@ class Attack;
 class Move;
 class Avoid;
 class Weapon;
+class NavMesh;
 
 enum class FightStyle
 {
@@ -171,6 +172,10 @@ public:
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
+
+	/// @brief ナビゲーションメッシュを取得する
+	/// @return 
+	virtual const NavMesh* GetNavMesh() const { return nullptr; }
 
 	/// @brief ターゲットがいるかどうか
 	/// @return 

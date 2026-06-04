@@ -17,6 +17,94 @@ namespace
 
 	// ピボット中心の高さオフセット
 	const Vector3 kPivotCenterOffset = Vector3(0.0f, 1.5f, 0.0f);
+
+	/// @brief ナビゲーションメッシュのテスト
+	/// @param navMesh 
+	void TestNavMesh(NavMesh* navMesh)
+	{
+
+		// ポリゴン0 (左上)
+		NavPolygon poly0;
+		poly0.id = 0;
+		poly0.vertices = {
+			Vector3(0, -9.0f, 30),  Vector3(10, -9.0f, 30),
+			Vector3(10, -9.0f, 20), Vector3(0, -9.0f, 20)
+		};
+		poly0.neighborIds = { -1, 1, 7, -1 }; // 右がPoly1、下がPoly7
+
+		// ポリゴン1 (上中)
+		NavPolygon poly1;
+		poly1.id = 1;
+		poly1.vertices = {
+			Vector3(10, -9.0f, 30), Vector3(20, -9.0f, 30),
+			Vector3(20, -9.0f, 20), Vector3(10, -9.0f, 20)
+		};
+		poly1.neighborIds = { -1, 2, -1, 0 }; // 右がPoly2、左がPoly0 (下は空洞)
+
+		// ポリゴン2 (右上)
+		NavPolygon poly2;
+		poly2.id = 2;
+		poly2.vertices = {
+			Vector3(20, -9.0f, 30), Vector3(30, -9.0f, 30),
+			Vector3(30, -9.0f, 20), Vector3(20, -9.0f, 20)
+		};
+		poly2.neighborIds = { -1, -1, 3, 1 }; // 下がPoly3、左がPoly1
+
+		// ポリゴン3 (右中)
+		NavPolygon poly3;
+		poly3.id = 3;
+		poly3.vertices = {
+			Vector3(20, -9.0f, 20), Vector3(30, -9.0f, 20),
+			Vector3(30, -9.0f, 10), Vector3(20, -9.0f, 10)
+		};
+		poly3.neighborIds = { 2, -1, 4, -1 }; // 上がPoly2、下がPoly4 (左は空洞)
+
+		// ポリゴン4 (右下)
+		NavPolygon poly4;
+		poly4.id = 4;
+		poly4.vertices = {
+			Vector3(20, -9.0f, 10), Vector3(30, -9.0f, 10),
+			Vector3(30, -9.0f, 0),  Vector3(20, -9.0f, 0)
+		};
+		poly4.neighborIds = { 3, -1, -1, 5 }; // 上がPoly3、左がPoly5
+
+		// ポリゴン5 (下中)
+		NavPolygon poly5;
+		poly5.id = 5;
+		poly5.vertices = {
+			Vector3(10, -9.0f, 10), Vector3(20, -9.0f, 10),
+			Vector3(20, -9.0f, 0),  Vector3(10, -9.0f, 0)
+		};
+		poly5.neighborIds = { -1, 4, -1, 6 }; // 右がPoly4、左がPoly6 (上は空洞)
+
+		// ポリゴン6 (左下)
+		NavPolygon poly6;
+		poly6.id = 6;
+		poly6.vertices = {
+			Vector3(0, -9.0f, 10),  Vector3(10, -9.0f, 10),
+			Vector3(10, -9.0f, 0),  Vector3(0, -9.0f, 0)
+		};
+		poly6.neighborIds = { 7, 5, -1, -1 }; // 上がPoly7、右がPoly5
+
+		// ポリゴン7 (左中)
+		NavPolygon poly7;
+		poly7.id = 7;
+		poly7.vertices = {
+			Vector3(0, -9.0f, 20),  Vector3(10, -9.0f, 20),
+			Vector3(10, -9.0f, 10), Vector3(0, -9.0f, 10)
+		};
+		poly7.neighborIds = { 0, -1, 6, -1 }; // 上がPoly0、下がPoly6 (右は空洞)
+
+		// メッシュにすべて登録
+		navMesh->AddPolygon(poly0);
+		navMesh->AddPolygon(poly1);
+		navMesh->AddPolygon(poly2);
+		navMesh->AddPolygon(poly3);
+		navMesh->AddPolygon(poly4);
+		navMesh->AddPolygon(poly5);
+		navMesh->AddPolygon(poly6);
+		navMesh->AddPolygon(poly7);
+	}
 }
 
 /// @brief 初期化
@@ -45,6 +133,10 @@ void GameScene::Initialize()
 	// ステージエディタの生成と初期化
 	stageEditor_ = std::make_unique<StageEditor>(this);
 	stageEditor_->Initialize();
+
+	// ナビゲーションメッシュの生成と初期化
+	navMesh_ = std::make_unique<NavMesh>();
+	TestNavMesh(navMesh_.get());
 
 	// キャラクターモデルの読み込み
 	hCharacterModel_ = engine_->LoadModel("./Assets/Models/Character", "bone.gltf");
@@ -194,6 +286,9 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());
+
+	// ナビメッシュのデバッグ描画
+	navMesh_->DrawDebug();
 }
 
 
@@ -248,7 +343,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
-		npc->Initialize(behaviorTreeEditor_->CreateTree("TEST", npc.get()));
+		npc->Initialize(behaviorTreeEditor_->CreateTree("Move", npc.get()), navMesh_.get());
 		character = npc.get();
 
 		// NPCのリストに追加する

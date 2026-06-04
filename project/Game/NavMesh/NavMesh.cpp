@@ -263,7 +263,7 @@ std::vector<Vector3> NavMesh::SmoothPath(const Vector3& start, const Vector3& en
         return smoothPath;
     }
     
-    // 1. 全てのポータル（門）の左右の頂点をリストアップする
+    // 全てのポータル（門）の左右の頂点をリストアップする
     std::vector<Vector3> lefts;
     std::vector<Vector3> rights;
     

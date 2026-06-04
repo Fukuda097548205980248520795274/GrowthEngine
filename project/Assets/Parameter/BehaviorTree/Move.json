@@ -1,0 +1,40 @@
+{
+    "links": [
+        {
+            "end": 5,
+            "id": 6,
+            "start": 3
+        }
+    ],
+    "nodes": [
+        {
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "output_pin": 3,
+            "pos": [
+                312.0,
+                162.0
+            ],
+            "type": 2
+        },
+        {
+            "action_name": "NavMeshMove",
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "nav_mesh_move_data": {
+                "moveSpeed": 3.0,
+                "stopDistance": 1.0
+            },
+            "output_pin": -1,
+            "pos": [
+                539.0,
+                93.0
+            ],
+            "type": 5
+        }
+    ]
+}
