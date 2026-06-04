@@ -17,6 +17,8 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "StageEditor/StageEditor.h"
 
+#include "NavMesh/NavMesh.h"
+
 class GameScene : public Scene
 {
 public:
@@ -115,7 +117,6 @@ private:
 
 	/// @brief 床の当たり判定グループ
 	std::unique_ptr<Collision3DBaseAABB> floorCollision_ = nullptr;
-
 
 
 	/// @brief プレイヤーのモデル

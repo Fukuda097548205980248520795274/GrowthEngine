@@ -1066,6 +1066,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Entity\Entity.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManager.cpp" />
+    <ClCompile Include="Game\NavMesh\NavMesh.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ActionNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\AvoidNode\AvoidNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.cpp" />
@@ -1425,6 +1426,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Entity\Entity.h" />
     <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h" />
     <ClInclude Include="Game\MotionManager\MotionManager.h" />
+    <ClInclude Include="Game\NavMesh\NavMesh.h" />
     <ClInclude Include="Game\Node\ActionNode\ActionNode.h" />
     <ClInclude Include="Game\Node\ActionNode\AvoidNode\AvoidNode.h" />
     <ClInclude Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.h" />

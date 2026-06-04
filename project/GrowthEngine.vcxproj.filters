@@ -1177,6 +1177,9 @@
     <Filter Include="Engine\Include\PSO\PSOTriangle">
       <UniqueIdentifier>{46324437-649a-47c8-89fd-4df3316a6927}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\NavMesh">
+      <UniqueIdentifier>{8284cf40-93e2-40df-9dfe-3f81f4382e89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2111,6 +2114,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp">
       <Filter>Engine\Include\PSO\PSOTriangle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\NavMesh\NavMesh.cpp">
+      <Filter>Game\NavMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3163,6 +3169,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h">
       <Filter>Engine\Include\PSO\PSOTriangle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\NavMesh\NavMesh.h">
+      <Filter>Game\NavMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
