@@ -134,6 +134,10 @@ void GameScene::Initialize()
 	stageEditor_ = std::make_unique<StageEditor>(this);
 	stageEditor_->Initialize();
 
+	// エディタワークスペースマネージャの生成と初期化
+	editorWorkspaceManager_ = std::make_unique<EditorWorkspaceManager>();
+	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(), motionManagerEditor_.get());
+
 	// ナビゲーションメッシュの生成と初期化
 	navMesh_ = std::make_unique<NavMesh>();
 	TestNavMesh(navMesh_.get());
@@ -261,12 +265,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	// エディタの描画
-	stageEditor_->DrawAssetWindow();
-	stageEditor_->DrawUI();
-	behaviorTreeEditor_->DrawProjectWindow();
-	behaviorTreeEditor_->DrawNodeTable();
-	behaviorTreeEditor_->DrawPropertyWindow();
-	motionManagerEditor_->Draw();
+	editorWorkspaceManager_->DrawUI();
 
 	// プレイヤーの描画
 	player_->Draw();

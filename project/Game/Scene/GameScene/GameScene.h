@@ -13,6 +13,7 @@
 #include "PostEffectManager/PostEffectManager.h"
 #include "EffectManager/EffectManager.h"
 
+#include "EditorWorkspaceManager/EditorWorkspaceManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "StageEditor/StageEditor.h"
@@ -87,7 +88,6 @@ private:
 	/// @brief ポストエフェクトマネージャ
 	std::unique_ptr<PostEffectManager> postEffectManager_ = nullptr;
 
-
 	// モーションマネージャエディタ
 	std::unique_ptr<MotionManagerEditor> motionManagerEditor_ = nullptr;
 
@@ -96,6 +96,9 @@ private:
 
 	// ステージエディタ
 	std::unique_ptr<StageEditor> stageEditor_ = nullptr;
+
+	/// @brief エディタワークスペースマネージャ
+	std::unique_ptr< EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;
 
 
 	/// @brief プレイヤーの当たり判定グループ

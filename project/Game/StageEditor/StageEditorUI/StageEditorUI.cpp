@@ -375,6 +375,91 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 #endif
 }
 
+/// @brief オブジェクトリストウィンドウの描画
+/// @param placementList 
+void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList)
+{
+#ifdef _DEVELOPMENT
+    ImGui::Begin("Object List");
+
+    ImGui::Text("Placed Objects:");
+
+    // オブジェクトのリスト表示（スクロール可能な領域）
+    ImGui::BeginChild("ObjectListRegion", ImVec2(0, 150), true);
+    for (int i = 0; i < placementList.size(); ++i)
+    {
+        auto& data = placementList[i];
+
+        // 表示用のラベルを作成 (例: "ID:0 Player")
+        std::string label = "ID:" + std::to_string(i) + " ";
+        if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
+        else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
+        else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
+
+        // 選択されたら selectedIndex_ を更新
+        if (ImGui::Selectable(label.c_str(), selectedIndex_ == i))
+        {
+            selectedIndex_ = i;
+        }
+    }
+    ImGui::EndChild();
+
+    ImGui::Separator();
+
+    // 選択中のオブジェクトがある場合、編集UIを表示
+    if (selectedIndex_ >= 0 && selectedIndex_ < placementList.size())
+    {
+        auto& target = placementList[selectedIndex_];
+        ImGui::Text("--- Edit Selected Object ---");
+
+        bool isChanged = false; // パラメータが変更されたかどうかのフラグ
+
+        // カテゴリごとの編集項目
+        if (target.category == EditCategory::Character)
+        {
+            if (ImGui::Combo("NPC Role", &target.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames))) isChanged = true;
+            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
+            if (ImGui::DragFloat("Rotation (Y)", &target.rotateY, 0.01f)) isChanged = true;
+            if (ImGui::DragInt("HP", &target.hp, 1, 0, 10000)) isChanged = true;
+        }
+        else if (target.category == EditCategory::Object)
+        {
+            if (ImGui::Combo("Object Type", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames))) isChanged = true;
+            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
+            if (ImGui::DragFloat3("Scale", &target.scale.x, 0.1f)) isChanged = true;
+        }
+        else if (target.category == EditCategory::Weapon)
+        {
+            if (ImGui::Combo("Weapon Type", &target.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames))) isChanged = true;
+            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
+            if (ImGui::DragInt("Durability", &target.durability, 1, 1, 10000)) isChanged = true;
+            if (ImGui::DragFloat("Attack Power", &target.attackPower, 0.1f)) isChanged = true;
+        }
+
+        // 変更があった場合は古い実体を消して再生成する
+        if (isChanged)
+        {
+            spawner_->DeleteActualEntity(target);
+            spawner_->SpawnActualEntity(target);
+        }
+
+        ImGui::Separator();
+
+        // 削除ボタン
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+        if (ImGui::Button("Delete Object", ImVec2(120, 0)))
+        {
+            spawner_->DeleteActualEntity(target);
+            placementList.erase(placementList.begin() + selectedIndex_);
+            selectedIndex_ = -1; // 選択状態をリセット
+        }
+        ImGui::PopStyleColor();
+    }
+
+    ImGui::End();
+#endif
+}
+
 /// @brief モーションの選択UIを表示する
 /// @param motionType 
 /// @param motionName 

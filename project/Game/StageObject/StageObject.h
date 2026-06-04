@@ -33,12 +33,22 @@ public:
 	/// @return 
 	Vector3 GetWorldPosition()const { return worldTransform_->GetWorldPosition(); }
 
+	/// @brief 終了したかどうか
+	/// @return 
+	bool IsFinished() const { return isFinished_; }
+
+	/// @brief 終了する
+	void Delete() { isFinished_ = true; }
+
 
 
 protected:
 
 	/// @brief ワールドトランスフォーム
 	std::unique_ptr<WorldTransform3D> worldTransform_ = nullptr;
+
+	/// @brief 終了フラグ
+	bool isFinished_ = false;
 
 	// ステージオブジェクトのタグ
 	StageObjectTag tag_ = StageObjectTag::None;

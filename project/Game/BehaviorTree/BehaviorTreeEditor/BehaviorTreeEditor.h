@@ -42,6 +42,12 @@ public:
 	/// @return 
 	std::unique_ptr<BehaviorTree> CreateTree(const std::string& fileName, Character* character);
 
+	/// @brief UIを描画する
+	void DrawUI();
+
+
+private:
+
 	/// @brief ノードテーブルを描画する
 	void DrawNodeTable();
 

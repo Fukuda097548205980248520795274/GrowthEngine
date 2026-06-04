@@ -28,6 +28,10 @@ public:
     /// @param currentFileName 
     void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName);
 
+	/// @brief オブジェクトリストウィンドウの描画
+    /// @param placementList 
+    void DrawObjectListWindow(std::vector<PlacementData>& placementList);
+
 private:
 
 	// ステージファイルの読み書きを担当するクラス

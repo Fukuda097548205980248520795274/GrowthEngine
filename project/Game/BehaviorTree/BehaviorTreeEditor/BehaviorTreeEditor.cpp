@@ -227,6 +227,14 @@ std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& 
 	return BehaviorTreeFactory::CreateTree(nodes, links, character);
 }
 
+/// @brief UIを描画する
+void BehaviorTreeEditor::DrawUI()
+{
+    DrawProjectWindow();
+    DrawNodeTable();
+    DrawPropertyWindow();
+}
+
 /// @brief 選択されているノードを削除する
 void BehaviorTreeEditor::DeleteSelectedNodes()
 {

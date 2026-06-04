@@ -356,8 +356,8 @@ void Character::Update()
 	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
-	// ロックオンしているターゲットがいて、掴んでおらず、無力化されていない場合は、ターゲットの方向を向くようにする
-	if (lockOnTarget_ && !IsGrabbing() && !IsIncapacitated())
+	// ロックオンしているターゲットの方向を向く処理
+	if (lockOnTarget_ && isStance_ && !IsGrabbing() && !IsIncapacitated())
 	{
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;

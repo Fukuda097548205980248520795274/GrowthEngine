@@ -23,118 +23,150 @@ Collapsed=0
 Pos=0,18
 Size=967,490
 Collapsed=0
-DockId=0x00000001,1
+DockId=0x00000005,1
 
 [Window][Texture]
-Pos=0,510
-Size=1222,210
+Pos=0,482
+Size=195,238
 Collapsed=0
-DockId=0x00000005,0
+DockId=0x0000000B,0
 
 [Window][Reset Scene]
-Pos=1224,510
-Size=56,210
+Pos=0,482
+Size=195,238
 Collapsed=0
-DockId=0x00000006,0
+DockId=0x0000000B,2
 
 [Window][Stage Editor]
-Pos=0,550
-Size=1222,170
+Pos=706,18
+Size=302,462
 Collapsed=0
-DockId=0x00000005,2
+DockId=0x00000008,0
 
 [Window][Chip Selector]
 Pos=0,550
 Size=1222,170
 Collapsed=0
-DockId=0x00000005,1
+DockId=0x0000000B,1
 
 [Window][Camera3D]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,4
 
 [Window][Model]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,3
 
 [Window][Prefab]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,2
 
 [Window][PostEffect]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,1
 
 [Window][Light]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,0
 
 [Window][View]
 Pos=0,18
-Size=926,490
+Size=704,462
 Collapsed=0
-DockId=0x00000001,0
+DockId=0x00000005,0
 
 [Window][Particle]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,5
 
 [Window][Sound]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,6
 
 [Window][Behavior Tree Editor]
-Pos=0,18
-Size=926,490
+Pos=470,18
+Size=538,462
 Collapsed=0
-DockId=0x00000001,1
+DockId=0x00000006,0
 
 [Window][Motion Manager Editor]
-Pos=0,18
-Size=926,490
-Collapsed=0
-DockId=0x00000001,2
-
-[Window][FPS Overlay]
-Pos=0,510
-Size=1222,210
-Collapsed=0
-DockId=0x00000005,1
-
-[Window][Tree Project Assets]
-Pos=0,510
-Size=1222,210
+Size=934,480
 Collapsed=0
 DockId=0x00000005,2
 
+[Window][FPS Overlay]
+Pos=0,482
+Size=195,238
+Collapsed=0
+DockId=0x0000000B,1
+
 [Window][Node Properties]
-Pos=928,18
-Size=352,490
+Pos=1010,18
+Size=270,462
+Collapsed=0
+DockId=0x00000002,7
+
+[Window][Tree Project Assets]
+Pos=226,482
+Size=1054,238
+Collapsed=0
+DockId=0x0000000C,0
+
+[Window][DeletePopup]
+Pos=508,324
+Size=264,72
+Collapsed=0
+
+[Window][SaveConfirmationPopup]
+Pos=492,314
+Size=352,92
+Collapsed=0
+
+[Window][Stage Project Assets]
+Pos=197,482
+Size=1083,238
+Collapsed=0
+DockId=0x0000000A,0
+
+[Window][Delete Confirmation]
+Pos=508,312
+Size=264,72
+Collapsed=0
+
+[Window][Object List]
+Pos=1010,18
+Size=270,462
 Collapsed=0
 DockId=0x00000002,7
 
 [Docking][Data]
-DockSpace     ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
-  DockNode    ID=0x00000003 Parent=0x14621557 SizeRef=1280,490 Split=X
-    DockNode  ID=0x00000001 Parent=0x00000003 SizeRef=926,702 CentralNode=1 Selected=0xFCC94F6D
-    DockNode  ID=0x00000002 Parent=0x00000003 SizeRef=352,702 Selected=0x370D40C7
-  DockNode    ID=0x00000004 Parent=0x14621557 SizeRef=1280,210 Split=X Selected=0xBE78FE5F
-    DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=1222,170 Selected=0xB4599F82
-    DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=56,170 Selected=0xFDB80A1C
+DockSpace         ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
+  DockNode        ID=0x00000003 Parent=0x14621557 SizeRef=1280,462 Split=X
+    DockNode      ID=0x00000001 Parent=0x00000003 SizeRef=1008,702 Split=X Selected=0xCD8A0BD6
+      DockNode    ID=0x00000007 Parent=0x00000001 SizeRef=704,462 Split=X Selected=0xCD8A0BD6
+        DockNode  ID=0x00000005 Parent=0x00000007 SizeRef=468,462 CentralNode=1 Selected=0xCD8A0BD6
+        DockNode  ID=0x00000006 Parent=0x00000007 SizeRef=538,462 Selected=0xFCC94F6D
+      DockNode    ID=0x00000008 Parent=0x00000001 SizeRef=302,462 Selected=0xBE78FE5F
+    DockNode      ID=0x00000002 Parent=0x00000003 SizeRef=270,702 Selected=0x2960FC1D
+  DockNode        ID=0x00000004 Parent=0x14621557 SizeRef=1280,238 Split=X Selected=0xB4599F82
+    DockNode      ID=0x00000009 Parent=0x00000004 SizeRef=195,238 Split=X Selected=0xFDB80A1C
+      DockNode    ID=0x0000000B Parent=0x00000009 SizeRef=224,238 Selected=0xFDB80A1C
+      DockNode    ID=0x0000000C Parent=0x00000009 SizeRef=1054,238 Selected=0xB4599F82
+    DockNode      ID=0x0000000A Parent=0x00000004 SizeRef=1083,238 Selected=0x801F0B42
 )";
 
 /// @brief デストラクタ

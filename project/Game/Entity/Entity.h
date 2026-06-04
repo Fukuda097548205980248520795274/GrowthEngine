@@ -60,6 +60,9 @@ public:
 	/// @return 
 	WorldTransform3D* GetWorldTransform()const { return worldTransform_.get(); }
 
+	/// @brief 削除する
+	void Delete() { isFinished_ = true; }
+
 
 protected:
 

@@ -1183,6 +1183,9 @@
     <Filter Include="Game\Action\Move\NavMeshMove">
       <UniqueIdentifier>{4485a032-4577-45b8-93e0-c53288274498}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\EditorWorkspaceManager">
+      <UniqueIdentifier>{ffbb5ed8-4d51-4940-b7ac-c03fa408edb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2123,6 +2126,9 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Move\NavMeshMove\NavMeshMove.cpp">
       <Filter>Game\Action\Move\NavMeshMove</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.cpp">
+      <Filter>Game\EditorWorkspaceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3181,6 +3187,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Move\NavMeshMove\NavMeshMove.h">
       <Filter>Game\Action\Move\NavMeshMove</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.h">
+      <Filter>Game\EditorWorkspaceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

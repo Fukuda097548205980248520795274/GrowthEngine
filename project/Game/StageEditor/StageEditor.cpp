@@ -28,11 +28,7 @@ void StageEditor::Update(float dt)
 /// @brief 描画処理（デバッグ用）
 void StageEditor::DrawUI()
 {
-	editorUI_->DrawUI(placementList_, currentFileName_);
-}
-
-/// @brief アセットウィンドウの描画
-void StageEditor::DrawAssetWindow()
-{
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_);
+	editorUI_->DrawUI(placementList_, currentFileName_);
+	editorUI_->DrawObjectListWindow(placementList_);
 }

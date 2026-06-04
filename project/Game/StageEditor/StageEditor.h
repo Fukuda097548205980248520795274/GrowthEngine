@@ -27,9 +27,6 @@ public:
     /// @brief 描画処理（デバッグ用）
     void DrawUI();
 
-	/// @brief アセットウィンドウの描画
-    void DrawAssetWindow();
-
 
 private:
     
