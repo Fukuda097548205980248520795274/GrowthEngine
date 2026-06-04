@@ -85,6 +85,9 @@ public:
 		AnimationHandle hGuardHitMotion = 0;
 
 
+		/// @brief 行動パターンを定義したスクリプトファイル名 
+		std::string behaviorTreeName = "";
+
 
 		/// @brief 当たり判定グループ
 		Collision3DBaseSphere* hurtboxGroup = nullptr;

@@ -8,6 +8,9 @@ void StageEditorUI::Initialize()
 {
 	// モーションマネージャのインスタンスを取得
 	motionManager_ = MotionManager::GetInstance();
+
+	// ビヘイビアツリーデータの名前を読み込む
+    LoadBehaviorTreeNames();
 }
 
 /// @brief UIの描画
@@ -107,6 +110,45 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         MotionSelecter("Avoiding Back Motion", currentData.avoidBackMotion.type, currentData.avoidBackMotion.name);
         MotionSelecter("Avoiding Left Motion", currentData.avoidLeftMotion.type, currentData.avoidLeftMotion.name);
         MotionSelecter("Avoiding Right Motion", currentData.avoidRightMotion.type, currentData.avoidRightMotion.name);
+
+        // プレイヤーと未選択以外　ビヘイビアツリーデータ
+		if (currentData.subType != 0 && currentData.subType != 1)
+		{
+            ImGui::Separator();
+            ImGui::Text("Behavior Tree Settings");
+
+            // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
+            if (ImGui::Button("Refresh BT List"))
+            {
+                LoadBehaviorTreeNames();
+            }
+
+            // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
+            std::string currentBtName = currentData.behaviorScriptName;
+            const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
+
+            // プルダウンメニュー（コンボボックス）の描画
+            if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
+            {
+                for (const auto& name : behaviorTreeNames_)
+                {
+                    bool isSelected = (currentBtName == name);
+                    if (ImGui::Selectable(name.c_str(), isSelected))
+                    {
+                        // 選択された名前を PlacementData の配列にコピーする
+                        // ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
+                        strcpy_s(currentData.behaviorScriptName, sizeof(currentData.behaviorScriptName), name.c_str());
+                    }
+
+                    // 選択中のアイテムにフォーカスを合わせる
+                    if (isSelected)
+                    {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+		}
     }
     else if (currentData.category == EditCategory::Object)
     {
@@ -510,5 +552,28 @@ void StageEditorUI::MotionSelecter(const char* label, MotionType& motionType, st
         }
 
         ImGui::TreePop();
+    }
+}
+
+/// @brief ビヘイビアツリーデータの名前を読み込む
+void StageEditorUI::LoadBehaviorTreeNames()
+{
+    behaviorTreeNames_.clear();
+
+	// ビヘイビアツリーのデータが保存されているフォルダのパス
+    std::string directoryPath = "./Assets/Parameter/BehaviorTree/";
+
+	// フォルダが存在しない場合は処理を終了
+    if (!std::filesystem::exists(directoryPath))
+        return;
+
+    // フォルダ内のファイルを走査
+    for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
+    {
+        if (entry.is_regular_file())
+        {
+            // stem() を使うと、拡張子を除いたファイル名を取得できます
+            behaviorTreeNames_.push_back(entry.path().stem().string());
+        }
     }
 }

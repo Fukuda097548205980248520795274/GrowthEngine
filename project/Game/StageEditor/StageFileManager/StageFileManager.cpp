@@ -28,6 +28,9 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
         itemJson["durability"] = data.durability;
         itemJson["attackPower"] = data.attackPower;
 
+		// 行動パターンのスクリプト名
+		itemJson["behaviorScriptName"] = data.behaviorScriptName;
+
         // モーションハンドルの保存（モーション名で保存するのが理想ですが、今回はハンドル値として保存する例）
         itemJson["hStandMotion"] = data.standMotion.handle;
         itemJson["hStanceMotion"] = data.stanceMotion.handle;
@@ -113,6 +116,14 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
             data.avoidBackMotion.handle = itemJson.value("hAvoidBackMotion", 0);
             data.avoidLeftMotion.handle = itemJson.value("hAvoidLeftMotion", 0);
             data.avoidRightMotion.handle = itemJson.value("hAvoidRightMotion", 0);
+
+			data.behaviorScriptName[0] = '\0'; // デフォルトは空文字列
+            if (itemJson.contains("behaviorScriptName"))
+            {
+				std::string scriptName = itemJson["behaviorScriptName"].get<std::string>();
+				strncpy_s(data.behaviorScriptName, scriptName.c_str(), sizeof(data.behaviorScriptName) - 1);
+				data.behaviorScriptName[sizeof(data.behaviorScriptName) - 1] = '\0'; // 念のためヌル終端
+            }
 
             // 実際のゲーム内エンティティを生成
             spawner->SpawnActualEntity(data);

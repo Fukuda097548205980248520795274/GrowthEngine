@@ -48,7 +48,11 @@ struct PlacementData
 	// 耐久力 (武器の場合)
 	int32_t durability = 100;
 
-	float attackPower = 1.0f; // 攻撃力 (武器の場合)
+	// 攻撃力 (武器の場合)
+	float attackPower = 1.0f;
+
+	// 行動パターンを定義したスクリプトファイル名 (キャラクターの場合)
+	char behaviorScriptName[256] = "";
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;

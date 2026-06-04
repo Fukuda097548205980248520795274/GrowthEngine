@@ -2,6 +2,7 @@
     "StageObjects": [
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 1,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -28,6 +29,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -54,6 +56,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -80,6 +83,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -106,6 +110,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -132,6 +137,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -158,6 +164,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,
@@ -184,6 +191,7 @@
         },
         {
             "attackPower": 1.0,
+            "behaviorScriptName": "Move",
             "category": 0,
             "durability": 100,
             "hAvoidBackMotion": 15,

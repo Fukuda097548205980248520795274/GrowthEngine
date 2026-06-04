@@ -325,7 +325,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
-		npc->Initialize(behaviorTreeEditor_->CreateTree("Move", npc.get()), navMesh_.get());
+		npc->Initialize(behaviorTreeEditor_->CreateTree(npcInitData.behaviorTreeName, npc.get()), navMesh_.get());
 		character = npc.get();
 
 		// NPCのリストに追加する

@@ -17,7 +17,7 @@ NPC::NPC(const InitData& initData, CharacterTag characterTag) :
 	// タグを指定する
 	characterTag_ = characterTag;
 
-   // 構え状態でなくてもロックオン候補を更新する
+	// 構え状態でなくてもロックオン候補を更新する
 	canLockOnWithoutStance_ = true;
 }
 

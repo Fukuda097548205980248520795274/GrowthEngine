@@ -46,10 +46,18 @@ private:
 	/// @brief モーションマネージャのインスタンス
 	MotionManager* motionManager_ = nullptr;
 
+	/// @brief ビヘイビアツリーデータの名前リスト
+    std::vector<std::string> behaviorTreeNames_;
+
+private:
+
 	/// @brief モーションの選択UIを表示する
     /// @param label 
     /// @param motionType 
     /// @param motionName 
     void MotionSelecter(const char* label, MotionType& motionType, std::string& motionName);
+
+	/// @brief ビヘイビアツリーデータの名前を読み込む
+    void LoadBehaviorTreeNames();
 };
 
