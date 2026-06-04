@@ -280,6 +280,7 @@ void Engine::RenderContext::PostDraw()
 	// 線の描画
 	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
 	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
+	line_->DrawTriangle3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
 #endif
 
 	// コマンドリスト・アロケータの取得

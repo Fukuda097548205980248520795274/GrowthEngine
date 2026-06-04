@@ -1171,6 +1171,12 @@
     <Filter Include="Game\StageEditor\StageEditorUI">
       <UniqueIdentifier>{eb40b218-49d6-4855-886f-736b422999f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Triangle">
+      <UniqueIdentifier>{db40687d-9cd0-4baf-9446-7964208b3759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOTriangle">
+      <UniqueIdentifier>{46324437-649a-47c8-89fd-4df3316a6927}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2102,6 +2108,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageFileManager\StageFileManager.cpp">
       <Filter>Game\StageEditor\StageFileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp">
+      <Filter>Engine\Include\PSO\PSOTriangle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3152,6 +3161,9 @@
     <ClInclude Include="Game\StageEditor\StageFileManager\StageFileManager.h">
       <Filter>Game\StageEditor\StageFileManager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h">
+      <Filter>Engine\Include\PSO\PSOTriangle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -3189,6 +3201,9 @@
     </None>
     <None Include="Assets\Shader\Particle3D\Particle3D.hlsli">
       <Filter>Engine\Shader\Particle3D</Filter>
+    </None>
+    <None Include="Assets\Shader\Triangle\Triangle.hlsli">
+      <Filter>Engine\Shader\Triangle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -3350,6 +3365,12 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Prefab\Prefab3D\Prefab3DTube.VS.hlsl">
       <Filter>Engine\Shader\Prefab\Prefab3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Triangle\Triangle.VS.hlsl">
+      <Filter>Engine\Shader\Triangle</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Triangle\Triangle.PS.hlsl">
+      <Filter>Engine\Shader\Triangle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

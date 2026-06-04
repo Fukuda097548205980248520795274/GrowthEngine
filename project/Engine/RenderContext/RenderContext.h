@@ -589,6 +589,13 @@ namespace Engine
 		/// @param color 
 		void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color) { line_->DrawCallLine2D(start, end, color); }
 
+		/// @brief デバッグ用の三角形を描画する
+		/// @param v0 
+		/// @param v1 
+		/// @param v2 
+		/// @param color 
+		void DrawDebugTriangle3D(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Vector4& color) { line_->DrawCallTriangle3D(v0, v1, v2, color); }
+
 		/// @brief ビューウィンドウ内のカーソルの位置を取得する
 		/// @return 
 		Vector2 GetViewWindowCursorPos()const { return imguiRender_->GetViewWindowCursorPos(); }

@@ -939,6 +939,18 @@ public:
 #endif
 	}
 
+	/// @brief デバッグ用の三角形を描画する
+	/// @param v1 
+	/// @param v2 
+	/// @param v3 
+	/// @param color 
+	void DrawDebugTriangle3D(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector4& color) const
+	{
+#ifdef _DEVELOPMENT
+		renderContext_->DrawDebugTriangle3D(v1, v2, v3, color);
+#endif
+	}
+
 	/// @brief デバッグ用立方体の描画
 	/// @param position 
 	/// @param rotate 

@@ -24,6 +24,13 @@ void TitleScene::Update()
 /// @brief 描画処理
 void TitleScene::Draw()
 {
+	engine_->DrawDebugTriangle3D(
+		Vector3{ 0.0f, 0.0f, 0.0f },
+		Vector3{ 1.0f, 0.0f, 0.0f },
+		Vector3{ 0.0f, 1.0f, 0.0f },
+		Vector4{ 1.0f, 0.0f, 0.0f, 1.0f }
+	);
+
 	engine_->DrawRender3D("Test_Ring");
 	engine_->DrawRender3D("Test_Cylinder");
 
