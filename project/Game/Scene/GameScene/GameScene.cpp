@@ -178,44 +178,6 @@ void GameScene::Initialize()
 
 	// 「床」に当たる
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
-
-	// プレイヤーの武器の生成と初期化
-	Weapon::InitData playerWeaponInitData;
-	playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
-	playerWeaponInitData.model = oneHandedWeaponModel_->CreateInstance();
-	playerWeaponInitData.durability = 0;
-	playerWeaponInitData.attackPower = 1.0f;
-	playerWeaponInitData.category = WeaponCategory::OneHanded;
-	playerWeaponInitData.isUnbreakable = true;
-	playerWeaponInitData.landingCollision = landingCollision_->CreateInstance();
-	playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
-
-	// プレイヤーの生成と初期化
-	Character::InitData playerInitData;
-	playerInitData.position = Vector3(0.0f, 0.0f, 0.0f);
-	playerInitData.rotateY = 0.0f;
-	playerInitData.hp = 100;
-	playerInitData.model_ = playerModel_.get();
-	playerInitData.weapon = nullptr;
-	playerInitData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, "Standing");
-	playerInitData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, "Nimble");
-	playerInitData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, "Walk");
-	playerInitData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, "Dash");
-	playerInitData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, "Front");
-	playerInitData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, "Back");
-	playerInitData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, "BothHands");
-	playerInitData.hGuardHitMotion = motionManager_->GetMotion(MotionType::Guard, "OneLeg");
-	playerInitData.hAvoidLeftMotion = 0;
-	playerInitData.hAvoidRightMotion = 0;
-	playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
-	playerInitData.hitboxGroup = playerHitboxGroup_.get();
-	playerInitData.landingCollision = landingCollision_->CreateInstance();
-	player_ = std::make_unique<Player>(playerInitData);
-	player_->Initialize(playerWeapon_.get());
-
-
-	// カメラ制御の初期化
-	InitializeCameraControl();
 }
 
 /// @brief 更新処理
@@ -228,8 +190,11 @@ void GameScene::Update()
 	stageEditor_->Update(deltaTime);
 
 	// プレイヤーの更新
-	player_->Update();
-	playerWeapon_->Update();
+	if (player_)
+	{
+		player_->Update();
+		playerWeapon_->Update();
+	}
 
 	// オブジェクトの更新
 	for (auto& object : objects_)object->Update();
@@ -268,8 +233,11 @@ void GameScene::Draw()
 	editorWorkspaceManager_->DrawUI();
 
 	// プレイヤーの描画
-	player_->Draw();
-	playerWeapon_->Draw();
+	if (player_)
+	{
+		player_->Draw();
+		playerWeapon_->Draw();
+	}
 
 	// 敵の描画
 	for (auto& npc : npcs_)npc->Draw();
@@ -300,6 +268,18 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 	if(tag == Character::CharacterTag::Player)
 	{
+		// プレイヤーの武器の生成と初期化
+		Weapon::InitData playerWeaponInitData;
+		playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
+		playerWeaponInitData.model = oneHandedWeaponModel_->CreateInstance();
+		playerWeaponInitData.durability = 0;
+		playerWeaponInitData.attackPower = 1.0f;
+		playerWeaponInitData.category = WeaponCategory::OneHanded;
+		playerWeaponInitData.isUnbreakable = true;
+		playerWeaponInitData.landingCollision = landingCollision_->CreateInstance();
+		playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
+
+
 		Character::InitData playerInitData = initData;
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
@@ -313,6 +293,9 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 		// プレイヤーはリストに追加せず、専用のメンバ変数で管理する
 		player_ = std::move(player);
+
+		// カメラ制御の初期化
+		InitializeCameraControl();
 	}
 	else
 	{
@@ -401,6 +384,9 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 /// @brief カメラ制御の初期化
 void GameScene::InitializeCameraControl()
 {
+	// プレイヤーがいない場合はカメラ制御を初期化しない
+	if (!player_)return;
+
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
@@ -415,6 +401,9 @@ void GameScene::InitializeCameraControl()
 /// @param deltaTime
 void GameScene::UpdateCameraControl(float deltaTime)
 {
+	// プレイヤーがいない場合はカメラ制御を更新しない
+	if (!player_)return;
+
 	// ピボットポイントがない場合は更新しない
 	if (!pivotPoint_)
 		return;
@@ -436,6 +425,9 @@ void GameScene::UpdateCameraControl(float deltaTime)
 /// @param deltaTime
 void GameScene::UpdatePivotFollow(float deltaTime)
 {
+	// プレイヤーがいない場合は更新しない
+	if (!player_)return;
+
 	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
@@ -484,6 +476,9 @@ void GameScene::UpdatePivotFollow(float deltaTime)
 /// @param deltaTime
 void GameScene::UpdatePivotRotateInput(float deltaTime)
 {
+	// プレイヤーがいない場合は更新しない
+	if (!player_)return;
+
 	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
@@ -554,6 +549,9 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 /// @brief ピボットからカメラ姿勢へ反映する
 void GameScene::ApplyCameraFromPivot()
 {
+	// プレイヤーがいない場合は更新しない
+	if (!player_)return;
+
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
 	// カメラ位置と回転をピボット情報から設定する
