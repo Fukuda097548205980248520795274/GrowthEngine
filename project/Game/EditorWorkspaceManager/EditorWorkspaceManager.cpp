@@ -50,6 +50,12 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
         // メニューバー内にタブバーを作成
         if (ImGui::BeginTabBar("WorkspaceTabs", ImGuiTabBarFlags_None))
         {
+            if (ImGui::BeginTabItem("None"))
+            {
+                currentWorkspace_ = WorkspaceType::None;
+                ImGui::EndTabItem();
+            }
+
             if (ImGui::BeginTabItem("Stage Editor"))
             {
                 currentWorkspace_ = WorkspaceType::StageEditor;

@@ -27,13 +27,13 @@ DockId=0x00000005,1
 
 [Window][Texture]
 Pos=0,482
-Size=195,238
+Size=1280,238
 Collapsed=0
 DockId=0x0000000B,0
 
 [Window][Reset Scene]
 Pos=0,482
-Size=195,238
+Size=1280,238
 Collapsed=0
 DockId=0x0000000B,2
 
@@ -81,7 +81,7 @@ DockId=0x00000002,0
 
 [Window][View]
 Pos=0,18
-Size=704,462
+Size=1008,462
 Collapsed=0
 DockId=0x00000005,0
 
@@ -110,7 +110,7 @@ DockId=0x00000005,2
 
 [Window][FPS Overlay]
 Pos=0,482
-Size=195,238
+Size=1280,238
 Collapsed=0
 DockId=0x0000000B,1
 
@@ -161,7 +161,7 @@ DockSpace         ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y
         DockNode  ID=0x00000005 Parent=0x00000007 SizeRef=468,462 CentralNode=1 Selected=0xCD8A0BD6
         DockNode  ID=0x00000006 Parent=0x00000007 SizeRef=538,462 Selected=0xFCC94F6D
       DockNode    ID=0x00000008 Parent=0x00000001 SizeRef=302,462 Selected=0xBE78FE5F
-    DockNode      ID=0x00000002 Parent=0x00000003 SizeRef=270,702 Selected=0x2960FC1D
+    DockNode      ID=0x00000002 Parent=0x00000003 SizeRef=270,702 Selected=0x321620B2
   DockNode        ID=0x00000004 Parent=0x14621557 SizeRef=1280,238 Split=X Selected=0xB4599F82
     DockNode      ID=0x00000009 Parent=0x00000004 SizeRef=195,238 Split=X Selected=0xFDB80A1C
       DockNode    ID=0x0000000B Parent=0x00000009 SizeRef=224,238 Selected=0xFDB80A1C

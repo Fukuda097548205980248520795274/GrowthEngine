@@ -6,6 +6,7 @@
 
 enum class WorkspaceType
 {
+    None,
 	StageEditor,
 	BehaviorTreeEditor
 };
