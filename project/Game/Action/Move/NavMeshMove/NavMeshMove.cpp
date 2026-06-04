@@ -10,7 +10,7 @@ namespace {
 /// @param character 
 /// @param initData
 NavMeshMove::NavMeshMove(Character* character, const NavMeshMoveInitData& initData)
-    : Move(character), stopDistanceSq_(initData.stopDistance * initData.stopDistance), moveSpeed_(initData.moveSpeed)
+	: Move(character, initData.isDash), stopDistanceSq_(initData.stopDistance* initData.stopDistance), moveSpeed_(initData.moveSpeed)
 {
 }
 
@@ -49,16 +49,12 @@ void NavMeshMove::Exec()
         if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) <= stopDistanceSq_)
         {
             // すでに到着しているので成功終了
-            owner_->MoveStop();
-            owner_->SetCurrentMove(nullptr);
             Action::Update();
             return;
         }
 
         // 離れているのに経路がない場合は移動不能として失敗終了
-        owner_->MoveStop();
-        owner_->SetCurrentMove(nullptr);
-        Exit(); // Action::Exit() 内で自動的に isFailure_ = true になります
+        Exit();
     }
 }
 
@@ -72,7 +68,6 @@ void NavMeshMove::Update()
         return;
     }
 
-
     // ターゲットを取得する
     Character* target = owner_->GetLockOnTarget();
 	NavMesh* navMesh = const_cast<NavMesh*>(owner_->GetNavMesh());
@@ -80,8 +75,6 @@ void NavMeshMove::Update()
     // ターゲットがいない場合は移動を停止して終了する
     if (!target || !navMesh)
     {
-        owner_->MoveStop();
-        owner_->SetCurrentMove(nullptr);
         Exit();
         return;
     }
@@ -93,23 +86,21 @@ void NavMeshMove::Update()
         float dx = currentTargetPos.x - lastTargetPosition_.x;
         float dz = currentTargetPos.z - lastTargetPosition_.z;
 
-		// ターゲットが1m以上動いていたら経路を再計算
-		lastTargetPosition_ = currentTargetPos;
-
         if ((dx * dx + dz * dz) > kRepathDistanceSq)
         {
+            // ターゲットが1m以上動いていたら経路を再計算
+            lastTargetPosition_ = currentTargetPos;
+
             // 経路を再計算してインデックスをリセット
             path_ = navMesh->FindPath(owner_->GetWorldPosition(), target->GetWorldPosition() );
             currentPathIndex_ = 0;
         }
     }
 
-    // 経路が空、またはすべてのチェックポイントを通過した場合
+	// 経路がない場合は移動を停止して終了する
     if (path_.empty() || currentPathIndex_ >= path_.size())
     {
-        owner_->MoveStop();
-        owner_->SetCurrentMove(nullptr);
-        Action::Update(); // 成功終了
+        Exit();
         return;
     }
 
@@ -118,21 +109,21 @@ void NavMeshMove::Update()
     Vector3 toWaypoint = waypoint - owner_->GetWorldPosition();
     toWaypoint.y = 0.0f;
 
+	// 中継点までの距離の二乗を計算
     float distSq = toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z;
 
     // 現在の中継点が「最後のゴール地点」かどうか
     bool isLastWaypoint = (currentPathIndex_ == path_.size() - 1);
 
-    // ゴールなら設定された停止距離、途中の中継点なら少し手前（50cm）で通過判定にする
+	// 中継点に到達したとみなす距離を選択（最後のゴール地点なら停止距離、それ以外はウェイポイントの半径）
     float checkRadiusSq = isLastWaypoint ? stopDistanceSq_ : waypointRadiusSq_;
 
+	// 中継点に到達したかどうかをチェック
     if (distSq <= checkRadiusSq)
     {
+        // 最終目的地に到着
         if (isLastWaypoint)
         {
-            // 最終目的地に到着！
-            owner_->MoveStop();
-            owner_->SetCurrentMove(nullptr);
             Action::Update(); // 成功終了
             return;
         }

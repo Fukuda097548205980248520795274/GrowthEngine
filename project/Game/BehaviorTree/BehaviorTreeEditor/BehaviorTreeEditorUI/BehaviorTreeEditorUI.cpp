@@ -1272,6 +1272,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
         {
             DragFloat("Move Speed", &node.approachTargetMoveInitData.moveSpeed, 0.1f);
             DragFloat("Stop Distance", &node.approachTargetMoveInitData.stopDistance, 0.01f);
+			Checkbox("Is Dash", &node.approachTargetMoveInitData.isDash);
             ImGui::TreePop();
         }
     }
@@ -1281,12 +1282,14 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 		{
 			DragFloat("Move Speed", &node.navMeshMoveInitData.moveSpeed, 0.1f);
 			DragFloat("Stop Distance", &node.navMeshMoveInitData.stopDistance, 0.01f);
+			Checkbox("Is Dash", &node.navMeshMoveInitData.isDash);
 			ImGui::TreePop();
 		}
 	}
 
     // None RequestToken ReleaseToke 以外のアクションが選択されている場合はモーション設定UIを表示
-    if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken" && node.actionName != "Avoid")
+    if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken" 
+        && node.actionName != "Avoid" && node.actionName != "ApproachTargetMove" && node.actionName != "NavMeshMove")
     {
         if (ImGui::TreeNode("Motion Settings"))
         {

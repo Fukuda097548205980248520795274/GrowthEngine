@@ -19,8 +19,6 @@ void ApproachTargetMove::Update()
 	// ターゲットがいない場合は移動を停止して終了する
     if (!target)
     {
-        owner_->MoveStop();
-        owner_->SetCurrentMove(nullptr);
         Exit();
         return;
     }

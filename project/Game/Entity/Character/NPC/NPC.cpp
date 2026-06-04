@@ -1,5 +1,6 @@
 #include "NPC.h"
 #include "BattleDirector/BattleDirector.h"
+#include "Action/Move/Move.h"
 
 namespace
 {
@@ -67,6 +68,10 @@ void NPC::Update()
 	// アクションの更新
 	ActionUpdate();
 
+	// 移動の更新
+	if (currentMove_) isDash_ = currentMove_->IsDash();
+	else isDash_ = false;
+
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{
@@ -86,6 +91,7 @@ void NPC::Update()
 	// 基底クラスの更新
 	Character::Update();
 
+	// ターゲットとの距離で構え状態を更新する
 	UpdateStanceStateByTargetDistance();
 }
 

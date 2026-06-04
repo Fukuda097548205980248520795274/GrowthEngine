@@ -26,6 +26,7 @@
             "motionName": "",
             "motionType": 0,
             "nav_mesh_move_data": {
+                "isDash": true,
                 "moveSpeed": 3.0,
                 "stopDistance": 1.0
             },

@@ -18,6 +18,19 @@ void Move::Update()
 	Action::Update();
 }
 
+/// @brief 中断・終了
+void Move::Exit()
+{
+	// 移動を中断する
+	owner_->MoveStop();
+
+	// 移動を停止する
+	owner_->SetCurrentMove(nullptr);
+
+	// 基底クラスのExitを呼び出す
+	Action::Exit();
+}
+
 bool Move::IsUse() const
 {
 	// 実行していない場合は使用していないとみなす

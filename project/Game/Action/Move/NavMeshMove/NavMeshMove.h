@@ -6,6 +6,7 @@ struct NavMeshMoveInitData
 {
 	float stopDistance = 1.0f;
 	float moveSpeed = 3.0f;
+	bool isDash = false;
 };
 
 class NavMeshMove : public Move

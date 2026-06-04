@@ -102,11 +102,13 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
             {
 				n["approach_target_move_data"]["moveSpeed"] = node.approachTargetMoveInitData.moveSpeed;
 				n["approach_target_move_data"]["stopDistance"] = node.approachTargetMoveInitData.stopDistance;
+				n["approach_target_move_data"]["isDash"] = node.approachTargetMoveInitData.isDash;
             }
             else if (node.actionName == "NavMeshMove")
             {
 				n["nav_mesh_move_data"]["moveSpeed"] = node.navMeshMoveInitData.moveSpeed;
 				n["nav_mesh_move_data"]["stopDistance"] = node.navMeshMoveInitData.stopDistance;
+				n["nav_mesh_move_data"]["isDash"] = node.navMeshMoveInitData.isDash;
             }
 
 			if (node.actionName != "None")
@@ -316,6 +318,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						const auto& move_data = n["approach_target_move_data"];
 						node.approachTargetMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
 						node.approachTargetMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+						node.approachTargetMoveInitData.isDash = move_data.value("isDash", false);
                     }
                 }
 				else if (node.actionName == "NavMeshMove")
@@ -325,6 +328,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
                         const auto& move_data = n["nav_mesh_move_data"];
                         node.navMeshMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
                         node.navMeshMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+						node.navMeshMoveInitData.isDash = move_data.value("isDash", false);
                     }
 				}
 
