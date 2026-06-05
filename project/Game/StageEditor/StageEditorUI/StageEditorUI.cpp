@@ -83,6 +83,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
         {
             fileManager_->SaveToFile(currentFileName, placementList);
+            isDirty_ = false;
         }
     }
 
@@ -90,12 +91,14 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z)) 
     {
         history_->Undo(placementList, spawner_);
+        isDirty_ = true;
     }
 
 	// Ctrl + Y でリドゥ
     if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y)) 
     {
         history_->Redo(placementList, spawner_);
+        isDirty_ = true;
     }
 
     ImGui::Separator();
@@ -237,6 +240,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     {
 		// 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
         history_->SaveHistory(placementList);
+        isDirty_ = true;
 
         // 新しい配置データを初期化
         PlacementData newData;
@@ -285,6 +289,9 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::OpenPopup("New Stage Popup");
     }
 
+    // 次に読み込むファイル名を保留するための変数
+    bool requestSavePopup = false;
+
     // 新規ステージ作成のポップアップ
     if (ImGui::BeginPopup("New Stage Popup"))
     {
@@ -295,21 +302,28 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         // 作成ボタン
         if (ImGui::Button("Create"))
         {
+			// 入力されたファイル名に ".json" 拡張子を付加する
             std::string fileName = newFileName;
+            if (fileName.find(".json") == std::string::npos) fileName += ".json";
 
-            // 拡張子がなければ追加する
-            if (fileName.find(".json") == std::string::npos)
+			// 新しいステージを作成する前に、現在の配置リストに基づいてすべての実体を消去する
+            if (isDirty_)
             {
-                fileName += ".json";
+                pendingAction_ = PendingAction::New;
+                pendingFileName_ = fileName;
+
+				// 変更が保存されていないことを警告するポップアップを開く
+                requestSavePopup = true;
             }
-            currentFileName = fileName;
+            else
+            {
+				// すでにファイルが存在している場合は上書き保存する
+                for (auto& data : placementList) spawner_->DeleteActualEntity(data);
+                placementList.clear();
+                currentFileName = fileName;
+                fileManager_->SaveToFile(currentFileName, placementList);
+            }
 
-			// 新しいファイルを作成する前に、現在の配置リストに基づいてすべての実体を消去する
-            for (auto& data : placementList)spawner_->DeleteActualEntity(data);
-            placementList.clear();
-
-            // 空のファイルを作成・保存
-            fileManager_->SaveToFile(currentFileName, placementList);
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -352,12 +366,22 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             if (ImGui::Button(file.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
             {
 				// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
-                for (auto& data : placementList)spawner_->DeleteActualEntity(data);
-                placementList.clear();
-
-				// クリックしたファイルを現在のファイルとして設定し、そのデータを読み込む
-                currentFileName = file;
-                fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+                if (isDirty_)
+                {
+                    pendingAction_ = PendingAction::Load;
+                    pendingFileName_ = file;
+                    
+                    // 変更が保存されていないことを警告するポップアップを開く
+                    requestSavePopup = true;
+                }
+                else
+                {
+					// すでにファイルが存在している場合は上書き保存する
+                    for (auto& data : placementList) spawner_->DeleteActualEntity(data);
+                    placementList.clear();
+                    currentFileName = file;
+                    fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+                }
             }
 
             // 右クリックメニュー
@@ -366,13 +390,23 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 // 読み込み
                 if (ImGui::MenuItem("Load"))
                 {
-                    // ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
-                    for (auto& data : placementList)spawner_->DeleteActualEntity(data);
-                    placementList.clear();
-
-					// 右クリックした対象を現在のファイルとして設定し、そのデータを読み込む
-                    currentFileName = file;
-                    fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+					// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+                    if (isDirty_)
+                    {
+                        pendingAction_ = PendingAction::Load;
+                        pendingFileName_ = file;
+                        
+                        // 変更が保存されていないことを警告するポップアップを開く
+                        requestSavePopup = true;
+                    }
+                    else
+                    {
+						// すでにファイルが存在している場合は上書き保存する
+                        for (auto& data : placementList) spawner_->DeleteActualEntity(data);
+                        placementList.clear();
+                        currentFileName = file;
+                        fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+                    }
                 }
 
                 if (ImGui::MenuItem("Save"), nullptr, false, !isPlaying)
@@ -380,6 +414,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     // 右クリックした対象を現在のファイルとして設定し、上書き保存する
                     currentFileName = file;
                     fileManager_->SaveToFile(currentFileName, placementList);
+                    isDirty_ = false;
                 }
 
                 ImGui::Separator();
@@ -400,6 +435,57 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             ImGui::PopID();
         }
         ImGui::EndTable();
+    }
+
+
+	// 保留中のアクションがある場合は、確認のポップアップを開く
+    if (requestSavePopup)
+    {
+		ImGui::OpenPopup("Save Confirmation Popup");
+    }
+
+	// 保留中のアクションがある場合は、確認のポップアップを表示する
+    if (ImGui::BeginPopupModal("Save Confirmation Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        // 重要な操作なので、赤いテキストで警告を表示して強調する
+        ImGui::Text("You have unsaved changes.\nDo you want to save the current tree before leaving?");
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // 保存ボタンを押して別のスクリプトを触る
+        if (ImGui::Button("Save", ImVec2(140, 0)))
+        {
+            if (!currentFileName.empty())
+            {
+                fileManager_->SaveToFile(currentFileName, placementList);
+            }
+            isDirty_ = false;
+            ExecutePendingAction(placementList, currentFileName);
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+        // キャンセル(破棄)ボタンを押して別のスクリプトを触る
+        if (ImGui::Button("Cancel", ImVec2(140, 0)))
+        {
+            isDirty_ = false; // 変更を破棄したとみなす
+            ExecutePendingAction(placementList, currentFileName);
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+        // 戻るボタンで今のスクリプトを触り続ける
+        if (ImGui::Button("Back", ImVec2(120, 0)))
+        {
+            pendingAction_ = PendingAction::None;
+            pendingFileName_ = "";
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
     }
 
 
@@ -505,7 +591,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         if (target.category == EditCategory::Character)
         {
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
-			charPtr->DrawDebugUI(&target, placementList, history_);
+			charPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
 
 			// モーション選択UI
             MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion);
@@ -520,12 +606,12 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         else if (target.category == EditCategory::Object)
         {
 			StageObject* objPtr = static_cast<StageObject*>(target.instancePtr);
-			objPtr->DrawDebugUI(&target, placementList, history_);
+			objPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
         }
         else if (target.category == EditCategory::Weapon)
         {
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
-			weaponPtr->DrawDebugUI(&target, placementList, history_);
+			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
         }
 
         ImGui::Separator();
@@ -536,6 +622,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         {
 			// 削除する前に、現在の配置リストの状態を履歴に保存する
             history_->SaveHistory(placementList);
+            isDirty_ = true;
 
             spawner_->DeleteActualEntity(target);
             placementList.erase(placementList.begin() + selectedIndex_);
@@ -606,4 +693,31 @@ void StageEditorUI::LoadBehaviorTreeNames()
             behaviorTreeNames_.push_back(entry.path().stem().string());
         }
     }
+}
+
+/// @brief 保留中のアクションを実行する
+/// @param placementList 
+/// @param currentFileName 
+void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName)
+{
+    if (pendingAction_ == PendingAction::Load)
+    {
+		// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+        for (auto& data : placementList) spawner_->DeleteActualEntity(data);
+        placementList.clear();
+        currentFileName = pendingFileName_;
+        fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+    }
+    else if (pendingAction_ == PendingAction::New)
+    {
+		// 新しいファイルを作成する前に、現在の配置リストに基づいてすべての実体を消去する
+        for (auto& data : placementList) spawner_->DeleteActualEntity(data);
+        placementList.clear();
+        currentFileName = pendingFileName_;
+        fileManager_->SaveToFile(currentFileName, placementList);
+    }
+
+    // 実行後はリセット
+    pendingAction_ = PendingAction::None;
+    pendingFileName_ = "";
 }

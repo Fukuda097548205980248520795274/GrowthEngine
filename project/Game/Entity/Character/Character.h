@@ -796,6 +796,7 @@ public:
 	/// @param placementData 
 	/// @param placementList 
 	/// @param history 
-	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history) override;
+	/// @param isDirty 
+	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

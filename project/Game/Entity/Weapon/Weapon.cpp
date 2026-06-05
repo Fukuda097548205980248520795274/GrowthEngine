@@ -234,27 +234,28 @@ void Weapon::LandingCheck()
 /// @param placementData 
 /// @param placementList 
 /// @param history 
-void Weapon::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
+/// @param isDirty 
+void Weapon::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
 #ifdef _DEVELOPMENT
 
 	// 基底クラスのデバッグUIを描画する
-	Entity::DrawDebugUI(placementData, placementList, history);
+	Entity::DrawDebugUI(placementData, placementList, history, isDirty);
 
 	ImGui::Separator();
 
 	// 耐久力のドラッグ
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
 	ImGui::DragInt("Durability", &durability_, 1, 0, 1000000);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->durability = durability_;
 
 	// 攻撃力のドラッグ
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
 	ImGui::DragFloat("Attack Power", &attackPower_, 0.01f, 0.0f, 1000000.0f);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->attackPower = attackPower_;
 
 	// 壊れない武器かどうかのチェックボックス
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
 	ImGui::Checkbox("Is Unbreakable", &isUnbreakable_);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->isUnbreakable = isUnbreakable_;
 

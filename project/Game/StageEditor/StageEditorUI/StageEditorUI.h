@@ -56,6 +56,27 @@ private:
 	/// @brief ビヘイビアツリーデータの名前リスト
     std::vector<std::string> behaviorTreeNames_;
 
+
+private:
+
+    /// @brief 未保存の変更があるかどうか
+    bool isDirty_ = false;
+
+    /// @brief 保留中のアクションの種類
+    enum class PendingAction
+    {
+        None,
+        Load,
+        New
+    };
+
+    /// @brief 保留中のアクション
+    PendingAction pendingAction_ = PendingAction::None;
+
+    /// @brief 保留中のファイル名
+    std::string pendingFileName_ = "";
+
+
 private:
 
     /// @brief モーションの選択UIを表示する
@@ -65,5 +86,10 @@ private:
 
 	/// @brief ビヘイビアツリーデータの名前を読み込む
     void LoadBehaviorTreeNames();
+
+	/// @brief 保留中のアクションを実行する
+    /// @param placementList 
+    /// @param currentFileName 
+    void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName);
 };
 

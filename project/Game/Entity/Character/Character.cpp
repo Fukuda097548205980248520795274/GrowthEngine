@@ -1492,17 +1492,18 @@ void Character::UpdatePushOut()
 /// @param placementData 
 /// @param placementList 
 /// @param history 
-void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
+/// @param isDirty 
+void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
 #ifdef _DEVELOPMENT
 
 	// キャラクターの状態を表示する
-	Entity::DrawDebugUI(placementData, placementList, history);
+	Entity::DrawDebugUI(placementData, placementList, history, isDirty);
 
 	ImGui::Separator();
 
 	// 体力を表示・編集する
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
 	ImGui::DragInt("HP", &hp_, 1, 0, 1000000);
 	if(ImGui::IsItemDeactivatedAfterEdit())placementData->hp = hp_;
 

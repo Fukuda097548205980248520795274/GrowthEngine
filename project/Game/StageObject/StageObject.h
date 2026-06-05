@@ -63,7 +63,8 @@ public:
 	/// @param placementData 
 	/// @param placementList 
 	/// @param history 
-	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history);
+	/// @param isDirty 
+	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty);
 
 	/// @brief ステージオブジェクトの更新を有効にするかどうかを設定する
 	/// @param enabled 

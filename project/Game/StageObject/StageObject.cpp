@@ -27,7 +27,8 @@ void StageObject::Update()
 /// @param placementData 
 /// @param placementList 
 /// @param history 
-void StageObject::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
+/// @param isDirty 
+void StageObject::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
 #ifdef _DEVELOPMENT
 
@@ -35,17 +36,17 @@ void StageObject::DrawDebugUI(PlacementData* placementData, std::vector<Placemen
 	if (updateEnabled_)return;
 
 	// 位置の編集
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
 	ImGui::DragFloat3("Position", &worldTransform_->translate_.x, 0.01f);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->position = worldTransform_->translate_;
 
 	// 回転の編集（Y軸のみ）
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
 	ImGui::DragFloat("RotationY", &worldTransform_->rotate_.y, 0.001f);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->rotateY = worldTransform_->rotate_.y;
 
 	// 拡縮の編集
-	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
 	ImGui::DragFloat3("Scale", &worldTransform_->scale_.x, 0.01f);
 	if (ImGui::IsItemDeactivatedAfterEdit())placementData->scale = worldTransform_->scale_;
 

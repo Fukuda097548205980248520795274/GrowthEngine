@@ -35,3 +35,4 @@ void StageEditor::DrawUI()
 	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_);
 	editorUI_->DrawObjectListWindow(placementList_);
 }
+
