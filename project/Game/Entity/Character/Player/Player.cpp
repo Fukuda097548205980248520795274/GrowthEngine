@@ -234,6 +234,9 @@ void Player::Initialize(Weapon* baton)
 /// @brief 更新処理
 void Player::Update()
 {
+	// 更新が無効なら何もしない
+	if (!updateEnabled_)return;
+
 	// 更新処理開始前のリセット
 	StartUpdate();
 

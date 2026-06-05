@@ -45,6 +45,9 @@ void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* 
 
 void NPC::Update()
 {
+	// 更新が無効なら何もしない
+	if (!updateEnabled_)return;
+
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 

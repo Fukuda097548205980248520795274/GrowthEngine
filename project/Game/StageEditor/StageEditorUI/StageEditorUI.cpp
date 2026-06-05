@@ -20,7 +20,7 @@ void StageEditorUI::Initialize()
 /// @brief UIの描画
 /// @param placementList 
 /// @param currentFileName 
-void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName)
+void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying)
 {
 #ifdef _DEVELOPMENT
 
@@ -35,14 +35,53 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         return;
     }
 
+
+	// PLAY / STOP ボタン
+    if (isPlaying)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); // STOPボタンは赤色
+        if (ImGui::Button("STOP", ImVec2(100, 30)))
+        {
+            isPlaying = false;
+			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
+			StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
+
+			// プレイモードを終了したら、配置リストに基づいてすべての実体を再生成する
+            for (auto& data : placementList)
+            {
+                spawner_->DeleteActualEntity(data);
+                spawner_->SpawnActualEntity(data);
+            }
+        }
+        ImGui::PopStyleColor();
+    }
+    else
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f)); // PLAYボタンは緑色
+        if (ImGui::Button("PLAY", ImVec2(100, 30)))
+        {
+            isPlaying = true;
+			Entity::SetUpdateEnabled(true); // すべての実体の更新を再開する
+			StageObject::SetUpdateEnabled(true); // すべてのステージオブジェクトの更新を再開する
+        }
+        ImGui::PopStyleColor();
+    }
+    ImGui::Separator();
+
+
+
     // 現在編集中のファイル名を表示
     ImGui::Text("Current Stage: %s", currentFileName.c_str());
     
-    // Ctrl + S が押されたら保存する処理
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+    
+    if (!isPlaying)
     {
-        fileManager_->SaveToFile(currentFileName, placementList);
+        // Ctrl + S が押されたら保存する処理
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+        {
+            fileManager_->SaveToFile(currentFileName, placementList);
+        }
     }
 
     ImGui::Separator();
@@ -260,7 +299,8 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @brief アセットウィンドウの描画
 /// @param placementList 
 /// @param currentFileName 
-void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName)
+/// @param isPlaying 
+void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying)
 {
 #ifdef _DEVELOPMENT
     ImGui::Begin("Stage Project Assets");
@@ -350,7 +390,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
                 }
 
-                if (ImGui::MenuItem("Save"))
+                if (ImGui::MenuItem("Save"), nullptr, false, !isPlaying)
                 {
                     // 右クリックした対象を現在のファイルとして設定し、上書き保存する
                     currentFileName = file;
@@ -361,7 +401,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
                 // 削除は赤文字で表示
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-                if (ImGui::MenuItem("Delete"))
+                if (ImGui::MenuItem("Delete"), nullptr, false, !isPlaying)
                 {
                     fileToDelete = file;
                 }

@@ -58,5 +58,14 @@ public:
 
 	/// @brief デバッグUIを描画する
 	virtual void DrawUI();
+
+	/// @brief ステージオブジェクトの更新を有効にするかどうかを設定する
+	/// @param enabled 
+	static void SetUpdateEnabled(bool enabled) { updateEnabled_ = enabled; }
+
+protected:
+
+	// ステージオブジェクトの更新を有効にするかどうか
+	static bool updateEnabled_;
 };
 

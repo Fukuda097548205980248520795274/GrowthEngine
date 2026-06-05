@@ -18,6 +18,20 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
         itemJson["category"] = static_cast<int>(data.category);
         itemJson["subType"] = data.subType;
 
+		// カテゴリごとに必要なデータを保存
+		if (data.category == EditCategory::Character)
+		{
+			
+		}
+		else if (data.category == EditCategory::Weapon)
+		{
+			
+		}
+        else if (data.category == EditCategory::Object)
+        {
+
+        }
+
         // Vector3は配列として保存すると扱いやすいです
         itemJson["position"] = { data.position.x, data.position.y, data.position.z };
         itemJson["rotateY"] = data.rotateY;

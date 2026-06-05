@@ -49,6 +49,9 @@ Weapon::Weapon(const InitData& initData) : Entity()
 		// ワールドトランスフォームの親をモデルに設定する
 		model_->param_.parent = worldTransform_.get();
 	}
+
+	// ワールドトランスフォームを更新する
+	worldTransform_->Update();
 }
 
 /// @brief デストラクタ
@@ -70,6 +73,9 @@ Weapon::~Weapon()
 /// @brief 更新処理
 void Weapon::Update()
 {
+	// 更新が無効なら何もしない
+	if (!updateEnabled_)return;
+
 	// 有効でないときは更新しない
 	if (!isActive_)return;
 

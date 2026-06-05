@@ -53,5 +53,8 @@ private:
 
     /// @brief 現在編集中のファイル名
     std::string currentFileName_ = "";
+
+    /// @brief 実行中かどうか
+    bool isPlaying_ = false;
 };
 

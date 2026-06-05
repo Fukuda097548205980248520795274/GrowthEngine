@@ -28,7 +28,7 @@ void StageEditor::Update(float dt)
 /// @brief 描画処理（デバッグ用）
 void StageEditor::DrawUI()
 {
-	editorUI_->DrawAssetWindow(placementList_, currentFileName_);
-	editorUI_->DrawUI(placementList_, currentFileName_);
+	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_);
+	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_);
 	editorUI_->DrawObjectListWindow(placementList_);
 }

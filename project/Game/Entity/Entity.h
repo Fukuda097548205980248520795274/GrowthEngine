@@ -80,5 +80,15 @@ public:
 
 	/// @brief デバッグUIを描画する
 	virtual void DrawDebugUI();
+
+	/// @brief 更新処理が有効かどうかを設定する
+	/// @param enabled 
+	static void SetUpdateEnabled(bool enabled) { updateEnabled_ = enabled; }
+
+
+protected:
+
+	// 更新処理が有効かどうか
+	static bool updateEnabled_;
 };
 

@@ -28,7 +28,7 @@ namespace
 	}
 }
 
-// Characterインスタンスの共有リスト
+// 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 
 /// @brief 
@@ -152,6 +152,9 @@ Character::~Character()
 /// @brief 更新処理
 void Character::Update()
 {
+	// 更新が無効なら何もしない
+	if (!updateEnabled_)return;
+
 	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);

@@ -21,12 +21,14 @@ public:
 	/// @brief UIの描画
     /// @param placementList 
     /// @param currentFileName 
-    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName);
+    /// @param isPlaying 
+    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying);
 
 	/// @brief アセットウィンドウの描画
     /// @param placementList 
     /// @param currentFileName 
-    void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName);
+	/// @param isPlaying
+    void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying);
 
 	/// @brief オブジェクトリストウィンドウの描画
     /// @param placementList 
