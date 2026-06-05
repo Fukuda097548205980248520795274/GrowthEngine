@@ -11,9 +11,20 @@ public:
 	/// @brief エディタのスナップショット
 	struct EditorSnapshot
 	{
-		std::vector<EditorNode> nodes; // ノードのリスト
-		std::vector<EditorLink> links; // リンクのリスト
-		int currentId; // 現在のIDカウンタ
+		// ノードのリスト
+		std::vector<EditorNode> nodes;
+
+		// リンクのリスト
+		std::vector<EditorLink> links;
+
+		// 現在のIDカウンタ
+		int currentId;
+
+		// 選択されていたノードのID
+		std::vector<int> selectedNodes;
+
+		// 選択されていたリンクのID
+		std::vector<int> selectedLinks;
 	};
 
 	/// @brief 現在の状態を履歴に保存する

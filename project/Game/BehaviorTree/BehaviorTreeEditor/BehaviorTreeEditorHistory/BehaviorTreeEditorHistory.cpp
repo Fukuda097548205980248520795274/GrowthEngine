@@ -13,6 +13,20 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
     snapshot.links = links;
     snapshot.currentId = currentId;
 
+	// 選択されているノードのIDを保存
+    if (int numNodes = ImNodes::NumSelectedNodes(); numNodes > 0)
+    {
+        snapshot.selectedNodes.resize(numNodes);
+        ImNodes::GetSelectedNodes(snapshot.selectedNodes.data());
+    }
+
+	// 選択されているリンクのIDも保存
+    if (int numLinks = ImNodes::NumSelectedLinks(); numLinks > 0)
+    {
+        snapshot.selectedLinks.resize(numLinks);
+        ImNodes::GetSelectedLinks(snapshot.selectedLinks.data());
+    }
+
     // 最新のグリッド座標をImNodesから取得してノードデータに反映
     for (auto& node : snapshot.nodes)
     {
@@ -41,6 +55,22 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
     for (auto& node : editor.nodes_)
         node.needSetPos = true;
 
+	// 選択されているノードのIDを保存
+    std::vector<int> currentSelectedNodes;
+    if (int numNodes = ImNodes::NumSelectedNodes(); numNodes > 0)
+    {
+        currentSelectedNodes.resize(numNodes);
+        ImNodes::GetSelectedNodes(currentSelectedNodes.data());
+    }
+
+	// 選択されているリンクのIDも保存
+    std::vector<int> currentSelectedLinks;
+    if (int numLinks = ImNodes::NumSelectedLinks(); numLinks > 0)
+    {
+        currentSelectedLinks.resize(numLinks);
+        ImNodes::GetSelectedLinks(currentSelectedLinks.data());
+    }
+
     EditorSnapshot currentSnapshot = { editor.nodes_, editor.links_, editor.currentId_ };
     redoHistory_.push_back(currentSnapshot);
 
@@ -57,8 +87,22 @@ void BehaviorTreeEditorHistory::Undo(BehaviorTreeEditor& editor)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+
+	// 復元した選択状態をImNodesに反映
     ImNodes::ClearNodeSelection();
     ImNodes::ClearLinkSelection();
+
+	// ノードの選択状態を復元
+    for (int id : snapshot.selectedNodes)
+    {
+        ImNodes::SelectNode(id);
+    }
+
+	// リンクの選択状態も復元
+    for (int id : snapshot.selectedLinks)
+    {
+        ImNodes::SelectLink(id);
+    }
 }
 
 /// @brief Redo（やり直す）を実行する
@@ -70,6 +114,22 @@ void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
     // 現在の状態をUndo履歴に保存しておく
     for (auto& node : editor.nodes_)
         node.needSetPos = true;
+
+	// 選択されているノードのIDを保存
+    std::vector<int> currentSelectedNodes;
+    if (int numNodes = ImNodes::NumSelectedNodes(); numNodes > 0)
+    {
+        currentSelectedNodes.resize(numNodes);
+        ImNodes::GetSelectedNodes(currentSelectedNodes.data());
+    }
+
+	// 選択されているリンクのIDも保存
+    std::vector<int> currentSelectedLinks;
+    if (int numLinks = ImNodes::NumSelectedLinks(); numLinks > 0)
+    {
+        currentSelectedLinks.resize(numLinks);
+        ImNodes::GetSelectedLinks(currentSelectedLinks.data());
+    }
 
     EditorSnapshot currentSnapshot = { editor.nodes_, editor.links_, editor.currentId_ };
     undoHistory_.push_back(currentSnapshot);
@@ -87,8 +147,21 @@ void BehaviorTreeEditorHistory::Redo(BehaviorTreeEditor& editor)
     {
         ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
+
     ImNodes::ClearNodeSelection();
     ImNodes::ClearLinkSelection();
+
+	// 復元した選択状態をImNodesに反映
+    for (int id : snapshot.selectedNodes)
+    {
+        ImNodes::SelectNode(id);
+    }
+
+	// 復元した選択状態をImNodesに反映
+    for (int id : snapshot.selectedLinks)
+    {
+        ImNodes::SelectLink(id);
+    }
 }
 
 /// @brief 履歴をクリアする
