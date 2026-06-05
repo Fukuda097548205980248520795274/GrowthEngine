@@ -5,6 +5,7 @@
 
 class StageFileManager;
 class StageSpawner;
+class StageEditorHistory;
 
 class StageEditorUI
 {
@@ -13,7 +14,8 @@ public:
 	/// @brief コンストラクタ
     /// @param fileManager 
     /// @param spawner 
-	StageEditorUI(StageFileManager* fileManager, StageSpawner* spawner) : fileManager_(fileManager), spawner_(spawner) {}
+    /// @param history 
+	StageEditorUI(StageFileManager* fileManager, StageSpawner* spawner, StageEditorHistory* history) : fileManager_(fileManager), spawner_(spawner), history_(history) {}
 
     /// @brief 初期化
     void Initialize();
@@ -41,6 +43,9 @@ private:
 
 	// ステージ上にオブジェクトを配置・削除するためのクラス
     StageSpawner* spawner_ = nullptr;
+
+	// 編集の履歴を管理するクラス
+	StageEditorHistory* history_ = nullptr;
 
 	// 現在選択中のオブジェクトのインデックス
     int selectedIndex_ = -1;

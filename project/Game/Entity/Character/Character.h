@@ -793,6 +793,9 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	void DrawDebugUI(PlacementData* placementData) override;
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history) override;
 };
 

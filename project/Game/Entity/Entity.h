@@ -3,6 +3,7 @@
 
 // 前方宣言
 struct PlacementData;
+class StageEditorHistory;
 
 class Entity
 {
@@ -82,7 +83,10 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	virtual void DrawDebugUI(PlacementData* placementData);
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history);
 
 	/// @brief 更新処理が有効かどうかを設定する
 	/// @param enabled 

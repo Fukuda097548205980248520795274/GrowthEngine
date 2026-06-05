@@ -22,7 +22,10 @@ void Entity::Update()
 }
 
 /// @brief デバッグUIを描画する
-void Entity::DrawDebugUI(PlacementData* placementData)
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+void Entity::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
 {
 #ifdef _DEVELOPMENT
 

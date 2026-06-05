@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 
 struct PlacementData;
+class StageEditorHistory;
 
 class StageObject
 {
@@ -59,7 +60,10 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	virtual void DrawUI(PlacementData* placementData);
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history);
 
 	/// @brief ステージオブジェクトの更新を有効にするかどうかを設定する
 	/// @param enabled 

@@ -3,6 +3,7 @@
 #include "StageEditorUI/StageEditorUI.h"
 #include "StageFileManager/StageFileManager.h"
 #include "StageSpawner/StageSpawner.h"
+#include "StageEditorHistory/StageEditorHistory.h"
 
 class GameScene;
 
@@ -47,6 +48,9 @@ private:
 
 	// ステージ上にオブジェクトを配置・削除するためのクラス
     std::unique_ptr<StageSpawner> spawner_;
+
+	/// @brief 編集の履歴を管理するクラス
+    std::unique_ptr<StageEditorHistory> history_;
 
 
 private:

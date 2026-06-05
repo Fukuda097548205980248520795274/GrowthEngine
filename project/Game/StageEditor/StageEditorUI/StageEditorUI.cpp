@@ -2,6 +2,7 @@
 #include <numbers>
 #include "../StageFileManager/StageFileManager.h"
 #include "../StageSpawner/StageSpawner.h"
+#include "../StageEditorHistory/StageEditorHistory.h"
 
 #include "Entity/Character/Character.h"
 #include "Entity/Weapon/Weapon.h"
@@ -73,15 +74,28 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     // 現在編集中のファイル名を表示
     ImGui::Text("Current Stage: %s", currentFileName.c_str());
     
+
+    ImGuiIO& io = ImGui::GetIO();
     
+	// Ctrl + S で上書き保存 (プレイ中は保存できないようにする)
     if (!isPlaying)
     {
-        // Ctrl + S が押されたら保存する処理
-        ImGuiIO& io = ImGui::GetIO();
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
         {
             fileManager_->SaveToFile(currentFileName, placementList);
         }
+    }
+
+	// Ctrl + Z でアンドゥ
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z)) 
+    {
+        history_->Undo(placementList, spawner_);
+    }
+
+	// Ctrl + Y でリドゥ
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y)) 
+    {
+        history_->Redo(placementList, spawner_);
     }
 
     ImGui::Separator();
@@ -225,6 +239,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     // 生成ボタン
     if (ImGui::Button("Spawn Object"))
     {
+		// 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
+        history_->SaveHistory(placementList);
+
         // 生成前にモーションのハンドルを取得しておく
         currentData.standMotion.handle = motionManager_->GetMotion(currentData.standMotion.type, currentData.standMotion.name);
         currentData.stanceMotion.handle = motionManager_->GetMotion(currentData.stanceMotion.type, currentData.stanceMotion.name);
@@ -260,37 +277,6 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         selectedIndex_ = static_cast<int>(placementList.size()) - 1;
     }
 
-    ImGui::Separator();
-
-
-    // 配置したオブジェクトのリストと編集UI
-    if (selectedIndex_ >= 0 && selectedIndex_ < placementList.size())
-    {
-        auto& target = placementList[selectedIndex_];
-        ImGui::Text("--- Edit Selected Object ---");
-
-        // 配置「後」でも Enemy か Ally かを切り替えられるようにする
-        bool typeChanged = false;
-        if (target.category == EditCategory::Character)
-        {
-            typeChanged = ImGui::Combo("NPC Role", &target.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
-        }
-        else if (target.category == EditCategory::Object)
-        {
-            typeChanged = ImGui::Combo("Object Type", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
-        }
-
-        // もし途中で Enemy から Ally に変えられたら、実体を一度消して再生成する
-        if (typeChanged)
-        {
-            spawner_->DeleteActualEntity(target); // 古い実体を消去
-            spawner_->SpawnActualEntity(target);  // 新しい設定（新タグ）で再生成
-        }
-        
-        // 座標などの編集UI...
-        ImGui::DragFloat3("Position", &target.position.x, 0.1f);
-    }
-
     ImGui::End();
 
 #endif
@@ -300,6 +286,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @param placementList 
 /// @param currentFileName 
 /// @param isPlaying 
+/// @param isDirty 
 void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying)
 {
 #ifdef _DEVELOPMENT
@@ -489,6 +476,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
 /// @brief オブジェクトリストウィンドウの描画
 /// @param placementList 
+/// @param isDirty 
 void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList)
 {
 #ifdef _DEVELOPMENT
@@ -496,13 +484,13 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
     ImGui::Text("Placed Objects:");
 
-    // オブジェクトのリスト表示（スクロール可能な領域）
+    // オブジェクトのリスト表示
     ImGui::BeginChild("ObjectListRegion", ImVec2(0, 150), true);
     for (int i = 0; i < placementList.size(); ++i)
     {
         auto& data = placementList[i];
 
-        // 表示用のラベルを作成 (例: "ID:0 Player")
+        // 表示用のラベルを作成 
         std::string label = "ID:" + std::to_string(i) + " ";
         if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
         else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
@@ -516,7 +504,9 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
     }
     ImGui::EndChild();
 
+
     ImGui::Separator();
+
 
     // 選択中のオブジェクトがある場合、編集UIを表示
     if (selectedIndex_ >= 0 && selectedIndex_ < placementList.size())
@@ -528,17 +518,17 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         if (target.category == EditCategory::Character)
         {
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
-			charPtr->DrawDebugUI(&target);
+			charPtr->DrawDebugUI(&target, placementList, history_);
         }
         else if (target.category == EditCategory::Object)
         {
 			StageObject* objPtr = static_cast<StageObject*>(target.instancePtr);
-			objPtr->DrawUI(&target);
+			objPtr->DrawDebugUI(&target, placementList, history_);
         }
         else if (target.category == EditCategory::Weapon)
         {
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
-			weaponPtr->DrawDebugUI(&target);
+			weaponPtr->DrawDebugUI(&target, placementList, history_);
         }
 
         ImGui::Separator();
@@ -547,6 +537,9 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
         if (ImGui::Button("Delete Object", ImVec2(120, 0)))
         {
+			// 削除する前に、現在の配置リストの状態を履歴に保存する
+            history_->SaveHistory(placementList);
+
             spawner_->DeleteActualEntity(target);
             placementList.erase(placementList.begin() + selectedIndex_);
             selectedIndex_ = -1; // 選択状態をリセット

@@ -9,12 +9,15 @@ void StageEditor::Initialize()
 	// ファイルマネージャの初期化
 	fileManager_ = std::make_unique<StageFileManager>("./Assets/Parameter/StageData/");
 
+	// 履歴管理の初期化
+	history_ = std::make_unique<StageEditorHistory>();
+
 	// スペナーの初期化
 	spawner_ = std::make_unique<StageSpawner>(scene_);
 	spawner_->Initialize();
 
 	// エディタUIの初期化
-	editorUI_ = std::make_unique<StageEditorUI>(fileManager_.get(), spawner_.get());
+	editorUI_ = std::make_unique<StageEditorUI>(fileManager_.get(), spawner_.get(), history_.get());
 	editorUI_->Initialize();
 }
 

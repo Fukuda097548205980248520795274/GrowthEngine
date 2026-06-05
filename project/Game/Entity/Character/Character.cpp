@@ -1487,13 +1487,16 @@ void Character::UpdatePushOut()
 	}
 }
 
-/// @brief デバッグUIを描画する
-void Character::DrawDebugUI(PlacementData* placementData)
+/// @brief デバッグ用のUIを描画する
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
 {
 #ifdef _DEVELOPMENT
 
 	// キャラクターの状態を表示する
-	Entity::DrawDebugUI(placementData);
+	Entity::DrawDebugUI(placementData, placementList, history);
 
 	ImGui::Separator();
 

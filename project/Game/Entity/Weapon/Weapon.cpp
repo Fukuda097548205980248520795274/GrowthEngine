@@ -230,12 +230,15 @@ void Weapon::LandingCheck()
 }
 
 /// @brief デバッグUIを描画する
-void Weapon::DrawDebugUI(PlacementData* placementData)
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+void Weapon::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
 {
 #ifdef _DEVELOPMENT
 
 	// 基底クラスのデバッグUIを描画する
-	Entity::DrawDebugUI(placementData);
+	Entity::DrawDebugUI(placementData, placementList, history);
 
 	ImGui::Separator();
 

@@ -1186,6 +1186,9 @@
     <Filter Include="Game\EditorWorkspaceManager">
       <UniqueIdentifier>{ffbb5ed8-4d51-4940-b7ac-c03fa408edb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorHistory">
+      <UniqueIdentifier>{b55c38b9-99d8-4e29-8c0b-6f9964ec39ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2129,6 +2132,9 @@
     </ClCompile>
     <ClCompile Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.cpp">
       <Filter>Game\EditorWorkspaceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.cpp">
+      <Filter>Game\StageEditor\StageEditorHistory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3190,6 +3196,9 @@
     </ClInclude>
     <ClInclude Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.h">
       <Filter>Game\EditorWorkspaceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.h">
+      <Filter>Game\StageEditor\StageEditorHistory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,10 @@ void StageObject::Update()
 }
 
 /// @brief デバッグUIを描画する
-void StageObject::DrawUI(PlacementData* placementData)
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+void StageObject::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history)
 {
 #ifdef _DEVELOPMENT
 
