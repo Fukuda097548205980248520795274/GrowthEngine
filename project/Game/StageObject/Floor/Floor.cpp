@@ -43,6 +43,9 @@ void Floor::Initialize(const InitData& initData)
 		// 親
 		model_->param_.parent = worldTransform_.get();
 	}
+
+	// ワールドトランスフォームを更新する
+	worldTransform_->Update();
 }
 
 /// @brief 更新処理
