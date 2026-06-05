@@ -2,18 +2,16 @@
     "StageObjects": [
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 1,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 -9.800000190734863,
@@ -25,22 +23,23 @@
                 1.0,
                 75.69999694824219
             ],
-            "subType": 1
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 1,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -52,22 +51,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 2
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 2,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 1.850000023841858,
                 0.0,
@@ -79,22 +79,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -106,22 +107,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -133,22 +135,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -160,22 +163,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -187,22 +191,23 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         },
         {
             "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Back",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
             "behaviorScriptName": "Move",
             "category": 0,
+            "dashMotionName": "Dash",
             "durability": 100,
-            "hAvoidBackMotion": 15,
-            "hAvoidFrontMotion": 14,
-            "hAvoidLeftMotion": 14,
-            "hAvoidRightMotion": 15,
-            "hDashMotion": 9,
-            "hStanceMotion": 2,
-            "hStandMotion": 0,
-            "hWalkMotion": 8,
             "hp": 100,
+            "isUnbreakable": false,
             "position": [
                 0.0,
                 0.0,
@@ -214,7 +219,10 @@
                 1.0,
                 1.0
             ],
-            "subType": 4
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
         }
     ]
 }

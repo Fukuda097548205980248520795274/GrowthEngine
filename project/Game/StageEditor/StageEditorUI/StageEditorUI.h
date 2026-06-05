@@ -58,11 +58,10 @@ private:
 
 private:
 
-	/// @brief モーションの選択UIを表示する
-    /// @param label 
+    /// @brief モーションの選択UIを表示する
     /// @param motionType 
     /// @param motionName 
-    void MotionSelecter(const char* label, MotionType& motionType, std::string& motionName);
+    void MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
 
 	/// @brief ビヘイビアツリーデータの名前を読み込む
     void LoadBehaviorTreeNames();

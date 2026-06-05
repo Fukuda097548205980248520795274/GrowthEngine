@@ -118,21 +118,13 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         currentData.attackPower = 1.0f;
 		currentData.isUnbreakable = false;
 
-        currentData.standMotion.type = MotionType::Stand;
         currentData.standMotion.name = "Standing";
-        currentData.stanceMotion.type = MotionType::Stance;
         currentData.stanceMotion.name = "Fighter";
-        currentData.walkMotion.type = MotionType::Walk;
         currentData.walkMotion.name = "Walk";
-        currentData.dashMotion.type = MotionType::Dash;
         currentData.dashMotion.name = "Dash";
-        currentData.avoidFrontMotion.type = MotionType::Avoid;
         currentData.avoidFrontMotion.name = "Front";
-        currentData.avoidBackMotion.type = MotionType::Avoid;
         currentData.avoidBackMotion.name = "Back";
-        currentData.avoidLeftMotion.type = MotionType::Avoid;
         currentData.avoidLeftMotion.name = "Front";
-        currentData.avoidRightMotion.type = MotionType::Avoid;
         currentData.avoidRightMotion.name = "Back";
 
         isInitialized = true;
@@ -163,14 +155,14 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         ImGui::DragFloat("Rotation (Y)", &currentData.rotateY, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
         // もしNPCが選ばれていたら、モーションの選択UIも表示する
-        MotionSelecter("Standing Motion", currentData.standMotion.type, currentData.standMotion.name);
-        MotionSelecter("Fighting Motion", currentData.stanceMotion.type, currentData.stanceMotion.name);
-        MotionSelecter("Walking Motion", currentData.walkMotion.type, currentData.walkMotion.name);
-        MotionSelecter("Dashing Motion", currentData.dashMotion.type, currentData.dashMotion.name);
-        MotionSelecter("Avoiding Front Motion", currentData.avoidFrontMotion.type, currentData.avoidFrontMotion.name);
-        MotionSelecter("Avoiding Back Motion", currentData.avoidBackMotion.type, currentData.avoidBackMotion.name);
-        MotionSelecter("Avoiding Left Motion", currentData.avoidLeftMotion.type, currentData.avoidLeftMotion.name);
-        MotionSelecter("Avoiding Right Motion", currentData.avoidRightMotion.type, currentData.avoidRightMotion.name);
+        MotionSelecter("Standing Motion", MotionType::Stand, currentData.standMotion);
+        MotionSelecter("Fighting Motion", MotionType::Stance, currentData.stanceMotion);
+        MotionSelecter("Walking Motion", MotionType::Walk, currentData.walkMotion);
+        MotionSelecter("Dashing Motion", MotionType::Dash, currentData.dashMotion);
+        MotionSelecter("Avoiding Front Motion", MotionType::Avoid, currentData.avoidFrontMotion);
+        MotionSelecter("Avoiding Back Motion", MotionType::Avoid, currentData.avoidBackMotion);
+        MotionSelecter("Avoiding Left Motion", MotionType::Avoid, currentData.avoidLeftMotion);
+        MotionSelecter("Avoiding Right Motion", MotionType::Avoid, currentData.avoidRightMotion);
 
         // プレイヤーと未選択以外　ビヘイビアツリーデータ
 		if (currentData.subType != 0 && currentData.subType != 1)
@@ -245,16 +237,6 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     {
 		// 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
         history_->SaveHistory(placementList);
-
-        // 生成前にモーションのハンドルを取得しておく
-        currentData.standMotion.handle = motionManager_->GetMotion(currentData.standMotion.type, currentData.standMotion.name);
-        currentData.stanceMotion.handle = motionManager_->GetMotion(currentData.stanceMotion.type, currentData.stanceMotion.name);
-        currentData.walkMotion.handle = motionManager_->GetMotion(currentData.walkMotion.type, currentData.walkMotion.name);
-        currentData.dashMotion.handle = motionManager_->GetMotion(currentData.dashMotion.type, currentData.dashMotion.name);
-        currentData.avoidFrontMotion.handle = motionManager_->GetMotion(currentData.avoidFrontMotion.type, currentData.avoidFrontMotion.name);
-        currentData.avoidBackMotion.handle = motionManager_->GetMotion(currentData.avoidBackMotion.type, currentData.avoidBackMotion.name);
-        currentData.avoidLeftMotion.handle = motionManager_->GetMotion(currentData.avoidLeftMotion.type, currentData.avoidLeftMotion.name);
-        currentData.avoidRightMotion.handle = motionManager_->GetMotion(currentData.avoidRightMotion.type, currentData.avoidRightMotion.name);
 
         // 新しい配置データを初期化
         PlacementData newData;
@@ -524,6 +506,16 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         {
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
 			charPtr->DrawDebugUI(&target, placementList, history_);
+
+			// モーション選択UI
+            MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion);
+            MotionSelecter("Fighting Motion", MotionType::Stance, target.stanceMotion);
+            MotionSelecter("Walking Motion", MotionType::Walk, target.walkMotion);
+            MotionSelecter("Dashing Motion", MotionType::Dash, target.dashMotion);
+            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, target.avoidFrontMotion);
+            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion);
+            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion);
+            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion);
         }
         else if (target.category == EditCategory::Object)
         {
@@ -559,53 +551,37 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 /// @brief モーションの選択UIを表示する
 /// @param motionType 
 /// @param motionName 
-void StageEditorUI::MotionSelecter(const char* label, MotionType& motionType, std::string& motionName)
+void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig)
 {
-    if (ImGui::TreeNode(label))
+    // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+    std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(motionType);
+
+    // モーション名のリストが空の場合はエラーメッセージを表示
+    if (motionNames.empty())
     {
-        // モーションタイプ選択用のコンボボックス
-        const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed",
-            "DownFall", "DownLying", "DowoGetUp", "Guard", "styleChange", "grabStrikeAttacker", "grabStrikeTarget" };
-        int currentType = static_cast<int>(motionType);
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+    }
+    else
+    {
+        // 現在選択されているモーション名をプレビュー用の文字列として設定
+        const char* previewValue = motionConfig.name.empty() ? "Select Motion..." : motionConfig.name.c_str();
 
-        // コンボボックスを描画し、変更があったらEnumにキャストして戻す
-        if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
+        // モーション名選択用のコンボボックスを描画
+        if (ImGui::BeginCombo(label, previewValue))
         {
-            motionType = static_cast<MotionType>(currentType);
-            motionName = "";
-        }
-
-        // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-        std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(motionType);
-
-        // モーション名のリストが空の場合はエラーメッセージを表示
-        if (motionNames.empty())
-        {
-            ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
-        }
-        else
-        {
-            // 現在選択されているモーション名をプレビュー用の文字列として設定
-            const char* previewValue = motionName.empty() ? "Select Motion..." : motionName.c_str();
-
-            // モーション名選択用のコンボボックスを描画
-            if (ImGui::BeginCombo("Motion Name", previewValue))
+            for (const auto& name : motionNames)
             {
-                for (const auto& name : motionNames)
+                // 現在のモーション名と同じものが選択されている状態にする
+                bool isSelected = (motionConfig.name == name);
+                if (ImGui::Selectable(name.c_str(), isSelected))
                 {
-                    // 現在のモーション名と同じものが選択されている状態にする
-                    bool isSelected = (motionName == name);
-                    if (ImGui::Selectable(name.c_str(), isSelected))
-                    {
-                        motionName = name;
-                    }
-                    if (isSelected) ImGui::SetItemDefaultFocus();
+                    motionConfig.name = name;
+					motionConfig.handle = motionManager_->GetMotion(motionType, motionConfig.name);
                 }
-                ImGui::EndCombo();
+                if (isSelected) ImGui::SetItemDefaultFocus();
             }
+            ImGui::EndCombo();
         }
-
-        ImGui::TreePop();
     }
 }
 

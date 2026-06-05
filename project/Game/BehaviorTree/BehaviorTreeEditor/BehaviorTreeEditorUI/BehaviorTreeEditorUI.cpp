@@ -960,6 +960,41 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             HistorySaveIfChanged();
             ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
 
+
+            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+
+            // モーション名のリストが空の場合はエラーメッセージを表示
+            if (motionNames.empty())
+            {
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+            }
+            else
+            {
+                // 現在選択されているモーション名をプレビュー用の文字列として設定
+                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+
+                // モーション名選択用のコンボボックスを描画
+                if (ImGui::BeginCombo("Attack Motion", previewValue))
+                {
+                    for (const auto& name : motionNames)
+                    {
+                        // 現在のモーション名と同じものが選択されている状態にする
+                        bool isSelected = (node.motionName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            history_->SaveHistory(nodes_, links_, currentId_);
+                            isDirty_ = true;
+
+                            node.motionName = name;
+                        }
+                        if (isSelected) ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                }
+            }
+
+
             ImGui::Text("Hitboxes (Multiple)");
 
             // 当たり判定のリストを描画
@@ -1076,6 +1111,41 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             HistorySaveIfChanged();
             ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
 
+
+            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+
+            // モーション名のリストが空の場合はエラーメッセージを表示
+            if (motionNames.empty())
+            {
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+            }
+            else
+            {
+                // 現在選択されているモーション名をプレビュー用の文字列として設定
+                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+
+                // モーション名選択用のコンボボックスを描画
+                if (ImGui::BeginCombo("Attack Motion", previewValue))
+                {
+                    for (const auto& name : motionNames)
+                    {
+                        // 現在のモーション名と同じものが選択されている状態にする
+                        bool isSelected = (node.motionName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            history_->SaveHistory(nodes_, links_, currentId_);
+                            isDirty_ = true;
+
+                            node.motionName = name;
+                        }
+                        if (isSelected) ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                }
+            }
+
+
             // ジョイントタイプ
             const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
             int currentJoint = static_cast<int>(node.grabAttackInitData.jointType);
@@ -1118,7 +1188,10 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
             // 離すタイミングの入力は、isReleaseがtrueの場合にのみ表示
             if (node.grabStrikeAttackInitData.isRelease)
+            {
+				HistorySaveIfChanged();
                 ImGui::DragFloat("Release Time", &node.grabStrikeAttackInitData.releaseTime, 0.01f);
+            }
 
             // ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
             node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
@@ -1135,58 +1208,71 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             }
 
 
-            // モーションタイプ選択用のコンボボックス
-            const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed",
-                "DownFall", "DownLying", "DowoGetUp", "Guard","styleChange", "grabStrikeAttacker", "grabStrikeTarget" };
-            int currentType = static_cast<int>(node.targetMotionType);
+            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+            std::vector<std::string> attackerMotions = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
 
-            // ターゲットのモーションタイプ選択用のコンボボックス
-            if (ImGui::TreeNode("Target Motion"))
+            // モーション名のリストが空の場合はエラーメッセージを表示
+            if (attackerMotions.empty())
             {
-                // コンボボックスを描画し、変更があったらEnumにキャストして戻す
-                if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+            }
+            else
+            {
+                // 現在選択されているモーション名をプレビュー用の文字列として設定
+                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+
+                // モーション名選択用のコンボボックスを描画
+                if (ImGui::BeginCombo("Attack Motion", previewValue))
                 {
-                    history_->SaveHistory(nodes_, links_, currentId_);
-                    isDirty_ = true;
-
-                    node.targetMotionType = static_cast<MotionType>(currentType);
-                    node.targetMotionName = "";
-                }
-
-                // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-                std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.targetMotionType);
-
-                // モーション名のリストが空の場合はエラーメッセージを表示
-                if (motionNames.empty())
-                {
-                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
-                }
-                else
-                {
-                    // 現在選択されているモーション名をプレビュー用の文字列として設定
-                    const char* previewValue = node.targetMotionName.empty() ? "Select Motion..." : node.targetMotionName.c_str();
-
-                    // モーション名選択用のコンボボックスを描画
-                    if (ImGui::BeginCombo("Motion Name", previewValue))
+                    for (const auto& name : attackerMotions)
                     {
-                        for (const auto& name : motionNames)
+                        // 現在のモーション名と同じものが選択されている状態にする
+                        bool isSelected = (node.motionName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
                         {
-                            // 現在のモーション名と同じものが選択されている状態にする
-                            bool isSelected = (node.targetMotionName == name);
-                            if (ImGui::Selectable(name.c_str(), isSelected))
-                            {
-                                history_->SaveHistory(nodes_, links_, currentId_);
-                                isDirty_ = true;
+                            history_->SaveHistory(nodes_, links_, currentId_);
+                            isDirty_ = true;
 
-                                node.targetMotionName = name;
-                            }
-                            if (isSelected) ImGui::SetItemDefaultFocus();
+                            node.motionName = name;
                         }
-                        ImGui::EndCombo();
+                        if (isSelected) ImGui::SetItemDefaultFocus();
                     }
+                    ImGui::EndCombo();
                 }
+            }
 
-                ImGui::TreePop();
+
+            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+            std::vector<std::string> targetMotions = MotionManager::GetInstance()->GetMotionNames(MotionType::Stagger);
+
+            // モーション名のリストが空の場合はエラーメッセージを表示
+            if (targetMotions.empty())
+            {
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+            }
+            else
+            {
+                // 現在選択されているモーション名をプレビュー用の文字列として設定
+                const char* previewValue = node.targetMotionName.empty() ? "Select Motion..." : node.targetMotionName.c_str();
+
+                // モーション名選択用のコンボボックスを描画
+                if (ImGui::BeginCombo("Stagger Motion", previewValue))
+                {
+                    for (const auto& name : targetMotions)
+                    {
+                        // 現在のモーション名と同じものが選択されている状態にする
+                        bool isSelected = (node.targetMotionName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            history_->SaveHistory(nodes_, links_, currentId_);
+                            isDirty_ = true;
+
+							node.targetMotionName = name;
+                        }
+                        if (isSelected) ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                }
             }
 
 
@@ -1268,64 +1354,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-
-    // None RequestToken ReleaseToke 以外のアクションが選択されている場合はモーション設定UIを表示
-    if (node.actionName != "None" && node.actionName != "RequestToken" && node.actionName != "ReleaseToken" 
-        && node.actionName != "Avoid" && node.actionName != "ApproachTargetMove" && node.actionName != "NavMeshMove")
-    {
-        if (ImGui::TreeNode("Motion Settings"))
-        {
-            // モーションタイプ選択用のコンボボックス
-            const char* typeNames[] = { "Stand", "Stance", "Walk", "Dash", "Attack", "Avoid", "Stagger", "Grab", "Grabbed",
-                "DownFall", "DownLying", "DowoGetUp", "Guard", "styleChange", "grabStrikeAttacker", "grabStrikeTarget" };
-            int currentType = static_cast<int>(node.motionType);
-
-            // コンボボックスを描画し、変更があったらEnumにキャストして戻す
-            if (ImGui::Combo("Motion Type", &currentType, typeNames, IM_ARRAYSIZE(typeNames)))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-
-                node.motionType = static_cast<MotionType>(currentType);
-                node.motionName = "";
-            }
-
-            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.motionType);
-
-            // モーション名のリストが空の場合はエラーメッセージを表示
-            if (motionNames.empty())
-            {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
-            }
-            else
-            {
-                // 現在選択されているモーション名をプレビュー用の文字列として設定
-                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
-
-                // モーション名選択用のコンボボックスを描画
-                if (ImGui::BeginCombo("Motion Name", previewValue))
-                {
-                    for (const auto& name : motionNames)
-                    {
-                        // 現在のモーション名と同じものが選択されている状態にする
-                        bool isSelected = (node.motionName == name);
-                        if (ImGui::Selectable(name.c_str(), isSelected))
-                        {
-                            history_->SaveHistory(nodes_, links_, currentId_);
-                            isDirty_ = true;
-
-                            node.motionName = name;
-                        }
-                        if (isSelected) ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-
-            ImGui::TreePop();
-        }
-    }
 
     ImGui::PopItemWidth();
 }

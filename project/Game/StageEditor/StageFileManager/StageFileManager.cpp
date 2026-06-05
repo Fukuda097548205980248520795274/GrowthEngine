@@ -46,15 +46,15 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 		// 行動パターンのスクリプト名
 		itemJson["behaviorScriptName"] = data.behaviorScriptName;
 
-        // モーションハンドルの保存（モーション名で保存するのが理想ですが、今回はハンドル値として保存する例）
-        itemJson["hStandMotion"] = data.standMotion.handle;
-        itemJson["hStanceMotion"] = data.stanceMotion.handle;
-        itemJson["hWalkMotion"] = data.walkMotion.handle;
-        itemJson["hDashMotion"] = data.dashMotion.handle;
-        itemJson["hAvoidFrontMotion"] = data.avoidFrontMotion.handle;
-        itemJson["hAvoidBackMotion"] = data.avoidBackMotion.handle;
-        itemJson["hAvoidLeftMotion"] = data.avoidLeftMotion.handle;
-        itemJson["hAvoidRightMotion"] = data.avoidRightMotion.handle;
+		// モーション名
+		itemJson["standMotionName"] = data.standMotion.name;
+		itemJson["stanceMotionName"] = data.stanceMotion.name;
+		itemJson["walkMotionName"] = data.walkMotion.name;
+		itemJson["dashMotionName"] = data.dashMotion.name;
+		itemJson["avoidFrontMotionName"] = data.avoidFrontMotion.name;
+		itemJson["avoidBackMotionName"] = data.avoidBackMotion.name;
+		itemJson["avoidLeftMotionName"] = data.avoidLeftMotion.name;
+		itemJson["avoidRightMotionName"] = data.avoidRightMotion.name;
 
         arrayJson.push_back(itemJson);
     }
@@ -124,14 +124,24 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
             data.attackPower = itemJson.value("attackPower", 1.0f);
 			data.isUnbreakable = itemJson.value("isUnbreakable", false);
 
-            data.standMotion.handle = itemJson.value("hStandMotion", 0);
-            data.stanceMotion.handle = itemJson.value("hStanceMotion", 0);
-            data.walkMotion.handle = itemJson.value("hWalkMotion", 0);
-            data.dashMotion.handle = itemJson.value("hDashMotion", 0);
-            data.avoidFrontMotion.handle = itemJson.value("hAvoidFrontMotion", 0);
-            data.avoidBackMotion.handle = itemJson.value("hAvoidBackMotion", 0);
-            data.avoidLeftMotion.handle = itemJson.value("hAvoidLeftMotion", 0);
-            data.avoidRightMotion.handle = itemJson.value("hAvoidRightMotion", 0);
+			data.standMotion.name = itemJson.value("standMotionName", "Standing");
+			data.stanceMotion.name = itemJson.value("stanceMotionName", "Fighter");
+			data.walkMotion.name = itemJson.value("walkMotionName", "Walk");
+			data.dashMotion.name = itemJson.value("dashMotionName", "Dash");
+			data.avoidFrontMotion.name = itemJson.value("avoidFrontMotionName", "Front");
+			data.avoidBackMotion.name = itemJson.value("avoidBackMotionName", "Back");
+			data.avoidLeftMotion.name = itemJson.value("avoidLeftMotionName", "Front");
+			data.avoidRightMotion.name = itemJson.value("avoidRightMotionName", "Back");
+
+			MotionManager* motionManager = MotionManager::GetInstance();
+			data.standMotion.handle = motionManager->GetMotion(MotionType::Stand, data.standMotion.name);
+			data.stanceMotion.handle = motionManager->GetMotion(MotionType::Stance, data.stanceMotion.name);
+			data.walkMotion.handle = motionManager->GetMotion(MotionType::Walk, data.walkMotion.name);
+			data.dashMotion.handle = motionManager->GetMotion(MotionType::Dash, data.dashMotion.name);
+			data.avoidFrontMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidFrontMotion.name);
+			data.avoidBackMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidBackMotion.name);
+			data.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidLeftMotion.name);
+			data.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidRightMotion.name);
 
 			data.behaviorScriptName[0] = '\0'; // デフォルトは空文字列
             if (itemJson.contains("behaviorScriptName"))

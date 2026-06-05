@@ -18,7 +18,6 @@ inline const char* weaponCategoryNames[] = { "None", "OneHanded", "TwoHanded" };
 
 struct MotionConfig
 {
-	MotionType type;
 	std::string name;
 	AnimationHandle handle = 0;
 };
