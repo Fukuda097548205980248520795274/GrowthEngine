@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 // 静的メンバの定義
 bool Entity::updateEnabled_ = false;
@@ -32,18 +33,23 @@ void Entity::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData
 	// 更新処理中は位置の変更はできないようにする
 	if (updateEnabled_)return;
 
-	// ワールドトランスフォームの位置、回転、拡縮をドラッグで編集できるUI
+	// 位置の編集
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
 	ImGui::DragFloat3("Position", &worldTransform_->translate_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->position = worldTransform_->translate_;
+
+	// 回転の編集（Y軸のみ）
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
 	ImGui::DragFloat("RotationY", &worldTransform_->rotate_.y, 0.001f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->rotateY = worldTransform_->rotate_.y;
+
+	// 拡縮の編集
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
 	ImGui::DragFloat3("Scale", &worldTransform_->scale_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->scale = worldTransform_->scale_;
 
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
-
-	// 配置データに反映
-	placementData->position = worldTransform_->translate_;
-	placementData->rotateY = worldTransform_->rotate_.y;
-	placementData->scale = worldTransform_->scale_;
 
 #endif
 }

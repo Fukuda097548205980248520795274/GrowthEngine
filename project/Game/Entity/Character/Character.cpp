@@ -10,6 +10,7 @@
 #include "Action/Avoid/Avoid.h"
 
 #include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 namespace
 {
@@ -1500,11 +1501,10 @@ void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementD
 
 	ImGui::Separator();
 
-	// キャラクターの体力を表示・編集する
+	// 体力を表示・編集する
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
 	ImGui::DragInt("HP", &hp_, 1, 0, 1000000);
-
-	// パラメータを反映させる。
-	placementData->hp = hp_;
+	if(ImGui::IsItemDeactivatedAfterEdit())placementData->hp = hp_;
 
 #endif
 }

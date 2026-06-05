@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include "Entity/Character/Character.h"
 #include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 #include <numbers>
 
@@ -242,14 +243,20 @@ void Weapon::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData
 
 	ImGui::Separator();
 
-	// 武器のデバッグUIを描画する
+	// 耐久力のドラッグ
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
 	ImGui::DragInt("Durability", &durability_, 1, 0, 1000000);
-	ImGui::DragFloat("Attack Power", &attackPower_, 0.01f, 0.0f, 1000000.0f);
-	ImGui::Checkbox("Is Unbreakable", &isUnbreakable_);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->durability = durability_;
 
-	// 配置データに反映
-	placementData->durability = durability_;
-	placementData->attackPower = attackPower_;
+	// 攻撃力のドラッグ
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	ImGui::DragFloat("Attack Power", &attackPower_, 0.01f, 0.0f, 1000000.0f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->attackPower = attackPower_;
+
+	// 壊れない武器かどうかのチェックボックス
+	if (ImGui::IsItemActivated())history->SaveHistory(placementList);
+	ImGui::Checkbox("Is Unbreakable", &isUnbreakable_);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->isUnbreakable = isUnbreakable_;
 
 #endif
 }

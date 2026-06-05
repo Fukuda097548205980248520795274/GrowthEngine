@@ -41,6 +41,7 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
         itemJson["hp"] = data.hp;
         itemJson["durability"] = data.durability;
         itemJson["attackPower"] = data.attackPower;
+		itemJson["isUnbreakable"] = data.isUnbreakable;
 
 		// 行動パターンのスクリプト名
 		itemJson["behaviorScriptName"] = data.behaviorScriptName;
@@ -121,6 +122,7 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
             data.hp = itemJson.value("hp", 100);
             data.durability = itemJson.value("durability", 100);
             data.attackPower = itemJson.value("attackPower", 1.0f);
+			data.isUnbreakable = itemJson.value("isUnbreakable", false);
 
             data.standMotion.handle = itemJson.value("hStandMotion", 0);
             data.stanceMotion.handle = itemJson.value("hStanceMotion", 0);

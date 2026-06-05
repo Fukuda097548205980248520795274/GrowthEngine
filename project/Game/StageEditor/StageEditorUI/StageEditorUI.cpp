@@ -116,6 +116,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         currentData.hp = 100;
         currentData.durability = 100;
         currentData.attackPower = 1.0f;
+		currentData.isUnbreakable = false;
 
         currentData.standMotion.type = MotionType::Stand;
         currentData.standMotion.name = "Standing";
@@ -232,6 +233,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
         // 攻撃力
         ImGui::DragFloat("Attack Power", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
+
+		// 壊れない武器かどうか
+		ImGui::Checkbox("Unbreakable", &currentData.isUnbreakable);
     }
 
     ImGui::Separator();
@@ -262,6 +266,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         newData.hp = currentData.hp;
         newData.durability = currentData.durability;
         newData.attackPower = currentData.attackPower;
+		newData.isUnbreakable = currentData.isUnbreakable;
         newData.standMotion = currentData.standMotion;
         newData.stanceMotion = currentData.stanceMotion;
         newData.walkMotion = currentData.walkMotion;

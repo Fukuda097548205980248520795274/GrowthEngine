@@ -70,6 +70,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.position = data.position;
 		initData.durability = data.durability;
 		initData.attackPower = data.attackPower;
+		initData.isUnbreakable = data.isUnbreakable;
 		initData.category = static_cast<WeaponCategory>(data.subType);
 		initData.model = nullptr; // モデルは後で設定する
 

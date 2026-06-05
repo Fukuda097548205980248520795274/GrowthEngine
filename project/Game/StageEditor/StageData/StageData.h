@@ -51,6 +51,9 @@ struct PlacementData
 	// 攻撃力 (武器の場合)
 	float attackPower = 1.0f;
 
+	// 壊れない武器かどうか (武器の場合)
+	bool isUnbreakable = false;
+
 	// 行動パターンを定義したスクリプトファイル名 (キャラクターの場合)
 	char behaviorScriptName[256] = "";
 
