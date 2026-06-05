@@ -52,5 +52,11 @@ protected:
 
 	// ステージオブジェクトのタグ
 	StageObjectTag tag_ = StageObjectTag::None;
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	virtual void DrawUI();
 };
 

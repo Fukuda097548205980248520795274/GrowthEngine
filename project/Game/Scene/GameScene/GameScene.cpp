@@ -197,7 +197,13 @@ void GameScene::Update()
 	}
 
 	// オブジェクトの更新
-	for (auto& object : objects_)object->Update();
+	objects_.remove_if(
+		[](const std::unique_ptr<StageObject>& object)
+		{
+			object->Update();
+			return object->IsFinished();
+		}
+	);
 
 	// NPCの更新
 	npcs_.remove_if(

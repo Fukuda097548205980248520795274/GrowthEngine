@@ -1481,3 +1481,19 @@ void Character::UpdatePushOut()
 		}
 	}
 }
+
+/// @brief デバッグUIを描画する
+void Character::DrawDebugUI()
+{
+#ifdef _DEVELOPMENT
+
+	// キャラクターの状態を表示する
+	Entity::DrawDebugUI();
+
+	ImGui::Separator();
+
+	// キャラクターの体力を表示・編集する
+	ImGui::DragInt("HP", &hp_, 1, 0, 1000000);
+
+#endif
+}

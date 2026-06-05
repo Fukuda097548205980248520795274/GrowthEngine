@@ -787,5 +787,12 @@ protected:
 
 	/// @brief 押し出し判定処理
 	void UpdatePushOut();
+
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	void DrawDebugUI() override;
 };
 

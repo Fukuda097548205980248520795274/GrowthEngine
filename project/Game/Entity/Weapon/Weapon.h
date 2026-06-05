@@ -149,5 +149,11 @@ protected:
 
 	// 最大落下速度
 	const float kMaxFallSpeed = -20.0f;
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	void DrawDebugUI() override;
 };
 

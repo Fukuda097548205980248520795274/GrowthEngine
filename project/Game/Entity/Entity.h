@@ -74,5 +74,11 @@ protected:
 
 	/// @brief ワールドトランスフォーム
 	std::unique_ptr<WorldTransform3D> worldTransform_ = nullptr;
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	virtual void DrawDebugUI();
 };
 

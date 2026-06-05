@@ -221,3 +221,21 @@ void Weapon::LandingCheck()
 		velocity_ = Vector3(0.0f, 0.0f, 0.0f);
 	}
 }
+
+/// @brief デバッグUIを描画する
+void Weapon::DrawDebugUI()
+{
+#ifdef _DEVELOPMENT
+
+	// 基底クラスのデバッグUIを描画する
+	Entity::DrawDebugUI();
+
+	ImGui::Separator();
+
+	// 武器のデバッグUIを描画する
+	ImGui::DragInt("Durability", &durability_, 1, 0, 1000000);
+	ImGui::DragFloat("Attack Power", &attackPower_, 0.01f, 0.0f, 1000000.0f);
+	ImGui::Checkbox("Is Unbreakable", &isUnbreakable_);
+
+#endif
+}

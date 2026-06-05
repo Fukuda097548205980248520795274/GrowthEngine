@@ -3,6 +3,10 @@
 #include "../StageFileManager/StageFileManager.h"
 #include "../StageSpawner/StageSpawner.h"
 
+#include "Entity/Character/Character.h"
+#include "Entity/Weapon/Weapon.h"
+#include "StageObject/StageObject.h"
+
 /// @brief 初期化
 void StageEditorUI::Initialize()
 {
@@ -33,7 +37,10 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
     // 現在編集中のファイル名を表示
     ImGui::Text("Current Stage: %s", currentFileName.c_str());
-    if (ImGui::Button("Save Stage", ImVec2(120, 30)))
+    
+    // Ctrl + S が押されたら保存する処理
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
     {
         fileManager_->SaveToFile(currentFileName, placementList);
     }
@@ -343,6 +350,15 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
                 }
 
+                if (ImGui::MenuItem("Save"))
+                {
+                    // 右クリックした対象を現在のファイルとして設定し、上書き保存する
+                    currentFileName = file;
+                    fileManager_->SaveToFile(currentFileName, placementList);
+                }
+
+                ImGui::Separator();
+
                 // 削除は赤文字で表示
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
                 if (ImGui::MenuItem("Delete"))
@@ -454,35 +470,21 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         auto& target = placementList[selectedIndex_];
         ImGui::Text("--- Edit Selected Object ---");
 
-        bool isChanged = false; // パラメータが変更されたかどうかのフラグ
-
         // カテゴリごとの編集項目
         if (target.category == EditCategory::Character)
         {
-            if (ImGui::Combo("NPC Role", &target.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames))) isChanged = true;
-            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
-            if (ImGui::DragFloat("Rotation (Y)", &target.rotateY, 0.01f)) isChanged = true;
-            if (ImGui::DragInt("HP", &target.hp, 1, 0, 10000)) isChanged = true;
+			Character* charPtr = static_cast<Character*>(target.instancePtr);
+			charPtr->DrawDebugUI();
         }
         else if (target.category == EditCategory::Object)
         {
-            if (ImGui::Combo("Object Type", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames))) isChanged = true;
-            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
-            if (ImGui::DragFloat3("Scale", &target.scale.x, 0.1f)) isChanged = true;
+			StageObject* objPtr = static_cast<StageObject*>(target.instancePtr);
+			objPtr->DrawUI();
         }
         else if (target.category == EditCategory::Weapon)
         {
-            if (ImGui::Combo("Weapon Type", &target.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames))) isChanged = true;
-            if (ImGui::DragFloat3("Position", &target.position.x, 0.1f)) isChanged = true;
-            if (ImGui::DragInt("Durability", &target.durability, 1, 1, 10000)) isChanged = true;
-            if (ImGui::DragFloat("Attack Power", &target.attackPower, 0.1f)) isChanged = true;
-        }
-
-        // 変更があった場合は古い実体を消して再生成する
-        if (isChanged)
-        {
-            spawner_->DeleteActualEntity(target);
-            spawner_->SpawnActualEntity(target);
+			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
+			weaponPtr->DrawDebugUI();
         }
 
         ImGui::Separator();

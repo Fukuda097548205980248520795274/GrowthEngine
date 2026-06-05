@@ -82,5 +82,19 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 /// @param data 
 void StageSpawner::DeleteActualEntity(PlacementData& data)
 {
-	
+	if (data.category == EditCategory::Character)
+	{
+		Character* character = static_cast<Character*>(data.instancePtr);
+		character->Delete();
+	}
+	else if (data.category == EditCategory::Object)
+	{
+		StageObject* stageObject = static_cast<StageObject*>(data.instancePtr);
+		stageObject->Delete();
+	}
+	else if (data.category == EditCategory::Weapon)
+	{
+		Weapon* weapon = static_cast<Weapon*>(data.instancePtr);
+		weapon->Delete();
+	}
 }
