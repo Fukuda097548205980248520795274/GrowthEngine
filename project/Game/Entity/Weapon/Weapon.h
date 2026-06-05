@@ -154,6 +154,6 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	void DrawDebugUI() override;
+	void DrawDebugUI(PlacementData* placementData) override;
 };
 

@@ -330,7 +330,8 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             }
             currentFileName = fileName;
 
-            // 必要であればここで配置リストなどをクリアする
+			// 新しいファイルを作成する前に、現在の配置リストに基づいてすべての実体を消去する
+            for (auto& data : placementList)spawner_->DeleteActualEntity(data);
             placementList.clear();
 
             // 空のファイルを作成・保存
@@ -376,6 +377,11 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             // ファイル名をボタンとして表示
             if (ImGui::Button(file.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
             {
+				// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+                for (auto& data : placementList)spawner_->DeleteActualEntity(data);
+                placementList.clear();
+
+				// クリックしたファイルを現在のファイルとして設定し、そのデータを読み込む
                 currentFileName = file;
                 fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
             }
@@ -386,6 +392,11 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 // 読み込み
                 if (ImGui::MenuItem("Load"))
                 {
+                    // ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+                    for (auto& data : placementList)spawner_->DeleteActualEntity(data);
+                    placementList.clear();
+
+					// 右クリックした対象を現在のファイルとして設定し、そのデータを読み込む
                     currentFileName = file;
                     fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
                 }
@@ -444,8 +455,11 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             // もし現在開いているファイルを削除した場合は、エディタの情報をリセットする
             if (currentFileName == targetName)
             {
+                // ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+                for (auto& data : placementList)spawner_->DeleteActualEntity(data);
+                placementList.clear();
+
                 currentFileName = "";
-                placementList.clear(); // 配置情報をクリア
                 selectedIndex_ = -1;
             }
 
@@ -514,17 +528,17 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         if (target.category == EditCategory::Character)
         {
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
-			charPtr->DrawDebugUI();
+			charPtr->DrawDebugUI(&target);
         }
         else if (target.category == EditCategory::Object)
         {
 			StageObject* objPtr = static_cast<StageObject*>(target.instancePtr);
-			objPtr->DrawUI();
+			objPtr->DrawUI(&target);
         }
         else if (target.category == EditCategory::Weapon)
         {
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
-			weaponPtr->DrawDebugUI();
+			weaponPtr->DrawDebugUI(&target);
         }
 
         ImGui::Separator();

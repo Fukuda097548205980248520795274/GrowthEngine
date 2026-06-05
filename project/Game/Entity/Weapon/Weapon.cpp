@@ -1,5 +1,6 @@
 #include "Weapon.h"
 #include "Entity/Character/Character.h"
+#include "StageEditor/StageData/StageData.h"
 
 #include <numbers>
 
@@ -229,12 +230,12 @@ void Weapon::LandingCheck()
 }
 
 /// @brief デバッグUIを描画する
-void Weapon::DrawDebugUI()
+void Weapon::DrawDebugUI(PlacementData* placementData)
 {
 #ifdef _DEVELOPMENT
 
 	// 基底クラスのデバッグUIを描画する
-	Entity::DrawDebugUI();
+	Entity::DrawDebugUI(placementData);
 
 	ImGui::Separator();
 
@@ -242,6 +243,10 @@ void Weapon::DrawDebugUI()
 	ImGui::DragInt("Durability", &durability_, 1, 0, 1000000);
 	ImGui::DragFloat("Attack Power", &attackPower_, 0.01f, 0.0f, 1000000.0f);
 	ImGui::Checkbox("Is Unbreakable", &isUnbreakable_);
+
+	// 配置データに反映
+	placementData->durability = durability_;
+	placementData->attackPower = attackPower_;
 
 #endif
 }

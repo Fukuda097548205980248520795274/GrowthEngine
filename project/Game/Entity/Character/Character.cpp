@@ -9,6 +9,8 @@
 #include "Action/Move/Move.h"
 #include "Action/Avoid/Avoid.h"
 
+#include "StageEditor/StageData/StageData.h"
+
 namespace
 {
 	/// @brief カメラ基準の入力方向をワールド方向へ変換する
@@ -1486,17 +1488,20 @@ void Character::UpdatePushOut()
 }
 
 /// @brief デバッグUIを描画する
-void Character::DrawDebugUI()
+void Character::DrawDebugUI(PlacementData* placementData)
 {
 #ifdef _DEVELOPMENT
 
 	// キャラクターの状態を表示する
-	Entity::DrawDebugUI();
+	Entity::DrawDebugUI(placementData);
 
 	ImGui::Separator();
 
 	// キャラクターの体力を表示・編集する
 	ImGui::DragInt("HP", &hp_, 1, 0, 1000000);
+
+	// パラメータを反映させる。
+	placementData->hp = hp_;
 
 #endif
 }

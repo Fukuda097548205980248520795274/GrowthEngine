@@ -1,6 +1,9 @@
 #pragma once
 #include "GrowthEngine.h"
 
+// 前方宣言
+struct PlacementData;
+
 class Entity
 {
 public:
@@ -79,7 +82,7 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	virtual void DrawDebugUI();
+	virtual void DrawDebugUI(PlacementData* placementData);
 
 	/// @brief 更新処理が有効かどうかを設定する
 	/// @param enabled 

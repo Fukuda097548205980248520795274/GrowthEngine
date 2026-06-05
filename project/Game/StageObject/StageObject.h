@@ -1,6 +1,8 @@
 #pragma once
 #include "GrowthEngine.h"
 
+struct PlacementData;
+
 class StageObject
 {
 public:
@@ -57,7 +59,7 @@ protected:
 public:
 
 	/// @brief デバッグUIを描画する
-	virtual void DrawUI();
+	virtual void DrawUI(PlacementData* placementData);
 
 	/// @brief ステージオブジェクトの更新を有効にするかどうかを設定する
 	/// @param enabled 

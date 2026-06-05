@@ -1,5 +1,6 @@
 #include "StageObject.h"
 #include <numbers>
+#include "StageEditor/StageData/StageData.h"
 
 // ステージオブジェクトの更新を有効にするかどうか
 bool StageObject::updateEnabled_ = false;
@@ -22,7 +23,7 @@ void StageObject::Update()
 }
 
 /// @brief デバッグUIを描画する
-void StageObject::DrawUI()
+void StageObject::DrawUI(PlacementData* placementData)
 {
 #ifdef _DEVELOPMENT
 
@@ -31,11 +32,16 @@ void StageObject::DrawUI()
 
 	// ワールドトランスフォームの位置、回転、拡縮をドラッグで編集できるUI
 	ImGui::DragFloat3("Position", &worldTransform_->translate_.x, 0.01f);
-	ImGui::DragFloat3("Rotation", &worldTransform_->rotate_.x, 0.001f);
+	ImGui::DragFloat("RotationY", &worldTransform_->rotate_.y, 0.001f);
 	ImGui::DragFloat3("Scale", &worldTransform_->scale_.x, 0.01f);
 
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
+
+	// 配置データに反映
+	placementData->position = worldTransform_->translate_;
+	placementData->rotateY = worldTransform_->rotate_.y;
+	placementData->scale = worldTransform_->scale_;
 
 #endif
 }
