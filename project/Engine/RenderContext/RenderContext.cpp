@@ -481,8 +481,8 @@ void Engine::RenderContext::DebugRayPicking()
 	Vector2 mouseScreenPos = imguiRender_->GetViewWindowCursorPos();
 
 	// 正規化デバイス座標系
-	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(winApp_->GetClientWidth()) - 1.0f;
-	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(winApp_->GetClientHeight());
+	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(1280.0f) - 1.0f;
+	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(720.0f);
 
 	// 同次クリップ空間
 	Vector4 nearClip = { ndcX, ndcY, 0.0f, 1.0f };

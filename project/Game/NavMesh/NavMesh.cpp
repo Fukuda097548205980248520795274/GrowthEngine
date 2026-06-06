@@ -175,6 +175,36 @@ std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end)
 /// @brief IDからポリゴンを取得する
 /// @param id 
 /// @return 
+NavPolygon* NavMesh::GetMutablePolygon(int id)
+{
+    for (auto& poly : polygons_)
+    {
+        if (poly.id == id)
+        {
+            return &poly;
+        }
+    }
+    return nullptr;
+}
+
+/// @brief 新しい一意のポリゴンIDを生成する
+/// @return 
+int NavMesh::GenerateNewPolygonId() const
+{
+    int maxId = -1;
+    for (const auto& poly : polygons_)
+    {
+        if (poly.id > maxId)
+        {
+            maxId = poly.id;
+        }
+    }
+    return maxId + 1; // 現在の最大ID + 1 を返す
+}
+
+/// @brief IDからポリゴンを取得する
+/// @param id 
+/// @return 
 const NavPolygon* NavMesh::GetPolygon(int id) const
 {
 	for (const auto& poly : polygons_)

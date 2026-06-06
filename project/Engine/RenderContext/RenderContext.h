@@ -149,6 +149,18 @@ namespace Engine
 		/// @return 
 		Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return camera2DStore_->GetParam(name); }
 
+		/// @brief 3Dカメラのビュー行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera3DView()const { return camera3DStore_->GetCamera3D().GetViewMatrix(); }
+
+		/// @brief 3Dカメラのプロジェクション行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera3DProjection()const { return camera3DStore_->GetCamera3D().GetProjectionMatrix(); }
+
+		/// @brief 3Dカメラのビュー正射影行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera3DViewProjection()const { return camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix(); }
+
 
 
 		/// @brief ライトのパラメータを取得する

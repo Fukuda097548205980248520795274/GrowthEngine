@@ -7,6 +7,7 @@
 using json = nlohmann::json;
 
 class StageSpawner;
+class NavMesh;
 
 class StageFileManager
 {
@@ -20,14 +21,14 @@ public:
     /// @param filename 
     /// @param dataList 
     /// @return 
-    bool SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList);
+    bool SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList, const NavMesh* navMesh);
 
 	/// @brief ファイルからステージデータを読み込む
     /// @param filename 
     /// @param outDataList 
     /// @param spawner 
     /// @return 
-    bool LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner);
+    bool LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh);
 
 	/// @brief 保存されているステージファイルのリストを取得する
     /// @return 

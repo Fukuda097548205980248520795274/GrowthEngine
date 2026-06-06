@@ -56,6 +56,10 @@ public:
 	/// @return 
 	Floor* CreateFloorObject(const Floor::InitData& initData);
 
+	/// @brief ナビゲーションメッシュを取得する
+	/// @return 
+	NavMesh* GetNavMesh() const { return navMesh_.get(); }
+
 
 private:
 

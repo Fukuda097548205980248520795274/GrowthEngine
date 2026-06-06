@@ -6,9 +6,27 @@
 #include "StageEditorHistory/StageEditorHistory.h"
 
 class GameScene;
+class NavMesh;
 
 class StageEditor
 {
+public:
+
+    // エディタのモード
+    enum class EditorMode
+    {
+        ObjectPlacement,// オブジェクト配置モード
+        NavMeshEdit, // ナビメッシュ編集モード
+    };
+
+    // 選択されている辺の情報を保持する構造体
+    struct SelectedEdge
+    {
+        int polygonId = -1; // 選択中のポリゴンID (-1で未選択)
+        int edgeIndex = -1; // 選択中の辺のインデックス (0～3)
+    };
+
+
 public:
 
 	/// @brief コンストラクタ
@@ -30,6 +48,25 @@ public:
 
 
 private:
+
+	/// @brief マウスからレイキャストを飛ばして、NavMeshの辺を選択する処理
+	Engine::Collision3D::Ray RaycastFromMouse();
+
+	/// @brief 点ptと線分abの距離の二乗を計算する関数
+    /// @param pt 
+    /// @param a 
+    /// @param b 
+    /// @return 
+    float SqrDistancePointToSegment(const Vector3& pt, const Vector3& a, const Vector3& b);
+
+	/// @brief 選択されている辺を押し出す
+    void SelectNavMeshEdge();
+
+
+private:
+
+	/// @brief エンジンのインスタンス
+	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
     
     /// @brief シーン
     GameScene* scene_ = nullptr;
@@ -60,5 +97,53 @@ private:
 
     /// @brief 実行中かどうか
     bool isPlaying_ = false;
+
+
+private:
+
+	/// @brief 選択されている辺を押し出す
+    void ExtrudeSelectedEdge();
+
+	/// @brief 初期のナビメッシュを作成する
+	void CreateInitialNavPolygon();
+
+	/// @brief レイとXZ平面（y=planeY）との交点を計算する関数
+    /// @param ray 
+    /// @param planeY 
+    /// @return 
+    Vector3 GetRayIntersectionWithPlane(const Engine::Collision3D::Ray& ray, float planeY = 0.0f);
+
+	/// @brief 選択された辺を移動する
+    /// @param moveDelta 
+    void MoveSelectedEdge(const Vector3& moveDelta);
+
+    /// @brief 現在のエディタモード
+    EditorMode currentMode_ = EditorMode::ObjectPlacement;
+
+    // NavMeshへのポインタ（初期化時にシーンなどから取得してセットしてください）
+    NavMesh* navMesh_ = nullptr;
+
+    /// @brief 選択された辺
+    SelectedEdge selectedEdge_;
+
+    // ドラッグ状態の管理
+    bool isDraggingEdge_ = false;
+
+    // 前回のレイと床の交点
+    Vector3 previousHitPoint_;
+
+
+private:
+
+	/// @brief モード切替の入力キー
+    std::unique_ptr<InputKey> inputModelChange_ = nullptr;
+
+	// 辺操作の入力キー
+	std::unique_ptr<InputKey> pressEdge_ = nullptr;
+	std::unique_ptr<InputKey> triggerEdge_ = nullptr;
+	std::unique_ptr<InputKey> releaseEdge_ = nullptr;
+
+	// 押し出しの入力キー
+	std::unique_ptr<InputKey> extrudeEdge_ = nullptr;
 };
 

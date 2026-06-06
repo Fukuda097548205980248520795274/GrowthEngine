@@ -96,6 +96,26 @@ public:
 	/// @return 
 	std::vector<Vector3> FindPath(const Vector3& start, const Vector3& end) const;
 
+	/// @brief IDからポリゴンを取得する
+	/// @param id 
+	/// @return 
+	NavPolygon* GetMutablePolygon(int id);
+
+	/// @brief 全てのポリゴンを取得する
+	/// @return 
+	std::vector<NavPolygon>& GetMutablePolygons() { return polygons_; }
+
+	/// @brief 新しい一意のポリゴンIDを生成する
+	/// @return 
+	int GenerateNewPolygonId() const;
+
+	/// @brief 全てのポリゴンを取得する
+	/// @return 
+	std::vector<NavPolygon> GetPolygons() const { return polygons_; }
+
+	/// @brief ナビメッシュをクリアする
+	void Clear() { polygons_.clear(); }
+
 
 private:
 

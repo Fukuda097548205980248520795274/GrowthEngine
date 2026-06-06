@@ -21,7 +21,9 @@ void StageEditorUI::Initialize()
 /// @brief UIの描画
 /// @param placementList 
 /// @param currentFileName 
-void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying)
+/// @param isPlaying 
+/// @param navMesh 
+void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
 {
 #ifdef _DEVELOPMENT
 
@@ -82,7 +84,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     {
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
         {
-            fileManager_->SaveToFile(currentFileName, placementList);
+            fileManager_->SaveToFile(currentFileName, placementList, navMesh);
             isDirty_ = false;
         }
     }
@@ -278,7 +280,8 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @param currentFileName 
 /// @param isPlaying 
 /// @param isDirty 
-void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying)
+/// @param navMesh 
+void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
 {
 #ifdef _DEVELOPMENT
     ImGui::Begin("Stage Project Assets");
@@ -321,7 +324,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                 placementList.clear();
                 currentFileName = fileName;
-                fileManager_->SaveToFile(currentFileName, placementList);
+                fileManager_->SaveToFile(currentFileName, placementList, navMesh);
             }
 
             ImGui::CloseCurrentPopup();
@@ -380,7 +383,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                     placementList.clear();
                     currentFileName = file;
-                    fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+                    fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
                 }
             }
 
@@ -405,15 +408,15 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                         placementList.clear();
                         currentFileName = file;
-                        fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+                        fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
                     }
                 }
 
-                if (ImGui::MenuItem("Save"), nullptr, false, !isPlaying)
+                if (ImGui::MenuItem("Save", nullptr, false, !isPlaying))
                 {
                     // 右クリックした対象を現在のファイルとして設定し、上書き保存する
                     currentFileName = file;
-                    fileManager_->SaveToFile(currentFileName, placementList);
+                    fileManager_->SaveToFile(currentFileName, placementList, navMesh);
                     isDirty_ = false;
                 }
 
@@ -421,7 +424,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
                 // 削除は赤文字で表示
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-                if (ImGui::MenuItem("Delete"), nullptr, false, !isPlaying)
+                if (ImGui::MenuItem("Delete", nullptr, false, !isPlaying))
                 {
                     fileToDelete = file;
                 }
@@ -458,10 +461,10 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         {
             if (!currentFileName.empty())
             {
-                fileManager_->SaveToFile(currentFileName, placementList);
+                fileManager_->SaveToFile(currentFileName, placementList, navMesh);
             }
             isDirty_ = false;
-            ExecutePendingAction(placementList, currentFileName);
+            ExecutePendingAction(placementList, currentFileName, navMesh);
             ImGui::CloseCurrentPopup();
         }
 
@@ -471,7 +474,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         if (ImGui::Button("Cancel", ImVec2(140, 0)))
         {
             isDirty_ = false; // 変更を破棄したとみなす
-            ExecutePendingAction(placementList, currentFileName);
+            ExecutePendingAction(placementList, currentFileName, navMesh);
             ImGui::CloseCurrentPopup();
         }
 
@@ -510,7 +513,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         if (ImGui::Button("Delete", ImVec2(120, 0)))
         {
             // 物理的にファイルを削除
-            std::filesystem::remove(fileToDelete);
+            std::filesystem::remove("./Assets/Parameter/StageData/" + fileToDelete);
 
             // もし現在開いているファイルを削除した場合は、エディタの情報をリセットする
             if (currentFileName == targetName)
@@ -549,8 +552,8 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
 /// @brief オブジェクトリストウィンドウの描画
 /// @param placementList 
-/// @param isDirty 
-void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList)
+/// @param navMesh 
+void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh)
 {
 #ifdef _DEVELOPMENT
     ImGui::Begin("Object List");
@@ -698,7 +701,8 @@ void StageEditorUI::LoadBehaviorTreeNames()
 /// @brief 保留中のアクションを実行する
 /// @param placementList 
 /// @param currentFileName 
-void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName)
+/// @param navMesh 
+void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh)
 {
     if (pendingAction_ == PendingAction::Load)
     {
@@ -706,7 +710,7 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
         placementList.clear();
         currentFileName = pendingFileName_;
-        fileManager_->LoadFromFile(currentFileName, placementList, spawner_);
+        fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
     }
     else if (pendingAction_ == PendingAction::New)
     {
@@ -714,7 +718,7 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
         placementList.clear();
         currentFileName = pendingFileName_;
-        fileManager_->SaveToFile(currentFileName, placementList);
+        fileManager_->SaveToFile(currentFileName, placementList, navMesh);
     }
 
     // 実行後はリセット

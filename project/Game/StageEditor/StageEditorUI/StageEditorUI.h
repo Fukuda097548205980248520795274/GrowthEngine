@@ -6,9 +6,21 @@
 class StageFileManager;
 class StageSpawner;
 class StageEditorHistory;
+class NavMesh;
 
 class StageEditorUI
 {
+public:
+
+    /// @brief 保留中のアクションの種類
+    enum class PendingAction
+    {
+        None,
+        Load,
+        New
+    };
+
+
 public:
 
 	/// @brief コンストラクタ
@@ -24,17 +36,18 @@ public:
     /// @param placementList 
     /// @param currentFileName 
     /// @param isPlaying 
-    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying);
+    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
 
 	/// @brief アセットウィンドウの描画
     /// @param placementList 
     /// @param currentFileName 
 	/// @param isPlaying
-    void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying);
+    void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
 
 	/// @brief オブジェクトリストウィンドウの描画
     /// @param placementList 
-    void DrawObjectListWindow(std::vector<PlacementData>& placementList);
+    /// @param navMesh 
+    void DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh);
 
 private:
 
@@ -62,14 +75,6 @@ private:
     /// @brief 未保存の変更があるかどうか
     bool isDirty_ = false;
 
-    /// @brief 保留中のアクションの種類
-    enum class PendingAction
-    {
-        None,
-        Load,
-        New
-    };
-
     /// @brief 保留中のアクション
     PendingAction pendingAction_ = PendingAction::None;
 
@@ -90,6 +95,7 @@ private:
 	/// @brief 保留中のアクションを実行する
     /// @param placementList 
     /// @param currentFileName 
-    void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName);
+    /// @param navMesh 
+    void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh);
 };
 

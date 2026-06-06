@@ -316,6 +316,18 @@ public:
 	/// @return 
 	Engine::Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return renderContext_->GetCamera2DParam(name); }
 
+	/// @brief 3Dカメラーのビュー行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera3DView()const { return renderContext_->GetCamera3DView(); }
+
+	/// @brief 3Dカメラーのプロジェクション行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera3DProjection()const { return renderContext_->GetCamera3DProjection(); }
+
+	/// @brief 3Dカメラのビュープロジェクション行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera3DViewProjection()const { return renderContext_->GetCamera3DViewProjection(); }
+
 #pragma endregion
 
 #pragma region 入力
