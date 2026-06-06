@@ -88,7 +88,7 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 	}
 
 	// LShift + マウスホイールを押して動かすと、向いている方向の左右に移動できる
-	if (engine_->GetKeyPress(DIK_LSHIFT) && engine_->GetMouseButtonPress(kMouseButtonCenter))
+	if (engine_->GetKeyPress(DIK_LSHIFT) && engine_->GetMouseButtonPress(MouseButton::Middle))
 	{
 		// マウスのベクトルと距離を取得し、正規化する
 		Vector2 mouseVector = engine_->GetMouseVelocity();
@@ -105,7 +105,7 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 		// 移動する
 		pivotPoint_ += velocity * kSpeedController * (pointLength_ / 10.0f);
 	}
-	else if (engine_->GetMouseButtonPress(kMouseButtonCenter))
+	else if (engine_->GetMouseButtonPress(MouseButton::Middle))
 	{
 		// マウスホイールを押して動かすと、向いている方向を回転できる
 

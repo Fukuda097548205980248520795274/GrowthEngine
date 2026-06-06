@@ -94,20 +94,6 @@
 #include "Func/RandomFunc/RandomFunc.h"
 
 
-// マウスボタン
-enum MouseButton
-{
-	// 左ボタン
-	kMouseButtonLeft,
-
-	// 右ボタン
-	kMouseButtonRight,
-
-	// 中央ボタン
-	kMouseButtonCenter
-};
-
-
 class GrowthEngine
 {
 public:

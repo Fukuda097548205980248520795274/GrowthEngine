@@ -824,6 +824,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.cpp" />
     <ClCompile Include="Engine\Store\InputStore\InputStore.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1340,6 +1341,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightStickResource\InputGamepadRightStickResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadRightTriggerResource\InputGamepadRightTriggerResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputKeyResource\InputKeyResource.h" />
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputStore.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\BaseLightData.h" />
     <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h" />

@@ -1,6 +1,14 @@
 #pragma once
 #include "Input/Input.h"
 
+/// @brief マウスボタンの種類
+enum class MouseButton
+{
+	Left,
+	Right,
+	Middle
+};
+
 namespace Engine
 {
 	namespace InputData
@@ -43,6 +51,13 @@ namespace Engine
 
 			/// @brief 閾値
 			float threshold;
+		};
+
+		/// @brief マウスボタン
+		struct MouseButtonParam
+		{
+			/// @brief ボタン
+			MouseButton button;
 		};
 	}
 }

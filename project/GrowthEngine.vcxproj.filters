@@ -1189,6 +1189,9 @@
     <Filter Include="Game\StageEditor\StageEditorHistory">
       <UniqueIdentifier>{b55c38b9-99d8-4e29-8c0b-6f9964ec39ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\InputStore\InputResource\InputMouseResource">
+      <UniqueIdentifier>{6a12dd05-054d-470c-a2f8-a01fd682a41a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2135,6 +2138,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.cpp">
       <Filter>Game\StageEditor\StageEditorHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.cpp">
+      <Filter>Engine\Include\Store\InputStore\InputResource\InputMouseResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3199,6 +3205,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.h">
       <Filter>Game\StageEditor\StageEditorHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.h">
+      <Filter>Engine\Include\Store\InputStore\InputResource\InputMouseResource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

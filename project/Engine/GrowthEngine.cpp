@@ -211,7 +211,7 @@ void GrowthEngine::PreDraw()
 	soundStore_->DebugParameter();
 
 	// マウスでオブジェクト選択
-	if (input_->GetMouseTrigger(MouseButton::kMouseButtonLeft))
+	if (input_->GetMouseTrigger(static_cast<uint32_t>(MouseButton::Left)))
 		if (!ImGuizmo::IsOver())
 			renderContext_->DebugRayPicking();
 

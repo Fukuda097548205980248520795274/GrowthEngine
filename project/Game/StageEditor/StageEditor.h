@@ -12,13 +12,6 @@ class StageEditor
 {
 public:
 
-    // エディタのモード
-    enum class EditorMode
-    {
-        ObjectPlacement,// オブジェクト配置モード
-        NavMeshEdit, // ナビメッシュ編集モード
-    };
-
     // 選択されている辺の情報を保持する構造体
     struct SelectedEdge
     {
@@ -117,9 +110,6 @@ private:
     /// @param moveDelta 
     void MoveSelectedEdge(const Vector3& moveDelta);
 
-    /// @brief 現在のエディタモード
-    EditorMode currentMode_ = EditorMode::ObjectPlacement;
-
     // NavMeshへのポインタ（初期化時にシーンなどから取得してセットしてください）
     NavMesh* navMesh_ = nullptr;
 
@@ -134,14 +124,6 @@ private:
 
 
 private:
-
-	/// @brief モード切替の入力キー
-    std::unique_ptr<InputKey> inputModelChange_ = nullptr;
-
-	// 辺操作の入力キー
-	std::unique_ptr<InputKey> pressEdge_ = nullptr;
-	std::unique_ptr<InputKey> triggerEdge_ = nullptr;
-	std::unique_ptr<InputKey> releaseEdge_ = nullptr;
 
 	// 押し出しの入力キー
 	std::unique_ptr<InputKey> extrudeEdge_ = nullptr;

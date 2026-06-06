@@ -8,7 +8,6 @@ void StageEditor::Initialize()
 {
 	// ナビメッシュの取得
 	navMesh_ = scene_->GetNavMesh();
-    CreateInitialNavPolygon();
 
 	// ファイルマネージャの初期化
 	fileManager_ = std::make_unique<StageFileManager>("./Assets/Parameter/StageData/");
@@ -25,13 +24,6 @@ void StageEditor::Initialize()
 	editorUI_->Initialize();
 
 
-	// 入力キーの初期化
-	inputModelChange_ = std::make_unique<InputKey>("StageEditor_ModelChange", InputState::Trigger, DIK_TAB);
-	
-	// 辺の選択と移動の入力キーを初期化
-	pressEdge_ = std::make_unique<InputKey>("StageEditor_PressEdge", InputState::Press, DIK_LSHIFT);
-	triggerEdge_ = std::make_unique<InputKey>("StageEditor_TriggerEdge", InputState::Trigger, DIK_LSHIFT);
-	releaseEdge_ = std::make_unique<InputKey>("StageEditor_ReleaseEdge", InputState::Release, DIK_LSHIFT);
 
 	// 押し出しの入力キーを初期化
 	extrudeEdge_ = std::make_unique<InputKey>("StageEditor_ExtrudeEdge", InputState::Trigger, DIK_E);
@@ -43,23 +35,18 @@ void StageEditor::Update(float dt)
 {
 #ifdef _DEVELOPMENT
 
-    // ブジェクト配置モード と ナビメッシュ編集モード を切り替え
-    if (inputModelChange_->IsInput())
-    {
-        if (currentMode_ == EditorMode::ObjectPlacement)
-            currentMode_ = EditorMode::NavMeshEdit;
-        else
-            currentMode_ = EditorMode::ObjectPlacement;
-    }
+	// UIの更新
+	editorUI_->Update();
 
-    if (currentMode_ == EditorMode::NavMeshEdit)
+	// 現在のモードに応じた処理
+    if (editorUI_->GetCurrentMode() == StageEditorUI::EditorMode::NavMeshEdit)
     {
         // 毎フレーム、マウスカーソルと床面との交点を取得
         Engine::Collision3D::Ray ray = RaycastFromMouse();
         Vector3 currentHitPoint = GetRayIntersectionWithPlane(ray, 0.0f); // 床の高さを0.0fとする
 
         // 左クリックが押された瞬間（選択 ＆ ドラッグ開始）
-        if (triggerEdge_ && triggerEdge_->IsInput())
+        if (engine_->GetMouseButtonTrigger(MouseButton::Left))
         {
             SelectNavMeshEdge();
 
@@ -70,7 +57,7 @@ void StageEditor::Update(float dt)
             }
         }
         // 左クリックが押し続けられている間（ドラッグ中）
-        else if (pressEdge_ && pressEdge_->IsInput() && isDraggingEdge_)
+        else if (engine_->GetMouseButtonPress(MouseButton::Left))
         {
             // 前回の交点から現在の交点への移動ベクトルを計算
             Vector3 moveDelta = currentHitPoint - previousHitPoint_;
@@ -85,7 +72,7 @@ void StageEditor::Update(float dt)
             previousHitPoint_ = currentHitPoint;
         }
         // 左クリックが離された瞬間（ドラッグ終了）
-        else if (releaseEdge_ && releaseEdge_->IsInput())
+        else if (engine_->GetMouseButtonRelease(MouseButton::Left))
         {
             isDraggingEdge_ = false;
         }

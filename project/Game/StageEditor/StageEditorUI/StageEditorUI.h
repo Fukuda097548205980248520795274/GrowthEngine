@@ -12,6 +12,13 @@ class StageEditorUI
 {
 public:
 
+    // エディタのモード
+    enum class EditorMode
+    {
+        ObjectPlacement,// オブジェクト配置モード
+        NavMeshEdit, // ナビメッシュ編集モード
+    };
+
     /// @brief 保留中のアクションの種類
     enum class PendingAction
     {
@@ -32,6 +39,9 @@ public:
     /// @brief 初期化
     void Initialize();
 
+	/// @brief 更新処理
+    void Update();
+
 	/// @brief UIの描画
     /// @param placementList 
     /// @param currentFileName 
@@ -48,6 +58,10 @@ public:
     /// @param placementList 
     /// @param navMesh 
     void DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh);
+
+	/// @brief 現在のエディタモードを取得する
+	/// @return 
+	EditorMode GetCurrentMode() const { return currentMode_; }
 
 private:
 
@@ -80,6 +94,15 @@ private:
 
     /// @brief 保留中のファイル名
     std::string pendingFileName_ = "";
+
+
+private:
+
+    /// @brief モード切替の入力キー
+    std::unique_ptr<InputKey> inputModelChange_ = nullptr;
+
+    /// @brief 現在のエディタモード
+    EditorMode currentMode_ = EditorMode::ObjectPlacement;
 
 
 private:

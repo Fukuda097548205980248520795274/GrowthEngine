@@ -62,7 +62,7 @@ void Engine::DebugCamera2DResource::Update()
 	}
 
 	// LShift + マウスホイールを押して動かすと、カメラを動かす
-	if (engine_->GetKeyPress(DIK_LSHIFT) && engine_->GetMouseButtonPress(kMouseButtonCenter))
+	if (engine_->GetKeyPress(DIK_LSHIFT) && engine_->GetMouseButtonPress(MouseButton::Middle))
 	{
 		// マウスのベクトルと距離を取得し、正規化する
 		Vector2 mouseVector = engine_->GetMouseVelocity();

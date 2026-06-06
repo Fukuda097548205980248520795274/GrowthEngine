@@ -20,6 +20,8 @@ void Engine::InputGamepadLeftStickResource::Update()
 {
 	// 入力を初期化する
 	isInput_ = false;
+	isPrevRecordInput_ = isRecordInput_;
+	isRecordInput_ = false;
 
 	if (param_->direction.Length() == 0.0f)
 	{
@@ -38,9 +40,25 @@ void Engine::InputGamepadLeftStickResource::Update()
 
 		case InputState::Trigger:
 
+			// 内積で判定
+			if (input_->GetGamepadLeftStick(param_->controller).Length() >= param_->dot)
+				isRecordInput_ = true;
+
+			// 前回の入力が記録されていなくて、今回の入力が記録された場合は、入力されたと判定する
+			if (isRecordInput_ && !isPrevRecordInput_)
+				isInput_ = true;
+
 			break;
 
 		case InputState::Release:
+
+			// 内積で判定
+			if (input_->GetGamepadLeftStick(param_->controller).Length() >= param_->dot)
+				isRecordInput_ = true;
+
+			// 前回の入力が記録されていなくて、今回の入力が記録された場合は、入力されたと判定する
+			if (isRecordInput_ && !isPrevRecordInput_)
+				isInput_ = true;
 
 			break;
 		}
@@ -65,9 +83,25 @@ void Engine::InputGamepadLeftStickResource::Update()
 
 		case InputState::Trigger:
 
+			// 内積で判定
+			if (dot >= param_->dot)
+				isRecordInput_ = true;
+
+			// 前回の入力が記録されていなくて、今回の入力が記録された場合は、入力されたと判定する
+			if (isRecordInput_ && !isPrevRecordInput_)
+				isInput_ = true;
+
 			break;
 
 		case InputState::Release:
+
+			// 内積で判定
+			if (dot >= param_->dot)
+				isRecordInput_ = true;
+
+			// 前回の入力が記録されていて、今回の入力が記録されていない場合は、入力されたと判定する
+			if (!isRecordInput_ && isPrevRecordInput_)
+				isInput_ = true;
 
 			break;
 		}

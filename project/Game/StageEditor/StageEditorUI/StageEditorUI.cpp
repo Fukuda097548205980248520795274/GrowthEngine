@@ -7,6 +7,7 @@
 #include "Entity/Character/Character.h"
 #include "Entity/Weapon/Weapon.h"
 #include "StageObject/StageObject.h"
+#include "NavMesh/NavMesh.h"
 
 /// @brief 初期化
 void StageEditorUI::Initialize()
@@ -16,6 +17,26 @@ void StageEditorUI::Initialize()
 
 	// ビヘイビアツリーデータの名前を読み込む
     LoadBehaviorTreeNames();
+
+    // 入力キーの初期化
+    inputModelChange_ = std::make_unique<InputKey>("StageEditor_ModelChange", InputState::Trigger, DIK_TAB);
+}
+
+/// @brief 更新処理
+void StageEditorUI::Update()
+{
+    // ブジェクト配置モード と ナビメッシュ編集モード を切り替え
+    if (inputModelChange_->IsInput())
+    {
+        if (currentMode_ == EditorMode::ObjectPlacement)
+        {
+            currentMode_ = EditorMode::NavMeshEdit;
+        }
+        else
+        {
+            currentMode_ = EditorMode::ObjectPlacement;
+        }
+    }
 }
 
 /// @brief UIの描画
@@ -105,169 +126,200 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
     ImGui::Separator();
 
-
-    // ここにオブジェクト配置のUI
-    ImGui::Text("--- Add New Object ---");
-
-    static PlacementData currentData;
-    static bool isInitialized = false;
-    if (!isInitialized)
+	// モード切替の表示
+    if (currentMode_ == EditorMode::ObjectPlacement)
     {
-        currentData.category = EditCategory::Character;
-        currentData.subType = 0;
-        currentData.position = Vector3(0.0f, 0.0f, 0.0f);
-        currentData.rotateY = 0.0f;
-        currentData.scale = Vector3(1.0f, 1.0f, 1.0f);
-        currentData.hp = 100;
-        currentData.durability = 100;
-        currentData.attackPower = 1.0f;
-		currentData.isUnbreakable = false;
+		// オブジェクト配置モードのUIを描画
+        ImGui::Text("--- Add New Object ---");
 
-        currentData.standMotion.name = "Standing";
-        currentData.stanceMotion.name = "Fighter";
-        currentData.walkMotion.name = "Walk";
-        currentData.dashMotion.name = "Dash";
-        currentData.avoidFrontMotion.name = "Front";
-        currentData.avoidBackMotion.name = "Back";
-        currentData.avoidLeftMotion.name = "Front";
-        currentData.avoidRightMotion.name = "Back";
+        static PlacementData currentData;
+        static bool isInitialized = false;
+        if (!isInitialized)
+        {
+            currentData.category = EditCategory::Character;
+            currentData.subType = 0;
+            currentData.position = Vector3(0.0f, 0.0f, 0.0f);
+            currentData.rotateY = 0.0f;
+            currentData.scale = Vector3(1.0f, 1.0f, 1.0f);
+            currentData.hp = 100;
+            currentData.durability = 100;
+            currentData.attackPower = 1.0f;
+            currentData.isUnbreakable = false;
 
-        isInitialized = true;
-    }
+            currentData.standMotion.name = "Standing";
+            currentData.stanceMotion.name = "Fighter";
+            currentData.walkMotion.name = "Walk";
+            currentData.dashMotion.name = "Dash";
+            currentData.avoidFrontMotion.name = "Front";
+            currentData.avoidBackMotion.name = "Back";
+            currentData.avoidLeftMotion.name = "Front";
+            currentData.avoidRightMotion.name = "Back";
 
-    // 大分類の選択
-    int intCat = static_cast<int>(currentData.category);
-    if (ImGui::Combo("Category", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
-    {
-        currentData.category = static_cast<EditCategory>(intCat);
-        currentData.subType = 0; // 大分類が変わったら小分類のリセット
-    }
+            isInitialized = true;
+        }
 
-    ImGui::Separator();
+        // 大分類の選択
+        int intCat = static_cast<int>(currentData.category);
+        if (ImGui::Combo("Category", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
+        {
+            currentData.category = static_cast<EditCategory>(intCat);
+            currentData.subType = 0; // 大分類が変わったら小分類のリセット
+        }
 
-    // 大分類に応じて、小分類のコンボボックスの中身を切り替える
-    if (currentData.category == EditCategory::Character)
-    {
-        ImGui::Combo("Type (NPC)", &currentData.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+        ImGui::Separator();
 
-        // 位置
-        ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+        // 大分類に応じて、小分類のコンボボックスの中身を切り替える
+        if (currentData.category == EditCategory::Character)
+        {
+            ImGui::Combo("Type (NPC)", &currentData.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
 
-        // HP
-        ImGui::DragInt("HP", &currentData.hp, 1, 0, 10000);
+            // 位置
+            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
 
-        // 回転
-        ImGui::DragFloat("Rotation (Y)", &currentData.rotateY, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+            // HP
+            ImGui::DragInt("HP", &currentData.hp, 1, 0, 10000);
 
-        // もしNPCが選ばれていたら、モーションの選択UIも表示する
-        MotionSelecter("Standing Motion", MotionType::Stand, currentData.standMotion);
-        MotionSelecter("Fighting Motion", MotionType::Stance, currentData.stanceMotion);
-        MotionSelecter("Walking Motion", MotionType::Walk, currentData.walkMotion);
-        MotionSelecter("Dashing Motion", MotionType::Dash, currentData.dashMotion);
-        MotionSelecter("Avoiding Front Motion", MotionType::Avoid, currentData.avoidFrontMotion);
-        MotionSelecter("Avoiding Back Motion", MotionType::Avoid, currentData.avoidBackMotion);
-        MotionSelecter("Avoiding Left Motion", MotionType::Avoid, currentData.avoidLeftMotion);
-        MotionSelecter("Avoiding Right Motion", MotionType::Avoid, currentData.avoidRightMotion);
+            // 回転
+            ImGui::DragFloat("Rotation (Y)", &currentData.rotateY, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
-        // プレイヤーと未選択以外　ビヘイビアツリーデータ
-		if (currentData.subType != 0 && currentData.subType != 1)
-		{
-            ImGui::Separator();
-            ImGui::Text("Behavior Tree Settings");
+            // もしNPCが選ばれていたら、モーションの選択UIも表示する
+            MotionSelecter("Standing Motion", MotionType::Stand, currentData.standMotion);
+            MotionSelecter("Fighting Motion", MotionType::Stance, currentData.stanceMotion);
+            MotionSelecter("Walking Motion", MotionType::Walk, currentData.walkMotion);
+            MotionSelecter("Dashing Motion", MotionType::Dash, currentData.dashMotion);
+            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, currentData.avoidFrontMotion);
+            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, currentData.avoidBackMotion);
+            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, currentData.avoidLeftMotion);
+            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, currentData.avoidRightMotion);
 
-            // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
-            if (ImGui::Button("Refresh BT List"))
+            // プレイヤーと未選択以外　ビヘイビアツリーデータ
+            if (currentData.subType != 0 && currentData.subType != 1)
             {
-                LoadBehaviorTreeNames();
-            }
+                ImGui::Separator();
+                ImGui::Text("Behavior Tree Settings");
 
-            // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
-            std::string currentBtName = currentData.behaviorScriptName;
-            const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
-
-            // プルダウンメニュー（コンボボックス）の描画
-            if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
-            {
-                for (const auto& name : behaviorTreeNames_)
+                // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
+                if (ImGui::Button("Refresh BT List"))
                 {
-                    bool isSelected = (currentBtName == name);
-                    if (ImGui::Selectable(name.c_str(), isSelected))
-                    {
-                        // 選択された名前を PlacementData の配列にコピーする
-                        // ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
-                        strcpy_s(currentData.behaviorScriptName, sizeof(currentData.behaviorScriptName), name.c_str());
-                    }
-
-                    // 選択中のアイテムにフォーカスを合わせる
-                    if (isSelected)
-                    {
-                        ImGui::SetItemDefaultFocus();
-                    }
+                    LoadBehaviorTreeNames();
                 }
-                ImGui::EndCombo();
+
+                // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
+                std::string currentBtName = currentData.behaviorScriptName;
+                const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
+
+                // プルダウンメニュー（コンボボックス）の描画
+                if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
+                {
+                    for (const auto& name : behaviorTreeNames_)
+                    {
+                        bool isSelected = (currentBtName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            // 選択された名前を PlacementData の配列にコピーする
+                            // ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
+                            strcpy_s(currentData.behaviorScriptName, sizeof(currentData.behaviorScriptName), name.c_str());
+                        }
+
+                        // 選択中のアイテムにフォーカスを合わせる
+                        if (isSelected)
+                        {
+                            ImGui::SetItemDefaultFocus();
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
             }
-		}
+        }
+        else if (currentData.category == EditCategory::Object)
+        {
+            ImGui::Combo("Type (Object)", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+
+            // 位置
+            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+
+            // 拡縮
+            ImGui::DragFloat3("Scale", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+        }
+        else if (currentData.category == EditCategory::Weapon)
+        {
+            ImGui::Combo("Type (Weapon)", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+
+            // 位置
+            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+
+            // 耐久力
+            ImGui::DragInt("Durability", &currentData.durability, 1, 1, 10000);
+
+            // 攻撃力
+            ImGui::DragFloat("Attack Power", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
+
+            // 壊れない武器かどうか
+            ImGui::Checkbox("Unbreakable", &currentData.isUnbreakable);
+        }
+
+        ImGui::Separator();
+
+        // 生成ボタン
+        if (ImGui::Button("Spawn Object"))
+        {
+            // 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
+            history_->SaveHistory(placementList);
+            isDirty_ = true;
+
+            // 新しい配置データを初期化
+            PlacementData newData;
+            newData.category = currentData.category;
+            newData.subType = currentData.subType;
+            newData.position = currentData.position;
+            newData.rotateY = currentData.rotateY;
+            newData.scale = currentData.scale;
+            newData.hp = currentData.hp;
+            newData.durability = currentData.durability;
+            newData.attackPower = currentData.attackPower;
+            newData.isUnbreakable = currentData.isUnbreakable;
+            newData.standMotion = currentData.standMotion;
+            newData.stanceMotion = currentData.stanceMotion;
+            newData.walkMotion = currentData.walkMotion;
+            newData.dashMotion = currentData.dashMotion;
+            newData.avoidFrontMotion = currentData.avoidFrontMotion;
+            newData.avoidBackMotion = currentData.avoidBackMotion;
+            newData.avoidLeftMotion = currentData.avoidLeftMotion;
+            newData.avoidRightMotion = currentData.avoidRightMotion;
+
+            // 実際のゲーム画面に生成してリストに追加
+            spawner_->SpawnActualEntity(newData);
+            placementList.push_back(newData);
+            selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+        }
     }
-    else if (currentData.category == EditCategory::Object)
+	else if (currentMode_ == EditorMode::NavMeshEdit)
     {
-        ImGui::Combo("Type (Object)", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+        // ナビメッシュ編集モードのUIを描画
+        ImGui::Text("--- NavMesh Edit Mode ---");
 
-        // 位置
-        ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+        if (ImGui::Button("Add New NavMesh Island"))
+        {
+            NavPolygon poly;
+            poly.id = navMesh->GenerateNewPolygonId();
 
-        // 拡縮
-        ImGui::DragFloat3("Scale", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
-    }
-    else if (currentData.category == EditCategory::Weapon)
-    {
-        ImGui::Combo("Type (Weapon)", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+            // 新しい島の頂点を設定（XZ平面での正方形、Yは0固定）
+            float size = 2.0f;
+            poly.vertices[0] = Vector3(-size, 0.0f, -size);
+            poly.vertices[1] = Vector3(-size, 0.0f, size);
+            poly.vertices[2] = Vector3(size, 0.0f, size);
+            poly.vertices[3] = Vector3(size, 0.0f, -size);
 
-        // 位置
-        ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+            // 完全に独立した新しい島なので、隣接IDはすべて無し (-1) に設定
+            poly.neighborIds.fill(-1);
 
-        // 耐久力
-        ImGui::DragInt("Durability", &currentData.durability, 1, 1, 10000);
+            // ナビメッシュに新しい島を追加
+            navMesh->AddPolygon(poly);
 
-        // 攻撃力
-        ImGui::DragFloat("Attack Power", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
+            isDirty_ = true; // 変更があったフラグを立てる
+        }
 
-		// 壊れない武器かどうか
-		ImGui::Checkbox("Unbreakable", &currentData.isUnbreakable);
-    }
-
-    ImGui::Separator();
-
-    // 生成ボタン
-    if (ImGui::Button("Spawn Object"))
-    {
-		// 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
-        history_->SaveHistory(placementList);
-        isDirty_ = true;
-
-        // 新しい配置データを初期化
-        PlacementData newData;
-        newData.category = currentData.category;
-        newData.subType = currentData.subType;
-        newData.position = currentData.position;
-        newData.rotateY = currentData.rotateY;
-        newData.scale = currentData.scale;
-        newData.hp = currentData.hp;
-        newData.durability = currentData.durability;
-        newData.attackPower = currentData.attackPower;
-		newData.isUnbreakable = currentData.isUnbreakable;
-        newData.standMotion = currentData.standMotion;
-        newData.stanceMotion = currentData.stanceMotion;
-        newData.walkMotion = currentData.walkMotion;
-        newData.dashMotion = currentData.dashMotion;
-        newData.avoidFrontMotion = currentData.avoidFrontMotion;
-        newData.avoidBackMotion = currentData.avoidBackMotion;
-        newData.avoidLeftMotion = currentData.avoidLeftMotion;
-        newData.avoidRightMotion = currentData.avoidRightMotion;
-
-        // 実際のゲーム画面に生成してリストに追加
-        spawner_->SpawnActualEntity(newData);
-        placementList.push_back(newData);
-        selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+        ImGui::Separator();
     }
 
     ImGui::End();
