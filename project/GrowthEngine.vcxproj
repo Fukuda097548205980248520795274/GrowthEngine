@@ -1097,6 +1097,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
     <ClCompile Include="Game\StageObject\StageObject.cpp" />
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
+    <ClCompile Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.cpp" />
     <ClCompile Include="Game\StageObject\Wall\Wall.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -1462,6 +1463,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
     <ClInclude Include="Game\StageObject\StageObject.h" />
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />
+    <ClInclude Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.h" />
     <ClInclude Include="Game\StageObject\Wall\Wall.h" />
   </ItemGroup>
   <ItemGroup>

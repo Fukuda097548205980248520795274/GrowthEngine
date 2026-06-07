@@ -27,7 +27,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		Character::InitData initData;
 		initData.position = data.position;
 		initData.hp = data.hp;
-		initData.rotateY = data.rotateY;
+		initData.rotateY = data.rotate_.y;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
 		initData.behaviorTreeName = data.behaviorScriptName;
@@ -98,7 +98,4 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 		Weapon* weapon = static_cast<Weapon*>(data.instancePtr);
 		weapon->Delete();
 	}
-
-	// シーンのリセット
-	scene_->Reset();
 }

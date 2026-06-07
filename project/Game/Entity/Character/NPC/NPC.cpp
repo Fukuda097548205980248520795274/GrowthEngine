@@ -27,13 +27,27 @@ void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* 
 	// ナビゲーションメッシュを設定する
 	navMesh_ = navMesh;
 
-	if (IsPlayerSide())
+	switch (characterTag_)
 	{
+		// 味方は青色にする
+	case CharacterTag::Ally:
 		model_->param_->meshMaterial[0].color = Vector4(0.1f, 0.1f, 1.0f, 1.0f);
-	}
-	else if (IsEnemySide())
-	{
+		break;
+
+		// VIPは緑色にする
+	case CharacterTag::Vip:
+		model_->param_->meshMaterial[0].color = Vector4(0.1f, 1.0f, 0.1f, 1.0f);
+		break;
+
+		// 敵は赤色にする
+	case CharacterTag::EnemyNormal:
 		model_->param_->meshMaterial[0].color = Vector4(1.0f, 0.1f, 0.1f, 1.0f);
+		break;
+
+		// ボスは紫色にする
+	case CharacterTag::EnemyBoss:
+		model_->param_->meshMaterial[0].color = Vector4(1.0f, 0.1f, 1.0f, 1.0f);
+		break;
 	}
 
 	// ビヘイビアツリーを設定する

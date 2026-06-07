@@ -23,7 +23,7 @@ void StageEditor::Initialize()
 	spawner_->Initialize();
 
 	// エディタUIの初期化
-	editorUI_ = std::make_unique<StageEditorUI>(fileManager_.get(), spawner_.get(), history_.get());
+	editorUI_ = std::make_unique<StageEditorUI>(fileManager_.get(), spawner_.get(), history_.get(), scene_);
 	editorUI_->Initialize();
 
 

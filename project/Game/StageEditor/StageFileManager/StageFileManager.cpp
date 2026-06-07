@@ -19,7 +19,7 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 
         // Vector3は配列として保存すると扱いやすいです
         itemJson["position"] = { data.position.x, data.position.y, data.position.z };
-        itemJson["rotateY"] = data.rotateY;
+		itemJson["rotate"] = { data.rotate_.x, data.rotate_.y, data.rotate_.z };
         itemJson["scale"] = { data.scale.x, data.scale.y, data.scale.z };
 
         // 各種パラメータ
@@ -128,7 +128,13 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
                 data.position.y = itemJson["position"][1];
                 data.position.z = itemJson["position"][2];
             }
-            data.rotateY = itemJson.value("rotateY", 0.0f);
+            
+			if (itemJson.contains("rotate"))
+			{
+				data.rotate_.x = itemJson["rotate"][0];
+				data.rotate_.y = itemJson["rotate"][1];
+				data.rotate_.z = itemJson["rotate"][2];
+			}
 
             if (itemJson.contains("scale"))
             {

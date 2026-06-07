@@ -1192,6 +1192,9 @@
     <Filter Include="Engine\Include\Store\InputStore\InputResource\InputMouseResource">
       <UniqueIdentifier>{6a12dd05-054d-470c-a2f8-a01fd682a41a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageObject\StaticEventTrigger">
+      <UniqueIdentifier>{0b619d00-9899-4898-9110-74c729445eb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2141,6 +2144,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.cpp">
       <Filter>Engine\Include\Store\InputStore\InputResource\InputMouseResource</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.cpp">
+      <Filter>Game\StageObject\StaticEventTrigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3208,6 +3214,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputMouseResource\InputMouseResource.h">
       <Filter>Engine\Include\Store\InputStore\InputResource\InputMouseResource</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.h">
+      <Filter>Game\StageObject\StaticEventTrigger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

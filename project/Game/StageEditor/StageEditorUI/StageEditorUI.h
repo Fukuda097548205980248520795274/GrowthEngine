@@ -7,6 +7,7 @@ class StageFileManager;
 class StageSpawner;
 class StageEditorHistory;
 class NavMesh;
+class GameScene;
 
 class StageEditorUI
 {
@@ -34,7 +35,9 @@ public:
     /// @param fileManager 
     /// @param spawner 
     /// @param history 
-	StageEditorUI(StageFileManager* fileManager, StageSpawner* spawner, StageEditorHistory* history) : fileManager_(fileManager), spawner_(spawner), history_(history) {}
+    /// @param gameScene 
+	StageEditorUI(StageFileManager* fileManager, StageSpawner* spawner, StageEditorHistory* history, GameScene* scene) :
+        fileManager_(fileManager), spawner_(spawner), history_(history), scene_(scene) {}
 
     /// @brief 初期化
     void Initialize();
@@ -73,6 +76,9 @@ private:
 
 	// ステージ上にオブジェクトを配置・削除するためのクラス
     StageSpawner* spawner_ = nullptr;
+
+	// ゲームシーンへのポインタ
+	GameScene* scene_ = nullptr;
 
 	// 編集の履歴を管理するクラス
 	StageEditorHistory* history_ = nullptr;

@@ -146,7 +146,6 @@ Character::~Character()
 	if (hurtboxRoot_.collider_) hurtboxRoot_.collider_->Delete();
 	hurtboxRoot_.collider_ = nullptr;
 
-
 	// インスタンスリストから自分を除外する
 	auto it = std::remove(characters_.begin(), characters_.end(), this);
 	characters_.erase(it, characters_.end());

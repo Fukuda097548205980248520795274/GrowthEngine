@@ -10,11 +10,19 @@ enum class EditCategory
 	Weapon
 };
 
+// イベントタイプ
+enum class EventType
+{
+	None,
+	Goal,
+};
+
 // 大分類と小分類の表示用文字列
 inline const char* categoryNames[] = { "Character (NPC)", "StageObject", "Weapon" };
 inline const char* characterTagNames[] = { "None", "Player", "Ally", "Vip", "EnemyNormal", "EnemyBoss" };
 inline const char* stageObjectTagNames[] = { "None", "Floor", "Wall" };
 inline const char* weaponCategoryNames[] = { "None", "OneHanded", "TwoHanded" };
+inline const char* eventTypeNames[] = { "None", "Goal" };
 
 struct MotionConfig
 {
@@ -35,8 +43,8 @@ struct PlacementData
 	// 位置
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 
-	// 回転（Y軸のみ）
-	float rotateY = 0.0f;
+	// 回転
+	Vector3 rotate_ = Vector3(0.0f, 0.0f, 0.0f);
 
 	// 拡縮
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
@@ -55,6 +63,12 @@ struct PlacementData
 
 	// 行動パターンを定義したスクリプトファイル名 (キャラクターの場合)
 	char behaviorScriptName[256] = "";
+
+	// イベントトリガーの種類 (イベントトリガーの場合)
+	int eventType = 0;
+
+	// イベントトリガーのパラメータ (イベントの種類によって内容が異なる)
+	std::string eventStringParam = "";
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;

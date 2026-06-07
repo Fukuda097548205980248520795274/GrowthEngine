@@ -4,6 +4,8 @@
 #include "../StageSpawner/StageSpawner.h"
 #include "../StageEditorHistory/StageEditorHistory.h"
 
+#include "Scene/GameScene/GameScene.h"
+
 #include "Entity/Character/Character.h"
 #include "Entity/Weapon/Weapon.h"
 #include "StageObject/StageObject.h"
@@ -75,6 +77,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
 			StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
 
+			// プレイモードを終了したら、ゲームシーンをリセットして初期状態に戻す
+            scene_->Reset();
+
 			// プレイモードを終了したら、配置リストに基づいてすべての実体を再生成する
             for (auto& data : placementList)
             {
@@ -144,7 +149,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             currentData.category = EditCategory::Character;
             currentData.subType = 0;
             currentData.position = Vector3(0.0f, 0.0f, 0.0f);
-            currentData.rotateY = 0.0f;
+			currentData.rotate_ = Vector3(0.0f, 0.0f, 0.0f);
             currentData.scale = Vector3(1.0f, 1.0f, 1.0f);
             currentData.hp = 100;
             currentData.durability = 100;
@@ -185,7 +190,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             ImGui::DragInt("HP", &currentData.hp, 1, 0, 10000);
 
             // 回転
-            ImGui::DragFloat("Rotation (Y)", &currentData.rotateY, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+            ImGui::DragFloat("Rotation", &currentData.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
             // もしNPCが選ばれていたら、モーションの選択UIも表示する
             MotionSelecter("Standing Motion", MotionType::Stand, currentData.standMotion);
@@ -277,7 +282,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             newData.category = currentData.category;
             newData.subType = currentData.subType;
             newData.position = currentData.position;
-            newData.rotateY = currentData.rotateY;
+            newData.rotate_ = currentData.rotate_;
             newData.scale = currentData.scale;
             newData.hp = currentData.hp;
             newData.durability = currentData.durability;
@@ -382,6 +387,9 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             }
             else
             {
+				// 変更が保存されていない場合でも、新しいステージを作成する前にすべての実体を消去する
+                scene_->Reset();
+
 				// すでにファイルが存在している場合は上書き保存する
                 for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                 placementList.clear();
@@ -441,6 +449,9 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 }
                 else
                 {
+					// 変更が保存されていない場合でも、ファイルを切り替える前にすべての実体を消去する
+                    scene_->Reset();
+
 					// すでにファイルが存在している場合は上書き保存する
                     for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                     placementList.clear();
@@ -466,6 +477,9 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     }
                     else
                     {
+                        // 変更が保存されていない場合でも、新しいステージを作成する前にすべての実体を消去する
+                        scene_->Reset();
+
 						// すでにファイルが存在している場合は上書き保存する
                         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
                         placementList.clear();
@@ -580,6 +594,9 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             // もし現在開いているファイルを削除した場合は、エディタの情報をリセットする
             if (currentFileName == targetName)
             {
+                // 変更が保存されていない場合でも、新しいステージを作成する前にすべての実体を消去する
+                scene_->Reset();
+
                 // ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
                 for (auto& data : placementList)spawner_->DeleteActualEntity(data);
                 placementList.clear();
@@ -672,6 +689,45 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion);
             MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion);
             MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion);
+
+            // プレイヤーと未選択以外　ビヘイビアツリーデータ
+            if (target.subType != 0 && target.subType != 1)
+            {
+                ImGui::Separator();
+                ImGui::Text("Behavior Tree Settings");
+
+                // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
+                if (ImGui::Button("Refresh BT List"))
+                {
+                    LoadBehaviorTreeNames();
+                }
+
+                // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
+                std::string currentBtName = target.behaviorScriptName;
+                const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
+
+                // プルダウンメニュー（コンボボックス）の描画
+                if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
+                {
+                    for (const auto& name : behaviorTreeNames_)
+                    {
+                        bool isSelected = (currentBtName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            // 選択された名前を PlacementData の配列にコピーする
+                            // ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
+                            strcpy_s(target.behaviorScriptName, sizeof(target.behaviorScriptName), name.c_str());
+                        }
+
+                        // 選択中のアイテムにフォーカスを合わせる
+                        if (isSelected)
+                        {
+                            ImGui::SetItemDefaultFocus();
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+            }
         }
         else if (target.category == EditCategory::Object)
         {
@@ -774,6 +830,9 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
     if (pendingAction_ == PendingAction::Load)
     {
 		// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+        scene_->Reset();
+
+		// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
         placementList.clear();
         currentFileName = pendingFileName_;
@@ -781,6 +840,9 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
     }
     else if (pendingAction_ == PendingAction::New)
     {
+        // ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
+        scene_->Reset();
+
 		// 新しいファイルを作成する前に、現在の配置リストに基づいてすべての実体を消去する
         for (auto& data : placementList) spawner_->DeleteActualEntity(data);
         placementList.clear();

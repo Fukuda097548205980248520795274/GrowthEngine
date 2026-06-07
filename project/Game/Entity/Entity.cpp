@@ -42,7 +42,7 @@ void Entity::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData
 	// 回転の編集（Y軸のみ）
 	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
 	ImGui::DragFloat("RotationY", &worldTransform_->rotate_.y, 0.001f);
-	if (ImGui::IsItemDeactivatedAfterEdit())placementData->rotateY = worldTransform_->rotate_.y;
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->rotate_ = worldTransform_->rotate_;
 
 	// 拡縮の編集
 	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }

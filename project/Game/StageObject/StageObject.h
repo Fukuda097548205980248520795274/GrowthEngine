@@ -13,7 +13,8 @@ public:
 	{
 		None,
 		Floor,
-		Wall
+		Wall,
+		StaticEventTrigger, // 静的イベントトリガー
 	};
 
 
