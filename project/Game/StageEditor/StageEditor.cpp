@@ -308,9 +308,6 @@ void StageEditor::CreateInitialNavPolygon()
 {
     if (!navMesh_) return;
 
-    // もしすでにポリゴンがあるなら、二重に作らないようにする場合はここでリターン
-    // if (!navMesh_->GetPolygons().empty()) return;
-
     NavPolygon poly;
     poly.id = navMesh_->GenerateNewPolygonId();
 
@@ -488,9 +485,7 @@ void StageEditor::DrawSelectedEdgesHighlight()
         Vector3 v0 = poly->vertices[eIdx];
         Vector3 v1 = poly->vertices[(eIdx + 1) % 4];
 
-        // 線の描画（白色を指定：R=1, G=1, B=1, A=1）
-        // ※注意: DrawDebugLine や Vector4 の部分は GrowthEngine の実際の仕様に合わせて書き換えてください。
-        // Zファイティング（元の線との重なりでチラつく現象）を防ぐため、Y座標を少しだけ浮かせると綺麗に描画されます。
+		// デバッグ描画のために少しだけY座標を上げる（地面と重ならないように）
         Vector3 renderV0 = Vector3(v0.x, v0.y + 0.01f, v0.z);
         Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
 
