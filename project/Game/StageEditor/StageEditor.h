@@ -113,6 +113,9 @@ private:
 	/// @brief ブリッジ操作を行う（選択された辺の両端に新しいポリゴンを作成して繋げる）
     void BridgeSelectedEdges();
 
+	/// @brief 選択された辺をハイライト表示する
+    void DrawSelectedEdgesHighlight();
+
     // NavMeshへのポインタ（初期化時にシーンなどから取得してセットしてください）
     NavMesh* navMesh_ = nullptr;
 
