@@ -63,6 +63,9 @@ public:
 	/// @return 
 	EditorMode GetCurrentMode() const { return currentMode_; }
 
+	/// @brief 変更があったことをマークする
+    void Dirty() { isDirty_ = true; }
+
 private:
 
 	// ステージファイルの読み書きを担当するクラス

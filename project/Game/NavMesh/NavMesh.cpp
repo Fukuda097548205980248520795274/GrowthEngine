@@ -74,18 +74,17 @@ std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end)
     // クローズドリスト（探索完了したノード）
     std::unordered_map<int, AStarNode> closedList;
 
-    // スタートノードの初期化
+    // 開始ノードの初期化
     Vector3 startCenter = GetPolygonCenter(startPolyId);
     Vector3 endCenter = GetPolygonCenter(endPolyId);
 
     AStarNode startNode;
     startNode.polygonId = startPolyId;
     startNode.gCost = 0.0f;
-    float dx = endCenter.x - startCenter.x;
-    float dz = endCenter.z - startCenter.z;
-    startNode.hCost = std::sqrt(dx * dx + dz * dz);
+    startNode.hCost = (endCenter - startCenter).Length();
     startNode.parentId = -1;
 
+	// 開始ノードをオープンリストに追加
     openList.push(startNode);
     openMap[startPolyId] = startNode;
 
@@ -123,27 +122,21 @@ std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end)
             Vector3 neighborCenter = GetPolygonCenter(neighborId);
 
             // 現在地から隣接ポリゴン中心までの距離を追加コストとする
-            float distX = neighborCenter.x - currentCenter.x;
-            float distZ = neighborCenter.z - currentCenter.z;
-            float moveCost = std::sqrt(distX * distX + distZ * distZ);
+            float moveCost = (neighborCenter - currentCenter).Length();
             float newGCost = current.gCost + moveCost;
 
             // 既にオープンリストにあり、今回のルートの方が遠いならスキップ
-            if (openMap.count(neighborId) && newGCost >= openMap[neighborId].gCost)
-            {
-                continue;
-            }
+            if (openMap.count(neighborId) && newGCost >= openMap[neighborId].gCost)continue;
 
             // 新しいノード情報を作成してオープンリストへ
             AStarNode neighborNode;
             neighborNode.polygonId = neighborId;
             neighborNode.gCost = newGCost;
 
-            float hDx = endCenter.x - neighborCenter.x;
-            float hDz = endCenter.z - neighborCenter.z;
-            neighborNode.hCost = std::sqrt(hDx * hDx + hDz * hDz);
-            neighborNode.parentId = current.polygonId; // 親を記録！
+            neighborNode.hCost = (endCenter - neighborCenter).Length();
+            neighborNode.parentId = current.polygonId; // 親を記録
 
+			// 隣接ノードをオープンリストに追加
             openList.push(neighborNode);
             openMap[neighborId] = neighborNode;
         }

@@ -98,4 +98,7 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 		Weapon* weapon = static_cast<Weapon*>(data.instancePtr);
 		weapon->Delete();
 	}
+
+	// シーンのリセット
+	scene_->Reset();
 }

@@ -3,6 +3,9 @@
 #include <json.hpp>
 #include "Scene/GameScene/GameScene.h"
 
+// ステージデータの保存先ディレクトリ
+constexpr const char* STAGE_DATA_DIR = "./Assets/Parameter/StageData/";
+
 /// @brief 初期化
 void StageEditor::Initialize()
 {
@@ -10,10 +13,10 @@ void StageEditor::Initialize()
 	navMesh_ = scene_->GetNavMesh();
 
 	// ファイルマネージャの初期化
-	fileManager_ = std::make_unique<StageFileManager>("./Assets/Parameter/StageData/");
+	fileManager_ = std::make_unique<StageFileManager>(STAGE_DATA_DIR);
 
 	// 履歴管理の初期化
-	history_ = std::make_unique<StageEditorHistory>();
+	history_ = std::make_unique<StageEditorHistory>(navMesh_);
 
 	// スペナーの初期化
 	spawner_ = std::make_unique<StageSpawner>(scene_);
@@ -52,6 +55,10 @@ void StageEditor::Update(float dt)
 
             if (selectedEdge_.polygonId != -1)
             {
+				// 編集の開始前の状態を履歴に保存
+                history_->SaveHistory(placementList_);
+				editorUI_->Dirty();
+
                 isDraggingEdge_ = true;
                 previousHitPoint_ = currentHitPoint;
             }
@@ -91,6 +98,9 @@ void StageEditor::Update(float dt)
 void StageEditor::DrawUI()
 {
 #ifdef _DEVELOPMENT
+
+	// ナビメッシュのデバッグ描画
+	navMesh_->DrawDebug();
 
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, navMesh_);
 	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, navMesh_);
@@ -215,6 +225,10 @@ void StageEditor::ExtrudeSelectedEdge()
 
     // すでに他のポリゴンと繋がっている辺からは押し出し不可にする
     if (poly->neighborIds[selectedEdge_.edgeIndex] != -1) return;
+
+	// 押し出し前の状態を履歴に保存
+    history_->SaveHistory(placementList_);
+    editorUI_->Dirty();
 
     int eIdx = selectedEdge_.edgeIndex;
     Vector3 v0 = poly->vertices[eIdx];

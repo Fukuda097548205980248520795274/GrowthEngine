@@ -48,7 +48,12 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 {
 #ifdef _DEVELOPMENT
 
-    ImGui::Begin("Stage Editor");
+    if (!ImGui::Begin("Stage Editor")) 
+    {
+        // ウィンドウが折りたたまれている場合は終了
+        ImGui::End();
+        return;
+    }
 
     // ファイルが選択されていない場合は、警告を表示してUIの描画を終了する
     if (currentFileName.empty())
@@ -336,7 +341,12 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
 {
 #ifdef _DEVELOPMENT
-    ImGui::Begin("Stage Project Assets");
+
+    if (!ImGui::Begin("Stage Project Assets")) 
+    {
+        ImGui::End();
+        return;
+    }
 
     // 新規ステージの作成
     if (ImGui::Button("New Stage"))
@@ -608,7 +618,12 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh)
 {
 #ifdef _DEVELOPMENT
-    ImGui::Begin("Object List");
+
+    if (!ImGui::Begin("Object List")) 
+    {
+        ImGui::End();
+        return;
+    }
 
     ImGui::Text("Placed Objects:");
 

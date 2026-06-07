@@ -8,8 +8,6 @@
 /// @return 
 bool StageFileManager::SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList, const NavMesh* navMesh)
 {
-    std::string fullPath = stageDataDir_ + filename;
-
     json rootJson;
     json arrayJson = json::array(); // 配置データの配列
 
@@ -18,20 +16,6 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
         json itemJson;
         itemJson["category"] = static_cast<int>(data.category);
         itemJson["subType"] = data.subType;
-
-		// カテゴリごとに必要なデータを保存
-		if (data.category == EditCategory::Character)
-		{
-			
-		}
-		else if (data.category == EditCategory::Weapon)
-		{
-			
-		}
-        else if (data.category == EditCategory::Object)
-        {
-
-        }
 
         // Vector3は配列として保存すると扱いやすいです
         itemJson["position"] = { data.position.x, data.position.y, data.position.z };
@@ -93,7 +77,10 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 
 
     // ファイルに書き出し
-    std::ofstream ofs(fullPath);
+    std::filesystem::path dir(stageDataDir_);
+    std::filesystem::path fullPath = dir / filename;
+    std::ofstream ofs(fullPath.string());
+
     if (ofs.is_open())
     {
         ofs << rootJson.dump(4); // 4文字インデントで見やすく整形

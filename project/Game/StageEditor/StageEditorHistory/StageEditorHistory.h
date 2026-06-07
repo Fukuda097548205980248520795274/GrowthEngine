@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../StageData/StageData.h"
+#include "NavMesh/NavMesh.h"
 
 class StageSpawner;
 
@@ -11,11 +12,19 @@ public:
 	/// @brief 履歴に新しいスナップショットを追加
 	struct EditorSnapshot
 	{
+		// 配置データのスナップショット
 		std::vector<PlacementData> placementList;
+
+		// ナビメッシュのスナップショット
+        std::vector<NavPolygon> navPolygonList;
 	};
 
 
 public:
+
+	/// @brief コンストラクタ
+    /// @param navMesh 
+    StageEditorHistory(NavMesh* navMesh = nullptr) : navMesh_(navMesh) {}
 
 	/// @brief 履歴に新しいスナップショットを保存する
     /// @param placementList 
@@ -41,5 +50,11 @@ private:
 
 	/// @brief Redo用のスナップショットのリスト
     std::vector<EditorSnapshot> redoHistory_;
+
+
+private:
+
+	// ナビメッシュへのポインタ
+	NavMesh* navMesh_ = nullptr;
 };
 

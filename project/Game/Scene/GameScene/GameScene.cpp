@@ -170,9 +170,6 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());
-
-	// ナビメッシュのデバッグ描画
-	navMesh_->DrawDebug();
 }
 
 
@@ -295,6 +292,16 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 	objects_.push_back(std::move(newFloor));
 
 	return floor;
+}
+
+/// @brief リセットする
+void GameScene::Reset()
+{
+	// プレイヤーをリセットする
+	if (player_)player_ = nullptr;
+
+	// npcのカウンターをリセットする
+	npcCount_ = 0;
 }
 
 

@@ -60,6 +60,9 @@ public:
 	/// @return 
 	NavMesh* GetNavMesh() const { return navMesh_.get(); }
 
+	/// @brief リセットする
+	void Reset();
+
 
 private:
 
