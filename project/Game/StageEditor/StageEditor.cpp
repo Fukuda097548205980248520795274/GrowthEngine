@@ -25,11 +25,6 @@ void StageEditor::Initialize()
 	// エディタUIの初期化
 	editorUI_ = std::make_unique<StageEditorUI>(fileManager_.get(), spawner_.get(), history_.get(), scene_);
 	editorUI_->Initialize();
-
-
-
-	// 押し出しの入力キーを初期化
-	extrudeEdge_ = std::make_unique<InputKey>("StageEditor_ExtrudeEdge", InputState::Trigger, DIK_E);
 }
 
 /// @brief 更新処理
@@ -51,14 +46,16 @@ void StageEditor::Update(float dt)
         // 左クリックが押された瞬間（選択 ＆ ドラッグ開始）
         if (engine_->GetMouseButtonTrigger(MouseButton::Left))
         {
+			// Shiftキーが押されているかどうかをチェック（複数選択のため）
+            bool isShiftPressed = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
+
             SelectNavMeshEdge();
 
-            if (selectedEdge_.polygonId != -1)
+			// Shiftキーが押されていない場合は、選択された辺だけを残して他の選択を解除する
+            if (!selectedEdges_.empty() && selectedEdges_[0].polygonId != -1)
             {
-				// 編集の開始前の状態を履歴に保存
                 history_->SaveHistory(placementList_);
-				editorUI_->Dirty();
-
+                editorUI_->Dirty();
                 isDraggingEdge_ = true;
                 previousHitPoint_ = currentHitPoint;
             }
@@ -85,10 +82,16 @@ void StageEditor::Update(float dt)
         }
 
 		// 押し出しキーが押された瞬間
-		if (extrudeEdge_ && extrudeEdge_->IsInput())
+		if (engine_->GetKeyTrigger(DIK_E))
 		{
 			ExtrudeSelectedEdge();
 		}
+
+		// ブリッジキーが押された瞬間
+        if (engine_->GetKeyTrigger(DIK_B))
+        {
+			BridgeSelectedEdges();
+        }
     }
 
 #endif
@@ -200,17 +203,47 @@ void StageEditor::SelectNavMeshEdge()
         }
     }
 
-    // 最も近い辺が見つかったら選択状態を更新
+	// Shiftキーが押されているかどうかをチェック（複数選択のため）
+	bool isMultiSelect = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
+
+	// 最も近い辺がクリック判定の範囲内なら選択する
     if (closestPolyId != -1)
     {
-        selectedEdge_.polygonId = closestPolyId;
-        selectedEdge_.edgeIndex = closestEdgeIdx;
+        SelectedEdge newEdge{ closestPolyId, closestEdgeIdx };
+
+		// Shiftキーが押されている場合は複数選択モード
+        if (isMultiSelect)
+        {
+            // 既に選択されていないかチェック
+            bool alreadySelected = false;
+            for (const auto& edge : selectedEdges_) {
+                if (edge.polygonId == newEdge.polygonId && edge.edgeIndex == newEdge.edgeIndex) {
+                    alreadySelected = true;
+                    break;
+                }
+            }
+
+            // 未選択なら追加。2つを超えたら古いものを消す
+            if (!alreadySelected) {
+                selectedEdges_.push_back(newEdge);
+                if (selectedEdges_.size() > 2) {
+                    selectedEdges_.erase(selectedEdges_.begin());
+                }
+            }
+        }
+        else
+        {
+            // 単一選択の場合はクリアして追加
+            selectedEdges_.clear();
+            selectedEdges_.push_back(newEdge);
+        }
     }
     else
     {
-        // 何も無いところをクリックしたら選択解除
-        selectedEdge_.polygonId = -1;
-        selectedEdge_.edgeIndex = -1;
+        // 何もないところをクリックしたら選択解除
+        if (!isMultiSelect) {
+            selectedEdges_.clear();
+        }
     }
 }
 
@@ -218,19 +251,19 @@ void StageEditor::SelectNavMeshEdge()
 /// @brief 選択されている辺を押し出す
 void StageEditor::ExtrudeSelectedEdge()
 {
-    if (selectedEdge_.polygonId == -1 || navMesh_ == nullptr) return;
+    if (selectedEdges_.empty() || navMesh_ == nullptr) return;
 
-    NavPolygon* poly = navMesh_->GetMutablePolygon(selectedEdge_.polygonId);
+    NavPolygon* poly = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
     if (!poly) return;
 
     // すでに他のポリゴンと繋がっている辺からは押し出し不可にする
-    if (poly->neighborIds[selectedEdge_.edgeIndex] != -1) return;
+    if (poly->neighborIds[selectedEdges_[0].edgeIndex] != -1) return;
 
 	// 押し出し前の状態を履歴に保存
     history_->SaveHistory(placementList_);
     editorUI_->Dirty();
 
-    int eIdx = selectedEdge_.edgeIndex;
+    int eIdx = selectedEdges_[0].edgeIndex;
     Vector3 v0 = poly->vertices[eIdx];
     Vector3 v1 = poly->vertices[(eIdx + 1) % 4];
 
@@ -265,8 +298,8 @@ void StageEditor::ExtrudeSelectedEdge()
     navMesh_->AddPolygon(newPoly);
 
     // 連続して「E」を押せるように、選択状態を新しくできた先端の辺（インデックス2）に移動
-    selectedEdge_.polygonId = newPoly.id;
-    selectedEdge_.edgeIndex = 2;
+    selectedEdges_.clear();
+    selectedEdges_.push_back({ newPoly.id, 2 });
 }
 
 /// @brief 初期のナビメッシュを作成する
@@ -293,8 +326,8 @@ void StageEditor::CreateInitialNavPolygon()
     navMesh_->AddPolygon(poly);
 
     // 生成したら自動的にそのポリゴンの辺0を選択状態にする
-    selectedEdge_.polygonId = poly.id;
-    selectedEdge_.edgeIndex = 0;
+    selectedEdges_.clear();
+    selectedEdges_.push_back({ poly.id, 0 });
 }
 
 /// @brief レイとXZ平面（y=planeY）との交点を計算する関数
@@ -320,13 +353,14 @@ Vector3 StageEditor::GetRayIntersectionWithPlane(const Engine::Collision3D::Ray&
 /// @param moveDelta 
 void StageEditor::MoveSelectedEdge(const Vector3& moveDelta)
 {
-    if (selectedEdge_.polygonId == -1 || !navMesh_) return;
+	// 選択された辺がない場合やナビメッシュが存在しない場合は何もしない
+	if (selectedEdges_.empty() || navMesh_ == nullptr) return;
 
-    NavPolygon* targetPoly = navMesh_->GetMutablePolygon(selectedEdge_.polygonId);
+    NavPolygon* targetPoly = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
     if (!targetPoly) return;
 
     // 移動前の辺の2つの頂点座標を取得しておく
-    int eIdx = selectedEdge_.edgeIndex;
+    int eIdx = selectedEdges_[0].edgeIndex;
     Vector3 oldV0 = targetPoly->vertices[eIdx];
     Vector3 oldV1 = targetPoly->vertices[(eIdx + 1) % 4];
 
@@ -356,4 +390,83 @@ void StageEditor::MoveSelectedEdge(const Vector3& moveDelta)
             }
         }
     }
+}
+
+/// @brief ブリッジ操作を行う（選択された辺の両端に新しいポリゴンを作成して繋げる）
+void StageEditor::BridgeSelectedEdges()
+{
+    // 辺が2つ選択されていない場合は何もしない
+    if (selectedEdges_.size() != 2 || navMesh_ == nullptr) return;
+
+    NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
+    NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedEdges_[1].polygonId);
+
+    if (!poly1 || !poly2) return;
+
+    int eIdx1 = selectedEdges_[0].edgeIndex;
+    int eIdx2 = selectedEdges_[1].edgeIndex;
+
+    // 選択された辺がすでに他のポリゴンと繋がっている場合はキャンセル
+    if (poly1->neighborIds[eIdx1] != -1 || poly2->neighborIds[eIdx2] != -1) return;
+
+    // 履歴保存
+    history_->SaveHistory(placementList_);
+    editorUI_->Dirty();
+
+    // 2つの辺の頂点を取得
+    Vector3 p1_v0 = poly1->vertices[eIdx1];
+    Vector3 p1_v1 = poly1->vertices[(eIdx1 + 1) % 4];
+
+    Vector3 p2_v0 = poly2->vertices[eIdx2];
+    Vector3 p2_v1 = poly2->vertices[(eIdx2 + 1) % 4];
+
+    // 新しいポリゴンの作成
+    NavPolygon newPoly;
+    newPoly.id = navMesh_->GenerateNewPolygonId();
+    newPoly.neighborIds = { -1, -1, -1, -1 };
+
+    // 頂点のねじれを防ぐため、距離の2乗を比較して結び方を決める
+    // パターンA: p1_v0 と p2_v1、p1_v1 と p2_v0 を結ぶ
+    Vector3 diffA1 = p1_v0 - p2_v1;
+    Vector3 diffA2 = p1_v1 - p2_v0;
+    float distSqA = (diffA1.x * diffA1.x + diffA1.y * diffA1.y + diffA1.z * diffA1.z) +
+        (diffA2.x * diffA2.x + diffA2.y * diffA2.y + diffA2.z * diffA2.z);
+
+    // パターンB: p1_v0 と p2_v0、p1_v1 と p2_v1 を結ぶ
+    Vector3 diffB1 = p1_v0 - p2_v0;
+    Vector3 diffB2 = p1_v1 - p2_v1;
+    float distSqB = (diffB1.x * diffB1.x + diffB1.y * diffB1.y + diffB1.z * diffB1.z) +
+        (diffB2.x * diffB2.x + diffB2.y * diffB2.y + diffB2.z * diffB2.z);
+
+    // 接合面の頂点は、法線が裏返らないようにするため元の辺とは逆の順番でセットします
+    newPoly.vertices[0] = p1_v1;
+    newPoly.vertices[1] = p1_v0;
+
+    if (distSqA < distSqB)
+    {
+        // パターンAの結び方が短い（ねじれない）場合
+        newPoly.vertices[2] = p2_v1;
+        newPoly.vertices[3] = p2_v0;
+    }
+    else
+    {
+        // パターンBの結び方が短い場合
+        newPoly.vertices[2] = p2_v0;
+        newPoly.vertices[3] = p2_v1;
+    }
+
+    // 隣接情報(neighborIds)を相互に繋ぐ
+    // poly1 と newPoly
+    poly1->neighborIds[eIdx1] = newPoly.id;
+    newPoly.neighborIds[0] = poly1->id;
+
+    // poly2 と newPoly (newPoly側の対向する辺はインデックス2)
+    poly2->neighborIds[eIdx2] = newPoly.id;
+    newPoly.neighborIds[2] = poly2->id;
+
+    // ナビメッシュに追加
+    navMesh_->AddPolygon(newPoly);
+
+    // ブリッジ完了後は選択を解除（または新しいポリゴンを選択状態にする）
+    selectedEdges_.clear();
 }

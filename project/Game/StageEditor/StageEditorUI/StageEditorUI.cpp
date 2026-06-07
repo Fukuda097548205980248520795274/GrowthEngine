@@ -735,7 +735,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         {
             selectedIndex_ = i; // 右クリックしたアイテムを自動的に選択状態にする
 
-            // オブジェクトの複製 (コピー)
+            // オブジェクトの複製
             if (ImGui::MenuItem("Duplicate Object"))
             {
                 history_->SaveHistory(placementList);
@@ -745,8 +745,8 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
                 PlacementData newData = placementList[i];
 
                 // 完全に重ならないように位置を少しずらす
-                newData.position.x += 1.0f;
-                newData.position.z += 1.0f;
+                newData.position.x += 0.5f;
+                newData.position.z += 0.5f;
                 newData.instancePtr = nullptr; // 新しい実体を作るため初期化
 
                 // 実体を生成して追加

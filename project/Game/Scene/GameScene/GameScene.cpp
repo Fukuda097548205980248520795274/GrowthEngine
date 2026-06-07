@@ -108,32 +108,13 @@ void GameScene::Update()
 	}
 
 	// オブジェクトの更新
-	objects_.remove_if(
-		[](const std::unique_ptr<StageObject>& object)
-		{
-			object->Update();
-			return object->IsFinished();
-		}
-	);
+	objects_.remove_if([](const std::unique_ptr<StageObject>& object) {object->Update();return object->IsFinished();});
 
 	// NPCの更新
-	npcs_.remove_if(
-		[](const std::unique_ptr<NPC>& npc)
-		{
-			npc->Update();
-			return npc->IsFinished();
-		}
-	);
+	npcs_.remove_if([](const std::unique_ptr<NPC>& npc) {npc->Update();return npc->IsFinished();});
 
 	// 武器の更新
-	weapons_.remove_if(
-		[](const std::unique_ptr<Weapon>& weapon) 
-		{
-			weapon->Update();
-			return weapon->IsFinished(); 
-		}
-	);
-
+	weapons_.remove_if([](const std::unique_ptr<Weapon>& weapon) {weapon->Update();return weapon->IsFinished();});
 
 
 	// エフェクトの更新

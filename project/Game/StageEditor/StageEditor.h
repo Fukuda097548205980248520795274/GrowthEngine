@@ -110,22 +110,19 @@ private:
     /// @param moveDelta 
     void MoveSelectedEdge(const Vector3& moveDelta);
 
+	/// @brief ブリッジ操作を行う（選択された辺の両端に新しいポリゴンを作成して繋げる）
+    void BridgeSelectedEdges();
+
     // NavMeshへのポインタ（初期化時にシーンなどから取得してセットしてください）
     NavMesh* navMesh_ = nullptr;
 
     /// @brief 選択された辺
-    SelectedEdge selectedEdge_;
+    std::vector<SelectedEdge> selectedEdges_;
 
     // ドラッグ状態の管理
     bool isDraggingEdge_ = false;
 
     // 前回のレイと床の交点
     Vector3 previousHitPoint_;
-
-
-private:
-
-	// 押し出しの入力キー
-	std::unique_ptr<InputKey> extrudeEdge_ = nullptr;
 };
 
