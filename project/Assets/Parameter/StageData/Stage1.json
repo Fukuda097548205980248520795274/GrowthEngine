@@ -475,6 +475,70 @@
             "standMotionName": "Standing",
             "subType": 1,
             "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Move",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "hp": 100,
+            "isUnbreakable": false,
+            "position": [
+                0.0,
+                0.0,
+                -1.309999942779541
+            ],
+            "rotate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 5,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Move",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "hp": 100,
+            "isUnbreakable": false,
+            "position": [
+                0.0,
+                0.0,
+                3.1500000953674316
+            ],
+            "rotate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 3,
+            "walkMotionName": "Walk"
         }
     ]
 }

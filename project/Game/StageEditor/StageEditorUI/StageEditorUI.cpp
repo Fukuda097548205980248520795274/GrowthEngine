@@ -681,14 +681,14 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 			charPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
 
 			// モーション選択UI
-            MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion);
-            MotionSelecter("Fighting Motion", MotionType::Stance, target.stanceMotion);
-            MotionSelecter("Walking Motion", MotionType::Walk, target.walkMotion);
-            MotionSelecter("Dashing Motion", MotionType::Dash, target.dashMotion);
-            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, target.avoidFrontMotion);
-            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion);
-            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion);
-            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion);
+            MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion, placementList);
+            MotionSelecter("Fighting Motion", MotionType::Stance, target.stanceMotion, placementList);
+            MotionSelecter("Walking Motion", MotionType::Walk, target.walkMotion, placementList);
+            MotionSelecter("Dashing Motion", MotionType::Dash, target.dashMotion, placementList);
+            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, target.avoidFrontMotion, placementList);
+            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion, placementList);
+            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion, placementList);
+            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion, placementList);
 
             // プレイヤーと未選択以外　ビヘイビアツリーデータ
             if (target.subType != 0 && target.subType != 1)
@@ -711,11 +711,15 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
                 {
                     for (const auto& name : behaviorTreeNames_)
                     {
+						// 現在のビヘイビアツリー名と同じものが選択されている状態にする
                         bool isSelected = (currentBtName == name);
                         if (ImGui::Selectable(name.c_str(), isSelected))
                         {
-                            // 選択された名前を PlacementData の配列にコピーする
-                            // ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
+							// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
+                            history_->SaveHistory(placementList);
+                            isDirty_ = true;
+
+							// 選択された名前を PlacementData の配列にコピーする
                             strcpy_s(target.behaviorScriptName, sizeof(target.behaviorScriptName), name.c_str());
                         }
 
@@ -790,6 +794,48 @@ void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, Mot
                 {
                     motionConfig.name = name;
 					motionConfig.handle = motionManager_->GetMotion(motionType, motionConfig.name);
+                }
+                if (isSelected) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+    }
+}
+
+/// @brief モーションの選択UIを表示する
+/// @param motionType 
+/// @param motionName 
+/// @param placementList
+void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig, std::vector<PlacementData>& placementList)
+{
+    // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+    std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(motionType);
+
+    // モーション名のリストが空の場合はエラーメッセージを表示
+    if (motionNames.empty())
+    {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+    }
+    else
+    {
+        // 現在選択されているモーション名をプレビュー用の文字列として設定
+        const char* previewValue = motionConfig.name.empty() ? "Select Motion..." : motionConfig.name.c_str();
+
+        // モーション名選択用のコンボボックスを描画
+        if (ImGui::BeginCombo(label, previewValue))
+        {
+            for (const auto& name : motionNames)
+            {
+                // 現在のモーション名と同じものが選択されている状態にする
+                bool isSelected = (motionConfig.name == name);
+                if (ImGui::Selectable(name.c_str(), isSelected))
+                {
+					// モーションを変更する前に、現在の配置リストの状態を履歴に保存する
+					history_->SaveHistory(placementList);
+					isDirty_ = true;
+
+                    motionConfig.name = name;
+                    motionConfig.handle = motionManager_->GetMotion(motionType, motionConfig.name);
                 }
                 if (isSelected) ImGui::SetItemDefaultFocus();
             }
