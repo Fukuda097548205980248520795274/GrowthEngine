@@ -488,12 +488,19 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                     }
                 }
 
+				// 上書き保存 (プレイ中は保存できないようにする)
                 if (ImGui::MenuItem("Save", nullptr, false, !isPlaying))
                 {
                     // 右クリックした対象を現在のファイルとして設定し、上書き保存する
                     currentFileName = file;
                     fileManager_->SaveToFile(currentFileName, placementList, navMesh);
                     isDirty_ = false;
+                }
+
+				// コピー
+                if (ImGui::MenuItem("Copy", nullptr, false, !isPlaying))
+                {
+                    fileToCopy = file;
                 }
 
                 ImGui::Separator();
@@ -564,6 +571,61 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             ImGui::CloseCurrentPopup();
         }
 
+        ImGui::EndPopup();
+    }
+
+
+
+    // コピー対象が設定されていればモーダルを開く
+    if (!fileToCopy.empty() && !ImGui::IsPopupOpen("Copy Stage"))
+    {
+        ImGui::OpenPopup("Copy Stage");
+    }
+
+    // コピー実行用のモーダルウィンドウ
+    if (ImGui::BeginPopupModal("Copy Stage", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Copy '%s' to:", fileToCopy.c_str());
+        static char copyFileName[64] = "";
+
+        ImGui::InputText("New File Name", copyFileName, 64);
+
+        if (ImGui::Button("Copy", ImVec2(120, 0)))
+        {
+            std::string newFileNameStr = copyFileName;
+            if (!newFileNameStr.empty())
+            {
+                if (newFileNameStr.find(".json") == std::string::npos) newFileNameStr += ".json";
+
+                // std::filesystem を使ってファイルを直接コピー
+                try 
+                {
+					// コピー元とコピー先のパスを作成
+                    std::filesystem::path srcPath = "./Assets/Parameter/StageData/" + fileToCopy;
+                    std::filesystem::path destPath = "./Assets/Parameter/StageData/" + newFileNameStr;
+                    std::filesystem::copy_file(srcPath, destPath, std::filesystem::copy_options::overwrite_existing);
+                }
+                catch (const std::exception& e) 
+                {
+                    // エラー時の処理 (必要であれば)
+                    (void)e;
+                }
+            }
+
+            fileToCopy = ""; // 対象をクリア
+            copyFileName[0] = '\0'; // 入力欄をクリア
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::SameLine();
+
+		// キャンセル ボタン
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            fileToCopy = "";
+            copyFileName[0] = '\0';
+            ImGui::CloseCurrentPopup();
+        }
         ImGui::EndPopup();
     }
 
@@ -644,6 +706,9 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
     ImGui::Text("Placed Objects:");
 
+	// 項目の追加や削除があった場合に、走査中のリストが変更されてバグるのを防止するためのフラグ
+    bool listChanged = false;
+
     // オブジェクトのリスト表示
     ImGui::BeginChild("ObjectListRegion", ImVec2(0, 150), true);
     for (int i = 0; i < placementList.size(); ++i)
@@ -656,10 +721,71 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
         else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
 
+        // 各アイテムごとに一意のID空間を作る（右クリックメニューのバッティング防止）
+        ImGui::PushID(i);
+
         // 選択されたら selectedIndex_ を更新
         if (ImGui::Selectable(label.c_str(), selectedIndex_ == i))
         {
             selectedIndex_ = i;
+        }
+
+        // 各項目に対する右クリックコンテキストメニュー
+        if (ImGui::BeginPopupContextItem("ObjectItemContextMenu"))
+        {
+            selectedIndex_ = i; // 右クリックしたアイテムを自動的に選択状態にする
+
+            // オブジェクトの複製 (コピー)
+            if (ImGui::MenuItem("Duplicate Object"))
+            {
+                history_->SaveHistory(placementList);
+                isDirty_ = true;
+
+                // 選択中のデータを複製
+                PlacementData newData = placementList[i];
+
+                // 完全に重ならないように位置を少しずらす
+                newData.position.x += 1.0f;
+                newData.position.z += 1.0f;
+                newData.instancePtr = nullptr; // 新しい実体を作るため初期化
+
+                // 実体を生成して追加
+                spawner_->SpawnActualEntity(newData);
+                placementList.push_back(newData);
+
+                // 複製したオブジェクトを選択状態にする
+                selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+                listChanged = true;
+            }
+
+            ImGui::Separator();
+
+            // オブジェクトの消去 (削除)
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
+            if (ImGui::MenuItem("Delete Object"))
+            {
+                history_->SaveHistory(placementList);
+                isDirty_ = true;
+
+                // ゲーム内実体の削除
+                spawner_->DeleteActualEntity(placementList[i]);
+                // リストから削除
+                placementList.erase(placementList.begin() + i);
+
+                selectedIndex_ = -1; // 選択状態をリセット
+                listChanged = true;
+            }
+            ImGui::PopStyleColor();
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::PopID();
+
+        // 項目が追加または削除されたら、安全のためにこのフレームの走査を終了する
+        if (listChanged)
+        {
+            break;
         }
     }
     ImGui::EndChild();
@@ -743,22 +869,6 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
 			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
         }
-
-        ImGui::Separator();
-
-        // 削除ボタン
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-        if (ImGui::Button("Delete Object", ImVec2(120, 0)))
-        {
-			// 削除する前に、現在の配置リストの状態を履歴に保存する
-            history_->SaveHistory(placementList);
-            isDirty_ = true;
-
-            spawner_->DeleteActualEntity(target);
-            placementList.erase(placementList.begin() + selectedIndex_);
-            selectedIndex_ = -1; // 選択状態をリセット
-        }
-        ImGui::PopStyleColor();
     }
 
     ImGui::End();
