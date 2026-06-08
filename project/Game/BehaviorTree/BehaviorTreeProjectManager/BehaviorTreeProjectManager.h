@@ -41,6 +41,12 @@ enum class ConditionType
 	IsTargetInRange, // ターゲットが一定距離内にいるかどうか
 
 	IsTargetOutOfRange, // ターゲットが一定距離外にいるかどうか
+
+	isTargetAttacking, // ターゲットが攻撃しているかどうか
+	isTargetNotAttacking, // ターゲットが攻撃していないかどうか
+
+	isTargetInAttackSequence, // ターゲットが攻撃動作中かどうか
+	isTargetNotInAttackSequence, // ターゲットが攻撃動作中でないかどうか
 };
 
 /// @brief 条件ノードパラメータ

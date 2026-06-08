@@ -145,6 +145,42 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 					return distance > editor_node.conditionParam.distanceToTarget;
 				};
 			break;
+
+			// ターゲットが攻撃しているかどうかをチェックする条件
+		case ConditionType::isTargetAttacking:
+			conditionFunc = [character]() 
+                { 
+					if (!character->HasTarget()) return false;
+                    return character->GetLockOnTarget()->IsAttack();
+                };
+            break;
+
+			// ターゲットが攻撃していないかどうかをチェックする条件
+		case ConditionType::isTargetNotAttacking:
+            conditionFunc = [character]()
+                {
+                    if (!character->HasTarget()) return true;
+                    return !character->GetLockOnTarget()->IsAttack();
+                };
+            break;
+
+			// ターゲットが攻撃動作中かどうかをチェックする条件
+		case ConditionType::isTargetInAttackSequence:
+            conditionFunc = [character]()
+                {
+                    if (!character->HasTarget()) return false;
+                    return character->GetLockOnTarget()->IsInAttackSequence();
+                };
+            break;
+
+			// ターゲットが攻撃動作中でないかどうかをチェックする条件
+		case ConditionType::isTargetNotInAttackSequence:
+			conditionFunc = [character]()
+				{
+					if (!character->HasTarget()) return true;
+					return !character->GetLockOnTarget()->IsInAttackSequence();
+				};
+			break;
         }
 
         // 実際は editor_node.condition_name 等をもとに、

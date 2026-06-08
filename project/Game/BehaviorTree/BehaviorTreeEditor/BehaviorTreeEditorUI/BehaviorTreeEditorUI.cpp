@@ -792,126 +792,29 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 {
     ImGui::Text("Function:");
 
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数
-    auto DragFloatClamp = [&](const char* label, float* value, float speed, float min, float max)
-        {
-            // 値が変更された場合は、履歴に保存して変更フラグを立てる
-            if (ImGui::DragFloat(label, value, speed, min, max))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
-    auto DragFloat = [&](const char* label, float* value, float speed)
-        {
-            if (ImGui::DragFloat(label, value, speed))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float2版）
-    auto DragFloat2Clamp = [&](const char* label, float* value, float speed, float min, float max)
-        {
-            if (ImGui::DragFloat2(label, value, speed, min, max))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
-    auto DragFloat2 = [&](const char* label, float* value, float speed)
-        {
-            if (ImGui::DragFloat2(label, value, speed))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（float3版）
-    auto DragFloat3Clamp = [&](const char* label, float* value, float speed, float min, float max)
-        {
-            if (ImGui::DragFloat3(label, value, speed, min, max))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
-    auto DragFloat3 = [&](const char* label, float* value, float speed)
-        {
-            if (ImGui::DragFloat3(label, value, speed))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（int版）
-    auto InputIntClamp = [&](const char* label, int* value, int min, int max)
-        {
-            if (ImGui::InputInt(label, value))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（minとmaxなし版）
-    auto InputInt = [&](const char* label, int* value)
-        {
-            if (ImGui::InputInt(label, value))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（コンボボックス版）
-    auto Combo = [&](const char* label, int* currentItem, const char* const items[], int itemCount) -> bool
-        {
-            if (ImGui::Combo(label, currentItem, items, itemCount))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-
-                return true;
-            }
-
-            return false;
-        };
-
-    // 同じようなUIが複数あるので、変更があったときに履歴に保存して変更フラグを立てる処理をまとめるためのラムダ関数（チェックボックス版）
-    auto Checkbox = [&](const char* label, bool* value)
-        {
-            if (ImGui::Checkbox(label, value))
-            {
-                history_->SaveHistory(nodes_, links_, currentId_);
-                isDirty_ = true;
-            }
-        };
+    // 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
+    auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
     // コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
-    const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing", "IsTargetInRange", "IsTargetOutOfRange" };
+    const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing", "IsTargetInRange", "IsTargetOutOfRange",
+        "IsTargetAttacking", "IsTargetNotAttacking", "IsTargetInAttackSequence", "IsTargetNotInAttackSequence" };
 
     // コンボボックスを描画し、変更があったらEnumにキャストして戻す
     int currentItem = static_cast<int>(node.conditionType);
     ImGui::PushItemWidth(120.0f);
-    if (Combo("Condition", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
+    if (ImGui::Combo("Condition", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
     {
+        history_->SaveHistory(nodes_, links_, currentId_);
+        isDirty_ = true;
+
         node.conditionType = static_cast<ConditionType>(currentItem);
     }
 
     // ターゲットとの距離を条件にする場合は、距離の入力UIを表示
     if (node.conditionType == ConditionType::IsTargetInRange || node.conditionType == ConditionType::IsTargetOutOfRange)
     {
-        DragFloatClamp("Distance to Target", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
+        HistorySaveIfChanged();
+        ImGui::DragFloat("Distance to Target", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
     }
 }
 
@@ -940,6 +843,9 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     // コンボボックスを描画し、変更があったら選択された文字列をノードに保存
     if (ImGui::Combo("##ActionType", &currentItem, actionTypes, IM_ARRAYSIZE(actionTypes)))
     {
+        history_->SaveHistory(nodes_, links_, currentId_);
+        isDirty_ = true;
+
         // 選択された文字列をノードに保存
         node.actionName = actionTypes[currentItem];
     }
