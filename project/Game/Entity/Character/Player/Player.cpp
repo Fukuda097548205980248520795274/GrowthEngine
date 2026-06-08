@@ -240,6 +240,11 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
+	if(IsJustAvoided())
+	{
+		int a = 0;
+	}
+
 	// 動けない状態かどうか
 	bool isIncapacitatedState = IsIncapacitated();
 
@@ -269,6 +274,8 @@ void Player::Update()
 				ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
 			}
 
+			// アクションの更新処理
+			ActionUpdate();
 			Character::Update();
 			return;
 		}

@@ -869,7 +869,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+            node.motionType = MotionType::Attack;
+            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.motionType);
 
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (motionNames.empty())
@@ -1020,7 +1021,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+			node.motionType = MotionType::Attack;
+            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(node.motionType);
 
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (motionNames.empty())
@@ -1116,7 +1118,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-            std::vector<std::string> attackerMotions = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+			node.motionType = MotionType::Attack;
+            std::vector<std::string> attackerMotions = MotionManager::GetInstance()->GetMotionNames(node.motionType);
 
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (attackerMotions.empty())
@@ -1150,7 +1153,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
-            std::vector<std::string> targetMotions = MotionManager::GetInstance()->GetMotionNames(MotionType::Stagger);
+            node.targetMotionType = MotionType::Stagger;
+            std::vector<std::string> targetMotions = MotionManager::GetInstance()->GetMotionNames(node.targetMotionType);
 
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (targetMotions.empty())

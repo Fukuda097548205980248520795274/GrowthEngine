@@ -20,6 +20,6 @@ void ReleaseTokenNode::Abort()
 	ReleaseToken* token = GetReleaseToken();
 	if (!token)return;
 
-	// 実行と更新
-	token->Exec();
+	// 終了
+	token->Exit();
 }

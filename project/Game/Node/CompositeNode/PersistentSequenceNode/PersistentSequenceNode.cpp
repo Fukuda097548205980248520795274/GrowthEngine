@@ -25,7 +25,8 @@ Node::State PersistentSequenceNode::Exec()
 		// 失敗　最初から
 		if (state == State::Failure)
 		{
-			currentIndex_ = 0;
+			// それ以降のノードは中断する
+			Abort();
 			return state;
 		}
 	}

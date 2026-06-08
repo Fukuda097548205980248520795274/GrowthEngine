@@ -1,0 +1,251 @@
+{
+    "links": [
+        {
+            "end": 20,
+            "id": 25,
+            "start": 24
+        },
+        {
+            "end": 17,
+            "id": 26,
+            "start": 24
+        },
+        {
+            "end": 14,
+            "id": 27,
+            "start": 24
+        },
+        {
+            "end": 11,
+            "id": 28,
+            "start": 24
+        },
+        {
+            "end": 8,
+            "id": 29,
+            "start": 24
+        },
+        {
+            "end": 5,
+            "id": 30,
+            "start": 24
+        },
+        {
+            "end": 2,
+            "id": 31,
+            "start": 24
+        },
+        {
+            "end": 23,
+            "id": 45,
+            "start": 44
+        },
+        {
+            "end": 47,
+            "id": 49,
+            "start": 44
+        },
+        {
+            "end": 51,
+            "id": 52,
+            "start": 48
+        },
+        {
+            "end": 54,
+            "id": 55,
+            "start": 48
+        }
+    ],
+    "nodes": [
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.699999988079071,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 0.5,
+                        "jointType": 9,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "output_pin": 3,
+            "pos": [
+                618.5601806640625,
+                583.4383544921875
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "Avoid",
+            "avoid_data": {
+                "Distance": 1.0,
+                "Duration": 0.30000001192092896,
+                "LocalDirection": [
+                    1.0,
+                    0.0
+                ]
+            },
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 6,
+            "pos": [
+                615.5601806640625,
+                485.4383239746094
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ApproachTargetMove",
+            "approach_target_move_data": {
+                "isDash": true,
+                "moveSpeed": 8.0,
+                "stopDistance": 3.0
+            },
+            "id": 7,
+            "input_pin": 8,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 9,
+            "pos": [
+                584.5601806640625,
+                389.4383239746094
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "OutAttackSequence",
+            "id": 10,
+            "input_pin": 11,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 12,
+            "pos": [
+                598.5601806640625,
+                684.4383544921875
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "InAttackSequence",
+            "id": 13,
+            "input_pin": 14,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 15,
+            "pos": [
+                561.5601806640625,
+                300.4383239746094
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ReleaseToken",
+            "id": 16,
+            "input_pin": 17,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 18,
+            "pos": [
+                602.5601806640625,
+                772.4383544921875
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "RequestToken",
+            "id": 19,
+            "input_pin": 20,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": 21,
+            "pos": [
+                537.5601806640625,
+                217.43832397460938
+            ],
+            "type": 5
+        },
+        {
+            "id": 22,
+            "input_pin": 23,
+            "is_collapsed": false,
+            "output_pin": 24,
+            "pos": [
+                282.5601501464844,
+                434.4383239746094
+            ],
+            "type": 1
+        },
+        {
+            "id": 42,
+            "input_pin": 43,
+            "is_collapsed": false,
+            "output_pin": 44,
+            "pos": [
+                109.0,
+                342.5
+            ],
+            "type": 1
+        },
+        {
+            "id": 46,
+            "input_pin": 47,
+            "is_collapsed": true,
+            "output_pin": 48,
+            "pos": [
+                285.0,
+                255.5
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 1,
+            "id": 50,
+            "input_pin": 51,
+            "is_collapsed": false,
+            "output_pin": -1,
+            "pos": [
+                477.0,
+                201.5
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 3,
+            "id": 53,
+            "input_pin": 54,
+            "is_collapsed": false,
+            "output_pin": -1,
+            "pos": [
+                483.0,
+                288.5
+            ],
+            "type": 4
+        }
+    ]
+}

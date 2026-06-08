@@ -48,9 +48,6 @@ void GrabAttack::Update()
 		return;
 	}
 
-	// ------------------------------------------
-	// 1. つかみ判定の処理
-	// ------------------------------------------
 
 	// JointType::None なら当たり判定を出さない
 	if (jointType_ != JointType::None && jointType_ != JointType::Weapon)
@@ -70,22 +67,40 @@ void GrabAttack::Update()
 				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 				sphere->param_->radius = 0.25f;
 
+
+				// 当たり判定がヒットしているかどうかをチェックするためのラムダ関数を定義する
+				auto IsSphereHit = [](Engine::BaseCollision3DInstance* hitbox, Engine::BaseCollision3DInstance* hurtbox) -> bool
+					{
+						if (!hitbox || !hurtbox) return false;
+
+						auto s1 = static_cast<Collision3DInstanceSphere*>(hitbox);
+						auto s2 = static_cast<Collision3DInstanceSphere*>(hurtbox);
+
+						// 中心点同士の距離を求める
+						Vector3 diff = s1->param_->center - s2->param_->center;
+
+						// 距離が、2つの球の半径の合計値以下なら当たっている
+						return diff.Length() <= (s1->param_->radius + s2->param_->radius);
+					};
+
 				// 当たり判定チェック
 				for (Character* target : Character::GetCharacters())
 				{
 					// 自分自身は判定しない
 					if (target == owner_) continue;
 
-					// 同じ陣営は判定しない（例：プレイヤー側の攻撃はプレイヤー側には当たらない）
-					if (target->GetCharacterTag() == owner_->GetCharacterTag())continue;
+					// 同じ側のキャラクターは判定しない（プレイヤー側ならプレイヤー側のキャラクターは判定しない、敵側なら敵側のキャラクターは判定しない）
+					if (target->IsPlayerSide() == owner_->IsPlayerSide() && target->IsEnemySide() == owner_->IsEnemySide())continue;
 
 					// 死亡しているキャラクターは判定しない
 					if (target->IsDead())continue;
 
 					// ヒットしたかどうか
-					if (target->GetHurtboxChest().IsHit() || target->GetHurtboxHead().IsHit() || target->GetHurtboxRoot().IsHit())
+					if (IsSphereHit(hitbox_.collider_, target->GetHurtboxChest().collider_) ||
+						IsSphereHit(hitbox_.collider_, target->GetHurtboxHead().collider_) ||
+						IsSphereHit(hitbox_.collider_, target->GetHurtboxRoot().collider_))
 					{
-						// 【つかみ成功】
+						// つかみ成功
 						hasHit_ = true;
 						DeleteHitbox();
 
@@ -113,9 +128,7 @@ void GrabAttack::Update()
 		return;
 	}
 
-	// ------------------------------------------
-	// 2. 踏み込み移動の処理
-	// ------------------------------------------
+	// 攻撃の特定の時間帯は移動する
 	if (attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)
 	{
 		Vector3 direction = owner_->GetDirection();
@@ -124,9 +137,7 @@ void GrabAttack::Update()
 		owner_->SetPosition(position);
 	}
 
-	// ------------------------------------------
-	// 3. アクション終了処理（空振り時）
-	// ------------------------------------------
+	// 攻撃時間が経過したら基底の更新処理を呼び出す
 	if (attackTimer_ >= attackTime_)
 	{
 		Attack::Update(); // Action::Update()が呼ばれ、終了処理へ

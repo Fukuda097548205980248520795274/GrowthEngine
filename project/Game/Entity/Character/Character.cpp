@@ -362,7 +362,7 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	// ロックオンしているターゲットの方向を向く処理
-	if (lockOnTarget_ && isStance_ && !IsGrabbing() && !IsIncapacitated())
+	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated() && !IsAttack())
 	{
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
 		toTarget.y = 0.0f;
@@ -372,6 +372,22 @@ void Character::Update()
 		{
 			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
 			hasTargetYaw_ = true;
+		}
+	}
+	else if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated())
+	{
+		// プレイヤーは攻撃中もターゲットの方向を向くようにする
+		if (IsPlayer() && IsAttack())
+		{
+			Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
+			toTarget.y = 0.0f;
+
+			// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
+			if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
+			{
+				targetYaw_ = std::atan2(toTarget.x, toTarget.z);
+				hasTargetYaw_ = true;
+			}
 		}
 	}
 
@@ -768,7 +784,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	const float length = direction.Length();
 
 	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || !IsGrounded() || IsStyleChanging())
+	if (length <= 0.0f || !IsGrounded() || IsStyleChanging() || IsAttack())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;

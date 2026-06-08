@@ -11,3 +11,10 @@ void ReleaseToken::Exec()
 	// 攻撃クールタイムをリセットする
 	owner_->SetAttackCooltime(0.5f);
 }
+
+/// @brief 終了、中断
+void ReleaseToken::Exit()
+{
+	// 攻撃トークンを返却する
+	BattleDirector::GetInstance().ReleaseAttackToken(owner_);
+}

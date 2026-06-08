@@ -1,0 +1,183 @@
+{
+    "links": [
+        {
+            "end": 5,
+            "id": 6,
+            "start": 3
+        },
+        {
+            "end": 8,
+            "id": 9,
+            "start": 3
+        },
+        {
+            "end": 11,
+            "id": 12,
+            "start": 3
+        },
+        {
+            "end": 14,
+            "id": 15,
+            "start": 3
+        },
+        {
+            "end": 17,
+            "id": 18,
+            "start": 3
+        },
+        {
+            "end": 20,
+            "id": 21,
+            "start": 3
+        },
+        {
+            "end": 23,
+            "id": 24,
+            "start": 3
+        }
+    ],
+    "nodes": [
+        {
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "output_pin": 3,
+            "pos": [
+                124.0,
+                197.5
+            ],
+            "type": 1
+        },
+        {
+            "action_name": "ReleaseToken",
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                379.0,
+                -19.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "None",
+            "id": 7,
+            "input_pin": 8,
+            "is_collapsed": false,
+            "output_pin": -1,
+            "pos": [
+                444.0,
+                535.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "InAttackSequence",
+            "id": 10,
+            "input_pin": 11,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                403.0,
+                63.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "OutAttackSequence",
+            "id": 13,
+            "input_pin": 14,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                440.0,
+                447.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ApproachTargetMove",
+            "approach_target_move_data": {
+                "isDash": true,
+                "moveSpeed": 8.0,
+                "stopDistance": 3.0
+            },
+            "id": 16,
+            "input_pin": 17,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                426.0,
+                152.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "Avoid",
+            "avoid_data": {
+                "Distance": 1.0,
+                "Duration": 0.30000001192092896,
+                "LocalDirection": [
+                    1.0,
+                    0.0
+                ]
+            },
+            "id": 19,
+            "input_pin": 20,
+            "is_collapsed": false,
+            "motionName": "",
+            "motionType": 0,
+            "output_pin": -1,
+            "pos": [
+                457.0,
+                248.5
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 1.0,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 3,
+                        "endTime": 0.5,
+                        "jointType": 9,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 22,
+            "input_pin": 23,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "output_pin": -1,
+            "pos": [
+                460.0,
+                346.5
+            ],
+            "type": 5
+        }
+    ]
+}

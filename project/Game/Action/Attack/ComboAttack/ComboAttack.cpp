@@ -134,8 +134,8 @@ void ComboAttack::Update()
 			// ターゲットのリストを取得する
 			for (Character* target : Character::GetCharacters())
 			{
-				// ターゲットが自分自身、同じ陣営、またはすでに倒れている場合はスキップする
-				if (target == owner_ || target->GetCharacterTag() == owner_->GetCharacterTag() || target->IsDead()) continue;
+				// ターゲットが攻撃者自身である場合、同じサイドのキャラクターである場合、またはすでに倒れている場合はスキップする
+				if (target == owner_ || (target->IsPlayerSide() == owner_->IsPlayerSide() && target->IsEnemySide() == owner_->IsEnemySide()) || target->IsDead()) continue;
 
 				// すでにこの攻撃でヒットしているターゲットはスキップする
 				if (std::find(state.hitCharacters.begin(), state.hitCharacters.end(), target) != state.hitCharacters.end())
