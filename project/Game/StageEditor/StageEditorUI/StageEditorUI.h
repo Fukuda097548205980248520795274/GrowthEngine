@@ -116,6 +116,22 @@ private:
 
 private:
 
+
+    /// @brief コピーされたオブジェクトのデータバッファ（ファイル間移動用）
+    PlacementData copiedData_;
+
+    /// @brief コピーされたデータがバッファに存在するかどうか
+    bool hasCopiedData_ = false;
+
+
+private:
+
+	/// @brief モーション選択UIでモーションが変更されたかどうか
+	bool isChangeAnimation_ = false;
+
+
+private:
+
     /// @brief モーションの選択UIを表示する
     /// @param motionType 
     /// @param motionName 

@@ -6,6 +6,7 @@
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "AppCollider/AppCollider.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 class Attack;
 class Move;
@@ -99,6 +100,21 @@ public:
 		Collision3DInstanceAABB* landingCollision = nullptr;
 	};
 
+	/// @brief アニメーションのハンドルをまとめた構造体
+	struct AnimationHandleData
+	{
+		AnimationHandle hStandMotion = 0;
+		AnimationHandle hStanceMotion = 0;
+		AnimationHandle hWalkMotion = 0;
+		AnimationHandle hDashMotion = 0;
+		AnimationHandle hAvoidFrontMotion = 0;
+		AnimationHandle hAvoidBackMotion = 0;
+		AnimationHandle hAvoidLeftMotion = 0;
+		AnimationHandle hAvoidRightMotion = 0;
+		AnimationHandle hGuardMotion = 0;
+		AnimationHandle hGuardHitMotion = 0;
+	};
+
 
 public:
 
@@ -108,6 +124,14 @@ public:
 
 	/// @brief デストラクタ
 	virtual ~Character() override;
+
+	/// @brief アニメーションの初期化
+	/// @param animData 
+	void SetAnimationHandle(const AnimationHandleData& animData);
+
+	/// @brief ビヘイビアツリーの設定
+	/// @param behaviorTreeName 
+	virtual void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) { (void)behaviorTree; }
 
 	/// @brief 更新処理
 	virtual void Update() override;

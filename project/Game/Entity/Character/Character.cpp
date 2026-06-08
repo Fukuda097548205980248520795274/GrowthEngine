@@ -151,6 +151,22 @@ Character::~Character()
 	characters_.erase(it, characters_.end());
 }
 
+/// @brief アニメーションの初期化
+/// @param animData 
+void Character::SetAnimationHandle(const AnimationHandleData& animData)
+{
+	hStandMotion_ = animData.hStandMotion;
+	hStanceMotion_ = animData.hStanceMotion;
+	hWalkMotion_ = animData.hWalkMotion;
+	hDashMotion_ = animData.hDashMotion;
+	hAvoidFrontMotion_ = animData.hAvoidFrontMotion;
+	hAvoidBackMotion_ = animData.hAvoidBackMotion;
+	hAvoidLeftMotion_ = animData.hAvoidLeftMotion;
+	hAvoidRightMotion_ = animData.hAvoidRightMotion;
+	hGuardMotion_ = animData.hGuardMotion;
+	hGuardHitMotion_ = animData.hGuardHitMotion;
+}
+
 /// @brief 更新処理
 void Character::Update()
 {

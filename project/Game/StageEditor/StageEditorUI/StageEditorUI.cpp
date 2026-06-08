@@ -706,6 +706,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
     ImGui::Text("Placed Objects:");
 
+
 	// 項目の追加や削除があった場合に、走査中のリストが変更されてバグるのを防止するためのフラグ
     bool listChanged = false;
 
@@ -734,6 +735,16 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         if (ImGui::BeginPopupContextItem("ObjectItemContextMenu"))
         {
             selectedIndex_ = i; // 右クリックしたアイテムを自動的に選択状態にする
+
+			// オブジェクトのコピー 
+            if (ImGui::MenuItem("Copy Object"))
+            {
+                copiedData_ = placementList[i];
+
+                // 新しいファイルで生成し直すため、実体へのポインタはリセットする
+                copiedData_.instancePtr = nullptr;
+                hasCopiedData_ = true;
+            }
 
             // オブジェクトの複製
             if (ImGui::MenuItem("Duplicate Object"))
@@ -788,6 +799,29 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             break;
         }
     }
+
+	// アイテムの上以外で右クリックされたら、全体のコンテキストメニューを開く
+    if (hasCopiedData_)
+    {
+		// 右クリックされた位置にアイテムがない場合は、全体のコンテキストメニューを開く
+        if (ImGui::BeginPopupContextWindow("ObjectListPasteRegionMenu", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
+        {
+            if (ImGui::MenuItem("Paste Object"))
+            {
+                history_->SaveHistory(placementList);
+                isDirty_ = true;
+
+				// コピーしたデータを新しいオブジェクトとして生成
+                PlacementData newData = copiedData_;
+                spawner_->SpawnActualEntity(newData);
+                placementList.push_back(newData);
+                selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+                listChanged = true;
+            }
+            ImGui::EndPopup();
+        }
+    }
+
     ImGui::EndChild();
 
 
@@ -806,6 +840,9 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
 			charPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
 
+            // アニメーション変更フラグを初期化
+            isChangeAnimation_ = false;
+
 			// モーション選択UI
             MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion, placementList);
             MotionSelecter("Fighting Motion", MotionType::Stance, target.stanceMotion, placementList);
@@ -815,6 +852,24 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion, placementList);
             MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion, placementList);
             MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion, placementList);
+
+			// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
+            if (isChangeAnimation_)
+            {
+				Character::AnimationHandleData animData;
+				animData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, target.standMotion.name);
+				animData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, target.stanceMotion.name);
+				animData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, target.walkMotion.name);
+				animData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, target.dashMotion.name);
+				animData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidFrontMotion.name);
+				animData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidBackMotion.name);
+				animData.hAvoidLeftMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
+				animData.hAvoidRightMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
+				
+				charPtr->SetAnimationHandle(animData);
+
+				isChangeAnimation_ = false; // フラグをリセット
+            }
 
             // プレイヤーと未選択以外　ビヘイビアツリーデータ
             if (target.subType != 0 && target.subType != 1)
@@ -946,6 +1001,8 @@ void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, Mot
 
                     motionConfig.name = name;
                     motionConfig.handle = motionManager_->GetMotion(motionType, motionConfig.name);
+
+					isChangeAnimation_ = true; // モーションが変更されたフラグを立てる
                 }
                 if (isSelected) ImGui::SetItemDefaultFocus();
             }

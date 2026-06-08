@@ -31,6 +31,10 @@ public:
 	/// @param cooltime 
 	void SetAttackCooltime(float cooltime)override { attackCooltime_ = cooltime; }
 
+	/// @brief ビヘイビアツリーの設定
+	/// @param behaviorTree 
+	void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) override { behaviorTree_ = std::move(behaviorTree); }
+
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	const NavMesh* GetNavMesh() const override { return navMesh_; }
