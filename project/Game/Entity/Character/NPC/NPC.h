@@ -39,6 +39,10 @@ public:
 	/// @return 
 	const NavMesh* GetNavMesh() const override { return navMesh_; }
 
+	/// @brief ビヘイビアツリーの取得
+	/// @return 
+	BehaviorTree* GetBehaviorTree() const override { return behaviorTree_.get(); }
+
 
 private:
 

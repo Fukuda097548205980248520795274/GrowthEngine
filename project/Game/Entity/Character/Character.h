@@ -133,6 +133,10 @@ public:
 	/// @param behaviorTreeName 
 	virtual void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) { (void)behaviorTree; }
 
+	/// @brief ビヘイビアツリーの取得
+	/// @return 
+	virtual BehaviorTree* GetBehaviorTree() const { return nullptr; }
+
 	/// @brief 更新処理
 	virtual void Update() override;
 

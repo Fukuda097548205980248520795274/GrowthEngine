@@ -13,8 +13,11 @@ public:
 	virtual ~BehaviorTree() = default;
 
 	/// @brief 実行
-	void Exec() {if(root_) root_->Exec(); }
+	void Exec() { root_->ResetStatusRecursive(); if (root_) root_->UpdateNode(); }
 
+	/// @brief ルートノードを取得する
+	/// @return 
+	Node* GetRoot() const { return root_.get(); }
 
 protected:
 

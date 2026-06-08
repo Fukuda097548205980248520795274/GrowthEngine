@@ -7,6 +7,7 @@ BehaviorTreeEditor::BehaviorTreeEditor()
 	// 履歴管理クラスとクリップボード管理クラスのインスタンスを作成
 	history_ = std::make_unique<BehaviorTreeEditorHistory>();
 	clipboard_ = std::make_unique<BehaviorTreeEditorClipboard>();
+	viewer_ = std::make_unique<BehaviorTreeViewer>();
 
 	// ファイルアイコンのSRVのGPUハンドルを取得
     btFileIcon_ = engine_->GetTextureSrvGpuHandle(engine_->LoadTexture("./Assets/Textures/uvChecker.png"));
@@ -233,6 +234,9 @@ void BehaviorTreeEditor::DrawUI()
     DrawProjectWindow();
     DrawNodeTable();
     DrawPropertyWindow();
+
+	// ビューアのUIも描画する
+    if (viewer_)viewer_->DrawUI();
 }
 
 /// @brief 選択されているノードを削除する

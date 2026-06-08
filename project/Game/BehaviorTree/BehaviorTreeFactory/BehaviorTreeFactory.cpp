@@ -298,5 +298,29 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
         }
     }
 
+
+	// ラインタイムでノードを確認するためのデバッグ情報を設定
+    if (runtime_node)
+    {
+        // ビューアー上に表示するノード名を設定
+        std::string nodeName = "Unknown";
+        if (editor_node.type == EditorNodeType::Action) nodeName = editor_node.actionName;
+        else if (editor_node.type == EditorNodeType::Condition) nodeName = "Condition";
+        else if (editor_node.type == EditorNodeType::PersistentSelector) nodeName = "Persistent Selector";
+        else if (editor_node.type == EditorNodeType::PersistentSequence) nodeName = "Persistent Sequence";
+        else if (editor_node.type == EditorNodeType::RestartingSelector) nodeName = "Restarting Selector";
+        else if (editor_node.type == EditorNodeType::RestartingSequence) nodeName = "Restarting Sequence";
+
+        runtime_node->SetDebugInfo(
+            editor_node.id,
+            editor_node.inputPinId,
+            editor_node.outputPinId,
+            editor_node.pos,
+            nodeName,
+            editor_node.type
+        );
+    }
+
+
     return runtime_node;
 }

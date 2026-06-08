@@ -12,7 +12,7 @@ Node::State PersistentSelectorNode::Exec()
 	while (currentIndex_ < children_.size())
 	{
 		// 実行
-		State state = children_[currentIndex_]->Exec();
+		State state = children_[currentIndex_]->UpdateNode();
 
 		// 成功　次の子ノードへ進む
 		if (state == State::Success)

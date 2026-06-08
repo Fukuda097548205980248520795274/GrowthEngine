@@ -11,7 +11,7 @@ Node::State RestartingSequenceNode::Exec()
 	// 一つでも失敗したら終了
     for (size_t i = 0; i < children_.size(); ++i)
     {
-        State state = children_[i]->Exec();
+        State state = children_[i]->UpdateNode();
 
         // 失敗、あるいは実行中のノードが見つかってここで止まる場合
         if (state == State::Failure || state == State::Running)

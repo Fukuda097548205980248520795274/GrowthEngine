@@ -1207,6 +1207,9 @@
     <Filter Include="Game\Node\ActionNode\OutAttackSequenceNode">
       <UniqueIdentifier>{cf738ecf-da31-4fc9-ac33-4a18b1655426}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeViewer">
+      <UniqueIdentifier>{e4236ab9-eba8-4ed3-9cbb-726a3c856b03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2171,6 +2174,9 @@
     </ClCompile>
     <ClCompile Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.cpp">
       <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp">
+      <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3253,6 +3259,9 @@
     </ClInclude>
     <ClInclude Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.h">
       <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
