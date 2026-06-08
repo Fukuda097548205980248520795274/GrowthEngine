@@ -188,6 +188,14 @@ public:
 	/// @return 
 	bool IsAttack()const { return currentAttack_ != nullptr; }
 
+	/// @brief 攻撃のシーケンスに入っているかどうか（攻撃動作全体の中かどうか）
+	/// @return 
+	bool IsInAttackSequence() const { return isInAttackSequence_; }
+
+	/// @brief 攻撃のシーケンスに入るかどうかを設定する
+	/// @param isInSequence 
+	void SetInAttackSequence(bool isInSequence) { isInAttackSequence_ = isInSequence; }
+
 	/// @brief 回避しているかどうか
 	/// @return 
 	bool IsAvoid() const { return isAvoid_; }
@@ -627,6 +635,9 @@ protected:
 
 	/// @brief 今の攻撃
 	Attack* currentAttack_ = nullptr;
+	
+	// 攻撃シーケンス中かどうか
+	bool isInAttackSequence_ = false;
 
 	/// @brief 今の移動
 	Move* currentMove_ = nullptr;

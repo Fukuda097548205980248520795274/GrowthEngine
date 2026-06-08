@@ -1039,9 +1039,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Action\Attack\GrabStrikeAttack\GrabStrikeAttack.cpp" />
     <ClCompile Include="Game\Action\Avoid\Avoid.cpp" />
     <ClCompile Include="Game\Action\Guard\Guard.cpp" />
+    <ClCompile Include="Game\Action\InAttackSequence\InAttackSequence.cpp" />
     <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\Action\Move\NavMeshMove\NavMeshMove.cpp" />
+    <ClCompile Include="Game\Action\OutAttackSequence\OutAttackSequence.cpp" />
     <ClCompile Include="Game\Action\ReleaseToken\ReleaseToken.cpp" />
     <ClCompile Include="Game\Action\RequestToken\RequestToken.cpp" />
     <ClCompile Include="Game\AppCollider\AppCollider.cpp" />
@@ -1075,6 +1077,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.cpp" />
+    <ClCompile Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.cpp" />
+    <ClCompile Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.cpp" />
     <ClCompile Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\CompositeNode.cpp" />
@@ -1407,9 +1411,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\Attack\GrabStrikeAttack\GrabStrikeAttack.h" />
     <ClInclude Include="Game\Action\Avoid\Avoid.h" />
     <ClInclude Include="Game\Action\Guard\Guard.h" />
+    <ClInclude Include="Game\Action\InAttackSequence\InAttackSequence.h" />
     <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\Action\Move\NavMeshMove\NavMeshMove.h" />
+    <ClInclude Include="Game\Action\OutAttackSequence\OutAttackSequence.h" />
     <ClInclude Include="Game\Action\ReleaseToken\ReleaseToken.h" />
     <ClInclude Include="Game\Action\RequestToken\RequestToken.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />
@@ -1440,6 +1446,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Node\ActionNode\ComboAttackNode\ComboAttackNode.h" />
     <ClInclude Include="Game\Node\ActionNode\GrabAttackNode\GrabAttackNode.h" />
     <ClInclude Include="Game\Node\ActionNode\GrabStrikeAttackNode\GrabStrikeAttackNode.h" />
+    <ClInclude Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.h" />
+    <ClInclude Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.h" />
     <ClInclude Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.h" />
     <ClInclude Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\CompositeNode.h" />

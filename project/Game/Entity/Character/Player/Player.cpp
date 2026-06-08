@@ -252,6 +252,9 @@ void Player::Update()
 		// 攻撃の更新処理
 		UpdateAttack();
 
+		// プレイヤーは予備動作はないので、攻撃中が攻撃動作中と同じ扱いになる
+		isInAttackSequence_ = IsAttack();
+
 		// 防御状態を更新する
 		UpdateGuardState();
 
@@ -306,6 +309,9 @@ void Player::Update()
 			SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
 		}
 	}
+
+	// プレイヤーは予備動作はないので、攻撃中が攻撃動作中と同じ扱いになる
+	isInAttackSequence_ = IsAttack();
 
 	// アクションの更新処理
 	ActionUpdate();

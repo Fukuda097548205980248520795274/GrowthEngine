@@ -925,7 +925,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
     // アクション選択用のコンボボックス
-    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", "RequestToken", "ReleaseToken", "Avoid", "ApproachTargetMove", "NavMeshMove" };
+    const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", 
+        "RequestToken", "ReleaseToken", "Avoid", "ApproachTargetMove", "NavMeshMove", "InAttackSequence", "OutAttackSequence" };
     int currentItem = 0;
     for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
     {

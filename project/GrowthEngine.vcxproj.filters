@@ -1195,6 +1195,18 @@
     <Filter Include="Game\StageObject\StaticEventTrigger">
       <UniqueIdentifier>{0b619d00-9899-4898-9110-74c729445eb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\InAttackSequence">
+      <UniqueIdentifier>{0a1cba05-54a4-47bb-8094-6af1eea997e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\OutAttackSequence">
+      <UniqueIdentifier>{0d744175-bf75-4c70-9cb1-412b85e086b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\InAttackSequenceNode">
+      <UniqueIdentifier>{ceae76f6-dc9b-4af6-bdd0-bf3a51f711be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\ActionNode\OutAttackSequenceNode">
+      <UniqueIdentifier>{cf738ecf-da31-4fc9-ac33-4a18b1655426}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2147,6 +2159,18 @@
     </ClCompile>
     <ClCompile Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.cpp">
       <Filter>Game\StageObject\StaticEventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\InAttackSequence\InAttackSequence.cpp">
+      <Filter>Game\Action\InAttackSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\OutAttackSequence\OutAttackSequence.cpp">
+      <Filter>Game\Action\OutAttackSequence</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.cpp">
+      <Filter>Game\Node\ActionNode\InAttackSequenceNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.cpp">
+      <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3217,6 +3241,18 @@
     </ClInclude>
     <ClInclude Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.h">
       <Filter>Game\StageObject\StaticEventTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\InAttackSequence\InAttackSequence.h">
+      <Filter>Game\Action\InAttackSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\OutAttackSequence\OutAttackSequence.h">
+      <Filter>Game\Action\OutAttackSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.h">
+      <Filter>Game\Node\ActionNode\InAttackSequenceNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.h">
+      <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

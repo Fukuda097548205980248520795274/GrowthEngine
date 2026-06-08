@@ -10,6 +10,8 @@
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
 #include "Node/ActionNode/RequestTokenNode/RequestTokenNode.h"
 #include "Node/ActionNode/ReleaseTokenNode/ReleaseTokenNode.h"
+#include "Node/ActionNode/InAttackSequenceNode/InAttackSequenceNode.h"
+#include "Node/ActionNode/OutAttackSequenceNode/OutAttackSequenceNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param editor_nodes 
@@ -200,6 +202,16 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		{
 			// NavMeshを使用した移動ノードの生成
 			runtime_node = std::make_unique<ActionNode>(std::make_unique<NavMeshMove>(character, editor_node.navMeshMoveInitData));
+		}
+		else if (editor_node.actionName == "InAttackSequence")
+		{
+			// 攻撃シーケンス開始ノードの生成
+			runtime_node = std::make_unique<InAttackSequenceNode>(std::make_unique<InAttackSequence>(character));
+		}
+		else if (editor_node.actionName == "OutAttackSequence")
+		{
+			// 攻撃シーケンス終了ノードの生成
+			runtime_node = std::make_unique<OutAttackSequenceNode>(std::make_unique<OutAttackSequence>(character));
 		}
         else
         {
