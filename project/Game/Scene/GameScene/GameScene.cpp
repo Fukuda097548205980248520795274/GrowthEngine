@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "BattleDirector/BattleDirector.h"
 
 #include <algorithm>
 #include <cmath>
@@ -283,6 +284,9 @@ void GameScene::Reset()
 
 	// npcのカウンターをリセットする
 	npcCount_ = 0;
+
+	// バトル制御をリセットする
+	BattleDirector::GetInstance().Clear();
 }
 
 

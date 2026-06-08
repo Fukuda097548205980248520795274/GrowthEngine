@@ -74,3 +74,10 @@ void BattleDirector::ReleaseAttackToken(Character* npc)
 	// NPCとそのターゲットのマッピングを削除する
 	npcToTargetMap_.erase(it);
 }
+
+/// @brief クリア処理
+void BattleDirector::Clear()
+{
+	targetTokenHolders_.clear();
+	npcToTargetMap_.clear();
+}

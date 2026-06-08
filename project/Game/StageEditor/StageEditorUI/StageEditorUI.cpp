@@ -134,6 +134,44 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         isDirty_ = true;
     }
 
+    if (!io.WantTextInput)
+    {
+		// Ctrl + C でコピー
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
+        {
+            // 有効なオブジェクトが選択されている場合のみコピー
+            if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+            {
+                copiedData_ = placementList[selectedIndex_];
+
+                // 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
+                copiedData_.instancePtr = nullptr;
+                hasCopiedData_ = true;
+            }
+        }
+
+		// Ctrl + V でペースト
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+        {
+            if (hasCopiedData_)
+            {
+                // 現在の状態を履歴に保存して変更フラグを立てる
+                history_->SaveHistory(placementList);
+                isDirty_ = true;
+
+                // クリップボードからデータを複製
+                PlacementData newData = copiedData_;
+
+                // 実体をシーンに生成してリストに追加
+                spawner_->SpawnActualEntity(newData);
+                placementList.push_back(newData);
+
+                // ペーストしたオブジェクトを自動的に選択状態にする
+                selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+            }
+        }
+    }
+
     ImGui::Separator();
 
 	// モード切替の表示
@@ -902,6 +940,9 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
 							// 選択された名前を PlacementData の配列にコピーする
                             strcpy_s(target.behaviorScriptName, sizeof(target.behaviorScriptName), name.c_str());
+
+							// 実際のキャラクターオブジェクトにビヘイビアツリーを更新する
+                            charPtr->SetBehaviorTree(scene_->GetBehaviorTreeEditor()->CreateTree(target.behaviorScriptName, charPtr));
                         }
 
                         // 選択中のアイテムにフォーカスを合わせる

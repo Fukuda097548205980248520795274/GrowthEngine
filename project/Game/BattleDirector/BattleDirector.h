@@ -22,6 +22,9 @@ public:
 	/// @param npc 
 	void ReleaseAttackToken(Character* npc);
 
+	/// @brief クリア処理
+	void Clear();
+
 private:
 
 	// シングルトンのためコンストラクタはprivate

@@ -60,6 +60,10 @@ public:
 	/// @return 
 	NavMesh* GetNavMesh() const { return navMesh_.get(); }
 
+	/// @brief ビヘイビアツリーエディタを取得する
+	/// @return 
+	BehaviorTreeEditor* GetBehaviorTreeEditor() const { return behaviorTreeEditor_.get(); }
+
 	/// @brief リセットする
 	void Reset();
 
