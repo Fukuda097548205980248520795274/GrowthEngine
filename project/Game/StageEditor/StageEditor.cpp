@@ -43,20 +43,37 @@ void StageEditor::Update(float dt)
         Engine::Collision3D::Ray ray = RaycastFromMouse();
         Vector3 currentHitPoint = GetRayIntersectionWithPlane(ray, 0.0f); // 床の高さを0.0fとする
 
+        // モード切り替え (1: 点, 2: 辺, 3: 面)
+        if (engine_->GetKeyTrigger(DIK_1))
+        {
+            selectionMode_ = SelectionMode::Vertex;
+            selectedItems_.clear();
+        }
+        if (engine_->GetKeyTrigger(DIK_2)) 
+        {
+            selectionMode_ = SelectionMode::Edge;
+            selectedItems_.clear();
+        }
+        if (engine_->GetKeyTrigger(DIK_3)) 
+        {
+            selectionMode_ = SelectionMode::Polygon;
+            selectedItems_.clear();
+        }
+
         // 左クリックが押された瞬間（選択 ＆ ドラッグ開始）
         if (engine_->GetMouseButtonTrigger(MouseButton::Left))
         {
 			// Shiftキーが押されているかどうかをチェック（複数選択のため）
             bool isShiftPressed = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
 
-            SelectNavMeshEdge();
+            SelectNavMeshItem();
 
 			// Shiftキーが押されていない場合は、選択された辺だけを残して他の選択を解除する
-            if (!selectedEdges_.empty() && selectedEdges_[0].polygonId != -1)
+            if (!selectedItems_.empty() && selectedItems_[0].polygonId != -1)
             {
                 history_->SaveHistory(placementList_);
                 editorUI_->Dirty();
-                isDraggingEdge_ = true;
+                isDraggingItem_ = true;
                 previousHitPoint_ = currentHitPoint;
             }
         }
@@ -69,7 +86,7 @@ void StageEditor::Update(float dt)
             // 少しでもマウスが動いていれば辺を動かす
             if (std::abs(moveDelta.x) > 0.001f || std::abs(moveDelta.z) > 0.001f)
             {
-                MoveSelectedEdge(moveDelta);
+                MoveSelectedItem(moveDelta);
             }
 
             // 次のフレームのために交点を更新
@@ -78,19 +95,13 @@ void StageEditor::Update(float dt)
         // 左クリックが離された瞬間（ドラッグ終了）
         else if (engine_->GetMouseButtonRelease(MouseButton::Left))
         {
-            isDraggingEdge_ = false;
+            isDraggingItem_ = false;
         }
 
-		// 押し出しキーが押された瞬間
-		if (engine_->GetKeyTrigger(DIK_E))
-		{
-			ExtrudeSelectedEdge();
-		}
-
-		// ブリッジキーが押された瞬間
-        if (engine_->GetKeyTrigger(DIK_B))
+        if (selectionMode_ == SelectionMode::Edge)
         {
-			BridgeSelectedEdges();
+            if (engine_->GetKeyTrigger(DIK_E)) ExtrudeSelectedEdge();
+            if (engine_->GetKeyTrigger(DIK_B)) BridgeSelectedEdges();
         }
     }
 
@@ -104,7 +115,7 @@ void StageEditor::DrawUI()
 
 	// ナビメッシュのデバッグ描画
 	navMesh_->DrawDebug();
-    DrawSelectedEdgesHighlight();
+    DrawSelectedHighlight();
 
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, navMesh_);
 	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, navMesh_);
@@ -166,85 +177,94 @@ float StageEditor::SqrDistancePointToSegment(const Vector3& pt, const Vector3& a
 }
 
 /// @brief 選択されている辺を押し出す
-void StageEditor::SelectNavMeshEdge()
+void StageEditor::SelectNavMeshItem()
 {
     if (!navMesh_) return;
 
-	// マウスからレイを飛ばす
     Engine::Collision3D::Ray ray = RaycastFromMouse();
-
-    // レイが下を向いていない場合は無視（空をクリックしている）
     if (ray.diff.y >= 0.0f) return;
 
-	// レイとXZ平面（y=0）との交点を計算
     float distanceToFloor = (0.0f - ray.start.y) / ray.diff.y;
     Vector3 hitPoint = ray.start + (ray.diff * distanceToFloor);
 
     int closestPolyId = -1;
-    int closestEdgeIdx = -1;
-    float minSqrDist = 1.0f; // クリック判定のしきい値（距離の2乗。1.0fなら半径1m以内の辺を許容）
+    int closestItemIdx = -1;
 
-    // 全てのポリゴンの全ての辺をチェックし、交点(hitPoint)に最も近いものを探す
-    for (const auto& poly : navMesh_->GetPolygons()) // ※NavMeshにGetPolygons()を実装してください
+    // === モードごとの当たり判定 ===
+    if (selectionMode_ == SelectionMode::Vertex)
     {
-        for (int i = 0; i < 4; ++i)
-        {
-            Vector3 v0 = poly.vertices[i];
-            Vector3 v1 = poly.vertices[(i + 1) % 4];
-
-            // 点(hitPoint)と辺(v0-v1)の距離を計算
-            float sqrDist = SqrDistancePointToSegment(hitPoint, v0, v1);
-
-            if (sqrDist < minSqrDist)
-            {
-                minSqrDist = sqrDist;
+        float minSqrDist = 1.0f;
+        for (const auto& poly : navMesh_->GetPolygons()) {
+            for (int i = 0; i < 4; ++i) {
+                Vector3 v = poly.vertices[i];
+                float sqrDist = (hitPoint.x - v.x) * (hitPoint.x - v.x) + (hitPoint.z - v.z) * (hitPoint.z - v.z); // XZ平面での距離
+                if (sqrDist < minSqrDist) {
+                    minSqrDist = sqrDist;
+                    closestPolyId = poly.id;
+                    closestItemIdx = i;
+                }
+            }
+        }
+    }
+    else if (selectionMode_ == SelectionMode::Edge)
+    {
+        float minSqrDist = 1.0f;
+        for (const auto& poly : navMesh_->GetPolygons()) {
+            for (int i = 0; i < 4; ++i) {
+                Vector3 v0 = poly.vertices[i];
+                Vector3 v1 = poly.vertices[(i + 1) % 4];
+                float sqrDist = SqrDistancePointToSegment(hitPoint, v0, v1);
+                if (sqrDist < minSqrDist) {
+                    minSqrDist = sqrDist;
+                    closestPolyId = poly.id;
+                    closestItemIdx = i;
+                }
+            }
+        }
+    }
+    else if (selectionMode_ == SelectionMode::Polygon)
+    {
+        // 面選択: NavPolygon の IsPointInside を使用して判定
+        for (const auto& poly : navMesh_->GetPolygons()) {
+            if (poly.IsPointInside(hitPoint)) {
                 closestPolyId = poly.id;
-                closestEdgeIdx = i;
+                closestItemIdx = 0; // 面の場合はインデックス不要
+                break;
             }
         }
     }
 
-	// Shiftキーが押されているかどうかをチェック（複数選択のため）
-	bool isMultiSelect = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
+    // === 選択リストへの追加処理（複数選択対応） ===
+    bool isMultiSelect = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
 
-	// 最も近い辺がクリック判定の範囲内なら選択する
     if (closestPolyId != -1)
     {
-        SelectedEdge newEdge{ closestPolyId, closestEdgeIdx };
+        SelectedItem newItem{ closestPolyId, closestItemIdx };
 
-		// Shiftキーが押されている場合は複数選択モード
-        if (isMultiSelect)
-        {
-            // 既に選択されていないかチェック
+        if (isMultiSelect) {
             bool alreadySelected = false;
-            for (const auto& edge : selectedEdges_) {
-                if (edge.polygonId == newEdge.polygonId && edge.edgeIndex == newEdge.edgeIndex) {
+            auto it = selectedItems_.begin();
+            for (; it != selectedItems_.end(); ++it) {
+                if (it->polygonId == newItem.polygonId && it->itemIndex == newItem.itemIndex) {
                     alreadySelected = true;
                     break;
                 }
             }
-
-            // 未選択なら追加。2つを超えたら古いものを消す
             if (!alreadySelected) {
-                selectedEdges_.push_back(newEdge);
-                if (selectedEdges_.size() > 2) {
-                    selectedEdges_.erase(selectedEdges_.begin());
-                }
+                selectedItems_.push_back(newItem);
+            }
+            else {
+                selectedItems_.erase(it); // トグル選択解除
             }
         }
-        else
-        {
-            // 単一選択の場合はクリアして追加
-            selectedEdges_.clear();
-            selectedEdges_.push_back(newEdge);
+        else {
+            selectedItems_.clear();
+            selectedItems_.push_back(newItem);
         }
     }
     else
     {
-        // 何もないところをクリックしたら選択解除
-        if (!isMultiSelect) {
-            selectedEdges_.clear();
-        }
+        if (!isMultiSelect) selectedItems_.clear();
     }
 }
 
@@ -252,19 +272,19 @@ void StageEditor::SelectNavMeshEdge()
 /// @brief 選択されている辺を押し出す
 void StageEditor::ExtrudeSelectedEdge()
 {
-    if (selectedEdges_.empty() || navMesh_ == nullptr) return;
+    if (selectedItems_.empty() || navMesh_ == nullptr) return;
 
-    NavPolygon* poly = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
+    NavPolygon* poly = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
     if (!poly) return;
 
     // すでに他のポリゴンと繋がっている辺からは押し出し不可にする
-    if (poly->neighborIds[selectedEdges_[0].edgeIndex] != -1) return;
+    if (poly->neighborIds[selectedItems_[0].itemIndex] != -1) return;
 
 	// 押し出し前の状態を履歴に保存
     history_->SaveHistory(placementList_);
     editorUI_->Dirty();
 
-    int eIdx = selectedEdges_[0].edgeIndex;
+    int eIdx = selectedItems_[0].itemIndex;
     Vector3 v0 = poly->vertices[eIdx];
     Vector3 v1 = poly->vertices[(eIdx + 1) % 4];
 
@@ -299,8 +319,8 @@ void StageEditor::ExtrudeSelectedEdge()
     navMesh_->AddPolygon(newPoly);
 
     // 連続して「E」を押せるように、選択状態を新しくできた先端の辺（インデックス2）に移動
-    selectedEdges_.clear();
-    selectedEdges_.push_back({ newPoly.id, 2 });
+    selectedItems_.clear();
+    selectedItems_.push_back({ newPoly.id, 2 });
 }
 
 /// @brief 初期のナビメッシュを作成する
@@ -324,8 +344,8 @@ void StageEditor::CreateInitialNavPolygon()
     navMesh_->AddPolygon(poly);
 
     // 生成したら自動的にそのポリゴンの辺0を選択状態にする
-    selectedEdges_.clear();
-    selectedEdges_.push_back({ poly.id, 0 });
+    selectedItems_.clear();
+    selectedItems_.push_back({ poly.id, 0 });
 }
 
 /// @brief レイとXZ平面（y=planeY）との交点を計算する関数
@@ -349,60 +369,70 @@ Vector3 StageEditor::GetRayIntersectionWithPlane(const Engine::Collision3D::Ray&
 
 /// @brief 選択された辺を移動する
 /// @param moveDelta 
-void StageEditor::MoveSelectedEdge(const Vector3& moveDelta)
+void StageEditor::MoveSelectedItem(const Vector3& moveDelta)
 {
-	// 選択された辺がない場合やナビメッシュが存在しない場合は何もしない
-	if (selectedEdges_.empty() || navMesh_ == nullptr) return;
+    if (selectedItems_.empty() || navMesh_ == nullptr) return;
 
-    NavPolygon* targetPoly = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
-    if (!targetPoly) return;
-
-    // 移動前の辺の2つの頂点座標を取得しておく
-    int eIdx = selectedEdges_[0].edgeIndex;
-    Vector3 oldV0 = targetPoly->vertices[eIdx];
-    Vector3 oldV1 = targetPoly->vertices[(eIdx + 1) % 4];
-
-    // 新しい座標を計算
-    Vector3 newV0 = oldV0 + moveDelta;
-    Vector3 newV1 = oldV1 + moveDelta;
-
-    // --- 共有頂点の同期更新 ---
-    for (auto& poly : navMesh_->GetMutablePolygons())
+    // --- 全ての選択アイテムを移動させる ---
+    for (const auto& item : selectedItems_)
     {
-        for (int i = 0; i < 4; ++i)
+        NavPolygon* targetPoly = navMesh_->GetMutablePolygon(item.polygonId);
+        if (!targetPoly) continue;
+
+        std::vector<Vector3> oldVertices;
+        std::vector<Vector3> newVertices;
+
+        if (selectionMode_ == SelectionMode::Vertex)
         {
-            // 頂点が oldV0 とほぼ同じ位置にあれば newV0 に更新
-            Vector3 diff0 = poly.vertices[i] - oldV0;
-            if ((diff0.x * diff0.x + diff0.y * diff0.y + diff0.z * diff0.z) < 0.01f)
-            {
-                poly.vertices[i] = newV0;
+            oldVertices.push_back(targetPoly->vertices[item.itemIndex]);
+            newVertices.push_back(targetPoly->vertices[item.itemIndex] + moveDelta);
+        }
+        else if (selectionMode_ == SelectionMode::Edge)
+        {
+            oldVertices.push_back(targetPoly->vertices[item.itemIndex]);
+            oldVertices.push_back(targetPoly->vertices[(item.itemIndex + 1) % 4]);
+            newVertices.push_back(oldVertices[0] + moveDelta);
+            newVertices.push_back(oldVertices[1] + moveDelta);
+        }
+        else if (selectionMode_ == SelectionMode::Polygon)
+        {
+            for (int i = 0; i < 4; ++i) {
+                oldVertices.push_back(targetPoly->vertices[i]);
+                newVertices.push_back(targetPoly->vertices[i] + moveDelta);
             }
-            // 頂点が oldV1 とほぼ同じ位置にあれば newV1 に更新
-            else
+        }
+
+        // --- 共有頂点の同期更新 ---
+        for (auto& poly : navMesh_->GetMutablePolygons())
+        {
+            for (int i = 0; i < 4; ++i)
             {
-                Vector3 diff1 = poly.vertices[i] - oldV1;
-                if ((diff1.x * diff1.x + diff1.y * diff1.y + diff1.z * diff1.z) < 0.01f)
+                for (size_t vIdx = 0; vIdx < oldVertices.size(); ++vIdx)
                 {
-                    poly.vertices[i] = newV1;
+                    Vector3 diff = poly.vertices[i] - oldVertices[vIdx];
+                    if ((diff.x * diff.x + diff.y * diff.y + diff.z * diff.z) < 0.01f)
+                    {
+                        poly.vertices[i] = newVertices[vIdx];
+                    }
                 }
             }
         }
     }
 }
 
-/// @brief ブリッジ操作を行う（選択された辺の両端に新しいポリゴンを作成して繋げる）
+/// @brief 選択された辺を繋ぐ（ブリッジ）する
 void StageEditor::BridgeSelectedEdges()
 {
     // 辺が2つ選択されていない場合は何もしない
-    if (selectedEdges_.size() != 2 || navMesh_ == nullptr) return;
+    if (selectedItems_.size() != 2 || navMesh_ == nullptr) return;
 
-    NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedEdges_[0].polygonId);
-    NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedEdges_[1].polygonId);
+    NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
+    NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedItems_[1].polygonId);
 
     if (!poly1 || !poly2) return;
 
-    int eIdx1 = selectedEdges_[0].edgeIndex;
-    int eIdx2 = selectedEdges_[1].edgeIndex;
+    int eIdx1 = selectedItems_[0].itemIndex;
+    int eIdx2 = selectedItems_[1].itemIndex;
 
     // 選択された辺がすでに他のポリゴンと繋がっている場合はキャンセル
     if (poly1->neighborIds[eIdx1] != -1 || poly2->neighborIds[eIdx2] != -1) return;
@@ -466,29 +496,43 @@ void StageEditor::BridgeSelectedEdges()
     navMesh_->AddPolygon(newPoly);
 
     // ブリッジ完了後は選択を解除（または新しいポリゴンを選択状態にする）
-    selectedEdges_.clear();
+    selectedItems_.clear();
 }
 
 /// @brief 選択された辺をハイライト表示する
-void StageEditor::DrawSelectedEdgesHighlight()
+void StageEditor::DrawSelectedHighlight()
 {
-    if (!navMesh_ || selectedEdges_.empty()) return;
+    if (!navMesh_ || selectedItems_.empty()) return;
 
-    for (const auto& edge : selectedEdges_)
+    for (const auto& item : selectedItems_)
     {
-        // 選択中のポリゴンを取得
-        NavPolygon* poly = navMesh_->GetMutablePolygon(edge.polygonId);
+        NavPolygon* poly = navMesh_->GetMutablePolygon(item.polygonId);
         if (!poly) continue;
 
-        // 選択中の辺の両端の頂点を取得
-        int eIdx = edge.edgeIndex;
-        Vector3 v0 = poly->vertices[eIdx];
-        Vector3 v1 = poly->vertices[(eIdx + 1) % 4];
+        if (selectionMode_ == SelectionMode::Vertex)
+        {
+            Vector3 v = poly->vertices[item.itemIndex];
+            Vector3 renderV = Vector3(v.x, v.y + 0.05f, v.z);
+            // 点を強調表示（Engine側に球やBoxを描画する機能があればそれを使用。例として短い線を描画）
+            engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        }
+        else if (selectionMode_ == SelectionMode::Edge)
+        {
+            Vector3 v0 = poly->vertices[item.itemIndex];
+            Vector3 v1 = poly->vertices[(item.itemIndex + 1) % 4];
+            Vector3 renderV0 = Vector3(v0.x, v0.y + 0.01f, v0.z);
+            Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
+            engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        }
+        else if (selectionMode_ == SelectionMode::Polygon)
+        {
+            // 面の強調表示（半透明の三角形などで塗りつぶす）
+            Vector3 v0 = poly->vertices[0]; Vector3 v1 = poly->vertices[1];
+            Vector3 v2 = poly->vertices[2]; Vector3 v3 = poly->vertices[3];
+            v0.y += 0.01f; v1.y += 0.01f; v2.y += 0.01f; v3.y += 0.01f;
 
-		// デバッグ描画のために少しだけY座標を上げる（地面と重ならないように）
-        Vector3 renderV0 = Vector3(v0.x, v0.y + 0.01f, v0.z);
-        Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
-
-        engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            engine_->DrawDebugTriangle3D(v0, v1, v2, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+            engine_->DrawDebugTriangle3D(v0, v2, v3, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+        }
     }
 }

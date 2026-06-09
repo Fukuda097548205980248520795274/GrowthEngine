@@ -12,11 +12,19 @@ class StageEditor
 {
 public:
 
+	// エディタの選択モード
+    enum class SelectionMode
+    {
+        Vertex, // 1: 点選択
+        Edge,   // 2: 辺選択
+        Polygon // 3: 面選択
+    };
+
     // 選択されている辺の情報を保持する構造体
-    struct SelectedEdge
+    struct SelectedItem
     {
         int polygonId = -1; // 選択中のポリゴンID (-1で未選択)
-        int edgeIndex = -1; // 選択中の辺のインデックス (0～3)
+		int itemIndex = -1; // 頂点選択なら頂点インデックス、辺選択なら辺インデックス、面選択なら-1
     };
 
 
@@ -52,8 +60,8 @@ private:
     /// @return 
     float SqrDistancePointToSegment(const Vector3& pt, const Vector3& a, const Vector3& b);
 
-	/// @brief 選択されている辺を押し出す
-    void SelectNavMeshEdge();
+    /// @brief ナビゲーションメッシュの選択
+    void SelectNavMeshItem();
 
 
 private:
@@ -108,24 +116,27 @@ private:
 
 	/// @brief 選択された辺を移動する
     /// @param moveDelta 
-    void MoveSelectedEdge(const Vector3& moveDelta);
+    void MoveSelectedItem(const Vector3& moveDelta);
 
-	/// @brief ブリッジ操作を行う（選択された辺の両端に新しいポリゴンを作成して繋げる）
+	/// @brief 選択された辺を繋ぐ（ブリッジ）する
     void BridgeSelectedEdges();
 
 	/// @brief 選択された辺をハイライト表示する
-    void DrawSelectedEdgesHighlight();
+    void DrawSelectedHighlight();
 
     // NavMeshへのポインタ（初期化時にシーンなどから取得してセットしてください）
     NavMesh* navMesh_ = nullptr;
 
     /// @brief 選択された辺
-    std::vector<SelectedEdge> selectedEdges_;
+    std::vector<SelectedItem> selectedItems_;
 
     // ドラッグ状態の管理
-    bool isDraggingEdge_ = false;
+    bool isDraggingItem_ = false;
 
     // 前回のレイと床の交点
-    Vector3 previousHitPoint_;
+    Vector3 previousHitPoint_{};
+
+	// 現在の選択モード
+    SelectionMode selectionMode_ = SelectionMode::Edge;
 };
 
