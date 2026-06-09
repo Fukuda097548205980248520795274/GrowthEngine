@@ -46,7 +46,9 @@ void StageEditorUI::Update()
 /// @param currentFileName 
 /// @param isPlaying 
 /// @param navMesh 
-void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
+/// @param canExtrude 
+/// @param canBridge 
+void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool canExtrude, bool canBridge)
 {
 #ifdef _DEVELOPMENT
 
@@ -60,18 +62,101 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     // ファイルが選択されていない場合は、警告を表示してUIの描画を終了する
     if (currentFileName.empty())
     {
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "No Stage File Selected.");
-        ImGui::Text("Please select or create a stage from 'Stage Project Assets' window.");
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "ステージファイルが選択されていません。");
+        ImGui::Text("「ステージプロジェクトアセット」ウィンドウからステージを選択または作成してください。");
         ImGui::End();
         return;
     }
 
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
 
-	// PLAY / STOP ボタン
+    /*--------------
+        操作方法
+    --------------*/
+
+    // ショートカットキーの説明
+    ImGui::Text("ショートカットキー 一覧");
+
+    // --- 保存の表示 ---
+    ImGui::Text("Ctrl + S : 上書き保存");
+
+    // --- Undo の表示切り替え ---
+    if (history_->CanUndo())
+    {
+        ImGui::Text("Ctrl + Z : Undo");
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Z : Undo (無効)");
+    }
+
+    // --- Redo の表示切り替え ---
+    if (history_->CanRedo())
+    {
+        ImGui::Text("Ctrl + Y : Redo");
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Y : Redo (無効)");
+    }
+
+    ImGui::Separator();
+
+    if (currentMode_ == EditorMode::ObjectPlacement)
+    {
+
+    }
+    else if (currentMode_ == EditorMode::NavMeshEdit)
+    {
+        // 操作方法の説明
+        ImGui::Text("1 キー : 頂点 選択");
+        ImGui::Text("2 キー : 辺 選択");
+        ImGui::Text("3 キー : 面 選択");
+
+        // --- 押し出し (Extrude) の表示切り替え ---
+        if (canExtrude)
+        {
+            // 成功時: 緑色でショートカットを表示
+            ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "E キー : 押し出し");
+        }
+        else
+        {
+            // 失敗時: 灰色で無効表示にし、右側にオレンジ色でアドバイスを表示
+            ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "E キー : 押し出し (無効)");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.0f, 1.0f), "<- 辺を1つ選択してください ( 2キー で 辺選択 )");
+        }
+
+        // --- ブリッジ (Bridge) の表示切り替え ---
+        if (canBridge)
+        {
+            // 成功時: 緑色でショートカットを表示
+            ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "B キー : ブリッジ");
+        }
+        else
+        {
+            // 失敗時: 灰色で無効表示にし、右側にオレンジ色でアドバイスを表示
+            ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "B キー : ブリッジ (無効)");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.0f, 1.0f), "<- 辺を2つ選択してください ( 2キー で 辺選択 )");
+        }
+        ImGui::Separator();
+    }
+
+
+
+    /*---------
+        生成
+    ---------*/
+
+    // 現在編集中のファイル名を表示
+    ImGui::Text("ステージ : %s", currentFileName.c_str());
+
+	// 実行 / 停止 ボタン
     if (isPlaying)
     {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); // STOPボタンは赤色
-        if (ImGui::Button("STOP", ImVec2(100, 30)))
+        if (ImGui::Button("停止", ImVec2(100, 30)))
         {
             isPlaying = false;
 			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
@@ -92,7 +177,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     else
     {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f)); // PLAYボタンは緑色
-        if (ImGui::Button("PLAY", ImVec2(100, 30)))
+        if (ImGui::Button("実行", ImVec2(100, 30)))
         {
             isPlaying = true;
 			Entity::SetUpdateEnabled(true); // すべての実体の更新を再開する
@@ -100,12 +185,6 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         }
         ImGui::PopStyleColor();
     }
-    ImGui::Separator();
-
-
-
-    // 現在編集中のファイル名を表示
-    ImGui::Text("Current Stage: %s", currentFileName.c_str());
     
 
     ImGuiIO& io = ImGui::GetIO();
@@ -118,56 +197,56 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             fileManager_->SaveToFile(currentFileName, placementList, navMesh);
             isDirty_ = false;
         }
-    }
 
-	// Ctrl + Z でアンドゥ
-    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z)) 
-    {
-        history_->Undo(placementList, spawner_);
-        isDirty_ = true;
-    }
-
-	// Ctrl + Y でリドゥ
-    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y)) 
-    {
-        history_->Redo(placementList, spawner_);
-        isDirty_ = true;
-    }
-
-    if (!io.WantTextInput)
-    {
-		// Ctrl + C でコピー
-        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
+        // Ctrl + Z でアンドゥ
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
         {
-            // 有効なオブジェクトが選択されている場合のみコピー
-            if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
-            {
-                copiedData_ = placementList[selectedIndex_];
-
-                // 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
-                copiedData_.instancePtr = nullptr;
-                hasCopiedData_ = true;
-            }
+            history_->Undo(placementList, spawner_);
+            isDirty_ = true;
         }
 
-		// Ctrl + V でペースト
-        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+        // Ctrl + Y でリドゥ
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
         {
-            if (hasCopiedData_)
+            history_->Redo(placementList, spawner_);
+            isDirty_ = true;
+        }
+
+        if (!io.WantTextInput)
+        {
+            // Ctrl + C でコピー
+            if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
             {
-                // 現在の状態を履歴に保存して変更フラグを立てる
-                history_->SaveHistory(placementList);
-                isDirty_ = true;
+                // 有効なオブジェクトが選択されている場合のみコピー
+                if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+                {
+                    copiedData_ = placementList[selectedIndex_];
 
-                // クリップボードからデータを複製
-                PlacementData newData = copiedData_;
+                    // 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
+                    copiedData_.instancePtr = nullptr;
+                    hasCopiedData_ = true;
+                }
+            }
 
-                // 実体をシーンに生成してリストに追加
-                spawner_->SpawnActualEntity(newData);
-                placementList.push_back(newData);
+            // Ctrl + V でペースト
+            if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+            {
+                if (hasCopiedData_)
+                {
+                    // 現在の状態を履歴に保存して変更フラグを立てる
+                    history_->SaveHistory(placementList);
+                    isDirty_ = true;
 
-                // ペーストしたオブジェクトを自動的に選択状態にする
-                selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+                    // クリップボードからデータを複製
+                    PlacementData newData = copiedData_;
+
+                    // 実体をシーンに生成してリストに追加
+                    spawner_->SpawnActualEntity(newData);
+                    placementList.push_back(newData);
+
+                    // ペーストしたオブジェクトを自動的に選択状態にする
+                    selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+                }
             }
         }
     }
@@ -178,7 +257,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
     if (currentMode_ == EditorMode::ObjectPlacement)
     {
 		// オブジェクト配置モードのUIを描画
-        ImGui::Text("--- Add New Object ---");
+        ImGui::Text("--- オブジェクト配置 ---");
 
         static PlacementData currentData;
         static bool isInitialized = false;
@@ -208,7 +287,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
         // 大分類の選択
         int intCat = static_cast<int>(currentData.category);
-        if (ImGui::Combo("Category", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
+        if (ImGui::Combo("大分類", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
         {
             currentData.category = static_cast<EditCategory>(intCat);
             currentData.subType = 0; // 大分類が変わったら小分類のリセット
@@ -219,45 +298,45 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         // 大分類に応じて、小分類のコンボボックスの中身を切り替える
         if (currentData.category == EditCategory::Character)
         {
-            ImGui::Combo("Type (NPC)", &currentData.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+            ImGui::Combo("キャラクターの種類", &currentData.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
 
             // 位置
-            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+            ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
             // HP
             ImGui::DragInt("HP", &currentData.hp, 1, 0, 10000);
 
             // 回転
-            ImGui::DragFloat("Rotation", &currentData.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+            ImGui::DragFloat("回転", &currentData.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
             // もしNPCが選ばれていたら、モーションの選択UIも表示する
-            MotionSelecter("Standing Motion", MotionType::Stand, currentData.standMotion);
-            MotionSelecter("Fighting Motion", MotionType::Stance, currentData.stanceMotion);
-            MotionSelecter("Walking Motion", MotionType::Walk, currentData.walkMotion);
-            MotionSelecter("Dashing Motion", MotionType::Dash, currentData.dashMotion);
-            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, currentData.avoidFrontMotion);
-            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, currentData.avoidBackMotion);
-            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, currentData.avoidLeftMotion);
-            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, currentData.avoidRightMotion);
+            MotionSelecter("立ちモーション", MotionType::Stand, currentData.standMotion);
+            MotionSelecter("戦闘モーション", MotionType::Stance, currentData.stanceMotion);
+            MotionSelecter("歩行モーション", MotionType::Walk, currentData.walkMotion);
+            MotionSelecter("ダッシュモーション", MotionType::Dash, currentData.dashMotion);
+            MotionSelecter("前方回避モーション", MotionType::Avoid, currentData.avoidFrontMotion);
+            MotionSelecter("後方回避モーション", MotionType::Avoid, currentData.avoidBackMotion);
+            MotionSelecter("左回避モーション", MotionType::Avoid, currentData.avoidLeftMotion);
+            MotionSelecter("右回避モーション", MotionType::Avoid, currentData.avoidRightMotion);
 
             // プレイヤーと未選択以外　ビヘイビアツリーデータ
             if (currentData.subType != 0 && currentData.subType != 1)
             {
                 ImGui::Separator();
-                ImGui::Text("Behavior Tree Settings");
+                ImGui::Text("ビヘイビアツリーの設定");
 
                 // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
-                if (ImGui::Button("Refresh BT List"))
+                if (ImGui::Button("ビヘイビアツリー一覧を更新"))
                 {
                     LoadBehaviorTreeNames();
                 }
 
                 // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
                 std::string currentBtName = currentData.behaviorScriptName;
-                const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
+                const char* previewBtValue = currentBtName.empty() ? "ビヘイビアツリーを選択..." : currentBtName.c_str();
 
                 // プルダウンメニュー（コンボボックス）の描画
-                if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
+                if (ImGui::BeginCombo("ビヘイビアツリー", previewBtValue))
                 {
                     for (const auto& name : behaviorTreeNames_)
                     {
@@ -281,35 +360,35 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         }
         else if (currentData.category == EditCategory::Object)
         {
-            ImGui::Combo("Type (Object)", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+            ImGui::Combo("オブジェクトの種類", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
             // 位置
-            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+            ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
             // 拡縮
-            ImGui::DragFloat3("Scale", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+            ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
         }
         else if (currentData.category == EditCategory::Weapon)
         {
-            ImGui::Combo("Type (Weapon)", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+            ImGui::Combo("武器の種類", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
 
             // 位置
-            ImGui::DragFloat3("Spawn Position", &currentData.position.x, 0.1f);
+            ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
             // 耐久力
-            ImGui::DragInt("Durability", &currentData.durability, 1, 1, 10000);
+            ImGui::DragInt("耐久力", &currentData.durability, 1, 1, 10000);
 
             // 攻撃力
-            ImGui::DragFloat("Attack Power", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
+            ImGui::DragFloat("攻撃力", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
 
             // 壊れない武器かどうか
-            ImGui::Checkbox("Unbreakable", &currentData.isUnbreakable);
+            ImGui::Checkbox("壊れるかどうか", &currentData.isUnbreakable);
         }
 
         ImGui::Separator();
 
         // 生成ボタン
-        if (ImGui::Button("Spawn Object"))
+        if (ImGui::Button("オブジェクトを生成"))
         {
             // 新しいオブジェクトを生成する前に、現在の配置リストの状態を履歴に保存する
             history_->SaveHistory(placementList);
@@ -340,13 +419,16 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             placementList.push_back(newData);
             selectedIndex_ = static_cast<int>(placementList.size()) - 1;
         }
+
+        ImGui::Separator();
     }
 	else if (currentMode_ == EditorMode::NavMeshEdit)
     {
         // ナビメッシュ編集モードのUIを描画
-        ImGui::Text("--- NavMesh Edit Mode ---");
+        ImGui::Text("--- ナビゲーションメッシュ ---");
 
-        if (ImGui::Button("Add New NavMesh Island"))
+		// ナビメッシュの島を追加するボタン
+        if (ImGui::Button("ナビメッシュの島を追加"))
         {
             NavPolygon poly;
             poly.id = navMesh->GenerateNewPolygonId();
@@ -370,6 +452,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         ImGui::Separator();
     }
 
+    ImGui::PopStyleVar();
+
+
     ImGui::End();
 
 #endif
@@ -391,8 +476,10 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         return;
     }
 
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
+
     // 新規ステージの作成
-    if (ImGui::Button("New Stage"))
+    if (ImGui::Button("新規ステージ"))
     {
         ImGui::OpenPopup("New Stage Popup");
     }
@@ -405,10 +492,10 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
     {
         // 新しいファイル名の入力
         static char newFileName[64] = "";
-        ImGui::InputText("File Name", newFileName, 64);
+        ImGui::InputText("ファイル名", newFileName, 64);
 
         // 作成ボタン
-        if (ImGui::Button("Create"))
+        if (ImGui::Button("作成"))
         {
 			// 入力されたファイル名に ".json" 拡張子を付加する
             std::string fileName = newFileName;
@@ -449,7 +536,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
     }
 
     ImGui::Separator();
-    ImGui::Text("Saved Stages:");
+    ImGui::Text("保存ステージ:");
     ImGui::Spacing();
 
     // フォルダ内のjsonファイルを取得
@@ -518,7 +605,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             if (ImGui::BeginPopupContextItem("FileContextMenu"))
             {
                 // 読み込み
-                if (ImGui::MenuItem("Load"))
+                if (ImGui::MenuItem("読み込み"))
                 {
 					// 実行中なら実行を停止する
                     if (isPlaying)
@@ -551,7 +638,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 }
 
 				// 上書き保存 (プレイ中は保存できないようにする)
-                if (ImGui::MenuItem("Save", nullptr, false, !isPlaying))
+                if (ImGui::MenuItem("上書き保存", nullptr, false, !isPlaying))
                 {
                     // 右クリックした対象を現在のファイルとして設定し、上書き保存する
                     currentFileName = file;
@@ -560,7 +647,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 }
 
 				// コピー
-                if (ImGui::MenuItem("Copy", nullptr, false, !isPlaying))
+                if (ImGui::MenuItem("コピー", nullptr, false, !isPlaying))
                 {
                     fileToCopy = file;
                 }
@@ -569,7 +656,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
                 // 削除は赤文字で表示
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-                if (ImGui::MenuItem("Delete", nullptr, false, !isPlaying))
+                if (ImGui::MenuItem("削除", nullptr, false, !isPlaying))
                 {
                     fileToDelete = file;
                 }
@@ -596,13 +683,13 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
     if (ImGui::BeginPopupModal("Save Confirmation Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         // 重要な操作なので、赤いテキストで警告を表示して強調する
-        ImGui::Text("You have unsaved changes.\nDo you want to save the current tree before leaving?");
+        ImGui::Text("変更が保存されていません。\n現在のステージを保存しますか？");
         ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
 
         // 保存ボタンを押して別のスクリプトを触る
-        if (ImGui::Button("Save", ImVec2(140, 0)))
+        if (ImGui::Button("保存", ImVec2(140, 0)))
         {
             if (!currentFileName.empty())
             {
@@ -616,7 +703,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::SameLine();
 
         // キャンセル(破棄)ボタンを押して別のスクリプトを触る
-        if (ImGui::Button("Cancel", ImVec2(140, 0)))
+        if (ImGui::Button("キャンセル", ImVec2(140, 0)))
         {
             isDirty_ = false; // 変更を破棄したとみなす
             ExecutePendingAction(placementList, currentFileName, navMesh);
@@ -626,7 +713,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::SameLine();
 
         // 戻るボタンで今のスクリプトを触り続ける
-        if (ImGui::Button("Back", ImVec2(120, 0)))
+        if (ImGui::Button("戻る", ImVec2(120, 0)))
         {
             pendingAction_ = PendingAction::None;
             pendingFileName_ = "";
@@ -647,10 +734,10 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
     // コピー実行用のモーダルウィンドウ
     if (ImGui::BeginPopupModal("Copy Stage", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Text("Copy '%s' to:", fileToCopy.c_str());
+        ImGui::Text("'%s' に コピー:", fileToCopy.c_str());
         static char copyFileName[64] = "";
 
-        ImGui::InputText("New File Name", copyFileName, 64);
+        ImGui::InputText("新規ファイル名", copyFileName, 64);
 
         if (ImGui::Button("Copy", ImVec2(120, 0)))
         {
@@ -682,7 +769,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::SameLine();
 
 		// キャンセル ボタン
-        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        if (ImGui::Button("キャンセル", ImVec2(120, 0)))
         {
             fileToCopy = "";
             copyFileName[0] = '\0';
@@ -705,12 +792,12 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         // パスからファイル名だけを抽出して表示
         std::string targetName = std::filesystem::path(fileToDelete).filename().string();
 
-        ImGui::Text("Are you sure you want to delete '%s'?", fileToDelete.c_str());
+        ImGui::Text("'%s' を削除してもよろしいですか？", fileToDelete.c_str());
         ImGui::Separator();
 
         // はい ボタン
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-        if (ImGui::Button("Delete", ImVec2(120, 0)))
+        if (ImGui::Button("削除", ImVec2(120, 0)))
         {
             // 物理的にファイルを削除
             std::filesystem::remove("./Assets/Parameter/StageData/" + fileToDelete);
@@ -739,7 +826,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::SameLine();
 
         // キャンセル ボタン
-        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        if (ImGui::Button("キャンセル", ImVec2(120, 0)))
         {
             fileToDelete = ""; // キャンセル時は対象をクリアするだけ
             ImGui::CloseCurrentPopup();
@@ -748,6 +835,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
         ImGui::EndPopup();
     }
 
+    ImGui::PopStyleVar();
 
     ImGui::End();
 #endif
@@ -766,7 +854,10 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         return;
     }
 
-    ImGui::Text("Placed Objects:");
+
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
+
+    ImGui::Text("配置されたオブジェクト :");
 
 
 	// 項目の追加や削除があった場合に、走査中のリストが変更されてバグるのを防止するためのフラグ
@@ -799,7 +890,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             selectedIndex_ = i; // 右クリックしたアイテムを自動的に選択状態にする
 
 			// オブジェクトのコピー 
-            if (ImGui::MenuItem("Copy Object"))
+            if (ImGui::MenuItem("コピー"))
             {
                 copiedData_ = placementList[i];
 
@@ -809,7 +900,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             }
 
             // オブジェクトの複製
-            if (ImGui::MenuItem("Duplicate Object"))
+            if (ImGui::MenuItem("複製"))
             {
                 history_->SaveHistory(placementList);
                 isDirty_ = true;
@@ -835,7 +926,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
             // オブジェクトの消去 (削除)
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-            if (ImGui::MenuItem("Delete Object"))
+            if (ImGui::MenuItem("削除"))
             {
                 history_->SaveHistory(placementList);
                 isDirty_ = true;
@@ -868,7 +959,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 		// 右クリックされた位置にアイテムがない場合は、全体のコンテキストメニューを開く
         if (ImGui::BeginPopupContextWindow("ObjectListPasteRegionMenu", ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
         {
-            if (ImGui::MenuItem("Paste Object"))
+            if (ImGui::MenuItem("貼り付け"))
             {
                 history_->SaveHistory(placementList);
                 isDirty_ = true;
@@ -894,7 +985,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
     if (selectedIndex_ >= 0 && selectedIndex_ < placementList.size())
     {
         auto& target = placementList[selectedIndex_];
-        ImGui::Text("--- Edit Selected Object ---");
+        ImGui::Text("--- 編集中のオブジェクト ---");
 
         // カテゴリごとの編集項目
         if (target.category == EditCategory::Character)
@@ -906,14 +997,14 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             isChangeAnimation_ = false;
 
 			// モーション選択UI
-            MotionSelecter("Standing Motion", MotionType::Stand, target.standMotion, placementList);
-            MotionSelecter("Fighting Motion", MotionType::Stance, target.stanceMotion, placementList);
-            MotionSelecter("Walking Motion", MotionType::Walk, target.walkMotion, placementList);
-            MotionSelecter("Dashing Motion", MotionType::Dash, target.dashMotion, placementList);
-            MotionSelecter("Avoiding Front Motion", MotionType::Avoid, target.avoidFrontMotion, placementList);
-            MotionSelecter("Avoiding Back Motion", MotionType::Avoid, target.avoidBackMotion, placementList);
-            MotionSelecter("Avoiding Left Motion", MotionType::Avoid, target.avoidLeftMotion, placementList);
-            MotionSelecter("Avoiding Right Motion", MotionType::Avoid, target.avoidRightMotion, placementList);
+            MotionSelecter("待機モーション", MotionType::Stand, target.standMotion, placementList);
+            MotionSelecter("戦闘モーション", MotionType::Stance, target.stanceMotion, placementList);
+            MotionSelecter("歩行モーション", MotionType::Walk, target.walkMotion, placementList);
+            MotionSelecter("ダッシュモーション", MotionType::Dash, target.dashMotion, placementList);
+            MotionSelecter("前方回避モーション", MotionType::Avoid, target.avoidFrontMotion, placementList);
+            MotionSelecter("後方回避モーション", MotionType::Avoid, target.avoidBackMotion, placementList);
+            MotionSelecter("左回避モーション", MotionType::Avoid, target.avoidLeftMotion, placementList);
+            MotionSelecter("右回避モーション", MotionType::Avoid, target.avoidRightMotion, placementList);
 
 			// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
             if (isChangeAnimation_)
@@ -937,20 +1028,20 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
             if (target.subType != 0 && target.subType != 1)
             {
                 ImGui::Separator();
-                ImGui::Text("Behavior Tree Settings");
+                ImGui::Text("ビヘイビアツリーの設定");
 
                 // 開発中にファイルを新規作成した際、エディタを再起動せずにリストを更新できるボタン
-                if (ImGui::Button("Refresh BT List"))
+                if (ImGui::Button("リストを更新"))
                 {
                     LoadBehaviorTreeNames();
                 }
 
                 // プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
                 std::string currentBtName = target.behaviorScriptName;
-                const char* previewBtValue = currentBtName.empty() ? "Select Behavior Tree..." : currentBtName.c_str();
+                const char* previewBtValue = currentBtName.empty() ? "ビヘイビアツリーを選択..." : currentBtName.c_str();
 
                 // プルダウンメニュー（コンボボックス）の描画
-                if (ImGui::BeginCombo("Behavior Tree", previewBtValue))
+                if (ImGui::BeginCombo("ビヘイビアツリー", previewBtValue))
                 {
                     for (const auto& name : behaviorTreeNames_)
                     {
@@ -991,6 +1082,8 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         }
     }
 
+    ImGui::PopStyleVar();
+
     ImGui::End();
 #endif
 }
@@ -1006,12 +1099,12 @@ void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, Mot
     // モーション名のリストが空の場合はエラーメッセージを表示
     if (motionNames.empty())
     {
-        ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
     }
     else
     {
         // 現在選択されているモーション名をプレビュー用の文字列として設定
-        const char* previewValue = motionConfig.name.empty() ? "Select Motion..." : motionConfig.name.c_str();
+        const char* previewValue = motionConfig.name.empty() ? "モーションを選択..." : motionConfig.name.c_str();
 
         // モーション名選択用のコンボボックスを描画
         if (ImGui::BeginCombo(label, previewValue))
@@ -1044,12 +1137,12 @@ void StageEditorUI::MotionSelecter(const char* label, MotionType motionType, Mot
     // モーション名のリストが空の場合はエラーメッセージを表示
     if (motionNames.empty())
     {
-        ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
     }
     else
     {
         // 現在選択されているモーション名をプレビュー用の文字列として設定
-        const char* previewValue = motionConfig.name.empty() ? "Select Motion..." : motionConfig.name.c_str();
+        const char* previewValue = motionConfig.name.empty() ? "モーションを選択..." : motionConfig.name.c_str();
 
         // モーション名選択用のコンボボックスを描画
         if (ImGui::BeginCombo(label, previewValue))

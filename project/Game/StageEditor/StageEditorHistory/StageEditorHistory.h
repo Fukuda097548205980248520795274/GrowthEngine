@@ -43,6 +43,14 @@ public:
     /// @brief 履歴をクリアする
     void Clear();
 
+	/// @brief Undoが可能かどうかを確認する
+	/// @return 
+	bool CanUndo() const { return !undoHistory_.empty(); }
+
+	/// @brief Redoが可能かどうかを確認する
+	/// @return 
+	bool CanRedo() const { return !redoHistory_.empty(); }
+
 private:
 
 	/// @brief Undo用のスナップショットのリスト

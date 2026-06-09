@@ -113,12 +113,18 @@ void StageEditor::DrawUI()
 {
 #ifdef _DEVELOPMENT
 
+    // 押し出し条件: 「辺選択モード」かつ「選択されている辺が1つだけ」
+    bool canExtrude = (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 1);
+
+    // ブリッジ条件: 「辺選択モード」かつ「選択されている辺が2つ」
+    bool canBridge = (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 2);
+
 	// ナビメッシュのデバッグ描画
 	navMesh_->DrawDebug();
     DrawSelectedHighlight();
 
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, navMesh_);
-	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, navMesh_);
+	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, navMesh_, canExtrude, canBridge);
 	editorUI_->DrawObjectListWindow(placementList_, navMesh_);
 
 #endif

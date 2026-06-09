@@ -49,7 +49,7 @@ public:
     /// @param placementList 
     /// @param currentFileName 
     /// @param isPlaying 
-    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
+    void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool canExtrude, bool canBridge);
 
 	/// @brief アセットウィンドウの描画
     /// @param placementList 
