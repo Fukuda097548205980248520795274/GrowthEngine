@@ -414,6 +414,14 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             std::string fileName = newFileName;
             if (fileName.find(".json") == std::string::npos) fileName += ".json";
 
+			// 実行中に新しいステージを作成する場合は、先に実行を停止する
+            if (isPlaying)
+            {
+                isPlaying = false;
+                Entity::SetUpdateEnabled(false);
+                StageObject::SetUpdateEnabled(false);
+            }
+
 			// 新しいステージを作成する前に、現在の配置リストに基づいてすべての実体を消去する
             if (isDirty_)
             {
@@ -476,6 +484,14 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
             // ファイル名をボタンとして表示
             if (ImGui::Button(file.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
             {
+				// 実行中なら実行を停止する
+                if (isPlaying)
+                {
+                    isPlaying = false;
+                    Entity::SetUpdateEnabled(false);
+                    StageObject::SetUpdateEnabled(false);
+                }
+
 				// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
                 if (isDirty_)
                 {
@@ -504,6 +520,14 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
                 // 読み込み
                 if (ImGui::MenuItem("Load"))
                 {
+					// 実行中なら実行を停止する
+                    if (isPlaying)
+                    {
+                        isPlaying = false;
+                        Entity::SetUpdateEnabled(false);
+                        StageObject::SetUpdateEnabled(false);
+                    }
+
 					// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
                     if (isDirty_)
                     {
