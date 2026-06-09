@@ -1,11 +1,10 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/BehaviorTreeSetting/BehaviorTreeSetting.h"
-#include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "BehaviorTreeSetting/BehaviorTreeSetting.h"
+#include "BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 #include "BehaviorTreeEditorClipboard/BehaviorTreeEditorClipboard.h"
 #include "BehaviorTreeEditorHistory/BehaviorTreeEditorHistory.h"
-#include "../BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include <unordered_set>
 
 class Character;
@@ -76,9 +75,6 @@ private:
 
 	/// @brief クリップボード管理クラス
 	std::unique_ptr<BehaviorTreeEditorClipboard> clipboard_ = nullptr;
-
-	/// @brief ビューア
-	std::unique_ptr<BehaviorTreeViewer> viewer_ = nullptr;
 
 	// エディタのUI描画に使用するフラグ
 	friend class BehaviorTreeEditorHistory;

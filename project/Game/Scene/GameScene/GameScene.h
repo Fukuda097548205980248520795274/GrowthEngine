@@ -16,6 +16,7 @@
 #include "EditorWorkspaceManager/EditorWorkspaceManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
+#include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
 
 #include "NavMesh/NavMesh.h"
@@ -104,6 +105,9 @@ private:
 
 	// ビヘイビアツリーエディタ
 	std::unique_ptr<BehaviorTreeEditor> behaviorTreeEditor_ = nullptr;
+
+	// ビヘイビアツリービューア
+	std::unique_ptr<BehaviorTreeViewer> behaviorTreeViewer_ = nullptr;
 
 	// ステージエディタ
 	std::unique_ptr<StageEditor> stageEditor_ = nullptr;

@@ -1,6 +1,6 @@
 #pragma once
 #include "Parameter/Parameter.h"
-#include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "../BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
 class BehaviorTreeSetting : public Engine::Parameter
 {

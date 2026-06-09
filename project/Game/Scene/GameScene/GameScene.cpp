@@ -43,6 +43,9 @@ void GameScene::Initialize()
 	// ビヘイビアツリーエディタの生成と初期化
 	behaviorTreeEditor_ = std::make_unique<BehaviorTreeEditor>();
 
+	// ビヘイビアツリービューアの生成と初期化
+	behaviorTreeViewer_ = std::make_unique<BehaviorTreeViewer>();
+
 	// ナビゲーションメッシュの生成と初期化
 	navMesh_ = std::make_unique<NavMesh>();
 
@@ -52,7 +55,7 @@ void GameScene::Initialize()
 
 	// エディタワークスペースマネージャの生成と初期化
 	editorWorkspaceManager_ = std::make_unique<EditorWorkspaceManager>();
-	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(), motionManagerEditor_.get());
+	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(),behaviorTreeViewer_.get(), motionManagerEditor_.get());
 
 	// キャラクターモデルの読み込み
 	hCharacterModel_ = engine_->LoadModel("./Assets/Models/Character", "bone.gltf");

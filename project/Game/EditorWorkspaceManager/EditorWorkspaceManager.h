@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
+#include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 
@@ -8,7 +9,8 @@ enum class WorkspaceType
 {
     None,
 	StageEditor,
-	BehaviorTreeEditor
+	BehaviorTreeEditor,
+	BehaviorTreeViewer,
 };
 
 class EditorWorkspaceManager
@@ -19,7 +21,7 @@ public:
     /// @param stageEditor 
     /// @param behaviorTreeEditor 
     /// @param motionManagerEditor 
-    void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, MotionManagerEditor* motionManagerEditor);
+    void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer, MotionManagerEditor* motionManagerEditor);
 
 	/// @brief UIを描画する
     void DrawUI();
@@ -34,6 +36,7 @@ private:
     // マネージャー側は指し示すポインタ（生ポインタ）だけを持つ
     StageEditor* stageEditor_ = nullptr;
     BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
+	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
 	MotionManagerEditor* motionManagerEditor_ = nullptr;
 
     // エディタ間で共有するデータなど

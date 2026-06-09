@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "../BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
 class BehaviorTreeEditor;
 

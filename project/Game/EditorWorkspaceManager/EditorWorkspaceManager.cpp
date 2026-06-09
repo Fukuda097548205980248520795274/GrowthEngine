@@ -3,16 +3,19 @@
 /// @brief 初期化
 /// @param stageEditor 
 /// @param behaviorTreeEditor 
-void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, MotionManagerEditor* motionManagerEditor)
+void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
+    MotionManagerEditor* motionManagerEditor)
 {
 	// nullptrチェック
 	assert(stageEditor);
 	assert(behaviorTreeEditor);
+    assert(behaviorTreeViewer);
 	assert(motionManagerEditor);
 
 	// 引数を受け取る
 	stageEditor_ = stageEditor;
 	behaviorTreeEditor_ = behaviorTreeEditor;
+	behaviorTreeViewer_ = behaviorTreeViewer;
 	motionManagerEditor_ = motionManagerEditor;
 }
 
@@ -37,6 +40,13 @@ void EditorWorkspaceManager::DrawUI()
         {
             behaviorTreeEditor_->DrawUI();
         }
+        break;
+
+    case WorkspaceType::BehaviorTreeViewer:
+		if (behaviorTreeViewer_)
+		{
+			behaviorTreeViewer_->DrawUI();
+		}
         break;
     }
 }
@@ -64,11 +74,17 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
                 ImGui::EndTabItem();
             }
 
-            if (ImGui::BeginTabItem("Behavior Tree"))
+            if (ImGui::BeginTabItem("Behavior Tree Editor"))
             {
                 currentWorkspace_ = WorkspaceType::BehaviorTreeEditor;
                 ImGui::EndTabItem();
             }
+
+			if (ImGui::BeginTabItem("Behavior Tree Viewer"))
+			{
+				currentWorkspace_ = WorkspaceType::BehaviorTreeViewer;
+				ImGui::EndTabItem();
+			}
 
             ImGui::EndTabBar();
         }
