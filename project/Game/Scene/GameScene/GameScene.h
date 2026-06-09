@@ -8,7 +8,10 @@
 #include "Entity/Weapon/Weapon.h"
 
 #include "StageObject/Floor/Floor.h"
+
 #include "PivotPoint/PivotPoint.h"
+#include "CameraShake/CameraShake.h"
+
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
 #include "EffectManager/EffectManager.h"
@@ -179,6 +182,9 @@ private:
 
 	/// @brief カメラのピボットポイント
 	std::unique_ptr<PivotPoint> pivotPoint_ = nullptr;
+
+	/// @brief カメラシェイク
+	std::unique_ptr<CameraShake> cameraShake_ = nullptr;
 
 	/// @brief カメラ回転入力
 	std::unique_ptr<InputGamepadRightStick> inputCameraRotate_ = nullptr;

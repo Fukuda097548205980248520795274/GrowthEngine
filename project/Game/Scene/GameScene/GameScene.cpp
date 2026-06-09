@@ -37,6 +37,9 @@ void GameScene::Initialize()
 	postEffectManager_ = std::make_unique<PostEffectManager>();
 	postEffectManager_->Initialize();
 
+	// カメラシェイクの生成と初期化
+	cameraShake_ = std::make_unique<CameraShake>();
+
 	// モーションマネージャのエディタの生成と初期化
 	motionManagerEditor_ = std::make_unique<MotionManagerEditor>();
 
@@ -309,6 +312,13 @@ void GameScene::InitializeCameraControl()
 	// プレイヤーがいない場合はカメラ制御を初期化しない
 	if (!player_)return;
 
+	// すでにピボットポイントが存在する場合は削除する
+	if (pivotPoint_)
+	{
+		pivotPoint_.reset();
+		pivotPoint_ = nullptr;
+	}
+
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
@@ -479,7 +489,10 @@ void GameScene::ApplyCameraFromPivot()
 	// カメラ位置と回転をピボット情報から設定する
 	if (Engine::Camera3DData::Param* cameraParam = engine_->GetCamera3DParam("MainCamera"))
 	{
-		cameraParam->transform.translate = pivotData->sphericalCoordinates;
+		Vector3 finalCameraPos = pivotData->sphericalCoordinates;
+		if (cameraShake_) finalCameraPos += cameraShake_->GetShakeOffset();
+
+		cameraParam->transform.translate = finalCameraPos;
 
 		// center方向を向くようにオイラー角を計算する
 		const Vector3 lookDirection = pivotData->toCenter;

@@ -1057,6 +1057,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
+    <ClCompile Include="Game\CameraShake\CameraShake.cpp" />
     <ClCompile Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.cpp" />
     <ClCompile Include="Game\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Game\EffectManager\Effect\Effect.cpp" />
@@ -1430,6 +1431,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
+    <ClInclude Include="Game\CameraShake\CameraShake.h" />
     <ClInclude Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.h" />
     <ClInclude Include="Game\EffectManager\EffectManager.h" />
     <ClInclude Include="Game\EffectManager\Effect\Effect.h" />
