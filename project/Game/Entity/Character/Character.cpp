@@ -147,8 +147,11 @@ Character::~Character()
 	hurtboxRoot_.collider_ = nullptr;
 
 	// インスタンスリストから自分を除外する
-	auto it = std::remove(characters_.begin(), characters_.end(), this);
-	characters_.erase(it, characters_.end());
+	auto it = std::find(characters_.begin(), characters_.end(), this);
+	if (it != characters_.end())
+	{
+		characters_.erase(it);
+	}
 }
 
 /// @brief アニメーションの初期化

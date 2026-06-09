@@ -68,8 +68,11 @@ Weapon::~Weapon()
 	model_ = nullptr;
 
 	// インスタンスリストから自分を除外する
-	auto it = std::remove(weapons_.begin(), weapons_.end(), this);
-	weapons_.erase(it, weapons_.end());
+	auto it = std::find(weapons_.begin(), weapons_.end(), this);
+	if (it != weapons_.end())
+	{
+		weapons_.erase(it);
+	}
 }
 
 /// @brief 更新処理
