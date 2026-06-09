@@ -16,7 +16,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 
 
 	// ノード追加のためのボタン
-    if (ImGui::Button("＋ Add Node..."))
+    if (ImGui::Button("＋ ノードを追加..."))
     {
         ImGui::OpenPopup("AddNodePopup");
     }
@@ -24,15 +24,15 @@ void BehaviorTreeEditor::DrawNodeTable()
 	// ノード追加のポップアップメニュー
     if (ImGui::BeginPopup("AddNodePopup"))
     {
-        ImGui::SeparatorText("Composites");
-        if (ImGui::MenuItem("Persistent Selector")) AddPersistentSelectorNode();
-        if (ImGui::MenuItem("Persistent Sequence")) AddPersistentSequenceNode();
-        if (ImGui::MenuItem("Restarting Selector")) AddRestartingSelectorNode();
-        if (ImGui::MenuItem("Restarting Sequence")) AddRestartingSequenceNode();
+        ImGui::SeparatorText("子あり");
+        if (ImGui::MenuItem("永続 選択")) AddPersistentSelectorNode();
+        if (ImGui::MenuItem("永続 シーケンス")) AddPersistentSequenceNode();
+        if (ImGui::MenuItem("再起動 選択")) AddRestartingSelectorNode();
+        if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
 
-        ImGui::SeparatorText("Tasks");
-        if (ImGui::MenuItem("Condition")) AddConditionNode();
-        if (ImGui::MenuItem("Action")) AddActionNode();
+        ImGui::SeparatorText("子なし");
+        if (ImGui::MenuItem("条件")) AddConditionNode();
+        if (ImGui::MenuItem("アクション")) AddActionNode();
 
         ImGui::EndPopup();
     }
@@ -45,23 +45,23 @@ void BehaviorTreeEditor::DrawNodeTable()
 	// キャンバスのコンテキストメニュー
     if (ImGui::BeginPopup("CanvasContextMenu"))
     {
-        ImGui::SeparatorText("Add Node");
+        ImGui::SeparatorText("ノード追加");
 
 		// Compositesノード追加のためのサブメニュー
-        if (ImGui::BeginMenu("Composites"))
+        if (ImGui::BeginMenu("子あり"))
         {
-            if (ImGui::MenuItem("Persistent Selector")) AddPersistentSelectorNode();
-            if (ImGui::MenuItem("Persistent Sequence")) AddPersistentSequenceNode();
-            if (ImGui::MenuItem("Restarting Selector")) AddRestartingSelectorNode();
-            if (ImGui::MenuItem("Restarting Sequence")) AddRestartingSequenceNode();
+            if (ImGui::MenuItem("永続 選択")) AddPersistentSelectorNode();
+            if (ImGui::MenuItem("永続 シーケンス")) AddPersistentSequenceNode();
+            if (ImGui::MenuItem("再起動 選択")) AddRestartingSelectorNode();
+            if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
             ImGui::EndMenu();
         }
 
 		// Tasksノード追加のためのサブメニュー
-        if (ImGui::BeginMenu("Tasks"))
+        if (ImGui::BeginMenu("子なし"))
         {
-            if (ImGui::MenuItem("Condition")) AddConditionNode();
-            if (ImGui::MenuItem("Action")) AddActionNode();
+            if (ImGui::MenuItem("条件")) AddConditionNode();
+            if (ImGui::MenuItem("アクション")) AddActionNode();
             ImGui::EndMenu();
         }
 
@@ -161,6 +161,78 @@ void BehaviorTreeEditor::DrawPropertyWindow()
     // 選択されているノードの数を取得
     int numSelected = ImNodes::NumSelectedNodes();
 
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
+
+    /*--------------
+        操作方法
+    --------------*/
+
+    // ショートカットキーの説明
+    ImGui::Text("ショートカットキー 一覧");
+
+    // --- 保存の表示 ---
+    ImGui::Text("Ctrl + S : 上書き保存");
+
+    // --- Undo の表示切り替え ---
+    if (history_->CanUndo())
+    {
+        ImGui::Text("Ctrl + Z : Undo");
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Z : Undo (無効)");
+    }
+
+    // --- Redo の表示切り替え ---
+    if (history_->CanRedo())
+    {
+        ImGui::Text("Ctrl + Y : Redo");
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Y : Redo (無効)");
+    }
+
+	// --- コピーとペーストの表示切り替え ---
+	if (numSelected > 0)
+	{
+		ImGui::Text("Ctrl + C : コピー");
+		ImGui::Text("Ctrl + V : ペースト");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + C : コピー (ノード選択時のみ有効)");
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + V : ペースト (コピーしたノードがある場合のみ有効)");
+	}
+
+    // -- リンク（接続線）の削除 --
+	if (ImNodes::NumSelectedLinks() > 0)
+	{
+		ImGui::Text("Ctrl + 左クリック : リンク（接続線）削除");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + 左クリック : リンク（接続線）削除 (リンク選択時のみ有効)");
+	}
+
+	// --- ノード削除の表示切り替え ---
+	if (numSelected > 0)
+	{
+		ImGui::Text("Delete / Backspace : ノード削除");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Delete / Backspace : ノード削除 (ノード選択時のみ有効)");
+	}
+
+    ImGui::Separator();
+
+
+
+    /*------------------
+        パラメータ調整
+    ------------------*/
+
     if (numSelected == 1)
     {
         // 1つだけ選択されている場合、そのノードのIDを取得
@@ -176,7 +248,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
             EditorNode& node = *it;
 
             // ノードの種類などを表示
-            ImGui::Text("Node ID: %d", node.id);
+            ImGui::Text("ノード ID: %d", node.id);
             ImGui::Separator();
 
             // ノードの種類に応じて、パラメータ設定UIをここで描画する
@@ -190,21 +262,24 @@ void BehaviorTreeEditor::DrawPropertyWindow()
             }
             else
             {
-                ImGui::Text("No properties to edit for this node type.");
+				// それ以外のノードタイプには特に設定項目がないので、その旨を表示
+                ImGui::Text("このノードタイプには編集可能なプロパティがありません");
             }
         }
     }
     else if (numSelected > 1)
     {
         // 複数選択時のメッセージ
-        ImGui::Text("Multiple nodes selected.");
-        ImGui::Text("Please select only one node to edit its properties.");
+        ImGui::Text("複数のノードが選択されています");
+        ImGui::Text("プロパティを編集するには、1つのノードのみを選択してください");
     }
     else
     {
         // 未選択時のメッセージ
-        ImGui::Text("No node selected.");
+        ImGui::Text("ノードが選択されていません");
     }
+
+    ImGui::PopStyleVar();
 
     ImGui::End();
 
@@ -222,7 +297,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
     bool requestSavePopup = false;
 
     // 新規ツリーボタン
-    if (ImGui::Button("New Tree"))
+    if (ImGui::Button("新規ツリー"))
     {
 		ImGui::OpenPopup("New Tree Popup");
     }
@@ -232,10 +307,10 @@ void BehaviorTreeEditor::DrawProjectWindow()
     {
 		// 新しいツリーのファイル名入力
         static char newFileName[64] = "";
-        ImGui::InputText("File Name", newFileName, 64);
+        ImGui::InputText("ファイル名", newFileName, 64);
 
 		// 新しいツリーを作成する前に、未保存の変更があるかどうかを確認する
-        if (ImGui::Button("Create"))
+        if (ImGui::Button("作成"))
         {
             if (isDirty_)
             {
@@ -261,7 +336,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
     ImGui::Separator();
 
 	// 保存されているツリーの一覧を表示
-    ImGui::Text("Saved Trees:");
+    ImGui::Text("保存ツリー :");
     auto files = projectManager_.GetFileList();
     ImGui::Spacing();
 
@@ -320,13 +395,13 @@ void BehaviorTreeEditor::DrawProjectWindow()
                 bool isCurrentFile = (currentFileName_ == file);
 
 				// Saveは現在のファイルが選択されているときのみ表示
-                if (ImGui::MenuItem("Save", "Ctrl+S", false, isCurrentFile))
+                if (ImGui::MenuItem("保存", "Ctrl+S", false, isCurrentFile))
                 {
                     SaveCurrentTree();
                 }
 
 				// Loadは常に表示
-                if (ImGui::MenuItem("Load"))
+                if (ImGui::MenuItem("読み込み"))
                 {
                     LoadTree(file);
                 }
@@ -334,14 +409,14 @@ void BehaviorTreeEditor::DrawProjectWindow()
                 ImGui::Separator();
 
 				// CopyとDeleteはファイルが選択されているときのみ表示
-                if (ImGui::MenuItem("Copy"))
+                if (ImGui::MenuItem("コピー"))
                 {
                     fileToCopy = file;
                 }
 
 				// Deleteは危険な操作なので、赤いテキストで表示して強調する
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-                if (ImGui::MenuItem("Delete"))
+                if (ImGui::MenuItem("削除"))
                 {
                     fileToDelete = file;
                 }
@@ -370,13 +445,13 @@ void BehaviorTreeEditor::DrawProjectWindow()
 	// 保存確認のポップアップ
     if (ImGui::BeginPopupModal("SaveConfirmationPopup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Text("You have unsaved changes.\nDo you want to save the current tree before leaving?");
+        ImGui::Text("未保存の変更があります。\n現在のツリーを保存しますか？");
         ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
 
         // [セーブボタン] 現在の状態を保存してから、保留していた操作を実行する
-        if (ImGui::Button("Save", ImVec2(120, 0)))
+        if (ImGui::Button("保存", ImVec2(120, 0)))
         {
             // 保存
             SaveCurrentTree();
@@ -399,7 +474,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
         ImGui::SameLine();
 
 		// [キャンセルボタン] 保存せずに保留していた操作を実行する
-        if (ImGui::Button("Cancel", ImVec2(100, 0)))
+        if (ImGui::Button("キャンセル", ImVec2(100, 0)))
         {
             if (isPendingNewTree_)
             {
@@ -447,11 +522,11 @@ void BehaviorTreeEditor::DrawProjectWindow()
     {
 		// コピー先のファイル名を入力するためのテキストボックス
         static char newFileName[64] = "";
-        ImGui::Text("Copy '%s' to:", fileToCopy.c_str());
-        ImGui::InputText("##newname", newFileName, 64);
+        ImGui::Text("コピー '%s' から:", fileToCopy.c_str());
+        ImGui::InputText("新規ファイル名", newFileName, 64);
 
 		// コピー実行ボタンとキャンセルボタン
-        if (ImGui::Button("Execute Copy"))
+        if (ImGui::Button("コピー実行"))
         {
             if (strlen(newFileName) > 0)
             {
@@ -464,7 +539,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
         ImGui::SameLine();
 
 		// コピー操作は危険な操作ではないので、通常のボタンでキャンセルを表示
-        if (ImGui::Button("Cancel"))
+        if (ImGui::Button("キャンセル"))
         {
             fileToCopy = "";
             ImGui::CloseCurrentPopup();
@@ -482,12 +557,12 @@ void BehaviorTreeEditor::DrawProjectWindow()
     if (ImGui::BeginPopupModal("DeletePopup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
 		// 重要な操作なので、赤いテキストで警告を表示して強調する
-        ImGui::Text("Are you sure you want to delete '%s'?", fileToDelete.c_str());
+        ImGui::Text("'%s' を削除してもよろしいですか？", fileToDelete.c_str());
         ImGui::Separator();
 
 		// 削除実行ボタンは赤いテキストで表示して強調する
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.3f, 0.3f, 1.0f));
-        if (ImGui::Button("Delete", ImVec2(120, 0)))
+        if (ImGui::Button("削除", ImVec2(120, 0)))
         {
             projectManager_.DeleteProjectFile(fileToDelete);
             if (currentFileName_ == fileToDelete)
@@ -504,7 +579,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
         ImGui::SameLine();
 
 		// 削除操作は危険な操作なので、赤いテキストで表示して強調する
-        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        if (ImGui::Button("キャンセル", ImVec2(120, 0)))
         {
             fileToDelete = "";
             ImGui::CloseCurrentPopup();
@@ -673,12 +748,12 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			}
         }
 
-        if (node.type == EditorNodeType::PersistentSelector) ImGui::TextUnformatted("Persistent Selector");
-        if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("Persistent Sequence");
-        if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("Restarting Selector");
-        if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("Restarting Sequence");
-        if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("Condition");
-        if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("Action");
+        if (node.type == EditorNodeType::PersistentSelector) ImGui::TextUnformatted("永続セレクタ");
+        if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("永続シーケンス");
+        if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("再起動セレクタ");
+        if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("再起動シーケンス");
+        if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
+        if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
         ImNodes::EndNodeTitleBar();
 
 
@@ -731,8 +806,33 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         shouldOpenPopup = true;
     }
 
+
     // ノードエディタの終了
     ImNodes::EndNodeEditor();
+
+
+	// リンクがホバーされているかどうかを取得するための変数
+    int hoveredLinkId;
+
+    // imnodesの場合、リンクがホバーされているか取得できる
+    if (ImNodes::IsLinkHovered(&hoveredLinkId))
+    {
+        // Ctrlキーが押されていて、かつ左クリックされた瞬間か判定
+        if (ImGui::GetIO().KeyCtrl && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        {
+            // 削除前の状態を履歴に保存 (Undo対応)
+            history_->SaveHistory(nodes_, links_, currentId_);
+
+            // 対象のリンクIDを持つ要素を links_ から削除
+            links_.erase(std::remove_if(links_.begin(), links_.end(),
+                [hoveredLinkId](const EditorLink& link) {
+                    return link.id == hoveredLinkId; // ※ EditorLink 構造体のID変数名に合わせてください
+                }), links_.end());
+
+            // 変更があったのでフラグを立てる
+            isDirty_ = true;
+        }
+    }
 
 
 	// キャンバスの空いている部分を右クリックしたときのコンテキストメニューを開く
@@ -757,12 +857,52 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
         {
             // 設定なし
         case ConditionType::None:
-            ImGui::Text("None");
+            ImGui::Text("設定なし");
             break;
 
 			// ターゲットがいるかどうか
 		case ConditionType::HasTarget:
-			ImGui::Text("Has Target");
+			ImGui::Text("ターゲットがいるかどうか");
+			break;
+
+		case ConditionType::IsTargetDown:
+			ImGui::Text("ターゲットがダウンしているか");
+			break;
+
+		case ConditionType::IsNotTargetDown:
+			ImGui::Text("ターゲットがダウンしていないか");
+			break;
+
+		case ConditionType::IsGrabbing:
+			ImGui::Text("掴んでいるか");
+			break;
+
+		case ConditionType::IsNotGrabbing:
+			ImGui::Text("掴んでいないか");
+			break;
+
+		case ConditionType::IsTargetInRange:
+			ImGui::Text("ターゲットが範囲内か");
+			break;
+
+		case ConditionType::IsTargetOutOfRange:
+			ImGui::Text("ターゲットが範囲外か");
+			break;
+
+		case ConditionType::IsTargetAttacking:
+			ImGui::Text("ターゲットが攻撃しているか");
+			break;
+
+		case ConditionType::IsTargetNotAttacking:
+			ImGui::Text("ターゲットが攻撃していないか");
+			break;
+
+		case ConditionType::IsTargetInAttackSequence:
+			ImGui::Text("ターゲットが攻撃シーケンスに入っているか");
+			break;
+
+		case ConditionType::IsTargetNotInAttackSequence:
+			ImGui::Text("ターゲットが攻撃シーケンスに入っていないか");
 			break;
         }
     }
@@ -791,7 +931,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 /// @param node 
 void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 {
-    ImGui::Text("Function:");
+    ImGui::Text("関数 :");
 
     // 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
     auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
@@ -803,7 +943,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
     // コンボボックスを描画し、変更があったらEnumにキャストして戻す
     int currentItem = static_cast<int>(node.conditionType);
     ImGui::PushItemWidth(120.0f);
-    if (ImGui::Combo("Condition", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
+    if (ImGui::Combo("条件", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
     {
         history_->SaveHistory(nodes_, links_, currentId_);
         isDirty_ = true;
@@ -815,7 +955,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
     if (node.conditionType == ConditionType::IsTargetInRange || node.conditionType == ConditionType::IsTargetOutOfRange)
     {
         HistorySaveIfChanged();
-        ImGui::DragFloat("Distance to Target", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
+        ImGui::DragFloat("距離", &node.conditionParam.distanceToTarget, 0.01f, 0.0f, 10000.0f);
     }
 }
 
@@ -842,7 +982,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     }
 
     // コンボボックスを描画し、変更があったら選択された文字列をノードに保存
-    if (ImGui::Combo("##ActionType", &currentItem, actionTypes, IM_ARRAYSIZE(actionTypes)))
+    if (ImGui::Combo("アクションの種類", &currentItem, actionTypes, IM_ARRAYSIZE(actionTypes)))
     {
         history_->SaveHistory(nodes_, links_, currentId_);
         isDirty_ = true;
@@ -854,19 +994,19 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     // 選択されているアクションに応じてパラメータ設定UIを切り替える
     if (node.actionName == "ComboAttack")
     {
-        if (ImGui::TreeNode("Combo Attack Settings"))
+        if (ImGui::TreeNode("コンボ攻撃 設定"))
         {
             HistorySaveIfChanged();
-            ImGui::DragFloat("Attack Time", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+            ImGui::DragFloat("攻撃時間", &node.comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Speed", &node.comboAttackInitData.moveSpeed, 0.1f);
+            ImGui::DragFloat("移動速度", &node.comboAttackInitData.moveSpeed, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Start", &node.comboAttackInitData.moveStartTime, 0.01f);
+            ImGui::DragFloat("移動開始時間", &node.comboAttackInitData.moveStartTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move End", &node.comboAttackInitData.moveEndTime, 0.01f);
+            ImGui::DragFloat("移動終了時間", &node.comboAttackInitData.moveEndTime, 0.01f);
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
@@ -876,15 +1016,15 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (motionNames.empty())
             {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
             }
             else
             {
                 // 現在選択されているモーション名をプレビュー用の文字列として設定
-                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+                const char* previewValue = node.motionName.empty() ? "モーションを選択..." : node.motionName.c_str();
 
                 // モーション名選択用のコンボボックスを描画
-                if (ImGui::BeginCombo("Attack Motion", previewValue))
+                if (ImGui::BeginCombo("攻撃モーション", previewValue))
                 {
                     for (const auto& name : motionNames)
                     {
@@ -904,7 +1044,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             }
 
 
-            ImGui::Text("Hitboxes (Multiple)");
+            ImGui::Text("当たり判定");
 
             // 当たり判定のリストを描画
             auto& hitDefs = node.comboAttackInitData.hitDefinitions;
@@ -913,25 +1053,25 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                 // 各当たり判定のUIを描画するためにIDをプッシュ
                 ImGui::PushID(static_cast<int>(i));
 
-                if (ImGui::TreeNode((std::string("Hitbox ") + std::to_string(i + 1)).c_str()))
+                if (ImGui::TreeNode((std::string("当たり判定 ") + std::to_string(i + 1)).c_str()))
                 {
                     HistorySaveIfChanged();
-                    ImGui::DragFloat("Start Time", &hitDefs[i].startTime, 0.01f);
+                    ImGui::DragFloat("開始時間", &hitDefs[i].startTime, 0.01f);
 
                     HistorySaveIfChanged();
-                    ImGui::DragFloat("End Time", &hitDefs[i].endTime, 0.01f);
+                    ImGui::DragFloat("終了時間", &hitDefs[i].endTime, 0.01f);
 
                     HistorySaveIfChanged();
-                    ImGui::DragFloat("Radius", &hitDefs[i].radius, 0.01f);
+                    ImGui::DragFloat("半径", &hitDefs[i].radius, 0.01f);
 
                     HistorySaveIfChanged();
-                    ImGui::InputInt("Damage", &hitDefs[i].damage);
+                    ImGui::InputInt("攻撃力", &hitDefs[i].damage);
 
                     HistorySaveIfChanged();
-                    ImGui::DragFloat("Knockback", &hitDefs[i].knockback, 0.1f);
+                    ImGui::DragFloat("ノックバック", &hitDefs[i].knockback, 0.1f);
 
                     HistorySaveIfChanged();
-                    ImGui::DragFloat3("Knockback Direction", &hitDefs[i].knockbackDirection.x, 0.1f);
+                    ImGui::DragFloat3("ノックバック方向", &hitDefs[i].knockbackDirection.x, 0.1f);
 
                     // ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
                     hitDefs[i].knockbackDirection = hitDefs[i].knockbackDirection.Normalize();
@@ -939,7 +1079,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                     // ダメージリアクション
                     const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
                     int currentReaction = static_cast<int>(hitDefs[i].damageReaction);
-                    if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+                    if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
                     {
                         history_->SaveHistory(nodes_, links_, currentId_);
                         isDirty_ = true;
@@ -950,7 +1090,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
                     // ジョイントタイプ
                     const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
                     int currentJoint = static_cast<int>(hitDefs[i].jointType);
-                    if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
                     {
                         history_->SaveHistory(nodes_, links_, currentId_);
                         isDirty_ = true;
@@ -960,7 +1100,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
                     // 削除ボタン
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-                    if (ImGui::Button("Delete Hitbox"))
+                    if (ImGui::Button("当たり判定を削除"))
                     {
 						// 当たり判定を削除する前に、履歴に保存して変更フラグを立てる
                         history_->SaveHistory(nodes_, links_, currentId_);
@@ -981,7 +1121,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             }
 
             // 新しい判定を追加するボタン
-            if (ImGui::Button("Add Hitbox"))
+            if (ImGui::Button("当たり判定を追加"))
             {
 				// 新しい当たり判定を追加する前に、履歴に保存して変更フラグを立てる
                 history_->SaveHistory(nodes_, links_, currentId_);
@@ -997,28 +1137,28 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     }
     else if (node.actionName == "GrabAttack")
     {
-        if (ImGui::TreeNode("Grab Attack Settings"))
+        if (ImGui::TreeNode("掴み 設定"))
         {
             HistorySaveIfChanged();
-            ImGui::DragFloat("Attack Time", &node.grabAttackInitData.attackTime, 0.01f);
+            ImGui::DragFloat("攻撃時間", &node.grabAttackInitData.attackTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Grab Time", &node.grabAttackInitData.grabTime, 0.01f);
+            ImGui::DragFloat("掴み時間", &node.grabAttackInitData.grabTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Speed", &node.grabAttackInitData.moveSpeed, 0.1f);
+            ImGui::DragFloat("移動速度", &node.grabAttackInitData.moveSpeed, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Start", &node.grabAttackInitData.moveStartTime, 0.01f);
+            ImGui::DragFloat("移動開始時間", &node.grabAttackInitData.moveStartTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move End", &node.grabAttackInitData.moveEndTime, 0.01f);
+            ImGui::DragFloat("移動終了時間", &node.grabAttackInitData.moveEndTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Hitbox Start", &node.grabAttackInitData.hitboxStartTime, 0.01f);
+            ImGui::DragFloat("当たり判定開始時間", &node.grabAttackInitData.hitboxStartTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Hitbox End", &node.grabAttackInitData.hitboxEndTime, 0.01f);
+            ImGui::DragFloat("当たり判定終了時間", &node.grabAttackInitData.hitboxEndTime, 0.01f);
 
 
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
@@ -1028,15 +1168,15 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (motionNames.empty())
             {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
             }
             else
             {
                 // 現在選択されているモーション名をプレビュー用の文字列として設定
-                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+                const char* previewValue = node.motionName.empty() ? "モーションを選択..." : node.motionName.c_str();
 
                 // モーション名選択用のコンボボックスを描画
-                if (ImGui::BeginCombo("Attack Motion", previewValue))
+                if (ImGui::BeginCombo("攻撃モーション", previewValue))
                 {
                     for (const auto& name : motionNames)
                     {
@@ -1072,35 +1212,35 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     }
     else if (node.actionName == "GrabStrikeAttack")
     {
-        if (ImGui::TreeNode("Grab Strike Attack Settings"))
+        if (ImGui::TreeNode("掴み攻撃 設定"))
         {
             HistorySaveIfChanged();
-            ImGui::DragFloat("Attack Time", &node.grabStrikeAttackInitData.attackTime, 0.01f);
+            ImGui::DragFloat("攻撃時間", &node.grabStrikeAttackInitData.attackTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Speed", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
+            ImGui::DragFloat("移動速度", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Start", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
+            ImGui::DragFloat("移動開始時間", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move End", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
+            ImGui::DragFloat("移動終了時間", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Knockback", &node.grabStrikeAttackInitData.knockback, 0.1f);
+            ImGui::DragFloat("ノックバック", &node.grabStrikeAttackInitData.knockback, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat3("Knockback Direction", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
+            ImGui::DragFloat3("ノックバック方向", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::Checkbox("Release", &node.grabStrikeAttackInitData.isRelease);
+            ImGui::Checkbox("離すかどうか", &node.grabStrikeAttackInitData.isRelease);
 
 
             // 離すタイミングの入力は、isReleaseがtrueの場合にのみ表示
             if (node.grabStrikeAttackInitData.isRelease)
             {
 				HistorySaveIfChanged();
-                ImGui::DragFloat("Release Time", &node.grabStrikeAttackInitData.releaseTime, 0.01f);
+                ImGui::DragFloat("離す時間", &node.grabStrikeAttackInitData.releaseTime, 0.01f);
             }
 
             // ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
@@ -1109,7 +1249,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // ダメージリアクション
             const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
             int currentReaction = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
-            if (ImGui::Combo("Damage Reaction", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+            if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
             {
                 history_->SaveHistory(nodes_, links_, currentId_);
                 isDirty_ = true;
@@ -1125,15 +1265,15 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (attackerMotions.empty())
             {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
             }
             else
             {
                 // 現在選択されているモーション名をプレビュー用の文字列として設定
-                const char* previewValue = node.motionName.empty() ? "Select Motion..." : node.motionName.c_str();
+                const char* previewValue = node.motionName.empty() ? "モーションを選択..." : node.motionName.c_str();
 
                 // モーション名選択用のコンボボックスを描画
-                if (ImGui::BeginCombo("Attack Motion", previewValue))
+                if (ImGui::BeginCombo("攻撃モーション", previewValue))
                 {
                     for (const auto& name : attackerMotions)
                     {
@@ -1160,15 +1300,15 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (targetMotions.empty())
             {
-                ImGui::TextColored(ImVec4(1, 0, 0, 1), "No motions loaded.");
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
             }
             else
             {
                 // 現在選択されているモーション名をプレビュー用の文字列として設定
-                const char* previewValue = node.targetMotionName.empty() ? "Select Motion..." : node.targetMotionName.c_str();
+                const char* previewValue = node.targetMotionName.empty() ? "モーションを選択..." : node.targetMotionName.c_str();
 
                 // モーション名選択用のコンボボックスを描画
-                if (ImGui::BeginCombo("Stagger Motion", previewValue))
+                if (ImGui::BeginCombo("怯みモーション", previewValue))
                 {
                     for (const auto& name : targetMotions)
                     {
@@ -1194,17 +1334,17 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
             for (size_t i = 0; i < hits.size(); ++i)
             {
                 ImGui::PushID(static_cast<int>(i));
-                if (ImGui::TreeNode((std::string("Hit ") + std::to_string(i + 1)).c_str()))
+                if (ImGui::TreeNode((std::string("当たり判定 ") + std::to_string(i + 1)).c_str()))
                 {
                     HistorySaveIfChanged();
-                    ImGui::DragFloat("Hit Time", &hits[i].hitTime, 0.01f);
+                    ImGui::DragFloat("当たり判定時間", &hits[i].hitTime, 0.01f);
 
                     HistorySaveIfChanged();
-                    ImGui::InputInt("Damage", &hits[i].damage);
+                    ImGui::InputInt("攻撃力", &hits[i].damage);
 
                     // ターゲットのジョイントタイプ
                     int targetJoint = static_cast<int>(node.grabAttackInitData.jointType);
-                    if (ImGui::Combo("Joint Type", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                    if (ImGui::Combo("ジョイントタイプ", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
                     {
                         history_->SaveHistory(nodes_, links_, currentId_);
                         isDirty_ = true;
@@ -1219,49 +1359,49 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
     }
 	else if (node.actionName == "Avoid")
 	{
-		if (ImGui::TreeNode("Avoid Settings"))
+		if (ImGui::TreeNode("回避 設定"))
 		{
             HistorySaveIfChanged();
-			ImGui::DragFloat2("Direction", &node.avoidInitData.localDirection.x, 0.01f);
+			ImGui::DragFloat2("回避方向", &node.avoidInitData.localDirection.x, 0.01f);
             node.avoidInitData.localDirection = node.avoidInitData.localDirection.Normalize();
 
             HistorySaveIfChanged();
-			ImGui::DragFloat("Distance", &node.avoidInitData.distance, 0.01f);
+			ImGui::DragFloat("回避距離", &node.avoidInitData.distance, 0.01f);
 
             HistorySaveIfChanged();
-			ImGui::DragFloat("Duration", &node.avoidInitData.time, 0.01f);
+			ImGui::DragFloat("回避時間", &node.avoidInitData.time, 0.01f);
 
 			ImGui::TreePop();
 		}
 	}
     else if (node.actionName == "ApproachTargetMove")
     {
-        if (ImGui::TreeNode("Approach Target Move Settings"))
+        if (ImGui::TreeNode("ターゲット接近 設定"))
         {
             HistorySaveIfChanged();
-            ImGui::DragFloat("Move Speed", &node.approachTargetMoveInitData.moveSpeed, 0.1f);
+            ImGui::DragFloat("移動速度", &node.approachTargetMoveInitData.moveSpeed, 0.1f);
 
             HistorySaveIfChanged();
-            ImGui::DragFloat("Stop Distance", &node.approachTargetMoveInitData.stopDistance, 0.01f);
+            ImGui::DragFloat("停止距離", &node.approachTargetMoveInitData.stopDistance, 0.01f);
 
             HistorySaveIfChanged();
-            ImGui::Checkbox("Is Dash", &node.approachTargetMoveInitData.isDash);
+            ImGui::Checkbox("走るかどうか", &node.approachTargetMoveInitData.isDash);
 
             ImGui::TreePop();
         }
     }
 	else if (node.actionName == "NavMeshMove")
 	{
-		if (ImGui::TreeNode("NavMesh Move Settings"))
+		if (ImGui::TreeNode("ナビメッシュ移動 設定"))
 		{
 			HistorySaveIfChanged();
-			ImGui::DragFloat("Move Speed", &node.navMeshMoveInitData.moveSpeed, 0.1f);
+			ImGui::DragFloat("移動速度", &node.navMeshMoveInitData.moveSpeed, 0.1f);
 
 			HistorySaveIfChanged();
-			ImGui::DragFloat("Stop Distance", &node.navMeshMoveInitData.stopDistance, 0.01f);
+			ImGui::DragFloat("停止距離", &node.navMeshMoveInitData.stopDistance, 0.01f);
 
 			HistorySaveIfChanged();
-			ImGui::Checkbox("Is Dash", &node.navMeshMoveInitData.isDash);
+			ImGui::Checkbox("走るかどうか", &node.navMeshMoveInitData.isDash);
 
 			ImGui::TreePop();
 		}

@@ -100,6 +100,50 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Y : Redo (無効)");
     }
 
+	// --- コピーの表示切り替え ---
+	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+	{
+		ImGui::Text("Ctrl + C : コピー");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + C : コピー (リスト内で選択時のみ有効)");
+	}
+
+	// --- 貼り付けの表示切り替え ---
+    if (hasCopiedData_)
+    {
+		ImGui::Text("Ctrl + V : 貼り付け");
+
+	}
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + V : 貼り付け (無効)");
+    }
+
+	// --- 複製の表示切り替え ---
+	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+	{
+		ImGui::Text("Ctrl + D : 複製");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + D : 複製 (リスト内で選択時のみ有効)");
+	}
+
+	// --- 削除の表示切り替え ---
+	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+	{
+		ImGui::Text("Delete / Backspace キー : 削除");
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Delete / Backspace キー : 削除 (リスト内で選択時のみ有効)");
+	}
+
+	// --- モード切り替えの表示 ---
+	ImGui::Text("Tab キー : モード切替 (現在のモード : %s)", currentMode_ == EditorMode::ObjectPlacement ? "オブジェクト配置" : "ナビメッシュ編集");
+
     ImGui::Separator();
 
     if (currentMode_ == EditorMode::ObjectPlacement)
@@ -246,6 +290,51 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
                     // ペーストしたオブジェクトを自動的に選択状態にする
                     selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+                }
+            }
+
+			// Ctrl + D で複製
+			if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_D))
+			{
+				// 有効なオブジェクトが選択されている場合のみ複製
+				if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+				{
+					// 現在の状態を履歴に保存して変更フラグを立てる
+					history_->SaveHistory(placementList);
+					isDirty_ = true;
+
+					// 選択中のオブジェクトのデータを複製
+					PlacementData newData = placementList[selectedIndex_];
+
+					// 複製したオブジェクトは少し位置をずらして生成する
+					newData.position.x += 0.5f; 
+					newData.position.z += 0.5f;
+                    newData.instancePtr = nullptr;
+
+					// 実体をシーンに生成してリストに追加
+					spawner_->SpawnActualEntity(newData);
+					placementList.push_back(newData);
+
+					// 複製したオブジェクトを自動的に選択状態にする
+					selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+				}
+			}
+
+			// Delete / Backspace キーで削除
+            if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+            {
+                if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+                {
+                    // 現在の状態を履歴に保存して変更フラグを立てる
+                    history_->SaveHistory(placementList);
+                    isDirty_ = true;
+
+                    // シーンから実体を削除してリストからも削除
+                    spawner_->DeleteActualEntity(placementList[selectedIndex_]);
+                    placementList.erase(placementList.begin() + selectedIndex_);
+
+                    // 選択状態をリセット
+                    selectedIndex_ = -1;
                 }
             }
         }

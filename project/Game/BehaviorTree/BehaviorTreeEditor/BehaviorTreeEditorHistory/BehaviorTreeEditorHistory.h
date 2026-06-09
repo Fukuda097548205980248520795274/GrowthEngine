@@ -44,6 +44,14 @@ public:
 	/// @brief 履歴をクリアする
 	void Clear();
 
+	/// @brief Undoが可能かどうかを返す
+	/// @return 
+	bool CanUndo() const { return !undoHistory_.empty(); }
+
+	/// @brief Redoが可能かどうかを返す
+	/// @return 
+	bool CanRedo() const { return !redoHistory_.empty(); }
+
 
 private:
 

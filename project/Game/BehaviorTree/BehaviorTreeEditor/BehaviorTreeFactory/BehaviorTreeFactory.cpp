@@ -147,7 +147,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			break;
 
 			// ターゲットが攻撃しているかどうかをチェックする条件
-		case ConditionType::isTargetAttacking:
+		case ConditionType::IsTargetAttacking:
 			conditionFunc = [character]() 
                 { 
 					if (!character->HasTarget()) return false;
@@ -156,7 +156,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
             break;
 
 			// ターゲットが攻撃していないかどうかをチェックする条件
-		case ConditionType::isTargetNotAttacking:
+		case ConditionType::IsTargetNotAttacking:
             conditionFunc = [character]()
                 {
                     if (!character->HasTarget()) return true;
@@ -165,7 +165,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
             break;
 
 			// ターゲットが攻撃動作中かどうかをチェックする条件
-		case ConditionType::isTargetInAttackSequence:
+		case ConditionType::IsTargetInAttackSequence:
             conditionFunc = [character]()
                 {
                     if (!character->HasTarget()) return false;
@@ -174,7 +174,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
             break;
 
 			// ターゲットが攻撃動作中でないかどうかをチェックする条件
-		case ConditionType::isTargetNotInAttackSequence:
+		case ConditionType::IsTargetNotInAttackSequence:
 			conditionFunc = [character]()
 				{
 					if (!character->HasTarget()) return true;
@@ -303,13 +303,13 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
     if (runtime_node)
     {
         // ビューアー上に表示するノード名を設定
-        std::string nodeName = "Unknown";
+        std::string nodeName = "未設定";
         if (editor_node.type == EditorNodeType::Action) nodeName = editor_node.actionName;
-        else if (editor_node.type == EditorNodeType::Condition) nodeName = "Condition";
-        else if (editor_node.type == EditorNodeType::PersistentSelector) nodeName = "Persistent Selector";
-        else if (editor_node.type == EditorNodeType::PersistentSequence) nodeName = "Persistent Sequence";
-        else if (editor_node.type == EditorNodeType::RestartingSelector) nodeName = "Restarting Selector";
-        else if (editor_node.type == EditorNodeType::RestartingSequence) nodeName = "Restarting Sequence";
+        else if (editor_node.type == EditorNodeType::Condition) nodeName = "条件";
+        else if (editor_node.type == EditorNodeType::PersistentSelector) nodeName = "永続 選択";
+        else if (editor_node.type == EditorNodeType::PersistentSequence) nodeName = "永続 シーケンス";
+        else if (editor_node.type == EditorNodeType::RestartingSelector) nodeName = "再起動 選択";
+        else if (editor_node.type == EditorNodeType::RestartingSequence) nodeName = "再起動 シーケンス";
 
         runtime_node->SetDebugInfo(
             editor_node.id,
