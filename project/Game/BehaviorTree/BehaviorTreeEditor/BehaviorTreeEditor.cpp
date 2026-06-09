@@ -238,45 +238,99 @@ void BehaviorTreeEditor::DrawUI()
 /// @brief 選択されているノードを削除する
 void BehaviorTreeEditor::DeleteSelectedNodes()
 {
-	// 選択されているノードの数を取得
-    int numSelected = ImNodes::NumSelectedNodes();
-    if (numSelected <= 0) return;
+    int numSelectedNodes = ImNodes::NumSelectedNodes();
+    int numSelectedLinks = ImNodes::NumSelectedLinks();
 
-    // ノード追加前の状態を履歴に保存する
-    history_->SaveHistory(nodes_, links_, currentId_);
-
-    // 選択されたノードのIDをすべて取得
-    std::vector<int> selectedNodes(numSelected);
-    ImNodes::GetSelectedNodes(selectedNodes.data());
-
-    for (int nodeId : selectedNodes)
+    // リンクの単体削除処理（既存の処理があればそのまま、または適宜追加）
+    if (numSelectedLinks > 0)
     {
-        // 削除対象のノードを見つける
-        auto nodeIt = std::find_if(nodes_.begin(), nodes_.end(),
-            [nodeId](const EditorNode& n) { return n.id == nodeId; });
+        std::vector<int> selectedLinkIds(numSelectedLinks);
+        ImNodes::GetSelectedLinks(selectedLinkIds.data());
 
-        if (nodeIt != nodes_.end())
-        {
-            int inPin = nodeIt->inputPinId;
-            int outPin = nodeIt->outputPinId;
-
-			// ノードに接続されているリンクをすべて削除する
-            links_.erase(
-                std::remove_if(links_.begin(), links_.end(),
-                    [inPin, outPin](const EditorLink& link) {
-                        return link.startPinId == outPin || link.endPinId == inPin;
-                    }),
-                links_.end()
-            );
-
-			// ノードを削除
-            nodes_.erase(nodeIt);
-        }
+        links_.erase(std::remove_if(links_.begin(), links_.end(),
+            [&selectedLinkIds](const EditorLink& link) {
+                return std::find(selectedLinkIds.begin(), selectedLinkIds.end(), link.id) != selectedLinkIds.end();
+            }), links_.end());
     }
 
-    // ImNodes側の選択状態もクリアしておく
-    ImNodes::ClearNodeSelection();
+    // ノードの削除処理（子孫ノードも巻き込んで削除）
+    if (numSelectedNodes > 0)
+    {
+        // 削除前の状態を履歴に保存（履歴機能があれば）
+        // history_->SaveHistory(nodes_, links_, currentId_);
 
-    // 変更があったのでフラグを立てる
-    isDirty_ = true;
+        std::vector<int> selectedNodeIds(numSelectedNodes);
+        ImNodes::GetSelectedNodes(selectedNodeIds.data());
+
+        // 探索用のキューと、削除対象のノードIDを格納するセット
+        std::vector<int> searchQueue = selectedNodeIds;
+        std::unordered_set<int> nodesToDelete;
+
+        // コピー時と同様に子孫ノードを探索
+        while (!searchQueue.empty())
+        {
+            int currentId = searchQueue.back();
+            searchQueue.pop_back();
+
+            // 既に削除対象に入っていればスキップ
+            if (nodesToDelete.count(currentId) > 0) continue;
+            nodesToDelete.insert(currentId);
+
+            // 現在のノードを取得
+            auto it = std::find_if(nodes_.begin(), nodes_.end(), [currentId](const EditorNode& n) { return n.id == currentId; });
+            if (it != nodes_.end())
+            {
+                int outPinId = it->outputPinId;
+
+                // リンクを辿って子ノードを探す
+                for (const auto& link : links_)
+                {
+                    if (link.startPinId == outPinId)
+                    {
+                        int childPinId = link.endPinId;
+                        auto childIt = std::find_if(nodes_.begin(), nodes_.end(), [childPinId](const EditorNode& n) { return n.inputPinId == childPinId; });
+
+                        if (childIt != nodes_.end())
+                        {
+                            searchQueue.push_back(childIt->id);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 削除対象ノードが持っているすべてのピンIDを収集
+        // （これらのピンに繋がっているリンクも削除するため）
+        std::unordered_set<int> pinsToDelete;
+        for (int nodeId : nodesToDelete)
+        {
+            auto it = std::find_if(nodes_.begin(), nodes_.end(), [nodeId](const EditorNode& n) { return n.id == nodeId; });
+            if (it != nodes_.end())
+            {
+                pinsToDelete.insert(it->inputPinId);
+                pinsToDelete.insert(it->outputPinId);
+            }
+        }
+
+        // 関連するリンクを削除
+        links_.erase(std::remove_if(links_.begin(), links_.end(),
+            [&pinsToDelete](const EditorLink& link) {
+                // リンクの始点か終点のどちらかが削除対象のピンなら削除
+                return pinsToDelete.count(link.startPinId) > 0 || pinsToDelete.count(link.endPinId) > 0;
+            }), links_.end());
+
+        // ノード本体を削除
+        nodes_.erase(std::remove_if(nodes_.begin(), nodes_.end(),
+            [&nodesToDelete](const EditorNode& n) {
+                return nodesToDelete.count(n.id) > 0;
+            }), nodes_.end());
+
+        // 選択状態をクリア
+        ImNodes::ClearNodeSelection();
+    }
+
+
+	// 変更があったのでフラグを立てる
+	history_->SaveHistory(nodes_, links_, currentId_);
+	isDirty_ = true;
 }

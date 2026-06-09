@@ -734,6 +734,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
     // ノードエディタの終了
     ImNodes::EndNodeEditor();
 
+
 	// キャンバスの空いている部分を右クリックしたときのコンテキストメニューを開く
     if (shouldOpenPopup)
     {

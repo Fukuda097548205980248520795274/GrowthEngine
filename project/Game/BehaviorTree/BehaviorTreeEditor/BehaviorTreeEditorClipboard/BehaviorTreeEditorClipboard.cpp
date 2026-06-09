@@ -20,9 +20,50 @@ void BehaviorTreeEditorClipboard::HandleCopy(const std::vector<EditorNode>& sour
             clipboardNodes_.clear();
             clipboardLinks_.clear();
 
-			// コピーしたノードのピンIDを記録するリスト（リンクの復元に使用）
+            // 選択されたノードとその全ての子孫ノードのIDを格納するリスト
+            std::vector<int> allNodeIdsToCopy;
+            std::vector<int> searchQueue = selectedNodeIds;
+            std::unordered_set<int> visitedNodes; // 重複探索を防止
+
+            // 子孫ノードを探索してコピー対象を収集する
+            while (!searchQueue.empty())
+            {
+                int currentId = searchQueue.back();
+                searchQueue.pop_back();
+
+                // 既にチェック済みのノードならスキップ
+                if (visitedNodes.count(currentId) > 0) continue;
+                visitedNodes.insert(currentId);
+                allNodeIdsToCopy.push_back(currentId);
+
+                // 現在のノード情報を取得
+                auto it = std::find_if(sourceNodes.begin(), sourceNodes.end(), [currentId](const EditorNode& n) { return n.id == currentId; });
+                if (it != sourceNodes.end())
+                {
+                    int outPinId = it->outputPinId;
+
+                    // このノードの outputPinId を開始点(startPinId)とするリンクを探す
+                    for (const auto& link : sourceLinks)
+                    {
+                        if (link.startPinId == outPinId)
+                        {
+                            // リンクの終点(endPinId)を持つ子ノードを探す
+                            int childPinId = link.endPinId;
+                            auto childIt = std::find_if(sourceNodes.begin(), sourceNodes.end(), [childPinId](const EditorNode& n) { return n.inputPinId == childPinId; });
+
+                            // 子ノードが見つかったら探索キューに追加
+                            if (childIt != sourceNodes.end())
+                            {
+                                searchQueue.push_back(childIt->id);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 収集したすべてのノードとピンIDを記録
             std::vector<int> copiedPinIds;
-            for (int id : selectedNodeIds)
+            for (int id : allNodeIdsToCopy)
             {
                 auto it = std::find_if(sourceNodes.begin(), sourceNodes.end(), [id](const EditorNode& n) { return n.id == id; });
                 if (it != sourceNodes.end())
@@ -33,12 +74,13 @@ void BehaviorTreeEditorClipboard::HandleCopy(const std::vector<EditorNode>& sour
                 }
             }
 
-			// コピーしたノードのピンIDをもとに、コピー元のリンクの中から該当するものをクリップボードに保存する
+            // コピーしたノードのピンIDをもとに、該当するリンクをクリップボードに保存
             for (const auto& link : sourceLinks)
             {
                 bool startInCopied = std::find(copiedPinIds.begin(), copiedPinIds.end(), link.startPinId) != copiedPinIds.end();
                 bool endInCopied = std::find(copiedPinIds.begin(), copiedPinIds.end(), link.endPinId) != copiedPinIds.end();
 
+                // 親子ともコピー対象に含まれていればリンクもコピー
                 if (startInCopied && endInCopied)
                 {
                     clipboardLinks_.push_back(link);

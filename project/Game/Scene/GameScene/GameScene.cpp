@@ -167,6 +167,20 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 	if(tag == Character::CharacterTag::Player)
 	{
+		// すでにプレイヤーが存在する場合は削除する
+		if (player_)
+		{
+			player_.reset();
+			player_ = nullptr;
+		}
+
+		// すでにプレイヤーの武器が存在する場合は削除する
+		if (playerWeapon_)
+		{
+			playerWeapon_.reset();
+			playerWeapon_ = nullptr;
+		}
+
 		// プレイヤーの武器の生成と初期化
 		Weapon::InitData playerWeaponInitData;
 		playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
