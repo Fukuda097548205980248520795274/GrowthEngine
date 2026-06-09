@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "BehaviorTree/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
+#include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
 /// @brief コンストラクタ
 Node::Node()

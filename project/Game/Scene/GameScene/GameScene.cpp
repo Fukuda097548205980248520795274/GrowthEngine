@@ -192,20 +192,16 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerWeaponInitData.landingCollision = landingCollision_->CreateInstance();
 		playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
 
-
+		// プレイヤーの生成処理
 		Character::InitData playerInitData = initData;
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
 		playerInitData.landingCollision = landingCollision_->CreateInstance();
 		playerInitData.model_ = playerModel_.get();
+		player_ = std::make_unique<Player>(playerInitData);
+		player_->Initialize(playerWeapon_.get());
 
-		// プレイヤーの生成処理
-		std::unique_ptr<Player> player = std::make_unique<Player>(playerInitData);
-		player->Initialize(playerWeapon_.get());
-		character = player.get();
-
-		// プレイヤーはリストに追加せず、専用のメンバ変数で管理する
-		player_ = std::move(player);
+		character = player_.get();
 
 		// カメラ制御の初期化
 		InitializeCameraControl();
