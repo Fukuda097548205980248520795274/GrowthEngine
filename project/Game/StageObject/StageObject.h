@@ -29,6 +29,9 @@ public:
 	/// @brief 更新処理
 	virtual void Update();
 
+	/// @brief 描画処理
+	virtual void Draw() {};
+
 	/// @brief ステージオブジェクトのタグを取得する
 	/// @return 
 	StageObjectTag GetTag() const { return tag_; }

@@ -1519,32 +1519,31 @@ void Character::WallTouchUpdate()
 		auto obbParam = hitColliders->param_.get();
 
 
-		// --- 簡易的な押し出しベクトルの計算 ---
-		// カプセルの始点(start)を代表点として扱う（必要に応じて線分上の最近傍点を求めます）
+		// キャラクターの位置（カプセルの始点）を取得する
 		Vector3 pos = capsule->start;
 
-		// OBBの中心からキャラクターへのベクトル（修正箇所）
+		// キャラクターの位置からOBBの中心へのベクトルを計算する
 		Vector3 offset = pos - obbParam->center;
 
-		// OBBのローカル座標系に変換（toCenter を offset に変更）
+		// ワールド座標系のベクトルをOBBのローカル座標系に変換する
 		Vector3 localPos;
 		localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
 		localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
 		localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
 
-		// OBB表面の最近傍点を求める
+		// OBBのローカル座標系で、キャラクターの位置をOBBの中心から見たときのベクトルを、OBBの半径内にクランプする
 		Vector3 closestLocal;
 		closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
 		closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
 		closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
 
-		// ワールド座標系に戻す
+		// クランプされたローカル座標をワールド座標に変換する
 		Vector3 closestWorld = obbParam->center;
 		closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
 		closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
 		closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
 
-		// めり込みベクトル(押し出しベクトル)を計算
+		// キャラクターの位置とクランプされた点との距離を計算する
 		Vector3 diff = pos - closestWorld;
 		float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
 

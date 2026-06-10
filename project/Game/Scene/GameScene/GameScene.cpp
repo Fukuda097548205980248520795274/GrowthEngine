@@ -72,6 +72,9 @@ void GameScene::Initialize()
 	// 片手武器モデルの読み込み
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
+	// 試験的な立方体の生成と初期化
+	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 1000, "Trial_Cube");
+
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -143,6 +146,10 @@ void GameScene::Draw()
 {
 	// エディタの描画
 	editorWorkspaceManager_->DrawUI();
+
+	// ステージオブジェクトの描画
+	for (auto& object : objects_)object->Draw();
+	trialCube_->Draw();
 
 	// プレイヤーの描画
 	if (player_)
@@ -290,6 +297,7 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 	// 床
 	Floor::InitData floorInitData = initData;
 	floorInitData.collision = floorCollision_->CreateInstance();
+	floorInitData.model = trialCube_->CreateInstance();
 
 	std::unique_ptr<Floor> newFloor = std::make_unique<Floor>();
 	newFloor->Initialize(floorInitData);
@@ -309,6 +317,7 @@ Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
 	// 壁
 	Wall::InitData wallInitData = initData;
 	wallInitData.collision = wallCollision_->CreateInstance();
+	wallInitData.model = trialCube_->CreateInstance();
 
 	std::unique_ptr<Wall> newWall = std::make_unique<Wall>();
 	newWall->Initialize(wallInitData);

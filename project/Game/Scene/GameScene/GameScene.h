@@ -192,6 +192,9 @@ private:
 	/// @brief ステージオブジェクトのリスト
 	std::list<std::unique_ptr<StageObject>> objects_;
 
+	/// @brief 試験的な立方体
+	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
+
 
 	/// @brief カメラのピボットポイント
 	std::unique_ptr<PivotPoint> pivotPoint_ = nullptr;

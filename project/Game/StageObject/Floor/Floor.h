@@ -18,7 +18,7 @@ public:
 		Collision3DInstanceAABB* collision = nullptr;
 
 		/// @brief 地面のモデル
-		PrefabInstanceStaticModel* model = nullptr;
+		PrefabInstanceCube* model = nullptr;
 	};
 
 public:
@@ -38,7 +38,7 @@ public:
 	virtual void Update() override;
 
 	/// @brief 描画処理
-	void Draw();
+	void Draw() override;
 
 
 private:
@@ -47,6 +47,6 @@ private:
 	Collision3DInstanceAABB* collision_ = nullptr;
 
 	/// @brief 床のモデル
-	PrefabInstanceStaticModel* model_ = nullptr;
+	PrefabInstanceCube* model_ = nullptr;
 };
 

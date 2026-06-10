@@ -17,6 +17,13 @@ Wall::~Wall()
 		collision_->Delete();
 		collision_ = nullptr;
 	}
+
+	// モデルの削除
+	if (model_)
+	{
+		model_->isDelete_ = true;
+		model_ = nullptr;
+	}
 }
 
 /// @brief 初期化
@@ -64,9 +71,9 @@ void Wall::Update()
 	// 衝突判定のパラメータを更新
 	collision_->param_->center = GetWorldPosition();
 	collision_->param_->radius = worldTransform_->scale_;
-	collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[1][0], rotate.m[2][0]);
-	collision_->param_->oriented[1] = Vector3(rotate.m[0][1], rotate.m[1][1], rotate.m[2][1]);
-	collision_->param_->oriented[2] = Vector3(rotate.m[0][2], rotate.m[1][2], rotate.m[2][2]);
+	collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[0][1], rotate.m[0][2]);
+	collision_->param_->oriented[1] = Vector3(rotate.m[1][0], rotate.m[1][1], rotate.m[1][2]);
+	collision_->param_->oriented[2] = Vector3(rotate.m[2][0], rotate.m[2][1], rotate.m[2][2]);
 }
 
 /// @brief 描画処理

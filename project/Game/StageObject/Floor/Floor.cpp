@@ -17,6 +17,13 @@ Floor::~Floor()
 		collision_->Delete();
 		collision_ = nullptr;
 	}
+
+	// モデルの削除
+	if (model_)
+	{
+		model_->isDelete_ = true;
+		model_ = nullptr;
+	}
 }
 
 /// @brief 初期化
