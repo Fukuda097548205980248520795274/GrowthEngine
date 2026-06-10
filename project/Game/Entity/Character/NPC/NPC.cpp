@@ -115,7 +115,7 @@ void NPC::Update()
 /// @brief ターゲットとの距離で構え状態を更新する
 void NPC::UpdateStanceStateByTargetDistance()
 {
-	if (!lockOnTarget_)
+	if (!lockOnTarget_ || IsInAttackSequence())
 	{
 		isStance_ = false;
 		return;
