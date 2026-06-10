@@ -1213,6 +1213,15 @@
     <Filter Include="Game\CameraShake">
       <UniqueIdentifier>{53e6f0a5-a949-4a97-8553-b9a11c934b00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData">
+      <UniqueIdentifier>{c4dae24d-f0dc-471a-9d2b-fe60df0d36d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule">
+      <UniqueIdentifier>{108da74b-0a1e-4f23-8fad-2a35a6603070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule">
+      <UniqueIdentifier>{e2330321-b3a2-4e9c-8229-5eaa9cbaa626}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2183,6 +2192,15 @@
     </ClCompile>
     <ClCompile Include="Game\CameraShake\CameraShake.cpp">
       <Filter>Game\CameraShake</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.cpp">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp">
+      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3271,6 +3289,15 @@
     </ClInclude>
     <ClInclude Include="Game\CameraShake\CameraShake.h">
       <Filter>Game\CameraShake</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.h">
+      <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h">
+      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h">
+      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 #include "Application/Collision3DInstance/Collision3DInstanceLine/Collision3DInstanceLine.h"
 #include "Application/Collision3DInstance/Collision3DInstanceRay/Collision3DInstanceRay.h"
 #include "Application/Collision3DInstance/Collision3DInstanceSegment/Collision3DInstanceSegment.h"
+#include "Application/Collision3DInstance/Collision3DInstanceCapsule/Collision3DInstanceCapsule.h"
 
 /// @brief 初期化
 /// @param collisionStore 
@@ -187,6 +188,96 @@ void Engine::Collision3DBaseData::CollisionCheck()
 			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::AABB)
 			{
 				if (CollisionCheckFunc(*static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// カプセル 球
+			if (myInstance->GetType() == Collision3D::Type::Capsule && yourInstance->GetType() == Collision3D::Type::Sphere)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(myInstance.get())->param_, *static_cast<Collision3DInstanceSphere*>(yourInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// 球 カプセル
+			if (myInstance->GetType() == Collision3D::Type::Sphere && yourInstance->GetType() == Collision3D::Type::Capsule)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceSphere*>(myInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// カプセル AABB
+			if (myInstance->GetType() == Collision3D::Type::Capsule && yourInstance->GetType() == Collision3D::Type::AABB)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(myInstance.get())->param_, *static_cast<Collision3DInstanceAABB*>(yourInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// AABB カプセル
+			if (myInstance->GetType() == Collision3D::Type::AABB && yourInstance->GetType() == Collision3D::Type::Capsule)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceAABB*>(myInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// カプセル OBB
+			if (myInstance->GetType() == Collision3D::Type::Capsule && yourInstance->GetType() == Collision3D::Type::OBB)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(myInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(yourInstance.get())->param_))
+				{
+					// 衝突フラグを立てる
+					myInstance->isCollision_ = true;
+
+					// 衝突した相手のインスタンスを保存する
+					myInstance->hitOpponent_ = yourInstance.get();
+				}
+
+				continue;
+			}
+
+			// OBB カプセル
+			if (myInstance->GetType() == Collision3D::Type::OBB && yourInstance->GetType() == Collision3D::Type::Capsule)
+			{
+				if (CollisionCheckFunc(*static_cast<Collision3DInstanceCapsule*>(yourInstance.get())->param_, *static_cast<Collision3DInstanceOBB*>(myInstance.get())->param_))
 				{
 					// 衝突フラグを立てる
 					myInstance->isCollision_ = true;

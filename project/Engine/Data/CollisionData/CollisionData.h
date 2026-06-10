@@ -14,7 +14,8 @@ namespace Engine
 			Plane,
 			Line,
 			Ray,
-			Segment
+			Segment,
+			Capsule
 		};
 
 		/// @brief 球
@@ -88,6 +89,19 @@ namespace Engine
 
 			/// @brief 終点（差分ベクトル）
 			Vector3 diff;
+		};
+
+		/// @brief カプセル
+		struct Capsule
+		{
+			/// @brief 始点
+			Vector3 start;
+
+			/// @brief 終点（差分ベクトル）
+			Vector3 diff;
+
+			/// @brief 半径
+			float radius;
 		};
 	}
 

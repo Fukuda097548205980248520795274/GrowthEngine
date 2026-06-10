@@ -6,6 +6,7 @@
 #include "Collision3DData/Collision3DLineData/Collision3DLineData.h"
 #include "Collision3DData/Collision3DRayData/Collision3DRayData.h"
 #include "Collision3DData/Collision3DSegmentData/Collision3DSegmentData.h"
+#include "Collision3DData/Collision3DCapsuleData/Collision3DCapsuleData.h"
 
 #include <cassert>
 
@@ -94,6 +95,15 @@ Collision3DHandle Engine::Collision3DStore::Load(const std::string& name, Collis
 	if (type == Collision3D::Type::Segment)
 	{
 		std::unique_ptr<Collision3DSegmentData> data = std::make_unique<Collision3DSegmentData>(name, type, handle);
+		data->Initialize(this);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// カプセル
+	if (type == Collision3D::Type::Capsule)
+	{
+		std::unique_ptr<Collision3DCapsuleData> data = std::make_unique<Collision3DCapsuleData>(name, type, handle);
 		data->Initialize(this);
 		dataTable_.push_back(std::move(data));
 		return handle;

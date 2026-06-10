@@ -61,6 +61,7 @@
 #include "Application/Collision3DBase/Collision3DBaseLine/Collision3DBaseLine.h"
 #include "Application/Collision3DBase/Collision3DBaseRay/Collision3DBaseRay.h"
 #include "Application/Collision3DBase/Collision3DBaseSegment/Collision3DBaseSegment.h"
+#include "Application/Collision3DBase/Collision3DBaseCapsule/Collision3DBaseCapsule.h"
 
 #include "Application/Collision3DInstance/Collision3DInstanceSphere/Collision3DInstanceSphere.h"
 #include "Application/Collision3DInstance/Collision3DInstanceAABB/Collision3DInstanceAABB.h"
@@ -69,6 +70,7 @@
 #include "Application/Collision3DInstance/Collision3DInstanceLine/Collision3DInstanceLine.h"
 #include "Application/Collision3DInstance/Collision3DInstanceRay/Collision3DInstanceRay.h"
 #include "Application/Collision3DInstance/Collision3DInstanceSegment/Collision3DInstanceSegment.h"
+#include "Application/Collision3DInstance/Collision3DInstanceCapsule/Collision3DInstanceCapsule.h"
 
 #include "Application/Collision2DBase/Collision2DBaseCircle/Collision2DBaseCircle.h"
 #include "Application/Collision2DBase/Collision2DBaseSprite/Collision2DBaseSprite.h"

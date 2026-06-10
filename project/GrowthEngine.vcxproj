@@ -149,6 +149,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp" />
+    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp" />
     <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
@@ -764,6 +766,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.cpp" />
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DLineData\Collision3DLineData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1115,6 +1118,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
+    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
@@ -1333,6 +1338,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DStore.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DAABBData\Collision3DAABBData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DBaseData.h" />
+    <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DLineData\Collision3DLineData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DOBBData\Collision3DOBBData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DPlaneData\Collision3DPlaneData.h" />

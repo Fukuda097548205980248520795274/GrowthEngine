@@ -34,6 +34,24 @@ namespace Engine
 	bool CollisionCheckFunc(const Collision3D::Sphere& sphere, const Collision3D::OBB& obb);
 
 	/// @brief 衝突判定
+	/// @param capsule カプセル
+	/// @param sphere 球
+	/// @return 
+	bool CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::Sphere& sphere);
+
+	/// @brief 衝突判定
+	/// @param capsule カプセル
+	/// @param aabb AABB
+	/// @return 
+	bool CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::AABB& aabb);
+
+	/// @brief 衝突判定
+	/// @param capsule カプセル
+	/// @param obb OBB
+	/// @return 
+	bool CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::OBB& obb);
+
+	/// @brief 衝突判定
 	/// @param aabb AABB
 	/// @param obb OBB
 	/// @return 

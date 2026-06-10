@@ -647,6 +647,143 @@ bool Engine::CollisionCheckFunc(const Collision3D::Sphere& sphere, const Collisi
 	return CollisionCheckFunc(sphereOBBLocal,aabbOBBLocal);
 }
 
+
+/// @brief 衝突判定
+/// @param capsule カプセル
+/// @param sphere 球
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::Sphere& sphere)
+{
+	// カプセルの線分と球の中心の最近接点を求める
+	Vector3 closetPoint = Project(capsule.diff, sphere.center - capsule.start) + capsule.start;
+
+	Collision3D::Sphere sphereCapsule;
+	sphereCapsule.center = closetPoint;
+	sphereCapsule.radius = capsule.radius;
+
+	// 最近接点と球の中心の距離が半径より小さいとき
+	return CollisionCheckFunc(sphereCapsule, sphere);
+}
+
+/// @brief 衝突判定
+/// @param capsule カプセル
+/// @param aabb AABB
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::AABB& aabb)
+{
+	// AABBの面とカプセルの線分の最近接点を求める
+	Vector3 min = aabb.center - aabb.radius;
+	Vector3 max = aabb.center + aabb.radius;
+
+	// 最近接点とAABBの距離を求めるラムダ式
+	auto GetClosetPointDistance = [min, max](const Vector3& p) -> float
+		{
+			// 最近接点を求める
+			float closestX = std::clamp(p.x, min.x, max.x);
+			float closestY = std::clamp(p.y, min.y, max.y);
+			float closestZ = std::clamp(p.z, min.z, max.z);
+
+			// 最近接点とAABBの距離を求める (2乗)
+			return (Vector3(closestX, closestY, closestZ) - p).LengthSq();
+		};
+
+	// カプセルの線分を細かく分割して、最近接点とAABBの距離を求める
+	float low = 0.0f;
+	float high = 1.0f;
+
+	// 分割数
+	const int numSamples = 15;
+
+	for (int i = 0; i < numSamples; ++i)
+	{
+		// 線分を三等分して、最近接点とAABBの距離を求める
+		float m1 = low + (high - low) / 3.0f;
+		float m2 = high - (high - low) / 3.0f;
+
+		// 線分上の点を求める
+		Vector3 p1 = capsule.start + capsule.diff * m1;
+		Vector3 p2 = capsule.start + capsule.diff * m2;
+
+		// 最近接点とAABBの距離を求める
+		float dist1 = GetClosetPointDistance(p1);
+		float dist2 = GetClosetPointDistance(p2);
+
+		// 距離が小さい方を選択して、探索範囲を狭める
+		if (dist1 < dist2)
+		{
+			high = m2;
+		} 
+		else
+		{
+			low = m1;
+		}
+	}
+
+	// 最終的な最近接点を求める
+	float t = (low + high) / 2.0f;
+	Vector3 closestPoint = capsule.start + capsule.diff * t;
+
+	// 最近接点とAABBの距離を求める
+	float minDist = GetClosetPointDistance(closestPoint);
+
+	// 最近接点とAABBの距離が半径より小さいとき
+	return minDist <= capsule.radius * capsule.radius;
+}
+
+/// @brief 衝突判定
+/// @param capsule カプセル
+/// @param obb OBB
+/// @return 
+bool Engine::CollisionCheckFunc(const Collision3D::Capsule& capsule, const Collision3D::OBB& obb)
+{
+	// ワールド行列
+	Matrix4x4 obbWorld;
+
+	obbWorld.m[0][0] = obb.oriented[0].x;
+	obbWorld.m[0][1] = obb.oriented[0].y;
+	obbWorld.m[0][2] = obb.oriented[0].z;
+	obbWorld.m[0][3] = 0.0f;
+
+	obbWorld.m[1][0] = obb.oriented[1].x;
+	obbWorld.m[1][1] = obb.oriented[1].y;
+	obbWorld.m[1][2] = obb.oriented[1].z;
+	obbWorld.m[1][3] = 0.0f;
+
+	obbWorld.m[2][0] = obb.oriented[2].x;
+	obbWorld.m[2][1] = obb.oriented[2].y;
+	obbWorld.m[2][2] = obb.oriented[2].z;
+	obbWorld.m[2][3] = 0.0f;
+
+	obbWorld.m[3][0] = obb.center.x;
+	obbWorld.m[3][1] = obb.center.y;
+	obbWorld.m[3][2] = obb.center.z;
+	obbWorld.m[3][3] = 1.0f;
+
+
+	// OBBのワールド逆行列
+	Matrix4x4 inverseMatrix = obbWorld.Inverse();
+
+	// カプセルをOBBの座標に持ち込む
+	Vector3 startInOBBLocalSpace = Transform(capsule.start, inverseMatrix);
+	Vector3 diffInOBBLocalSpace = Transform(capsule.diff, inverseMatrix);
+
+	// OBB視点のため、AABBを使用する
+	Collision3D::AABB aabbOBBLocal;
+	aabbOBBLocal.center = Vector3(0.0f, 0.0f, 0.0f);
+	aabbOBBLocal.radius = obb.radius;
+
+	// OBB視点の球
+	Collision3D::Capsule capsuleOBBLocal =
+	{
+		startInOBBLocalSpace,
+		diffInOBBLocalSpace,
+		capsule.radius
+	};
+
+	// AABBとカプセルの当たり判定
+	return CollisionCheckFunc(capsuleOBBLocal, aabbOBBLocal);
+}
+
 /// @brief 衝突判定
 /// @param aabb AABB
 /// @param obb OBB
