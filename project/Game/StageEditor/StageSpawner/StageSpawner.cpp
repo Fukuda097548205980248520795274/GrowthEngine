@@ -62,6 +62,16 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			Floor* newFloor = scene_->CreateFloorObject(initData);
 			data.instancePtr = newFloor;
 		}
+		else if (tag == StageObject::StageObjectTag::Wall)
+		{
+			// 壁の生成処理
+			Wall::InitData initData;
+			initData.position = data.position;
+			initData.scale = data.scale;
+			initData.rotateY = data.rotate_.y;
+			Wall* newWall = scene_->CreateWallObject(initData);
+			data.instancePtr = newWall;
+		}
 	}
 	else if (data.category == EditCategory::Weapon)
 	{

@@ -8,6 +8,7 @@
 #include "Entity/Weapon/Weapon.h"
 
 #include "StageObject/Floor/Floor.h"
+#include "StageObject/Wall/Wall.h"
 
 #include "PivotPoint/PivotPoint.h"
 #include "CameraShake/CameraShake.h"
@@ -59,6 +60,11 @@ public:
 	/// @param scale 
 	/// @return 
 	Floor* CreateFloorObject(const Floor::InitData& initData);
+
+	/// @brief 壁オブジェクトを生成する
+	/// @param initData 
+	/// @return 
+	Wall* CreateWallObject(const Wall::InitData& initData);
 
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
@@ -134,10 +140,17 @@ private:
 
 
 	/// @brief 着地の当たり判定グループ
-	std::unique_ptr<Collision3DBaseAABB> landingCollision_ = nullptr;
+	std::unique_ptr<Collision3DBaseCapsule> landingCollision_ = nullptr;
 
 	/// @brief 床の当たり判定グループ
 	std::unique_ptr<Collision3DBaseAABB> floorCollision_ = nullptr;
+
+
+	/// @brief 壁接触の当たり判定グループ
+	std::unique_ptr<Collision3DBaseCapsule> wallTouchCollision_ = nullptr;
+
+	/// @brief 壁の当たり判定グループ
+	std::unique_ptr<Collision3DBaseOBB> wallCollision_ = nullptr;
 
 
 	/// @brief プレイヤーのモデル

@@ -112,22 +112,28 @@ Character::Character(const InitData& initData) : Entity()
 	hurtboxRoot_.owner_ = this;
 	hurtboxRoot_.type_ = ColliderType::Hurtbox;
 
-
 	// 攻撃判定グループ
 	hitboxGroup_ = initData.hitboxGroup;
-
-	// 着地判定
-	landingCollision_ = initData.landingCollision;
-	landingCollision_->param_->center = GetWorldPosition();
-	landingCollision_->param_->radius = Vector3(0.25f, 0.03f, 0.25f);
-	
-
-	// ブラックボードの生成
-	blackboard_ = std::make_unique<Blackboard>();
 
 
 	// ワールド座標を更新
 	worldTransform_->Update();
+
+	// 着地判定
+	landingCollision_ = initData.landingCollision;
+	landingCollision_->param_->start = GetWorldPosition();
+	landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+	landingCollision_->param_->radius = 0.25f;
+
+	// 壁接触の当たり判定
+	wallTouchCollision_ = initData.wallTouchCollision;
+	wallTouchCollision_->param_->start = GetWorldPosition();
+	wallTouchCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+	wallTouchCollision_->param_->radius = 0.25f;
+	
+
+	// ブラックボードの生成
+	blackboard_ = std::make_unique<Blackboard>();
 }
 
 /// @brief デストラクタ
@@ -136,6 +142,9 @@ Character::~Character()
 	// 当たり判定の削除
 	if (landingCollision_)landingCollision_->Delete();
 	landingCollision_ = nullptr;
+
+	if (wallTouchCollision_) wallTouchCollision_->Delete();
+	wallTouchCollision_ = nullptr;
 
 	if (hurtboxHead_.collider_) hurtboxHead_.collider_->Delete();
 	hurtboxHead_.collider_ = nullptr;
@@ -183,6 +192,9 @@ void Character::Update()
 	// 着地判定をチェックする
 	LandingCheck();
 
+	// 壁接触の当たり判定をチェックする
+	WallTouchCheck();
+
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
@@ -216,7 +228,17 @@ void Character::Update()
 
 			// 着地判定の位置を更新する
 			if (landingCollision_)
-				landingCollision_->param_->center = GetWorldPosition();
+			{
+				landingCollision_->param_->diff = GetWorldPosition() - landingCollision_->param_->start;
+				landingCollision_->param_->start = GetWorldPosition();
+			}
+
+			// 壁接触の当たり判定の位置を更新する
+			if (wallTouchCollision_)
+			{
+				wallTouchCollision_->param_->diff = GetWorldPosition() - wallTouchCollision_->param_->start;
+				wallTouchCollision_->param_->start = GetWorldPosition();
+			}
 
 			if (hurtboxHead_.collider_)
 			{
@@ -454,6 +476,9 @@ void Character::Update()
 
 	// 落下処理
 	FallUpdate(dt);
+
+	// 壁接触の処理
+	WallTouchUpdate();
 
 	// 最後のまとめた処理
 	FinalizeUpdate();
@@ -1461,6 +1486,90 @@ void Character::LandingCheck()
 
 		// Y方向の速度をリセットする（着地したので落下を止める）
 		velocityY_ = 0.0f;
+	}
+}
+
+/// @brief 壁接触の更新
+void Character::WallTouchCheck()
+{
+	// コリジョンがないと処理しない
+	if (!wallTouchCollision_)return;
+
+	// 壁に接触しているかどうかのフラグを更新する
+	isWallTouch_ = wallTouchCollision_->isCollision_;
+}
+
+/// @brief 壁接触の更新
+void Character::WallTouchUpdate()
+{
+	// コリジョンがないと処理しない
+	if (!wallTouchCollision_)return;
+
+	// 壁に接触していない場合は処理しない
+	if (!isWallTouch_) return;
+
+	// コリジョンの当たり判定がOBBであることを前提に、押し出しベクトルを計算する
+	if (wallTouchCollision_->hitOpponent_->GetType() == Engine::Collision3D::Type::OBB)
+	{
+		// カプセルの情報
+		auto capsule = wallTouchCollision_->param_.get();
+
+		// 当たった相手のOBBの情報
+		auto hitColliders = static_cast<Collision3DInstanceOBB*>(wallTouchCollision_->hitOpponent_);
+		auto obbParam = hitColliders->param_.get();
+
+
+		// --- 簡易的な押し出しベクトルの計算 ---
+		// カプセルの始点(start)を代表点として扱う（必要に応じて線分上の最近傍点を求めます）
+		Vector3 pos = capsule->start;
+
+		// OBBの中心からキャラクターへのベクトル（修正箇所）
+		Vector3 offset = pos - obbParam->center;
+
+		// OBBのローカル座標系に変換（toCenter を offset に変更）
+		Vector3 localPos;
+		localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
+		localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
+		localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
+
+		// OBB表面の最近傍点を求める
+		Vector3 closestLocal;
+		closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
+		closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
+		closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
+
+		// ワールド座標系に戻す
+		Vector3 closestWorld = obbParam->center;
+		closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
+		closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
+		closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
+
+		// めり込みベクトル(押し出しベクトル)を計算
+		Vector3 diff = pos - closestWorld;
+		float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
+
+		// めり込んでいる場合（距離がカプセルの半径未満）
+		if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
+		{
+			float dist = std::sqrt(distSq);
+			float penetration = capsule->radius - dist; // めり込み量
+
+			// 押し出しベクトル（正規化方向ベクトル × めり込み量）
+			Vector3 pushVector = (diff / dist) * penetration;
+
+			// ここでもY軸の押し出しは無効化する
+			pushVector.y = 0.0f;
+
+			// 位置を補正する
+			Vector3 currentPos = GetPosition();
+			currentPos.x += pushVector.x;
+			currentPos.z += pushVector.z;
+			SetPosition(currentPos);
+
+			// カプセルの始点も補正に合わせて更新しておく
+			capsule->start.x = currentPos.x;
+			capsule->start.z = currentPos.z;
+		}
 	}
 }
 

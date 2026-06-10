@@ -97,7 +97,10 @@ public:
 		Collision3DBaseSphere* hitboxGroup = nullptr;
 
 		/// @brief 着地判定グループ
-		Collision3DInstanceAABB* landingCollision = nullptr;
+		Collision3DInstanceCapsule* landingCollision = nullptr;
+
+		/// @brief 壁接触の当たり判定グループ
+		Collision3DInstanceCapsule* wallTouchCollision = nullptr;
 	};
 
 	/// @brief アニメーションのハンドルをまとめた構造体
@@ -807,7 +810,7 @@ protected:
 	void LandingCheck();
 
 	/// @brief 着地判定
-	Collision3DInstanceAABB* landingCollision_ = nullptr;
+	Collision3DInstanceCapsule* landingCollision_ = nullptr;
 
 	// 現在の落下速度
 	float velocityY_ = 0.0f;
@@ -820,6 +823,21 @@ protected:
 
 	// 最大落下速度
 	const float kMaxFallSpeed = -20.0f;
+
+
+protected:
+
+	/// @brief 壁接触の判定
+	void WallTouchCheck();
+
+	/// @brief 壁接触の更新
+	void WallTouchUpdate();
+
+	/// @brief 壁に接触しているかどうか
+	bool isWallTouch_ = false;
+
+	/// @brief 壁接触判定
+	Collision3DInstanceCapsule* wallTouchCollision_ = nullptr;
 
 
 protected:

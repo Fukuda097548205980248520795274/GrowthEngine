@@ -96,6 +96,38 @@
             "standMotionName": "Standing",
             "subType": 1,
             "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "",
+            "category": 1,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "hp": 100,
+            "isUnbreakable": false,
+            "position": [
+                2.390000104904175,
+                0.7099999785423279,
+                0.0
+            ],
+            "rotate": [
+                0.0,
+                -0.5149999856948853,
+                0.0
+            ],
+            "scale": [
+                4.849999904632568,
+                1.1399999856948853,
+                0.17000000178813934
+            ],
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 2,
+            "walkMotionName": "Walk"
         }
     ]
 }

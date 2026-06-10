@@ -33,16 +33,6 @@ Weapon::Weapon(const InitData& initData) : Entity()
 	// 壊れない武器かどうか
 	isUnbreakable_ = initData.isUnbreakable;
 
-	// 着地判定
-	if (initData.landingCollision)
-	{
-		landingCollision_ = initData.landingCollision;
-
-		// コリジョンの位置を武器の位置に設定する
-		landingCollision_->param_->center = GetWorldPosition();
-		landingCollision_->param_->radius = Vector3(0.05f, 0.05f, 0.05f); 
-	}
-
 	// モデル
 	if (initData.model)
 	{
@@ -54,6 +44,17 @@ Weapon::Weapon(const InitData& initData) : Entity()
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
+
+	// 着地判定
+	if (initData.landingCollision)
+	{
+		landingCollision_ = initData.landingCollision;
+
+		// コリジョンの位置を武器の位置に設定する
+		landingCollision_->param_->start = GetWorldPosition();
+		landingCollision_->param_->radius = 0.05f;
+		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+	}
 }
 
 /// @brief デストラクタ
@@ -136,7 +137,11 @@ void Weapon::Update()
 		}
 
 		// 着地判定の位置を更新する
-		if (landingCollision_)landingCollision_->param_->center = GetWorldPosition();
+		if (landingCollision_)
+		{
+			landingCollision_->param_->diff = GetWorldPosition() - landingCollision_->param_->start;
+			landingCollision_->param_->start = GetWorldPosition();
+		}
 	}
 }
 

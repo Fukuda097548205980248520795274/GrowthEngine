@@ -34,7 +34,7 @@ public:
 		PrefabInstanceStaticModel* model = nullptr;
 
 		/// @brief 着地判定グループ
-		Collision3DInstanceAABB* landingCollision = nullptr;
+		Collision3DInstanceCapsule* landingCollision = nullptr;
 	};
 
 public:
@@ -136,7 +136,7 @@ protected:
 	void LandingCheck();
 
 	/// @brief 着地判定
-	Collision3DInstanceAABB* landingCollision_ = nullptr;
+	Collision3DInstanceCapsule* landingCollision_ = nullptr;
 
 	// 現在の速度
 	Vector3 velocity_ = Vector3(0.0f, 0.0f, 0.0f);

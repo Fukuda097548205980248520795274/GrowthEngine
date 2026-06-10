@@ -454,6 +454,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
             // 位置
             ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
+			// 回転
+			ImGui::DragFloat3("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+
             // 拡縮
             ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
         }

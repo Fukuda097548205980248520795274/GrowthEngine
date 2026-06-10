@@ -1,16 +1,55 @@
 #pragma once
 #include "../StageObject.h"
 
-struct WallInitData
-{
-	/// @brief 壁の位置
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 壁の衝突判定
-	Collision3DInstanceSegment* collision = nullptr;
-};
-
 class Wall : public StageObject
 {
+public:
 
+	// 壁の初期化データ
+	struct InitData
+	{
+		/// @brief 壁の位置
+		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+		/// @brief 壁の回転
+		float rotateY = 0.0f;
+
+		/// @brief 壁のスケール
+		Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+		// 壁の衝突判定
+		Collision3DInstanceOBB* collision = nullptr;
+
+		/// @brief 壁のモデル
+		PrefabInstanceStaticModel* model = nullptr;
+	};
+
+
+public:
+
+	/// @brief コンストラクタ
+	/// @param initData 
+	Wall();
+
+	/// @brief デストラクタ
+	~Wall();
+
+	/// @brief 初期化
+	/// @param initData 
+	void Initialize(const InitData& initData);
+
+	/// @brief 更新処理
+	virtual void Update() override;
+
+	/// @brief 描画処理
+	void Draw();
+
+
+private:
+
+	/// @brief 床の衝突判定
+	Collision3DInstanceOBB* collision_ = nullptr;
+
+	/// @brief 床のモデル
+	PrefabInstanceStaticModel* model_ = nullptr;
 };

@@ -83,8 +83,12 @@ void GameScene::Initialize()
 	enemyHitboxGroup_ = std::make_unique<Collision3DBaseSphere>("EnemySide_Hitbox");
 
 	// 着地の当たり判定グループの生成と初期化
-	landingCollision_ = std::make_unique<Collision3DBaseAABB>("Landing_Collision");
+	landingCollision_ = std::make_unique<Collision3DBaseCapsule>("Landing_Collision");
 	floorCollision_ = std::make_unique<Collision3DBaseAABB>("Floor_Collision");
+
+	// 壁の当たり判定グループの生成と初期化
+	wallTouchCollision_ = std::make_unique<Collision3DBaseCapsule>("WallTouch_Collision");
+	wallCollision_ = std::make_unique<Collision3DBaseOBB>("Wall_Collision");
 
 
 
@@ -96,6 +100,9 @@ void GameScene::Initialize()
 
 	// 「床」に当たる
 	landingCollision_->SetCollisionTarget(floorCollision_->GetHandle());
+
+	// 「壁」に当たる
+	wallTouchCollision_->SetCollisionTarget(wallCollision_->GetHandle());
 }
 
 /// @brief 更新処理
@@ -200,6 +207,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
 		playerInitData.landingCollision = landingCollision_->CreateInstance();
+		playerInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
 		playerInitData.model_ = playerModel_.get();
 		player_ = std::make_unique<Player>(playerInitData);
 		player_->Initialize(playerWeapon_.get());
@@ -234,6 +242,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 
 		// 着地判定グループの設定
 		npcInitData.landingCollision = landingCollision_->CreateInstance();
+		npcInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
@@ -290,6 +299,24 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 	objects_.push_back(std::move(newFloor));
 
 	return floor;
+}
+
+/// @brief 壁オブジェクトを生成する
+/// @param initData 
+/// @return 
+Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
+{
+	// 壁
+	Wall::InitData wallInitData = initData;
+	wallInitData.collision = wallCollision_->CreateInstance();
+
+	std::unique_ptr<Wall> newWall = std::make_unique<Wall>();
+	newWall->Initialize(wallInitData);
+	Wall* wall = newWall.get();
+
+	objects_.push_back(std::move(newWall));
+
+	return wall;
 }
 
 /// @brief リセットする
