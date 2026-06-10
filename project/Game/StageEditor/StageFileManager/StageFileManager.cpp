@@ -16,6 +16,7 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
         json itemJson;
         itemJson["category"] = static_cast<int>(data.category);
         itemJson["subType"] = data.subType;
+		itemJson["name"] = data.name;
 
         // Vector3は配列として保存すると扱いやすいです
         itemJson["position"] = { data.position.x, data.position.y, data.position.z };
@@ -121,6 +122,14 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
             // データの復元
             data.category = static_cast<EditCategory>(itemJson.value("category", 0));
             data.subType = itemJson.value("subType", 0);
+			
+			data.name[0] = '\0'; // デフォルトは空文字列
+			if (itemJson.contains("name"))
+			{
+				std::string nameStr = itemJson["name"].get<std::string>();
+				strncpy_s(data.name, nameStr.c_str(), sizeof(data.name) - 1);
+				data.name[sizeof(data.name) - 1] = '\0'; // 念のためヌル終端
+			}
 
             if (itemJson.contains("position"))
             {

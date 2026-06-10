@@ -48,5 +48,15 @@ private:
 
 	/// @brief 床のモデル
 	PrefabInstanceCube* model_ = nullptr;
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	/// @param isDirty 
+	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

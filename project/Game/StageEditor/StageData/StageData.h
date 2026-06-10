@@ -40,6 +40,9 @@ struct PlacementData
 	// キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
 	int subType = 0;
 
+	// オブジェクトの名前（任意）
+	char name[256] = "";
+
 	// 位置
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 

@@ -1,4 +1,7 @@
 #include "Floor.h"
+#include <numbers>
+#include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 /// @brief コンストラクタ
 /// @param initData 
@@ -70,4 +73,33 @@ void Floor::Update()
 void Floor::Draw()
 {
 	if (model_)model_->Draw();
+}
+
+
+/// @brief デバッグUIを描画する
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+/// @param isDirty 
+void Floor::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
+{
+#ifdef _DEVELOPMENT
+
+	// 更新が有効なときはUIを表示しない（誤操作防止のため）
+	if (updateEnabled_)return;
+
+	// 位置の編集
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
+	ImGui::DragFloat3("位置", &worldTransform_->translate_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->position = worldTransform_->translate_;
+
+	// 拡縮の編集
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
+	ImGui::DragFloat3("大きさ", &worldTransform_->scale_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->scale = worldTransform_->scale_;
+
+	// ワールドトランスフォームの更新
+	worldTransform_->Update();
+
+#endif
 }

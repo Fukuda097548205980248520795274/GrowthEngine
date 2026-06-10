@@ -73,7 +73,7 @@ void GameScene::Initialize()
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
 	// 試験的な立方体の生成と初期化
-	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 1000, "Trial_Cube");
+	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 1000, "Trial_Cube");
 
 
 	
@@ -122,6 +122,9 @@ void GameScene::Update()
 	{
 		player_->Update();
 		playerWeapon_->Update();
+
+		// 太陽光をプレイヤーに追従させる
+		sunLight_->param_->position = player_->GetPosition() + Vector3(-5.0f, 10.0f, -5.0f);
 	}
 
 	// オブジェクトの更新

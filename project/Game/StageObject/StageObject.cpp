@@ -1,7 +1,4 @@
 #include "StageObject.h"
-#include <numbers>
-#include "StageEditor/StageData/StageData.h"
-#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 // ステージオブジェクトの更新を有効にするかどうか
 bool StageObject::updateEnabled_ = false;
@@ -21,37 +18,4 @@ void StageObject::Update()
 
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
-}
-
-/// @brief デバッグUIを描画する
-/// @param placementData 
-/// @param placementList 
-/// @param history 
-/// @param isDirty 
-void StageObject::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
-{
-#ifdef _DEVELOPMENT
-
-	// 更新が有効なときはUIを表示しない（誤操作防止のため）
-	if (updateEnabled_)return;
-
-	// 位置の編集
-	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
-	ImGui::DragFloat3("位置", &worldTransform_->translate_.x, 0.01f);
-	if (ImGui::IsItemDeactivatedAfterEdit())placementData->position = worldTransform_->translate_;
-
-	// 回転の編集
-	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
-	ImGui::DragFloat3("回転", &worldTransform_->rotate_.x, 0.001f);
-	if (ImGui::IsItemDeactivatedAfterEdit())placementData->rotate_ = worldTransform_->rotate_;
-
-	// 拡縮の編集
-	if (ImGui::IsItemActivated()){history->SaveHistory(placementList); *isDirty = true;}
-	ImGui::DragFloat3("大きさ", &worldTransform_->scale_.x, 0.01f);
-	if (ImGui::IsItemDeactivatedAfterEdit())placementData->scale = worldTransform_->scale_;
-
-	// ワールドトランスフォームの更新
-	worldTransform_->Update();
-
-#endif
 }

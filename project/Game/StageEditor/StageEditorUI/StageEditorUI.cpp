@@ -451,14 +451,26 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         {
             ImGui::Combo("オブジェクトの種類", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
-            // 位置
-            ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
+            // 床
+            if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::Floor)
+            {
+                // 位置
+                ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
-			// 回転
-			ImGui::DragFloat3("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+                // 拡縮
+                ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+            }
+            else if(static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::Wall)
+            {
+                // 位置
+                ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
 
-            // 拡縮
-            ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+                // 回転
+                ImGui::DragFloat("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+
+                // 拡縮
+                ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+            }
         }
         else if (currentData.category == EditCategory::Weapon)
         {
@@ -963,9 +975,16 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
         // 表示用のラベルを作成 
         std::string label = "ID:" + std::to_string(i) + " ";
-        if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
-        else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
-        else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
+        if (data.name[0] == '\0')
+        {
+            if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
+            else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
+            else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
+        }
+        else
+        {
+			label += data.name; // 名前が設定されていればそちらを優先して表示
+        }
 
         // 各アイテムごとに一意のID空間を作る（右クリックメニューのバッティング防止）
         ImGui::PushID(i);
@@ -1079,9 +1098,15 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
         auto& target = placementList[selectedIndex_];
         ImGui::Text("--- 編集中のオブジェクト ---");
 
+        // オブジェクト名の編集
+        ImGui::InputText("オブジェクト名", target.name, sizeof(target.name));
+
+        ImGui::Separator();
+
         // カテゴリごとの編集項目
         if (target.category == EditCategory::Character)
         {
+			// 選択されたオブジェクトの実体をキャラクター型として扱う
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
 			charPtr->DrawDebugUI(&target, placementList, history_, &isDirty_);
 
