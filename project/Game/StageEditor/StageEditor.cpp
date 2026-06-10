@@ -116,8 +116,36 @@ void StageEditor::DrawUI()
     // 押し出し条件: 「辺選択モード」かつ「選択されている辺が1つだけ」
     bool canExtrude = (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 1);
 
-    // ブリッジ条件: 「辺選択モード」かつ「選択されている辺が2つ」
-    bool canBridge = (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 2);
+	// ブリッジ条件: 「辺選択モード」かつ「選択されている辺が2つ」かつ「両方の辺が未接続」かつ「同じポリゴンに属していない」かつ「どの頂点も共有していない」
+    bool canBridge = false;
+    if (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 2 && navMesh_ != nullptr)
+    {
+        NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
+        NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedItems_[1].polygonId);
+
+        if (poly1 && poly2 &&
+            poly1->neighborIds[selectedItems_[0].itemIndex] == -1 &&
+            poly2->neighborIds[selectedItems_[1].itemIndex] == -1 &&
+            poly1->id != poly2->id)
+        {
+            Vector3 p1_v0 = poly1->vertices[selectedItems_[0].itemIndex];
+            Vector3 p1_v1 = poly1->vertices[(selectedItems_[0].itemIndex + 1) % 4];
+            Vector3 p2_v0 = poly2->vertices[selectedItems_[1].itemIndex];
+            Vector3 p2_v1 = poly2->vertices[(selectedItems_[1].itemIndex + 1) % 4];
+
+            auto IsSameVertex = [](const Vector3& a, const Vector3& b) {
+                Vector3 diff = a - b;
+                return (diff.x * diff.x + diff.y * diff.y + diff.z * diff.z) < 0.01f;
+                };
+
+            // どの頂点も共有していない場合のみブリッジ可能とする
+            if (!IsSameVertex(p1_v0, p2_v0) && !IsSameVertex(p1_v0, p2_v1) &&
+                !IsSameVertex(p1_v1, p2_v0) && !IsSameVertex(p1_v1, p2_v1))
+            {
+                canBridge = true;
+            }
+        }
+    }
 
 	// ナビメッシュのデバッグ描画
 	navMesh_->DrawDebug();
@@ -435,7 +463,8 @@ void StageEditor::BridgeSelectedEdges()
     NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
     NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedItems_[1].polygonId);
 
-    if (!poly1 || !poly2) return;
+	// 同じポリゴンの辺が選択されている場合は何もしない
+    if (!poly1 || !poly2 || poly1->id == poly2->id) return;
 
     int eIdx1 = selectedItems_[0].itemIndex;
     int eIdx2 = selectedItems_[1].itemIndex;
@@ -453,6 +482,18 @@ void StageEditor::BridgeSelectedEdges()
 
     Vector3 p2_v0 = poly2->vertices[eIdx2];
     Vector3 p2_v1 = poly2->vertices[(eIdx2 + 1) % 4];
+
+	// 選択された辺の頂点が同じポリゴンに属している場合はキャンセル（ブリッジ不可）
+    auto IsSameVertex = [](const Vector3& a, const Vector3& b) 
+        {
+			// 頂点が同じかどうかを判断するために、距離の2乗が小さいかで判定
+            Vector3 diff = a - b;
+            return (diff.x * diff.x + diff.y * diff.y + diff.z * diff.z) < 0.01f;
+        };
+
+	// 共有頂点がある場合はブリッジ不可（複雑なトポロジーになるのを防ぐため）
+    if (IsSameVertex(p1_v0, p2_v0) || IsSameVertex(p1_v0, p2_v1) || IsSameVertex(p1_v1, p2_v0) || IsSameVertex(p1_v1, p2_v1))
+        return;
 
     // 新しいポリゴンの作成
     NavPolygon newPoly;
@@ -520,7 +561,7 @@ void StageEditor::DrawSelectedHighlight()
             Vector3 v = poly->vertices[item.itemIndex];
             Vector3 renderV = Vector3(v.x, v.y + 0.05f, v.z);
             // 点を強調表示（Engine側に球やBoxを描画する機能があればそれを使用。例として短い線を描画）
-            engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+            engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
         }
         else if (selectionMode_ == SelectionMode::Edge)
         {
@@ -528,7 +569,7 @@ void StageEditor::DrawSelectedHighlight()
             Vector3 v1 = poly->vertices[(item.itemIndex + 1) % 4];
             Vector3 renderV0 = Vector3(v0.x, v0.y + 0.01f, v0.z);
             Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
-            engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
         }
         else if (selectionMode_ == SelectionMode::Polygon)
         {
