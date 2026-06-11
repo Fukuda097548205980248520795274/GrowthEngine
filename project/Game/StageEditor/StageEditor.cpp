@@ -36,27 +36,43 @@ void StageEditor::Update(float dt)
     // 実行中に消えたエンティティを配置リストから削除する
     if (isPlaying_)
     {
-        placementList_.erase(std::remove_if(placementList_.begin(), placementList_.end(),
-            [](const PlacementData& data)
-            {
-                if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
-                {
-                    // 配置されたエンティティが終了しているかどうかをチェック
-                    Entity* entity = static_cast<Entity*>(data.instancePtr);
-                    if (entity && entity->IsFinished())return true;
-                }
-                else if (data.category == EditCategory::Object)
-                {
-                    // 配置されたオブジェクトが終了しているかどうかをチェック
-                    StageObject* obj = static_cast<StageObject*>(data.instancePtr);
-                    if (obj && obj->IsFinished()) return true;
-                }
+        // 削除によってインデックスがズレるのを防ぐため、逆順でループを回します
+        for (int i = static_cast<int>(placementList_.size()) - 1; i >= 0; --i)
+        {
+            auto& data = placementList_[i];
+            bool shouldDelete = false;
 
-                return false; // 残す
+            if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
+            {
+                Entity* entity = static_cast<Entity*>(data.instancePtr);
+                if (entity && entity->IsFinished()) shouldDelete = true;
             }
-        ),
-            placementList_.end()
-        );
+            else if (data.category == EditCategory::Object)
+            {
+                StageObject* obj = static_cast<StageObject*>(data.instancePtr);
+                if (obj && obj->IsFinished()) shouldDelete = true;
+            }
+
+            if (shouldDelete)
+            {
+                // 配置リストから要素を削除
+                placementList_.erase(placementList_.begin() + i);
+
+                // UI側の選択状態を安全に調整する
+                int currentSelected = editorUI_->GetSelectedIndex();
+                if (currentSelected == i)
+                {
+                    // 選択していたオブジェクトそのものが消滅した場合、選択を解除する
+                    editorUI_->SetSelectedIndex(-1);
+                }
+                else if (currentSelected > i)
+                {
+                    // 削除された要素よりも後ろのオブジェクトを選択していた場合、
+                    // リストが詰まった分だけ選択インデックスを1つ繰り上げる
+                    editorUI_->SetSelectedIndex(currentSelected - 1);
+                }
+            }
+        }
     }
 
 	// UIの更新

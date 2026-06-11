@@ -21,7 +21,7 @@ public:
 		int eventType = 0;
 
 		// イベントの整数パラメータ
-		char eventStringParam[256] = {};
+		char eventStringParam[1024] = "";
 
 		// イベントが発生したときのコールバック関数
 		std::function<bool(int, const char*)> onTriggerCallback = nullptr;
@@ -31,7 +31,7 @@ public:
 	enum class EventType
 	{
 		None,
-		EnemySpawn
+		ObjectSpawn
 	};
 
 public:
@@ -50,6 +50,14 @@ public:
 	/// @brief 更新処理
 	virtual void Update() override;
 
+	/// @brief イベントの種類を設定する
+	/// @param eventType 
+	void SetEventType(int eventType) { eventType_ = eventType; }
+
+	/// @brief イベントの文字列パラメータを設定する
+	/// @param param 
+	void SetEventStringParam(const char* param) { strncpy_s(eventStringParam_, sizeof(eventStringParam_), param, _TRUNCATE); }
+
 
 private:
 
@@ -61,7 +69,7 @@ private:
 	int eventType_ = 0;
 
 	// イベントの整数パラメータ
-	char eventStringParam_[256] = {};
+	char eventStringParam_[1024] = {};
 
 	// イベントが発生したときのコールバック関数
 	std::function<bool(int, const char*)> onTriggerCallback_ = nullptr;

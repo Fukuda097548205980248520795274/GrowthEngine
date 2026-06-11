@@ -121,9 +121,6 @@ void GameScene::Update()
 	// デルタタイムを取得する
 	const float deltaTime = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
-	// ステージエディタの更新
-	stageEditor_->Update(deltaTime);
-
 	// プレイヤーの更新
 	if (player_)
 	{
@@ -146,6 +143,9 @@ void GameScene::Update()
 
 	// エフェクトの更新
 	effectManager_->Update();
+
+	// ステージエディタの更新
+	stageEditor_->Update(deltaTime);
 
 	// カメラ制御の更新
 	UpdateCameraControl(deltaTime);
@@ -583,8 +583,105 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 		return true;
 		break;
 
-		// 敵のスポーンイベント
-	case StaticEventTrigger::EventType::EnemySpawn:
+		// オブジェクトのスポーンイベント
+	case StaticEventTrigger::EventType::ObjectSpawn:
+
+		try
+		{
+			// エディタで入力された文字列パラメータ(param)をJSONとして解析
+			nlohmann::json j = nlohmann::json::parse(param);
+
+			// JSON配列をループして、記述された各種オブジェクトを生成する
+			for (const auto& spawnDataJson : j)
+			{
+				PlacementData initData;
+
+				// カテゴリとサブタイプの取得 (設定がない場合はデフォルト値)
+				initData.category = static_cast<EditCategory>(spawnDataJson.value("category", 0));
+				initData.subType = spawnDataJson.value("subType", 0);
+
+				// 共通パラメータ（位置・回転）の解析
+				initData.position = Vector3(0.0f, 0.0f, 0.0f);
+				if (spawnDataJson.contains("position") && spawnDataJson["position"].is_array() && spawnDataJson["position"].size() == 3)
+					initData.position = Vector3(spawnDataJson["position"][0].get<float>(), spawnDataJson["position"][1].get<float>(), spawnDataJson["position"][2].get<float>());
+
+				initData.rotate_ = Vector3(0.0f, 0.0f, 0.0f);
+				if (spawnDataJson.contains("rotate") && spawnDataJson["rotate"].is_array() && spawnDataJson["rotate"].size() == 3)
+					initData.rotate_ = Vector3(spawnDataJson["rotate"][0].get<float>(), spawnDataJson["rotate"][1].get<float>(), spawnDataJson["rotate"][2].get<float>());
+
+				initData.scale = Vector3(1.0f, 1.0f, 1.0f);
+				if (spawnDataJson.contains("scale") && spawnDataJson["scale"].is_array() && spawnDataJson["scale"].size() == 3)
+					initData.scale = Vector3(spawnDataJson["scale"][0].get<float>(), spawnDataJson["scale"][1].get<float>(), spawnDataJson["scale"][2].get<float>());
+
+				initData.hp = spawnDataJson.value("hp", 100);
+
+				initData.eventType = spawnDataJson.value("eventType", 0);
+
+				if (spawnDataJson.contains("eventParam"))
+				{
+					std::string eventParam = spawnDataJson["eventParam"].get<std::string>();
+					strcpy_s(initData.eventStringParam, sizeof(initData.eventStringParam), eventParam.c_str());
+				}
+
+				initData.durability = spawnDataJson.value("durability", 100);
+				initData.attackPower = spawnDataJson.value("attackPower", 1.0f);
+				initData.isUnbreakable = spawnDataJson.value("isUnbreakable", false);
+
+				initData.standMotion.name = spawnDataJson.value("standMotionName", "");
+				initData.stanceMotion.name = spawnDataJson.value("stanceMotionName", "");
+				initData.walkMotion.name = spawnDataJson.value("walkMotionName", "");
+				initData.dashMotion.name = spawnDataJson.value("dashMotionName", "");
+				initData.avoidFrontMotion.name = spawnDataJson.value("avoidFrontMotionName", "");
+				initData.avoidLeftMotion.name = spawnDataJson.value("avoidLeftMotionName", "");
+				initData.avoidRightMotion.name = spawnDataJson.value("avoidRightMotionName", "");
+				initData.avoidBackMotion.name = spawnDataJson.value("avoidBackMotionName", "");
+
+				initData.standMotion.handle = motionManager_->GetMotion(MotionType::Stand, initData.standMotion.name);
+				initData.stanceMotion.handle = motionManager_->GetMotion(MotionType::Stance, initData.stanceMotion.name);
+				initData.walkMotion.handle = motionManager_->GetMotion(MotionType::Walk, initData.walkMotion.name);
+				initData.dashMotion.handle = motionManager_->GetMotion(MotionType::Dash, initData.dashMotion.name);
+				initData.avoidFrontMotion.handle = motionManager_->GetMotion(MotionType::Avoid, initData.avoidFrontMotion.name);
+				initData.avoidLeftMotion.handle = motionManager_->GetMotion(MotionType::Avoid, initData.avoidLeftMotion.name);
+				initData.avoidRightMotion.handle = motionManager_->GetMotion(MotionType::Avoid, initData.avoidRightMotion.name);
+				initData.avoidBackMotion.handle = motionManager_->GetMotion(MotionType::Avoid, initData.avoidBackMotion.name);
+
+				initData.name[0] = '\0';
+				if (spawnDataJson.contains("name"))
+				{
+					std::string name = spawnDataJson["name"].get<std::string>();
+					strcpy_s(initData.name, sizeof(initData.name), name.c_str());
+				}
+
+				initData.eventType = spawnDataJson.value("eventType", 0);
+				initData.eventStringParam[0] = '\0';
+				if (initData.category == EditCategory::Object && initData.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger) && spawnDataJson.contains("eventParam"))
+				{
+					std::string eventParam = spawnDataJson["eventParam"].get<std::string>();
+					strcpy_s(initData.eventStringParam, sizeof(initData.eventStringParam), eventParam.c_str());
+				}
+
+				initData.behaviorScriptName[0] = '\0';
+				if (initData.category == EditCategory::Character && spawnDataJson.contains("behaviorScript"))
+				{
+					std::string behaviorScriptName = spawnDataJson["behaviorScript"].get<std::string>();
+					strcpy_s(initData.behaviorScriptName, sizeof(initData.behaviorScriptName), behaviorScriptName.c_str());
+				}
+
+				// 解析したデータをもとにオブジェクトを生成する
+				stageEditor_->SpawnObject(initData);
+				stageEditor_->SetPlacementList(initData);
+			}
+
+			// 生成が終わったイベントトリガーを削除する場合は true を返す
+			return true;
+		}
+		catch (const std::exception& e)
+		{
+			// JSONの解析に失敗した場合はエラーを出力してイベントトリガーを削除しない
+			(void)e; // 未使用変数の警告を消すため
+			return false;
+		}
+		break;
 		
 		break;
 	}

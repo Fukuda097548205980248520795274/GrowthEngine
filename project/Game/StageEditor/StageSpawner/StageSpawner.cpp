@@ -77,6 +77,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			// 静的イベントトリガーの生成処理
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
+			initData.scale = data.scale;
 			initData.eventType = data.eventType;
 			strcpy_s(initData.eventStringParam, sizeof(initData.eventStringParam), data.eventStringParam);
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);

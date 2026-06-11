@@ -47,6 +47,18 @@ public:
     /// @brief 描画処理（デバッグ用）
     void DrawUI();
 
+	/// @brief オブジェクトを配置する
+    /// @param data 
+    void SpawnObject(PlacementData& data) { spawner_->SpawnActualEntity(data); }
+
+	/// @brief オブジェクトを削除する
+	/// @param data 
+	void DeleteObject(PlacementData& data) { spawner_->DeleteActualEntity(data); }
+
+	/// @brief 配置リストにデータを追加する
+	/// @param data 
+	void SetPlacementList(PlacementData& data) { placementList_.push_back(data); }
+
 
 private:
 

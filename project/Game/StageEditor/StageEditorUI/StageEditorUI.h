@@ -69,6 +69,14 @@ public:
 	/// @brief 変更があったことをマークする
     void Dirty() { isDirty_ = true; }
 
+	/// @brief 現在選択中のオブジェクトのインデックスを取得する
+    /// @return 
+    int GetSelectedIndex() const { return selectedIndex_; }
+
+	/// @brief 現在選択中のオブジェクトのインデックスを設定する
+    /// @param index 
+    void SetSelectedIndex(int index) { selectedIndex_ = index; }
+
 private:
 
 	// ステージファイルの読み書きを担当するクラス
@@ -135,7 +143,7 @@ private:
     /// @brief モーションの選択UIを表示する
     /// @param motionType 
     /// @param motionName 
-    void MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
+    bool MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
 
     /// @brief モーションの選択UIを表示する
     /// @param motionType 
