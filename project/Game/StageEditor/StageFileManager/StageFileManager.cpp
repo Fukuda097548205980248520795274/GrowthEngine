@@ -32,6 +32,10 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 		// 行動パターンのスクリプト名
 		itemJson["behaviorScriptName"] = data.behaviorScriptName;
 
+		// イベントトリガーの種類とパラメータ
+		itemJson["eventType"] = data.eventType;
+		itemJson["eventStringParam"] = data.eventStringParam;
+
 		// モーション名
 		itemJson["standMotionName"] = data.standMotion.name;
 		itemJson["stanceMotionName"] = data.stanceMotion.name;
@@ -165,6 +169,15 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 			data.avoidBackMotion.name = itemJson.value("avoidBackMotionName", "Back");
 			data.avoidLeftMotion.name = itemJson.value("avoidLeftMotionName", "Front");
 			data.avoidRightMotion.name = itemJson.value("avoidRightMotionName", "Back");
+
+			data.eventType = itemJson.value("eventType", 0);
+			data.eventStringParam[0] = '\0'; // デフォルトは空文字列
+			if (itemJson.contains("eventStringParam"))
+			{
+				std::string eventParamStr = itemJson["eventStringParam"].get<std::string>();
+				strncpy_s(data.eventStringParam, eventParamStr.c_str(), sizeof(data.eventStringParam) - 1);
+				data.eventStringParam[sizeof(data.eventStringParam) - 1] = '\0'; // 念のためヌル終端
+			}
 
 			MotionManager* motionManager = MotionManager::GetInstance();
 			data.standMotion.handle = motionManager->GetMotion(MotionType::Stand, data.standMotion.name);

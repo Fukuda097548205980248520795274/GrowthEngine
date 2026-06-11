@@ -101,6 +101,9 @@ public:
 
 		/// @brief 壁接触の当たり判定グループ
 		Collision3DInstanceCapsule* wallTouchCollision = nullptr;
+
+		// / @brief イベントトリガーの当たり判定グループ
+		Collision3DInstanceCapsule* eventTriggerCollision = nullptr;
 	};
 
 	/// @brief アニメーションのハンドルをまとめた構造体
@@ -838,6 +841,12 @@ protected:
 
 	/// @brief 壁接触判定
 	Collision3DInstanceCapsule* wallTouchCollision_ = nullptr;
+
+
+protected:
+
+	/// @brief イベントトリガーのコリジョン
+	Collision3DInstanceCapsule* eventTriggerCollision_ = nullptr;
 
 
 protected:

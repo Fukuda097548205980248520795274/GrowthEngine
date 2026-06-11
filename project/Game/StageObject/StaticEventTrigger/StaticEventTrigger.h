@@ -21,10 +21,17 @@ public:
 		int eventType = 0;
 
 		// イベントの整数パラメータ
-		std::string eventStringParam = "";
+		char eventStringParam[256] = {};
 
 		// イベントが発生したときのコールバック関数
-		std::function<void(int, const std::string&)> onTriggerCallback = nullptr;
+		std::function<bool(int, const char*)> onTriggerCallback = nullptr;
+	};
+
+	/// @brief イベントの種類
+	enum class EventType
+	{
+		None,
+		EnemySpawn
 	};
 
 public:
@@ -54,9 +61,19 @@ private:
 	int eventType_ = 0;
 
 	// イベントの整数パラメータ
-	std::string eventStringParam_;
+	char eventStringParam_[256] = {};
 
 	// イベントが発生したときのコールバック関数
-	std::function<void(int, const std::string&)> onTriggerCallback_ = nullptr;
+	std::function<bool(int, const char*)> onTriggerCallback_ = nullptr;
+
+
+public:
+
+	/// @brief デバッグUIを描画する
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	/// @param isDirty 
+	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

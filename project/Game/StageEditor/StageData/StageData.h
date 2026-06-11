@@ -20,7 +20,7 @@ enum class EventType
 // 大分類と小分類の表示用文字列
 inline const char* categoryNames[] = { "Character (NPC)", "StageObject", "Weapon" };
 inline const char* characterTagNames[] = { "None", "Player", "Ally", "Vip", "EnemyNormal", "EnemyBoss" };
-inline const char* stageObjectTagNames[] = { "None", "Floor", "Wall" };
+inline const char* stageObjectTagNames[] = { "None", "Floor", "Wall", "StaticEventTrigger" };
 inline const char* weaponCategoryNames[] = { "None", "OneHanded", "TwoHanded" };
 inline const char* eventTypeNames[] = { "None", "Goal" };
 
@@ -71,7 +71,7 @@ struct PlacementData
 	int eventType = 0;
 
 	// イベントトリガーのパラメータ (イベントの種類によって内容が異なる)
-	std::string eventStringParam = "";
+	char eventStringParam[256] = "";
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;

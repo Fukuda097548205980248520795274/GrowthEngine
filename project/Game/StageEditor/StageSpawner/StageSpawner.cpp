@@ -72,6 +72,16 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			Wall* newWall = scene_->CreateWallObject(initData);
 			data.instancePtr = newWall;
 		}
+		else if (tag == StageObject::StageObjectTag::StaticEventTrigger)
+		{
+			// 静的イベントトリガーの生成処理
+			StaticEventTrigger::InitData initData;
+			initData.position = data.position;
+			initData.eventType = data.eventType;
+			strcpy_s(initData.eventStringParam, sizeof(initData.eventStringParam), data.eventStringParam);
+			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
+			data.instancePtr = newTrigger;
+		}
 	}
 	else if (data.category == EditCategory::Weapon)
 	{

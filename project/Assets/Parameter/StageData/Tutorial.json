@@ -11,6 +11,8 @@
             "category": 0,
             "dashMotionName": "Dash",
             "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "プレイヤー",
@@ -44,6 +46,8 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "強大な床",
@@ -77,6 +81,8 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "壁",
@@ -110,6 +116,8 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "壁",
@@ -143,6 +151,8 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "",
@@ -164,6 +174,41 @@
             "stanceMotionName": "Fighter",
             "standMotionName": "Standing",
             "subType": 1,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "",
+            "category": 1,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
+            "hp": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "position": [
+                0.0,
+                0.0,
+                8.100000381469727
+            ],
+            "rotate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 3,
             "walkMotionName": "Walk"
         }
     ]

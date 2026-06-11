@@ -202,6 +202,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); // STOPボタンは赤色
         if (ImGui::Button("停止", ImVec2(100, 30)))
         {
+			// プレイモードを終了したら、ファイルからステージデータを再読み込みして初期状態に戻す
+            assert(fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh) && "実行停止時のファイル読み込みに失敗しました");
+
             isPlaying = false;
 			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
 			StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
@@ -470,6 +473,20 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 
                 // 拡縮
                 ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+            }
+            else if(static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::StaticEventTrigger)
+            {
+                // 位置
+                ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
+
+                // 拡縮
+                ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+
+				// イベントの種類
+                ImGui::Combo("イベントタイプ", &currentData.eventType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames));
+
+				// イベントの種類によって、パラメータの内容が異なる（今はすべて文字列パラメータとして扱う）
+                ImGui::InputText("イベントパラメータ", currentData.eventStringParam, sizeof(currentData.eventStringParam));
             }
         }
         else if (currentData.category == EditCategory::Weapon)

@@ -9,6 +9,7 @@
 
 #include "StageObject/Floor/Floor.h"
 #include "StageObject/Wall/Wall.h"
+#include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
 #include "PivotPoint/PivotPoint.h"
 #include "CameraShake/CameraShake.h"
@@ -66,6 +67,11 @@ public:
 	/// @return 
 	Wall* CreateWallObject(const Wall::InitData& initData);
 
+	/// @brief 静的イベントトリガーオブジェクトを生成する
+	/// @param initData 
+	/// @return 
+	StaticEventTrigger* CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData);
+
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	NavMesh* GetNavMesh() const { return navMesh_.get(); }
@@ -97,6 +103,12 @@ private:
 
 	/// @brief ピボットからカメラ姿勢へ反映する
 	void ApplyCameraFromPivot();
+
+
+	/// @brief イベントトリガーに触れたときの処理
+	/// @param eventType 
+	/// @param param 
+	bool HandleTriggerEvent(int eventType, const char* param);
 
 
 private:
@@ -151,6 +163,13 @@ private:
 
 	/// @brief 壁の当たり判定グループ
 	std::unique_ptr<Collision3DBaseOBB> wallCollision_ = nullptr;
+
+
+	/// @brief イベントトリガーに触れたかどうか
+	std::unique_ptr<Collision3DBaseCapsule> eventTriggerCollision_ = nullptr;
+
+	/// @brief イベントトリガー自体の当たり判定グループ
+	std::unique_ptr<Collision3DBaseAABB> eventTriggerAABBCollision_ = nullptr;
 
 
 	/// @brief プレイヤーのモデル

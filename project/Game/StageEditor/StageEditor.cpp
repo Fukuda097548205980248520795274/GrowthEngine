@@ -33,6 +33,32 @@ void StageEditor::Update(float dt)
 {
 #ifdef _DEVELOPMENT
 
+    // 実行中に消えたエンティティを配置リストから削除する
+    if (isPlaying_)
+    {
+        placementList_.erase(std::remove_if(placementList_.begin(), placementList_.end(),
+            [](const PlacementData& data)
+            {
+                if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
+                {
+                    // 配置されたエンティティが終了しているかどうかをチェック
+                    Entity* entity = static_cast<Entity*>(data.instancePtr);
+                    if (entity && entity->IsFinished())return true;
+                }
+                else if (data.category == EditCategory::Object)
+                {
+                    // 配置されたオブジェクトが終了しているかどうかをチェック
+                    StageObject* obj = static_cast<StageObject*>(data.instancePtr);
+                    if (obj && obj->IsFinished()) return true;
+                }
+
+                return false; // 残す
+            }
+        ),
+            placementList_.end()
+        );
+    }
+
 	// UIの更新
 	editorUI_->Update();
 

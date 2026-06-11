@@ -93,6 +93,10 @@ void GameScene::Initialize()
 	wallTouchCollision_ = std::make_unique<Collision3DBaseCapsule>("WallTouch_Collision");
 	wallCollision_ = std::make_unique<Collision3DBaseOBB>("Wall_Collision");
 
+	// イベントトリガーの当たり判定グループの生成と初期化
+	eventTriggerCollision_ = std::make_unique<Collision3DBaseCapsule>("EventTrigger_Collision");
+	eventTriggerAABBCollision_ = std::make_unique<Collision3DBaseAABB>("EventTriggerAABB_Collision");
+
 
 
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
@@ -106,6 +110,9 @@ void GameScene::Initialize()
 
 	// 「壁」に当たる
 	wallTouchCollision_->SetCollisionTarget(wallCollision_->GetHandle());
+
+	// 「イベントトリガー」に当たる
+	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 }
 
 /// @brief 更新処理
@@ -218,6 +225,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
 		playerInitData.landingCollision = landingCollision_->CreateInstance();
 		playerInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
+		playerInitData.eventTriggerCollision = eventTriggerCollision_->CreateInstance();
 		playerInitData.model_ = playerModel_.get();
 		player_ = std::make_unique<Player>(playerInitData);
 		player_->Initialize(playerWeapon_.get());
@@ -329,6 +337,24 @@ Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
 	objects_.push_back(std::move(newWall));
 
 	return wall;
+}
+
+/// @brief 静的イベントトリガーオブジェクトを生成する
+/// @param initData 
+/// @return 
+StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData)
+{
+	StaticEventTrigger::InitData triggerInitData = initData;
+	triggerInitData.collision = eventTriggerAABBCollision_->CreateInstance();
+	triggerInitData.onTriggerCallback = [this](int eventType, const char* param) -> bool { return HandleTriggerEvent(eventType, param); };
+
+	std::unique_ptr<StaticEventTrigger> newTrigger = std::make_unique<StaticEventTrigger>();
+	newTrigger->Initialize(triggerInitData);
+	StaticEventTrigger* trigger = newTrigger.get();
+
+	objects_.push_back(std::move(newTrigger));
+
+	return trigger;
 }
 
 /// @brief リセットする
@@ -540,4 +566,29 @@ void GameScene::ApplyCameraFromPivot()
 		const float pitch = std::atan2(-lookDirection.y, horizontal);
 		cameraParam->transform.rotate = Vector3(pitch, yaw, 0.0f);
 	}
+}
+
+/// @brief イベントトリガーに触れたときの処理
+/// @param eventType 
+/// @param param 
+bool GameScene::HandleTriggerEvent(int eventType, const char* param)
+{
+	// ここではイベントの種類に応じて処理を分岐させることができます
+	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
+
+	switch (type)
+	{
+		// イベントなし
+	case StaticEventTrigger::EventType::None:
+		return true;
+		break;
+
+		// 敵のスポーンイベント
+	case StaticEventTrigger::EventType::EnemySpawn:
+		
+		break;
+	}
+
+	// イベントを処理した場合はtrueを返し、処理しなかった場合はfalseを返す
+	return false;
 }

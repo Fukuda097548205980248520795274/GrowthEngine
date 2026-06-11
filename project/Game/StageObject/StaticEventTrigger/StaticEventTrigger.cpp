@@ -1,4 +1,7 @@
 #include "StaticEventTrigger.h"
+#include <numbers>
+#include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 /// @brief コンストラクタ
 /// @param initData 
@@ -38,11 +41,11 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 	// イベントの種類
 	eventType_ = initData.eventType;
 
-	// イベントの整数パラメータ
-	eventStringParam_ = initData.eventStringParam;
-
 	// イベントが発生したときのコールバック関数
 	onTriggerCallback_ = initData.onTriggerCallback;
+
+	// イベントの整数パラメータ
+	strcpy_s(eventStringParam_, sizeof(eventStringParam_), initData.eventStringParam);
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
@@ -63,9 +66,39 @@ void StaticEventTrigger::Update()
 	{
 		// コールバック関数を呼び出す
 		if (onTriggerCallback_)
-			onTriggerCallback_(eventType_, eventStringParam_);
+		{
+			bool shouldDelete = onTriggerCallback_(eventType_, eventStringParam_);
 
-		// 削除する
-		Delete();
+			// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
+			if (shouldDelete)Delete();
+		}
 	}
+}
+
+/// @brief デバッグUIを描画する
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+/// @param isDirty 
+void StaticEventTrigger::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
+{
+#ifdef _DEVELOPMENT
+
+	// 更新が有効なときはUIを表示しない（誤操作防止のため）
+	if (updateEnabled_)return;
+
+	// 位置の編集
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
+	ImGui::DragFloat3("位置", &worldTransform_->translate_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->position = worldTransform_->translate_;
+
+	// 拡縮の編集
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
+	ImGui::DragFloat3("大きさ", &worldTransform_->scale_.x, 0.01f);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->scale = worldTransform_->scale_;
+
+	// ワールドトランスフォームの更新
+	worldTransform_->Update();
+
+#endif
 }

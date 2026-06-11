@@ -120,16 +120,31 @@ Character::Character(const InitData& initData) : Entity()
 	worldTransform_->Update();
 
 	// 着地判定
-	landingCollision_ = initData.landingCollision;
-	landingCollision_->param_->start = GetWorldPosition();
-	landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
-	landingCollision_->param_->radius = 0.25f;
+	if (initData.landingCollision)
+	{
+		landingCollision_ = initData.landingCollision;
+		landingCollision_->param_->start = GetWorldPosition();
+		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		landingCollision_->param_->radius = 0.25f;
+	}
 
 	// 壁接触の当たり判定
-	wallTouchCollision_ = initData.wallTouchCollision;
-	wallTouchCollision_->param_->start = GetWorldPosition();
-	wallTouchCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
-	wallTouchCollision_->param_->radius = 0.25f;
+	if (initData.wallTouchCollision)
+	{
+		wallTouchCollision_ = initData.wallTouchCollision;
+		wallTouchCollision_->param_->start = GetWorldPosition();
+		wallTouchCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		wallTouchCollision_->param_->radius = 0.25f;
+	}
+
+	// イベントトリガーの当たり判定
+	if (initData.eventTriggerCollision)
+	{
+		eventTriggerCollision_ = initData.eventTriggerCollision;
+		eventTriggerCollision_->param_->start = GetWorldPosition();
+		eventTriggerCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		eventTriggerCollision_->param_->radius = 0.25f;
+	}
 	
 
 	// ブラックボードの生成
@@ -145,6 +160,9 @@ Character::~Character()
 
 	if (wallTouchCollision_) wallTouchCollision_->Delete();
 	wallTouchCollision_ = nullptr;
+
+	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
+	eventTriggerCollision_ = nullptr;
 
 	if (hurtboxHead_.collider_) hurtboxHead_.collider_->Delete();
 	hurtboxHead_.collider_ = nullptr;
@@ -238,6 +256,13 @@ void Character::Update()
 			{
 				wallTouchCollision_->param_->diff = GetWorldPosition() - wallTouchCollision_->param_->start;
 				wallTouchCollision_->param_->start = GetWorldPosition();
+			}
+
+			// イベントトリガーの当たり判定の位置を更新する
+			if (eventTriggerCollision_)
+			{
+				eventTriggerCollision_->param_->diff = GetWorldPosition() - eventTriggerCollision_->param_->start;
+				eventTriggerCollision_->param_->start = GetWorldPosition();
 			}
 
 			if (hurtboxHead_.collider_)
