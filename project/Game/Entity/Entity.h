@@ -60,6 +60,14 @@ public:
 	/// @param rotation 
 	void SetRotation(const Quaternion& rotation) { worldTransform_->SetRotate(rotation); }
 
+	/// @brief 回転を設定する
+	/// @param rotation 
+	void SetRotation(const Vector3& rotation) { worldTransform_->rotate_ = rotation; }
+
+	/// @brief 拡縮を設定する
+	/// @param scale 
+	void SetScale(const Vector3& scale) { worldTransform_->scale_ = scale; }
+
 	/// @brief ワールドトランスフォームを取得する
 	/// @return 
 	WorldTransform3D* GetWorldTransform()const { return worldTransform_.get(); }

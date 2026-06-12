@@ -37,14 +37,10 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
     }
 
 
-
+	// 選択されているオブジェクトがあれば、そのオブジェクトをギズモで操作できるようにする
     if (selectedIndex >= 0 && selectedIndex < placementList.size())
     {
         auto& data = placementList[selectedIndex];
-
-        // 描画領域を画面全体に設定（ウィンドウ内に収める場合は領域を調整してください）
-        ImGuiIO& io = ImGui::GetIO();
-        ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 
         // カメラのビュー行列とプロジェクション行列を取得
         Matrix4x4 viewMatrix = engine_->GetCamera3DView();
@@ -65,28 +61,74 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
         // ギズモの操作モード（移動・回転・拡縮）を切り替えるためのUI（ショートカットキー等と連動させると便利です）
         static ImGuizmo::OPERATION currentOperation = ImGuizmo::TRANSLATE;
         static ImGuizmo::MODE currentMode = ImGuizmo::LOCAL;
+		static bool useSnap = false;
 
         // キーボード入力などで操作モードを切り替える例
-        if (ImGui::IsKeyPressed(ImGuiKey_W)) currentOperation = ImGuizmo::TRANSLATE;
-        if (ImGui::IsKeyPressed(ImGuiKey_E)) currentOperation = ImGuizmo::ROTATE;
-        if (ImGui::IsKeyPressed(ImGuiKey_R)) currentOperation = ImGuizmo::SCALE;
+        if (ImGui::IsKeyPressed(ImGuiKey_T)) currentOperation = ImGuizmo::TRANSLATE;
+        if (ImGui::IsKeyPressed(ImGuiKey_R)) currentOperation = ImGuizmo::ROTATE;
+        if (ImGui::IsKeyPressed(ImGuiKey_S)) currentOperation = ImGuizmo::SCALE;
 
         // ギズモの描画と操作
         ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], currentOperation, currentMode, &worldMatrix.m[0][0]);
 
         // ギズモを使ってオブジェクトを操作中かどうかをチェック
-        if (ImGuizmo::IsUsing())
+        if (ImGuizmo::IsUsing() && useSnap)
         {
-            // 変更前の状態を履歴に保存（操作開始時のみ保存する工夫を入れるとベターです）
-            // history_->SaveHistory(placementList);
-            isDirty = true; // 変更フラグを立てる
+            float translation[3];
+            float rotation[3];
+            float scale[3];
 
-            // 操作後の行列から再び位置、回転、スケールに分解してデータに反映
-            ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0],&data.position.x,&data.rotate_.x,&data.scale.x);
+            // ワールド行列からSRT成分を抽出
+            ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
 
-            // TODO: データが更新されたので、シーン上の実際のエンティティ (instancePtr) の Transform も同時に更新する処理を呼ぶ
-            // 例: spawner_->UpdateActualEntityTransform(data);
+			// 回転はImGuizmoが度単位で返すので、ラジアンに変換するための定数
+            constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+
+            switch (currentOperation)
+            {
+            case ImGuizmo::TRANSLATE:
+                // 移動成分抽出
+                data.position = Vector3(translation[0], translation[1], translation[2]);
+                break;
+            case ImGuizmo::ROTATE:
+                // 回転成分抽出
+                data.rotate_.x = rotation[0] * DEG2RAD;
+                data.rotate_.y = rotation[1] * DEG2RAD;
+                data.rotate_.z = rotation[2] * DEG2RAD;
+                break;
+            case ImGuizmo::SCALE:
+                // 拡縮成分抽出
+                data.scale = Vector3(scale[0], scale[1], scale[2]);
+                break;
+            }
+
+			// ギズモで操作した結果をゲーム内の実体に反映させる
+            if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
+            {
+                auto entityPtr = static_cast<Entity*>(data.instancePtr);
+                entityPtr->SetPosition(data.position);
+                entityPtr->SetRotation(data.rotate_);
+                entityPtr->SetScale(data.scale);
+            }
+            else if (data.category == EditCategory::Object)
+            {
+				auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr);
+                stageObjectPtr->SetPosition(data.position);
+                stageObjectPtr->SetRotation(data.rotate_);
+                stageObjectPtr->SetScale(data.scale);
+            }
         }
+
+		// Guizmoを触った瞬間に配置データの変更を確定させる（スナップ機能を使用していない場合）
+        if (ImGuizmo::IsUsing() && !useSnap)
+        {
+            // 配置データを更新
+            history_->SaveHistory(placementList);
+            isDirty = true;
+        }
+
+		// ギズモを操作している間は、スナップ機能を有効にする例（オプション）
+        useSnap = ImGuizmo::IsUsing();
     }
 
 

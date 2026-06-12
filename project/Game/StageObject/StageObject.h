@@ -47,6 +47,18 @@ public:
 	/// @brief 終了する
 	void Delete() { isFinished_ = true; }
 
+	/// @brief 位置を設定する
+	/// @param position 
+	void SetPosition(const Vector3& position) { worldTransform_->translate_ = position; }
+
+	/// @brief 回転を設定する
+	/// @param rotation 
+	void SetRotation(const Vector3& rotation) { worldTransform_->rotate_ = rotation; }
+
+	/// @brief 拡縮を設定する
+	/// @param scale 
+	void SetScale(const Vector3& scale) { worldTransform_->scale_ = scale; }
+
 
 
 protected:
