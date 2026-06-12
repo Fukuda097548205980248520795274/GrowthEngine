@@ -2,6 +2,9 @@
 #include <string>
 #include <vector>
 #include "../StageData/StageData.h"
+#include "StageEditorUIPlacement/StageEditorUIPlacement.h"
+#include "StageEditorUINavMesh/StageEditorUINavMesh.h"
+#include "StageEditorUIObjectList/StageEditorUIObjectList.h"
 
 class StageFileManager;
 class StageSpawner;
@@ -77,6 +80,19 @@ public:
     /// @param index 
     void SetSelectedIndex(int index) { selectedIndex_ = index; }
 
+
+private:
+
+	/// @brief オブジェクト配置モードUI
+	std::unique_ptr<StageEditorUIPlacement> placementUI_ = nullptr;
+
+	/// @brief ナビメッシュ編集モードUI
+	std::unique_ptr<StageEditorUINavMesh> navMeshUI_ = nullptr;
+
+	/// @brief オブジェクトリストUI
+	std::unique_ptr<StageEditorUIObjectList> objectListUI_ = nullptr;
+
+
 private:
 
 	// ステージファイルの読み書きを担当するクラス
@@ -97,7 +113,7 @@ private:
 	/// @brief モーションマネージャのインスタンス
 	MotionManager* motionManager_ = nullptr;
 
-	/// @brief ビヘイビアツリーデータの名前リスト
+    /// @brief ビヘイビアツリーデータの名前リスト
     std::vector<std::string> behaviorTreeNames_;
 
 
@@ -124,7 +140,6 @@ private:
 
 private:
 
-
     /// @brief コピーされたオブジェクトのデータバッファ（ファイル間移動用）
     PlacementData copiedData_;
 
@@ -140,24 +155,20 @@ private:
 
 private:
 
-    /// @brief モーションの選択UIを表示する
-    /// @param motionType 
-    /// @param motionName 
-    bool MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
-
-    /// @brief モーションの選択UIを表示する
-    /// @param motionType 
-    /// @param motionName 
-	/// @param placementList
-    void MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig, std::vector<PlacementData>& placementList);
-
-	/// @brief ビヘイビアツリーデータの名前を読み込む
-    void LoadBehaviorTreeNames();
-
 	/// @brief 保留中のアクションを実行する
     /// @param placementList 
     /// @param currentFileName 
     /// @param navMesh 
     void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh);
+
+    /// @brief ショートカットキーの処理
+    /// @param placementList 
+    /// @param currentFileName 
+    /// @param isPlaying 
+    /// @param navMesh 
+    void HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
+
+    /// @brief ビヘイビアツリーデータの名前を読み込む
+    void LoadBehaviorTreeNames();
 };
 

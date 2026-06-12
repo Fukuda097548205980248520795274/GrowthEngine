@@ -1222,6 +1222,15 @@
     <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule">
       <UniqueIdentifier>{e2330321-b3a2-4e9c-8229-5eaa9cbaa626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement">
+      <UniqueIdentifier>{054e9389-c22f-438c-990c-4d7a6edcc55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh">
+      <UniqueIdentifier>{77f58560-f368-499d-8414-43d2dd89f1ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList">
+      <UniqueIdentifier>{8c791ff0-6a38-4e5e-a613-80ff940572e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2201,6 +2210,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp">
       <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUINavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIPlacement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIObjectList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3298,6 +3316,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h">
       <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUINavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIPlacement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIObjectList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

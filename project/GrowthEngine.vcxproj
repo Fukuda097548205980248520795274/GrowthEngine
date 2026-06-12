@@ -1101,6 +1101,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.cpp" />
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUI.cpp" />
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.cpp" />
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.cpp" />
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.cpp" />
     <ClCompile Include="Game\StageEditor\StageFileManager\StageFileManager.cpp" />
     <ClCompile Include="Game\StageEditor\StageSpawner\StageSpawner.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
@@ -1476,6 +1479,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\StageEditor\StageEditor.h" />
     <ClInclude Include="Game\StageEditor\StageEditorHistory\StageEditorHistory.h" />
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUI.h" />
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.h" />
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.h" />
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.h" />
     <ClInclude Include="Game\StageEditor\StageFileManager\StageFileManager.h" />
     <ClInclude Include="Game\StageEditor\StageSpawner\StageSpawner.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
