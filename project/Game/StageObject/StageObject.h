@@ -40,6 +40,10 @@ public:
 	/// @return 
 	Vector3 GetWorldPosition()const { return worldTransform_->GetWorldPosition(); }
 
+	/// @brief ワールドトランスフォームを取得する
+	/// @return 
+	WorldTransform3D* GetWorldTransform() const { return worldTransform_.get(); }
+
 	/// @brief 終了したかどうか
 	/// @return 
 	bool IsFinished() const { return isFinished_; }

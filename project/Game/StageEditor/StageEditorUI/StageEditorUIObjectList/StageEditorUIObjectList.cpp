@@ -118,6 +118,24 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                 stageObjectPtr->SetScale(data.scale);
             }
         }
+        else
+        {
+			// ギズモを操作していないときは、ゲーム内の実体の位置を配置データに反映させる
+            if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
+            {
+                auto entityPtr = static_cast<Entity*>(data.instancePtr);
+				data.position = entityPtr->GetWorldTransform()->translate_;
+				data.rotate_ = entityPtr->GetWorldTransform()->rotate_;
+				data.scale = entityPtr->GetWorldTransform()->scale_;
+            }
+            else if (data.category == EditCategory::Object)
+            {
+                auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr);
+				data.position = stageObjectPtr->GetWorldTransform()->translate_;
+				data.rotate_ = stageObjectPtr->GetWorldTransform()->rotate_;
+				data.scale = stageObjectPtr->GetWorldTransform()->scale_;
+            }
+        }
 
 		// Guizmoを触った瞬間に配置データの変更を確定させる（スナップ機能を使用していない場合）
         if (ImGuizmo::IsUsing() && !useSnap)
