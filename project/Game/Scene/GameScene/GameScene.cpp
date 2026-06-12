@@ -661,9 +661,9 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 				}
 
 				initData.behaviorScriptName[0] = '\0';
-				if (initData.category == EditCategory::Character && spawnDataJson.contains("behaviorScript"))
+				if (initData.category == EditCategory::Character && spawnDataJson.contains("behaviorScriptName"))
 				{
-					std::string behaviorScriptName = spawnDataJson["behaviorScript"].get<std::string>();
+					std::string behaviorScriptName = spawnDataJson["behaviorScriptName"].get<std::string>();
 					strcpy_s(initData.behaviorScriptName, sizeof(initData.behaviorScriptName), behaviorScriptName.c_str());
 				}
 

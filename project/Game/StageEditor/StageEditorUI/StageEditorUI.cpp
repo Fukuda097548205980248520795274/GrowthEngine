@@ -1301,14 +1301,14 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
                                                 spawnData.scale.z = enemyData["scale"][2].get<float>();
                                             }
 
-                                            spawnData.standMotion.name = enemyData.value("standMotionName", "");
-                                            spawnData.stanceMotion.name = enemyData.value("stanceMotionName", "");
-                                            spawnData.walkMotion.name = enemyData.value("walkMotionName", "");
-                                            spawnData.dashMotion.name = enemyData.value("dashMotionName", "");
-                                            spawnData.avoidFrontMotion.name = enemyData.value("avoidFrontMotionName", "");
-                                            spawnData.avoidBackMotion.name = enemyData.value("avoidBackMotionName", "");
-                                            spawnData.avoidLeftMotion.name = enemyData.value("avoidLeftMotionName", "");
-                                            spawnData.avoidRightMotion.name = enemyData.value("avoidRightMotionName", "");
+                                            spawnData.standMotion.name = enemyData.value("standMotionName", "Standing");
+                                            spawnData.stanceMotion.name = enemyData.value("stanceMotionName", "Fighter");
+                                            spawnData.walkMotion.name = enemyData.value("walkMotionName", "Walk");
+                                            spawnData.dashMotion.name = enemyData.value("dashMotionName", "Dash");
+                                            spawnData.avoidFrontMotion.name = enemyData.value("avoidFrontMotionName", "Front");
+                                            spawnData.avoidBackMotion.name = enemyData.value("avoidBackMotionName", "Back");
+                                            spawnData.avoidLeftMotion.name = enemyData.value("avoidLeftMotionName", "Front");
+                                            spawnData.avoidRightMotion.name = enemyData.value("avoidRightMotionName", "Back");
 
                                             spawnData.standMotion.handle = motionManager_->GetMotion(MotionType::Stand, spawnData.standMotion.name);
                                             spawnData.stanceMotion.handle = motionManager_->GetMotion(MotionType::Stance, spawnData.stanceMotion.name);
@@ -1444,28 +1444,14 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
                                     }
 
                                     // もしNPCが選ばれていたら、モーションの選択UIも表示する
-                                    if (!isParamChanged)
-                                    {
-                                        isParamChanged = MotionSelecter("立ちモーション", MotionType::Stand, object.standMotion);
-                                        isParamChanged = MotionSelecter("戦闘モーション", MotionType::Stance, object.stanceMotion);
-                                        isParamChanged = MotionSelecter("歩行モーション", MotionType::Walk, object.walkMotion);
-                                        isParamChanged = MotionSelecter("ダッシュモーション", MotionType::Dash, object.dashMotion);
-                                        isParamChanged = MotionSelecter("前方回避モーション", MotionType::Avoid, object.avoidFrontMotion);
-                                        isParamChanged = MotionSelecter("後方回避モーション", MotionType::Avoid, object.avoidBackMotion);
-                                        isParamChanged = MotionSelecter("左回避モーション", MotionType::Avoid, object.avoidLeftMotion);
-                                        isParamChanged = MotionSelecter("右回避モーション", MotionType::Avoid, object.avoidRightMotion);
-                                    }
-                                    else
-                                    {
-                                        MotionSelecter("立ちモーション", MotionType::Stand, object.standMotion);
-                                        MotionSelecter("戦闘モーション", MotionType::Stance, object.stanceMotion);
-                                        MotionSelecter("歩行モーション", MotionType::Walk, object.walkMotion);
-                                        MotionSelecter("ダッシュモーション", MotionType::Dash, object.dashMotion);
-                                        MotionSelecter("前方回避モーション", MotionType::Avoid, object.avoidFrontMotion);
-                                        MotionSelecter("後方回避モーション", MotionType::Avoid, object.avoidBackMotion);
-                                        MotionSelecter("左回避モーション", MotionType::Avoid, object.avoidLeftMotion);
-                                        MotionSelecter("右回避モーション", MotionType::Avoid, object.avoidRightMotion);
-                                    }
+                                    if (MotionSelecter("立ちモーション", MotionType::Stand, object.standMotion))isParamChanged = true;
+                                    if (MotionSelecter("戦闘モーション", MotionType::Stance, object.stanceMotion))isParamChanged = true;
+                                    if (MotionSelecter("歩行モーション", MotionType::Walk, object.walkMotion))isParamChanged = true;
+                                    if (MotionSelecter("ダッシュモーション", MotionType::Dash, object.dashMotion))isParamChanged = true;
+                                    if (MotionSelecter("前方回避モーション", MotionType::Avoid, object.avoidFrontMotion))isParamChanged = true;
+                                    if (MotionSelecter("後方回避モーション", MotionType::Avoid, object.avoidBackMotion))isParamChanged = true;
+                                    if (MotionSelecter("左回避モーション", MotionType::Avoid, object.avoidLeftMotion))isParamChanged = true;
+                                    if (MotionSelecter("右回避モーション", MotionType::Avoid, object.avoidRightMotion))isParamChanged = true;
 
                                     // プレイヤーと未選択以外　ビヘイビアツリーデータ
                                     if (object.subType != 0 && object.subType != 1)
@@ -1663,7 +1649,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
                                     spawnData["durability"] = cfg.durability;
                                     spawnData["attackPower"] = cfg.attackPower;
                                     spawnData["isUnbreakable"] = cfg.isUnbreakable;
-                                    spawnData["behavior"] = cfg.behaviorScriptName;
+                                    spawnData["behaviorScriptName"] = cfg.behaviorScriptName;
                                     spawnData["standMotionName"] = cfg.standMotion.name;
                                     spawnData["stanceMotionName"] = cfg.stanceMotion.name;
                                     spawnData["walkMotionName"] = cfg.walkMotion.name;
