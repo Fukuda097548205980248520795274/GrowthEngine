@@ -35,9 +35,6 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 	//　大きさ
 	worldTransform_->scale_ = initData.scale;
 
-	// 衝突判定
-	collision_ = initData.collision;
-
 	// イベントの種類
 	eventType_ = initData.eventType;
 
@@ -49,28 +46,44 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
+
+	// 衝突判定
+	if (initData.collision)
+	{
+		collision_ = initData.collision;
+
+		// 衝突判定のパラメータを更新
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
+	}
 }
 
 /// @brief 更新処理
 void StaticEventTrigger::Update()
 {
+	// 更新が有効でないときは処理しない（誤操作防止のため）
+	if (!updateEnabled_)return;
+
 	// 基底クラスの更新処理
 	StageObject::Update();
 
 	// 衝突判定のパラメータを更新
-	collision_->param_->center = GetWorldPosition();
-	collision_->param_->radius = worldTransform_->scale_;
-
-	// 衝突しているかどうか
-	if (collision_->isCollision_)
+	if (collision_)
 	{
-		// コールバック関数を呼び出す
-		if (onTriggerCallback_)
-		{
-			bool shouldDelete = onTriggerCallback_(eventType_, eventStringParam_);
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
 
-			// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
-			if (shouldDelete)Delete();
+		// 衝突しているかどうか
+		if (collision_->isCollision_)
+		{
+			// コールバック関数を呼び出す
+			if (onTriggerCallback_)
+			{
+				bool shouldDelete = onTriggerCallback_(eventType_, eventStringParam_);
+
+				// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
+				if (shouldDelete)Delete();
+			}
 		}
 	}
 }
@@ -99,6 +112,14 @@ void StaticEventTrigger::DrawDebugUI(PlacementData* placementData, std::vector<P
 
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
+
+	// 衝突しているかどうか
+	if (collision_)
+	{
+		// 衝突判定のパラメータを更新
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
+	}
 
 #endif
 }

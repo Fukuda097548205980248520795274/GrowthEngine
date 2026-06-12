@@ -14,37 +14,9 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
     for (const auto& data : dataList)
     {
         json itemJson;
-        itemJson["category"] = static_cast<int>(data.category);
-        itemJson["subType"] = data.subType;
-		itemJson["name"] = data.name;
 
-        // Vector3は配列として保存すると扱いやすいです
-        itemJson["position"] = { data.position.x, data.position.y, data.position.z };
-		itemJson["rotate"] = { data.rotate_.x, data.rotate_.y, data.rotate_.z };
-        itemJson["scale"] = { data.scale.x, data.scale.y, data.scale.z };
-
-        // 各種パラメータ
-        itemJson["hp"] = data.hp;
-        itemJson["durability"] = data.durability;
-        itemJson["attackPower"] = data.attackPower;
-		itemJson["isUnbreakable"] = data.isUnbreakable;
-
-		// 行動パターンのスクリプト名
-		itemJson["behaviorScriptName"] = data.behaviorScriptName;
-
-		// イベントトリガーの種類とパラメータ
-		itemJson["eventType"] = data.eventType;
-		itemJson["eventStringParam"] = data.eventStringParam;
-
-		// モーション名
-		itemJson["standMotionName"] = data.standMotion.name;
-		itemJson["stanceMotionName"] = data.stanceMotion.name;
-		itemJson["walkMotionName"] = data.walkMotion.name;
-		itemJson["dashMotionName"] = data.dashMotion.name;
-		itemJson["avoidFrontMotionName"] = data.avoidFrontMotion.name;
-		itemJson["avoidBackMotionName"] = data.avoidBackMotion.name;
-		itemJson["avoidLeftMotionName"] = data.avoidLeftMotion.name;
-		itemJson["avoidRightMotionName"] = data.avoidRightMotion.name;
+		// 配置データをJSONに変換
+		toJson(itemJson, data);
 
         arrayJson.push_back(itemJson);
     }
@@ -123,79 +95,8 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
         {
             PlacementData data;
 
-            // データの復元
-            data.category = static_cast<EditCategory>(itemJson.value("category", 0));
-            data.subType = itemJson.value("subType", 0);
-			
-			data.name[0] = '\0'; // デフォルトは空文字列
-			if (itemJson.contains("name"))
-			{
-				std::string nameStr = itemJson["name"].get<std::string>();
-				strncpy_s(data.name, nameStr.c_str(), sizeof(data.name) - 1);
-				data.name[sizeof(data.name) - 1] = '\0'; // 念のためヌル終端
-			}
-
-            if (itemJson.contains("position"))
-            {
-                data.position.x = itemJson["position"][0];
-                data.position.y = itemJson["position"][1];
-                data.position.z = itemJson["position"][2];
-            }
-            
-			if (itemJson.contains("rotate"))
-			{
-				data.rotate_.x = itemJson["rotate"][0];
-				data.rotate_.y = itemJson["rotate"][1];
-				data.rotate_.z = itemJson["rotate"][2];
-			}
-
-            if (itemJson.contains("scale"))
-            {
-                data.scale.x = itemJson["scale"][0];
-                data.scale.y = itemJson["scale"][1];
-                data.scale.z = itemJson["scale"][2];
-            }
-
-            data.hp = itemJson.value("hp", 100);
-            data.durability = itemJson.value("durability", 100);
-            data.attackPower = itemJson.value("attackPower", 1.0f);
-			data.isUnbreakable = itemJson.value("isUnbreakable", false);
-
-			data.standMotion.name = itemJson.value("standMotionName", "Standing");
-			data.stanceMotion.name = itemJson.value("stanceMotionName", "Fighter");
-			data.walkMotion.name = itemJson.value("walkMotionName", "Walk");
-			data.dashMotion.name = itemJson.value("dashMotionName", "Dash");
-			data.avoidFrontMotion.name = itemJson.value("avoidFrontMotionName", "Front");
-			data.avoidBackMotion.name = itemJson.value("avoidBackMotionName", "Back");
-			data.avoidLeftMotion.name = itemJson.value("avoidLeftMotionName", "Front");
-			data.avoidRightMotion.name = itemJson.value("avoidRightMotionName", "Back");
-
-			data.eventType = itemJson.value("eventType", 0);
-			data.eventStringParam[0] = '\0'; // デフォルトは空文字列
-			if (itemJson.contains("eventStringParam"))
-			{
-				std::string eventParamStr = itemJson["eventStringParam"].get<std::string>();
-				strncpy_s(data.eventStringParam, eventParamStr.c_str(), sizeof(data.eventStringParam) - 1);
-				data.eventStringParam[sizeof(data.eventStringParam) - 1] = '\0'; // 念のためヌル終端
-			}
-
-			MotionManager* motionManager = MotionManager::GetInstance();
-			data.standMotion.handle = motionManager->GetMotion(MotionType::Stand, data.standMotion.name);
-			data.stanceMotion.handle = motionManager->GetMotion(MotionType::Stance, data.stanceMotion.name);
-			data.walkMotion.handle = motionManager->GetMotion(MotionType::Walk, data.walkMotion.name);
-			data.dashMotion.handle = motionManager->GetMotion(MotionType::Dash, data.dashMotion.name);
-			data.avoidFrontMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidFrontMotion.name);
-			data.avoidBackMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidBackMotion.name);
-			data.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidLeftMotion.name);
-			data.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, data.avoidRightMotion.name);
-
-			data.behaviorScriptName[0] = '\0'; // デフォルトは空文字列
-            if (itemJson.contains("behaviorScriptName"))
-            {
-				std::string scriptName = itemJson["behaviorScriptName"].get<std::string>();
-				strncpy_s(data.behaviorScriptName, scriptName.c_str(), sizeof(data.behaviorScriptName) - 1);
-				data.behaviorScriptName[sizeof(data.behaviorScriptName) - 1] = '\0'; // 念のためヌル終端
-            }
+			// JSONから配置データを復元
+			fromJson(itemJson, data);
 
             // 実際のゲーム内エンティティを生成
             spawner->SpawnActualEntity(data);

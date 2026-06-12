@@ -316,7 +316,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                         case StaticEventTrigger::EventType::ObjectSpawn:
 
                             // オブジェクトのスポーン設定を保持する構造体のリスト
-                            std::vector<SpawnData> objects;
+                            std::vector<PlacementData> objects;
                             bool isInitialEmpty = false;
 
                             // まずは既存のJSON文字列を解析して、敵のリストを構築する
@@ -329,63 +329,8 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                                     {
                                         for (const auto& enemyData : j)
                                         {
-                                            SpawnData spawnData;
-                                            spawnData.category = static_cast<EditCategory>(enemyData.value("category", 0));
-                                            spawnData.hp = enemyData.value("hp", 100);
-                                            spawnData.attackPower = enemyData.value("attackPower", 1.0f);
-                                            spawnData.durability = enemyData.value("durability", 0);
-                                            spawnData.isUnbreakable = enemyData.value("isUnbreakable", false);
-                                            spawnData.subType = enemyData.value("subType", 0);
-                                            if (enemyData.contains("position") && enemyData["position"].is_array() && enemyData["position"].size() == 3)
-                                            {
-                                                spawnData.position.x = enemyData["position"][0].get<float>();
-                                                spawnData.position.y = enemyData["position"][1].get<float>();
-                                                spawnData.position.z = enemyData["position"][2].get<float>();
-                                            }
-                                            if (enemyData.contains("rotation") && enemyData["rotation"].is_array() && enemyData["rotation"].size() == 3)
-                                            {
-                                                spawnData.rotate_.x = enemyData["rotation"][0].get<float>();
-                                                spawnData.rotate_.y = enemyData["rotation"][1].get<float>();
-                                                spawnData.rotate_.z = enemyData["rotation"][2].get<float>();
-                                            }
-                                            if (enemyData.contains("scale") && enemyData["scale"].is_array() && enemyData["scale"].size() == 3)
-                                            {
-                                                spawnData.scale.x = enemyData["scale"][0].get<float>();
-                                                spawnData.scale.y = enemyData["scale"][1].get<float>();
-                                                spawnData.scale.z = enemyData["scale"][2].get<float>();
-                                            }
-
-                                            spawnData.standMotion.name = enemyData.value("standMotionName", "Standing");
-                                            spawnData.stanceMotion.name = enemyData.value("stanceMotionName", "Fighter");
-                                            spawnData.walkMotion.name = enemyData.value("walkMotionName", "Walk");
-                                            spawnData.dashMotion.name = enemyData.value("dashMotionName", "Dash");
-                                            spawnData.avoidFrontMotion.name = enemyData.value("avoidFrontMotionName", "Front");
-                                            spawnData.avoidBackMotion.name = enemyData.value("avoidBackMotionName", "Back");
-                                            spawnData.avoidLeftMotion.name = enemyData.value("avoidLeftMotionName", "Front");
-                                            spawnData.avoidRightMotion.name = enemyData.value("avoidRightMotionName", "Back");
-
-                                            spawnData.standMotion.handle = motionManager_->GetMotion(MotionType::Stand, spawnData.standMotion.name);
-                                            spawnData.stanceMotion.handle = motionManager_->GetMotion(MotionType::Stance, spawnData.stanceMotion.name);
-                                            spawnData.walkMotion.handle = motionManager_->GetMotion(MotionType::Walk, spawnData.walkMotion.name);
-                                            spawnData.dashMotion.handle = motionManager_->GetMotion(MotionType::Dash, spawnData.dashMotion.name);
-                                            spawnData.avoidFrontMotion.handle = motionManager_->GetMotion(MotionType::Avoid, spawnData.avoidFrontMotion.name);
-                                            spawnData.avoidBackMotion.handle = motionManager_->GetMotion(MotionType::Avoid, spawnData.avoidBackMotion.name);
-                                            spawnData.avoidLeftMotion.handle = motionManager_->GetMotion(MotionType::Avoid, spawnData.avoidLeftMotion.name);
-                                            spawnData.avoidRightMotion.handle = motionManager_->GetMotion(MotionType::Avoid, spawnData.avoidRightMotion.name);
-
-                                            spawnData.name[0] = '\0';
-                                            if (enemyData.contains("name"))
-                                            {
-                                                std::string name = enemyData["name"].get<std::string>();
-                                                strncpy_s(spawnData.name, name.c_str(), sizeof(spawnData.name) - 1);
-                                            }
-
-                                            spawnData.behaviorScriptName[0] = '\0';
-                                            if (enemyData.contains("behaviorScriptName"))
-                                            {
-                                                std::string btName = enemyData["behaviorScriptName"].get<std::string>();
-                                                strncpy_s(spawnData.behaviorScriptName, btName.c_str(), sizeof(spawnData.behaviorScriptName) - 1);
-                                            }
+                                            PlacementData spawnData;
+											fromJson(enemyData, spawnData);
 
                                             objects.push_back(spawnData);
                                         }
@@ -406,7 +351,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                             // 初期状態で空だった場合、かつ解析の結果敵のリストが空になってしまった場合は、デフォルトの敵を1体追加しておく
                             if (isInitialEmpty && objects.empty())
                             {
-                                SpawnData defaultObject;
+                                PlacementData defaultObject;
                                 defaultObject.position = target.position;
                                 objects.push_back(defaultObject);
                             }
@@ -646,7 +591,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                             // 追加ボタン（全体のリストに対する操作）
                             if (ImGui::Button("敵を追加"))
                             {
-                                SpawnData newEnemy;
+                                PlacementData newEnemy;
                                 if (!objects.empty())
                                 {
                                     // 最後に選択していた敵のパラメータを引き継ぐ
@@ -681,24 +626,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
                                 for (const auto& cfg : objects)
                                 {
                                     nlohmann::json spawnData;
-                                    spawnData["category"] = static_cast<int>(cfg.category);
-                                    spawnData["subType"] = cfg.subType;
-                                    spawnData["hp"] = cfg.hp;
-                                    spawnData["position"] = { cfg.position.x, cfg.position.y, cfg.position.z };
-                                    spawnData["rotate"] = { cfg.rotate_.x, cfg.rotate_.y, cfg.rotate_.z };
-                                    spawnData["scale"] = { cfg.scale.x, cfg.scale.y, cfg.scale.z };
-                                    spawnData["durability"] = cfg.durability;
-                                    spawnData["attackPower"] = cfg.attackPower;
-                                    spawnData["isUnbreakable"] = cfg.isUnbreakable;
-                                    spawnData["behaviorScriptName"] = cfg.behaviorScriptName;
-                                    spawnData["standMotionName"] = cfg.standMotion.name;
-                                    spawnData["stanceMotionName"] = cfg.stanceMotion.name;
-                                    spawnData["walkMotionName"] = cfg.walkMotion.name;
-                                    spawnData["dashMotionName"] = cfg.dashMotion.name;
-                                    spawnData["avoidFrontMotionName"] = cfg.avoidFrontMotion.name;
-                                    spawnData["avoidBackMotionName"] = cfg.avoidBackMotion.name;
-                                    spawnData["avoidLeftMotionName"] = cfg.avoidLeftMotion.name;
-                                    spawnData["avoidRightMotionName"] = cfg.avoidRightMotion.name;
+									toJson(spawnData, cfg);
 
                                     enemyArray.push_back(spawnData);
                                 }

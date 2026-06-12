@@ -2,6 +2,9 @@
 #include "GrowthEngine.h"
 #include "MotionManager/MotionManager.h"
 
+// JSONライブラリ
+using json = nlohmann::json;
+
 // 配置するオブジェクトの種類
 enum class EditCategory
 {
@@ -80,49 +83,81 @@ struct PlacementData
 	void* instancePtr = nullptr;
 };
 
-/// @brief ゲーム中のイベントトリガーからオブジェクトを生成するためのデータ構造
-struct SpawnData
+/// @brief PlacementDataをJSONに変換（シリアライズ）
+/// @param j 
+/// @param s 
+inline void toJson(json& j, const PlacementData& s)
 {
-	// 配置するオブジェクトの種類
-	EditCategory category = EditCategory::Character;
+	j = json{
+		{"category", static_cast<int>(s.category)},
+		{"subType", s.subType},
+		{"name", s.name},
+		{"posX", s.position.x}, {"posY", s.position.y}, {"posZ", s.position.z},
+		{"rotX", s.rotate_.x}, {"rotY", s.rotate_.y}, {"rotZ", s.rotate_.z},
+		{"scaleX", s.scale.x}, {"scaleY", s.scale.y}, {"scaleZ", s.scale.z},
+		{"hp", s.hp},
+		{"durability", s.durability},
+		{"attackPower", s.attackPower},
+		{"isUnbreakable", s.isUnbreakable},
+		{"behaviorScriptName", s.behaviorScriptName},
+		{"eventType", s.eventType},
+		{"eventStringParam", s.eventStringParam},
+		{"standMotionName", s.standMotion.name},
+		{"stanceMotionName", s.stanceMotion.name},
+		{"walkMotionName", s.walkMotion.name},
+		{"dashMotionName", s.dashMotion.name},
+		{"avoidFrontMotionName", s.avoidFrontMotion.name},
+		{"avoidBackMotionName", s.avoidBackMotion.name},
+		{"avoidLeftMotionName", s.avoidLeftMotion.name},
+		{"avoidRightMotionName", s.avoidRightMotion.name}
+	};
+}
 
-	// キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
-	int subType = 0;
+/// @brief JSONからPlacementDataに変換（デシリアライズ）
+/// @param j 
+/// @param s 
+inline void fromJson(const json& j, PlacementData& s)
+{
+	s.category = static_cast<EditCategory>(j.value("category", 0));
+	s.subType = j.value("subType", 0);
+	std::string nameStr = j.value("name", "");
+	strncpy_s(s.name, nameStr.c_str(), sizeof(s.name) - 1);
 
-	// オブジェクトの名前（任意）
-	char name[256] = "";
+	s.position = Vector3(j.value("posX", 0.0f), j.value("posY", 0.0f), j.value("posZ", 0.0f));
+	s.rotate_ = Vector3(j.value("rotX", 0.0f), j.value("rotY", 0.0f), j.value("rotZ", 0.0f));
+	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
 
-	// 位置
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+	s.hp = j.value("hp", 100);
+	s.durability = j.value("durability", 100);
+	s.attackPower = j.value("attackPower", 1.0f);
+	s.isUnbreakable = j.value("isUnbreakable", false);
 
-	// 回転
-	Vector3 rotate_ = Vector3(0.0f, 0.0f, 0.0f);
+	std::string behaviorScriptStr = j.value("behaviorScriptName", "");
+	strncpy_s(s.behaviorScriptName, behaviorScriptStr.c_str(), sizeof(s.behaviorScriptName) - 1);
 
-	// 拡縮
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
-	// HP (キャラクターの場合)
-	int32_t hp = 100;
+	s.eventType = j.value("eventType", 0);
+	std::string eventStringParamStr = j.value("eventStringParam", "");
+	strncpy_s(s.eventStringParam, eventStringParamStr.c_str(), sizeof(s.eventStringParam) - 1);
 
-	// 耐久力 (武器の場合)
-	int32_t durability = 100;
 
-	// 攻撃力 (武器の場合)
-	float attackPower = 1.0f;
+	MotionManager* motionManager = MotionManager::GetInstance();
 
-	// 壊れない武器かどうか (武器の場合)
-	bool isUnbreakable = false;
+	s.standMotion.name = j.value("standMotionName", "Stand");
+	s.stanceMotion.name = j.value("stanceMotionName", "Fighter");
+	s.walkMotion.name = j.value("walkMotionName", "Walk");
+	s.dashMotion.name = j.value("dashMotionName", "Dash");
+	s.avoidFrontMotion.name = j.value("avoidFrontMotionName", "Front");
+	s.avoidBackMotion.name = j.value("avoidBackMotionName", "Back");
+	s.avoidLeftMotion.name = j.value("avoidLeftMotionName", "Front");
+	s.avoidRightMotion.name = j.value("avoidRightMotionName", "Back");
 
-	// 行動パターンを定義したスクリプトファイル名 (キャラクターの場合)
-	char behaviorScriptName[256] = "";
-
-	// モーション設定 (キャラクターの場合)
-	MotionConfig standMotion;
-	MotionConfig stanceMotion;
-	MotionConfig walkMotion;
-	MotionConfig dashMotion;
-	MotionConfig avoidFrontMotion;
-	MotionConfig avoidBackMotion;
-	MotionConfig avoidLeftMotion;
-	MotionConfig avoidRightMotion;
-};
+	s.standMotion.handle = motionManager->GetMotion(MotionType::Stand, s.standMotion.name);
+	s.stanceMotion.handle = motionManager->GetMotion(MotionType::Stance, s.stanceMotion.name);
+	s.walkMotion.handle = motionManager->GetMotion(MotionType::Walk, s.walkMotion.name);
+	s.dashMotion.handle = motionManager->GetMotion(MotionType::Dash, s.dashMotion.name);
+	s.avoidFrontMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidFrontMotion.name);
+	s.avoidBackMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidBackMotion.name);
+	s.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidLeftMotion.name);
+	s.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidRightMotion.name);
+}

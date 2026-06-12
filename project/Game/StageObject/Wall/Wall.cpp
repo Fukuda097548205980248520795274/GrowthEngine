@@ -45,9 +45,6 @@ void Wall::Initialize(const InitData& initData)
 	//　大きさ
 	worldTransform_->scale_ = initData.scale;
 
-	// 衝突判定
-	collision_ = initData.collision;
-
 	// モデル
 	if (initData.model)
 	{
@@ -59,24 +56,48 @@ void Wall::Initialize(const InitData& initData)
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
+
+
+	// 衝突判定
+	if (initData.collision)
+	{
+		collision_ = initData.collision;
+
+		// 回転行列を作成する
+		Quaternion rotation = worldTransform_->GetQuaternion();
+		Matrix4x4 rotate = Make3DRotateMatrix4x4(rotation);
+
+		// 衝突判定のパラメータを更新
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
+		collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[0][1], rotate.m[0][2]);
+		collision_->param_->oriented[1] = Vector3(rotate.m[1][0], rotate.m[1][1], rotate.m[1][2]);
+		collision_->param_->oriented[2] = Vector3(rotate.m[2][0], rotate.m[2][1], rotate.m[2][2]);
+	}
 }
 
 /// @brief 更新処理
 void Wall::Update()
 {
+	// 更新が有効でないときは処理しない（誤操作防止のため）
+	if (!updateEnabled_)return;
+
 	// 基底クラスの更新処理
 	StageObject::Update();
 	
-	// 回転行列を作成する
-	Quaternion rotation = worldTransform_->GetQuaternion();
-	Matrix4x4 rotate = Make3DRotateMatrix4x4(rotation);
-
 	// 衝突判定のパラメータを更新
-	collision_->param_->center = GetWorldPosition();
-	collision_->param_->radius = worldTransform_->scale_;
-	collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[0][1], rotate.m[0][2]);
-	collision_->param_->oriented[1] = Vector3(rotate.m[1][0], rotate.m[1][1], rotate.m[1][2]);
-	collision_->param_->oriented[2] = Vector3(rotate.m[2][0], rotate.m[2][1], rotate.m[2][2]);
+	if (collision_)
+	{
+		// 回転行列を作成する
+		Quaternion rotation = worldTransform_->GetQuaternion();
+		Matrix4x4 rotate = Make3DRotateMatrix4x4(rotation);
+
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
+		collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[0][1], rotate.m[0][2]);
+		collision_->param_->oriented[1] = Vector3(rotate.m[1][0], rotate.m[1][1], rotate.m[1][2]);
+		collision_->param_->oriented[2] = Vector3(rotate.m[2][0], rotate.m[2][1], rotate.m[2][2]);
+	}
 }
 
 /// @brief 描画処理
@@ -114,6 +135,21 @@ void Wall::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>&
 
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
+
+	// 衝突判定のパラメータを更新
+	if (collision_)
+	{
+		// 回転行列を作成する
+		Quaternion rotation = worldTransform_->GetQuaternion();
+		Matrix4x4 rotate = Make3DRotateMatrix4x4(rotation);
+
+		// 衝突判定のパラメータを更新
+		collision_->param_->center = GetWorldPosition();
+		collision_->param_->radius = worldTransform_->scale_;
+		collision_->param_->oriented[0] = Vector3(rotate.m[0][0], rotate.m[0][1], rotate.m[0][2]);
+		collision_->param_->oriented[1] = Vector3(rotate.m[1][0], rotate.m[1][1], rotate.m[1][2]);
+		collision_->param_->oriented[2] = Vector3(rotate.m[2][0], rotate.m[2][1], rotate.m[2][2]);
+	}
 
 #endif
 }

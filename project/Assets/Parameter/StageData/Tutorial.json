@@ -16,21 +16,15 @@
             "hp": 100,
             "isUnbreakable": false,
             "name": "プレイヤー",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "rotate": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
             "stanceMotionName": "Fighter",
             "standMotionName": "Standing",
             "subType": 1,
@@ -51,21 +45,15 @@
             "hp": 100,
             "isUnbreakable": false,
             "name": "強大な床",
-            "position": [
-                0.0,
-                -0.09000000357627869,
-                90.0
-            ],
-            "rotate": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                100.0,
-                0.10000000149011612,
-                100.0
-            ],
+            "posX": 0.009999999776482582,
+            "posY": 0.0,
+            "posZ": 40.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 50.0,
+            "scaleY": 0.10000000149011612,
+            "scaleZ": 50.0,
             "stanceMotionName": "Fighter",
             "standMotionName": "Standing",
             "subType": 1,
@@ -81,131 +69,20 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
-            "eventStringParam": "",
-            "eventType": 0,
-            "hp": 100,
-            "isUnbreakable": false,
-            "name": "壁",
-            "position": [
-                2.2799999713897705,
-                0.8199999928474426,
-                5.579999923706055
-            ],
-            "rotate": [
-                0.0,
-                1.5700000524520874,
-                0.0
-            ],
-            "scale": [
-                7.480000019073486,
-                1.0,
-                0.10000000149011612
-            ],
-            "stanceMotionName": "Fighter",
-            "standMotionName": "Standing",
-            "subType": 2,
-            "walkMotionName": "Walk"
-        },
-        {
-            "attackPower": 1.0,
-            "avoidBackMotionName": "Back",
-            "avoidFrontMotionName": "Front",
-            "avoidLeftMotionName": "Front",
-            "avoidRightMotionName": "Back",
-            "behaviorScriptName": "",
-            "category": 1,
-            "dashMotionName": "Dash",
-            "durability": 100,
-            "eventStringParam": "",
-            "eventType": 0,
-            "hp": 100,
-            "isUnbreakable": false,
-            "name": "壁",
-            "position": [
-                -2.450000047683716,
-                0.8199999928474426,
-                5.579999923706055
-            ],
-            "rotate": [
-                0.0,
-                1.5700000524520874,
-                0.0
-            ],
-            "scale": [
-                7.480000019073486,
-                1.0,
-                0.10000000149011612
-            ],
-            "stanceMotionName": "Fighter",
-            "standMotionName": "Standing",
-            "subType": 2,
-            "walkMotionName": "Walk"
-        },
-        {
-            "attackPower": 1.0,
-            "avoidBackMotionName": "Back",
-            "avoidFrontMotionName": "Front",
-            "avoidLeftMotionName": "Front",
-            "avoidRightMotionName": "Back",
-            "behaviorScriptName": "",
-            "category": 1,
-            "dashMotionName": "Dash",
-            "durability": 100,
-            "eventStringParam": "",
-            "eventType": 0,
-            "hp": 100,
-            "isUnbreakable": false,
-            "name": "",
-            "position": [
-                0.0,
-                0.7099999785423279,
-                25.260000228881836
-            ],
-            "rotate": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                5.0,
-                1.0,
-                5.0
-            ],
-            "stanceMotionName": "Fighter",
-            "standMotionName": "Standing",
-            "subType": 1,
-            "walkMotionName": "Walk"
-        },
-        {
-            "attackPower": 1.0,
-            "avoidBackMotionName": "Back",
-            "avoidFrontMotionName": "Front",
-            "avoidLeftMotionName": "Front",
-            "avoidRightMotionName": "Back",
-            "behaviorScriptName": "",
-            "category": 1,
-            "dashMotionName": "Dash",
-            "durability": 100,
-            "eventStringParam": "[{\"attackPower\":1.0,\"avoidBackMotionName\":\"Back\",\"avoidFrontMotionName\":\"Front\",\"avoidLeftMotionName\":\"Front\",\"avoidRightMotionName\":\"Back\",\"behaviorScriptName\":\"ComboAttack_000\",\"category\":0,\"dashMotionName\":\"Dash\",\"durability\":100,\"hp\":100,\"isUnbreakable\":false,\"position\":[0.0,0.0,8.100000381469727],\"rotate\":[0.0,0.0,0.0],\"scale\":[1.0,1.0,1.0],\"stanceMotionName\":\"Fighter\",\"standMotionName\":\"Standing\",\"subType\":4,\"walkMotionName\":\"Walk\"}]",
+            "eventStringParam": "[{\"attackPower\":1.0,\"avoidBackMotionName\":\"Back\",\"avoidFrontMotionName\":\"Front\",\"avoidLeftMotionName\":\"Front\",\"avoidRightMotionName\":\"Back\",\"behaviorScriptName\":\"ComboAttack_000\",\"category\":0,\"dashMotionName\":\"Dash\",\"durability\":100,\"eventStringParam\":\"\",\"eventType\":0,\"hp\":100,\"isUnbreakable\":false,\"name\":\"\",\"posX\":0.0,\"posY\":0.0,\"posZ\":9.0,\"rotX\":0.0,\"rotY\":0.0,\"rotZ\":0.0,\"scaleX\":1.0,\"scaleY\":1.0,\"scaleZ\":1.0,\"stanceMotionName\":\"Fighter\",\"standMotionName\":\"Standing\",\"subType\":4,\"walkMotionName\":\"Walk\"}]",
             "eventType": 1,
             "hp": 100,
             "isUnbreakable": false,
             "name": "",
-            "position": [
-                0.0,
-                0.0,
-                8.100000381469727
-            ],
-            "rotate": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 10.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
             "stanceMotionName": "Fighter",
             "standMotionName": "Standing",
             "subType": 3,
