@@ -37,6 +37,60 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
     }
 
 
+
+    if (selectedIndex >= 0 && selectedIndex < placementList.size())
+    {
+        auto& data = placementList[selectedIndex];
+
+        // 描画領域を画面全体に設定（ウィンドウ内に収める場合は領域を調整してください）
+        ImGuiIO& io = ImGui::GetIO();
+        ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+        // カメラのビュー行列とプロジェクション行列を取得
+        Matrix4x4 viewMatrix = engine_->GetCamera3DView();
+        Matrix4x4 projectionMatrix = engine_->GetCamera3DProjection();
+
+        // 現在のSRTからワールド行列を一度だけ生成する
+        Quaternion rotateQ =
+            ToQuaternion(data.rotate_.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
+            ToQuaternion(data.rotate_.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *
+            ToQuaternion(data.rotate_.x, Vector3(1.0f, 0.0, 0.0f)).Normalize();
+
+        // ワールド行列
+        Matrix4x4 worldMatrix =
+            Make3DScaleMatrix4x4(data.scale) *
+            Make3DRotateMatrix4x4(rotateQ) *
+            Make3DTranslateMatrix4x4(data.position);
+
+        // ギズモの操作モード（移動・回転・拡縮）を切り替えるためのUI（ショートカットキー等と連動させると便利です）
+        static ImGuizmo::OPERATION currentOperation = ImGuizmo::TRANSLATE;
+        static ImGuizmo::MODE currentMode = ImGuizmo::LOCAL;
+
+        // キーボード入力などで操作モードを切り替える例
+        if (ImGui::IsKeyPressed(ImGuiKey_W)) currentOperation = ImGuizmo::TRANSLATE;
+        if (ImGui::IsKeyPressed(ImGuiKey_E)) currentOperation = ImGuizmo::ROTATE;
+        if (ImGui::IsKeyPressed(ImGuiKey_R)) currentOperation = ImGuizmo::SCALE;
+
+        // ギズモの描画と操作
+        ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], currentOperation, currentMode, &worldMatrix.m[0][0]);
+
+        // ギズモを使ってオブジェクトを操作中かどうかをチェック
+        if (ImGuizmo::IsUsing())
+        {
+            // 変更前の状態を履歴に保存（操作開始時のみ保存する工夫を入れるとベターです）
+            // history_->SaveHistory(placementList);
+            isDirty = true; // 変更フラグを立てる
+
+            // 操作後の行列から再び位置、回転、スケールに分解してデータに反映
+            ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0],&data.position.x,&data.rotate_.x,&data.scale.x);
+
+            // TODO: データが更新されたので、シーン上の実際のエンティティ (instancePtr) の Transform も同時に更新する処理を呼ぶ
+            // 例: spawner_->UpdateActualEntityTransform(data);
+        }
+    }
+
+
+
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
 
     ImGui::Text("配置されたオブジェクト :");
