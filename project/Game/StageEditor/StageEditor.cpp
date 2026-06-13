@@ -1,6 +1,7 @@
 #include "StageEditor.h"
 #include <numbers>
 #include <json.hpp>
+#include <set>
 #include "Scene/GameScene/GameScene.h"
 
 // ステージデータの保存先ディレクトリ
@@ -140,11 +141,16 @@ void StageEditor::Update(float dt)
             isDraggingItem_ = false;
         }
 
+		// 押し出しとブリッジの操作（辺選択モードのときのみ）
         if (selectionMode_ == SelectionMode::Edge)
         {
             if (engine_->GetKeyTrigger(DIK_E)) ExtrudeSelectedEdge();
             if (engine_->GetKeyTrigger(DIK_B)) BridgeSelectedEdges();
         }
+
+		// DeleteキーまたはBackspaceキーが押された瞬間
+        if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+            DeleteSelectedNavMeshElements();
     }
 
 #endif
@@ -158,7 +164,7 @@ void StageEditor::DrawUI()
     // 押し出し条件: 「辺選択モード」かつ「選択されている辺が1つだけ」
     bool canExtrude = (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 1);
 
-	// ブリッジ条件: 「辺選択モード」かつ「選択されている辺が2つ」かつ「両方の辺が未接続」かつ「同じポリゴンに属していない」かつ「どの頂点も共有していない」
+    // ブリッジ条件: 「辺選択モード」かつ「選択されている辺が2つ」かつ「両方の辺が未接続」かつ「同じポリゴンに属していない」かつ「どの頂点も共有していない」
     bool canBridge = false;
     if (selectionMode_ == SelectionMode::Edge && selectedItems_.size() == 2 && navMesh_ != nullptr)
     {
@@ -189,9 +195,41 @@ void StageEditor::DrawUI()
         }
     }
 
-	// ナビメッシュのデバッグ描画
-	navMesh_->DrawDebug();
+    // ナビメッシュのデバッグ描画
+    navMesh_->DrawDebug();
     DrawSelectedHighlight();
+
+
+	// ブリッジ可能な状態なら、選択されている2つの辺を半透明の四角形で繋いでプレビュー表示する
+    if (canBridge)
+    {
+        // 選択されている2つのポリゴンを取得
+        NavPolygon* poly1 = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
+        NavPolygon* poly2 = navMesh_->GetMutablePolygon(selectedItems_[1].polygonId);
+
+        int eIdx1 = selectedItems_[0].itemIndex;
+        int eIdx2 = selectedItems_[1].itemIndex;
+
+        // 辺1の頂点
+        Vector3 p1_v0 = poly1->vertices[eIdx1];
+        Vector3 p1_v1 = poly1->vertices[(eIdx1 + 1) % 4];
+
+        // 辺2の頂点
+        Vector3 p2_v0 = poly2->vertices[eIdx2];
+        Vector3 p2_v1 = poly2->vertices[(eIdx2 + 1) % 4];
+
+        // プレビュー用の半透明な色（例：薄い水色）と、少し濃い境界線の色
+        Vector4 previewFaceColor = { 0.0f, 1.0f, 1.0f, 0.3f };
+        Vector4 previewLineColor = { 0.0f, 1.0f, 1.0f, 0.8f };
+
+		// 2つの辺を繋いでできる四角形を、2つの三角形に分割して描画
+        engine_->DrawDebugTriangle3D(p1_v1, p1_v0, p2_v1, previewFaceColor);
+        engine_->DrawDebugTriangle3D(p1_v1, p2_v0, p2_v1, previewFaceColor);
+
+        // 新しく作られる「橋渡し」の辺もうっすら描画
+        engine_->DrawDebugLine3D(p1_v0, p2_v1, previewLineColor);
+        engine_->DrawDebugLine3D(p1_v1, p2_v0, previewLineColor);
+    }
 
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, navMesh_);
 	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, navMesh_, canExtrude, canBridge);
@@ -585,6 +623,90 @@ void StageEditor::BridgeSelectedEdges()
     navMesh_->AddPolygon(newPoly);
 
     // ブリッジ完了後は選択を解除（または新しいポリゴンを選択状態にする）
+    selectedItems_.clear();
+}
+
+/// @brief 選択された辺を削除する
+void StageEditor::DeleteSelectedNavMeshElements()
+{
+    if (selectedItems_.empty()) return;
+
+    // 削除対象のポリゴンIDを格納するセット（重複を防ぐため）
+    std::set<int> polygonsToRemove;
+
+    for (const auto& item : selectedItems_)
+    {
+        NavPolygon* poly = navMesh_->GetMutablePolygon(item.polygonId);
+        if (!poly) continue;
+
+        switch (selectionMode_)
+        {
+        case SelectionMode::Polygon:
+            // 【面削除】選択されたポリゴンそのものを削除対象にする
+            polygonsToRemove.insert(item.polygonId);
+            break;
+
+        case SelectionMode::Edge:
+            // 【辺削除】選択されたポリゴン自身と、その辺を共有して隣接しているポリゴンを削除対象にする
+            polygonsToRemove.insert(item.polygonId);
+            if (poly->neighborIds[item.itemIndex] != -1)
+            {
+                polygonsToRemove.insert(poly->neighborIds[item.itemIndex]);
+            }
+            break;
+
+        case SelectionMode::Vertex:
+        {
+            // 【点削除】選択された頂点の座標を取得
+            Vector3 targetVertex = poly->vertices[item.itemIndex];
+
+            // 全ポリゴンを走査し、同じ座標の頂点を持つポリゴンをすべて抽出
+            for (const auto& p : navMesh_->GetPolygons())
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    // 浮動小数点の誤差を考慮して座標がほぼ一致するか判定
+                    if ((p.vertices[i] - targetVertex).LengthSq() < 0.0001f)
+                    {
+                        polygonsToRemove.insert(p.id);
+                        break; // このポリゴンは確定なので次のポリゴンへ
+                    }
+                }
+            }
+        }
+        break;
+        }
+    }
+
+    // 削除対象がなければ終了
+    if (polygonsToRemove.empty()) return;
+
+	// 変更前の状態を履歴に保存
+    history_->SaveHistory(placementList_);
+
+	// ナビメッシュから削除対象のポリゴンをすべて削除する
+    auto& polygons = navMesh_->GetMutablePolygons();
+    polygons.erase(
+        std::remove_if(polygons.begin(), polygons.end(),
+            [&polygonsToRemove](const NavPolygon& p) {
+                return polygonsToRemove.count(p.id) > 0;
+            }),
+        polygons.end()
+    );
+
+	// 削除されたポリゴンと隣接していたポリゴンの neighborIds を -1 にリセットする
+    for (auto& p : polygons)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            if (polygonsToRemove.count(p.neighborIds[i]) > 0)
+            {
+                p.neighborIds[i] = -1;
+            }
+        }
+    }
+
+    // 選択状態を安全にリセット
     selectedItems_.clear();
 }
 

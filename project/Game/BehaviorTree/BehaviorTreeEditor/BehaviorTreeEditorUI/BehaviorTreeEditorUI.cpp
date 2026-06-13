@@ -938,7 +938,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 
     // コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
     const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing", "IsTargetInRange", "IsTargetOutOfRange",
-        "IsTargetAttacking", "IsTargetNotAttacking", "IsTargetInAttackSequence", "IsTargetNotInAttackSequence" };
+        "IsTargetAttacking", "IsTargetNotAttacking", "IsTargetInAttackSequence", "IsTargetNotInAttackSequence", "IsClosestToTarget", "IsNotClosestToTarget" };
 
     // コンボボックスを描画し、変更があったらEnumにキャストして戻す
     int currentItem = static_cast<int>(node.conditionType);

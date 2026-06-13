@@ -81,3 +81,43 @@ void BattleDirector::Clear()
 	targetTokenHolders_.clear();
 	npcToTargetMap_.clear();
 }
+
+/// @brief NPCがターゲットに最も近いかどうかを判断する
+/// @param npc 
+/// @return 
+bool BattleDirector::IsClosestToTarget(Character* npc)
+{
+	// NPCが現在狙っているターゲットを取得
+	Character* target = npc->GetLockOnTarget();
+	if (!target)return false;
+
+	// 位置を取得する
+	Vector3 npcPos = npc->GetWorldPosition();
+	Vector3 targetPos = target->GetWorldPosition();
+
+	// NPCとターゲットの距離を計算する
+	Vector3 toTarget = targetPos - npcPos;
+	toTarget.y = 0.0f; // 水平方向の距離のみを考慮する
+	float npcDistanceSq = toTarget.LengthSq();
+
+	// 他のNPCとターゲットの距離を比較する
+	for (const auto& other : Character::GetCharacters())
+	{
+		// 自分自身はスキップする
+		if (other == npc)continue;
+
+		// 他のNPCが同じターゲットを狙っている場合のみ比較する
+		if (other->GetLockOnTarget() == target)
+		{
+			Vector3 otherToTarget = targetPos - other->GetWorldPosition();
+			otherToTarget.y = 0.0f; // 水平方向の距離のみを考慮する
+			float otherDistanceSq = otherToTarget.LengthSq();
+
+			// 他のNPCの方がターゲットに近い場合は、NPCは最も近くないと判断する
+			if (otherDistanceSq < npcDistanceSq)
+				return false;
+		}
+	}
+
+	return true;
+}

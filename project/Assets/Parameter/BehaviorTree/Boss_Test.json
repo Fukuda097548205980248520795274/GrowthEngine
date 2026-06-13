@@ -54,6 +54,11 @@
             "end": 54,
             "id": 55,
             "start": 48
+        },
+        {
+            "end": 57,
+            "id": 58,
+            "start": 48
         }
     ],
     "nodes": [
@@ -215,11 +220,11 @@
         {
             "id": 46,
             "input_pin": 47,
-            "is_collapsed": true,
+            "is_collapsed": false,
             "output_pin": 48,
             "pos": [
-                285.0,
-                255.5
+                286.0,
+                225.5
             ],
             "type": 3
         },
@@ -230,8 +235,8 @@
             "is_collapsed": false,
             "output_pin": -1,
             "pos": [
-                477.0,
-                201.5
+                482.0,
+                192.5
             ],
             "type": 4
         },
@@ -242,8 +247,20 @@
             "is_collapsed": false,
             "output_pin": -1,
             "pos": [
-                483.0,
-                288.5
+                488.0,
+                279.5
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 12,
+            "id": 56,
+            "input_pin": 57,
+            "is_collapsed": false,
+            "output_pin": -1,
+            "pos": [
+                484.0,
+                118.5
             ],
             "type": 4
         }

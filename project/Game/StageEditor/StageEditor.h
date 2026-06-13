@@ -133,6 +133,9 @@ private:
 	/// @brief 選択された辺を繋ぐ（ブリッジ）する
     void BridgeSelectedEdges();
 
+	/// @brief 選択された辺を削除する
+	void DeleteSelectedNavMeshElements();
+
 	/// @brief 選択された辺をハイライト表示する
     void DrawSelectedHighlight();
 

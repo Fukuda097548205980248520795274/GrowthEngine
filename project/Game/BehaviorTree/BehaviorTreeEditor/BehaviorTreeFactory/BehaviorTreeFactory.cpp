@@ -1,5 +1,6 @@
 #include "BehaviorTreeFactory.h"
 #include "Entity/Character/Character.h"
+#include "BattleDirector/BattleDirector.h"
 #include "Node/ConditionNode/ConditionNode.h"
 #include "Node/CompositeNode/PersistentSelectorNode/PersistentSelectorNode.h"
 #include "Node/CompositeNode/PersistentSequenceNode/PersistentSequenceNode.h"
@@ -179,6 +180,24 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 				{
 					if (!character->HasTarget()) return true;
 					return !character->GetLockOnTarget()->IsInAttackSequence();
+				};
+			break;
+
+			// ターゲットに最も近いかどうかをチェックする条件
+		case ConditionType::IsClosestToTarget:
+			conditionFunc = [character]()
+				{
+					if (!character->HasTarget()) return false;
+					return BattleDirector::GetInstance().IsClosestToTarget(character);
+				};
+			break;
+
+			// ターゲットに最も近くないかどうかをチェックする条件
+		case ConditionType::IsNotClosestToTarget:
+			conditionFunc = [character]()
+				{
+					if (!character->HasTarget()) return true;
+					return !BattleDirector::GetInstance().IsClosestToTarget(character);
 				};
 			break;
         }

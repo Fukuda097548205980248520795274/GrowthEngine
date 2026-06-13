@@ -25,6 +25,11 @@ public:
 	/// @brief クリア処理
 	void Clear();
 
+	/// @brief NPCがターゲットに最も近いかどうかを判断する
+	/// @param npc 
+	/// @return 
+	bool IsClosestToTarget(Character* npc);
+
 private:
 
 	// シングルトンのためコンストラクタはprivate

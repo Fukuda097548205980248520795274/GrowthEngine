@@ -1,35 +1,224 @@
 {
-    "navMesh": [],
-    "objects": [
+    "navMesh": [
         {
-            "attackPower": 1.0,
-            "avoidBackMotionName": "Back",
-            "avoidFrontMotionName": "Front",
-            "avoidLeftMotionName": "Front",
-            "avoidRightMotionName": "Back",
-            "behaviorScriptName": "",
-            "category": 0,
-            "dashMotionName": "Dash",
-            "durability": 100,
-            "eventStringParam": "",
-            "eventType": 0,
-            "hp": 100,
-            "isUnbreakable": false,
-            "name": "プレイヤー",
-            "posX": 0.0,
-            "posY": 0.0,
-            "posZ": 0.0,
-            "rotX": 0.0,
-            "rotY": 0.0,
-            "rotZ": 0.0,
-            "scaleX": 1.0,
-            "scaleY": 1.0,
-            "scaleZ": 1.0,
-            "stanceMotionName": "Fighter",
-            "standMotionName": "Standing",
-            "subType": 1,
-            "walkMotionName": "Walk"
+            "id": 0,
+            "neighborIds": [
+                1,
+                -1,
+                2,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    -2.0
+                ]
+            ]
         },
+        {
+            "id": 1,
+            "neighborIds": [
+                0,
+                -1,
+                -1,
+                3
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -4.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    2.0
+                ]
+            ]
+        },
+        {
+            "id": 2,
+            "neighborIds": [
+                0,
+                5,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    -2.0
+                ]
+            ]
+        },
+        {
+            "id": 3,
+            "neighborIds": [
+                1,
+                -1,
+                4,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    4.0
+                ]
+            ]
+        },
+        {
+            "id": 4,
+            "neighborIds": [
+                3,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    6.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    6.0
+                ]
+            ]
+        },
+        {
+            "id": 5,
+            "neighborIds": [
+                2,
+                -1,
+                6,
+                -1
+            ],
+            "vertices": [
+                [
+                    4.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    4.0
+                ]
+            ]
+        },
+        {
+            "id": 6,
+            "neighborIds": [
+                5,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    4.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    6.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    6.0
+                ]
+            ]
+        }
+    ],
+    "objects": [
         {
             "attackPower": 1.0,
             "avoidBackMotionName": "Back",
@@ -65,18 +254,18 @@
             "avoidFrontMotionName": "Front",
             "avoidLeftMotionName": "Front",
             "avoidRightMotionName": "Back",
-            "behaviorScriptName": "",
-            "category": 1,
+            "behaviorScriptName": "Boss_Test",
+            "category": 0,
             "dashMotionName": "Dash",
             "durability": 100,
-            "eventStringParam": "[{\"attackPower\":1.0,\"avoidBackMotionName\":\"Back\",\"avoidFrontMotionName\":\"Front\",\"avoidLeftMotionName\":\"Front\",\"avoidRightMotionName\":\"Back\",\"behaviorScriptName\":\"ComboAttack_000\",\"category\":0,\"dashMotionName\":\"Dash\",\"durability\":100,\"eventStringParam\":\"\",\"eventType\":0,\"hp\":100,\"isUnbreakable\":false,\"name\":\"\",\"posX\":0.0,\"posY\":0.0,\"posZ\":10.0,\"rotX\":0.0,\"rotY\":0.0,\"rotZ\":0.0,\"scaleX\":1.0,\"scaleY\":1.0,\"scaleZ\":1.0,\"stanceMotionName\":\"Standard\",\"standMotionName\":\"Standing\",\"subType\":4,\"walkMotionName\":\"Walk\"}]",
-            "eventType": 1,
+            "eventStringParam": "",
+            "eventType": 0,
             "hp": 100,
             "isUnbreakable": false,
             "name": "",
             "posX": 0.0,
             "posY": 0.0,
-            "posZ": 10.0,
+            "posZ": 8.06103801727295,
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,
@@ -85,7 +274,123 @@
             "scaleZ": 1.0,
             "stanceMotionName": "Fighter",
             "standMotionName": "Standing",
-            "subType": 3,
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Boss_Test",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
+            "hp": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "posX": -1.1327204704284668,
+            "posY": 0.0,
+            "posZ": 11.118734359741211,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Boss_Test",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
+            "hp": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "posX": 1.4703021049499512,
+            "posY": 0.0,
+            "posZ": 5.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Boss_Test",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
+            "hp": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "posX": 4.4265971183776855,
+            "posY": 0.0,
+            "posZ": 8.393152236938477,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "attackPower": 1.0,
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Avoid",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "durability": 100,
+            "eventStringParam": "",
+            "eventType": 0,
+            "hp": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "posX": 1.6260329484939575,
+            "posY": -0.03650170564651489,
+            "posZ": 7.152214050292969,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 2,
             "walkMotionName": "Walk"
         }
     ]
