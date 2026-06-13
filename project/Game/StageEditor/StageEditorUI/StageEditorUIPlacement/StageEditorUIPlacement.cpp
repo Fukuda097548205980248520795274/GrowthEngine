@@ -79,7 +79,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
         ImGui::DragInt("HP", &currentData.hp, 1, 0, 10000);
 
         // 回転
-        ImGui::DragFloat("回転", &currentData.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+        ImGui::DragFloat("回転", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
         // もしNPCが選ばれていたら、モーションの選択UIも表示する
         MotionSelecter("立ちモーション", MotionType::Stand, currentData.standMotion);
@@ -196,6 +196,8 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
         newData.rotate_ = currentData.rotate_;
         newData.scale = currentData.scale;
         newData.hp = currentData.hp;
+		strcpy_s(newData.name, sizeof(newData.name), currentData.name);
+		strcpy_s(newData.behaviorScriptName, sizeof(newData.behaviorScriptName), currentData.behaviorScriptName);
         newData.durability = currentData.durability;
         newData.attackPower = currentData.attackPower;
         newData.isUnbreakable = currentData.isUnbreakable;
