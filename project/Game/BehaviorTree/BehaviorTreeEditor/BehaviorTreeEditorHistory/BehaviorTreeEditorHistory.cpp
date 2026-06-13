@@ -13,28 +13,6 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
     snapshot.links = links;
     snapshot.currentId = currentId;
 
-	// 選択されているノードのIDを保存
-    if (int numNodes = ImNodes::NumSelectedNodes(); numNodes > 0)
-    {
-        snapshot.selectedNodes.resize(numNodes);
-        ImNodes::GetSelectedNodes(snapshot.selectedNodes.data());
-    }
-
-	// 選択されているリンクのIDも保存
-    if (int numLinks = ImNodes::NumSelectedLinks(); numLinks > 0)
-    {
-        snapshot.selectedLinks.resize(numLinks);
-        ImNodes::GetSelectedLinks(snapshot.selectedLinks.data());
-    }
-
-    // 最新のグリッド座標をImNodesから取得してノードデータに反映
-    for (auto& node : snapshot.nodes)
-    {
-        ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-        node.pos.x = pos.x;
-        node.pos.y = pos.y;
-    }
-
     undoHistory_.push_back(snapshot);
     redoHistory_.clear(); // 新しい操作が行われたらRedo履歴は破棄する
 

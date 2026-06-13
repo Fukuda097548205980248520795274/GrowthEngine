@@ -715,6 +715,8 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         pendingCenterNodeId_ = -1;
     }
 
+    // 折りたたみボタンが押されたノードのIDを保持する
+    int toggleCollapsedNodeId = -1;
 
     // ノードの描画
     for (auto& node : nodes_)
@@ -742,9 +744,8 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
         {
 			if (ImGui::ArrowButton(node.isCollapsed ? "+" : "-", node.isCollapsed ? ImGuiDir_Right : ImGuiDir_Down))
 			{
-				// ノードの展開状態をトグルする
-                node.isCollapsed = !node.isCollapsed;
-                history_->SaveHistory(nodes_, links_, currentId_);
+				// タイトルバーの折りたたみ/展開ボタンがクリックされたので、そのノードのIDを保持する
+				toggleCollapsedNodeId = node.id;
 			}
         }
 
@@ -809,6 +810,19 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
     // ノードエディタの終了
     ImNodes::EndNodeEditor();
+
+
+	// 折りたたみ/展開のトグルボタンがクリックされたノードがある場合は、そのノードの折りたたみ状態を変更する
+    if (toggleCollapsedNodeId != -1)
+    {
+		// ノードの折りたたみ状態を変更する前の状態を履歴に保存する
+        history_->SaveHistory(nodes_, links_, currentId_);
+        isDirty_ = true;
+
+		// 対象のノードを見つけて折りたたみ状態をトグルする
+        auto it = std::find_if(nodes_.begin(), nodes_.end(), [toggleCollapsedNodeId](const EditorNode& n) { return n.id == toggleCollapsedNodeId; });
+        if (it != nodes_.end())it->isCollapsed = !it->isCollapsed;
+    }
 
 
 	// リンクがホバーされているかどうかを取得するための変数
