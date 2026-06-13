@@ -69,7 +69,7 @@
             "category": 1,
             "dashMotionName": "Dash",
             "durability": 100,
-            "eventStringParam": "[{\"attackPower\":1.0,\"avoidBackMotionName\":\"Back\",\"avoidFrontMotionName\":\"Front\",\"avoidLeftMotionName\":\"Front\",\"avoidRightMotionName\":\"Back\",\"behaviorScriptName\":\"ComboAttack_000\",\"category\":0,\"dashMotionName\":\"Dash\",\"durability\":100,\"eventStringParam\":\"\",\"eventType\":0,\"hp\":100,\"isUnbreakable\":false,\"name\":\"\",\"posX\":0.0,\"posY\":0.0,\"posZ\":9.0,\"rotX\":0.0,\"rotY\":0.0,\"rotZ\":0.0,\"scaleX\":1.0,\"scaleY\":1.0,\"scaleZ\":1.0,\"stanceMotionName\":\"Fighter\",\"standMotionName\":\"Standing\",\"subType\":4,\"walkMotionName\":\"Walk\"}]",
+            "eventStringParam": "[{\"attackPower\":1.0,\"avoidBackMotionName\":\"Back\",\"avoidFrontMotionName\":\"Front\",\"avoidLeftMotionName\":\"Front\",\"avoidRightMotionName\":\"Back\",\"behaviorScriptName\":\"ComboAttack_000\",\"category\":0,\"dashMotionName\":\"Dash\",\"durability\":100,\"eventStringParam\":\"\",\"eventType\":0,\"hp\":100,\"isUnbreakable\":false,\"name\":\"\",\"posX\":0.0,\"posY\":0.0,\"posZ\":10.0,\"rotX\":0.0,\"rotY\":0.0,\"rotZ\":0.0,\"scaleX\":1.0,\"scaleY\":1.0,\"scaleZ\":1.0,\"stanceMotionName\":\"Standard\",\"standMotionName\":\"Standing\",\"subType\":4,\"walkMotionName\":\"Walk\"}]",
             "eventType": 1,
             "hp": 100,
             "isUnbreakable": false,
