@@ -5,6 +5,7 @@
 #include "StageEditorUIPlacement/StageEditorUIPlacement.h"
 #include "StageEditorUINavMesh/StageEditorUINavMesh.h"
 #include "StageEditorUIObjectList/StageEditorUIObjectList.h"
+#include "StageEditorGuizmo/StageEditorGuizmo.h"
 
 class StageFileManager;
 class StageSpawner;
@@ -91,6 +92,9 @@ private:
 
 	/// @brief オブジェクトリストUI
 	std::unique_ptr<StageEditorUIObjectList> objectListUI_ = nullptr;
+
+	/// @brief ギズモUI
+    std::unique_ptr<StageEditorGuizmo> guizmo_ = nullptr;
 
 
 private:

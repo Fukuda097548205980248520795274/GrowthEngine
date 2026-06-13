@@ -1231,6 +1231,9 @@
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList">
       <UniqueIdentifier>{8c791ff0-6a38-4e5e-a613-80ff940572e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo">
+      <UniqueIdentifier>{ee163524-9df7-4554-a8e9-6ff42ba89689}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2219,6 +2222,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIObjectList</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo\StageEditorGuizmo.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3325,6 +3331,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIObjectList\StageEditorUIObjectList.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIObjectList</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo\StageEditorGuizmo.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorGuizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

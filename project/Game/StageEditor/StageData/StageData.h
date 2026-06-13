@@ -83,6 +83,28 @@ struct PlacementData
 	void* instancePtr = nullptr;
 };
 
+// イベントチェーンのデータ構造
+struct ChainEventData
+{
+	// イベントの種類（例：敵生成、アイテム生成、トリガー発動など）
+	int eventType = 0;
+
+	// イベントのパラメータ（イベントの種類によって内容が異なる）
+	int subType = 0;
+
+	// イベントのパラメータ（イベントの種類によって内容が異なる）
+	char name[256] = "";
+
+	// 生成されるオブジェクトの位置（イベントトリガーの場合は、トリガーの中心からの相対位置）
+	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+	// イベントが発生するトリガーの半径（イベントトリガーの場合）
+	float triggerRadius = 1.0f;
+
+	// イベントが発生したときに生成されるオブジェクトの配置データ
+	std::vector<ChainEventData> childEvents;
+};
+
 /// @brief PlacementDataをJSONに変換（シリアライズ）
 /// @param j 
 /// @param s 

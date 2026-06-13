@@ -21,6 +21,7 @@ void StageEditorUI::Initialize()
 	placementUI_ = std::make_unique<StageEditorUIPlacement>(spawner_, history_);
 	navMeshUI_ = std::make_unique<StageEditorUINavMesh>();
 	objectListUI_ = std::make_unique<StageEditorUIObjectList>(spawner_, history_, scene_->GetBehaviorTreeEditor());
+	guizmo_ = std::make_unique<StageEditorGuizmo>();
 
     // 入力キーの初期化
     inputModelChange_ = std::make_unique<InputKey>("StageEditor_ModelChange", InputState::Trigger, DIK_TAB);
@@ -651,6 +652,7 @@ void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementLi
 
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
+		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty_, history_);
         objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty_, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
 	}
     
