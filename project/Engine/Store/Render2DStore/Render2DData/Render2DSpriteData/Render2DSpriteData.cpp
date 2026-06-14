@@ -196,6 +196,7 @@ void Engine::Render2DSpriteData::Register(const Matrix4x4& viewProjection, ID3D1
 	// ワールド行列
 	Matrix4x4 worldMatrix = Make2DScaleMatrix4x4(Vector2(param_->transform.scale.x * param_->texture.size.x, param_->transform.scale.y * param_->texture.size.y))
 		* Make3DRotateZMatrix4x4(param_->transform.rotate) * Make2DTranslateMatrix4x4(translate);
+	if (parent_) worldMatrix = worldMatrix * parent_->GetWorldMatrix();
 
 	// ワールドビュープロジェクション行列
 	transformationResource_->data_->worldViewProjectionMatrix = worldMatrix * viewProjection;

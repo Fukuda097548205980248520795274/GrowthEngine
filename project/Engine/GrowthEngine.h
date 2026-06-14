@@ -304,6 +304,10 @@ public:
 	/// @return 
 	Engine::Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return renderContext_->GetCamera2DParam(name); }
 
+	/// @brief 2Dカメラのパラメータを取得する
+	/// @return 
+	Engine::Camera2DData::Param* GetCamera2DParam()const { return renderContext_->GetCamera2DParam(); }
+
 	/// @brief 3Dカメラーのビュー行列を取得する
 	/// @return 
 	Matrix4x4 GetCamera3DView()const { return renderContext_->GetCamera3DView(); }
@@ -315,6 +319,18 @@ public:
 	/// @brief 3Dカメラのビュープロジェクション行列を取得する
 	/// @return 
 	Matrix4x4 GetCamera3DViewProjection()const { return renderContext_->GetCamera3DViewProjection(); }
+
+	/// @brief 2Dカメラーのビュー行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera2DView()const { return renderContext_->GetCamera2DView(); }
+
+	/// @brief 2Dカメラーのプロジェクション行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera2DProjection()const { return renderContext_->GetCamera2DProjection(); }
+
+	/// @brief 2Dカメラのビュープロジェクション行列を取得する
+	/// @return 
+	Matrix4x4 GetCamera2DViewProjection()const { return renderContext_->GetCamera2DViewProjection(); }
 
 #pragma endregion
 
@@ -650,6 +666,17 @@ public:
 	/// @param name 
 	/// @param parent 
 	void SetRender3DParent(const std::string& name, WorldTransform3D* parent) const { renderContext_->SetRender3DParent(name, parent); }
+
+
+	/// @brief 2D描画の親を設定する
+	/// @param handle 
+	/// @param parent 
+	void SetRender2DParent(Render2DHandle handle, WorldTransform2D* parent) const { renderContext_->SetRender2DParent(handle, parent); }
+
+	/// @brief 2D描画の親を設定する
+	/// @param name 
+	/// @param parent 
+	void SetRender2DParent(const std::string& name, WorldTransform2D* parent) const { renderContext_->SetRender2DParent(name, parent); }
 
 
 

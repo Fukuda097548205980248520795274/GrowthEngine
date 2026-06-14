@@ -15,6 +15,7 @@
 #include "Data/DebugData/DebugData.h"
 
 class GrowthEngine;
+class WorldTransform2D;
 
 namespace Engine
 {
@@ -61,6 +62,10 @@ namespace Engine
 		/// @return 
 		virtual void* GetParam() = 0;
 
+		/// @brief 親を設定する
+		/// @param parent 
+		void SetParent(WorldTransform2D* parent) { parent_ = parent; }
+
 
 	public:
 
@@ -79,6 +84,9 @@ namespace Engine
 
 
 	protected:
+
+		/// @brief 親
+		WorldTransform2D* parent_ = nullptr;
 
 		// 頂点リソース
 		VertexBufferResource<SpriteVertexData>* vertexResource_ = nullptr;

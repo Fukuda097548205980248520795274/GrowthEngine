@@ -15,6 +15,13 @@ Sprite::Sprite(TextureHandle hTexture, const std::string& name) : name_(name)
 	param_ = engine_->GetRender2DParam<Engine::Render2D::Sprite::Param>(hRender2D_);
 }
 
+/// @brief 親を設定する
+/// @param parent 
+void Sprite::SetParent(WorldTransform2D* parent)
+{
+	engine_->SetRender2DParent(hRender2D_, parent);
+}
+
 /// @brief 描画処理
 void Sprite::Draw()
 {

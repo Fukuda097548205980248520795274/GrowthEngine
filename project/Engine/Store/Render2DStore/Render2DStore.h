@@ -5,6 +5,8 @@
 
 #include "Parameter/Render2DParameter/Render2DParameter.h"
 
+class WorldTransform2D;
+
 namespace Engine
 {
 	class FontStore;
@@ -73,6 +75,16 @@ namespace Engine
 		{
 			return static_cast<T*>(dataTable_[nameTable_[name]]->GetParam());
 		}
+
+		/// @brief 親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetParent(Render2DHandle handle, WorldTransform2D* parent) { dataTable_[handle]->SetParent(parent); }
+
+		/// @brief 親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetParent(const std::string& name, WorldTransform2D* parent) { dataTable_[nameTable_[name]]->SetParent(parent); }
 
 
 	public:

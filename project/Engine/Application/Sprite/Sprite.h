@@ -5,6 +5,7 @@
 #include <string>
 
 class GrowthEngine;
+class WorldTransform2D;
 
 class Sprite
 {
@@ -14,6 +15,10 @@ public:
 	/// @param hTexture 
 	/// @param name 
 	Sprite(TextureHandle hTexture, const std::string& name);
+
+	/// @brief 親を設定する
+	/// @param parent 
+	void SetParent(WorldTransform2D* parent);
 
 	/// @brief 描画処理
 	void Draw();

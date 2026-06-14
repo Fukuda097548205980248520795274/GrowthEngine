@@ -149,6 +149,11 @@ namespace Engine
 		/// @return 
 		Camera2DData::Param* GetCamera2DParam(const std::string& name)const { return camera2DStore_->GetParam(name); }
 
+		/// @brief 2Dカメラのパラメータを取得する
+		/// @return 
+		Camera2DData::Param* GetCamera2DParam()const { return camera2DStore_->GetCamera2D().GetParam(); }
+
+
 		/// @brief 3Dカメラのビュー行列を取得する
 		/// @return 
 		Matrix4x4 GetCamera3DView()const { return camera3DStore_->GetCamera3D().GetViewMatrix(); }
@@ -160,6 +165,20 @@ namespace Engine
 		/// @brief 3Dカメラのビュー正射影行列を取得する
 		/// @return 
 		Matrix4x4 GetCamera3DViewProjection()const { return camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix(); }
+
+
+
+		/// @brief 2Dカメラのビュー行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera2DView()const { return camera2DStore_->GetCamera2D().GetViewMatrix(); }
+
+		/// @brief 2Dカメラのプロジェクション行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera2DProjection()const { return camera2DStore_->GetCamera2D().GetProjectionMatrix(); }
+
+		/// @brief 2Dカメラのビュー正射影行列を取得する
+		/// @return 
+		Matrix4x4 GetCamera2DViewProjection()const { return camera2DStore_->GetCamera2D().GetViewMatrix() * camera2DStore_->GetCamera2D().GetProjectionMatrix(); }
 
 
 
@@ -230,6 +249,17 @@ namespace Engine
 		/// @param name 
 		/// @param parent 
 		void SetRender3DParent(const std::string& name, WorldTransform3D* parent) { render_->SetRender3DParent(name, parent); }
+
+
+		/// @brief 2D描画の親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetRender2DParent(Render2DHandle handle, WorldTransform2D* parent) { render_->SetRender2DParent(handle, parent); }
+
+		/// @brief 2D描画の親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetRender2DParent(const std::string& name, WorldTransform2D* parent) { render_->SetRender2DParent(name, parent); }
 
 
 

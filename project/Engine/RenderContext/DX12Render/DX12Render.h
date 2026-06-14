@@ -197,6 +197,16 @@ namespace Engine
 		/// @param parent 
 		void SetRender3DParent(const std::string& name, WorldTransform3D* parent) { render3DStore_->SetParent(name, parent); }
 
+		/// @brief 2D描画の親を設定する
+		/// @param handle 
+		/// @param parent 
+		void SetRender2DParent(Render2DHandle handle, WorldTransform2D* parent) { render2DStore_->SetParent(handle, parent); }
+
+		/// @brief 2D描画の親を設定する
+		/// @param name 
+		/// @param parent 
+		void SetRender2DParent(const std::string& name, WorldTransform2D* parent) { render2DStore_->SetParent(name, parent); }
+
 		/// @brief ボーンのワールド行列を取得する
 		/// @param handle 
 		/// @param boneName 
