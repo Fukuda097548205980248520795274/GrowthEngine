@@ -16,32 +16,32 @@ public:
 		std::vector<PlacementData> placementList;
 
 		// ナビメッシュのスナップショット
-        std::vector<NavPolygon> navPolygonList;
+		std::vector<NavPolygon> navPolygonList;
 	};
 
 
 public:
 
 	/// @brief コンストラクタ
-    /// @param navMesh 
-    StageEditorHistory(NavMesh* navMesh = nullptr) : navMesh_(navMesh) {}
+	/// @param navMesh 
+	StageEditorHistory(NavMesh* navMesh = nullptr) : navMesh_(navMesh) {}
 
 	/// @brief 履歴に新しいスナップショットを保存する
-    /// @param placementList 
-    void SaveHistory(const std::vector<PlacementData>& placementList);
+	/// @param placementList 
+	void SaveHistory(const std::vector<PlacementData>& placementList);
 
 	/// @brief Undo（元に戻す）を実行する
-    /// @param currentList 
-    /// @param spawner 
-    void Undo(std::vector<PlacementData>& currentList, StageSpawner* spawner);
+	/// @param currentList 
+	/// @param spawner 
+	void Undo(std::vector<PlacementData>& currentList, StageSpawner* spawner);
 
 	/// @brief Redo（やり直す）を実行する
-    /// @param currentList 
-    /// @param spawner 
-    void Redo(std::vector<PlacementData>& currentList, StageSpawner* spawner);
+	/// @param currentList 
+	/// @param spawner 
+	void Redo(std::vector<PlacementData>& currentList, StageSpawner* spawner);
 
-    /// @brief 履歴をクリアする
-    void Clear();
+	/// @brief 履歴をクリアする
+	void Clear();
 
 	/// @brief Undoが可能かどうかを確認する
 	/// @return 
@@ -54,10 +54,10 @@ public:
 private:
 
 	/// @brief Undo用のスナップショットのリスト
-    std::vector<EditorSnapshot> undoHistory_;
+	std::vector<EditorSnapshot> undoHistory_;
 
 	/// @brief Redo用のスナップショットのリスト
-    std::vector<EditorSnapshot> redoHistory_;
+	std::vector<EditorSnapshot> redoHistory_;
 
 
 private:

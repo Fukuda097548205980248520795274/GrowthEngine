@@ -5,16 +5,17 @@ class BehaviorTreeViewer
 public:
 
 	/// @brief コンストラクタ
-    BehaviorTreeViewer() = default;
+	BehaviorTreeViewer() = default;
 
 	/// @brief デストラクタ
-    ~BehaviorTreeViewer() = default;
+	~BehaviorTreeViewer() = default;
 
-    /// @brief ビューアーウィンドウを描画する
-    void DrawUI();
+	/// @brief ビューアーウィンドウを描画する
+	void DrawUI();
 
 private:
 
-    int selectedNpcIndex_ = 0; // 現在デバッグ対象に選択されているNPCのインデックス
+	// 現在デバッグ対象に選択されているNPCのインデックス
+	int selectedNpcIndex_ = 0;
 };
 

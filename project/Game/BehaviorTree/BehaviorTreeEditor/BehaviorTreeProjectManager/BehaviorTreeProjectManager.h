@@ -111,11 +111,11 @@ class BehaviorTreeProjectManager
 public:
 
 	/// @brief コンストラクタ
-    BehaviorTreeProjectManager();
+	BehaviorTreeProjectManager();
 
 	/// @brief 保存されているツリーのファイル名一覧を返す
-    /// @return 
-    std::vector<std::string> GetFileList();
+	/// @return 
+	std::vector<std::string> GetFileList();
 
 	/// @brief プロジェクトファイルを削除する
 	/// @param fileName 
@@ -131,6 +131,6 @@ public:
 private:
 
 	// ツリー構造の保存先ディレクトリパス
-    std::string directoryPath_;
+	std::string directoryPath_;
 };
 
