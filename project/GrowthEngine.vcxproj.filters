@@ -1234,6 +1234,9 @@
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo">
       <UniqueIdentifier>{ee163524-9df7-4554-a8e9-6ff42ba89689}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorNavMeshController">
+      <UniqueIdentifier>{334fccf9-dbdb-4e02-9852-2b8214c810bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2225,6 +2228,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo\StageEditorGuizmo.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorNavMeshController\StageEditorNavMeshController.cpp">
+      <Filter>Game\StageEditor\StageEditorNavMeshController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3334,6 +3340,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorGuizmo\StageEditorGuizmo.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorNavMeshController\StageEditorNavMeshController.h">
+      <Filter>Game\StageEditor\StageEditorNavMeshController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

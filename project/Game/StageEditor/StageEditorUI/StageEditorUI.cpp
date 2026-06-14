@@ -54,7 +54,7 @@ void StageEditorUI::Update()
 /// @param navMesh 
 /// @param canExtrude 
 /// @param canBridge 
-void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool canExtrude, bool canBridge)
+void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, bool canExtrude, bool canBridge)
 {
 #ifdef _DEVELOPMENT
 
@@ -242,16 +242,16 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	ImGui::Separator();
 
 	// ショートカットキーの処理
-	HandleShortcuts(placementList, currentFileName, isPlaying, navMesh);
+	HandleShortcuts(placementList, currentFileName, isPlaying, navMesh, isDirty);
 
 	// モード切替の表示
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
-		placementUI_->DrawUI(placementList, selectedIndex_, isDirty_, behaviorTreeNames_);
+		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
-		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, isDirty_);
+		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, isDirty);
 	}
 
 	ImGui::PopStyleVar();
@@ -268,7 +268,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @param isPlaying 
 /// @param isDirty 
 /// @param navMesh 
-void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
+void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty)
 {
 #ifdef _DEVELOPMENT
 
@@ -312,7 +312,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 			}
 
 			// 新しいステージを作成する前に、現在の配置リストに基づいてすべての実体を消去する
-			if (isDirty_)
+			if (isDirty)
 			{
 				pendingAction_ = PendingAction::New;
 				pendingFileName_ = fileName;
@@ -382,7 +382,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 				}
 
 				// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
-				if (isDirty_)
+				if (isDirty)
 				{
 					pendingAction_ = PendingAction::Load;
 					pendingFileName_ = file;
@@ -418,7 +418,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 					}
 
 					// ファイルを切り替える前に、現在の配置リストに基づいてすべての実体を消去する
-					if (isDirty_)
+					if (isDirty)
 					{
 						pendingAction_ = PendingAction::Load;
 						pendingFileName_ = file;
@@ -445,7 +445,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 					// 右クリックした対象を現在のファイルとして設定し、上書き保存する
 					currentFileName = file;
 					fileManager_->SaveToFile(currentFileName, placementList, navMesh);
-					isDirty_ = false;
+					isDirty = false;
 				}
 
 				// コピー
@@ -497,7 +497,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 			{
 				fileManager_->SaveToFile(currentFileName, placementList, navMesh);
 			}
-			isDirty_ = false;
+			isDirty = false;
 			ExecutePendingAction(placementList, currentFileName, navMesh);
 			ImGui::CloseCurrentPopup();
 		}
@@ -507,7 +507,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 		// キャンセル(破棄)ボタンを押して別のスクリプトを触る
 		if (ImGui::Button("キャンセル", ImVec2(140, 0)))
 		{
-			isDirty_ = false; // 変更を破棄したとみなす
+			isDirty = false; // 変更を破棄したとみなす
 			ExecutePendingAction(placementList, currentFileName, navMesh);
 			ImGui::CloseCurrentPopup();
 		}
@@ -646,14 +646,15 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 /// @brief オブジェクトリストウィンドウの描画
 /// @param placementList 
 /// @param navMesh 
-void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh)
+/// @param isDirty 
+void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh, bool& isDirty)
 {
 #ifdef _DEVELOPMENT
 
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
-		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty_, history_);
-		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty_, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
+		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty, history_);
+		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
 	}
 	
 #endif
@@ -700,7 +701,8 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
 /// @param currentFileName 
 /// @param isPlaying 
 /// @param navMesh 
-void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh)
+/// @param isDirty 
+void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty)
 {
 	// プレイ中はショートカットキーを無効化する
 	if (isPlaying)return;
@@ -712,21 +714,21 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
 	{
 		fileManager_->SaveToFile(currentFileName, placementList, navMesh);
-		isDirty_ = false;
+		isDirty = false;
 	}
 
 	// Ctrl + Z でアンドゥ
 	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
 	{
 		history_->Undo(placementList, spawner_);
-		isDirty_ = true;
+		isDirty = true;
 	}
 
 	// Ctrl + Y でリドゥ
 	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
 	{
 		history_->Redo(placementList, spawner_);
-		isDirty_ = true;
+		isDirty = true;
 	}
 
 	if (!io.WantTextInput)
@@ -753,7 +755,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 			{
 				// 現在の状態を履歴に保存して変更フラグを立てる
 				history_->SaveHistory(placementList);
-				isDirty_ = true;
+				isDirty = true;
 
 				// クリップボードからデータを複製
 				PlacementData newData = copiedData_;
@@ -775,7 +777,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 			{
 				// 現在の状態を履歴に保存して変更フラグを立てる
 				history_->SaveHistory(placementList);
-				isDirty_ = true;
+				isDirty = true;
 
 				// 選択中のオブジェクトのデータを複製
 				PlacementData newData = placementList[selectedIndex_];
@@ -801,7 +803,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 			{
 				// 現在の状態を履歴に保存して変更フラグを立てる
 				history_->SaveHistory(placementList);
-				isDirty_ = true;
+				isDirty = true;
 
 				// シーンから実体を削除してリストからも削除
 				spawner_->DeleteActualEntity(placementList[selectedIndex_]);

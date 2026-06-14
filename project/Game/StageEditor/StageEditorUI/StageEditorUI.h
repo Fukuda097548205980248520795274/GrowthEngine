@@ -53,25 +53,22 @@ public:
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying 
-	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool canExtrude, bool canBridge);
+	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, bool canExtrude, bool canBridge);
 
 	/// @brief アセットウィンドウの描画
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying
-	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
+	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
 
 	/// @brief オブジェクトリストウィンドウの描画
 	/// @param placementList 
 	/// @param navMesh 
-	void DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh);
+	void DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh, bool& isDirty);
 
 	/// @brief 現在のエディタモードを取得する
 	/// @return 
 	EditorMode GetCurrentMode() const { return currentMode_; }
-
-	/// @brief 変更があったことをマークする
-	void Dirty() { isDirty_ = true; }
 
 	/// @brief 現在選択中のオブジェクトのインデックスを取得する
 	/// @return 
@@ -123,9 +120,6 @@ private:
 
 private:
 
-	/// @brief 未保存の変更があるかどうか
-	bool isDirty_ = false;
-
 	/// @brief 保留中のアクション
 	PendingAction pendingAction_ = PendingAction::None;
 
@@ -170,7 +164,7 @@ private:
 	/// @param currentFileName 
 	/// @param isPlaying 
 	/// @param navMesh 
-	void HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh);
+	void HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
 
 	/// @brief ビヘイビアツリーデータの名前を読み込む
 	void LoadBehaviorTreeNames();
