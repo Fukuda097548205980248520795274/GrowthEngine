@@ -44,32 +44,32 @@ struct NavPolygon
 	bool IsPointInside(const Vector3& point) const
 	{
 		// Y座標の平均を計算して、点がその近くにあるか確認
-        float averageY = (vertices[0].y + vertices[1].y + vertices[2].y + vertices[3].y) * 0.25f;
-        if (std::abs(point.y - averageY) > 2.0f)
-            return false;
+		float averageY = (vertices[0].y + vertices[1].y + vertices[2].y + vertices[3].y) * 0.25f;
+		if (std::abs(point.y - averageY) > 2.0f)
+			return false;
 
-        // XZ平面（上から見下ろした2D）での内外判定
-        for (int i = 0; i < 4; ++i)
-        {
-            Vector3 a = vertices[i];
-            Vector3 b = vertices[(i + 1) % 4];
+		// XZ平面（上から見下ろした2D）での内外判定
+		for (int i = 0; i < 4; ++i)
+		{
+			Vector3 a = vertices[i];
+			Vector3 b = vertices[(i + 1) % 4];
 
-            // 辺のベクトル（XZ）
-            float edgeX = b.x - a.x;
-            float edgeZ = b.z - a.z;
+			// 辺のベクトル（XZ）
+			float edgeX = b.x - a.x;
+			float edgeZ = b.z - a.z;
 
-            // 点へのベクトル（XZ）
-            float toPointX = point.x - a.x;
-            float toPointZ = point.z - a.z;
+			// 点へのベクトル（XZ）
+			float toPointX = point.x - a.x;
+			float toPointZ = point.z - a.z;
 
-            // 2Dの外積（クロス積）を計算
-            float cross2D = edgeX * toPointZ - edgeZ * toPointX;
+			// 2Dの外積（クロス積）を計算
+			float cross2D = edgeX * toPointZ - edgeZ * toPointX;
 
 			// 外積が正なら点は辺の外側にある
-            if (cross2D > 0.0f)
-                return false;
-        }
-        return true;
+			if (cross2D > 0.0f)
+				return false;
+		}
+		return true;
 	}
 };
 

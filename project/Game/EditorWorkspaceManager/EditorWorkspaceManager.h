@@ -7,7 +7,7 @@
 
 enum class WorkspaceType
 {
-    None,
+	None,
 	StageEditor,
 	BehaviorTreeEditor,
 	BehaviorTreeViewer,
@@ -18,29 +18,29 @@ class EditorWorkspaceManager
 public:
 
 	/// @brief 初期化
-    /// @param stageEditor 
-    /// @param behaviorTreeEditor 
-    /// @param motionManagerEditor 
-    void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer, MotionManagerEditor* motionManagerEditor);
+	/// @param stageEditor 
+	/// @param behaviorTreeEditor 
+	/// @param motionManagerEditor 
+	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer, MotionManagerEditor* motionManagerEditor);
 
 	/// @brief UIを描画する
-    void DrawUI();
+	void DrawUI();
 
 private:
 
 	/// @brief ワークスペース切り替え用のタブバーを描画する
-    void DrawWorkspaceTabBar();
+	void DrawWorkspaceTabBar();
 
-    WorkspaceType currentWorkspace_ = WorkspaceType::StageEditor;
+	WorkspaceType currentWorkspace_ = WorkspaceType::StageEditor;
 
-    // マネージャー側は指し示すポインタ（生ポインタ）だけを持つ
-    StageEditor* stageEditor_ = nullptr;
-    BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
+	// マネージャー側は指し示すポインタ（生ポインタ）だけを持つ
+	StageEditor* stageEditor_ = nullptr;
+	BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
 	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
 	MotionManagerEditor* motionManagerEditor_ = nullptr;
 
-    // エディタ間で共有するデータなど
-    std::vector<PlacementData> placementList_;
-    std::string currentStageFileName_;
+	// エディタ間で共有するデータなど
+	std::vector<PlacementData> placementList_;
+	std::string currentStageFileName_;
 };
 

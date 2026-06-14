@@ -6,17 +6,17 @@
 /// @return 
 int NavMesh::FindPolygonAt(const Vector3& position) const
 {
-    // 全ポリゴンをループして、内側にあるかチェックする
-    for (const auto& poly : polygons_)
-    {
-        if (poly.IsPointInside(position))
-        {
-            return poly.id;
-        }
-    }
+	// 全ポリゴンをループして、内側にあるかチェックする
+	for (const auto& poly : polygons_)
+	{
+		if (poly.IsPointInside(position))
+		{
+			return poly.id;
+		}
+	}
 
-    // どのポリゴンにも乗っていなければ -1（無効値）を返す
-    return -1;
+	// どのポリゴンにも乗っていなければ -1（無効値）を返す
+	return -1;
 }
 
 /// @brief デバッグ用に描画する
@@ -48,121 +48,121 @@ void NavMesh::DrawDebug() const
 /// @return 
 std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end) const
 {
-    std::vector<Vector3> path;
+	std::vector<Vector3> path;
 
-    // スタートとゴールのポリゴンを特定
-    int startPolyId = FindPolygonAt(start);
-    int endPolyId = FindPolygonAt(end);
+	// スタートとゴールのポリゴンを特定
+	int startPolyId = FindPolygonAt(start);
+	int endPolyId = FindPolygonAt(end);
 
 	// どちらかがポリゴン内にない場合は経路なし
-    if (startPolyId == -1 || endPolyId == -1)
-        return path;
+	if (startPolyId == -1 || endPolyId == -1)
+		return path;
 
 	// スタートとゴールが同じポリゴン内なら、直接目的地を返す
-    if (startPolyId == endPolyId)
-    {
-        path.push_back(end);
-        return path;
-    }
+	if (startPolyId == endPolyId)
+	{
+		path.push_back(end);
+		return path;
+	}
 
 	// A*アルゴリズムのオープンリスト（優先度キュー）
-    std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> openList;
+	std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> openList;
 
-    // オープンリストに登録済みのノードを記録（Gコスト比較用）
-    std::unordered_map<int, AStarNode> openMap;
+	// オープンリストに登録済みのノードを記録（Gコスト比較用）
+	std::unordered_map<int, AStarNode> openMap;
 
-    // クローズドリスト（探索完了したノード）
-    std::unordered_map<int, AStarNode> closedList;
+	// クローズドリスト（探索完了したノード）
+	std::unordered_map<int, AStarNode> closedList;
 
-    // 開始ノードの初期化
-    Vector3 startCenter = GetPolygonCenter(startPolyId);
-    Vector3 endCenter = GetPolygonCenter(endPolyId);
+	// 開始ノードの初期化
+	Vector3 startCenter = GetPolygonCenter(startPolyId);
+	Vector3 endCenter = GetPolygonCenter(endPolyId);
 
-    AStarNode startNode;
-    startNode.polygonId = startPolyId;
-    startNode.gCost = 0.0f;
-    startNode.hCost = (endCenter - startCenter).Length();
-    startNode.parentId = -1;
+	AStarNode startNode;
+	startNode.polygonId = startPolyId;
+	startNode.gCost = 0.0f;
+	startNode.hCost = (endCenter - startCenter).Length();
+	startNode.parentId = -1;
 
 	// 開始ノードをオープンリストに追加
-    openList.push(startNode);
-    openMap[startPolyId] = startNode;
+	openList.push(startNode);
+	openMap[startPolyId] = startNode;
 
-    bool isGoalFound = false;
+	bool isGoalFound = false;
 
-    // 探索ループ
-    while (!openList.empty())
-    {
-        // Fコストが最小のノードを取り出す
-        AStarNode current = openList.top();
-        openList.pop();
+	// 探索ループ
+	while (!openList.empty())
+	{
+		// Fコストが最小のノードを取り出す
+		AStarNode current = openList.top();
+		openList.pop();
 
-        // 既に探索済みの場合はスキップ
-        if (closedList.count(current.polygonId)) continue;
+		// 既に探索済みの場合はスキップ
+		if (closedList.count(current.polygonId)) continue;
 
-        // クローズドリストに追加（探索完了）
-        closedList[current.polygonId] = current;
+		// クローズドリストに追加（探索完了）
+		closedList[current.polygonId] = current;
 
-        // ゴールに到達したら終了
-        if (current.polygonId == endPolyId)
-        {
-            isGoalFound = true;
-            break;
-        }
+		// ゴールに到達したら終了
+		if (current.polygonId == endPolyId)
+		{
+			isGoalFound = true;
+			break;
+		}
 
-        const NavPolygon* currentPoly = GetPolygon(current.polygonId);
-        Vector3 currentCenter = GetPolygonCenter(current.polygonId);
+		const NavPolygon* currentPoly = GetPolygon(current.polygonId);
+		Vector3 currentCenter = GetPolygonCenter(current.polygonId);
 
-        // 隣接するポリゴンを調べる
-        for (int neighborId : currentPoly->neighborIds)
-        {
-            if (neighborId == -1) continue; // 壁
-            if (closedList.count(neighborId)) continue; // 探索済み
+		// 隣接するポリゴンを調べる
+		for (int neighborId : currentPoly->neighborIds)
+		{
+			if (neighborId == -1) continue; // 壁
+			if (closedList.count(neighborId)) continue; // 探索済み
 
-            Vector3 neighborCenter = GetPolygonCenter(neighborId);
+			Vector3 neighborCenter = GetPolygonCenter(neighborId);
 
-            // 現在地から隣接ポリゴン中心までの距離を追加コストとする
-            float moveCost = (neighborCenter - currentCenter).Length();
-            float newGCost = current.gCost + moveCost;
+			// 現在地から隣接ポリゴン中心までの距離を追加コストとする
+			float moveCost = (neighborCenter - currentCenter).Length();
+			float newGCost = current.gCost + moveCost;
 
-            // 既にオープンリストにあり、今回のルートの方が遠いならスキップ
-            if (openMap.count(neighborId) && newGCost >= openMap[neighborId].gCost)continue;
+			// 既にオープンリストにあり、今回のルートの方が遠いならスキップ
+			if (openMap.count(neighborId) && newGCost >= openMap[neighborId].gCost)continue;
 
-            // 新しいノード情報を作成してオープンリストへ
-            AStarNode neighborNode;
-            neighborNode.polygonId = neighborId;
-            neighborNode.gCost = newGCost;
+			// 新しいノード情報を作成してオープンリストへ
+			AStarNode neighborNode;
+			neighborNode.polygonId = neighborId;
+			neighborNode.gCost = newGCost;
 
-            neighborNode.hCost = (endCenter - neighborCenter).Length();
-            neighborNode.parentId = current.polygonId; // 親を記録
+			neighborNode.hCost = (endCenter - neighborCenter).Length();
+			neighborNode.parentId = current.polygonId; // 親を記録
 
 			// 隣接ノードをオープンリストに追加
-            openList.push(neighborNode);
-            openMap[neighborId] = neighborNode;
-        }
-    }
+			openList.push(neighborNode);
+			openMap[neighborId] = neighborNode;
+		}
+	}
 
-    // 経路の復元（ゴールから親を辿ってスタートに戻る）
-    if (isGoalFound)
-    {
-        std::vector<int> pathIds;
-        int currentId = endPolyId;
-        pathIds.push_back(endPolyId);
+	// 経路の復元（ゴールから親を辿ってスタートに戻る）
+	if (isGoalFound)
+	{
+		std::vector<int> pathIds;
+		int currentId = endPolyId;
+		pathIds.push_back(endPolyId);
 
-        while (currentId != startPolyId)
-        {
-            currentId = closedList[currentId].parentId; // 親ポリゴンへ戻る
-            pathIds.push_back(currentId);
-        }
+		while (currentId != startPolyId)
+		{
+			currentId = closedList[currentId].parentId; // 親ポリゴンへ戻る
+			pathIds.push_back(currentId);
+		}
 
-        // ゴール -> スタートの順になっているので、配列を反転させる
-        std::reverse(pathIds.begin(), pathIds.end());
+		// ゴール -> スタートの順になっているので、配列を反転させる
+		std::reverse(pathIds.begin(), pathIds.end());
 
-        // ファンネルアルゴリズムで滑らかな経路を計算して返す
-        return SmoothPath(start, end, pathIds);
-    }
+		// ファンネルアルゴリズムで滑らかな経路を計算して返す
+		return SmoothPath(start, end, pathIds);
+	}
 
-    return path;
+	return path;
 }
 
 /// @brief IDからポリゴンを取得する
@@ -170,29 +170,29 @@ std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end)
 /// @return 
 NavPolygon* NavMesh::GetMutablePolygon(int id)
 {
-    for (auto& poly : polygons_)
-    {
-        if (poly.id == id)
-        {
-            return &poly;
-        }
-    }
-    return nullptr;
+	for (auto& poly : polygons_)
+	{
+		if (poly.id == id)
+		{
+			return &poly;
+		}
+	}
+	return nullptr;
 }
 
 /// @brief 新しい一意のポリゴンIDを生成する
 /// @return 
 int NavMesh::GenerateNewPolygonId() const
 {
-    int maxId = -1;
-    for (const auto& poly : polygons_)
-    {
-        if (poly.id > maxId)
-        {
-            maxId = poly.id;
-        }
-    }
-    return maxId + 1; // 現在の最大ID + 1 を返す
+	int maxId = -1;
+	for (const auto& poly : polygons_)
+	{
+		if (poly.id > maxId)
+		{
+			maxId = poly.id;
+		}
+	}
+	return maxId + 1; // 現在の最大ID + 1 を返す
 }
 
 /// @brief IDからポリゴンを取得する
@@ -214,24 +214,24 @@ const NavPolygon* NavMesh::GetPolygon(int id) const
 const Vector3 NavMesh::GetPolygonCenter(int polygonId) const
 {
 	// IDからポリゴンを取得する
-    const NavPolygon* poly = GetPolygon(polygonId);
-    if (!poly) return Vector3(0, 0, 0);
+	const NavPolygon* poly = GetPolygon(polygonId);
+	if (!poly) return Vector3(0, 0, 0);
 
 	// 頂点の合計を計算する
-    Vector3 center(0, 0, 0);
-    for (int i = 0; i < 4; ++i)
-    {
-        center.x += poly->vertices[i].x;
-        center.y += poly->vertices[i].y;
-        center.z += poly->vertices[i].z;
-    }
+	Vector3 center(0, 0, 0);
+	for (int i = 0; i < 4; ++i)
+	{
+		center.x += poly->vertices[i].x;
+		center.y += poly->vertices[i].y;
+		center.z += poly->vertices[i].z;
+	}
 
 	// 頂点の平均を取る
-    center.x *= 0.25f;
-    center.y *= 0.25f;
-    center.z *= 0.25f;
+	center.x *= 0.25f;
+	center.y *= 0.25f;
+	center.z *= 0.25f;
 
-    return center;
+	return center;
 }
 
 /// @brief 2つのポリゴンを繋ぐポータル（共通の辺）を取得する
@@ -242,21 +242,21 @@ const Vector3 NavMesh::GetPolygonCenter(int polygonId) const
 /// @return 
 bool NavMesh::GetPortal(int fromPolyId, int toPolyId, Vector3& outLeft, Vector3& outRight) const
 {
-    const NavPolygon* from = GetPolygon(fromPolyId);
-    if (!from) return false;
+	const NavPolygon* from = GetPolygon(fromPolyId);
+	if (!from) return false;
 
-    for (int i = 0; i < 4; ++i)
-    {
-        // 向かいたいポリゴンと繋がっている辺を探す
-        if (from->neighborIds[i] == toPolyId)
-        {
-            // 時計回りの定義なので、進行方向に向かって i番目が左、(i+1)番目が右になる
-            outLeft = from->vertices[i];
-            outRight = from->vertices[(i + 1) % 4];
-            return true;
-        }
-    }
-    return false;
+	for (int i = 0; i < 4; ++i)
+	{
+		// 向かいたいポリゴンと繋がっている辺を探す
+		if (from->neighborIds[i] == toPolyId)
+		{
+			// 時計回りの定義なので、進行方向に向かって i番目が左、(i+1)番目が右になる
+			outLeft = from->vertices[i];
+			outRight = from->vertices[(i + 1) % 4];
+			return true;
+		}
+	}
+	return false;
 }
 
 /// @brief XZ平面での三角形の面積を計算する
@@ -266,8 +266,8 @@ bool NavMesh::GetPortal(int fromPolyId, int toPolyId, Vector3& outLeft, Vector3&
 /// @return 
 float NavMesh::TriArea2D(const Vector3& a, const Vector3& b, const Vector3& c) const
 {
-    // aから見て、bからcへ向かう時、正(>0)なら左へ曲がる、負(<0)なら右へ曲がる
-    return (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x);
+	// aから見て、bからcへ向かう時、正(>0)なら左へ曲がる、負(<0)なら右へ曲がる
+	return (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x);
 }
 
 /// @brief 経路をスムーズ化する（スタートとゴールはポリゴンの中心から実際の位置に補正する）
@@ -277,100 +277,102 @@ float NavMesh::TriArea2D(const Vector3& a, const Vector3& b, const Vector3& c) c
 /// @return 
 std::vector<Vector3> NavMesh::SmoothPath(const Vector3& start, const Vector3& end, const std::vector<int>& pathIds) const
 {
-    std::vector<Vector3> smoothPath;
+	std::vector<Vector3> smoothPath;
 
-    // ポリゴンが1つだけなら、スタートからゴールへ直進
-    if (pathIds.size() <= 1)
-    {
-        smoothPath.push_back(end);
-        return smoothPath;
-    }
-    
-    // 全てのポータル（門）の左右の頂点をリストアップする
-    std::vector<Vector3> lefts;
-    std::vector<Vector3> rights;
-    
-    for (size_t i = 0; i < pathIds.size() - 1; ++i)
-    {
-        Vector3 left, right;
-        if (GetPortal(pathIds[i], pathIds[i + 1], left, right))
-        {
-            lefts.push_back(left);
-            rights.push_back(right);
-        }
-    }
-    
-    // 最後にゴール地点を「幅ゼロの門」として追加
-    lefts.push_back(end);
-    rights.push_back(end);
-    
-    // 2. 糸引き処理の実行
-    Vector3 portalApex = start;  // 糸を固定しているピンの位置
-    Vector3 portalLeft = start;  // 糸が通れる左の限界
-    Vector3 portalRight = start; // 糸が通れる右の限界
-    
-    int apexIndex = 0;
-    int leftIndex = 0;
-    int rightIndex = 0;
-    
-    for (int i = 0; i < lefts.size(); ++i)
-    {
-        Vector3 left = lefts[i];
-        Vector3 right = rights[i];
-    
-        // --- 右側の更新 ---
-        // 新しい右端が、現在の右端より「内側（左側）」にあるか判定
-        if (TriArea2D(portalApex, portalRight, right) >= 0.0f)
-        {
-            // portalApexとportalRightが同じ（初期状態）、または新しい右端が「左端」を越えていないか
-            if (std::abs(portalApex.x - portalRight.x) < 0.01f && std::abs(portalApex.z - portalRight.z) < 0.01f ||
-                TriArea2D(portalApex, portalLeft, right) < 0.0f)
-            {
-                // 右の限界を狭める
-                portalRight = right;
-                rightIndex = i;
-            }
-            else
-            {
-                // 左端を越えてしまった ＝ 糸が左の角に引っかかった！
-                smoothPath.push_back(portalLeft); // 左の角を新しい中継点として確定
-                portalApex = portalLeft; // ここから糸を引き直す
-                portalLeft = portalApex;
-                portalRight = portalApex;
-                apexIndex = leftIndex;
-                i = apexIndex; // 引っかかったポータルの次から再開
-                continue;
-            }
-        }
-    
-        // --- 左側の更新 ---
-        // 新しい左端が、現在の左端より「内側（右側）」にあるか判定
-        if (TriArea2D(portalApex, portalLeft, left) <= 0.0f)
-        {
-            // portalApexとportalLeftが同じ（初期状態）、または新しい左端が「右端」を越えていないか
-            if (std::abs(portalApex.x - portalLeft.x) < 0.01f && std::abs(portalApex.z - portalLeft.z) < 0.01f ||
-                TriArea2D(portalApex, portalRight, left) > 0.0f)
-            {
-                // 左の限界を狭める
-                portalLeft = left;
-                leftIndex = i;
-            }
-            else
-            {
-                // 右端を越えてしまった ＝ 糸が右の角に引っかかった！
-                smoothPath.push_back(portalRight); // 右の角を新しい中継点として確定
-                portalApex = portalRight; // ここから糸を引き直す
-                portalLeft = portalApex;
-                portalRight = portalApex;
-                apexIndex = rightIndex;
-                i = apexIndex; // 引っかかったポータルの次から再開
-                continue;
-            }
-        }
-    }
-    
-    // 最後にゴール地点を追加
-    smoothPath.push_back(end);
-    
-    return smoothPath;
+	// ポリゴンが1つだけなら、スタートからゴールへ直進
+	if (pathIds.size() <= 1)
+	{
+		smoothPath.push_back(end);
+		return smoothPath;
+	}
+	
+	// 全てのポータル（門）の左右の頂点をリストアップする
+	std::vector<Vector3> lefts;
+	std::vector<Vector3> rights;
+	
+	for (size_t i = 0; i < pathIds.size() - 1; ++i)
+	{
+		Vector3 left, right;
+		if (GetPortal(pathIds[i], pathIds[i + 1], left, right))
+		{
+			lefts.push_back(left);
+			rights.push_back(right);
+		}
+	}
+	
+	// 最後にゴール地点を「幅ゼロの門」として追加
+	lefts.push_back(end);
+	rights.push_back(end);
+	
+	// 糸引き処理の実行
+	Vector3 portalApex = start;  // 糸を固定しているピンの位置
+	Vector3 portalLeft = start;  // 糸が通れる左の限界
+	Vector3 portalRight = start; // 糸が通れる右の限界
+	
+	int apexIndex = 0;
+	int leftIndex = 0;
+	int rightIndex = 0;
+	
+	for (int i = 0; i < lefts.size(); ++i)
+	{
+		Vector3 left = lefts[i];
+		Vector3 right = rights[i];
+	
+		// --- 右側の更新 ---
+		// 新しい右端が、現在の右端より「内側（左側）」にあるか判定
+		if (TriArea2D(portalApex, portalRight, right) >= 0.0f)
+		{
+			// portalApexとportalRightが同じ（初期状態）、または新しい右端が「左端」を越えていないか
+			if (std::abs(portalApex.x - portalRight.x) < 0.01f && std::abs(portalApex.z - portalRight.z) < 0.01f ||
+				TriArea2D(portalApex, portalLeft, right) < 0.0f)
+			{
+				// 右の限界を狭める
+				portalRight = right;
+				rightIndex = i;
+			}
+			else
+			{
+				// 左端を越えてしまった ＝ 糸が左の角に引っかかった
+				smoothPath.push_back(portalLeft); // 左の角を新しい中継点として確定
+				portalApex = portalLeft; // ここから糸を引き直す
+				portalLeft = portalApex;
+				portalRight = portalApex;
+				apexIndex = leftIndex;
+
+				i = apexIndex; // 引っかかったポータルの次から再開
+				continue;
+			}
+		}
+	
+		// --- 左側の更新 ---
+		// 新しい左端が、現在の左端より「内側（右側）」にあるか判定
+		if (TriArea2D(portalApex, portalLeft, left) <= 0.0f)
+		{
+			// portalApexとportalLeftが同じ（初期状態）、または新しい左端が「右端」を越えていないか
+			if (std::abs(portalApex.x - portalLeft.x) < 0.01f && std::abs(portalApex.z - portalLeft.z) < 0.01f ||
+				TriArea2D(portalApex, portalRight, left) > 0.0f)
+			{
+				// 左の限界を狭める
+				portalLeft = left;
+				leftIndex = i;
+			}
+			else
+			{
+				// 右端を越えてしまった ＝ 糸が右の角に引っかかった
+				smoothPath.push_back(portalRight); // 右の角を新しい中継点として確定
+				portalApex = portalRight; // ここから糸を引き直す
+				portalLeft = portalApex;
+				portalRight = portalApex;
+				apexIndex = rightIndex;
+
+				i = apexIndex; // 引っかかったポータルの次から再開
+				continue;
+			}
+		}
+	}
+	
+	// 最後にゴール地点を追加
+	smoothPath.push_back(end);
+	
+	return smoothPath;
 }
