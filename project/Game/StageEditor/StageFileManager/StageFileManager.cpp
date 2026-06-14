@@ -9,48 +9,12 @@
 bool StageFileManager::SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList, const NavMesh* navMesh)
 {
 	json rootJson;
-	json arrayJson = json::array(); // 配置データの配列
 
-	for (const auto& data : dataList)
-	{
-		json itemJson;
-
-		// 配置データをJSONに変換
-		toJson(itemJson, data);
-
-		arrayJson.push_back(itemJson);
-	}
-	rootJson["objects"] = arrayJson;
-
+	// 配置データをJSONに変換して保存する
+	toJson(rootJson, dataList);
 
 	// NavMeshのデータも保存する
-	json navMeshJson = json::array();
-	if (navMesh)
-	{
-		for (const auto& poly : navMesh->GetPolygons())
-		{
-			json polyJson;
-			polyJson["id"] = poly.id;
-
-			// 頂点配列の保存
-			json vertsJson = json::array();
-			for (const auto& v : poly.vertices) {
-				vertsJson.push_back({ v.x, v.y, v.z });
-			}
-			polyJson["vertices"] = vertsJson;
-
-			// 隣接IDの保存
-			json neighborsJson = json::array();
-			for (int neighborId : poly.neighborIds) {
-				neighborsJson.push_back(neighborId);
-			}
-			polyJson["neighborIds"] = neighborsJson;
-
-			navMeshJson.push_back(polyJson);
-		}
-	}
-	rootJson["navMesh"] = navMeshJson;
-
+	toJson(rootJson, *navMesh);
 
 
 	// ファイルに書き出し

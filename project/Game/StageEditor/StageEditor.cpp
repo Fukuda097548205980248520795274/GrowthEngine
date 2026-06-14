@@ -96,8 +96,8 @@ void StageEditor::DrawUI()
 	navMeshController_->DrawDebug();
 
 	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), isDirty_);
-	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), isDirty_, navMeshController_->CanExtrudeSelectedEdge(), navMeshController_->CanBridgeSelectedEdges());
-	editorUI_->DrawObjectListWindow(placementList_, scene_->GetNavMesh(), isDirty_);
+	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), navMeshController_.get(),
+		isDirty_, navMeshController_->CanExtrudeSelectedEdge(), navMeshController_->CanBridgeSelectedEdges());
 
 #endif
 }

@@ -4,6 +4,7 @@
 #include "../StageData/StageData.h"
 #include "StageEditorUIPlacement/StageEditorUIPlacement.h"
 #include "StageEditorUINavMesh/StageEditorUINavMesh.h"
+#include "StageEditorUINavMeshInfo/StageEditorUINavMeshInfo.h"
 #include "StageEditorUIObjectList/StageEditorUIObjectList.h"
 #include "StageEditorGuizmo/StageEditorGuizmo.h"
 
@@ -53,18 +54,14 @@ public:
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying 
-	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, bool canExtrude, bool canBridge);
+	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, 
+		NavMesh* navMesh,StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge);
 
 	/// @brief アセットウィンドウの描画
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying
 	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
-
-	/// @brief オブジェクトリストウィンドウの描画
-	/// @param placementList 
-	/// @param navMesh 
-	void DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh, bool& isDirty);
 
 	/// @brief 現在のエディタモードを取得する
 	/// @return 
@@ -84,14 +81,18 @@ private:
 	/// @brief オブジェクト配置モードUI
 	std::unique_ptr<StageEditorUIPlacement> placementUI_ = nullptr;
 
-	/// @brief ナビメッシュ編集モードUI
-	std::unique_ptr<StageEditorUINavMesh> navMeshUI_ = nullptr;
-
 	/// @brief オブジェクトリストUI
 	std::unique_ptr<StageEditorUIObjectList> objectListUI_ = nullptr;
 
 	/// @brief ギズモUI
 	std::unique_ptr<StageEditorGuizmo> guizmo_ = nullptr;
+
+
+	/// @brief ナビメッシュ編集モードUI
+	std::unique_ptr<StageEditorUINavMesh> navMeshUI_ = nullptr;
+
+	/// @brief ナビメッシュ情報UI
+	std::unique_ptr<StageEditorUINavMeshInfo> navMeshInfoUI_ = nullptr;
 
 
 private:

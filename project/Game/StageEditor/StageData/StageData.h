@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "MotionManager/MotionManager.h"
+#include "NavMesh/NavMesh.h"
 
 // JSONライブラリ
 using json = nlohmann::json;
@@ -134,6 +135,56 @@ inline void toJson(json& j, const PlacementData& s)
 		{"avoidRightMotionName", s.avoidRightMotion.name}
 	};
 }
+
+/// @brief PlacementDataのリストをJSONに変換（シリアライズ）
+/// @param j 
+/// @param v 
+inline void toJson(json& j, const std::vector<PlacementData>& v)
+{
+	json arrayJson = json::array();
+	for (const auto& item : v)
+	{
+		json itemJson;
+		toJson(itemJson, item);
+
+		arrayJson.push_back(itemJson);
+	}
+	j["objects"] = arrayJson;
+}
+
+/// @brief NavMeshをJSONに変換（シリアライズ）
+/// @param j 
+/// @param navMesh 
+inline void toJson(json& j, const NavMesh& navMesh)
+{
+	json navMeshJson = json::array();
+	for (const auto& poly : navMesh.GetPolygons())
+	{
+		json polyJson;
+		polyJson["id"] = poly.id;
+
+		// 頂点配列の保存
+		json vertsJson = json::array();
+		for (const auto& v : poly.vertices) 
+		{
+			vertsJson.push_back({ v.x, v.y, v.z });
+		}
+		polyJson["vertices"] = vertsJson;
+
+		// 隣接IDの保存
+		json neighborsJson = json::array();
+		for (int neighborId : poly.neighborIds)
+		{
+			neighborsJson.push_back(neighborId);
+		}
+		polyJson["neighborIds"] = neighborsJson;
+
+		navMeshJson.push_back(polyJson);
+	}
+	j["navMesh"] = navMeshJson;
+}
+
+
 
 /// @brief JSONからPlacementDataに変換（デシリアライズ）
 /// @param j 

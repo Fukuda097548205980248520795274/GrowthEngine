@@ -20,6 +20,7 @@ void StageEditorUI::Initialize()
 	// UIクラスの初期化
 	placementUI_ = std::make_unique<StageEditorUIPlacement>(spawner_, history_);
 	navMeshUI_ = std::make_unique<StageEditorUINavMesh>();
+	navMeshInfoUI_ = std::make_unique<StageEditorUINavMeshInfo>();
 	objectListUI_ = std::make_unique<StageEditorUIObjectList>(spawner_, history_, scene_->GetBehaviorTreeEditor());
 	guizmo_ = std::make_unique<StageEditorGuizmo>();
 
@@ -54,7 +55,8 @@ void StageEditorUI::Update()
 /// @param navMesh 
 /// @param canExtrude 
 /// @param canBridge 
-void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, bool canExtrude, bool canBridge)
+void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
+	NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge)
 {
 #ifdef _DEVELOPMENT
 
@@ -247,11 +249,14 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	// モード切替の表示
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
+		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty, history_);
+		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
 		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
 		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, isDirty);
+		navMeshInfoUI_->DrawWindow(navMesh, navMeshController);
 	}
 
 	ImGui::PopStyleVar();
@@ -640,23 +645,6 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 	ImGui::PopStyleVar();
 
 	ImGui::End();
-#endif
-}
-
-/// @brief オブジェクトリストウィンドウの描画
-/// @param placementList 
-/// @param navMesh 
-/// @param isDirty 
-void StageEditorUI::DrawObjectListWindow(std::vector<PlacementData>& placementList, NavMesh* navMesh, bool& isDirty)
-{
-#ifdef _DEVELOPMENT
-
-	if (currentMode_ == EditorMode::ObjectPlacement)
-	{
-		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty, history_);
-		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
-	}
-	
 #endif
 }
 

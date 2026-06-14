@@ -34,6 +34,7 @@ void StageEditorHistory::Undo(std::vector<PlacementData>& currentList, StageSpaw
 	// 現在の状態をRedo履歴に保存しておく
 	EditorSnapshot currentSnapshot;
 	currentSnapshot.placementList = currentList;
+	if (navMesh_)currentSnapshot.navPolygonList = navMesh_->GetPolygons();
 	redoHistory_.push_back(currentSnapshot);
 
 	// 現在のシーン上に配置されている実体をすべて削除する
@@ -78,6 +79,7 @@ void StageEditorHistory::Redo(std::vector<PlacementData>& currentList, StageSpaw
 	// 現在の状態をUndo履歴に保存しておく
 	EditorSnapshot currentSnapshot;
 	currentSnapshot.placementList = currentList;
+	if (navMesh_)currentSnapshot.navPolygonList = navMesh_->GetPolygons();
 	undoHistory_.push_back(currentSnapshot);
 
 	// 現在のシーン上に配置されている実体をすべて削除する

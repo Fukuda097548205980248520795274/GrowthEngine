@@ -59,6 +59,14 @@ public:
 	/// @return 
 	bool CanBridgeSelectedEdges() const;
 
+	/// @brief 選択されている要素のリストを取得
+	/// @return 
+	const std::vector<SelectedItem>& GetSelectedItems() const { return selectedItems_; }
+
+	/// @brief 現在の選択モードを取得
+	/// @return 
+	SelectionMode GetSelectionMode() const { return selectionMode_; }
+
 
 private:
 
