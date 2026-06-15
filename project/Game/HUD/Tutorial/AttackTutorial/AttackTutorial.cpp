@@ -5,6 +5,9 @@
 /// @param initData 
 void AttackTutorial::Initialize(const InitData& initData)
 {
+	// プレイヤーがいることを確認
+	assert(initData.player && "プレイヤーがいません");
+
 	// 練習時間
 	practiceTime_ = initData.practiceTime;
 	practiceTimer_ = practiceTime_;

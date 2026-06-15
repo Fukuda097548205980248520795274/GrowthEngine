@@ -98,6 +98,28 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		Weapon* newWeapon = scene_->CreateWeapon(initData);
 		data.instancePtr = newWeapon;
 	}
+	else if (data.category == EditCategory::HUD)
+	{
+		// HUD
+		if (data.subType == static_cast<int32_t>(HUD::Tag::AttackTutorial))
+		{
+			AttackTutorial::InitData initData;
+			initData.practiceTime = data.practiceTime;
+			initData.attackMaxCount = data.maxAttackCount;
+
+			HUD* newHUD = scene_->CreateAttackTutorial(initData);
+			data.instancePtr = newHUD;
+		}
+		else if (data.subType == static_cast<int32_t>(HUD::Tag::GuardTutorial))
+		{
+			GuardTutorial::InitData initData;
+			initData.practiceTime = data.practiceTime;
+			initData.guardMaxCount = data.maxGuardCount;
+
+			HUD* newHUD = scene_->CreateGuardTutorial(initData);
+			data.instancePtr = newHUD;
+		}
+	}
 }
 
 /// @brief 実体を削除する

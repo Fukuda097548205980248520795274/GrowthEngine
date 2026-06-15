@@ -1,5 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
+#include "StageEditor/StageData/StageData.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 class HUD
 {
@@ -66,5 +68,12 @@ protected:
 
 	/// @brief 終了したかどうか
 	bool isFinished_ = false;
+
+
+public:
+
+
+	/// @brief デバッグ用描画処理
+	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty){}
 };
 

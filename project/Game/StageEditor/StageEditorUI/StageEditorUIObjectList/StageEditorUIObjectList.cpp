@@ -12,6 +12,9 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
+#include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
+
 /// @brief コンストラクタ
 /// @param spawner 
 /// @param history 
@@ -558,6 +561,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		{
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
 			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
+		}
+		else if (target.category == EditCategory::HUD)
+		{
+			HUD* hudPtr = static_cast<HUD*>(target.instancePtr);
+			hudPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
 		}
 	}
 
