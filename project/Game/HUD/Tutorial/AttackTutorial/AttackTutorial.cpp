@@ -20,6 +20,9 @@ void AttackTutorial::Initialize(const InitData& initData)
 
 	// 攻撃の最大回数
 	attackMaxCount_ = initData.attackMaxCount;
+
+	// ワールドトランスフォームの更新
+	worldTransform_->Update();
 }
 
 /// @brief 更新処理

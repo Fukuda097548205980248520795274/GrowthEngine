@@ -20,6 +20,9 @@ void GuardTutorial::Initialize(const InitData& initData)
 
 	// 攻撃の最大回数
 	guardMaxCount_ = initData.guardMaxCount;
+
+	// ワールドトランスフォームの更新
+	worldTransform_->Update();
 }
 
 /// @brief 更新処理
