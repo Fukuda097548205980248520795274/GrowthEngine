@@ -1261,6 +1261,18 @@
     <Filter Include="Game\HUD\HP\EnemyHP">
       <UniqueIdentifier>{209ecf67-a9ae-43de-8663-ea4ac3f8d51e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\Tutorial">
+      <UniqueIdentifier>{49bff084-59cf-43bf-9b0c-e54c51045c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Tutorial\AttackTutorial">
+      <UniqueIdentifier>{3aed4065-6cd4-4d52-bf55-8196d942912d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Tutorial\GuardTutorial">
+      <UniqueIdentifier>{0f8ba193-f1d7-4653-a11e-738b9f9b3962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Timer">
+      <UniqueIdentifier>{e127f022-ff89-403e-a9fa-240a0eb57dd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2279,6 +2291,18 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\HP\AllyHP\AllyHP.cpp">
       <Filter>Game\HUD\HP\AllyHP</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp">
+      <Filter>Game\HUD\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.cpp">
+      <Filter>Game\HUD\Tutorial\AttackTutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.cpp">
+      <Filter>Game\HUD\Tutorial\GuardTutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Timer\Timer.cpp">
+      <Filter>Game\HUD\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3415,6 +3439,18 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\HP\AllyHP\AllyHP.h">
       <Filter>Game\HUD\HP\AllyHP</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\Tutorial.h">
+      <Filter>Game\HUD\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.h">
+      <Filter>Game\HUD\Tutorial\AttackTutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.h">
+      <Filter>Game\HUD\Tutorial\GuardTutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Timer\Timer.h">
+      <Filter>Game\HUD\Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

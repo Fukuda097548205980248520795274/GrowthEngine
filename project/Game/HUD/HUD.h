@@ -14,6 +14,9 @@ public:
 		AllyHP,
 		EnemyHP,
 		BossHP,
+		Timer,
+		AttackTutorial,
+		GuardTutorial
 	};
 
 

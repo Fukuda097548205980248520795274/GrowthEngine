@@ -11,6 +11,9 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
+#include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
+
 #include "PivotPoint/PivotPoint.h"
 #include "CameraShake/CameraShake.h"
 
@@ -71,6 +74,16 @@ public:
 	/// @param initData 
 	/// @return 
 	StaticEventTrigger* CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData);
+
+	/// @brief 攻撃チュートリアルを生成する
+	/// @param initData 
+	/// @return 
+	AttackTutorial* CreateAttackTutorial(const AttackTutorial::InitData& initData);
+
+	/// @brief ガードチュートリアルを生成する
+	/// @param initData 
+	/// @return 
+	GuardTutorial* CreateGuardTutorial(const GuardTutorial::InitData& initData);
 
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
@@ -210,6 +223,9 @@ private:
 
 	/// @brief ステージオブジェクトのリスト
 	std::list<std::unique_ptr<StageObject>> objects_;
+
+	/// @brief HUDのリスト
+	std::list<std::unique_ptr<HUD>> huds_;
 
 	/// @brief 試験的な立方体
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;

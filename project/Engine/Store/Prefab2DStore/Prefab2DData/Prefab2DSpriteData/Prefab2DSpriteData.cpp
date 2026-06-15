@@ -7,6 +7,7 @@
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
 #include "Parameter/Prefab2DParameter/Prefab2DParameter.h"
+#include "Application/WorldTransform/WorldTransform2D/WorldTransform2D.h"
 
 /// @brief 初期化
 /// @param vertexResource 
@@ -202,11 +203,15 @@ void Engine::Prefab2DSpriteData::InstanceDrawCall(const Prefab2D::Sprite::Instan
 	if (useInstance_ >= numInstance_)
 		return;
 
+	// ワールド行列
+	Matrix4x4 worldMatrix = Make2DScaleMatrix4x4((Vector2(param->transform.scale.x * param->texture.size.x, param->transform.scale.y * param->texture.size.y)))
+		* Make3DRotateZMatrix4x4(param->transform.rotate) * Make2DTranslateMatrix4x4(param->transform.translate);
+
+	// 親がいるときは親のワールド行列を掛ける
+	if (param->parent)worldMatrix = worldMatrix * param->parent->GetWorldMatrix();
+
 	// ワールドビュープロジェクション行列
-	resource_->data_[useInstance_].worldViewProjection =
-		Make2DScaleMatrix4x4((Vector2(param->transform.scale.x * param->texture.size.x, param->transform.scale.y * param->texture.size.y)))
-		* Make3DRotateZMatrix4x4(param->transform.rotate) * Make2DTranslateMatrix4x4(param->transform.translate)
-		* cameraStore_->GetCamera2D().GetCurrentVPMatrix();
+	resource_->data_[useInstance_].worldViewProjection = worldMatrix * cameraStore_->GetCamera2D().GetCurrentVPMatrix();
 
 	// アンカー
 	resource_->data_[useInstance_].anchor = param_->texture.anchor;

@@ -1,5 +1,13 @@
 #pragma once
-class HP
+#include "../HUD.h"
+
+class HP : public HUD
 {
+public:
+
+
+protected:
+
+
 };
 

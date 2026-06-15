@@ -515,6 +515,14 @@ void Character::StartUpdate()
 	// 回避直後のフラグを更新する
 	isJustAvoidedPrev_ = isJustAvoided_;
 	isJustAvoided_ = false;
+
+	// 攻撃直後のフラグを更新する
+	isPrevHitAttack_ = isHitAttack_;
+	isHitAttack_ = false;
+
+	// ガード成功のフラグを更新する
+	isPrevGuardHit_ = isGuardHit_;
+	isGuardHit_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -539,6 +547,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
+		// ガード成功のフラグを立てる
+		isGuardHit_ = true;
+
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
 		if (canParry_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
@@ -592,6 +603,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 
 	// ダメージを受ける処理
+
+	// 攻撃者が攻撃をヒットさせたことを通知する
+	if (attacker)attacker->SetHitAttack(true);
 
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
 	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
