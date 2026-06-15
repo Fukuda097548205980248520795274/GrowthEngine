@@ -1081,6 +1081,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\HUD\HP\PlayerHP\PlayerHP.cpp" />
     <ClCompile Include="Game\HUD\HP\VipHP\VipHP.cpp" />
     <ClCompile Include="Game\HUD\HUD.cpp" />
+    <ClCompile Include="Game\HUD\Timer\Timer.cpp" />
+    <ClCompile Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.cpp" />
+    <ClCompile Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.cpp" />
+    <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManager.cpp" />
     <ClCompile Include="Game\NavMesh\NavMesh.cpp" />
@@ -1468,6 +1472,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\HUD\HP\PlayerHP\PlayerHP.h" />
     <ClInclude Include="Game\HUD\HP\VipHP\VipHP.h" />
     <ClInclude Include="Game\HUD\HUD.h" />
+    <ClInclude Include="Game\HUD\Timer\Timer.h" />
+    <ClInclude Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.h" />
+    <ClInclude Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.h" />
+    <ClInclude Include="Game\HUD\Tutorial\Tutorial.h" />
     <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h" />
     <ClInclude Include="Game\MotionManager\MotionManager.h" />
     <ClInclude Include="Game\NavMesh\NavMesh.h" />

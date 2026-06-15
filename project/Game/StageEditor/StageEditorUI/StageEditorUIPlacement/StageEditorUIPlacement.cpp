@@ -11,6 +11,9 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
+#include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
+
 /// @brief コンストラクタ
 /// @param spawner 
 /// @param history 
@@ -44,7 +47,12 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.durability = 100;
 		currentData.attackPower = 1.0f;
 		currentData.isUnbreakable = false;
-
+		currentData.behaviorScriptName[0] = '\0';
+		currentData.eventType = 0;
+		currentData.eventStringParam[0] = '\0';
+		currentData.practiceTime = 0.0f;
+		currentData.maxAttackCount = 1;
+		currentData.maxGuardCount = 1;
 		currentData.standMotion.name = "Standing";
 		currentData.stanceMotion.name = "Fighter";
 		currentData.walkMotion.name = "Walk";
@@ -123,7 +131,8 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 				ImGui::EndCombo();
 			}
 		}
-	} else if (currentData.category == EditCategory::Object)
+	}
+	else if (currentData.category == EditCategory::Object)
 	{
 		ImGui::Combo("オブジェクトの種類", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
@@ -178,6 +187,40 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		// 壊れない武器かどうか
 		ImGui::Checkbox("壊れるかどうか", &currentData.isUnbreakable);
 	}
+	else if (currentData.category == EditCategory::HUD)
+	{
+		// HUDの種類
+		if (ImGui::Combo("HUDの種類", &currentData.subType, hudTagNames, IM_ARRAYSIZE(hudTagNames)))
+		{
+			if (currentData.subType = 1)
+			{
+				currentData.subType = static_cast<int>(HUD::Tag::AttackTutorial);
+			} 
+			else if (currentData.subType = 2)
+			{
+				currentData.subType = static_cast<int>(HUD::Tag::GuardTutorial);
+			}
+		}
+
+		// 位置
+		ImGui::DragFloat2("生成位置", &currentData.position.x, 0.1f);
+
+		// 攻撃チュートリアル
+		if (static_cast<HUD::Tag>(currentData.subType) == HUD::Tag::AttackTutorial)
+		{
+			ImGui::DragFloat("練習時間", &currentData.practiceTime, 0.1f, 0.0f, 10000.0f);
+
+			ImGui::DragInt("攻撃の最大回数", &currentData.maxAttackCount,1, 1, 100);
+		}
+
+		// ガードチュートリアル
+		if (static_cast<HUD::Tag>(currentData.subType) == HUD::Tag::GuardTutorial)
+		{
+			ImGui::DragFloat("練習時間", &currentData.practiceTime, 0.1f, 0.0f, 10000.0f);
+
+			ImGui::DragInt("ガードの最大回数", &currentData.maxGuardCount, 1, 1, 100);
+		}
+	}
 
 	ImGui::Separator();
 
@@ -201,6 +244,9 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.durability = currentData.durability;
 		newData.attackPower = currentData.attackPower;
 		newData.isUnbreakable = currentData.isUnbreakable;
+		newData.practiceTime = currentData.practiceTime;
+		newData.maxAttackCount = currentData.maxAttackCount;
+		newData.maxGuardCount = currentData.maxGuardCount;
 		newData.standMotion = currentData.standMotion;
 		newData.stanceMotion = currentData.stanceMotion;
 		newData.walkMotion = currentData.walkMotion;

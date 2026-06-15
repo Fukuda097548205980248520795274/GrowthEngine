@@ -12,6 +12,9 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
+#include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
+
 /// @brief コンストラクタ
 /// @param spawner 
 /// @param history 
@@ -504,6 +507,40 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 									ImGui::DragFloat("攻撃力", &object.attackPower, 0.1f, 0.0f, 10000.0f);
 									ImGui::Checkbox("壊れるかどうか", &object.isUnbreakable);
 								}
+								else if (object.category == EditCategory::HUD)
+								{
+									// HUDの種類
+									if (ImGui::Combo("HUDの種類", &object.subType, hudTagNames, IM_ARRAYSIZE(hudTagNames)))
+									{
+										if (object.subType = 1)
+										{
+											object.subType = static_cast<int>(HUD::Tag::AttackTutorial);
+										} 
+										else if (object.subType = 2)
+										{
+											object.subType = static_cast<int>(HUD::Tag::GuardTutorial);
+										}
+									}
+
+									// 位置
+									ImGui::DragFloat2("生成位置", &object.position.x, 0.1f);
+
+									// 攻撃チュートリアル
+									if (static_cast<HUD::Tag>(object.subType) == HUD::Tag::AttackTutorial)
+									{
+										ImGui::DragFloat("練習時間", &object.practiceTime, 0.1f, 0.0f, 10000.0f);
+
+										ImGui::DragInt("攻撃の最大回数", &object.maxAttackCount, 1, 1, 100);
+									}
+
+									// ガードチュートリアル
+									if (static_cast<HUD::Tag>(object.subType) == HUD::Tag::GuardTutorial)
+									{
+										ImGui::DragFloat("練習時間", &object.practiceTime, 0.1f, 0.0f, 10000.0f);
+
+										ImGui::DragInt("ガードの最大回数", &object.maxGuardCount, 1, 1, 100);
+									}
+								}
 							}
 							else
 							{
@@ -558,6 +595,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		{
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
 			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
+		}
+		else if (target.category == EditCategory::HUD)
+		{
+			HUD* hudPtr = static_cast<HUD*>(target.instancePtr);
+			hudPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
 		}
 	}
 

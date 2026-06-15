@@ -464,6 +464,18 @@ public:
 	/// @return 
 	bool IsEnemySide() const { return characterTag_ == CharacterTag::EnemyNormal || characterTag_ == CharacterTag::EnemyBoss; }
 
+	/// @brief 攻撃がヒットしているかどうか
+	/// @return 
+	bool IsHitAttack() const { return isHitAttack_ || isPrevHitAttack_; }
+
+	/// @brief ガードが成功したかどうか
+	/// @return 
+	bool IsGuardHit() const { return isGuardHit_ || isPrevGuardHit_; }
+
+	/// @brief 攻撃がヒットしているかどうかを設定する
+	/// @param isHit 
+	void SetHitAttack(bool isHit) { isHitAttack_ = isHit; }
+
 
 protected:
 
@@ -612,6 +624,13 @@ protected:
 	float guardReactionTimer_ = 0.0f;
 
 
+	// ガードに成功したかどうか
+	bool isGuardHit_ = false;
+
+	// 前フレームでガードに成功したかどうか
+	bool isPrevGuardHit_ = false;
+
+
 protected:
 
 	// ガードしてからの経過時間
@@ -693,6 +712,15 @@ protected:
 
 	// アニメーションの経過時間
 	float animationTime_ = 0.0f;
+
+
+protected:
+
+	// 攻撃がヒットしたかどうか
+	bool isHitAttack_ = false;
+
+	// 前フレームで攻撃がヒットしたかどうか
+	bool isPrevHitAttack_ = false;
 
 
 protected:

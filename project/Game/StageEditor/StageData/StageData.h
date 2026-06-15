@@ -11,15 +11,17 @@ enum class EditCategory
 {
 	Character,
 	Object,
-	Weapon
+	Weapon,
+	HUD
 };
 
 // 大分類と小分類の表示用文字列
-inline const char* categoryNames[] = { "キャラクター", "オブジェクト", "武器" };
+inline const char* categoryNames[] = { "キャラクター", "オブジェクト", "武器","HUD"};
 inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
 inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
 inline const char* eventTypeNames[] = { "None", "敵生成" };
+inline const char* hudTagNames[] = { "None", "攻撃チュートリアル", "ガードチュートリアル" };
 
 struct MotionConfig
 {
@@ -69,6 +71,15 @@ struct PlacementData
 
 	// イベントトリガーのパラメータ (イベントの種類によって内容が異なる)
 	char eventStringParam[1024] = "";
+
+	// 練習時間 (チュートリアルの場合)
+	float practiceTime = 0.0f;
+
+	// 攻撃の最大回数 (攻撃チュートリアルの場合)
+	int maxAttackCount = 1;
+
+	// ガードの最大回数 (ガードチュートリアルの場合)
+	int maxGuardCount = 1;
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;
@@ -125,6 +136,9 @@ inline void toJson(json& j, const PlacementData& s)
 		{"behaviorScriptName", s.behaviorScriptName},
 		{"eventType", s.eventType},
 		{"eventStringParam", s.eventStringParam},
+		{"practiceTime", s.practiceTime },
+		{"maxAttackCount", s.maxAttackCount },
+		{"maxGuardCount", s.maxGuardCount },
 		{"standMotionName", s.standMotion.name},
 		{"stanceMotionName", s.stanceMotion.name},
 		{"walkMotionName", s.walkMotion.name},
@@ -215,6 +229,10 @@ inline void fromJson(const json& j, PlacementData& s)
 
 
 	MotionManager* motionManager = MotionManager::GetInstance();
+
+	s.practiceTime = j.value("practiceTime", 0.0f);
+	s.maxAttackCount = j.value("maxAttackCount", 1);
+	s.maxGuardCount = j.value("maxGuardCount", 1);
 
 	s.standMotion.name = j.value("standMotionName", "Stand");
 	s.stanceMotion.name = j.value("stanceMotionName", "Fighter");

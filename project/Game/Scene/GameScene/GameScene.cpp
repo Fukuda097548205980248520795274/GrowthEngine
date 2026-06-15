@@ -140,6 +140,9 @@ void GameScene::Update()
 	// 武器の更新
 	weapons_.remove_if([](const std::unique_ptr<Weapon>& weapon) {weapon->Update();return weapon->IsFinished();});
 
+	// HUDの更新
+	huds_.remove_if([](const std::unique_ptr<HUD>& hud) {hud->Update(); return hud->IsFinished(); });
+
 
 	// エフェクトの更新
 	effectManager_->Update();
@@ -173,6 +176,9 @@ void GameScene::Draw()
 
 	// 武器の描画
 	for (auto& weapon : weapons_)weapon->Draw();
+
+	// HUDの描画
+	for (auto& hud : huds_)hud->Draw();
 
 	// プレハブの描画処理
 	oneHandedWeaponModel_->Draw();
@@ -355,6 +361,40 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 	objects_.push_back(std::move(newTrigger));
 
 	return trigger;
+}
+
+/// @brief 攻撃チュートリアルを生成する
+/// @param initData 
+/// @return 
+AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& initData)
+{
+	AttackTutorial::InitData tutorialInitData = initData;
+	tutorialInitData.player = player_.get();
+
+	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
+	newTutorial->Initialize(tutorialInitData);
+	AttackTutorial* tutorial = newTutorial.get();
+
+	huds_.push_back(std::move(newTutorial));
+
+	return tutorial;
+}
+
+/// @brief ガードチュートリアルを生成する
+/// @param initData 
+/// @return 
+GuardTutorial* GameScene::CreateGuardTutorial(const GuardTutorial::InitData& initData)
+{
+	GuardTutorial::InitData tutorialInitData = initData;
+	tutorialInitData.player = player_.get();
+
+	std::unique_ptr<GuardTutorial> newTutorial = std::make_unique<GuardTutorial>();
+	newTutorial->Initialize(tutorialInitData);
+	GuardTutorial* tutorial = newTutorial.get();
+
+	huds_.push_back(std::move(newTutorial));
+
+	return tutorial;
 }
 
 /// @brief リセットする

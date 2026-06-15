@@ -6,6 +6,8 @@
 #include "Math/Vector/Vector4/Vector4.h"
 #include "PSO/EnumBlendMode/EnumBlendMode.h"
 
+class WorldTransform2D;
+
 namespace Engine
 {
 	namespace Prefab2D
@@ -115,6 +117,9 @@ namespace Engine
 				{
 					/// @brief トランスフォーム
 					Transform transform;
+
+					/// @brief 親
+					WorldTransform2D* parent;
 
 					/// @brief マテリアル
 					Material material;
