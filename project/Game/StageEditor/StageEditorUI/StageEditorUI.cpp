@@ -214,18 +214,15 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			for (auto& data : placementList)spawner_->DeleteActualEntity(data);
 			placementList.clear();
 
+			// プレイモードを終了したら、ゲームシーンをリセットして初期状態に戻す
+			scene_->Reset();
+
 			// プレイモードを終了したら、ファイルからステージデータを再読み込みして初期状態に戻す
 			assert(fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh) && "実行停止時のファイル読み込みに失敗しました");
 
 			isPlaying = false;
 			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
 			StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
-
-			// プレイモードを終了したら、ゲームシーンをリセットして初期状態に戻す
-			scene_->Reset();
-
-			// プレイモードを終了したら、ステージ上にすべての実体を再生成する
-			for (auto& data : placementList)spawner_->SpawnActualEntity(data);
 		}
 		ImGui::PopStyleColor();
 	}

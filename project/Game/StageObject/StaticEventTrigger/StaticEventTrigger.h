@@ -21,7 +21,7 @@ public:
 		int eventType = 0;
 
 		// イベントの整数パラメータ
-		char eventStringParam[1024] = "";
+		char eventStringParam[65536] = "";
 
 		// イベントが発生したときのコールバック関数
 		std::function<bool(int, const char*)> onTriggerCallback = nullptr;
@@ -69,7 +69,7 @@ private:
 	int eventType_ = 0;
 
 	// イベントの整数パラメータ
-	char eventStringParam_[1024] = {};
+	char eventStringParam_[65536] = {};
 
 	// イベントが発生したときのコールバック関数
 	std::function<bool(int, const char*)> onTriggerCallback_ = nullptr;

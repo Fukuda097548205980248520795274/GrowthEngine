@@ -76,6 +76,13 @@ void GameScene::Initialize()
 	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 1000, "Trial_Cube");
 
 
+	// コンマスプライトの生成と初期化
+	commaSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/comma.png"), 100, "Comma_Sprite");
+
+	// 数字スプライトの生成と初期化
+	numbersSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/numbers.png"), 100, "Numbers_Sprite");
+
+
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
 	playerHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("PlayerSide_Hurtbox");
@@ -343,6 +350,27 @@ Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
 	objects_.push_back(std::move(newWall));
 
 	return wall;
+}
+
+/// @brief タイマーHUDを生成する
+/// @param initData 
+/// @return 
+Timer* GameScene::CreateTimer(const Timer::InitData& initData)
+{
+	Timer::InitData timerInitData = initData;
+	timerInitData.timerSprite[0] = numbersSprite_->CreateInstance();
+	timerInitData.timerSprite[1] = numbersSprite_->CreateInstance();
+	timerInitData.timerSprite[2] = numbersSprite_->CreateInstance();
+	timerInitData.timerSprite[3] = numbersSprite_->CreateInstance();
+	timerInitData.commaSprite = commaSprite_->CreateInstance();
+
+	std::unique_ptr<Timer> newTimer = std::make_unique<Timer>();
+	newTimer->Initialize(timerInitData);
+	Timer* timer = newTimer.get();
+
+	huds_.push_back(std::move(newTimer));
+
+	return timer;
 }
 
 /// @brief 静的イベントトリガーオブジェクトを生成する

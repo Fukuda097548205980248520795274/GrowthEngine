@@ -4,7 +4,7 @@
 Timer::~Timer()
 {
 	// タイマースプライトの削除
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		if (timerSprite_[i])
 		{
@@ -19,6 +19,18 @@ Timer::~Timer()
 		commaSprite_->isDelete_ = true;
 		commaSprite_ = nullptr;
 	}
+}
+
+/// @brief 初期化
+/// @param initData 
+void Timer::Initialize(const InitData& initData)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		timerSprite_[i] = initData.timerSprite[i];
+	}
+	commaSprite_ = initData.commaSprite;
+	currentTime_ = initData.currentTime;
 }
 
 /// @brief 更新処理
@@ -37,9 +49,5 @@ void Timer::Update()
 /// @brief 描画処理
 void Timer::Draw()
 {
-	// 桁ごとの時間を描画
-	for (int i = 0; i < 4; ++i)
-	{
-		if (timerSprite_[digit_[i]])timerSprite_[digit_[i]]->Draw();
-	}
+	
 }

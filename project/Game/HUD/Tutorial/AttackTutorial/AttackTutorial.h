@@ -11,9 +11,6 @@ public:
 		// 練習時間
 		float practiceTime = 0.0f;
 
-		// スプライト
-		Sprite* sprite = nullptr;
-
 		// プレイヤー
 		Player* player = nullptr;
 

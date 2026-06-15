@@ -70,7 +70,7 @@ struct PlacementData
 	int eventType = 0;
 
 	// イベントトリガーのパラメータ (イベントの種類によって内容が異なる)
-	char eventStringParam[1024] = "";
+	char eventStringParam[65536] = "";
 
 	// 練習時間 (チュートリアルの場合)
 	float practiceTime = 0.0f;

@@ -11,6 +11,7 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "HUD/Timer/Timer.h"
 #include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
 #include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
 
@@ -74,6 +75,11 @@ public:
 	/// @param initData 
 	/// @return 
 	StaticEventTrigger* CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData);
+
+	/// @brief タイマーHUDを生成する
+	/// @param initData 
+	/// @return 
+	Timer* CreateTimer(const Timer::InitData& initData);
 
 	/// @brief 攻撃チュートリアルを生成する
 	/// @param initData 
@@ -207,6 +213,12 @@ private:
 
 	// 片手武器モデル
 	std::unique_ptr<PrefabBaseStaticModel> oneHandedWeaponModel_ = nullptr;
+
+	/// @brief コンマスプライト
+	std::unique_ptr<PrefabBaseSprite> commaSprite_ = nullptr;
+
+	/// @brief 数字スプライト
+	std::unique_ptr<PrefabBaseSprite> numbersSprite_ = nullptr;
 
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;

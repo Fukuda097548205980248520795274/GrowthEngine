@@ -8,7 +8,7 @@ public:
 	struct InitData
 	{
 		// 時間用スプライト
-		PrefabInstanceSprite* timerSprite[10];
+		PrefabInstanceSprite* timerSprite[4];
 
 		// コンマ用スプライト
 		PrefabInstanceSprite* commaSprite;
@@ -22,6 +22,10 @@ public:
 
 	/// @brief デストラクタ
 	~Timer();
+
+	/// @brief 初期化
+	/// @param initData 
+	void Initialize(const InitData& initData);
 
 	/// @brief 更新処理
 	void Update() override;
@@ -37,7 +41,7 @@ private:
 	float currentTime_ = 0.0f;
 
 	// 時間用スプライト
-	PrefabInstanceSprite* timerSprite_[10];
+	PrefabInstanceSprite* timerSprite_[4];
 
 	// コンマ用スプライト
 	PrefabInstanceSprite* commaSprite_;

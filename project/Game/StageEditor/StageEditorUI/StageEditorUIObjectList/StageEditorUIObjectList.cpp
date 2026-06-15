@@ -512,11 +512,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 									// HUDの種類
 									if (ImGui::Combo("HUDの種類", &object.subType, hudTagNames, IM_ARRAYSIZE(hudTagNames)))
 									{
-										if (object.subType = 1)
+										if (object.subType == 1)
 										{
 											object.subType = static_cast<int>(HUD::Tag::AttackTutorial);
 										} 
-										else if (object.subType = 2)
+										else if (object.subType == 2)
 										{
 											object.subType = static_cast<int>(HUD::Tag::GuardTutorial);
 										}

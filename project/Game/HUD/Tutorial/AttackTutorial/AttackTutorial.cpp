@@ -15,9 +15,6 @@ void AttackTutorial::Initialize(const InitData& initData)
 	// プレイヤー
 	player_ = initData.player;
 
-	// スプライト
-	sprite_ = initData.sprite;
-
 	// 攻撃の最大回数
 	attackMaxCount_ = initData.attackMaxCount;
 

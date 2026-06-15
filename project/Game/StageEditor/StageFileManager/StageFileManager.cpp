@@ -41,6 +41,9 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 /// @return 
 bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh)
 {
+	// 既存の配置データをクリア
+	outDataList.clear();
+
 	if (spawner == nullptr) return false; // スポナーがなければ何もしない
 
 	std::ifstream ifs(stageDataDir_ + filename);

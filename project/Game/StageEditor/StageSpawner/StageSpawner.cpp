@@ -141,4 +141,12 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 		Weapon* weapon = static_cast<Weapon*>(data.instancePtr);
 		weapon->Delete();
 	}
+	else if (data.category == EditCategory::HUD)
+	{
+		HUD* hud = static_cast<HUD*>(data.instancePtr);
+		hud->Delete();
+	}
+
+	// HUDは削除の概念がないため、ここでは何もしない
+	data.instancePtr = nullptr;
 }

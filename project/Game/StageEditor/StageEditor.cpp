@@ -53,6 +53,11 @@ void StageEditor::Update(float dt)
 				StageObject* obj = static_cast<StageObject*>(data.instancePtr);
 				if (obj && obj->IsFinished()) shouldDelete = true;
 			}
+			else if (data.category == EditCategory::HUD)
+			{
+				HUD* hud = static_cast<HUD*>(data.instancePtr);
+				if (hud && hud->IsFinished()) shouldDelete = true;
+			}
 
 			if (shouldDelete)
 			{

@@ -2,6 +2,7 @@
 #include "../HUD.h"
 
 class Player;
+class Timer;
 
 class Tutorial : public HUD
 {
@@ -59,9 +60,6 @@ protected:
 
 	// プレイヤー
 	Player* player_ = nullptr;
-
-	// スプライト
-	Sprite* sprite_ = nullptr;
 
 
 protected:

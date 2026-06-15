@@ -44,6 +44,5 @@ void Tutorial::Update()
 /// @brief 描画処理
 void Tutorial::Draw()
 {
-	// 描画
-	if (sprite_)sprite_->Draw();
+	
 }
