@@ -94,9 +94,6 @@ void Player::Initialize(Weapon* baton)
 	// つかみ入力の生成
 	inputGrab_ = std::make_unique<InputGamepadButton>("Player_Grab", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
 
-	// 構え入力の生成
-	inputStance_ = std::make_unique<InputGamepadButton>("Player_Stance", InputState::Press, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
-
 	// 防御入力の生成
 	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
 
@@ -417,17 +414,14 @@ void Player::UpdateAttack()
 /// @brief 構え状態を更新する
 void Player::UpdateStanceState()
 {
-	// 怯み状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら構え状態にならない
+	// 怯み状態、動けない状態は構え状態にならない
 	if(IsGrabbing() || IsIncapacitated())
 	{
 		isStance_ = false;
 		return;
 	}
 
-	// 構え入力中は構えフラグを立て、離したらフラグを下ろす
-	const bool isGamepadStance = (inputStance_ && inputStance_->IsInput());
-	const bool isKeyStance = (keyStance_ && keyStance_->IsInput());
-	isStance_ = (isGamepadStance || isKeyStance);
+	isStance_ = true;
 }
 
 /// @brief 連続回避を試行する

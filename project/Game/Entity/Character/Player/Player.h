@@ -85,9 +85,6 @@ private:
 	/// @brief 掴み入力
 	std::unique_ptr<InputGamepadButton> inputGrab_ = nullptr;
 
-	/// @brief 構え入力
-	std::unique_ptr<InputGamepadButton> inputStance_ = nullptr;
-
 	/// @brief 防御入力
 	std::unique_ptr<InputGamepadButton> inputGuard_ = nullptr;
 
