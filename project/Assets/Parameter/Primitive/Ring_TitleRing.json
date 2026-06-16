@@ -1,0 +1,54 @@
+{
+    "Ring_TitleRing": {
+        "BlendMode": 0,
+        "Blur_AfterImageMask": 0.0,
+        "Blur_MotionBlurMask": 0.0,
+        "Division_Slices": 32,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_Draw_ShadowMap": true,
+        "Material_Enable_BlinnPhong": true,
+        "Material_Enable_Diffuse": true,
+        "Material_Enable_HalfLambert": true,
+        "Material_Enable_Lighting": false,
+        "Material_Enable_Shadow": true,
+        "Material_Enable_Specular": true,
+        "Material_Environment": 0.0,
+        "Material_Shininess": 10.0,
+        "Material_Texture": "./Assets/Textures/uvChecker.png",
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "Size_EndAngle": 6.2831854820251465,
+        "Size_EndInRadius": 0.5,
+        "Size_EndOutRadius": 1.0,
+        "Size_StartAngle": 0.0,
+        "Size_StartInRadius": 0.5,
+        "Size_StartOutRadius": 1.0,
+        "Transform_Rotate": [
+            0.0,
+            3.2300000190734863,
+            0.0
+        ],
+        "Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Transform_Translate": [
+            0.0,
+            0.0,
+            10.0
+        ]
+    }
+}

@@ -17,15 +17,5 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
-
-
-private:
-
-	// カプセルコリジョン
-	std::unique_ptr<Collision3DBaseCapsule> capsule_ = nullptr;
-	Collision3DInstanceCapsule* capsuleInstance_ = nullptr;
-
-	std::unique_ptr<Collision3DBaseAABB> aabb_ = nullptr;
-	Collision3DInstanceAABB* aabbInstance_ = nullptr;
 };
 
