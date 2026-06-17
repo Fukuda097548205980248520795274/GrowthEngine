@@ -64,6 +64,9 @@ private:
 	/// @brief スタイルチェンジ処理
 	void StyleChange();
 
+	/// @brief カメラによるターゲットの更新
+	void UpdateTargetByCamera();
+
 
 private:
 
@@ -134,6 +137,9 @@ private:
 
 	/// @brief つかみ攻撃
 	std::unique_ptr<GrabAttack> grabAttack_ = nullptr;
+
+	/// @brief 前フレームのカメラのY回転
+	float prevCameraYaw_ = 0.0f;
 
 
 private:

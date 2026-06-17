@@ -242,6 +242,9 @@ void Player::Update()
 	// 動けない状態かどうか
 	bool isIncapacitatedState = IsIncapacitated();
 
+	// カメラによるターゲットの更新
+	UpdateTargetByCamera();
+
 	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
 	if (!isIncapacitatedState)
 	{
@@ -654,6 +657,69 @@ void Player::StyleChange()
 		if (currentStyle_ == FightStyle::Tempest) { StartStyleChange(FightStyle::Hammer); }
 		if (currentStyle_ == FightStyle::Hammer) { StartStyleChange(FightStyle::Tempest); }
 	}
+}
+
+/// @brief カメラによるターゲットの更新
+void Player::UpdateTargetByCamera()
+{
+	// 受け流し中、弾き中、つかみ中、つかまれ中、動けない状態ならターゲットの更新は行わない
+	if (IsParryNow() || IsDeflectNow() || IsGrabbing() || IsGrabbed() || IsIncapacitated())
+	{
+		return;
+	}
+
+	// カメラのY回転を取得する
+	float currentYaw = GetCameraYaw();
+
+	// 前フレームからのカメラのY回転の変化量を計算する
+	float deltaYaw = std::abs(currentYaw - prevCameraYaw_);
+
+	// 前フレームのカメラY回転を保存する
+	prevCameraYaw_ = currentYaw;
+
+	// カメラの回転変化が小さい場合はターゲットの更新を行わない
+	constexpr float kCameraThreshold = 0.05f;
+	if(deltaYaw < kCameraThreshold)return;
+
+	// カメラのY回転に基づいて、ターゲットの前方向を計算する
+	Vector3 cameraForward = Vector3(std::sin(currentYaw), 0.0f, std::cos(currentYaw));
+
+	// ターゲット候補の中から、カメラ前方向に最も近いターゲットを選択する
+	Character* bestTarget = nullptr;
+	float maxDot = -1.0f;
+
+	// 自身の位置を取得する
+	Vector3 pos = GetWorldPosition();
+
+	for (Character* target : Character::characters_)
+	{
+		// ターゲットが自分自身、または死んでいる、または同じ陣営ならスキップする
+		if (target == this || target->IsDead())continue;
+		if (IsPlayerSide() == target->IsPlayerSide())continue;
+
+		// ターゲットの方向
+		Vector3 toTarget = target->GetWorldPosition() - pos;
+		toTarget.y = 0.0f; // Y軸の高さは無視する
+
+		// ターゲットが遠い場合はスキップする
+		constexpr float kTargetSelectRange = 10.0f;
+		if (toTarget.LengthSq() > kTargetSelectRange * kTargetSelectRange)continue;
+
+		// ターゲット方向を正規化
+		toTarget = toTarget.Normalize();
+
+		// カメラ前方向とターゲット方向の内積を計算する
+		float dot = cameraForward.x * toTarget.x + cameraForward.z * toTarget.z;
+		if (dot > 0.0f && dot > maxDot)
+		{
+			maxDot = dot;
+			bestTarget = target;
+		}
+	}
+
+	// 最もカメラ前方向に近いターゲットをロックオンする
+	if (bestTarget != nullptr && bestTarget != lockOnTarget_)
+		lockOnTarget_ = bestTarget;
 }
 
 /// @brief 防御状態を更新する

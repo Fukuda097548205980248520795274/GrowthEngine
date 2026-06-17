@@ -207,6 +207,14 @@ void Character::Update()
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
 
+	// 受け流しのタイマーを減らす
+	parryTimer_ -= dt;
+	parryTimer_ = std::max(parryTimer_, 0.0f);
+
+	// 弾きのタイマーを減らす
+	deflectTimer_ -= dt;
+	deflectTimer_ = std::max(deflectTimer_, 0.0f);
+
 	// 着地判定をチェックする
 	LandingCheck();
 
@@ -544,6 +552,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
+	// 攻撃者をロックオンターゲットに設定する
+	if (attacker)lockOnTarget_ = attacker;
+
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
@@ -556,7 +567,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 受け流す
 			ExecuteParry(attacker);
 
-			// 必要であれば自分に専用の受け流し成功モーションを設定
+			// 受け流し成功モーションを設定
 			// SetAnimation(hParrySuccessMotion_, false, false);
 
 			// ダメージ無効
@@ -569,7 +580,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 受け流す
 			ExecuteDeflect(attacker);
 
-			// 必要であれば自分に専用の弾き成功モーションを設定
+			// 弾き成功モーションを設定
 			// SetAnimation(hDeflectSuccessMotion_, false, false);
 			
 			// ダメージ無効
@@ -709,7 +720,7 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 
 	// 受け流し成功のリアクションを設定する
 	currentDamageReaction_ = DamageReactionState::Parried;
-	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間（調整可）
+	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
 	knockbackVelocity_ = pushDirection * 4.0f;
@@ -1340,6 +1351,7 @@ void Character::ExecuteParry(Character* attacker)
 
 	// 受け流され処理を実行
 	attacker->OnParried(pullPos, attacker->GetDirection());
+	parryTimer_ = 0.5f; // 受け流し成功後の無防備時間
 
 	// se受け流し
 	soundManager_->SeParried();
@@ -1360,6 +1372,7 @@ void Character::ExecuteDeflect(Character* attacker)
 
 	// 相手に弾きのリアクションを与える
 	attacker->OnDeflect(pushDir, 5.0f);
+	deflectTimer_ = 0.5f; // 弾き成功後の無防備時間
 
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())

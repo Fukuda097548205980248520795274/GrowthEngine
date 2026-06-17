@@ -399,7 +399,15 @@ public:
 
 	/// @brief 弾かれたかどうか
 	/// @return 
-	bool IsDeflect() const { return currentDamageReaction_ == DamageReactionState::Deflect; }
+	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflect; }
+
+	/// @brief 受け流しているかどうか
+	/// @return 
+	bool IsParryNow()const { return parryTimer_ > 0.0f; }
+
+	/// @brief 弾いているかどうか
+	/// @return 
+	bool IsDeflectNow() const { return deflectTimer_ > 0.0f; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -639,11 +647,22 @@ protected:
 	// ジャストガード（受け流し）の受付時間
 	const float kJustGuardTime = 0.35f;
 
+
+private:
+
 	/// @brief 受け流しが可能かどうか
 	bool canParry_ = false;
 
+	// 受け流しのタイマー
+	float parryTimer_ = 0.0f;
+
+private:
+
 	/// @brief 弾きが可能かどうか
 	bool canDeflect_ = false;
+
+	// 弾きのタイマー
+	float deflectTimer_ = 0.0f;
 
 
 protected:
