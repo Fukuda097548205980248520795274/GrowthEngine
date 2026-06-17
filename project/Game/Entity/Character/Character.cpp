@@ -907,7 +907,7 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 void Character::UpdateLockOnTargets()
 {
 	// 構え中でない場合、構えなしでロックオンできない設定の場合、ダウン中の場合、すでにロックオンしている相手が死んでいる場合は、ロックオンを解除する
-	if ((!isStance_ && !canLockOnWithoutStance_) || IsDown() || (lockOnTarget_ && lockOnTarget_->IsDead()))
+	if (IsDown() || (lockOnTarget_ && lockOnTarget_->IsDead()))
 	{
 		lockOnTarget_ = nullptr;
 		return;

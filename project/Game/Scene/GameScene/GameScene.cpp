@@ -572,7 +572,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 			pivotData->theta += -rightStick.y * kPivotRotateSpeed * deltaTime;
 		}
 	}
-	else if (player_->IsStance() && player_->GetLockOnTarget() != nullptr)
+	else if (player_->GetLockOnTarget() != nullptr)
 	{
 		// ロックオン中はターゲットの方向にピボットを回転させる
 		Character* target = player_->GetLockOnTarget();

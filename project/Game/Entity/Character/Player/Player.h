@@ -110,9 +110,6 @@ private:
 	/// @brief 右移動入力
 	std::unique_ptr<InputKey> keyRightMove_ = nullptr;
 
-	/// @brief キーの構え入力
-	std::unique_ptr<InputKey> keyStance_ = nullptr;
-
 	/// @brief キーのカメラ左回転入力
 	std::unique_ptr<InputKey> keyCameraRotateLeft_ = nullptr;
 

@@ -80,7 +80,7 @@ void Player::Initialize(Weapon* baton)
 	inputMove_ = std::make_unique<InputGamepadLeftStick>("Player_Move", InputState::Press, 0, Vector2(0.0f, 0.0f), 0.5f);
 
 	// ダッシュ入力の生成
-	inputDash_ = std::make_unique<InputGamepadButton>("Player_Dash", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+	inputDash_ = std::make_unique<InputGamepadButton>("Player_Dash", InputState::Trigger, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
 
 	// 回避入力の生成
 	inputAvoid_ = std::make_unique<InputGamepadButton>("Player_Avoid", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
@@ -118,9 +118,6 @@ void Player::Initialize(Weapon* baton)
 
 	// キーの右移動入力の生成
 	keyRightMove_ = std::make_unique<InputKey>("Player_KeyRightMove", InputState::Press, DIK_D);
-
-	// キーの構え入力の生成
-	keyStance_ = std::make_unique<InputKey>("Player_KeyStance", InputState::Press, DIK_SPACE);
 
 
 	// 1段目の攻撃
@@ -415,7 +412,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 怯み状態、動けない状態は構え状態にならない
-	if(IsGrabbing() || IsIncapacitated())
+	if(IsGrabbing() || IsIncapacitated() || isDash_ || !GetLockOnTarget())
 	{
 		isStance_ = false;
 		return;
@@ -501,7 +498,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中ならダッシュにならない
 	// ダッシュ中に構えた場合もダッシュを解除する
-	if (isStance_ || IsGrabbing() || IsIncapacitated())
+	if (IsGrabbing() || IsIncapacitated())
 	{
 		isDash_ = false;
 		return;
