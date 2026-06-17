@@ -7,9 +7,17 @@
 /// @param isDirty 
 void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementList, bool& isDirty)
 {
+	// 選択されているポリゴンの高さを取得（押し出し時の基準高さとして使用）
+	float baseHeight = 0.0f;
+	if (!selectedItems_.empty())
+	{
+		NavPolygon* poly = navMesh_->GetMutablePolygon(selectedItems_[0].polygonId);
+		if (poly)baseHeight = poly->vertices[0].y;
+	}
+
 	// 毎フレーム、マウスカーソルと床面との交点を取得
 	Engine::Collision3D::Ray ray = RaycastFromMouse();
-	Vector3 currentHitPoint = GetRayIntersectionWithPlane(ray, 0.0f); // 床の高さを0.0fとする
+	Vector3 currentHitPoint = GetRayIntersectionWithPlane(ray, baseHeight);
 
 	// モード切り替え (1: 点, 2: 辺, 3: 面)
 	if (engine_->GetKeyTrigger(DIK_1))
@@ -51,6 +59,17 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 	{
 		// 前回の交点から現在の交点への移動ベクトルを計算
 		Vector3 moveDelta = currentHitPoint - previousHitPoint_;
+
+		// Altキーが押されている場合は、X軸とZ軸方向の移動を無効化してY軸方向の移動のみを許可
+		if (engine_->GetKeyPress(DIK_LALT))
+		{
+			moveDelta.x = 0.0f; // X軸方向の移動を無効化
+			moveDelta.z = 0.0f; // Z軸方向の移動を無効化
+		} 
+		else
+		{
+			moveDelta.y = 0.0f; // Y軸方向の移動を無効化
+		}
 
 		// 少しでもマウスが動いていれば辺を動かす
 		if (std::abs(moveDelta.x) > 0.001f || std::abs(moveDelta.z) > 0.001f)

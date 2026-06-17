@@ -207,14 +207,6 @@ void Character::Update()
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
 
-	// 受け流しのタイマーを減らす
-	parryTimer_ -= dt;
-	parryTimer_ = std::max(parryTimer_, 0.0f);
-
-	// 弾きのタイマーを減らす
-	deflectTimer_ -= dt;
-	deflectTimer_ = std::max(deflectTimer_, 0.0f);
-
 	// 着地判定をチェックする
 	LandingCheck();
 
@@ -531,6 +523,10 @@ void Character::StartUpdate()
 	// ガード成功のフラグを更新する
 	isPrevGuardHit_ = isGuardHit_;
 	isGuardHit_ = false;
+
+	// 弾き成功のフラグを更新する
+	isPrevHitDeflect_ = isHitDeflect_;
+	isHitDeflect_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -1351,7 +1347,6 @@ void Character::ExecuteParry(Character* attacker)
 
 	// 受け流され処理を実行
 	attacker->OnParried(pullPos, attacker->GetDirection());
-	parryTimer_ = 0.5f; // 受け流し成功後の無防備時間
 
 	// se受け流し
 	soundManager_->SeParried();
@@ -1372,7 +1367,7 @@ void Character::ExecuteDeflect(Character* attacker)
 
 	// 相手に弾きのリアクションを与える
 	attacker->OnDeflect(pushDir, 5.0f);
-	deflectTimer_ = 0.5f; // 弾き成功後の無防備時間
+	isHitDeflect_ = true;
 
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())

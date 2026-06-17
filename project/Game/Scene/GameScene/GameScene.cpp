@@ -126,7 +126,7 @@ void GameScene::Initialize()
 void GameScene::Update()
 {
 	// デルタタイムを取得する
-	const float deltaTime = engine_->GetDeltaTime() * engine_->GetTimeScale();
+	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// プレイヤーの更新
 	if (player_)
@@ -155,10 +155,25 @@ void GameScene::Update()
 	effectManager_->Update();
 
 	// ステージエディタの更新
-	stageEditor_->Update(deltaTime);
+	stageEditor_->Update(dt);
 
 	// カメラ制御の更新
-	UpdateCameraControl(deltaTime);
+	UpdateCameraControl(dt);
+
+	// プレイヤーの動きによるシェイクの更新
+	if (player_)
+	{
+		// 攻撃を当てた時
+		if(player_->IsHitAttack())
+			cameraShake_->Shake(0.2f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
+
+		// 弾いたとき
+		if(player_->IsHitDeflect())
+			cameraShake_->Shake(0.1f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
+	}
+
+	// カメラシェイクの更新
+	cameraShake_->Update(dt);
 }
 
 /// @brief 描画処理
@@ -565,6 +580,9 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 	// 手動でカメラ回転入力がある場合はピボットを回転させる
 	if (isManualCameraControl)
 	{
+		// プレイヤーに手動でカメラ回転していることを通知する
+		player_->SetIsOperationCamera(true);
+
 		// 手動でカメラ回転入力がある場合はピボットを回転させる
 		if (!isKeyCameraRotate)
 		{

@@ -18,6 +18,9 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief カメラを操作しているかどうかを設定する
+	/// @param isOperationCamera 
+	void SetIsOperationCamera(bool isOperationCamera) { isOperationCamera_ = isOperationCamera; }
 
 private:
 
@@ -140,6 +143,9 @@ private:
 
 	/// @brief 前フレームのカメラのY回転
 	float prevCameraYaw_ = 0.0f;
+
+	/// @brief カメラを操作しているかどうか
+	bool isOperationCamera_ = false;
 
 
 private:

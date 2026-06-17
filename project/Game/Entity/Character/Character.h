@@ -401,14 +401,6 @@ public:
 	/// @return 
 	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflect; }
 
-	/// @brief 受け流しているかどうか
-	/// @return 
-	bool IsParryNow()const { return parryTimer_ > 0.0f; }
-
-	/// @brief 弾いているかどうか
-	/// @return 
-	bool IsDeflectNow() const { return deflectTimer_ > 0.0f; }
-
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
 	void StartStyleChange(FightStyle style);
@@ -483,6 +475,10 @@ public:
 	/// @brief 攻撃がヒットしているかどうかを設定する
 	/// @param isHit 
 	void SetHitAttack(bool isHit) { isHitAttack_ = isHit; }
+
+	/// @brief 弾きが成功したかどうか
+	/// @return 
+	bool IsHitDeflect() const { return isHitDeflect_ || isPrevHitDeflect_; }
 
 
 protected:
@@ -653,16 +649,16 @@ private:
 	/// @brief 受け流しが可能かどうか
 	bool canParry_ = false;
 
-	// 受け流しのタイマー
-	float parryTimer_ = 0.0f;
-
 private:
 
 	/// @brief 弾きが可能かどうか
 	bool canDeflect_ = false;
 
-	// 弾きのタイマー
-	float deflectTimer_ = 0.0f;
+	/// @brief 弾きが成功したかどうか
+	bool isHitDeflect_ = false;
+
+	/// @brief 前フレームで弾きが成功したかどうか
+	bool isPrevHitDeflect_ = false;
 
 
 protected:

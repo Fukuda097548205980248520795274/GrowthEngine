@@ -177,9 +177,8 @@ void ComboAttack::Update()
 					// ターゲットにダメージを与える
 					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition() , owner_);
 
-					// ヒットしなかった場合は、移動速度を半減させる（ガードされた場合など）
-					if (!isHit)
-						currentMoveSpeed_ = moveSpeed_ * 0.5f;
+					// 攻撃が何かしら敵に触れたら、攻撃の移動速度を遅くする
+					if (moveSpeed_ > 0.2f)currentMoveSpeed_ = 0.2f;
 
 					// この攻撃でヒットしたターゲットをリストに追加する
 					state.hitCharacters.push_back(target);

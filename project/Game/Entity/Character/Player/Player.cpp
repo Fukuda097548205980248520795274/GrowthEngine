@@ -244,6 +244,7 @@ void Player::Update()
 
 	// カメラによるターゲットの更新
 	UpdateTargetByCamera();
+	isOperationCamera_ = false;
 
 	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
 	if (!isIncapacitatedState)
@@ -662,11 +663,8 @@ void Player::StyleChange()
 /// @brief カメラによるターゲットの更新
 void Player::UpdateTargetByCamera()
 {
-	// 受け流し中、弾き中、つかみ中、つかまれ中、動けない状態ならターゲットの更新は行わない
-	if (IsParryNow() || IsDeflectNow() || IsGrabbing() || IsGrabbed() || IsIncapacitated())
-	{
-		return;
-	}
+	// カメラ操作中でない、または攻撃中、またはつかまれている状態、または動けない状態ならターゲットの更新を行わない
+	if (!isOperationCamera_ || IsGrabbing() || IsGrabbed() || IsIncapacitated())return;
 
 	// カメラのY回転を取得する
 	float currentYaw = GetCameraYaw();
