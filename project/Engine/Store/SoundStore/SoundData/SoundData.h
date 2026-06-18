@@ -1,3 +1,4 @@
+#pragma once
 #include "Handle/Handle.h"
 #include <string>
 #include <memory>
@@ -7,20 +8,10 @@ namespace Engine
 	class AudioStore;
 	class SoundParameter;
 
-	// サウンドパラメータ
-	struct SoundParam
+	enum class SoundType
 	{
-		// 音量
-		float volume = 0.5f;
-
-		// ピッチ
-		float pitch = 1.0f;
-
-		// ループの有効化
-		bool enableLoop = false;
-
-		// オーディオハンドル
-		AudioHandle hAudio = 0;
+		Bgm,
+		Se
 	};
 
 	// サウンドデータ
@@ -36,26 +27,33 @@ namespace Engine
 			: name_(name), hSound_(hSound){
 		}
 
+		/// @brief デストラクタ
+		virtual ~SoundData() = default;
+
 		/// @brief 初期化
 		/// @param audioStore 
 		/// @param parameter 
-		void Initialize(AudioStore* audioStore, SoundParameter* parameter, AudioHandle hAudio);
+		virtual void Initialize(AudioStore* audioStore, SoundParameter* parameter, AudioHandle hAudio) = 0;
 
 		/// @brief リセット
-		void Reset();
+		virtual void Reset() = 0;
 
 		/// @brief 更新処理
-		void Update();
+		virtual void Update() = 0;
 
 		/// @brief 再生する
-		void Play();
+		virtual void Play() = 0;
 
 		/// @brief 停止する
-		void Stop();
+		virtual void Stop() = 0;
 
 		/// @brief パラメータを取得する
 		/// @return 
-		SoundParam* GetParam() { return param_.get(); }
+		virtual void* GetParam() const = 0;
+
+		/// @brief 再生されているかどうか
+		/// @return 
+		virtual bool IsPlay() const = 0;
 
 		/// @brief 名前を取得する
 		/// @return 名前
@@ -65,18 +63,18 @@ namespace Engine
 		/// @return 
 		SoundHandle GetHandle() const { return hSound_; }
 
-		/// @brief 再生されているかどうか
+		/// @brief サウンドタイプを取得する
 		/// @return 
-		bool IsPlay() const;
+		SoundType GetType() const { return type_; }
 
 
 	public:
 
 		/// @brief デバッグ用パラメータ
-		void DebugParameter();
+		virtual void DebugParameter() = 0;
 
 
-	private:
+	protected:
 
 		/// @brief 名前
 		std::string name_{};
@@ -87,31 +85,16 @@ namespace Engine
 		/// @brief サウンドハンドル
 		SoundHandle hSound_ = 0;
 
-		/// @brief プレイハンドル
-		PlayHandle hPlay_ = 0;
 
-		/// @brief パラメータ
-		std::unique_ptr<SoundParam> param_ = std::make_unique<SoundParam>();
-
-
-	private:
-
-		// 前回の音量
-		float preVolume_ = 0.5f;
-
-		// 前回のピッチ
-		float prePitch_ = 1.0f;
-
-		// サウンド内での再生フラグ
-		bool isPlay_ = false;
-
-
-	private:
+	protected:
 
 		/// @brief オーディオストア
 		AudioStore* audioStore_ = nullptr;
 
 		/// @brief パラメータ
 		SoundParameter* parameter_ = nullptr;
+
+		// サウンドタイプ
+		SoundType type_;
 	};
 }

@@ -152,6 +152,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp" />
     <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp" />
     <ClCompile Include="Engine\Application\Emitter3D\Emitter3D.cpp" />
+    <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp" />
+    <ClCompile Include="Engine\Application\Sound\Se\Se.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp" />
     <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
@@ -1014,6 +1016,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.cpp" />
+    <ClCompile Include="Engine\Store\SoundStore\SoundData\SeData\SeData.cpp" />
     <ClCompile Include="Engine\Store\SoundStore\SoundData\SoundData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1139,6 +1143,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
     <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />
     <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h" />
+    <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h" />
+    <ClInclude Include="Engine\Application\Sound\Se\Se.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
@@ -1424,6 +1430,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxStore.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DSpriteData\Render2DSpriteData.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DStore.h" />
+    <ClInclude Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.h" />
+    <ClInclude Include="Engine\Store\SoundStore\SoundData\SeData\SeData.h" />
     <ClInclude Include="Engine\Store\SoundStore\SoundData\SoundData.h" />
     <ClInclude Include="Engine\Store\SoundStore\SoundStore.h" />
     <ClInclude Include="Engine\Store\TextureStore\TextureStore.h" />

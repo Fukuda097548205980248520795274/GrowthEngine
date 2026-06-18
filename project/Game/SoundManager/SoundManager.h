@@ -41,39 +41,39 @@ public:
 
 
 	/// @brief 旋嵐スタイルのBGM
-	std::unique_ptr<Sound> bgmStyleSenran_ = nullptr;
+	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
 
 	/// @brief 撃鉄スタイルのBGM
-	std::unique_ptr<Sound> bgmStyleGekitetu_ = nullptr;
+	std::unique_ptr<Bgm> bgmStyleGekitetu_ = nullptr;
 
 
 private:
 
 
 	/// @brief 旋嵐スタイルチェンジのSE
-	std::unique_ptr<Sound> seStyleSenran0_ = nullptr;
-	std::unique_ptr<Sound> seStyleSenran1_ = nullptr;
-	std::unique_ptr<Sound> seStyleSenran2_ = nullptr;
-	std::unique_ptr<Sound> seStyleSenran3_ = nullptr;
-	std::unique_ptr<Sound> seStyleSenran4_ = nullptr;
+	std::unique_ptr<Se> seStyleSenran0_ = nullptr;
+	std::unique_ptr<Se> seStyleSenran1_ = nullptr;
+	std::unique_ptr<Se> seStyleSenran2_ = nullptr;
+	std::unique_ptr<Se> seStyleSenran3_ = nullptr;
+	std::unique_ptr<Se> seStyleSenran4_ = nullptr;
 
 	/// @brief 撃鉄スタイルチェンジのSE
-	std::unique_ptr<Sound> seStyleGekitetu0_ = nullptr;
-	std::unique_ptr<Sound> seStyleGekitetu1_ = nullptr;
-	std::unique_ptr<Sound> seStyleGekitetu2_ = nullptr;
-	std::unique_ptr<Sound> seStyleGekitetu3_ = nullptr;
+	std::unique_ptr<Se> seStyleGekitetu0_ = nullptr;
+	std::unique_ptr<Se> seStyleGekitetu1_ = nullptr;
+	std::unique_ptr<Se> seStyleGekitetu2_ = nullptr;
+	std::unique_ptr<Se> seStyleGekitetu3_ = nullptr;
 
 	/// @brief 受け流しのSE
-	std::unique_ptr<Sound> seParried_ = nullptr;
+	std::unique_ptr<Se> seParried_ = nullptr;
 
 	/// @brief 弾きのSE
-	std::unique_ptr<Sound> seDeflect_ = nullptr;
+	std::unique_ptr<Se> seDeflect_ = nullptr;
 
 	/// @brief ガードのSE
-	std::unique_ptr<Sound> seGuard_ = nullptr;
+	std::unique_ptr<Se> seGuard_ = nullptr;
 
 	/// @brief 回避のSE
-	std::unique_ptr<Sound> seAvoid_ = nullptr;
+	std::unique_ptr<Se> seAvoid_ = nullptr;
 
 
 private:

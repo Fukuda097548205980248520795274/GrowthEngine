@@ -1,40 +1,31 @@
 #pragma once
 #include "Handle/Handle.h"
-
-namespace Engine
-{
-	struct SoundParam;
-}
+#include <string>
 
 class GrowthEngine;
 
-class Sound
+namespace Engine
 {
-public:
+	class Sound
+	{
+	public:
 
-	/// @brief コンストラクタ
-	Sound(SoundHandle hSound);
+		/// @brief コンストラクタ
+		Sound() = default;
 
-	/// @brief 再生
-	void Play()const;
+		/// @brief デストラクタ
+		virtual ~Sound() = default;
 
-	/// @brief 停止
-	void Stop()const;
-
-	/// @brief 再生されているかどうか
-	/// @return 
-	bool IsPlaying()const;
-
-	/// @brief パラメータ
-	Engine::SoundParam* param_ = nullptr;
+		/// @brief 再生
+		virtual void Play()const = 0;
 
 
-private:
+	private:
 
-	/// @brief エンジンのインスタンス
-	const GrowthEngine* engine_ = nullptr;
+		/// @brief エンジンのインスタンス
+		const GrowthEngine* engine_ = nullptr;
 
-	/// @brief サウンドハンドル
-	SoundHandle hSound_ = 0;
-};
-
+		/// @brief サウンドハンドル
+		SoundHandle hSound_ = 0;
+	};
+}

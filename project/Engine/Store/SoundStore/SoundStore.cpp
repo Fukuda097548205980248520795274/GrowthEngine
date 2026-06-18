@@ -3,6 +3,9 @@
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 #include <cassert>
 
+#include "SoundData/BgmData/BgmData.h"
+#include "SoundData/SeData/SeData.h"
+
 /// @brief コンストラクタ
 Engine::SoundStore::SoundStore()
 {
@@ -30,7 +33,8 @@ void Engine::SoundStore::Update()
 /// @brief 読み込み
 /// @param name 
 /// @param hAudio 
-SoundHandle Engine::SoundStore::Load(const std::string& name, AudioHandle hAudio)
+/// @param type 
+SoundHandle Engine::SoundStore::Load(const std::string& name, AudioHandle hAudio, SoundType type)
 {
 	// 同じ名前を見つけたら、そのハンドルを返す
 	for(auto& data : dataTable_)
@@ -47,7 +51,19 @@ SoundHandle Engine::SoundStore::Load(const std::string& name, AudioHandle hAudio
 	nameTable_[name] = hSound;
 
 	// サウンドデータを作成してテーブルに追加する
-	std::unique_ptr<SoundData> data = std::make_unique<SoundData>(name, hSound);
+	std::unique_ptr<SoundData> data;
+	switch (type)
+	{
+	case SoundType::Bgm:
+		data = std::make_unique<BgmData>(name, hSound);
+		break;
+	case SoundType::Se:
+		data = std::make_unique<SeData>(name, hSound);
+		break;
+	default:
+		assert(false);
+	}
+
 	data->Initialize(audioStore_, parameter_.get(), hAudio);
 	dataTable_.push_back(std::move(data));
 

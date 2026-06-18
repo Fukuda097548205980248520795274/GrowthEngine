@@ -1276,6 +1276,18 @@
     <Filter Include="Engine\Include\Application\Emitter3D">
       <UniqueIdentifier>{a499c0f5-cf8a-4e64-aab5-210bf128e16d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\SoundStore\SoundData\BgmData">
+      <UniqueIdentifier>{0795d898-e02a-439c-96bf-648702eb47c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\SoundStore\SoundData\SeData">
+      <UniqueIdentifier>{0896478c-3a24-42ff-9f54-7c1ab9d41d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Sound\Bgm">
+      <UniqueIdentifier>{482ad6a8-a785-4d12-ba5a-46c218ca4544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Sound\Se">
+      <UniqueIdentifier>{4f4bc02a-9ac1-4fd6-a692-29750b12d0f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2309,6 +2321,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Emitter3D\Emitter3D.cpp">
       <Filter>Engine\Include\Application\Emitter3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.cpp">
+      <Filter>Engine\Include\Store\SoundStore\SoundData\BgmData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\SoundStore\SoundData\SeData\SeData.cpp">
+      <Filter>Engine\Include\Store\SoundStore\SoundData\SeData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Sound\Se\Se.cpp">
+      <Filter>Engine\Include\Application\Sound\Se</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp">
+      <Filter>Engine\Include\Application\Sound\Bgm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3460,6 +3484,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h">
       <Filter>Engine\Include\Application\Emitter3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.h">
+      <Filter>Engine\Include\Store\SoundStore\SoundData\BgmData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\SoundStore\SoundData\SeData\SeData.h">
+      <Filter>Engine\Include\Store\SoundStore\SoundData\SeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Sound\Se\Se.h">
+      <Filter>Engine\Include\Application\Sound\Se</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h">
+      <Filter>Engine\Include\Application\Sound\Bgm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

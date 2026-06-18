@@ -28,17 +28,22 @@ namespace Engine
 		/// @brief 読み込み
 		/// @param name 
 		/// @param hAudio 
-		SoundHandle Load(const std::string& name, AudioHandle hAudio);
+		/// @param type 
+		SoundHandle Load(const std::string& name, AudioHandle hAudio, SoundType type);
 
 		/// @brief パラメータを取得する
+		/// @tparam T 
 		/// @param hSound 
 		/// @return 
-		SoundParam* GetParam(SoundHandle hSound) { return dataTable_[hSound]->GetParam(); }
+		template<typename T>
+		T* GetParam(SoundHandle hSound) {return static_cast<T*>(dataTable_[hSound]->GetParam());}
 
 		/// @brief パラメータを取得する
+		/// @tparam T 
 		/// @param name 
 		/// @return 
-		SoundParam* GetParam(const std::string& name) { return GetParam(nameTable_[name]); }
+		template<typename T>
+		T* GetParam(const std::string& name) { return GetParam<T>(nameTable_[name]); }
 
 		/// @brief 再生する
 		/// @param hSound 

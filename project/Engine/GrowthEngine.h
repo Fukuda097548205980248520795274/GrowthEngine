@@ -53,7 +53,8 @@
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
 
-#include "Application/Sound/Sound.h"
+#include "Application/Sound/Bgm/Bgm.h"
+#include "Application/Sound/Se/Se.h"
 
 #include "Application/Collision3DBase/Collision3DBaseSphere/Collision3DBaseSphere.h"
 #include "Application/Collision3DBase/Collision3DBaseAABB/Collision3DBaseAABB.h"
@@ -224,8 +225,9 @@ public:
 	/// @brief サウンドを読み込む
 	/// @param name 
 	/// @param hAudio 
+	/// @param type 
 	/// @return 
-	SoundHandle LoadSound(const std::string& name, AudioHandle hAudio)const { return soundStore_->Load(name, hAudio); }
+	SoundHandle LoadSound(const std::string& name, AudioHandle hAudio, Engine::SoundType type)const { return soundStore_->Load(name, hAudio, type); }
 
 
 
@@ -248,14 +250,18 @@ public:
 	void SoundStop(const std::string& name)const { soundStore_->Stop(name); }
 
 	/// @brief サウンドのパラメータを取得する
+	/// @tparam T 
 	/// @param hSound 
 	/// @return 
-	Engine::SoundParam* GetSoundParam(SoundHandle hSound)const { return soundStore_->GetParam(hSound); }
+	template<typename T>
+	T* GetSoundParam(SoundHandle hSound)const { return soundStore_->GetParam<T>(hSound); }
 
 	/// @brief サウンドのパラメータを取得する
+	/// @tparam T 
 	/// @param name 
 	/// @return 
-	Engine::SoundParam* GetSoundParam(const std::string& name)const { return soundStore_->GetParam(name); }
+	template<typename T>
+	T* GetSoundParam(const std::string& name)const { return soundStore_->GetParam<T>(name); }
 
 	/// @brief サウンドが再生されているかどうか
 	/// @param hSound 
