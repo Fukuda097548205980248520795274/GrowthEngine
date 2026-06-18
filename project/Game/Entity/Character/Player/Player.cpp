@@ -130,7 +130,7 @@ void Player::Initialize(Weapon* baton)
 	attack1Data.cancelStartTime = 0.2f;
 	attack1Data.cancelEndTime = 0.5f;
 	attack1Data.hitDefinitions.resize(1);
-	attack1Data.hitDefinitions[0].jointType = JointType::Weapon;
+	attack1Data.hitDefinitions[0].jointType = JointType::HandR;
 	attack1Data.hitDefinitions[0].startTime = 0.1f;
 	attack1Data.hitDefinitions[0].endTime = 0.4f;
 	attack1Data.hitDefinitions[0].damage = 1;
@@ -166,7 +166,7 @@ void Player::Initialize(Weapon* baton)
 	attack3Data.cancelStartTime = 0.2f;
 	attack3Data.cancelEndTime = 0.5f;
 	attack3Data.hitDefinitions.resize(1);
-	attack3Data.hitDefinitions[0].jointType = JointType::Weapon;
+	attack3Data.hitDefinitions[0].jointType = JointType::HandR;
 	attack3Data.hitDefinitions[0].startTime = 0.1f;
 	attack3Data.hitDefinitions[0].endTime = 0.4f;
 	attack3Data.hitDefinitions[0].damage = 1;
@@ -189,8 +189,8 @@ void Player::Initialize(Weapon* baton)
 	attack4Data.hitDefinitions[0].endTime = 0.4f;
 	attack4Data.hitDefinitions[0].damage = 1;
 	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
-	attack4Data.hitDefinitions[0].knockback = 0.5f;
-	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(1.0f, 1.0f, 1.0f);
+	attack4Data.hitDefinitions[0].knockback = 1.0f;
+	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));
@@ -675,10 +675,6 @@ void Player::UpdateTargetByCamera()
 	// 前フレームのカメラY回転を保存する
 	prevCameraYaw_ = currentYaw;
 
-	// カメラの回転変化が小さい場合はターゲットの更新を行わない
-	constexpr float kCameraThreshold = 0.05f;
-	if(deltaYaw < kCameraThreshold)return;
-
 	// カメラのY回転に基づいて、ターゲットの前方向を計算する
 	Vector3 cameraForward = Vector3(std::sin(currentYaw), 0.0f, std::cos(currentYaw));
 
@@ -698,10 +694,6 @@ void Player::UpdateTargetByCamera()
 		// ターゲットの方向
 		Vector3 toTarget = target->GetWorldPosition() - pos;
 		toTarget.y = 0.0f; // Y軸の高さは無視する
-
-		// ターゲットが遠い場合はスキップする
-		constexpr float kTargetSelectRange = 10.0f;
-		if (toTarget.LengthSq() > kTargetSelectRange * kTargetSelectRange)continue;
 
 		// ターゲット方向を正規化
 		toTarget = toTarget.Normalize();

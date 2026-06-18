@@ -156,8 +156,9 @@ public:
 	/// @param knockDirection 
 	/// @param enemyPosition 
 	/// @param attacker 
+	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
-		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr);
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
@@ -391,7 +392,8 @@ public:
 
 	/// @brief 弾きを実行する
 	/// @param attacker 
-	void ExecuteDeflect(Character* attacker);
+	/// @param hitPosition 
+	void ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPosition = std::nullopt);
 
 	/// @brief 受け流されているかどうか
 	/// @return 

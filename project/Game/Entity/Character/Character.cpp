@@ -535,7 +535,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -574,7 +574,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
 			// 受け流す
-			ExecuteDeflect(attacker);
+			ExecuteDeflect(attacker, hitPosition);
 
 			// 弾き成功モーションを設定
 			// SetAnimation(hDeflectSuccessMotion_, false, false);
@@ -645,7 +645,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			damageReactionTimer_ = 0.3f;
 
 			// 軽い怯みのエフェクトを再生する
-			EffectManager::GetInstance()->ImpactDrop000(GetWorldPosition() + Vector3(0.0f, 1.5f, 0.0f));
+			if (hitPosition)
+			{
+				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			}
+
+			// 軽い怯みのSEを再生する
+			soundManager_->SeLightDamage();
 
 			break;
 
@@ -654,6 +661,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			currentDamageReaction_ = DamageReactionState::HeavyStaggerFront; // ここではとりあえず前方向の怯みを設定。
 			SetAnimation(hDamageHeavyMotion_, true, false);
 			damageReactionTimer_ = 1.0f;
+
+			// 重い怯みのSEを再生する
+			soundManager_->SeHeavyDamage();
+
 			break;
 
 			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
@@ -661,6 +672,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
 			SetAnimation(hDownFallMotion_, true, false);
 			damageReactionTimer_ = 0.3f;
+
+			// ダウン落下のSEを再生する
+			soundManager_->SeHeavyDamage();
+
 			break;
 		}
 	}
@@ -1358,7 +1373,8 @@ void Character::ExecuteParry(Character* attacker)
 
 /// @brief 弾きを実行する
 /// @param attacker 
-void Character::ExecuteDeflect(Character* attacker)
+/// @param hitPosition 
+void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPosition)
 {
 	if (!attacker) return;
 
@@ -1374,7 +1390,10 @@ void Character::ExecuteDeflect(Character* attacker)
 	isHitDeflect_ = true;
 
 	// 弾きのエフェクトを発生させる
-	EffectManager::GetInstance()->EmitSpark000(attacker->GetWorldPosition() + Vector3(0.0f, 1.5f, 0.0f) + attacker->GetDirection() * 0.25f);
+	if (hitPosition)
+	{
+		EffectManager::GetInstance()->EmitSpark000(*hitPosition);
+	}
 
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())
@@ -1527,6 +1546,11 @@ void Character::LandingCheck()
 
 	// コリジョンがないと処理しない
 	if (!landingCollision_)return;
+
+	if (knockbackVelocity_.y + velocityY_ > 0.0f)
+	{
+		return; // 上に飛んでいる間は着地判定をしない
+	}
 
 	// コリジョンの状態を確認する
 	if (landingCollision_->isCollision_)

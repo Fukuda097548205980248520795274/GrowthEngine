@@ -20,6 +20,9 @@ EffectManager* EffectManager::GetInstance()
 /// @brief 初期化処理
 void EffectManager::Initialize()
 {
+	// テクスチャを読み込む
+	engine_->LoadTexture("./Assets/Textures/smoke_000.png");
+
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
 	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
@@ -29,6 +32,9 @@ void EffectManager::Initialize()
 
 	// インパクトドロップ000を生成
 	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// インパクトスモーク000を生成
+	impactSmoke000_ = std::make_unique<Particle3D>("impactSmoke_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -53,6 +59,9 @@ void EffectManager::Draw()
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
+
+	// インパクトスモーク000を描画
+	impactSmoke000_->Draw();
 
 	// スパーク000を描画
 	spark000_->Draw();
@@ -86,6 +95,15 @@ void EffectManager::EmitSpark000(const Vector3& position)
 void EffectManager::ImpactDrop000(const Vector3& position)
 {
 	Emitter3D emitter("impactDrop_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトスモークを放出する
+/// @param position 
+void EffectManager::ImpactSmoke000(const Vector3& position)
+{
+	Emitter3D emitter("impactSmoke_000");
 	emitter.param_->position = position;
 	emitter.Emit();
 }

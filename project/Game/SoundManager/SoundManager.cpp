@@ -56,6 +56,15 @@ void SoundManager::Initialize()
 
 	// 回避のSE
 	seAvoid_ = std::make_unique<Se>("Avoid", engine_->LoadAudio("./Assets/Sounds/se/avoid.mp3"));
+
+	// 軽ダメージのSE
+	seLightDamage_ = std::make_unique<Se>("LightDamage", engine_->LoadAudio("./Assets/Sounds/se/lightDamage.mp3"));
+
+	// 重ダメージのSE
+	seHeavyDamage_ = std::make_unique<Se>("HeavyDamage", engine_->LoadAudio("./Assets/Sounds/se/heavyDamage.mp3"));
+
+	// ガードブレイクのSE
+	seGuardBreak_ = std::make_unique<Se>("GuardBreak", engine_->LoadAudio("./Assets/Sounds/se/guardBreak.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

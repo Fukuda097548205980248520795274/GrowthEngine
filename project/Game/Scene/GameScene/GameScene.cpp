@@ -73,7 +73,7 @@ void GameScene::Initialize()
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
 	// 試験的な立方体の生成と初期化
-	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 1000, "Trial_Cube");
+	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 1000, "Trial_Cube");
 
 
 	// コンマスプライトの生成と初期化

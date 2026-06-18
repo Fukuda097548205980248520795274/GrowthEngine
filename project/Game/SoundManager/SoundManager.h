@@ -39,6 +39,15 @@ public:
 	/// @brief 回避のSE
 	void SeAvoid() { if (seAvoid_)seAvoid_->Play(); }
 
+	/// @brief 軽ダメージのSE
+	void SeLightDamage() { if (seLightDamage_)seLightDamage_->Play(); }
+
+	/// @brief 重ダメージのSE
+	void SeHeavyDamage() { if (seHeavyDamage_)seHeavyDamage_->Play(); }
+
+	/// @brief ガードブレイクのSE
+	void SeGuardBreak() { if (seGuardBreak_)seGuardBreak_->Play(); }
+
 
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
@@ -74,6 +83,15 @@ private:
 
 	/// @brief 回避のSE
 	std::unique_ptr<Se> seAvoid_ = nullptr;
+
+	/// @brief 軽ダメージのSE
+	std::unique_ptr<Se> seLightDamage_ = nullptr;
+
+	/// @brief 重ダメージのSE
+	std::unique_ptr<Se> seHeavyDamage_ = nullptr;
+
+	/// @brief ガードブレイクのSE
+	std::unique_ptr<Se> seGuardBreak_ = nullptr;
 
 
 private:

@@ -69,14 +69,14 @@
                 "hitDefinitions": [
                     {
                         "damage": 10,
-                        "damageReaction": 1,
+                        "damageReaction": 3,
                         "endTime": 0.5,
                         "jointType": 9,
-                        "knockback": 0.0,
+                        "knockback": 1.0,
                         "knockbackDirection": [
                             0.0,
-                            0.0,
-                            1.0
+                            0.7425634860992432,
+                            0.669775664806366
                         ],
                         "radius": 0.25,
                         "startTime": 0.05000000074505806

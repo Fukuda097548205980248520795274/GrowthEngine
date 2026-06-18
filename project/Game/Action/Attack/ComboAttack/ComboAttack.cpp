@@ -174,8 +174,12 @@ void ComboAttack::Update()
 					knockBackDirection.z = right.z * state.def.knockbackDirection.x + up.z * state.def.knockbackDirection.y + forward.z * state.def.knockbackDirection.z;
 					knockBackDirection = knockBackDirection.Normalize();
 
+					// 当たり判定の中心点を取得する
+					Vector3 hitPosition = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_)->param_->center;
+
 					// ターゲットにダメージを与える
-					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition() , owner_);
+					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition(), owner_,
+						std::make_optional(hitPosition));
 
 					// 攻撃が何かしら敵に触れたら、攻撃の移動速度を遅くする
 					if (moveSpeed_ > 0.2f)currentMoveSpeed_ = 0.2f;
