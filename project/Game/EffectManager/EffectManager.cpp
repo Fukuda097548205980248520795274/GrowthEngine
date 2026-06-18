@@ -23,6 +23,12 @@ void EffectManager::Initialize()
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
 	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
+
+	// スパークパーティクル000を生成
+	spark000_ = std::make_unique<Particle3D>("spark_000", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// インパクトドロップ000を生成
+	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -45,6 +51,12 @@ void EffectManager::Draw()
 	for (auto& effect : guardEffects_)
 		effect->Draw();
 
+	// インパクトドロップ000を描画
+	impactDrop000_->Draw();
+
+	// スパーク000を描画
+	spark000_->Draw();
+
 	// ガードエフェクトのモデルを描画
 	guardEffectModel_->Draw();
 }
@@ -58,4 +70,22 @@ void  EffectManager::CreateGuardEffect(const Vector3& position, const Vector3& r
 	guardEffect->Initialize(guardEffectModel_->CreateInstance(), position, rotate);
 
 	guardEffects_.push_back(std::move(guardEffect));
+}
+
+/// @brief スパークを放出する
+/// @param position 
+void EffectManager::EmitSpark000(const Vector3& position)
+{
+	Emitter3D emitter("spark_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトドロップを放出する
+/// @param position 
+void EffectManager::ImpactDrop000(const Vector3& position)
+{
+	Emitter3D emitter("impactDrop_000");
+	emitter.param_->position = position;
+	emitter.Emit();
 }

@@ -643,6 +643,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
 			SetAnimation(hDamageLightMotion_, true, false);
 			damageReactionTimer_ = 0.3f;
+
+			// 軽い怯みのエフェクトを再生する
+			EffectManager::GetInstance()->ImpactDrop000(GetWorldPosition() + Vector3(0.0f, 1.5f, 0.0f));
+
 			break;
 
 			// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
@@ -1368,6 +1372,9 @@ void Character::ExecuteDeflect(Character* attacker)
 	// 相手に弾きのリアクションを与える
 	attacker->OnDeflect(pushDir, 5.0f);
 	isHitDeflect_ = true;
+
+	// 弾きのエフェクトを発生させる
+	EffectManager::GetInstance()->EmitSpark000(attacker->GetWorldPosition() + Vector3(0.0f, 1.5f, 0.0f) + attacker->GetDirection() * 0.25f);
 
 	// 相手が武器を持っている場合は、武器を落とさせる
 	if (attacker->HasWeapon())

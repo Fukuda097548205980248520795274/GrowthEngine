@@ -25,6 +25,14 @@ public:
 	/// @param rotate 
 	void CreateGuardEffect(const Vector3& position, const Vector3& rotate);
 
+	/// @brief スパークを放出する
+	/// @param position 
+	void EmitSpark000(const Vector3& position);
+
+	/// @brief インパクトドロップを放出する
+	/// @param position 
+	void ImpactDrop000(const Vector3& position);
+
 
 private:
 
@@ -54,5 +62,17 @@ private:
 
 	/// @brief ガードエフェクト
 	std::list<std::unique_ptr<GuardEffect>> guardEffects_;
+
+
+private:
+
+	// スパークパーティクル000
+	std::unique_ptr<Particle3D> spark000_ = nullptr;
+
+
+private:
+
+	// インパクトドロップ000
+	std::unique_ptr<Particle3D> impactDrop000_ = nullptr;
 };
 

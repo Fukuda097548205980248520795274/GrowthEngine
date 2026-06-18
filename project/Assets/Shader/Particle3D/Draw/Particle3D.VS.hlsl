@@ -29,23 +29,24 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     // パーティクルの情報を取得
     Particle particle = gParticles[instanceID];
     
-    
+    // 1. スケールとローカル回転を適用した行列を作成
     float3x3 rotMatrix = QuaternionToMatrix(particle.rotation);
-    
-    float4x4 worldMatrix = float4x4(
-        float4(rotMatrix[0], 0.0f),
-        float4(rotMatrix[1], 0.0f),
-        float4(rotMatrix[2], 0.0f),
+    float4x4 localMatrix = float4x4(
+        float4(rotMatrix[0] * particle.scale.x, 0.0f),
+        float4(rotMatrix[1] * particle.scale.y, 0.0f),
+        float4(rotMatrix[2] * particle.scale.z, 0.0f),
         float4(0.0f, 0.0f, 0.0f, 1.0f)
     );
     
-    worldMatrix[0] *= particle.scale.x;
-    worldMatrix[1] *= particle.scale.y;
-    worldMatrix[2] *= particle.scale.z;
+    // 2. 「平行移動を入れる前」にビルボード行列を掛けて、常にカメラを向くようにする
+    float4x4 billboardedMatrix = mul(localMatrix, gView.billboard);
     
-    worldMatrix[3].xyz = particle.translate;
+    // 3. 最後に平行移動（ワールド座標の位置）を入れる
+    billboardedMatrix[3].xyz = particle.translate;
     
-    output.position = mul(input.position, mul(mul(worldMatrix, gView.billboard), gView.viewProjection));
+    // 4. ビュープロジェクションを掛けて画面上の位置を計算
+    output.position = mul(input.position, mul(billboardedMatrix, gView.viewProjection));
+    
     output.texcoord = input.texcoord;
     output.color = particle.color;
     output.clipPos = output.position;
