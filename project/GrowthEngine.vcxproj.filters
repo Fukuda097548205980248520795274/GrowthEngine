@@ -1273,6 +1273,9 @@
     <Filter Include="Game\HUD\Timer">
       <UniqueIdentifier>{e127f022-ff89-403e-a9fa-240a0eb57dd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Emitter3D">
+      <UniqueIdentifier>{a499c0f5-cf8a-4e64-aab5-210bf128e16d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2303,6 +2306,9 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\Timer\Timer.cpp">
       <Filter>Game\HUD\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Emitter3D\Emitter3D.cpp">
+      <Filter>Engine\Include\Application\Emitter3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3451,6 +3457,9 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Timer\Timer.h">
       <Filter>Game\HUD\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h">
+      <Filter>Engine\Include\Application\Emitter3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

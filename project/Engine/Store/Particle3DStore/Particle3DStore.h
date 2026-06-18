@@ -73,6 +73,28 @@ namespace Engine
 		/// @param viewProjection 
 		void Draw(ID3D12GraphicsCommandList* commandList, const std::string& name, const Camera3DStore* cameraStore, OffscreenResource* offscreenResource, DepthResource* depthResource);
 
+		/// @brief エミッターのパラメータを取得する
+		/// @param handle 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* GetEmitter(Particle3DHandle handle, int32_t emitterIndex) { return dataTable_[handle]->GetEmitter(emitterIndex); }
+
+		/// @brief エミッターのパラメータを取得する
+		/// @param name 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* GetEmitter(const std::string& name, int32_t emitterIndex) { return dataTable_[nameTable_[name]]->GetEmitter(emitterIndex); }
+
+		/// @brief エミッターのインデックスを取得する
+		/// @param handle 
+		/// @return 
+		int32_t GetEmitterIndex(Particle3DHandle handle) { return dataTable_[handle]->GetEmitterIndex(); }
+
+		/// @brief エミッターのインデックスを取得する
+		/// @param name 
+		/// @return 
+		int32_t GetEmitterIndex(const std::string& name) { return dataTable_[nameTable_[name]]->GetEmitterIndex(); }
+
 		/// @brief 放出開始
 		/// @param handle 
 		void Emit(Particle3DHandle handle, int32_t emitterIndex) { dataTable_[handle]->Emit(emitterIndex); }

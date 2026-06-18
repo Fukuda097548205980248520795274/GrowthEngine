@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <vector>
+#include <string>
 #include "Handle/Handle.h"
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
@@ -27,6 +28,10 @@ namespace Engine
 
 		struct Emitter
 		{
+			// エミッターの名前
+			std::string name;
+
+			// 位置
 			Vector3 position;
 
 			// 放出開始

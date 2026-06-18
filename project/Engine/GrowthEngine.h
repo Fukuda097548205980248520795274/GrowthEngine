@@ -26,6 +26,7 @@
 #include "Application/GameCamera/GameCamera2D/GameCamera2D.h"
 
 #include "Application/Particle3D/Particle3D.h"
+#include "Application/Emitter3D/Emitter3D.h"
 
 #include "Application/Render3D/Render3DStaticModel/Render3DStaticModel.h"
 #include "Application/Render3D/Render3DAnimationModel/Render3DAnimationModel.h"
@@ -934,6 +935,28 @@ public:
 	/// @param name 
 	/// @param emitterIndex 
 	void StopParticle3D(const std::string& name, int32_t emitterIndex)const { renderContext_->StopParticle3D(name, emitterIndex); }
+
+	/// @brief 3Dパーティクルのエミッタを取得する
+	/// @param hParticle 
+	/// @param emitterIndex 
+	/// @return 
+	Engine::Particle3D::Emitter* Get3DEmitter(Particle3DHandle hParticle, int32_t emitterIndex) const { return renderContext_->Get3DEmitter(hParticle, emitterIndex); }
+
+	/// @brief 3Dパーティクルのエミッタを取得する
+	/// @param name 
+	/// @param emitterIndex 
+	/// @return 
+	Engine::Particle3D::Emitter* Get3DEmitter(const std::string& name, int32_t emitterIndex) const { return renderContext_->Get3DEmitter(name, emitterIndex); }
+
+	/// @brief 3Dパーティクルのエミッタのインデックスを取得する
+	/// @param hParticle 
+	/// @return 
+	int32_t GetEmitter3DIndex(Particle3DHandle hParticle)const { return renderContext_->GetEmitter3DIndex(hParticle); }
+
+	/// @brief 3Dパーティクルのエミッタのインデックスを取得する
+	/// @param name 
+	/// @return 
+	int32_t GetEmitter3DIndex(const std::string& name)const { return renderContext_->GetEmitter3DIndex(name); }
 
 
 

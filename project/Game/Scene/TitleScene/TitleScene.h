@@ -17,5 +17,10 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
+
+
+private:
+
+	Vector3 emitterPosition_ = { 0.0f, 0.0f, 0.0f };
 };
 

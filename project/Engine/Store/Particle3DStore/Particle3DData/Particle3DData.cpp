@@ -76,13 +76,20 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->attract.swapEmitterAttract = false;
 	param_->hModel = hModel_;
 
+	// エミッターのインデックス
+	int emitterIndex = 0;
+
 	// エミッターの設定
 	param_->emitter.resize(emitterNum_);
 	for (auto& emitter : param_->emitter)
 	{
+		emitter.name = "Emitter" + std::to_string(emitterIndex);
 		emitter.position = Vector3(0.0f, 0.0f, 0.0f);
         emitter.isStart = false;
 		emitter.timer = 0.0f;
+
+		// エミッターインデックスを加算する
+		emitterIndex++;
 	}
 
 	// テクスチャを取得する
@@ -97,6 +104,18 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 
 	if (parameter_)
 	{
+		emitterIndex = 0;
+
+		for(auto& emitter : param_->emitter)
+		{
+			parameter_->SetValue(group_, "Emitter" + std::to_string(emitterIndex) + "_Name", &emitter.name);
+			parameter_->SetValue(group_, "Emitter" + std::to_string(emitterIndex) + "_Timer", &emitter.timer);
+			parameter_->SetValue(group_, "Emitter" + std::to_string(emitterIndex) + "_Position", &emitter.position);
+			parameter_->SetValue(group_, "Emitter" + std::to_string(emitterIndex) + "_IsStart", &emitter.isStart);
+
+			emitterIndex++;
+		}
+
 		// パラメータを登録する
 		parameter_->SetValue(group_, "Shape", &param_->shape);
 		parameter_->SetValue(group_, "Radius1", &param_->radius1);
@@ -279,6 +298,9 @@ void Engine::Particle3DData::Reset()
 		}
 	}
 
+	// エミッターのインデックスをリセットする
+	useCurrentEmitterIndex_ = 0;
+
 	// ロードしたこととする
 	isLoad_ = true;
 }
@@ -391,10 +413,19 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// 回転はクォータニオンに変換して渡す
 	if (param_->rotate.isRandom)
 	{
-		Vector3 randomAxis = Vector3(GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f)).Normalize();
-		float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
-		emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, randomAxis);
-		emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, randomAxis);
+		if (param_->enableBillboard)
+		{
+			float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
+			emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
+			emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			Vector3 randomAxis = Vector3(GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f)).Normalize();
+			float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
+			emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, randomAxis);
+			emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, randomAxis);
+		}
 	}
 	else
 	{
@@ -509,6 +540,36 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	commandList->Dispatch((numInstance_ + 255) / 256, 1, 1);
 }
 
+/// @brief エミッターのインデックスを名前から取得する
+/// @param name 
+/// @return 
+int32_t Engine::Particle3DData::GetEmitterIndex(const std::string& name) const
+{
+	for (size_t i = 0; i < param_->emitter.size(); ++i)
+	{
+		if (param_->emitter[i].name == name)
+		{
+			return static_cast<int32_t>(i);
+		}
+	}
+
+	// 見つからなかったら-1を返す
+	return -1;
+}
+
+/// @brief エミッターのパラメータを取得する（自動でインデックスを進める）
+/// @return 
+int32_t Engine::Particle3DData::GetEmitterIndex()
+{
+	// 現在のインデックスを一時保存
+	int32_t index = useCurrentEmitterIndex_;
+
+	// 次のインデックスに進める（エミッターの最大数を超えたら0に戻す）
+	useCurrentEmitterIndex_ = (useCurrentEmitterIndex_ + 1) % emitterNum_;
+
+	return index;
+}
+
 /// @brief 描画処理
 /// @param commandList 
 /// @param psoDraw 
@@ -612,19 +673,19 @@ void Engine::Particle3DData::DebugParameter()
 		// エミッター
 		if (ImGui::TreeNode("Emitter"))
 		{
-			for (int i = 0; i < static_cast<int32_t>(emitterNum_); ++i)
+			for (auto& emitter : param_->emitter)
 			{
-				if (ImGui::TreeNode(std::to_string(i).c_str()))
+				if (ImGui::TreeNode(emitter.name.c_str()))
 				{
 					// 放出開始
 					if (ImGui::Button("Emit Start"))
 					{
-						param_->emitter[i].isStart = true;
-						param_->emitter[i].timer = 0.0f;
+						emitter.isStart = true;
+						emitter.timer = 0.0f;
 					}
 
 					// 位置
-					ImGui::DragFloat3(("Position" + std::to_string(i)).c_str(), &param_->emitter[i].position.x, 0.01f, -1000000.0f, 1000000.0f);
+					ImGui::DragFloat3("Position", &emitter.position.x, 0.01f, -1000000.0f, 1000000.0f);
 
 					ImGui::TreePop();
 				}

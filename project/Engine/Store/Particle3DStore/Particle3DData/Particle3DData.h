@@ -55,13 +55,40 @@ namespace Engine
 		/// @param psoUpdate 
 		void Update(ID3D12GraphicsCommandList* commandList, BaseComputePSO* psoEmitter, BaseComputePSO* psoUpdate);
 
+		/// @brief エミッターのインデックスを名前から取得する
+		/// @param name 
+		/// @return 
+		int32_t GetEmitterIndex(const std::string& name) const;
+
+		/// @brief エミッターのインデックスを取得する（自動インデックス）
+		/// @return 
+		int32_t GetEmitterIndex();
+
+		/// @brief エミッターのパラメータを取得する
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* GetEmitter(int32_t emitterIndex) { return &param_->emitter[emitterIndex]; }
+
+		/// @brief エミッターのパラメータを取得する
+		/// @param emitterName 
+		/// @return 
+		Particle3D::Emitter* GetEmitter(const std::string& emitterName) { int index = GetEmitterIndex(emitterName); if (index != -1) { return GetEmitter(index); } return nullptr; }
+
 		/// @brief 放出開始
 		/// @param emitterIndex 
 		void Emit(int32_t emitterIndex) { param_->emitter[emitterIndex].isStart = true; }
 
+		/// @brief 放出開始
+		/// @param emitterName 
+		void Emit(const std::string& emitterName) { int index = GetEmitterIndex(emitterName); if (index != -1) { Emit(index); } }
+
 		/// @brief 放出停止
 		/// @param emitterIndex 
 		void Stop(int32_t emitterIndex) { param_->emitter[emitterIndex].isStart = false; }
+
+		/// @brief 放出停止
+		/// @param emitterName 
+		void Stop(const std::string& emitterName) { int index = GetEmitterIndex(emitterName); if (index != -1) { Stop(index); } }
 
 		/// @brief 描画処理
 		/// @param commandList 
@@ -157,6 +184,9 @@ namespace Engine
 
 		/// @brief ロードフラグ
 		bool isLoad_ = false;
+
+		// 自動でエミッターを取得するインデックス
+		int useCurrentEmitterIndex_ = 0;
 
 
 		/// @brief パラメータ

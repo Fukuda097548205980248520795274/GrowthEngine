@@ -589,6 +589,16 @@ namespace Engine
 		/// @return 
 		Particle3D::Param* GetParticle3DParam(const std::string& name) { return particle_->Get3DParticleParam(name); }
 
+		/// @brief 3Dパーティクルのエミッタのインデックスを取得する
+		/// @param hParticle 
+		/// @return 
+		int32_t GetEmitter3DIndex(Particle3DHandle hParticle) { return particle_->Get3DEmitterIndex(hParticle); }
+
+		/// @brief 3Dパーティクルのエミッタのインデックスを取得する
+		/// @param name 
+		/// @return 
+		int32_t GetEmitter3DIndex(const std::string& name) { return particle_->Get3DEmitterIndex(name); }
+
 		/// @brief 3Dパーティクルを放出する
 		/// @param hParticle 
 		/// @param emitterIndex 
@@ -608,6 +618,18 @@ namespace Engine
 		/// @param name 
 		/// @param emitterIndex 
 		void StopParticle3D(const std::string& name, int32_t emitterIndex) { particle_->Stop3D(name, emitterIndex); }
+
+		/// @brief 3Dパーティクルのエミッタを取得する
+		/// @param hParticle 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* Get3DEmitter(Particle3DHandle hParticle, int32_t emitterIndex) { return particle_->Get3DEmitter(hParticle, emitterIndex); }
+
+		/// @brief 3Dパーティクルのエミッタを取得する
+		/// @param name 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* Get3DEmitter(const std::string& name, int32_t emitterIndex) { return particle_->Get3DEmitter(name, emitterIndex); }
 
 
 		/// @brief アニメーションの時間を取得する

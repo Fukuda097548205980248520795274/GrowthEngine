@@ -66,6 +66,28 @@ namespace Engine
 		/// @param name 
 		Particle3D::Param* Get3DParticleParam(const std::string& name) { return particle3DStore_->GetParam(name); }
 
+		/// @brief 3Dパーティクルのエミッターのパラメータを取得する
+		/// @param hParticle 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* Get3DEmitter(Particle3DHandle hParticle, int32_t emitterIndex) { return particle3DStore_->GetEmitter(hParticle, emitterIndex); }
+
+		/// @brief 3Dパーティクルのエミッターのパラメータを取得する
+		/// @param name 
+		/// @param emitterIndex 
+		/// @return 
+		Particle3D::Emitter* Get3DEmitter(const std::string& name, int32_t emitterIndex) { return particle3DStore_->GetEmitter(name, emitterIndex); }
+
+		/// @brief 3Dパーティクルのエミッターのインデックスを取得する
+		/// @param hParticle 
+		/// @return 
+		int32_t Get3DEmitterIndex(Particle3DHandle hParticle) { return particle3DStore_->GetEmitterIndex(hParticle); }
+
+		/// @brief 3Dパーティクルのエミッターのインデックスを取得する
+		/// @param name 
+		/// @return 
+		int32_t Get3DEmitterIndex(const std::string& name) { return particle3DStore_->GetEmitterIndex(name); }
+
 		/// @brief 放出開始
 		/// @param handle 
 		void Emit3D(Particle3DHandle handle, int32_t emitterIndex) { particle3DStore_->Emit(handle, emitterIndex); }
