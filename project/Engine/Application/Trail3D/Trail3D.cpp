@@ -22,5 +22,11 @@ Trail3D::Trail3D(const std::string& name, float maxLifeTime, TextureHandle hText
 void Trail3D::Draw()
 {
 	// トレイルを描画する
-	engine_->DrawTrail(name_);
+	engine_->DrawTrail(hTrail_);
+}
+
+/// @brief クリア
+void Trail3D::Clear()
+{
+	engine_->Trail3DClear(hTrail_);
 }

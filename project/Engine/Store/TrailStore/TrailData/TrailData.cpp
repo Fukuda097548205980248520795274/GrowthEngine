@@ -32,6 +32,7 @@ void Engine::TrailData::Initialize(ID3D12Device* device, PSOTrail* pso, TextureS
 	param_->basePosition = Vector3(0.0f, 0.0f, 0.0f);
 	param_->tipPosition = Vector3(0.0f, 0.0f, 0.0f);
 	param_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	param_->easing_ = 1.0f;
 	param_->blendMode = BlendMode::kNormal;
 
 	// 頂点リソースの生成
@@ -89,7 +90,7 @@ void Engine::TrailData::Update()
 		float progress = static_cast<float>(i) / static_cast<float>(currentHistoryCount - 1);
 
 		// インデックスが大きい(最新)ほど濃く、小さい(古い)ほど透明にする
-		float alpha = progress;
+		float alpha = std::powf(progress, param_->easing_);
 
 		//-----------------------------
 		// 基点の頂点 (i * 2 + 0)

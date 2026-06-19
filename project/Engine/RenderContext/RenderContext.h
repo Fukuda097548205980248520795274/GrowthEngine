@@ -638,6 +638,15 @@ namespace Engine
 		float GetAnimationDuration(AnimationHandle hAnimation) { return animationStore_->GetDuration(hAnimation); }
 
 
+		/// @brief トレイルの履歴を消す
+		/// @param hTrail 
+		void Trail3DClear(TrailHandle hTrail) { render_->Trail3DClear(hTrail); }
+
+		/// @brief トレイルの履歴を消す
+		/// @param name 
+		void Trail3DClear(const std::string& name) { render_->Trail3DClear(name); }
+
+
 
 #ifdef _DEVELOPMENT
 

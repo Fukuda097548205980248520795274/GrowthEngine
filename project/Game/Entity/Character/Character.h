@@ -312,6 +312,8 @@ public:
 	Matrix4x4 GetBoneMatrix(const JointType& jointType) const;
 
 	/// @brief ボーンの位置を取得する
+	/// @param jointType 
+	/// @return 
 	Vector3 GetBonePosition(const JointType& jointType) const;
 
 	/// @brief ダメージリアクション中かどうか
@@ -484,6 +486,14 @@ public:
 	/// @brief 弾きが成功したかどうか
 	/// @return 
 	bool IsHitDeflect() const { return isHitDeflect_ || isPrevHitDeflect_; }
+
+	/// @brief トレイルの位置を設定する
+	/// @param basePosition
+	/// @param tipPosition 
+	void SetTrailPos(const Vector3& basePosition, const Vector3& tipPosition);
+
+	/// @brief トレイルをクリアする
+	void TrailClear() { if (attackTrail_)attackTrail_->Clear(); }
 
 
 protected:

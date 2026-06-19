@@ -219,6 +219,14 @@ namespace Engine
 		/// @return 
 		Matrix4x4 GetBoneWorldMatrix(const std::string& name, const std::string& boneName) { return render3DStore_->GetBoneWorldMatrix(name, boneName); }
 
+		/// @brief トレイルの履歴を消す
+		/// @param hTrail 
+		void Trail3DClear(TrailHandle hTrail) { trailStore_->Clear(hTrail); }
+
+		/// @brief トレイルの履歴を消す
+		/// @param name 
+		void Trail3DClear(const std::string& name) { trailStore_->Clear(name); }
+
 
 	public:
 

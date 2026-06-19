@@ -70,7 +70,7 @@ void GameScene::Initialize()
 	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
 
 	// プレイヤーの生成と初期化
-	playerTrail_ = std::make_unique<Trail3D>("Player_Trail", 0.5f , engine_->LoadTexture("./Assets/Textures/white2x2.png"));
+	playerTrail_ = std::make_unique<Trail3D>("Player_Trail", 0.2f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
 
 	// 片手武器モデルの読み込み
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
@@ -280,8 +280,12 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		std::unique_ptr<Render3DSkinningModel> npcModel =
 			std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterSkeleton_, hCharacterAnimation_, "Enemy_Model_" + std::to_string(npcCount_));
 
+		// NPCのトレイルの生成と初期化
+		std::unique_ptr<Trail3D> npcTrail = std::make_unique<Trail3D>("Enemy_Trail_" + std::to_string(npcCount_), 0.2f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
+
 		// NPCのモデルを初期化データに設定する
 		npcInitData.model_ = npcModel.get();
+		npcInitData.attackTrail = npcTrail.get();
 
 		// NPCの当たり判定グループの設定
 		if (tag == Character::CharacterTag::Ally || tag == Character::CharacterTag::Vip)
@@ -307,6 +311,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		// NPCのリストに追加する
 		npcs_.push_back(std::move(npc));
 		npcModels_.push_back(std::move(npcModel));
+		npcTrails_.push_back(std::move(npcTrail));
 
 		// NPCをカウントする
 		npcCount_++;
@@ -479,7 +484,7 @@ void GameScene::InitializeCameraControl()
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
 	pivotPoint_->GetData()->center = player_->GetPosition();
-	pivotPoint_->GetData()->radius = 10.0f;
+	pivotPoint_->GetData()->radius = 8.0f;
 	pivotPoint_->GetData()->phi = -std::numbers::pi_v<float> / 2.0f;
 
 	// カメラ回転入力の生成
@@ -524,15 +529,7 @@ void GameScene::UpdatePivotFollow(float deltaTime)
 	Vector3 targetPivotPos = player_->GetPosition();
 
 	// プレイヤーの位置からピボット中心までの高さオフセットを加算する
-	if (player_->IsStance())
-	{
-		targetPivotPos.y += 1.2f;
-	}
-	else
-	{
-		// プレイヤーの位置からピボット中心までの高さオフセットを加算する
-		targetPivotPos.y += 1.2f;
-	}
+	targetPivotPos.y += 1.5f;
 
 	// ロックオン中はターゲットの位置にピボットをオフセットする
 	if (player_->IsStance() && player_->GetLockOnTarget() != nullptr)

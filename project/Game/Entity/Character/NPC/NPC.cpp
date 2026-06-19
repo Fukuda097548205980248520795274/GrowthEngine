@@ -167,6 +167,9 @@ void NPC::Draw()
 
 	// モデルを描画する
 	model_->Draw();
+
+	// 攻撃トレイルを描画する
+	if (attackTrail_)attackTrail_->Draw();
 }
 
 /// @brief 攻撃クールタイムの更新処理

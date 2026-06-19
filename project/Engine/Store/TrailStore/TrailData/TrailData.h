@@ -55,6 +55,9 @@ namespace Engine
 
 			/// @brief ブレンドモード
 			BlendMode blendMode;
+
+			/// @brief イージング
+			float easing_ = 1.0f;
 		};
 
 
@@ -81,6 +84,9 @@ namespace Engine
 		/// @brief コマンドリストに登録する
 		/// @param commandList 
 		void Register(ID3D12GraphicsCommandList* commandList);
+
+		/// @brief トレイルの履歴を消す
+		void HistoryClear() { histories_.clear(); }
 
 		/// @brief ハンドルを取得する
 		/// @return 

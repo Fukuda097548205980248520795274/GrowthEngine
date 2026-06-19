@@ -637,9 +637,6 @@ void Engine::Render3DSkinningModelData::RegisterMotionVector(ID3D12GraphicsComma
 /// @return 
 Matrix4x4 Engine::Render3DSkinningModelData::GetBoneWorldMatrix(const std::string& name)
 {
-	// モデルデータを取得する
-	const ModelData& modelData = modelStore_->GetModelData(hModel_);
-
 	Quaternion modelQuaternion =
 		ToQuaternion(param_->modelTransform.rotate.z, Vector3(0.0f, 0.0, 1.0f)).Normalize() *
 		ToQuaternion(param_->modelTransform.rotate.y, Vector3(0.0f, 1.0, 0.0f)).Normalize() *

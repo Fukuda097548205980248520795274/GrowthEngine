@@ -233,6 +233,9 @@ private:
 	/// @brief NPCのリスト
 	std::list<std::unique_ptr<NPC>> npcs_;
 
+	/// @brief NPCのトレイルのリスト
+	std::list<std::unique_ptr<Trail3D>> npcTrails_;
+
 	/// @brief 武器のリスト
 	std::list<std::unique_ptr<Weapon>> weapons_;
 
@@ -259,5 +262,10 @@ private:
 
 	/// @brief 太陽光
 	std::unique_ptr<LightDirectional> sunLight_ = nullptr;
+
+
+private:
+
+	
 };
 

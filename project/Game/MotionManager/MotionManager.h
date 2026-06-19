@@ -61,6 +61,11 @@ public:
 	/// @return 
 	AnimationHandle GetMotion(MotionType type, const std::string& name) { return table_[type][name]; }
 
+	/// @brief ジョイントの親を取得する
+	/// @param jointType 
+	/// @return 
+	JointType GetParentJoint(const JointType& jointType) const { return parentMap_.at(jointType); }
+
 	/// @brief スケルトンを取得する
 	/// @return 
 	SkeletonHandle GetSkeleton() { return hSkeleton_; }
@@ -171,6 +176,9 @@ private:
 
 	/// @brief ジョイントマップ
 	std::unordered_map<JointType, std::string> jointMap_;
+
+	/// @brief ジョイントの親マップ
+	std::unordered_map<JointType, JointType> parentMap_;
 
 	/// @brief 初期化したかどうか
 	bool isInit_ = false;

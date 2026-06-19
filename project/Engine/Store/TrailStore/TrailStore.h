@@ -57,6 +57,14 @@ namespace Engine
 		/// @return 
 		TrailData::Param* GetParam(const std::string& name) { return dataTable_[nameTable_[name]]->GetParam(); }
 
+		/// @brief トレイルの履歴を消す
+		/// @param hTrail 
+		void Clear(TrailHandle hTrail) { dataTable_[hTrail]->HistoryClear(); }
+
+		/// @brief トレイルの履歴を消す
+		/// @param name 
+		void Clear(const std::string& name) { dataTable_[nameTable_[name]]->HistoryClear(); }
+
 
 	private:
 

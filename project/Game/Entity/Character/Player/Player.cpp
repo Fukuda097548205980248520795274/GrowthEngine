@@ -640,11 +640,13 @@ void Player::OnStyleChanged(FightStyle newStyle)
 		// 旋嵐スタイル
 	case FightStyle::Tempest:
 		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Senran");
+		if (attackTrail_)attackTrail_->param_->color = Vector4(0.5f, 0.5f, 1.0f, 1.0f);
 		break;
 
 		// 撃鉄スタイル
 	case FightStyle::Hammer:
 		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Gekitetu");
+		if (attackTrail_)attackTrail_->param_->color = Vector4(1.0f, 0.5f, 0.5f, 1.0f);
 		break;
 	}
 

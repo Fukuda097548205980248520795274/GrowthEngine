@@ -36,11 +36,20 @@ void MotionManager::Initialize()
 	// ジョイントマップを作成する
 	jointMap_[JointType::HandL] = "ボーン.007";
 	jointMap_[JointType::HandR] = "ボーン.015";
+	jointMap_[JointType::ArmL] = "ボーン.006";
+	jointMap_[JointType::ArmR] = "ボーン.014";
 	jointMap_[JointType::FootL] = "ボーン.011";
 	jointMap_[JointType::FootR] = "ボーン.019";
+	jointMap_[JointType::LegL] = "ボーン.010";
+	jointMap_[JointType::LegR] = "ボーン.018";
 	jointMap_[JointType::Chest] = "ボーン.001";
 	jointMap_[JointType::Head] = "ボーン.003";
 	jointMap_[JointType::Root] = "ボーン";
+
+	parentMap_[JointType::HandL] = JointType::ArmL;
+	parentMap_[JointType::HandR] = JointType::ArmR;
+	parentMap_[JointType::FootL] = JointType::LegL;
+	parentMap_[JointType::FootR] = JointType::LegR;
 
 	// モーション読み込み
 	LoadStand(dir);

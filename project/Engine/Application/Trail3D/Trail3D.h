@@ -16,6 +16,9 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief クリア
+	void Clear();
+
 	/// @brief パラメータ
 	Engine::TrailData::Param* param_ = nullptr;
 

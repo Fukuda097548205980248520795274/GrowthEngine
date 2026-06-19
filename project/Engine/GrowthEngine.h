@@ -974,6 +974,15 @@ public:
 	float GetAnimationTime(AnimationHandle hAnimation)const { return renderContext_->GetAnimationDuration(hAnimation); }
 
 
+	/// @brief トレイルの履歴を消す
+	/// @param hTrail 
+	void Trail3DClear(TrailHandle hTrail)const { renderContext_->Trail3DClear(hTrail); }
+
+	/// @brief トレイルの履歴を消す
+	/// @param name 
+	void Trail3DClear(const std::string& name)const { renderContext_->Trail3DClear(name); }
+
+
 
 	/// @brief デバッグ用の線を描画する
 	/// @param start 

@@ -75,7 +75,11 @@ Character::Character(const InitData& initData) : Entity()
 	GrabWeapon(initData.weapon);
 
 	// 攻撃用トレイル
-	if (initData.attackTrail)attackTrail_ = initData.attackTrail;
+	if (initData.attackTrail)
+	{
+		attackTrail_ = initData.attackTrail;
+		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
+	}
 
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
@@ -1708,6 +1712,19 @@ void Character::UpdatePushOut()
 				SetPosition(newPos); // 位置を更新
 			}
 		}
+	}
+}
+
+/// @brief トレイルの位置を設定する
+/// @param basePosition
+/// @param tipPosition 
+void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosition)
+{
+	if (attackTrail_)
+	{
+		// トレイルの位置を更新する
+		attackTrail_->param_->basePosition = basePosition;
+		attackTrail_->param_->tipPosition = tipPosition;
 	}
 }
 

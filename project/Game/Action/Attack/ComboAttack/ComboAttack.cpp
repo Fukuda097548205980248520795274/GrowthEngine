@@ -98,7 +98,12 @@ void ComboAttack::Update()
 		{
 			// 当たり判定がまだ存在しない場合は作成する
 			if (state.hitbox.collider_ == nullptr)
+			{
 				state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+
+				// 攻撃用のトレイルをクリアする
+				owner_->TrailClear();
+			}
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
 			auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
@@ -109,8 +114,12 @@ void ComboAttack::Update()
 			}
 			else
 			{
-				Matrix4x4 boneMatrix = owner_->GetBoneMatrix(state.def.jointType);
-				sphere->param_->center = Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
+				Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
+				Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
+				sphere->param_->center = bonePosition;
+
+				// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
+				owner_->SetTrailPos(bonePosition, boneParentPosition);
 			}
 			sphere->param_->radius = state.def.radius;
 
