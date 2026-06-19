@@ -74,6 +74,9 @@ Character::Character(const InitData& initData) : Entity()
 	// 武器
 	GrabWeapon(initData.weapon);
 
+	// 攻撃用トレイル
+	if (initData.attackTrail)attackTrail_ = initData.attackTrail;
+
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;

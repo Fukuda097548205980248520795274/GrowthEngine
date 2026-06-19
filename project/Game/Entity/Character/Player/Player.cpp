@@ -348,6 +348,9 @@ void Player::Draw()
 
 	// モデルを描画する
 	model_->Draw();
+
+	// 攻撃エフェクトの描画
+	if (attackTrail_)attackTrail_->Draw();
 }
 
 /// @brief 攻撃処理を更新する

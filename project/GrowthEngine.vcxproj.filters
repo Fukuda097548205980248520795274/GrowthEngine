@@ -1288,6 +1288,9 @@
     <Filter Include="Engine\Include\Application\Sound\Se">
       <UniqueIdentifier>{4f4bc02a-9ac1-4fd6-a692-29750b12d0f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\Trail3D">
+      <UniqueIdentifier>{a916ff01-0e24-4130-ac3c-c9594fe903b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2333,6 +2336,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp">
       <Filter>Engine\Include\Application\Sound\Bgm</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp">
+      <Filter>Engine\Include\Application\Trail3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3496,6 +3502,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h">
       <Filter>Engine\Include\Application\Sound\Bgm</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Trail3D\Trail3D.h">
+      <Filter>Engine\Include\Application\Trail3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

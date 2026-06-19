@@ -154,6 +154,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\Application\Emitter3D\Emitter3D.cpp" />
     <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp" />
     <ClCompile Include="Engine\Application\Sound\Se\Se.cpp" />
+    <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp" />
     <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
@@ -1145,6 +1146,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h" />
     <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h" />
     <ClInclude Include="Engine\Application\Sound\Se\Se.h" />
+    <ClInclude Include="Engine\Application\Trail3D\Trail3D.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />

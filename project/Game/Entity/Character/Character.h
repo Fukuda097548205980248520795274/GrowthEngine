@@ -54,6 +54,9 @@ public:
 		/// @brief 武器
 		Weapon* weapon = nullptr;
 
+		/// @brief 攻撃用トレイル
+		Trail3D* attackTrail = nullptr;
+
 
 		/// @brief 立ちモーション
 		AnimationHandle hStandMotion = 0;
@@ -729,6 +732,9 @@ protected:
 
 	// アニメーションの経過時間
 	float animationTime_ = 0.0f;
+
+	/// @brief 攻撃用トレイル
+	Trail3D* attackTrail_ = nullptr;
 
 
 protected:

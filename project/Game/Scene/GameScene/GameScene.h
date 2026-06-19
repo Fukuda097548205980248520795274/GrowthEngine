@@ -194,6 +194,9 @@ private:
 	/// @brief プレイヤーのモデル
 	std::unique_ptr<Render3DSkinningModel> playerModel_ = nullptr;
 
+	/// @brief プレイヤーのトレイル
+	std::unique_ptr<Trail3D> playerTrail_ = nullptr;
+
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 

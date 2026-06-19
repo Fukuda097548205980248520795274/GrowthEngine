@@ -50,6 +50,8 @@
 #include "Application/PostEffect/PostEffectGrayscale/PostEffectGrayscale.h"
 #include "Application/PostEffect/PostEffectVignetting/PostEffectVignetting.h"
 
+#include "Application/Trail3D/Trail3D.h"
+
 #include "Application/Scene/Scene.h"
 #include "Application/SceneManager/SceneManager.h"
 
