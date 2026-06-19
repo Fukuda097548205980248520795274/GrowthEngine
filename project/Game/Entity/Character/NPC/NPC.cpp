@@ -170,9 +170,6 @@ void NPC::Draw()
 
 	// 攻撃トレイルを描画する
 	if (attackTrail_)attackTrail_->Draw();
-
-	// 攻撃パーティクルの描画
-	if (attackParticle_)attackParticle_->Draw();
 }
 
 /// @brief 攻撃クールタイムの更新処理

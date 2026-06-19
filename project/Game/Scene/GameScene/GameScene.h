@@ -197,9 +197,6 @@ private:
 	/// @brief プレイヤーのトレイル
 	std::unique_ptr<Trail3D> playerTrail_ = nullptr;
 
-	/// @brief プレイヤーのパーティクル
-	std::unique_ptr<Particle3D> playerParticle_ = nullptr;
-
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 

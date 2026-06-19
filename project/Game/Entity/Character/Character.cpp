@@ -81,12 +81,6 @@ Character::Character(const InitData& initData) : Entity()
 		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
 	}
 
-	// 攻撃用パーティクル
-	if (initData.attackParticle)
-	{
-		attackParticle_ = initData.attackParticle;
-	}
-
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;
@@ -174,24 +168,8 @@ Character::~Character()
 	if (wallTouchCollision_) wallTouchCollision_->Delete();
 	wallTouchCollision_ = nullptr;
 
-	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
-	eventTriggerCollision_ = nullptr;
-
-	if (hurtboxHead_.collider_) hurtboxHead_.collider_->Delete();
-	hurtboxHead_.collider_ = nullptr;
-
-	if (hurtboxChest_.collider_) hurtboxChest_.collider_->Delete();
-	hurtboxChest_.collider_ = nullptr;
-
-	if (hurtboxRoot_.collider_) hurtboxRoot_.collider_->Delete();
-	hurtboxRoot_.collider_ = nullptr;
-
-	// インスタンスリストから自分を除外する
-	auto it = std::find(characters_.begin(), characters_.end(), this);
-	if (it != characters_.end())
-	{
-		characters_.erase(it);
-	}
+	// イベントトリガーの当たり判定の削除
+	Dead();
 }
 
 /// @brief アニメーションの初期化
@@ -719,8 +697,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 死亡判定
 	if (hp_ == 0)
 	{
-		isDead_ = true;
-		SetAnimation(hDownFallMotion_, true, false);
+		Dead();
 	}
 
 	return true; // ダメージが通った
@@ -792,7 +769,7 @@ void Character::OnGrabDamage(int damage)
 
 	// 死亡判定
 	if (hp_ == 0)
-		isDead_ = true;
+		Dead();
 }
 
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
@@ -1734,14 +1711,33 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 	}
 }
 
-/// @brief 攻撃用パーティクルを発生させる
-void Character::EmitAttackParticle(const Vector3& position)
+/// @brief 死亡処理
+void Character::Dead()
 {
-	if (attackParticle_)
+	// 死亡フラグを立てる
+	isDead_ = true;
+
+	// ダウン落下モーションを再生する
+	SetAnimation(hDownFallMotion_, true, false);
+
+	// 当たり判定の削除
+	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
+	eventTriggerCollision_ = nullptr;
+
+	if (hurtboxHead_.collider_) hurtboxHead_.collider_->Delete();
+	hurtboxHead_.collider_ = nullptr;
+
+	if (hurtboxChest_.collider_) hurtboxChest_.collider_->Delete();
+	hurtboxChest_.collider_ = nullptr;
+
+	if (hurtboxRoot_.collider_) hurtboxRoot_.collider_->Delete();
+	hurtboxRoot_.collider_ = nullptr;
+
+	// インスタンスリストから自分を除外する
+	auto it = std::find(characters_.begin(), characters_.end(), this);
+	if (it != characters_.end())
 	{
-		Emitter3D emitter(attackParticle_);
-		emitter.param_->position = position;
-		emitter.Emit();
+		characters_.erase(it);
 	}
 }
 

@@ -72,10 +72,6 @@ void GameScene::Initialize()
 	// プレイヤーの生成と初期化
 	playerTrail_ = std::make_unique<Trail3D>("Player_Trail", 0.2f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
 
-	// プレイヤーのパーティクルの生成と初期化
-	playerParticle_ = std::make_unique<Particle3D>("Player_Particle", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
-	playerParticle_->param_->emitTime.isLoop = false;
-
 	// 片手武器モデルの読み込み
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
@@ -268,7 +264,6 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.eventTriggerCollision = eventTriggerCollision_->CreateInstance();
 		playerInitData.model_ = playerModel_.get();
 		playerInitData.attackTrail = playerTrail_.get();
-		playerInitData.attackParticle = playerParticle_.get();
 		player_ = std::make_unique<Player>(playerInitData);
 		player_->Initialize(playerWeapon_.get());
 

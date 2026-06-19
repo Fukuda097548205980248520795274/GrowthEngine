@@ -97,10 +97,6 @@ void ComboAttack::Update()
 		// 武器のジョイントタイプの場合は、攻撃者が武器を持っているかどうかを確認する
 		if (state.def.jointType == JointType::Weapon && owner_->GetWeapon() == nullptr)continue;
 
-
-		// 攻撃用のパーティクルを発生させる
-		owner_->EmitAttackParticle(owner_->GetBonePosition(state.def.jointType));
-
 		// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
 		Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
 		Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
@@ -124,6 +120,7 @@ void ComboAttack::Update()
 			}
 			else
 			{
+				// その他の当たり判定は、攻撃者の指定されたボーンの位置を使用する
 				sphere->param_->center = bonePosition;
 			}
 
