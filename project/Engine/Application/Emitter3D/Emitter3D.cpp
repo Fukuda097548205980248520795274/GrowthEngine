@@ -20,6 +20,24 @@ Emitter3D::Emitter3D(const std::string& particleName)
 	particleName_ = particleName;
 }
 
+/// @brief コンストラクタ
+/// @param particle 
+Emitter3D::Emitter3D(const Particle3D* particle)
+{
+	// エンジンのインスタンスを取得する
+	engine_ = GrowthEngine::GetInstance();
+
+	// エミッターインデックスを取得する
+	emitterIndex_ = engine_->GetEmitter3DIndex(particle->GetName());
+
+	// パラメータを取得する
+	param_ = engine_->Get3DEmitter(particle->GetName(), emitterIndex_);
+	assert(param_);
+
+	// エミッターが確定したので、パーティクル名を記録する
+	particleName_ = particle->GetName();
+}
+
 /// @brief 放出
 void Emitter3D::Emit()
 {

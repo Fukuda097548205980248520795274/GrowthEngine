@@ -4,6 +4,7 @@
 #include "Data/ParticleData/ParticleData.h"
 
 class GrowthEngine;
+class Particle3D;
 
 class Emitter3D
 {
@@ -13,6 +14,10 @@ public:
 	/// @param particleName 
 	/// @param emitterIndex 
 	Emitter3D(const std::string& particleName);
+
+	/// @brief コンストラクタ
+	/// @param particle 
+	Emitter3D(const Particle3D* particle);
 
 	/// @brief 放出
 	void Emit();

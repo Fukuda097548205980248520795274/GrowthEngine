@@ -28,12 +28,12 @@ void GuardEffect::Update()
 	// 0.0f ~ 1.0f
 	float t = 1.0f - (duration_ / startTime_);
 
-	instanceModel_->param_.size.radiusBottom = Lerp(0.25f, 0.75f, t);
+	instanceModel_->param_.size.radiusBottom = Lerp(0.1f, 0.5f, t);
 	
 	if (t >= 0.0f && t <= 0.5f)
 	{
 		float t2 = t / 0.5f;
-		instanceModel_->param_.size.radiusTop = Lerp(0.25f, 0.75f, t2);
+		instanceModel_->param_.size.radiusTop = Lerp(0.1f, 0.5f, t2);
 	}
 
 	// 基底クラスの更新

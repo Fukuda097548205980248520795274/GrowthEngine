@@ -33,7 +33,7 @@ void Engine::TrailData::Initialize(ID3D12Device* device, PSOTrail* pso, TextureS
 	param_->tipPosition = Vector3(0.0f, 0.0f, 0.0f);
 	param_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	param_->easing_ = 1.0f;
-	param_->blendMode = BlendMode::kNormal;
+	param_->blendMode = BlendMode::kAdd;
 
 	// 頂点リソースの生成
 	vertexBufferResource_ = std::make_unique<VertexBufferResource<TrailVertexDataForGPU>>();

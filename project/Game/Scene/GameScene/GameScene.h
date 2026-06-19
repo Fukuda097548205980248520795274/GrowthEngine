@@ -197,6 +197,9 @@ private:
 	/// @brief プレイヤーのトレイル
 	std::unique_ptr<Trail3D> playerTrail_ = nullptr;
 
+	/// @brief プレイヤーのパーティクル
+	std::unique_ptr<Particle3D> playerParticle_ = nullptr;
+
 	/// @brief プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 
@@ -235,6 +238,9 @@ private:
 
 	/// @brief NPCのトレイルのリスト
 	std::list<std::unique_ptr<Trail3D>> npcTrails_;
+
+	/// @brief NPCのパーティクルのリスト
+	std::list<std::unique_ptr<Particle3D>> npcParticles_;
 
 	/// @brief 武器のリスト
 	std::list<std::unique_ptr<Weapon>> weapons_;

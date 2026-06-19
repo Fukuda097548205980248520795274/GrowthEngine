@@ -81,6 +81,12 @@ Character::Character(const InitData& initData) : Entity()
 		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
 	}
 
+	// 攻撃用パーティクル
+	if (initData.attackParticle)
+	{
+		attackParticle_ = initData.attackParticle;
+	}
+
 	// モーション
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;
@@ -608,7 +614,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		soundManager_->SeGuard();
 
 		// ガードエフェクト
-		EffectManager::GetInstance()->CreateGuardEffect(GetWorldPosition() + Vector3(0.0f, 1.0f, 0.0f), worldTransform_->rotate_);
+		EffectManager::GetInstance()->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
 
 		SetAnimation(hGuardHitMotion_, false, true);
 
@@ -1725,6 +1731,17 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 		// トレイルの位置を更新する
 		attackTrail_->param_->basePosition = basePosition;
 		attackTrail_->param_->tipPosition = tipPosition;
+	}
+}
+
+/// @brief 攻撃用パーティクルを発生させる
+void Character::EmitAttackParticle(const Vector3& position)
+{
+	if (attackParticle_)
+	{
+		Emitter3D emitter(attackParticle_);
+		emitter.param_->position = position;
+		emitter.Emit();
 	}
 }
 

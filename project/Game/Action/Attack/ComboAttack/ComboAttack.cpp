@@ -50,6 +50,9 @@ void ComboAttack::Exec()
 		state.hitCharacters.clear();
 		state.DeleteHitbox();
 	}
+
+	// 攻撃用のトレイルをクリアする
+	owner_->TrailClear();
 }
 
 /// @brief 更新処理
@@ -94,15 +97,22 @@ void ComboAttack::Update()
 		// 武器のジョイントタイプの場合は、攻撃者が武器を持っているかどうかを確認する
 		if (state.def.jointType == JointType::Weapon && owner_->GetWeapon() == nullptr)continue;
 
+
+		// 攻撃用のパーティクルを発生させる
+		owner_->EmitAttackParticle(owner_->GetBonePosition(state.def.jointType));
+
+		// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
+		Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
+		Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
+		owner_->SetTrailPos(bonePosition, boneParentPosition);
+
+
 		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
 		{
 			// 当たり判定がまだ存在しない場合は作成する
 			if (state.hitbox.collider_ == nullptr)
 			{
 				state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
-
-				// 攻撃用のトレイルをクリアする
-				owner_->TrailClear();
 			}
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
@@ -114,13 +124,9 @@ void ComboAttack::Update()
 			}
 			else
 			{
-				Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
-				Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
 				sphere->param_->center = bonePosition;
-
-				// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
-				owner_->SetTrailPos(bonePosition, boneParentPosition);
 			}
+
 			sphere->param_->radius = state.def.radius;
 
 

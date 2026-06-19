@@ -27,6 +27,14 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief ハンドルを取得する
+	/// @return 
+	Particle3DHandle GetHandle() const { return hParticle_; }
+
+	/// @brief 名前を取得する
+	/// @return 
+	std::string GetName() const { return name_; }
+
 	/// @brief パラメータ
 	Engine::Particle3D::Param* param_ = nullptr;
 

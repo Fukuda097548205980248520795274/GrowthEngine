@@ -57,6 +57,9 @@ public:
 		/// @brief 攻撃用トレイル
 		Trail3D* attackTrail = nullptr;
 
+		/// @brief 攻撃用パーティクル
+		Particle3D* attackParticle = nullptr;
+
 
 		/// @brief 立ちモーション
 		AnimationHandle hStandMotion = 0;
@@ -495,6 +498,9 @@ public:
 	/// @brief トレイルをクリアする
 	void TrailClear() { if (attackTrail_)attackTrail_->Clear(); }
 
+	/// @brief 攻撃用パーティクルを発生させる
+	void EmitAttackParticle(const Vector3& position);
+
 
 protected:
 
@@ -745,6 +751,9 @@ protected:
 
 	/// @brief 攻撃用トレイル
 	Trail3D* attackTrail_ = nullptr;
+
+	/// @brief 攻撃用パーティクル
+	Particle3D* attackParticle_ = nullptr;
 
 
 protected:
