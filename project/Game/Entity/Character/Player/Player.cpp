@@ -406,11 +406,12 @@ void Player::UpdateAttack()
 	{
 		if (bufferedAttackInput_ == AttackInputType::Light)
 		{
-			// 初段の弱攻撃アクションのポインタを渡して実行
-			// (※事前に初期化で生成しておいた ComboAttack インスタンスを使用)
+			// 1段目の攻撃を実行
 			auto comboLight1 = comboAttacks_[0].get();
 			comboLight1->Exec();
 		}
+
+		// バッファされた攻撃入力を消す
 		ConsumeBufferedAttackInput();
 	}
 }

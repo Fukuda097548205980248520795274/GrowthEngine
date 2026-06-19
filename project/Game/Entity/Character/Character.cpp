@@ -1537,10 +1537,9 @@ void Character::LandingCheck()
 	// コリジョンがないと処理しない
 	if (!landingCollision_)return;
 
-	if (knockbackVelocity_.y + velocityY_ > 0.0f)
-	{
-		return; // 上に飛んでいる間は着地判定をしない
-	}
+	// 上に飛んでいる間は着地判定をしない
+	if (knockbackVelocity_.y + velocityY_ > 0.0f && IsDown())
+		return;
 
 	// コリジョンの状態を確認する
 	if (landingCollision_->isCollision_)
