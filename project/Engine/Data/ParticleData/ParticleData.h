@@ -61,9 +61,22 @@ namespace Engine
 		/// @brief 大きさ
 		struct Scale
 		{
+			bool isRandomStart;
+
 			Vector3 start;
 
+			// ランダムな大きさの範囲
+			Vector3 startA;
+			Vector3 startB;
+
+
+			bool isRandomEnd;
+
 			Vector3 end;
+
+			// ランダムな大きさの範囲
+			Vector3 endA;
+			Vector3 endB;
 		};
 
 		/// @brief 速度

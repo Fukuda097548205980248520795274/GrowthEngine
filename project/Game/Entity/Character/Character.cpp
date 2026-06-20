@@ -641,6 +641,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				EffectManager::GetInstance()->Impact001(*hitPosition);
+				EffectManager::GetInstance()->Impact002(*hitPosition);
+				EffectManager::GetInstance()->Impact003(*hitPosition);
 			}
 
 			// 軽い怯みのSEを再生する
@@ -654,6 +658,18 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			SetAnimation(hDamageHeavyMotion_, true, false);
 			damageReactionTimer_ = 1.0f;
 
+			// 軽い怯みのエフェクトを再生する
+			if (hitPosition)
+			{
+				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				EffectManager::GetInstance()->Impact001(*hitPosition);
+				EffectManager::GetInstance()->Impact002(*hitPosition);
+				EffectManager::GetInstance()->Impact003(*hitPosition);
+			}
+
 			// 重い怯みのSEを再生する
 			soundManager_->SeHeavyDamage();
 
@@ -664,6 +680,18 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
 			SetAnimation(hDownFallMotion_, true, false);
 			damageReactionTimer_ = 0.3f;
+
+			// 軽い怯みのエフェクトを再生する
+			if (hitPosition)
+			{
+				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				EffectManager::GetInstance()->Impact001(*hitPosition);
+				EffectManager::GetInstance()->Impact002(*hitPosition);
+				EffectManager::GetInstance()->Impact003(*hitPosition);
+			}
 
 			// ダウン落下のSEを再生する
 			soundManager_->SeHeavyDamage();

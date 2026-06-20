@@ -29,6 +29,23 @@ public:
 	/// @param position 
 	void EmitSpark000(const Vector3& position);
 
+	/// @brief インパクトを放出する
+	/// @param position 
+	/// @param rotate 
+	void Impact000(const Vector3& position, const Vector3& rotate);
+
+	/// @brief インパクトを放出する
+	/// @param position 
+	void Impact001(const Vector3& position);
+
+	/// @brief インパクトを放出する
+	/// @param position 
+	void Impact002(const Vector3& position);
+
+	/// @brief インパクトを放出する
+	/// @param position 
+	void Impact003(const Vector3& position);
+
 	/// @brief インパクトドロップを放出する
 	/// @param position 
 	void ImpactDrop000(const Vector3& position);
@@ -76,6 +93,21 @@ private:
 
 	// スパークパーティクル000
 	std::unique_ptr<Particle3D> spark000_ = nullptr;
+
+
+private:
+
+	/// @brief インパクト000
+	std::unique_ptr<Particle3D> impact000_ = nullptr;
+
+	/// @brief インパクト001
+	std::unique_ptr<Particle3D> impact001_ = nullptr;
+
+	/// @brief インパクト002
+	std::unique_ptr<Particle3D> impact002_ = nullptr;
+
+	/// @brief インパクト003
+	std::unique_ptr<Particle3D> impact003_ = nullptr;
 
 
 private:

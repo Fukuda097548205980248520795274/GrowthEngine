@@ -50,6 +50,12 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->color.endAlpha = 1.0f;
 	param_->scale.start = Vector3(1.0f, 1.0f, 1.0f);
 	param_->scale.end = Vector3(1.0f, 1.0f, 1.0f);
+	param_->scale.isRandomStart = false;
+	param_->scale.startA = Vector3(1.0f, 1.0f, 1.0f);
+	param_->scale.startB = Vector3(1.0f, 1.0f, 1.0f);
+	param_->scale.isRandomEnd = false;
+	param_->scale.endA = Vector3(1.0f, 1.0f, 1.0f);
+	param_->scale.endB = Vector3(1.0f, 1.0f, 1.0f);
 	param_->rotate.isRandom = false;
 	param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
 	param_->rotate.start = 0.0f;
@@ -128,6 +134,12 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "EndAlpha", &param_->color.endAlpha);
 		parameter_->SetValue(group_, "StartScale", &param_->scale.start);
 		parameter_->SetValue(group_, "EndScale", &param_->scale.end);
+		parameter_->SetValue(group_, "IsRandomStartScale", &param_->scale.isRandomStart);
+		parameter_->SetValue(group_, "IsRandomEndScale", &param_->scale.isRandomEnd);
+		parameter_->SetValue(group_, "StartScaleA", &param_->scale.startA);
+		parameter_->SetValue(group_, "StartScaleB", &param_->scale.startB);
+		parameter_->SetValue(group_, "EndScaleA", &param_->scale.endA);
+		parameter_->SetValue(group_, "EndScaleB", &param_->scale.endB);
 		parameter_->SetValue(group_, "IsRandomRotate", &param_->rotate.isRandom);
 		parameter_->SetValue(group_, "RotateAxis", &param_->rotate.axis);
 		parameter_->SetValue(group_, "StartRotate", &param_->rotate.start);
@@ -266,6 +278,12 @@ void Engine::Particle3DData::Reset()
 		param_->color.endAlpha = 1.0f;
 		param_->scale.start = Vector3(1.0f, 1.0f, 1.0f);
 		param_->scale.end = Vector3(1.0f, 1.0f, 1.0f);
+		param_->scale.isRandomStart = false;
+		param_->scale.isRandomEnd = false;
+		param_->scale.startA = Vector3(1.0f, 1.0f, 1.0f);
+		param_->scale.startB = Vector3(1.0f, 1.0f, 1.0f);
+		param_->scale.endA = Vector3(1.0f, 1.0f, 1.0f);
+		param_->scale.endB = Vector3(1.0f, 1.0f, 1.0f);
 		param_->rotate.isRandom = false;
 		param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
 		param_->rotate.start = 0.0f;
@@ -405,9 +423,31 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 		emitOptionResource_->data_->endColor = param_->color.end;
 	}
 
+	// 大きさのランダムを有効にしているかどうかで処理を分ける
+	if (param_->scale.isRandomStart)
+	{
+		emitOptionResource_->data_->startScale.x = GetRandomRange(param_->scale.startA.x, param_->scale.startB.x);
+		emitOptionResource_->data_->startScale.y = GetRandomRange(param_->scale.startA.y, param_->scale.startB.y);
+		emitOptionResource_->data_->startScale.z = GetRandomRange(param_->scale.startA.z, param_->scale.startB.z);
+	}
+	else
+	{
+		emitOptionResource_->data_->startScale = param_->scale.start;
+	}
+
+	// 大きさのランダムを有効にしているかどうかで処理を分ける
+	if (param_->scale.isRandomEnd)
+	{
+		emitOptionResource_->data_->endScale.x = GetRandomRange(param_->scale.endA.x, param_->scale.endB.x);
+		emitOptionResource_->data_->endScale.y = GetRandomRange(param_->scale.endA.y, param_->scale.endB.y);
+		emitOptionResource_->data_->endScale.z = GetRandomRange(param_->scale.endA.z, param_->scale.endB.z);
+	}
+	else
+	{
+		emitOptionResource_->data_->endScale = param_->scale.end;
+	}
+
 	// エミッタのパラメータを更新する
-	emitOptionResource_->data_->startScale = param_->scale.start;
-	emitOptionResource_->data_->endScale = param_->scale.end;
 	emitOptionResource_->data_->minLifeTime = param_->lifeTime.min;
 	emitOptionResource_->data_->maxLifeTime = param_->lifeTime.max;
 	emitOptionResource_->data_->startSpeed = param_->speed.start;
@@ -840,11 +880,31 @@ void Engine::Particle3DData::DebugParameter()
 		// 大きさ
 		if (ImGui::TreeNode("Scale"))
 		{
-			// 開始
-			ImGui::DragFloat3("Start", &param_->scale.start.x, 0.01f, 0.0f, 100000.0f);
+			ImGui::Checkbox("RandomStart", &param_->scale.isRandomStart);
 
-			// 終了
-			ImGui::DragFloat3("End", &param_->scale.end.x, 0.01f, 0.0f, 100000.0f);
+			if (param_->scale.isRandomStart)
+			{
+				ImGui::DragFloat3("StartA", &param_->scale.startA.x, 0.01f, 0.0f, 100000.0f);
+				ImGui::DragFloat3("StartB", &param_->scale.startB.x, 0.01f, 0.0f, 100000.0f);
+			}
+			else
+			{
+				// 開始
+				ImGui::DragFloat3("Start", &param_->scale.start.x, 0.01f, 0.0f, 100000.0f);
+			}
+
+			ImGui::Checkbox("RandomEnd", &param_->scale.isRandomEnd);
+
+			if (param_->scale.isRandomEnd)
+			{
+				ImGui::DragFloat3("EndA", &param_->scale.endA.x, 0.01f, 0.0f, 100000.0f);
+				ImGui::DragFloat3("EndB", &param_->scale.endB.x, 0.01f, 0.0f, 100000.0f);
+			}
+			else
+			{
+				// 終了
+				ImGui::DragFloat3("End", &param_->scale.end.x, 0.01f, 0.0f, 100000.0f);
+			}
 
 			// 終了
 			ImGui::TreePop();

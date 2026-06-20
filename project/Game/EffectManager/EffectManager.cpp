@@ -22,6 +22,11 @@ void EffectManager::Initialize()
 {
 	// テクスチャを読み込む
 	engine_->LoadTexture("./Assets/Textures/smoke_000.png");
+	engine_->LoadTexture("./Assets/Textures/impact_000.png");
+	engine_->LoadTexture("./Assets/Textures/color_effect.png");
+	engine_->LoadTexture("./Assets/Textures/damage_effect.png");
+	engine_->LoadTexture("./Assets/Textures/thunder_effect.png");
+	engine_->LoadTexture("./Assets/Textures/color_effect_bloom.png");
 
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
@@ -29,6 +34,12 @@ void EffectManager::Initialize()
 
 	// スパークパーティクル000を生成
 	spark000_ = std::make_unique<Particle3D>("spark_000", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// インパクト000を生成
+	impact000_ = std::make_unique<Particle3D>("impact_000", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impact001_ = std::make_unique<Particle3D>("impact_001", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impact002_ = std::make_unique<Particle3D>("impact_002", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impact003_ = std::make_unique<Particle3D>("impact_003", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
 	// インパクトドロップ000を生成
 	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
@@ -57,6 +68,12 @@ void EffectManager::Draw()
 	// ガードエフェクトの描画
 	for (auto& effect : guardEffects_)
 		effect->Draw();
+
+	// インパクト000を描画
+	impact000_->Draw();
+	impact001_->Draw();
+	impact002_->Draw();
+	impact003_->Draw();
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
@@ -88,6 +105,47 @@ void  EffectManager::CreateGuardEffect(const Vector3& position, const Vector3& r
 void EffectManager::EmitSpark000(const Vector3& position)
 {
 	Emitter3D emitter("spark_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトを放出する
+/// @param position 
+/// @param rotate 
+void EffectManager::Impact000(const Vector3& position, const Vector3& rotate)
+{
+	impact000_->param_->rotate.axis = Vector3(0.0f, 1.0f, 0.0f);
+	impact000_->param_->rotate.start = -rotate.y;
+	impact000_->param_->rotate.end = -rotate.y;
+
+	Emitter3D emitter("impact_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトを放出する
+/// @param position 
+void EffectManager::Impact001(const Vector3& position)
+{
+	Emitter3D emitter("impact_001");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトを放出する
+/// @param position 
+void EffectManager::Impact002(const Vector3& position)
+{
+	Emitter3D emitter("impact_002");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトを放出する
+/// @param position 
+void EffectManager::Impact003(const Vector3& position)
+{
+	Emitter3D emitter("impact_003");
 	emitter.param_->position = position;
 	emitter.Emit();
 }
