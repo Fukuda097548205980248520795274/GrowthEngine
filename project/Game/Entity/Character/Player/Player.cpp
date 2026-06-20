@@ -512,10 +512,13 @@ void Player::UpdateDashState(bool hasMoveInput)
 		return;
 	}
 
-	// ダッシュボタンを押したらダッシュフラグを立てる
-	if (inputDash_ && inputDash_->IsInput() && hasMoveInput)
+	// ダッシュ入力があって、移動入力もあって、ダッシュ中でない場合はダッシュを開始する
+	if (inputDash_ && inputDash_->IsInput() && hasMoveInput && !isDash_)
 	{
 		isDash_ = true;
+
+		// ダッシュ開始時にスローモーションを開始する
+		GrowthEngine::GetInstance()->StartSlowMotion(0.05f, 0.1f);
 	}
 
 	// ダッシュ中に移動入力がなくなったらダッシュを終了する

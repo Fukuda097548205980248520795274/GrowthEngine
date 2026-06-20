@@ -170,9 +170,6 @@ void GameScene::Update()
 		if (player_->IsHitAttack())
 		{
 			cameraShake_->Shake(0.2f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
-
-			// ヒットストップ
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 		}
 
 		// 弾いたとき

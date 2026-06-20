@@ -596,6 +596,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		SetAnimation(hGuardHitMotion_, false, true);
 
+		// ガードしたのがプレイヤーの場合は、スローモーションを開始する
+		if (IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
 		return false; // ガード成功によりダメージ無効
 	}
 
@@ -614,6 +618,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		// ダウン中はノックバックが入らない
 		knockback = 0.0f;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 	}
 	else if (currentDamageReaction_ == DamageReactionState::DownLyingBack || currentDamageReaction_ == DamageReactionState::DownStaggerBack)
 	{
@@ -623,6 +631,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		// ダウン中はノックバックが入らない
 		knockback = 0.0f;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 	}
 	else
 	{
@@ -645,10 +657,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
+				EffectManager::GetInstance()->Impact004(*hitPosition);
 			}
 
 			// 軽い怯みのSEを再生する
 			soundManager_->SeLightDamage();
+
+			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+			if (attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 
 			break;
 
@@ -668,10 +685,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
+				EffectManager::GetInstance()->Impact004(*hitPosition);
 			}
 
 			// 重い怯みのSEを再生する
 			soundManager_->SeHeavyDamage();
+
+			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+			if (attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
 
 			break;
 
@@ -691,10 +713,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
+				EffectManager::GetInstance()->Impact004(*hitPosition);
 			}
 
 			// ダウン落下のSEを再生する
 			soundManager_->SeHeavyDamage();
+
+			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+			if(attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
 
 			break;
 		}

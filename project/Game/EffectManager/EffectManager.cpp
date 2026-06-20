@@ -40,6 +40,7 @@ void EffectManager::Initialize()
 	impact001_ = std::make_unique<Particle3D>("impact_001", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impact002_ = std::make_unique<Particle3D>("impact_002", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impact003_ = std::make_unique<Particle3D>("impact_003", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impact004_ = std::make_unique<Particle3D>("impact_004", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
 	// インパクトドロップ000を生成
 	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
@@ -74,6 +75,7 @@ void EffectManager::Draw()
 	impact001_->Draw();
 	impact002_->Draw();
 	impact003_->Draw();
+	impact004_->Draw();
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
@@ -146,6 +148,15 @@ void EffectManager::Impact002(const Vector3& position)
 void EffectManager::Impact003(const Vector3& position)
 {
 	Emitter3D emitter("impact_003");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトを放出する
+/// @param position 
+void EffectManager::Impact004(const Vector3& position)
+{
+	Emitter3D emitter("impact_004");
 	emitter.param_->position = position;
 	emitter.Emit();
 }
