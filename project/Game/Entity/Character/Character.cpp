@@ -832,6 +832,9 @@ void Character::OnGrabDamage(int damage)
 /// @return 
 bool Character::CheckGetUpCondition()
 {
+	// 地面に接地していない場合は起き上がれない
+	if (!IsGrounded())return false;
+
 	// ダウン中の時間が十分経過しているかどうか
 	return damageReactionTimer_ <= 0.0f &&
 		currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack;

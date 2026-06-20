@@ -190,7 +190,7 @@ void Player::Initialize(Weapon* baton)
 	attack4Data.hitDefinitions[0].damage = 1;
 	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
 	attack4Data.hitDefinitions[0].knockback = 1.0f;
-	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
+	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 0.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));
@@ -518,7 +518,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 		isDash_ = true;
 
 		// ダッシュ開始時にスローモーションを開始する
-		GrowthEngine::GetInstance()->StartSlowMotion(0.05f, 0.1f);
+		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.1f);
 	}
 
 	// ダッシュ中に移動入力がなくなったらダッシュを終了する
@@ -565,6 +565,9 @@ float Player::GetCameraYaw() const
 /// @return 
 bool Player::CheckGetUpCondition()
 {
+	// 地面に接地していない場合は起き上がれない
+	if (!IsGrounded())return false;
+
 	// 起き上がりボタンが入力されたら true を返す
 	if (inputGetUp_ && inputGetUp_->IsInput())
 	{

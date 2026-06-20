@@ -48,6 +48,12 @@ public:
 	/// @brief ガードブレイクのSE
 	void SeGuardBreak() { if (seGuardBreak_)seGuardBreak_->Play(); }
 
+	/// @brief 着地のSE
+	void SeLanding() { if (seLanding_)seLanding_->Play(); }
+
+	/// @brief ダウン中着地のSE
+	void SeDownLanding() { if (seDownLanding_)seDownLanding_->Play(); }
+
 
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
@@ -92,6 +98,12 @@ private:
 
 	/// @brief ガードブレイクのSE
 	std::unique_ptr<Se> seGuardBreak_ = nullptr;
+
+	/// @brief 着地のSE
+	std::unique_ptr<Se> seLanding_ = nullptr;
+
+	/// @brief ダウン中着地のSE
+	std::unique_ptr<Se> seDownLanding_ = nullptr;
 
 
 private:
