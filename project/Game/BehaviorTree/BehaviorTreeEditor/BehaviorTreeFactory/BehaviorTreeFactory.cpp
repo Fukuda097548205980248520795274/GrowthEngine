@@ -200,6 +200,16 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 					return !BattleDirector::GetInstance().IsClosestToTarget(character);
 				};
 			break;
+
+			// 攻撃動作中かどうかをチェックする条件
+		case ConditionType::IsInAttackSequence:
+			conditionFunc = [character]() {return character->IsInAttackSequence();};
+			break;
+
+			// 攻撃動作中でないかどうかをチェックする条件
+		case ConditionType::IsNotInAttackSequence:
+			conditionFunc = [character]() {return !character->IsInAttackSequence();};
+			break;
 		}
 
 		// 実際は editor_node.condition_name 等をもとに、

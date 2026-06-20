@@ -21,11 +21,15 @@ void Move::Update()
 /// @brief 中断・終了
 void Move::Exit()
 {
-	// 移動を中断する
-	owner_->MoveStop();
+	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
+	if (owner_->GetCurrentMove() == this)
+	{
+		// 移動を中断する
+		owner_->MoveStop();
 
-	// 移動を停止する
-	owner_->SetCurrentMove(nullptr);
+		// 移動を停止する
+		owner_->SetCurrentMove(nullptr);
+	}
 
 	// 基底クラスのExitを呼び出す
 	Action::Exit();

@@ -33,16 +33,14 @@ void ApproachTargetMove::Update()
 	// 動けない状態や回避中の場合は移動を停止して終了する
     if (owner_->IsJustAvoided() ||  owner_->IsGrabbing() || owner_->IsIncapacitated())
     {
-        this->Exit();
+        Exit();
         return;
     }
 
 	// ターゲットとの距離が停止距離以内の場合は移動を停止して終了する
     if (distanceSq <= stopDistanceSq_)
     {
-        owner_->MoveStop();
-        owner_->SetCurrentMove(nullptr);
-        Action::Update();
+        Move::Update();
         return;
     }
 

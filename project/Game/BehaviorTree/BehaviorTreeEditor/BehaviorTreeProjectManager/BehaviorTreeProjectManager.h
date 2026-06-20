@@ -50,6 +50,9 @@ enum class ConditionType
 
 	IsClosestToTarget, // ターゲットに最も近いかどうか
 	IsNotClosestToTarget, // ターゲットに最も近くないかどうか
+
+	IsInAttackSequence, // 攻撃動作中かどうか
+	IsNotInAttackSequence, // 攻撃動作中でないかどうか
 };
 
 /// @brief 条件ノードパラメータ
