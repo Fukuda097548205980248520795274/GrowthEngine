@@ -336,6 +336,14 @@ public:
 	/// @return 
 	bool IsGettingUp() const { return currentDamageReaction_ == DamageReactionState::DownGettingUpFront || currentDamageReaction_ == DamageReactionState::DownGettingUpBack; }
 
+	/// @brief 吹き飛び中かどうか
+	/// @return 
+	bool IsBlownAway() const { return currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownAwayBack; }
+
+	/// @brief 吹き飛び落下中かどうか
+	/// @return 
+	bool IsBlownFalling() const { return currentDamageReaction_ == DamageReactionState::BlownFallingFront || currentDamageReaction_ == DamageReactionState::BlownFallingBack; }
+
 	/// @brief 頭の当たり判定を取得する
 	/// @return 
 	AppCollider& GetHurtboxHead() { return hurtboxHead_; }
@@ -522,6 +530,9 @@ protected:
 
 	// やられたかどうか
 	bool isDead_ = false;
+
+	/// @brief 死亡してからの経過時間
+	float deadTimer_ = 5.0f;
 
 
 protected:

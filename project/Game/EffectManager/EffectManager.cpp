@@ -71,11 +71,11 @@ void EffectManager::Draw()
 		effect->Draw();
 
 	// インパクト000を描画
-	impact000_->Draw();
+	impact004_->Draw();
 	impact001_->Draw();
 	impact002_->Draw();
 	impact003_->Draw();
-	impact004_->Draw();
+	impact000_->Draw();
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();

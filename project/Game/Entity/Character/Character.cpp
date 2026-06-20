@@ -276,6 +276,19 @@ void Character::Update()
 				collider->param_->radius = 0.25f;
 				collider->param_->center = GetBonePosition(JointType::Root);
 			}
+
+			// 死亡処理の更新
+			if (isDead_)
+			{
+				// 死亡タイマーを減算する
+				deadTimer_ -= dt;
+
+				// 死亡タイマーが0以下になったら、終了フラグを立てる
+				if (deadTimer_ <= 0.0f)
+				{
+					isFinished_ = true;
+				}
+			}
 		};
 
 	// 掴まれている場合の処理
@@ -402,6 +415,50 @@ void Character::Update()
 				currentDamageReaction_ = DamageReactionState::DownGettingUpBack;
 				damageReactionTimer_ = 1.0f;
 				SetAnimation(hDownGetUpMotion_, true, false);
+				break;
+
+				// 落下速度が負の場合は、落下中状態へ移行する
+			case DamageReactionState::BlownAwayFront:
+				if (velocityY_ <= 0.0f)
+				{
+					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
+					SetAnimation(hDownLyingMotion_, true, true);
+				}
+				break;
+
+				// 落下速度が負の場合は、落下中状態へ移行する
+			case DamageReactionState::BlownAwayBack:
+				if (velocityY_ <= 0.0f)
+				{
+					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
+					SetAnimation(hDownLyingMotion_, true, true);
+				}
+				break;
+
+				// 地上に着地した場合は、ダウン中状態へ移行する
+			case DamageReactionState::BlownFallingFront:
+				if (isGrounded_)
+				{
+					currentDamageReaction_ = DamageReactionState::DownLyingFront;
+					damageReactionTimer_ = 2.0f;
+					SetAnimation(hDownLyingMotion_, true, true);
+
+					// ダウン着地のSEを再生する
+					soundManager_->SeDownLanding();
+				}
+				break;
+
+				// 地上に着地した場合は、ダウン中状態へ移行する
+			case DamageReactionState::BlownFallingBack:
+				if (isGrounded_)
+				{
+					currentDamageReaction_ = DamageReactionState::DownLyingBack;
+					damageReactionTimer_ = 2.0f;
+					SetAnimation(hDownLyingMotion_, true, true);
+
+					// ダウン着地のSEを再生する
+					soundManager_->SeDownLanding();
+				}
 				break;
 			}
 		}
@@ -699,9 +756,23 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
 		case DamageReaction::Down:
-			currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
-			SetAnimation(hDownFallMotion_, true, false);
-			damageReactionTimer_ = 0.3f;
+
+			// ノックバックの方向が上方向の場合は、吹っ飛び状態にする
+			if (knockDirection.y * knockback > 0.0f)
+			{
+				currentDamageReaction_ = DamageReactionState::BlownAwayFront; // ここではとりあえず前方向の吹っ飛びを設定。
+				SetAnimation(hDownFallMotion_, true, false);
+
+				isGrounded_ = false; // 地面に接地していない状態にする
+			}
+			else
+			{
+				// 上に跳ばない場合は、ダウン落下状態にする
+
+				currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
+				SetAnimation(hDownFallMotion_, true, false);
+				damageReactionTimer_ = 0.3f;
+			}
 
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
@@ -1288,7 +1359,13 @@ bool Character::IsDown()const
 		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
 
 		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
-		currentDamageReaction_ == DamageReactionState::DownGettingUpBack;
+		currentDamageReaction_ == DamageReactionState::DownGettingUpBack ||
+
+		currentDamageReaction_ == DamageReactionState::BlownAwayFront ||
+		currentDamageReaction_ == DamageReactionState::BlownAwayBack ||
+
+		currentDamageReaction_ == DamageReactionState::BlownFallingFront ||
+		currentDamageReaction_ == DamageReactionState::BlownFallingBack;
 }
 
 /// @brief 倒れこみ中かどうか

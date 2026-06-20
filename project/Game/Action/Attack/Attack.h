@@ -76,6 +76,14 @@ enum class DamageReactionState
 	DownStaggerFront,
 	DownStaggerBack,
 
+	// 吹き飛び
+	BlownAwayFront,
+	BlownAwayBack,
+
+	// 落下
+	BlownFallingFront,
+	BlownFallingBack,
+
 	// 受け流され
 	Parried,
 
