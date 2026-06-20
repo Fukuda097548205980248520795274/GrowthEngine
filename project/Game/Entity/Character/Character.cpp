@@ -640,6 +640,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
 			}
 
 			// 軽い怯みのSEを再生する

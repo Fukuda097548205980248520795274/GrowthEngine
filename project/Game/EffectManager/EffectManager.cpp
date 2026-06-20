@@ -33,8 +33,9 @@ void EffectManager::Initialize()
 	// インパクトドロップ000を生成
 	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
-	// インパクトスモーク000を生成
+	// インパクトスモークを生成
 	impactSmoke000_ = std::make_unique<Particle3D>("impactSmoke_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impactSmoke001_ = std::make_unique<Particle3D>("impactSmoke_001", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -60,8 +61,9 @@ void EffectManager::Draw()
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
 
-	// インパクトスモーク000を描画
+	// インパクトスモーク001を描画
 	impactSmoke000_->Draw();
+	impactSmoke001_->Draw();
 
 	// スパーク000を描画
 	spark000_->Draw();
@@ -104,6 +106,15 @@ void EffectManager::ImpactDrop000(const Vector3& position)
 void EffectManager::ImpactSmoke000(const Vector3& position)
 {
 	Emitter3D emitter("impactSmoke_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクトスモークを放出する
+/// @param position 
+void EffectManager::ImpactSmoke001(const Vector3& position)
+{
+	Emitter3D emitter("impactSmoke_001");
 	emitter.param_->position = position;
 	emitter.Emit();
 }

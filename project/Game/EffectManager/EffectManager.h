@@ -37,6 +37,10 @@ public:
 	/// @param position 
 	void ImpactSmoke000(const Vector3& position);
 
+	/// @brief インパクトスモークを放出する
+	/// @param position 
+	void ImpactSmoke001(const Vector3& position);
+
 
 private:
 
@@ -84,5 +88,8 @@ private:
 
 	/// @brief インパクトスモーク000
 	std::unique_ptr<Particle3D> impactSmoke000_ = nullptr;
+
+	/// @brief インパクトスモーク001
+	std::unique_ptr<Particle3D> impactSmoke001_ = nullptr;
 };
 

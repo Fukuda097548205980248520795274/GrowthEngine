@@ -66,6 +66,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->frequency = 0.1f;
 	param_->enableBillboard = false;
 	param_->enableSoftParticle = false;
+	param_->alignToDirection = false;
 	param_->attract.enableAttract = false;
 	param_->attract.positionType = Particle3D::AttractPostitionType::Direction;
 	param_->attract.attractCenter = Vector3(0.0f, 0.0f, 0.0f);
@@ -143,6 +144,7 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "Frequency", &param_->frequency);
 		parameter_->SetValue(group_, "EnableBillboard", &param_->enableBillboard);
 		parameter_->SetValue(group_, "EnableSoftParticle", &param_->enableSoftParticle);
+		parameter_->SetValue(group_, "AlignToDirection", &param_->alignToDirection);
 		parameter_->SetValue(group_, "EnableAttract", &param_->attract.enableAttract);
 		parameter_->SetValue(group_, "AttractDirection", &param_->attract.attractDirection);
 		parameter_->SetValue(group_, "AttractLength", &param_->attract.attractLength);
@@ -280,6 +282,7 @@ void Engine::Particle3DData::Reset()
 		param_->frequency = 0.1f;
 		param_->enableBillboard = false;
 		param_->enableSoftParticle = false;
+		param_->alignToDirection = false;
 		param_->attract.enableAttract = false;
 		param_->attract.attractDirection = Vector3(0.0f, 1.0f, 0.0f);
 		param_->attract.attractLength = 1.0f;
@@ -594,6 +597,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	// データを渡す
 	particleViewResource_->data_->viewProjection = cameraStore->GetCamera3D().GetCurrentVPMatrix();
 	enableResource_->data_->softParticle = static_cast<int32_t>(param_->enableSoftParticle);
+	enableResource_->data_->alignToDirection = static_cast<int32_t>(param_->alignToDirection);
 
 	// ビルボードの有効化
 	if (param_->enableBillboard)
@@ -634,6 +638,12 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 
 	// 有効化フラグを登録する
 	enableResource_->RegisterGraphics(commandList, 5);
+
+	// カメラを登録する
+	cameraStore->RegisterCameraResource(commandList, 6);
+
+	// 有効化フラグを登録する
+	enableResource_->RegisterGraphics(commandList, 7);
 
 	// ドローコール
 	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
@@ -763,6 +773,9 @@ void Engine::Particle3DData::DebugParameter()
 
 		// ソフトパーティクル有効化
 		ImGui::Checkbox("SoftParticle", &param_->enableSoftParticle);
+
+		// 方向に合わせる
+		ImGui::Checkbox("AlignToDirection", &param_->alignToDirection);
 
 
 		// 生存期間

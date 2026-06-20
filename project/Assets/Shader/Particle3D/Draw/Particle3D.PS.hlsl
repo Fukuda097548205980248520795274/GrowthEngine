@@ -21,6 +21,7 @@ struct Enable
 {
     // 0: 通常のパーティクル、1: ソフトパーティクル
     int softParticle;
+    int alignToDirection;
 };
 ConstantBuffer<Enable> gEnable : register(b1);
 

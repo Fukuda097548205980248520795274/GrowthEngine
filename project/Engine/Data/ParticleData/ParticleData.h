@@ -187,6 +187,9 @@ namespace Engine
 			/// @brief ビルボード有効化
 			bool enableBillboard;
 
+			/// @brief 方向に合わせるかどうか
+			bool alignToDirection;
+
 			/// @brief ソフトパーティクル有効化
 			bool enableSoftParticle;
 

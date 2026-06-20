@@ -13,7 +13,7 @@
         ],
         "AttractPositionType": 0,
         "BlendMode": 5,
-        "Count": 5,
+        "Count": 10,
         "EmitTime": 0.0,
         "Emitter0_IsStart": false,
         "Emitter0_Name": "Emitter0",
@@ -224,7 +224,7 @@
             0.15000000596046448,
             0.15000000596046448
         ],
-        "StartSpeed": 3.5,
+        "StartSpeed": 5.0,
         "SwapEmitterAttract": false,
         "TextureFilePath": "./Assets/Models/particle/particle.png"
     }

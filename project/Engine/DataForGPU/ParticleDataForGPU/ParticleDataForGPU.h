@@ -172,6 +172,9 @@ namespace Engine
 		// パーティクル有効フラグ
 		int32_t softParticle;
 
-		float padding[3]; // パディング
+		// 進行方向に合わせるかどうかのフラグ
+		int32_t alignToDirection;
+
+		float padding[2]; // パディング
 	};
 }

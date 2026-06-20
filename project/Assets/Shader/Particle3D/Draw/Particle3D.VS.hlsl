@@ -22,34 +22,95 @@ struct PerView
 };
 ConstantBuffer<PerView> gView : register(b0);
 
+// カメラ情報（視線ビルボード用）
+struct Camera
+{
+    float3 worldPositin;
+    float nearZ;
+    float farZ;
+};
+ConstantBuffer<Camera> gCamera : register(b1);
+
+// フラグ
+struct Enable
+{
+    int softParticle;
+    int alignToDirection; 
+};
+ConstantBuffer<Enable> gEnable : register(b2);
+
 VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID)
 {
     VertexShaderOutput output;
-    
-    // パーティクルの情報を取得
     Particle particle = gParticles[instanceID];
     
-    // 1. スケールとローカル回転を適用した行列を作成
-    float3x3 rotMatrix = QuaternionToMatrix(particle.rotation);
-    float4x4 localMatrix = float4x4(
-        float4(rotMatrix[0] * particle.scale.x, 0.0f),
-        float4(rotMatrix[1] * particle.scale.y, 0.0f),
-        float4(rotMatrix[2] * particle.scale.z, 0.0f),
-        float4(0.0f, 0.0f, 0.0f, 1.0f)
-    );
-    
-    // 2. 「平行移動を入れる前」にビルボード行列を掛けて、常にカメラを向くようにする
+    float4x4 localMatrix = (float4x4) 0;
+
+    // ▼ 進行方向に向けるフラグが有効な場合
+    if (gEnable.alignToDirection != 0)
+    {
+        // カメラの「右方向」と「上方向」のベクトルをビルボード行列から抽出
+        float3 camRight = gView.billboard[0].xyz;
+        float3 camUp = gView.billboard[1].xyz;
+
+        // パーティクルの進行方向（particle.direction）をカメラの画面（2D平面）に投影
+        float dirX = dot(particle.direction, camRight);
+        float dirY = dot(particle.direction, camUp);
+        float2 screenDir = float2(dirX, dirY);
+
+        float3x3 rotMatrix = float3x3(
+            float3(1, 0, 0),
+            float3(0, 1, 0),
+            float3(0, 0, 1)
+        );
+
+        // 画面上での移動成分がある場合のみ、2D回転行列を組み立てる
+        if (length(screenDir) > 0.0001f)
+        {
+            float2 d = normalize(screenDir);
+            
+            // 進行方向の角度に合わせてポリゴンをZ軸回転させる行列（行優先）
+            // これにより：
+            // 画面上で上(+Y)に進む時 => 回転なし (0, 0, 0)
+            // 画面上で下(-Y)に進む時 => 180度回転 (0, 0, 3.14)
+            // 画面上で右(+X)に進む時 => -90度回転
+            rotMatrix = float3x3(
+                float3(d.y, -d.x, 0.0f), // 新しいX軸（右）
+                float3(d.x, d.y, 0.0f), // 新しいY軸（上）
+                float3(0.0f, 0.0f, 1.0f) // 新しいZ軸（正面はカメラに向けたまま固定）
+            );
+        }
+
+        // スケールを適用（元のコードの構造に合わせる）
+        localMatrix = float4x4(
+            float4(rotMatrix[0] * particle.scale.x, 0.0f),
+            float4(rotMatrix[1] * particle.scale.y, 0.0f),
+            float4(rotMatrix[2] * particle.scale.z, 0.0f),
+            float4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    }
+    // ▼ 通常のビルボードの場合（元の処理と100%同じ）
+    else
+    {
+        float3x3 rotMatrix = QuaternionToMatrix(particle.rotation);
+        localMatrix = float4x4(
+            float4(rotMatrix[0] * particle.scale.x, 0.0f),
+            float4(rotMatrix[1] * particle.scale.y, 0.0f),
+            float4(rotMatrix[2] * particle.scale.z, 0.0f),
+            float4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    }
+
+    // 元のコードと完全に同じ行列合成フローを適用（これで座標のズレや消失を防ぎます）
     float4x4 billboardedMatrix = mul(localMatrix, gView.billboard);
-    
-    // 3. 最後に平行移動（ワールド座標の位置）を入れる
     billboardedMatrix[3].xyz = particle.translate;
-    
-    // 4. ビュープロジェクションを掛けて画面上の位置を計算
+
+    // 最終座標変換
     output.position = mul(input.position, mul(billboardedMatrix, gView.viewProjection));
     
     output.texcoord = input.texcoord;
     output.color = particle.color;
     output.clipPos = output.position;
-    
+
     return output;
 }
