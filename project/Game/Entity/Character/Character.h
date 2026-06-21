@@ -589,6 +589,8 @@ protected:
 	/// @brief ダッシュフラグ
 	bool isDash_ = false;
 
+	float dashTimer_ = 0.4f;
+
 
 protected:
 

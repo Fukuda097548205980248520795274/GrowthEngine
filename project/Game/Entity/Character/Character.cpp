@@ -283,6 +283,16 @@ void Character::Update()
 				collider->param_->center = GetBonePosition(JointType::Root);
 			}
 
+			if (isDash_)
+			{
+				dashTimer_ -= dt;
+				if (dashTimer_ <= 0.0f)
+				{
+					EffectManager::GetInstance()->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
+					dashTimer_ = 0.25f;
+				}
+			}
+
 			// 死亡処理の更新
 			if (isDead_)
 			{

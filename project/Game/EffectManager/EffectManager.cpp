@@ -72,6 +72,9 @@ void EffectManager::Initialize()
 	impactGround004_ = std::make_unique<Particle3D>("impactGround_004", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 	impactGround005_ = std::make_unique<Particle3D>("impactGround_005", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impactGround006_ = std::make_unique<Particle3D>("impactGround_006", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// 走りスモークを生成
+	dashSmoke000_ = std::make_unique<Particle3D>("dashSmoke_000", 1000, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -109,6 +112,9 @@ void EffectManager::Draw()
 
 	// 吹っ飛びスモーク000を描画
 	blownSmoke000_->Draw();
+
+	// 走りスモーク000を描画
+	dashSmoke000_->Draw();
 
 	// インパクト000を描画
 	impact004_->Draw();
@@ -329,5 +335,14 @@ void EffectManager::ImpactGround006(const Vector3& position)
 {
 	Emitter3D emitter("impactGround_006");
 	emitter.param_->position = position + Vector3(0.0f, -0.4f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief 走りスモークを放出する
+/// @param position 
+void EffectManager::DashSmoke000(const Vector3& position)
+{
+	Emitter3D emitter("dashSmoke_000");
+	emitter.param_->position = position;
 	emitter.Emit();
 }

@@ -103,6 +103,10 @@ public:
 	/// @param position 
 	void ImpactGround006(const Vector3& position);
 
+	/// @brief 走りスモークを放出する
+	/// @param position 
+	void DashSmoke000(const Vector3& position);
+
 
 private:
 
@@ -213,5 +217,11 @@ private:
 	
 	/// @brief インパクト地面006
 	std::unique_ptr<Particle3D> impactGround006_ = nullptr;
+
+
+private:
+
+	/// @brief 走りスモーク000
+	std::unique_ptr<Particle3D> dashSmoke000_ = nullptr;
 };
 
