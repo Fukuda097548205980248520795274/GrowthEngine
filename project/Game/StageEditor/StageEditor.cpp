@@ -93,6 +93,15 @@ void StageEditor::Update(float dt)
 #endif
 }
 
+/// @brief ステージを読み込む
+/// @param fileName 
+void StageEditor::LoadStage(const std::string& fileName)
+{
+	// ファイルを読み込む
+	fileManager_->LoadFromFile(fileName, placementList_, spawner_.get(), scene_->GetNavMesh());
+	editorUI_->Play(isPlaying_);
+}
+
 /// @brief 描画処理（デバッグ用）
 void StageEditor::DrawUI()
 {

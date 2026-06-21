@@ -27,6 +27,10 @@ public:
 	/// @param dt 
 	void Update(float dt);
 
+	/// @brief ステージを読み込む
+	/// @param fileName 
+	void LoadStage(const std::string& fileName);
+
 	/// @brief 描画処理（デバッグ用）
 	void DrawUI();
 

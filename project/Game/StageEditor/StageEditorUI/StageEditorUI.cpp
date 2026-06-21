@@ -220,9 +220,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			// プレイモードを終了したら、ファイルからステージデータを再読み込みして初期状態に戻す
 			assert(fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh) && "実行停止時のファイル読み込みに失敗しました");
 
-			isPlaying = false;
-			Entity::SetUpdateEnabled(false);// すべての実体の更新を停止する
-			StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
+			Stop(isPlaying);
 		}
 		ImGui::PopStyleColor();
 	}
@@ -231,9 +229,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f)); // PLAYボタンは緑色
 		if (ImGui::Button("実行", ImVec2(100, 30)))
 		{
-			isPlaying = true;
-			Entity::SetUpdateEnabled(true); // すべての実体の更新を再開する
-			StageObject::SetUpdateEnabled(true); // すべてのステージオブジェクトの更新を再開する
+			Play(isPlaying);
 		}
 		ImGui::PopStyleColor();
 	}
@@ -643,6 +639,23 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
 	ImGui::End();
 #endif
+}
+
+
+/// @brief プレイモードを開始する
+void StageEditorUI::Play(bool& isPlaying)
+{
+	isPlaying = true;
+	Entity::SetUpdateEnabled(true); // すべての実体の更新を再開する
+	StageObject::SetUpdateEnabled(true); // すべてのステージオブジェクトの更新を再開する
+}
+
+/// @brief プレイモードを終了する
+void StageEditorUI::Stop(bool& isPlaying)
+{
+	isPlaying = false;
+	Entity::SetUpdateEnabled(false); // すべての実体の更新を停止する
+	StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
 }
 
 

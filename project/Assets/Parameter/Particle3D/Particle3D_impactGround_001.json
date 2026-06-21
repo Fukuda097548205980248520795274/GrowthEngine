@@ -19,11 +19,11 @@
         "Emitter0_IsStart": false,
         "Emitter0_Name": "Emitter0",
         "Emitter0_Position": [
-            12.267850875854492,
-            0.2737300395965576,
-            -4.502434253692627
+            -1.2083301544189453,
+            0.239321768283844,
+            0.48307061195373535
         ],
-        "Emitter0_Timer": 0.11667089909315109,
+        "Emitter0_Timer": 0.1333353966474533,
         "Emitter10_IsStart": false,
         "Emitter10_Name": "Emitter10",
         "Emitter10_Position": [
@@ -107,67 +107,67 @@
         "Emitter1_IsStart": false,
         "Emitter1_Name": "Emitter1",
         "Emitter1_Position": [
-            10.077108383178711,
-            0.2739185094833374,
-            0.06857508420944214
+            1.378993034362793,
+            0.239321768283844,
+            0.5069458484649658
         ],
-        "Emitter1_Timer": 0.13332051038742065,
+        "Emitter1_Timer": 0.14998501539230347,
         "Emitter2_IsStart": false,
         "Emitter2_Name": "Emitter2",
         "Emitter2_Position": [
-            12.872102737426758,
-            0.23933354020118713,
-            -2.408402919769287
+            -0.019858021289110184,
+            0.2742609977722168,
+            2.409825325012207
         ],
-        "Emitter2_Timer": 0.13336791098117828,
+        "Emitter2_Timer": 0.1500341147184372,
         "Emitter3_IsStart": false,
         "Emitter3_Name": "Emitter3",
         "Emitter3_Position": [
-            14.777937889099121,
-            0.27382808923721313,
-            2.1007466316223145
+            -1.1229941844940186,
+            0.23946499824523926,
+            -1.0812970399856567
         ],
-        "Emitter3_Timer": 0.1166968047618866,
+        "Emitter3_Timer": 0.1333800107240677,
         "Emitter4_IsStart": false,
         "Emitter4_Name": "Emitter4",
         "Emitter4_Position": [
-            1.2072867155075073,
-            0.2384626567363739,
-            -6.608341217041016
+            1.2113460302352905,
+            0.23946499824523926,
+            -1.0507519245147705
         ],
-        "Emitter4_Timer": 0.11669060587882996,
+        "Emitter4_Timer": 0.13337381184101105,
         "Emitter5_IsStart": false,
         "Emitter5_Name": "Emitter5",
         "Emitter5_Position": [
-            -2.0975747108459473,
-            0.2392553687095642,
-            -5.659829139709473
+            4.44596004486084,
+            0.267767071723938,
+            1.9660272598266602
         ],
-        "Emitter5_Timer": 0.11666939407587051,
+        "Emitter5_Timer": 0.1333433985710144,
         "Emitter6_IsStart": false,
         "Emitter6_Name": "Emitter6",
         "Emitter6_Position": [
-            -1.6935546398162842,
-            0.2392725646495819,
-            -5.221722602844238
+            0.03585657477378845,
+            0.27429986000061035,
+            6.2566351890563965
         ],
-        "Emitter6_Timer": 0.11685299873352051,
+        "Emitter6_Timer": 0.13351960480213165,
         "Emitter7_IsStart": false,
         "Emitter7_Name": "Emitter7",
         "Emitter7_Position": [
-            2.8920907974243164,
-            0.23931747674942017,
-            -1.5279021263122559
+            -1.0375665426254272,
+            0.2392786741256714,
+            -2.5958127975463867
         ],
-        "Emitter7_Timer": 0.06663210690021515,
+        "Emitter7_Timer": 0.08329311013221741,
         "Emitter8_IsStart": false,
         "Emitter8_Name": "Emitter8",
         "Emitter8_Position": [
-            3.25923752784729,
-            0.2393040955066681,
-            -0.5347142815589905
+            -3.1451594829559326,
+            0.23932293057441711,
+            0.31923335790634155
         ],
-        "Emitter8_Timer": 0.0666922926902771,
+        "Emitter8_Timer": 0.08337889611721039,
         "Emitter9_IsStart": false,
         "Emitter9_Name": "Emitter9",
         "Emitter9_Position": [
@@ -208,8 +208,8 @@
         "IsRandomEndScale": false,
         "IsRandomRotate": false,
         "IsRandomStartScale": false,
-        "MaxLifeTime": 0.10000000149011612,
-        "MinLifeTime": 0.10000000149011612,
+        "MaxLifeTime": 0.15000000596046448,
+        "MinLifeTime": 0.15000000596046448,
         "PauseTime": 0.0,
         "Radius1": 1.0,
         "Radius3": [

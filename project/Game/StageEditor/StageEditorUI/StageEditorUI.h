@@ -63,6 +63,14 @@ public:
 	/// @param isPlaying
 	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
 
+	/// @brief プレイモードを開始する
+	/// @param isPlaying
+	void Play(bool& isPlaying);
+
+	/// @brief プレイモードを終了する
+	/// @param isPlaying
+	void Stop(bool& isPlaying);
+
 	/// @brief 現在のエディタモードを取得する
 	/// @return 
 	EditorMode GetCurrentMode() const { return currentMode_; }
