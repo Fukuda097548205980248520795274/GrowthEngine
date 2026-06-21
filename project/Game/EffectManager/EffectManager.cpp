@@ -34,6 +34,14 @@ void EffectManager::Initialize()
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
 	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
+	guardEffectModel_->param_->material.enableLighting = false;
+	guardEffectModel_->param_->material.enableShadow = false;
+
+	// 弾きエフェクトのモデルを生成
+	deflectEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/gradation.png"), 100, "deflectEffect");
+	deflectEffectModel_->param_->blendMode = BlendMode::kAdd;
+	deflectEffectModel_->param_->material.enableLighting = false;
+	deflectEffectModel_->param_->material.enableShadow = false;
 
 	// スパークパーティクル000を生成
 	spark000_ = std::make_unique<Particle3D>("spark_000", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
@@ -76,6 +84,15 @@ void EffectManager::Update()
 			return effect->IsFinished();
 		}
 	);
+
+	// 弾きエフェクトの更新と終了したエフェクトの削除
+	deflectEffects_.remove_if(
+		[](std::unique_ptr<DeflectEffect>& effect)
+		{
+			effect->Update();
+			return effect->IsFinished();
+		}
+	);
 }
 
 /// @brief 描画処理
@@ -83,6 +100,10 @@ void EffectManager::Draw()
 {
 	// ガードエフェクトの描画
 	for (auto& effect : guardEffects_)
+		effect->Draw();
+
+	// 弾きエフェクトの描画
+	for (auto& effect : deflectEffects_)
 		effect->Draw();
 
 	// 吹っ飛びスモーク000を描画
@@ -116,6 +137,9 @@ void EffectManager::Draw()
 
 	// ガードエフェクトのモデルを描画
 	guardEffectModel_->Draw();
+
+	// 弾きエフェクトのモデルを描画
+	deflectEffectModel_->Draw();
 }
 
 /// @brief ガードエフェクトを生成する
@@ -127,6 +151,16 @@ void  EffectManager::CreateGuardEffect(const Vector3& position, const Vector3& r
 	guardEffect->Initialize(guardEffectModel_->CreateInstance(), position, rotate);
 
 	guardEffects_.push_back(std::move(guardEffect));
+}
+
+/// @brief 弾きエフェクトを生成する
+/// @param position 
+void EffectManager::CreateDeflectEffect(const Vector3& position)
+{
+	std::unique_ptr <DeflectEffect> deflectEffect = std::make_unique<DeflectEffect>();
+	deflectEffect->Initialize(deflectEffectModel_->CreateInstance(), deflectEffectModel_->CreateInstance(), deflectEffectModel_->CreateInstance(), position);
+
+	deflectEffects_.push_back(std::move(deflectEffect));
 }
 
 /// @brief スパークを放出する

@@ -1590,7 +1590,10 @@ void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPo
 	// 弾きのエフェクトを発生させる
 	if (hitPosition)
 	{
+		EffectManager::GetInstance()->CreateDeflectEffect(*hitPosition);
 		EffectManager::GetInstance()->EmitSpark000(*hitPosition);
+		EffectManager::GetInstance()->Impact001(*hitPosition);
+		EffectManager::GetInstance()->Impact003(*hitPosition);
 	}
 
 	// 相手が武器を持っている場合は、武器を落とさせる

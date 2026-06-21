@@ -1291,6 +1291,9 @@
     <Filter Include="Game\Shake">
       <UniqueIdentifier>{53e6f0a5-a949-4a97-8553-b9a11c934b00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\EffectManager\Effect\DeflectEffect">
+      <UniqueIdentifier>{df746e58-6f19-40c4-8cb8-9519b9082dd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2339,6 +2342,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp">
       <Filter>Engine\Include\Application\Trail3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EffectManager\Effect\DeflectEffect\DeflectEffect.cpp">
+      <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3505,6 +3511,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\Trail3D\Trail3D.h">
       <Filter>Engine\Include\Application\Trail3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EffectManager\Effect\DeflectEffect\DeflectEffect.h">
+      <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

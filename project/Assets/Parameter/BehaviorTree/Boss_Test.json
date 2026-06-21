@@ -84,6 +84,21 @@
             "end": 96,
             "id": 98,
             "start": 68
+        },
+        {
+            "end": 100,
+            "id": 108,
+            "start": 24
+        },
+        {
+            "end": 103,
+            "id": 109,
+            "start": 24
+        },
+        {
+            "end": 106,
+            "id": 110,
+            "start": 24
         }
     ],
     "nodes": [
@@ -94,10 +109,10 @@
                 "hitDefinitions": [
                     {
                         "damage": 10,
-                        "damageReaction": 3,
+                        "damageReaction": 1,
                         "endTime": 0.5,
                         "jointType": 9,
-                        "knockback": 1.0,
+                        "knockback": 0.5,
                         "knockbackDirection": [
                             0.0,
                             0.7425634860992432,
@@ -173,8 +188,8 @@
             "motionType": 0,
             "output_pin": 12,
             "pos": [
-                598.5601806640625,
-                684.4383544921875
+                627.272216796875,
+                981.9520874023438
             ],
             "type": 5
         },
@@ -201,8 +216,8 @@
             "motionType": 0,
             "output_pin": 18,
             "pos": [
-                602.5601806640625,
-                772.4383544921875
+                631.272216796875,
+                1069.9521484375
             ],
             "type": 5
         },
@@ -223,7 +238,7 @@
         {
             "id": 22,
             "input_pin": 23,
-            "is_collapsed": true,
+            "is_collapsed": false,
             "output_pin": 24,
             "pos": [
                 282.5601501464844,
@@ -303,7 +318,7 @@
         {
             "id": 66,
             "input_pin": 67,
-            "is_collapsed": false,
+            "is_collapsed": true,
             "output_pin": 68,
             "pos": [
                 106.0,
@@ -353,6 +368,114 @@
                 538.0
             ],
             "type": 4
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.699999988079071,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 0.5,
+                        "jointType": 8,
+                        "knockback": 0.5,
+                        "knockbackDirection": [
+                            0.0,
+                            0.7425634860992432,
+                            0.669775664806366
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 99,
+            "input_pin": 100,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_2",
+            "motionType": 4,
+            "output_pin": 101,
+            "pos": [
+                622.7120361328125,
+                668.5137329101563
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.699999988079071,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 0.5,
+                        "jointType": 9,
+                        "knockback": 0.5,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 102,
+            "input_pin": 103,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_3",
+            "motionType": 4,
+            "output_pin": 104,
+            "pos": [
+                624.7120361328125,
+                759.5137329101563
+            ],
+            "type": 5
+        },
+        {
+            "action_name": "ComboAttack",
+            "combo_data": {
+                "attackTime": 0.699999988079071,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 3,
+                        "endTime": 0.5,
+                        "jointType": 12,
+                        "knockback": 1.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.7425634860992432,
+                            0.669775664806366
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "moveEndTime": 0.5,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.05000000074505806
+            },
+            "id": 105,
+            "input_pin": 106,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_4",
+            "motionType": 4,
+            "output_pin": 107,
+            "pos": [
+                626.7120361328125,
+                850.5137329101563
+            ],
+            "type": 5
         }
     ]
 }
