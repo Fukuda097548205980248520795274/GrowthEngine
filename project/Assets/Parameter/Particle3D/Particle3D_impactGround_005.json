@@ -13,15 +13,15 @@
             0.0
         ],
         "AttractPositionType": 0,
-        "BlendMode": 2,
+        "BlendMode": 1,
         "Count": 20,
         "EmitTime": 0.0,
         "Emitter0_IsStart": false,
         "Emitter0_Name": "Emitter0",
         "Emitter0_Position": [
-            0.0,
-            0.0,
-            0.0
+            -0.21214419603347778,
+            0.22374749183654785,
+            4.113199234008789
         ],
         "Emitter0_Timer": 0.0,
         "Emitter10_IsStart": false,
@@ -107,27 +107,27 @@
         "Emitter1_IsStart": false,
         "Emitter1_Name": "Emitter1",
         "Emitter1_Position": [
-            0.0,
-            0.0,
-            0.0
+            0.12829351425170898,
+            0.22464889287948608,
+            8.044615745544434
         ],
-        "Emitter1_Timer": 0.0,
+        "Emitter1_Timer": 0.016669100150465965,
         "Emitter2_IsStart": false,
         "Emitter2_Name": "Emitter2",
         "Emitter2_Position": [
-            0.0,
-            0.0,
-            0.0
+            3.8196048736572266,
+            0.22390788793563843,
+            -0.5218002796173096
         ],
-        "Emitter2_Timer": 0.0,
+        "Emitter2_Timer": 0.01665329933166504,
         "Emitter3_IsStart": false,
         "Emitter3_Name": "Emitter3",
         "Emitter3_Position": [
-            0.0,
-            0.0,
-            0.0
+            0.023288503289222717,
+            0.22428661584854126,
+            3.2470245361328125
         ],
-        "Emitter3_Timer": 0.0,
+        "Emitter3_Timer": 0.01666630059480667,
         "Emitter4_IsStart": false,
         "Emitter4_Name": "Emitter4",
         "Emitter4_Position": [
@@ -193,17 +193,23 @@
             1.0
         ],
         "EndScaleA": [
-            3.0,
-            3.0,
-            3.0
+            5.0,
+            5.0,
+            5.0
         ],
         "EndScaleB": [
-            4.0,
-            4.0,
-            4.0
+            6.0,
+            6.0,
+            6.0
         ],
         "EndSpeed": 0.0,
         "Frequency": 0.0,
+        "GravityDirection": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "GravityVelocity": 0.7099999785423279,
         "IsLoop": false,
         "IsRandomEndScale": true,
         "IsRandomRotate": true,
@@ -229,7 +235,7 @@
             1.0,
             1.0,
             1.0,
-            0.3921568691730499
+            0.05882352963089943
         ],
         "StartRotate": 0.0,
         "StartScale": [
@@ -249,6 +255,6 @@
         ],
         "StartSpeed": 0.699999988079071,
         "SwapEmitterAttract": false,
-        "TextureFilePath": "./Assets/Textures/smoke_000.png"
+        "TextureFilePath": "./Assets/Textures/smoke_001.png"
     }
 }

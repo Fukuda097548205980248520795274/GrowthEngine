@@ -177,4 +177,14 @@ namespace Engine
 
 		float padding[2]; // パディング
 	};
+
+	/// @brief GPUに送るパーティクルの重力のデータ
+	struct ParticleGravityDataForGPU
+	{
+		// 引力の方向
+		Vector3 direction;
+
+		// 速度
+		float velocity;
+	};
 }

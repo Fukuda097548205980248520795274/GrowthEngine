@@ -3,6 +3,13 @@
 ConstantBuffer<MaxNum> gMaxNum : register(b0);
 ConstantBuffer<PerFrame> gPerFrame : register(b1);
 
+struct Gravity
+{
+    float3 direction;
+    float velocity;
+};
+ConstantBuffer<Gravity> gGravity : register(b2);
+
 RWStructuredBuffer<Particle> gParticles : register(u0);
 RWStructuredBuffer<int> gFreeListIndex : register(u1);
 RWStructuredBuffer<uint> gFreeList : register(u2);
@@ -32,7 +39,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         
         // 移動
         float speed = lerp(gParticles[particleIndex].startSpeed, gParticles[particleIndex].endSpeed, t);
-        gParticles[particleIndex].translate += gParticles[particleIndex].direction * speed * gPerFrame.deltaTime;
+        gParticles[particleIndex].translate += (gParticles[particleIndex].direction * speed + gGravity.direction * gGravity.velocity) * gPerFrame.deltaTime;
         
         // 大きさ
         float3 scale = lerp(gParticles[particleIndex].startScale, gParticles[particleIndex].endScale, t);

@@ -23,7 +23,7 @@
             0.08827194571495056,
             0.4877971410751343
         ],
-        "Emitter0_Timer": 0.016661399975419044,
+        "Emitter0_Timer": 0.0,
         "Emitter10_IsStart": false,
         "Emitter10_Name": "Emitter10",
         "Emitter10_Position": [
@@ -204,6 +204,12 @@
         ],
         "EndSpeed": 3.0,
         "Frequency": 0.0,
+        "GravityDirection": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "GravityVelocity": 0.5199999809265137,
         "IsLoop": false,
         "IsRandomEndScale": false,
         "IsRandomRotate": true,

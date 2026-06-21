@@ -154,6 +154,16 @@ namespace Engine
 			bool swapEmitterAttract;
 		};
 
+		/// @brief 重力
+		struct Gravity
+		{
+			// 重力の方向
+			Vector3 direction;
+
+			// 重力の強さ
+			float velocity;
+		};
+
 		/// @brief パラメータ
 		struct Param
 		{
@@ -209,6 +219,9 @@ namespace Engine
 
 			// 引力
 			Attract attract;
+
+			// 重力
+			Gravity gravity;
 
 
 			/// @brief テクスチャハンドル

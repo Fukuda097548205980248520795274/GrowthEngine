@@ -45,7 +45,7 @@ void Engine::ComputePSOParticle3DUpdateVelocity::Initialize(ID3D12Device* device
 		ルートパラメータ
 	---------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[5];
+	D3D12_ROOT_PARAMETER rootParameter[6];
 
 	// UAV DescriptorTable u0
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -76,6 +76,12 @@ void Engine::ComputePSOParticle3DUpdateVelocity::Initialize(ID3D12Device* device
 	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[4].DescriptorTable.pDescriptorRanges = freeListDescriptor;
 	rootParameter[4].DescriptorTable.NumDescriptorRanges = _countof(freeListDescriptor);
+
+	// CBV b2
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[5].Descriptor.RegisterSpace = 0;
+	rootParameter[5].Descriptor.ShaderRegister = 2;
 
 
 	/*-------------------------

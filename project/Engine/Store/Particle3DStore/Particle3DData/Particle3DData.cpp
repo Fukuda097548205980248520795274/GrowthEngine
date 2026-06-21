@@ -81,6 +81,8 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	param_->attract.attractPosition = Vector3(0.0f, 0.0f, 0.0f);
 	param_->attract.attractAcceleration = 1.0f;
 	param_->attract.swapEmitterAttract = false;
+	param_->gravity.direction = Vector3(0.0f, -1.0f, 0.0f);
+	param_->gravity.velocity = 0.0f;
 	param_->hModel = hModel_;
 
 	// エミッターのインデックス
@@ -163,6 +165,8 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 		parameter_->SetValue(group_, "AttractPosition", &param_->attract.attractPosition);
 		parameter_->SetValue(group_, "SwapEmitterAttract", &param_->attract.swapEmitterAttract);
 		parameter_->SetValue(group_, "AttractPositionType", &param_->attract.positionType);
+		parameter_->SetValue(group_, "GravityDirection", &param_->gravity.direction);
+		parameter_->SetValue(group_, "GravityVelocity", &param_->gravity.velocity);
 		parameter_->SetValue(group_, "TextureFilePath", &textureFilePath_);
 		
 		// 値を反映させる
@@ -214,6 +218,12 @@ void Engine::Particle3DData::Initialize(ID3D12Device* device, ID3D12GraphicsComm
 	particleAttractResource_->Initialize(device, log);
 	particleAttractResource_->data_->position = param_->attract.attractCenter + (param_->attract.attractDirection * param_->attract.attractLength);
 	particleAttractResource_->data_->acceleration = param_->attract.attractAcceleration;
+
+	// 重力リソースを生成する
+	particleGravityResource_ = std::make_unique<ConstantBufferResource<ParticleGravityDataForGPU>>();
+	particleGravityResource_->Initialize(device, log);
+	particleGravityResource_->data_->direction = param_->gravity.direction;
+	particleGravityResource_->data_->velocity = param_->gravity.velocity;
 
 	// パーティクルフレームリソースを生成する
 	particlePerFrameResource_ = std::make_unique<ConstantBufferResource<ParticlePerFrameDataForGPU>>();
@@ -308,6 +318,8 @@ void Engine::Particle3DData::Reset()
 		param_->attract.attractPosition = Vector3(0.0f, 0.0f, 0.0f);
 		param_->attract.positionType = Particle3D::AttractPostitionType::Direction;
 		param_->attract.swapEmitterAttract = false;
+		param_->gravity.direction = Vector3(0.0f, -1.0f, 0.0f);
+		param_->gravity.velocity = 0.0f;
 		param_->hModel = hModel_;
 		param_->hTexture = hTexture_;
 
@@ -498,6 +510,11 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 
 	particleAttractResource_->data_->acceleration = param_->attract.attractAcceleration;
 
+	// 重力の方向を正規化する
+	param_->gravity.direction = param_->gravity.direction.Normalize();
+	particleGravityResource_->data_->direction = param_->gravity.direction;
+	particleGravityResource_->data_->velocity = param_->gravity.velocity;
+
 	if(param_->attract.swapEmitterAttract)
 	{
 		// エミッターと引力の位置を入れ替える
@@ -577,6 +594,11 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	{
 		// 引力リソースを登録する
 		particleAttractResource_->RegisterCompute(commandList, 5);
+	}
+	else
+	{
+		// 重力リソースを登録する
+		particleGravityResource_->RegisterCompute(commandList, 5);
 	}
 
 	// ディスパッチする
@@ -987,6 +1009,14 @@ void Engine::Particle3DData::DebugParameter()
 
 			// 吸引加速度
 			ImGui::DragFloat("AttractAcceleration", &param_->attract.attractAcceleration, 0.01f, 0.01f, 100000.0f);
+		}
+		else
+		{
+			// 重力の方向
+			ImGui::DragFloat3("GravityDirection", &param_->gravity.direction.x, 0.01f, -1.0f, 1.0f);
+
+			// 重力の速度
+			ImGui::DragFloat("GravityVelocity", &param_->gravity.velocity, 0.01f, 0.0f, 100000.0f);
 		}
 
 		

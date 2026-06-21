@@ -124,6 +124,12 @@
         ],
         "EndSpeed": 0.0,
         "Frequency": 0.0,
+        "GravityDirection": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "GravityVelocity": 1.0,
         "IsLoop": false,
         "IsRandomEndScale": true,
         "IsRandomRotate": false,

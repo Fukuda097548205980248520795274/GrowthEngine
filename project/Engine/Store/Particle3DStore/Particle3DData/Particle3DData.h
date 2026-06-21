@@ -146,6 +146,9 @@ namespace Engine
 		/// @brief 引力リソース
 		std::unique_ptr<ConstantBufferResource<Particle3DAttractDataForGPU>> particleAttractResource_ = nullptr;
 
+		/// @brief 重力リソース
+		std::unique_ptr<ConstantBufferResource<ParticleGravityDataForGPU>> particleGravityResource_ = nullptr;
+
 		/// @brief パーティクルフレームリソース
 		std::unique_ptr<ConstantBufferResource<ParticlePerFrameDataForGPU>> particlePerFrameResource_ = nullptr;
 
