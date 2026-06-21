@@ -55,6 +55,10 @@ public:
 	/// @param position 
 	void Impact004(const Vector3& position);
 
+	/// @brief インパクトを放出する
+	/// @param position 
+	void Impact005(const Vector3& position);
+
 	/// @brief インパクトドロップを放出する
 	/// @param position 
 	void ImpactDrop000(const Vector3& position);
@@ -161,6 +165,9 @@ private:
 
 	/// @brief インパクト004
 	std::unique_ptr<Particle3D> impact004_ = nullptr;
+
+	/// @brief インパクト005
+	std::unique_ptr<Particle3D> impact005_ = nullptr;
 
 
 private:

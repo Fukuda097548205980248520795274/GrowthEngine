@@ -759,6 +759,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
 				EffectManager::GetInstance()->Impact004(*hitPosition);
+				EffectManager::GetInstance()->Impact005(*hitPosition);
 			}
 
 			// 軽い怯みのSEを再生する
@@ -794,6 +795,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
 				EffectManager::GetInstance()->Impact004(*hitPosition);
+				EffectManager::GetInstance()->Impact005(*hitPosition);
 			}
 
 			// 重い怯みのSEを再生する
@@ -844,6 +846,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
 				EffectManager::GetInstance()->Impact004(*hitPosition);
+				EffectManager::GetInstance()->Impact005(*hitPosition);
 			}
 
 			// ダウン落下のSEを再生する
@@ -1594,6 +1597,7 @@ void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPo
 		EffectManager::GetInstance()->EmitSpark000(*hitPosition);
 		EffectManager::GetInstance()->Impact001(*hitPosition);
 		EffectManager::GetInstance()->Impact003(*hitPosition);
+		EffectManager::GetInstance()->Impact005(*hitPosition);
 	}
 
 	// 相手が武器を持っている場合は、武器を落とさせる
