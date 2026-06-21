@@ -51,6 +51,8 @@ Character::Character(const InitData& initData) : Entity()
 	// タグを指定する
 	entityTag_ = EntityTag::Character;
 
+	// シェイクの生成と初期化
+	shake_ = std::make_unique<Shake>();
 
 	// 位置
 	worldTransform_->translate_ = initData.position;
@@ -234,6 +236,10 @@ void Character::Update()
 
 			// 基底クラスの更新処理
 			Entity::Update();
+
+			// シェイクの更新
+			if (model_)model_->param_->modelTransform.translate = shake_->GetShakeOffset();
+			shake_->Update(dt);
 
 			// 着地判定の位置を更新する
 			if (landingCollision_)
@@ -568,6 +574,10 @@ void Character::StartUpdate()
 	isPrevHitAttack_ = isHitAttack_;
 	isHitAttack_ = false;
 
+	// ダメージを受けた直後のフラグを更新する
+	isPrevHitDamage_ = isHitDamage_;
+	isHitDamage_ = false;
+
 	// ガード成功のフラグを更新する
 	isPrevGuardHit_ = isGuardHit_;
 	isGuardHit_ = false;
@@ -676,8 +686,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// ダウン中はノックバックが入らない
 		knockback = 0.0f;
 
+		// ダメージを受けたことを通知する
+		isHitDamage_ = true;
+
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 		if (attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
 			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 	}
 	else if (currentDamageReaction_ == DamageReactionState::DownLyingBack || currentDamageReaction_ == DamageReactionState::DownStaggerBack)
@@ -689,8 +706,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// ダウン中はノックバックが入らない
 		knockback = 0.0f;
 
+		// ダメージを受けたことを通知する
+		isHitDamage_ = true;
+
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 		if (attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
 			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 	}
 	else
@@ -720,8 +744,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 軽い怯みのSEを再生する
 			soundManager_->SeLightDamage();
 
+			// ダメージを受けたことを通知する
+			isHitDamage_ = true;
+
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 			if (attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+			if (IsPlayer())if (IsHitDamage())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 
 			break;
@@ -748,8 +779,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 重い怯みのSEを再生する
 			soundManager_->SeHeavyDamage();
 
+			// ダメージを受けたことを通知する
+			isHitDamage_ = true;
+
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 			if (attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
+
+			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+			if (IsPlayer())if (IsHitDamage())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
 
 			break;
@@ -790,8 +828,18 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// ダウン落下のSEを再生する
 			soundManager_->SeHeavyDamage();
 
+			// ダメージを受けたことを通知する
+			isHitDamage_ = true;
+
+			// シェイクさせる
+			shake_->StartShake(0.08f, 0.2f);
+
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 			if(attacker->IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
+
+			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+			if (IsPlayer())if (IsHitDamage())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
 
 			break;
@@ -885,6 +933,9 @@ void Character::OnDeflect(const Vector3& pushDirection, float knockBackPower)
 
 	// 弾き成功モーションを再生する
 	SetAnimation(hGuardHitMotion_, true, false);
+
+	// シェイクさせる
+	shake_->StartShake(0.05f, 0.15f);
 }
 
 /// @brief 掴みダメージを受けた時の処理

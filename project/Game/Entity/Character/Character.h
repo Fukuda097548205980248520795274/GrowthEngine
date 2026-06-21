@@ -7,6 +7,7 @@
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "AppCollider/AppCollider.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "Shake/Shake.h"
 
 class Attack;
 class Move;
@@ -483,6 +484,10 @@ public:
 	/// @return 
 	bool IsHitAttack() const { return isHitAttack_ || isPrevHitAttack_; }
 
+	/// @brief ダメージを受けたかどうか
+	/// @return 
+	bool IsHitDamage() const { return isHitDamage_ || isPrevHitDamage_; }
+
 	/// @brief ガードが成功したかどうか
 	/// @return 
 	bool IsGuardHit() const { return isGuardHit_ || isPrevGuardHit_; }
@@ -506,6 +511,12 @@ public:
 	/// @brief 死亡処理
 	void Dead();
 
+	/// @brief シェイクを開始する
+	/// @param duration 
+	/// @param magnitude 
+	/// @param direction 
+	void StartShake(float duration, float magnitude, const Vector3& direction) { if (shake_) shake_->StartShake(duration, magnitude, direction); }
+
 
 protected:
 
@@ -523,6 +534,9 @@ protected:
 
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
+
+	/// @brief シェイク
+	std::unique_ptr<Shake> shake_ = nullptr;
 
 
 	/// @brief 体力
@@ -768,6 +782,13 @@ protected:
 
 	// 前フレームで攻撃がヒットしたかどうか
 	bool isPrevHitAttack_ = false;
+
+
+	/// @brief ダメージを受けたかどうか
+	bool isHitDamage_ = false;
+
+	/// @brief 前フレームでダメージを受けたかどうか
+	bool isPrevHitDamage_ = false;
 
 
 protected:

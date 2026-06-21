@@ -16,7 +16,7 @@
 #include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
 
 #include "PivotPoint/PivotPoint.h"
-#include "CameraShake/CameraShake.h"
+#include "Shake/Shake.h"
 
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
@@ -256,7 +256,7 @@ private:
 	std::unique_ptr<PivotPoint> pivotPoint_ = nullptr;
 
 	/// @brief カメラシェイク
-	std::unique_ptr<CameraShake> cameraShake_ = nullptr;
+	std::unique_ptr<Shake> cameraShake_ = nullptr;
 
 	/// @brief カメラ回転入力
 	std::unique_ptr<InputGamepadRightStick> inputCameraRotate_ = nullptr;

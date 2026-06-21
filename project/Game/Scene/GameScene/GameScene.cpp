@@ -38,7 +38,7 @@ void GameScene::Initialize()
 	postEffectManager_->Initialize();
 
 	// カメラシェイクの生成と初期化
-	cameraShake_ = std::make_unique<CameraShake>();
+	cameraShake_ = std::make_unique<Shake>();
 
 	// モーションマネージャのエディタの生成と初期化
 	motionManagerEditor_ = std::make_unique<MotionManagerEditor>();
@@ -168,13 +168,15 @@ void GameScene::Update()
 	{
 		// 攻撃を当てた時
 		if (player_->IsHitAttack())
-		{
-			cameraShake_->Shake(0.2f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
-		}
+			cameraShake_->StartShake(0.2f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
+
+		// ダメージを受けた時
+		if (player_->IsHitDamage())
+			cameraShake_->StartShake(0.3f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// 弾いたとき
 		if(player_->IsHitDeflect())
-			cameraShake_->Shake(0.1f, 0.025f, Vector3(1.0f, 1.0f, 1.0f));
+			cameraShake_->StartShake(0.1f, 0.025f, Vector3(1.0f, 1.0f, 1.0f));
 	}
 
 	// カメラシェイクの更新

@@ -1,8 +1,8 @@
-#include "CameraShake.h"
+#include "Shake.h"
 
 /// @brief シェイクを開始する
 /// @param duration 
-void CameraShake::Shake(float duration, float magnitude, const Vector3& direction)
+void Shake::StartShake(float duration, float magnitude, const Vector3& direction)
 {
 	// シェイクの経過時間をリセットして、シェイクの総時間を設定する
 	duration_ = duration;
@@ -17,7 +17,7 @@ void CameraShake::Shake(float duration, float magnitude, const Vector3& directio
 
 /// @brief 更新処理
 /// @param dt 
-void CameraShake::Update(float dt)
+void Shake::Update(float dt)
 {
 	// シェイクが終了している場合は何もしない
 	if (timer_ <= 0.0f)return;
@@ -28,7 +28,7 @@ void CameraShake::Update(float dt)
 
 /// @brief シェイクのオフセットを取得する
 /// @return 
-Vector3 CameraShake::GetShakeOffset() const
+Vector3 Shake::GetShakeOffset() const
 {
 	// シェイクが終了している場合はオフセットなし
 	if (timer_ <= 0.0f)return Vector3(0.0f, 0.0f, 0.0f);

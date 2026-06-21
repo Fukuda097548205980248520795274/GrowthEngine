@@ -1210,9 +1210,6 @@
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager">
       <UniqueIdentifier>{b03b1a91-505d-428c-874e-f4e6adecb6fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\CameraShake">
-      <UniqueIdentifier>{53e6f0a5-a949-4a97-8553-b9a11c934b00}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData">
       <UniqueIdentifier>{c4dae24d-f0dc-471a-9d2b-fe60df0d36d6}</UniqueIdentifier>
     </Filter>
@@ -1290,6 +1287,9 @@
     </Filter>
     <Filter Include="Engine\Include\Application\Trail3D">
       <UniqueIdentifier>{a916ff01-0e24-4130-ac3c-c9594fe903b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shake">
+      <UniqueIdentifier>{53e6f0a5-a949-4a97-8553-b9a11c934b00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2259,8 +2259,8 @@
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CameraShake\CameraShake.cpp">
-      <Filter>Game\CameraShake</Filter>
+    <ClCompile Include="Game\Shake\Shake.cpp">
+      <Filter>Game\Shake</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.cpp">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>
@@ -3425,8 +3425,8 @@
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h">
       <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CameraShake\CameraShake.h">
-      <Filter>Game\CameraShake</Filter>
+    <ClInclude Include="Game\Shake\Shake.h">
+      <Filter>Game\Shake</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.h">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>

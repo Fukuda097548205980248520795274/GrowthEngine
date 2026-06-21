@@ -1,7 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
-class CameraShake
+class Shake
 {
 public:
 
@@ -9,7 +9,7 @@ public:
 	/// @param duration 
 	/// @param magnitude 
 	/// @param direction 
-	void Shake(float duration, float magnitude, const Vector3& direction = Vector3(1.0f, 1.0f, 1.0f));
+	void StartShake(float duration, float magnitude, const Vector3& direction = Vector3(1.0f, 1.0f, 1.0f));
 
 	/// @brief 更新処理
 	/// @param dt 
@@ -18,6 +18,10 @@ public:
 	/// @brief シェイクのオフセットを取得する
 	/// @return 
 	Vector3 GetShakeOffset() const;
+
+	/// @brief シェイク中かどうか
+	/// @return 
+	bool IsShaking() const { return timer_ > 0.0f; }
 
 
 private:
