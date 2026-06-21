@@ -190,7 +190,7 @@ void Player::Initialize(Weapon* baton)
 	attack4Data.hitDefinitions[0].damage = 1;
 	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
 	attack4Data.hitDefinitions[0].knockback = 1.0f;
-	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 0.0f);
+	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));

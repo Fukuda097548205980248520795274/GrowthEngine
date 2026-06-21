@@ -62,6 +62,30 @@ public:
 	/// @param position 
 	void ImpactSmoke001(const Vector3& position);
 
+	/// @brief 吹っ飛びスモークを放出する
+	/// @param position 
+	void BlownSmoke000(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround000(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround001(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround002(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround003(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround004(const Vector3& position);
+
 
 private:
 
@@ -130,5 +154,29 @@ private:
 
 	/// @brief インパクトスモーク001
 	std::unique_ptr<Particle3D> impactSmoke001_ = nullptr;
+
+
+private:
+
+	/// @brief 吹っ飛びスモーク000
+	std::unique_ptr<Particle3D> blownSmoke000_ = nullptr;
+
+
+private:
+
+	/// @brief インパクト地面000
+	std::unique_ptr<Particle3D> impactGround000_ = nullptr;
+
+	/// @brief インパクト地面001
+	std::unique_ptr<Particle3D> impactGround001_ = nullptr;
+
+	/// @brief インパクト地面002
+	std::unique_ptr<Particle3D> impactGround002_ = nullptr;
+	
+	/// @brief インパクト地面003
+	std::unique_ptr<Particle3D> impactGround003_ = nullptr;
+
+	/// @brief インパクト地面004
+	std::unique_ptr<Particle3D> impactGround004_ = nullptr;
 };
 

@@ -918,7 +918,7 @@ protected:
 	bool isGrounded_ = false;
 
 	// 重力加速度
-	const float kGravity = -9.8f;
+	const float kGravity = -9.8f * 0.75f;
 
 	// 最大落下速度
 	const float kMaxFallSpeed = -20.0f;

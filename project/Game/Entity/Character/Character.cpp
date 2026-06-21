@@ -425,7 +425,8 @@ void Character::Update()
 
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayFront:
-				if (velocityY_ <= 0.0f)
+				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
+				if (knockbackVelocity_.y + velocityY_ <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
 					SetAnimation(hDownLyingMotion_, true, true);
@@ -434,7 +435,8 @@ void Character::Update()
 
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayBack:
-				if (velocityY_ <= 0.0f)
+				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
+				if (knockbackVelocity_.y + velocityY_ <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
 					SetAnimation(hDownLyingMotion_, true, true);
@@ -451,6 +453,13 @@ void Character::Update()
 
 					// ダウン着地のSEを再生する
 					soundManager_->SeDownLanding();
+
+					// ダウン着地のエフェクトを生成する
+					EffectManager::GetInstance()->ImpactGround000(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround001(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
 				}
 				break;
 
@@ -464,6 +473,13 @@ void Character::Update()
 
 					// ダウン着地のSEを再生する
 					soundManager_->SeDownLanding();
+
+					// ダウン着地のエフェクトを生成する
+					EffectManager::GetInstance()->ImpactGround000(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround001(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
 				}
 				break;
 			}
@@ -800,6 +816,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				currentDamageReaction_ = DamageReactionState::BlownAwayFront; // ここではとりあえず前方向の吹っ飛びを設定。
 				SetAnimation(hDownFallMotion_, true, false);
+				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
 
 				isGrounded_ = false; // 地面に接地していない状態にする
 			}

@@ -22,6 +22,7 @@ void EffectManager::Initialize()
 {
 	// テクスチャを読み込む
 	engine_->LoadTexture("./Assets/Textures/smoke_000.png");
+	engine_->LoadTexture("./Assets/Textures/smoke_001.png");
 	engine_->LoadTexture("./Assets/Textures/impact_000.png");
 	engine_->LoadTexture("./Assets/Textures/color_effect.png");
 	engine_->LoadTexture("./Assets/Textures/damage_effect.png");
@@ -48,6 +49,16 @@ void EffectManager::Initialize()
 	// インパクトスモークを生成
 	impactSmoke000_ = std::make_unique<Particle3D>("impactSmoke_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impactSmoke001_ = std::make_unique<Particle3D>("impactSmoke_001", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// 吹っ飛びスモークを生成
+	blownSmoke000_ = std::make_unique<Particle3D>("blownSmoke_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// インパクト地面を生成
+	impactGround000_ = std::make_unique<Particle3D>("impactGround_000", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	impactGround001_ = std::make_unique<Particle3D>("impactGround_001", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	impactGround002_ = std::make_unique<Particle3D>("impactGround_002", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	impactGround003_ = std::make_unique<Particle3D>("impactGround_003", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	impactGround004_ = std::make_unique<Particle3D>("impactGround_004", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 }
 
 /// @brief 更新処理
@@ -70,12 +81,22 @@ void EffectManager::Draw()
 	for (auto& effect : guardEffects_)
 		effect->Draw();
 
+	// 吹っ飛びスモーク000を描画
+	blownSmoke000_->Draw();
+
 	// インパクト000を描画
 	impact004_->Draw();
 	impact001_->Draw();
 	impact002_->Draw();
 	impact003_->Draw();
 	impact000_->Draw();
+
+	// インパクト地面000を描画
+	impactGround001_->Draw();
+	impactGround000_->Draw();
+	impactGround002_->Draw();
+	impactGround004_->Draw();
+	impactGround003_->Draw();
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
@@ -185,5 +206,59 @@ void EffectManager::ImpactSmoke001(const Vector3& position)
 {
 	Emitter3D emitter("impactSmoke_001");
 	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief 吹っ飛びスモークを放出する
+/// @param position 
+void EffectManager::BlownSmoke000(const Vector3& position)
+{
+	Emitter3D emitter("blownSmoke_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround000(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_000");
+	emitter.param_->position = position + Vector3(0.0f, -0.0f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround001(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_001");
+	emitter.param_->position = position + Vector3(0.0f, -0.25f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround002(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_002");
+	emitter.param_->position = position + Vector3(0.0f, -0.0f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround003(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_003");
+	emitter.param_->position = position + Vector3(0.0f, -0.0f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround004(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_004");
+	emitter.param_->position = position + Vector3(0.0f, -0.0f, 0.0f);
 	emitter.Emit();
 }

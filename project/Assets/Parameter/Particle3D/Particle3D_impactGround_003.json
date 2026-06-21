@@ -1,0 +1,254 @@
+{
+    "Particle3D_impactGround_003": {
+        "AlignToDirection": false,
+        "AttractDirection": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "AttractLength": 1.0,
+        "AttractPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttractPositionType": 0,
+        "BlendMode": 1,
+        "Count": 1,
+        "EmitTime": 0.0,
+        "Emitter0_IsStart": false,
+        "Emitter0_Name": "Emitter0",
+        "Emitter0_Position": [
+            -1.2108591794967651,
+            0.4892604351043701,
+            0.5294445157051086
+        ],
+        "Emitter0_Timer": 0.04999220371246338,
+        "Emitter10_IsStart": false,
+        "Emitter10_Name": "Emitter10",
+        "Emitter10_Position": [
+            -0.8318113088607788,
+            0.4893432855606079,
+            4.118561267852783
+        ],
+        "Emitter10_Timer": 0.03334660083055496,
+        "Emitter11_IsStart": false,
+        "Emitter11_Name": "Emitter11",
+        "Emitter11_Position": [
+            1.7908762693405151,
+            0.488445520401001,
+            6.0765275955200195
+        ],
+        "Emitter11_Timer": 0.03333450108766556,
+        "Emitter12_IsStart": false,
+        "Emitter12_Name": "Emitter12",
+        "Emitter12_Position": [
+            2.8741230964660645,
+            0.48930856585502625,
+            4.6841864585876465
+        ],
+        "Emitter12_Timer": 0.0333264023065567,
+        "Emitter13_IsStart": false,
+        "Emitter13_Name": "Emitter13",
+        "Emitter13_Position": [
+            2.553506851196289,
+            0.5221264362335205,
+            6.825916767120361
+        ],
+        "Emitter13_Timer": 0.033326201140880585,
+        "Emitter14_IsStart": false,
+        "Emitter14_Name": "Emitter14",
+        "Emitter14_Position": [
+            -1.2085033655166626,
+            0.48800331354141235,
+            0.48624736070632935
+        ],
+        "Emitter14_Timer": 0.033330097794532776,
+        "Emitter15_IsStart": false,
+        "Emitter15_Name": "Emitter15",
+        "Emitter15_Position": [
+            1.382938265800476,
+            0.48800331354141235,
+            0.5436151623725891
+        ],
+        "Emitter15_Timer": 0.0333281010389328,
+        "Emitter16_IsStart": false,
+        "Emitter16_Name": "Emitter16",
+        "Emitter16_Position": [
+            1.8161145448684692,
+            0.48804086446762085,
+            4.568467140197754
+        ],
+        "Emitter16_Timer": 0.03332789987325668,
+        "Emitter17_IsStart": false,
+        "Emitter17_Name": "Emitter17",
+        "Emitter17_Position": [
+            -5.3349761962890625,
+            0.3893195688724518,
+            8.326009750366211
+        ],
+        "Emitter17_Timer": 0.01666649989783764,
+        "Emitter18_IsStart": false,
+        "Emitter18_Name": "Emitter18",
+        "Emitter18_Position": [
+            -3.0101888179779053,
+            0.42355963587760925,
+            6.779842376708984
+        ],
+        "Emitter18_Timer": 0.0166631992906332,
+        "Emitter19_IsStart": false,
+        "Emitter19_Name": "Emitter19",
+        "Emitter19_Position": [
+            -2.988870620727539,
+            0.3888753354549408,
+            7.545362949371338
+        ],
+        "Emitter19_Timer": 0.01666329987347126,
+        "Emitter1_IsStart": false,
+        "Emitter1_Name": "Emitter1",
+        "Emitter1_Position": [
+            1.3811709880828857,
+            0.48926040530204773,
+            0.5271868705749512
+        ],
+        "Emitter1_Timer": 0.06665930151939392,
+        "Emitter2_IsStart": false,
+        "Emitter2_Name": "Emitter2",
+        "Emitter2_Position": [
+            -1.4259012937545776,
+            0.48937368392944336,
+            4.471538066864014
+        ],
+        "Emitter2_Timer": 0.06670010089874268,
+        "Emitter3_IsStart": false,
+        "Emitter3_Name": "Emitter3",
+        "Emitter3_Position": [
+            1.8064920902252197,
+            0.48937368392944336,
+            4.479063987731934
+        ],
+        "Emitter3_Timer": 0.06668660044670105,
+        "Emitter4_IsStart": false,
+        "Emitter4_Name": "Emitter4",
+        "Emitter4_Position": [
+            -4.991682089894312e-07,
+            0.5236921310424805,
+            2.9282968044281006
+        ],
+        "Emitter4_Timer": 0.06669240444898605,
+        "Emitter5_IsStart": false,
+        "Emitter5_Name": "Emitter5",
+        "Emitter5_Position": [
+            -0.32943692803382874,
+            0.48919159173965454,
+            -1.2269155979156494
+        ],
+        "Emitter5_Timer": 0.06665590405464172,
+        "Emitter6_IsStart": false,
+        "Emitter6_Name": "Emitter6",
+        "Emitter6_Position": [
+            0.21345745027065277,
+            0.48914891481399536,
+            -1.200912356376648
+        ],
+        "Emitter6_Timer": 0.0667525976896286,
+        "Emitter7_IsStart": false,
+        "Emitter7_Name": "Emitter7",
+        "Emitter7_Position": [
+            2.559641122817993,
+            0.5173236131668091,
+            0.6622768044471741
+        ],
+        "Emitter7_Timer": 0.0333046019077301,
+        "Emitter8_IsStart": false,
+        "Emitter8_Name": "Emitter8",
+        "Emitter8_Position": [
+            0.8124778270721436,
+            0.4892432689666748,
+            5.090272903442383
+        ],
+        "Emitter8_Timer": 0.033355697989463806,
+        "Emitter9_IsStart": false,
+        "Emitter9_Name": "Emitter9",
+        "Emitter9_Position": [
+            -0.7375420331954956,
+            0.5239620208740234,
+            2.9503347873687744
+        ],
+        "Emitter9_Timer": 0.03332749754190445,
+        "EnableAttract": false,
+        "EnableBillboard": false,
+        "EnableSoftParticle": false,
+        "EndAlpha": 1.0,
+        "EndColor": [
+            1.0,
+            1.0,
+            0.0,
+            1.0
+        ],
+        "EndRotate": 0.0,
+        "EndScale": [
+            3.0,
+            2.0,
+            3.0
+        ],
+        "EndScaleA": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EndScaleB": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EndSpeed": 0.0,
+        "Frequency": 0.0,
+        "IsLoop": false,
+        "IsRandomEndScale": false,
+        "IsRandomRotate": false,
+        "IsRandomStartScale": false,
+        "MaxLifeTime": 0.10000000149011612,
+        "MinLifeTime": 0.10000000149011612,
+        "PauseTime": 0.0,
+        "Radius1": 1.0,
+        "Radius3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "RandomColor": false,
+        "RotateAxis": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Shape": 0,
+        "StartAlpha": 1.0,
+        "StartColor": [
+            1.0,
+            1.0,
+            0.0,
+            1.0
+        ],
+        "StartRotate": 0.0,
+        "StartScale": [
+            0.5,
+            2.0,
+            0.5
+        ],
+        "StartScaleA": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StartScaleB": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StartSpeed": 0.0,
+        "SwapEmitterAttract": false,
+        "TextureFilePath": "./Assets/Textures/damage_effect.png"
+    }
+}
