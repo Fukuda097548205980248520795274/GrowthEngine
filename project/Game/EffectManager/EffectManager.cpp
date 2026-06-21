@@ -118,6 +118,13 @@ void EffectManager::Draw()
 	// 走りスモーク000を描画
 	dashSmoke000_->Draw();
 
+	// インパクトドロップ000を描画
+	impactDrop000_->Draw();
+
+	// インパクトスモーク001を描画
+	impactSmoke000_->Draw();
+	impactSmoke001_->Draw();
+
 	// インパクト000を描画
 	impact004_->Draw();
 	impact005_->Draw();
@@ -134,13 +141,6 @@ void EffectManager::Draw()
 	impactGround003_->Draw();
 	impactGround005_->Draw();
 	impactGround006_->Draw();
-
-	// インパクトドロップ000を描画
-	impactDrop000_->Draw();
-
-	// インパクトスモーク001を描画
-	impactSmoke000_->Draw();
-	impactSmoke001_->Draw();
 
 	// スパーク000を描画
 	spark000_->Draw();
