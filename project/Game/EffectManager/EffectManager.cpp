@@ -28,6 +28,8 @@ void EffectManager::Initialize()
 	engine_->LoadTexture("./Assets/Textures/damage_effect.png");
 	engine_->LoadTexture("./Assets/Textures/thunder_effect.png");
 	engine_->LoadTexture("./Assets/Textures/color_effect_bloom.png");
+	engine_->LoadTexture("./Assets/Textures/chip.png");
+	engine_->LoadTexture("./Assets/Textures/chip_bloom.png");
 
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
@@ -59,6 +61,8 @@ void EffectManager::Initialize()
 	impactGround002_ = std::make_unique<Particle3D>("impactGround_002", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 	impactGround003_ = std::make_unique<Particle3D>("impactGround_003", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 	impactGround004_ = std::make_unique<Particle3D>("impactGround_004", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	impactGround005_ = std::make_unique<Particle3D>("impactGround_005", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	impactGround006_ = std::make_unique<Particle3D>("impactGround_006", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -97,6 +101,8 @@ void EffectManager::Draw()
 	impactGround002_->Draw();
 	impactGround004_->Draw();
 	impactGround003_->Draw();
+	impactGround005_->Draw();
+	impactGround006_->Draw();
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
@@ -260,5 +266,23 @@ void EffectManager::ImpactGround004(const Vector3& position)
 {
 	Emitter3D emitter("impactGround_004");
 	emitter.param_->position = position + Vector3(0.0f, -0.0f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround005(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_005");
+	emitter.param_->position = position + Vector3(0.0f, -0.3f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief インパクト地面を放出する
+/// @param position 
+void EffectManager::ImpactGround006(const Vector3& position)
+{
+	Emitter3D emitter("impactGround_006");
+	emitter.param_->position = position + Vector3(0.0f, -0.4f, 0.0f);
 	emitter.Emit();
 }

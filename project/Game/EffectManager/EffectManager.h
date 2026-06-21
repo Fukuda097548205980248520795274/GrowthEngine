@@ -86,6 +86,14 @@ public:
 	/// @param position 
 	void ImpactGround004(const Vector3& position);
 
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround005(const Vector3& position);
+
+	/// @brief インパクト地面を放出する
+	/// @param position 
+	void ImpactGround006(const Vector3& position);
+
 
 private:
 
@@ -178,5 +186,11 @@ private:
 
 	/// @brief インパクト地面004
 	std::unique_ptr<Particle3D> impactGround004_ = nullptr;
+
+	/// @brief インパクト地面005
+	std::unique_ptr<Particle3D> impactGround005_ = nullptr;
+	
+	/// @brief インパクト地面006
+	std::unique_ptr<Particle3D> impactGround006_ = nullptr;
 };
 

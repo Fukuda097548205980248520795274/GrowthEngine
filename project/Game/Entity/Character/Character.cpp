@@ -460,6 +460,8 @@ void Character::Update()
 					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
 					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
 					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround005(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround006(GetBonePosition(JointType::Root));
 				}
 				break;
 
@@ -480,6 +482,8 @@ void Character::Update()
 					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
 					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
 					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround005(GetBonePosition(JointType::Root));
+					EffectManager::GetInstance()->ImpactGround006(GetBonePosition(JointType::Root));
 				}
 				break;
 			}
