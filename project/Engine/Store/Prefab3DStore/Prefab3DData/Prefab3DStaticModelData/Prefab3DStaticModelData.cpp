@@ -109,6 +109,7 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		param_->meshMaterial[meshIndex].enableSpecular = true;
 		param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 		param_->meshMaterial[meshIndex].enableShadow = true;
+		param_->meshMaterial[meshIndex].drawShadowMap = true;
 
 		// ブラー
 		param_->meshBlur[meshIndex].afterImageMask = 0.0f;
@@ -135,6 +136,7 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Specular", &param_->meshMaterial[meshIndex].enableSpecular);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_BlinnPhong", &param_->meshMaterial[meshIndex].enableBlinnPhong);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Enable_Shadow", &param_->meshMaterial[meshIndex].enableShadow);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_DrawShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
@@ -211,6 +213,7 @@ void Engine::Prefab3DStaticModelData::Reset()
 			param_->meshMaterial[meshIndex].enableSpecular = true;
 			param_->meshMaterial[meshIndex].enableBlinnPhong = true;
 			param_->meshMaterial[meshIndex].enableShadow = true;
+			param_->meshMaterial[meshIndex].drawShadowMap = true;
 
 			// ブラー
 			param_->meshBlur[meshIndex].afterImageMask = 0.0f;
@@ -302,6 +305,10 @@ void Engine::Prefab3DStaticModelData::DrawShadowMap(const Matrix4x4& viewProject
 	// メッシュごとに処理
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
 	{
+		// シャドウマップを描画しないメッシュは処理しない
+		if (param_->meshMaterial[meshIndex].drawShadowMap == false)
+			continue;
+
 		UINT useInstance = 0;
 
 		for (useInstance = 0; useInstance < numShadowInstance_; ++useInstance)
@@ -630,6 +637,8 @@ void Engine::Prefab3DStaticModelData::DebugParameter()
 
 						// ライティング有効化
 						ImGui::Checkbox("Lighting", &param_->meshMaterial[meshIndex].enableLighting);
+
+						ImGui::Checkbox("DrawShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
 
 						if (param_->meshMaterial[meshIndex].enableLighting)
 						{

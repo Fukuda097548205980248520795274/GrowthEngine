@@ -283,7 +283,7 @@ void Character::Update()
 				collider->param_->center = GetBonePosition(JointType::Root);
 			}
 
-			if (isDash_)
+			if (isDash_ && !isStance_)
 			{
 				dashTimer_ -= dt;
 				if (dashTimer_ <= 0.0f)

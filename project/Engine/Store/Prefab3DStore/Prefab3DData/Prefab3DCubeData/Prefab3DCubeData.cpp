@@ -94,6 +94,7 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	param_->material.enableSpecular = true;
 	param_->material.enableBlinnPhong = true;
 	param_->material.enableShadow = true;
+	param_->material.drawShadowMap = true;
 
 	// ブラー
 	param_->blur.afterImageMask = 0.0f;
@@ -123,6 +124,7 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_Enable_Specular", &param_->material.enableSpecular);
 		parameter_->SetValue(group_, "Material_Enable_BlinnPhong", &param_->material.enableBlinnPhong);
 		parameter_->SetValue(group_, "Material_Enable_Shadow", &param_->material.enableShadow);
+		parameter_->SetValue(group_, "Material_DrawShadowMap", &param_->material.drawShadowMap);
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
@@ -173,6 +175,7 @@ void Engine::Prefab3DCubeData::Reset()
 		param_->material.enableSpecular = true;
 		param_->material.enableBlinnPhong = true;
 		param_->material.enableShadow = true;
+		param_->material.drawShadowMap = true;
 
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
@@ -241,6 +244,9 @@ void Engine::Prefab3DCubeData::DrawShadowMap(const Matrix4x4& viewProjection, ID
 
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
+
+	// シャドウマップを描画しない設定のときは処理しない
+	if (!param_->material.drawShadowMap)return;
 
 	// デバッグ指定のオブジェクトは処理しない
 	if (isDebug_)return;
@@ -526,6 +532,9 @@ void Engine::Prefab3DCubeData::DebugParameter()
 
 			// ライティング有効化
 			ImGui::Checkbox("Lighting", &param_->material.enableLighting);
+
+			// シャドウマップ描画有効化
+			ImGui::Checkbox("DrawShadowMap", &param_->material.drawShadowMap);
 
 			if (param_->material.enableLighting)
 			{

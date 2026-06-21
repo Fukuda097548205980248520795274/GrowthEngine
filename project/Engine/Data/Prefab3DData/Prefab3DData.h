@@ -87,6 +87,9 @@ namespace Engine
 
 					// シャドウ有効化
 					bool enableShadow;
+
+					/// @brief シャドウマップ描画
+					bool drawShadowMap;
 				};
 
 				/// @brief ブラー
@@ -282,6 +285,9 @@ namespace Engine
 
 					// シャドウ有効化
 					bool enableShadow;
+
+					/// @brief シャドウマップ描画
+					bool drawShadowMap;
 				};
 
 				/// @brief ブラー
@@ -487,6 +493,9 @@ namespace Engine
 
 					// シャドウ有効化
 					bool enableShadow;
+
+					/// @brief シャドウマップ描画
+					bool drawShadowMap;
 				};
 
 				/// @brief ブラー

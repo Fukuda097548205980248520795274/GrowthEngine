@@ -36,12 +36,14 @@ void EffectManager::Initialize()
 	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
 	guardEffectModel_->param_->material.enableLighting = false;
 	guardEffectModel_->param_->material.enableShadow = false;
+	guardEffectModel_->param_->material.drawShadowMap = false;
 
 	// 弾きエフェクトのモデルを生成
 	deflectEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/gradation.png"), 100, "deflectEffect");
 	deflectEffectModel_->param_->blendMode = BlendMode::kAdd;
 	deflectEffectModel_->param_->material.enableLighting = false;
 	deflectEffectModel_->param_->material.enableShadow = false;
+	deflectEffectModel_->param_->material.drawShadowMap = false;
 
 	// スパークパーティクル000を生成
 	spark000_ = std::make_unique<Particle3D>("spark_000", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
