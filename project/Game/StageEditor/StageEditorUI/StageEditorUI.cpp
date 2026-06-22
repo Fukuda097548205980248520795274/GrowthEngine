@@ -242,12 +242,13 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	// モード切替の表示
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
-		guizmo_->UpdateAndDraw(placementList, selectedIndex_, isDirty, history_);
+		guizmo_->UpdateObject(placementList, selectedIndex_, isDirty, history_);
 		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_);
 		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
+		guizmo_->UpdateNavMesh(navMesh, navMeshController, isDirty, history_);
 		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, isDirty);
 		navMeshInfoUI_->DrawWindow(navMesh, navMeshController);
 	}

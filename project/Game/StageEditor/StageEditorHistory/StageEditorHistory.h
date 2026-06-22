@@ -30,6 +30,9 @@ public:
 	/// @param placementList 
 	void SaveHistory(const std::vector<PlacementData>& placementList);
 
+	/// @brief 履歴に新しいスナップショットを保存する（ナビメッシュ用）
+	void SaveHistory();
+
 	/// @brief Undo（元に戻す）を実行する
 	/// @param currentList 
 	/// @param spawner 

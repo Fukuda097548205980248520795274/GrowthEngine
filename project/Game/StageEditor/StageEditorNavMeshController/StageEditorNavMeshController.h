@@ -82,19 +82,14 @@ private:
 	// 現在の選択モード
 	SelectionMode selectionMode_ = SelectionMode::Edge;
 
-	// 現在選択されている辺のリスト
+	// 選択されている要素のリスト
 	std::vector<SelectedItem> selectedItems_;
-
-	// ドラッグ状態の管理
-	bool isDraggingItem_ = false;
-
-	// 前回のレイと床の交点
-	Vector3 previousHitPoint_{};
 
 
 private:
 
-	/// @brief マウスからレイキャストを飛ばして、NavMeshの辺を選択する処理
+	/// @brief マウスカーソルからのレイを計算する関数
+	/// @return 
 	Engine::Collision3D::Ray RaycastFromMouse();
 
 	/// @brief レイとXZ平面（y=planeY）との交点を計算する関数
@@ -109,10 +104,6 @@ private:
 	/// @brief 選択されている辺を押し出す
 	void ExtrudeSelectedEdge(std::vector<PlacementData>& placementList, bool& isDirty);
 
-	/// @brief 選択された辺を移動する
-	/// @param moveDelta 
-	void MoveSelectedItem(const Vector3& moveDelta);
-
 	/// @brief 選択された辺を繋ぐ（ブリッジ）する
 	void BridgeSelectedEdges(std::vector<PlacementData>& placementList, bool& isDirty);
 
@@ -121,10 +112,5 @@ private:
 
 	/// @brief 選択された辺をハイライト表示する
 	void DrawSelectedHighlight();
-
-
-private:
-
-
 };
 

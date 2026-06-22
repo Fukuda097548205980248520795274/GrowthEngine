@@ -22,6 +22,27 @@ void StageEditorHistory::SaveHistory(const std::vector<PlacementData>& placement
 	}
 }
 
+/// @brief 履歴に新しいスナップショットを保存する（ナビメッシュ用）
+void StageEditorHistory::SaveHistory()
+{
+	// 過去の最新の配置データを取得してスナップショットに保存する
+	EditorSnapshot snapshot;
+	snapshot.placementList = undoHistory_.empty() ? std::vector<PlacementData>() : undoHistory_.back().placementList;
+
+	// ナビメッシュのスナップショットを保存
+	if (navMesh_) snapshot.navPolygonList = navMesh_->GetPolygons();
+
+	// 新しいスナップショットをUndo履歴に追加し、Redo履歴はクリアする
+	undoHistory_.push_back(snapshot);
+	redoHistory_.clear();
+
+	// 履歴の上限を50に設定（必要に応じて調整可能）
+	if (undoHistory_.size() > 50)
+	{
+		undoHistory_.erase(undoHistory_.begin());
+	}
+}
+
 /// @brief Undo（元に戻す）を実行する
 /// @param currentList 
 /// @param spawner 

@@ -3,17 +3,26 @@
 #include "StageEditor/StageData/StageData.h"
 
 class StageEditorHistory;
+class NavMesh;
+class StageEditorNavMeshController;
 
 class StageEditorGuizmo
 {
 public:
 
-	/// @brief 更新と描画を行う
+	/// @brief オブジェクトの変形を更新する
 	/// @param placementList 
 	/// @param selectedIndex 
 	/// @param isDirty 
 	/// @param history 
-	void UpdateAndDraw(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history);
+	void UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history);
+
+	/// @brief ナビメッシュの変形を更新する
+	/// @param navMesh 
+	/// @param navMeshController 
+	/// @param isDirty 
+	/// @param history 
+	void UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, StageEditorHistory* history);
 
 
 private:
@@ -24,8 +33,11 @@ private:
 	// ローカルモードかワールドモードか
 	ImGuizmo::MODE currentMode_ = ImGuizmo::LOCAL;
 
-	// スナップの使用フラグ
-	bool useSnap_ = false;
+	// オブジェクトのスナップの使用フラグ
+	bool useObjectSnap_ = false;
+
+	// ナビメッシュのスナップの使用フラグ
+	bool useNavMeshSnap_ = false;
 
 	// エンジンのインスタンス
 	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
