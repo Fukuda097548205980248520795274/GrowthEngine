@@ -13,27 +13,25 @@
             "is_collapsed": false,
             "output_pin": 3,
             "pos": [
-                312.0,
-                162.0
+                115.0,
+                182.0
             ],
-            "type": 2
+            "type": 0
         },
         {
-            "action_name": "NavMeshMove",
-            "id": 4,
-            "input_pin": 5,
-            "is_collapsed": false,
-            "motionName": "",
-            "motionType": 0,
-            "nav_mesh_move_data": {
-                "isDash": true,
+            "action_type": 4,
+            "approach_target_move_data": {
+                "isDash": false,
                 "moveSpeed": 3.0,
                 "stopDistance": 1.0
             },
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
             "output_pin": -1,
             "pos": [
-                539.0,
-                93.0
+                353.0,
+                202.0
             ],
             "type": 5
         }

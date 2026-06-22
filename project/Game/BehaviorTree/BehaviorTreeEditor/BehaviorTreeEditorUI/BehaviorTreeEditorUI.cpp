@@ -941,7 +941,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	// アクションノードの場合はアクション選択UIを描画
 	if (node.type == EditorNodeType::Action)
 	{
-		ImGui::Text("%s", node.actionName.c_str());
+		ImGui::Text("%s", ACTION_TYPE_NAMES[static_cast<int32_t>(node.actionType)]);
 	}
 }
 
@@ -954,15 +954,10 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 	// 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
-	// コンボボックスに表示する文字列の配列（Enumの順番と一致させる必要があります）
-	const char* conditionNames[] = { "None", "HasTarget", "IsTargetDown", "IsNotTargetDown", "IsGrabbing", "IsNotGrabbing", "IsTargetInRange", "IsTargetOutOfRange",
-		"IsTargetAttacking", "IsTargetNotAttacking", "IsTargetInAttackSequence", "IsTargetNotInAttackSequence", "IsClosestToTarget", "IsNotClosestToTarget",
-		"IsInAttackSequence", "IsNotInAttackSequence" };
-
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
 	int currentItem = static_cast<int>(node.conditionType);
 	ImGui::PushItemWidth(120.0f);
-	if (ImGui::Combo("条件", &currentItem, conditionNames, IM_ARRAYSIZE(conditionNames)))
+	if (ImGui::Combo("条件", &currentItem, CONDITION_TYPE_NAMES, IM_ARRAYSIZE(CONDITION_TYPE_NAMES)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -984,16 +979,14 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 {
 	ImGui::PushItemWidth(120.0f);
 
-	// 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
+	// 履歴と変更フラグをまとめて処理するラムダ関数の例
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
-	// アクション選択用のコンボボックス
-	const char* actionTypes[] = { "None", "ComboAttack", "GrabAttack", "GrabStrikeAttack", 
-		"RequestToken", "ReleaseToken", "Avoid", "ApproachTargetMove", "NavMeshMove", "InAttackSequence", "OutAttackSequence" };
+	// コンボボックスに表示する文字列の配列
 	int currentItem = 0;
-	for (int i = 0; i < IM_ARRAYSIZE(actionTypes); ++i)
+	for (int i = 0; i < IM_ARRAYSIZE(ACTION_TYPE_NAMES); ++i)
 	{
-		if (node.actionName == actionTypes[i])
+		if (ACTION_TYPE_NAMES[static_cast<int32_t>(node.actionType)] == ACTION_TYPE_NAMES[i])
 		{
 			currentItem = i;
 			break;
@@ -1001,17 +994,17 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 
 	// コンボボックスを描画し、変更があったら選択された文字列をノードに保存
-	if (ImGui::Combo("アクションの種類", &currentItem, actionTypes, IM_ARRAYSIZE(actionTypes)))
+	if (ImGui::Combo("アクションの種類", &currentItem, ACTION_TYPE_NAMES, IM_ARRAYSIZE(ACTION_TYPE_NAMES)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
 
 		// 選択された文字列をノードに保存
-		node.actionName = actionTypes[currentItem];
+		node.actionType = static_cast<ActionType>(currentItem);
 	}
 
 	// 選択されているアクションに応じてパラメータ設定UIを切り替える
-	if (node.actionName == "ComboAttack")
+	if (node.actionType == ActionType::ComboAttack)
 	{
 		if (ImGui::TreeNode("コンボ攻撃 設定"))
 		{
@@ -1154,7 +1147,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionName == "GrabAttack")
+	else if (node.actionType == ActionType::GrabAttack)
 	{
 		if (ImGui::TreeNode("掴み 設定"))
 		{
@@ -1229,7 +1222,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionName == "GrabStrikeAttack")
+	else if (node.actionType == ActionType::GrabStrikeAttack)
 	{
 		if (ImGui::TreeNode("掴み攻撃 設定"))
 		{
@@ -1376,7 +1369,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionName == "Avoid")
+	else if (node.actionType == ActionType::Avoid)
 	{
 		if (ImGui::TreeNode("回避 設定"))
 		{
@@ -1393,7 +1386,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionName == "ApproachTargetMove")
+	else if (node.actionType == ActionType::ApproachTargetMove)
 	{
 		if (ImGui::TreeNode("ターゲット接近 設定"))
 		{
@@ -1409,7 +1402,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionName == "NavMeshMove")
+	else if (node.actionType == ActionType::NavMeshMove)
 	{
 		if (ImGui::TreeNode("ナビメッシュ移動 設定"))
 		{

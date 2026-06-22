@@ -220,7 +220,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	case EditorNodeType::Action:
 
 		// エディターで設定した文字列（actionName）に応じて生成するノードを変える
-		if (editor_node.actionName == "ComboAttack")
+		if (editor_node.actionType == ActionType::ComboAttack)
 		{
 			// エディタ上で設定した初期化データを使用
 			CombAttackInitData initData = editor_node.comboAttackInitData;
@@ -228,7 +228,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			auto comboAction = std::make_unique<ComboAttack>(character, initData);
 			runtime_node = std::make_unique<ComboAttackNode>(std::move(comboAction));
 		}
-		else if (editor_node.actionName == "GrabAttack")
+		else if (editor_node.actionType == ActionType::GrabAttack)
 		{
 			// エディタ上で設定した初期化データを使用
 			GrabAttackInitData initData = editor_node.grabAttackInitData;
@@ -236,44 +236,44 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			auto grabAction = std::make_unique<GrabAttack>(character, initData);
 			runtime_node = std::make_unique<GrabAttackNode>(std::move(grabAction));
 		}
-		else if (editor_node.actionName == "GrabStrikeAttack")
+		else if (editor_node.actionType == ActionType::GrabStrikeAttack)
 		{
 			// エディタ上で設定した初期化データを使用
 			GrabStrikeAttackInitData initData = editor_node.grabStrikeAttackInitData;
 			auto grabStrikeAction = std::make_unique<GrabStrikeAttack>(character, initData);
 			runtime_node = std::make_unique<GrabStrikeAttackNode>(std::move(grabStrikeAction));
 		}
-		else if (editor_node.actionName == "RequestToken")
+		else if (editor_node.actionType == ActionType::RequestToken)
 		{
 			// トークン要求ノードの生成
 			runtime_node = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character));
 		} 
-		else if (editor_node.actionName == "ReleaseToken")
+		else if (editor_node.actionType == ActionType::ReleaseToken)
 		{
 			// トークン解放ノードの生成
 			runtime_node = std::make_unique<ReleaseTokenNode>(std::make_unique<ReleaseToken>(character));
 		}
-		else if (editor_node.actionName == "Avoid")
+		else if (editor_node.actionType == ActionType::Avoid)
 		{
 			// 回避ノードの生成
 			runtime_node = std::make_unique<ActionNode>(std::make_unique<Avoid>(character, editor_node.avoidInitData));
 		}
-		else if (editor_node.actionName == "ApproachTargetMove")
+		else if (editor_node.actionType == ActionType::ApproachTargetMove)
 		{
 			// ターゲットに近づく移動ノードの生成
 			runtime_node = std::make_unique<ActionNode>(std::make_unique<ApproachTargetMove>(character, editor_node.approachTargetMoveInitData));
 		}
-		else if (editor_node.actionName == "NavMeshMove")
+		else if (editor_node.actionType == ActionType::NavMeshMove)
 		{
 			// NavMeshを使用した移動ノードの生成
 			runtime_node = std::make_unique<ActionNode>(std::make_unique<NavMeshMove>(character, editor_node.navMeshMoveInitData));
 		}
-		else if (editor_node.actionName == "InAttackSequence")
+		else if (editor_node.actionType == ActionType::InAttackSequence)
 		{
 			// 攻撃シーケンス開始ノードの生成
 			runtime_node = std::make_unique<InAttackSequenceNode>(std::make_unique<InAttackSequence>(character));
 		}
-		else if (editor_node.actionName == "OutAttackSequence")
+		else if (editor_node.actionType == ActionType::OutAttackSequence)
 		{
 			// 攻撃シーケンス終了ノードの生成
 			runtime_node = std::make_unique<OutAttackSequenceNode>(std::make_unique<OutAttackSequence>(character));
@@ -333,7 +333,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	{
 		// ビューアー上に表示するノード名を設定
 		std::string nodeName = "未設定";
-		if (editor_node.type == EditorNodeType::Action) nodeName = editor_node.actionName;
+		if (editor_node.type == EditorNodeType::Action) nodeName = "アクション";
 		else if (editor_node.type == EditorNodeType::Condition) nodeName = "条件";
 		else if (editor_node.type == EditorNodeType::PersistentSelector) nodeName = "永続 選択";
 		else if (editor_node.type == EditorNodeType::PersistentSequence) nodeName = "永続 シーケンス";

@@ -21,6 +21,49 @@ enum class EditorNodeType
 	Action,
 };
 
+// アクションの種類
+enum class ActionType
+{
+	// 攻撃系
+	ComboAttack,
+	GrabAttack,
+	GrabStrikeAttack,
+
+	// 回避系
+	Avoid,
+
+	// 移動系
+	ApproachTargetMove,
+	NavMeshMove,
+
+	// 防御系
+	Guard,
+
+	// 攻撃動作判定系
+	InAttackSequence,
+	OutAttackSequence,
+
+	// トークン系
+	RequestToken,
+	ReleaseToken,
+};
+
+/// @brief アクションの種類を文字列で表す配列
+constexpr inline const char* ACTION_TYPE_NAMES[] = {
+	"ComboAttack",
+	"GrabAttack",
+	"GrabStrikeAttack",
+	"Avoid",
+	"ApproachTargetMove",
+	"NavMeshMove",
+	"Guard",
+	"InAttackSequence",
+	"OutAttackSequence",
+	"RequestToken",
+	"ReleaseToken"
+};
+
+// 条件の種類
 enum class ConditionType
 {
 	None = 0,
@@ -55,6 +98,26 @@ enum class ConditionType
 	IsNotInAttackSequence, // 攻撃動作中でないかどうか
 };
 
+// コンディションの種類を文字列で表す配列
+constexpr inline const char* CONDITION_TYPE_NAMES[] = {
+	"None",
+	"HasTarget",
+	"IsTargetDown",
+	"IsNotTargetDown",
+	"IsGrabbing",
+	"IsNotGrabbing",
+	"IsTargetInRange",
+	"IsTargetOutOfRange",
+	"IsTargetAttacking",
+	"IsTargetNotAttacking",
+	"IsTargetInAttackSequence",
+	"IsTargetNotInAttackSequence",
+	"IsClosestToTarget",
+	"IsNotClosestToTarget",
+	"IsInAttackSequence",
+	"IsNotInAttackSequence"
+};
+
 /// @brief 条件ノードパラメータ
 struct CondtionNodeParam
 {
@@ -72,7 +135,8 @@ struct EditorNode
 
 	Vector2 pos; // ノードの位置
 
-	std::string actionName{}; // アクションノードの場合のアクション名
+	// アクションノードの場合のアクションの種類
+	ActionType actionType = ActionType::ComboAttack;
 
 	// 条件ノードの場合の条件の種類
 	ConditionType conditionType = ConditionType::None;

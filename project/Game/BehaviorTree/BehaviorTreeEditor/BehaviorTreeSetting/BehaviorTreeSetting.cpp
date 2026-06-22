@@ -24,9 +24,9 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 		if (node.type == EditorNodeType::Action)
 		{
 			// アクション名を保存
-			n["action_name"] = node.actionName;
+			n["action_type"] = static_cast<int32_t>(node.actionType);
 
-			if (node.actionName == "ComboAttack")
+			if (node.actionType == ActionType::ComboAttack)
 			{
 				n["combo_data"]["attackTime"] = node.comboAttackInitData.attackTime;
 				n["combo_data"]["moveSpeed"] = node.comboAttackInitData.moveSpeed;
@@ -51,8 +51,11 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 
 				// コンボ攻撃のデータに当たり判定の配列を追加
 				n["combo_data"]["hitDefinitions"] = hitboxesJson;
+
+				n["motionType"] = static_cast<int>(node.motionType);
+				n["motionName"] = node.motionName;
 			} 
-			else if (node.actionName == "GrabAttack")
+			else if (node.actionType == ActionType::GrabAttack)
 			{
 				n["grab_data"]["attackTime"] = node.grabAttackInitData.attackTime;
 				n["grab_data"]["grabTime"] = node.grabAttackInitData.grabTime;
@@ -62,8 +65,11 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["grab_data"]["moveStartTime"] = node.grabAttackInitData.moveStartTime;
 				n["grab_data"]["moveEndTime"] = node.grabAttackInitData.moveEndTime;
 				n["grab_data"]["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
+
+				n["motionType"] = static_cast<int>(node.motionType);
+				n["motionName"] = node.motionName;
 			}
-			else if (node.actionName == "GrabStrikeAttack")
+			else if (node.actionType == ActionType::GrabStrikeAttack)
 			{
 				n["grab_strike_data"]["attackTime"] = node.grabStrikeAttackInitData.attackTime;
 				n["grab_strike_data"]["moveSpeed"] = node.grabStrikeAttackInitData.moveSpeed;
@@ -91,30 +97,27 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 
 				// グラブストライク攻撃のデータにヒットの配列を追加
 				n["grab_strike_data"]["hits"] = hitsJson;
+
+				n["motionType"] = static_cast<int>(node.motionType);
+				n["motionName"] = node.motionName;
 			}
-			else if (node.actionName == "Avoid")
+			else if (node.actionType == ActionType::Avoid)
 			{
 				n["avoid_data"]["Duration"] = node.avoidInitData.time;
 				n["avoid_data"]["Distance"] = node.avoidInitData.distance;
 				n["avoid_data"]["LocalDirection"] = { node.avoidInitData.localDirection.x, node.avoidInitData.localDirection.y };
 			}
-			else if (node.actionName == "ApproachTargetMove")
+			else if (node.actionType == ActionType::ApproachTargetMove)
 			{
 				n["approach_target_move_data"]["moveSpeed"] = node.approachTargetMoveInitData.moveSpeed;
 				n["approach_target_move_data"]["stopDistance"] = node.approachTargetMoveInitData.stopDistance;
 				n["approach_target_move_data"]["isDash"] = node.approachTargetMoveInitData.isDash;
 			}
-			else if (node.actionName == "NavMeshMove")
+			else if (node.actionType == ActionType::NavMeshMove)
 			{
 				n["nav_mesh_move_data"]["moveSpeed"] = node.navMeshMoveInitData.moveSpeed;
 				n["nav_mesh_move_data"]["stopDistance"] = node.navMeshMoveInitData.stopDistance;
 				n["nav_mesh_move_data"]["isDash"] = node.navMeshMoveInitData.isDash;
-			}
-
-			if (node.actionName != "None")
-			{
-				n["motionType"] = static_cast<int>(node.motionType);
-				n["motionName"] = node.motionName;
 			}
 		}
 		else if (node.type == EditorNodeType::Condition)
@@ -190,9 +193,9 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 			if (node.type == EditorNodeType::Action)
 			{
 				// アクション名を読み込む
-				node.actionName = n.value("action_name", "None");
+				node.actionType = static_cast<ActionType>(n.value("action_type", 0));
 
-				if (node.actionName == "ComboAttack" && n.contains("combo_data"))
+				if (node.actionType == ActionType::ComboAttack && n.contains("combo_data"))
 				{
 					node.comboAttackInitData.attackTime = n["combo_data"].value("attackTime", 0.0f);
 					node.comboAttackInitData.moveSpeed = n["combo_data"].value("moveSpeed", 0.0f);
@@ -232,8 +235,11 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 							node.comboAttackInitData.hitDefinitions.push_back(def);
 						}
 					}
+
+					node.motionType = static_cast<MotionType>(n.value("motionType", 0));
+					node.motionName = n.value("motionName", "");
 				} 
-				else if (node.actionName == "GrabAttack" && n.contains("grab_data"))
+				else if (node.actionType == ActionType::GrabAttack && n.contains("grab_data"))
 				{
 					node.grabAttackInitData.attackTime = n["grab_data"].value("attackTime", 0.0f);
 					node.grabAttackInitData.grabTime = n["grab_data"].value("grabTime", 0.0f);
@@ -244,8 +250,11 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabAttackInitData.moveEndTime = n["grab_data"].value("moveEndTime", 0.0f);
 					node.grabAttackInitData.jointType = static_cast<JointType>(n["grab_data"].value("jointType", 0));
 					node.grabAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
+
+					node.motionType = static_cast<MotionType>(n.value("motionType", 0));
+					node.motionName = n.value("motionName", "");
 				}
-				else if (node.actionName == "GrabStrikeAttack" && n.contains("grab_strike_data"))
+				else if (node.actionType == ActionType::GrabStrikeAttack && n.contains("grab_strike_data"))
 				{
 					node.grabStrikeAttackInitData.attackTime = n["grab_strike_data"].value("attackTime", 0.0f);
 					node.grabStrikeAttackInitData.moveSpeed = n["grab_strike_data"].value("moveSpeed", 0.0f);
@@ -289,8 +298,11 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 							node.grabStrikeAttackInitData.hits.push_back(def);
 						}
 					}
+
+					node.motionType = static_cast<MotionType>(n.value("motionType", 0));
+					node.motionName = n.value("motionName", "");
 				}
-				else if (node.actionName == "Avoid")
+				else if (node.actionType == ActionType::Avoid)
 				{
 					if (n.contains("avoid_data") && n["avoid_data"].is_object())
 					{
@@ -311,7 +323,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						}
 					}
 				}
-				else if (node.actionName == "ApproachTargetMove")
+				else if (node.actionType == ActionType::ApproachTargetMove)
 				{
 					if (n.contains("approach_target_move_data") && n["approach_target_move_data"].is_object())
 					{
@@ -321,7 +333,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						node.approachTargetMoveInitData.isDash = move_data.value("isDash", false);
 					}
 				}
-				else if (node.actionName == "NavMeshMove")
+				else if (node.actionType == ActionType::NavMeshMove)
 				{
 					if (n.contains("nav_mesh_move_data") && n["nav_mesh_move_data"].is_object())
 					{
@@ -330,12 +342,6 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						node.navMeshMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
 						node.navMeshMoveInitData.isDash = move_data.value("isDash", false);
 					}
-				}
-
-				if (node.actionName != "None")
-				{
-					node.motionType = static_cast<MotionType>(n.value("motionType", 0));
-					node.motionName = n.value("motionName", "");
 				}
 			}
 			else if (node.type == EditorNodeType::Condition)

@@ -123,7 +123,7 @@ void BehaviorTreeEditor::AddActionNode()
 	node.type = EditorNodeType::Action;
 	node.inputPinId = GetNextId();
 	node.outputPinId = -1;
-	node.actionName = "None"; // アクション名を設定
+	node.actionType = ActionType::ComboAttack; // デフォルトでコンボ攻撃に設定
 	nodes_.push_back(node);
 
 	// ノードをウィンドウの中心に配置する
