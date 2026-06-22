@@ -41,9 +41,10 @@ void StageEditorGuizmo::UpdateAndDraw(std::vector<PlacementData>& placementList,
 			Make3DTranslateMatrix4x4(data.position);
 
 		// キーボード入力などで操作モードを切り替える例
-		if (ImGui::IsKeyPressed(ImGuiKey_T)) currentOperation_ = ImGuizmo::TRANSLATE;
-		if (ImGui::IsKeyPressed(ImGuiKey_R)) currentOperation_ = ImGuizmo::ROTATE;
-		if (ImGui::IsKeyPressed(ImGuiKey_S)) currentOperation_ = ImGuizmo::SCALE;
+		ImGuiIO& io = ImGui::GetIO();
+		if (ImGui::IsKeyPressed(ImGuiKey_T) && !io.KeyCtrl) currentOperation_ = ImGuizmo::TRANSLATE;
+		if (ImGui::IsKeyPressed(ImGuiKey_R) && !io.KeyCtrl) currentOperation_ = ImGuizmo::ROTATE;
+		if (ImGui::IsKeyPressed(ImGuiKey_S) && !io.KeyCtrl) currentOperation_ = ImGuizmo::SCALE;
 
 		// ギズモの描画と操作
 		ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], currentOperation_, currentMode_, &worldMatrix.m[0][0]);

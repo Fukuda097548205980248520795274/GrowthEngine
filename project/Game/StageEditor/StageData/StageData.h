@@ -3,6 +3,11 @@
 #include "MotionManager/MotionManager.h"
 #include "NavMesh/NavMesh.h"
 
+#include "Entity/Character/Character.h"
+#include "Entity/Weapon/Weapon.h"
+#include "StageObject/StageObject.h"
+#include "HUD/HUD.h"
+
 // JSONライブラリ
 using json = nlohmann::json;
 
@@ -122,32 +127,59 @@ struct ChainEventData
 /// @param s 
 inline void toJson(json& j, const PlacementData& s)
 {
-	j = json{
-		{"category", static_cast<int>(s.category)},
-		{"subType", s.subType},
-		{"name", s.name},
-		{"posX", s.position.x}, {"posY", s.position.y}, {"posZ", s.position.z},
-		{"rotX", s.rotate_.x}, {"rotY", s.rotate_.y}, {"rotZ", s.rotate_.z},
-		{"scaleX", s.scale.x}, {"scaleY", s.scale.y}, {"scaleZ", s.scale.z},
-		{"hp", s.hp},
-		{"durability", s.durability},
-		{"attackPower", s.attackPower},
-		{"isUnbreakable", s.isUnbreakable},
-		{"behaviorScriptName", s.behaviorScriptName},
-		{"eventType", s.eventType},
-		{"eventStringParam", s.eventStringParam},
-		{"practiceTime", s.practiceTime },
-		{"maxAttackCount", s.maxAttackCount },
-		{"maxGuardCount", s.maxGuardCount },
-		{"standMotionName", s.standMotion.name},
-		{"stanceMotionName", s.stanceMotion.name},
-		{"walkMotionName", s.walkMotion.name},
-		{"dashMotionName", s.dashMotion.name},
-		{"avoidFrontMotionName", s.avoidFrontMotion.name},
-		{"avoidBackMotionName", s.avoidBackMotion.name},
-		{"avoidLeftMotionName", s.avoidLeftMotion.name},
-		{"avoidRightMotionName", s.avoidRightMotion.name}
-	};
+	j["category"] = static_cast<int>(s.category);
+	j["subType"] = s.subType;
+	j["name"] = s.name;
+	j["posX"] = s.position.x;j["posY"] = s.position.y;j["posZ"] = s.position.z;
+	j["rotX"] = s.rotate_.x; j["rotY"] = s.rotate_.y; j["rotZ"] = s.rotate_.z;
+	j["scaleX"] = s.scale.x; j["scaleY"] = s.scale.y; j["scaleZ"] = s.scale.z;
+
+
+	if (s.category == EditCategory::Character)
+	{
+		j["hp"] = s.hp;
+		j["standMotionName"] = s.standMotion.name;
+		j["stanceMotionName"] = s.stanceMotion.name;
+		j["walkMotionName"] = s.walkMotion.name;
+		j["dashMotionName"] = s.dashMotion.name;
+		j["avoidFrontMotionName"] = s.avoidFrontMotion.name;
+		j["avoidBackMotionName"] = s.avoidBackMotion.name;
+		j["avoidLeftMotionName"] = s.avoidLeftMotion.name;
+		j["avoidRightMotionName"] = s.avoidRightMotion.name;
+
+		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
+		if (s.subType != static_cast<int32_t>(Character::CharacterTag::Player) && s.subType != static_cast<int32_t>(Character::CharacterTag::None))
+		{
+			j["behaviorScriptName"] = s.behaviorScriptName;
+		}
+	}
+	else if (s.category == EditCategory::Object)
+	{
+		if (s.subType == static_cast<int32_t>(StageObject::StageObjectTag::StaticEventTrigger))
+		{
+			j["eventType"] = s.eventType;
+			j["eventStringParam"] = s.eventStringParam;
+		}
+	}
+	else if (s.category == EditCategory::Weapon)
+	{
+		j["durability"] = s.durability;
+		j["attackPower"] = s.attackPower;
+		j["isUnbreakable"] = s.isUnbreakable;
+	}
+	else if (s.category == EditCategory::HUD)
+	{
+		if (s.subType == 7)
+		{
+			j["practiceTime"] = s.practiceTime;
+			j["maxAttackCount"] = s.maxAttackCount;
+		}
+		else if (s.subType == 8)
+		{
+			j["practiceTime"] = s.practiceTime;
+			j["maxGuardCount"] = s.maxGuardCount;
+		}
+	}
 }
 
 /// @brief PlacementDataのリストをJSONに変換（シリアライズ）

@@ -125,7 +125,7 @@ void GameScene::Initialize()
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
 	//// ステージを読み込む
-	stageEditor_->LoadStage("Tutorial.json");
+	//stageEditor_->LoadStage("Tutorial.json");
 }
 
 /// @brief 更新処理

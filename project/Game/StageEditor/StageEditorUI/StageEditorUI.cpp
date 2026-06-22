@@ -708,107 +708,111 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 
 	ImGuiIO& io = ImGui::GetIO();
 
-	// Ctrl + S で上書き保存
-	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+	// テキスト入力中やアイテムがアクティブな場合はショートカットキーを無効化する
+	if (!io.WantTextInput && !ImGui::IsAnyItemActive())
 	{
-		fileManager_->SaveToFile(currentFileName, placementList, navMesh);
-		isDirty = false;
-	}
-
-	// Ctrl + Z でアンドゥ
-	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
-	{
-		history_->Undo(placementList, spawner_);
-		isDirty = true;
-	}
-
-	// Ctrl + Y でリドゥ
-	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
-	{
-		history_->Redo(placementList, spawner_);
-		isDirty = true;
-	}
-
-	if (!io.WantTextInput)
-	{
-		// Ctrl + C でコピー
-		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
+		// Ctrl + S で上書き保存
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
 		{
-			// 有効なオブジェクトが選択されている場合のみコピー
-			if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
-			{
-				// 配置データ全体をコピーする
-				copiedData_ = placementList[selectedIndex_];
-
-				// 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
-				copiedData_.instancePtr = nullptr;
-				hasCopiedData_ = true;
-			}
+			fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+			isDirty = false;
 		}
 
-		// Ctrl + V でペースト
-		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+		// Ctrl + Z でアンドゥ
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
 		{
-			if (hasCopiedData_)
-			{
-				// 現在の状態を履歴に保存して変更フラグを立てる
-				history_->SaveHistory(placementList);
-				isDirty = true;
-
-				// クリップボードからデータを複製
-				PlacementData newData = copiedData_;
-
-				// 実体をシーンに生成してリストに追加
-				spawner_->SpawnActualEntity(newData);
-				placementList.push_back(newData);
-
-				// ペーストしたオブジェクトを自動的に選択状態にする
-				selectedIndex_ = static_cast<int>(placementList.size()) - 1;
-			}
+			history_->Undo(placementList, spawner_);
+			isDirty = true;
 		}
 
-		// Ctrl + D で複製
-		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_D))
+		// Ctrl + Y でリドゥ
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
 		{
-			// 有効なオブジェクトが選択されている場合のみ複製
-			if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
-			{
-				// 現在の状態を履歴に保存して変更フラグを立てる
-				history_->SaveHistory(placementList);
-				isDirty = true;
-
-				// 選択中のオブジェクトのデータを複製
-				PlacementData newData = placementList[selectedIndex_];
-
-				// 複製したオブジェクトは少し位置をずらして生成する
-				newData.position.x += 0.5f;
-				newData.position.z += 0.5f;
-				newData.instancePtr = nullptr;
-
-				// 実体をシーンに生成してリストに追加
-				spawner_->SpawnActualEntity(newData);
-				placementList.push_back(newData);
-
-				// 複製したオブジェクトを自動的に選択状態にする
-				selectedIndex_ = static_cast<int>(placementList.size()) - 1;
-			}
+			history_->Redo(placementList, spawner_);
+			isDirty = true;
 		}
 
-		// Delete / Backspace キーで削除
-		if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+		if (!io.WantTextInput)
 		{
-			if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+			// Ctrl + C でコピー
+			if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
 			{
-				// 現在の状態を履歴に保存して変更フラグを立てる
-				history_->SaveHistory(placementList);
-				isDirty = true;
+				// 有効なオブジェクトが選択されている場合のみコピー
+				if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+				{
+					// 配置データ全体をコピーする
+					copiedData_ = placementList[selectedIndex_];
 
-				// シーンから実体を削除してリストからも削除
-				spawner_->DeleteActualEntity(placementList[selectedIndex_]);
-				placementList.erase(placementList.begin() + selectedIndex_);
+					// 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
+					copiedData_.instancePtr = nullptr;
+					hasCopiedData_ = true;
+				}
+			}
 
-				// 選択状態をリセット
-				selectedIndex_ = -1;
+			// Ctrl + V でペースト
+			if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+			{
+				if (hasCopiedData_)
+				{
+					// 現在の状態を履歴に保存して変更フラグを立てる
+					history_->SaveHistory(placementList);
+					isDirty = true;
+
+					// クリップボードからデータを複製
+					PlacementData newData = copiedData_;
+
+					// 実体をシーンに生成してリストに追加
+					spawner_->SpawnActualEntity(newData);
+					placementList.push_back(newData);
+
+					// ペーストしたオブジェクトを自動的に選択状態にする
+					selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+				}
+			}
+
+			// Ctrl + D で複製
+			if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_D))
+			{
+				// 有効なオブジェクトが選択されている場合のみ複製
+				if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+				{
+					// 現在の状態を履歴に保存して変更フラグを立てる
+					history_->SaveHistory(placementList);
+					isDirty = true;
+
+					// 選択中のオブジェクトのデータを複製
+					PlacementData newData = placementList[selectedIndex_];
+
+					// 複製したオブジェクトは少し位置をずらして生成する
+					newData.position.x += 0.5f;
+					newData.position.z += 0.5f;
+					newData.instancePtr = nullptr;
+
+					// 実体をシーンに生成してリストに追加
+					spawner_->SpawnActualEntity(newData);
+					placementList.push_back(newData);
+
+					// 複製したオブジェクトを自動的に選択状態にする
+					selectedIndex_ = static_cast<int>(placementList.size()) - 1;
+				}
+			}
+
+			// Delete / Backspace キーで削除
+			if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+			{
+				if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
+				{
+					// 現在の状態を履歴に保存して変更フラグを立てる
+					history_->SaveHistory(placementList);
+					isDirty = true;
+
+					// シーンから実体を削除してリストからも削除
+					spawner_->DeleteActualEntity(placementList[selectedIndex_]);
+					placementList.erase(placementList.begin() + selectedIndex_);
+
+					// 選択状態をリセット
+					selectedIndex_ = -1;
+				}
 			}
 		}
 	}

@@ -69,38 +69,42 @@ void BehaviorTreeEditor::DrawNodeTable()
 	}
 
 
-	// コピーとペーストの処理
-	clipboard_->HandleCopy(nodes_, links_);
-	clipboard_->HandlePaste(*this);
-
-	// DeleteキーまたはBackspaceキーが押された場合、選択されているノードを削除する
-	if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+	// パラメータ調整中はショートカットキーの処理を無効化する
+	if (!ImGui::GetIO().WantTextInput && !ImGui::IsAnyItemActive())
 	{
-		DeleteSelectedNodes();
-	}
+		// コピーとペーストの処理
+		clipboard_->HandleCopy(nodes_, links_);
+		clipboard_->HandlePaste(*this);
 
-	// Ctrl+Sで現在のツリーを保存する
-	if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
-	{
-		SaveCurrentTree();
-	}
+		// DeleteキーまたはBackspaceキーが押された場合、選択されているノードを削除する
+		if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
+		{
+			DeleteSelectedNodes();
+		}
 
-	// Ctrl+ZでUndoを実行
-	if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
-	{
-		history_->Undo(*this);
+		// Ctrl+Sで現在のツリーを保存する
+		if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+		{
+			SaveCurrentTree();
+		}
 
-		// 変更があったのでフラグを立てる
-		isDirty_ = true;
-	}
+		// Ctrl+ZでUndoを実行
+		if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
+		{
+			history_->Undo(*this);
 
-	// Ctrl+YでRedoを実行
-	if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
-	{
-		history_->Redo(*this);
+			// 変更があったのでフラグを立てる
+			isDirty_ = true;
+		}
 
-		// 変更があったのでフラグを立てる
-		isDirty_ = true;
+		// Ctrl+YでRedoを実行
+		if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
+		{
+			history_->Redo(*this);
+
+			// 変更があったのでフラグを立てる
+			isDirty_ = true;
+		}
 	}
 
 
