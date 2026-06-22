@@ -237,6 +237,9 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		パラメータ調整
 	------------------*/
 
+	// 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
+	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_); isDirty_ = true; }};
+
 	if (numSelected == 1)
 	{
 		// 1つだけ選択されている場合、そのノードのIDを取得
@@ -254,6 +257,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 			// ノードの種類などを表示
 			ImGui::Text("ノード ID: %d", node.id);
 			ImGui::Separator();
+
+			// ノード名の編集UI
+			HistorySaveIfChanged();
+			ImGui::InputText("ノード名", node.name, sizeof(node.name));
 
 			// ノードの種類に応じて、パラメータ設定UIをここで描画する
 			if (node.type == EditorNodeType::Condition)
@@ -753,12 +760,20 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			}
 		}
 
-		if (node.type == EditorNodeType::PersistentSelector) ImGui::TextUnformatted("永続セレクタ");
-		if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("永続シーケンス");
-		if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("再起動セレクタ");
-		if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("再起動シーケンス");
-		if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
-		if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
+		// ノード名の描画 名前が空文字の場合は、ノードの種類に応じたデフォルト名を表示する
+		if (node.name[0] == '\0')
+		{
+			if (node.type == EditorNodeType::PersistentSelector) ImGui::TextUnformatted("永続セレクタ");
+			if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("永続シーケンス");
+			if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("再起動セレクタ");
+			if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("再起動シーケンス");
+			if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
+			if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
+		}
+		else
+		{
+			ImGui::TextUnformatted(node.name);
+		}
 		ImNodes::EndNodeTitleBar();
 
 

@@ -11,6 +11,7 @@
             "id": 1,
             "input_pin": 2,
             "is_collapsed": false,
+            "name": "",
             "output_pin": 3,
             "pos": [
                 115.0,
@@ -28,6 +29,7 @@
             "id": 4,
             "input_pin": 5,
             "is_collapsed": false,
+            "name": "aaaasaaa",
             "output_pin": -1,
             "pos": [
                 353.0,

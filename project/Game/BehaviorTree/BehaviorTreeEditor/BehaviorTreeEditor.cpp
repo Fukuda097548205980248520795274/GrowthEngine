@@ -21,6 +21,7 @@ void BehaviorTreeEditor::AddPersistentSelectorNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::PersistentSelector;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = GetNextId();
 	nodes_.push_back(node);
@@ -41,6 +42,7 @@ void BehaviorTreeEditor::AddPersistentSequenceNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::PersistentSequence;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = GetNextId();
 	nodes_.push_back(node);
@@ -61,6 +63,7 @@ void BehaviorTreeEditor::AddRestartingSelectorNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::RestartingSelector;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = GetNextId();
 	nodes_.push_back(node);
@@ -81,6 +84,7 @@ void BehaviorTreeEditor::AddRestartingSequenceNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::RestartingSequence;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = GetNextId();
 	nodes_.push_back(node);
@@ -101,6 +105,7 @@ void BehaviorTreeEditor::AddConditionNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::Condition;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = -1;
 	nodes_.push_back(node);
@@ -121,6 +126,7 @@ void BehaviorTreeEditor::AddActionNode()
 	EditorNode node;
 	node.id = GetNextId();
 	node.type = EditorNodeType::Action;
+	node.name[0] = '\0'; // 名前を空に初期化
 	node.inputPinId = GetNextId();
 	node.outputPinId = -1;
 	node.actionType = ActionType::ComboAttack; // デフォルトでコンボ攻撃に設定

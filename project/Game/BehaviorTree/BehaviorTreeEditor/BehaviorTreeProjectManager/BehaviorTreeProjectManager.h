@@ -133,6 +133,7 @@ struct EditorNode
 	int inputPinId; // 入力ピンのID（親とつなげる）
 	int outputPinId; // 出力ピンのID（子とつなげる）
 
+	char name[128]; // ノードの名前
 	Vector2 pos; // ノードの位置
 
 	// アクションノードの場合のアクションの種類
