@@ -1,0 +1,29 @@
+{
+    "navMesh": [],
+    "objects": [
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "New",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "hp": 100,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 5.0,
+            "rotX": 0.0,
+            "rotY": 3.140000104904175,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        }
+    ]
+}

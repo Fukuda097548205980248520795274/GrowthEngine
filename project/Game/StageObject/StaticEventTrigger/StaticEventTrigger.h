@@ -20,8 +20,8 @@ public:
 		// イベントの種類
 		int eventType = 0;
 
-		// イベントの整数パラメータ
-		char eventStringParam[65536] = "";
+		// イベントトリガーのステージデータファイル名
+		char eventStageDataFileName[256] = "";
 
 		// イベントが発生したときのコールバック関数
 		std::function<bool(int, const char*)> onTriggerCallback = nullptr;
@@ -56,7 +56,7 @@ public:
 
 	/// @brief イベントの文字列パラメータを設定する
 	/// @param param 
-	void SetEventStringParam(const char* param) { strncpy_s(eventStringParam_, sizeof(eventStringParam_), param, _TRUNCATE); }
+	void SetEventStringParam(const char* param) { strncpy_s(eventStageDataFileName_, sizeof(eventStageDataFileName_), param, _TRUNCATE); }
 
 
 private:
@@ -69,7 +69,7 @@ private:
 	int eventType_ = 0;
 
 	// イベントの整数パラメータ
-	char eventStringParam_[65536] = {};
+	char eventStageDataFileName_[256] = {};
 
 	// イベントが発生したときのコールバック関数
 	std::function<bool(int, const char*)> onTriggerCallback_ = nullptr;

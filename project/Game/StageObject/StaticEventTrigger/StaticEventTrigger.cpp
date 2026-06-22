@@ -42,7 +42,7 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 	onTriggerCallback_ = initData.onTriggerCallback;
 
 	// イベントの整数パラメータ
-	strcpy_s(eventStringParam_, sizeof(eventStringParam_), initData.eventStringParam);
+	strcpy_s(eventStageDataFileName_, sizeof(eventStageDataFileName_), initData.eventStageDataFileName);
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
@@ -79,7 +79,7 @@ void StaticEventTrigger::Update()
 			// コールバック関数を呼び出す
 			if (onTriggerCallback_)
 			{
-				bool shouldDelete = onTriggerCallback_(eventType_, eventStringParam_);
+				bool shouldDelete = onTriggerCallback_(eventType_, eventStageDataFileName_);
 
 				// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
 				if (shouldDelete)Delete();

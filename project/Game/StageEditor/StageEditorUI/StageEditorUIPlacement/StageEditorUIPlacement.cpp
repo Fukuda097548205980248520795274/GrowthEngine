@@ -29,7 +29,8 @@ StageEditorUIPlacement::StageEditorUIPlacement(StageSpawner* spawner, StageEdito
 /// @param selectedIndex 
 /// @param isDirty 
 /// @param isPlaying
-void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty, const std::vector<std::string>& behaviorTreeNames)
+void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty, 
+	const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& eventStageDataFileNames)
 {
 	// オブジェクト配置モードのUIを描画
 	ImGui::Text("--- オブジェクト配置 ---");
@@ -49,7 +50,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.isUnbreakable = false;
 		currentData.behaviorScriptName[0] = '\0';
 		currentData.eventType = 0;
-		currentData.eventStringParam[0] = '\0';
+		currentData.eventStageDataFileName[0] = '\0';
 		currentData.practiceTime = 0.0f;
 		currentData.maxAttackCount = 1;
 		currentData.maxGuardCount = 1;
@@ -167,8 +168,39 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 			// イベントの種類
 			ImGui::Combo("イベントタイプ", &currentData.eventType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames));
 
-			// イベントの種類によって、パラメータの内容が異なる（今はすべて文字列パラメータとして扱う）
-			ImGui::InputText("イベントパラメータ", currentData.eventStringParam, sizeof(currentData.eventStringParam));
+
+			ImGui::Separator();
+			ImGui::Text("ステージデータの設定");
+
+			// プレビュー用の文字列（未設定の場合は "ステージデータを選択..." と表示）
+			std::string currentSdName = currentData.eventStageDataFileName;
+			const char* previewSdValue = currentSdName.empty() ? "ステージデータを選択..." : currentSdName.c_str();
+
+			// プルダウンメニュー（コンボボックス）の描画
+			if (ImGui::BeginCombo("ステージデータ", previewSdValue))
+			{
+				for (const auto& name : eventStageDataFileNames)
+				{
+					// 現在のステージデータ名と同じものが選択されている状態にする
+					bool isSelected = (currentSdName == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
+						history_->SaveHistory(placementList);
+						isDirty = true;
+
+						// 選択された名前を PlacementData の配列にコピーする
+						strcpy_s(currentData.eventStageDataFileName, sizeof(currentData.eventStageDataFileName), name.c_str());
+					}
+
+					// 選択中のアイテムにフォーカスを合わせる
+					if (isSelected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
 		}
 	} 
 	else if (currentData.category == EditCategory::Weapon)

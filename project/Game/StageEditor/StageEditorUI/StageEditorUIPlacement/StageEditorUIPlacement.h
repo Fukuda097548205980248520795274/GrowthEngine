@@ -19,7 +19,8 @@ public:
 	/// @param selectedIndex 
 	/// @param isDirty 
 	/// @param behaviorTreeNames
-	void DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty, const std::vector<std::string>& behaviorTreeNames);
+	void DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
+		const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& eventStageDataFileNames);
 
 private:
 

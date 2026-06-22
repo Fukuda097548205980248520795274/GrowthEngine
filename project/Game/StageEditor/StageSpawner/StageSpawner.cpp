@@ -79,7 +79,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			initData.position = data.position;
 			initData.scale = data.scale;
 			initData.eventType = data.eventType;
-			strcpy_s(initData.eventStringParam, sizeof(initData.eventStringParam), data.eventStringParam);
+			strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
 		}

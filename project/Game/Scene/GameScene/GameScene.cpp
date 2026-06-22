@@ -682,18 +682,36 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 
 		try
 		{
-			// エディタで入力された文字列パラメータ(param)をJSONとして解析
-			nlohmann::json j = nlohmann::json::parse(param);
+			// param が空文字列の場合は何もしない
+			std::string fileName = param;
+			if (fileName.empty()) return true;
+
+			// ステージデータが保存されているディレクトリのパスと結合
+			// (必要であれば拡張子 .json を付ける)
+			std::string filePath = "./Assets/Parameter/StageData/" + fileName + ".json";
+
+			// ファイルストリームを開く
+			std::ifstream ifs(filePath);
+			if (!ifs.is_open())return false;
+
+			// ファイルからJSONを読み込んで解析
+			nlohmann::json j;
+			ifs >> j;
+			ifs.close();
 
 			// JSON配列をループして、記述された各種オブジェクトを生成する
-			for (const auto& spawnDataJson : j)
+			if (j.contains("objects") && j["objects"].is_array())
 			{
-				PlacementData initData;
-				fromJson(spawnDataJson, initData);
+				for (const auto& objectDataJson : j["objects"])
+				{
+					PlacementData initData;
+					fromJson(objectDataJson, initData);
+					// 解析したデータをもとにオブジェクトを生成する
+					stageEditor_->SpawnObject(initData);
+					stageEditor_->SetPlacementList(initData);
+				}
 
-				// 解析したデータをもとにオブジェクトを生成する
-				stageEditor_->SpawnObject(initData);
-				stageEditor_->SetPlacementList(initData);
+				j.erase("objects");
 			}
 
 			// 生成が終わったイベントトリガーを削除する場合は true を返す

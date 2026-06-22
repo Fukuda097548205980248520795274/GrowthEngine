@@ -74,8 +74,8 @@ struct PlacementData
 	// イベントトリガーの種類 (イベントトリガーの場合)
 	int eventType = 0;
 
-	// イベントトリガーのパラメータ (イベントの種類によって内容が異なる)
-	char eventStringParam[65536] = "";
+	// イベントトリガーのステージデータファイル名 (イベントトリガーの場合)
+	char eventStageDataFileName[256] = "";
 
 	// 練習時間 (チュートリアルの場合)
 	float practiceTime = 0.0f;
@@ -158,7 +158,7 @@ inline void toJson(json& j, const PlacementData& s)
 		if (s.subType == static_cast<int32_t>(StageObject::StageObjectTag::StaticEventTrigger))
 		{
 			j["eventType"] = s.eventType;
-			j["eventStringParam"] = s.eventStringParam;
+			j["eventStageDataFileName"] = s.eventStageDataFileName;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -256,8 +256,8 @@ inline void fromJson(const json& j, PlacementData& s)
 
 
 	s.eventType = j.value("eventType", 0);
-	std::string eventStringParamStr = j.value("eventStringParam", "");
-	strncpy_s(s.eventStringParam, eventStringParamStr.c_str(), sizeof(s.eventStringParam) - 1);
+	std::string eventStageDataFileNameStr = j.value("eventStageDataFileName", "");
+	strncpy_s(s.eventStageDataFileName, eventStageDataFileNameStr.c_str(), sizeof(s.eventStageDataFileName) - 1);
 
 
 	MotionManager* motionManager = MotionManager::GetInstance();

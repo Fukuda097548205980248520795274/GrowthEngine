@@ -31,7 +31,7 @@ StageEditorUIObjectList::StageEditorUIObjectList(StageSpawner* spawner, StageEdi
 /// @param isDirty 
 /// @param navMesh 
 void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
-	bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh, const std::vector<std::string> behaviorTreeNames)
+	bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh, const std::vector<std::string> behaviorTreeNames, const std::vector<std::string> eventStageDataFileNames)
 {
 	if (!ImGui::Begin("Object List"))
 	{
@@ -311,280 +311,36 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					
 					if (target.eventType == 1) // 1: 敵生成(ObjectSpawn) の場合
 					{
-						// 編集中のデータを保持するための変数（staticにしてポップアップ中もデータを保持）
-						static std::vector<PlacementData> editingObjects;
-						static int selectedEnemyIndex = 0;
+						ImGui::Text("ステージデータの設定");
 
-						// ボタンを押すとポップアップを開く
-						if (ImGui::Button("生成オブジェクト設定を開く", ImVec2(200, 30)))
+						// プレビュー用の文字列（未設定の場合は "ステージデータを選択..." と表示）
+						std::string currentSdName = target.eventStageDataFileName;
+						const char* previewSdValue = currentSdName.empty() ? "ステージデータを選択..." : currentSdName.c_str();
+
+						// プルダウンメニュー（コンボボックス）の描画
+						if (ImGui::BeginCombo("ステージデータ", previewSdValue))
 						{
-							// 開く瞬間に1回だけ、JSONから現在の設定を読み込む
-							editingObjects.clear();
-							selectedEnemyIndex = 0; // 選択インデックスもリセット
-
-							try 
+							for (const auto& name : eventStageDataFileNames)
 							{
-								if (strlen(target.eventStringParam) > 0) 
+								// 現在のステージデータ名と同じものが選択されている状態にする
+								bool isSelected = (currentSdName == name);
+								if (ImGui::Selectable(name.c_str(), isSelected))
 								{
-									nlohmann::json j = nlohmann::json::parse(target.eventStringParam);
-									if (j.is_array()) 
-									{
-										for (const auto& enemyData : j) 
-										{
-											PlacementData spawnData;
-											fromJson(enemyData, spawnData); // スネークケースに修正
-											editingObjects.push_back(spawnData);
-										}
-									}
+									// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
+									history_->SaveHistory(placementList);
+									isDirty = true;
+
+									// 選択された名前を PlacementData の配列にコピーする
+									strcpy_s(target.eventStageDataFileName, sizeof(target.eventStageDataFileName), name.c_str());
+								}
+
+								// 選択中のアイテムにフォーカスを合わせる
+								if (isSelected)
+								{
+									ImGui::SetItemDefaultFocus();
 								}
 							}
-							catch (...) {
-								editingObjects.clear();
-							}
-
-							ImGui::OpenPopup("SpawnObjectConfigModal");
-						}
-
-						// 画面中央にポップアップを表示するための位置・サイズ設定
-						ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-						ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-						ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver); // 幅を少し広げて見やすく
-
-						// モーダルダイアログの開始
-						if (ImGui::BeginPopupModal("SpawnObjectConfigModal", NULL, ImGuiWindowFlags_NoSavedSettings))
-						{
-							ImGui::Text("イベント発生時の生成オブジェクト設定");
-							ImGui::Separator();
-
-							// 左右2カラムに分割（左：リストと追加削除、右：パラメータ詳細）
-							ImGui::Columns(2, "SplitColumns", true);
-							ImGui::SetColumnWidth(0, 250.0f); // 左カラムの幅を固定
-
-							// --- 左カラム: オブジェクト一覧 ---
-							ImGui::Text("生成オブジェクト一覧");
-
-							// リスト部分をスクロール可能に
-							ImGui::BeginChild("SpawnObjectsListRegion", ImVec2(0, -60), true);
-							int enemyToDelete = -1;
-
-							for (size_t i = 0; i < editingObjects.size(); ++i)
-							{
-								auto& data = editingObjects[i];
-								std::string label = "ID:" + std::to_string(i) + " ";
-								if (data.name[0] == '\0')
-								{
-									if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
-									else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
-									else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
-								}
-								else
-								{
-									label += data.name;
-								}
-
-								bool isSelected = (selectedEnemyIndex == static_cast<int>(i));
-								if (ImGui::Selectable(label.c_str(), isSelected))
-								{
-									selectedEnemyIndex = static_cast<int>(i);
-								}
-							}
-							ImGui::EndChild();
-
-							// 追加・削除ボタンをリストの下に配置
-							if (ImGui::Button("追加", ImVec2(100, 0)))
-							{
-								PlacementData newEnemy;
-								if (!editingObjects.empty())
-								{
-									int copyIndex = (selectedEnemyIndex >= 0) ? selectedEnemyIndex : static_cast<int>(editingObjects.size() - 1);
-									newEnemy = editingObjects[copyIndex];
-									newEnemy.position.x += 0.5f;
-								}
-								else
-								{
-									newEnemy.position = target.position;
-								}
-								editingObjects.push_back(newEnemy);
-								selectedEnemyIndex = static_cast<int>(editingObjects.size()) - 1;
-							}
-
-							ImGui::SameLine();
-
-							// 削除は即座に行わず、フラグを立てるだけにしておく
-							if (ImGui::Button("選択中を削除", ImVec2(100, 0)))
-							{
-								if (selectedEnemyIndex >= 0 && selectedEnemyIndex < static_cast<int>(editingObjects.size()))
-								{
-									enemyToDelete = selectedEnemyIndex;
-								}
-							}
-
-							// 削除フラグが立っていたら、ループを抜けた後で安全に削除する
-							if (enemyToDelete >= 0 && enemyToDelete < static_cast<int>(editingObjects.size()))
-							{
-								editingObjects.erase(editingObjects.begin() + enemyToDelete);
-								selectedEnemyIndex = editingObjects.empty() ? -1 : 0;
-							}
-
-							// --- 右カラム: パラメータ編集 ---
-							ImGui::NextColumn();
-							ImGui::Text("オブジェクトの詳細パラメータ");
-
-							ImGui::BeginChild("ParameterEditRegion", ImVec2(0, -60), true);
-							if (selectedEnemyIndex >= 0 && selectedEnemyIndex < static_cast<int>(editingObjects.size()))
-							{
-								auto& object = editingObjects[selectedEnemyIndex];
-
-								// 名前の編集項目を追加しておくと便利です
-								ImGui::InputText("オブジェクト名", object.name, sizeof(object.name));
-
-								int intCat = static_cast<int>(object.category);
-								if (ImGui::Combo("大分類", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
-								{
-									object.category = static_cast<EditCategory>(intCat);
-									object.subType = 0;
-								}
-
-								ImGui::Separator();
-
-								// 大分類に応じたパラメータ表示
-								if (object.category == EditCategory::Character)
-								{
-									ImGui::Combo("キャラクターの種類", &object.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
-									ImGui::DragFloat3("生成位置", &object.position.x, 0.1f);
-									ImGui::DragInt("HP", &object.hp, 1, 0, 10000);
-									ImGui::DragFloat("回転", &object.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
-
-									// モーション選択（引数3つのデバッグ用UIをそのまま利用）
-									MotionSelecter("立ちモーション", MotionType::Stand, object.standMotion);
-									MotionSelecter("戦闘モーション", MotionType::Stance, object.stanceMotion);
-									MotionSelecter("歩行モーション", MotionType::Walk, object.walkMotion);
-									MotionSelecter("ダッシュモーション", MotionType::Dash, object.dashMotion);
-									MotionSelecter("前方回避モーション", MotionType::Avoid, object.avoidFrontMotion);
-									MotionSelecter("後方回避モーション", MotionType::Avoid, object.avoidBackMotion);
-									MotionSelecter("左回避モーション", MotionType::Avoid, object.avoidLeftMotion);
-									MotionSelecter("右回避モーション", MotionType::Avoid, object.avoidRightMotion);
-
-									if (object.subType != 0 && object.subType != 1)
-									{
-										ImGui::Separator();
-										ImGui::Text("ビヘイビアツリーの設定");
-
-										std::string currentBtName = object.behaviorScriptName;
-										const char* previewBtValue = currentBtName.empty() ? "ビヘイビアツリーを選択..." : currentBtName.c_str();
-
-										if (ImGui::BeginCombo("ビヘイビアツリー", previewBtValue))
-										{
-											for (const auto& name : behaviorTreeNames)
-											{
-												bool isSelected = (currentBtName == name);
-												if (ImGui::Selectable(name.c_str(), isSelected))
-												{
-													strcpy_s(object.behaviorScriptName, sizeof(object.behaviorScriptName), name.c_str());
-												}
-												if (isSelected) ImGui::SetItemDefaultFocus();
-											}
-											ImGui::EndCombo();
-										}
-									}
-								}
-								else if (object.category == EditCategory::Object)
-								{
-									ImGui::Combo("オブジェクトの種類", &object.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
-									ImGui::DragFloat3("生成位置", &object.position.x, 0.1f);
-									ImGui::DragFloat3("大きさ", &object.scale.x, 0.1f, 0.0f, 10000.0f);
-
-									if (static_cast<StageObject::StageObjectTag>(object.subType) == StageObject::StageObjectTag::Wall)
-									{
-										ImGui::DragFloat("回転Y", &object.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
-									}
-								}
-								else if (object.category == EditCategory::Weapon)
-								{
-									ImGui::Combo("武器の種類", &object.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
-									ImGui::DragFloat3("生成位置", &object.position.x, 0.1f);
-									ImGui::DragInt("耐久力", &object.durability, 1, 1, 10000);
-									ImGui::DragFloat("攻撃力", &object.attackPower, 0.1f, 0.0f, 10000.0f);
-									ImGui::Checkbox("壊れるかどうか", &object.isUnbreakable);
-								}
-								else if (object.category == EditCategory::HUD)
-								{
-									// HUDの種類
-									if (ImGui::Combo("HUDの種類", &object.subType, hudTagNames, IM_ARRAYSIZE(hudTagNames)))
-									{
-										if (object.subType == 1)
-										{
-											object.subType = static_cast<int>(HUD::Tag::AttackTutorial);
-										} 
-										else if (object.subType == 2)
-										{
-											object.subType = static_cast<int>(HUD::Tag::GuardTutorial);
-										}
-									}
-
-									// 位置
-									ImGui::DragFloat2("生成位置", &object.position.x, 0.1f);
-
-									// 攻撃チュートリアル
-									if (static_cast<HUD::Tag>(object.subType) == HUD::Tag::AttackTutorial)
-									{
-										ImGui::DragFloat("練習時間", &object.practiceTime, 0.1f, 0.0f, 10000.0f);
-
-										ImGui::DragInt("攻撃の最大回数", &object.maxAttackCount, 1, 1, 100);
-									}
-
-									// ガードチュートリアル
-									if (static_cast<HUD::Tag>(object.subType) == HUD::Tag::GuardTutorial)
-									{
-										ImGui::DragFloat("練習時間", &object.practiceTime, 0.1f, 0.0f, 10000.0f);
-
-										ImGui::DragInt("ガードの最大回数", &object.maxGuardCount, 1, 1, 100);
-									}
-								}
-							}
-							else
-							{
-								ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "オブジェクトが選択されていないか、リストが空です。");
-							}
-							ImGui::EndChild();
-
-							// カラム終了
-							ImGui::Columns(1);
-							ImGui::Separator();
-
-							// --- 最下部: 保存・キャンセルボタン ---
-							ImGui::SetCursorPosX(ImGui::GetWindowSize().x - 220);
-
-							if (ImGui::Button("保存して閉じる", ImVec2(120, 0)))
-							{
-								// 変更前に履歴を保存
-								history_->SaveHistory(placementList);
-								isDirty = true;
-
-								// JSON配列を作成して、編集されたオブジェクトのデータを保存する
-								nlohmann::json jArray = nlohmann::json::array();
-								for (const auto& obj : editingObjects)
-								{
-									nlohmann::json jObj;
-									toJson(jObj, obj); // スネークケースに修正
-									jArray.push_back(jObj);
-								}
-
-								std::string jsonStr = jArray.dump();
-								strncpy_s(target.eventStringParam, jsonStr.c_str(), sizeof(target.eventStringParam) - 1);
-								eventTriggerPtr->SetEventStringParam(target.eventStringParam);
-
-								ImGui::CloseCurrentPopup();
-							}
-
-							ImGui::SameLine();
-
-							if (ImGui::Button("キャンセル", ImVec2(80, 0)))
-							{
-								ImGui::CloseCurrentPopup();
-							}
-
-							ImGui::EndPopup();
+							ImGui::EndCombo();
 						}
 					}
 				}

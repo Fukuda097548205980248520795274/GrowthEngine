@@ -375,6 +375,22 @@
             "standMotionName": "Standing",
             "subType": 4,
             "walkMotionName": "Walk"
+        },
+        {
+            "category": 1,
+            "eventStageDataFileName": "Event",
+            "eventType": 1,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 3
         }
     ]
 }
