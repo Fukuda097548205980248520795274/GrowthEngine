@@ -507,8 +507,6 @@ void Engine::RenderContext::DebugRayPicking()
 
 	// リストを作成し、判定
 	std::vector<std::pair<float, DebugData::DebugGuizmoData*>> pickList;
-	render_->DebugRayPicking(ray, pickList);
-	render_->DebugPicking(render2DCoordinatePos, pickList);
 	camera3DStore_->DebugRayPicking(ray, pickList);
 	lightStore_->DebugRayPicking(ray, pickList);
 

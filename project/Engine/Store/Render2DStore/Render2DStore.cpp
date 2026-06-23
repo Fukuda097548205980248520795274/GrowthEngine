@@ -142,11 +142,6 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 /// @param pso 
 void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 {
-	// Guizmo操作
-#ifdef _DEVELOPMENT
-	dataTable_[hRender2D]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
-#endif
-
 	// スプライト
 	if (dataTable_[hRender2D]->GetType() == Render2D::Type::Sprite)
 	{
@@ -166,11 +161,6 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* ca
 /// @param pso 
 void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cameraStore, ID3D12GraphicsCommandList* commandList)
 {
-	// Guizmo操作
-#ifdef _DEVELOPMENT
-	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore->GetCamera2D().GetViewMatrix(), cameraStore->GetCamera2D().GetProjectionMatrix());
-#endif
-
 	// スプライト
 	if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Sprite)
 	{
@@ -189,12 +179,4 @@ void Engine::Render2DStore::DebugParameter()
 #ifdef _DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
-}
-
-/// @brief デバッグ用ピッキング
-/// @param point 
-/// @param pickList 
-void Engine::Render2DStore::DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
-{
-	for (auto& data : dataTable_)data->DebugPicking(point, pickList);
 }

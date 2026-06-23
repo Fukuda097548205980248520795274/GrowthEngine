@@ -72,16 +72,6 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
-		/// @brief デバッグ用ピッキング
-		/// @param point 
-		/// @param pickList 
-		virtual void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) = 0;
-
-		/// @brief Guizmo操作
-		/// @param viewMatrix 
-		/// @param projMatrix 
-		virtual void DebugGuizmo(const Matrix4x4& viewMatrix, const Matrix4x4& projMatrix) = 0;
-
 
 	protected:
 
@@ -126,8 +116,5 @@ namespace Engine
 
 		/// @brief パラメータ
 		Render2DParameter* parameter_ = nullptr;
-
-		/// @brief デバッグデータ : Guizmo
-		DebugData::DebugGuizmoData guizmoData_{};
 	};
 }

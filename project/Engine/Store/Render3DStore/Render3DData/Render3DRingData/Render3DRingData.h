@@ -62,15 +62,6 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
 
-		/// @brief デバッグ用レイピッキング
-		/// @param ray 
-		/// @param pickList 
-		void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) override;
-
-		/// @brief Guizmo操作
-		/// @param cameraStore 
-		void DebugGuizmo(Camera3DStore* cameraStore) override;
-
 
 	private:
 

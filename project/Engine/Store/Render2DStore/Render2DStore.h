@@ -86,19 +86,14 @@ namespace Engine
 		/// @param parent 
 		void SetParent(const std::string& name, WorldTransform2D* parent) { dataTable_[nameTable_[name]]->SetParent(parent); }
 
+		template <typename T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+
 
 	public:
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
-
-		/// @brief デバッグ用ピッキング
-		/// @param point 
-		/// @param pickList 
-		void DebugPicking(const Vector2& point, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList);
-
-		template <typename T>
-		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 	private:
 

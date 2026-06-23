@@ -203,11 +203,6 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 /// @param meshIndex 
 void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, Render3DHandle handle)
 {
-#ifdef _DEVELOPMENT
-	// 描画している者のみGuizmo操作可能
-	dataTable_[handle]->DebugGuizmo(cameraStore);
-#endif
-
 	// コマンドリストの登録する
 	dataTable_[handle]->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 }
@@ -220,11 +215,6 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 /// @param pso 
 void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* skyboxStore, ID3D12GraphicsCommandList* commandList, const std::string& name)
 {
-#ifdef _DEVELOPMENT
-	// 描画している者のみGuizmo操作可能
-	dataTable_[nameTable_[name]]->DebugGuizmo(cameraStore);
-#endif
-
 	// コマンドリストの登録する
 	dataTable_[nameTable_[name]]->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
 }

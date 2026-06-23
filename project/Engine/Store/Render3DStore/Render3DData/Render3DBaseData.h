@@ -108,15 +108,6 @@ namespace Engine
 		/// @brief デバッグ用パラメータ
 		virtual void DebugParameter() = 0;
 
-		/// @brief デバッグ用レイピッキング
-		/// @param ray 
-		/// @param pickList 
-		virtual void DebugRayPicker(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList) = 0;
-
-		/// @brief Guizmo操作
-		/// @return 
-		virtual void DebugGuizmo(Camera3DStore* cameraStore) = 0;
-
 
 	protected:
 
@@ -158,11 +149,5 @@ namespace Engine
 
 		// ハンドル
 		Render3DHandle hRender3D_ = 0;
-
-
-	protected:
-
-		// デバッグデータ : Guizmo
-		DebugData::DebugGuizmoData guizmoData_{};
 	};
 }
