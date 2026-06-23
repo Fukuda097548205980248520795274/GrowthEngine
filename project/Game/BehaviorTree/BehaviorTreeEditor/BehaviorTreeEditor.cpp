@@ -340,3 +340,106 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
 	history_->SaveHistory(nodes_, links_, currentId_);
 	isDirty_ = true;
 }
+
+/// @brief ノードを自動配置する
+void BehaviorTreeEditor::AutoArrangeNodes()
+{
+	if (nodes_.empty()) return;
+
+	// 整頓前の状態を履歴に保存 (Undo対応)
+	history_->SaveHistory(nodes_, links_, currentId_);
+
+	// ノードマップの作成
+	std::unordered_map<int, EditorNode*> nodeMap;
+	for (auto& node : nodes_)
+	{
+		nodeMap[node.id] = &node;
+	}
+
+	// 親子関係の構築
+	std::unordered_map<int, std::vector<int>> childrenMap;
+	std::unordered_map<int, int> parentMap;
+
+	for (const auto& link : links_)
+	{
+		int parentId = -1;
+		int childId = -1;
+
+		for (const auto& node : nodes_)
+		{
+			if (node.outputPinId == link.startPinId) parentId = node.id;
+			if (node.inputPinId == link.endPinId) childId = node.id;
+		}
+
+		if (parentId != -1 && childId != -1)
+		{
+			childrenMap[parentId].push_back(childId);
+			parentMap[childId] = parentId;
+		}
+	}
+
+	// 兄弟ノードの実行順序を現在のY座標（上から下）でソート
+	for (auto& pair : childrenMap)
+	{
+		std::sort(pair.second.begin(), pair.second.end(), [&](int a, int b) {
+			return nodeMap[a]->pos.y < nodeMap[b]->pos.y;
+			});
+	}
+
+	// ルートノードの検索とソート
+	std::vector<int> rootNodes;
+	for (const auto& node : nodes_)
+	{
+		if (parentMap.find(node.id) == parentMap.end())
+		{
+			rootNodes.push_back(node.id);
+		}
+	}
+	std::sort(rootNodes.begin(), rootNodes.end(), [&](int a, int b) {
+		return nodeMap[a]->pos.y < nodeMap[b]->pos.y;
+		});
+
+	// 段組みレイアウトの計算
+	const float spacingX = 150.0f; // ノードの横の間隔
+	const float spacingY = 120.0f; // ノードの縦の間隔（1段の高さ）
+	float currentY = 0.0f;         // 全体で共有する現在のY座標
+
+	// 再帰的に配置を行う関数
+	std::function<void(int, int)> arrangeNode = [&](int nodeId, int depthX) {
+		EditorNode* node = nodeMap[nodeId];
+
+		// X座標は深さに応じて決定 
+		node->pos.x = depthX * spacingX;
+		node->pos.y = currentY;
+
+		// 座標を反映させるフラグ
+		node->needSetPos = true;
+
+		// 子ノードの配置
+		if (!childrenMap[nodeId].empty())
+		{
+			// 1番目の子ノードは、親と同じY座標(高さを変えない)で配置
+			arrangeNode(childrenMap[nodeId][0], depthX + 1);
+
+			// 2番目以降の子ノードは、Y座標を1段ずつ下げて配置
+			for (size_t i = 1; i < childrenMap[nodeId].size(); ++i)
+			{
+				currentY += spacingY;
+				arrangeNode(childrenMap[nodeId][i], depthX + 1);
+			}
+		}
+		};
+
+	// 各ツリーごとに配置を実行
+	for (size_t i = 0; i < rootNodes.size(); ++i)
+	{
+		if (i > 0)
+		{
+			currentY += spacingY; // 複数の独立したツリーがある場合は1段空ける
+		}
+		arrangeNode(rootNodes[i], 0); // 深さ0からスタート
+	}
+
+	// 変更があったのでフラグを立てる
+	isDirty_ = true;
+}

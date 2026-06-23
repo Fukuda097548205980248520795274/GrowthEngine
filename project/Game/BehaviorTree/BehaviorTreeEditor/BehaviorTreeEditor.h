@@ -141,6 +141,9 @@ private:
 	/// @brief 選択されているノードを削除する
 	void DeleteSelectedNodes();
 
+	/// @brief ノードを自動配置する
+	void AutoArrangeNodes();
+
 	/// @brief ファイルからツリー構造を読み込む
 	/// @param fileName 
 	void LoadTree(const std::string& fileName);

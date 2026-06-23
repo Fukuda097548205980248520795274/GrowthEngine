@@ -37,6 +37,12 @@ void BehaviorTreeEditor::DrawNodeTable()
 		ImGui::EndPopup();
 	}
 
+	ImGui::SameLine();
+	if (ImGui::Button("整頓"))
+	{
+		AutoArrangeNodes();
+	}
+
 
 	// ノードエディタのキャンバスを描画
 	DrawNodeEditorCanvas();
