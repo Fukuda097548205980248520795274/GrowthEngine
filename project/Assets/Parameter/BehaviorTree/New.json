@@ -398,7 +398,7 @@
             "action_type": 3,
             "avoid_data": {
                 "Distance": 1.0,
-                "Duration": 0.30000001192092896,
+                "Duration": 0.800000011920929,
                 "LocalDirection": [
                     1.0,
                     0.0

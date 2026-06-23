@@ -168,7 +168,7 @@ public:
 	/// @param pullPosition 
 	/// @param pushDirection 
 	/// @return 
-	virtual void OnParried(const Vector3& pullPosition, const Vector3& pushDirection);
+	virtual void OnParried(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower);
 
 	/// @brief 弾かれた時の処理
 	/// @param pushDirection 
@@ -320,6 +320,14 @@ public:
 	/// @brief ダメージリアクション中かどうか
 	/// @return 
 	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReactionState::None; }
+
+	/// @brief 地面に倒れているかどうか
+	/// @return 
+	bool IsGrondedDown() const;
+
+	/// @brief 吹き飛ばされてダウンしているかどうか
+	/// @return 
+	bool IsBlownDown() const;
 
 	/// @brief ダウン中かどうか
 	/// @return 
@@ -952,6 +960,8 @@ protected:
 	/// @brief 押し出し判定処理
 	void UpdatePushOut();
 
+	// 押し出し判定の半径
+	static constexpr float kPushOutRadius = 0.25f;
 
 
 public:
