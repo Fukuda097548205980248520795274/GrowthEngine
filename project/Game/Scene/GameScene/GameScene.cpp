@@ -612,6 +612,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 
 		// ターゲットの方向ベクトルを計算する
 		Vector3 dir = targetPos - pivotData->center;
+		if (target->IsBlownAway() || target->IsBlownFalling())dir.y = 0.0f;
 		dir.Normalize();
 
 		// ターゲットの方向からピボットの回転角度を計算する

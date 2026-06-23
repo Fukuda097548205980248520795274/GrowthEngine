@@ -7,7 +7,7 @@
 void Game::Initialize()
 {
 	// シーンマネージャの生成
-	sceneManager_ = std::make_unique<SceneManager>("Title");
+	sceneManager_ = std::make_unique<SceneManager>("Game");
 }
 
 /// @brief 更新処理
