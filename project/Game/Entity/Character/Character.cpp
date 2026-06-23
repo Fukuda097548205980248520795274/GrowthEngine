@@ -228,6 +228,12 @@ void Character::Update()
 				UpdateStyleChange(dt);
 			}
 
+			// ダッシュ中に攻撃をした場合は、ダッシュを解除する
+			if (IsAttack())
+			{
+				isDash_ = false;
+			}
+
 			// 押し出し処理
 			UpdatePushOut();
 
@@ -289,7 +295,7 @@ void Character::Update()
 				if (dashTimer_ <= 0.0f)
 				{
 					EffectManager::GetInstance()->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
-					dashTimer_ = 0.25f;
+					dashTimer_ = 0.15f;
 				}
 			}
 
@@ -779,7 +785,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			isHitDamage_ = true;
 
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker->IsPlayer())
+			if (attacker && attacker->IsPlayer())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 
 			// プレイヤーがダメージを受けた場合は、スローモーションを開始する

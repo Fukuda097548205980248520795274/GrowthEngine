@@ -16,6 +16,9 @@ public:
 
 		// 攻撃の最大回数
 		int attackMaxCount = 0;
+
+		/// @brief スプライト
+		Sprite* sprite = nullptr;
 	};
 
 
@@ -27,6 +30,8 @@ public:
 
 	/// @brief 更新処理
 	void Update() override;
+
+
 
 
 private:

@@ -76,7 +76,7 @@ void GameScene::Initialize()
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
 	// 試験的な立方体の生成と初期化
-	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/uvChecker.png"), 1000, "Trial_Cube");
+	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 1000, "Trial_Cube");
 
 
 	// コンマスプライトの生成と初期化
@@ -84,6 +84,10 @@ void GameScene::Initialize()
 
 	// 数字スプライトの生成と初期化
 	numbersSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/numbers.png"), 100, "Numbers_Sprite");
+
+	// 攻撃ボタンのスプライトの生成と初期化
+	attackButtonSprite = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/attack_button.png"), "Attack_Button_Sprite");
+	attackButtonSprite->param_->texture.anchor = Vector2(0.0f, 1.0f);
 
 
 	
@@ -429,6 +433,7 @@ AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& 
 {
 	AttackTutorial::InitData tutorialInitData = initData;
 	tutorialInitData.player = player_.get();
+	tutorialInitData.sprite = attackButtonSprite.get();
 
 	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
 	newTutorial->Initialize(tutorialInitData);

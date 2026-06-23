@@ -1,41 +1,435 @@
 {
     "links": [
         {
-            "end": 5,
-            "id": 6,
-            "start": 3
+            "end": 16,
+            "id": 17,
+            "start": 11
+        },
+        {
+            "end": 19,
+            "id": 20,
+            "start": 11
+        },
+        {
+            "end": 30,
+            "id": 31,
+            "start": 27
+        },
+        {
+            "end": 33,
+            "id": 34,
+            "start": 27
+        },
+        {
+            "end": 36,
+            "id": 40,
+            "start": 27
+        },
+        {
+            "end": 38,
+            "id": 41,
+            "start": 27
+        },
+        {
+            "end": 43,
+            "id": 45,
+            "start": 27
+        },
+        {
+            "end": 47,
+            "id": 48,
+            "start": 27
+        },
+        {
+            "end": 50,
+            "id": 52,
+            "start": 23
+        },
+        {
+            "end": 26,
+            "id": 53,
+            "start": 51
+        },
+        {
+            "end": 55,
+            "id": 57,
+            "start": 51
+        },
+        {
+            "end": 59,
+            "id": 60,
+            "start": 56
+        },
+        {
+            "end": 65,
+            "id": 66,
+            "start": 56
+        },
+        {
+            "end": 68,
+            "id": 69,
+            "start": 56
+        },
+        {
+            "end": 71,
+            "id": 73,
+            "start": 23
+        },
+        {
+            "end": 10,
+            "id": 74,
+            "start": 72
+        },
+        {
+            "end": 79,
+            "id": 85,
+            "start": 77
+        },
+        {
+            "end": 87,
+            "id": 89,
+            "start": 77
+        },
+        {
+            "end": 76,
+            "id": 90,
+            "start": 72
+        },
+        {
+            "end": 92,
+            "id": 93,
+            "start": 77
+        },
+        {
+            "end": 95,
+            "id": 96,
+            "start": 77
         }
     ],
     "nodes": [
         {
-            "id": 1,
-            "input_pin": 2,
-            "is_collapsed": false,
+            "id": 9,
+            "input_pin": 10,
+            "is_collapsed": true,
             "name": "",
-            "output_pin": 3,
+            "output_pin": 11,
             "pos": [
-                115.0,
-                182.0
+                330.0,
+                364.0
             ],
-            "type": 0
+            "type": 3
         },
         {
             "action_type": 4,
             "approach_target_move_data": {
                 "isDash": false,
                 "moveSpeed": 3.0,
-                "stopDistance": 1.0
+                "stopDistance": 4.0
             },
-            "id": 4,
-            "input_pin": 5,
+            "id": 15,
+            "input_pin": 16,
             "is_collapsed": false,
-            "name": "aaaasaaa",
+            "name": "ターゲットを追跡",
             "output_pin": -1,
             "pos": [
-                353.0,
-                202.0
+                455.0,
+                422.0
             ],
             "type": 5
+        },
+        {
+            "condition_type": 15,
+            "id": 18,
+            "input_pin": 19,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": -1,
+            "pos": [
+                454.0,
+                316.0
+            ],
+            "type": 4
+        },
+        {
+            "id": 21,
+            "input_pin": 22,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 23,
+            "pos": [
+                -34.0,
+                65.0
+            ],
+            "type": 2
+        },
+        {
+            "id": 25,
+            "input_pin": 26,
+            "is_collapsed": false,
+            "name": "一連の攻撃",
+            "output_pin": 27,
+            "pos": [
+                293.0,
+                85.0
+            ],
+            "type": 1
+        },
+        {
+            "action_type": 9,
+            "id": 29,
+            "input_pin": 30,
+            "is_collapsed": false,
+            "name": "リクエスト",
+            "output_pin": -1,
+            "pos": [
+                548.0,
+                -160.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 10,
+            "id": 32,
+            "input_pin": 33,
+            "is_collapsed": false,
+            "name": "トークン開放",
+            "output_pin": -1,
+            "pos": [
+                591.0,
+                365.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 7,
+            "id": 35,
+            "input_pin": 36,
+            "is_collapsed": false,
+            "name": "攻撃開始",
+            "output_pin": -1,
+            "pos": [
+                540.0,
+                -71.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 8,
+            "id": 37,
+            "input_pin": 38,
+            "is_collapsed": false,
+            "name": "攻撃終了",
+            "output_pin": 39,
+            "pos": [
+                574.0,
+                250.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 4,
+            "approach_target_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 1.0
+            },
+            "id": 42,
+            "input_pin": 43,
+            "is_collapsed": false,
+            "name": "ターゲットに走る",
+            "output_pin": 44,
+            "pos": [
+                536.0,
+                41.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 0,
+            "combo_data": {
+                "attackTime": 0.800000011920929,
+                "hitDefinitions": [
+                    {
+                        "damage": 1,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "jointType": 9,
+                        "knockback": 0.800000011920929,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
+                ],
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 4.0,
+                "moveStartTime": 0.0
+            },
+            "id": 46,
+            "input_pin": 47,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "name": "パンチ",
+            "output_pin": -1,
+            "pos": [
+                592.0,
+                149.0
+            ],
+            "type": 5
+        },
+        {
+            "id": 49,
+            "input_pin": 50,
+            "is_collapsed": true,
+            "name": "",
+            "output_pin": 51,
+            "pos": [
+                134.0,
+                4.0
+            ],
+            "type": 1
+        },
+        {
+            "id": 54,
+            "input_pin": 55,
+            "is_collapsed": true,
+            "name": "攻撃前の判定",
+            "output_pin": 56,
+            "pos": [
+                289.0,
+                -48.0
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 3,
+            "id": 58,
+            "input_pin": 59,
+            "is_collapsed": false,
+            "name": "ターゲットが立っているとき",
+            "output_pin": -1,
+            "pos": [
+                452.0,
+                -68.0
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 12,
+            "id": 64,
+            "input_pin": 65,
+            "is_collapsed": false,
+            "name": "自分が一番ターゲットに近いかどうか",
+            "output_pin": -1,
+            "pos": [
+                454.0,
+                43.0
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 1,
+            "id": 67,
+            "input_pin": 68,
+            "is_collapsed": false,
+            "name": "ターゲットがいるかどうか",
+            "output_pin": -1,
+            "pos": [
+                457.4805603027344,
+                -164.72267150878906
+            ],
+            "type": 4
+        },
+        {
+            "id": 70,
+            "input_pin": 71,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 72,
+            "pos": [
+                128.0,
+                259.0
+            ],
+            "type": 2
+        },
+        {
+            "id": 75,
+            "input_pin": 76,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 77,
+            "pos": [
+                339.0,
+                113.0
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 15,
+            "id": 78,
+            "input_pin": 79,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 80,
+            "pos": [
+                526.0,
+                58.0
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 8,
+            "id": 86,
+            "input_pin": 87,
+            "is_collapsed": false,
+            "name": "相手が攻撃状態",
+            "output_pin": 88,
+            "pos": [
+                519.0,
+                159.0
+            ],
+            "type": 4
+        },
+        {
+            "action_type": 3,
+            "avoid_data": {
+                "Distance": 1.0,
+                "Duration": 0.30000001192092896,
+                "LocalDirection": [
+                    1.0,
+                    0.0
+                ]
+            },
+            "id": 91,
+            "input_pin": 92,
+            "is_collapsed": false,
+            "name": "回避",
+            "output_pin": -1,
+            "pos": [
+                549.0,
+                355.0
+            ],
+            "type": 5
+        },
+        {
+            "condition_param": {
+                "distance_to_target": 3.0
+            },
+            "condition_type": 6,
+            "id": 94,
+            "input_pin": 95,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": -1,
+            "pos": [
+                552.0,
+                257.0
+            ],
+            "type": 4
         }
     ]
 }

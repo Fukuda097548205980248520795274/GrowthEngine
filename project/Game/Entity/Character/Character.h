@@ -589,7 +589,7 @@ protected:
 	/// @brief ダッシュフラグ
 	bool isDash_ = false;
 
-	float dashTimer_ = 0.4f;
+	float dashTimer_ = 0.1f;
 
 
 protected:
@@ -686,7 +686,7 @@ protected:
 	float guardActiveTimer_ = 0.0f;
 
 	// ジャストガード（受け流し）の受付時間
-	const float kJustGuardTime = 0.35f;
+	const float kJustGuardTime = 0.2f;
 
 
 private:

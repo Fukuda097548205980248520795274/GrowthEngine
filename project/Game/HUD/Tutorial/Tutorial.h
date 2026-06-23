@@ -64,6 +64,12 @@ protected:
 
 protected:
 
+	/// @brief スプライト
+	Sprite* sprite_ = nullptr;
+
+
+protected:
+
 	// 状態
 	State state_ = State::Practice;
 };

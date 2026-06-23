@@ -223,6 +223,9 @@ private:
 	/// @brief 数字スプライト
 	std::unique_ptr<PrefabBaseSprite> numbersSprite_ = nullptr;
 
+	/// @brief 攻撃ボタンのスプライト
+	std::unique_ptr<Sprite> attackButtonSprite = nullptr;
+
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
