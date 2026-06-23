@@ -650,6 +650,7 @@ void StageEditorUI::Play(bool& isPlaying)
 	isPlaying = true;
 	Entity::SetUpdateEnabled(true); // すべての実体の更新を再開する
 	StageObject::SetUpdateEnabled(true); // すべてのステージオブジェクトの更新を再開する
+	HUD::SetUpdateEnabled(true); // HUDの更新も再開する
 }
 
 /// @brief プレイモードを終了する
@@ -658,6 +659,7 @@ void StageEditorUI::Stop(bool& isPlaying)
 	isPlaying = false;
 	Entity::SetUpdateEnabled(false); // すべての実体の更新を停止する
 	StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
+	HUD::SetUpdateEnabled(false); // HUDの更新も停止する
 }
 
 

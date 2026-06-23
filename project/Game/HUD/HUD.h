@@ -72,8 +72,17 @@ protected:
 
 public:
 
-
 	/// @brief デバッグ用描画処理
 	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty){}
+
+	/// @brief HUDの更新を有効にするかどうかを設定する
+	/// @param enabled 
+	static void SetUpdateEnabled(bool enabled) { updateEnabled_ = enabled; }
+
+
+protected:
+
+	// HUDの更新を有効にするかどうか
+	static bool updateEnabled_;
 };
 

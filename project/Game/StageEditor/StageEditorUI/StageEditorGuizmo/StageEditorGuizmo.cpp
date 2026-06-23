@@ -154,139 +154,108 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 	Matrix4x4 viewMatrix = engine_->GetCamera3DView();
 	Matrix4x4 projectionMatrix = engine_->GetCamera3DProjection();
 
-	for(auto& selectedItem : selectedItems)
+	// 1. 選択されているすべての要素から「中心座標（重心）」を計算する
+	Vector3 center = { 0.0f, 0.0f, 0.0f };
+	int vertexCount = 0;
+
+	for (const auto& selectedItem : selectedItems)
 	{
-		// 選択されているポリゴンを取得
 		NavPolygon* poly = navMesh->GetMutablePolygon(selectedItem.polygonId);
 		if (!poly) continue;
 
-		// 選択されている要素の頂点を取得
-		std::vector<Vector3> oldVertices;
-		std::vector<Vector3> newVertices;
-
 		if (selectionMode == StageEditorNavMeshController::SelectionMode::Vertex)
 		{
-			// 選択されている頂点を取得
-			Vector3 position = poly->vertices[selectedItem.itemIndex];
-			oldVertices.push_back(poly->vertices[selectedItem.itemIndex]);
-
-			// ワールド行列を頂点の位置に設定
-			Matrix4x4 worldMatrix = Make3DTranslateMatrix4x4(position);
-
-			// ギズモの描画と操作
-			ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-			// ギズモを使ってオブジェクトを操作中かどうかをチェック
-			if (ImGuizmo::IsUsing() && useNavMeshSnap_)
-			{
-				float translation[3];
-				float rotation[3];
-				float scale[3];
-
-				// ワールド行列からSRT成分を抽出
-				ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
-				Vector3 movePosition = Vector3(translation[0], translation[1], translation[2]);
-
-				// 移動成分抽出
-				newVertices.push_back(movePosition);
-			}
-			else
-			{
-				newVertices.push_back(poly->vertices[selectedItem.itemIndex]);
-			}
-		}
+			center = center + poly->vertices[selectedItem.itemIndex];
+			vertexCount++;
+		} 
 		else if (selectionMode == StageEditorNavMeshController::SelectionMode::Edge)
 		{
-			// 選択されている辺の両端の頂点を取得
-			Vector3 position = (poly->vertices[(selectedItem.itemIndex + 1) % 4] - poly->vertices[selectedItem.itemIndex]) / 2.0f + poly->vertices[selectedItem.itemIndex];
-			oldVertices.push_back(poly->vertices[selectedItem.itemIndex]);
-			oldVertices.push_back(poly->vertices[(selectedItem.itemIndex + 1) % 4]);
-
-			// ワールド行列を頂点の位置に設定
-			Matrix4x4 worldMatrix = Make3DTranslateMatrix4x4(position);
-
-			// ギズモの描画と操作
-			ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
-
-			// ギズモを使ってオブジェクトを操作中かどうかをチェック
-			if (ImGuizmo::IsUsing() && useNavMeshSnap_)
-			{
-				float translation[3];
-				float rotation[3];
-				float scale[3];
-
-				// ワールド行列からSRT成分を抽出
-				ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
-				Vector3 move = Vector3(translation[0], translation[1], translation[2]) - position;
-
-				// 移動成分抽出
-				newVertices.push_back(oldVertices[0] + move);
-				newVertices.push_back(oldVertices[1] + move);
-			}
-			else
-			{
-				newVertices.push_back(oldVertices[0]);
-				newVertices.push_back(oldVertices[1]);
-			}
-		}
+			center = center + poly->vertices[selectedItem.itemIndex];
+			center = center + poly->vertices[(selectedItem.itemIndex + 1) % 4];
+			vertexCount += 2;
+		} 
 		else if (selectionMode == StageEditorNavMeshController::SelectionMode::Polygon)
 		{
-			// 面の4頂点すべてを保存
 			for (int i = 0; i < 4; ++i)
 			{
-				oldVertices.push_back(poly->vertices[i]);
+				center = center + poly->vertices[i];
+				vertexCount++;
 			}
+		}
+	}
 
-			// 面の中心座標（4頂点の平均）を計算
-			Vector3 center = (poly->vertices[0] + poly->vertices[1] + poly->vertices[2] + poly->vertices[3]) / 4.0f;
+	if (vertexCount > 0)
+	{
+		center = center / static_cast<float>(vertexCount);
+	}
 
-			// ワールド行列を面の中心位置に設定
-			Matrix4x4 worldMatrix = Make3DTranslateMatrix4x4(center);
+	// ワールド行列を選択要素の中心位置に設定
+	Matrix4x4 worldMatrix = Make3DTranslateMatrix4x4(center);
 
-			// ギズモの描画と操作
-			ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
+	// 2. ギズモの描画と操作（ループの外で1回だけ呼び出す）
+	ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
-			// ギズモを使ってオブジェクトを操作中かどうかをチェック
-			if (ImGuizmo::IsUsing() && useNavMeshSnap_)
+	// ギズモを使ってオブジェクトを操作中かどうかをチェック
+	if (ImGuizmo::IsUsing() && useNavMeshSnap_)
+	{
+		float translation[3];
+		float rotation[3];
+		float scale[3];
+
+		// ワールド行列からSRT成分を抽出
+		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
+
+		// 移動量（現在のギズモ座標 - 元の中心座標）を計算
+		Vector3 move = Vector3(translation[0], translation[1], translation[2]) - center;
+
+		// 変更前の頂点と変更後の頂点をペアで保持するための構造体リスト
+		struct VertexMove {
+			Vector3 oldPos;
+			Vector3 newPos;
+		};
+		std::vector<VertexMove> vertexMoves;
+
+		// 3. 各要素の頂点に対して移動量を加算し、リストに記録する
+		for (const auto& selectedItem : selectedItems)
+		{
+			NavPolygon* poly = navMesh->GetMutablePolygon(selectedItem.polygonId);
+			if (!poly) continue;
+
+			if (selectionMode == StageEditorNavMeshController::SelectionMode::Vertex)
 			{
-				float translation[3];
-				float rotation[3];
-				float scale[3];
-
-				// ワールド行列からSRT成分を抽出
-				ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
-
-				// 移動量（現在のギズモ座標 - 元の中心座標）を計算
-				Vector3 move = Vector3(translation[0], translation[1], translation[2]) - center;
-
-				// 4つの頂点すべてに移動量を加算
+				Vector3 oldPos = poly->vertices[selectedItem.itemIndex];
+				vertexMoves.push_back({ oldPos, oldPos + move });
+			}
+			else if (selectionMode == StageEditorNavMeshController::SelectionMode::Edge)
+			{
+				Vector3 oldPos0 = poly->vertices[selectedItem.itemIndex];
+				Vector3 oldPos1 = poly->vertices[(selectedItem.itemIndex + 1) % 4];
+				vertexMoves.push_back({ oldPos0, oldPos0 + move });
+				vertexMoves.push_back({ oldPos1, oldPos1 + move });
+			} 
+			else if (selectionMode == StageEditorNavMeshController::SelectionMode::Polygon)
+			{
 				for (int i = 0; i < 4; ++i)
 				{
-					newVertices.push_back(oldVertices[i] + move);
-				}
-			}
-			else
-			{
-				// 操作していない場合は元の頂点座標を維持
-				for (int i = 0; i < 4; ++i)
-				{
-					newVertices.push_back(oldVertices[i]);
+					Vector3 oldPos = poly->vertices[i];
+					vertexMoves.push_back({ oldPos, oldPos + move });
 				}
 			}
 		}
-
 
 		// --- 共有頂点の同期更新 ---
 		for (auto& poly : navMesh->GetMutablePolygons())
 		{
 			for (int i = 0; i < 4; ++i)
 			{
-				for (size_t vIdx = 0; vIdx < oldVertices.size(); ++vIdx)
+				for (const auto& vm : vertexMoves)
 				{
-					Vector3 diff = poly.vertices[i] - oldVertices[vIdx];
+					Vector3 diff = poly.vertices[i] - vm.oldPos;
+					// 浮動小数点の誤差を考慮して同じ頂点か判定
 					if ((diff.x * diff.x + diff.y * diff.y + diff.z * diff.z) < 0.01f)
 					{
-						poly.vertices[i] = newVertices[vIdx];
+						poly.vertices[i] = vm.newPos;
+						break; // 一度更新したら次の頂点へ（重複更新を防ぐ）
 					}
 				}
 			}
@@ -300,6 +269,6 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 		isDirty = true;
 	}
 
-	// ギズモを操作している間は、スナップ機能を有効にする例（オプション）
+	// ギズモを操作している間は、スナップ機能を有効にする（オプション）
 	useNavMeshSnap_ = ImGuizmo::IsUsing();
 }

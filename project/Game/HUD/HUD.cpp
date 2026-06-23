@@ -1,5 +1,8 @@
 #include "HUD.h"
 
+// ステージオブジェクトの更新を有効にするかどうか
+bool HUD::updateEnabled_ = false;
+
 /// @brief コンストラクタ
 HUD::HUD()
 {

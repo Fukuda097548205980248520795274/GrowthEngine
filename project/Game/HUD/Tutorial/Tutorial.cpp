@@ -3,6 +3,9 @@
 /// @brief 更新処理
 void Tutorial::Update()
 {
+	// 更新が無効な場合は処理しない
+	if (!updateEnabled_)return;
+
 	if (state_ == State::Practice)
 	{
 		// タイマーを減らす

@@ -5,15 +5,12 @@
 /// @param initData 
 void AttackTutorial::Initialize(const InitData& initData)
 {
-	// プレイヤーがいることを確認
-	assert(initData.player && "プレイヤーがいません");
-
 	// 練習時間
 	practiceTime_ = initData.practiceTime;
 	practiceTimer_ = practiceTime_;
 
 	// プレイヤー
-	player_ = initData.player;
+	if(initData.player)player_ = initData.player;
 
 	// 攻撃の最大回数
 	attackMaxCount_ = initData.attackMaxCount;
@@ -25,6 +22,16 @@ void AttackTutorial::Initialize(const InitData& initData)
 /// @brief 更新処理
 void AttackTutorial::Update()
 {
+	// 更新が無効な場合は処理しない
+	if (!updateEnabled_)return;
+
+	// プレイヤーが存在しない場合は終了する
+	if (!player_)
+	{
+		Delete();
+		return;
+	}
+
 	if (state_ == State::Practice)
 	{
 		// 攻撃の回数を更新
