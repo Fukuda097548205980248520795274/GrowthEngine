@@ -761,7 +761,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		currentDamageReaction_ = DamageReactionState::BlownFallingBack;
 		SetAnimation(hDownLyingMotion_, true, true);
 
-		velocityY_ = 3.0f;
+		// 少し上に飛ばす
+		velocityY_ = 1.0f;
 		
 		isHitDamage_ = true;
 
@@ -778,7 +779,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		currentDamageReaction_ = DamageReactionState::BlownFallingFront;
 		SetAnimation(hDownLyingMotion_, true, true);
 
-		velocityY_ = 3.0f;
+		// 少し上に飛ばす
+		velocityY_ = 1.0f;
 
 		isHitDamage_ = true;
 
