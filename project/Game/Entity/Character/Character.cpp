@@ -712,6 +712,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 攻撃者が攻撃をヒットさせたことを通知する
 	if (attacker)attacker->SetHitAttack(true);
 
+	// 飛ばされているときに、ダメージを受けたかどうか
+	bool isBlownHit = IsBlownAway() && IsBlownFalling();
+
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
 	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
 	{
@@ -726,7 +729,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isHitDamage_ = true;
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker->IsPlayer())
+		if (attacker && attacker->IsPlayer())
 			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 
 		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -746,7 +749,41 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isHitDamage_ = true;
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker->IsPlayer())
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+	}
+	else if (currentDamageReaction_ == DamageReactionState::BlownAwayBack || currentDamageReaction_ == DamageReactionState::BlownFallingBack)
+	{
+		currentDamageReaction_ = DamageReactionState::BlownFallingBack;
+		SetAnimation(hDownLyingMotion_, true, true);
+
+		velocityY_ = 3.0f;
+		
+		isHitDamage_ = true;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+	}
+	else if (currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownFallingFront)
+	{
+		currentDamageReaction_ = DamageReactionState::BlownFallingFront;
+		SetAnimation(hDownLyingMotion_, true, true);
+
+		velocityY_ = 3.0f;
+
+		isHitDamage_ = true;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
 			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 
 		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -770,7 +807,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
@@ -806,7 +843,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
@@ -821,7 +858,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			isHitDamage_ = true;
 
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker->IsPlayer())
+			if (attacker && attacker->IsPlayer())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
 
 			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -857,7 +894,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
 				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
 				EffectManager::GetInstance()->Impact001(*hitPosition);
 				EffectManager::GetInstance()->Impact002(*hitPosition);
 				EffectManager::GetInstance()->Impact003(*hitPosition);
@@ -875,7 +912,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			shake_->StartShake(0.08f, 0.2f);
 
 			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if(attacker->IsPlayer())
+			if(attacker && attacker->IsPlayer())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
 
 			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -892,7 +929,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	int finalDamage = damage;
 
 	// 武器の攻撃力を考慮する
-	if (attacker != nullptr && attacker->HasWeapon())
+	if (attacker && attacker->HasWeapon())
 	{
 		finalDamage = static_cast<int>(static_cast<float>(damage) * attacker->GetWeapon()->GetAttackPower());
 
@@ -906,7 +943,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
-		knockbackVelocity_ = knockDirection.Normalize() * (knockback * 10.0f);
+		if(!isBlownHit)knockbackVelocity_ = knockDirection.Normalize() * knockback;
 	}
 
 	// 死亡判定
