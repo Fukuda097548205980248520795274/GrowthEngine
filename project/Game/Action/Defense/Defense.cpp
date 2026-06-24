@@ -1,15 +1,14 @@
-#include "Guard.h"
+#include "Defense.h"
 #include "Entity/Character/Character.h"
 
-// Guard.cpp のイメージ
-void Guard::Exec()
+void Defense::Exec()
 {
     Action::Exec();
     owner_->SetGuard(true); // キャラクターを防御状態にする
     guardTimer_ = 0.0f;
 }
 
-void Guard::Update()
+void Defense::Update()
 {
     guardTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
@@ -21,7 +20,7 @@ void Guard::Update()
     }
 }
 
-void Guard::Exit()
+void Defense::Exit()
 {
     owner_->SetGuard(false); // 念のため解除
     Action::Exit();

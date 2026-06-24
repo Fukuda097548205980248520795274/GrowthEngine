@@ -1018,9 +1018,6 @@
     <Filter Include="Game\Scene\TitleScene">
       <UniqueIdentifier>{9954f7e1-9515-42b7-94fc-9140e1f0f3f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Action\Guard">
-      <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Math\Shape">
       <UniqueIdentifier>{bc142630-e615-470c-b7ba-b83bbc4df33c}</UniqueIdentifier>
     </Filter>
@@ -1293,6 +1290,18 @@
     </Filter>
     <Filter Include="Game\EffectManager\Effect\DeflectEffect">
       <UniqueIdentifier>{df746e58-6f19-40c4-8cb8-9519b9082dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Turn">
+      <UniqueIdentifier>{17e744cc-5a08-4847-aed8-22632ac9c377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Defence">
+      <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Defence\Guard">
+      <UniqueIdentifier>{7e83fb75-283e-48b2-9512-ed55c15ff934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Defence\Parry">
+      <UniqueIdentifier>{354b9aaf-2d11-4911-ae58-8e5951e3d613}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2088,8 +2097,8 @@
     <ClCompile Include="Game\Scene\TitleScene\TitleScene.cpp">
       <Filter>Game\Scene\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Action\Guard\Guard.cpp">
-      <Filter>Game\Action\Guard</Filter>
+    <ClCompile Include="Game\Action\Defense\Defense.cpp">
+      <Filter>Game\Action\Defence</Filter>
     </ClCompile>
     <ClCompile Include="Game\Entity\Weapon\Weapon.cpp">
       <Filter>Game\Entity\Weapon</Filter>
@@ -2343,8 +2352,14 @@
     <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp">
       <Filter>Engine\Include\Application\Trail3D</Filter>
     </ClCompile>
-    <ClCompile Include="Game\EffectManager\Effect\DeflectEffect\DeflectEffect.cpp">
+    <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Defense\Guard\Guard.cpp">
+      <Filter>Game\Action\Defence\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Defense\Parry\Parry.cpp">
+      <Filter>Game\Action\Defence\Parry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3251,8 +3266,8 @@
     <ClInclude Include="Game\Scene\TitleScene\TitleScene.h">
       <Filter>Game\Scene\TitleScene</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Action\Guard\Guard.h">
-      <Filter>Game\Action\Guard</Filter>
+    <ClInclude Include="Game\Action\Defense\Defense.h">
+      <Filter>Game\Action\Defence</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Shape\Shape.h">
       <Filter>Engine\Include\Math\Shape</Filter>
@@ -3512,8 +3527,14 @@
     <ClInclude Include="Engine\Application\Trail3D\Trail3D.h">
       <Filter>Engine\Include\Application\Trail3D</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EffectManager\Effect\DeflectEffect\DeflectEffect.h">
+    <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Defense\Guard\Guard.h">
+      <Filter>Game\Action\Defence\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Defense\Parry\Parry.h">
+      <Filter>Game\Action\Defence\Parry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

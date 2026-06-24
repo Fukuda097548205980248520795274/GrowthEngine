@@ -12,25 +12,6 @@
 #include "StageEditor/StageData/StageData.h"
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
-namespace
-{
-	/// @brief カメラ基準の入力方向をワールド方向へ変換する
-	/// @param cameraLocalDirection
-	/// @param cameraYaw
-	/// @return
-	Vector2 ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDirection, float cameraYaw)
-	{
-		// カメラ前方向(XZ平面)
-		const Vector2 forward = Vector2(std::sin(cameraYaw), std::cos(cameraYaw));
-
-		// カメラ右方向(XZ平面)
-		const Vector2 right = Vector2(forward.y, -forward.x);
-
-		// カメラ基準入力をワールド方向へ変換する
-		return right * cameraLocalDirection.x + forward * cameraLocalDirection.y;
-	}
-}
-
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 
@@ -247,48 +228,15 @@ void Character::Update()
 			if (model_)model_->param_->modelTransform.translate = shake_->GetShakeOffset();
 			shake_->Update(dt);
 
-			// 着地判定の位置を更新する
-			if (landingCollision_)
-			{
-				landingCollision_->param_->diff = GetWorldPosition() - landingCollision_->param_->start;
-				landingCollision_->param_->start = GetWorldPosition();
-			}
+			// 当たり判定の更新
+			UpdateCollisionPosition(landingCollision_);
+			UpdateCollisionPosition(wallTouchCollision_);
+			UpdateCollisionPosition(eventTriggerCollision_);
+			UpdateHurtbox(hurtboxHead_, JointType::Head);
+			UpdateHurtbox(hurtboxChest_, JointType::Chest);
+			UpdateHurtbox(hurtboxRoot_, JointType::Root);
 
-			// 壁接触の当たり判定の位置を更新する
-			if (wallTouchCollision_)
-			{
-				wallTouchCollision_->param_->diff = GetWorldPosition() - wallTouchCollision_->param_->start;
-				wallTouchCollision_->param_->start = GetWorldPosition();
-			}
-
-			// イベントトリガーの当たり判定の位置を更新する
-			if (eventTriggerCollision_)
-			{
-				eventTriggerCollision_->param_->diff = GetWorldPosition() - eventTriggerCollision_->param_->start;
-				eventTriggerCollision_->param_->start = GetWorldPosition();
-			}
-
-			if (hurtboxHead_.collider_)
-			{
-				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxHead_.collider_);
-				collider->param_->radius = 0.25f;
-				collider->param_->center = GetBonePosition(JointType::Head);
-			}
-
-			if (hurtboxChest_.collider_)
-			{
-				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxChest_.collider_);
-				collider->param_->radius = 0.25f;
-				collider->param_->center = GetBonePosition(JointType::Chest);
-			}
-
-			if (hurtboxRoot_.collider_)
-			{
-				auto collider = static_cast<Collision3DInstanceSphere*>(hurtboxRoot_.collider_);
-				collider->param_->radius = 0.25f;
-				collider->param_->center = GetBonePosition(JointType::Root);
-			}
-
+			// ダッシュ中のエフェクト更新
 			if (isDash_ && !isStance_)
 			{
 				dashTimer_ -= dt;
@@ -356,6 +304,10 @@ void Character::Update()
 	// ノックバックの更新
 	if (knockbackVelocity_.Length() > 0.01f)
 	{
+		// 攻撃中の場合は、ノックバックを無効化する
+		if (IsAttack())
+			knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
+
 		// ノックバックの移動
 		SetPosition(GetPosition() + knockbackVelocity_ * dt);
 		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, dt);
@@ -390,8 +342,8 @@ void Character::Update()
 			case DamageReactionState::HeavyStaggerRight:
 			case DamageReactionState::DownGettingUpFront:
 			case DamageReactionState::DownGettingUpBack:
-			case DamageReactionState::Parried:
-			case DamageReactionState::Deflect:
+			case DamageReactionState::Deflected:
+			case DamageReactionState::Repelled:
 				currentDamageReaction_ = DamageReactionState::None;
 				break;
 
@@ -520,7 +472,12 @@ void Character::Update()
 	// ロックオンしているターゲットの方向を向く処理
 	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated() && !IsAttack())
 	{
+		// ターゲットの方向を向く
 		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
+		if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
+			toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
+
+		// Y軸の回転のみを考慮するため、Y成分を0にする
 		toTarget.y = 0.0f;
 
 		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
@@ -535,7 +492,12 @@ void Character::Update()
 		// プレイヤーは攻撃中もターゲットの方向を向くようにする
 		if (IsPlayer() && IsAttack())
 		{
+			// ターゲットの方向を向く
 			Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
+			if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
+				toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
+
+			// Y軸の回転のみを考慮するため、Y成分を0にする
 			toTarget.y = 0.0f;
 
 			// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
@@ -619,8 +581,8 @@ void Character::StartUpdate()
 	isGuardHit_ = false;
 
 	// 弾き成功のフラグを更新する
-	isPrevHitDeflect_ = isHitDeflect_;
-	isHitDeflect_ = false;
+	isPrevHitRepel_ = isHitRepel_;
+	isHitRepel_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -652,26 +614,26 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canParry_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
 			// 受け流す
-			ExecuteParry(attacker);
+			ExecuteDeflect(attacker);
 
 			// 受け流し成功モーションを設定
-			// SetAnimation(hParrySuccessMotion_, false, false);
+			// SetAnimation(hDeflectSuccessMotion_, false, false);
 
 			// ダメージ無効
 			return false;
 		}
 
 		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
-		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canRepel_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
 			// 受け流す
-			ExecuteDeflect(attacker, hitPosition);
+			ExecuteRepel(attacker, hitPosition);
 
 			// 弾き成功モーションを設定
-			// SetAnimation(hDeflectSuccessMotion_, false, false);
+			// SetAnimation(hRepelSuccessMotion_, false, false);
 			
 			// ダメージ無効
 			return false;
@@ -687,9 +649,11 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			targetRotationY_ = std::atan2(dirToAttacker.x, dirToAttacker.z);
 		}
 
+		knockbackVelocity_ = -dirToAttacker * 2.0f;
+
+		// ガードリアクションのフラグを立てる
 		isGuardReaction_ = true;
 		guardReactionTimer_ = 0.0f;
-		knockbackVelocity_ = -dirToAttacker * 2.0f;
 
 		// ガードse
 		soundManager_->SeGuard();
@@ -713,7 +677,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	if (attacker)attacker->SetHitAttack(true);
 
 	// 飛ばされているときに、ダメージを受けたかどうか
-	bool isBlownHit = IsBlownAway() && IsBlownFalling();
+	bool isBlownHit = IsBlownAway() || IsBlownFalling();
 
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
 	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
@@ -761,10 +725,28 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		currentDamageReaction_ = DamageReactionState::BlownFallingBack;
 		SetAnimation(hDownLyingMotion_, true, true);
 
-		// 少し上に飛ばす
-		velocityY_ = 1.0f;
+		// 落下速度をリセットする
+		velocityY_ = 0.0f;
 		
+		// ダメージを受けたことを通知する
 		isHitDamage_ = true;
+
+		// 重い怯みのSEを再生する
+		soundManager_->SeHeavyDamage();
+
+		// エフェクトを再生する
+		if (hitPosition)
+		{
+			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			EffectManager::GetInstance()->Impact001(*hitPosition);
+			EffectManager::GetInstance()->Impact002(*hitPosition);
+			EffectManager::GetInstance()->Impact003(*hitPosition);
+			EffectManager::GetInstance()->Impact004(*hitPosition);
+			EffectManager::GetInstance()->Impact005(*hitPosition);
+		}
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -779,10 +761,28 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		currentDamageReaction_ = DamageReactionState::BlownFallingFront;
 		SetAnimation(hDownLyingMotion_, true, true);
 
-		// 少し上に飛ばす
-		velocityY_ = 1.0f;
+		// 落下速度をリセットする
+		velocityY_ = 0.0f;
 
+		// ダメージを受けたことを通知する
 		isHitDamage_ = true;
+
+		// 重い怯みのSEを再生する
+		soundManager_->SeHeavyDamage();
+
+		// エフェクトを再生する
+		if (hitPosition)
+		{
+			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			EffectManager::GetInstance()->Impact001(*hitPosition);
+			EffectManager::GetInstance()->Impact002(*hitPosition);
+			EffectManager::GetInstance()->Impact003(*hitPosition);
+			EffectManager::GetInstance()->Impact004(*hitPosition);
+			EffectManager::GetInstance()->Impact005(*hitPosition);
+		}
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -961,7 +961,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 /// @param pullPosition 
 /// @param pushDirection 
 /// @return 
-void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirection)
+void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower)
 {
 	// すでに死亡している場合は、何もしない
 	if (IsDead())return;
@@ -978,11 +978,11 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 	SetPosition(pullPosition);
 
 	// 受け流し成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Parried;
+	currentDamageReaction_ = DamageReactionState::Deflected;
 	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
-	knockbackVelocity_ = pushDirection * 4.0f;
+	knockbackVelocity_ = pushDirection * knockBackPower;
 
 	// 受け流し成功モーションを再生する
 	SetAnimation(hDamageHeavyMotion_, true, false);
@@ -990,7 +990,7 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 
 /// @brief 弾かれた時の処理
 /// @param pushDirection 
-void Character::OnDeflect(const Vector3& pushDirection, float knockBackPower)
+void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 {
 	// すでに死亡している場合は、何もしない
 	if (IsDead())return;
@@ -1004,7 +1004,7 @@ void Character::OnDeflect(const Vector3& pushDirection, float knockBackPower)
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// 弾き成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Deflect;
+	currentDamageReaction_ = DamageReactionState::Repelled;
 	damageReactionTimer_ = 1.0f;
 
 	// ノックバックを入れる
@@ -1471,33 +1471,6 @@ Vector3 Character::GetBonePosition(const JointType& jointType) const
 	return Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 }
 
-/// @brief ダウン中かどうか
-/// @return 
-bool Character::IsDown()const
-{
-	// ダウン中の状態は、ダウン落下、ダウン中、ダウン起き上がりのいずれかの状態である
-	return 
-		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
-		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
-		currentDamageReaction_ == DamageReactionState::DownFallingRight ||
-
-		currentDamageReaction_ == DamageReactionState::DownLyingFront ||
-		currentDamageReaction_ == DamageReactionState::DownLyingBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownStaggerFront ||
-		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
-		currentDamageReaction_ == DamageReactionState::DownGettingUpBack ||
-
-		currentDamageReaction_ == DamageReactionState::BlownAwayFront ||
-		currentDamageReaction_ == DamageReactionState::BlownAwayBack ||
-
-		currentDamageReaction_ == DamageReactionState::BlownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::BlownFallingBack;
-}
-
 /// @brief 倒れこみ中かどうか
 /// @return 
 bool Character::IsDownFalling() const
@@ -1506,7 +1479,35 @@ bool Character::IsDownFalling() const
 		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
 		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
 		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
-		currentDamageReaction_ == DamageReactionState::DownFallingRight; 
+		currentDamageReaction_ == DamageReactionState::DownFallingRight;
+}
+
+/// @brief 地面に倒れているかどうか
+/// @return 
+bool Character::IsGrondedDown() const
+{
+	// 地面に倒れている状態は、前後左右に倒れている状態か、前後に倒れている状態か、前後に倒れて起き上がっている状態のいずれかである
+	return
+		currentDamageReaction_ == DamageReactionState::DownLyingFront ||
+		currentDamageReaction_ == DamageReactionState::DownLyingBack ||
+
+		currentDamageReaction_ == DamageReactionState::DownStaggerFront ||
+		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
+
+		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
+		currentDamageReaction_ == DamageReactionState::DownGettingUpBack;
+}
+
+/// @brief 吹き飛ばされてダウンしているかどうか
+/// @return 
+bool Character::IsBlownDown() const
+{
+	// 吹き飛ばされてダウンしている状態は、吹き飛ばされて前後に倒れている状態か、吹き飛ばされて落下している状態のいずれかである
+	return
+		currentDamageReaction_ == DamageReactionState::BlownAwayFront ||
+		currentDamageReaction_ == DamageReactionState::BlownAwayBack ||
+		currentDamageReaction_ == DamageReactionState::BlownFallingFront ||
+		currentDamageReaction_ == DamageReactionState::BlownFallingBack;
 }
 
 /// @brief 相手をつかむ
@@ -1609,7 +1610,7 @@ void Character::ReleaseWeapon(const Vector3& blowVelocity)
 
 /// @brief 受け流しを実行する
 /// @param attacker 
-void Character::ExecuteParry(Character* attacker)
+void Character::ExecuteDeflect(Character* attacker)
 {
 	if (!attacker) return;
 
@@ -1621,16 +1622,16 @@ void Character::ExecuteParry(Character* attacker)
 	Vector3 pullPos = myPos - myForward * 0.2f;
 
 	// 受け流され処理を実行
-	attacker->OnParried(pullPos, attacker->GetDirection());
+	attacker->OnDeflected(pullPos, attacker->GetDirection(), 4.0f);
 
 	// se受け流し
-	soundManager_->SeParried();
+	soundManager_->SeDeflect();
 }
 
 /// @brief 弾きを実行する
 /// @param attacker 
 /// @param hitPosition 
-void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPosition)
+void Character::ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosition)
 {
 	if (!attacker) return;
 
@@ -1642,13 +1643,13 @@ void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPo
 	pushDir = pushDir.Normalize();
 
 	// 相手に弾きのリアクションを与える
-	attacker->OnDeflect(pushDir, 5.0f);
-	isHitDeflect_ = true;
+	attacker->OnRepelled(pushDir, 5.0f);
+	isHitRepel_ = true;
 
 	// 弾きのエフェクトを発生させる
 	if (hitPosition)
 	{
-		EffectManager::GetInstance()->CreateDeflectEffect(*hitPosition);
+		EffectManager::GetInstance()->CreateRepelEffect(*hitPosition);
 		EffectManager::GetInstance()->EmitSpark000(*hitPosition);
 		EffectManager::GetInstance()->Impact001(*hitPosition);
 		EffectManager::GetInstance()->Impact003(*hitPosition);
@@ -1691,7 +1692,7 @@ void Character::ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPo
 		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.5f);
 
 	// se弾き
-	soundManager_->SeDeflect();
+	soundManager_->SeRepel();
 }
 
 /// @brief スタイルチェンジを開始する
@@ -1742,14 +1743,14 @@ void Character::OnStyleChanged(FightStyle newStyle)
 	{
 		// 旋嵐
 	case FightStyle::Tempest:
-		canParry_ = true; // 旋嵐スタイルは受け流しが可能になる
-		canDeflect_ = false; // 旋嵐スタイルは弾きが不可能になる
+		canDeflect_ = true; // 旋嵐スタイルは受け流しが可能になる
+		canRepel_ = false; // 旋嵐スタイルは弾きが不可能になる
 		break;
 
 		// 撃鉄
 	case FightStyle::Hammer:
-		canParry_ = false; // 撃鉄スタイルは受け流しが不可能になる
-		canDeflect_ = true; // 撃鉄スタイルは弾きが可能になる
+		canDeflect_ = false; // 撃鉄スタイルは受け流しが不可能になる
+		canRepel_ = true; // 撃鉄スタイルは弾きが可能になる
 		break;
 	}
 }
@@ -1807,8 +1808,8 @@ void Character::LandingCheck()
 	// コリジョンがないと処理しない
 	if (!landingCollision_)return;
 
-	// 上に飛んでいる間は着地判定をしない
-	if (knockbackVelocity_.y + velocityY_ > 0.0f && IsDown())
+	// Y方向の速度が上向きで、かつ吹き飛ばされている状態の場合は着地判定を行わない
+	if (knockbackVelocity_.y + velocityY_ > 0.0f && IsBlownDown())
 		return;
 
 	// コリジョンの状態を確認する
@@ -1913,9 +1914,7 @@ void Character::WallTouchUpdate()
 void Character::UpdatePushOut()
 {
 	// キャラクターの押し出し半径（ゲームのモデルサイズに合わせて調整してください）
-	constexpr float kHeight = 1.6f; // キャラクターの高さ
-	constexpr float kPushRadius = 0.25f; // 押し出し半径
-	constexpr float kDistanceLimit = kPushRadius * 2.0f; // 2人の半径の和
+	constexpr float kDistanceLimit = kPushOutRadius * 2.0f; // 2人の半径の和
 
 	// 全キャラクターのリストを取得
 	const auto& characters = Character::GetCharacters();
@@ -1925,43 +1924,61 @@ void Character::UpdatePushOut()
 		// 自分自身とは判定しない
 		if (this == other) continue;
 
-		// ダウン中や掴み・掴まれ中など、めり込みを許容したい状態の場合は判定をスキップする
-		if (IsDown() || other->IsDown() ||
-			IsGrabbed() || other->IsGrabbed() ||
-			IsGrabbing() || other->IsGrabbing() ||
-			IsParried() || other->IsParried())
-		{
+		// 吹き飛ばされている、地面に倒れている、掴まれている、掴んでいる、受け流されている状態のキャラクターは押し出し判定を行わない
+		if (IsBlownAway() || other->IsBlownAway() || IsGrondedDown() || other->IsGrondedDown() || IsGrabbed() || other->IsGrabbed()
+			|| IsGrabbing() || other->IsGrabbing() || IsDeflected() || other->IsDeflected())
 			continue;
-		}
 
 		// 自分と相手の位置を取得する（Y軸はキャラクターの中心の高さに合わせる）
-		Vector3 myPos = GetPosition();
-		Vector3 otherPos = other->GetPosition();
+		Vector3 myPos = GetWorldPosition();
+		Vector3 myHeadPos = GetBonePosition(JointType::Head);
+		Vector3 otherPos = other->GetWorldPosition();
+		Vector3 otherHeadPos = other->GetBonePosition(JointType::Head);
 
-		// Y軸方向の重なりもあるか確認する（高さが同じくらいの相手のみ押し出す）
-		if (myPos.y <= otherPos.y + kHeight && myPos.y + kHeight >= otherPos.y)
+		// 射影位置を計算する
+		Vector3 otherProjPos = Project(otherHeadPos - otherPos, myPos - otherPos) + otherPos;
+
+		// Y軸方向の距離を計算する
+		if (myPos.y <= otherProjPos.y + std::fabs(otherHeadPos.y - otherPos.y) && myPos.y + std::fabs(myHeadPos.y - myPos.y) >= otherProjPos.y)
 		{
-			// XZ平面での距離を計算（高さ(Y軸)は無視して円柱状に判定する）
-			Vector3 diff = myPos - otherPos;
+			// Y軸方向の距離が重なっている場合は押し出し判定を行う
+			Vector3 diff = myPos - otherProjPos;
 			diff.y = 0.0f;
 
-			// 距離の二乗を計算する（平方根を取る前に比較して効率化する）
-			float distSq = diff.x * diff.x + diff.z * diff.z;
+			// 距離の二乗を計算する
+			float distSq = diff.LengthSq();
 
-			// 距離が0より大きく、かつ押し出し半径の2倍以内の場合は押し出す
-			if (distSq > 0.0f && distSq < (kDistanceLimit * kDistanceLimit))
+			// 距離が押し出し半径未満の場合は押し出す
+			if (distSq < (kDistanceLimit * kDistanceLimit))
 			{
+				// 距離を計算する
 				float dist = std::sqrt(distSq);
+				Vector3 pushDir;
+
+				// もし距離が非常に小さい場合（ほぼ重なっている場合）は、押し出し方向をX軸方向に固定する
+				if (dist < 0.001f)
+				{
+					// 完全に重なっている場合は、X軸方向に押し出す
+					pushDir = Vector3(1.0f, 0.0f, 0.0f);
+
+					// 自分の位置と相手の位置を比較して、押し出し方向を反転させる
+					if (this > other)pushDir = -pushDir;
+
+					// 距離を0に設定して、押し出し量を最大にする
+					dist = 0.0f;
+				}
+				else
+				{
+					// 通常時の押し出し方向
+					pushDir = diff / dist;
+				}
 
 				// めり込んでいる距離を計算
 				float penetration = kDistanceLimit - dist;
 
-				// 押し出し方向の単位ベクトルを計算
-				Vector3 pushDir = diff / dist;
-
-				// お互いのUpdateで処理されるため、自分をめり込み量の半分だけ移動させる
+				// 押し出し量を半分にして、自分と相手の両方を押し出す
 				Vector3 newPos = myPos + pushDir * (penetration * 0.5f);
-				SetPosition(newPos); // 位置を更新
+				SetPosition(newPos);
 			}
 		}
 	}
@@ -1986,8 +2003,8 @@ void Character::Dead()
 	// 死亡フラグを立てる
 	isDead_ = true;
 
-	// ダウン落下モーションを再生する
-	SetAnimation(hDownFallMotion_, true, false);
+	// ダウンモーションを再生する
+	if(!isFinished_)SetAnimation(hDownFallMotion_, true, false);
 
 	// 当たり判定の削除
 	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
@@ -2008,6 +2025,46 @@ void Character::Dead()
 	{
 		characters_.erase(it);
 	}
+}
+
+/// @brief 当たり判定の更新
+/// @param hurtbox 
+/// @param jointType 
+void Character::UpdateHurtbox(AppCollider& hurtbox, JointType jointType)
+{
+	// 当たり判定がない場合は処理しない
+	if (!hurtbox.collider_)return;
+
+	auto collider = static_cast<Collision3DInstanceSphere*>(hurtbox.collider_);
+	collider->param_->radius = IsBlownAway() || IsBlownFalling() ? 0.5f : 0.25f;
+	collider->param_->center = GetBonePosition(jointType);
+}
+
+/// @brief 当たり判定の位置を更新する
+/// @param collision 
+void Character::UpdateCollisionPosition(Collision3DInstanceCapsule* collision)
+{
+	// コリジョンがない場合は処理しない
+	if (!collision)return;
+
+	collision->param_->diff = GetWorldPosition() - collision->param_->start;
+	collision->param_->start = GetWorldPosition();
+}
+
+/// @brief カメラのローカル方向をワールド座標系の移動方向に変換する
+/// @param cameraLocalDirection 
+/// @param cameraYaw 
+/// @return 
+Vector2 Character::ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDirection, float cameraYaw)
+{
+	// カメラ前方向(XZ平面)
+	const Vector2 forward = Vector2(std::sin(cameraYaw), std::cos(cameraYaw));
+
+	// カメラ右方向(XZ平面)
+	const Vector2 right = Vector2(forward.y, -forward.x);
+
+	// カメラ基準入力をワールド方向へ変換する
+	return right * cameraLocalDirection.x + forward * cameraLocalDirection.y;
 }
 
 /// @brief デバッグ用のUIを描画する

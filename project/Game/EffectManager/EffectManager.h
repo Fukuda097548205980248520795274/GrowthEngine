@@ -2,7 +2,7 @@
 #include "GrowthEngine.h"
 
 #include "Effect/GuardEffect/GuardEffect.h"
-#include "Effect/DeflectEffect/DeflectEffect.h"
+#include "Effect/RepelEffect/RepelEffect.h"
 
 class EffectManager
 {
@@ -28,7 +28,7 @@ public:
 
 	/// @brief 弾きエフェクトを生成する
 	/// @param position 
-	void CreateDeflectEffect(const Vector3& position);
+	void CreateRepelEffect(const Vector3& position);
 
 	/// @brief スパークを放出する
 	/// @param position 
@@ -141,10 +141,10 @@ private:
 private:
 
 	/// @brief 弾きエフェクトのモデル
-	std::unique_ptr<PrefabBaseTube> deflectEffectModel_ = nullptr;
+	std::unique_ptr<PrefabBaseTube> repelEffectModel_ = nullptr;
 
 	/// @brief 弾きエフェクト
-	std::list<std::unique_ptr<DeflectEffect>> deflectEffects_;
+	std::list<std::unique_ptr<RepelEffect>> repelEffects_;
 
 
 private:

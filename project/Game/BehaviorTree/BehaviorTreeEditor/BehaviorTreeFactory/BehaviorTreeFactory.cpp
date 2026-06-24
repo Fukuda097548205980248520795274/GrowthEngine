@@ -210,6 +210,16 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		case ConditionType::IsNotInAttackSequence:
 			conditionFunc = [character]() {return !character->IsInAttackSequence();};
 			break;
+
+			// 回避動作中かどうかをチェックする条件
+		case ConditionType::IsAvoiding:
+			conditionFunc = [character]() {return character->IsAvoid();};
+			break;
+
+			// 回避動作中でないかどうかをチェックする条件
+		case ConditionType::IsNotAvoiding:
+			conditionFunc = [character]() {return !character->IsAvoid();};
+			break;
 		}
 
 		// 実際は editor_node.condition_name 等をもとに、

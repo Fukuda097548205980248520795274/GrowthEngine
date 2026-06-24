@@ -1,12 +1,12 @@
 #pragma once
 #include "../Effect.h"
 
-class DeflectEffect : public Effect
+class RepelEffect : public Effect
 {
 public:
 
 	/// @brief コンストラクタ
-	DeflectEffect() { startTime_ = 0.04f; duration_ = startTime_; }
+	RepelEffect() { startTime_ = 0.04f; duration_ = startTime_; }
 
 	/// @brief 初期化
 	/// @param instanceModel 

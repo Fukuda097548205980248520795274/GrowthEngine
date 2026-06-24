@@ -37,12 +37,6 @@ void BehaviorTreeEditor::DrawNodeTable()
 		ImGui::EndPopup();
 	}
 
-	ImGui::SameLine();
-	if (ImGui::Button("整頓"))
-	{
-		AutoArrangeNodes();
-	}
-
 
 	// ノードエディタのキャンバスを描画
 	DrawNodeEditorCanvas();
@@ -107,6 +101,15 @@ void BehaviorTreeEditor::DrawNodeTable()
 		if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
 		{
 			history_->Redo(*this);
+
+			// 変更があったのでフラグを立てる
+			isDirty_ = true;
+		}
+
+		// Ctrl + Shift + N で整頓
+		if (ImGui::GetIO().KeyCtrl && ImGui::GetIO().KeyShift && ImGui::IsKeyPressed(ImGuiKey_N))
+		{
+			AutoArrangeNodes();
 
 			// 変更があったのでフラグを立てる
 			isDirty_ = true;
@@ -234,6 +237,9 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 	{
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Delete / Backspace : ノード削除 (ノード選択時のみ有効)");
 	}
+
+	// --- ノード自動整列の表示 ---
+	ImGui::Text("Ctrl + Shift + N : ノード自動整列");
 
 	ImGui::Separator();
 
