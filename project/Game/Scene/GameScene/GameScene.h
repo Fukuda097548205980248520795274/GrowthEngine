@@ -279,5 +279,10 @@ private:
 	std::unique_ptr<PrefabBaseSprite> hpFrameLeftSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> hpFrameMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> hpFrameRightSprite_ = nullptr;
+
+	// 体力バー
+	std::unique_ptr<PrefabBaseSprite> hpLeftSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpRightSprite_ = nullptr;
 };
 

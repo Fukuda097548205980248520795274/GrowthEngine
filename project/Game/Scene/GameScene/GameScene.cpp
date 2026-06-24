@@ -231,9 +231,14 @@ void GameScene::Draw()
 
 	// HUDの描画
 	for (auto& hud : huds_)hud->Draw();
+
+	// 体力バーの描画
 	hpFrameRightSprite_->Draw();
 	hpFrameLeftSprite_->Draw();
 	hpFrameMiddleSprite_->Draw();
+	hpRightSprite_->Draw();
+	hpMiddleSprite_->Draw();
+	hpLeftSprite_->Draw();
 }
 
 
@@ -284,6 +289,23 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		player_->Initialize(playerWeapon_.get());
 
 		character = player_.get();
+
+
+		HP::InitData hpInitData;
+		hpInitData.width = 800;
+		hpInitData.position = Vector2(640.0f, 640.0f);
+		hpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+		hpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+		hpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+		hpInitData.hpLeftSprite = hpLeftSprite_->CreateInstance();
+		hpInitData.hpMiddleSprite = hpMiddleSprite_->CreateInstance();
+		hpInitData.hpRightSprite = hpRightSprite_->CreateInstance();
+		hpInitData.character = character;
+		hpInitData.scale = Vector2(1.0f, 1.0f);
+		std::unique_ptr<HP> hp = std::make_unique<HP>();
+		hp->Initialize(hpInitData);
+		huds_.push_back(std::move(hp));
+
 
 		// カメラ制御の初期化
 		InitializeCameraControl();
@@ -761,4 +783,14 @@ void GameScene::LoadHUDs()
 
 	hpFrameRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right_frame.png"), 100, "HP_Frame_Right_Sprite");
 	hpFrameRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	// 体力バー
+	hpLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_left.png"), 100, "HP_Left_Sprite");
+	hpLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
+
+	hpMiddleSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_middle.png"), 100, "HP_Middle_Sprite");
+	hpMiddleSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	hpRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "HP_Right_Sprite");
+	hpRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
 }
