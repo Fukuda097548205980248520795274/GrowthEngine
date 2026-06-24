@@ -168,11 +168,11 @@ public:
 	/// @param pullPosition 
 	/// @param pushDirection 
 	/// @return 
-	virtual void OnParried(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower);
+	virtual void OnDeflected(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower);
 
 	/// @brief 弾かれた時の処理
 	/// @param pushDirection 
-	virtual void OnRepel(const Vector3& pushDirection, float knockBackPower);
+	virtual void OnRepelled(const Vector3& pushDirection, float knockBackPower);
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
@@ -410,7 +410,7 @@ public:
 
 	/// @brief 受け流しを実行する
 	/// @param attacker 
-	void ExecuteParry(Character* attacker);
+	void ExecuteDeflect(Character* attacker);
 
 	/// @brief 弾きを実行する
 	/// @param attacker 
@@ -419,11 +419,11 @@ public:
 
 	/// @brief 受け流されているかどうか
 	/// @return 
-	bool IsParried() const { return currentDamageReaction_ == DamageReactionState::Parried; }
+	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflected; }
 
 	/// @brief 弾かれたかどうか
 	/// @return 
-	bool IsRepelled() const { return currentDamageReaction_ == DamageReactionState::Repel; }
+	bool IsRepelled() const { return currentDamageReaction_ == DamageReactionState::Repelled; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -467,7 +467,7 @@ public:
 
 	/// @brief 受け流しが可能かどうかを取得する
 	/// @return 
-	bool CanParry() const { return canParry_; }
+	bool CanDeflect() const { return canDeflect_; }
 
 	/// @brief 弾きが可能かどうかを取得する
 	/// @return 
@@ -718,7 +718,7 @@ protected:
 private:
 
 	/// @brief 受け流しが可能かどうか
-	bool canParry_ = false;
+	bool canDeflect_ = false;
 
 private:
 

@@ -28,7 +28,7 @@ public:
 	void SeStyleChangeGekitetu()const;
 
 	/// @brief 受け流しのSE
-	void SeParried() { if (seParried_)seParried_->Play(); }
+	void SeDeflect() { if (seDeflect_)seDeflect_->Play(); }
 
 	/// @brief 弾きのSE
 	void SeRepel() { if (seRepel_)seRepel_->Play(); }
@@ -79,7 +79,7 @@ private:
 	std::unique_ptr<Se> seStyleGekitetu3_ = nullptr;
 
 	/// @brief 受け流しのSE
-	std::unique_ptr<Se> seParried_ = nullptr;
+	std::unique_ptr<Se> seDeflect_ = nullptr;
 
 	/// @brief 弾きのSE
 	std::unique_ptr<Se> seRepel_ = nullptr;

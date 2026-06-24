@@ -342,8 +342,8 @@ void Character::Update()
 			case DamageReactionState::HeavyStaggerRight:
 			case DamageReactionState::DownGettingUpFront:
 			case DamageReactionState::DownGettingUpBack:
-			case DamageReactionState::Parried:
-			case DamageReactionState::Repel:
+			case DamageReactionState::Deflected:
+			case DamageReactionState::Repelled:
 				currentDamageReaction_ = DamageReactionState::None;
 				break;
 
@@ -614,13 +614,13 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canParry_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
 		{
 			// 受け流す
-			ExecuteParry(attacker);
+			ExecuteDeflect(attacker);
 
 			// 受け流し成功モーションを設定
-			// SetAnimation(hParrySuccessMotion_, false, false);
+			// SetAnimation(hDeflectSuccessMotion_, false, false);
 
 			// ダメージ無効
 			return false;
@@ -961,7 +961,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 /// @param pullPosition 
 /// @param pushDirection 
 /// @return 
-void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower)
+void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDirection, float knockBackPower)
 {
 	// すでに死亡している場合は、何もしない
 	if (IsDead())return;
@@ -978,7 +978,7 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 	SetPosition(pullPosition);
 
 	// 受け流し成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Parried;
+	currentDamageReaction_ = DamageReactionState::Deflected;
 	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
@@ -990,7 +990,7 @@ void Character::OnParried(const Vector3& pullPosition, const Vector3& pushDirect
 
 /// @brief 弾かれた時の処理
 /// @param pushDirection 
-void Character::OnRepel(const Vector3& pushDirection, float knockBackPower)
+void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 {
 	// すでに死亡している場合は、何もしない
 	if (IsDead())return;
@@ -1004,7 +1004,7 @@ void Character::OnRepel(const Vector3& pushDirection, float knockBackPower)
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// 弾き成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Repel;
+	currentDamageReaction_ = DamageReactionState::Repelled;
 	damageReactionTimer_ = 1.0f;
 
 	// ノックバックを入れる
@@ -1610,7 +1610,7 @@ void Character::ReleaseWeapon(const Vector3& blowVelocity)
 
 /// @brief 受け流しを実行する
 /// @param attacker 
-void Character::ExecuteParry(Character* attacker)
+void Character::ExecuteDeflect(Character* attacker)
 {
 	if (!attacker) return;
 
@@ -1622,10 +1622,10 @@ void Character::ExecuteParry(Character* attacker)
 	Vector3 pullPos = myPos - myForward * 0.2f;
 
 	// 受け流され処理を実行
-	attacker->OnParried(pullPos, attacker->GetDirection(), 4.0f);
+	attacker->OnDeflected(pullPos, attacker->GetDirection(), 4.0f);
 
 	// se受け流し
-	soundManager_->SeParried();
+	soundManager_->SeDeflect();
 }
 
 /// @brief 弾きを実行する
@@ -1643,7 +1643,7 @@ void Character::ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosi
 	pushDir = pushDir.Normalize();
 
 	// 相手に弾きのリアクションを与える
-	attacker->OnRepel(pushDir, 5.0f);
+	attacker->OnRepelled(pushDir, 5.0f);
 	isHitRepel_ = true;
 
 	// 弾きのエフェクトを発生させる
@@ -1743,13 +1743,13 @@ void Character::OnStyleChanged(FightStyle newStyle)
 	{
 		// 旋嵐
 	case FightStyle::Tempest:
-		canParry_ = true; // 旋嵐スタイルは受け流しが可能になる
+		canDeflect_ = true; // 旋嵐スタイルは受け流しが可能になる
 		canRepel_ = false; // 旋嵐スタイルは弾きが不可能になる
 		break;
 
 		// 撃鉄
 	case FightStyle::Hammer:
-		canParry_ = false; // 撃鉄スタイルは受け流しが不可能になる
+		canDeflect_ = false; // 撃鉄スタイルは受け流しが不可能になる
 		canRepel_ = true; // 撃鉄スタイルは弾きが可能になる
 		break;
 	}
@@ -1926,7 +1926,7 @@ void Character::UpdatePushOut()
 
 		// 吹き飛ばされている、地面に倒れている、掴まれている、掴んでいる、受け流されている状態のキャラクターは押し出し判定を行わない
 		if (IsBlownAway() || other->IsBlownAway() || IsGrondedDown() || other->IsGrondedDown() || IsGrabbed() || other->IsGrabbed()
-			|| IsGrabbing() || other->IsGrabbing() || IsParried() || other->IsParried())
+			|| IsGrabbing() || other->IsGrabbing() || IsDeflected() || other->IsDeflected())
 			continue;
 
 		// 自分と相手の位置を取得する（Y軸はキャラクターの中心の高さに合わせる）
