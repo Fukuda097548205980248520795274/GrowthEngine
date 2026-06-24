@@ -1,14 +1,14 @@
 #pragma once
 #include "../Action.h"
 
-class Guard : public Action
+class Defense : public Action
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param character 
 	/// @param duration 
-	Guard(Character* character , float duration) : Action(character), guardDuration_(duration) {}
+	Defense(Character* character , float duration) : Action(character), guardDuration_(duration) {}
 
 	/// @brief 実行
 	virtual void Exec() override;

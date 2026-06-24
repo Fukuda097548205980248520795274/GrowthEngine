@@ -39,11 +39,11 @@ void EffectManager::Initialize()
 	guardEffectModel_->param_->material.drawShadowMap = false;
 
 	// 弾きエフェクトのモデルを生成
-	deflectEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/gradation.png"), 100, "deflectEffect");
-	deflectEffectModel_->param_->blendMode = BlendMode::kAdd;
-	deflectEffectModel_->param_->material.enableLighting = false;
-	deflectEffectModel_->param_->material.enableShadow = false;
-	deflectEffectModel_->param_->material.drawShadowMap = false;
+	repelEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/gradation.png"), 100, "repelEffect");
+	repelEffectModel_->param_->blendMode = BlendMode::kAdd;
+	repelEffectModel_->param_->material.enableLighting = false;
+	repelEffectModel_->param_->material.enableShadow = false;
+	repelEffectModel_->param_->material.drawShadowMap = false;
 
 	// スパークパーティクル000を生成
 	spark000_ = std::make_unique<Particle3D>("spark_000", 1000, 10, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
@@ -92,8 +92,8 @@ void EffectManager::Update()
 	);
 
 	// 弾きエフェクトの更新と終了したエフェクトの削除
-	deflectEffects_.remove_if(
-		[](std::unique_ptr<DeflectEffect>& effect)
+	repelEffects_.remove_if(
+		[](std::unique_ptr<RepelEffect>& effect)
 		{
 			effect->Update();
 			return effect->IsFinished();
@@ -109,7 +109,7 @@ void EffectManager::Draw()
 		effect->Draw();
 
 	// 弾きエフェクトの描画
-	for (auto& effect : deflectEffects_)
+	for (auto& effect : repelEffects_)
 		effect->Draw();
 
 	// 吹っ飛びスモーク000を描画
@@ -149,7 +149,7 @@ void EffectManager::Draw()
 	guardEffectModel_->Draw();
 
 	// 弾きエフェクトのモデルを描画
-	deflectEffectModel_->Draw();
+	repelEffectModel_->Draw();
 }
 
 /// @brief ガードエフェクトを生成する
@@ -165,12 +165,12 @@ void  EffectManager::CreateGuardEffect(const Vector3& position, const Vector3& r
 
 /// @brief 弾きエフェクトを生成する
 /// @param position 
-void EffectManager::CreateDeflectEffect(const Vector3& position)
+void EffectManager::CreateRepelEffect(const Vector3& position)
 {
-	std::unique_ptr <DeflectEffect> deflectEffect = std::make_unique<DeflectEffect>();
-	deflectEffect->Initialize(deflectEffectModel_->CreateInstance(), deflectEffectModel_->CreateInstance(), deflectEffectModel_->CreateInstance(), position);
+	std::unique_ptr <RepelEffect> repelEffect = std::make_unique<RepelEffect>();
+	repelEffect->Initialize(repelEffectModel_->CreateInstance(), repelEffectModel_->CreateInstance(), repelEffectModel_->CreateInstance(), position);
 
-	deflectEffects_.push_back(std::move(deflectEffect));
+	repelEffects_.push_back(std::move(repelEffect));
 }
 
 /// @brief スパークを放出する

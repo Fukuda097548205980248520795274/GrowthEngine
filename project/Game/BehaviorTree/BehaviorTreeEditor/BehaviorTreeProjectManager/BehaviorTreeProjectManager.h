@@ -96,6 +96,9 @@ enum class ConditionType
 
 	IsInAttackSequence, // 攻撃動作中かどうか
 	IsNotInAttackSequence, // 攻撃動作中でないかどうか
+
+	IsAvoiding, // 回避動作中かどうか
+	IsNotAvoiding, // 回避動作中でないかどうか
 };
 
 // コンディションの種類を文字列で表す配列
@@ -115,7 +118,9 @@ constexpr inline const char* CONDITION_TYPE_NAMES[] = {
 	"IsClosestToTarget",
 	"IsNotClosestToTarget",
 	"IsInAttackSequence",
-	"IsNotInAttackSequence"
+	"IsNotInAttackSequence",
+	"IsAvoiding",
+	"IsNotAvoiding"
 };
 
 /// @brief 条件ノードパラメータ

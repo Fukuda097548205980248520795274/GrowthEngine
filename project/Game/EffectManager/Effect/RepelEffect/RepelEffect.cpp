@@ -1,11 +1,11 @@
-#include "DeflectEffect.h"
+#include "RepelEffect.h"
 
 /// @brief 初期化
 /// @param instanceModel0 
 /// @param instanceModel1 
 /// @param instanceModel2 
 /// @param position 
-void DeflectEffect::Initialize(PrefabInstanceTube* instanceModel0, PrefabInstanceTube* instanceModel1, PrefabInstanceTube* instanceModel2, const Vector3& position)
+void RepelEffect::Initialize(PrefabInstanceTube* instanceModel0, PrefabInstanceTube* instanceModel1, PrefabInstanceTube* instanceModel2, const Vector3& position)
 {
 	// nullptrチェック
 	assert(instanceModel0);
@@ -47,7 +47,7 @@ void DeflectEffect::Initialize(PrefabInstanceTube* instanceModel0, PrefabInstanc
 }
 
 /// @brief 更新処理
-void DeflectEffect::Update()
+void RepelEffect::Update()
 {
 	// 0.0f ~ 1.0f
 	float t = 1.0f - (duration_ / startTime_);
@@ -89,7 +89,7 @@ void DeflectEffect::Update()
 }
 
 /// @brief 描画処理
-void DeflectEffect::Draw()
+void RepelEffect::Draw()
 {
 	if (!instanceModel0_ && !instanceModel1_ && !instanceModel2_)return;
 

@@ -182,7 +182,7 @@ void GameScene::Update()
 			cameraShake_->StartShake(0.3f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// 弾いたとき
-		if(player_->IsHitDeflect())
+		if(player_->IsHitRepel())
 			cameraShake_->StartShake(0.1f, 0.025f, Vector3(1.0f, 1.0f, 1.0f));
 	}
 

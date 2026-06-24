@@ -49,7 +49,7 @@ void SoundManager::Initialize()
 	seParried_ = std::make_unique<Se>("Parried", engine_->LoadAudio("./Assets/Sounds/se/parried.mp3"));
 
 	// 弾きのSE
-	seDeflect_ = std::make_unique<Se>("Deflect", engine_->LoadAudio("./Assets/Sounds/se/deflect.mp3"));
+	seRepel_ = std::make_unique<Se>("Repel", engine_->LoadAudio("./Assets/Sounds/se/repel.mp3"));
 
 	// ガードのSE
 	seGuard_ = std::make_unique<Se>("Guard", engine_->LoadAudio("./Assets/Sounds/se/guard.mp3"));

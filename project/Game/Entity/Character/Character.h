@@ -172,7 +172,7 @@ public:
 
 	/// @brief 弾かれた時の処理
 	/// @param pushDirection 
-	virtual void OnDeflect(const Vector3& pushDirection, float knockBackPower);
+	virtual void OnRepel(const Vector3& pushDirection, float knockBackPower);
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
@@ -331,7 +331,7 @@ public:
 
 	/// @brief ダウン中かどうか
 	/// @return 
-	bool IsDown()const;
+	bool IsDown()const { return IsDownFalling() || IsDownLying() || IsGettingUp(); }
 
 	/// @brief 倒れこみ中かどうか
 	/// @return 
@@ -415,7 +415,7 @@ public:
 	/// @brief 弾きを実行する
 	/// @param attacker 
 	/// @param hitPosition 
-	void ExecuteDeflect(Character* attacker, std::optional<Vector3> hitPosition = std::nullopt);
+	void ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosition = std::nullopt);
 
 	/// @brief 受け流されているかどうか
 	/// @return 
@@ -423,7 +423,7 @@ public:
 
 	/// @brief 弾かれたかどうか
 	/// @return 
-	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflect; }
+	bool IsRepelled() const { return currentDamageReaction_ == DamageReactionState::Repel; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -471,7 +471,7 @@ public:
 
 	/// @brief 弾きが可能かどうかを取得する
 	/// @return 
-	bool CanDeflect() const { return canDeflect_; }
+	bool CanRepel() const { return canRepel_; }
 
 	/// @brief プレイヤーかどうかを取得する
 	bool IsPlayer() const { return characterTag_ == CharacterTag::Player; }
@@ -506,7 +506,7 @@ public:
 
 	/// @brief 弾きが成功したかどうか
 	/// @return 
-	bool IsHitDeflect() const { return isHitDeflect_ || isPrevHitDeflect_; }
+	bool IsHitRepel() const { return isHitRepel_ || isPrevHitRepel_; }
 
 	/// @brief トレイルの位置を設定する
 	/// @param basePosition
@@ -528,14 +528,32 @@ public:
 
 protected:
 
+	/// @brief 当たり判定の更新
+	/// @param hurtbox 
+	/// @param jointType 
+	void UpdateHurtbox(AppCollider& hurtbox, JointType jointType);
+
+	/// @brief 当たり判定の位置を更新する
+	/// @param collision 
+	void UpdateCollisionPosition(Collision3DInstanceCapsule* collision);
+
+	/// @brief カメラのローカル方向をワールド座標系の移動方向に変換する
+	/// @param cameraLocalDirection 
+	/// @param cameraYaw 
+	/// @return 
+	static Vector2 ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDirection, float cameraYaw);
+
+
+protected:
+
 	/// @brief エンジン
 	const GrowthEngine* engine_ = nullptr;
 
 	/// @brief モーションマネージャ
-	MotionManager* motionManager_;
+	MotionManager* motionManager_ = nullptr;
 
 	/// @brief サウンドマネージャ
-	SoundManager* soundManager_;
+	SoundManager* soundManager_ = nullptr;
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
@@ -705,13 +723,13 @@ private:
 private:
 
 	/// @brief 弾きが可能かどうか
-	bool canDeflect_ = false;
+	bool canRepel_ = false;
 
 	/// @brief 弾きが成功したかどうか
-	bool isHitDeflect_ = false;
+	bool isHitRepel_ = false;
 
 	/// @brief 前フレームで弾きが成功したかどうか
-	bool isPrevHitDeflect_ = false;
+	bool isPrevHitRepel_ = false;
 
 
 protected:

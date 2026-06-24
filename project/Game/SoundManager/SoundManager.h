@@ -31,7 +31,7 @@ public:
 	void SeParried() { if (seParried_)seParried_->Play(); }
 
 	/// @brief 弾きのSE
-	void SeDeflect() { if (seDeflect_)seDeflect_->Play(); }
+	void SeRepel() { if (seRepel_)seRepel_->Play(); }
 
 	/// @brief ガードのSE
 	void SeGuard() { if (seGuard_)seGuard_->Play(); }
@@ -82,7 +82,7 @@ private:
 	std::unique_ptr<Se> seParried_ = nullptr;
 
 	/// @brief 弾きのSE
-	std::unique_ptr<Se> seDeflect_ = nullptr;
+	std::unique_ptr<Se> seRepel_ = nullptr;
 
 	/// @brief ガードのSE
 	std::unique_ptr<Se> seGuard_ = nullptr;

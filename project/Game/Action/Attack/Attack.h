@@ -38,7 +38,7 @@ enum class DamageReaction
 	Parried,
 
 	// 弾き
-	Deflect,
+	Repel,
 };
 
 enum class DamageReactionState
@@ -88,7 +88,7 @@ enum class DamageReactionState
 	Parried,
 
 	// 弾き
-	Deflect,
+	Repel,
 };
 
 class Attack : public Action

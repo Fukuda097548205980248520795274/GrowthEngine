@@ -43,7 +43,12 @@ void Avoid::Exec()
 /// @brief 終了、中断
 void Avoid::Exit()
 {
-	owner_->SetCurrentAvoid(nullptr);
+	// 自分が現在の回避処理として登録されている場合のみ、停止とクリアを行う
+	if (owner_->GetCurrentAvoid() == this)
+	{
+		// 回避を停止する
+		owner_->SetCurrentAvoid(nullptr);
+	}
 
 	Action::Exit();
 }
