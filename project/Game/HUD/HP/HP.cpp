@@ -32,6 +32,7 @@ void HP::Initialize(const InitData& initData)
 
 	// ワールドトランスフォームを設定する
 	worldTransform_->translate_ = initData.position;
+	worldTransform_->scale_ = initData.scale;
 
 	// 親を設定する
 	hpFrameMiddleSprite_->param_.parent = worldTransform_.get();
@@ -50,6 +51,8 @@ void HP::Initialize(const InitData& initData)
 /// @brief 更新処理
 void HP::Update()
 {
+	SetPosition(Vector3(0.0f, 2.0f, 0.0f));
+
 	// スケールと位置を設定する
 	hpFrameMiddleSprite_->param_.transform.scale.x = static_cast<float>(width_ / 2);
 	hpFrameLeftSprite_->param_.transform.translate.x = -hpFrameMiddleSprite_->param_.transform.scale.x;
@@ -62,6 +65,9 @@ void HP::Update()
 /// @brief 描画処理
 void HP::Draw()
 {
+	// 表示されていない場合は描画しない
+	if (!isVisible_)return;
+
 	// hp枠の描画
 	hpFrameMiddleSprite_->Draw();
 	hpFrameLeftSprite_->Draw();

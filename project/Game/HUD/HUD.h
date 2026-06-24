@@ -69,6 +69,9 @@ protected:
 	/// @brief 終了したかどうか
 	bool isFinished_ = false;
 
+	/// @brief 表示するかどうか
+	bool isVisible_ = true;
+
 
 public:
 

@@ -134,16 +134,6 @@ void GameScene::Initialize()
 	// HUDの読み込み
 	LoadHUDs();
 
-	HP::InitData hpInitData;
-	hpInitData.width = 600;
-	hpInitData.position = Vector2(640.0f, 640.0f);
-	hpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
-	hpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
-	hpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
-	std::unique_ptr<HP> hp = std::make_unique<HP>();
-	hp->Initialize(hpInitData);
-	huds_.push_back(std::move(hp));
-
 
 	//// ステージを読み込む
 	//stageEditor_->LoadStage("Tutorial.json");
