@@ -5,6 +5,8 @@
 #include <cmath>
 #include <numbers>
 
+#include "HUD/HP/HP.h"
+
 namespace
 {
 	// ピボット中心の追従補間速度
@@ -128,6 +130,21 @@ void GameScene::Initialize()
 	// 「イベントトリガー」に当たる
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
+
+	// HUDの読み込み
+	LoadHUDs();
+
+	HP::InitData hpInitData;
+	hpInitData.width = 600;
+	hpInitData.position = Vector2(640.0f, 640.0f);
+	hpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+	hpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+	hpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+	std::unique_ptr<HP> hp = std::make_unique<HP>();
+	hp->Initialize(hpInitData);
+	huds_.push_back(std::move(hp));
+
+
 	//// ステージを読み込む
 	//stageEditor_->LoadStage("Tutorial.json");
 }
@@ -213,9 +230,6 @@ void GameScene::Draw()
 	// 武器の描画
 	for (auto& weapon : weapons_)weapon->Draw();
 
-	// HUDの描画
-	for (auto& hud : huds_)hud->Draw();
-
 	// プレハブの描画処理
 	oneHandedWeaponModel_->Draw();
 
@@ -224,6 +238,12 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画処理
 	postEffectManager_->Draw(player_.get());
+
+	// HUDの描画
+	for (auto& hud : huds_)hud->Draw();
+	hpFrameRightSprite_->Draw();
+	hpFrameLeftSprite_->Draw();
+	hpFrameMiddleSprite_->Draw();
 }
 
 
@@ -736,4 +756,19 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 
 	// イベントを処理した場合はtrueを返し、処理しなかった場合はfalseを返す
 	return false;
+}
+
+
+/// @brief HUDらの読み込み
+void GameScene::LoadHUDs()
+{
+	// 体力バーの枠
+	hpFrameLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_left_frame.png"), 100, "HP_Frame_Left_Sprite");
+	hpFrameLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
+
+	hpFrameMiddleSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_middle_frame.png"), 100, "HP_Frame_Middle_Sprite");
+	hpFrameMiddleSprite_->param_->texture.anchor = Vector2(0.5f, 0.5f);
+
+	hpFrameRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right_frame.png"), 100, "HP_Frame_Right_Sprite");
+	hpFrameRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
 }

@@ -272,6 +272,12 @@ private:
 
 private:
 
-	
+	/// @brief HUDらの読み込み
+	void LoadHUDs();
+
+	// 体力バーの枠
+	std::unique_ptr<PrefabBaseSprite> hpFrameLeftSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpFrameMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpFrameRightSprite_ = nullptr;
 };
 
