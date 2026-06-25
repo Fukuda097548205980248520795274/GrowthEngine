@@ -67,6 +67,9 @@ void GameScene::Initialize()
 	hCharacterAnimation_ = motionManager_->GetMotion(MotionType::Stand, "Standing");
 	hCharacterSkeleton_ = motionManager_->GetSkeleton();
 
+	// HUDの読み込み
+	LoadHUDs();
+
 
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
@@ -131,8 +134,8 @@ void GameScene::Initialize()
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
 
-	// HUDの読み込み
-	LoadHUDs();
+	// ステージ読み込み
+	//stageEditor_->LoadStage("Tutorial.json");
 }
 
 /// @brief 更新処理
@@ -250,6 +253,7 @@ void GameScene::Draw()
 	delayHpFrontMiddleSprite_->Draw();
 	delayHpFrontLeftSprite_->Draw();
 	delayHpFrontRightSprite_->Draw();
+	hpSeparatorSprite_->Draw();
 }
 
 
@@ -306,9 +310,10 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		hpInitData.delayHpLeftSprite = delayHpLeftSprite_->CreateInstance();
 		hpInitData.delayHpMiddleSprite = delayHpMiddleSprite_->CreateInstance();
 		hpInitData.delayHpRightSprite = delayHpRightSprite_->CreateInstance();
+		hpInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
 		hpInitData.alpha = 1.0f;
-		hpInitData.scale = Vector2(1.0f, 1.0f);
-		hpInitData.width = 600;
+		hpInitData.scale = Vector2(0.5f, 0.5f);
+		hpInitData.width = 1200;
 		hpInitData.color = Vector3(0.25f, 1.0f, 0.25f);
 		playerHP_ = std::make_unique<HP>();
 		playerHP_->Initialize(hpInitData);
@@ -382,9 +387,10 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 			bossHpInitData.delayHpFrontLeftSprite = delayHpFrontLeftSprite_->CreateInstance();
 			bossHpInitData.delayHpFrontMiddleSprite = delayHpFrontMiddleSprite_->CreateInstance();
 			bossHpInitData.delayHpFrontRightSprite = delayHpFrontRightSprite_->CreateInstance();
+			bossHpInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
 			bossHpInitData.alpha = 1.0f;
-			bossHpInitData.scale = Vector2(1.0f, 1.0f);
-			bossHpInitData.width = 230;
+			bossHpInitData.scale = Vector2(0.45f, 0.45f);
+			bossHpInitData.width = 300;
 
 			std::unique_ptr<BossHP> hp = std::make_unique<BossHP>();
 			hp->Initialize(bossHpInitData);
@@ -406,6 +412,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 			hpInitData.delayHpLeftSprite = delayHpLeftSprite_->CreateInstance();
 			hpInitData.delayHpMiddleSprite = delayHpMiddleSprite_->CreateInstance();
 			hpInitData.delayHpRightSprite = delayHpRightSprite_->CreateInstance();
+			hpInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
 			hpInitData.alpha = 1.0f;
 
 			if (tag == Character::CharacterTag::Ally)
@@ -416,7 +423,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 			}
 			else if (tag == Character::CharacterTag::EnemyNormal)
 			{
-				hpInitData.scale = Vector2(0.5f, 0.5f);
+				hpInitData.scale = Vector2(0.25f, 0.25f);
 				hpInitData.width = 200;
 				hpInitData.color = Vector3(1.0f, 0.25f, 0.25f);
 			}
@@ -911,4 +918,10 @@ void GameScene::LoadHUDs()
 
 	delayHpFrontRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "Delay_HP_Front_Right_Sprite");
 	delayHpFrontRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	// 体力区切り
+	hpSeparatorSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_separator.png"), 100, "HP_Separator_Sprite");
+	hpSeparatorSprite_->param_->texture.anchor = Vector2(0.5f, 0.5f);
+	hpSeparatorSprite_->param_->transform.scale = Vector2(0.1f, 0.1f);
+	hpSeparatorSprite_->param_->transform.rotate = -0.5f;
 }

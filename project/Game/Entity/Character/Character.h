@@ -1001,7 +1001,7 @@ protected:
 	void HpHudInit();
 
 	/// @brief 体力HUDの位置を更新する
-	void HpHudPositionUpdate();
+	void HpHudUpdate();
 
 
 public:

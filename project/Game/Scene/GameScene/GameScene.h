@@ -303,5 +303,8 @@ private:
 	std::unique_ptr<PrefabBaseSprite> delayHpFrontLeftSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> delayHpFrontMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> delayHpFrontRightSprite_ = nullptr;
+
+	/// @brief 体力ゲージの区切りのスプライト
+	std::unique_ptr<PrefabBaseSprite> hpSeparatorSprite_ = nullptr;
 };
 

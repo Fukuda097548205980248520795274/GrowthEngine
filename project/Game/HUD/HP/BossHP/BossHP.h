@@ -36,6 +36,9 @@ public:
 		PrefabInstanceSprite* delayHpFrontMiddleSprite = nullptr;
 		PrefabInstanceSprite* delayHpFrontRightSprite = nullptr;
 
+		// 体力ゲージの区切り
+		PrefabInstanceSprite* hpSeparatorSprite = nullptr;
+
 		// 位置
 		Vector2 position = Vector2(0.0f, 0.0f);
 

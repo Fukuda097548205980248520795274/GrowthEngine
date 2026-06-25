@@ -33,6 +33,10 @@ HP::~HP()
 
 	if (delayHpRightSprite_)delayHpRightSprite_->isDelete_ = true;
 	delayHpRightSprite_ = nullptr;
+
+	// 体力ゲージの区切りを削除する
+	if (hpSeparatorSprite_)hpSeparatorSprite_->isDelete_ = true;
+	hpSeparatorSprite_ = nullptr;
 }
 
 /// @brief 初期化
@@ -49,6 +53,7 @@ void HP::Initialize(const InitData& initData)
 	assert(initData.delayHpMiddleSprite && "遅延hpの真ん中のスプライトが設定されていません。");
 	assert(initData.delayHpRightSprite && "遅延hpの右のスプライトが設定されていません。");
 	assert(initData.hpRightSprite && "hpの右のスプライトが設定されていません。");
+	assert(initData.hpSeparatorSprite && "体力ゲージの区切りのスプライトが設定されていません。");
 
 	// 横幅を設定する
 	width_ = std::max(initData.width, 0);
@@ -67,6 +72,7 @@ void HP::Initialize(const InitData& initData)
 	delayHpLeftSprite_ = initData.delayHpLeftSprite;
 	delayHpMiddleSprite_ = initData.delayHpMiddleSprite;
 	delayHpRightSprite_ = initData.delayHpRightSprite;
+	hpSeparatorSprite_ = initData.hpSeparatorSprite;
 
 	// ワールドトランスフォームを設定する
 	worldTransform_->translate_ = initData.position;
@@ -82,6 +88,7 @@ void HP::Initialize(const InitData& initData)
 	delayHpLeftSprite_->param_.parent = worldTransform_.get();
 	delayHpMiddleSprite_->param_.parent = worldTransform_.get();
 	delayHpRightSprite_->param_.parent = worldTransform_.get();
+	hpSeparatorSprite_->param_.parent = worldTransform_.get();
 
 	// スケールと位置を設定する
 	hpFrameMiddleSprite_->param_.transform.scale.x = static_cast<float>(width_ / 2);
@@ -92,6 +99,9 @@ void HP::Initialize(const InitData& initData)
 	hpMiddleSprite_->param_.transform.translate.x = hpLeftSprite_->param_.transform.translate.x;
 	hpMiddleSprite_->param_.transform.scale.x = static_cast<float>((width_ - 6) / 2);
 	hpRightSprite_->param_.transform.translate.x = hpMiddleSprite_->param_.transform.translate.x + hpMiddleSprite_->param_.transform.scale.x * 2.0f;
+
+	// ゲージ区切りのスケールと位置を設定する
+	hpSeparatorSprite_->param_.transform.translate = Vector2(hpRightSprite_->param_.transform.translate.x, hpRightSprite_->param_.transform.translate.y);
 
 	// 色を設定する
 	hpFrameLeftSprite_->param_.material.color.w = alpha_;
@@ -156,6 +166,9 @@ void HP::Update()
 	delayHpMiddleSprite_->param_.transform.scale.x = delayHpWidth;
 	delayHpRightSprite_->param_.transform.translate.x = delayHpMiddleSprite_->param_.transform.translate.x + delayHpMiddleSprite_->param_.transform.scale.x * 2.0f;
 
+	// ゲージ区切りのスケールと位置を設定する
+	hpSeparatorSprite_->param_.transform.translate = Vector2(hpRightSprite_->param_.transform.translate.x, hpRightSprite_->param_.transform.translate.y);
+
 	float alpha = alpha_;
 	if (isDeath_)
 	{
@@ -215,6 +228,12 @@ void HP::Draw()
 		hpLeftSprite_->Draw();
 		hpRightSprite_->Draw();
 	}
+
+	// 体力ゲージの区切りの描画
+	if (currentHP_ > 0)
+	{
+		hpSeparatorSprite_->Draw();
+	}
 }
 
 /// @brief 現在の体力を設定する
@@ -237,7 +256,7 @@ void HP::SetCurrentHP(int hp)
 		// 体力変化タイマーをリセットする
 		changeTimer_ = 1.0f;
 	}
-	else
+	else if (currentHP_ < hp)
 	{
 		// 回復などのとき
 

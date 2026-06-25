@@ -146,7 +146,7 @@ Character::Character(const InitData& initData) : Entity()
 		hpHUD_->SetCurrentHP(hp_);
 
 		// 体力HUDの位置を更新する
-		HpHudPositionUpdate();
+		HpHudUpdate();
 	}
 	
 
@@ -247,7 +247,7 @@ void Character::Update()
 				hpHUD_->SetCurrentHP(hp_);
 
 				// 体力HUDの位置を更新する
-				HpHudPositionUpdate();
+				HpHudUpdate();
 			}
 
 
@@ -2111,7 +2111,7 @@ Vector2 Character::ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDire
 }
 
 /// @brief 体力HUDの位置を更新する
-void Character::HpHudPositionUpdate()
+void Character::HpHudUpdate()
 {
 	// 体力HUDがない場合は処理しない
 	if (!hpHUD_)return;
@@ -2127,7 +2127,7 @@ void Character::HpHudPositionUpdate()
 
 		// プレイヤーは画面左上の固定位置に体力HUDを表示する
 	case CharacterTag::Player:
-		hpHUD_->SetPosition(Vector2(400.0f, 650.0f));
+		hpHUD_->SetPosition(Vector2(360.0f, 670.0f));
 		break;
 
 		// ボスは頭の上に体力HUDを表示する

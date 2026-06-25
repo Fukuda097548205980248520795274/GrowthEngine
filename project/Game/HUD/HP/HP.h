@@ -28,6 +28,9 @@ public:
 		PrefabInstanceSprite* delayHpMiddleSprite = nullptr;
 		PrefabInstanceSprite* delayHpRightSprite = nullptr;
 
+		// 体力ゲージの区切り
+		PrefabInstanceSprite* hpSeparatorSprite = nullptr;
+
 		// 位置
 		Vector2 position = Vector2(0.0f, 0.0f);
 
@@ -65,6 +68,10 @@ public:
 	/// @param maxHP 
 	void SetMaxHP(int maxHP) { maxHP_ = maxHP;  }
 
+	/// @brief 色を設定する
+	/// @param color 
+	void SetColor(const Vector3& color) { color_ = color; }
+
 	/// @brief 体力バーを持つキャラクターが死亡したときの処理
 	void Death();
 
@@ -84,7 +91,7 @@ protected:
 	Vector3 color_ = Vector3(1.0f, 1.0f, 1.0f);
 
 	// 遅延して減少する体力の色
-	static constexpr Vector3 kDelayHpColor = Vector3(0.2f, 0.2f, 0.2f);
+	static constexpr Vector3 kDelayHpColor = Vector3(0.1f, 0.1f, 0.1f);
 
 	/// @brief 不透明度
 	float alpha_ = 1.0f;
@@ -103,6 +110,9 @@ protected:
 	PrefabInstanceSprite* delayHpLeftSprite_ = nullptr;
 	PrefabInstanceSprite* delayHpMiddleSprite_ = nullptr;
 	PrefabInstanceSprite* delayHpRightSprite_ = nullptr;
+
+	// 体力ゲージの区切り
+	PrefabInstanceSprite* hpSeparatorSprite_ = nullptr;
 
 
 protected:

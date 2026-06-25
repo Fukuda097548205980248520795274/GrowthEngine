@@ -34,6 +34,7 @@ void BossHP::Initialize(const InitData& initData)
 	assert(initData.delayHpFrontLeftSprite && "遅延hpの左のスプライトが設定されていません。");
 	assert(initData.delayHpFrontMiddleSprite && "遅延hpの真ん中のスプライトが設定されていません。");
 	assert(initData.delayHpFrontRightSprite && "遅延hpの右のスプライトが設定されていません。");
+	assert(initData.hpSeparatorSprite && "体力ゲージの区切りのスプライトが設定されていません。");
 
 	// 横幅を設定する
 	width_ = std::max(initData.width, 0);
@@ -58,6 +59,7 @@ void BossHP::Initialize(const InitData& initData)
 	delayHpFrontLeftSprite_ = initData.delayHpFrontLeftSprite;
 	delayHpFrontMiddleSprite_ = initData.delayHpFrontMiddleSprite;
 	delayHpFrontRightSprite_ = initData.delayHpFrontRightSprite;
+	hpSeparatorSprite_ = initData.hpSeparatorSprite;
 
 	// ワールドトランスフォームを設定する
 	worldTransform_->translate_ = initData.position;
@@ -79,6 +81,7 @@ void BossHP::Initialize(const InitData& initData)
 	delayHpFrontLeftSprite_->param_.parent = worldTransform_.get();
 	delayHpFrontMiddleSprite_->param_.parent = worldTransform_.get();
 	delayHpFrontRightSprite_->param_.parent = worldTransform_.get();
+	hpSeparatorSprite_->param_.parent = worldTransform_.get();
 
 
 	// HPの割合を計算する
@@ -114,6 +117,10 @@ void BossHP::Initialize(const InitData& initData)
 	delayHpMiddleSprite_->param_.transform.translate.x = delayHpLeftSprite_->param_.transform.translate.x;
 	delayHpMiddleSprite_->param_.transform.scale.x = delayHpWidth;
 	delayHpRightSprite_->param_.transform.translate.x = delayHpMiddleSprite_->param_.transform.translate.x + delayHpMiddleSprite_->param_.transform.scale.x * 2.0f;
+
+	// ゲージ区切りのスケールと位置を設定する
+	hpSeparatorSprite_->param_.transform.translate = Vector2(hpRightSprite_->param_.transform.translate.x, hpRightSprite_->param_.transform.translate.y);
+
 
 
 	// 色を設定する
@@ -199,6 +206,9 @@ void BossHP::Update()
 	delayHpFrontMiddleSprite_->param_.transform.translate.x = delayHpFrontLeftSprite_->param_.transform.translate.x;
 	delayHpFrontMiddleSprite_->param_.transform.scale.x = delayHpFrontWidth;
 	delayHpFrontRightSprite_->param_.transform.translate.x = delayHpFrontMiddleSprite_->param_.transform.translate.x + delayHpFrontMiddleSprite_->param_.transform.scale.x * 2.0f;
+
+	// ゲージ区切りのスケールと位置を設定する
+	hpSeparatorSprite_->param_.transform.translate = Vector2(hpRightSprite_->param_.transform.translate.x, hpRightSprite_->param_.transform.translate.y);
 
 	float alpha = alpha_;
 	if (isDeath_)
@@ -305,6 +315,12 @@ void BossHP::Draw()
 			delayHpFrontLeftSprite_->Draw();
 			delayHpFrontRightSprite_->Draw();
 		}
+	}
+
+	// ゲージ区切りの描画
+	if (currentHP_ > 0)	
+	{
+		hpSeparatorSprite_->Draw();
 	}
 }
 
