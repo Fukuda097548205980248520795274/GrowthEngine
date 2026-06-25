@@ -100,9 +100,9 @@ void HP::Initialize(const InitData& initData)
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
-	delayHpLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
+	delayHpLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
@@ -181,9 +181,9 @@ void HP::Update()
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
-	delayHpLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
+	delayHpLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
 
 	// 基底クラスの更新処理を呼び出す
 	HUD::Update();
@@ -222,8 +222,10 @@ void HP::Draw()
 void HP::SetCurrentHP(int hp)
 {
 	// 体力が変化したかどうかを判定する
-	if (currentHP_ != hp)
-	{ 
+	if (currentHP_ > hp)
+	{
+		// ダメージなどのとき
+
 		// 遅延して減少する体力を設定する
 		if (!isChanged_)delayHP_ = currentHP_;
 
@@ -234,6 +236,14 @@ void HP::SetCurrentHP(int hp)
 
 		// 体力変化タイマーをリセットする
 		changeTimer_ = 1.0f;
+	}
+	else
+	{
+		// 回復などのとき
+
+		// 体力を設定する
+		currentHP_ = hp;
+		delayHP_ = hp;
 	}
 }
 

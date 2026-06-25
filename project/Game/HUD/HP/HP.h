@@ -83,6 +83,9 @@ protected:
 	/// @brief 色
 	Vector3 color_ = Vector3(1.0f, 1.0f, 1.0f);
 
+	// 遅延して減少する体力の色
+	static constexpr Vector3 kDelayHpColor = Vector3(0.2f, 0.2f, 0.2f);
+
 	/// @brief 不透明度
 	float alpha_ = 1.0f;
 

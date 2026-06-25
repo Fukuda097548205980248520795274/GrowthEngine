@@ -123,12 +123,12 @@ void BossHP::Initialize(const InitData& initData)
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
-	delayHpLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpFrontLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpFrontMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
-	delayHpFrontRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
+	delayHpLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpFrontLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpFrontMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
+	delayHpFrontRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha_);
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
@@ -221,13 +221,15 @@ void BossHP::Update()
 	// 今のゲージに色を合わせる
 	if (currentHP_ > 0)
 	{
-		// 色のインデックスを計算する
+		// 今のゲージのインデックスを計算する
 		int colorIndex = currentHP_ / kOneGageHp;
+		int backColorIndex = colorIndex - 1;
+
+		// 色のインデックスを計算する
 		if (colorIndex >= 12)colorIndex = (colorIndex % 2) + 10;
 		color_ = kGageColor[colorIndex];
 
 		// 後ろ側のゲージの色を設定する
-		int backColorIndex = colorIndex - 1;
 		if (backColorIndex >= 0)
 		{
 			if (backColorIndex >= 12)backColorIndex = (backColorIndex % 2) + 10;
@@ -245,12 +247,12 @@ void BossHP::Update()
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
-	delayHpLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpFrontLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpFrontMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
-	delayHpFrontRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha);
+	delayHpLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpFrontLeftSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpFrontMiddleSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
+	delayHpFrontRightSprite_->param_.material.color = Vector4(kDelayHpColor.x, kDelayHpColor.y, kDelayHpColor.z, alpha);
 
 	// 基底クラスの更新処理を呼び出す
 	HUD::Update();
@@ -310,9 +312,11 @@ void BossHP::Draw()
 /// @param hp 
 void BossHP::SetCurrentHP(int hp)
 {
-	// 体力が変化したかどうかを判定する
-	if (currentHP_ != hp)
+	// 体力が変化した場合のみ処理を行う
+	if (currentHP_ > hp)
 	{
+		// ダメージなどのとき
+
 		// 遅延して減少する体力を設定する
 		if (!isChanged_)delayHP_ = currentHP_;
 
@@ -326,5 +330,13 @@ void BossHP::SetCurrentHP(int hp)
 
 		// 体力変化タイマーをリセットする
 		changeTimer_ = 1.0f;
+	}
+	else if (currentHP_ < hp)
+	{
+		// 回復などのとき
+
+		// 体力を設定する
+		currentHP_ = hp;
+		delayHP_ = currentHP_;
 	}
 }
