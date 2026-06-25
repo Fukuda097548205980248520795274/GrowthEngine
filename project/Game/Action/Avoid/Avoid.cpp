@@ -5,7 +5,7 @@
 /// @param character 
 /// @param initData 
 Avoid::Avoid(Character* character, const AvoidInitData& initData)
-	: Action(character), localDirection_(initData.localDirection), time_(initData.time), distance_(initData.distance)
+	: Action(character), localDirection_(initData.localDirection), time_(initData.time), distance_(initData.distance), isTargetDirection_(initData.isTargetDirection)
 {
 
 }
@@ -68,6 +68,12 @@ void Avoid::Update()
 	// タイマーを更新する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 	timer_ += dt;
+
+	// ターゲット方向を向く場合は、ターゲットの方向を向く
+	if (isTargetDirection_ && owner_->GetLockOnTarget())
+	{
+		
+	}
 
 	// キャラクターが掴まれているか、行動不能状態なら回避を終了する
 	if (owner_->IsGrabbing() || owner_->IsIncapacitated())

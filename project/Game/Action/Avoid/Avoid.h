@@ -11,6 +11,9 @@ struct AvoidInitData
 
 	// 回避距離
 	float distance = 1.0f;
+
+	/// @brief ターゲット方向を向くかどうか
+	bool isTargetDirection = false;
 };
 
 class Avoid : public Action
@@ -49,6 +52,9 @@ private:
 
 	// 回避距離
 	float distance_ = 1.0f;
+
+	/// @brief ターゲット方向を向くかどうか
+	bool isTargetDirection_ = false;
 
 
 private:

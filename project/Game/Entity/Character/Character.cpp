@@ -144,7 +144,9 @@ Character::Character(const InitData& initData) : Entity()
 		hpHUD_ = initData.hpHUD;
 		hpHUD_->SetMaxHP(hp_);
 		hpHUD_->SetCurrentHP(hp_);
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+
+		// 体力HUDの位置を更新する
+		HpHudPositionUpdate();
 	}
 	
 
@@ -244,14 +246,8 @@ void Character::Update()
 			{
 				hpHUD_->SetCurrentHP(hp_);
 
-				switch (characterTag_)
-				{
-					// 味方と敵は頭の上に体力HUDを表示する
-				case CharacterTag::Ally:
-				case CharacterTag::EnemyNormal:
-					hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
-					break;
-				}
+				// 体力HUDの位置を更新する
+				HpHudPositionUpdate();
 			}
 
 
@@ -497,45 +493,8 @@ void Character::Update()
 	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
-	// ロックオンしているターゲットの方向を向く処理
-	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated() && !IsAttack())
-	{
-		// ターゲットの方向を向く
-		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
-		if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
-			toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
-
-		// Y軸の回転のみを考慮するため、Y成分を0にする
-		toTarget.y = 0.0f;
-
-		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
-		if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
-		{
-			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
-			hasTargetYaw_ = true;
-		}
-	}
-	else if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated())
-	{
-		// プレイヤーは攻撃中もターゲットの方向を向くようにする
-		if (IsPlayer() && IsAttack())
-		{
-			// ターゲットの方向を向く
-			Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
-			if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
-				toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
-
-			// Y軸の回転のみを考慮するため、Y成分を0にする
-			toTarget.y = 0.0f;
-
-			// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
-			if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
-			{
-				targetYaw_ = std::atan2(toTarget.x, toTarget.z);
-				hasTargetYaw_ = true;
-			}
-		}
-	}
+	/// ターゲットの方向を向く処理
+	TargetDirection();
 
 	// ターゲットの方向へ向く処理
 	if (hasTargetYaw_)
@@ -543,7 +502,8 @@ void Character::Update()
 		float currentYaw = worldTransform_->rotate_.y;
 		float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
 
-		const float rotateLerpT = 1.0f - std::exp(-12.0f * dt);
+		float rotateLerpT = 1.0f - std::exp(-12.0f * dt);
+
 		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
 
 		// 角度が十分近くなったら、ターゲットの方向を向ききったとみなす
@@ -957,6 +917,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 	// 最終的な攻撃力を計算する
 	int finalDamage = damage;
+	finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * attackPower_);
 
 	// 武器の攻撃力を考慮する
 	if (attacker && attacker->HasWeapon())
@@ -1207,6 +1168,29 @@ void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	}
 }
 
+/// @brief ターゲットの方向を向く
+void Character::TargetDirection()
+{
+	// ロックオンしているターゲットの方向を向く処理
+	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated() && !IsAttack())
+	{
+		// ターゲットの方向を向く
+		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
+		if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
+			toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
+
+		// Y軸の回転のみを考慮するため、Y成分を0にする
+		toTarget.y = 0.0f;
+
+		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
+		if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
+		{
+			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
+			hasTargetYaw_ = true;
+		}
+	}
+}
+
 // 構え中のロックオン候補を更新する
 void Character::UpdateLockOnTargets()
 {
@@ -1306,6 +1290,9 @@ void Character::UpdateLockOnTargets()
 /// @param hAnimation 
 void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLoop)
 {
+	// 死亡したら、モーション設定は行わない
+	if (isDead_)return;
+
 	if (!model_)return;
 
 	if (!(model_->param_->animation.hAnimation == hAnimation))
@@ -2052,11 +2039,11 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 /// @brief 死亡処理
 void Character::Dead()
 {
+	// 死亡モーションを再生する
+	SetAnimation(hDownFallMotion_, true, false);
+
 	// 死亡フラグを立てる
 	isDead_ = true;
-
-	// ダウンモーションを再生する
-	if(!isFinished_)SetAnimation(hDownFallMotion_, true, false);
 
 	// 当たり判定の削除
 	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
@@ -2121,6 +2108,33 @@ Vector2 Character::ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDire
 
 	// カメラ基準入力をワールド方向へ変換する
 	return right * cameraLocalDirection.x + forward * cameraLocalDirection.y;
+}
+
+/// @brief 体力HUDの位置を更新する
+void Character::HpHudPositionUpdate()
+{
+	// 体力HUDがない場合は処理しない
+	if (!hpHUD_)return;
+
+	switch (characterTag_)
+	{
+		// 味方と敵は頭の上に体力HUDを表示する
+	case CharacterTag::Ally:
+	case CharacterTag::EnemyNormal:
+	default:
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
+		break;
+
+		// プレイヤーは画面左上の固定位置に体力HUDを表示する
+	case CharacterTag::Player:
+		hpHUD_->SetPosition(Vector2(400.0f, 650.0f));
+		break;
+
+		// ボスは頭の上に体力HUDを表示する
+	case CharacterTag::EnemyBoss:
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
+		break;
+	}
 }
 
 /// @brief デバッグ用のUIを描画する

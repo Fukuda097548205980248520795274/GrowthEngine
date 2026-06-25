@@ -1240,20 +1240,8 @@
     <Filter Include="Game\HUD\HP">
       <UniqueIdentifier>{9319cf8a-24f0-4bde-9bed-832b2110078e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\HUD\HP\PlayerHP">
-      <UniqueIdentifier>{dc8f7466-e7dc-4d00-a6ef-853d425f505c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\HP\VipHP">
-      <UniqueIdentifier>{9ddffd18-e7c6-4a3b-92ab-dd4b7f23088c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\HP\AllyHP">
-      <UniqueIdentifier>{b2edb28f-9a6e-4932-88cd-d0ef998cbb51}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\HUD\HP\BossHP">
       <UniqueIdentifier>{3976fcc1-c980-4f88-a72d-b3b312871f93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\HP\EnemyHP">
-      <UniqueIdentifier>{209ecf67-a9ae-43de-8663-ea4ac3f8d51e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\HUD\Tutorial">
       <UniqueIdentifier>{49bff084-59cf-43bf-9b0c-e54c51045c75}</UniqueIdentifier>
@@ -2307,20 +2295,8 @@
     <ClCompile Include="Game\HUD\HP\HP.cpp">
       <Filter>Game\HUD\HP</Filter>
     </ClCompile>
-    <ClCompile Include="Game\HUD\HP\VipHP\VipHP.cpp">
-      <Filter>Game\HUD\HP\VipHP</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\HP\PlayerHP\PlayerHP.cpp">
-      <Filter>Game\HUD\HP\PlayerHP</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\HP\EnemyHP\EnemyHP.cpp">
-      <Filter>Game\HUD\HP\EnemyHP</Filter>
-    </ClCompile>
     <ClCompile Include="Game\HUD\HP\BossHP\BossHP.cpp">
       <Filter>Game\HUD\HP\BossHP</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\HP\AllyHP\AllyHP.cpp">
-      <Filter>Game\HUD\HP\AllyHP</Filter>
     </ClCompile>
     <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp">
       <Filter>Game\HUD\Tutorial</Filter>
@@ -3482,20 +3458,8 @@
     <ClInclude Include="Game\HUD\HP\HP.h">
       <Filter>Game\HUD\HP</Filter>
     </ClInclude>
-    <ClInclude Include="Game\HUD\HP\VipHP\VipHP.h">
-      <Filter>Game\HUD\HP\VipHP</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\HP\PlayerHP\PlayerHP.h">
-      <Filter>Game\HUD\HP\PlayerHP</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\HP\EnemyHP\EnemyHP.h">
-      <Filter>Game\HUD\HP\EnemyHP</Filter>
-    </ClInclude>
     <ClInclude Include="Game\HUD\HP\BossHP\BossHP.h">
       <Filter>Game\HUD\HP\BossHP</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\HP\AllyHP\AllyHP.h">
-      <Filter>Game\HUD\HP\AllyHP</Filter>
     </ClInclude>
     <ClInclude Include="Game\HUD\Tutorial\Tutorial.h">
       <Filter>Game\HUD\Tutorial</Filter>

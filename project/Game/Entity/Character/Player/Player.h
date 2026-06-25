@@ -22,6 +22,9 @@ public:
 	/// @param isOperationCamera 
 	void SetIsOperationCamera(bool isOperationCamera) { isOperationCamera_ = isOperationCamera; }
 
+	/// @brief ターゲット方向を向く
+	void TargetDirection() override;
+
 private:
 
 	/// @brief 攻撃処理を更新する

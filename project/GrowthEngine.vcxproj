@@ -1083,12 +1083,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Game\Entity\Entity.cpp" />
-    <ClCompile Include="Game\HUD\HP\AllyHP\AllyHP.cpp" />
     <ClCompile Include="Game\HUD\HP\BossHP\BossHP.cpp" />
-    <ClCompile Include="Game\HUD\HP\EnemyHP\EnemyHP.cpp" />
     <ClCompile Include="Game\HUD\HP\HP.cpp" />
-    <ClCompile Include="Game\HUD\HP\PlayerHP\PlayerHP.cpp" />
-    <ClCompile Include="Game\HUD\HP\VipHP\VipHP.cpp" />
     <ClCompile Include="Game\HUD\HUD.cpp" />
     <ClCompile Include="Game\HUD\Timer\Timer.cpp" />
     <ClCompile Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.cpp" />
@@ -1483,12 +1479,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Entity\Weapon\Weapon.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\Entity\Entity.h" />
-    <ClInclude Include="Game\HUD\HP\AllyHP\AllyHP.h" />
     <ClInclude Include="Game\HUD\HP\BossHP\BossHP.h" />
-    <ClInclude Include="Game\HUD\HP\EnemyHP\EnemyHP.h" />
     <ClInclude Include="Game\HUD\HP\HP.h" />
-    <ClInclude Include="Game\HUD\HP\PlayerHP\PlayerHP.h" />
-    <ClInclude Include="Game\HUD\HP\VipHP\VipHP.h" />
     <ClInclude Include="Game\HUD\HUD.h" />
     <ClInclude Include="Game\HUD\Timer\Timer.h" />
     <ClInclude Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.h" />

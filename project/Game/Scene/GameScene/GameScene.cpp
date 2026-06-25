@@ -5,7 +5,7 @@
 #include <cmath>
 #include <numbers>
 
-#include "HUD/HP/HP.h"
+#include "HUD/HP/BossHP/BossHP.h"
 
 namespace
 {
@@ -133,10 +133,6 @@ void GameScene::Initialize()
 
 	// HUDの読み込み
 	LoadHUDs();
-
-
-	//// ステージを読み込む
-	//stageEditor_->LoadStage("Tutorial.json");
 }
 
 /// @brief 更新処理
@@ -152,12 +148,7 @@ void GameScene::Update()
 		playerWeapon_->Update();
 
 		// プレイヤーの体力バーの更新
-		if (playerHP_)
-		{
-			playerHP_->SetPosition(Vector2(400.0f, 650.0f));
-			playerHP_->SetCurrentHP(player_->GetHp());
-			playerHP_->Update();
-		}
+		if (playerHP_)playerHP_->Update();
 
 		// 太陽光をプレイヤーに追従させる
 		sunLight_->param_->position = player_->GetPosition() + Vector3(-5.0f, 10.0f, -5.0f);
@@ -247,12 +238,18 @@ void GameScene::Draw()
 	hpFrameMiddleSprite_->Draw();
 	hpFrameRightSprite_->Draw();
 	hpFrameLeftSprite_->Draw();
+	hpBackMiddleSprite_->Draw();
+	hpBackLeftSprite_->Draw();
+	hpBackRightSprite_->Draw();
 	delayHpMiddleSprite_->Draw();
 	delayHpLeftSprite_->Draw();
 	delayHpRightSprite_->Draw();
 	hpMiddleSprite_->Draw();
 	hpRightSprite_->Draw();
 	hpLeftSprite_->Draw();
+	delayHpFrontMiddleSprite_->Draw();
+	delayHpFrontLeftSprite_->Draw();
+	delayHpFrontRightSprite_->Draw();
 }
 
 
@@ -297,20 +294,6 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerWeaponInitData.landingCollision = landingCollision_->CreateInstance();
 		playerWeapon_ = std::make_unique<Weapon>(playerWeaponInitData);
 
-		// プレイヤーの生成処理
-		Character::InitData playerInitData = initData;
-		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
-		playerInitData.hitboxGroup = playerHitboxGroup_.get();
-		playerInitData.landingCollision = landingCollision_->CreateInstance();
-		playerInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
-		playerInitData.eventTriggerCollision = eventTriggerCollision_->CreateInstance();
-		playerInitData.model_ = playerModel_.get();
-		playerInitData.attackTrail = playerTrail_.get();
-		player_ = std::make_unique<Player>(playerInitData);
-		player_->Initialize(playerWeapon_.get());
-
-		character = player_.get();
-
 		// 体力ゲージの生成と初期化
 		HP::InitData hpInitData;
 		hpInitData.position = Vector2(0.0f, 0.0f);
@@ -329,8 +312,21 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		hpInitData.color = Vector3(0.25f, 1.0f, 0.25f);
 		playerHP_ = std::make_unique<HP>();
 		playerHP_->Initialize(hpInitData);
-		playerHP_->SetMaxHP(player_->GetHp());
-		playerHP_->SetCurrentHP(player_->GetHp());
+
+		// プレイヤーの生成処理
+		Character::InitData playerInitData = initData;
+		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
+		playerInitData.hitboxGroup = playerHitboxGroup_.get();
+		playerInitData.landingCollision = landingCollision_->CreateInstance();
+		playerInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
+		playerInitData.eventTriggerCollision = eventTriggerCollision_->CreateInstance();
+		playerInitData.model_ = playerModel_.get();
+		playerInitData.attackTrail = playerTrail_.get();
+		playerInitData.hpHUD = playerHP_.get();
+		player_ = std::make_unique<Player>(playerInitData);
+		player_->Initialize(playerWeapon_.get());
+
+		character = player_.get();
 
 
 		// カメラ制御の初期化
@@ -367,37 +363,71 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcInitData.landingCollision = landingCollision_->CreateInstance();
 		npcInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
 
-		// 体力ゲージの生成と初期化
-		HP::InitData hpInitData;
-		hpInitData.position = Vector2(0.0f, 0.0f);
-		hpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
-		hpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
-		hpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
-		hpInitData.hpLeftSprite = hpLeftSprite_->CreateInstance();
-		hpInitData.hpMiddleSprite = hpMiddleSprite_->CreateInstance();
-		hpInitData.hpRightSprite = hpRightSprite_->CreateInstance();
-		hpInitData.delayHpLeftSprite = delayHpLeftSprite_->CreateInstance();
-		hpInitData.delayHpMiddleSprite = delayHpMiddleSprite_->CreateInstance();
-		hpInitData.delayHpRightSprite = delayHpRightSprite_->CreateInstance();
-		hpInitData.alpha = 1.0f;
-
-		if (tag == Character::CharacterTag::Ally)
+		if (tag == Character::CharacterTag::EnemyBoss)
 		{
-			hpInitData.scale = Vector2(0.75f, 0.75f);
-			hpInitData.width = 150;
-			hpInitData.color = Vector3(0.25f, 1.0f, 0.25f);
-		}
-		else if (tag == Character::CharacterTag::EnemyNormal)
-		{
-			hpInitData.scale = Vector2(0.5f, 0.5f);
-			hpInitData.width = 200;
-			hpInitData.color = Vector3(1.0f, 0.25f, 0.25f);
-		}
+			BossHP::InitData bossHpInitData;
+			bossHpInitData.position = Vector2(0.0f, 0.0f);
+			bossHpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+			bossHpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+			bossHpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+			bossHpInitData.hpFrontLeftSprite = hpLeftSprite_->CreateInstance();
+			bossHpInitData.hpFrontMiddleSprite = hpMiddleSprite_->CreateInstance();
+			bossHpInitData.hpFrontRightSprite = hpRightSprite_->CreateInstance();
+			bossHpInitData.hpBackLeftSprite = hpBackLeftSprite_->CreateInstance();
+			bossHpInitData.hpBackMiddleSprite = hpBackMiddleSprite_->CreateInstance();
+			bossHpInitData.hpBackRightSprite = hpBackRightSprite_->CreateInstance();
+			bossHpInitData.delayHpBackLeftSprite = delayHpLeftSprite_->CreateInstance();
+			bossHpInitData.delayHpBackMiddleSprite = delayHpMiddleSprite_->CreateInstance();
+			bossHpInitData.delayHpBackRightSprite = delayHpRightSprite_->CreateInstance();
+			bossHpInitData.delayHpFrontLeftSprite = delayHpFrontLeftSprite_->CreateInstance();
+			bossHpInitData.delayHpFrontMiddleSprite = delayHpFrontMiddleSprite_->CreateInstance();
+			bossHpInitData.delayHpFrontRightSprite = delayHpFrontRightSprite_->CreateInstance();
+			bossHpInitData.alpha = 1.0f;
+			bossHpInitData.scale = Vector2(1.0f, 1.0f);
+			bossHpInitData.width = 230;
 
-		
-		std::unique_ptr<HP> hp = std::make_unique<HP>();
-		hp->Initialize(hpInitData);
-		npcInitData.hpHUD = hp.get();
+			std::unique_ptr<BossHP> hp = std::make_unique<BossHP>();
+			hp->Initialize(bossHpInitData);
+			npcInitData.hpHUD = hp.get();
+
+			huds_.push_back(std::move(hp));
+		}
+		else
+		{
+			// 体力ゲージの生成と初期化
+			HP::InitData hpInitData;
+			hpInitData.position = Vector2(0.0f, 0.0f);
+			hpInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+			hpInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+			hpInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+			hpInitData.hpLeftSprite = hpLeftSprite_->CreateInstance();
+			hpInitData.hpMiddleSprite = hpMiddleSprite_->CreateInstance();
+			hpInitData.hpRightSprite = hpRightSprite_->CreateInstance();
+			hpInitData.delayHpLeftSprite = delayHpLeftSprite_->CreateInstance();
+			hpInitData.delayHpMiddleSprite = delayHpMiddleSprite_->CreateInstance();
+			hpInitData.delayHpRightSprite = delayHpRightSprite_->CreateInstance();
+			hpInitData.alpha = 1.0f;
+
+			if (tag == Character::CharacterTag::Ally)
+			{
+				hpInitData.scale = Vector2(0.75f, 0.75f);
+				hpInitData.width = 150;
+				hpInitData.color = Vector3(0.25f, 1.0f, 0.25f);
+			}
+			else if (tag == Character::CharacterTag::EnemyNormal)
+			{
+				hpInitData.scale = Vector2(0.5f, 0.5f);
+				hpInitData.width = 200;
+				hpInitData.color = Vector3(1.0f, 0.25f, 0.25f);
+			}
+
+
+			std::unique_ptr<HP> hp = std::make_unique<HP>();
+			hp->Initialize(hpInitData);
+			npcInitData.hpHUD = hp.get();
+
+			huds_.push_back(std::move(hp));
+		}
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
@@ -408,7 +438,6 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcs_.push_back(std::move(npc));
 		npcModels_.push_back(std::move(npcModel));
 		npcTrails_.push_back(std::move(npcTrail));
-		huds_.push_back(std::move(hp));
 
 		// NPCをカウントする
 		npcCount_++;
@@ -853,6 +882,16 @@ void GameScene::LoadHUDs()
 	hpRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "HP_Right_Sprite");
 	hpRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
 
+	// 後ろ側の体力バー
+	hpBackLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_left.png"), 100, "HP_Back_Left_Sprite");
+	hpBackLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
+
+	hpBackMiddleSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_middle.png"), 100, "HP_Back_Middle_Sprite");
+	hpBackMiddleSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	hpBackRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "HP_Back_Right_Sprite");
+	hpBackRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
 	// 遅延体力バー
 	delayHpLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_left.png"), 100, "Delay_HP_Left_Sprite");
 	delayHpLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
@@ -862,4 +901,14 @@ void GameScene::LoadHUDs()
 
 	delayHpRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "Delay_HP_Right_Sprite");
 	delayHpRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	// 前側の体力バー
+	delayHpFrontLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_left.png"), 100, "Delay_HP_Front_Left_Sprite");
+	delayHpFrontLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
+
+	delayHpFrontMiddleSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_middle.png"), 100, "Delay_HP_Front_Middle_Sprite");
+	delayHpFrontMiddleSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	delayHpFrontRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/hp_right.png"), 100, "Delay_HP_Front_Right_Sprite");
+	delayHpFrontRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
 }

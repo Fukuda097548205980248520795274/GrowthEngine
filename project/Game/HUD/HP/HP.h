@@ -52,10 +52,10 @@ public:
 	void Initialize(const InitData& initData);
 
 	/// @brief 更新処理
-	void Update() override;
+	virtual void Update() override;
 
 	/// @brief 描画処理
-	void Draw() override;
+	virtual void Draw() override;
 
 	/// @brief 現在の体力を設定する
 	/// @param hp 

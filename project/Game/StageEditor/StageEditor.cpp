@@ -99,6 +99,7 @@ void StageEditor::LoadStage(const std::string& fileName)
 {
 	// ファイルを読み込む
 	fileManager_->LoadFromFile(fileName, placementList_, spawner_.get(), scene_->GetNavMesh());
+	editorUI_->Play(isPlaying_);
 }
 
 /// @brief 描画処理（デバッグ用）

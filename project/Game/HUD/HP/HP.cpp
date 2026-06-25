@@ -4,6 +4,7 @@
 /// @brief デストラクタ
 HP::~HP()
 {
+	// hp枠のスプライトを削除する
 	if (hpFrameLeftSprite_)hpFrameLeftSprite_->isDelete_ = true;
 	hpFrameLeftSprite_ = nullptr;
 
@@ -13,6 +14,7 @@ HP::~HP()
 	if (hpFrameRightSprite_)hpFrameRightSprite_->isDelete_ = true;
 	hpFrameRightSprite_ = nullptr;
 
+	// hpのスプライトを削除する
 	if (hpLeftSprite_)hpLeftSprite_->isDelete_ = true;
 	hpLeftSprite_ = nullptr;
 
@@ -22,6 +24,7 @@ HP::~HP()
 	if (hpRightSprite_)hpRightSprite_->isDelete_ = true;
 	hpRightSprite_ = nullptr;
 
+	// 遅延hpのスプライトを削除する
 	if (delayHpLeftSprite_)delayHpLeftSprite_->isDelete_ = true;
 	delayHpLeftSprite_ = nullptr;
 
@@ -97,9 +100,9 @@ void HP::Initialize(const InitData& initData)
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha_);
-	delayHpLeftSprite_->param_.material.color = Vector4(0.5f, 0.5f, 0.5f, alpha_);
-	delayHpMiddleSprite_->param_.material.color = Vector4(0.5f, 0.5f, 0.5f, alpha_);
-	delayHpRightSprite_->param_.material.color = Vector4(0.5f, 0.5f, 0.5f, alpha_);
+	delayHpLeftSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
+	delayHpMiddleSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
+	delayHpRightSprite_->param_.material.color = Vector4(0.1f, 0.1f, 0.1f, alpha_);
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();

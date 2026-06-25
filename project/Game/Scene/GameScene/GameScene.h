@@ -289,9 +289,19 @@ private:
 	std::unique_ptr<PrefabBaseSprite> hpMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> hpRightSprite_ = nullptr;
 
+	// 後ろ側の体力バー
+	std::unique_ptr<PrefabBaseSprite> hpBackLeftSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpBackMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> hpBackRightSprite_ = nullptr;
+
 	// 遅延体力バー
 	std::unique_ptr<PrefabBaseSprite> delayHpLeftSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> delayHpMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> delayHpRightSprite_ = nullptr;
+
+	// 前側の遅延体力バー
+	std::unique_ptr<PrefabBaseSprite> delayHpFrontLeftSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> delayHpFrontMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> delayHpFrontRightSprite_ = nullptr;
 };
 

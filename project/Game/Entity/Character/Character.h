@@ -219,6 +219,9 @@ public:
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
 
+	/// @brief ターゲットの方向を向く
+	virtual void TargetDirection();
+
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	virtual const NavMesh* GetNavMesh() const { return nullptr; }
@@ -572,8 +575,8 @@ protected:
 	/// @brief 体力
 	int hp_ = 0;
 
-	/// @brief 体力HUD
-	HP* hpHUD_ = nullptr;
+	/// @brief 攻撃力
+	float attackPower_ = 1.0f;
 
 	// やられたかどうか
 	bool isDead_ = false;
@@ -987,6 +990,18 @@ protected:
 
 	// 押し出し判定の半径
 	static constexpr float kPushOutRadius = 0.25f;
+
+
+protected:
+
+	/// @brief 体力HUD
+	HP* hpHUD_ = nullptr;
+
+	/// @brief 体力HUDの初期化
+	void HpHudInit();
+
+	/// @brief 体力HUDの位置を更新する
+	void HpHudPositionUpdate();
 
 
 public:
