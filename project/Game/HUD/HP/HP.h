@@ -59,7 +59,7 @@ public:
 
 	/// @brief 現在の体力を設定する
 	/// @param hp 
-	void SetCurrentHP(int hp);
+	virtual void SetCurrentHP(int hp);
 
 	/// @brief 最大体力を設定する
 	/// @param maxHP 

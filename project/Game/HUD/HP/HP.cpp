@@ -227,14 +227,14 @@ void HP::SetCurrentHP(int hp)
 		// 遅延して減少する体力を設定する
 		if (!isChanged_)delayHP_ = currentHP_;
 
+		// 体力を設定する
+		currentHP_ = hp;
+
 		isChanged_ = true;
 
 		// 体力変化タイマーをリセットする
 		changeTimer_ = 1.0f;
 	}
-
-	// 体力を設定する
-	currentHP_ = hp; 
 }
 
 /// @brief 体力バーを持つキャラクターが死亡したときの処理

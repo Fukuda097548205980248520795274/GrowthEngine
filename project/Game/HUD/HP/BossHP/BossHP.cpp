@@ -305,3 +305,26 @@ void BossHP::Draw()
 		}
 	}
 }
+
+/// @brief 現在の体力を設定する
+/// @param hp 
+void BossHP::SetCurrentHP(int hp)
+{
+	// 体力が変化したかどうかを判定する
+	if (currentHP_ != hp)
+	{
+		// 遅延して減少する体力を設定する
+		if (!isChanged_)delayHP_ = currentHP_;
+
+		// 体力を設定する
+		currentHP_ = hp;
+
+		// 遅延して減少する体力が現在の体力よりも大きい場合は、遅延して減少する体力を現在の体力に合わせる
+		if (delayHP_ > currentHP_ + kOneGageHp)delayHP_ = currentHP_;
+
+		isChanged_ = true;
+
+		// 体力変化タイマーをリセットする
+		changeTimer_ = 1.0f;
+	}
+}

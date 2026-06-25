@@ -62,6 +62,10 @@ public:
 	/// @brief 描画処理
 	void Draw() override;
 
+	/// @brief 現在の体力を設定する
+	/// @param hp 
+	void SetCurrentHP(int hp) override;
+
 
 
 private:
