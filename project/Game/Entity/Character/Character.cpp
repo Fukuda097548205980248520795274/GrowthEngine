@@ -1929,10 +1929,11 @@ void Character::WallTouchUpdate()
 void Character::UpdatePushOut()
 {
 	// キャラクターの押し出し半径
-	constexpr float kDistanceLimit = kPushOutRadius * 2.0f; // 2人の半径の和
+	constexpr float kPushRadius = 0.25f; // 押し出し半径
+	constexpr float kDistanceLimit = kPushRadius * 2.0f; // 2人の半径の和
 
-	// キャラクターの高さ（ゲームのモデルに合わせて調整してください。例：1.8f）
-	constexpr float kCharacterHeight = 1.8f;
+	// 押し直しのなめらかさ（抵抗感）の係数
+	constexpr float kPushStrength = 0.2f;
 
 	// 全キャラクターのリストを取得
 	const auto& characters = Character::GetCharacters();
@@ -1942,81 +1943,64 @@ void Character::UpdatePushOut()
 		// 自分自身とは判定しない
 		if (this == other) continue;
 
-		// 自分よりも後に生成されたキャラクターとは判定しない（重複処理を避けるため）
+		// 自分よりも後に生成されたキャラクターは押し出し判定を行わない（重複処理防止）
 		if (this > other) continue;
 
-		// ダウン中や掴み・掴まれ中など、めり込みを許容したい状態の場合は判定をスキップする
-		if (IsBlownAway() || other->IsBlownAway() ||IsGrondedDown() || other->IsGrondedDown() ||IsGrabbed() || other->IsGrabbed() ||
+		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
+		if (IsGrondedDown() || other->IsGrondedDown() ||IsGrabbed() || other->IsGrabbed() ||
 			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected())
 			continue;
 
-		Vector3 myPos = GetWorldPosition();
-		Vector3 otherPos = other->GetWorldPosition();
+		// 自分と相手の位置を取得する
+		Vector3 myPos = GetPosition();
+		Vector3 myHeadPos = GetBonePosition(JointType::Head);
+		Vector3 otherPos = other->GetPosition();
+		Vector3 otherHeadPos = other->GetBonePosition(JointType::Head);
 
-		// 高さの差を確認する
-		if (std::fabs(myPos.y - otherPos.y) >= kCharacterHeight)
-			continue;
+		// 相手の体幹上の最近点を計算する
+		Vector3 otherProjPos = Project(otherHeadPos - otherPos, myPos - otherPos) + otherPos;
 
-		// XZ平面での距離を計算（高さ(Y軸)は無視して円柱状に判定する）
-		Vector3 diff = myPos - otherPos;
-		diff.y = 0.0f;
-
-		// 距離の二乗を計算する
-		float distSq = diff.x * diff.x + diff.z * diff.z;
-
-		// 半径以内なら押し出し処理を行う
-		if (distSq < (kDistanceLimit * kDistanceLimit))
+		// Y軸方向の重なりがあるか確認（最初のコードの判定）
+		if (myPos.y <= otherProjPos.y + std::fabs(otherHeadPos.y - otherPos.y) &&
+			myPos.y + std::fabs(myHeadPos.y - myPos.y) >= otherProjPos.y)
 		{
-			float dist = std::sqrt(distSq);
-			Vector3 pushDir;
+			// 射影点と自分の位置の差を計算する
+			Vector3 diff = myPos - otherProjPos;
+			diff.y = 0.0f; // 押し出し自体は水平（XZ平面）に行う
 
-			// 完全に重なっている場合のスタック防止
-			if (dist < 0.001f)
+			float distSq = diff.LengthSq();
+
+			// 完全に重なってしまった場合のスタック（引っかかり）防止
+			if (distSq < 0.00001f)
 			{
-				pushDir = Vector3(1.0f, 0.0f, 0.0f);
-				dist = 0.0f;
-			} 
-			else
-			{
-				pushDir = diff / dist; // other から my への方向ベクトル
+				diff = Vector3(0.01f, 0.0f, 0.0f);
+				distSq = diff.LengthSq();
 			}
 
-			// めり込んでいる総量を計算
-			float penetration = kDistanceLimit - dist;
-
-			// どちらがどれだけ動くかの割合を決める
-			float myWeight = 0.5f;
-			float otherWeight = 0.5f;
-
-			// どちらかが地上にいる場合は、地上のキャラクターを優先して押し出す
-			if (!this->isGrounded_ && other->isGrounded_)
+			// 距離が押し出し半径の2倍以内の場合は押し出す
+			if (distSq < (kDistanceLimit * kDistanceLimit))
 			{
-				myWeight = 1.0f;
-				otherWeight = 0.0f;
-			} 
-			else if (this->isGrounded_ && !other->isGrounded_)
-			{
-				// 自分が地上、相手が空中の場合
-				myWeight = 0.0f;
-				otherWeight = 1.0f;
-			}
+				float dist = std::sqrt(distSq);
 
-			// 押し出し力を計算（めり込み量の半分を押し出す）
-			float pushForce = penetration * 0.5f;
+				// めり込んでいる距離を計算
+				float penetration = kDistanceLimit - dist;
 
-			// お互いの位置を「一度の計算で同時に」ずらす
-			if (myWeight > 0.0f)
-			{
-				Vector3 newMyPos = myPos + pushDir * (pushForce * myWeight);
-				newMyPos.y = myPos.y; // Yは絶対固定
-				this->SetPosition(newMyPos);
-			}
+				// 押し出し方向の単位ベクトル
+				Vector3 pushDir = diff / dist;
 
-			if (otherWeight > 0.0f)
-			{
-				// 相手から見て自分は逆方向なので、マイナス(-)にする
-				Vector3 newOtherPos = otherPos - pushDir * (pushForce * otherWeight);
-				newOtherPos.y = otherPos.y; // Yは絶対固定
+				// 前回の「滑らかに押し合う（壁にならない）」移動量を計算
+				float pushAmount = penetration * kPushStrength;
+
+				// 自分（0.3）と相手（0.7）の移動比率（プレイヤーが押し込みやすくする設定）
+				float myWeight = 0.3f;
+				float otherWeight = 0.7f;
+
+				// 自分の位置を更新（相手の体から離れる方向へ）
+				Vector3 newMyPos = myPos + pushDir * (pushAmount * myWeight);
+				SetPosition(newMyPos);
+
+				// 相手の位置も同時に更新（自分から遠ざかる方向へズルズルと押される）
+				Vector3 newOtherPos = otherPos - pushDir * (pushAmount * otherWeight);
 				other->SetPosition(newOtherPos);
 			}
 		}
