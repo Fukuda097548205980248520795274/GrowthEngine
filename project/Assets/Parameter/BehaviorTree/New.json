@@ -260,7 +260,7 @@
                 "attackTime": 0.800000011920929,
                 "hitDefinitions": [
                     {
-                        "damage": 1,
+                        "damage": 10,
                         "damageReaction": 1,
                         "endTime": 0.20000000298023224,
                         "jointType": 9,
@@ -460,8 +460,8 @@
                 "Distance": 1.0,
                 "Duration": 0.30000001192092896,
                 "LocalDirection": [
-                    1.0,
-                    0.0
+                    0.0,
+                    1.0
                 ]
             },
             "id": 100,

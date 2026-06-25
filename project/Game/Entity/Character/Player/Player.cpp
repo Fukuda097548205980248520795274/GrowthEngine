@@ -117,7 +117,7 @@ void Player::Initialize(Weapon* baton)
 	attack1Data.hitDefinitions[0].jointType = JointType::HandR;
 	attack1Data.hitDefinitions[0].startTime = 0.1f;
 	attack1Data.hitDefinitions[0].endTime = 0.4f;
-	attack1Data.hitDefinitions[0].damage = 1;
+	attack1Data.hitDefinitions[0].damage = 10;
 	attack1Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
 	attack1Data.hitDefinitions[0].knockback = 1.0f;
 	attack1Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
@@ -135,7 +135,7 @@ void Player::Initialize(Weapon* baton)
 	attack2Data.hitDefinitions[0].jointType = JointType::HandL;
 	attack2Data.hitDefinitions[0].startTime = 0.1f;
 	attack2Data.hitDefinitions[0].endTime = 0.4f;
-	attack2Data.hitDefinitions[0].damage = 1;
+	attack2Data.hitDefinitions[0].damage = 10;
 	attack2Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
 	attack2Data.hitDefinitions[0].knockback = 1.0f;
 	attack2Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
@@ -153,7 +153,7 @@ void Player::Initialize(Weapon* baton)
 	attack3Data.hitDefinitions[0].jointType = JointType::HandR;
 	attack3Data.hitDefinitions[0].startTime = 0.1f;
 	attack3Data.hitDefinitions[0].endTime = 0.4f;
-	attack3Data.hitDefinitions[0].damage = 1;
+	attack3Data.hitDefinitions[0].damage = 10;
 	attack3Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
 	attack3Data.hitDefinitions[0].knockback = 1.0f;
 	attack3Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
@@ -171,10 +171,10 @@ void Player::Initialize(Weapon* baton)
 	attack4Data.hitDefinitions[0].jointType = JointType::FootL;
 	attack4Data.hitDefinitions[0].startTime = 0.1f;
 	attack4Data.hitDefinitions[0].endTime = 0.4f;
-	attack4Data.hitDefinitions[0].damage = 1;
+	attack4Data.hitDefinitions[0].damage = 10;
 	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
 	attack4Data.hitDefinitions[0].knockback = 8.0f;
-	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 0.0f);
+	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
 	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));

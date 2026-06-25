@@ -14,6 +14,7 @@
 #include "HUD/Timer/Timer.h"
 #include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
 #include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
+#include "HUD/HP/HP.h"
 
 #include "PivotPoint/PivotPoint.h"
 #include "Shake/Shake.h"
@@ -203,6 +204,9 @@ private:
 	/// @brief プレイヤーの武器
 	std::unique_ptr<Weapon> playerWeapon_ = nullptr;
 
+	/// @brief プレイヤーの体力バー
+	std::unique_ptr<HP> playerHP_ = nullptr;
+
 
 	// キャラクターのモデル用ハンドル
 	ModelHandle hCharacterModel_ = 0;
@@ -284,5 +288,10 @@ private:
 	std::unique_ptr<PrefabBaseSprite> hpLeftSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> hpMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> hpRightSprite_ = nullptr;
+
+	// 遅延体力バー
+	std::unique_ptr<PrefabBaseSprite> delayHpLeftSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> delayHpMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> delayHpRightSprite_ = nullptr;
 };
 

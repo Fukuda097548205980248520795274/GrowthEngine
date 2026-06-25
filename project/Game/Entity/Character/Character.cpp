@@ -12,6 +12,8 @@
 #include "StageEditor/StageData/StageData.h"
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
+#include "HUD/HP/HP.h"
+
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 
@@ -135,6 +137,15 @@ Character::Character(const InitData& initData) : Entity()
 		eventTriggerCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
 		eventTriggerCollision_->param_->radius = 0.25f;
 	}
+
+	// 体力HUD
+	if (initData.hpHUD)
+	{
+		hpHUD_ = initData.hpHUD;
+		hpHUD_->SetMaxHP(hp_);
+		hpHUD_->SetCurrentHP(hp_);
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+	}
 	
 
 	// ブラックボードの生成
@@ -151,7 +162,7 @@ Character::~Character()
 	if (wallTouchCollision_) wallTouchCollision_->Delete();
 	wallTouchCollision_ = nullptr;
 
-	// イベントトリガーの当たり判定の削除
+	// 死亡処理
 	Dead();
 }
 
@@ -227,6 +238,23 @@ void Character::Update()
 			// シェイクの更新
 			if (model_)model_->param_->modelTransform.translate = shake_->GetShakeOffset();
 			shake_->Update(dt);
+
+			// 現在の体力をHUDに反映する
+			if (hpHUD_)
+			{
+				hpHUD_->SetCurrentHP(hp_);
+
+				switch (characterTag_)
+				{
+					// 味方と敵は頭の上に体力HUDを表示する
+				case CharacterTag::Ally:
+				case CharacterTag::EnemyNormal:
+					hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
+					break;
+				}
+			}
+
+
 
 			// 当たり判定の更新
 			UpdateCollisionPosition(landingCollision_);
@@ -2042,6 +2070,10 @@ void Character::Dead()
 
 	if (hurtboxRoot_.collider_) hurtboxRoot_.collider_->Delete();
 	hurtboxRoot_.collider_ = nullptr;
+
+	// HUDに死亡を通知する
+	if (hpHUD_)hpHUD_->Death();
+	hpHUD_ = nullptr;
 
 	// インスタンスリストから自分を除外する
 	auto it = std::find(characters_.begin(), characters_.end(), this);

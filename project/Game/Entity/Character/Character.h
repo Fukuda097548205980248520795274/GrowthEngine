@@ -14,6 +14,7 @@ class Move;
 class Avoid;
 class Weapon;
 class NavMesh;
+class HP;
 
 enum class FightStyle
 {
@@ -57,6 +58,9 @@ public:
 
 		/// @brief 攻撃用トレイル
 		Trail3D* attackTrail = nullptr;
+
+		/// @brief 体力HUD
+		HP* hpHUD = nullptr;
 
 
 		/// @brief 立ちモーション
@@ -567,6 +571,9 @@ protected:
 
 	/// @brief 体力
 	int hp_ = 0;
+
+	/// @brief 体力HUD
+	HP* hpHUD_ = nullptr;
 
 	// やられたかどうか
 	bool isDead_ = false;
