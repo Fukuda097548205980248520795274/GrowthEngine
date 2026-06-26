@@ -34,6 +34,8 @@ void SingleButton::Initialize(const InitData& initData)
 	buttonInSprite_->param_.parent = worldTransform_.get();
 	buttonOutSprite_->param_.parent = worldTransform_.get();
 
+	alphaRate_ = 1.0f;
+
 	// 位置を設定
 	worldTransform_->translate_ = initData.position;
 	worldTransform_->Update();

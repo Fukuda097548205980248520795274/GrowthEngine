@@ -29,6 +29,9 @@
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
 
+#include "HUD/Button/SingleButton/SingleButton.h"
+#include "HUD/Button/MashButton/MashButton.h"
+
 #include "NavMesh/NavMesh.h"
 
 class GameScene : public Scene
@@ -258,6 +261,9 @@ private:
 	/// @brief 試験的な立方体
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
 
+	/// @brief Xボタン
+	std::unique_ptr<SingleButton> xButton_ = nullptr;
+
 
 	/// @brief カメラのピボットポイント
 	std::unique_ptr<PivotPoint> pivotPoint_ = nullptr;
@@ -306,5 +312,15 @@ private:
 
 	/// @brief 体力ゲージの区切りのスプライト
 	std::unique_ptr<PrefabBaseSprite> hpSeparatorSprite_ = nullptr;
+
+	/// @brief ボタンのスプライト
+	std::unique_ptr<PrefabBaseSprite> aButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> bButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> xButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> yButtonSprite_ = nullptr;
+
+	// ボタンの内側と外側のスプライト
+	std::unique_ptr<PrefabBaseSprite> buttonInSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> buttonOutSprite_ = nullptr;
 };
 

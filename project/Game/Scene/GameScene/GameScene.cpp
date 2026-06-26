@@ -95,6 +95,13 @@ void GameScene::Initialize()
 	attackButtonSprite->param_->texture.anchor = Vector2(0.0f, 1.0f);
 
 
+	SingleButton::InitData xButtonInitData;
+	xButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
+	xButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
+	xButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
+	xButton_ = std::make_unique<SingleButton>();
+	xButton_->Initialize(xButtonInitData);
+
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
 	playerHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("PlayerSide_Hurtbox");
@@ -195,6 +202,9 @@ void GameScene::Update()
 			cameraShake_->StartShake(0.1f, 0.025f, Vector3(1.0f, 1.0f, 1.0f));
 	}
 
+	// 攻撃ボタンの更新
+	if (xButton_) xButton_->Update();
+
 	// カメラシェイクの更新
 	cameraShake_->Update(dt);
 }
@@ -254,6 +264,17 @@ void GameScene::Draw()
 	delayHpFrontLeftSprite_->Draw();
 	delayHpFrontRightSprite_->Draw();
 	hpSeparatorSprite_->Draw();
+
+
+	// 攻撃ボタンの描画
+	if (xButton_) xButton_->Draw();
+
+	buttonInSprite_->Draw();
+	buttonOutSprite_->Draw();
+	yButtonSprite_->Draw();
+	xButtonSprite_->Draw();
+	bButtonSprite_->Draw();
+	aButtonSprite_->Draw();
 }
 
 
@@ -924,4 +945,13 @@ void GameScene::LoadHUDs()
 	hpSeparatorSprite_->param_->texture.anchor = Vector2(0.5f, 0.5f);
 	hpSeparatorSprite_->param_->transform.scale = Vector2(0.1f, 0.1f);
 	hpSeparatorSprite_->param_->transform.rotate = -0.5f;
+
+	// ボタン
+	aButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/a_button.png"), 50, "Button_A_Sprite");
+	bButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/b_button.png"), 50, "Button_B_Sprite");
+	xButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), 50, "Button_X_Sprite");
+	yButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), 50, "Button_Y_Sprite");
+
+	buttonInSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_in_circle.png"), 50, "Button_In_Sprite");
+	buttonOutSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_out_circle.png"), 50, "Button_Out_Sprite");
 }
