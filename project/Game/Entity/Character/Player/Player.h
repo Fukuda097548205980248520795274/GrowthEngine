@@ -25,7 +25,14 @@ public:
 	/// @brief ターゲット方向を向く
 	void TargetDirection() override;
 
+	/// @brief 弱攻撃入力があったかどうかを取得する
+	/// @return 
+	bool IsInputLightAttack() const { return isInputLightAttack_; }
+
 private:
+
+	/// @brief 更新処理開始前のリセット
+	void StartUpdate() override;
 
 	/// @brief 攻撃処理を更新する
 	void UpdateAttack();
@@ -146,6 +153,13 @@ private:
 
 	/// @brief カメラを操作しているかどうか
 	bool isOperationCamera_ = false;
+
+
+	// 攻撃入力状態
+	bool isInputLightAttack_ = false;
+
+	// 前フレームの攻撃入力状態
+	bool isPrevInputLightAttack_ = false;
 
 
 private:

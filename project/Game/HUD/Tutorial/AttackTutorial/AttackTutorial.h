@@ -14,6 +14,9 @@ public:
 		// プレイヤー
 		Player* player = nullptr;
 
+		/// @brief ボタンHUD
+		MashButton* buttonHud = nullptr;
+
 		// 攻撃の最大回数
 		int attackMaxCount = 0;
 
@@ -41,5 +44,8 @@ private:
 
 	/// @brief 攻撃の最大回数
 	int attackMaxCount_ = 0;
+
+	/// @brief プレイヤー
+	MashButton* buttonHud_ = nullptr;
 };
 

@@ -29,6 +29,9 @@ public:
 
 		/// @brief ボタンのスケール
 		Vector2 scale = Vector2(1.0f, 1.0f);
+
+		/// @brief 色
+		Vector3 color = Vector3(1.0f, 1.0f, 1.0f);
 	};
 
 

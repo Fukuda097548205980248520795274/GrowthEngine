@@ -356,6 +356,17 @@ void Player::TargetDirection()
 	}
 }
 
+/// @brief 更新処理開始前のリセット
+void Player::StartUpdate()
+{
+	// 攻撃入力をしたかどうかのフラグを更新する
+	isPrevInputLightAttack_ = isInputLightAttack_;
+	isInputLightAttack_ = false;
+
+	// 基底クラスの更新処理開始前のリセット
+	Character::StartUpdate();
+}
+
 /// @brief 攻撃処理を更新する
 void Player::UpdateAttack()
 {
@@ -390,6 +401,9 @@ void Player::UpdateAttack()
 		// 攻撃していない(待機・移動中) または、現在の攻撃から「弱」へ派生できる場合のみ
 		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Light))
 		{
+			// 弱攻撃入力をしたことを記録する
+			isInputLightAttack_ = true;
+
 			bufferedAttackInput_ = AttackInputType::Light;
 			attackInputBufferTime_ = 0.2f; // バッファ有効時間
 		}

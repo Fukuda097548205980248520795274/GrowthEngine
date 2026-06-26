@@ -3,6 +3,8 @@
 
 class Player;
 class Timer;
+class MashButton;
+class SingleButton;
 
 class Tutorial : public HUD
 {

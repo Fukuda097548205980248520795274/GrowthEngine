@@ -101,9 +101,9 @@ void GameScene::Initialize()
 	xButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	xButtonInitData.position = Vector2(200.0f, 200.0f);
 	xButtonInitData.scale = Vector2(0.3f, 0.3f);
+	xButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
 	xButton_ = std::make_unique<MashButton>();
 	xButton_->Initialize(xButtonInitData);
-	xButton_->FadeIn();
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -212,7 +212,7 @@ void GameScene::Update()
 	}
 
 	// 攻撃ボタンの更新
-	if (xButton_) xButton_->Update();
+	if (xButton_)xButton_->Update();
 
 	// カメラシェイクの更新
 	cameraShake_->Update(dt);
@@ -591,6 +591,7 @@ AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& 
 	AttackTutorial::InitData tutorialInitData = initData;
 	tutorialInitData.player = player_.get();
 	tutorialInitData.sprite = attackButtonSprite.get();
+	tutorialInitData.buttonHud = xButton_.get();
 
 	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
 	newTutorial->Initialize(tutorialInitData);

@@ -1,5 +1,6 @@
 #include "AttackTutorial.h"
 #include "Entity/Character/Player/Player.h"
+#include "HUD/Button/MashButton/MashButton.h"
 
 /// @brief 初期化処理
 /// @param initData 
@@ -11,6 +12,13 @@ void AttackTutorial::Initialize(const InitData& initData)
 
 	// プレイヤー
 	if(initData.player)player_ = initData.player;
+
+	// ボタンHUD
+	if (initData.buttonHud)
+	{
+		buttonHud_ = initData.buttonHud;
+		buttonHud_->FadeIn();
+	}
 
 	sprite_ = initData.sprite;
 
@@ -34,6 +42,13 @@ void AttackTutorial::Update()
 		return;
 	}
 
+	// ボタンHUDの位置をプレイヤーの頭の上に設定
+	if (buttonHud_)
+	{
+		buttonHud_->SetPosition(player_->GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+		if(player_->IsInputLightAttack())buttonHud_->Input();
+	}
+
 	if (state_ == State::Practice)
 	{
 		// 攻撃の回数を更新
@@ -46,6 +61,7 @@ void AttackTutorial::Update()
 		if (attackCount_ >= attackMaxCount_)
 		{
 			state_ = State::Clear;
+			if (buttonHud_)buttonHud_->FadeOut();
 		}
 	}
 

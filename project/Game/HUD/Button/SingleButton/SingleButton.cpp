@@ -34,6 +34,10 @@ void SingleButton::Initialize(const InitData& initData)
 	buttonInSprite_->param_.parent = worldTransform_.get();
 	buttonOutSprite_->param_.parent = worldTransform_.get();
 
+	// 色を設定
+	buttonInSprite_->param_.material.color = Vector4(initData.color.x, initData.color.y, initData.color.z, 1.0f);
+	buttonOutSprite_->param_.material.color = Vector4(initData.color.x, initData.color.y, initData.color.z, 1.0f);
+
 	// 位置を設定
 	worldTransform_->translate_ = initData.position;
 	worldTransform_->scale_ = initData.scale;
@@ -124,6 +128,9 @@ void SingleButton::Update()
 /// @brief 描画処理
 void SingleButton::Draw()
 {
+	// α値が0以下の場合は描画しない
+	if (alphaRate_ <= 0.0f)return;
+
 	buttonSprite_->Draw();
 	buttonInSprite_->Draw();
 	buttonOutSprite_->Draw();

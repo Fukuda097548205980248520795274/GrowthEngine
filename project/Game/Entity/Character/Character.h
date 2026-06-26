@@ -815,6 +815,7 @@ protected:
 
 protected:
 
+
 	// 攻撃がヒットしたかどうか
 	bool isHitAttack_ = false;
 
