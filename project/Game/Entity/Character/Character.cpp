@@ -941,6 +941,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	if (hp_ == 0)
 	{
 		Dead();
+
+		// プレイヤーが相手を倒した場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.2f, 0.8f);
+
+		// プレイヤーが倒された場合は、スローモーションを開始する
+		if(IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 3.0f);
 	}
 
 	return true; // ダメージが通った

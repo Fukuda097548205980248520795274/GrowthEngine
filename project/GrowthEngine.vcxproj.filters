@@ -706,29 +706,11 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData">
       <UniqueIdentifier>{84a3de5c-0a90-4c1a-be9a-9bfcca5302e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline">
-      <UniqueIdentifier>{c4bed02e-059b-4996-af29-f3def6a3441b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline">
-      <UniqueIdentifier>{7876ec07-82f4-479b-a0f3-6ed9f85c380d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData">
-      <UniqueIdentifier>{69acefa8-6fd1-41ca-b345-b429d0f0b8c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData">
-      <UniqueIdentifier>{f8a5038e-32d4-42a9-a70f-fcaceb7b4d5c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise">
       <UniqueIdentifier>{384c55b5-07b6-441d-82f3-554d707b65bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData">
       <UniqueIdentifier>{340ae851-aac8-4657-b765-4671a02334c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODissolve">
-      <UniqueIdentifier>{2d7c790d-8e9e-46c7-98cc-ac53b53ec1b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData">
-      <UniqueIdentifier>{f37d9bc4-ed89-44df-b50f-d88511567128}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODOF">
       <UniqueIdentifier>{f360b711-ba09-424b-995c-088cbdca649f}</UniqueIdentifier>
@@ -1293,6 +1275,15 @@
     </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData">
       <UniqueIdentifier>{d97b07d0-a8ae-4906-8d6a-43fbd54460c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Button">
+      <UniqueIdentifier>{acdc7cfa-c684-4e79-a1d4-943cbedc68a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Button\MashButton">
+      <UniqueIdentifier>{543de320-6789-40f1-a2ed-906d1384ec71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Button\SingleButton">
+      <UniqueIdentifier>{b760b2ea-cbf4-4239-aa6e-2848405e42ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2321,6 +2312,15 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Defense\Parry\Parry.cpp">
       <Filter>Game\Action\Defence\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Button\Button.cpp">
+      <Filter>Game\HUD\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Button\MashButton\MashButton.cpp">
+      <Filter>Game\HUD\Button\MashButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Button\SingleButton\SingleButton.cpp">
+      <Filter>Game\HUD\Button\SingleButton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3469,6 +3469,15 @@
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData\BehaviorTreeData.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Button\Button.h">
+      <Filter>Game\HUD\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Button\MashButton\MashButton.h">
+      <Filter>Game\HUD\Button\MashButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Button\SingleButton\SingleButton.h">
+      <Filter>Game\HUD\Button\SingleButton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
