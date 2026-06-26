@@ -1,6 +1,14 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief パリィの種類
+enum class GuardType
+{
+	Guard, // ガード
+	Deflect, // 受け流し
+	Repel, // 弾き
+};
+
 class Defense : public Action
 {
 public:

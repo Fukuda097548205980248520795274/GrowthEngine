@@ -1291,6 +1291,9 @@
     <Filter Include="Game\Action\Defence\Parry">
       <UniqueIdentifier>{354b9aaf-2d11-4911-ae58-8e5951e3d613}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData">
+      <UniqueIdentifier>{d97b07d0-a8ae-4906-8d6a-43fbd54460c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -3499,6 +3502,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Defense\Parry\Parry.h">
       <Filter>Game\Action\Defence\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData\BehaviorTreeData.h">
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

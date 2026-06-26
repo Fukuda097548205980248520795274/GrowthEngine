@@ -1,12 +1,7 @@
 #pragma once
+#include "../Defense.h"
 
-enum class ParryType
-{
-	None = 0,
-
-};
-
-class Parry
+class Parry : public Defense
 {
 };
 

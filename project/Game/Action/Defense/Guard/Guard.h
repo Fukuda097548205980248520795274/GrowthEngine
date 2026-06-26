@@ -1,5 +1,7 @@
 #pragma once
-class Guard
+#include "../Defense.h"
+
+class Guard : public Defense
 {
 };
 

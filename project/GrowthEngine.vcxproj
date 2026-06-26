@@ -1458,6 +1458,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\Action\RequestToken\RequestToken.h" />
     <ClInclude Include="Game\AppCollider\AppCollider.h" />
     <ClInclude Include="Game\BattleDirector\BattleDirector.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData\BehaviorTreeData.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditor.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorClipboard\BehaviorTreeEditorClipboard.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.h" />
