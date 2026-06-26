@@ -84,9 +84,6 @@ void Player::Initialize(Weapon* baton)
 	// 掴まれ解き入力の生成
 	inputEscapeMash_ = std::make_unique<InputGamepadButton>("Player_EscapeMash", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
 
-	// ダウン後起き上がり入力の生成
-	inputGetUp_ = std::make_unique<InputGamepadButton>("Player_GetUp", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
-
 	// スタイルチェンジ入力の生成
 	inputStyleChange_ = std::make_unique<InputGamepadButton>("Player_StyleChange", InputState::Trigger, 0, XINPUT_GAMEPAD_DPAD_DOWN);
 
@@ -574,13 +571,10 @@ bool Player::CheckGetUpCondition()
 	// 地面に接地していない場合は起き上がれない
 	if (!IsGrounded())return false;
 
-	// 起き上がりボタンが入力されたら true を返す
-	if (inputGetUp_ && inputGetUp_->IsInput())
-	{
-		return true;
-	}
+	// プレイヤーはダウン後、すぐに起き上がるようにする
+	damageReactionTimer_ = 0.0f;
 
-	return false;
+	return true;
 }
 
 /// @brief スタイルチェンジ開始時の処理

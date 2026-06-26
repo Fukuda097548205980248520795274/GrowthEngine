@@ -100,9 +100,6 @@ private:
 	/// @brief 掴まれ解き入力
 	std::unique_ptr<InputGamepadButton> inputEscapeMash_ = nullptr;
 
-	/// @brief ダウン後起き上がり入力
-	std::unique_ptr<InputGamepadButton> inputGetUp_ = nullptr;
-
 	/// @brief スタイルチェンジ入力
 	std::unique_ptr<InputGamepadButton> inputStyleChange_ = nullptr;
 
