@@ -72,32 +72,6 @@ namespace Engine
 			float power;
 		};
 
-		/// @brief 輝度ベースの輪郭抽出
-		struct LuminanceBasedOutline
-		{
-			// RGBチャンネルの重み
-			Vector3 colorWeight;
-
-			// 輝度の閾値
-			float intensity;
-		};
-
-		/// @brief ディゾルブ
-		struct Dissolve
-		{
-			// 閾値
-			float threshold;
-
-			// マスクテクスチャ
-			TextureHandle hMaskTexture;
-
-			// エッジの幅
-			float edgeDiff;
-
-			// エッジの色
-			Vector3 edgeColor;
-		};
-
 		/// @brief ホワイトノイズ
 		struct WhiteNoise
 		{

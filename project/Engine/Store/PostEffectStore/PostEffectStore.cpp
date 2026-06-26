@@ -9,10 +9,7 @@
 #include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"
 #include "PostEffectData/PostEffectGaussianFilterData/PostEffectGaussianFilterData.h"
-#include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
-#include "PostEffectData/PostEffectDepthBasedOutlineData/PostEffectDepthBasedOutlineData.h"
 #include "PostEffectData/PostEffectRadialBlurData/PostEffectRadialBlurData.h"
-#include "PostEffectData/PostEffectDissolveData/PostEffectDissolveData.h"
 #include "PostEffectData/PostEffectWhiteNoiseData/PostEffectWhiteNoiseData.h"
 #include "PostEffectData/PostEffectDOFData/PostEffectDOFData.h"
 #include "PostEffectData/PostEffectBloomData/PostEffectBloomData.h"
@@ -68,22 +65,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// ガウシアンフィルタPSO
 	psoGaussianFilter_ = std::make_unique<PSOGaussianFilter>();
 	psoGaussianFilter_->Initialize(device, compiler, vertexShaderBlob, log);
-
-	// 輝度ベース輪郭抽出PSO
-	psoLuminanceBasedOutline_ = std::make_unique<PSOLuminanceBasedOutline>();
-	psoLuminanceBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
-
-	// 深度ベース輪郭抽出PSO
-	psoDepthBasedOutline_ = std::make_unique<PSODepthBasedOutline>();
-	psoDepthBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
 	
 	// ラジアルブラーPSO
 	psoRadialBlur_ = std::make_unique<PSORadialBlur>();
 	psoRadialBlur_->Initialize(device, compiler, vertexShaderBlob, log);
-
-	// ディゾルブPSO
-	psoDissolve_ = std::make_unique<PSODissolve>();
-	psoDissolve_->Initialize(device, compiler, vertexShaderBlob, log);
 
 	// ホワイトノイズPSO
 	psoWhiteNoise_ = std::make_unique<PSOWhiteNoise>();
@@ -235,24 +220,6 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		return handle;
 	}
 
-	// 輝度ベース輪郭抽出
-	if (type == PostEffect::Type::LuminanceBasedOutline)
-	{
-		std::unique_ptr<PostEffectLuminanceBasedOutlineData> data = std::make_unique<PostEffectLuminanceBasedOutlineData>(name, type, handle, parameter_.get());
-		data->Initialize(device, log, psoLuminanceBasedOutline_.get());
-		dataTable_.push_back(std::move(data));
-		return handle;
-	}
-
-	// 深度ベース輪郭抽出
-	if (type == PostEffect::Type::DepthBasedOutline)
-	{
-		std::unique_ptr<PostEffectDepthBasedOutlineData> data = std::make_unique<PostEffectDepthBasedOutlineData>(name, type, handle, parameter_.get());
-		data->Initialize(device, log, psoDepthBasedOutline_.get());
-		dataTable_.push_back(std::move(data));
-		return handle;
-	}
-
 	// ラジアルブラー
 	if (type == PostEffect::Type::RadialBlur)
 	{
@@ -260,15 +227,6 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		data->Initialize(device, log, psoRadialBlur_.get());
 		dataTable_.push_back(std::move(data));
 
-		return handle;
-	}
-
-	// ディゾルブ
-	if (type == PostEffect::Type::Dissolve)
-	{
-		std::unique_ptr<PostEffectDissolveData> data = std::make_unique<PostEffectDissolveData>(name, type, handle, parameter_.get());
-		data->Initialize(device, log, psoDissolve_.get(), textureStore_);
-		dataTable_.push_back(std::move(data));
 		return handle;
 	}
 

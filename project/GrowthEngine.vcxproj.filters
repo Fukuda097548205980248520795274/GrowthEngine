@@ -1851,29 +1851,11 @@
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.cpp">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.cpp">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.cpp">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOWhiteNoise\PSOWhiteNoise.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODissolve\PSODissolve.cpp">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSODissolve</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.cpp">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSODOF\PSODOF.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSODOF</Filter>
@@ -2996,29 +2978,11 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.h">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.h">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOWhiteNoise\PSOWhiteNoise.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOWhiteNoise</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData\PostEffectWhiteNoiseData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectWhiteNoiseData</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODissolve\PSODissolve.h">
-      <Filter>Engine\Include\PSO\PSOPostEffect\PSODissolve</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDissolveData\PostEffectDissolveData.h">
-      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDissolveData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSODOF\PSODOF.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSODOF</Filter>
@@ -3618,16 +3582,7 @@
     <FxCompile Include="Assets\Shader\PostEffect\GaussianFilter.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\PostEffect\LuminanceBasedOutline.PS.hlsl">
-      <Filter>Engine\Shader\PostEffect</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\PostEffect\DepthBasedOutline.PS.hlsl">
-      <Filter>Engine\Shader\PostEffect</Filter>
-    </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\WhiteNoise.PS.hlsl">
-      <Filter>Engine\Shader\PostEffect</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\PostEffect\Dissolve.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\DOF.PS.hlsl">

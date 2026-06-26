@@ -15,9 +15,6 @@
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
 #include "PSO/PSOPostEffect/PSOSmoothing/PSOSmoothing.h"
 #include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
-#include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
-#include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
-#include "PSO/PSOPostEffect/PSODissolve/PSODissolve.h"
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 #include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
 
@@ -212,17 +209,8 @@ namespace Engine
 		/// @brief ガウシアンフィルタPSO
 		std::unique_ptr<PSOGaussianFilter> psoGaussianFilter_ = nullptr;
 
-		/// @brief 輝度ベース輪郭抽出PSO
-		std::unique_ptr<PSOLuminanceBasedOutline> psoLuminanceBasedOutline_ = nullptr;
-
-		/// @brief 深度ベース輪郭抽出PSO
-		std::unique_ptr<PSODepthBasedOutline> psoDepthBasedOutline_ = nullptr;
-
 		/// @brief ラジアルブラーPSO
 		std::unique_ptr<PSORadialBlur> psoRadialBlur_ = nullptr;
-
-		/// @brief ディゾルブPSO
-		std::unique_ptr<PSODissolve> psoDissolve_ = nullptr;
 
 		/// @brief ホワイトノイズPSO
 		std::unique_ptr<PSOWhiteNoise> psoWhiteNoise_ = nullptr;

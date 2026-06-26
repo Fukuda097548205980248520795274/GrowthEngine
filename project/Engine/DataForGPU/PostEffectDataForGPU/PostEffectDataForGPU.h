@@ -57,39 +57,6 @@ namespace Engine
 			float padding0[3]; // 16バイトアラインメントのためのパディング
         };
 
-		/// @brief GPUに送る輝度ベースの輪郭抽出
-        struct LuminanceBasedOutlineDataForGPU
-        {
-            // RGBチャンネルの重み
-            Vector3 colorWeight;
-
-            // 輝度の閾値
-            float intensity;
-        };
-
-		/// @brief GPUに送る深度ベースの輪郭抽出
-        struct DepthBasedOutlineDataForGPU
-        {
-            Matrix4x4 projectionInverse;
-        };
-
-        /// @brief GPUに送るディゾルブ
-		struct DissolveDataForGPU
-        {
-            // 閾値
-            float threshold;
-
-            // エッジの幅
-            float edgeDiff;
-
-            float padding0[2]; // 16バイトアラインメントのためのパディング
-
-            // エッジの色
-            Vector3 edgeColor;
-
-			float padding1[1]; // 16バイトアラインメントのためのパディング
-        };
-
         /// @brief GPUに送るホワイトノイズ
         struct WhiteNoiseDataForGPU
         {
