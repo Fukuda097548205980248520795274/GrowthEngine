@@ -95,12 +95,15 @@ void GameScene::Initialize()
 	attackButtonSprite->param_->texture.anchor = Vector2(0.0f, 1.0f);
 
 
-	SingleButton::InitData xButtonInitData;
+	MashButton::InitData xButtonInitData;
 	xButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
 	xButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	xButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
-	xButton_ = std::make_unique<SingleButton>();
+	xButtonInitData.position = Vector2(200.0f, 200.0f);
+	xButtonInitData.scale = Vector2(0.3f, 0.3f);
+	xButton_ = std::make_unique<MashButton>();
 	xButton_->Initialize(xButtonInitData);
+	xButton_->FadeIn();
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -176,6 +179,12 @@ void GameScene::Update()
 	// HUDの更新
 	huds_.remove_if([](const std::unique_ptr<HUD>& hud) {hud->Update(); return hud->IsFinished(); });
 
+	if (engine_->GetKeyTrigger(DIK_SPACE))
+	{
+		xButton_->Input();
+	}
+
+	xButton_->Update();
 
 	// エフェクトの更新
 	effectManager_->Update();
@@ -953,5 +962,7 @@ void GameScene::LoadHUDs()
 	yButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), 50, "Button_Y_Sprite");
 
 	buttonInSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_in_circle.png"), 50, "Button_In_Sprite");
+	buttonInSprite_->param_->transform.scale = Vector2(0.7f, 0.7f);
+
 	buttonOutSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_out_circle.png"), 50, "Button_Out_Sprite");
 }

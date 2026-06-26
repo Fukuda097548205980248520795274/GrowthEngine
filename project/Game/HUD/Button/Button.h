@@ -21,6 +21,6 @@ protected:
 	PrefabInstanceSprite* buttonSprite_;
 
 	/// @brief α値の割合
-	float alphaRate_ = 1.0f;
+	float alphaRate_ = 0.0f;
 };
 

@@ -34,10 +34,9 @@ void SingleButton::Initialize(const InitData& initData)
 	buttonInSprite_->param_.parent = worldTransform_.get();
 	buttonOutSprite_->param_.parent = worldTransform_.get();
 
-	alphaRate_ = 1.0f;
-
 	// 位置を設定
 	worldTransform_->translate_ = initData.position;
+	worldTransform_->scale_ = initData.scale;
 	worldTransform_->Update();
 }
 
@@ -51,32 +50,73 @@ void SingleButton::Update()
 
 		if (fadeInTimer_ <= 0.0f)
 		{
-			state_ = State::OutScaling;
+			state_ = State::None;
 			inScalingTimer_ = kOutScalingTime;
 		}
 	} 
-	else if (state_ == State::OutScaling)
+	else if (state_ == State::Input)
 	{
-		inScalingTimer_ -= engine_->GetDeltaTime();
-		float scaleRate = inScalingTimer_ / kOutScalingTime;
+		inputTimer_ -= engine_->GetDeltaTime();
 
-		buttonOutSprite_->param_.transform.scale = Vector2(1.0f + (1.0f - scaleRate), 1.0f + (1.0f - scaleRate));
-		if (inScalingTimer_ <= 0.0f)
+		float scaleRate = std::clamp(1.0f - (inputTimer_ / kInputTime), 0.0f, 1.0f);
+		scaleRate = 1.0f - std::powf(1.0f - scaleRate, 2.0f);
+
+		// 外側のスプライトのスケールを設定
+		float scale = Lerp(0.0f, kInputOutScale, scaleRate);
+		buttonOutSprite_->param_.transform.scale = Vector2(scale, scale);
+
+		// α値を設定
+		outAlphaRate_ = 1.0f - scaleRate;
+
+		if (inputTimer_ <= 0.0f)
 		{
-			state_ = State::None;
-			buttonOutSprite_->param_.transform.scale = Vector2(1.0f, 1.0f);
+			state_ = State::FadeOut;
+			buttonOutSprite_->param_.transform.scale = Vector2(kInputOutScale, kInputOutScale);
+			outAlphaRate_ = 0.0f;
 		}
-	} 
+	}
 	else if (state_ == State::FadeOut)
 	{
 		fadeOutTimer_ -= engine_->GetDeltaTime();
+
+		float scaleRate = std::clamp(1.0f - (fadeOutTimer_ / kFadeOutTime), 0.0f, 1.0f);
+		scaleRate = std::powf(scaleRate, 2.0f);
+
+		// 外側のスプライトのスケールを設定
+		float scale = Lerp(kOutScale, 0.0f, scaleRate);
+		buttonOutSprite_->param_.transform.scale = Vector2(scale, scale);
+
+		// α値を設定
 		alphaRate_ = fadeOutTimer_ / kFadeOutTime;
+
+		if (fadeOutTimer_ <= 0.0f)
+		{
+			state_ = State::None;
+			buttonOutSprite_->param_.transform.scale = Vector2(0.0f, 0.0f);
+		}
+	}
+	else if (state_ == State::None)
+	{
+		inScalingTimer_ -= engine_->GetDeltaTime();
+
+		float scaleRate = std::clamp(1.0f - (inScalingTimer_ / kOutScalingTime), 0.0f, 1.0f);
+		scaleRate = 1.0f - std::powf(1.0f - scaleRate, 2.0f);
+
+		// 外側のスプライトのスケールを設定
+		float scale = Lerp(0.0f, kOutScale, scaleRate);
+		buttonOutSprite_->param_.transform.scale = Vector2(scale, scale);
+
+		// α値を設定
+		outAlphaRate_ = 1.0f - scaleRate;
+
+		// タイマーが0以下になったらリセット
+		if (inScalingTimer_ <= 0.0f)inScalingTimer_ = kOutScalingTime;
 	}
 
 	// α値を設定
 	buttonSprite_->param_.material.color.w = alphaRate_;
 	buttonInSprite_->param_.material.color.w = alphaRate_;
-	buttonOutSprite_->param_.material.color.w = alphaRate_;
+	buttonOutSprite_->param_.material.color.w = alphaRate_ * outAlphaRate_;
 
 	Button::Update();
 }
@@ -92,8 +132,10 @@ void SingleButton::Draw()
 /// @brief 入力処理
 void  SingleButton::Input()
 {
-	// 入力したらフェードアウトする
-	FadeOut();
+	state_ = State::Input;
+	inputTimer_ = kInputTime;
+	buttonOutSprite_->param_.transform.scale = Vector2(kInputOutScale, kInputOutScale);
+	outAlphaRate_ = 1.0f;
 }
 
 /// @brief フェードインを開始する
@@ -101,6 +143,7 @@ void SingleButton::FadeIn()
 {
 	state_ = State::FadeIn;
 	fadeInTimer_ = kFadeInTime;
+	buttonOutSprite_->param_.transform.scale = Vector2(0.0f, 0.0f);
 }
 
 /// @brief フェードアウトを開始する

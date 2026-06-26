@@ -9,6 +9,7 @@ public:
 	{
 		None,
 		FadeIn,
+		Input,
 		FadeOut,
 	};
 
@@ -25,6 +26,9 @@ public:
 
 		/// @brief ボタンの位置
 		Vector2 position = Vector2(0.0f, 0.0f);
+
+		/// @brief ボタンのスケール
+		Vector2 scale = Vector2(1.0f, 1.0f);
 	};
 
 
@@ -64,6 +68,9 @@ private:
 	/// @brief ボタンの状態
 	State state_ = State::None;
 
+	/// @brief 外側のスプライトのα値の割合
+	float outAlphaRate_ = 1.0f;
+
 
 private:
 
@@ -81,6 +88,27 @@ private:
 
 	/// @brief フェードアウトタイマー
 	float fadeOutTimer_ = kFadeOutTime;
+
+
+private:
+
+	/// @brief 入力時間
+	static constexpr float kInputTime = 0.2f;
+
+	/// @brief 入力タイマー
+	float inputTimer_ = kInputTime;
+
+	/// @brief ボタンの外側の大きさ
+	static constexpr float kInputOutScale = 1.2f;
+
+
+private:
+
+	/// @brief 外側のスケールパラメータ
+	float outScaleParameter_ = 0.0f;
+
+	/// @brief 外側のスケールパラメータの速度
+	static constexpr float kOutScaleParameterSpeed = 6.0f;
 
 };
 

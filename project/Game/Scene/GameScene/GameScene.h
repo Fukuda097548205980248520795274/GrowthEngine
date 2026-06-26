@@ -262,7 +262,7 @@ private:
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
 
 	/// @brief Xボタン
-	std::unique_ptr<SingleButton> xButton_ = nullptr;
+	std::unique_ptr<MashButton> xButton_ = nullptr;
 
 
 	/// @brief カメラのピボットポイント
