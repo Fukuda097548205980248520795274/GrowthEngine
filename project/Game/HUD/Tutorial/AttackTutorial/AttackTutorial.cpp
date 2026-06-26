@@ -39,6 +39,7 @@ void AttackTutorial::Update()
 	if (!player_)
 	{
 		Delete();
+		if (buttonHud_)buttonHud_->FadeOut();
 		return;
 	}
 
