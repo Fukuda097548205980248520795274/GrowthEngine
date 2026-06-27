@@ -2,6 +2,12 @@
 #include "Entity/Character/Player/Player.h"
 #include "HUD/Button/MashButton/MashButton.h"
 
+/// @brief デストラクタ
+AttackTutorial::~AttackTutorial()
+{
+	
+}
+
 /// @brief 初期化処理
 /// @param initData 
 void AttackTutorial::Initialize(const InitData& initData)
@@ -19,8 +25,6 @@ void AttackTutorial::Initialize(const InitData& initData)
 		buttonHud_ = initData.buttonHud;
 		buttonHud_->FadeIn();
 	}
-
-	sprite_ = initData.sprite;
 
 	// 攻撃の最大回数
 	attackMaxCount_ = initData.attackMaxCount;
@@ -47,7 +51,10 @@ void AttackTutorial::Update()
 	if (buttonHud_)
 	{
 		buttonHud_->SetPosition(player_->GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
-		if(player_->IsInputLightAttack())buttonHud_->Input();
+
+		// ボタンHUDの入力を更新
+		if (player_->IsInputLightAttack() && state_ != State::Clear)
+			buttonHud_->Input();
 	}
 
 	if (state_ == State::Practice)
@@ -68,4 +75,10 @@ void AttackTutorial::Update()
 
 	// 基底クラスの更新
 	Tutorial::Update();
+}
+
+/// @brief 描画処理
+void AttackTutorial::Draw()
+{
+	if (buttonHud_)buttonHud_->Draw();
 }

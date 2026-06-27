@@ -43,9 +43,3 @@ void Tutorial::Update()
 	// 基底クラスの更新
 	HUD::Update();
 }
-
-/// @brief 描画処理
-void Tutorial::Draw()
-{
-	if (sprite_)sprite_->Draw();
-}

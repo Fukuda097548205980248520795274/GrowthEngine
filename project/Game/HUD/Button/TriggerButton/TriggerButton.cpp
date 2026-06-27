@@ -1,7 +1,7 @@
-#include "SingleButton.h"
+#include "TriggerButton.h"
 
 /// @brief デストラクタ
-SingleButton::~SingleButton()
+TriggerButton::~TriggerButton()
 {
 	// ボタンのスプライトを削除
 	if (buttonSprite_)buttonSprite_->isDelete_ = true;
@@ -18,7 +18,7 @@ SingleButton::~SingleButton()
 
 /// @brief 初期化
 /// @param initData 
-void SingleButton::Initialize(const InitData& initData)
+void TriggerButton::Initialize(const InitData& initData)
 {
 	assert(initData.buttonSprite && "ボタンスプライトが設定されていません。");
 	assert(initData.buttonInSprite && "ボタン内側スプライトが設定されていません。");
@@ -45,7 +45,7 @@ void SingleButton::Initialize(const InitData& initData)
 }
 
 /// @brief 更新処理
-void SingleButton::Update()
+void TriggerButton::Update()
 {
 	if (state_ == State::FadeIn)
 	{
@@ -126,7 +126,7 @@ void SingleButton::Update()
 }
 
 /// @brief 描画処理
-void SingleButton::Draw()
+void TriggerButton::Draw()
 {
 	// α値が0以下の場合は描画しない
 	if (alphaRate_ <= 0.0f)return;
@@ -137,7 +137,7 @@ void SingleButton::Draw()
 }
 
 /// @brief 入力処理
-void  SingleButton::Input()
+void TriggerButton::Input()
 {
 	state_ = State::Input;
 	inputTimer_ = kInputTime;
@@ -146,7 +146,7 @@ void  SingleButton::Input()
 }
 
 /// @brief フェードインを開始する
-void SingleButton::FadeIn()
+void TriggerButton::FadeIn()
 {
 	state_ = State::FadeIn;
 	fadeInTimer_ = kFadeInTime;
@@ -154,7 +154,7 @@ void SingleButton::FadeIn()
 }
 
 /// @brief フェードアウトを開始する
-void SingleButton::FadeOut()
+void TriggerButton::FadeOut()
 {
 	state_ = State::FadeOut;
 	fadeOutTimer_ = kFadeOutTime;

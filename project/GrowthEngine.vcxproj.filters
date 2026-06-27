@@ -1282,8 +1282,20 @@
     <Filter Include="Game\HUD\Button\MashButton">
       <UniqueIdentifier>{543de320-6789-40f1-a2ed-906d1384ec71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\HUD\Button\SingleButton">
+    <Filter Include="Game\HUD\Button\PressButton">
+      <UniqueIdentifier>{bd348c54-39fd-4b90-bf92-13012aca3ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Button\TriggerButton">
       <UniqueIdentifier>{b760b2ea-cbf4-4239-aa6e-2848405e42ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Tutorial\AvoidTutorial">
+      <UniqueIdentifier>{8a554a59-5a58-4edc-8397-4e9a9b66088a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Tutorial\DashTutorial">
+      <UniqueIdentifier>{74630fe7-766b-45df-b989-93bea8c6692d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Tutorial\StyleChangeTutorial">
+      <UniqueIdentifier>{2200fc4b-93ba-4007-8687-d5d14f2a3a45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2319,8 +2331,20 @@
     <ClCompile Include="Game\HUD\Button\MashButton\MashButton.cpp">
       <Filter>Game\HUD\Button\MashButton</Filter>
     </ClCompile>
-    <ClCompile Include="Game\HUD\Button\SingleButton\SingleButton.cpp">
-      <Filter>Game\HUD\Button\SingleButton</Filter>
+    <ClCompile Include="Game\HUD\Button\TriggerButton\TriggerButton.cpp">
+      <Filter>Game\HUD\Button\TriggerButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Button\PressButton\PressButton.cpp">
+      <Filter>Game\HUD\Button\PressButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.cpp">
+      <Filter>Game\HUD\Tutorial\AvoidTutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.cpp">
+      <Filter>Game\HUD\Tutorial\DashTutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.cpp">
+      <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3476,8 +3500,20 @@
     <ClInclude Include="Game\HUD\Button\MashButton\MashButton.h">
       <Filter>Game\HUD\Button\MashButton</Filter>
     </ClInclude>
-    <ClInclude Include="Game\HUD\Button\SingleButton\SingleButton.h">
-      <Filter>Game\HUD\Button\SingleButton</Filter>
+    <ClInclude Include="Game\HUD\Button\TriggerButton\TriggerButton.h">
+      <Filter>Game\HUD\Button\TriggerButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Button\PressButton\PressButton.h">
+      <Filter>Game\HUD\Button\PressButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.h">
+      <Filter>Game\HUD\Tutorial\AvoidTutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.h">
+      <Filter>Game\HUD\Tutorial\DashTutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h">
+      <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

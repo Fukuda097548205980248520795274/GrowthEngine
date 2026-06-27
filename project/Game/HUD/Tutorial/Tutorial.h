@@ -21,6 +21,9 @@ public:
 
 public:
 
+	/// @brief 仮想デストラクタ
+	virtual ~Tutorial() = default;
+
 	/// @brief コンストラクタ
 	Tutorial() : HUD() { state_ = State::Practice; }
 
@@ -28,7 +31,7 @@ public:
 	virtual void Update() override;
 
 	/// @brief 描画処理
-	void Draw()override;
+	virtual void Draw()override {}
 
 
 protected:
@@ -62,12 +65,6 @@ protected:
 
 	// プレイヤー
 	Player* player_ = nullptr;
-
-
-protected:
-
-	/// @brief スプライト
-	Sprite* sprite_ = nullptr;
 
 
 protected:

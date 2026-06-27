@@ -12,8 +12,6 @@ void GuardTutorial::Initialize(const InitData& initData)
 	// プレイヤー
 	if(initData.player)player_ = initData.player;
 
-	sprite_ = initData.sprite;
-
 	// 攻撃の最大回数
 	guardMaxCount_ = initData.guardMaxCount;
 

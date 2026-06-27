@@ -55,6 +55,10 @@ public:
 	/// @param position 
 	void SetPosition(const Vector3& position);
 
+	/// @brief ワールド座標を取得する
+	/// @return 
+	Vector2 GetWorldPosition() { return worldTransform_->GetWorldPosition(); }
+
 
 protected:
 

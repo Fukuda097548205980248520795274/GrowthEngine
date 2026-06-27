@@ -179,11 +179,6 @@ void GameScene::Update()
 	// HUDの更新
 	huds_.remove_if([](const std::unique_ptr<HUD>& hud) {hud->Update(); return hud->IsFinished(); });
 
-	if (engine_->GetKeyTrigger(DIK_SPACE))
-	{
-		xButton_->Input();
-	}
-
 	xButton_->Update();
 
 	// エフェクトの更新
@@ -273,13 +268,11 @@ void GameScene::Draw()
 	delayHpFrontLeftSprite_->Draw();
 	delayHpFrontRightSprite_->Draw();
 	hpSeparatorSprite_->Draw();
-
-
-	// 攻撃ボタンの描画
-	if (xButton_) xButton_->Draw();
-
 	buttonInSprite_->Draw();
 	buttonOutSprite_->Draw();
+	textFrameMiddleSprite_->Draw();
+	textFrameLeftSprite_->Draw();
+	textFrameRightSprite_->Draw();
 	yButtonSprite_->Draw();
 	xButtonSprite_->Draw();
 	bButtonSprite_->Draw();
@@ -590,7 +583,6 @@ AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& 
 {
 	AttackTutorial::InitData tutorialInitData = initData;
 	tutorialInitData.player = player_.get();
-	tutorialInitData.sprite = attackButtonSprite.get();
 	tutorialInitData.buttonHud = xButton_.get();
 
 	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
@@ -966,4 +958,14 @@ void GameScene::LoadHUDs()
 	buttonInSprite_->param_->transform.scale = Vector2(0.7f, 0.7f);
 
 	buttonOutSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_out_circle.png"), 50, "Button_Out_Sprite");
+
+	// テキスト枠
+	textFrameMiddleSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/text_frame_middle.png"), 50, "Text_Frame_Middle_Sprite");
+	textFrameMiddleSprite_->param_->texture.anchor = Vector2(0.5f, 0.5f);
+
+	textFrameRightSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/text_frame_right.png"), 50, "Text_Frame_Right_Sprite");
+	textFrameRightSprite_->param_->texture.anchor = Vector2(0.0f, 0.5f);
+
+	textFrameLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/text_frame_left.png"), 50, "Text_Frame_Left_Sprite");
+	textFrameLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "../Button.h"
 
-class SingleButton : public Button
+class PressButton : public Button
 {
 public:
 
@@ -30,7 +30,7 @@ public:
 		/// @brief ボタンのスケール
 		Vector2 scale = Vector2(1.0f, 1.0f);
 
-		/// @brief 色
+		// @brief 色
 		Vector3 color = Vector3(1.0f, 1.0f, 1.0f);
 	};
 
@@ -38,7 +38,7 @@ public:
 public:
 
 	/// @brief デストラクタ
-	~SingleButton();
+	~PressButton();
 
 	/// @brief 初期化
 	/// @param initData 
@@ -60,7 +60,6 @@ public:
 	void FadeOut();
 
 
-
 private:
 
 	/// @brief ボタンの内側のスプライト
@@ -72,14 +71,14 @@ private:
 	/// @brief ボタンの状態
 	State state_ = State::None;
 
-	/// @brief 外側のα値の割合
-	float outAlphaRate_ = 0.0f;
+	/// @brief 外側のスプライトのα値の割合
+	float outAlphaRate_ = 1.0f;
 
 
 private:
 
 	// フェードイン時間
-	static constexpr float kFadeInTime = 0.25f;
+	static constexpr float kFadeInTime = 0.5f;
 
 	// フェードインタイマー
 	float fadeInTimer_ = kFadeInTime;
@@ -87,14 +86,11 @@ private:
 
 private:
 
-	/// @brief アウトスケーリング時間
-	static constexpr float kOutScalingTime = 1.5f;
+	// フェードアウト時間
+	static constexpr float kFadeOutTime = 0.5f;
 
-	/// @brief アウトスケーリングタイマー
-	float inScalingTimer_ = kOutScalingTime;
-
-	/// @brief ボタンの外側の大きさ
-	static constexpr float kOutScale = 1.0f;
+	/// @brief フェードアウトタイマー
+	float fadeOutTimer_ = kFadeOutTime;
 
 
 private:
@@ -105,16 +101,16 @@ private:
 	/// @brief 入力タイマー
 	float inputTimer_ = kInputTime;
 
-	/// @brief 入力時の外側の大きさ
-	static constexpr float kInputOutScale = 2.0f;
+	/// @brief ボタンの外側の大きさ
+	static constexpr float kInputOutScale = 1.2f;
 
 
 private:
 
-	// フェードアウト時間
-	static constexpr float kFadeOutTime = 0.25f;
+	/// @brief 外側のスケールパラメータ
+	float outScaleParameter_ = 0.0f;
 
-	/// @brief フェードアウトタイマー
-	float fadeOutTimer_ = kFadeOutTime;
-
+	/// @brief 外側のスケールパラメータの速度
+	static constexpr float kOutScaleParameterSpeed = 6.0f;
 };
+

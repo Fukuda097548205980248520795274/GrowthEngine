@@ -29,7 +29,7 @@
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
 
-#include "HUD/Button/SingleButton/SingleButton.h"
+#include "HUD/Button/TriggerButton/TriggerButton.h"
 #include "HUD/Button/MashButton/MashButton.h"
 
 #include "NavMesh/NavMesh.h"
@@ -313,6 +313,9 @@ private:
 	/// @brief 体力ゲージの区切りのスプライト
 	std::unique_ptr<PrefabBaseSprite> hpSeparatorSprite_ = nullptr;
 
+
+private:
+
 	/// @brief ボタンのスプライト
 	std::unique_ptr<PrefabBaseSprite> aButtonSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> bButtonSprite_ = nullptr;
@@ -322,5 +325,10 @@ private:
 	// ボタンの内側と外側のスプライト
 	std::unique_ptr<PrefabBaseSprite> buttonInSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> buttonOutSprite_ = nullptr;
+
+	// テキストの枠のスプライト
+	std::unique_ptr<PrefabBaseSprite> textFrameRightSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> textFrameMiddleSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> textFrameLeftSprite_ = nullptr;
 };
 

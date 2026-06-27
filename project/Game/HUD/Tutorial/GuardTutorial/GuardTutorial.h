@@ -16,9 +16,6 @@ public:
 
 		// ガードの最大回数
 		int guardMaxCount = 0;
-
-		/// @brief スプライト
-		Sprite* sprite = nullptr;
 	};
 
 

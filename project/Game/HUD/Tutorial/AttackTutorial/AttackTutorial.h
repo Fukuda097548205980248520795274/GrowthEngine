@@ -19,13 +19,13 @@ public:
 
 		// 攻撃の最大回数
 		int attackMaxCount = 0;
-
-		/// @brief スプライト
-		Sprite* sprite = nullptr;
 	};
 
 
 public:
+
+	/// @brief デストラクタ
+	~AttackTutorial();
 
 	/// @brief 初期化処理
 	/// @param initData 
@@ -33,6 +33,9 @@ public:
 
 	/// @brief 更新処理
 	void Update() override;
+
+	/// @brief 描画処理
+	void Draw() override;
 
 
 
