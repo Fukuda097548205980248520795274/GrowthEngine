@@ -322,10 +322,6 @@ void Engine::ImGuiRender::CreateDockSpace()
 /// @param commandList 
 void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, ID3D12GraphicsCommandList* commandList)
 {
-	// RenderTarget -> PixelShaderResource
-	TransitionBarrier(resource,
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 	ImGui::Begin("View");
 
 	ImTextureID texId = (ImTextureID)(gpuHandle.ptr);
@@ -399,7 +395,4 @@ void Engine::ImGuiRender::DrawImGuiScreen(ID3D12Resource* resource, D3D12_GPU_DE
 	// ImGuiを描画する
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
 
-	// PixelShaderResource -> RenderTarget
-	TransitionBarrier(resource,
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }

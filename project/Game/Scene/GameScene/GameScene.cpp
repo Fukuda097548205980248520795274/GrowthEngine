@@ -146,6 +146,73 @@ void GameScene::Initialize()
 
 	// ステージ読み込み
 	//stageEditor_->LoadStage("Tutorial.json");
+
+	// レンダーパスの読み込み
+	engine_->LoadRenderPass("MainPass", [&]()
+		{
+			// エディタの描画
+			editorWorkspaceManager_->DrawUI();
+
+			// ステージオブジェクトの描画
+			for (auto& object : objects_)object->Draw();
+			trialCube_->Draw();
+
+			// プレイヤーの描画
+			if (player_)
+			{
+				player_->Draw();
+				playerWeapon_->Draw();
+			}
+
+			// 敵の描画
+			for (auto& npc : npcs_)npc->Draw();
+
+			// 武器の描画
+			for (auto& weapon : weapons_)weapon->Draw();
+
+			// プレハブの描画処理
+			oneHandedWeaponModel_->Draw();
+
+			// エフェクトの描画
+			effectManager_->Draw();
+
+			// ポストエフェクトの描画処理
+			postEffectManager_->Draw(player_.get());
+
+			// HUDの描画
+			for (auto& hud : huds_)hud->Draw();
+
+			// プレイヤーの体力バーの描画
+			if (playerHP_)playerHP_->Draw();
+
+			// 体力バーの描画
+			hpFrameMiddleSprite_->Draw();
+			hpFrameRightSprite_->Draw();
+			hpFrameLeftSprite_->Draw();
+			hpBackMiddleSprite_->Draw();
+			hpBackLeftSprite_->Draw();
+			hpBackRightSprite_->Draw();
+			delayHpMiddleSprite_->Draw();
+			delayHpLeftSprite_->Draw();
+			delayHpRightSprite_->Draw();
+			hpMiddleSprite_->Draw();
+			hpRightSprite_->Draw();
+			hpLeftSprite_->Draw();
+			delayHpFrontMiddleSprite_->Draw();
+			delayHpFrontLeftSprite_->Draw();
+			delayHpFrontRightSprite_->Draw();
+			hpSeparatorSprite_->Draw();
+			buttonInSprite_->Draw();
+			buttonOutSprite_->Draw();
+			textFrameMiddleSprite_->Draw();
+			textFrameLeftSprite_->Draw();
+			textFrameRightSprite_->Draw();
+			yButtonSprite_->Draw();
+			xButtonSprite_->Draw();
+			bButtonSprite_->Draw();
+			aButtonSprite_->Draw();
+		}
+	);
 }
 
 /// @brief 更新処理
@@ -216,67 +283,7 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
-	// エディタの描画
-	editorWorkspaceManager_->DrawUI();
-
-	// ステージオブジェクトの描画
-	for (auto& object : objects_)object->Draw();
-	trialCube_->Draw();
-
-	// プレイヤーの描画
-	if (player_)
-	{
-		player_->Draw();
-		playerWeapon_->Draw();
-	}
-
-	// 敵の描画
-	for (auto& npc : npcs_)npc->Draw();
-
-	// 武器の描画
-	for (auto& weapon : weapons_)weapon->Draw();
-
-	// プレハブの描画処理
-	oneHandedWeaponModel_->Draw();
-
-	// エフェクトの描画
-	effectManager_->Draw();
-
-	// ポストエフェクトの描画処理
-	postEffectManager_->Draw(player_.get());
-
-	// HUDの描画
-	for (auto& hud : huds_)hud->Draw();
-
-	// プレイヤーの体力バーの描画
-	if (playerHP_)playerHP_->Draw();
-
-	// 体力バーの描画
-	hpFrameMiddleSprite_->Draw();
-	hpFrameRightSprite_->Draw();
-	hpFrameLeftSprite_->Draw();
-	hpBackMiddleSprite_->Draw();
-	hpBackLeftSprite_->Draw();
-	hpBackRightSprite_->Draw();
-	delayHpMiddleSprite_->Draw();
-	delayHpLeftSprite_->Draw();
-	delayHpRightSprite_->Draw();
-	hpMiddleSprite_->Draw();
-	hpRightSprite_->Draw();
-	hpLeftSprite_->Draw();
-	delayHpFrontMiddleSprite_->Draw();
-	delayHpFrontLeftSprite_->Draw();
-	delayHpFrontRightSprite_->Draw();
-	hpSeparatorSprite_->Draw();
-	buttonInSprite_->Draw();
-	buttonOutSprite_->Draw();
-	textFrameMiddleSprite_->Draw();
-	textFrameLeftSprite_->Draw();
-	textFrameRightSprite_->Draw();
-	yButtonSprite_->Draw();
-	xButtonSprite_->Draw();
-	bButtonSprite_->Draw();
-	aButtonSprite_->Draw();
+	
 }
 
 

@@ -78,3 +78,6 @@ using Particle2DHandle = uint32_t;
 
 /// @brief トレイルハンドル
 using TrailHandle = uint32_t;
+
+/// @brief レンダーパスハンドル
+using RenderPassHandle = uint32_t;

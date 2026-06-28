@@ -156,6 +156,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\Application\Sound\Se\Se.cpp" />
     <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.cpp" />
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.cpp" />
     <ClCompile Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.cpp" />
     <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
@@ -969,6 +971,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Store\RenderPassStore\RenderPassStore.cpp" />
     <ClCompile Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1130,6 +1133,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Sound\Se\Se.h" />
     <ClInclude Include="Engine\Application\Trail3D\Trail3D.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.h" />
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
     <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h" />
@@ -1402,6 +1407,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DUVSphereData\Render3DUVSphereData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DStore.h" />
+    <ClInclude Include="Engine\Store\RenderPassStore\RenderPassStore.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonResource\SkeletonResource.h" />
     <ClInclude Include="Engine\Store\SkeletonStore\SkeletonStore.h" />
     <ClInclude Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.h" />

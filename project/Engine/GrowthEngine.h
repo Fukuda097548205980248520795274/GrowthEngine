@@ -231,6 +231,12 @@ public:
 	/// @return 
 	SoundHandle LoadSound(const std::string& name, AudioHandle hAudio, Engine::SoundType type)const { return soundStore_->Load(name, hAudio, type); }
 
+	/// @brief レンダーパスを読み込む
+	/// @param name 
+	/// @param drawFunc 
+	/// @return 
+	RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc)const { return renderContext_->LoadRenderPass(name, drawFunc); }
+
 
 
 public:
@@ -982,6 +988,14 @@ public:
 	/// @param name 
 	void Trail3DClear(const std::string& name)const { renderContext_->Trail3DClear(name); }
 
+
+	/// @brief レンダーパスを描画する
+	/// @param handle 
+	void RenderPassDraw(RenderPassHandle handle)const { renderContext_->DrawRenderPass(handle); }
+
+	/// @brief レンダーパスを描画する
+	/// @param name 
+	void RenderPassDraw(const std::string& name)const { renderContext_->DrawRenderPass(name); }
 
 
 	/// @brief デバッグ用の線を描画する

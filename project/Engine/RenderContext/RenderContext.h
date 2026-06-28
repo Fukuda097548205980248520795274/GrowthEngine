@@ -569,14 +569,14 @@ namespace Engine
 		/// @param hParticle 
 		void DrawParticle3D(Particle3DHandle hParticle)
 		{
-			particle_->Draw3DParticle(commandList_, hParticle, camera3DStore_.get(),offscreen_->GetCurrentOffscreenResource(), offscreen_->GetDepthResource());
+			particle_->Draw3DParticle(commandList_, hParticle, camera3DStore_.get(),offscreen_->GetDestinationResource(), offscreen_->GetDepthResource());
 		}
 
 		/// @brief 3Dパーティクルを描画する
 		/// @param name 
 		void DrawParticle3D(const std::string& name)
 		{
-			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get(), offscreen_->GetCurrentOffscreenResource(), offscreen_->GetDepthResource());
+			particle_->Draw3DParticle(commandList_, name, camera3DStore_.get(), offscreen_->GetDestinationResource(), offscreen_->GetDepthResource());
 		}
 
 		/// @brief 3Dパーティクルのパラメータを取得する
@@ -646,6 +646,21 @@ namespace Engine
 		/// @param name 
 		void Trail3DClear(const std::string& name) { render_->Trail3DClear(name); }
 
+
+
+		/// @brief レンダーパスを読み込む
+		/// @param name 
+		/// @param drawFunc 
+		/// @return 
+		RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc) { return offscreen_->LoadRenderPass(name, drawFunc); }
+
+		/// @brief レンダーパスを描画する
+		/// @param hRenderPass 
+		void DrawRenderPass(RenderPassHandle hRenderPass) { offscreen_->RenderPassDraw(hRenderPass, commandList_); }
+
+		/// @brief レンダーパスを描画する
+		/// @param name 
+		void DrawRenderPass(const std::string& name) { offscreen_->RenderPassDraw(name, commandList_); }
 
 
 #ifdef _DEVELOPMENT

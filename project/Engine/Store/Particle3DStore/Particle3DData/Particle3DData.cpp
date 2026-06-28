@@ -707,6 +707,8 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 	// 有効化フラグを登録する
 	enableResource_->RegisterGraphics(commandList, 7);
 
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	// ドローコール
 	commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(param_->hModel).meshes[0].indices.size()), numInstance_, 0, 0, 0);
 

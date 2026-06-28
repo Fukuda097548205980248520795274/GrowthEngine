@@ -1297,6 +1297,15 @@
     <Filter Include="Game\HUD\Tutorial\StyleChangeTutorial">
       <UniqueIdentifier>{2200fc4b-93ba-4007-8687-d5d14f2a3a45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Offscreen\RenderTargetPool">
+      <UniqueIdentifier>{120957fd-3978-4ac7-80ae-0d7d8d2f76e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\RenderContext\DX12Offscreen\RenderPass">
+      <UniqueIdentifier>{0a61744d-7b26-457a-a3f5-48a4d43e5b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\RenderPassStore">
+      <UniqueIdentifier>{fbcded2a-e278-433b-8585-2d0756c2bd52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1343,9 +1352,6 @@
     </ClCompile>
     <ClCompile Include="Engine\ShaderCompiler\ShaderCompiler.cpp">
       <Filter>Engine\Include\ShaderCompiler</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp">
-      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\OffscreenResource\OffscreenResource.cpp">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
@@ -2346,6 +2352,18 @@
     <ClCompile Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.cpp">
       <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.cpp">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderTargetPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\RenderPassStore\RenderPassStore.cpp">
+      <Filter>Engine\Include\Store\RenderPassStore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
@@ -2392,9 +2410,6 @@
     </ClInclude>
     <ClInclude Include="Engine\ShaderCompiler\ShaderCompiler.h">
       <Filter>Engine\Include\ShaderCompiler</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h">
-      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\OffscreenResource\OffscreenResource.h">
       <Filter>Engine\Include\Resource\OffscreenResource</Filter>
@@ -3514,6 +3529,18 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h">
       <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.h">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.h">
+      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderTargetPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\RenderPassStore\RenderPassStore.h">
+      <Filter>Engine\Include\Store\RenderPassStore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

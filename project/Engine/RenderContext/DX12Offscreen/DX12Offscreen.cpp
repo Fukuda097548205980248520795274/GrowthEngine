@@ -14,10 +14,12 @@
 /// @param buffering 
 /// @param compiler 
 /// @param log 
-void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log)
+void Engine::DX12Offscreen::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
+	DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log)
 {
 	// nullptrチェック
 	assert(device);
+	assert(commandList);
 	assert(heap);
 	assert(buffering);
 	assert(compiler);
@@ -29,14 +31,6 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 
 	int width = static_cast<int32_t>(buffering->GetSwapChainDesc().Width);
 	int height = static_cast<int32_t>(buffering->GetSwapChainDesc().Height);
-
-	// オフスクリーンのリソースを生成する
-	for (int32_t i = 0; i < kMaxOffscreenCount; ++i)
-	{
-		offscreenResource_[i] = std::make_unique<OffscreenResource>();
-		offscreenResource_[i]->Initialize(device, heap,
-			static_cast<int32_t>(buffering->GetSwapChainDesc().Width), static_cast<int32_t>(buffering->GetSwapChainDesc().Height), log);
-	}
 
 	// 深度リソースを生成する
 	depthResource_ = std::make_unique<DepthResource>();
@@ -51,16 +45,30 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, DX12Heap* heap, DX1
 	psoCopyImage_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
 
 
+	// レンダーターゲットプールの生成
+	renderTargetPool_ = std::make_unique<RenderTargetPool>();
+	renderTargetPool_->Initialize(device, heap, buffering, commandList, 3);
+
 	// ポストエフェクトストアの生成
 	postEffectStore_ = std::make_unique<PostEffectStore>();
 	postEffectStore_->Initialize(device, compiler, vertexShaderBlob_.Get(),
 		heap, textureStore, static_cast<int32_t>(buffering_->GetSwapChainDesc().Width), static_cast<int32_t>(buffering_->GetSwapChainDesc().Height), log);
+
+	// レンダーパスストアの生成
+	renderPassStore_ = std::make_unique<RenderPassStore>();
+	renderPassStore_->Initialize(renderTargetPool_.get());
 }
 
 /// @brief シーン前のリセット
 void Engine::DX12Offscreen::PerSceneReset()
 {
 	postEffectStore_->PerSceneReset();
+}
+
+/// @brief フレームの最後の処理
+void Engine::DX12Offscreen::EndFrame()
+{
+	renderPassStore_->Return();
 }
 
 /// @brief サイズを作り直す
@@ -71,8 +79,9 @@ void Engine::DX12Offscreen::Resize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	int width = static_cast<int32_t>(buffering->GetSwapChainDesc().Width);
 	int height = static_cast<int32_t>(buffering->GetSwapChainDesc().Height);
 
-	offscreenResource_[0]->Resize(device, width, height);
-	offscreenResource_[1]->Resize(device, width, height);
+	// レンダーターゲットプールのリサイズ
+	renderTargetPool_->Resize(width, height);
+
 	depthResource_->Resize(device, width, height);
 
 	// ポストエフェクトストアのリサイズ
@@ -86,11 +95,7 @@ void Engine::DX12Offscreen::Clear(ID3D12GraphicsCommandList* commandList)
 	// nullptrチェック
 	assert(commandList);
 
-	// 値を初期化
-	currentOffscreen_ = 0;
-
-	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-	ClearRenderTarget(commandList);
+	// オフスクリーンのデプスステンシルの設定とクリア
 	ClearDepthStencil(commandList);
 }
 
@@ -102,34 +107,17 @@ void Engine::DX12Offscreen::RenderSwapChain(ID3D12GraphicsCommandList* commandLi
 	// nullptrチェック
 	assert(commandList);
 
-	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[currentOffscreen_]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 	// PSOの設定
 	psoCopyImage_->Register(commandList);
 
 	// テクスチャ
-	offscreenResource_[currentOffscreen_]->RegisterGraphics(commandList, 0);
+	currentResource_->RegisterGraphics(commandList, 0);
 
 	// 形状は三角形
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// 頂点は3つ
 	commandList->DrawInstanced(3, 1, 0, 0);
-
-	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[currentOffscreen_]->GetResource(),
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
-}
-
-
-/// @brief レンダーターゲットのクリア
-/// @param commandList 
-void Engine::DX12Offscreen::ClearRenderTarget(ID3D12GraphicsCommandList* commandList)
-{
-	// レンダーターゲットのクリアと設定
-	offscreenResource_[currentOffscreen_]->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
 }
 
 /// @brief デプスステンシルのクリア
@@ -139,7 +127,6 @@ void Engine::DX12Offscreen::ClearDepthStencil(ID3D12GraphicsCommandList* command
 	// デプスステンシルのクリア
 	depthResource_->ClearDepthStencil(commandList);
 }
-
 
 
 /// @brief ポストエフェクトを描画する
@@ -153,7 +140,6 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
 	const bool isBloom = postEffectStore_->IsBloom(hPostEffect);
-	const int32_t sourceOffscreenIndex = currentOffscreen_;
 
 	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
 	if (isBloom)
@@ -162,8 +148,8 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		PostEffectRenderContext registerContext{};
 		registerContext = context;
 		registerContext.commandList = commandList;
-		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.offscreenPixelShaderResource = sourceResource_;
+		registerContext.offscreenRenderTargetResource = destinationResource_;
 		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -171,17 +157,6 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	}
 	else
 	{
-		// カウントする
-		++currentOffscreen_;
-		currentOffscreen_ = currentOffscreen_ % 2;
-
-		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-		ClearRenderTarget(commandList);
-
-		// 書き込み対象 -> 読み込ませテクスチャ
-		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 		if (isUseDepth)
 		{
 			// 深度書き込み -> 読み込みテクスチャ
@@ -193,8 +168,8 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		PostEffectRenderContext registerContext{};
 		registerContext = context;
 		registerContext.commandList = commandList;
-		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.offscreenPixelShaderResource = sourceResource_;
+		registerContext.offscreenRenderTargetResource = destinationResource_;
 		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -206,10 +181,6 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 			TransitionBarrier(depthResource_->GetResource(),
 				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
 		}
-
-		// 読み込ませテクスチャ -> 書き込み対象
-		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 	}
 }
 
@@ -224,7 +195,6 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
 	const bool isBloom = postEffectStore_->IsBloom(name);
-	const int32_t sourceOffscreenIndex = currentOffscreen_;
 
 	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
 	if (isBloom)
@@ -233,8 +203,8 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		PostEffectRenderContext registerContext{};
 		registerContext = context;
 		registerContext.commandList = commandList;
-		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.offscreenPixelShaderResource = sourceResource_;
+		registerContext.offscreenRenderTargetResource = destinationResource_;
 		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -242,17 +212,6 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	}
 	else
 	{
-		// カウントする
-		++currentOffscreen_;
-		currentOffscreen_ = currentOffscreen_ % 2;
-
-		// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-		ClearRenderTarget(commandList);
-
-		// 書き込み対象 -> 読み込ませテクスチャ
-		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
-
 		if (isUseDepth)
 		{
 			// 深度書き込み -> 読み込みテクスチャ
@@ -264,8 +223,8 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		PostEffectRenderContext registerContext{};
 		registerContext = context;
 		registerContext.commandList = commandList;
-		registerContext.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-		registerContext.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+		registerContext.offscreenPixelShaderResource = sourceResource_;
+		registerContext.offscreenRenderTargetResource = destinationResource_;
 		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -277,11 +236,47 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 			TransitionBarrier(depthResource_->GetResource(),
 				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
 		}
-
-		// 読み込ませテクスチャ -> 書き込み対象
-		TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 	}
+}
+
+/// @brief レンダーパスを描画する
+/// @param handle 
+/// @param commandList 
+/// @param dsvHandle 
+/// @param inputResource 
+void Engine::DX12Offscreen::RenderPassDraw(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList)
+{
+	// nullptrチェック
+	assert(commandList);
+	assert(renderPassStore_);
+	assert(depthResource_);
+
+	// 内部のデプスリソースからDSVハンドルを取得 (お使いの関数名に合わせて調整してください)
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthResource_->GetDsvCpuHandle();
+
+	// 前のパスの出力（currentResource_）を入力テクスチャとして渡し、
+	// 今回のパスの出力テクスチャを新しい「最新リソース」として更新する
+	currentResource_ = renderPassStore_->RenderPassDraw(handle, this, commandList, dsvHandle, currentResource_);
+}
+
+/// @brief レンダーパスを描画する
+/// @param name 
+/// @param commandList 
+/// @param dsvHandle 
+/// @param inputResource 
+void Engine::DX12Offscreen::RenderPassDraw(const std::string& name, ID3D12GraphicsCommandList* commandList)
+{
+	// nullptrチェック
+	assert(commandList);
+	assert(renderPassStore_);
+	assert(depthResource_);
+
+	// 内部のデプスリソースからDSVハンドルを取得 (お使いの関数名に合わせて調整してください)
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthResource_->GetDsvCpuHandle();
+
+	// 前のパスの出力（currentResource_）を入力テクスチャとして渡し、
+	// 今回のパスの出力テクスチャを新しい「最新リソース」として更新する
+	currentResource_ = renderPassStore_->RenderPassDraw(name, this, commandList, dsvHandle, currentResource_);
 }
 
 /// @brief モーションベクトルを描画する
@@ -303,7 +298,7 @@ void Engine::DX12Offscreen::DrawMotionVector(ID3D12GraphicsCommandList* commandL
 	postEffectStore_->DrawMotionVector(commandList, depthResource_->GetDsvCpuHandle(), render, prefab);
 
 	// レンダーターゲットを戻す
-	offscreenResource_[currentOffscreen_]->SetRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
+	currentResource_->SetRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
 }
 
 /// @brief TAAを描画する
@@ -319,30 +314,21 @@ void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
 	// nullptrチェック
 	assert(commandList);
 
-	const int32_t sourceOffscreenIndex = currentOffscreen_;
-
-	// カウントする
-	++currentOffscreen_;
-	currentOffscreen_ = currentOffscreen_ % 2;
-
-	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-	ClearRenderTarget(commandList);
-
 	PostEffectRenderContext context{};
 	context.commandList = commandList;
-	context.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.offscreenPixelShaderResource = sourceResource_;
+	context.offscreenRenderTargetResource = destinationResource_;
 	context.psoCopyImage = psoCopyImage_.get();
 
 	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+	TransitionBarrier(sourceResource_->GetResource(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// TAAの描画コマンドを登録する
 	postEffectStore_->DrawTAA(context);
 
 	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
+	TransitionBarrier(sourceResource_->GetResource(),
 		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }
 
@@ -359,30 +345,14 @@ void Engine::DX12Offscreen::DrawMotionBlur(ID3D12GraphicsCommandList* commandLis
 	// nullptrチェック
 	assert(commandList);
 
-	const int32_t sourceOffscreenIndex = currentOffscreen_;
-
-	// カウントする
-	++currentOffscreen_;
-	currentOffscreen_ = currentOffscreen_ % 2;
-
-	// オフスクリーンのレンダーターゲット・デプスステンシルの設定とクリア
-	ClearRenderTarget(commandList);
-
 	PostEffectRenderContext context{};
 	context.commandList = commandList;
-	context.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
+	context.offscreenPixelShaderResource = sourceResource_;
+	context.offscreenRenderTargetResource = destinationResource_;
 	context.psoCopyImage = psoCopyImage_.get();
-
-	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// モーションブラーの描画コマンドを登録する
 	postEffectStore_->DrawMotionBlur(context);
-
-	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 }
 
 /// @brief 残像を描画する
@@ -395,30 +365,25 @@ void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandLis
 	// nullptrチェック
 	assert(commandList);
 	assert(cameraStore);
-	const int32_t sourceOffscreenIndex = currentOffscreen_;
-
-	// カウントする
-	++currentOffscreen_;
-	currentOffscreen_ = currentOffscreen_ % 2;
 
 	PostEffectRenderContext context{};
 	context.commandList = commandList;
-	context.offscreenPixelShaderResource = offscreenResource_[sourceOffscreenIndex].get();
-	context.offscreenRenderTargetResource = offscreenResource_[currentOffscreen_].get();
+	context.offscreenPixelShaderResource = sourceResource_;
+	context.offscreenRenderTargetResource = destinationResource_;
 	context.camera3DStore = cameraStore;
 	context.depthResource = depthResource_.get();
 	context.psoCopyImage = psoCopyImage_.get();
 
 	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+	TransitionBarrier(sourceResource_->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// 残像の描画コマンドを登録する
 	postEffectStore_->DrawAfterImage(context);
 
 	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(offscreenResource_[sourceOffscreenIndex]->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+	TransitionBarrier(sourceResource_->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 }
 
 /// @brief デバッグ用パラメータ

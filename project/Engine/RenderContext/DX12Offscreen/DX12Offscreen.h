@@ -12,7 +12,9 @@
 
 #include "PSO/PSOPostEffect/PSOCopyImage/PSOCopyImage.h"
 
+#include "RenderTargetPool/RenderTargetPool.h"
 #include "Store/PostEffectStore/PostEffectStore.h"
+#include "Store/RenderPassStore/RenderPassStore.h"
 
 namespace Engine
 {
@@ -33,10 +35,14 @@ namespace Engine
 		/// @param buffering 
 		/// @param compiler 
 		/// @param log 
-		void Initialize(ID3D12Device* device, DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log);
+		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, 
+			DX12Heap* heap, DX12Buffering* buffering, ShaderCompiler* compiler, TextureStore* textureStore, Log* log);
 
 		/// @brief シーン前のリセット
 		void PerSceneReset();
+
+		/// @brief フレームの最後の処理
+		void EndFrame();
 
 		/// @brief サイズを作り直す
 		/// @param device 
@@ -51,21 +57,37 @@ namespace Engine
 		/// @param commandList 
 		void RenderSwapChain(ID3D12GraphicsCommandList* commandList);
 
-		/// @brief 現在使用中のオフスクリーンを取得する
+		/// @brief 現在のレンダーターゲットのリソースを取得する
 		/// @return 
-		ID3D12Resource* GetCurrentResource() { return offscreenResource_[currentOffscreen_]->GetResource(); }
+		OffscreenResource* GetCurrentResource() { return currentResource_; }
 
-		/// @brief 現在使用中のオフスクリーンのSRV用GPUハンドルを取得する
+		/// @brief 書き込み先のレンダーターゲットのリソースを取得する
 		/// @return 
-		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return offscreenResource_[currentOffscreen_]->GetSrvGpuHandle(); }
+		OffscreenResource* GetDestinationResource() { return destinationResource_; }
+
+		/// @brief 現在のレンダーターゲットのSRVハンドルを取得する
+		/// @return 
+		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return currentResource_->GetSrvGpuHandle(); }
+
+		/// @brief 現在のレンダーターゲットのリソースを設定する
+		/// @param resource 
+		void SetSourceResource(OffscreenResource* resource) { sourceResource_ = resource; }
+
+		/// @brief 現在のレンダーターゲットのリソースを設定する
+		/// @param resource 
+		void SetDestinationResource(OffscreenResource* resource) { destinationResource_ = resource; }
+
+		/// @brief 現在のレンダーターゲットのリソースを設定する
+		/// @param resource 
+		void SetCurrentResource(OffscreenResource* resource) { currentResource_ = resource; }
+
+		/// @brief 現在のレンダーターゲットのリソースを取得する
+		/// @return 
+		OffscreenResource* GetCurrentResource() const { return currentResource_; }
 
 		/// @brief 深度リソースを取得する
 		/// @return 
 		DepthResource* GetDepthResource() { return depthResource_.get(); }
-
-		/// @brief 現在使用中のオフスクリーンリソースを取得する
-		/// @return 
-		OffscreenResource* GetCurrentOffscreenResource() { return offscreenResource_[currentOffscreen_].get(); }
 
 		/// @brief ポストエフェクトを読み込む
 		/// @param name 
@@ -78,6 +100,12 @@ namespace Engine
 			return postEffectStore_->Load(name, type, device, commandList, buffering_, log);
 		}
 
+		/// @brief レンダーパスを読み込む
+		/// @param name 
+		/// @param drawFunc 
+		/// @return 
+		RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc) { return renderPassStore_->Load(name, drawFunc); }
+
 
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
@@ -88,6 +116,20 @@ namespace Engine
 		/// @param name 
 		/// @param commandList 
 		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const PostEffectRenderContext& context);
+
+		/// @brief レンダーパスを描画する
+		/// @param handle 
+		/// @param commandList 
+		/// @param dsvHandle 
+		/// @param inputResource 
+		void RenderPassDraw(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList);
+
+		/// @brief レンダーパスを描画する
+		/// @param name 
+		/// @param commandList 
+		/// @param dsvHandle 
+		/// @param inputResource 
+		void RenderPassDraw(const std::string& name, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief モーションベクトルを描画する
 		/// @param commandList 
@@ -133,10 +175,6 @@ namespace Engine
 
 	private:
 
-		/// @brief レンダーターゲットのクリア
-		/// @param commandList 
-		void ClearRenderTarget(ID3D12GraphicsCommandList* commandList);
-
 		/// @brief デプスステンシルのクリア
 		/// @param commandList 
 		void ClearDepthStencil(ID3D12GraphicsCommandList* commandList);
@@ -144,17 +182,24 @@ namespace Engine
 
 	private:
 
-		/// @brief 最大オフスクリーン数
-		static constexpr int32_t kMaxOffscreenCount = 2;
+		// 読み込みのリソース
+		OffscreenResource* sourceResource_ = nullptr;
 
-		// 現在のオフスクリーン
-		int32_t currentOffscreen_ = 0;
+		// 書き込み対象のレンダーターゲット
+		OffscreenResource* destinationResource_ = nullptr;
 
-		// オフスクリーンリソース
-		std::unique_ptr<OffscreenResource> offscreenResource_[kMaxOffscreenCount] = { nullptr };
+		// 最新のパスの結果
+		OffscreenResource* currentResource_ = nullptr;
+
+
+		/// @brief レンダーターゲットプール
+		std::unique_ptr<RenderTargetPool> renderTargetPool_ = nullptr;
 
 		// ポストエフェクトストア
 		std::unique_ptr<PostEffectStore> postEffectStore_ = nullptr;
+
+		/// @brief レンダーパスストア
+		std::unique_ptr<RenderPassStore> renderPassStore_ = nullptr;
 
 
 	private:

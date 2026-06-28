@@ -61,7 +61,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// DX12Offscreenの生成と初期化
 	offscreen_ = std::make_unique<DX12Offscreen>();
-	offscreen_->Initialize(core_->GetDevice(), heap_.get(), buffering_.get(), shaderCompiler_.get(),textureStore_.get(), log);
+	offscreen_->Initialize(core_->GetDevice(), commandList_, heap_.get(), buffering_.get(), shaderCompiler_.get(), textureStore_.get(), log);
 
 	// 3Dカメラストア
 	camera3DStore_ = std::make_unique<Camera3DStore>();
@@ -135,6 +135,56 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// ImGuiの初期設定
 	imguiRender_ = std::make_unique<ImGuiRender>();
 	imguiRender_->Initialize(core_->GetDevice(), winApp_, heap_.get(), buffering_.get(), log);
+#endif
+
+	// 描画前処理のレンダーパスを登録する
+	LoadRenderPass("PrevDraw", [&]() 
+		{
+			// スカイボックスの描画
+			skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
+		}
+	);
+
+	// 描画後処理のレンダーパスを登録する
+	LoadRenderPass("LastPostDraw", [&]()
+		{
+			// モーションベクトルの描画
+			offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
+
+			// モーションブラーの描画
+			offscreen_->DrawMotionBlur(commandList_);
+
+			// 残像の描画
+			offscreen_->DrawAfterImage(commandList_, camera3DStore_.get());
+
+			// TAAの描画
+			offscreen_->DrawTAA(commandList_);
+		}
+	);
+
+
+#ifdef _DEVELOPMENT
+
+	// 線の描画前処理のレンダーパスを登録する
+	LoadRenderPass("LineDraw", [&]()
+		{
+			// 衝突ストアのデバッグ線
+			collision3DStore_->DebugDrawLine();
+			collision2DStore_->DebugDrawLine();
+
+			// カメラのデバッグ線
+			camera3DStore_->DebugDrawLine();
+
+			// ライトのデバッグ線
+			lightStore_->DebugDrawLine();
+
+			// 線の描画
+			line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+			line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
+			line_->DrawTriangle3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+		}
+	);
+
 #endif
 }
 
@@ -247,40 +297,21 @@ void Engine::RenderContext::PreDraw()
 	// オフスクリーンのクリア
 	offscreen_->Clear(commandList_);
 
-	// スカイボックスの描画
-	skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
+	// 描画前処理のレンダーパスを呼び出す
+	DrawRenderPass("PrevDraw");
 }
 
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// モーションベクトルの描画
-	offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
+	// 描画後処理のレンダーパスを呼び出す
+	DrawRenderPass("MainPass");
 
-	// モーションブラーの描画
-	offscreen_->DrawMotionBlur(commandList_);
-
-	// 残像の描画
-	offscreen_->DrawAfterImage(commandList_ , camera3DStore_.get());
-
-	// TAAの描画
-	offscreen_->DrawTAA(commandList_);
+	// 描画後ポストエフェクトのレンダーパスを呼び出す
+	//DrawRenderPass("LastPostDraw");
 
 #ifdef _DEVELOPMENT
-	// 衝突ストアのデバッグ線
-	collision3DStore_->DebugDrawLine();
-	collision2DStore_->DebugDrawLine();
-
-	// カメラのデバッグ線
-	camera3DStore_->DebugDrawLine();
-
-	// ライトのデバッグ線
-	lightStore_->DebugDrawLine();
-
-	// 線の描画
-	line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
-	line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
-	line_->DrawTriangle3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+	//DrawRenderPass("LineDraw");
 #endif
 
 	// コマンドリスト・アロケータの取得
@@ -311,7 +342,7 @@ void Engine::RenderContext::PostDraw()
 	// ImGuiDockingに最終的なオフスクリーンを描画する
 #ifdef _DEVELOPMENT
 	// ImGuiに表示するスクリーンを描画する
-	imguiRender_->DrawImGuiScreen(offscreen_->GetCurrentResource(), offscreen_->GetCurrentResourceSrvHandle(), commandList_);
+	imguiRender_->DrawImGuiScreen(offscreen_->GetCurrentResource()->GetResource(), offscreen_->GetCurrentResourceSrvHandle(), commandList_);
 #endif
 
 	// バックバッファリソース RenderTarget -> Present
@@ -345,6 +376,8 @@ void Engine::RenderContext::PostDraw()
 	hr = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr));
 
+	// オフスクリーンのフレーム終了処理
+	offscreen_->EndFrame();
 
 	// プレハブをリセット
 	prefab_->PrefabReset();
