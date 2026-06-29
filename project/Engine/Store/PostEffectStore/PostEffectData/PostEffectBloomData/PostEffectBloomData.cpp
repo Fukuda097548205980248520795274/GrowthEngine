@@ -10,18 +10,16 @@
 /// @param device 
 /// @param log 
 void Engine::PostEffectBloomData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
-	BasePSOPostEffect* pso, BaseComputePSO* highLuminanceExtractionPSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log)
+	BaseComputePSO* highLuminanceExtractionPSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log)
 {
 	// nullptrチェック
 	assert(device);
-	assert(pso);
 	assert(buffering);
 	assert(highLuminanceExtractionPSO);
 	assert(upsamplePSO);
 	assert(downsamplePSO);
 
 	// 引数を受け取る
-	pso_ = pso;
 	upsamplePSO_ = upsamplePSO;
 	downsamplePSO_ = downsamplePSO;
 	highLuminanceExtractionPSO_ = highLuminanceExtractionPSO;
@@ -130,6 +128,11 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 
 	ID3D12GraphicsCommandList* commandList = context.commandList;
 	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
+	PSOFullscreen* psoFullscreen = context.psoFullscreen;
+
+	assert(commandList);
+	assert(offscreenRenderTargetResource);
+	assert(psoFullscreen);
 	
 
 	/*-----------------
@@ -252,7 +255,7 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	---------------------------------*/
 
 	// PSOの設定
-	pso_->Register(commandList);
+	psoFullscreen->Register(commandList, BlendMode::kAdd);
 
 	// ブラー用オフスクリーンのテクスチャを設定
 	dualBlurTextureResources_[0]->RegisterGraphicsSRV(commandList, 0);

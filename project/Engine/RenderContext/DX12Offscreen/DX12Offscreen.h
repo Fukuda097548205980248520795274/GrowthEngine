@@ -10,7 +10,7 @@
 #include "Resource/OffscreenResource/OffscreenResource.h"
 #include "Resource/DepthResource/DepthResource.h"
 
-#include "PSO/PSOPostEffect/PSOCopyImage/PSOCopyImage.h"
+#include "PSO/PSOModel/PSOFullscreen/PSOFullscreen.h"
 
 #include "RenderTargetPool/RenderTargetPool.h"
 #include "Store/PostEffectStore/PostEffectStore.h"
@@ -117,19 +117,31 @@ namespace Engine
 		/// @param commandList 
 		void DrawPostEffect(const std::string& name, ID3D12GraphicsCommandList* commandList, const PostEffectRenderContext& context);
 
-		/// @brief レンダーパスを描画する
+		/// @brief レンダーパスを実行する
 		/// @param handle 
 		/// @param commandList 
 		/// @param dsvHandle 
 		/// @param inputResource 
-		void RenderPassDraw(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList);
+		void ExecuteRenderPass(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList);
 
-		/// @brief レンダーパスを描画する
+		/// @brief レンダーパスを実行する
 		/// @param name 
 		/// @param commandList 
 		/// @param dsvHandle 
 		/// @param inputResource 
-		void RenderPassDraw(const std::string& name, ID3D12GraphicsCommandList* commandList);
+		void ExecuteRenderPass(const std::string& name, ID3D12GraphicsCommandList* commandList);
+
+		/// @brief レンダーパスに描画する
+		/// @param renderTargetHandle 
+		/// @param sourceHandle 
+		/// @param commandList 
+		void DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle, ID3D12GraphicsCommandList* commandList);
+
+		/// @brief レンダーパスに描画する
+		/// @param renderTargetName 
+		/// @param sourceName 
+		/// @param commandList 
+		void DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName, ID3D12GraphicsCommandList* commandList);
 
 		/// @brief モーションベクトルを描画する
 		/// @param commandList 
@@ -210,12 +222,15 @@ namespace Engine
 
 	private:
 
-		// 頂点シェーダ
+
+		/// @brief フルスクリーンPSO
+		std::unique_ptr<PSOFullscreen> psoFullscreen_ = nullptr;
+
+		/// @brief 頂点シェーダのBlob
 		ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
-
-
-		// CopyImage PSO
-		std::unique_ptr<PSOCopyImage> psoCopyImage_ = nullptr;
+		
+		/// @brief ピクセルシェーダーのBlob
+		ComPtr<IDxcBlob> pixelShaderBlob_ = nullptr;
 
 
 	private:

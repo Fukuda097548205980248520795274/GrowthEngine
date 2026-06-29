@@ -64,6 +64,28 @@ Engine::OffscreenResource* Engine::RenderPassStore::RenderPassDraw(const std::st
 	return outputResource;
 }
 
+/// @brief レンダーパスに描画する
+/// @param handle 
+/// @param offscreen 
+/// @param commandList 
+/// @param psoFullscreen 
+void Engine::RenderPassStore::DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle,
+	ID3D12GraphicsCommandList* commandList,PSOFullscreen* psoFullscreen)
+{
+	dataTable_[renderTargetHandle]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[sourceHandle]->GetOffscreenResource());
+}
+
+/// @brief レンダーパスに描画する
+/// @param name 
+/// @param offscreen 
+/// @param commandList 
+/// @param psoFullscreen 
+void Engine::RenderPassStore::DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName,
+	ID3D12GraphicsCommandList* commandList,PSOFullscreen* psoFullscreen)
+{
+	dataTable_[nameTable_.at(renderTargetName)]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[nameTable_.at(sourceName)]->GetOffscreenResource());
+}
+
 /// @brief レンダーパスを返却する
 void Engine::RenderPassStore::Return()
 {

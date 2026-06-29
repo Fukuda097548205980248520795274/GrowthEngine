@@ -88,13 +88,13 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	MotionVectorTextureResource* motionVectorTextureResource = context.motionVectorTextureResource;
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	ID3D12GraphicsCommandList* commandList = context.commandList;
-	PSOCopyImage* psoCopyImage = context.psoCopyImage;
+	PSOFullscreen* psoFullscreen = context.psoFullscreen;
 
 	// nullptrチェック
 	assert(motionVectorTextureResource);
 	assert(offscreenPixelShaderResource);
 	assert(commandList);
-	assert(psoCopyImage);
+	assert(psoFullscreen);
 
 	// パラメータをGPU用のデータに転送
 	resource_->data_->numSamples = param_->numSamples;
@@ -160,7 +160,7 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	outputResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// PSOを登録
-	psoCopyImage->Register(commandList);
+	psoFullscreen->Register(commandList, BlendMode::kNone);
 
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	outputResource_->RegisterGraphicsSRV(commandList, 0);

@@ -150,6 +150,8 @@ void GameScene::Initialize()
 	// レンダーパスの読み込み
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
+			engine_->DrawToRenderPass("MainPass", "PrevDraw");
+
 			// エディタの描画
 			editorWorkspaceManager_->DrawUI();
 
@@ -177,7 +179,7 @@ void GameScene::Initialize()
 			effectManager_->Draw();
 
 			// ポストエフェクトの描画処理
-			postEffectManager_->Draw(player_.get());
+			//postEffectManager_->Draw(player_.get());
 
 			// HUDの描画
 			for (auto& hud : huds_)hud->Draw();

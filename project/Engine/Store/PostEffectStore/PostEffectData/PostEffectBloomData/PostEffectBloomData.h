@@ -23,7 +23,7 @@ namespace Engine
 		/// @param device 
 		/// @param log 
 		void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
-			BasePSOPostEffect* pso, BaseComputePSO* highLuminanceExtractionPSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log);
+			BaseComputePSO* highLuminanceExtractionPSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log);
 
 		/// @brief リセット
 		void Reset() override;

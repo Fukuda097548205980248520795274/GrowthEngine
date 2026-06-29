@@ -10,6 +10,7 @@ namespace Engine
 	class RenderTargetPool;
 	class OffscreenResource;
 	class DX12Offscreen;
+	class PSOFullscreen;
 
 	class RenderPass
 	{
@@ -27,6 +28,12 @@ namespace Engine
 		/// @param dsvHandle 
 		OffscreenResource* Execute(ID3D12GraphicsCommandList* commandList, RenderTargetPool* renderTargetPool,DX12Offscreen* offscreen,
 			D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource = nullptr);
+
+		/// @brief レンダーパスに描画する
+		/// @param commandList 
+		/// @param psoFullscreen 
+		/// @param textureResource 
+		void DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource);
 
 		/// @brief レンダーパスを返却する
 		/// @param commandList 

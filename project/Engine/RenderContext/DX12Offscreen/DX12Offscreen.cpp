@@ -39,10 +39,15 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, ID3D12GraphicsComma
 
 	// 頂点シェーダを読み込む
 	vertexShaderBlob_ = compiler->Compile(L"./Assets/Shader/Fullscreen/Fullscreen.VS.hlsl", L"vs_6_0");
+	assert(vertexShaderBlob_);
 
-	// PSO CopyImage の生成と初期化
-	psoCopyImage_ = std::make_unique<PSOCopyImage>();
-	psoCopyImage_->Initialize(device, compiler, vertexShaderBlob_.Get(), log);
+	// ピクセルシェーダーを読み込む
+	pixelShaderBlob_ = compiler->Compile(L"./Assets/Shader/Fullscreen/Fullscreen.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob_);
+
+	// フルスクリーンPSOの生成
+	psoFullscreen_ = std::make_unique<PSOFullscreen>();
+	psoFullscreen_->Initialize(device, vertexShaderBlob_.Get(), pixelShaderBlob_.Get(), log);
 
 
 	// レンダーターゲットプールの生成
@@ -108,7 +113,7 @@ void Engine::DX12Offscreen::RenderSwapChain(ID3D12GraphicsCommandList* commandLi
 	assert(commandList);
 
 	// PSOの設定
-	psoCopyImage_->Register(commandList);
+	psoFullscreen_->Register(commandList, BlendMode::kNone);
 
 	// テクスチャ
 	currentResource_->RegisterGraphics(commandList, 0);
@@ -206,6 +211,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
 		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(name, registerContext);
@@ -239,12 +245,12 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	}
 }
 
-/// @brief レンダーパスを描画する
+/// @brief レンダーパスを実行する
 /// @param handle 
 /// @param commandList 
 /// @param dsvHandle 
 /// @param inputResource 
-void Engine::DX12Offscreen::RenderPassDraw(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList)
+void Engine::DX12Offscreen::ExecuteRenderPass(RenderPassHandle handle, ID3D12GraphicsCommandList* commandList)
 {
 	// nullptrチェック
 	assert(commandList);
@@ -259,12 +265,12 @@ void Engine::DX12Offscreen::RenderPassDraw(RenderPassHandle handle, ID3D12Graphi
 	currentResource_ = renderPassStore_->RenderPassDraw(handle, this, commandList, dsvHandle, currentResource_);
 }
 
-/// @brief レンダーパスを描画する
+/// @brief レンダーパスを実行する
 /// @param name 
 /// @param commandList 
 /// @param dsvHandle 
 /// @param inputResource 
-void Engine::DX12Offscreen::RenderPassDraw(const std::string& name, ID3D12GraphicsCommandList* commandList)
+void Engine::DX12Offscreen::ExecuteRenderPass(const std::string& name, ID3D12GraphicsCommandList* commandList)
 {
 	// nullptrチェック
 	assert(commandList);
@@ -277,6 +283,24 @@ void Engine::DX12Offscreen::RenderPassDraw(const std::string& name, ID3D12Graphi
 	// 前のパスの出力（currentResource_）を入力テクスチャとして渡し、
 	// 今回のパスの出力テクスチャを新しい「最新リソース」として更新する
 	currentResource_ = renderPassStore_->RenderPassDraw(name, this, commandList, dsvHandle, currentResource_);
+}
+
+/// @brief レンダーパスに描画する
+/// @param renderTargetHandle 
+/// @param sourceHandle 
+/// @param commandList 
+void Engine::DX12Offscreen::DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle, ID3D12GraphicsCommandList* commandList)
+{
+	renderPassStore_->DrawToRenderPass(renderTargetHandle, sourceHandle, commandList, psoFullscreen_.get());
+}
+
+/// @brief レンダーパスに描画する
+/// @param renderTargetName 
+/// @param sourceName 
+/// @param commandList 
+void Engine::DX12Offscreen::DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName, ID3D12GraphicsCommandList* commandList)
+{
+	renderPassStore_->DrawToRenderPass(renderTargetName, sourceName, commandList, psoFullscreen_.get());
 }
 
 /// @brief モーションベクトルを描画する
@@ -318,7 +342,7 @@ void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
 	context.commandList = commandList;
 	context.offscreenPixelShaderResource = sourceResource_;
 	context.offscreenRenderTargetResource = destinationResource_;
-	context.psoCopyImage = psoCopyImage_.get();
+	context.psoFullscreen = psoFullscreen_.get();
 
 	// 書き込み対象 -> 読み込ませテクスチャ
 	TransitionBarrier(sourceResource_->GetResource(),
@@ -349,7 +373,7 @@ void Engine::DX12Offscreen::DrawMotionBlur(ID3D12GraphicsCommandList* commandLis
 	context.commandList = commandList;
 	context.offscreenPixelShaderResource = sourceResource_;
 	context.offscreenRenderTargetResource = destinationResource_;
-	context.psoCopyImage = psoCopyImage_.get();
+	context.psoFullscreen = psoFullscreen_.get();
 
 	// モーションブラーの描画コマンドを登録する
 	postEffectStore_->DrawMotionBlur(context);
@@ -372,7 +396,7 @@ void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandLis
 	context.offscreenRenderTargetResource = destinationResource_;
 	context.camera3DStore = cameraStore;
 	context.depthResource = depthResource_.get();
-	context.psoCopyImage = psoCopyImage_.get();
+	context.psoFullscreen = psoFullscreen_.get();
 
 	// 書き込み対象 -> 読み込ませテクスチャ
 	TransitionBarrier(sourceResource_->GetResource(),

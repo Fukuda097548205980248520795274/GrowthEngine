@@ -34,6 +34,21 @@ namespace Engine
 		/// @param dsvHandle 
 		OffscreenResource* RenderPassDraw(const std::string& name, DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource);
 
+		/// @brief レンダーパスに描画する
+		/// @param handle 
+		/// @param offscreen 
+		/// @param commandList 
+		/// @param psoFullscreen 
+		void DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle, ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen);
+
+		/// @brief レンダーパスに描画する
+		/// @param name 
+		/// @param offscreen 
+		/// @param commandList 
+		/// @param psoFullscreen 
+		void DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName, ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen);
+
+
 		/// @brief レンダーパスを返却する
 		void Return();
 

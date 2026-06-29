@@ -38,6 +38,29 @@ Engine::OffscreenResource* Engine::RenderPass::Execute(ID3D12GraphicsCommandList
 	return offscreenResource_;
 }
 
+/// @brief レンダーパスに描画する
+/// @param commandList 
+/// @param psoFullscreen 
+/// @param textureResource 
+void Engine::RenderPass::DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource)
+{
+	assert(commandList);
+	assert(psoFullscreen);
+	assert(textureResource);
+
+	// PSOを登録する
+	psoFullscreen->Register(commandList, BlendMode::kNone);
+
+	// レンダーターゲットを設定する
+	commandList->SetGraphicsRootDescriptorTable(0, textureResource->GetSrvGpuHandle());
+
+	// 三角形の描画に必要な情報を設定する
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// 3つの頂点を描画する
+	commandList->DrawInstanced(3, 1, 0, 0);
+}
+
 /// @brief レンダーパスを返却する
 /// @param commandList 
 /// @param renderTargetPool 

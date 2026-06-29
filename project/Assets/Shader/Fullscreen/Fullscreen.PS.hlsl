@@ -1,4 +1,4 @@
-#include "../Fullscreen/Fullscreen.hlsli"
+#include "Fullscreen.hlsli"
 
 struct PixelShaderOutput
 {
@@ -6,11 +6,11 @@ struct PixelShaderOutput
 };
 
 Texture2D<float4> gTexture : register(t0);
-SamplerState gSample : register(s0);
+SamplerState gSampler : register(s0);
 
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
-    output.color = gTexture.Sample(gSample, input.texcoord);
+    output.color = gTexture.Sample(gSampler, input.texcoord);
     return output;
 }

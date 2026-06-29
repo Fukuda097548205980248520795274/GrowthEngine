@@ -46,10 +46,6 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	heap_ = heap;
 	textureStore_ = textureStore;
 
-	// コピー加算PSO
-	psoCopyImageAdd_ = std::make_unique<PSOCopyImageAdd>();
-	psoCopyImageAdd_->Initialize(device, compiler, vertexShaderBlob, log);
-
 	// グレースケールPSO
 	psoGrayscale_ = std::make_unique<PSOGrayscale>();
 	psoGrayscale_->Initialize(device, compiler, vertexShaderBlob, log);
@@ -253,7 +249,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	if (type == PostEffect::Type::Bloom)
 	{
 		std::unique_ptr<PostEffectBloomData> data = std::make_unique<PostEffectBloomData>(name, type, handle, parameter_.get());
-		data->Initialize(device, commandList, buffering, heap_, psoCopyImageAdd_.get(),
+		data->Initialize(device, commandList, buffering, heap_,
 			computePSOHighLuminanceExtraction_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;

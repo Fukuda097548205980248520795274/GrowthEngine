@@ -654,13 +654,23 @@ namespace Engine
 		/// @return 
 		RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc) { return offscreen_->LoadRenderPass(name, drawFunc); }
 
-		/// @brief レンダーパスを描画する
+		/// @brief レンダーパスを実行する
 		/// @param hRenderPass 
-		void DrawRenderPass(RenderPassHandle hRenderPass) { offscreen_->RenderPassDraw(hRenderPass, commandList_); }
+		void ExecuteRenderPass(RenderPassHandle hRenderPass) { offscreen_->ExecuteRenderPass(hRenderPass, commandList_); }
 
-		/// @brief レンダーパスを描画する
+		/// @brief レンダーパスを実行する
 		/// @param name 
-		void DrawRenderPass(const std::string& name) { offscreen_->RenderPassDraw(name, commandList_); }
+		void ExecuteRenderPass(const std::string& name) { offscreen_->ExecuteRenderPass(name, commandList_); }
+
+		/// @brief レンダーパスに描画する
+		/// @param renderTargetHandle 
+		/// @param sourceHandle 
+		void DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle) { offscreen_->DrawToRenderPass(renderTargetHandle, sourceHandle, commandList_); }
+
+		/// @brief レンダーパスに描画する
+		/// @param renderTargetName 
+		/// @param sourceName 
+		void DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName) { offscreen_->DrawToRenderPass(renderTargetName, sourceName, commandList_); }
 
 
 #ifdef _DEVELOPMENT

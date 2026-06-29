@@ -148,6 +148,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 描画後処理のレンダーパスを登録する
 	LoadRenderPass("LastPostDraw", [&]()
 		{
+			DrawToRenderPass("LastPostDraw", "MainPass");
+
 			// モーションベクトルの描画
 			offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 
@@ -168,6 +170,8 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	// 線の描画前処理のレンダーパスを登録する
 	LoadRenderPass("LineDraw", [&]()
 		{
+			DrawToRenderPass("LineDraw", "LastPostDraw");
+
 			// 衝突ストアのデバッグ線
 			collision3DStore_->DebugDrawLine();
 			collision2DStore_->DebugDrawLine();
@@ -298,20 +302,20 @@ void Engine::RenderContext::PreDraw()
 	offscreen_->Clear(commandList_);
 
 	// 描画前処理のレンダーパスを呼び出す
-	DrawRenderPass("PrevDraw");
+	ExecuteRenderPass("PrevDraw");
 }
 
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
 	// 描画後処理のレンダーパスを呼び出す
-	DrawRenderPass("MainPass");
+	ExecuteRenderPass("MainPass");
 
 	// 描画後ポストエフェクトのレンダーパスを呼び出す
-	//DrawRenderPass("LastPostDraw");
+	ExecuteRenderPass("LastPostDraw");
 
 #ifdef _DEVELOPMENT
-	//DrawRenderPass("LineDraw");
+	ExecuteRenderPass("LineDraw");
 #endif
 
 	// コマンドリスト・アロケータの取得

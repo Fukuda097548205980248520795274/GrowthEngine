@@ -103,7 +103,7 @@ void Engine::PostEffectAfterImageData::Register(const PostEffectRenderContext& c
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
 	ID3D12GraphicsCommandList* commandList = context.commandList;
-	PSOCopyImage* psoCopyImage = context.psoCopyImage;
+	PSOFullscreen* psoFullscreen = context.psoFullscreen;
 	DepthResource* depthResource = context.depthResource;
 	Camera3DStore* camera3DStore = context.camera3DStore;
 
@@ -111,7 +111,7 @@ void Engine::PostEffectAfterImageData::Register(const PostEffectRenderContext& c
 	assert(motionVectorTextureResource);
 	assert(offscreenPixelShaderResource);
 	assert(commandList);
-	assert(psoCopyImage);
+	assert(psoFullscreen);
 	assert(depthResource);
 
 	// パラメータをGPU用のデータに転送
@@ -174,7 +174,7 @@ void Engine::PostEffectAfterImageData::Register(const PostEffectRenderContext& c
 	prevFrameOffscreenResource_->ClearRenderTarget(commandList, context.depthResource->GetDsvCpuHandle());
 
 	// PSOを登録
-	psoCopyImage->Register(commandList);
+	psoFullscreen->Register(commandList, BlendMode::kNone);
 
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	prevAfterImageOutputResource_->RegisterGraphicsSRV(commandList, 0);
@@ -198,7 +198,7 @@ void Engine::PostEffectAfterImageData::Register(const PostEffectRenderContext& c
 	offscreenRenderTargetResource->ClearRenderTarget(commandList, context.depthResource->GetDsvCpuHandle());
 
 	// PSOを登録
-	psoCopyImage->Register(commandList);
+	psoFullscreen->Register(commandList, BlendMode::kNone);
 
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	outputResource_->RegisterGraphicsSRV(commandList, 0);

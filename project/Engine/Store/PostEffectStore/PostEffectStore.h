@@ -9,7 +9,6 @@
 #include "PostEffectData/PostEffectBaseData.h"
 #include "Parameter/PostEffectParameter/PostEffectParameter.h"
 
-#include "PSO/PSOPostEffect/PSOCopyImageAdd/PSOCopyImageAdd.h"
 #include "PSO/PSOPostEffect/PSORadialBlur/PSORadialBlur.h"
 #include "PSO/PSOPostEffect/PSOVignetting/PSOVignetting.h"
 #include "PSO/PSOPostEffect/PSOGrayscale/PSOGrayscale.h"
@@ -193,9 +192,6 @@ namespace Engine
 
 
 	private:
-
-		/// @brief コピー加算PSO
-		std::unique_ptr<PSOCopyImageAdd> psoCopyImageAdd_ = nullptr;
 
 		/// @brief グレースケールPSO
 		std::unique_ptr<PSOGrayscale> psoGrayscale_ = nullptr;

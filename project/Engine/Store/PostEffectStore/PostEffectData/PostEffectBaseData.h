@@ -19,7 +19,7 @@ namespace Engine
 	class BaseComputePSO;
 	class PostEffectParameter;
 	class MotionVectorTextureResource;
-	class PSOCopyImage;
+	class PSOFullscreen;
 
 	/// @brief 各ポストエフェクトが必要とする入力データの種類
 	/// @details 新しい入力が必要になった場合はここにフラグを追加する
@@ -48,7 +48,7 @@ namespace Engine
 		DepthResource* depthResource = nullptr;
 		Camera3DStore* camera3DStore = nullptr;
 		MotionVectorTextureResource* motionVectorTextureResource = nullptr;
-		PSOCopyImage* psoCopyImage = nullptr;
+		PSOFullscreen* psoFullscreen = nullptr;
 	};
 
 	class PostEffectBaseData

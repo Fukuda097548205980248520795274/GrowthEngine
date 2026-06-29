@@ -989,13 +989,24 @@ public:
 	void Trail3DClear(const std::string& name)const { renderContext_->Trail3DClear(name); }
 
 
-	/// @brief レンダーパスを描画する
+	/// @brief レンダーパスを実行する
 	/// @param handle 
-	void RenderPassDraw(RenderPassHandle handle)const { renderContext_->DrawRenderPass(handle); }
+	void ExecuteRenderPass(RenderPassHandle handle)const { renderContext_->ExecuteRenderPass(handle); }
 
-	/// @brief レンダーパスを描画する
+	/// @brief レンダーパスを実行する
 	/// @param name 
-	void RenderPassDraw(const std::string& name)const { renderContext_->DrawRenderPass(name); }
+	void ExecuteRenderPass(const std::string& name)const { renderContext_->ExecuteRenderPass(name); }
+
+
+	/// @brief レンダーパスに描画する
+	/// @param rendarTargetHandle 
+	/// @param sourceHandle 
+	void DrawToRenderPass(RenderPassHandle rendarTargetHandle, RenderPassHandle sourceHandle)const { renderContext_->DrawToRenderPass(rendarTargetHandle, sourceHandle); }
+
+	/// @brief レンダーパスに描画する
+	/// @param rendarTargetName 
+	/// @param sourceName 
+	void DrawToRenderPass(const std::string& rendarTargetName, const std::string& sourceName)const { renderContext_->DrawToRenderPass(rendarTargetName, sourceName); }
 
 
 	/// @brief デバッグ用の線を描画する

@@ -92,13 +92,13 @@ void Engine::PostEffectTAAData::Register(const PostEffectRenderContext& context)
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
 	ID3D12GraphicsCommandList* commandList = context.commandList;
-	PSOCopyImage* psoCopyImage = context.psoCopyImage;
+	PSOFullscreen* psoFullscreen = context.psoFullscreen;
 
 	// nullptrチェック
 	assert(motionVectorTextureResource);
 	assert(offscreenPixelShaderResource);
 	assert(commandList);
-	assert(psoCopyImage);
+	assert(psoFullscreen);
 
 	// パラメータをGPU用のデータに転送
 	resource_->data_->blendFactor = param_->blendFactor;
@@ -145,7 +145,7 @@ void Engine::PostEffectTAAData::Register(const PostEffectRenderContext& context)
 	outputTAAResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// PSOを登録
-	psoCopyImage->Register(commandList);
+	psoFullscreen->Register(commandList, BlendMode::kNone);
 
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	outputTAAResource_->RegisterGraphicsSRV(commandList, 0);
