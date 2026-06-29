@@ -185,6 +185,8 @@ void GameScene::Initialize()
 	// ポストエフェクトの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("PostEffect", [&]()
 		{
+			engine_->DrawToRenderPass("MainPass", "Object");
+
 			// ポストエフェクトの描画処理
 			postEffectManager_->Draw(player_.get());
 		}
@@ -193,7 +195,7 @@ void GameScene::Initialize()
 	// HUDの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("HUD", [&]()
 		{
-			engine_->DrawToRenderPass("MainPass", "Object");
+			engine_->DrawToRenderPass("MainPass", "PostEffect");
 
 			// HUDの描画
 			for (auto& hud : huds_)hud->Draw();

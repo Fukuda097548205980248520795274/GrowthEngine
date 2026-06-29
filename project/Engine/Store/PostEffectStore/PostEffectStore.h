@@ -43,6 +43,7 @@ namespace Engine
 	class DX12Heap;
 	class DX12Render;
 	class DX12Prefab;
+	class RenderTargetPool;
 
 	class PostEffectStore
 	{
@@ -75,6 +76,7 @@ namespace Engine
 
 		/// @brief シーン前のリセット処理
 		void PerSceneReset();
+
 
         /// @brief 描画処理をコマンドリストに登録する
 		/// @param hPostEffect

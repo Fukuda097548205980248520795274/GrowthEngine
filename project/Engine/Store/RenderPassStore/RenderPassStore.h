@@ -73,6 +73,11 @@ namespace Engine
 		RenderPass* GetPass(const std::string& name) { return dataTable_[nameTable_.at(name)].get(); }
 
 
+		/// @brief 中間リソースを解放する
+		/// @param resource 
+		void ReleaseIntermediateResource(OffscreenResource* resource);
+
+
 	private:
 
 		/// @brief データテーブル
@@ -82,7 +87,7 @@ namespace Engine
 		std::unordered_map<std::string, RenderPassHandle> nameTable_;
 
 		/// @brief 実行リスト
-		std::list<RenderPass*> executeList_;
+		std::vector<OffscreenResource*> activeResources_;
 
 		/// @brief レンダーターゲットプール
 		RenderTargetPool* renderTargetPool_ = nullptr;

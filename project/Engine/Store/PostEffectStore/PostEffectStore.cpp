@@ -5,6 +5,8 @@
 #include "RenderContext/DX12Render/DX12Render.h"
 #include "RenderContext/DX12Prefab/DX12Prefab.h"
 
+#include "RenderContext/DX12Offscreen/RenderTargetPool/RenderTargetPool.h"
+
 #include "PostEffectData/PostEffectGrayscaleData/PostEffectGrayscaleData.h"
 #include "PostEffectData/PostEffectVignettingData/PostEffectVignettingData.h"
 #include "PostEffectData/PostEffectSmoothingData/PostEffectSmoothingData.h"

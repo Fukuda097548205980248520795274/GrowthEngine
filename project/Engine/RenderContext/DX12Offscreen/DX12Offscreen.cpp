@@ -133,7 +133,6 @@ void Engine::DX12Offscreen::ClearDepthStencil(ID3D12GraphicsCommandList* command
 	depthResource_->ClearDepthStencil(commandList);
 }
 
-
 /// @brief ポストエフェクトを描画する
 /// @param hPostEffect 
 /// @param commandList 

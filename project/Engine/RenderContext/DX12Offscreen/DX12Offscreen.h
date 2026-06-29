@@ -107,6 +107,11 @@ namespace Engine
 		RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc) { return renderPassStore_->Load(name, drawFunc); }
 
 
+		/// @brief 中間リソースを解放する
+		/// @param resource 
+		void ReleaseIntermediateResource(OffscreenResource* resource) { renderPassStore_->ReleaseIntermediateResource(resource); }
+
+
 		/// @brief ポストエフェクトを描画する
 		/// @param hPostEffect 
 		/// @param commandList 

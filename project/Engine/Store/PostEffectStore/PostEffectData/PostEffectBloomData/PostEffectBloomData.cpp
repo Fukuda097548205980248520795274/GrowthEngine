@@ -147,9 +147,9 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	    高輝度抽出を行う
 	--------------------*/
 
-	// オフスクリーンのテクスチャにバリアを張る 書き込み -> ComputeShader書き込み
+	// オフスクリーンのテクスチャにバリアを張る 読み込み -> ComputeShader書き込み
 	TransitionBarrier(offscreenRenderTargetResource->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// PSOの設定
 	highLuminanceExtractionPSO_->Register(commandList);
@@ -269,6 +269,10 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 
 	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
 	TransitionBarrier(dualBlurTextureResources_[0]->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+
+	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader書き込み
+	TransitionBarrier(offscreenRenderTargetResource->GetResource(),
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 }
 
