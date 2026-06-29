@@ -147,8 +147,9 @@ void GameScene::Initialize()
 	// ステージ読み込み
 	//stageEditor_->LoadStage("Tutorial.json");
 
-	// レンダーパスの読み込み
-	engine_->LoadRenderPass("MainPass", [&]()
+
+	// オブジェクトの描画レンダーパスの読み込み
+	engine_->LoadRenderPass("Object", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "PrevDraw");
 
@@ -178,8 +179,21 @@ void GameScene::Initialize()
 			// エフェクトの描画
 			effectManager_->Draw();
 
+		}
+	);
+
+	// ポストエフェクトの描画レンダーパスの読み込み
+	engine_->LoadRenderPass("PostEffect", [&]()
+		{
 			// ポストエフェクトの描画処理
-			//postEffectManager_->Draw(player_.get());
+			postEffectManager_->Draw(player_.get());
+		}
+	);
+
+	// HUDの描画レンダーパスの読み込み
+	engine_->LoadRenderPass("HUD", [&]()
+		{
+			engine_->DrawToRenderPass("MainPass", "Object");
 
 			// HUDの描画
 			for (auto& hud : huds_)hud->Draw();
@@ -213,6 +227,13 @@ void GameScene::Initialize()
 			xButtonSprite_->Draw();
 			bButtonSprite_->Draw();
 			aButtonSprite_->Draw();
+		}
+	);
+
+	// レンダーパスの読み込み
+	engine_->LoadRenderPass("MainPass", [&]()
+		{
+			engine_->DrawToRenderPass("MainPass", "HUD");
 		}
 	);
 }
@@ -285,7 +306,17 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
-	
+	// オブジェクトの描画レンダーパスを呼び出す
+	engine_->ExecuteRenderPass("Object");
+
+	// ポストエフェクトの描画レンダーパスを呼び出す
+	engine_->ExecuteRenderPass("PostEffect");
+
+	// HUDの描画レンダーパスを呼び出す
+	engine_->ExecuteRenderPass("HUD");
+
+	// 描画後処理のレンダーパスを呼び出す
+	engine_->ExecuteRenderPass("MainPass");
 }
 
 

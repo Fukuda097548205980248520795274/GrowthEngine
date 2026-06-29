@@ -49,7 +49,7 @@ void Engine::RenderPass::DrawToRenderPass(ID3D12GraphicsCommandList* commandList
 	assert(textureResource);
 
 	// PSOを登録する
-	psoFullscreen->Register(commandList, BlendMode::kNone);
+	psoFullscreen->Register(commandList, BlendMode::kNormal);
 
 	// レンダーターゲットを設定する
 	commandList->SetGraphicsRootDescriptorTable(0, textureResource->GetSrvGpuHandle());

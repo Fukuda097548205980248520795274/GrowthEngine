@@ -308,9 +308,6 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// 描画後処理のレンダーパスを呼び出す
-	ExecuteRenderPass("MainPass");
-
 	// 描画後ポストエフェクトのレンダーパスを呼び出す
 	ExecuteRenderPass("LastPostDraw");
 

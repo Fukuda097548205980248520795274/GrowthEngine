@@ -73,7 +73,7 @@ namespace Engine
 		ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;
 
 		// RTV用ディスクリプタ数
-		UINT rtvDescriptorNum_ = 8;
+		UINT rtvDescriptorNum_ = 128;
 
 		// RTV用CPUディスクリプタ使用数
 		int32_t useRtvCPUDescriptor_ = 0;
