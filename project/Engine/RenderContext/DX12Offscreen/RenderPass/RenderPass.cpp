@@ -31,11 +31,19 @@ Engine::OffscreenResource* Engine::RenderPass::Execute(ID3D12GraphicsCommandList
 
 	// 描画処理
 	drawFunc_();
+
+	OffscreenResource* destinationResource = offscreen->GetDestinationResource();
+	OffscreenResource* sourceResource = offscreenResource_;
+	if (offscreenResource_ != destinationResource)
+	{
+		// 描画先が変わってしまった場合は、描画先を戻す
+		offscreenResource_ = destinationResource;
+	}
 	
 	// テクスチャとして使用するためにバリアを張る
 	offscreenResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-	return offscreenResource_;
+	return sourceResource;
 }
 
 /// @brief レンダーパスに描画する
