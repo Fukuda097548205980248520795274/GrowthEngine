@@ -211,6 +211,17 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
 	const bool isBloom = postEffectStore_->IsBloom(name);
 
+	// レンダーターゲットの設定とクリア
+	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	sourceResource_->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
+
+	destinationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// sourceとdestinationを入れ替える
+	OffscreenResource* temp = sourceResource_;
+	sourceResource_ = destinationResource_;
+	destinationResource_ = temp;
+
 	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
 	if (isBloom)
 	{

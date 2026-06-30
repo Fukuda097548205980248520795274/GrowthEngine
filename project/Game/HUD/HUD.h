@@ -59,6 +59,10 @@ public:
 	/// @return 
 	Vector2 GetWorldPosition() { return worldTransform_->GetWorldPosition(); }
 
+	/// @brief 表示するかどうか
+	/// @param visible 
+	void SetVisible(bool visible) { isVisible_ = visible; }
+
 
 protected:
 

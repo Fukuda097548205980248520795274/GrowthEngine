@@ -2120,6 +2120,7 @@ void Character::HpHudUpdate()
 		// プレイヤーは画面左上の固定位置に体力HUDを表示する
 	case CharacterTag::Player:
 		hpHUD_->SetPosition(Vector2(360.0f, 670.0f));
+		hpHUD_->SetVisible(true);
 		break;
 
 		// ボスは頭の上に体力HUDを表示する
