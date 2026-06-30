@@ -260,6 +260,8 @@ void Engine::RenderContext::NewFrame()
 /// @brief 描画前処理
 void Engine::RenderContext::PreDraw()
 {
+	bool isHoverViewWindow = false;
+
 	// パラメータやGuizmo操作などのデバッグ表示
 #ifdef _DEVELOPMENT
 	camera3DStore_->DebugParameter();
@@ -270,6 +272,9 @@ void Engine::RenderContext::PreDraw()
 
 	lightStore_->DebugGuizmo(camera3DStore_->GetCamera3D().GetViewMatrix(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
 	lightStore_->DebugParameter();
+
+	// ImGuiDockingのビューウィンドウがホバーしているかどうかを取得する
+	isHoverViewWindow = imguiRender_->IsViewWindowHover();
 #endif
 
 	// コマンドリストの取得
@@ -282,8 +287,8 @@ void Engine::RenderContext::PreDraw()
 	particle_->Update(commandList_);
 
 	// カメラストアの更新
-	camera3DStore_->Update();
-	camera2DStore_->Update();
+	camera3DStore_->Update(isHoverViewWindow);
+	camera2DStore_->Update(isHoverViewWindow);
 
 	// ライトストアの更新
 	lightStore_->Update();

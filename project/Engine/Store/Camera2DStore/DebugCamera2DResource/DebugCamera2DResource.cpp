@@ -31,7 +31,7 @@ Engine::DebugCamera2DResource::~DebugCamera2DResource()
 }
 
 /// @brief 更新処理
-void Engine::DebugCamera2DResource::Update()
+void Engine::DebugCamera2DResource::Update(bool isHoverViewWindow)
 {
 	// F2キーで有効
 	if (engine_->GetKeyTrigger(DIK_F2))
@@ -39,6 +39,9 @@ void Engine::DebugCamera2DResource::Update()
 
 	// 有効でないと処理しない
 	if (!enable_)return;
+
+	// マウスがビューウィンドウ上にない場合は処理しない
+	if (!isHoverViewWindow)return;
 
 	// パラメータを取得する
 	Camera2DData::Param* param = camera2d_->GetParam();

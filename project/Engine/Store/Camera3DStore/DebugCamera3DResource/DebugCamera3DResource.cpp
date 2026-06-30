@@ -32,7 +32,7 @@ Engine::DebugCamera3DResource::~DebugCamera3DResource()
 }
 
 /// @brief 更新処理
-void Engine::DebugCamera3DResource::Update()
+void Engine::DebugCamera3DResource::Update(bool isHoverViewWindow)
 {
 	// F1キーで有効
 	if (engine_->GetKeyTrigger(DIK_F1))
@@ -42,14 +42,14 @@ void Engine::DebugCamera3DResource::Update()
 	if (!enable_)return;
 
 	// ピボットポイントの更新
-	PivotPointUpdate();
+	if(isHoverViewWindow)PivotPointUpdate();
 
 	// カメラの更新
 	camera3d_->Update();
 }
 
 /// @brief ジッタリングして更新処理
-void Engine::DebugCamera3DResource::JitterUpdate()
+void Engine::DebugCamera3DResource::JitterUpdate(bool isHoverViewWindow)
 {
 	// F1キーで有効
 	if (engine_->GetKeyTrigger(DIK_F1))
@@ -59,7 +59,7 @@ void Engine::DebugCamera3DResource::JitterUpdate()
 	if (!enable_)return;
 
 	// ピボットポイントの更新
-	PivotPointUpdate();
+	if(isHoverViewWindow)PivotPointUpdate();
 
 	// カメラの更新
 	camera3d_->JitterUpdate();

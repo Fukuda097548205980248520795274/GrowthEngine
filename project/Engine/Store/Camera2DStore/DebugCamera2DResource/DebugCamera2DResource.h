@@ -17,7 +17,7 @@ namespace Engine
 		~DebugCamera2DResource();
 
 		/// @brief 更新処理
-		void Update();
+		void Update(bool isHoverViewWindow);
 
 		/// @brief カメラデータを取得する
 		/// @return 

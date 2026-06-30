@@ -74,7 +74,7 @@ Camera3DHandle Engine::Camera3DStore::Load(const std::string& name)
 }
 
 /// @brief 更新処理
-void Engine::Camera3DStore::Update()
+void Engine::Camera3DStore::Update(bool isHoverViewWindow)
 {
 	// 指定されたカメラの更新
 	if(!enableJitter_)dataTable_[selectHCamera_]->Update();
@@ -85,8 +85,8 @@ void Engine::Camera3DStore::Update()
 #ifdef _DEVELOPMENT
 
 	// デバッグカメラ更新
-	if(!enableJitter_)debugCamera_->Update();
-	else debugCamera_->JitterUpdate();
+	if(!enableJitter_)debugCamera_->Update(isHoverViewWindow);
+	else debugCamera_->JitterUpdate(isHoverViewWindow);
 
 	// デバッグカメラ有効時
 	if (debugCamera_->IsEnable())

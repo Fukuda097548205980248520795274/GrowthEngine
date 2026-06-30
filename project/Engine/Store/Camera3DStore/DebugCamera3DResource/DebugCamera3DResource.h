@@ -19,10 +19,11 @@ namespace Engine
 		~DebugCamera3DResource();
 
 		/// @brief 更新処理
-		void Update();
+		/// @param isHoverViewWindow 
+		void Update(bool isHoverViewWindow);
 
 		/// @brief ジッタリングして更新処理
-		void JitterUpdate();
+		void JitterUpdate(bool isHoverViewWindow);
 
 		/// @brief カメラデータを取得する
 		/// @return 

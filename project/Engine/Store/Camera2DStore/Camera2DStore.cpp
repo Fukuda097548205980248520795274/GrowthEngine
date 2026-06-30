@@ -44,7 +44,7 @@ Camera2DHandle Engine::Camera2DStore::Load(const std::string& name)
 }
 
 /// @brief 更新処理
-void Engine::Camera2DStore::Update()
+void Engine::Camera2DStore::Update(bool isHoverViewWindow)
 {
 	// 指定されたカメラの更新
 	dataTable_[selectHCamera_]->Update();
@@ -52,7 +52,7 @@ void Engine::Camera2DStore::Update()
 #ifdef _DEVELOPMENT
 
 	// デバッグカメラ更新
-	debugCamera_->Update();
+	debugCamera_->Update(isHoverViewWindow);
 
 #endif
 }

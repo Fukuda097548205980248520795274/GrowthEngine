@@ -36,7 +36,7 @@ namespace Engine
 		Camera3DHandle Load(const std::string& name);
 
 		/// @brief 更新処理
-		void Update();
+		void Update(bool isHoverViewWindow);
 
 		/// @brief カメラを切り替える
 		/// @param hCamera 
