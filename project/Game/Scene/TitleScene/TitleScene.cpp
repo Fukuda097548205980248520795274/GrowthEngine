@@ -6,7 +6,13 @@ void TitleScene::Initialize()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-	engine_->LoadPostEffect("Test", Engine::PostEffect::Type::Dissolve);
+	engine_->LoadPostEffect("Test", Engine::PostEffect::Type::WhiteNoise);
+
+	engine_->LoadRenderPass("MainPass", [&]()
+		{
+			engine_->DrawPostEffect("Test");
+		}
+	);
 }
 
 /// @brief 更新処理
@@ -18,5 +24,5 @@ void TitleScene::Update()
 /// @brief 描画処理
 void TitleScene::Draw()
 {
-	engine_->DrawPostEffect("Test");
+	engine_->ExecuteRenderPass("MainPass");
 }

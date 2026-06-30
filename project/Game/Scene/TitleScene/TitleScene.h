@@ -17,5 +17,6 @@ public:
 
 	/// @brief 描画処理
 	void Draw() override;
+
 };
 
