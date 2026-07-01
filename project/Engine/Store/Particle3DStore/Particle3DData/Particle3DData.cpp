@@ -361,6 +361,9 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	// デルタタイム
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
+	// 放出するかどうか
+	bool isEmitter = false;
+
 	// エミッターを更新する
 	for (int i = 0; i < static_cast<int32_t>(emitterNum_); ++i)
 	{
@@ -400,6 +403,8 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 				{
 					emitterResource_->data_[i].emit = 1;
 					emitterResource_->data_[i].frequencyTimer = 0.0f;
+
+					isEmitter = true;
 				}
 				else
 				{
@@ -416,78 +421,13 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	}
 
 
+
 	particlePerFrameResource_->data_->time += dt;
 	particlePerFrameResource_->data_->time = std::fmod(particlePerFrameResource_->data_->time, 1000.0f); // 時間が大きくなりすぎないようにする
 
 	// デルタタイムを取得する
 	particlePerFrameResource_->data_->deltaTime = dt;
 
-	// 色のランダムを有効にしているかどうかで処理を分ける
-	if (param_->color.randomColor)
-	{
-		emitOptionResource_->data_->startColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.startAlpha);
-		emitOptionResource_->data_->endColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.endAlpha);
-	}
-	else
-	{
-		// エミッタの色を更新する
-		emitOptionResource_->data_->startColor = param_->color.start;
-		emitOptionResource_->data_->endColor = param_->color.end;
-	}
-
-	// 大きさのランダムを有効にしているかどうかで処理を分ける
-	if (param_->scale.isRandomStart)
-	{
-		emitOptionResource_->data_->startScale.x = GetRandomRange(param_->scale.startA.x, param_->scale.startB.x);
-		emitOptionResource_->data_->startScale.y = GetRandomRange(param_->scale.startA.y, param_->scale.startB.y);
-		emitOptionResource_->data_->startScale.z = GetRandomRange(param_->scale.startA.z, param_->scale.startB.z);
-	}
-	else
-	{
-		emitOptionResource_->data_->startScale = param_->scale.start;
-	}
-
-	// 大きさのランダムを有効にしているかどうかで処理を分ける
-	if (param_->scale.isRandomEnd)
-	{
-		emitOptionResource_->data_->endScale.x = GetRandomRange(param_->scale.endA.x, param_->scale.endB.x);
-		emitOptionResource_->data_->endScale.y = GetRandomRange(param_->scale.endA.y, param_->scale.endB.y);
-		emitOptionResource_->data_->endScale.z = GetRandomRange(param_->scale.endA.z, param_->scale.endB.z);
-	}
-	else
-	{
-		emitOptionResource_->data_->endScale = param_->scale.end;
-	}
-
-	// エミッタのパラメータを更新する
-	emitOptionResource_->data_->minLifeTime = param_->lifeTime.min;
-	emitOptionResource_->data_->maxLifeTime = param_->lifeTime.max;
-	emitOptionResource_->data_->startSpeed = param_->speed.start;
-	emitOptionResource_->data_->endSpeed = param_->speed.end;
-
-	// 回転はクォータニオンに変換して渡す
-	if (param_->rotate.isRandom)
-	{
-		if (param_->enableBillboard)
-		{
-			float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
-			emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
-			emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
-		}
-		else
-		{
-			Vector3 randomAxis = Vector3(GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f)).Normalize();
-			float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
-			emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, randomAxis);
-			emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, randomAxis);
-		}
-	}
-	else
-	{
-		param_->rotate.axis = param_->rotate.axis.Normalize();
-		emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
-		emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
-	}
 
 	// エミッター形状のパラメータを更新する
 	particleEmitterShapeResource_->data_->radius1 = param_->radius1;
@@ -515,7 +455,7 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	particleGravityResource_->data_->direction = param_->gravity.direction;
 	particleGravityResource_->data_->velocity = param_->gravity.velocity;
 
-	if(param_->attract.swapEmitterAttract)
+	if (param_->attract.swapEmitterAttract)
 	{
 		// エミッターと引力の位置を入れ替える
 		Vector3 temp = particleAttractResource_->data_->position;
@@ -524,48 +464,114 @@ void Engine::Particle3DData::Update(ID3D12GraphicsCommandList* commandList, Base
 	}
 
 
-	/*------------
-	   エミッター
-	------------*/
-
-	// PSOの設定
-	psoEmitter->Register(commandList);
-
-	// パーティクルリソースを登録する
-	particleResource_->RegisterComputeUAV(commandList, 0);
-
-	// 放出設定リソースを登録する
-	emitOptionResource_->RegisterCompute(commandList, 1);
-
-	// パーティクル数リソースを登録する
-	particleNumResource_->RegisterCompute(commandList, 2);
-
-	// パーティクルフレームリソースを登録する
-	particlePerFrameResource_->RegisterCompute(commandList, 3);
-
-	// フリーリストインデックスリソースを登録する
-	freeListIndexResource_->RegisterComputeUAV(commandList, 4);
-
-	// フリーリストリソースを登録する
-	freeListResource_->RegisterComputeUAV(commandList, 5);
-
-	// エミッターリソースを登録する
-	emitterResource_->RegisterCompute(commandList, 6);
-
-	if (param_->shape != Particle3D::EmitterShape::Point)
+	if (isEmitter)
 	{
-		// エミッター形状リソースを登録する
-		particleEmitterShapeResource_->RegisterCompute(commandList, 7);
+		// 色のランダムを有効にしているかどうかで処理を分ける
+		if (param_->color.randomColor)
+		{
+			emitOptionResource_->data_->startColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.startAlpha);
+			emitOptionResource_->data_->endColor = Vector4(GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), GetRandomRange(0.0f, 1.0f), param_->color.endAlpha);
+		} else
+		{
+			// エミッタの色を更新する
+			emitOptionResource_->data_->startColor = param_->color.start;
+			emitOptionResource_->data_->endColor = param_->color.end;
+		}
+
+		// 大きさのランダムを有効にしているかどうかで処理を分ける
+		if (param_->scale.isRandomStart)
+		{
+			emitOptionResource_->data_->startScale.x = GetRandomRange(param_->scale.startA.x, param_->scale.startB.x);
+			emitOptionResource_->data_->startScale.y = GetRandomRange(param_->scale.startA.y, param_->scale.startB.y);
+			emitOptionResource_->data_->startScale.z = GetRandomRange(param_->scale.startA.z, param_->scale.startB.z);
+		} else
+		{
+			emitOptionResource_->data_->startScale = param_->scale.start;
+		}
+
+		// 大きさのランダムを有効にしているかどうかで処理を分ける
+		if (param_->scale.isRandomEnd)
+		{
+			emitOptionResource_->data_->endScale.x = GetRandomRange(param_->scale.endA.x, param_->scale.endB.x);
+			emitOptionResource_->data_->endScale.y = GetRandomRange(param_->scale.endA.y, param_->scale.endB.y);
+			emitOptionResource_->data_->endScale.z = GetRandomRange(param_->scale.endA.z, param_->scale.endB.z);
+		} else
+		{
+			emitOptionResource_->data_->endScale = param_->scale.end;
+		}
+
+		// エミッタのパラメータを更新する
+		emitOptionResource_->data_->minLifeTime = param_->lifeTime.min;
+		emitOptionResource_->data_->maxLifeTime = param_->lifeTime.max;
+		emitOptionResource_->data_->startSpeed = param_->speed.start;
+		emitOptionResource_->data_->endSpeed = param_->speed.end;
+
+		// 回転はクォータニオンに変換して渡す
+		if (param_->rotate.isRandom)
+		{
+			if (param_->enableBillboard)
+			{
+				float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
+				emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
+				emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, Vector3(0.0f, 0.0f, 1.0f));
+			} else
+			{
+				Vector3 randomAxis = Vector3(GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f), GetRandomRange(-1.0f, 1.0f)).Normalize();
+				float randomStart = GetRandomRange(0.0f, std::numbers::pi_v<float>);
+				emitOptionResource_->data_->startRotation = ToQuaternion(randomStart, randomAxis);
+				emitOptionResource_->data_->endRotation = ToQuaternion(randomStart, randomAxis);
+			}
+		} else
+		{
+			param_->rotate.axis = param_->rotate.axis.Normalize();
+			emitOptionResource_->data_->startRotation = ToQuaternion(param_->rotate.start, param_->rotate.axis);
+			emitOptionResource_->data_->endRotation = ToQuaternion(param_->rotate.end, param_->rotate.axis);
+		}
+
+
+		/*------------
+		   エミッター
+		------------*/
+
+		// PSOの設定
+		psoEmitter->Register(commandList);
+
+		// パーティクルリソースを登録する
+		particleResource_->RegisterComputeUAV(commandList, 0);
+
+		// 放出設定リソースを登録する
+		emitOptionResource_->RegisterCompute(commandList, 1);
+
+		// パーティクル数リソースを登録する
+		particleNumResource_->RegisterCompute(commandList, 2);
+
+		// パーティクルフレームリソースを登録する
+		particlePerFrameResource_->RegisterCompute(commandList, 3);
+
+		// フリーリストインデックスリソースを登録する
+		freeListIndexResource_->RegisterComputeUAV(commandList, 4);
+
+		// フリーリストリソースを登録する
+		freeListResource_->RegisterComputeUAV(commandList, 5);
+
+		// エミッターリソースを登録する
+		emitterResource_->RegisterCompute(commandList, 6);
+
+		if (param_->shape != Particle3D::EmitterShape::Point)
+		{
+			// エミッター形状リソースを登録する
+			particleEmitterShapeResource_->RegisterCompute(commandList, 7);
+		}
+
+		// ディスパッチする
+		commandList->Dispatch((emitterNum_ + 255) / 256, 1, 1);
+
+
+		// UAVバリアを張る
+		UAVBarrier(particleResource_->GetResource(), commandList);
+		UAVBarrier(freeListIndexResource_->GetResource(), commandList);
+		UAVBarrier(freeListResource_->GetResource(), commandList);
 	}
-
-	// ディスパッチする
-	commandList->Dispatch((emitterNum_ + 255) / 256, 1, 1);
-
-
-	// UAVバリアを張る
-	UAVBarrier(particleResource_->GetResource(), commandList);
-	UAVBarrier(freeListIndexResource_->GetResource(), commandList);
-	UAVBarrier(freeListResource_->GetResource(), commandList);
 
 
 	/*-------------

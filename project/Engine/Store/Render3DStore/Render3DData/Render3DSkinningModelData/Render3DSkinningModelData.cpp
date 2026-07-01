@@ -318,6 +318,9 @@ void Engine::Render3DSkinningModelData::Skinning(ID3D12GraphicsCommandList* comm
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// 更新するかどうか
+	if (!param_->isUpdate)return;
+
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 

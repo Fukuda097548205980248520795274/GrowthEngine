@@ -240,9 +240,6 @@ private:
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
-	/// @brief NPCのモデルのプール
-	std::unique_ptr<Pool<Render3DSkinningModel>> npcModelPool_ = nullptr;
-
 	// npcの数
 	int npcCount_ = 0;
 
@@ -250,9 +247,6 @@ private:
 
 	/// @brief NPCのリスト
 	std::list<std::unique_ptr<NPC>> npcs_;
-
-	/// @brief NPCのプール
-	std::unique_ptr<Pool<NPC>> npcPool_ = nullptr;
 
 
 	/// @brief NPCのトレイルのリスト
@@ -290,6 +284,15 @@ private:
 
 	/// @brief 太陽光
 	std::unique_ptr<LightDirectional> sunLight_ = nullptr;
+
+
+private:
+
+	/// @brief NPCのプール
+	std::unique_ptr<Pool<NPC>> npcPool_ = nullptr;
+
+	/// @brief NPCのモデルのプール
+	std::unique_ptr<Pool<Render3DSkinningModel>> npcModelPool_ = nullptr;
 
 
 private:
