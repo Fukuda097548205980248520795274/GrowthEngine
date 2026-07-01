@@ -12,16 +12,22 @@ public:
 	/// @param initData 
 	/// @param characterTag 
 	/// @param navMesh 
-	NPC(const InitData& initData, CharacterTag characterTag);
+	NPC();
 
 	/// @brief 初期化
-	void Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
+	void Initialize(const InitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
+
+	/// @brief プールに返却したときの処理
+	void PoolRelease();
 
 	/// @brief 更新処理
 	virtual void Update() override;
 
 	/// @brief 描画処理
 	void Draw();
+
+	/// @brief 死亡処理
+	void Dead() override;
 
 	/// @brief 現在の攻撃のクールタイムを取得する
 	/// @return 

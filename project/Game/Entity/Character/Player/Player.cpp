@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Entity/Weapon/Weapon.h"
+#include "HUD/HP/HP.h"
 
 #include <cmath>
 
@@ -17,8 +18,11 @@ namespace
 
 /// @brief コンストラクタ
 /// @param initData 
-Player::Player(const InitData& initData) : Character(initData)
+Player::Player() : Character()
 {
+	// キャラクターのリストに追加する
+	characters_.push_back(this);
+
 	// タグを指定する
 	characterTag_ = CharacterTag::Player;
 
@@ -27,10 +31,13 @@ Player::Player(const InitData& initData) : Character(initData)
 }
 
 /// @brief 初期化
-void Player::Initialize(Weapon* baton)
+void Player::Initialize(const InitData& initData, Weapon* baton)
 {
-	assert(model_);
 	assert(baton);
+
+	// 初期化データを設定する
+	SetInitData(initData);
+
 
 	// 引数を受け取る
 	baton_ = baton;
@@ -54,10 +61,6 @@ void Player::Initialize(Weapon* baton)
 		// 旋嵐スタイルのBGMを再生する
 		soundManager_->bgmStyleSenran_->Play();
 	}
-
-
-	// モデルをワールドトランスフォームの子にする
-	model_->SetParent(worldTransform_.get());
 
 
 	// 移動入力の生成
@@ -325,10 +328,8 @@ void Player::Update()
 /// @brief 描画処理
 void Player::Draw()
 {
-	assert(model_);
-
 	// モデルを描画する
-	model_->Draw();
+	if(model_)model_->Draw();
 
 	// 攻撃エフェクトの描画
 	if (attackTrail_)attackTrail_->Draw();

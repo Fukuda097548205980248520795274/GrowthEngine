@@ -19,11 +19,8 @@ std::vector<Character*> Character::characters_{};
 
 /// @brief 
 /// @param position 
-Character::Character(const InitData& initData) : Entity()
+Character::Character() : Entity()
 {
-	// インスタンスリストに登録する
-	characters_.push_back(this);
-
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
@@ -36,119 +33,6 @@ Character::Character(const InitData& initData) : Entity()
 
 	// シェイクの生成と初期化
 	shake_ = std::make_unique<Shake>();
-
-	// 位置
-	worldTransform_->translate_ = initData.position;
-
-	// 回転
-	worldTransform_->rotate_ = Vector3(0.0f, initData.rotateY, 0.0f);
-
-	// 体力
-	hp_ = initData.hp;
-
-	// モデルデータ
-	if (initData.model_)
-	{
-		// モデル
-		model_ = initData.model_;
-
-		// アニメーションの時間を取得する
-		animationTime_ = engine_->GetAnimationTime(model_->param_->animation.hAnimation);
-	}
-
-	// 武器
-	GrabWeapon(initData.weapon);
-
-	// 攻撃用トレイル
-	if (initData.attackTrail)
-	{
-		attackTrail_ = initData.attackTrail;
-		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
-	}
-
-	// モーション
-	hStandMotion_ = initData.hStandMotion;
-	hStanceMotion_ = initData.hStanceMotion;
-	hWalkMotion_ = initData.hWalkMotion;
-	hDashMotion_ = initData.hDashMotion;
-	hAvoidFrontMotion_ = initData.hAvoidFrontMotion;
-	hAvoidBackMotion_ = initData.hAvoidBackMotion;
-	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
-	hAvoidRightMotion_ = initData.hAvoidRightMotion;
-	hGuardMotion_ = initData.hGuardMotion;
-	hGuardHitMotion_ = initData.hGuardHitMotion;
-
-	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
-	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
-	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
-
-	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
-	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
-	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, "Front");
-
-	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
-	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");
-
-
-
-	// 当たり判定グループ
-	hurtboxHead_.collider_ = initData.hurtboxGroup->CreateInstance();
-	hurtboxHead_.owner_ = this;
-	hurtboxHead_.type_ = ColliderType::Hurtbox;
-
-	hurtboxChest_.collider_ = initData.hurtboxGroup->CreateInstance();
-	hurtboxChest_.owner_ = this;
-	hurtboxChest_.type_ = ColliderType::Hurtbox;
-
-	hurtboxRoot_.collider_ = initData.hurtboxGroup->CreateInstance();
-	hurtboxRoot_.owner_ = this;
-	hurtboxRoot_.type_ = ColliderType::Hurtbox;
-
-	// 攻撃判定グループ
-	hitboxGroup_ = initData.hitboxGroup;
-
-
-	// ワールド座標を更新
-	worldTransform_->Update();
-
-	// 着地判定
-	if (initData.landingCollision)
-	{
-		landingCollision_ = initData.landingCollision;
-		landingCollision_->param_->start = GetWorldPosition();
-		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
-		landingCollision_->param_->radius = 0.25f;
-	}
-
-	// 壁接触の当たり判定
-	if (initData.wallTouchCollision)
-	{
-		wallTouchCollision_ = initData.wallTouchCollision;
-		wallTouchCollision_->param_->start = GetWorldPosition();
-		wallTouchCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
-		wallTouchCollision_->param_->radius = 0.25f;
-	}
-
-	// イベントトリガーの当たり判定
-	if (initData.eventTriggerCollision)
-	{
-		eventTriggerCollision_ = initData.eventTriggerCollision;
-		eventTriggerCollision_->param_->start = GetWorldPosition();
-		eventTriggerCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
-		eventTriggerCollision_->param_->radius = 0.25f;
-	}
-
-	// 体力HUD
-	if (initData.hpHUD)
-	{
-		hpHUD_ = initData.hpHUD;
-		hpHUD_->SetMaxHP(hp_);
-		hpHUD_->SetCurrentHP(hp_);
-
-		// 体力HUDの位置を更新する
-		HpHudUpdate();
-	}
-	
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
@@ -1955,6 +1839,9 @@ void Character::WallTouchUpdate()
 /// @brief 押し出し判定処理
 void Character::UpdatePushOut()
 {
+	// モデルがない場合は処理しない
+	if (!model_)return;
+
 	// キャラクターの押し出し半径
 	constexpr float kPushRadius = 0.25f; // 押し出し半径
 	constexpr float kDistanceLimit = kPushRadius * 2.0f; // 2人の半径の和
@@ -1972,6 +1859,9 @@ void Character::UpdatePushOut()
 
 		// 自分よりも後に生成されたキャラクターは押し出し判定を行わない（重複処理防止）
 		if (this > other) continue;
+
+		// モデルを持たないキャラクターは押し出し判定を行わない
+		if (!other->HasModel())continue;
 
 		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
 		if (IsGrondedDown() || other->IsGrondedDown() ||IsGrabbed() || other->IsGrabbed() ||
@@ -2050,6 +1940,9 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 /// @brief 死亡処理
 void Character::Dead()
 {
+	// 死亡タイマーをリセットする
+	deadTimer_ = kDeadDuration;
+
 	// 死亡モーションを再生する
 	SetAnimation(hDownFallMotion_, true, false);
 
@@ -2078,6 +1971,165 @@ void Character::Dead()
 	if (it != characters_.end())
 	{
 		characters_.erase(it);
+	}
+}
+
+/// @brief 初期化用データを設定する
+/// @param initData 
+void Character::SetInitData(const InitData& initData)
+{
+	// フラグをリセットする
+	isFinished_ = false;
+	isDead_ = false;
+	isInAttackSequence_ = false;
+	isDash_ = false;
+	isAvoid_ = false;
+	isJustAvoided_ = false;
+	isJustAvoidedPrev_ = false;
+	hasTargetYaw_ = false;
+	isStance_ = false;
+	canLockOnWithoutStance_ = false;
+	isGuard_ = false;
+	isGuardReaction_ = false;
+	isGuardHit_ = false;
+	isPrevGuardHit_ = false;
+	canDeflect_ = false;
+	canRepel_ = false;
+	isHitRepel_ = false;
+	isPrevHitRepel_ = false;
+	isStyleChanging_ = false;
+	isAnimationLoop_ = true;
+	isHitAttack_ = false;
+	isPrevHitAttack_ = false;
+	isHitDamage_ = false;
+	isPrevHitDamage_ = false;
+	isGrounded_ = false;
+	isWallTouch_ = false;
+
+	// ロックオンターゲットをリセットする
+	lockOnTarget_ = nullptr;
+
+	// ダメージリアクションの状態をリセットする
+	currentDamageReaction_ = DamageReactionState::None;
+	damageReactionTimer_ = 0.0f;
+
+
+	// 位置
+	worldTransform_->translate_ = initData.position;
+
+	// 回転
+	worldTransform_->rotate_ = Vector3(0.0f, initData.rotateY, 0.0f);
+
+	// 体力
+	hp_ = initData.hp;
+
+	// モデルデータ
+	if (initData.model_)
+	{
+		// モデル
+		model_ = initData.model_;
+
+		// アニメーションの時間を取得する
+		animationTime_ = engine_->GetAnimationTime(model_->param_->animation.hAnimation);
+
+		// モデルをワールドトランスフォームの子にする
+		model_->SetParent(worldTransform_.get());
+	}
+
+	// 武器
+	GrabWeapon(initData.weapon);
+
+	// 攻撃用トレイル
+	if (initData.attackTrail)
+	{
+		attackTrail_ = initData.attackTrail;
+		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
+	}
+
+	// モーション
+	hStandMotion_ = initData.hStandMotion;
+	hStanceMotion_ = initData.hStanceMotion;
+	hWalkMotion_ = initData.hWalkMotion;
+	hDashMotion_ = initData.hDashMotion;
+	hAvoidFrontMotion_ = initData.hAvoidFrontMotion;
+	hAvoidBackMotion_ = initData.hAvoidBackMotion;
+	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
+	hAvoidRightMotion_ = initData.hAvoidRightMotion;
+	hGuardMotion_ = initData.hGuardMotion;
+	hGuardHitMotion_ = initData.hGuardHitMotion;
+
+	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
+	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
+	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
+
+	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
+	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
+	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, "Front");
+
+	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
+	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");
+
+
+
+	// 当たり判定グループ
+	if (!hurtboxHead_.collider_ && !hurtboxChest_.collider_ && !hurtboxRoot_.collider_)
+	{
+		hurtboxHead_.collider_ = initData.hurtboxGroup->CreateInstance();
+		hurtboxHead_.owner_ = this;
+		hurtboxHead_.type_ = ColliderType::Hurtbox;
+
+		hurtboxChest_.collider_ = initData.hurtboxGroup->CreateInstance();
+		hurtboxChest_.owner_ = this;
+		hurtboxChest_.type_ = ColliderType::Hurtbox;
+
+		hurtboxRoot_.collider_ = initData.hurtboxGroup->CreateInstance();
+		hurtboxRoot_.owner_ = this;
+		hurtboxRoot_.type_ = ColliderType::Hurtbox;
+	}
+
+	// 攻撃判定グループ
+	hitboxGroup_ = initData.hitboxGroup;
+
+
+	// ワールド座標を更新
+	worldTransform_->Update();
+
+	// 着地判定
+	if (initData.landingCollision)
+	{
+		landingCollision_ = initData.landingCollision;
+		landingCollision_->param_->start = GetWorldPosition();
+		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		landingCollision_->param_->radius = 0.25f;
+	}
+
+	// 壁接触の当たり判定
+	if (initData.wallTouchCollision)
+	{
+		wallTouchCollision_ = initData.wallTouchCollision;
+		wallTouchCollision_->param_->start = GetWorldPosition();
+		wallTouchCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		wallTouchCollision_->param_->radius = 0.25f;
+	}
+
+	// イベントトリガーの当たり判定
+	if (initData.eventTriggerCollision)
+	{
+		eventTriggerCollision_ = initData.eventTriggerCollision;
+		eventTriggerCollision_->param_->start = GetWorldPosition();
+		eventTriggerCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
+		eventTriggerCollision_->param_->radius = 0.25f;
+	}
+
+	// 体力HUD
+	if (initData.hpHUD)
+	{
+		hpHUD_ = initData.hpHUD;
+		hpHUD_->SetMaxHP(hp_);
+		hpHUD_->SetCurrentHP(hp_);
+
+		// 体力HUDの位置を更新する
+		HpHudUpdate();
 	}
 }
 

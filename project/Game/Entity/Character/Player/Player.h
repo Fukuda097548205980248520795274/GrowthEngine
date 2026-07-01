@@ -7,10 +7,10 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param initData 
-	Player(const InitData& initData);
+	Player();
 
 	/// @brief 初期化
-	void Initialize(Weapon* baton);
+	void Initialize(const InitData& initData, Weapon* baton);
 
 	/// @brief 更新処理
 	virtual void Update() override;

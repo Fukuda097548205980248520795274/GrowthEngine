@@ -32,6 +32,8 @@
 #include "HUD/Button/TriggerButton/TriggerButton.h"
 #include "HUD/Button/MashButton/MashButton.h"
 
+#include "Pool/Pool.h"
+
 #include "NavMesh/NavMesh.h"
 
 class GameScene : public Scene
@@ -242,6 +244,10 @@ private:
 
 	/// @brief NPCのリスト
 	std::list<std::unique_ptr<NPC>> npcs_;
+
+	/// @brief NPCのプール
+	std::unique_ptr<Pool<NPC>> npcPool_ = nullptr;
+
 
 	/// @brief NPCのトレイルのリスト
 	std::list<std::unique_ptr<Trail3D>> npcTrails_;

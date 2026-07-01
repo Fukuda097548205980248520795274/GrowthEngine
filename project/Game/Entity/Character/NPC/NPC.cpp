@@ -1,6 +1,7 @@
 #include "NPC.h"
 #include "BattleDirector/BattleDirector.h"
 #include "Action/Move/Move.h"
+#include "HUD/HP/HP.h"
 
 namespace
 {
@@ -11,21 +12,39 @@ namespace
 /// @brief コンストラクタ
 /// @param initData 
 /// @param navMesh 
-NPC::NPC(const InitData& initData, CharacterTag characterTag) :
-	Character(initData)
+NPC::NPC() : Character()
 {
-	// タグを指定する
-	characterTag_ = characterTag;
-
 	// 構え状態でなくてもロックオン候補を更新する
 	canLockOnWithoutStance_ = true;
 }
 
-/// @brief 初期化
-void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
+/// @brief プールに返却したときの処理
+void NPC::PoolRelease()
 {
-	// ナビゲーションメッシュを設定する
-	navMesh_ = navMesh;
+	// 当たり判定の削除
+	if (landingCollision_)landingCollision_->Delete();
+	landingCollision_ = nullptr;
+
+	if (wallTouchCollision_) wallTouchCollision_->Delete();
+	wallTouchCollision_ = nullptr;
+
+	// 死亡処理
+	Dead();
+}
+
+/// @brief 初期化
+void NPC::Initialize(const InitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
+{
+	// インスタンスリストに登録する
+	characters_.push_back(this);
+
+	// タグを設定する
+	characterTag_ = characterTag;
+
+
+	// 初期化データを設定する
+	SetInitData(initData);
+
 
 	switch (characterTag_)
 	{
@@ -50,11 +69,12 @@ void NPC::Initialize(std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* 
 		break;
 	}
 
+
+	// ナビゲーションメッシュを設定する
+	navMesh_ = navMesh;
+
 	// ビヘイビアツリーを設定する
 	behaviorTree_ = std::move(behaviorTree);
-
-	// モデルをワールドトランスフォームの子にする
-	model_->SetParent(worldTransform_.get());
 }
 
 void NPC::Update()
@@ -163,13 +183,21 @@ std::unique_ptr<BehaviorTree> NPC::CreateBehaviorTreeForStyle(FightStyle style)
 /// @brief 描画処理
 void NPC::Draw()
 {
-	assert(model_);
-
 	// モデルを描画する
-	model_->Draw();
+	if(model_)model_->Draw();
 
 	// 攻撃トレイルを描画する
 	if (attackTrail_)attackTrail_->Draw();
+}
+
+/// @brief 死亡処理
+void NPC::Dead()
+{
+	if (behaviorTree_)behaviorTree_.reset();
+	behaviorTree_ = nullptr;
+
+	// 基底クラスの死亡処理
+	Character::Dead();
 }
 
 /// @brief 攻撃クールタイムの更新処理

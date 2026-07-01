@@ -1514,6 +1514,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.h" />
     <ClInclude Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.h" />
     <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h" />
+    <ClInclude Include="Game\Pool\Pool.h" />
     <ClInclude Include="Game\Shake\Shake.h" />
     <ClInclude Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.h" />
     <ClInclude Include="Game\EffectManager\EffectManager.h" />

@@ -67,6 +67,10 @@ void GameScene::Initialize()
 	hCharacterAnimation_ = motionManager_->GetMotion(MotionType::Stand, "Standing");
 	hCharacterSkeleton_ = motionManager_->GetSkeleton();
 
+	/// @brief NPCプールの生成と初期化
+	npcPool_ = std::make_unique<Pool<NPC>>([this]() {return std::make_unique<NPC>(); });
+	npcPool_->PreAllocate(10);
+
 	// HUDの読み込み
 	LoadHUDs();
 
@@ -263,7 +267,25 @@ void GameScene::Update()
 	objects_.remove_if([](const std::unique_ptr<StageObject>& object) {object->Update();return object->IsFinished();});
 
 	// NPCの更新
-	npcs_.remove_if([](const std::unique_ptr<NPC>& npc) {npc->Update();return npc->IsFinished();});
+	for (auto it = npcs_.begin(); it != npcs_.end(); )
+	{
+		(*it)->Update();
+
+		// 倒されて終わった場合
+		if ((*it)->IsFinished()) 
+		{
+			// プールに返却する
+			it->get()->PoolRelease();
+			npcPool_->Release(std::move(*it));
+
+			// アクティブリストからは除外
+			it = npcs_.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 
 	// 武器の更新
 	weapons_.remove_if([](const std::unique_ptr<Weapon>& weapon) {weapon->Update();return weapon->IsFinished();});
@@ -393,8 +415,8 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.model_ = playerModel_.get();
 		playerInitData.attackTrail = playerTrail_.get();
 		playerInitData.hpHUD = playerHP_.get();
-		player_ = std::make_unique<Player>(playerInitData);
-		player_->Initialize(playerWeapon_.get());
+		player_ = std::make_unique<Player>();
+		player_->Initialize(playerInitData, playerWeapon_.get());
 
 		character = player_.get();
 
@@ -502,8 +524,8 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		}
 
 		// NPCの生成処理
-		std::unique_ptr<NPC> npc = std::make_unique<NPC>(npcInitData, tag);
-		npc->Initialize(behaviorTreeEditor_->CreateTree(npcInitData.behaviorTreeName, npc.get()), navMesh_.get());
+		std::unique_ptr<NPC> npc = npcPool_->Acquire();
+		npc->Initialize(npcInitData, tag, behaviorTreeEditor_->CreateTree(npcInitData.behaviorTreeName, npc.get()), navMesh_.get());
 		character = npc.get();
 
 		// NPCのリストに追加する

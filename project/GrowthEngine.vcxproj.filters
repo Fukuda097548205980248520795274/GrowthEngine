@@ -1303,6 +1303,9 @@
     <Filter Include="Engine\Include\PSO\PSOModel\PSOFullscreen">
       <UniqueIdentifier>{2ff431f0-0e9e-43fa-b75d-21341fed17bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Pool">
+      <UniqueIdentifier>{905c936a-a70f-4c61-8ffe-0befa5f3b580}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -3532,6 +3535,9 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOModel\PSOFullscreen\PSOFullscreen.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOFullscreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Pool\Pool.h">
+      <Filter>Game\Pool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

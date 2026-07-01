@@ -134,7 +134,7 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param initData 
-	Character(const InitData& initData);
+	Character();
 
 	/// @brief デストラクタ
 	virtual ~Character() override;
@@ -485,7 +485,7 @@ public:
 
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
-	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead(); }
+	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead() || IsFinished(); }
 
 	/// @brief プレイヤー側かどうか
 	/// @return 
@@ -524,7 +524,7 @@ public:
 	void TrailClear() { if (attackTrail_)attackTrail_->Clear(); }
 
 	/// @brief 死亡処理
-	void Dead();
+	virtual void Dead();
 
 	/// @brief シェイクを開始する
 	/// @param duration 
@@ -532,8 +532,16 @@ public:
 	/// @param direction 
 	void StartShake(float duration, float magnitude, const Vector3& direction) { if (shake_) shake_->StartShake(duration, magnitude, direction); }
 
+	/// @brief モデルを持っているかどうか
+	/// @return 
+	bool HasModel() const { return model_ != nullptr; }
+
 
 protected:
+
+	/// @brief 初期化用データを設定する
+	/// @param initData 
+	void SetInitData(const InitData& initData);
 
 	/// @brief 当たり判定の更新
 	/// @param hurtbox 
@@ -581,8 +589,12 @@ protected:
 	// やられたかどうか
 	bool isDead_ = false;
 
-	/// @brief 死亡してからの経過時間
-	float deadTimer_ = 5.0f;
+
+	// 死亡してからの経過時間
+	const float kDeadDuration = 5.0f;
+
+	// 死亡してからの経過時間
+	float deadTimer_ = kDeadDuration;
 
 
 protected:
