@@ -79,13 +79,13 @@ public:
 protected:
 
 	// 横幅
-	int width_ = 100;
+	int width_ = 0;
 
 	// 最大体力
-	int maxHP_ = 100;
+	int maxHP_ = 0;
 
 	/// @brief 現在の体力
-	int currentHP_ = 100;
+	int currentHP_ = 0;
 
 	/// @brief 色
 	Vector3 color_ = Vector3(1.0f, 1.0f, 1.0f);
@@ -137,5 +137,8 @@ protected:
 
 	/// @brief 死亡タイマー
 	float deathTimer_ = kDeathTime;
+
+
+private:
 };
 

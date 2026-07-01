@@ -592,12 +592,12 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
-	// 攻撃者をロックオンターゲットに設定する
-	if (attacker)lockOnTarget_ = attacker;
-
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
+		// 攻撃者をロックオンターゲットに設定する
+		if (attacker)lockOnTarget_ = attacker;
+
 		// ガード成功のフラグを立てる
 		isGuardHit_ = true;
 
@@ -666,6 +666,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 	// 飛ばされているときに、ダメージを受けたかどうか
 	bool isBlownHit = IsBlownAway() || IsBlownFalling();
+
+	// 弱攻撃が攻撃中のプレイヤーに当たったかどうか
+	bool isLightAttackHitPlayer = false;
 
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
 	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
@@ -787,9 +790,22 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		{
 			// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
 		case DamageReaction::LightStagger:
-			currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
-			SetAnimation(hDamageLightMotion_, true, false);
-			damageReactionTimer_ = 0.3f;
+
+			// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
+			if (!IsPlayer() || !IsAttack())
+			{
+				currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
+				SetAnimation(hDamageLightMotion_, true, false);
+				damageReactionTimer_ = 0.3f;
+			}
+			else
+			{
+				// 弱攻撃が攻撃中のプレイヤーに当たった
+				isLightAttackHitPlayer = true;
+
+				// ノックバックを無効化する
+				knockback = 0.0f;
+			}
 
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
@@ -913,6 +929,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 	}
 
+
+	// 弱攻撃を受けたプレイヤー以外は、攻撃者をロックオンターゲットに設定する
+	if (!isLightAttackHitPlayer)if (attacker)lockOnTarget_ = attacker;
 
 
 	// 最終的な攻撃力を計算する
