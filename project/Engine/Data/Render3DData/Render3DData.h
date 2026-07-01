@@ -332,6 +332,9 @@ namespace Engine
 				/// @brief ブレンドモード
 				BlendMode blendMode;
 
+				/// @brief 更新するかどうか
+				bool isUpdate = true;
+
 				/// @brief モデルトランスフォーム
 				Transform modelTransform;
 

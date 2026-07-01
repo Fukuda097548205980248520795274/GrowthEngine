@@ -235,9 +235,15 @@ private:
 	/// @brief 攻撃ボタンのスプライト
 	std::unique_ptr<Sprite> attackButtonSprite = nullptr;
 
+
+
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
+	/// @brief NPCのモデルのプール
+	std::unique_ptr<Pool<Render3DSkinningModel>> npcModelPool_ = nullptr;
+
+	// npcの数
 	int npcCount_ = 0;
 
 

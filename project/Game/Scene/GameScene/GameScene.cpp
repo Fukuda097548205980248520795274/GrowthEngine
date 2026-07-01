@@ -67,9 +67,23 @@ void GameScene::Initialize()
 	hCharacterAnimation_ = motionManager_->GetMotion(MotionType::Stand, "Standing");
 	hCharacterSkeleton_ = motionManager_->GetSkeleton();
 
+
+	// NPCモデルプールの生成と初期化
+	npcModelPool_ = std::make_unique<Pool<Render3DSkinningModel>>([this]()
+		{
+			npcCount_++;
+			std::unique_ptr<Render3DSkinningModel> model = 
+				std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "NPC_Model_" + std::to_string(npcCount_ - 1));
+			model->param_->isUpdate = false;
+			return std::move(model); 
+		}
+	);
+	npcModelPool_->PreAllocate(30);
+	npcCount_ = 0;
+
 	/// @brief NPCプールの生成と初期化
 	npcPool_ = std::make_unique<Pool<NPC>>([this]() {return std::make_unique<NPC>(); });
-	npcPool_->PreAllocate(10);
+	npcPool_->PreAllocate(30);
 
 	// HUDの読み込み
 	LoadHUDs();
@@ -149,7 +163,7 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	//stageEditor_->LoadStage("Tutorial.json");
+	stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -274,6 +288,24 @@ void GameScene::Update()
 		// 倒されて終わった場合
 		if ((*it)->IsFinished()) 
 		{
+			// NPCモデルをプールに返却する
+			auto model = (*it)->GetModel();
+			for (auto& npcModel : npcModels_)
+			{
+				if (npcModel.get() == model)
+				{
+					// NPCモデルのカウントを減らす
+					npcCount_--;
+
+					// NPCモデルの更新を停止する
+					npcModel->param_->isUpdate = false;
+
+					npcModelPool_->Release(std::move(npcModel));
+					npcModels_.remove(npcModel);
+					break;
+				}
+			}
+
 			// プールに返却する
 			it->get()->PoolRelease();
 			npcPool_->Release(std::move(*it));
@@ -429,8 +461,8 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		Character::InitData npcInitData = initData;
 
 		// NPCのモデルの生成と初期化
-		std::unique_ptr<Render3DSkinningModel> npcModel =
-			std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterSkeleton_, hCharacterAnimation_, "Enemy_Model_" + std::to_string(npcCount_));
+		std::unique_ptr<Render3DSkinningModel> npcModel = npcModelPool_->Acquire();
+		npcModel->param_->isUpdate = true;
 
 		// NPCのトレイルの生成と初期化
 		std::unique_ptr<Trail3D> npcTrail = std::make_unique<Trail3D>("Enemy_Trail_" + std::to_string(npcCount_), 0.15f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));

@@ -218,6 +218,9 @@ void Engine::Render3DSkinningModelData::Update()
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// 更新するかどうか
+	if (!param_->isUpdate)return;
+
 	Animation animation = animationStore_->GetAnimation(param_->animation.hAnimation);
 
 	// 現在の時間に合わせたスケルトンを取得する

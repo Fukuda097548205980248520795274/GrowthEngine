@@ -536,6 +536,10 @@ public:
 	/// @return 
 	bool HasModel() const { return model_ != nullptr; }
 
+	/// @brief モデルを取得する
+	/// @return 
+	Render3DSkinningModel* GetModel() const { return model_; }
+
 
 protected:
 
