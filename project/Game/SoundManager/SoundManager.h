@@ -54,6 +54,12 @@ public:
 	/// @brief ダウン中着地のSE
 	void SeDownLanding() { if (seDownLanding_)seDownLanding_->Play(); }
 
+	/// @brief レイジモード開始のSE
+	void SeRageModeStart() { if (seRageModeStart_)seRageModeStart_->Play(); }
+
+	/// @brief レイジモード終了のSE
+	void SeRageModeEnd() { if (seRageModeEnd_)seRageModeEnd_->Play(); }
+
 
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
@@ -104,6 +110,12 @@ private:
 
 	/// @brief ダウン中着地のSE
 	std::unique_ptr<Se> seDownLanding_ = nullptr;
+
+	/// @brief レイジモード開始のSE
+	std::unique_ptr<Se> seRageModeStart_ = nullptr;
+
+	/// @brief レイジモード終了のSE
+	std::unique_ptr<Se> seRageModeEnd_ = nullptr;
 
 
 private:

@@ -56,8 +56,8 @@ void Engine::InputGamepadRightStickResource::Update()
 			if (input_->GetGamepadRightStick(param_->controller).Length() >= param_->dot)
 				isRecordInput_ = true;
 
-			// 前回の入力が記録されていなくて、今回の入力が記録された場合は、入力されたと判定する
-			if (isRecordInput_ && !isPrevRecordInput_)
+			// 前回の入力が記録されていて、今回の入力が記録されていない場合は、入力されたと判定する
+			if (!isRecordInput_ && isPrevRecordInput_)
 				isInput_ = true;
 
 			break;

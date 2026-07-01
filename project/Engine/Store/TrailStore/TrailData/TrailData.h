@@ -44,6 +44,9 @@ namespace Engine
 		/// @brief パラメータ
 		struct Param
 		{
+			/// @brief 更新するかどうか
+			bool isUpdate_ = true;
+
 			/// @brief 基点の位置
 			Vector3 basePosition;
 

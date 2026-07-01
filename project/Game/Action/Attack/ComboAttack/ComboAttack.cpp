@@ -85,8 +85,12 @@ void ComboAttack::Update()
 		}
 	}
 
+
+	// レイジモードの攻撃速度を取得する
+	float rageModeSpeed = owner_->RageModeAttackSpeed();
+
 	// 攻撃タイマーを更新する
-	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
+	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeSpeed;
 
 	// 各当たり判定の状態を更新する
 	for (auto& state : hitStates_)

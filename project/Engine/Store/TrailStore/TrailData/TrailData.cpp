@@ -65,6 +65,9 @@ void Engine::TrailData::Initialize(ID3D12Device* device, PSOTrail* pso, TextureS
 /// @brief 更新処理
 void Engine::TrailData::Update()
 {
+	// 更新フラグがfalseなら更新処理をスキップ
+	if (!param_->isUpdate_) return;
+
 	// 現在の位置と色を履歴に追加する
 	TrailHistory newHistory = {
 		Vector4(param_->basePosition.x, param_->basePosition.y, param_->basePosition.z, 1.0f),

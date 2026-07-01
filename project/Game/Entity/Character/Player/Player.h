@@ -110,6 +110,9 @@ private:
 	/// @brief スタイルチェンジ入力
 	std::unique_ptr<InputGamepadButton> inputStyleChange_ = nullptr;
 
+	/// @brief レイジモード入力
+	std::unique_ptr<InputGamepadRightTrigger> inputRageMode_ = nullptr;
+
 
 	/// @brief 前方移動入力
 	std::unique_ptr<InputKey> keyFrontMove_ = nullptr;

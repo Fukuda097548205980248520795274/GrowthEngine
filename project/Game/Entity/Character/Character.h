@@ -49,6 +49,9 @@ public:
 
 		/// @brief 体力
 		int hp = 0;
+
+		/// @brief レイジゲージの閾値
+		std::vector<float> rageGageThresholds;
 		
 		/// @brief モデル
 		Render3DSkinningModel* model_ = nullptr;
@@ -483,9 +486,13 @@ public:
 	/// @brief プレイヤーかどうかを取得する
 	bool IsPlayer() const { return characterTag_ == CharacterTag::Player; }
 
+	/// @brief ボスかどうかを取得する
+	/// @return 
+	bool IsBoss() const { return characterTag_ == CharacterTag::EnemyBoss; }
+
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
-	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead() || IsFinished(); }
+	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart(); }
 
 	/// @brief プレイヤー側かどうか
 	/// @return 
@@ -539,6 +546,40 @@ public:
 	/// @brief モデルを取得する
 	/// @return 
 	Render3DSkinningModel* GetModel() const { return model_; }
+
+	/// @brief 攻撃用トレイルを取得する
+	/// @return 
+	Trail3D* GetAttackTrail() const { return attackTrail_; }
+
+	/// @brief レイジゲージが満タンかどうか
+	/// @return 
+	bool IsRageGageFull() const { if (rageGageThresholds_.empty())return false; return rageGage_ >= rageGageThresholds_.back(); }
+
+	/// @brief レイジゲージの閾値を超えているかどうか
+	/// @return 
+	bool IsRageGageThresholdExceeded() const { return rageGageThresholdIndex_ > 0; }
+
+	/// @brief レイジゲージの最大値を取得する
+	/// @return 
+	float GetMaxRageGage() const { if (rageGageThresholds_.empty())return 0.0f; return rageGageThresholds_.back(); }
+
+	/// @brief レイジモード中かどうか
+	/// @return 
+	bool IsRageMode() const { return isRageMode_; }
+
+	/// @brief レイジモード開始中かどうか
+	/// @return 
+	bool IsRageModeStart() const { return isRageMode_ && rageModeStartTimer_ > 0.0f; }
+
+	/// @brief レイジモード中の攻撃速度を取得する
+	/// @return 
+	float RageModeAttackSpeed()const { return IsRageMode() && IsAttack() ? 2.0f : 1.0f; }
+
+	/// @brief レイジモード中の攻撃力を取得する
+	/// @return 
+	float RageModeAttackPower()const { return IsRageMode() && IsAttack() ? 1.5f : 1.0f; }
+
+
 
 
 protected:
@@ -831,7 +872,6 @@ protected:
 
 protected:
 
-
 	// 攻撃がヒットしたかどうか
 	bool isHitAttack_ = false;
 
@@ -844,6 +884,41 @@ protected:
 
 	/// @brief 前フレームでダメージを受けたかどうか
 	bool isPrevHitDamage_ = false;
+
+
+protected:
+
+	/// @brief レイジゲージの更新
+	void RageGageUpdate(float dt);
+
+	/// @brief レイジゲージをチャージする
+	/// @param damageReaction 
+	void ChargeRageGage(DamageReaction damageReaction);
+
+	/// @brief レイジモードの入力処理
+	void RageModeInput();
+
+
+	/// @brief レイジゲージ
+	float rageGage_ = 0;
+
+	/// @brief レイジゲージの閾値
+	std::vector<float> rageGageThresholds_;
+
+	/// @brief レイジゲージの閾値を超えたかどうか
+	int32_t rageGageThresholdIndex_ = 0;
+
+	/// @brief レイジゲージの減少量
+	static constexpr float kRageGageDecrease = 1.0f;
+
+	/// @brief レイジモード中かどうか
+	bool isRageMode_ = false;
+
+	/// @brief レイジモード開始時の経過時間
+	static constexpr float kRageModeStartDuration = 0.5f;
+
+	/// @brief レイジモード開始時の経過時間
+	float rageModeStartTimer_ = kRageModeStartDuration;
 
 
 protected:

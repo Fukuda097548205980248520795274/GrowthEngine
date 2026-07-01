@@ -240,8 +240,8 @@ private:
 	/// @brief NPCのモデルリスト
 	std::list<std::unique_ptr<Render3DSkinningModel>> npcModels_;
 
-	// npcの数
-	int npcCount_ = 0;
+	/// @brief NPCのトレイルのリスト
+	std::list<std::unique_ptr<Trail3D>> npcTrails_;
 
 
 
@@ -249,8 +249,6 @@ private:
 	std::list<std::unique_ptr<NPC>> npcs_;
 
 
-	/// @brief NPCのトレイルのリスト
-	std::list<std::unique_ptr<Trail3D>> npcTrails_;
 
 	/// @brief NPCのパーティクルのリスト
 	std::list<std::unique_ptr<Particle3D>> npcParticles_;
@@ -293,6 +291,9 @@ private:
 
 	/// @brief NPCのモデルのプール
 	std::unique_ptr<Pool<Render3DSkinningModel>> npcModelPool_ = nullptr;
+
+	/// @brief NPCのトレイルのプール
+	std::unique_ptr<Pool<Trail3D>> npcTrailPool_ = nullptr;
 
 
 private:

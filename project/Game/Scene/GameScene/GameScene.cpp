@@ -71,15 +71,30 @@ void GameScene::Initialize()
 	// NPCモデルプールの生成と初期化
 	npcModelPool_ = std::make_unique<Pool<Render3DSkinningModel>>([this]()
 		{
-			npcCount_++;
+			int count = npcModelPool_->GetCount() + 1;
+			npcModelPool_->SetCount(count);
+
 			std::unique_ptr<Render3DSkinningModel> model = 
-				std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "NPC_Model_" + std::to_string(npcCount_ - 1));
+				std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "NPC_Model_" + std::to_string(count - 1));
 			model->param_->isUpdate = false;
+
 			return std::move(model); 
 		}
 	);
 	npcModelPool_->PreAllocate(30);
-	npcCount_ = 0;
+
+	// NPCトレイルプールの生成と初期化
+	npcTrailPool_ = std::make_unique<Pool<Trail3D>>([this]()
+		{
+			int count = npcTrailPool_->GetCount() + 1;
+			npcTrailPool_->SetCount(count);
+
+			std::unique_ptr<Trail3D> trail = std::make_unique<Trail3D>("NPC_Trail_" + std::to_string(count - 1), 0.15f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
+			trail->param_->isUpdate_ = false;
+			return std::move(trail);
+		}
+	);
+	npcTrailPool_->PreAllocate(30);
 
 	/// @brief NPCプールの生成と初期化
 	npcPool_ = std::make_unique<Pool<NPC>>([this]() {return std::make_unique<NPC>(); });
@@ -294,14 +309,28 @@ void GameScene::Update()
 			{
 				if (npcModel.get() == model)
 				{
-					// NPCモデルのカウントを減らす
-					npcCount_--;
-
 					// NPCモデルの更新を停止する
 					npcModel->param_->isUpdate = false;
 
 					npcModelPool_->Release(std::move(npcModel));
 					npcModels_.remove(npcModel);
+
+					break;
+				}
+			}
+
+			// NPCトレイルをプールに返却する
+			auto trail = (*it)->GetAttackTrail();
+			for (auto& npcTrail : npcTrails_)
+			{
+				if (npcTrail.get() == trail)
+				{
+					// 更新を停止する
+					trail->param_->isUpdate_ = false;
+
+					npcTrailPool_->Release(std::move(npcTrail));
+					npcTrails_.remove(npcTrail);
+
 					break;
 				}
 			}
@@ -447,6 +476,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerInitData.model_ = playerModel_.get();
 		playerInitData.attackTrail = playerTrail_.get();
 		playerInitData.hpHUD = playerHP_.get();
+		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
 		player_ = std::make_unique<Player>();
 		player_->Initialize(playerInitData, playerWeapon_.get());
 
@@ -465,7 +495,8 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcModel->param_->isUpdate = true;
 
 		// NPCのトレイルの生成と初期化
-		std::unique_ptr<Trail3D> npcTrail = std::make_unique<Trail3D>("Enemy_Trail_" + std::to_string(npcCount_), 0.15f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
+		std::unique_ptr<Trail3D> npcTrail = npcTrailPool_->Acquire();
+		npcTrail->param_->isUpdate_ = true;
 
 		// NPCのモデルを初期化データに設定する
 		npcInitData.model_ = npcModel.get();
@@ -564,9 +595,6 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcs_.push_back(std::move(npc));
 		npcModels_.push_back(std::move(npcModel));
 		npcTrails_.push_back(std::move(npcTrail));
-
-		// NPCをカウントする
-		npcCount_++;
 	}
 
 	return character;
@@ -712,9 +740,6 @@ void GameScene::Reset()
 {
 	// プレイヤーをリセットする
 	if (player_)player_ = nullptr;
-
-	// npcのカウンターをリセットする
-	npcCount_ = 0;
 
 	// バトル制御をリセットする
 	BattleDirector::GetInstance().Clear();

@@ -20,6 +20,8 @@ void Engine::InputGamepadRightTriggerResource::Update()
 {
 	// 入力を初期化する
 	isInput_ = false;
+	isPrevRecordInput_ = isRecordInput_;
+	isRecordInput_ = false;
 
 	// 入力状態
 	switch (inputState_)
@@ -34,9 +36,25 @@ void Engine::InputGamepadRightTriggerResource::Update()
 
 	case InputState::Trigger:
 
+		// 閾値を越えたかどうか
+		if (input_->GetGamepadRightTrigger(param_->controller) >= param_->threshold)
+			isRecordInput_ = true;
+
+		// 前回の入力が記録されていなくて、今回の入力が記録された場合は、入力されたと判定する
+		if (isRecordInput_ && !isPrevRecordInput_)
+			isInput_ = true;
+
 		break;
 
 	case InputState::Release:
+
+		// 閾値を越えたかどうか
+		if (input_->GetGamepadRightTrigger(param_->controller) >= param_->threshold)
+			isRecordInput_ = true;
+
+		// 前回の入力が記録されていて、今回の入力が記録されていない場合は、入力されたと判定する
+		if (!isRecordInput_ && isPrevRecordInput_)
+			isInput_ = true;
 
 		break;
 	}

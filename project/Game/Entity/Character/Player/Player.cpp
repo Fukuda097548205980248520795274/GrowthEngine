@@ -90,6 +90,9 @@ void Player::Initialize(const InitData& initData, Weapon* baton)
 	// スタイルチェンジ入力の生成
 	inputStyleChange_ = std::make_unique<InputGamepadButton>("Player_StyleChange", InputState::Trigger, 0, XINPUT_GAMEPAD_DPAD_DOWN);
 
+	// レイジモード入力の生成
+	inputRageMode_ = std::make_unique<InputGamepadRightTrigger>("Player_RageMode", InputState::Trigger, 0, 0.5f);
+
 
 	// キーの前移動入力の生成
 	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
@@ -235,6 +238,10 @@ void Player::Update()
 	{
 		// スタイルチェンジ入力があればスタイルチェンジ処理を行う
 		StyleChange();
+
+		// レイジモードを開始する
+		if (inputRageMode_ && inputRageMode_->IsInput())
+			RageModeInput();
 
 		// 攻撃の更新処理
 		UpdateAttack();

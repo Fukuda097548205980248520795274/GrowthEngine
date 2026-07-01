@@ -71,6 +71,12 @@ void SoundManager::Initialize()
 
 	// ダウン中着地のSE
 	seDownLanding_ = std::make_unique<Se>("DownLanding", engine_->LoadAudio("./Assets/Sounds/se/downLanding.mp3"));
+
+	// レイジモード開始のSE
+	seRageModeStart_ = std::make_unique<Se>("RageModeStart", engine_->LoadAudio("./Assets/Sounds/se/rageModeStart.mp3"));
+
+	// レイジモード終了のSE
+	seRageModeEnd_ = std::make_unique<Se>("RageModeEnd", engine_->LoadAudio("./Assets/Sounds/se/rageModeEnd.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

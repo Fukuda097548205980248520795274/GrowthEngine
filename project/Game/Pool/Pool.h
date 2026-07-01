@@ -49,6 +49,14 @@ public:
         pool_.push_back(std::move(obj));
     }
 
+	/// @brief カウントを取得する
+	/// @return 
+	int GetCount() const { return count_; }
+
+	/// @brief カウントを設定する
+	/// @param count 
+	void SetCount(int count) { count_ = count; }
+
 private:
 
 	// プールの内部データ構造
@@ -56,4 +64,7 @@ private:
 
 	// オブジェクト生成用の関数オブジェクト
     std::function<std::unique_ptr<T>()> generator_;
+
+	/// @brief カウント用
+	int count_ = 0;
 };

@@ -87,6 +87,9 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// レイジゲージの更新
+			RageGageUpdate(dt);
+
 			// 壊れたブキを持っている場合は、ブキを離す
 			if (HasWeapon())
 			{
@@ -546,13 +549,19 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ダメージを受ける処理
 
 	// 攻撃者が攻撃をヒットさせたことを通知する
-	if (attacker)attacker->SetHitAttack(true);
+	if (attacker)
+	{
+		attacker->SetHitAttack(true);
+
+		// 攻撃者のレイジゲージを増加させる
+		attacker->ChargeRageGage(damageReaction);
+	}
 
 	// 飛ばされているときに、ダメージを受けたかどうか
 	bool isBlownHit = IsBlownAway() || IsBlownFalling();
 
-	// 弱攻撃が攻撃中のプレイヤーに当たったかどうか
-	bool isLightAttackHitPlayer = false;
+	// 弱攻撃が攻撃中のプレイヤーやボスに当たったかどうか
+	bool isLightAttackHit = false;
 
 	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
 	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
@@ -676,7 +685,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		case DamageReaction::LightStagger:
 
 			// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
-			if (!IsPlayer() || !IsAttack())
+			if ((!IsPlayer() && !IsBoss()) || !IsAttack())
 			{
 				currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
 				SetAnimation(hDamageLightMotion_, true, false);
@@ -685,7 +694,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			else
 			{
 				// 弱攻撃が攻撃中のプレイヤーに当たった
-				isLightAttackHitPlayer = true;
+				isLightAttackHit = true;
 
 				// ノックバックを無効化する
 				knockback = 0.0f;
@@ -814,21 +823,27 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 
 
-	// 弱攻撃を受けたプレイヤー以外は、攻撃者をロックオンターゲットに設定する
-	if (!isLightAttackHitPlayer)if (attacker)lockOnTarget_ = attacker;
+	// 弱攻撃を受けたプレイヤーとボス以外は、攻撃者をロックオンターゲットに設定する
+	if (!isLightAttackHit)if (attacker)lockOnTarget_ = attacker;
 
 
 	// 最終的な攻撃力を計算する
 	int finalDamage = damage;
 	finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * attackPower_);
 
-	// 武器の攻撃力を考慮する
-	if (attacker && attacker->HasWeapon())
+	if (attacker)
 	{
-		finalDamage = static_cast<int>(static_cast<float>(damage) * attacker->GetWeapon()->GetAttackPower());
+		// レイジモード中の攻撃力を考慮して最終的なダメージを計算する
+		finalDamage = static_cast<int>(static_cast<float>(finalDamage) * attacker->RageModeAttackPower());
 
-		// 武器の耐久力を1減らす
-		attacker->GetWeapon()->TakeDamage(1);
+		// 武器の攻撃力を考慮して最終的なダメージを計算する
+		if (attacker->HasWeapon())
+		{
+			finalDamage = static_cast<int>(static_cast<float>(finalDamage) * attacker->GetWeapon()->GetAttackPower());
+
+			// 武器の耐久力を1減らす
+			attacker->GetWeapon()->TakeDamage(1);
+		}
 	}
 
 	// 体力を減らし、0未満にならないようにする
@@ -847,7 +862,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 		// プレイヤーが相手を倒した場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.2f, 0.8f);
+			GrowthEngine::GetInstance()->StartSlowMotion(0.2f, 0.55f);
 
 		// プレイヤーが倒された場合は、スローモーションを開始する
 		if(IsPlayer())
@@ -927,6 +942,90 @@ void Character::OnGrabDamage(int damage)
 	// 死亡判定
 	if (hp_ == 0)
 		Dead();
+}
+
+/// @brief レイジゲージの更新
+void Character::RageGageUpdate(float dt)
+{
+	// レイジゲージの閾値が空の場合は、インデックスを0にリセットする
+	if (rageGageThresholds_.empty())
+	{
+		rageGageThresholdIndex_ = 0;
+		return;
+	}
+
+	// レイジモード中は、レイジゲージを減少させる
+	if (isRageMode_)
+	{
+		if (IsRageModeStart())
+		{
+			// レイジモード開始時の待機時間を減少させる
+			rageModeStartTimer_ -= dt;
+			rageModeStartTimer_ = std::max(0.0f, rageModeStartTimer_);
+		}
+		else
+		{
+			rageGage_ -= kRageGageDecrease * dt;
+			rageGage_ = std::max(0.0f, rageGage_);
+
+			// レイジゲージが0になったら、レイジモードを終了する
+			if (rageGage_ <= 0.0f)
+			{
+				isRageMode_ = false;
+				rageGageThresholdIndex_ = 0;
+
+				// レイジモード終了のSEを再生する
+				soundManager_->SeRageModeEnd();
+			}
+		}
+	}
+
+	// 閾値を超えた数をインデックスとする
+	while (rageGageThresholdIndex_ < rageGageThresholds_.size() && rageGage_ >= rageGageThresholds_[rageGageThresholdIndex_])
+	{
+		rageGageThresholdIndex_++;
+	}
+}
+
+/// @brief レイジゲージをチャージする
+/// @param damageReaction 
+void Character::ChargeRageGage(DamageReaction damageReaction)
+{
+	// レイジモード中はゲージをチャージしない
+	if (isRageMode_)return; 
+
+	if (damageReaction == DamageReaction::LightStagger) rageGage_ += 0.5f;
+	else if (damageReaction == DamageReaction::HeavyStagger) rageGage_ += 1.0f;
+	else if (damageReaction == DamageReaction::Down) rageGage_ += 1.5f;
+}
+
+/// @brief レイジモード中の入力処理
+void Character::RageModeInput()
+{
+	// レイジモード中は、レイジゲージの閾値を超えた場合にのみ、レイジモードの入力を受け付ける
+	if (IsIncapacitated())return;
+
+	if (isRageMode_)
+	{
+		// レイジモードを終了させる
+		isRageMode_ = false;
+
+		// レイジモード終了のSEを再生する
+		soundManager_->SeRageModeEnd();
+	}
+	else if(IsRageGageThresholdExceeded())
+	{
+		// ゲージが閾値を超えた場合は、レイジモードを開始させる
+
+		// レイジモードを開始させる
+		isRageMode_ = true;
+
+		// レイジモード開始時の待機時間を設定する
+		rageModeStartTimer_ = kRageModeStartDuration;
+
+		// レイジモード開始のSEを再生する
+		soundManager_->SeRageModeStart();
+	}
 }
 
 /// @brief ダウンからの起き上がり条件を満たしているかどうか
@@ -1247,7 +1346,10 @@ void Character::UpdateAnimation()
 {
 	if (!model_)return;
 
-	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+	// レイジモード中は、攻撃速度を上げる
+	float rageModeAttackSpeed = RageModeAttackSpeed();
+
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeAttackSpeed;
 
 	// プレイヤーのスタイルチェンジモーションはtimeScaleの影響を受けないようにする
 	if (isStyleChanging_ && IsPlayer())
@@ -2013,6 +2115,10 @@ void Character::SetInitData(const InitData& initData)
 	currentDamageReaction_ = DamageReactionState::None;
 	damageReactionTimer_ = 0.0f;
 
+	// レイジゲージをリセットする
+	rageGage_ = 0;
+	rageGageThresholdIndex_ = 0;
+
 
 	// 位置
 	worldTransform_->translate_ = initData.position;
@@ -2022,6 +2128,10 @@ void Character::SetInitData(const InitData& initData)
 
 	// 体力
 	hp_ = initData.hp;
+
+	// レイジゲージの閾値 昇順
+	rageGageThresholds_ = initData.rageGageThresholds;
+	std::sort(rageGageThresholds_.begin(), rageGageThresholds_.end());
 
 	// モデルデータ
 	if (initData.model_)

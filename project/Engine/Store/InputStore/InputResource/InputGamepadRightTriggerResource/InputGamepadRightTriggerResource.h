@@ -26,5 +26,11 @@ namespace Engine
 
 		/// @brief パラメータ
 		std::unique_ptr<InputData::GamepadTriggerParam> param_ = nullptr;
+
+		/// @brief 入力されたかどうかを記録
+		bool isRecordInput_ = false;
+
+		/// @brief 前回の入力が記録されたかどうかを記録
+		bool isPrevRecordInput_ = false;
 	};
 }
