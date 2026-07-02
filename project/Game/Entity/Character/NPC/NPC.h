@@ -15,7 +15,7 @@ public:
 	NPC();
 
 	/// @brief 初期化
-	void Initialize(const InitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
+	void Initialize(const CharacterInitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
 
 	/// @brief プールに返却したときの処理
 	void PoolRelease();

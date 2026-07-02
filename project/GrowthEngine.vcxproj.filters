@@ -3548,6 +3548,9 @@
     <ClInclude Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.h">
       <Filter>Game\Entity\Character\Player\PlayerInputController</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Entity\Character\CharacterTypes.h">
+      <Filter>Game\Entity\Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

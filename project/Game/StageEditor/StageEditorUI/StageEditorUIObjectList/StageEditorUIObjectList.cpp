@@ -206,7 +206,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
 			if (isChangeAnimation_)
 			{
-				Character::AnimationHandleData animData;
+				AnimationHandleData animData;
 				animData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, target.standMotion.name);
 				animData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, target.stanceMotion.name);
 				animData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, target.walkMotion.name);

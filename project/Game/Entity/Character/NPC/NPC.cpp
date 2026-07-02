@@ -33,7 +33,7 @@ void NPC::PoolRelease()
 }
 
 /// @brief 初期化
-void NPC::Initialize(const InitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
+void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
 {
 	// インスタンスリストに登録する
 	characters_.push_back(this);

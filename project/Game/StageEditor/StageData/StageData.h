@@ -148,7 +148,7 @@ inline void toJson(json& j, const PlacementData& s)
 		j["avoidRightMotionName"] = s.avoidRightMotion.name;
 
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
-		if (s.subType != static_cast<int32_t>(Character::CharacterTag::Player) && s.subType != static_cast<int32_t>(Character::CharacterTag::None))
+		if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
 		{
 			j["behaviorScriptName"] = s.behaviorScriptName;
 		}

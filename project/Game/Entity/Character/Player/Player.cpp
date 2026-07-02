@@ -31,7 +31,7 @@ Player::Player() : Character()
 }
 
 /// @brief 初期化
-void Player::Initialize(const InitData& initData, Weapon* baton)
+void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 {
 	assert(baton);
 

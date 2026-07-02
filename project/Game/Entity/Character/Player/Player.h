@@ -11,7 +11,7 @@ public:
 	Player();
 
 	/// @brief 初期化
-	void Initialize(const InitData& initData, Weapon* baton);
+	void Initialize(const CharacterInitData& initData, Weapon* baton);
 
 	/// @brief 更新処理
 	virtual void Update() override;

@@ -59,7 +59,7 @@ public:
 	/// @brief キャラクターを生成する
 	/// @param initData 
 	/// @return 
-	Character* CreateCharacter(const Character::InitData& initData, Character::CharacterTag tag);
+	Character* CreateCharacter(const CharacterInitData& initData, CharacterTag tag);
 
 	/// @brief 武器を生成する
 	/// @param position 

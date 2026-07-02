@@ -21,10 +21,10 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 	if (data.category == EditCategory::Character)
 	{
 		// int から CharacterTag にキャスト
-		Character::CharacterTag tag = static_cast<Character::CharacterTag>(data.subType);
+		CharacterTag tag = static_cast<CharacterTag>(data.subType);
 
 		// NPCの初期化データの作成
-		Character::InitData initData;
+		CharacterInitData initData;
 		initData.position = data.position;
 		initData.hp = data.hp;
 		initData.rotateY = data.rotate_.y;

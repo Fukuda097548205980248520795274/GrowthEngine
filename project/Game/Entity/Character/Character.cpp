@@ -2085,7 +2085,7 @@ void Character::Dead()
 
 /// @brief 初期化用データを設定する
 /// @param initData 
-void Character::SetInitData(const InitData& initData)
+void Character::SetInitData(const CharacterInitData& initData)
 {
 	// フラグをリセットする
 	isFinished_ = false;

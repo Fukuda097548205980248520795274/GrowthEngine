@@ -412,11 +412,11 @@ void GameScene::Draw()
 /// @brief キャラクターを生成する
 /// @param initData 
 /// @return 
-Character* GameScene::CreateCharacter(const Character::InitData& initData, Character::CharacterTag tag)
+Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag)
 {
 	Character* character = nullptr;
 
-	if (tag == Character::CharacterTag::Player)
+	if (tag == CharacterTag::Player)
 	{
 		// すでにプレイヤーが存在する場合は削除する
 		if (player_)
@@ -471,7 +471,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		playerHP_->Initialize(hpInitData);
 
 		// プレイヤーの生成処理
-		Character::InitData playerInitData = initData;
+		CharacterInitData playerInitData = initData;
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
 		playerInitData.hitboxGroup = playerHitboxGroup_.get();
 		playerInitData.landingCollision = landingCollision_->CreateInstance();
@@ -492,7 +492,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 	}
 	else
 	{
-		Character::InitData npcInitData = initData;
+		CharacterInitData npcInitData = initData;
 
 		// NPCのモデルの生成と初期化
 		std::unique_ptr<Render3DSkinningModel> npcModel = npcModelPool_->Acquire();
@@ -507,12 +507,12 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcInitData.attackTrail = npcTrail.get();
 
 		// NPCの当たり判定グループの設定
-		if (tag == Character::CharacterTag::Ally || tag == Character::CharacterTag::Vip)
+		if (tag == CharacterTag::Ally || tag == CharacterTag::Vip)
 		{
 			npcInitData.hurtboxGroup = playerHurtboxGroup_.get();
 			npcInitData.hitboxGroup = playerHitboxGroup_.get();
 		}
-		else if (tag == Character::CharacterTag::EnemyNormal || tag == Character::CharacterTag::EnemyBoss)
+		else if (tag == CharacterTag::EnemyNormal || tag == CharacterTag::EnemyBoss)
 		{
 			npcInitData.hurtboxGroup = enemyHurtboxGroup_.get();
 			npcInitData.hitboxGroup = enemyHitboxGroup_.get();
@@ -522,7 +522,7 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 		npcInitData.landingCollision = landingCollision_->CreateInstance();
 		npcInitData.wallTouchCollision = wallTouchCollision_->CreateInstance();
 
-		if (tag == Character::CharacterTag::EnemyBoss)
+		if (tag == CharacterTag::EnemyBoss)
 		{
 			BossHP::InitData bossHpInitData;
 			bossHpInitData.position = Vector2(0.0f, 0.0f);
@@ -569,13 +569,13 @@ Character* GameScene::CreateCharacter(const Character::InitData& initData, Chara
 			hpInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
 			hpInitData.alpha = 1.0f;
 
-			if (tag == Character::CharacterTag::Ally)
+			if (tag == CharacterTag::Ally)
 			{
 				hpInitData.scale = Vector2(0.75f, 0.75f);
 				hpInitData.width = 150;
 				hpInitData.color = Vector3(0.25f, 1.0f, 0.25f);
 			}
-			else if (tag == Character::CharacterTag::EnemyNormal)
+			else if (tag == CharacterTag::EnemyNormal)
 			{
 				hpInitData.scale = Vector2(0.25f, 0.25f);
 				hpInitData.width = 200;

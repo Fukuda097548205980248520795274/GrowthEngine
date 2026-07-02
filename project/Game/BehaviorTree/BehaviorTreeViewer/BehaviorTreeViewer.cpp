@@ -21,7 +21,7 @@ void BehaviorTreeViewer::DrawUI()
 
 	for (Character* character : characters)
 	{
-		if (character && character->GetCharacterTag() != Character::CharacterTag::Player)
+		if (character && character->GetCharacterTag() != CharacterTag::Player)
 		{
 			// CharacterからNPCへ安全にキャスト
 			if (NPC* npc = dynamic_cast<NPC*>(character))
