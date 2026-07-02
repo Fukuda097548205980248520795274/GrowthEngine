@@ -6,7 +6,9 @@
 #include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "Action/Avoid/Avoid.h"
 #include "Action/Move/ApproachTargetMove/ApproachTargetMove.h"
+#include "Action/Move/ApproachLeaderMove/ApproachLeaderMove.h"
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
+#include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
 #include "MotionManager/MotionManager.h"
 
 // ノードの種類
@@ -45,6 +47,9 @@ enum class ActionType
 	// トークン系
 	RequestToken,
 	ReleaseToken,
+
+	ApproachLeaderMove,
+	NavMeshLeaderMove,
 };
 
 /// @brief アクションの種類を文字列で表す配列
@@ -59,7 +64,10 @@ constexpr inline const char* ACTION_TYPE_NAMES[] = {
 	"InAttackSequence",
 	"OutAttackSequence",
 	"RequestToken",
-	"ReleaseToken"
+	"ReleaseToken",
+
+	"ApproachLeaderMove",
+	"NavMeshLeaderMove"
 };
 
 // 条件の種類
@@ -158,7 +166,9 @@ struct EditorNode
 	GrabStrikeAttackInitData grabStrikeAttackInitData;
 	AvoidInitData avoidInitData;
 	ApproachTargetMoveInitData approachTargetMoveInitData;
+	ApproachLeaderMoveInitData approachLeaderMoveInitData;
 	NavMeshMoveInitData navMeshMoveInitData;
+	NavMeshLeaderMoveInitData navMeshLeaderMoveInitData;
 
 	// 条件ノードのパラメータ
 	CondtionNodeParam conditionParam;

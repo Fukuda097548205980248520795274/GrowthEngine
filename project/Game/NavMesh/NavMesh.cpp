@@ -195,6 +195,73 @@ int NavMesh::GenerateNewPolygonId() const
 	return maxId + 1; // 現在の最大ID + 1 を返す
 }
 
+/// @brief 指定した位置に最も近い点をナビメッシュ上で取得する
+/// @param position 
+/// @param searchRadius 
+/// @return 
+Vector3 NavMesh::GetNearestPoint(const Vector3& position, float searchRadius) const
+{
+	// まず現在の位置が既にNavMesh内にあるかチェックする
+	if (FindPolygonAt(position) != -1)
+	{
+		// 既にポリゴン内にいる場合はそのまま返す
+		return position;
+	}
+
+	Vector3 nearestPoint = position;
+	float minDistanceSq = searchRadius * searchRadius;
+	bool isFound = false;
+
+	// 全ポリゴンの辺（エッジ）との距離を計算し、最も近い点を探す
+	for (const auto& poly : polygons_)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			Vector3 a = poly.vertices[i];
+			Vector3 b = poly.vertices[(i + 1) % 4];
+
+			// 頂点AからBへのベクトル（辺）と、Aから現在地へのベクトル
+			Vector3 ab = { b.x - a.x, b.y - a.y, b.z - a.z };
+			Vector3 ap = { position.x - a.x, position.y - a.y, position.z - a.z };
+
+			// 線分ABの長さの二乗
+			float abLengthSq = ab.x * ab.x + ab.y * ab.y + ab.z * ab.z;
+			if (abLengthSq <= 0.0001f) continue; // 縮退した辺はスキップ
+
+			// 線分に対する現在位置の投影位置（tパラメータ）を計算
+			float t = (ap.x * ab.x + ap.y * ab.y + ap.z * ab.z) / abLengthSq;
+
+			// tを 0.0f から 1.0f の間にクランプして、線分の範囲内に収める
+			t = std::max(0.0f, std::min(1.0f, t));
+
+			// 線分上の最も近い点を算出
+			Vector3 closestPointOnEdge = {
+				a.x + t * ab.x,
+				a.y + t * ab.y,
+				a.z + t * ab.z
+			};
+
+			// その点と現在位置との距離の二乗を計算
+			Vector3 diff = {
+				position.x - closestPointOnEdge.x,
+				position.y - closestPointOnEdge.y,
+				position.z - closestPointOnEdge.z
+			};
+			float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
+
+			// 最小距離を更新できたら記録
+			if (distSq < minDistanceSq)
+			{
+				minDistanceSq = distSq;
+				nearestPoint = closestPointOnEdge;
+				isFound = true;
+			}
+		}
+	}
+
+	return nearestPoint;
+}
+
 /// @brief IDからポリゴンを取得する
 /// @param id 
 /// @return 

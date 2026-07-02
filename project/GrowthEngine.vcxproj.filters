@@ -1315,6 +1315,12 @@
     <Filter Include="Game\CharacterComponent\CharacterMovement">
       <UniqueIdentifier>{512a06a7-bae2-4df9-a353-90d2a7f43383}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Move\ApproachLeaderMove">
+      <UniqueIdentifier>{f1c5dc00-82cd-401d-8bcf-24446a0a0563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Action\Move\NavMeshLeaderMove">
+      <UniqueIdentifier>{baa755df-dd46-4760-bddd-c54d8c051bdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2375,6 +2381,12 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp">
       <Filter>Game\CharacterComponent\CharacterMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.cpp">
+      <Filter>Game\Action\Move\ApproachLeaderMove</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.cpp">
+      <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3562,6 +3574,12 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h">
       <Filter>Game\CharacterComponent\CharacterMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.h">
+      <Filter>Game\Action\Move\ApproachLeaderMove</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.h">
+      <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

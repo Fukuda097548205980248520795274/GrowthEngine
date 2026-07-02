@@ -116,6 +116,12 @@ public:
 	/// @brief ナビメッシュをクリアする
 	void Clear() { polygons_.clear(); }
 
+	/// @brief 指定した位置に最も近い点をナビメッシュ上で取得する
+	/// @param position 
+	/// @param searchRadius 
+	/// @return 
+	Vector3 GetNearestPoint(const Vector3& position, float searchRadius) const;
+
 
 private:
 

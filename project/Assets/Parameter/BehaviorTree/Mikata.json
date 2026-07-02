@@ -79,6 +79,26 @@
             "end": 26,
             "id": 88,
             "start": 6
+        },
+        {
+            "end": 90,
+            "id": 98,
+            "start": 97
+        },
+        {
+            "end": 93,
+            "id": 99,
+            "start": 97
+        },
+        {
+            "end": 96,
+            "id": 100,
+            "start": 6
+        },
+        {
+            "end": 102,
+            "id": 104,
+            "start": 27
         }
     ],
     "nodes": [
@@ -145,7 +165,7 @@
             "output_pin": 33,
             "pos": [
                 450.0,
-                1200.0
+                1320.0
             ],
             "type": 5
         },
@@ -256,7 +276,7 @@
             "name": "パンチ",
             "output_pin": 57,
             "pos": [
-                449.0,
+                450.0,
                 720.0
             ],
             "type": 5
@@ -287,8 +307,8 @@
             "name": "攻撃終了",
             "output_pin": 63,
             "pos": [
-                443.0,
-                835.0
+                450.0,
+                840.0
             ],
             "type": 5
         },
@@ -330,6 +350,62 @@
                 360.0
             ],
             "type": 5
+        },
+        {
+            "action_type": 12,
+            "id": 89,
+            "input_pin": 90,
+            "is_collapsed": false,
+            "name": "リーダーについていく",
+            "nav_mesh_leader_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 4.0
+            },
+            "output_pin": 91,
+            "pos": [
+                450.0,
+                1560.0
+            ],
+            "type": 5
+        },
+        {
+            "condition_type": 15,
+            "id": 92,
+            "input_pin": 93,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 94,
+            "pos": [
+                450.0,
+                1440.0
+            ],
+            "type": 4
+        },
+        {
+            "id": 95,
+            "input_pin": 96,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 97,
+            "pos": [
+                300.0,
+                1440.0
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 1,
+            "id": 101,
+            "input_pin": 102,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 103,
+            "pos": [
+                450.0,
+                1200.0
+            ],
+            "type": 4
         }
     ]
 }

@@ -50,7 +50,7 @@ void CharacterMovement::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	const float length = direction.Length();
 
 	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || !IsGrounded() || owner_->IsStyleChanging() || owner_->IsAttack())
+	if (length <= 0.0f || owner_->IsAttack() || owner_->IsIncapacitated())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;
@@ -64,6 +64,9 @@ void CharacterMovement::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	targetVelocity_.x = direction.x * moveSpeed;
 	targetVelocity_.y = 0.0f;
 	targetVelocity_.z = direction.y * moveSpeed;
+
+	// 移動する場合はノックバックを無効化する
+	knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 
 	// つかまれていない場合は入力方向を向く。つかんでいる場合は入力方向の逆を向く
 	if (!owner_->IsGrabbing())

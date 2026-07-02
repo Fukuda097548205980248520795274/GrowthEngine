@@ -56,8 +56,8 @@
                     9.520891189575195
                 ],
                 [
-                    12.634456634521484,
-                    9.313225746154785e-10,
+                    12.819060325622559,
+                    4.656612873077393e-10,
                     9.470026016235352
                 ]
             ]
@@ -72,8 +72,8 @@
             ],
             "vertices": [
                 [
-                    12.634456634521484,
-                    9.313225746154785e-10,
+                    12.819060325622559,
+                    4.656612873077393e-10,
                     9.470026016235352
                 ],
                 [
@@ -87,8 +87,8 @@
                     31.654399871826172
                 ],
                 [
-                    12.638482093811035,
-                    0.0,
+                    12.823086738586426,
+                    -4.656612873077393e-10,
                     31.5013427734375
                 ]
             ]
@@ -103,8 +103,8 @@
             ],
             "vertices": [
                 [
-                    12.638482093811035,
-                    0.0,
+                    12.823086738586426,
+                    -4.656612873077393e-10,
                     31.5013427734375
                 ],
                 [
@@ -828,6 +828,54 @@
             "scaleY": 1.0,
             "scaleZ": 5.8447442054748535,
             "subType": 3
+        },
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Mikata",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "hp": 100,
+            "name": "",
+            "posX": -1.2599999904632568,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 2,
+            "walkMotionName": "Walk"
+        },
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "Mikata",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "hp": 100,
+            "name": "",
+            "posX": 1.2699999809265137,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Fighter",
+            "standMotionName": "Standing",
+            "subType": 2,
+            "walkMotionName": "Walk"
         }
     ]
 }

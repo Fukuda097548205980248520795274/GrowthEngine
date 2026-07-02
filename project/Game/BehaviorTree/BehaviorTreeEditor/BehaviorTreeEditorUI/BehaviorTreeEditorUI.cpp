@@ -1429,6 +1429,22 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
+	else if (node.actionType == ActionType::ApproachLeaderMove)
+	{
+		if (ImGui::TreeNode("リーダー接近 設定"))
+		{
+			HistorySaveIfChanged();
+			ImGui::DragFloat("移動速度", &node.approachLeaderMoveInitData.moveSpeed, 0.1f);
+
+			HistorySaveIfChanged();
+			ImGui::DragFloat("停止距離", &node.approachLeaderMoveInitData.stopDistance, 0.01f);
+
+			HistorySaveIfChanged();
+			ImGui::Checkbox("走るかどうか", &node.approachLeaderMoveInitData.isDash);
+
+			ImGui::TreePop();
+		}
+	}
 	else if (node.actionType == ActionType::NavMeshMove)
 	{
 		if (ImGui::TreeNode("ナビメッシュ移動 設定"))
@@ -1441,6 +1457,22 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 			HistorySaveIfChanged();
 			ImGui::Checkbox("走るかどうか", &node.navMeshMoveInitData.isDash);
+
+			ImGui::TreePop();
+		}
+	}
+	else if (node.actionType == ActionType::NavMeshLeaderMove)
+	{
+		if (ImGui::TreeNode("ナビメッシュリーダー移動 設定"))
+		{
+			HistorySaveIfChanged();
+			ImGui::DragFloat("移動速度", &node.navMeshLeaderMoveInitData.moveSpeed, 0.1f);
+
+			HistorySaveIfChanged();
+			ImGui::DragFloat("停止距離", &node.navMeshLeaderMoveInitData.stopDistance, 0.01f);
+
+			HistorySaveIfChanged();
+			ImGui::Checkbox("走るかどうか", &node.navMeshLeaderMoveInitData.isDash);
 
 			ImGui::TreePop();
 		}

@@ -114,11 +114,23 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["approach_target_move_data"]["stopDistance"] = node.approachTargetMoveInitData.stopDistance;
 				n["approach_target_move_data"]["isDash"] = node.approachTargetMoveInitData.isDash;
 			}
+			else if (node.actionType == ActionType::ApproachLeaderMove)
+			{
+				n["approach_leader_move_data"]["moveSpeed"] = node.approachLeaderMoveInitData.moveSpeed;
+				n["approach_leader_move_data"]["stopDistance"] = node.approachLeaderMoveInitData.stopDistance;
+				n["approach_leader_move_data"]["isDash"] = node.approachLeaderMoveInitData.isDash;
+			}
 			else if (node.actionType == ActionType::NavMeshMove)
 			{
 				n["nav_mesh_move_data"]["moveSpeed"] = node.navMeshMoveInitData.moveSpeed;
 				n["nav_mesh_move_data"]["stopDistance"] = node.navMeshMoveInitData.stopDistance;
 				n["nav_mesh_move_data"]["isDash"] = node.navMeshMoveInitData.isDash;
+			}
+			else if (node.actionType == ActionType::NavMeshLeaderMove)
+			{
+				n["nav_mesh_leader_move_data"]["moveSpeed"] = node.navMeshLeaderMoveInitData.moveSpeed;
+				n["nav_mesh_leader_move_data"]["stopDistance"] = node.navMeshLeaderMoveInitData.stopDistance;
+				n["nav_mesh_leader_move_data"]["isDash"] = node.navMeshLeaderMoveInitData.isDash;
 			}
 		}
 		else if (node.type == EditorNodeType::Condition)
@@ -334,6 +346,26 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						node.approachTargetMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
 						node.approachTargetMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
 						node.approachTargetMoveInitData.isDash = move_data.value("isDash", false);
+					}
+				}
+				else if (node.actionType == ActionType::ApproachLeaderMove)
+				{
+					if (n.contains("approach_leader_move_data") && n["approach_leader_move_data"].is_object())
+					{
+						const auto& move_data = n["approach_leader_move_data"];
+						node.approachLeaderMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
+						node.approachLeaderMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+						node.approachLeaderMoveInitData.isDash = move_data.value("isDash", false);
+					}
+				}
+				else if (node.actionType == ActionType::NavMeshLeaderMove)
+				{
+					if (n.contains("nav_mesh_leader_move_data") && n["nav_mesh_leader_move_data"].is_object())
+					{
+						const auto& move_data = n["nav_mesh_leader_move_data"];
+						node.navMeshLeaderMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
+						node.navMeshLeaderMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
+						node.navMeshLeaderMoveInitData.isDash = move_data.value("isDash", false);
 					}
 				}
 				else if (node.actionType == ActionType::NavMeshMove)

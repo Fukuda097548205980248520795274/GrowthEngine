@@ -81,7 +81,7 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	attack1Data.hitDefinitions[0].endTime = 0.4f;
 	attack1Data.hitDefinitions[0].damage = 10;
 	attack1Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack1Data.hitDefinitions[0].knockback = 1.0f;
+	attack1Data.hitDefinitions[0].knockback = 3.0f;
 	attack1Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 2段目の攻撃
@@ -99,7 +99,7 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	attack2Data.hitDefinitions[0].endTime = 0.4f;
 	attack2Data.hitDefinitions[0].damage = 10;
 	attack2Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack2Data.hitDefinitions[0].knockback = 1.0f;
+	attack2Data.hitDefinitions[0].knockback = 3.0f;
 	attack2Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
 
 	// 3段目の攻撃
@@ -117,7 +117,7 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	attack3Data.hitDefinitions[0].endTime = 0.4f;
 	attack3Data.hitDefinitions[0].damage = 10;
 	attack3Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack3Data.hitDefinitions[0].knockback = 1.0f;
+	attack3Data.hitDefinitions[0].knockback = 3.0f;
 	attack3Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
 
 	// 4段目の攻撃
