@@ -301,28 +301,6 @@ void Player::Draw()
 	if (attackTrail_)attackTrail_->Draw();
 }
 
-/// @brief ターゲット方向を向く
-void Player::TargetDirection()
-{
-	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated())
-	{
-		// ターゲットの方向を向く
-		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
-		if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
-			toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
-
-		// Y軸の回転のみを考慮するため、Y成分を0にする
-		toTarget.y = 0.0f;
-
-		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
-		if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
-		{
-			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
-			hasTargetYaw_ = true;
-		}
-	}
-}
-
 /// @brief 更新処理開始前のリセット
 void Player::StartUpdate()
 {

@@ -1,6 +1,8 @@
 #pragma once
 #include "../Entity.h"
 #include "CharacterTypes.h"
+#include "CharacterComponent/CharacterMovement/CharacterMovement.h"
+
 #include "BlackBoard/BlackBoard.h"
 #include "MotionManager/MotionManager.h"
 #include "SoundManager/SoundManager.h"
@@ -87,27 +89,24 @@ public:
 	CharacterTag GetCharacterTag()const { return characterTag_; }
 
 	/// @brief 移動を停止させる
-	void MoveStop();
+	void MoveStop() { movement_->Stop(); }
 
 	/// @brief XZ平面の移動入力を設定する
 	/// @param direction
 	/// @param maxSpeed
-	void SetMoveInputXZ(const Vector2& direction, float maxSpeed);
+	void SetMoveInputXZ(const Vector2& direction, float maxSpeed) { movement_->SetMoveInputXZ(direction, maxSpeed); }
 
 	/// @brief 現在向いている方向ベクトルを取得する
 	/// @return
-	Vector3 GetDirection() const { return direction_; }
+	Vector3 GetDirection() const { return movement_->GetDirection(); }
 
 	/// @brief 向きを設定する
 	/// @param direction 
-	void SetDirection(const Vector3& direction) { direction_ = direction.Normalize(); }
+	void SetDirection(const Vector3& direction) { movement_->SetDirection(direction.Normalize()); }
 
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
-
-	/// @brief ターゲットの方向を向く
-	virtual void TargetDirection();
 
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
@@ -288,7 +287,7 @@ public:
 
 	/// @brief 着地しているかどうか
 	/// @return 
-	bool IsGrounded() const { return isGrounded_; }
+	bool IsGrounded() const { return movement_->IsGrounded(); }
 
 	/// @brief 掴んでいる相手を取得する
 	/// @return 
@@ -506,6 +505,9 @@ protected:
 	// キャラクターのタグ
 	CharacterTag characterTag_;
 
+	/// @brief 移動コンポーネント
+	std::unique_ptr<CharacterMovement> movement_ = nullptr;
+
 	/// @brief ブラックボード
 	std::unique_ptr<Blackboard> blackboard_ = nullptr;
 
@@ -537,32 +539,6 @@ protected:
 
 	/// @brief 所持している武器
 	Weapon* weapon_ = nullptr;
-
-
-protected:
-
-	/// @brief 方向
-	Vector3 direction_ = Vector3(0.0f, 0.0f, 1.0f);
-
-
-protected:
-
-   // 速度補間の応答速度(1秒あたり)
-	float velocityLerpSpeed_ = 6.0f;
-
-	/// @brief 目標速度
-	Vector3 targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// @brief 現在の速度
-	Vector3 currentVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-
-protected:
-
-	/// @brief 現在の目標Y軸回転角度（ラジアン）
-	float targetRotationY_ = 0.0f;
-
-	/// @brief 回転の補間スピード（数値が大きいほど素早く振り向く）
-	float rotationSpeed_ = 10.0f;
 
 
 protected:
@@ -610,18 +586,6 @@ protected:
 	/// @brief 回避中の更新処理
 	/// @param deltaTime
 	void UpdateAvoid(float deltaTime);
-
-
-protected:
-
-	/// @brief 目標Y回転
-	float targetYaw_ = 0.0f;
-
-	/// @brief 目標回転が有効かどうか
-	bool hasTargetYaw_ = false;
-
-	// 入力に応じて目標速度と目標回転を更新する
-	static constexpr float kRotateThreshold = 0.0001f;
 
 
 protected:
@@ -822,9 +786,6 @@ protected:
 	/// @return 
 	virtual bool CheckGetUpCondition();
 
-	/// @brief ノックバックの速度
-	Vector3 knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-
 	/// @brief 現在のダメージリアクション
 	DamageReactionState currentDamageReaction_ = DamageReactionState::None;
 
@@ -926,27 +887,11 @@ protected:
 
 protected:
 
-	/// @brief 落下の更新
-	/// @param deltaTime 
-	void FallUpdate(float deltaTime);
-
 	/// @brief 着地判定の更新
 	void LandingCheck();
 
 	/// @brief 着地判定
 	Collision3DInstanceCapsule* landingCollision_ = nullptr;
-
-	// 現在の落下速度
-	float velocityY_ = 0.0f;
-
-	// 地面に接地しているかどうか
-	bool isGrounded_ = false;
-
-	// 重力加速度
-	const float kGravity = -9.8f * 0.75f;
-
-	// 最大落下速度
-	const float kMaxFallSpeed = -20.0f;
 
 
 protected:

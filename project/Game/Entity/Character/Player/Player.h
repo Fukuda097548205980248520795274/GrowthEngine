@@ -23,9 +23,6 @@ public:
 	/// @param isOperationCamera 
 	void SetIsOperationCamera(bool isOperationCamera) { isOperationCamera_ = isOperationCamera; }
 
-	/// @brief ターゲット方向を向く
-	void TargetDirection() override;
-
 	/// @brief 弱攻撃入力があったかどうかを取得する
 	/// @return 
 	bool IsInputLightAttack() const { return isInputLightAttack_; }

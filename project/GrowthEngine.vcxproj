@@ -1103,6 +1103,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
+    <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp" />
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp" />
     <ClCompile Include="Game\HUD\Button\Button.cpp" />
@@ -1507,6 +1508,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
+    <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h" />
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h" />
     <ClInclude Include="Game\Entity\Character\CharacterTypes.h" />
     <ClInclude Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.h" />

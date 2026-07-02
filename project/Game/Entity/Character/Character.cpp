@@ -34,6 +34,9 @@ Character::Character() : Entity()
 	// シェイクの生成と初期化
 	shake_ = std::make_unique<Shake>();
 
+	// キャラクターの移動処理の生成
+	movement_ = std::make_unique<CharacterMovement>(this);
+
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
 }
@@ -212,22 +215,9 @@ void Character::Update()
 		grabbedTarget_->worldTransform_->rotate_ = Vector3(0.0f, worldTransform_->rotate_.y + std::numbers::pi_v<float>, 0.0f);
 	}
 
-	// ノックバックの更新
-	if (knockbackVelocity_.Length() > 0.01f)
-	{
-		// 攻撃中の場合は、ノックバックを無効化する
-		if (IsAttack())
-			knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-
-		// ノックバックの移動
-		SetPosition(GetPosition() + knockbackVelocity_ * dt);
-		knockbackVelocity_ = knockbackVelocity_ * std::pow(0.1f, dt);
-	}
-	else
-	{
-		// ノックバックの速度が十分小さくなったら、ノックバックを終了する
-		knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-	}
+	// ノックバックの方向を取得する
+	Vector3 knockbackDirection = movement_->GetKnockbackVelocity();
+	float velocityY = movement_->GetVelocityY();
 
 	// ダメージリアクションの更新
 	if (IsDamageReaction())
@@ -305,7 +295,7 @@ void Character::Update()
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayFront:
 				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackVelocity_.y + velocityY_ <= 0.0f)
+				if (knockbackDirection.y + velocityY <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
 					SetAnimation(hDownLyingMotion_, true, true);
@@ -315,7 +305,7 @@ void Character::Update()
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayBack:
 				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackVelocity_.y + velocityY_ <= 0.0f)
+				if (knockbackDirection.y + velocityY <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
 					SetAnimation(hDownLyingMotion_, true, true);
@@ -324,7 +314,7 @@ void Character::Update()
 
 				// 地上に着地した場合は、ダウン中状態へ移行する
 			case DamageReactionState::BlownFallingFront:
-				if (isGrounded_)
+				if (movement_->IsGrounded())
 				{
 					currentDamageReaction_ = DamageReactionState::DownLyingFront;
 					damageReactionTimer_ = 2.0f;
@@ -346,7 +336,7 @@ void Character::Update()
 
 				// 地上に着地した場合は、ダウン中状態へ移行する
 			case DamageReactionState::BlownFallingBack:
-				if (isGrounded_)
+				if (movement_->IsGrounded())
 				{
 					currentDamageReaction_ = DamageReactionState::DownLyingBack;
 					damageReactionTimer_ = 2.0f;
@@ -381,53 +371,23 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	/// ターゲットの方向を向く処理
-	TargetDirection();
-
-	// ターゲットの方向へ向く処理
-	if (hasTargetYaw_)
-	{
-		float currentYaw = worldTransform_->rotate_.y;
-		float deltaYaw = std::atan2(std::sin(targetYaw_ - currentYaw), std::cos(targetYaw_ - currentYaw));
-
-		float rotateLerpT = 1.0f - std::exp(-12.0f * dt);
-
-		worldTransform_->rotate_.y = currentYaw + deltaYaw * rotateLerpT;
-
-		// 角度が十分近くなったら、ターゲットの方向を向ききったとみなす
-		if ((deltaYaw * deltaYaw) <= kRotateThreshold)
-		{
-			worldTransform_->rotate_.y = targetYaw_;
-			hasTargetYaw_ = false;
-		}
-	}
+	movement_->TargetDirection(dt);
 
 	// ガードリアクション中は、攻撃してきた相手の方向を向くようにする
 	if (isGuardReaction_)
 	{
-		float diff = targetRotationY_ - worldTransform_->rotate_.y;
+		float diff = movement_->GetTargetRotationY() - worldTransform_->rotate_.y;
 		const float pi = std::numbers::pi_v<float>;
 
 		// 角度の正規化
 		while (diff > pi) diff -= 2.0f * pi;
 		while (diff < -pi) diff += 2.0f * pi;
 
-		worldTransform_->rotate_.y += diff * rotationSpeed_ * dt;
+		worldTransform_->rotate_.y += diff * movement_->GetRotationSpeed() * dt;
 	}
 
-	// 向きの更新
-	direction_.x = std::sin(worldTransform_->rotate_.y);
-	direction_.y = 0.0f;
-	direction_.z = std::cos(worldTransform_->rotate_.y);
-
-	// 速度の更新
-	const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * dt);
-	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, velocityLerpT);
-
-	// 位置の更新
-	worldTransform_->translate_ += currentVelocity_ * dt;
-
-	// 落下処理
-	FallUpdate(dt);
+	// 移動の更新
+	movement_->Update(dt);
 
 	// 壁接触の処理
 	WallTouchUpdate();
@@ -525,10 +485,11 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		if (dirToAttacker.Length() > 0.0f)
 		{
 			dirToAttacker = dirToAttacker.Normalize();
-			targetRotationY_ = std::atan2(dirToAttacker.x, dirToAttacker.z);
+			movement_->SetTargetRotationY(std::atan2(dirToAttacker.x, dirToAttacker.z));
 		}
 
-		knockbackVelocity_ = -dirToAttacker * 2.0f;
+		// 攻撃者の方向と逆方向にノックバックを加える
+		movement_->AddKnockback(-dirToAttacker * 2.0f);
 
 		// ガードリアクションのフラグを立てる
 		isGuardReaction_ = true;
@@ -614,7 +575,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		SetAnimation(hDownLyingMotion_, true, true);
 
 		// 落下速度をリセットする
-		velocityY_ = 0.0f;
+		movement_->SetVelocityY(0.0f);
 		
 		// ダメージを受けたことを通知する
 		isHitDamage_ = true;
@@ -650,7 +611,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		SetAnimation(hDownLyingMotion_, true, true);
 
 		// 落下速度をリセットする
-		velocityY_ = 0.0f;
+		movement_->SetVelocityY(0.0f);
 
 		// ダメージを受けたことを通知する
 		isHitDamage_ = true;
@@ -780,7 +741,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				SetAnimation(hDownFallMotion_, true, false);
 				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
 
-				isGrounded_ = false; // 地面に接地していない状態にする
+				movement_->SetGrounded(false); // 地面に接地していない状態にする
 			}
 			else
 			{
@@ -856,7 +817,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
-		if(!isBlownHit)knockbackVelocity_ = knockDirection.Normalize() * knockback;
+		if(!isBlownHit)movement_->AddKnockback(knockDirection.Normalize() * knockback);
 	}
 
 	// 死亡判定
@@ -901,7 +862,7 @@ void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDire
 	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
-	knockbackVelocity_ = pushDirection * knockBackPower;
+	movement_->AddKnockback(pushDirection * knockBackPower);
 
 	// 受け流し成功モーションを再生する
 	SetAnimation(hDamageHeavyMotion_, true, false);
@@ -927,7 +888,7 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 	damageReactionTimer_ = 1.0f;
 
 	// ノックバックを入れる
-	knockbackVelocity_ = pushDirection * knockBackPower;
+	movement_->AddKnockback(pushDirection * knockBackPower);
 
 	// 弾き成功モーションを再生する
 	SetAnimation(hGuardHitMotion_, true, false);
@@ -1122,90 +1083,16 @@ Vector2 Character::GetAvoidDirection(const Vector2& moveInputDirection, bool has
 		}
 	}
 
+	Vector3 direction = movement_->GetDirection();
+
 	// 移動入力がない場合は現在向いている方向の後ろへ回避する
-	Vector2 backwardDirection = Vector2(-direction_.x, -direction_.z);
+	Vector2 backwardDirection = Vector2(-direction.x, -direction.z);
 	if (backwardDirection.Length() <= 0.0f)
 	{
 		backwardDirection = Vector2(0.0f, -1.0f);
 	}
 
 	return backwardDirection.Normalize();
-}
-
-/// @brief 移動を停止させる
-void Character::MoveStop()
-{
-	// 目標速度と現在の速度を0にする
-	targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-	currentVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-}
-
-/// @brief XZ平面の移動入力を設定する
-/// @param direction
-/// @param maxSpeed
-void Character::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
-{
-	// 入力された方向の長さを計算する
-	const float length = direction.Length();
-
-	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || !IsGrounded() || IsStyleChanging() || IsAttack())
-	{
-		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
-		return;
-	}
-
-	// 長さが1を超える場合は1にクランプする
-	const float clampedLength = (length < 1.0f) ? length : 1.0f;
-	const float moveSpeed = clampedLength * maxSpeed;
-
-	// 入力された方向を正規化して、目標速度を計算する
-	targetVelocity_.x = direction.x * moveSpeed;
-	targetVelocity_.y = 0.0f;
-	targetVelocity_.z = direction.y * moveSpeed;
-
-	// つかまれていない場合は入力方向を向く。つかんでいる場合は入力方向の逆を向く
-	if (!IsGrabbing())
-	{
-		// つかまれていない場合は入力方向を向く
-		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
-		{
-			targetYaw_ = std::atan2(direction.x, direction.y);
-			hasTargetYaw_ = true;
-		}
-	}
-	else
-	{
-		// つかんでいる場合は入力方向の逆を向く
-		if ((targetVelocity_.x * targetVelocity_.x + targetVelocity_.z * targetVelocity_.z) > kRotateThreshold)
-		{
-			targetYaw_ = std::atan2(-direction.x, -direction.y);
-			hasTargetYaw_ = true;
-		}
-	}
-}
-
-/// @brief ターゲットの方向を向く
-void Character::TargetDirection()
-{
-	// ロックオンしているターゲットの方向を向く処理
-	if (lockOnTarget_ && IsStance() && !IsGrabbing() && !IsIncapacitated() && !IsAttack())
-	{
-		// ターゲットの方向を向く
-		Vector3 toTarget = lockOnTarget_->GetWorldPosition() - worldTransform_->GetWorldPosition();
-		if (lockOnTarget_->IsBlownAway() || lockOnTarget_->IsBlownFalling())
-			toTarget = lockOnTarget_->GetBonePosition(JointType::Root) - worldTransform_->GetWorldPosition();
-
-		// Y軸の回転のみを考慮するため、Y成分を0にする
-		toTarget.y = 0.0f;
-
-		// ターゲットの方向がある程度ある場合のみ、ターゲットの方向を向くようにする
-		if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) > kRotateThreshold)
-		{
-			targetYaw_ = std::atan2(toTarget.x, toTarget.z);
-			hasTargetYaw_ = true;
-		}
-	}
 }
 
 // 構え中のロックオン候補を更新する
@@ -1258,10 +1145,11 @@ void Character::UpdateLockOnTargets()
 		if (IsPlayer())
 		{
 			// プレイヤーの場合は、目の前にいる相手のみロックオン候補にする
+			Vector3 direction = movement_->GetDirection();
 
 			// 目の前にいる相手のみリストに登録する
 			const Vector3 toTargetDirection = toTarget.Normalize();
-			if (Dot(direction_, toTargetDirection) <= 0.0f)
+			if (Dot(direction, toTargetDirection) <= 0.0f)
 			{
 				continue;
 			}
@@ -1270,7 +1158,7 @@ void Character::UpdateLockOnTargets()
 			const float distance = std::sqrt(distanceSq);
 
 			// 視線方向との内積を計算する
-			const float viewDot = Dot(direction_, toTargetDirection);
+			const float viewDot = Dot(direction, toTargetDirection);
 
 			// まず距離が最も近い相手を優先する
 			if (distance < bestDistance)
@@ -1374,7 +1262,7 @@ void Character::UpdateAnimation()
 				SetAnimation(hStandMotion_, false, true);
 
 				//　移動している場合は歩きモーションを再生する
-				if (targetVelocity_.Length() > 0.0f)
+				if (movement_->GetTargetVelocity().Length() > 0.0f)
 					SetAnimation(hWalkMotion_, false, true);
 
 				// ダッシュしている場合はダッシュモーションを再生する
@@ -1398,7 +1286,7 @@ void Character::UpdateAnimation()
 					if (avoidDirection.Length() > 0.0f)
 					{
 						// キャラクターの向き（前）と右方向
-						Vector3 forward = direction_;
+						Vector3 forward = movement_->GetDirection();
 						Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
 
 						// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
@@ -1818,33 +1706,17 @@ void Character::UpdateWeapon()
 	if (!weapon_)return;
 }
 
-/// @brief 落下の更新
-/// @param deltaTime 
-void Character::FallUpdate(float deltaTime)
-{
-	// 重力による落下処理
-	if (!isGrounded_)
-	{
-		// 落下速度を更新する
-		velocityY_ += kGravity * deltaTime;
-		if (velocityY_ < kMaxFallSpeed) velocityY_ = kMaxFallSpeed;
-
-		// Y方向の位置を更新する
-		worldTransform_->translate_.y += velocityY_ * deltaTime;
-	}
-}
-
 /// @brief 着地判定の更新
 void Character::LandingCheck()
 {
 	// 着地しているかどうかのフラグをリセットする
-	isGrounded_ = false;
+	movement_->SetGrounded(false);
 
 	// コリジョンがないと処理しない
 	if (!landingCollision_)return;
 
 	// Y方向の速度が上向きで、かつ吹き飛ばされている状態の場合は着地判定を行わない
-	if (knockbackVelocity_.y + velocityY_ > 0.0f && IsBlownDown())
+	if (movement_->GetKnockbackVelocity().y + movement_->GetVelocityY() > 0.0f && IsBlownDown())
 		return;
 
 	// コリジョンの状態を確認する
@@ -1855,10 +1727,10 @@ void Character::LandingCheck()
 		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
 
 		// 着地していると判定する
-		isGrounded_ = true;
+		movement_->SetGrounded(true);
 
 		// Y方向の速度をリセットする（着地したので落下を止める）
-		velocityY_ = 0.0f;
+		movement_->SetVelocityY(0.0f);
 	}
 }
 
@@ -2095,7 +1967,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	isAvoid_ = false;
 	isJustAvoided_ = false;
 	isJustAvoidedPrev_ = false;
-	hasTargetYaw_ = false;
 	isStance_ = false;
 	canLockOnWithoutStance_ = false;
 	isGuard_ = false;
@@ -2112,7 +1983,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	isPrevHitAttack_ = false;
 	isHitDamage_ = false;
 	isPrevHitDamage_ = false;
-	isGrounded_ = false;
 	isWallTouch_ = false;
 
 	// ロックオンターゲットをリセットする

@@ -1309,6 +1309,12 @@
     <Filter Include="Game\Entity\Character\Player\PlayerInputController">
       <UniqueIdentifier>{75172264-a33c-434d-9e07-80be8926dfc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterComponent">
+      <UniqueIdentifier>{9daba23a-8a16-4bc4-8e5d-4ebaa41a5779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterComponent\CharacterMovement">
+      <UniqueIdentifier>{512a06a7-bae2-4df9-a353-90d2a7f43383}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2366,6 +2372,9 @@
     </ClCompile>
     <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp">
       <Filter>Game\Entity\Character\Player\PlayerInputController</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp">
+      <Filter>Game\CharacterComponent\CharacterMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3550,6 +3559,9 @@
     </ClInclude>
     <ClInclude Include="Game\Entity\Character\CharacterTypes.h">
       <Filter>Game\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h">
+      <Filter>Game\CharacterComponent\CharacterMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
