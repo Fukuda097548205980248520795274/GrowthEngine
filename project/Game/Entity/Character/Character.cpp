@@ -458,6 +458,10 @@ void Character::StartUpdate()
 	// 弾き成功のフラグを更新する
 	isPrevHitRepel_ = isHitRepel_;
 	isHitRepel_ = false;
+
+	// レイジモード開始成功のフラグを更新する
+	isPrevSuccessRageModeStart_ = isSuccessRageModeStart_;
+	isSuccessRageModeStart_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -466,7 +470,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -1019,6 +1023,9 @@ void Character::RageModeInput()
 
 		// レイジモードを開始させる
 		isRageMode_ = true;
+		isSuccessRageModeStart_ = true;
+
+		GrowthEngine::GetInstance()->StartSlowMotion(0.2f, 0.5f);
 
 		// レイジモード開始時の待機時間を設定する
 		rageModeStartTimer_ = kRageModeStartDuration;

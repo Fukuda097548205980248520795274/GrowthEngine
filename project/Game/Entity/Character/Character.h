@@ -169,7 +169,7 @@ public:
 	/// @param attacker 
 	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
-		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt);
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt, bool isGuardBreak = false);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
@@ -579,6 +579,10 @@ public:
 	/// @return 
 	float RageModeAttackPower()const { return IsRageMode() && IsAttack() ? 1.5f : 1.0f; }
 
+	/// @brief レイジモード開始に成功したかどうか
+	/// @return 
+	bool IsSuccessRageModeStart() const { return isSuccessRageModeStart_ || isPrevSuccessRageModeStart_; }
+
 
 
 
@@ -919,6 +923,13 @@ protected:
 
 	/// @brief レイジモード開始時の経過時間
 	float rageModeStartTimer_ = kRageModeStartDuration;
+
+
+	/// @brief レイジモード開始に成功したかどうか
+	bool isSuccessRageModeStart_ = false;
+
+	/// @brief 前フレームでレイジモード開始に成功したかどうか
+	bool isPrevSuccessRageModeStart_ = false;
 
 
 protected:
