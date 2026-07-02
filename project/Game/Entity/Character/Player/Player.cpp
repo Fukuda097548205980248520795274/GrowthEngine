@@ -38,6 +38,9 @@ void Player::Initialize(const InitData& initData, Weapon* baton)
 	// 初期化データを設定する
 	SetInitData(initData);
 
+	// 入力コントローラーを作成する
+	inputController_ = std::make_unique<PlayerInputController>();
+	inputController_->Initialize();
 
 	// 引数を受け取る
 	baton_ = baton;
@@ -61,50 +64,6 @@ void Player::Initialize(const InitData& initData, Weapon* baton)
 		// 旋嵐スタイルのBGMを再生する
 		soundManager_->bgmStyleSenran_->Play();
 	}
-
-
-	// 移動入力の生成
-	inputMove_ = std::make_unique<InputGamepadLeftStick>("Player_Move", InputState::Press, 0, Vector2(0.0f, 0.0f), 0.5f);
-
-	// ダッシュ入力の生成
-	inputDash_ = std::make_unique<InputGamepadButton>("Player_Dash", InputState::Trigger, 0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
-
-	// 回避入力の生成
-	inputAvoid_ = std::make_unique<InputGamepadButton>("Player_Avoid", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
-
-	// 弱攻撃入力の生成
-	inputLightAttack_ = std::make_unique<InputGamepadButton>("Player_LightAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_X);
-
-	// 強攻撃入力の生成
-	inputHeavyAttack_ = std::make_unique<InputGamepadButton>("Player_HeavyAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_Y);
-
-	// つかみ入力の生成
-	inputGrab_ = std::make_unique<InputGamepadButton>("Player_Grab", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
-
-	// 防御入力の生成
-	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
-
-	// 掴まれ解き入力の生成
-	inputEscapeMash_ = std::make_unique<InputGamepadButton>("Player_EscapeMash", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
-
-	// スタイルチェンジ入力の生成
-	inputStyleChange_ = std::make_unique<InputGamepadButton>("Player_StyleChange", InputState::Trigger, 0, XINPUT_GAMEPAD_DPAD_DOWN);
-
-	// レイジモード入力の生成
-	inputRageMode_ = std::make_unique<InputGamepadRightTrigger>("Player_RageMode", InputState::Trigger, 0, 0.5f);
-
-
-	// キーの前移動入力の生成
-	keyFrontMove_ = std::make_unique<InputKey>("Player_KeyFrontMove", InputState::Press, DIK_W);
-
-	// キーの後移動入力の生成
-	keyBackMove_ = std::make_unique<InputKey>("Player_KeyBackMove", InputState::Press, DIK_S);
-
-	// キーの左移動入力の生成
-	keyLeftMove_ = std::make_unique<InputKey>("Player_KeyLeftMove", InputState::Press, DIK_A);
-
-	// キーの右移動入力の生成
-	keyRightMove_ = std::make_unique<InputKey>("Player_KeyRightMove", InputState::Press, DIK_D);
 
 
 	// 1段目の攻撃
@@ -240,7 +199,7 @@ void Player::Update()
 		StyleChange();
 
 		// レイジモードを開始する
-		if (inputRageMode_ && inputRageMode_->IsInput())
+		if (inputController_->IsRageModeRequested())
 			RageModeInput();
 
 		// 攻撃の更新処理
@@ -257,8 +216,8 @@ void Player::Update()
 		{
 			// 回避中でも回避ボタン入力があれば次の回避を予約する
 			bool hasMoveInput = false;
-			const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
-			if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+			const Vector2 moveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
+			if (isStance_ && inputController_->IsAvoidRequested())
 			{
 				ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
 			}
@@ -274,10 +233,10 @@ void Player::Update()
 
 		// 移動入力方向を取得する
 		bool hasMoveInput = false;
-		const Vector2 moveInputDirection = GetMoveInputDirection(hasMoveInput);
+		const Vector2 moveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
 
 		// 構え中に回避ボタンを押したら回避を開始する
-		if (isStance_ && inputAvoid_ && inputAvoid_->IsInput())
+		if (isStance_ && inputController_->IsAvoidRequested())
 		{
 			// 入力方向に応じた回避方向を計算して回避を開始する
 			Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, GetCameraYaw());
@@ -319,7 +278,7 @@ void Player::Update()
 		if (IsGrabbed())
 		{
 			bool isStruggleInput = false;
-			if (inputEscapeMash_ && inputEscapeMash_->IsInput()) isStruggleInput = true;
+			if (inputController_->IsEscapeMashRequested()) isStruggleInput = true;
 
 			if (isStruggleInput)
 			{
@@ -386,7 +345,7 @@ void Player::UpdateAttack()
 		return;
 
 	// つかみ攻撃の入力があって、現在攻撃中でない場合はつかみ攻撃を実行する
-	if (inputGrab_ && inputGrab_->IsInput() && !IsAttack())
+	if (inputController_->IsGrabRequested() && !IsAttack())
 	{
 		// つかみ攻撃を実行
 		grabAttack_->Exec();
@@ -404,7 +363,7 @@ void Player::UpdateAttack()
 	}
 
 	// 攻撃ボタンの入力を受け付け、条件を満たす場合のみバッファに保存
-	if (inputLightAttack_ && inputLightAttack_->IsInput())
+	if (inputController_->IsLightAttackRequested())
 	{
 		// 攻撃していない(待機・移動中) または、現在の攻撃から「弱」へ派生できる場合のみ
 		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Light))
@@ -416,7 +375,7 @@ void Player::UpdateAttack()
 			attackInputBufferTime_ = 0.2f; // バッファ有効時間
 		}
 	} 
-	else if (inputHeavyAttack_ && inputHeavyAttack_->IsInput())
+	else if (inputController_->IsHeavyAttackRequested())
 	{
 		// 攻撃していない または、現在の攻撃から「強」へ派生できる場合のみ
 		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Heavy))
@@ -479,52 +438,6 @@ void Player::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInp
 	StartAvoid(Vector3(avoidDirection.x, 0.0f, avoidDirection.y), 1.5f, 0.3f);
 }
 
-/// @brief 移動入力方向を取得する
-/// @param hasMoveInput
-/// @return
-Vector2 Player::GetMoveInputDirection(bool& hasMoveInput) const
-{
-	// WASDキーの入力方向を作成する
-	Vector2 keyMoveDirection = Vector2(0.0f, 0.0f);
-	if (keyFrontMove_ && keyFrontMove_->IsInput())
-	{
-		keyMoveDirection.y += 1.0f;
-	}
-	if (keyBackMove_ && keyBackMove_->IsInput())
-	{
-		keyMoveDirection.y -= 1.0f;
-	}
-	if (keyLeftMove_ && keyLeftMove_->IsInput())
-	{
-		keyMoveDirection.x -= 1.0f;
-	}
-	if (keyRightMove_ && keyRightMove_->IsInput())
-	{
-		keyMoveDirection.x += 1.0f;
-	}
-
-	// 移動入力方向を求める（キー入力を優先）
-	hasMoveInput = false;
-	if (keyMoveDirection.Length() > 0.0f)
-	{
-		hasMoveInput = true;
-		return keyMoveDirection.Normalize();
-	}
-
-	if (inputMove_ && inputMove_->param_ && inputMove_->IsInput())
-	{
-		// 左スティックの入力を取得する
-		const Vector2 stick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
-		if (stick.Length() > 0.0f)
-		{
-			hasMoveInput = true;
-			return stick.Normalize();
-		}
-	}
-
-	return Vector2(0.0f, 0.0f);
-}
-
 /// @brief ダッシュ状態を更新する
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
@@ -538,7 +451,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 	}
 
 	// ダッシュ入力があって、移動入力もあって、ダッシュ中でない場合はダッシュを開始する
-	if (inputDash_ && inputDash_->IsInput() && hasMoveInput && !isDash_)
+	if (inputController_->IsDashRequested() && hasMoveInput && !isDash_)
 	{
 		isDash_ = true;
 
@@ -687,7 +600,7 @@ void Player::OnStyleChanged(FightStyle newStyle)
 void Player::StyleChange()
 {
 	// スタイルチェンジ入力があればスタイルを切り替える
-	if (inputStyleChange_ && inputStyleChange_->IsInput())
+	if (inputController_->IsStyleChangeRequested())
 	{
 		if (currentStyle_ == FightStyle::Tempest) { StartStyleChange(FightStyle::Hammer); }
 		if (currentStyle_ == FightStyle::Hammer) { StartStyleChange(FightStyle::Tempest); }
@@ -757,7 +670,7 @@ void Player::UpdateGuardState()
 	}
 
 	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
-	if(inputGuard_ && inputGuard_->IsInput())
+	if(inputController_->IsGuardRequested())
 	{
 		SetGuard(true);
 	}

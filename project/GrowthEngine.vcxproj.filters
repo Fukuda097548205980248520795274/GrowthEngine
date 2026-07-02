@@ -1306,6 +1306,9 @@
     <Filter Include="Game\Pool">
       <UniqueIdentifier>{905c936a-a70f-4c61-8ffe-0befa5f3b580}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Entity\Character\Player\PlayerInputController">
+      <UniqueIdentifier>{75172264-a33c-434d-9e07-80be8926dfc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2360,6 +2363,9 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOModel\PSOFullscreen\PSOFullscreen.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOFullscreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp">
+      <Filter>Game\Entity\Character\Player\PlayerInputController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3538,6 +3544,9 @@
     </ClInclude>
     <ClInclude Include="Game\Pool\Pool.h">
       <Filter>Game\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.h">
+      <Filter>Game\Entity\Character\Player\PlayerInputController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

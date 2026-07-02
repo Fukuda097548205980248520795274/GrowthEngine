@@ -1104,6 +1104,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp" />
+    <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp" />
     <ClCompile Include="Game\HUD\Button\Button.cpp" />
     <ClCompile Include="Game\HUD\Button\MashButton\MashButton.cpp" />
     <ClCompile Include="Game\HUD\Button\PressButton\PressButton.cpp" />
@@ -1507,6 +1508,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h" />
+    <ClInclude Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.h" />
     <ClInclude Include="Game\HUD\Button\Button.h" />
     <ClInclude Include="Game\HUD\Button\MashButton\MashButton.h" />
     <ClInclude Include="Game\HUD\Button\PressButton\PressButton.h" />
