@@ -673,6 +673,17 @@ namespace Engine
 		void DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName) { offscreen_->DrawToRenderPass(renderTargetName, sourceName, commandList_); }
 
 
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		RenderPassData::Param* GetRenderPassParam(RenderPassHandle handle) { return offscreen_->GetRenderPassParam(handle); }
+
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param name 
+		/// @return 
+		RenderPassData::Param* GetRenderPassParam(const std::string& name) { return offscreen_->GetRenderPassParam(name); }
+
+
 #ifdef _DEVELOPMENT
 
 		/// @brief デバッグ用の線を描画する

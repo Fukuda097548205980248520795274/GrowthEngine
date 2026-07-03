@@ -3,7 +3,9 @@
 #include <dxgi1_6.h>
 #include <string>
 #include <functional>
+#include <memory>
 #include "Handle/Handle.h"
+#include "PSO/EnumBlendMode/EnumBlendMode.h"
 
 namespace Engine
 {
@@ -12,15 +14,29 @@ namespace Engine
 	class DX12Offscreen;
 	class PSOFullscreen;
 
-	class RenderPass
+	class RenderPassData
 	{
+	public:
+
+		struct Param
+		{
+			/// @brief ブレンドモード
+			BlendMode blendMode = BlendMode::kNone;
+		};
+
+
 	public:
 
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param handle 
 		/// @param drawFunc 
-		RenderPass(const std::string& name, RenderPassHandle handle, std::function<void()> drawFunc) : name_(name), handle_(handle), drawFunc_(drawFunc) {}
+		RenderPassData(const std::string& name, RenderPassHandle handle, std::function<void()> drawFunc) 
+			: name_(name), handle_(handle), drawFunc_(drawFunc)
+		{
+			param_ = std::make_unique<Param>();
+			param_->blendMode = BlendMode::kNone;
+		}
 
 		/// @brief 描画関数を実行する
 		/// @param commandList 
@@ -33,7 +49,7 @@ namespace Engine
 		/// @param commandList 
 		/// @param psoFullscreen 
 		/// @param textureResource 
-		void DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource);
+		void DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource, Param* param);
 
 		/// @brief レンダーパスを返却する
 		/// @param commandList 
@@ -56,6 +72,10 @@ namespace Engine
 		/// @return 
 		OffscreenResource* GetInputResource() const { return inputResource_; }
 
+		/// @brief パラメータを取得する
+		/// @return 
+		Param* GetParam() { return param_.get(); }
+
 	private:
 
 		/// @brief レンダーパス名
@@ -72,5 +92,8 @@ namespace Engine
 
 		/// @brief 描画関数
 		std::function<void()> drawFunc_;
+
+		/// @brief パラメータ
+		std::unique_ptr<Param> param_ = nullptr;
 	};
 }

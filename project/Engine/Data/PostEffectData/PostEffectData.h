@@ -24,7 +24,8 @@ namespace Engine
 			Bloom,
 			TAA,
 			MotionBlur,
-			AfterImage
+			AfterImage,
+			BlurShadow2D,
 		};
 
 		/// @brief ラジアルブラー
@@ -128,6 +129,19 @@ namespace Engine
 			float intensity; // 残像の強度
 
 			Vector3 tintColor; // 残像の色
+		};
+
+		/// @brief ブラーによる影
+		struct BlurShadow2D
+		{
+			// 影の色
+			Vector4 shadowColor;
+
+			// 影のずれ幅
+			Vector2 shadowOffset;
+
+			// ぼかしの強さ
+			float blurSize;
 		};
 	}
 }

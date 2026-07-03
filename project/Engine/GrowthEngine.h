@@ -49,6 +49,7 @@
 #include "Application/PostEffect/PostEffectRadialBlur/PostEffectRadialBlur.h"
 #include "Application/PostEffect/PostEffectGrayscale/PostEffectGrayscale.h"
 #include "Application/PostEffect/PostEffectVignetting/PostEffectVignetting.h"
+#include "Application/PostEffect/PostEffectBlurShadow2D/PostEffectBlurShadow2D.h"
 
 #include "Application/Trail3D/Trail3D.h"
 
@@ -1007,6 +1008,17 @@ public:
 	/// @param rendarTargetName 
 	/// @param sourceName 
 	void DrawToRenderPass(const std::string& rendarTargetName, const std::string& sourceName)const { renderContext_->DrawToRenderPass(rendarTargetName, sourceName); }
+
+
+	/// @brief レンダーパスのパラメータを取得する
+	/// @param handle 
+	/// @return 
+	Engine::RenderPassData::Param* GetRenderPassParam(RenderPassHandle handle)const { return renderContext_->GetRenderPassParam(handle); }
+
+	/// @brief レンダーパスのパラメータを取得する
+	/// @param name 
+	/// @return 
+	Engine::RenderPassData::Param* GetRenderPassParam(const std::string& name)const { return renderContext_->GetRenderPassParam(name); }
 
 
 	/// @brief デバッグ用の線を描画する

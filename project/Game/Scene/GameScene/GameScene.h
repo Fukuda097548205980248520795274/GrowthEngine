@@ -346,5 +346,11 @@ private:
 	std::unique_ptr<PrefabBaseSprite> textFrameRightSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> textFrameMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> textFrameLeftSprite_ = nullptr;
+
+
+private:
+
+	/// @brief スプライトシャドウのポストエフェクト
+	std::unique_ptr<PostEffectBlurShadow2D> spriteShadow_ = nullptr;
 };
 

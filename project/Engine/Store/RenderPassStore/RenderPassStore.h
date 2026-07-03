@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "RenderContext/DX12Offscreen/RenderPass/RenderPass.h"
+#include "RenderPassData/RenderPassData.h"
 
 namespace Engine
 {
@@ -65,12 +65,23 @@ namespace Engine
 		/// @brief レンダーパスを取得する
 		/// @param handle 
 		/// @return 
-		RenderPass* GetPass(RenderPassHandle handle) { return dataTable_[handle].get(); }
+		RenderPassData* GetPass(RenderPassHandle handle) { return dataTable_[handle].get(); }
 
 		/// @brief レンダーパスを取得する
 		/// @param name 
 		/// @return 
-		RenderPass* GetPass(const std::string& name) { return dataTable_[nameTable_.at(name)].get(); }
+		RenderPassData* GetPass(const std::string& name) { return dataTable_[nameTable_.at(name)].get(); }
+
+
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		RenderPassData::Param* GetPassParam(RenderPassHandle handle) { return dataTable_[handle]->GetParam(); }
+
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param name 
+		/// @return 
+		RenderPassData::Param* GetPassParam(const std::string& name) { return dataTable_[nameTable_.at(name)]->GetParam(); }
 
 
 		/// @brief 中間リソースを解放する
@@ -81,7 +92,7 @@ namespace Engine
 	private:
 
 		/// @brief データテーブル
-		std::vector<std::unique_ptr<RenderPass>> dataTable_;
+		std::vector<std::unique_ptr<RenderPassData>> dataTable_;
 
 		/// @brief 名前テーブル
 		std::unordered_map<std::string, RenderPassHandle> nameTable_;

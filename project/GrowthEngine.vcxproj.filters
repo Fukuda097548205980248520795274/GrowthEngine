@@ -1294,9 +1294,6 @@
     <Filter Include="Engine\Include\RenderContext\DX12Offscreen\RenderTargetPool">
       <UniqueIdentifier>{120957fd-3978-4ac7-80ae-0d7d8d2f76e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\RenderContext\DX12Offscreen\RenderPass">
-      <UniqueIdentifier>{0a61744d-7b26-457a-a3f5-48a4d43e5b28}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\RenderPassStore">
       <UniqueIdentifier>{fbcded2a-e278-433b-8585-2d0756c2bd52}</UniqueIdentifier>
     </Filter>
@@ -1320,6 +1317,21 @@
     </Filter>
     <Filter Include="Game\Action\Move\NavMeshLeaderMove">
       <UniqueIdentifier>{baa755df-dd46-4760-bddd-c54d8c051bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOBlurShadow2D">
+      <UniqueIdentifier>{593377cd-d951-4174-bfa0-f9226faf8aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData">
+      <UniqueIdentifier>{13519fe3-dcc9-4361-a9e7-de765eca1816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\PostEffect\PostEffectBlurShadow2D">
+      <UniqueIdentifier>{721d5e0b-6f6f-4504-9d96-44d167b10aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\RenderPassStore\RenderPassData">
+      <UniqueIdentifier>{0a61744d-7b26-457a-a3f5-48a4d43e5b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\RenderPass">
+      <UniqueIdentifier>{5a649636-c473-4742-ad81-e1d192edda95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2361,8 +2373,8 @@
     <ClCompile Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.cpp">
       <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.cpp">
-      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderPass</Filter>
+    <ClCompile Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.cpp">
+      <Filter>Engine\Include\Store\RenderPassStore\RenderPassData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.cpp">
       <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
@@ -2387,6 +2399,18 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.cpp">
       <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOBlurShadow2D\PSOBlurShadow2D.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOBlurShadow2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectBlurShadow2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\RenderPass\RenderPass.cpp">
+      <Filter>Engine\Include\Application\RenderPass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3548,8 +3572,8 @@
     <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h">
       <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.h">
-      <Filter>Engine\Include\RenderContext\DX12Offscreen\RenderPass</Filter>
+    <ClInclude Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.h">
+      <Filter>Engine\Include\Store\RenderPassStore\RenderPassData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\DX12Offscreen.h">
       <Filter>Engine\Include\RenderContext\DX12Offscreen</Filter>
@@ -3580,6 +3604,18 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.h">
       <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOBlurShadow2D\PSOBlurShadow2D.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOBlurShadow2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h">
+      <Filter>Engine\Include\Application\PostEffect\PostEffectBlurShadow2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\RenderPass\RenderPass.h">
+      <Filter>Engine\Include\Application\RenderPass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3779,6 +3815,9 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Fullscreen\Fullscreen.PS.hlsl">
       <Filter>Engine\Shader\Fullscreen</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\BlurShadow2D.PS.hlsl">
+      <Filter>Engine\Shader\PostEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

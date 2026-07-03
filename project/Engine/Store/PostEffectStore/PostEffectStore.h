@@ -16,6 +16,7 @@
 #include "PSO/PSOPostEffect/PSOGaussianFilter/PSOGaussianFilter.h"
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 #include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
+#include "PSO/PSOPostEffect/PSOBlurShadow2D/PSOBlurShadow2D.h"
 
 #include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
 #include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
@@ -215,6 +216,9 @@ namespace Engine
 
 		/// @brief 被写界深度PSO
 		std::unique_ptr<PSODOF> psoDOF_ = nullptr;
+
+		/// @brief ブラーシャドウ2DPSO
+		std::unique_ptr<PSOBlurShadow2D> psoBlurShadow2D_ = nullptr;
 
 
 	private:

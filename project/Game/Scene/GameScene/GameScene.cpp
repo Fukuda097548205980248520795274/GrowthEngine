@@ -39,6 +39,9 @@ void GameScene::Initialize()
 	postEffectManager_ = std::make_unique<PostEffectManager>();
 	postEffectManager_->Initialize();
 
+	// 2Dスプライトの影の生成と初期化
+	spriteShadow_ = std::make_unique<PostEffectBlurShadow2D>("SpriteShadow");
+
 	// カメラシェイクの生成と初期化
 	cameraShake_ = std::make_unique<Shake>();
 
@@ -178,13 +181,13 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	//stageEditor_->LoadStage("Tutorial.json");
+	stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("Object", [&]()
 		{
-			engine_->DrawToRenderPass("MainPass", "PrevDraw");
+			engine_->DrawToRenderPass("Object", "PrevDraw");
 
 			// エディタの描画
 			editorWorkspaceManager_->DrawUI();
@@ -212,29 +215,42 @@ void GameScene::Initialize()
 			// エフェクトの描画
 			effectManager_->Draw();
 
+			// HUDの描画
+			for (auto& hud : huds_)hud->Draw();
+
+			// プレイヤーの体力バーの描画
+			if (playerHP_)playerHP_->Draw();
 		}
 	);
 
 	// ポストエフェクトの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("PostEffect", [&]()
 		{
-			engine_->DrawToRenderPass("MainPass", "Object");
+			engine_->DrawToRenderPass("PostEffect", "Object");
 
 			// ポストエフェクトの描画処理
 			postEffectManager_->Draw(player_.get());
 		}
 	);
 
+	engine_->LoadRenderPass("SpriteShadow", [&]()
+		{
+			// プレイヤーの体力バーの描画
+			hpFrameMiddleSprite_->Draw();
+			hpFrameRightSprite_->Draw();
+			hpFrameLeftSprite_->Draw();
+
+			spriteShadow_->Draw();
+		}
+	);
+	auto spriteShadowParam = engine_->GetRenderPassParam("SpriteShadow");
+	spriteShadowParam->blendMode = BlendMode::kNormal;
+
 	// HUDの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("HUD", [&]()
 		{
-			engine_->DrawToRenderPass("MainPass", "PostEffect");
-
-			// HUDの描画
-			for (auto& hud : huds_)hud->Draw();
-
-			// プレイヤーの体力バーの描画
-			if (playerHP_)playerHP_->Draw();
+			engine_->DrawToRenderPass("HUD", "PostEffect");
+			engine_->DrawToRenderPass("HUD", "SpriteShadow");
 
 			// 体力バーの描画
 			hpFrameMiddleSprite_->Draw();
@@ -400,6 +416,9 @@ void GameScene::Draw()
 
 	// ポストエフェクトの描画レンダーパスを呼び出す
 	engine_->ExecuteRenderPass("PostEffect");
+
+	// 2Dスプライトの影の描画レンダーパスを呼び出す
+	engine_->ExecuteRenderPass("SpriteShadow");
 
 	// HUDの描画レンダーパスを呼び出す
 	engine_->ExecuteRenderPass("HUD");

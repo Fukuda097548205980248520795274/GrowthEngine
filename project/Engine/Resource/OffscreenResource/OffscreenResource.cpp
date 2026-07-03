@@ -18,7 +18,7 @@ void Engine::OffscreenResource::Initialize(ID3D12Device* device, DX12Heap* heap,
 	assert(heap);
 
 	// 書き込み可能なリソーステクスチャを生成する
-	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.1f, 0.1f, 0.1f, 1.0f), log);
+	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.0f, 0.0f, 0.0f, 0.0f), log);
 
 	/*----------------
 		RTVの設定
@@ -87,7 +87,7 @@ void Engine::OffscreenResource::Resize(ID3D12Device* device, int32_t width, int3
 	resource_.Reset();
 
 	// 新たなサイズで作り直す
-	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.1f, 0.1f, 0.1f, 1.0f), nullptr);
+	resource_ = CreateRenderTextureResource(device, width, height, Vector4(0.0f, 0.0f, 0.0f, 0.0f), nullptr);
 
 	// スワップチェーンのRTV設定を反映させる
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc;
@@ -132,7 +132,7 @@ void Engine::OffscreenResource::ClearRenderTarget(ID3D12GraphicsCommandList* com
 	commandList->OMSetRenderTargets(1, &rtvCpuHandle_, false, &dsvHandle);
 
 	// クリア
-	float clearColor[] = { 0.1f, 0.1f ,0.1f, 1.0f };
+	float clearColor[] = { 0.0f, 0.0f ,0.0f, 0.0f };
 	commandList->ClearRenderTargetView(rtvCpuHandle_, clearColor, 0, nullptr);
 }
 

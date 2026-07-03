@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class PostEffectGrayscaleData : public PostEffectBaseData
+	class PostEffectBlurShadow2DData : public PostEffectBaseData
 	{
 	public:
 
@@ -11,7 +11,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectGrayscaleData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+		PostEffectBlurShadow2DData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
 			: PostEffectBaseData(name, type, hPostEffect, parameter) {
 		}
 
@@ -38,9 +38,9 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<PostEffect::Grayscale> param_ = nullptr;
+		std::unique_ptr<PostEffect::BlurShadow2D> param_ = nullptr;
 
 		// リソース
-		std::unique_ptr<ConstantBufferResource<PostEffect::GrayscaleDataForGPU>> resource_ = nullptr;
+		std::unique_ptr<ConstantBufferResource<PostEffect::BlurShadow2DDataForGPU>> resource_ = nullptr;
 	};
 }

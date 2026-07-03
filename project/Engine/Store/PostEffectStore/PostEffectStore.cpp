@@ -18,6 +18,7 @@
 #include "PostEffectData/PostEffectTAAData/PostEffectTAAData.h"
 #include "PostEffectData/PostEffectMotionBlurData/PostEffectMotionBlurData.h"
 #include "PostEffectData/PostEffectAfterImageData/PostEffectAfterImageData.h"
+#include "PostEffectData/PostEffectBlurShadow2DData/PostEffectBlurShadow2DData.h"
 
 bool Engine::PostEffectStore::isLoadMotionBlur_ = false;
 bool Engine::PostEffectStore::isLoadAfterImage_ = false;
@@ -75,6 +76,10 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// 被写界深度PSO
 	psoDOF_ = std::make_unique<PSODOF>();
 	psoDOF_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// ブラーシャドウ2DPSO
+	psoBlurShadow2D_ = std::make_unique<PSOBlurShadow2D>();
+	psoBlurShadow2D_->Initialize(device, compiler, vertexShaderBlob, log);
 
 
 	// CSデュアルブラー縮小PSO
@@ -253,6 +258,15 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		std::unique_ptr<PostEffectBloomData> data = std::make_unique<PostEffectBloomData>(name, type, handle, parameter_.get());
 		data->Initialize(device, commandList, buffering, heap_,
 			computePSOHighLuminanceExtraction_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
+		dataTable_.push_back(std::move(data));
+		return handle;
+	}
+
+	// ブラーシャドウ2D
+	if (type == PostEffect::Type::BlurShadow2D)
+	{
+		std::unique_ptr<PostEffectBlurShadow2DData> data = std::make_unique<PostEffectBlurShadow2DData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoBlurShadow2D_.get());
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

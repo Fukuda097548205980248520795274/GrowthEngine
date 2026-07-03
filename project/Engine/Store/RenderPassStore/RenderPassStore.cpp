@@ -35,7 +35,7 @@ RenderPassHandle Engine::RenderPassStore::Load(const std::string& name, std::fun
 	nameTable_[name] = handle;
 
 	// レンダーパスを作る
-	std::unique_ptr<RenderPass> renderPass = std::make_unique<RenderPass>(name, handle, drawFunc);
+	std::unique_ptr<RenderPassData> renderPass = std::make_unique<RenderPassData>(name, handle, drawFunc);
 	dataTable_.push_back(std::move(renderPass));
 
 	return handle;
@@ -103,7 +103,8 @@ Engine::OffscreenResource* Engine::RenderPassStore::RenderPassDraw(const std::st
 void Engine::RenderPassStore::DrawToRenderPass(RenderPassHandle renderTargetHandle, RenderPassHandle sourceHandle,
 	ID3D12GraphicsCommandList* commandList,PSOFullscreen* psoFullscreen)
 {
-	dataTable_[renderTargetHandle]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[sourceHandle]->GetOffscreenResource());
+	RenderPassData::Param* param = dataTable_[sourceHandle]->GetParam();
+	dataTable_[renderTargetHandle]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[sourceHandle]->GetOffscreenResource(), param);
 }
 
 /// @brief レンダーパスに描画する
@@ -114,7 +115,8 @@ void Engine::RenderPassStore::DrawToRenderPass(RenderPassHandle renderTargetHand
 void Engine::RenderPassStore::DrawToRenderPass(const std::string& renderTargetName, const std::string& sourceName,
 	ID3D12GraphicsCommandList* commandList,PSOFullscreen* psoFullscreen)
 {
-	dataTable_[nameTable_.at(renderTargetName)]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[nameTable_.at(sourceName)]->GetOffscreenResource());
+	RenderPassData::Param* param = dataTable_[nameTable_.at(sourceName)]->GetParam();
+	dataTable_[nameTable_.at(renderTargetName)]->DrawToRenderPass(commandList, psoFullscreen, dataTable_[nameTable_.at(sourceName)]->GetOffscreenResource(), param);
 }
 
 /// @brief 中間リソースを解放する

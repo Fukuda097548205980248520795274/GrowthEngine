@@ -161,6 +161,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp" />
+    <ClCompile Include="Engine\Application\RenderPass\RenderPass.cpp" />
     <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -177,8 +179,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOBlurShadow2D\PSOBlurShadow2D.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
-    <ClCompile Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.cpp">
+    <ClCompile Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -912,6 +915,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBloomData\PostEffectBloomData.cpp" />
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.cpp" />
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1189,12 +1193,15 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
     <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />
     <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h" />
+    <ClInclude Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h" />
+    <ClInclude Include="Engine\Application\RenderPass\RenderPass.h" />
     <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h" />
     <ClInclude Include="Engine\Application\Sound\Se\Se.h" />
     <ClInclude Include="Engine\Application\Trail3D\Trail3D.h" />
     <ClInclude Include="Engine\PSO\PSOModel\PSOFullscreen\PSOFullscreen.h" />
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOBlurShadow2D\PSOBlurShadow2D.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
-    <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderPass\RenderPass.h" />
+    <ClInclude Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />
     <ClInclude Include="Engine\Application\AppParam\AppParam.h" />
@@ -1438,6 +1445,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectAfterImageData\PostEffectAfterImageData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBaseData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBloomData\PostEffectBloomData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDOFData\PostEffectDOFData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGaussianFilterData\PostEffectGaussianFilterData.h" />
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectGrayscaleData\PostEffectGrayscaleData.h" />
@@ -1808,6 +1816,14 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\PostEffect\BlurShadow2D.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Development|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

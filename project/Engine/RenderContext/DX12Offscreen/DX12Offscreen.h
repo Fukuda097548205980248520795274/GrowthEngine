@@ -182,6 +182,18 @@ namespace Engine
 		template<typename T>
 		T* GetPostEffectParam(const std::string& name) { return postEffectStore_->GetParam<T>(name); }
 
+
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param handle 
+		/// @return 
+		RenderPassData::Param* GetRenderPassParam(RenderPassHandle handle) { return renderPassStore_->GetPassParam(handle); }
+
+		/// @brief レンダーパスのパラメータを取得する
+		/// @param name 
+		/// @return 
+		RenderPassData::Param* GetRenderPassParam(const std::string& name) { return renderPassStore_->GetPassParam(name); }
+
+
 		/// @brief デバッグ用パラメータ
 		void DebugParameter();
 

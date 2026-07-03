@@ -146,5 +146,20 @@ namespace Engine
             // 前のフレームのビュー射影行列
 			Matrix4x4 PrevViewProjection;
         };
+
+        /// @brief ブラーによる影
+        struct BlurShadow2DDataForGPU
+        {
+            // 影の色
+            Vector4 shadowColor;
+
+            // 影のずれ幅
+            Vector2 shadowOffset;
+
+            // ぼかしの強さ
+            float blurSize;
+
+			float padding[1]; // 16バイトアラインメントのためのパディング
+        };
 	}
 }

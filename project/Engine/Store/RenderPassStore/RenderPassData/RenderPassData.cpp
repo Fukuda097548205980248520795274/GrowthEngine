@@ -1,4 +1,4 @@
-#include "RenderPass.h"
+#include "RenderPassData.h"
 #include <cassert>
 
 #include "RenderContext/DX12Offscreen/RenderTargetPool/RenderTargetPool.h"
@@ -7,7 +7,7 @@
 /// @brief 描画関数を実行する
 /// @param commandList 
 /// @param renderTargetPool 
-Engine::OffscreenResource* Engine::RenderPass::Execute(ID3D12GraphicsCommandList* commandList, RenderTargetPool* renderTargetPool, DX12Offscreen* offscreen,
+Engine::OffscreenResource* Engine::RenderPassData::Execute(ID3D12GraphicsCommandList* commandList, RenderTargetPool* renderTargetPool, DX12Offscreen* offscreen,
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource)
 {
 	// nullptrチェック
@@ -52,14 +52,14 @@ Engine::OffscreenResource* Engine::RenderPass::Execute(ID3D12GraphicsCommandList
 /// @param commandList 
 /// @param psoFullscreen 
 /// @param textureResource 
-void Engine::RenderPass::DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource)
+void Engine::RenderPassData::DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource, Param* param)
 {
 	assert(commandList);
 	assert(psoFullscreen);
 	assert(textureResource);
 
 	// PSOを登録する
-	psoFullscreen->Register(commandList, BlendMode::kNormal);
+	psoFullscreen->Register(commandList, param->blendMode);
 
 	// レンダーターゲットを設定する
 	commandList->SetGraphicsRootDescriptorTable(0, textureResource->GetSrvGpuHandle());
@@ -74,7 +74,7 @@ void Engine::RenderPass::DrawToRenderPass(ID3D12GraphicsCommandList* commandList
 /// @brief レンダーパスを返却する
 /// @param commandList 
 /// @param renderTargetPool 
-void Engine::RenderPass::Return(RenderTargetPool* renderTargetPool)
+void Engine::RenderPassData::Return(RenderTargetPool* renderTargetPool)
 {
 	// nullptrチェック
 	assert(renderTargetPool);
