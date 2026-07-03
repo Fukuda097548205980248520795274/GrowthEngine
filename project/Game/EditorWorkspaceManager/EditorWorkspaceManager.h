@@ -3,6 +3,7 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
+#include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 
 enum class WorkspaceType
@@ -11,6 +12,7 @@ enum class WorkspaceType
 	StageEditor,
 	BehaviorTreeEditor,
 	BehaviorTreeViewer,
+	ComboTreeEditor,
 };
 
 class EditorWorkspaceManager
@@ -21,7 +23,8 @@ public:
 	/// @param stageEditor 
 	/// @param behaviorTreeEditor 
 	/// @param motionManagerEditor 
-	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer, MotionManagerEditor* motionManagerEditor);
+	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
+		ComboTreeEditor* comboTreeEditor, MotionManagerEditor* motionManagerEditor);
 
 	/// @brief UIを描画する
 	void DrawUI();
@@ -37,6 +40,7 @@ private:
 	StageEditor* stageEditor_ = nullptr;
 	BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
 	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
+	ComboTreeEditor* comboTreeEditor_ = nullptr;
 	MotionManagerEditor* motionManagerEditor_ = nullptr;
 
 	// エディタ間で共有するデータなど

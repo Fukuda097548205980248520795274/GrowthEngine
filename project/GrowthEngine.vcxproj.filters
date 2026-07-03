@@ -1333,6 +1333,18 @@
     <Filter Include="Engine\Include\Application\RenderPass">
       <UniqueIdentifier>{5a649636-c473-4742-ad81-e1d192edda95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboTree">
+      <UniqueIdentifier>{8acefced-f188-42da-af7e-f19665008ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor">
+      <UniqueIdentifier>{3f2f14f2-74de-490d-829b-222a4e9d26be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeData">
+      <UniqueIdentifier>{a530cf43-39af-4fd0-b82e-218a2cbeefca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory">
+      <UniqueIdentifier>{8d6d9991-e7a0-4e6c-82ca-97b9d1415975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2411,6 +2423,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\RenderPass\RenderPass.cpp">
       <Filter>Engine\Include\Application\RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTree.cpp">
+      <Filter>Game\ComboTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.cpp">
+      <Filter>Game\ComboTree\ComboTreeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.cpp">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeFactory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3616,6 +3637,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\RenderPass\RenderPass.h">
       <Filter>Engine\Include\Application\RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTree.h">
+      <Filter>Game\ComboTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.h">
+      <Filter>Game\ComboTree\ComboTreeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeData\ComboTreeData.h">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.h">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

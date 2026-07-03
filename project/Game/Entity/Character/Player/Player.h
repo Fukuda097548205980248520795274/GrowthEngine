@@ -1,6 +1,7 @@
 #pragma once
 #include "../Character.h"
 #include "PlayerInputController/PlayerInputController.h"
+#include "ComboTree/ComboTree.h"
 
 class Player : public Character
 {
@@ -89,9 +90,6 @@ private:
 	float attackInputBufferTime_ = 0.2f;
 
 
-	/// @brief コンボアタック
-	std::vector<std::unique_ptr<ComboAttack>> comboAttacks_;
-
 	/// @brief つかみ攻撃
 	std::unique_ptr<GrabAttack> grabAttack_ = nullptr;
 
@@ -107,6 +105,10 @@ private:
 
 	// 前フレームの攻撃入力状態
 	bool isPrevInputLightAttack_ = false;
+
+
+	/// @brief コンボツリー
+	ComboTree comboTree_;
 
 
 private:

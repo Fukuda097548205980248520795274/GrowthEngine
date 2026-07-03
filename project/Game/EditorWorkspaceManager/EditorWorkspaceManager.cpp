@@ -4,18 +4,20 @@
 /// @param stageEditor 
 /// @param behaviorTreeEditor 
 void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
-	MotionManagerEditor* motionManagerEditor)
+	ComboTreeEditor* comboTreeEditor, MotionManagerEditor* motionManagerEditor)
 {
 	// nullptrチェック
 	assert(stageEditor);
 	assert(behaviorTreeEditor);
 	assert(behaviorTreeViewer);
+	assert(comboTreeEditor);
 	assert(motionManagerEditor);
 
 	// 引数を受け取る
 	stageEditor_ = stageEditor;
 	behaviorTreeEditor_ = behaviorTreeEditor;
 	behaviorTreeViewer_ = behaviorTreeViewer;
+	comboTreeEditor_ = comboTreeEditor;
 	motionManagerEditor_ = motionManagerEditor;
 }
 
@@ -46,6 +48,13 @@ void EditorWorkspaceManager::DrawUI()
 		if (behaviorTreeViewer_)
 		{
 			behaviorTreeViewer_->DrawUI();
+		}
+		break;
+
+	case WorkspaceType::ComboTreeEditor:
+		if (comboTreeEditor_)
+		{
+			comboTreeEditor_->DrawUI();
 		}
 		break;
 	}
@@ -83,6 +92,12 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
 			if (ImGui::BeginTabItem("Behavior Tree Viewer"))
 			{
 				currentWorkspace_ = WorkspaceType::BehaviorTreeViewer;
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Combo Tree Editor"))
+			{
+				currentWorkspace_ = WorkspaceType::ComboTreeEditor;
 				ImGui::EndTabItem();
 			}
 

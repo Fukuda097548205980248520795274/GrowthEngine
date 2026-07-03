@@ -2,6 +2,8 @@
 #include "Entity/Weapon/Weapon.h"
 #include "HUD/HP/HP.h"
 
+#include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
+
 #include <cmath>
 
 namespace
@@ -66,93 +68,6 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	}
 
 
-	// 1段目の攻撃
-	CombAttackInitData attack1Data;
-	attack1Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_1");
-	attack1Data.attackTime = 0.5f;
-	attack1Data.moveSpeed = 9.0f;
-	attack1Data.moveStartTime = 0.01f;
-	attack1Data.moveEndTime = 0.07f;
-	attack1Data.cancelStartTime = 0.2f;
-	attack1Data.cancelEndTime = 0.5f;
-	attack1Data.hitDefinitions.resize(1);
-	attack1Data.hitDefinitions[0].jointType = JointType::HandR;
-	attack1Data.hitDefinitions[0].startTime = 0.1f;
-	attack1Data.hitDefinitions[0].endTime = 0.4f;
-	attack1Data.hitDefinitions[0].damage = 10;
-	attack1Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack1Data.hitDefinitions[0].knockback = 3.0f;
-	attack1Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
-
-	// 2段目の攻撃
-	CombAttackInitData attack2Data;
-	attack2Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_2");
-	attack2Data.attackTime = 0.5f;
-	attack2Data.moveSpeed = 9.0f;
-	attack2Data.moveStartTime = 0.01f;
-	attack2Data.moveEndTime = 0.07f;
-	attack2Data.cancelStartTime = 0.2f;
-	attack2Data.cancelEndTime = 0.5f;
-	attack2Data.hitDefinitions.resize(1);
-	attack2Data.hitDefinitions[0].jointType = JointType::HandL;
-	attack2Data.hitDefinitions[0].startTime = 0.1f;
-	attack2Data.hitDefinitions[0].endTime = 0.4f;
-	attack2Data.hitDefinitions[0].damage = 10;
-	attack2Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack2Data.hitDefinitions[0].knockback = 3.0f;
-	attack2Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
-
-	// 3段目の攻撃
-	CombAttackInitData attack3Data;
-	attack3Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_3");
-	attack3Data.attackTime = 0.5f;
-	attack3Data.moveSpeed = 9.0f;
-	attack3Data.moveStartTime = 0.01f;
-	attack3Data.moveEndTime = 0.07f;
-	attack3Data.cancelStartTime = 0.2f;
-	attack3Data.cancelEndTime = 0.5f;
-	attack3Data.hitDefinitions.resize(1);
-	attack3Data.hitDefinitions[0].jointType = JointType::HandR;
-	attack3Data.hitDefinitions[0].startTime = 0.1f;
-	attack3Data.hitDefinitions[0].endTime = 0.4f;
-	attack3Data.hitDefinitions[0].damage = 10;
-	attack3Data.hitDefinitions[0].damageReaction = DamageReaction::LightStagger;
-	attack3Data.hitDefinitions[0].knockback = 3.0f;
-	attack3Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
-
-	// 4段目の攻撃
-	CombAttackInitData attack4Data;
-	attack4Data.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, "Player_Combo_4");
-	attack4Data.attackTime = 0.5f;
-	attack4Data.moveSpeed = 9.0f;
-	attack4Data.moveStartTime = 0.01f;
-	attack4Data.moveEndTime = 0.07f;
-	attack4Data.cancelStartTime = 0.2f;
-	attack4Data.cancelEndTime = 0.5f;
-	attack4Data.hitDefinitions.resize(1);
-	attack4Data.hitDefinitions[0].jointType = JointType::FootL;
-	attack4Data.hitDefinitions[0].startTime = 0.1f;
-	attack4Data.hitDefinitions[0].endTime = 0.4f;
-	attack4Data.hitDefinitions[0].damage = 10;
-	attack4Data.hitDefinitions[0].damageReaction = DamageReaction::Down;
-	attack4Data.hitDefinitions[0].knockback = 8.0f;
-	attack4Data.hitDefinitions[0].knockbackDirection = Vector3(0.0f, 1.0f, 1.0f);
-
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack1Data));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack2Data));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack3Data));
-	comboAttacks_.push_back(std::make_unique<ComboAttack>(this, attack4Data));
-
-	auto comboLight1 = comboAttacks_[0].get();
-	auto comboLight2 = comboAttacks_[1].get();
-	auto comboLight3 = comboAttacks_[2].get();
-	auto comboLight4 = comboAttacks_[3].get();
-
-	comboLight1->SetNextLightAttack(comboLight2);
-	comboLight2->SetNextLightAttack(comboLight3);
-	comboLight3->SetNextLightAttack(comboLight4);
-
-
 	// 掴み攻撃
 	GrabAttackInitData grabData;
 	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1");
@@ -169,6 +84,9 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 
 	// スタイルチェンジ開始時の処理
 	OnStyleChanged(currentStyle_);
+
+	// コンボツリーを作成する
+	comboTree_ = ComboTreeFactory::CreateTree("Assets/Parameter/ComboTree/test_combo.json", this);
 }
 
 /// @brief 更新処理
@@ -369,8 +287,7 @@ void Player::UpdateAttack()
 		if (bufferedAttackInput_ == AttackInputType::Light)
 		{
 			// 1段目の攻撃を実行
-			auto comboLight1 = comboAttacks_[0].get();
-			comboLight1->Exec();
+			comboTree_.rootAttack->Exec();
 		}
 
 		// バッファされた攻撃入力を消す

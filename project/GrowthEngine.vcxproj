@@ -1110,6 +1110,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp" />
+    <ClCompile Include="Game\ComboTree\ComboTree.cpp" />
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.cpp" />
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.cpp" />
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp" />
     <ClCompile Include="Game\HUD\Button\Button.cpp" />
@@ -1521,6 +1524,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h" />
+    <ClInclude Include="Game\ComboTree\ComboTree.h" />
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeData\ComboTreeData.h" />
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.h" />
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.h" />
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h" />
     <ClInclude Include="Game\Entity\Character\CharacterTypes.h" />
     <ClInclude Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.h" />

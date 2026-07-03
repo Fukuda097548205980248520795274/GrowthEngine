@@ -1,0 +1,76 @@
+{
+    "currentId": 10,
+    "links": [
+        {
+            "endPinId": 6,
+            "id": 9,
+            "startPinId": 3
+        }
+    ],
+    "nodes": [
+        {
+            "animationName": "Attack_01",
+            "attackTime": 1.0,
+            "cancelEndTime": 1.0,
+            "cancelStartTime": 0.5,
+            "hitDefinitions": [
+                {
+                    "damage": 10,
+                    "damageReaction": 1,
+                    "endTime": 0.4000000059604645,
+                    "jointType": 9,
+                    "knockback": 0.0,
+                    "knockbackDirection": [
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "radius": 0.25,
+                    "startTime": 0.0
+                }
+            ],
+            "id": 1,
+            "inputPinId": 2,
+            "moveEndTime": 0.30000001192092896,
+            "moveSpeed": 6.0,
+            "moveStartTime": 0.0,
+            "name": "Combo Attack",
+            "outputHeavyPinId": 4,
+            "outputLightPinId": 3,
+            "posX": 52.0,
+            "posY": 100.0
+        },
+        {
+            "animationName": "Attack_01",
+            "attackTime": 1.0,
+            "cancelEndTime": 1.0,
+            "cancelStartTime": 0.5,
+            "hitDefinitions": [
+                {
+                    "damage": 10,
+                    "damageReaction": 1,
+                    "endTime": 0.4000000059604645,
+                    "jointType": 9,
+                    "knockback": 0.0,
+                    "knockbackDirection": [
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "radius": 0.25,
+                    "startTime": 0.0
+                }
+            ],
+            "id": 5,
+            "inputPinId": 6,
+            "moveEndTime": 0.30000001192092896,
+            "moveSpeed": 6.0,
+            "moveStartTime": 0.0,
+            "name": "Combo Attack",
+            "outputHeavyPinId": 8,
+            "outputLightPinId": 7,
+            "posX": 225.0,
+            "posY": 103.0
+        }
+    ]
+}

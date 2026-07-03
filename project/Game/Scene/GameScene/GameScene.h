@@ -28,6 +28,7 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
+#include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
 
 #include "HUD/Button/TriggerButton/TriggerButton.h"
 #include "HUD/Button/MashButton/MashButton.h"
@@ -157,6 +158,9 @@ private:
 
 	// ステージエディタ
 	std::unique_ptr<StageEditor> stageEditor_ = nullptr;
+
+	/// @brief コンボツリーエディタ
+	std::unique_ptr<ComboTreeEditor> comboTreeEditor_ = nullptr;
 
 	/// @brief エディタワークスペースマネージャ
 	std::unique_ptr< EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;
