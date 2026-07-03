@@ -120,7 +120,7 @@ public:
 	/// @param position 
 	/// @param searchRadius 
 	/// @return 
-	Vector3 GetNearestPoint(const Vector3& position, float searchRadius) const;
+	std::optional<Vector3> GetNearestPoint(const Vector3& position, float searchRadius) const;
 
 
 private:

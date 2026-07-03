@@ -69,6 +69,7 @@ void NavMeshLeaderMove::Exec()
 
     // 初回の経路探索を実行
     path_ = navMesh->FindPath(owner_->GetWorldPosition(), leader_->GetWorldPosition());
+    // 経路の中継点インデックスをリセット
     currentPathIndex_ = 0;
 
     // 経路が見つからなかった場合
@@ -84,8 +85,34 @@ void NavMeshLeaderMove::Exec()
             return;
         }
 
-        // 離れているのに経路がない場合は移動不能として失敗終了
-        Exit();
+        // 自分の最も近いNavMesh上の点を取得
+        std::optional<Vector3> myNearestPos = navMesh->GetNearestPoint(owner_->GetWorldPosition(), 1.5f);
+
+        // リーダーの最も近いNavMesh上の点を取得
+        std::optional<Vector3> leaderNearestPos = navMesh->GetNearestPoint(leader_->GetWorldPosition(), 1.5f);
+
+        if (myNearestPos != std::nullopt && leaderNearestPos != std::nullopt)
+        {
+            // 自分と最も近い点が離れている（＝自分がNavMesh外にいる）場合
+            if ((owner_->GetWorldPosition() - myNearestPos.value()).LengthSq() > kMinMoveDistance)
+            {
+                // 復帰ポイントを仮の目的地にして経路を再設定（または直接そこへ向かう）
+                path_ = { myNearestPos.value() };
+                currentPathIndex_ = 0;
+                return; // 復帰へ向かう
+            }
+
+            // リーダーがNavMesh外にいる場合は、リーダーの最近傍点への経路を探す
+            path_ = navMesh->FindPath(owner_->GetWorldPosition(), leaderNearestPos.value());
+            currentPathIndex_ = 0;
+        }
+
+        // それでもダメなら失敗終了
+        if (path_.empty())
+        {
+            Exit();
+            return;
+        }
     }
 }
 
@@ -124,6 +151,49 @@ void NavMeshLeaderMove::Update()
             // 経路を再計算してインデックスをリセット
             path_ = navMesh->FindPath(owner_->GetWorldPosition(), leader_->GetWorldPosition());
             currentPathIndex_ = 0;
+
+            // 経路が見つからなかった場合
+            if (path_.empty())
+            {
+                // すでに目的地（停止距離内）にいるかチェック
+                Vector3 toLeader = leader_->GetWorldPosition() - owner_->GetWorldPosition();
+                toLeader.y = 0.0f;
+                if ((toLeader.x * toLeader.x + toLeader.z * toLeader.z) <= stopDistanceSq_)
+                {
+                    // すでに到着しているので成功終了
+                    Action::Update();
+                    return;
+                }
+
+                // 自分の最も近いNavMesh上の点を取得
+                std::optional<Vector3> myNearestPos = navMesh->GetNearestPoint(owner_->GetWorldPosition(), 1.5f);
+
+                // リーダーの最も近いNavMesh上の点を取得
+                std::optional<Vector3> leaderNearestPos = navMesh->GetNearestPoint(leader_->GetWorldPosition(), 1.5f);
+
+                if (myNearestPos != std::nullopt && leaderNearestPos != std::nullopt)
+                {
+                    // 自分と最も近い点が離れている（＝自分がNavMesh外にいる）場合
+                    if ((owner_->GetWorldPosition() - myNearestPos.value()).LengthSq() > kMinMoveDistance)
+                    {
+                        // 復帰ポイントを仮の目的地にして経路を再設定（または直接そこへ向かう）
+                        path_ = { myNearestPos.value() };
+                        currentPathIndex_ = 0;
+                        return; // 復帰へ向かう
+                    }
+
+                    // リーダーがNavMesh外にいる場合は、リーダーの最近傍点への経路を探す
+                    path_ = navMesh->FindPath(owner_->GetWorldPosition(), leaderNearestPos.value());
+                    currentPathIndex_ = 0;
+                }
+
+                // それでもダメなら失敗終了
+                if (path_.empty())
+                {
+                    Exit();
+                    return;
+                }
+            }
         }
     }
 

@@ -199,7 +199,7 @@ int NavMesh::GenerateNewPolygonId() const
 /// @param position 
 /// @param searchRadius 
 /// @return 
-Vector3 NavMesh::GetNearestPoint(const Vector3& position, float searchRadius) const
+std::optional<Vector3> NavMesh::GetNearestPoint(const Vector3& position, float searchRadius) const
 {
 	// まず現在の位置が既にNavMesh内にあるかチェックする
 	if (FindPolygonAt(position) != -1)
@@ -259,7 +259,15 @@ Vector3 NavMesh::GetNearestPoint(const Vector3& position, float searchRadius) co
 		}
 	}
 
-	return nearestPoint;
+	if (isFound) 
+	{
+		return nearestPoint;
+	}
+	else 
+	{
+		// 見つからなかったことを明示
+		return std::nullopt;
+	}
 }
 
 /// @brief IDからポリゴンを取得する
