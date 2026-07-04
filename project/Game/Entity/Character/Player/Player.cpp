@@ -86,7 +86,7 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	OnStyleChanged(currentStyle_);
 
 	// コンボツリーを作成する
-	comboTree_ = ComboTreeFactory::CreateTree("Assets/Parameter/ComboTree/test_combo.json", this);
+	comboTree_ = ComboTreeFactory::CreateTree("Assets/Parameter/ComboTree/Test.json", this);
 }
 
 /// @brief 更新処理
