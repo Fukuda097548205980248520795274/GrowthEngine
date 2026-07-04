@@ -7,6 +7,9 @@ using json = nlohmann::json;
 /// @brief ノードを追加する
 void ComboTreeEditor::AddComboAttackNode()
 {
+	// 変更があったことを通知
+    HandleChange();
+
 	// 新しいノードを作成
     ComboEditorNode node;
     node.id = GetNextId();
@@ -22,8 +25,8 @@ void ComboTreeEditor::AddComboAttackNode()
     // ImNodesのAPIを使って、いま見えている画面の中央座標にノードを配置する
     ImNodes::SetNodeScreenSpacePos(node.id, centerPos);
 
-    // 構造体側にも一応初期値としてセットしておく
-	node.pos = centerPos;
+	// 無効な座標を設定しておく
+    node.pos = ImVec2(-99999.0f, -99999.0f);
 
 	// ノードを配列に追加
     nodes_.push_back(node);
@@ -203,6 +206,18 @@ void ComboTreeEditor::DrawUI()
             clipboard_.HandlePaste(*this);
         }
 
+		// Ctrl + Zで元に戻す
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
+		{
+			history_.Undo(*this);
+		}
+
+		// Ctrl + Yでやり直す
+		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
+		{
+			history_.Redo(*this);
+		}
+
 		// Deleteキー Backspaceキー で選択されたノードを削除
         if (ImNodes::NumSelectedNodes() > 0 && (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)))
         {
@@ -305,7 +320,7 @@ void ComboTreeEditor::DrawProjectPanel()
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.17f, 0.35f, 0.52f, 1.0f));
             }
 
-            // 1. 正方形のボタン領域（ホバー・クリックに反応するのはこの四角形のみ）
+            // 正方形のボタン領域（ホバー・クリックに反応するのはこの四角形のみ）
             if (ImGui::Button(fileName.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
             {
                 currentFileName_ = fileName;
@@ -317,7 +332,7 @@ void ComboTreeEditor::DrawProjectPanel()
                 ImGui::PopStyleColor(3);
             }
 
-            // 2. ボタンの下に表示する名前
+            // ボタンの下に表示する名前
             ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2.0f);
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + thumbnailSize);
             ImGui::TextUnformatted(fileName.c_str());
@@ -348,6 +363,42 @@ void ComboTreeEditor::DrawNodeEditor()
     {
         AddComboAttackNode();
     }
+
+
+    // --- ノードの位置変更を検知して履歴に保存する処理 ---
+    for (auto& node : nodes_)
+    {
+        ImVec2 gridPos = ImNodes::GetNodeGridSpacePos(node.id);
+
+        // 初期状態の座標が無効値の場合は、ImNodesの座標をそのまま保存する
+        if (node.pos.x == -99999.0f && node.pos.y == -99999.0f)
+        {
+            node.pos = gridPos;
+            continue;
+        }
+
+        // ノードがドラッグされている間、座標が変化したら履歴に保存する
+        if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+        {
+            if (gridPos.x != node.pos.x || gridPos.y != node.pos.y)
+            {
+                // ドラッグが始まった「最初の1フレームだけ」、動く前の状態を履歴に保存する
+                if (!isDraggingNode_)
+                {
+                    HandleChange();
+                    isDraggingNode_ = true;
+                }
+                node.pos = gridPos; // 座標を同期
+            }
+        }
+    }
+
+    // マウスの左クリックが離されたら、ドラッグ終了フラグをリセット
+    if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+    {
+        isDraggingNode_ = false;
+    }
+
 
     ImNodes::BeginNodeEditor();
 
@@ -407,11 +458,15 @@ void ComboTreeEditor::DrawNodeEditor()
 
     ImNodes::EndNodeEditor();
 
+
+
     // --- リンクが作成されたときの処理 ---
-    // ※判定処理はノード描画ループの外（EndNodeEditorの後）に置くのが安全です。
     int startPin, endPin;
     if (ImNodes::IsLinkCreated(&startPin, &endPin))
     {
+        // 変更があったことを通知
+        HandleChange();
+
         ComboEditorLink link;
         link.id = GetNextId();
         link.startPinId = startPin;
@@ -591,6 +646,9 @@ void ComboTreeEditor::DeleteLink()
         // Ctrlキーが押されている ＆ 左クリックが押された瞬間
         if (io.KeyCtrl && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
         {
+			// 変更があったことを通知
+            HandleChange();
+
             // 対象のリンクIDを探して配列から削除
             for (auto it = links_.begin(); it != links_.end(); )
             {
@@ -613,6 +671,10 @@ void ComboTreeEditor::DeleteSelectedNodes()
 {
 	// 選択されているノードの数を取得
 	int numSelectedNodes = ImNodes::NumSelectedNodes();
+    if (numSelectedNodes == 0) return;
+
+    // 消す前の状態を履歴に保存
+    HandleChange();
 
     // 選択されているすべてのノードIDを取得
     std::vector<int> selectedNodeIds(numSelectedNodes);
@@ -658,6 +720,12 @@ void ComboTreeEditor::DeleteSelectedNodes()
         // ImNodes側の選択キャッシュをクリア (ゴミ残りの防止)
         ImNodes::ClearNodeSelection(nodeId);
     }
+}
+
+/// @brief 変更があったことを通知する関数
+void ComboTreeEditor::HandleChange()
+{
+	history_.SaveHistory(nodes_, links_, currentId_);
 }
 
 /// @brief 指定されたIDのノードを取得する関数

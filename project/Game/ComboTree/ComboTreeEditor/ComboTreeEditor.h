@@ -2,11 +2,13 @@
 #include "ComboTreeData/ComboTreeData.h"
 #include "ComboTreeProjectManager/ComboTreeProjectManager.h"
 #include "ComboTreeEditorClipboard/ComboTreeEditorClipboard.h"
+#include "ComboTreeEditorHistory/ComboTreeEditorHistory.h"
 
 class ComboTreeEditor
 {
-	/// @brief コピー用のクリップボード管理クラスはComboTreeEditorのprivateメンバにアクセスできるようにする
+	// privateメンバにアクセスできるようにするためのフレンドクラス宣言
     friend class ComboTreeEditorClipboard;
+	friend class ComboTreeEditorHistory;
 
 public:
 
@@ -51,6 +53,9 @@ private:
     /// @return 
     int GetNextId() { return currentId_++; }
 
+	/// @brief 変更があったことを通知する関数
+    void HandleChange();
+
 	/// @brief 指定されたIDのノードを取得する関数
     /// @param id 
     /// @return 
@@ -65,6 +70,9 @@ private:
 	// @brief コピー用のクリップボード管理クラス
     ComboTreeEditorClipboard clipboard_;
 
+	/// @brief 履歴管理クラス
+	ComboTreeEditorHistory history_;
+
 	// ノード情報を保持する配列
     std::vector<ComboEditorNode> nodes_;
 
@@ -76,5 +84,8 @@ private:
 
     // 現在のファイル名を保持する変数
     std::string currentFileName_{};
+
+    // ノードをドラッグ中かどうかのフラグ
+	bool isDraggingNode_ = false; 
 };
 

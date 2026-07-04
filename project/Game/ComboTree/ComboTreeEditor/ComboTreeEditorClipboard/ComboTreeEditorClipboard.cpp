@@ -58,10 +58,13 @@ void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
 {
     if (clipboardNodes_.empty()) return;
 
-	// 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
+    /// @brief 変更があったことを通知する関数
+    editor.HandleChange();
+
+    // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
     ImVec2 windowPos = ImGui::GetWindowPos();
     ImVec2 windowSize = ImGui::GetWindowSize();
-    ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f,windowPos.y + windowSize.y * 0.5f);
+    ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
 
     // 旧ピンIDから新ピンIDへのマッピング (リンクの再接続に必要)
     std::unordered_map<int, int> pinIdMap;
@@ -91,7 +94,7 @@ void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
         node.outputLightPinId = newOutLightPinId;
         node.outputHeavyPinId = newOutHeavyPinId;
 
-		// ノードの位置を更新
+        // ノードの位置を更新
         if (isFirst)
         {
             // 最初のノードを画面の中央（スクリーンスペース）に強制配置
@@ -103,7 +106,7 @@ void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
             // コピー元からどれだけグリッドが移動したか（オフセット）を算出
             gridOffset = newGridPos - node.pos;
 
-			// ノードの座標を更新
+            // ノードの座標を更新
             node.pos = newGridPos;
             isFirst = false;
         }
