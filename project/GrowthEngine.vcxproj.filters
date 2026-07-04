@@ -1348,6 +1348,9 @@
     <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager">
       <UniqueIdentifier>{a7cfbe17-4f6c-44ad-97bf-df2a37ca1e04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard">
+      <UniqueIdentifier>{9b4265f0-e1f6-4757-9048-af741ee330a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2438,6 +2441,9 @@
     </ClCompile>
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.cpp">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard\ComboTreeEditorClipboard.cpp">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3658,6 +3664,9 @@
     </ClInclude>
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.h">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard\ComboTreeEditorClipboard.h">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

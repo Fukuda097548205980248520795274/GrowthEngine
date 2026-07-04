@@ -1,5 +1,6 @@
 #include "ComboTreeEditor.h"
 #include "GrowthEngine.h"
+#include <unordered_set>
 
 using json = nlohmann::json;
 
@@ -13,9 +14,16 @@ void ComboTreeEditor::AddComboAttackNode()
     node.outputLightPinId = GetNextId();
     node.outputHeavyPinId = GetNextId();
 
-    // 初期配置座標
-    node.posX = 100.0f;
-    node.posY = 100.0f;
+    // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
+    ImVec2 windowPos = ImGui::GetWindowPos();
+    ImVec2 windowSize = ImGui::GetWindowSize();
+    ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
+
+    // ImNodesのAPIを使って、いま見えている画面の中央座標にノードを配置する
+    ImNodes::SetNodeScreenSpacePos(node.id, centerPos);
+
+    // 構造体側にも一応初期値としてセットしておく
+	node.pos = centerPos;
 
 	// ノードを配列に追加
     nodes_.push_back(node);
@@ -43,8 +51,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 
         // エディタ上の最新のノード座標を取得して保存
         ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
-        nodeJson["posX"] = pos.x;
-        nodeJson["posY"] = pos.y;
+		nodeJson["pos"] = { pos.x, pos.y };
 
         // パラメータ
         nodeJson["animationName"] = node.motionName.c_str();
@@ -119,8 +126,8 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
         node.inputPinId = nodeJson["inputPinId"];
         node.outputLightPinId = nodeJson["outputLightPinId"];
         node.outputHeavyPinId = nodeJson["outputHeavyPinId"];
-        node.posX = nodeJson["posX"];
-        node.posY = nodeJson["posY"];
+        node.pos.x = nodeJson["pos"][0];
+        node.pos.y = nodeJson["pos"][1];
 
 		node.motionName = nodeJson["animationName"].get<std::string>();
         node.attackTime = nodeJson["attackTime"];
@@ -154,7 +161,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
         nodes_.push_back(node);
 
         // ImNodesに座標を即座に反映させる（重要）
-        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.posX, node.posY));
+        ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
     }
 
     // リンクの復元
@@ -171,6 +178,42 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 /// @brief UI描画処理
 void ComboTreeEditor::DrawUI()
 {
+    if (!ImGui::GetIO().WantTextInput && !ImGui::IsAnyItemActive())
+    {
+        ImGuiIO& io = ImGui::GetIO();
+
+		// Ctrl + Sで保存
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+        {
+            if (!currentFileName_.empty())
+            {
+                SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+            }
+        }
+
+		// Ctrl + Cでコピー
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
+        {
+            clipboard_.HandleCopy(nodes_, links_);
+        }
+
+		// Ctrl + Vで貼り付け
+        if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
+        {
+            clipboard_.HandlePaste(*this);
+        }
+
+		// Deleteキー Backspaceキー で選択されたノードを削除
+        if (ImNodes::NumSelectedNodes() > 0 && (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)))
+        {
+			DeleteSelectedNodes();
+
+		}
+
+		// Ctrl + 右クリック でリンクを削除
+        DeleteLink();
+    }
+
     DrawProjectPanel();
 	DrawNodeEditor();
 	DrawPropertyPanel();
@@ -181,18 +224,53 @@ void ComboTreeEditor::DrawProjectPanel()
 {
     ImGui::Begin("Combo Tree Browser");
 
-    // ファイル名の新規作成UI
-    static char newFileName[128] = "";
-    ImGui::InputText("New File", newFileName, sizeof(newFileName));
-    ImGui::SameLine();
-    if (ImGui::Button("Create") && strlen(newFileName) > 0)
+
+	// 新規作成ボタン
+    if (ImGui::Button("新規作成", ImVec2(0, 30)))
     {
-        currentFileName_ = newFileName;
-        nodes_.clear();
-        links_.clear();
-        SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
-        newFileName[0] = '\0'; // クリア
+        // ポップアップを開くフラグを立てる
+        ImGui::OpenPopup("Create New File Popup");
     }
+
+    if (ImGui::BeginPopupModal("Create New File Popup", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        static char newFileName[128] = "";
+
+        ImGui::Text("Enter new combo tree name:");
+        ImGui::InputText("##NewFileName", newFileName, sizeof(newFileName));
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // 作成ボタン
+        if (ImGui::Button("Create", ImVec2(120, 0)))
+        {
+            if (strlen(newFileName) > 0)
+            {
+                currentFileName_ = newFileName;
+                nodes_.clear();
+                links_.clear();
+                SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+
+                // バッファをクリアしてポップアップを閉じる
+                newFileName[0] = '\0';
+                ImGui::CloseCurrentPopup();
+            }
+        }
+
+        ImGui::SameLine();
+
+        // キャンセルボタン
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            newFileName[0] = '\0'; // キャンセル時もクリアしておく
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+    
 
     ImGui::Separator();
     ImGui::Text("File List:");
@@ -200,24 +278,54 @@ void ComboTreeEditor::DrawProjectPanel()
     // プロジェクトマネージャーからファイル一覧を取得
     std::vector<std::string> fileList = projectManager_.GetFileList();
 
-    for (const auto& fileName : fileList)
-    {
-        bool isSelected = (currentFileName_ == fileName);
-        if (ImGui::Selectable(fileName.c_str(), isSelected))
-        {
-            currentFileName_ = fileName;
-            LoadFromFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
-        }
-    }
+    // タイルのサイズ設定
+    const float thumbnailSize = 64.0f;
+    const float padding = 12.0f;
+    const float cellSize = thumbnailSize + padding;
 
-    // 保存ボタン
-    if (!currentFileName_.empty())
+    // ウィンドウの利用可能な横幅から、1行に収まる列数を自動計算
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columnCount = static_cast<int>(panelWidth / cellSize);
+    if (columnCount < 1) columnCount = 1; // 最低でも1列は確保
+
+    if (ImGui::BeginTable("AssetGrid", columnCount, ImGuiTableFlags_None))
     {
-        ImGui::Separator();
-        if (ImGui::Button("Save Current Tree", ImVec2(-1, 30)))
+        for (const auto& fileName : fileList)
         {
-            SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+            ImGui::TableNextColumn();
+            ImGui::PushID(fileName.c_str());
+
+            bool isSelected = (currentFileName_ == fileName);
+
+            // 選択されている場合のみ、ボタンの色をハイライトする
+            if (isSelected)
+            {
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.17f, 0.35f, 0.52f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.4f, 0.6f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.17f, 0.35f, 0.52f, 1.0f));
+            }
+
+            // 1. 正方形のボタン領域（ホバー・クリックに反応するのはこの四角形のみ）
+            if (ImGui::Button(fileName.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
+            {
+                currentFileName_ = fileName;
+                LoadFromFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+            }
+
+            if (isSelected)
+            {
+                ImGui::PopStyleColor(3);
+            }
+
+            // 2. ボタンの下に表示する名前
+            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2.0f);
+            ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + thumbnailSize);
+            ImGui::TextUnformatted(fileName.c_str());
+            ImGui::PopTextWrapPos();
+
+            ImGui::PopID();
         }
+        ImGui::EndTable();
     }
 
     ImGui::End();
@@ -227,6 +335,13 @@ void ComboTreeEditor::DrawProjectPanel()
 void ComboTreeEditor::DrawNodeEditor()
 {
     ImGui::Begin("Combo Tree");
+
+    // ファイルが選択されていない場合はノードエディタを描画せずに終了
+    if (currentFileName_.empty())
+    {
+        ImGui::End();
+        return;
+    }
 
     // テスト用にノードを追加するボタン
     if (ImGui::Button("Add Combo Node"))
@@ -461,6 +576,88 @@ void ComboTreeEditor::DrawPropertyPanel()
     }
 
     ImGui::End();
+}
+
+/// @brief リンクを削除する
+void ComboTreeEditor::DeleteLink()
+{
+    int hoveredLinkId;
+
+    // マウスカーソルがリンクの上に乗っているかを取得
+    if (ImNodes::IsLinkHovered(&hoveredLinkId))
+    {
+        ImGuiIO& io = ImGui::GetIO();
+
+        // Ctrlキーが押されている ＆ 左クリックが押された瞬間
+        if (io.KeyCtrl && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        {
+            // 対象のリンクIDを探して配列から削除
+            for (auto it = links_.begin(); it != links_.end(); )
+            {
+                if (it->id == hoveredLinkId)
+                {
+                    it = links_.erase(it); // 削除
+                    break; // 同じIDのリンクは他にないのでループを抜ける
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+    }
+}
+
+/// @brief 選択されているノードを削除する
+void ComboTreeEditor::DeleteSelectedNodes()
+{
+	// 選択されているノードの数を取得
+	int numSelectedNodes = ImNodes::NumSelectedNodes();
+
+    // 選択されているすべてのノードIDを取得
+    std::vector<int> selectedNodeIds(numSelectedNodes);
+    ImNodes::GetSelectedNodes(selectedNodeIds.data());
+
+    for (int nodeId : selectedNodeIds)
+    {
+        // 削除対象のノードに繋がっているリンクを先に削除
+        ComboEditorNode* node = GetNodeById(nodeId);
+        if (node)
+        {
+            int inPin = node->inputPinId;
+            int outLightPin = node->outputLightPinId;
+            int outHeavyPin = node->outputHeavyPinId;
+
+            for (auto it = links_.begin(); it != links_.end(); )
+            {
+                if (it->startPinId == inPin || it->startPinId == outLightPin || it->startPinId == outHeavyPin ||
+                    it->endPinId == inPin || it->endPinId == outLightPin || it->endPinId == outHeavyPin)
+                {
+                    it = links_.erase(it); // リンク配列から削除
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+
+        // ノード自体の削除
+        for (auto it = nodes_.begin(); it != nodes_.end(); )
+        {
+            if (it->id == nodeId)
+            {
+                it = nodes_.erase(it); // ノード配列から削除
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        // ImNodes側の選択キャッシュをクリア (ゴミ残りの防止)
+        ImNodes::ClearNodeSelection(nodeId);
+    }
 }
 
 /// @brief 指定されたIDのノードを取得する関数

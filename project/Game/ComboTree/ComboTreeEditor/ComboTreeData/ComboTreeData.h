@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "Action/Attack/Attack.h"
+#include "Math/Vector/Vector2/Vector2.h"
 
 
 // ノード情報を保持する構造体
@@ -22,8 +23,7 @@ struct ComboEditorNode
     int outputHeavyPinId = 0;
 
     // エディタ上の座標
-    float posX = 0.0f;
-    float posY = 0.0f;
+    ImVec2 pos;
 
 
     // 攻撃全体の時間

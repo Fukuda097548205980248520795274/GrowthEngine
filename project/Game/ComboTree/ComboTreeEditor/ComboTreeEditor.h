@@ -1,9 +1,13 @@
 #pragma once
 #include "ComboTreeData/ComboTreeData.h"
 #include "ComboTreeProjectManager/ComboTreeProjectManager.h"
+#include "ComboTreeEditorClipboard/ComboTreeEditorClipboard.h"
 
 class ComboTreeEditor
 {
+	/// @brief コピー用のクリップボード管理クラスはComboTreeEditorのprivateメンバにアクセスできるようにする
+    friend class ComboTreeEditorClipboard;
+
 public:
 
 	/// @brief コンストラクタ
@@ -34,6 +38,15 @@ private:
     /// @brief プロパティパネルを描画する
     void DrawPropertyPanel();
 
+
+private:
+
+    /// @brief リンクを削除する
+    void DeleteLink();
+
+    /// @brief 選択されているノードを削除する
+    void DeleteSelectedNodes();
+
 	/// @brief ユニークなIDを発行する関数
     /// @return 
     int GetNextId() { return currentId_++; }
@@ -48,6 +61,9 @@ private:
 
 	/// @brief プロジェクトマネージャー
 	ComboTreeProjectManager projectManager_;
+
+	// @brief コピー用のクリップボード管理クラス
+    ComboTreeEditorClipboard clipboard_;
 
 	// ノード情報を保持する配列
     std::vector<ComboEditorNode> nodes_;

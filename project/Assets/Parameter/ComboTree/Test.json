@@ -1,23 +1,50 @@
 {
-    "currentId": 5,
-    "links": [],
+    "currentId": 70,
+    "links": [
+        {
+            "endPinId": 30,
+            "id": 33,
+            "startPinId": 27
+        }
+    ],
     "nodes": [
         {
-            "animationName": "Player_Combo_1",
+            "animationName": "",
             "attackTime": 1.0,
             "cancelEndTime": 0.0,
             "cancelStartTime": 0.0,
             "hitDefinitions": [],
-            "id": 1,
-            "inputPinId": 2,
+            "id": 25,
+            "inputPinId": 26,
             "moveEndTime": 0.0,
             "moveSpeed": 0.0,
             "moveStartTime": 0.0,
             "name": "Combo Attack",
-            "outputHeavyPinId": 4,
-            "outputLightPinId": 3,
-            "posX": 164.0,
-            "posY": 102.0
+            "outputHeavyPinId": 28,
+            "outputLightPinId": 27,
+            "pos": [
+                148.0,
+                155.5
+            ]
+        },
+        {
+            "animationName": "",
+            "attackTime": 1.0,
+            "cancelEndTime": 0.0,
+            "cancelStartTime": 0.0,
+            "hitDefinitions": [],
+            "id": 29,
+            "inputPinId": 30,
+            "moveEndTime": 0.0,
+            "moveSpeed": 0.0,
+            "moveStartTime": 0.0,
+            "name": "Combo Attack",
+            "outputHeavyPinId": 32,
+            "outputLightPinId": 31,
+            "pos": [
+                361.0,
+                163.0
+            ]
         }
     ]
 }
