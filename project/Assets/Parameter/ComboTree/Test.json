@@ -1,0 +1,23 @@
+{
+    "currentId": 5,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "Player_Combo_1",
+            "attackTime": 1.0,
+            "cancelEndTime": 0.0,
+            "cancelStartTime": 0.0,
+            "hitDefinitions": [],
+            "id": 1,
+            "inputPinId": 2,
+            "moveEndTime": 0.0,
+            "moveSpeed": 0.0,
+            "moveStartTime": 0.0,
+            "name": "Combo Attack",
+            "outputHeavyPinId": 4,
+            "outputLightPinId": 3,
+            "posX": 164.0,
+            "posY": 102.0
+        }
+    ]
+}

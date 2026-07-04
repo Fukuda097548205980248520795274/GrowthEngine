@@ -26,9 +26,6 @@ struct ComboEditorNode
     float posY = 0.0f;
 
 
-    // アニメーション名またはパス
-    char animationName[128] = "Attack_01";
-
     // 攻撃全体の時間
     float attackTime = 1.0f;
 
@@ -48,6 +45,10 @@ struct ComboEditorNode
     float cancelEndTime = 0.0f;
 
 
+	// 攻撃アニメーション名
+    std::string motionName;
+
+
 	// 当たり判定の定義リスト
     std::vector<HitboxDefinition> hitDefinitions;
 };
@@ -62,4 +63,8 @@ struct ComboEditorLink
 
     // 入力ピンのID
     int endPinId = 0;
+
+
+	// リンクの種類（1: 弱攻撃, 2: 強攻撃）
+    int linkType = 0;
 };

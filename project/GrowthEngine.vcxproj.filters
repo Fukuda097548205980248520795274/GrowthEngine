@@ -1345,6 +1345,9 @@
     <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory">
       <UniqueIdentifier>{8d6d9991-e7a0-4e6c-82ca-97b9d1415975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager">
+      <UniqueIdentifier>{a7cfbe17-4f6c-44ad-97bf-df2a37ca1e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2432,6 +2435,9 @@
     </ClCompile>
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.cpp">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.cpp">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3649,6 +3655,9 @@
     </ClInclude>
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.h">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.h">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

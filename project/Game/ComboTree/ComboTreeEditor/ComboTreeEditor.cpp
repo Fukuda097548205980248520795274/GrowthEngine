@@ -47,7 +47,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
         nodeJson["posY"] = pos.y;
 
         // パラメータ
-        nodeJson["animationName"] = node.animationName;
+        nodeJson["animationName"] = node.motionName.c_str();
         nodeJson["attackTime"] = node.attackTime;
         nodeJson["moveSpeed"] = node.moveSpeed;
         nodeJson["moveStartTime"] = node.moveStartTime;
@@ -122,7 +122,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
         node.posX = nodeJson["posX"];
         node.posY = nodeJson["posY"];
 
-        strcpy_s(node.animationName, nodeJson["animationName"].get<std::string>().c_str());
+		node.motionName = nodeJson["animationName"].get<std::string>();
         node.attackTime = nodeJson["attackTime"];
         node.moveSpeed = nodeJson["moveSpeed"];
         node.moveStartTime = nodeJson["moveStartTime"];
@@ -171,43 +171,81 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 /// @brief UI描画処理
 void ComboTreeEditor::DrawUI()
 {
+    DrawProjectPanel();
 	DrawNodeEditor();
 	DrawPropertyPanel();
+}
+
+/// @brief プロジェクトパネルを描画する
+void ComboTreeEditor::DrawProjectPanel()
+{
+    ImGui::Begin("Combo Tree Browser");
+
+    // ファイル名の新規作成UI
+    static char newFileName[128] = "";
+    ImGui::InputText("New File", newFileName, sizeof(newFileName));
+    ImGui::SameLine();
+    if (ImGui::Button("Create") && strlen(newFileName) > 0)
+    {
+        currentFileName_ = newFileName;
+        nodes_.clear();
+        links_.clear();
+        SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+        newFileName[0] = '\0'; // クリア
+    }
+
+    ImGui::Separator();
+    ImGui::Text("File List:");
+
+    // プロジェクトマネージャーからファイル一覧を取得
+    std::vector<std::string> fileList = projectManager_.GetFileList();
+
+    for (const auto& fileName : fileList)
+    {
+        bool isSelected = (currentFileName_ == fileName);
+        if (ImGui::Selectable(fileName.c_str(), isSelected))
+        {
+            currentFileName_ = fileName;
+            LoadFromFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+        }
+    }
+
+    // 保存ボタン
+    if (!currentFileName_.empty())
+    {
+        ImGui::Separator();
+        if (ImGui::Button("Save Current Tree", ImVec2(-1, 30)))
+        {
+            SaveToFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+        }
+    }
+
+    ImGui::End();
 }
 
 /// @brief ノードエディタを描画する
 void ComboTreeEditor::DrawNodeEditor()
 {
+    ImGui::Begin("Combo Tree");
+
     // テスト用にノードを追加するボタン
     if (ImGui::Button("Add Combo Node"))
     {
         AddComboAttackNode();
     }
 
-    if (ImGui::Button("Save"))
-    {
-        SaveToFile("./Assets/Parameter/ComboTree/test_combo.json"); // 保存先パスは環境に合わせてください
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Load"))
-    {
-        LoadFromFile("./Assets/Parameter/ComboTree/test_combo.json");
-    }
-
-    // ImNodesの配置開始
     ImNodes::BeginNodeEditor();
 
     for (const auto& node : nodes_)
     {
-        // ノードの開始
+        // --- ノードの描画開始 ---
         ImNodes::BeginNode(node.id);
 
-        // 1. ノードのタイトル
+        // ノードのタイトルバー（あると見栄えが良いです）
         ImNodes::BeginNodeTitleBar();
         ImGui::TextUnformatted(node.name);
         ImNodes::EndNodeTitleBar();
 
-        // 2. ピンの配置（ImGuiのLayoutを使って左右に分ける）
         // 左側：入力ピン
         ImNodes::BeginInputAttribute(node.inputPinId);
         ImGui::Text("In");
@@ -216,44 +254,46 @@ void ComboTreeEditor::DrawNodeEditor()
         ImGui::Spacing();
 
         // 右側：弱攻撃派生ピン
+        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
         ImNodes::BeginOutputAttribute(node.outputLightPinId);
-        ImGui::Indent(40.0f); // 右側に寄せるためのインデント
+        ImGui::Indent(40.0f);
         ImGui::Text("Light (弱)");
         ImNodes::EndOutputAttribute();
+        ImNodes::PopColorStyle();
 
         // 右側：強攻撃派生ピン
+        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
         ImNodes::BeginOutputAttribute(node.outputHeavyPinId);
         ImGui::Indent(40.0f);
         ImGui::Text("Heavy (強)");
         ImNodes::EndOutputAttribute();
+        ImNodes::PopColorStyle();
 
-        // ノードの終了
+        // --- ノードの描画終了 ---
         ImNodes::EndNode();
-
-
-        // 選択されているノードを取得
-        int numSelectedNodes = ImNodes::NumSelectedNodes();
-        if (numSelectedNodes > 0)
-        {
-            std::vector<int> selectedNodes(numSelectedNodes);
-            ImNodes::GetSelectedNodes(selectedNodes.data());
-            selectedNodeId_ = selectedNodes[0]; // まずは単一選択のみ対応
-        }
-        else
-        {
-            selectedNodeId_ = -1; // 選択解除
-        }
     }
 
-    // リンクの描画（これがないと繋いだ線が表示されません）
+    // リンクの描画
     for (const auto& link : links_)
     {
+        if (link.linkType == 1) {
+            ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(100, 200, 250, 255)); // 水色
+        }
+        else if (link.linkType == 2) {
+            ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(250, 100, 100, 255)); // 赤色
+        }
+
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
+
+        if (link.linkType != 0) {
+            ImNodes::PopColorStyle();
+        }
     }
 
     ImNodes::EndNodeEditor();
 
-    // --- リンクの結合処理（ドラッグ＆ドロップされたとき） ---
+    // --- リンクが作成されたときの処理 ---
+    // ※判定処理はノード描画ループの外（EndNodeEditorの後）に置くのが安全です。
     int startPin, endPin;
     if (ImNodes::IsLinkCreated(&startPin, &endPin))
     {
@@ -261,8 +301,19 @@ void ComboTreeEditor::DrawNodeEditor()
         link.id = GetNextId();
         link.startPinId = startPin;
         link.endPinId = endPin;
+
+        // 繋いだ元ピンが弱か強かを判定して保存
+        link.linkType = 0;
+        for (const auto& node : nodes_)
+        {
+            if (node.outputLightPinId == startPin) link.linkType = 1;
+            else if (node.outputHeavyPinId == startPin) link.linkType = 2;
+        }
+
         links_.push_back(link);
     }
+
+    ImGui::End();
 }
 
 /// @brief プロパティパネルを描画する
@@ -271,16 +322,20 @@ void ComboTreeEditor::DrawPropertyPanel()
     // プロパティウィンドウの描画
     ImGui::Begin("Combo Properties");
 
-    if (selectedNodeId_ != -1)
+    // 選択されているノードの数を取得
+    int numSelected = ImNodes::NumSelectedNodes();
+
+    if (numSelected == 1)
     {
-        ComboEditorNode* node = GetNodeById(selectedNodeId_);
+        // 1つだけ選択されている場合、そのノードのIDを取得
+        int selectedNodeId;
+        ImNodes::GetSelectedNodes(&selectedNodeId);
+
+        ComboEditorNode* node = GetNodeById(selectedNodeId);
         if (node)
         {
             ImGui::InputText("Node Name", node->name, sizeof(node->name));
             ImGui::Separator();
-
-            ImGui::Text("Attack Parameters");
-            ImGui::InputText("Animation", node->animationName, sizeof(node->animationName));
 
             // パラメータの編集 (DragFloatを使ってスライダー式にするのがおすすめです)
             ImGui::DragFloat("Attack Time", &node->attackTime, 0.01f, 0.0f, 10.0f);
@@ -295,6 +350,44 @@ void ComboTreeEditor::DrawPropertyPanel()
             ImGui::Text("Cancel Window");
             ImGui::DragFloat("Cancel Start Time", &node->cancelStartTime, 0.01f, 0.0f, node->attackTime);
             ImGui::DragFloat("Cancel End Time", &node->cancelEndTime, 0.01f, 0.0f, node->attackTime);
+
+
+
+            ImGui::Spacing();
+            ImGui::Text("Attack Motion");
+            // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+            std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
+			std::string motionName = node->motionName;
+
+            // モーション名のリストが空の場合はエラーメッセージを表示
+            if (motionNames.empty())
+            {
+                ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
+            }
+            else
+            {
+                // 現在選択されているモーション名をプレビュー用の文字列として設定
+                const char* previewValue = motionName.empty() ? "モーションを選択..." : motionName.c_str();
+
+                // モーション名選択用のコンボボックスを描画
+                if (ImGui::BeginCombo("攻撃モーション", previewValue))
+                {
+                    for (const auto& name : motionNames)
+                    {
+                        // 現在のモーション名と同じものが選択されている状態にする
+                        bool isSelected = (motionName == name);
+                        if (ImGui::Selectable(name.c_str(), isSelected))
+                        {
+                            //history_->SaveHistory(nodes_, links_, currentId_);
+                            //isDirty_ = true;
+
+							node->motionName = name; // 選択されたモーション名をノードに設定
+                        }
+                        if (isSelected) ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                }
+            }
 
 
             ImGui::Spacing();

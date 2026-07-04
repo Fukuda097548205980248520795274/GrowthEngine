@@ -36,8 +36,12 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
         // InitDataをJSONから構築
         CombAttackInitData initData;
 
-        // ※ 実際はここで animationName から AnimationHandle への変換処理を入れます
-        // initData.hAttackMotion = MotionManager::GetInstance()->LoadAnimation(nodeJson["animationName"]);
+        std::string animName = nodeJson["animationName"];
+        if (!animName.empty())
+        {
+            // ※ プロジェクトの MotionManager の仕様に合わせて関数名は適宜調整してください
+            initData.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
+        }
 
         initData.attackTime = nodeJson["attackTime"];
         initData.moveSpeed = nodeJson["moveSpeed"];

@@ -1,5 +1,6 @@
 #pragma once
 #include "ComboTreeData/ComboTreeData.h"
+#include "ComboTreeProjectManager/ComboTreeProjectManager.h"
 
 class ComboTreeEditor
 {
@@ -24,6 +25,9 @@ public:
 
 private:
 
+	/// @brief プロジェクトパネルを描画する
+	void DrawProjectPanel();
+
     /// @brief ノードエディタを描画する
     void DrawNodeEditor();
 
@@ -42,6 +46,9 @@ private:
 
 private:
 
+	/// @brief プロジェクトマネージャー
+	ComboTreeProjectManager projectManager_;
+
 	// ノード情報を保持する配列
     std::vector<ComboEditorNode> nodes_;
 
@@ -50,8 +57,8 @@ private:
 
 	// ユニークなIDを発行するためのカウンタ
     int currentId_ = 1;
-    
-	// 選択中のノードIDを保持する変数（-1は未選択を意味する）
-    int selectedNodeId_ = -1;
+
+    // 現在のファイル名を保持する変数
+    std::string currentFileName_{};
 };
 
