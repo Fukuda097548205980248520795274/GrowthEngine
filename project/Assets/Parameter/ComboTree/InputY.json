@@ -1,0 +1,88 @@
+{
+    "currentId": 83,
+    "links": [
+        {
+            "endPinId": 73,
+            "id": 82,
+            "startPinId": 80
+        }
+    ],
+    "nodes": [
+        {
+            "animationName": "Player_Combo_4",
+            "comboParams": {
+                "attackTime": 0.5,
+                "cancelEndTime": 0.5,
+                "cancelStartTime": 0.10000000149011612,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 3,
+                        "endTime": 0.20000000298023224,
+                        "jointType": 12,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
+                ],
+                "moveEndTime": 0.10000000149011612,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.0
+            },
+            "id": 72,
+            "inputPinId": 73,
+            "name": "Combo Attack",
+            "nodeType": 0,
+            "outputInputBPinId": 76,
+            "outputInputXPinId": 74,
+            "outputInputYPinId": 75,
+            "pos": [
+                760.7583618164063,
+                661.2384033203125
+            ]
+        },
+        {
+            "animationName": "Player_Combo_4",
+            "comboParams": {
+                "attackTime": 0.5,
+                "cancelEndTime": 0.5,
+                "cancelStartTime": 0.10000000149011612,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 0.20000000298023224,
+                        "jointType": 12,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
+                ],
+                "moveEndTime": 0.10000000149011612,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.0
+            },
+            "id": 77,
+            "inputPinId": 78,
+            "name": "Combo Attack",
+            "nodeType": 0,
+            "outputInputBPinId": 81,
+            "outputInputXPinId": 79,
+            "outputInputYPinId": 80,
+            "pos": [
+                644.75830078125,
+                657.2384033203125
+            ]
+        }
+    ]
+}

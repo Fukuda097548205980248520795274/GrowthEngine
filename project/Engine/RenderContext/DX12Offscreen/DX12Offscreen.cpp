@@ -52,7 +52,7 @@ void Engine::DX12Offscreen::Initialize(ID3D12Device* device, ID3D12GraphicsComma
 
 	// レンダーターゲットプールの生成
 	renderTargetPool_ = std::make_unique<RenderTargetPool>();
-	renderTargetPool_->Initialize(device, heap, buffering, commandList, 3);
+	renderTargetPool_->Initialize(device, heap, buffering, commandList, 10);
 
 	// ポストエフェクトストアの生成
 	postEffectStore_ = std::make_unique<PostEffectStore>();

@@ -1,0 +1,30 @@
+{
+    "currentId": 85,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "Player_Combo_1",
+            "grabParams": {
+                "attackTime": 1.0,
+                "grabTime": 0.0,
+                "hitboxEndTime": 0.4000000059604645,
+                "hitboxStartTime": 0.10000000149011612,
+                "jointType": 9,
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.10000000149011612
+            },
+            "id": 83,
+            "inputPinId": 84,
+            "name": "Combo Attack",
+            "nodeType": 1,
+            "outputInputBPinId": -1,
+            "outputInputXPinId": -1,
+            "outputInputYPinId": -1,
+            "pos": [
+                655.7583618164063,
+                612.7384033203125
+            ]
+        }
+    ]
+}

@@ -236,24 +236,10 @@ void GameScene::Initialize()
 		}
 	);
 
-	engine_->LoadRenderPass("SpriteShadow", [&]()
-		{
-			// プレイヤーの体力バーの描画
-			hpFrameMiddleSprite_->Draw();
-			hpFrameRightSprite_->Draw();
-			hpFrameLeftSprite_->Draw();
-
-			spriteShadow_->Draw();
-		}
-	);
-	auto spriteShadowParam = engine_->GetRenderPassParam("SpriteShadow");
-	spriteShadowParam->blendMode = BlendMode::kNormal;
-
 	// HUDの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("HUD", [&]()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
-			engine_->DrawToRenderPass("HUD", "SpriteShadow");
 
 			// 体力バーの描画
 			hpFrameMiddleSprite_->Draw();
@@ -420,9 +406,6 @@ void GameScene::Draw()
 	// ポストエフェクトの描画レンダーパスを呼び出す
 	engine_->ExecuteRenderPass("PostEffect");
 
-	// 2Dスプライトの影の描画レンダーパスを呼び出す
-	engine_->ExecuteRenderPass("SpriteShadow");
-
 	// HUDの描画レンダーパスを呼び出す
 	engine_->ExecuteRenderPass("HUD");
 
@@ -505,7 +488,9 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
 		player_ = std::make_unique<Player>();
 		player_->Initialize(playerInitData, playerWeapon_.get(),
-			ComboTreeFactory::CreateTree("Test.json", player_.get()), ComboTreeFactory::CreateTree("Test.json", player_.get()), ComboTreeFactory::CreateTree("Test.json", player_.get()));
+			ComboTreeFactory::CreateTree("InputX.json", player_.get()),
+			ComboTreeFactory::CreateTree("InputY.json", player_.get()),
+			ComboTreeFactory::CreateTree("InputB.json", player_.get()));
 
 		character = player_.get();
 

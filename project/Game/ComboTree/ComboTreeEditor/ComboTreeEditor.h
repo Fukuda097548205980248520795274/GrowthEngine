@@ -65,6 +65,10 @@ private:
     /// @return 
     ComboEditorNode* GetNodeById(int id);
 
+	/// @brief ルートノードのIDを取得する関数
+    /// @return 
+    int FindRootNodeId() const;
+
 
 private:
 
