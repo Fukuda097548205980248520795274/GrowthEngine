@@ -8,7 +8,7 @@ class ComboTree
 public:
 
     // 生成されたすべての攻撃ステートのメモリを管理
-    std::vector<std::unique_ptr<ComboAttack>> allAttacks;
+    std::vector<std::unique_ptr<Attack>> allAttacks;
 
     // コンボの始点となる最初の一撃のポインタ（Playerはこれを呼び出す）
     ComboAttack* rootAttack = nullptr;

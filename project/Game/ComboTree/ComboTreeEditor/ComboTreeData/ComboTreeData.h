@@ -1,8 +1,16 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Action/Attack/Attack.h"
+#include "Action/Attack/ComboAttack/ComboAttack.h"
+#include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "Math/Vector/Vector2/Vector2.h"
+
+// ノードの種類を表す列挙型
+enum class ComboNodeType
+{
+    Combo,
+    Grab
+};
 
 
 // ノード情報を保持する構造体
@@ -22,35 +30,22 @@ struct ComboEditorNode
     // 強攻撃（Heavy）派生用ピン
     int outputHeavyPinId = 0;
 
+	/// @brief ノードの種類
+    ComboNodeType nodeType = ComboNodeType::Combo;
+
     // エディタ上の座標
     ImVec2 pos;
 
 
-    // 攻撃全体の時間
-    float attackTime = 1.0f;
+	/// @brief コンボ攻撃の初期化データ
+	CombAttackInitData comboAttackInitData;
 
-    // 移動速度
-    float moveSpeed = 0.0f;
-
-    // 移動開始時間
-    float moveStartTime = 0.0f;
-
-    // 移動終了時間
-    float moveEndTime = 0.0f;
-
-    // キャンセル可能開始時間
-    float cancelStartTime = 0.0f;
-
-    // キャンセル可能終了時間
-    float cancelEndTime = 0.0f;
+	/// @brief つかみ攻撃の初期化データ
+	GrabAttackInitData grabAttackInitData;
 
 
 	// 攻撃アニメーション名
     std::string motionName;
-
-
-	// 当たり判定の定義リスト
-    std::vector<HitboxDefinition> hitDefinitions;
 };
 
 // リンク情報を保持する構造体

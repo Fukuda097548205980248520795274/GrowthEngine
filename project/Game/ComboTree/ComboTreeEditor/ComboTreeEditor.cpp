@@ -16,6 +16,7 @@ void ComboTreeEditor::AddComboAttackNode()
     node.inputPinId = GetNextId();
     node.outputLightPinId = GetNextId();
     node.outputHeavyPinId = GetNextId();
+	node.nodeType = ComboNodeType::Combo;
 
     // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
     ImVec2 windowPos = ImGui::GetWindowPos();
@@ -29,6 +30,35 @@ void ComboTreeEditor::AddComboAttackNode()
     node.pos = ImVec2(-99999.0f, -99999.0f);
 
 	// ノードを配列に追加
+    nodes_.push_back(node);
+}
+
+/// @brief ノードを追加する
+void ComboTreeEditor::AddGrabAttackNode()
+{
+    // 変更があったことを通知
+    HandleChange();
+
+    // 新しいノードを作成
+    ComboEditorNode node;
+    node.id = GetNextId();
+    node.inputPinId = GetNextId();
+    node.outputLightPinId = -1;
+    node.outputHeavyPinId = -1;
+	node.nodeType = ComboNodeType::Grab;
+
+    // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
+    ImVec2 windowPos = ImGui::GetWindowPos();
+    ImVec2 windowSize = ImGui::GetWindowSize();
+    ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
+
+    // ImNodesのAPIを使って、いま見えている画面の中央座標にノードを配置する
+    ImNodes::SetNodeScreenSpacePos(node.id, centerPos);
+
+    // 無効な座標を設定しておく
+    node.pos = ImVec2(-99999.0f, -99999.0f);
+
+    // ノードを配列に追加
     nodes_.push_back(node);
 }
 
@@ -51,34 +81,58 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
         nodeJson["inputPinId"] = node.inputPinId;
         nodeJson["outputLightPinId"] = node.outputLightPinId;
         nodeJson["outputHeavyPinId"] = node.outputHeavyPinId;
+		nodeJson["nodeType"] = static_cast<int>(node.nodeType);
 
         // エディタ上の最新のノード座標を取得して保存
         ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
 		nodeJson["pos"] = { pos.x, pos.y };
 
-        // パラメータ
         nodeJson["animationName"] = node.motionName.c_str();
-        nodeJson["attackTime"] = node.attackTime;
-        nodeJson["moveSpeed"] = node.moveSpeed;
-        nodeJson["moveStartTime"] = node.moveStartTime;
-        nodeJson["moveEndTime"] = node.moveEndTime;
-        nodeJson["cancelStartTime"] = node.cancelStartTime;
-        nodeJson["cancelEndTime"] = node.cancelEndTime;
 
-        // 当たり判定配列の保存
-        nodeJson["hitDefinitions"] = json::array();
-        for (const auto& def : node.hitDefinitions)
+        // パラメータ
+        if (node.nodeType == ComboNodeType::Combo)
         {
-            json defJson;
-            defJson["startTime"] = def.startTime;
-            defJson["endTime"] = def.endTime;
-            defJson["damage"] = def.damage;
-            defJson["radius"] = def.radius;
-            defJson["knockback"] = def.knockback;
-            defJson["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
-            defJson["damageReaction"] = static_cast<int>(def.damageReaction);
-            defJson["jointType"] = static_cast<int>(def.jointType); // 必要に応じて追加
-            nodeJson["hitDefinitions"].push_back(defJson);
+			json comboParams = nodeJson["comboParams"];
+			comboParams["attackTime"] = node.comboAttackInitData.attackTime;
+            comboParams["attackTime"] = node.comboAttackInitData.attackTime;
+            comboParams["moveSpeed"] = node.comboAttackInitData.moveSpeed;
+            comboParams["moveStartTime"] = node.comboAttackInitData.moveStartTime;
+            comboParams["moveEndTime"] = node.comboAttackInitData.moveEndTime;
+            comboParams["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
+            comboParams["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
+
+            // 当たり判定配列の保存
+            comboParams["hitDefinitions"] = json::array();
+            for (const auto& def : node.comboAttackInitData.hitDefinitions)
+            {
+                json defJson;
+                defJson["startTime"] = def.startTime;
+                defJson["endTime"] = def.endTime;
+                defJson["damage"] = def.damage;
+                defJson["radius"] = def.radius;
+                defJson["knockback"] = def.knockback;
+                defJson["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
+                defJson["damageReaction"] = static_cast<int>(def.damageReaction);
+                defJson["jointType"] = static_cast<int>(def.jointType); // 必要に応じて追加
+                comboParams["hitDefinitions"].push_back(defJson);
+            }
+
+			// JSONに追加
+			nodeJson["comboParams"] = comboParams;
+        }
+        else if (node.nodeType == ComboNodeType::Grab)
+        {
+			json grabParams = nodeJson["grabParams"];
+			grabParams["attackTime"] = node.grabAttackInitData.attackTime;
+			grabParams["moveSpeed"] = node.grabAttackInitData.moveSpeed;
+			grabParams["moveStartTime"] = node.grabAttackInitData.moveStartTime;
+			grabParams["moveEndTime"] = node.grabAttackInitData.moveEndTime;
+			grabParams["grabTime"] = node.grabAttackInitData.grabTime;
+			grabParams["hitboxStartTime"] = node.grabAttackInitData.hitboxStartTime;
+			grabParams["hitboxEndTime"] = node.grabAttackInitData.hitboxEndTime;
+			grabParams["jointType"] = static_cast<int>(node.grabAttackInitData.jointType); // 必要に応じて追加
+
+			nodeJson["grabParams"] = grabParams;
         }
 
         rootJson["nodes"].push_back(nodeJson);
@@ -124,41 +178,57 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
     for (const auto& nodeJson : rootJson["nodes"])
     {
         ComboEditorNode node;
-        node.id = nodeJson["id"];
+		node.id = nodeJson.value("id", 0);
         strcpy_s(node.name, nodeJson["name"].get<std::string>().c_str());
-        node.inputPinId = nodeJson["inputPinId"];
-        node.outputLightPinId = nodeJson["outputLightPinId"];
-        node.outputHeavyPinId = nodeJson["outputHeavyPinId"];
-        node.pos.x = nodeJson["pos"][0];
-        node.pos.y = nodeJson["pos"][1];
+		node.inputPinId = nodeJson.value("inputPinId", -1);
+		node.outputLightPinId = nodeJson.value("outputLightPinId", -1);
+		node.outputHeavyPinId = nodeJson.value("outputHeavyPinId", -1);
+        node.nodeType = static_cast<ComboNodeType>(nodeJson.value("nodeType", 0));
+		node.pos.x = nodeJson.value("pos", std::vector<float>{0.0f, 0.0f})[0];
+		node.pos.y = nodeJson.value("pos", std::vector<float>{0.0f, 0.0f})[1];
 
 		node.motionName = nodeJson["animationName"].get<std::string>();
-        node.attackTime = nodeJson["attackTime"];
-        node.moveSpeed = nodeJson["moveSpeed"];
-        node.moveStartTime = nodeJson["moveStartTime"];
-        node.moveEndTime = nodeJson["moveEndTime"];
-        node.cancelStartTime = nodeJson["cancelStartTime"];
-        node.cancelEndTime = nodeJson["cancelEndTime"];
 
-        // 当たり判定配列の復元
-        if (nodeJson.contains("hitDefinitions"))
+        if (node.nodeType == ComboNodeType::Combo && nodeJson.contains("comboParams"))
         {
-            for (const auto& defJson : nodeJson["hitDefinitions"])
-            {
-                HitboxDefinition def;
-                def.startTime = defJson["startTime"];
-                def.endTime = defJson["endTime"];
-                def.damage = defJson["damage"];
-                def.radius = defJson["radius"];
-                def.knockback = defJson["knockback"];
+			const auto& comboParams = nodeJson["comboParams"];
+			node.comboAttackInitData.attackTime = comboParams.value("attackTime", 0.0f);
+			node.comboAttackInitData.moveSpeed = comboParams.value("moveSpeed", 0.0f);
+			node.comboAttackInitData.moveStartTime = comboParams.value("moveStartTime", 0.0f);
+			node.comboAttackInitData.moveEndTime = comboParams.value("moveEndTime", 0.0f);
+			node.comboAttackInitData.cancelStartTime = comboParams.value("cancelStartTime", 0.0f);
+			node.comboAttackInitData.cancelEndTime = comboParams.value("cancelEndTime", 0.0f);
 
-                auto targetDir = defJson["knockbackDirection"];
-                def.knockbackDirection = Vector3(targetDir[0], targetDir[1], targetDir[2]);
-                def.damageReaction = static_cast<DamageReaction>(defJson["damageReaction"].get<int>());
-                def.jointType = static_cast<JointType>(defJson["jointType"].get<int>());
-
-                node.hitDefinitions.push_back(def);
-            }
+			// 当たり判定配列の復元
+			if (comboParams.contains("hitDefinitions"))
+			{
+				for (const auto& defJson : comboParams["hitDefinitions"])
+				{
+					HitboxDefinition def;
+					def.startTime = defJson.value("startTime", 0.0f);
+					def.endTime = defJson.value("endTime", 0.0f);
+					def.damage = defJson.value("damage", 0);
+					def.radius = defJson.value("radius", 0.0f);
+					def.knockback = defJson.value("knockback", 0.0f);
+					auto targetDir = defJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f});
+					def.knockbackDirection = Vector3(targetDir[0], targetDir[1], targetDir[2]);
+					def.damageReaction = static_cast<DamageReaction>(defJson.value("damageReaction", 0));
+					def.jointType = static_cast<JointType>(defJson.value("jointType", 0));
+					node.comboAttackInitData.hitDefinitions.push_back(def);
+				}
+			}
+        }
+        else if (node.nodeType == ComboNodeType::Grab && nodeJson.contains("grabParams"))
+        {
+			const auto& grabParams = nodeJson["grabParams"];
+			node.grabAttackInitData.attackTime = grabParams.value("attackTime", 0.0f);
+			node.grabAttackInitData.moveSpeed = grabParams.value("moveSpeed", 0.0f);
+			node.grabAttackInitData.moveStartTime = grabParams.value("moveStartTime", 0.0f);
+			node.grabAttackInitData.moveEndTime = grabParams.value("moveEndTime", 0.0f);
+			node.grabAttackInitData.grabTime = grabParams.value("grabTime", 0.0f);
+			node.grabAttackInitData.hitboxStartTime = grabParams.value("hitboxStartTime", 0.0f);
+			node.grabAttackInitData.hitboxEndTime = grabParams.value("hitboxEndTime", 0.0f);
+			node.grabAttackInitData.jointType = static_cast<JointType>(grabParams.value("jointType", 0));
         }
 
         nodes_.push_back(node);
@@ -363,6 +433,11 @@ void ComboTreeEditor::DrawNodeEditor()
     {
         AddComboAttackNode();
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Add Grab Node"))
+    {
+		AddGrabAttackNode();
+    }
 
 
     // --- ノードの位置変更を検知して履歴に保存する処理 ---
@@ -419,21 +494,24 @@ void ComboTreeEditor::DrawNodeEditor()
 
         ImGui::Spacing();
 
-        // 右側：弱攻撃派生ピン
-        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
-        ImNodes::BeginOutputAttribute(node.outputLightPinId);
-        ImGui::Indent(40.0f);
-        ImGui::Text("Light (弱)");
-        ImNodes::EndOutputAttribute();
-        ImNodes::PopColorStyle();
+        if (node.nodeType == ComboNodeType::Combo)
+        {
+            // 右側：弱攻撃派生ピン
+            ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
+            ImNodes::BeginOutputAttribute(node.outputLightPinId);
+            ImGui::Indent(40.0f);
+            ImGui::Text("Light (弱)");
+            ImNodes::EndOutputAttribute();
+            ImNodes::PopColorStyle();
 
-        // 右側：強攻撃派生ピン
-        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
-        ImNodes::BeginOutputAttribute(node.outputHeavyPinId);
-        ImGui::Indent(40.0f);
-        ImGui::Text("Heavy (強)");
-        ImNodes::EndOutputAttribute();
-        ImNodes::PopColorStyle();
+            // 右側：強攻撃派生ピン
+            ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
+            ImNodes::BeginOutputAttribute(node.outputHeavyPinId);
+            ImGui::Indent(40.0f);
+            ImGui::Text("Heavy (強)");
+            ImNodes::EndOutputAttribute();
+            ImNodes::PopColorStyle();
+        }
 
         // --- ノードの描画終了 ---
         ImNodes::EndNode();
@@ -505,29 +583,12 @@ void ComboTreeEditor::DrawPropertyPanel()
         if (node)
         {
             ImGui::InputText("Node Name", node->name, sizeof(node->name));
-            ImGui::Separator();
-
-            // パラメータの編集 (DragFloatを使ってスライダー式にするのがおすすめです)
-            ImGui::DragFloat("Attack Time", &node->attackTime, 0.01f, 0.0f, 10.0f);
-
-            ImGui::Spacing();
-            ImGui::Text("Movement");
-            ImGui::DragFloat("Move Speed", &node->moveSpeed, 0.1f, 0.0f, 100.0f);
-            ImGui::DragFloat("Move Start Time", &node->moveStartTime, 0.01f, 0.0f, node->attackTime);
-            ImGui::DragFloat("Move End Time", &node->moveEndTime, 0.01f, 0.0f, node->attackTime);
-
-            ImGui::Spacing();
-            ImGui::Text("Cancel Window");
-            ImGui::DragFloat("Cancel Start Time", &node->cancelStartTime, 0.01f, 0.0f, node->attackTime);
-            ImGui::DragFloat("Cancel End Time", &node->cancelEndTime, 0.01f, 0.0f, node->attackTime);
 
 
-
-            ImGui::Spacing();
             ImGui::Text("Attack Motion");
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
             std::vector<std::string> motionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Attack);
-			std::string motionName = node->motionName;
+            std::string motionName = node->motionName;
 
             // モーション名のリストが空の場合はエラーメッセージを表示
             if (motionNames.empty())
@@ -551,7 +612,7 @@ void ComboTreeEditor::DrawPropertyPanel()
                             //history_->SaveHistory(nodes_, links_, currentId_);
                             //isDirty_ = true;
 
-							node->motionName = name; // 選択されたモーション名をノードに設定
+                            node->motionName = name; // 選択されたモーション名をノードに設定
                         }
                         if (isSelected) ImGui::SetItemDefaultFocus();
                     }
@@ -559,69 +620,104 @@ void ComboTreeEditor::DrawPropertyPanel()
                 }
             }
 
+			if (node->nodeType == ComboNodeType::Combo)
+			{
+                ImGui::Separator();
+                ImGui::DragFloat("Attack Time", &node->comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
 
-            ImGui::Spacing();
-            ImGui::Separator();
-            ImGui::Text("Hitboxes (当たり判定)");
+                ImGui::Spacing();
+                ImGui::Text("Movement");
+                ImGui::DragFloat("Move Speed", &node->comboAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+                ImGui::DragFloat("Move Start Time", &node->comboAttackInitData.moveStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+                ImGui::DragFloat("Move End Time", &node->comboAttackInitData.moveEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
-            // 新しい当たり判定を追加するボタン
-            if (ImGui::Button("Add Hitbox"))
-            {
-                node->hitDefinitions.push_back(HitboxDefinition());
-            }
+                ImGui::Spacing();
+                ImGui::Text("Cancel Window");
+                ImGui::DragFloat("Cancel Start Time", &node->comboAttackInitData.cancelStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+                ImGui::DragFloat("Cancel End Time", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
-            // 配列の各要素を描画
-            for (int i = 0; i < node->hitDefinitions.size(); ++i)
-            {
-                // ImGuiのID衝突を避けるためにインデックスでPushする
-                ImGui::PushID(i);
 
-                // 折りたたみ可能なツリーノードでまとめる
-                char hitboxName[32];
-                sprintf_s(hitboxName, "Hitbox [%d]", i);
-                if (ImGui::TreeNode(hitboxName))
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Text("Hitboxes (当たり判定)");
+
+                // 新しい当たり判定を追加するボタン
+                if (ImGui::Button("Add Hitbox"))
                 {
-                    HitboxDefinition& def = node->hitDefinitions[i];
-
-                    ImGui::DragFloat("Start Time", &def.startTime, 0.01f, 0.0f, node->attackTime);
-                    ImGui::DragFloat("End Time", &def.endTime, 0.01f, 0.0f, node->attackTime);
-                    ImGui::DragInt("Damage", &def.damage, 1, 0, 9999);
-                    ImGui::DragFloat("Radius", &def.radius, 0.01f, 0.0f, 10.0f);
-                    ImGui::DragFloat("Knockback", &def.knockback, 0.1f, 0.0f, 100.0f);
-                    ImGui::DragFloat3("Knockback Dir", &def.knockbackDirection.x, 0.01f);
-
-                    // 列挙型 (DamageReaction) のコンボボックス
-                    // 怯みなし, 小怯み, 大怯み, ダウン, 受け流され, 弾かれ を選択できるようにする
-                    const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
-                    int currentReaction = static_cast<int>(def.damageReaction);
-                    if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
-                    {
-                        def.damageReaction = static_cast<DamageReaction>(currentReaction);
-                    }
-
-                    // ※ jointType も同様に Combo を使って文字列の配列から選ばせるのがオススメです。
-                    // (例: "HandR", "HandL", "FootR", "FootL" など)
-
-                    ImGui::Spacing();
-
-                    // 削除ボタン
-                    // 削除ボタンを赤色にする（見た目の工夫）
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-                    if (ImGui::Button("Delete Hitbox"))
-                    {
-                        node->hitDefinitions.erase(node->hitDefinitions.begin() + i);
-                        ImGui::PopStyleColor();
-                        ImGui::TreePop();
-                        ImGui::PopID();
-                        --i; // 要素を削除したのでインデックスを戻す
-                        continue; // ループの次へ
-                    }
-                    ImGui::PopStyleColor();
-
-                    ImGui::TreePop(); // TreeNodeの終了
+                    node->comboAttackInitData.hitDefinitions.push_back(HitboxDefinition());
                 }
 
-                ImGui::PopID(); // PushIDの終了
+                // 配列の各要素を描画
+                for (int i = 0; i < node->comboAttackInitData.hitDefinitions.size(); ++i)
+                {
+                    // ImGuiのID衝突を避けるためにインデックスでPushする
+                    ImGui::PushID(i);
+
+                    // 折りたたみ可能なツリーノードでまとめる
+                    char hitboxName[32];
+                    sprintf_s(hitboxName, "Hitbox [%d]", i);
+                    if (ImGui::TreeNode(hitboxName))
+                    {
+                        HitboxDefinition& def = node->comboAttackInitData.hitDefinitions[i];
+
+                        ImGui::DragFloat("Start Time", &def.startTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+                        ImGui::DragFloat("End Time", &def.endTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+                        ImGui::DragInt("Damage", &def.damage, 1, 0, 9999);
+                        ImGui::DragFloat("Radius", &def.radius, 0.01f, 0.0f, 10.0f);
+                        ImGui::DragFloat("Knockback", &def.knockback, 0.1f, 0.0f, 100.0f);
+                        ImGui::DragFloat3("Knockback Dir", &def.knockbackDirection.x, 0.01f);
+
+                        // 列挙型 (DamageReaction) のコンボボックス
+                        // 怯みなし, 小怯み, 大怯み, ダウン, 受け流され, 弾かれ を選択できるようにする
+                        const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
+                        int currentReaction = static_cast<int>(def.damageReaction);
+                        if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
+                        {
+                            def.damageReaction = static_cast<DamageReaction>(currentReaction);
+                        }
+
+                        // ※ jointType も同様に Combo を使って文字列の配列から選ばせるのがオススメです。
+                        // (例: "HandR", "HandL", "FootR", "FootL" など)
+
+                        ImGui::Spacing();
+
+                        // 削除ボタン
+                        // 削除ボタンを赤色にする（見た目の工夫）
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+                        if (ImGui::Button("Delete Hitbox"))
+                        {
+                            node->comboAttackInitData.hitDefinitions.erase(node->comboAttackInitData.hitDefinitions.begin() + i);
+                            ImGui::PopStyleColor();
+                            ImGui::TreePop();
+                            ImGui::PopID();
+                            --i; // 要素を削除したのでインデックスを戻す
+                            continue; // ループの次へ
+                        }
+                        ImGui::PopStyleColor();
+
+                        ImGui::TreePop(); // TreeNodeの終了
+                    }
+
+                    ImGui::PopID(); // PushIDの終了
+                }
+			}
+            else if (node->nodeType == ComboNodeType::Grab)
+            {
+                ImGui::Separator();
+                ImGui::DragFloat("Attack Time", &node->grabAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+
+                ImGui::Spacing();
+                ImGui::Text("Movement");
+                ImGui::DragFloat("Move Speed", &node->grabAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+                ImGui::DragFloat("Move Start Time", &node->grabAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+                ImGui::DragFloat("Move End Time", &node->grabAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+
+
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Text("Hitboxes (当たり判定)");
+				ImGui::DragFloat("Hitbox Start Time", &node->grabAttackInitData.hitboxStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				ImGui::DragFloat("Hitbox End Time", &node->grabAttackInitData.hitboxEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
             }
         }
     }

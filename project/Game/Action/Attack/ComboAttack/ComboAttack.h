@@ -42,19 +42,19 @@ public:
 
 	/// @brief 次のライト攻撃を設定する
 	/// @param nextLightAttack 
-	void SetNextLightAttack(ComboAttack* nextLightAttack) { nextLightAttack_ = nextLightAttack; }
+	void SetNextLightAttack(Attack* nextLightAttack) { nextLightAttack_ = nextLightAttack; }
 
 	/// @brief 次のヘビー攻撃を設定する
 	/// @param nextHeavyAttack 
-	void SetNextHeavyAttack(ComboAttack* nextHeavyAttack) { nextHeavyAttack_ = nextHeavyAttack; }
+	void SetNextHeavyAttack(Attack* nextHeavyAttack) { nextHeavyAttack_ = nextHeavyAttack; }
 
 	/// @brief 次のライト攻撃を取得する
 	/// @return 
-	ComboAttack* GetNextLightAttack() const { return nextLightAttack_; }
+	Attack* GetNextLightAttack() const { return nextLightAttack_; }
 
 	/// @brief 次のヘビー攻撃を取得する
 	/// @return 
-	ComboAttack* GetNextHeavyAttack() const { return nextHeavyAttack_; }
+	Attack* GetNextHeavyAttack() const { return nextHeavyAttack_; }
 
 	/// @brief コンボキャンセル可能かどうか
 	/// @return 
@@ -77,10 +77,10 @@ private:
 private:
 
 	/// @brief 次のライト攻撃
-	ComboAttack* nextLightAttack_ = nullptr;
+	Attack* nextLightAttack_ = nullptr;
 
 	/// @brief 次のヘビー攻撃
-	ComboAttack* nextHeavyAttack_ = nullptr;
+	Attack* nextHeavyAttack_ = nullptr;
 
 
 private:
