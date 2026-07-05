@@ -704,8 +704,13 @@ void ComboTreeEditor::DrawPropertyPanel()
                             def.damageReaction = static_cast<DamageReaction>(currentReaction);
                         }
 
-                        // ※ jointType も同様に Combo を使って文字列の配列から選ばせるのがオススメです。
-                        // (例: "HandR", "HandL", "FootR", "FootL" など)
+                        // ジョイントタイプ
+                        const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
+                        int currentJoint = static_cast<int>(def.jointType);
+                        if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                        {
+                            def.jointType = static_cast<JointType>(currentJoint);
+                        }
 
                         ImGui::Spacing();
 
@@ -746,6 +751,14 @@ void ComboTreeEditor::DrawPropertyPanel()
                 ImGui::Text("Hitboxes (当たり判定)");
 				ImGui::DragFloat("Hitbox Start Time", &node->grabAttackInitData.hitboxStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 				ImGui::DragFloat("Hitbox End Time", &node->grabAttackInitData.hitboxEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+
+                // ジョイントタイプ
+                const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
+                int currentJoint = static_cast<int>(node->grabAttackInitData.jointType);
+                if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                {
+                    node->grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
+                }
             }
         }
     }

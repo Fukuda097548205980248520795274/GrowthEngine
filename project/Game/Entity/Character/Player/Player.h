@@ -15,7 +15,8 @@ public:
 	/// @param initData 
 	/// @param comboTree 
 	/// @param baton 
-	void Initialize(const CharacterInitData& initData, std::unique_ptr<ComboTree> comboTree, Weapon* baton);
+	void Initialize(const CharacterInitData& initData, Weapon* baton,
+		std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB);
 
 	/// @brief 更新処理
 	virtual void Update() override;
@@ -107,8 +108,15 @@ private:
 	bool isPrevInputLightAttack_ = false;
 
 
-	/// @brief コンボツリー
-	std::unique_ptr<ComboTree> comboTree_ = nullptr;
+private:
+
+	// 現在のコンボタイプ
+	AttackInputType activeComboType_ = AttackInputType::None;
+
+	// コンボツリー
+	std::unique_ptr<ComboTree> comboTreeX_ = nullptr;
+	std::unique_ptr<ComboTree> comboTreeY_ = nullptr;
+	std::unique_ptr<ComboTree> comboTreeB_ = nullptr;
 
 
 private:

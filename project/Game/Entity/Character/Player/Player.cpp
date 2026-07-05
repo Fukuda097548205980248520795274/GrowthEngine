@@ -33,7 +33,8 @@ Player::Player() : Character()
 }
 
 /// @brief 初期化
-void Player::Initialize(const CharacterInitData& initData, std::unique_ptr<ComboTree> comboTree, Weapon* baton)
+void Player::Initialize(const CharacterInitData& initData, Weapon* baton,
+	std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB)
 {
 	assert(baton);
 
@@ -71,7 +72,9 @@ void Player::Initialize(const CharacterInitData& initData, std::unique_ptr<Combo
 	OnStyleChanged(currentStyle_);
 
 	// コンボツリーを作成する
-	comboTree_ = std::move(comboTree);
+	comboTreeX_ = std::move(comboTreeX);
+	comboTreeY_ = std::move(comboTreeY);
+	comboTreeB_ = std::move(comboTreeB);
 }
 
 /// @brief 更新処理
@@ -270,10 +273,18 @@ void Player::UpdateAttack()
 	// 現在攻撃中でなく、かつバッファされた攻撃入力がある場合は攻撃を開始する
 	if (!IsAttack() && bufferedAttackInput_ != AttackInputType::None)
 	{
-		if (bufferedAttackInput_ == AttackInputType::InputX)
+		// 入力に応じて別々のコンボツリーを実行する
+		if (bufferedAttackInput_ == AttackInputType::InputX && comboTreeX_)
 		{
-			// 1段目の攻撃を実行
-			comboTree_->Exec();
+			comboTreeX_->Exec();
+		}
+		else if (bufferedAttackInput_ == AttackInputType::InputY && comboTreeY_)
+		{
+			comboTreeY_->Exec();
+		}
+		else if (bufferedAttackInput_ == AttackInputType::InputB && comboTreeB_)
+		{
+			comboTreeB_->Exec();
 		}
 
 		// バッファされた攻撃入力を消す
