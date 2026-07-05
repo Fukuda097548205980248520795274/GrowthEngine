@@ -9,11 +9,13 @@ using json = nlohmann::json;
 /// @param jsonFilePath 
 /// @param character 
 /// @return 
-ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Character* character)
+std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Character* character)
 {
-    ComboTree tree;
-    std::ifstream file(jsonFilePath);
-    if (!file.is_open()) return tree; // 読み込み失敗
+	std::string directoryPath = "./Assets/Parameter/ComboTree/" + jsonFilePath;
+
+	std::unique_ptr<ComboTree> tree = std::make_unique<ComboTree>();
+    std::ifstream file(directoryPath);
+    if (!file.is_open()) return nullptr; // 読み込み失敗
 
     json rootJson;
     file >> rootJson;
@@ -31,8 +33,9 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
     {
         int nodeId = nodeJson.value("id", 0);
 		int inputPinId = nodeJson.value("inputPinId", 0);
-		int outputLightPinId = nodeJson.value("outputLightPinId", 0);
-		int outputHeavyPinId = nodeJson.value("outputHeavyPinId", 0);
+		int outputInputXPinId = nodeJson.value("outputInputXPinId", 0);
+		int outputInputYPinId = nodeJson.value("outputInputYPinId", 0);
+		int outputInputBPinId = nodeJson.value("outputInputBPinId", 0);
 		std::string animName = nodeJson.value("animationName", "");
 		ComboNodeType nodeType = static_cast<ComboNodeType>(nodeJson.value("nodeType", 0));
         Attack* attackPtr = nullptr;
@@ -84,7 +87,7 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
             // ComboAttackインスタンスを生成してリストに保管
             auto attack = std::make_unique<ComboAttack>(character, initData);
             attackPtr = attack.get();
-            tree.allAttacks.push_back(std::move(attack));
+			tree->AddAttack(std::move(attack));
         }
         else if (nodeType == ComboNodeType::Grab && nodeJson.contains("grabParams"))
         {
@@ -113,7 +116,7 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
             // ComboAttackインスタンスを生成してリストに保管
             auto attack = std::make_unique<GrabAttack>(character, initData);
             attackPtr = attack.get();
-            tree.allAttacks.push_back(std::move(attack));
+			tree->AddAttack(std::move(attack));
         }
 
         // 検索用マップに登録
@@ -121,11 +124,14 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
 
         pinToNodeMap[inputPinId] = nodeId;
 
-        pinToNodeMap[outputLightPinId] = nodeId;
-        pinToTypeMap[outputLightPinId] = AttackInputType::Light; // このピンは「弱」
+        pinToNodeMap[outputInputXPinId] = nodeId;
+        pinToTypeMap[outputInputXPinId] = AttackInputType::InputX; // このピンはX
 
-        pinToNodeMap[outputHeavyPinId] = nodeId;
-        pinToTypeMap[outputHeavyPinId] = AttackInputType::Heavy; // このピンは「強」
+        pinToNodeMap[outputInputYPinId] = nodeId;
+        pinToTypeMap[outputInputYPinId] = AttackInputType::InputY; // このピンはY
+
+		pinToNodeMap[outputInputBPinId] = nodeId;
+		pinToTypeMap[outputInputBPinId] = AttackInputType::InputB; // このピンはB
     }
 
 	// リンク情報を読み込み、ノード間の接続を構築
@@ -146,14 +152,18 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
 		// 親ノードの次の攻撃として子ノードを設定
         if (parentAttack && childAttack)
         {
-            if (pinToTypeMap[startPinId] == AttackInputType::Light)
+            if (pinToTypeMap[startPinId] == AttackInputType::InputX)
             {
-                parentAttack->SetNextLightAttack(childAttack);
+                parentAttack->SetNextInputXAttack(childAttack);
             }
-            else if (pinToTypeMap[startPinId] == AttackInputType::Heavy)
+            else if (pinToTypeMap[startPinId] == AttackInputType::InputY)
             {
-                parentAttack->SetNextHeavyAttack(childAttack);
+                parentAttack->SetNextInputYAttack(childAttack);
             }
+			else if (pinToTypeMap[startPinId] == AttackInputType::InputB)
+			{
+				parentAttack->SetNextInputBAttack(childAttack);
+			}
         }
 
         // リンク先（子）のノードは、ルート（始点）ではないことを記録
@@ -166,8 +176,7 @@ ComboTree ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Characte
         int nodeId = pair.first;
         if (hasInputNodes.find(nodeId) == hasInputNodes.end())
         {
-            // ルートになるのは基本ComboAttackなのでキャストしておく（ツリー構造の定義に合わせます）
-            tree.rootAttack = dynamic_cast<ComboAttack*>(pair.second);
+            tree->SetRootAttack(pair.second);
             break;
         }
     }

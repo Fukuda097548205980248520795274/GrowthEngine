@@ -4,6 +4,15 @@
 
 using json = nlohmann::json;
 
+/// @brief コンストラクタ
+ComboTreeEditor::ComboTreeEditor()
+{
+	// プロジェクトマネージャー、クリップボード、履歴管理クラスのインスタンスを作成
+	projectManager_ = std::make_unique<ComboTreeProjectManager>();
+	clipboard_ = std::make_unique<ComboTreeEditorClipboard>();
+	history_ = std::make_unique<ComboTreeEditorHistory>();
+}
+
 /// @brief ノードを追加する
 void ComboTreeEditor::AddComboAttackNode()
 {
@@ -14,8 +23,9 @@ void ComboTreeEditor::AddComboAttackNode()
     ComboEditorNode node;
     node.id = GetNextId();
     node.inputPinId = GetNextId();
-    node.outputLightPinId = GetNextId();
-    node.outputHeavyPinId = GetNextId();
+    node.outputInputXPinId = GetNextId();
+    node.outputInputYPinId = GetNextId();
+	node.outputInputBPinId = GetNextId();
 	node.nodeType = ComboNodeType::Combo;
 
     // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
@@ -43,8 +53,9 @@ void ComboTreeEditor::AddGrabAttackNode()
     ComboEditorNode node;
     node.id = GetNextId();
     node.inputPinId = GetNextId();
-    node.outputLightPinId = -1;
-    node.outputHeavyPinId = -1;
+    node.outputInputXPinId = -1;
+    node.outputInputYPinId = -1;
+	node.outputInputBPinId = -1;
 	node.nodeType = ComboNodeType::Grab;
 
     // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
@@ -79,8 +90,9 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
         nodeJson["id"] = node.id;
         nodeJson["name"] = node.name;
         nodeJson["inputPinId"] = node.inputPinId;
-        nodeJson["outputLightPinId"] = node.outputLightPinId;
-        nodeJson["outputHeavyPinId"] = node.outputHeavyPinId;
+        nodeJson["outputInputXPinId"] = node.outputInputXPinId;
+        nodeJson["outputInputYPinId"] = node.outputInputYPinId;
+		nodeJson["outputInputBPinId"] = node.outputInputBPinId;
 		nodeJson["nodeType"] = static_cast<int>(node.nodeType);
 
         // エディタ上の最新のノード座標を取得して保存
@@ -181,8 +193,9 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 		node.id = nodeJson.value("id", 0);
         strcpy_s(node.name, nodeJson["name"].get<std::string>().c_str());
 		node.inputPinId = nodeJson.value("inputPinId", -1);
-		node.outputLightPinId = nodeJson.value("outputLightPinId", -1);
-		node.outputHeavyPinId = nodeJson.value("outputHeavyPinId", -1);
+		node.outputInputXPinId = nodeJson.value("outputInputXPinId", -1);
+		node.outputInputYPinId = nodeJson.value("outputInputYPinId", -1);
+		node.outputInputBPinId = nodeJson.value("outputInputBPinId", -1);
         node.nodeType = static_cast<ComboNodeType>(nodeJson.value("nodeType", 0));
 		node.pos.x = nodeJson.value("pos", std::vector<float>{0.0f, 0.0f})[0];
 		node.pos.y = nodeJson.value("pos", std::vector<float>{0.0f, 0.0f})[1];
@@ -267,25 +280,25 @@ void ComboTreeEditor::DrawUI()
 		// Ctrl + Cでコピー
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_C))
         {
-            clipboard_.HandleCopy(nodes_, links_);
+            clipboard_->HandleCopy(nodes_, links_);
         }
 
 		// Ctrl + Vで貼り付け
         if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
         {
-            clipboard_.HandlePaste(*this);
+            clipboard_->HandlePaste(*this);
         }
 
 		// Ctrl + Zで元に戻す
 		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
 		{
-			history_.Undo(*this);
+			history_->Undo(*this);
 		}
 
 		// Ctrl + Yでやり直す
 		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
 		{
-			history_.Redo(*this);
+			history_->Redo(*this);
 		}
 
 		// Deleteキー Backspaceキー で選択されたノードを削除
@@ -361,7 +374,7 @@ void ComboTreeEditor::DrawProjectPanel()
     ImGui::Text("File List:");
 
     // プロジェクトマネージャーからファイル一覧を取得
-    std::vector<std::string> fileList = projectManager_.GetFileList();
+    std::vector<std::string> fileList = projectManager_->GetFileList();
 
     // タイルのサイズ設定
     const float thumbnailSize = 64.0f;
@@ -496,19 +509,27 @@ void ComboTreeEditor::DrawNodeEditor()
 
         if (node.nodeType == ComboNodeType::Combo)
         {
-            // 右側：弱攻撃派生ピン
+            // 右側：X入力攻撃派生ピン
             ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
-            ImNodes::BeginOutputAttribute(node.outputLightPinId);
+            ImNodes::BeginOutputAttribute(node.outputInputXPinId);
             ImGui::Indent(40.0f);
-            ImGui::Text("Light (弱)");
+            ImGui::Text("X 入力");
             ImNodes::EndOutputAttribute();
             ImNodes::PopColorStyle();
 
-            // 右側：強攻撃派生ピン
+            // 右側：Y入力攻撃派生ピン
             ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
-            ImNodes::BeginOutputAttribute(node.outputHeavyPinId);
+            ImNodes::BeginOutputAttribute(node.outputInputYPinId);
             ImGui::Indent(40.0f);
-            ImGui::Text("Heavy (強)");
+            ImGui::Text("Y 入力");
+            ImNodes::EndOutputAttribute();
+            ImNodes::PopColorStyle();
+
+			// 右側：B入力攻撃派生ピン
+			ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 250, 100, 255));
+            ImNodes::BeginOutputAttribute(node.outputInputBPinId);
+            ImGui::Indent(40.0f);
+            ImGui::Text("B 入力");
             ImNodes::EndOutputAttribute();
             ImNodes::PopColorStyle();
         }
@@ -520,12 +541,18 @@ void ComboTreeEditor::DrawNodeEditor()
     // リンクの描画
     for (const auto& link : links_)
     {
-        if (link.linkType == 1) {
+        if (link.linkType == 1) 
+        {
             ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(100, 200, 250, 255)); // 水色
         }
-        else if (link.linkType == 2) {
+        else if (link.linkType == 2) 
+        {
             ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(250, 100, 100, 255)); // 赤色
         }
+		else if (link.linkType == 3)
+		{
+			ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(100, 250, 100, 255)); // 緑色
+		}
 
         ImNodes::Link(link.id, link.startPinId, link.endPinId);
 
@@ -554,8 +581,9 @@ void ComboTreeEditor::DrawNodeEditor()
         link.linkType = 0;
         for (const auto& node : nodes_)
         {
-            if (node.outputLightPinId == startPin) link.linkType = 1;
-            else if (node.outputHeavyPinId == startPin) link.linkType = 2;
+            if (node.outputInputXPinId == startPin) link.linkType = 1;
+            else if (node.outputInputYPinId == startPin) link.linkType = 2;
+			else if (node.outputInputBPinId == startPin) link.linkType = 3;
         }
 
         links_.push_back(link);
@@ -783,13 +811,14 @@ void ComboTreeEditor::DeleteSelectedNodes()
         if (node)
         {
             int inPin = node->inputPinId;
-            int outLightPin = node->outputLightPinId;
-            int outHeavyPin = node->outputHeavyPinId;
+            int outInputXPin = node->outputInputXPinId;
+            int outInputYPin = node->outputInputYPinId;
+			int outInputBPin = node->outputInputBPinId;
 
             for (auto it = links_.begin(); it != links_.end(); )
             {
-                if (it->startPinId == inPin || it->startPinId == outLightPin || it->startPinId == outHeavyPin ||
-                    it->endPinId == inPin || it->endPinId == outLightPin || it->endPinId == outHeavyPin)
+				if (it->startPinId == inPin || it->startPinId == outInputXPin || it->startPinId == outInputYPin || it->startPinId == outInputBPin ||
+                    it->endPinId == inPin || it->endPinId == outInputXPin || it->endPinId == outInputYPin || it->endPinId == outInputBPin)
                 {
                     it = links_.erase(it); // リンク配列から削除
                 }
@@ -821,7 +850,7 @@ void ComboTreeEditor::DeleteSelectedNodes()
 /// @brief 変更があったことを通知する関数
 void ComboTreeEditor::HandleChange()
 {
-	history_.SaveHistory(nodes_, links_, currentId_);
+	history_->SaveHistory(nodes_, links_, currentId_);
 }
 
 /// @brief 指定されたIDのノードを取得する関数

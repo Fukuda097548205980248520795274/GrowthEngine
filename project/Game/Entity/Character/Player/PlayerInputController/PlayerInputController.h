@@ -24,17 +24,17 @@ public:
 	/// @return 
 	bool IsAvoidRequested() const;
 
-	/// @brief 弱攻撃入力があったかどうかを取得する
+	/// @brief X攻撃入力があったかどうかを取得する
 	/// @return 
-	bool IsLightAttackRequested() const;
+	bool IsInputXAttackRequested() const;
 
-	/// @brief 強攻撃入力があったかどうかを取得する
+	/// @brief Y攻撃入力があったかどうかを取得する
 	/// @return 
-	bool IsHeavyAttackRequested() const;
+	bool IsInputYAttackRequested() const;
 
-	/// @brief 掴み入力があったかどうかを取得する
+	/// @brief B攻撃入力があったかどうかを取得する
 	/// @return 
-	bool IsGrabRequested() const;
+	bool IsInputBAttackRequested() const;
 
 	/// @brief 防御入力があったかどうかを取得する
 	/// @return 
@@ -70,14 +70,14 @@ private:
 	/// @brief 回避入力
 	std::unique_ptr<InputGamepadButton> inputAvoid_ = nullptr;
 
-	/// @brief 弱攻撃入力
-	std::unique_ptr<InputGamepadButton> inputLightAttack_ = nullptr;
+	/// @brief X攻撃入力
+	std::unique_ptr<InputGamepadButton> inputXAttack_ = nullptr;
 
-	/// @brief 強攻撃入力
-	std::unique_ptr<InputGamepadButton> inputHeavyAttack_ = nullptr;
+	/// @brief Y攻撃入力
+	std::unique_ptr<InputGamepadButton> inputYAttack_ = nullptr;
 
-	/// @brief 掴み入力
-	std::unique_ptr<InputGamepadButton> inputGrab_ = nullptr;
+	/// @brief B攻撃入力
+	std::unique_ptr<InputGamepadButton> inputBAttack_ = nullptr;
 
 	/// @brief 防御入力
 	std::unique_ptr<InputGamepadButton> inputGuard_ = nullptr;

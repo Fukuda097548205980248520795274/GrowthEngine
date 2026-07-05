@@ -7,10 +7,24 @@ class ComboTree
 {
 public:
 
+	/// @brief コンストラクタ
+	void Exec() { rootAttack->Exec(); }
+
+	/// @brief 攻撃を追加する
+    /// @param attack 
+    void AddAttack(std::unique_ptr<Attack> attack) { allAttacks.push_back(std::move(attack)); }
+
+	/// @brief ルート攻撃を設定する
+	/// @param attack 
+	void SetRootAttack(Attack* attack) { rootAttack = attack; }
+
+
+private:
+
     // 生成されたすべての攻撃ステートのメモリを管理
     std::vector<std::unique_ptr<Attack>> allAttacks;
 
     // コンボの始点となる最初の一撃のポインタ（Playerはこれを呼び出す）
-    ComboAttack* rootAttack = nullptr;
+    Attack* rootAttack = nullptr;
 };
 

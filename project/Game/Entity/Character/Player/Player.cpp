@@ -33,7 +33,7 @@ Player::Player() : Character()
 }
 
 /// @brief 初期化
-void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
+void Player::Initialize(const CharacterInitData& initData, std::unique_ptr<ComboTree> comboTree, Weapon* baton)
 {
 	assert(baton);
 
@@ -67,26 +67,11 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 		soundManager_->bgmStyleSenran_->Play();
 	}
 
-
-	// 掴み攻撃
-	GrabAttackInitData grabData;
-	grabData.hAttackMotion = motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1");
-	grabData.attackTime = 1.0f;
-	grabData.moveSpeed = 3.0f;
-	grabData.moveStartTime = 0.1f;
-	grabData.moveEndTime = 0.3f;
-	grabData.jointType = JointType::HandR;
-	grabData.hitboxStartTime = 0.15f;
-	grabData.hitboxEndTime = 0.35f;
-	grabData.grabTime = 3.0f;
-
-	grabAttack_ = std::make_unique<GrabAttack>(this, grabData);
-
 	// スタイルチェンジ開始時の処理
 	OnStyleChanged(currentStyle_);
 
 	// コンボツリーを作成する
-	comboTree_ = ComboTreeFactory::CreateTree("Assets/Parameter/ComboTree/Test.json", this);
+	comboTree_ = std::move(comboTree);
 }
 
 /// @brief 更新処理
@@ -240,14 +225,6 @@ void Player::UpdateAttack()
 	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsStyleChanging())
 		return;
 
-	// つかみ攻撃の入力があって、現在攻撃中でない場合はつかみ攻撃を実行する
-	if (inputController_->IsGrabRequested() && !IsAttack())
-	{
-		// つかみ攻撃を実行
-		grabAttack_->Exec();
-		return;
-	}
-
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
@@ -259,24 +236,33 @@ void Player::UpdateAttack()
 	}
 
 	// 攻撃ボタンの入力を受け付け、条件を満たす場合のみバッファに保存
-	if (inputController_->IsLightAttackRequested())
+	if (inputController_->IsInputXAttackRequested())
 	{
 		// 攻撃していない(待機・移動中) または、現在の攻撃から「弱」へ派生できる場合のみ
-		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Light))
+		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::InputX))
 		{
 			// 弱攻撃入力をしたことを記録する
 			isInputLightAttack_ = true;
 
-			bufferedAttackInput_ = AttackInputType::Light;
+			bufferedAttackInput_ = AttackInputType::InputX;
 			attackInputBufferTime_ = 0.2f; // バッファ有効時間
 		}
 	} 
-	else if (inputController_->IsHeavyAttackRequested())
+	else if (inputController_->IsInputYAttackRequested())
 	{
 		// 攻撃していない または、現在の攻撃から「強」へ派生できる場合のみ
-		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::Heavy))
+		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::InputY))
 		{
-			bufferedAttackInput_ = AttackInputType::Heavy;
+			bufferedAttackInput_ = AttackInputType::InputY;
+			attackInputBufferTime_ = 0.2f;
+		}
+	}
+	else if (inputController_->IsInputBAttackRequested())
+	{
+		// 攻撃していない または、現在の攻撃から「特殊」へ派生できる場合のみ
+		if (!IsAttack() || currentAttack_->HasNextAttack(AttackInputType::InputB))
+		{
+			bufferedAttackInput_ = AttackInputType::InputB;
 			attackInputBufferTime_ = 0.2f;
 		}
 	}
@@ -284,10 +270,10 @@ void Player::UpdateAttack()
 	// 現在攻撃中でなく、かつバッファされた攻撃入力がある場合は攻撃を開始する
 	if (!IsAttack() && bufferedAttackInput_ != AttackInputType::None)
 	{
-		if (bufferedAttackInput_ == AttackInputType::Light)
+		if (bufferedAttackInput_ == AttackInputType::InputX)
 		{
 			// 1段目の攻撃を実行
-			comboTree_.rootAttack->Exec();
+			comboTree_->Exec();
 		}
 
 		// バッファされた攻撃入力を消す

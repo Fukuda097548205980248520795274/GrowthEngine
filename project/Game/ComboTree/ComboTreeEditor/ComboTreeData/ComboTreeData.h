@@ -24,11 +24,14 @@ struct ComboEditorNode
     // 遷移元から入ってくるピン
     int inputPinId = 0;
 
-    // 弱攻撃（Light）派生用ピン
-    int outputLightPinId = 0;
+    // X入力派生用ピン
+    int outputInputXPinId = 0;
 
-    // 強攻撃（Heavy）派生用ピン
-    int outputHeavyPinId = 0;
+	// B入力派生用ピン
+	int outputInputBPinId = 0;
+
+    // Y入力派生用ピン
+    int outputInputYPinId = 0;
 
 	/// @brief ノードの種類
     ComboNodeType nodeType = ComboNodeType::Combo;

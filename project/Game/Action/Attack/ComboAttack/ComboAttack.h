@@ -40,21 +40,31 @@ public:
 	/// @return 
 	bool HasNextAttack(AttackInputType inputType) const override;
 
-	/// @brief 次のライト攻撃を設定する
-	/// @param nextLightAttack 
-	void SetNextLightAttack(Attack* nextLightAttack) { nextLightAttack_ = nextLightAttack; }
 
-	/// @brief 次のヘビー攻撃を設定する
+	/// @brief 次のX入力攻撃を設定する
+	/// @param nextInputXAttack 
+	void SetNextInputXAttack(Attack* nextInputXAttack) { nextInputXAttack_ = nextInputXAttack; }
+
+	/// @brief 次のY入力攻撃を設定する
 	/// @param nextHeavyAttack 
-	void SetNextHeavyAttack(Attack* nextHeavyAttack) { nextHeavyAttack_ = nextHeavyAttack; }
+	void SetNextInputYAttack(Attack* nextInputYAttack) { nextInputYAttack_ = nextInputYAttack; }
 
-	/// @brief 次のライト攻撃を取得する
-	/// @return 
-	Attack* GetNextLightAttack() const { return nextLightAttack_; }
+	/// @brief 次のB入力攻撃を設定する
+	/// @param nextInputBAttack 
+	void SetNextInputBAttack(Attack* nextInputBAttack) { nextInputBAttack_ = nextInputBAttack; }
 
-	/// @brief 次のヘビー攻撃を取得する
+	/// @brief 次のX入力攻撃を取得する
 	/// @return 
-	Attack* GetNextHeavyAttack() const { return nextHeavyAttack_; }
+	Attack* GetNextInputXAttack() const { return nextInputXAttack_; }
+
+	/// @brief 次のY入力攻撃を取得する
+	/// @return 
+	Attack* GetNextInputYAttack() const { return nextInputYAttack_; }
+
+	/// @brief 次のB攻撃を取得する
+	/// @return 
+	Attack* GetNextInputBAttack() const { return nextInputBAttack_; }
+
 
 	/// @brief コンボキャンセル可能かどうか
 	/// @return 
@@ -76,11 +86,14 @@ private:
 
 private:
 
-	/// @brief 次のライト攻撃
-	Attack* nextLightAttack_ = nullptr;
+	/// @brief 次のX入力攻撃
+	Attack* nextInputXAttack_ = nullptr;
 
-	/// @brief 次のヘビー攻撃
-	Attack* nextHeavyAttack_ = nullptr;
+	/// @brief 次のY入力攻撃
+	Attack* nextInputYAttack_ = nullptr;
+
+	/// @brief 次のB入力攻撃
+	Attack* nextInputBAttack_ = nullptr;
 
 
 private:

@@ -12,7 +12,10 @@ public:
 	Player();
 
 	/// @brief 初期化
-	void Initialize(const CharacterInitData& initData, Weapon* baton);
+	/// @param initData 
+	/// @param comboTree 
+	/// @param baton 
+	void Initialize(const CharacterInitData& initData, std::unique_ptr<ComboTree> comboTree, Weapon* baton);
 
 	/// @brief 更新処理
 	virtual void Update() override;
@@ -90,9 +93,6 @@ private:
 	float attackInputBufferTime_ = 0.2f;
 
 
-	/// @brief つかみ攻撃
-	std::unique_ptr<GrabAttack> grabAttack_ = nullptr;
-
 	/// @brief 前フレームのカメラのY回転
 	float prevCameraYaw_ = 0.0f;
 
@@ -108,7 +108,7 @@ private:
 
 
 	/// @brief コンボツリー
-	ComboTree comboTree_;
+	std::unique_ptr<ComboTree> comboTree_ = nullptr;
 
 
 private:

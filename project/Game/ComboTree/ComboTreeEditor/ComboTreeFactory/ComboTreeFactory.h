@@ -10,6 +10,6 @@ public:
 	/// @param jsonFilePath 
 	/// @param character 
 	/// @return 
-	static ComboTree CreateTree(const std::string& jsonFilePath, Character* character);
+	static std::unique_ptr<ComboTree> CreateTree(const std::string& jsonFilePath, Character* character);
 };
 

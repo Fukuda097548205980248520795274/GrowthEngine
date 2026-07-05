@@ -1,5 +1,6 @@
 #pragma once
 #include "ComboTreeData/ComboTreeData.h"
+#include "ComboTreeFactory/ComboTreeFactory.h"
 #include "ComboTreeProjectManager/ComboTreeProjectManager.h"
 #include "ComboTreeEditorClipboard/ComboTreeEditorClipboard.h"
 #include "ComboTreeEditorHistory/ComboTreeEditorHistory.h"
@@ -13,7 +14,7 @@ class ComboTreeEditor
 public:
 
 	/// @brief コンストラクタ
-	ComboTreeEditor() = default;
+	ComboTreeEditor();
 
 	/// @brief ノードを追加する
     void AddComboAttackNode();
@@ -68,13 +69,13 @@ private:
 private:
 
 	/// @brief プロジェクトマネージャー
-	ComboTreeProjectManager projectManager_;
+    std::unique_ptr<ComboTreeProjectManager> projectManager_;
 
 	// @brief コピー用のクリップボード管理クラス
-    ComboTreeEditorClipboard clipboard_;
+    std::unique_ptr<ComboTreeEditorClipboard> clipboard_;
 
 	/// @brief 履歴管理クラス
-	ComboTreeEditorHistory history_;
+    std::unique_ptr<ComboTreeEditorHistory> history_;
 
 	// ノード情報を保持する配列
     std::vector<ComboEditorNode> nodes_;

@@ -37,8 +37,9 @@ void ComboTreeEditorClipboard::HandleCopy(const std::vector<ComboEditorNode>& so
 
 			// コピーしたノードのピンIDを記録
             copiedPinIds.insert(node.inputPinId);
-            copiedPinIds.insert(node.outputLightPinId);
-            copiedPinIds.insert(node.outputHeavyPinId);
+            copiedPinIds.insert(node.outputInputXPinId);
+            copiedPinIds.insert(node.outputInputYPinId);
+			copiedPinIds.insert(node.outputInputBPinId);
         }
     }
 
@@ -80,19 +81,22 @@ void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
         // エディタ側で新しいIDを発行
         int newId = editor.GetNextId();
         int newInputPinId = editor.GetNextId();
-        int newOutLightPinId = editor.GetNextId();
-        int newOutHeavyPinId = editor.GetNextId();
+        int newOutInputXPinId = editor.GetNextId();
+        int newOutInputYPinId = editor.GetNextId();
+		int newOutInputBPinId = editor.GetNextId();
 
         // リンクを繋ぎ直すために、元のピンIDと新しいピンIDのペアを記憶
         pinIdMap[node.inputPinId] = newInputPinId;
-        pinIdMap[node.outputLightPinId] = newOutLightPinId;
-        pinIdMap[node.outputHeavyPinId] = newOutHeavyPinId;
+        pinIdMap[node.outputInputXPinId] = newOutInputXPinId;
+        pinIdMap[node.outputInputYPinId] = newOutInputYPinId;
+		pinIdMap[node.outputInputBPinId] = newOutInputBPinId;
 
         // ノード本体のIDを更新
         node.id = newId;
         node.inputPinId = newInputPinId;
-        node.outputLightPinId = newOutLightPinId;
-        node.outputHeavyPinId = newOutHeavyPinId;
+        node.outputInputXPinId = newOutInputXPinId;
+        node.outputInputYPinId = newOutInputYPinId;
+		node.outputInputBPinId = newOutInputBPinId;
 
         // ノードの位置を更新
         if (isFirst)

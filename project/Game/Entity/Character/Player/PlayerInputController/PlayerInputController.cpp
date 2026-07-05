@@ -18,14 +18,14 @@ void PlayerInputController::Initialize()
 	// 回避入力の生成
 	inputAvoid_ = std::make_unique<InputGamepadButton>("Player_Avoid", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
 
-	// 弱攻撃入力の生成
-	inputLightAttack_ = std::make_unique<InputGamepadButton>("Player_LightAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_X);
+	// X攻撃入力の生成
+	inputXAttack_ = std::make_unique<InputGamepadButton>("Player_XAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_X);
 
-	// 強攻撃入力の生成
-	inputHeavyAttack_ = std::make_unique<InputGamepadButton>("Player_HeavyAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_Y);
+	// Y攻撃入力の生成
+	inputYAttack_ = std::make_unique<InputGamepadButton>("Player_YAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_Y);
 
-	// つかみ入力の生成
-	inputGrab_ = std::make_unique<InputGamepadButton>("Player_Grab", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
+	// B攻撃入力の生成
+	inputBAttack_ = std::make_unique<InputGamepadButton>("Player_BAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
 
 	// 防御入力の生成
 	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
@@ -68,25 +68,25 @@ bool PlayerInputController::IsAvoidRequested() const
 	return inputAvoid_ && inputAvoid_->IsInput();
 }
 
-/// @brief 弱攻撃入力があったかどうかを取得する
+/// @brief X攻撃入力があったかどうかを取得する
 /// @return 
-bool PlayerInputController::IsLightAttackRequested() const
+bool PlayerInputController::IsInputXAttackRequested() const
 {
-	return inputLightAttack_ && inputLightAttack_->IsInput();
+	return inputXAttack_ && inputXAttack_->IsInput();
 }
 
-/// @brief 強攻撃入力があったかどうかを取得する
+/// @brief Y攻撃入力があったかどうかを取得する
 /// @return 
-bool PlayerInputController::IsHeavyAttackRequested() const
+bool PlayerInputController::IsInputYAttackRequested() const
 {
-	return inputHeavyAttack_ && inputHeavyAttack_->IsInput();
+	return inputYAttack_ && inputYAttack_->IsInput();
 }
 
-/// @brief 掴み入力があったかどうかを取得する
+/// @brief B攻撃入力があったかどうかを取得する
 /// @return 
-bool PlayerInputController::IsGrabRequested() const
+bool PlayerInputController::IsInputBAttackRequested() const
 {
-	return inputGrab_ && inputGrab_->IsInput();
+	return inputBAttack_ && inputBAttack_->IsInput();
 }
 
 /// @brief 防御入力があったかどうかを取得する

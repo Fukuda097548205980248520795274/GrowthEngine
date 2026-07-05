@@ -66,20 +66,28 @@ void ComboAttack::Update()
 			// バッファされた攻撃入力を取得する
 			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
 
-			if (bufferedInput == AttackInputType::Light && nextLightAttack_)
+			if (bufferedInput == AttackInputType::InputX && nextInputXAttack_)
 			{
 				// ライト攻撃への移行は、ヘビー攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
 				owner_->ConsumeBufferedAttackInput();
 				this->Exit();
-				nextLightAttack_->Exec();
+				nextInputXAttack_->Exec();
 				return;
 			}
-			else if (bufferedInput == AttackInputType::Heavy && nextHeavyAttack_)
+			else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
 			{
 				// ヘビー攻撃への移行は、ライト攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
 				owner_->ConsumeBufferedAttackInput();
 				this->Exit();
-				nextHeavyAttack_->Exec();
+				nextInputYAttack_->Exec();
+				return;
+			}
+			else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
+			{
+				// バッファされた攻撃入力を消費する
+				owner_->ConsumeBufferedAttackInput();
+				this->Exit();
+				nextInputBAttack_->Exec();
 				return;
 			}
 		}
@@ -256,13 +264,17 @@ void ComboAttack::Reset()
 /// @return 
 bool ComboAttack::HasNextAttack(AttackInputType inputType) const
 {
-	if (inputType == AttackInputType::Light)
+	if (inputType == AttackInputType::InputX)
 	{
-		return nextLightAttack_ != nullptr; // 弱の派生先がセットされていればtrue
+		return nextInputXAttack_ != nullptr; // 弱の派生先がセットされていればtrue
 	} 
-	else if (inputType == AttackInputType::Heavy)
+	else if (inputType == AttackInputType::InputY)
 	{
-		return nextHeavyAttack_ != nullptr; // 強の派生先がセットされていればtrue
+		return nextInputYAttack_ != nullptr; // 強の派生先がセットされていればtrue
+	}
+	else if (inputType == AttackInputType::InputB)
+	{
+		return nextInputBAttack_ != nullptr; // 特殊の派生先がセットされていればtrue
 	}
 	return false;
 }

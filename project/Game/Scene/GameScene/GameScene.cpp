@@ -504,7 +504,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.hpHUD = playerHP_.get();
 		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
 		player_ = std::make_unique<Player>();
-		player_->Initialize(playerInitData, playerWeapon_.get());
+		player_->Initialize(playerInitData, ComboTreeFactory::CreateTree("Test.json", player_.get()), playerWeapon_.get());
 
 		character = player_.get();
 

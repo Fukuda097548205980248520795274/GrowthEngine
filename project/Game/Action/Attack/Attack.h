@@ -7,8 +7,9 @@
 enum class AttackInputType
 {
 	None,
-	Light,
-	Heavy
+	InputX,
+	InputY,
+	InputB
 };
 
 // 攻撃の種類（コンボ、スピン投げ、掴みなど）を表す列挙型

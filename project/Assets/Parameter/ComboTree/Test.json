@@ -1,65 +1,35 @@
 {
-    "currentId": 128,
+    "currentId": 210,
     "links": [
         {
-            "endPinId": 71,
-            "id": 82,
-            "startPinId": 31
+            "endPinId": 134,
+            "id": 193,
+            "startPinId": 130
         },
         {
-            "endPinId": 75,
-            "id": 83,
-            "startPinId": 72
+            "endPinId": 139,
+            "id": 194,
+            "startPinId": 135
         },
         {
-            "endPinId": 79,
-            "id": 84,
-            "startPinId": 76
+            "endPinId": 144,
+            "id": 195,
+            "startPinId": 140
         },
         {
-            "endPinId": 86,
-            "id": 89,
-            "startPinId": 32
+            "endPinId": 189,
+            "id": 197,
+            "startPinId": 145
         },
         {
-            "endPinId": 91,
-            "id": 94,
-            "startPinId": 88
+            "endPinId": 204,
+            "id": 208,
+            "startPinId": 131
         },
         {
-            "endPinId": 100,
-            "id": 103,
-            "startPinId": 98
-        },
-        {
-            "endPinId": 109,
-            "id": 112,
-            "startPinId": 107
-        },
-        {
-            "endPinId": 118,
-            "id": 121,
-            "startPinId": 116
-        },
-        {
-            "endPinId": 96,
-            "id": 122,
-            "startPinId": 73
-        },
-        {
-            "endPinId": 105,
-            "id": 123,
-            "startPinId": 77
-        },
-        {
-            "endPinId": 114,
-            "id": 124,
-            "startPinId": 81
-        },
-        {
-            "endPinId": 126,
-            "id": 127,
-            "startPinId": 80
+            "endPinId": 199,
+            "id": 209,
+            "startPinId": 142
         }
     ],
     "nodes": [
@@ -89,15 +59,16 @@
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 29,
-            "inputPinId": 30,
+            "id": 128,
+            "inputPinId": 129,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputHeavyPinId": 32,
-            "outputLightPinId": 31,
+            "outputInputBPinId": 132,
+            "outputInputXPinId": 130,
+            "outputInputYPinId": 131,
             "pos": [
-                195.0,
-                158.0
+                750.810791015625,
+                289.24530029296875
             ]
         },
         {
@@ -126,15 +97,16 @@
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 70,
-            "inputPinId": 71,
+            "id": 133,
+            "inputPinId": 134,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputHeavyPinId": 73,
-            "outputLightPinId": 72,
+            "outputInputBPinId": 137,
+            "outputInputXPinId": 135,
+            "outputInputYPinId": 136,
             "pos": [
-                332.0,
-                165.0
+                862.810791015625,
+                289.24530029296875
             ]
         },
         {
@@ -163,15 +135,16 @@
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 74,
-            "inputPinId": 75,
+            "id": 138,
+            "inputPinId": 139,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputHeavyPinId": 77,
-            "outputLightPinId": 76,
+            "outputInputBPinId": 142,
+            "outputInputXPinId": 140,
+            "outputInputYPinId": 141,
             "pos": [
-                487.0,
-                175.0
+                974.810791015625,
+                291.24530029296875
             ]
         },
         {
@@ -200,311 +173,16 @@
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 78,
-            "inputPinId": 79,
+            "id": 143,
+            "inputPinId": 144,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputHeavyPinId": 81,
-            "outputLightPinId": 80,
+            "outputInputBPinId": 147,
+            "outputInputXPinId": 145,
+            "outputInputYPinId": 146,
             "pos": [
-                657.0,
-                175.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 85,
-            "inputPinId": 86,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 88,
-            "outputLightPinId": 87,
-            "pos": [
-                318.7530822753906,
-                694.050048828125
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 90,
-            "inputPinId": 91,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 93,
-            "outputLightPinId": 92,
-            "pos": [
-                456.7530822753906,
-                754.0501708984375
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 95,
-            "inputPinId": 96,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 98,
-            "outputLightPinId": 97,
-            "pos": [
-                392.0,
-                455.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 99,
-            "inputPinId": 100,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 102,
-            "outputLightPinId": 101,
-            "pos": [
-                530.0,
-                515.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 104,
-            "inputPinId": 105,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 107,
-            "outputLightPinId": 106,
-            "pos": [
-                621.0,
-                401.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 108,
-            "inputPinId": 109,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 111,
-            "outputLightPinId": 110,
-            "pos": [
-                759.0,
-                461.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 113,
-            "inputPinId": 114,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 116,
-            "outputLightPinId": 115,
-            "pos": [
-                835.0,
-                331.0
-            ]
-        },
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 1.0,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 117,
-            "inputPinId": 118,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputHeavyPinId": 120,
-            "outputLightPinId": 119,
-            "pos": [
-                973.0,
-                391.0
+                1088.810791015625,
+                292.24530029296875
             ]
         },
         {
@@ -519,15 +197,92 @@
                 "moveSpeed": 3.0,
                 "moveStartTime": 0.0
             },
-            "id": 125,
-            "inputPinId": 126,
+            "id": 188,
+            "inputPinId": 189,
             "name": "Combo Attack",
             "nodeType": 1,
-            "outputHeavyPinId": -1,
-            "outputLightPinId": -1,
+            "outputInputBPinId": 192,
+            "outputInputXPinId": 190,
+            "outputInputYPinId": 191,
             "pos": [
-                875.0,
-                206.5
+                1202.810791015625,
+                324.74530029296875
+            ]
+        },
+        {
+            "animationName": "Player_Combo_4",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.20000000298023224,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "jointType": 9,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
+                ],
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.0
+            },
+            "id": 198,
+            "inputPinId": 199,
+            "name": "Combo Attack",
+            "nodeType": 0,
+            "outputInputBPinId": 202,
+            "outputInputXPinId": 200,
+            "outputInputYPinId": 201,
+            "pos": [
+                1093.0,
+                419.0
+            ]
+        },
+        {
+            "animationName": "Player_Combo_4",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.20000000298023224,
+                "hitDefinitions": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "jointType": 9,
+                        "knockback": 0.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "radius": 0.25,
+                        "startTime": 0.0
+                    }
+                ],
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.0
+            },
+            "id": 203,
+            "inputPinId": 204,
+            "name": "Combo Attack",
+            "nodeType": 0,
+            "outputInputBPinId": 207,
+            "outputInputXPinId": 205,
+            "outputInputYPinId": 206,
+            "pos": [
+                861.0,
+                420.0
             ]
         }
     ]
