@@ -1,0 +1,39 @@
+{
+    "Sprite_R_Stick_Sprite": {
+        "BlendMode": 1,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "ScreenAnchor": 6,
+        "Texture": "./Assets/Textures/r_stick.png",
+        "Texture_Anchor": [
+            0.5,
+            0.5
+        ],
+        "Texture_Size": [
+            128.0,
+            128.0
+        ],
+        "Transform_Rotate": 0.0,
+        "Transform_Scale": [
+            0.5,
+            0.5
+        ],
+        "Transform_Translate": [
+            1086.8599853515625,
+            62.0
+        ]
+    }
+}

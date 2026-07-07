@@ -1,0 +1,39 @@
+{
+    "Sprite_Tutorial_Perspective_Text_Sprite": {
+        "BlendMode": 1,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "ScreenAnchor": 6,
+        "Texture": "./Assets/Textures/perspective_text.png",
+        "Texture_Anchor": [
+            0.5,
+            0.5
+        ],
+        "Texture_Size": [
+            288.0,
+            160.0
+        ],
+        "Transform_Rotate": 0.0,
+        "Transform_Scale": [
+            0.30000001192092896,
+            0.30000001192092896
+        ],
+        "Transform_Translate": [
+            976.489990234375,
+            54.709999084472656
+        ]
+    }
+}

@@ -132,10 +132,6 @@ void GameScene::Initialize()
 	// 数字スプライトの生成と初期化
 	numbersSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/numbers.png"), 100, "Numbers_Sprite");
 
-	// 攻撃ボタンのスプライトの生成と初期化
-	attackButtonSprite = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/attack_button.png"), "Attack_Button_Sprite");
-	attackButtonSprite->param_->texture.anchor = Vector2(0.0f, 1.0f);
-
 
 	MashButton::InitData xButtonInitData;
 	xButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
@@ -146,6 +142,36 @@ void GameScene::Initialize()
 	xButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
 	xButton_ = std::make_unique<MashButton>();
 	xButton_->Initialize(xButtonInitData);
+
+	MashButton::InitData yButtonInitData;
+	yButtonInitData.buttonSprite = yButtonSprite_->CreateInstance();
+	yButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
+	yButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
+	yButtonInitData.position = Vector2(200.0f, 300.0f);
+	yButtonInitData.scale = Vector2(0.3f, 0.3f);
+	yButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
+	yButton_ = std::make_unique<MashButton>();
+	yButton_->Initialize(yButtonInitData);
+
+	MashButton::InitData aButtonInitData;
+	aButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
+	aButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
+	aButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
+	aButtonInitData.position = Vector2(200.0f, 200.0f);
+	aButtonInitData.scale = Vector2(0.3f, 0.3f);
+	aButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
+	aButton_ = std::make_unique<MashButton>();
+	aButton_->Initialize(aButtonInitData);
+
+	MashButton::InitData bButtonInitData;
+	bButtonInitData.buttonSprite = yButtonSprite_->CreateInstance();
+	bButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
+	bButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
+	bButtonInitData.position = Vector2(200.0f, 300.0f);
+	bButtonInitData.scale = Vector2(0.3f, 0.3f);
+	bButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
+	bButton_ = std::make_unique<MashButton>();
+	bButton_->Initialize(bButtonInitData);
 
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
@@ -270,6 +296,12 @@ void GameScene::Initialize()
 			xButtonSprite_->Draw();
 			bButtonSprite_->Draw();
 			aButtonSprite_->Draw();
+
+			// チュートリアルの描画
+			tutorialMoveText_->Draw();
+			tutorialPerspectiveText_->Draw();
+			lStickSprite_->Draw();
+			rStickSprite_->Draw();
 		}
 	);
 
@@ -369,8 +401,6 @@ void GameScene::Update()
 		}
 	);
 
-	xButton_->Update();
-
 	// エフェクトの更新
 	effectManager_->Update();
 
@@ -402,6 +432,9 @@ void GameScene::Update()
 
 	// 攻撃ボタンの更新
 	if (xButton_)xButton_->Update();
+	if (yButton_)yButton_->Update();
+	if (aButton_)aButton_->Update();
+	if (bButton_)bButton_->Update();
 
 	// カメラシェイクの更新
 	cameraShake_->Update(dt);
@@ -1111,4 +1144,13 @@ void GameScene::LoadHUDs()
 
 	textFrameLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/text_frame_left.png"), 50, "Text_Frame_Left_Sprite");
 	textFrameLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
+
+	// チュートリアル用テキスト
+	tutorialMoveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/move_text.png"), "Tutorial_Move_Text_Sprite");
+	tutorialPerspectiveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/perspective_text.png"), "Tutorial_Perspective_Text_Sprite");
+
+	// スティックの画像
+	lStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/l_stick.png"), "L_Stick_Sprite");
+	rStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/r_stick.png"), "R_Stick_Sprite");
+
 }

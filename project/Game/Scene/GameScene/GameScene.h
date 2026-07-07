@@ -240,9 +240,6 @@ private:
 	/// @brief 数字スプライト
 	std::unique_ptr<PrefabBaseSprite> numbersSprite_ = nullptr;
 
-	/// @brief 攻撃ボタンのスプライト
-	std::unique_ptr<Sprite> attackButtonSprite = nullptr;
-
 
 
 	/// @brief NPCのモデルリスト
@@ -278,6 +275,9 @@ private:
 
 	/// @brief Xボタン
 	std::unique_ptr<MashButton> xButton_ = nullptr;
+	std::unique_ptr<MashButton> yButton_ = nullptr;
+	std::unique_ptr<MashButton> aButton_ = nullptr;
+	std::unique_ptr<MashButton> bButton_ = nullptr;
 
 
 	/// @brief カメラのピボットポイント
@@ -357,6 +357,14 @@ private:
 	std::unique_ptr<PrefabBaseSprite> textFrameRightSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> textFrameMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> textFrameLeftSprite_ = nullptr;
+
+	/// @brief チュートリアルのテキストスプライト
+	std::unique_ptr<Sprite> tutorialMoveText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialPerspectiveText_ = nullptr;
+
+	/// @brief スティックのスプライト
+	std::unique_ptr<Sprite> lStickSprite_ = nullptr;
+	std::unique_ptr<Sprite> rStickSprite_ = nullptr;
 
 
 private:

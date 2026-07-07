@@ -230,7 +230,7 @@
             "hp": 50,
             "name": "",
             "posX": -0.010753585956990719,
-            "posY": 0.0,
+            "posY": 6.214715957641602,
             "posZ": 19.752424240112305,
             "rotX": 0.0,
             "rotY": 3.140000104904175,
@@ -242,6 +242,22 @@
             "standMotionName": "Standing",
             "subType": 4,
             "walkMotionName": "Walk"
+        },
+        {
+            "category": 3,
+            "maxAttackCount": 6,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "practiceTime": 60.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 7
         }
     ]
 }
