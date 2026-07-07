@@ -70,14 +70,14 @@
                         "damageReaction": 1,
                         "endTime": 0.20000000298023224,
                         "jointType": 9,
-                        "knockback": 0.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -106,16 +106,16 @@
                     {
                         "damage": 10,
                         "damageReaction": 1,
-                        "endTime": 0.10000000149011612,
+                        "endTime": 0.20000000298023224,
                         "jointType": 8,
-                        "knockback": 0.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -146,14 +146,14 @@
                         "damageReaction": 1,
                         "endTime": 0.20000000298023224,
                         "jointType": 9,
-                        "knockback": 0.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -168,7 +168,7 @@
             "outputInputXPinId": 13,
             "outputInputYPinId": 14,
             "pos": [
-                596.0,
+                595.0,
                 236.0
             ]
         },
@@ -184,14 +184,14 @@
                         "damageReaction": 1,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -222,14 +222,14 @@
                         "damageReaction": 3,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 10.0,
                         "knockbackDirection": [
                             0.0,
-                            0.0,
-                            1.0
+                            1.0,
+                            0.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -260,14 +260,14 @@
                         "damageReaction": 2,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -282,7 +282,7 @@
             "outputInputXPinId": 31,
             "outputInputYPinId": 32,
             "pos": [
-                843.0,
+                842.0,
                 238.0
             ]
         },
@@ -298,14 +298,14 @@
                         "damageReaction": 3,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 8.0,
                         "knockbackDirection": [
+                            1.0,
                             0.0,
-                            0.0,
-                            1.0
+                            0.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -321,7 +321,7 @@
             "outputInputYPinId": 39,
             "pos": [
                 829.0,
-                384.0
+                385.0
             ]
         },
         {
@@ -336,14 +336,14 @@
                         "damageReaction": 2,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 5.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -374,7 +374,7 @@
                         "damageReaction": 3,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 8.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
@@ -412,14 +412,14 @@
                         "damageReaction": 2,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -435,7 +435,7 @@
             "outputInputYPinId": 56,
             "pos": [
                 593.75830078125,
-                495.23834228515625
+                494.23834228515625
             ]
         },
         {
@@ -450,14 +450,14 @@
                         "damageReaction": 3,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
-                            0.0,
+                            1.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -472,8 +472,8 @@
             "outputInputXPinId": 62,
             "outputInputYPinId": 63,
             "pos": [
-                592.7583618164063,
-                612.2384033203125
+                597.7583618164063,
+                615.2384033203125
             ]
         },
         {
@@ -488,14 +488,14 @@
                         "damageReaction": 2,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 4.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
                         "radius": 0.25,
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
@@ -510,8 +510,8 @@
             "outputInputXPinId": 67,
             "outputInputYPinId": 68,
             "pos": [
-                476.75830078125,
-                608.2384033203125
+                475.75830078125,
+                609.2384033203125
             ]
         }
     ]
