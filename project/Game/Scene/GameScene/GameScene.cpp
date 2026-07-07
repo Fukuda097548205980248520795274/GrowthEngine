@@ -22,6 +22,9 @@ namespace
 	const Vector3 kPivotCenterOffset = Vector3(0.0f, 1.5f, 0.0f);
 }
 
+/// @brief チュートリアルがアクティブかどうか
+bool GameScene::isTutorialActive_ = false;
+
 /// @brief 初期化
 void GameScene::Initialize()
 {
@@ -357,7 +360,14 @@ void GameScene::Update()
 	weapons_.remove_if([](const std::unique_ptr<Weapon>& weapon) {weapon->Update();return weapon->IsFinished();});
 
 	// HUDの更新
-	huds_.remove_if([](const std::unique_ptr<HUD>& hud) {hud->Update(); return hud->IsFinished(); });
+	isTutorialActive_ = false;
+	huds_.remove_if([](const std::unique_ptr<HUD>& hud) 
+		{
+			hud->Update();
+			if (!isTutorialActive_)isTutorialActive_ = hud->IsTutorial();
+			return hud->IsFinished(); 
+		}
+	);
 
 	xButton_->Update();
 

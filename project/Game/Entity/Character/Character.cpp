@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numbers>
+#include "Scene/GameScene/GameScene.h"
 #include "Entity/Weapon/Weapon.h"
 #include "EffectManager/EffectManager.h"
 
@@ -812,7 +813,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 
 	// 体力を減らし、0未満にならないようにする
-	hp_ = std::max(0, hp_ - finalDamage);
+	if(!GameScene::IsTutorialActive())
+		hp_ = std::max(0, hp_ - finalDamage);
 
 	// ノックバック処理
 	if (knockback > 0.0f)

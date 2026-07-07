@@ -33,6 +33,10 @@ public:
 	/// @brief 描画処理
 	virtual void Draw()override {}
 
+	/// @brief チュートリアルかどうかを判定する
+	/// @return 
+	bool IsTutorial() const override { return state_ == State::Practice; }
+
 
 protected:
 

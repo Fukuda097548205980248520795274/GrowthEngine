@@ -63,6 +63,10 @@ public:
 	/// @param visible 
 	void SetVisible(bool visible) { isVisible_ = visible; }
 
+	/// @brief チュートリアルかどうかを判定する
+	/// @return 
+	virtual bool IsTutorial() const { return false; }
+
 
 protected:
 

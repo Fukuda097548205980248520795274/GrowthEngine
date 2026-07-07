@@ -109,6 +109,10 @@ public:
 	/// @brief リセットする
 	void Reset();
 
+	/// @brief チュートリアルがアクティブかどうかを取得する
+	/// @return 
+	static bool IsTutorialActive() { return isTutorialActive_; }
+
 
 private:
 
@@ -265,6 +269,9 @@ private:
 
 	/// @brief HUDのリスト
 	std::list<std::unique_ptr<HUD>> huds_;
+
+	/// @brief チュートリアルがアクティブかどうか
+	static bool isTutorialActive_;
 
 	/// @brief 試験的な立方体
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
