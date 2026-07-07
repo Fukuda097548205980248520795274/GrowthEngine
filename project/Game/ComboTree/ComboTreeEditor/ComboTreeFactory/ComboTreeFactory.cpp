@@ -37,6 +37,7 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 		int outputInputYPinId = nodeJson.value("outputInputYPinId", 0);
 		int outputInputBPinId = nodeJson.value("outputInputBPinId", 0);
 		std::string animName = nodeJson.value("animationName", "");
+		std::string targetAnimName = nodeJson.value("targetAnimationName", "");
 		ComboNodeType nodeType = static_cast<ComboNodeType>(nodeJson.value("nodeType", 0));
         Attack* attackPtr = nullptr;
 
@@ -116,6 +117,56 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
             // ComboAttackインスタンスを生成してリストに保管
             auto attack = std::make_unique<GrabAttack>(character, initData);
             attackPtr = attack.get();
+			tree->AddAttack(std::move(attack));
+        }
+        else if (nodeType == ComboNodeType::GrabStrike && nodeJson.contains("grabStrikeParams"))
+        {
+			// GrabStrikeAttackのパラメータを取得
+			paramsJson = nodeJson["grabStrikeParams"];
+
+			GrabStrikeAttackInitData initData;
+
+			if (!animName.empty())
+			{
+				// ※ プロジェクトの MotionManager の仕様に合わせて関数名は適宜調整してください
+				initData.hAttackAnimation = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
+			}
+
+			if (!targetAnimName.empty())
+			{
+				initData.hTargetAnimation = MotionManager::GetInstance()->GetMotion(MotionType::Attack, targetAnimName);
+			}
+
+			initData.attackTime = paramsJson.value("attackTime", 0.0f);
+			initData.moveSpeed = paramsJson.value("moveSpeed", 0.0f);
+			initData.moveStartTime = paramsJson.value("moveStartTime", 0.0f);
+			initData.moveEndTime = paramsJson.value("moveEndTime", 0.0f);
+			initData.knockback = paramsJson.value("knockback", 0.0f);
+			initData.knockbackDirection = Vector3(
+				paramsJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				paramsJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				paramsJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
+
+			initData.isRelease = paramsJson.value("isRelease", false);
+			initData.releaseTime = paramsJson.value("releaseTime", 0.0f);
+			initData.damageReaction = static_cast<DamageReaction>(paramsJson.value("damageReaction", 0));
+
+            if (paramsJson.contains("hitDefinitions"))
+            {
+                for (const auto& defJson : paramsJson["hitDefinitions"])
+                {
+                    HitDefinition def;
+					def.hitTime = defJson["hitTime"];
+                    def.damage = defJson["damage"];
+					def.hitJoint = static_cast<JointType>(defJson["hitJoint"].get<int>());
+
+                    initData.hits.push_back(def);
+                }
+            }
+            
+			auto attack = std::make_unique<GrabStrikeAttack>(character, initData);
+			attackPtr = attack.get();
 			tree->AddAttack(std::move(attack));
         }
 

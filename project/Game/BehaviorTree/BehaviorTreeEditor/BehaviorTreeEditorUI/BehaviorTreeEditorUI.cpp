@@ -1388,7 +1388,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 						history_->SaveHistory(nodes_, links_, currentId_);
 						isDirty_ = true;
 
-						node.grabStrikeAttackInitData.hits[i].targetHitJoint = static_cast<JointType>(targetJoint);
+						node.grabStrikeAttackInitData.hits[i].hitJoint = static_cast<JointType>(targetJoint);
 					}
 				}
 			}

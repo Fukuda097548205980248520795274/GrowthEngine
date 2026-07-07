@@ -3,13 +3,15 @@
 #include <vector>
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
+#include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "Math/Vector/Vector2/Vector2.h"
 
 // ノードの種類を表す列挙型
 enum class ComboNodeType
 {
     Combo,
-    Grab
+    Grab,
+    GrabStrike,
 };
 
 
@@ -19,7 +21,7 @@ struct ComboEditorNode
     int id = 0;
 
     // 攻撃名
-    char name[128] = "Combo Attack";
+    std::string name{};
 
     // 遷移元から入ってくるピン
     int inputPinId = 0;
@@ -46,9 +48,15 @@ struct ComboEditorNode
 	/// @brief つかみ攻撃の初期化データ
 	GrabAttackInitData grabAttackInitData;
 
+	/// @brief つかみ打撃攻撃の初期化データ
+    GrabStrikeAttackInitData grabStrikeAttackInitData;
+
 
 	// 攻撃アニメーション名
     std::string motionName;
+
+    // GrabStrike用のターゲットアニメーション名
+	std::string targetMotionName;
 };
 
 // リンク情報を保持する構造体

@@ -22,6 +22,9 @@ public:
 	/// @brief ノードを追加する
     void AddGrabAttackNode();
 
+	/// @brief ノードを追加する
+	void AddGrabStrikeAttackNode();
+
     /// @brief ファイルにコンボツリーを保存する
     /// @param filePath 
     void SaveToFile(const std::string& filePath);

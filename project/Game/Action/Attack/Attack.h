@@ -201,5 +201,5 @@ struct HitDefinition
 	float hitTime = 0.0f;
 
 	// 相手に当たるジョイント
-	JointType targetHitJoint = JointType::None;
+	JointType hitJoint = JointType::None;
 };

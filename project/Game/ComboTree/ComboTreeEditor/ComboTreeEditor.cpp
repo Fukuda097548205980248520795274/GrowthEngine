@@ -53,9 +53,9 @@ void ComboTreeEditor::AddGrabAttackNode()
     ComboEditorNode node;
     node.id = GetNextId();
     node.inputPinId = GetNextId();
-    node.outputInputXPinId = -1;
-    node.outputInputYPinId = -1;
-	node.outputInputBPinId = -1;
+    node.outputInputXPinId = GetNextId();
+    node.outputInputYPinId = GetNextId();
+	node.outputInputBPinId = GetNextId();
 	node.nodeType = ComboNodeType::Grab;
 
     // 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
@@ -70,6 +70,33 @@ void ComboTreeEditor::AddGrabAttackNode()
     node.pos = ImVec2(-99999.0f, -99999.0f);
 
     // ノードを配列に追加
+    nodes_.push_back(node);
+}
+
+/// @brief ノードを追加する
+void ComboTreeEditor::AddGrabStrikeAttackNode()
+{
+	// 変更があったことを通知
+    HandleChange();
+
+	// 新しいノードを作成
+    ComboEditorNode node;
+    node.id = GetNextId();
+    node.inputPinId = GetNextId();
+    node.outputInputXPinId = GetNextId();
+    node.outputInputYPinId = GetNextId();
+    node.outputInputBPinId = GetNextId();
+    node.nodeType = ComboNodeType::GrabStrike;
+
+	// 現在のウィンドウ（ノードエディタ）の位置とサイズを取得して中央の座標を計算
+    ImVec2 centerPos = ImVec2(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * 0.5f, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * 0.5f);
+
+	// ImNodesのAPIを使って、いま見えている画面の中央座標にノードを配置する
+    ImNodes::SetNodeScreenSpacePos(node.id, centerPos);
+
+	// 無効な座標を設定しておく
+    node.pos = ImVec2(-99999.0f, -99999.0f);
+
     nodes_.push_back(node);
 }
 
@@ -88,7 +115,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
     {
         json nodeJson;
         nodeJson["id"] = node.id;
-        nodeJson["name"] = node.name;
+		nodeJson["name"] = node.name.c_str();
         nodeJson["inputPinId"] = node.inputPinId;
         nodeJson["outputInputXPinId"] = node.outputInputXPinId;
         nodeJson["outputInputYPinId"] = node.outputInputYPinId;
@@ -100,6 +127,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 		nodeJson["pos"] = { pos.x, pos.y };
 
         nodeJson["animationName"] = node.motionName.c_str();
+		nodeJson["targetAnimationName"] = node.targetMotionName.c_str();
 
         // パラメータ
         if (node.nodeType == ComboNodeType::Combo)
@@ -146,6 +174,35 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 
 			nodeJson["grabParams"] = grabParams;
         }
+        else if (node.nodeType == ComboNodeType::GrabStrike)
+        {
+			json grabStrikeParams = nodeJson["grabStrikeParams"];
+			grabStrikeParams["attackTime"] = node.grabStrikeAttackInitData.attackTime;
+			grabStrikeParams["moveSpeed"] = node.grabStrikeAttackInitData.moveSpeed;
+			grabStrikeParams["moveStartTime"] = node.grabStrikeAttackInitData.moveStartTime;
+			grabStrikeParams["moveEndTime"] = node.grabStrikeAttackInitData.moveEndTime;
+			grabStrikeParams["knockback"] = node.grabStrikeAttackInitData.knockback;
+			grabStrikeParams["knockbackDirection"] = { 
+                node.grabStrikeAttackInitData.knockbackDirection.x, 
+                node.grabStrikeAttackInitData.knockbackDirection.y,
+                node.grabStrikeAttackInitData.knockbackDirection.z 
+            };
+			grabStrikeParams["releaseTime"] = node.grabStrikeAttackInitData.releaseTime;
+			grabStrikeParams["isRelease"] = node.grabStrikeAttackInitData.isRelease;
+			grabStrikeParams["damageReaction"] = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
+			
+			grabStrikeParams["hits"] = json::array();
+			for (const auto& hit : node.grabStrikeAttackInitData.hits)
+			{
+				json hitJson;
+				hitJson["damage"] = hit.damage;
+				hitJson["hitTime"] = hit.hitTime;
+				hitJson["hitJoint"] = static_cast<int>(hit.hitJoint); // 必要に応じて追加
+				grabStrikeParams["hits"].push_back(hitJson);
+			}
+
+			nodeJson["grabStrikeParams"] = grabStrikeParams;
+        }
 
         rootJson["nodes"].push_back(nodeJson);
     }
@@ -191,7 +248,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
     {
         ComboEditorNode node;
 		node.id = nodeJson.value("id", 0);
-        strcpy_s(node.name, nodeJson["name"].get<std::string>().c_str());
+		node.name = nodeJson.value("name", "");
 		node.inputPinId = nodeJson.value("inputPinId", -1);
 		node.outputInputXPinId = nodeJson.value("outputInputXPinId", -1);
 		node.outputInputYPinId = nodeJson.value("outputInputYPinId", -1);
@@ -201,6 +258,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 		node.pos.y = nodeJson.value("pos", std::vector<float>{0.0f, 0.0f})[1];
 
 		node.motionName = nodeJson["animationName"].get<std::string>();
+		node.targetMotionName = nodeJson.value("targetAnimationName", "");
 
         if (node.nodeType == ComboNodeType::Combo && nodeJson.contains("comboParams"))
         {
@@ -243,6 +301,35 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.grabAttackInitData.hitboxEndTime = grabParams.value("hitboxEndTime", 0.0f);
 			node.grabAttackInitData.jointType = static_cast<JointType>(grabParams.value("jointType", 0));
         }
+		else if (node.nodeType == ComboNodeType::GrabStrike && nodeJson.contains("grabStrikeParams"))
+		{
+			const auto& grabStrikeParams = nodeJson["grabStrikeParams"];
+			node.grabStrikeAttackInitData.attackTime = grabStrikeParams.value("attackTime", 0.0f);
+			node.grabStrikeAttackInitData.moveSpeed = grabStrikeParams.value("moveSpeed", 0.0f);
+			node.grabStrikeAttackInitData.moveStartTime = grabStrikeParams.value("moveStartTime", 0.0f);
+			node.grabStrikeAttackInitData.moveEndTime = grabStrikeParams.value("moveEndTime", 0.0f);
+			node.grabStrikeAttackInitData.releaseTime = grabStrikeParams.value("releaseTime", 0.0f);
+			node.grabStrikeAttackInitData.isRelease = grabStrikeParams.value("isRelease", false);
+			node.grabStrikeAttackInitData.knockback = grabStrikeParams.value("knockback", 0.0f);
+			node.grabStrikeAttackInitData.knockbackDirection = Vector3(
+				grabStrikeParams.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				grabStrikeParams.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				grabStrikeParams.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
+
+            // 当たり判定配列の復元
+            if (grabStrikeParams.contains("hitDefinitions"))
+            {
+                for (const auto& defJson : grabStrikeParams["hitDefinitions"])
+                {
+                    HitDefinition def;
+                    def.damage = defJson.value("damage", 0);
+					def.hitTime = defJson.value("hitTime", 0.0f);
+					def.hitJoint = static_cast<JointType>(defJson.value("jointType", 0));
+                    node.grabStrikeAttackInitData.hits.push_back(def);
+                }
+            }
+		}
 
         nodes_.push_back(node);
 
@@ -461,6 +548,11 @@ void ComboTreeEditor::DrawNodeEditor()
     {
 		AddGrabAttackNode();
     }
+	ImGui::SameLine();
+    if (ImGui::Button("Add Grab Strike Node"))
+    {
+		AddGrabStrikeAttackNode();
+    }
 
 
     // --- ノードの位置変更を検知して履歴に保存する処理 ---
@@ -505,9 +597,27 @@ void ComboTreeEditor::DrawNodeEditor()
         // --- ノードの描画開始 ---
         ImNodes::BeginNode(node.id);
 
-        // ノードのタイトルバー（あると見栄えが良いです）
+        // ノードのタイトルバー
         ImNodes::BeginNodeTitleBar();
-        ImGui::TextUnformatted(node.name);
+        if (!node.name.empty())
+        {
+			ImGui::Text("%s", node.name.c_str());
+        }
+        else
+        {
+			if (node.nodeType == ComboNodeType::Combo)
+			{
+				ImGui::Text("Combo Attack");
+			} 
+            else if (node.nodeType == ComboNodeType::Grab)
+			{
+				ImGui::Text("Grab Attack");
+			}
+            else if (node.nodeType == ComboNodeType::GrabStrike)
+			{
+				ImGui::Text("Grab Strike Attack");
+			}
+        }
         ImNodes::EndNodeTitleBar();
 
         // 左側：入力ピン
@@ -517,32 +627,29 @@ void ComboTreeEditor::DrawNodeEditor()
 
         ImGui::Spacing();
 
-        if (node.nodeType == ComboNodeType::Combo)
-        {
-            // 右側：X入力攻撃派生ピン
-            ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
-            ImNodes::BeginOutputAttribute(node.outputInputXPinId);
-            ImGui::Indent(40.0f);
-            ImGui::Text("X 入力");
-            ImNodes::EndOutputAttribute();
-            ImNodes::PopColorStyle();
+        // 右側：X入力攻撃派生ピン
+        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 200, 250, 255));
+        ImNodes::BeginOutputAttribute(node.outputInputXPinId);
+        ImGui::Indent(40.0f);
+        ImGui::Text("X 入力");
+        ImNodes::EndOutputAttribute();
+        ImNodes::PopColorStyle();
 
-            // 右側：Y入力攻撃派生ピン
-            ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
-            ImNodes::BeginOutputAttribute(node.outputInputYPinId);
-            ImGui::Indent(40.0f);
-            ImGui::Text("Y 入力");
-            ImNodes::EndOutputAttribute();
-            ImNodes::PopColorStyle();
+        // 右側：Y入力攻撃派生ピン
+        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(250, 100, 100, 255));
+        ImNodes::BeginOutputAttribute(node.outputInputYPinId);
+        ImGui::Indent(40.0f);
+        ImGui::Text("Y 入力");
+        ImNodes::EndOutputAttribute();
+        ImNodes::PopColorStyle();
 
-			// 右側：B入力攻撃派生ピン
-			ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 250, 100, 255));
-            ImNodes::BeginOutputAttribute(node.outputInputBPinId);
-            ImGui::Indent(40.0f);
-            ImGui::Text("B 入力");
-            ImNodes::EndOutputAttribute();
-            ImNodes::PopColorStyle();
-        }
+        // 右側：B入力攻撃派生ピン
+        ImNodes::PushColorStyle(ImNodesCol_Pin, IM_COL32(100, 250, 100, 255));
+        ImNodes::BeginOutputAttribute(node.outputInputBPinId);
+        ImGui::Indent(40.0f);
+        ImGui::Text("B 入力");
+        ImNodes::EndOutputAttribute();
+        ImNodes::PopColorStyle();
 
         // --- ノードの描画終了 ---
         ImNodes::EndNode();
@@ -576,27 +683,51 @@ void ComboTreeEditor::DrawNodeEditor()
 
 
     // --- リンクが作成されたときの処理 ---
-    int startPin, endPin;
-    if (ImNodes::IsLinkCreated(&startPin, &endPin))
+    int startPinId, endPinId;
+    if (ImNodes::IsLinkCreated(&startPinId, &endPinId))
     {
-        // 変更があったことを通知
-        HandleChange();
-
-        ComboEditorLink link;
-        link.id = GetNextId();
-        link.startPinId = startPin;
-        link.endPinId = endPin;
-
-        // 繋いだ元ピンが弱か強かを判定して保存
-        link.linkType = 0;
-        for (const auto& node : nodes_)
-        {
-            if (node.outputInputXPinId == startPin) link.linkType = 1;
-            else if (node.outputInputYPinId == startPin) link.linkType = 2;
-			else if (node.outputInputBPinId == startPin) link.linkType = 3;
+        // ピンIDから、接続元(start)と接続先(end)のノードを探す
+        ComboEditorNode* startNode = nullptr;
+        ComboEditorNode* endNode = nullptr;
+        for (auto& node : nodes_) {
+            if (node.outputInputXPinId == startPinId || node.outputInputYPinId == startPinId || node.outputInputBPinId == startPinId) startNode = &node;
+            if (node.inputPinId == endPinId) endNode = &node;
         }
 
-        links_.push_back(link);
+        if (startNode && endNode)
+        {
+            bool canConnect = true;
+
+            // 【制限ルール1】 接続先が「つかみ打撃」の場合、接続元は「つかみ」か「つかみ打撃」でなければならない
+            if (endNode->nodeType == ComboNodeType::GrabStrike)
+            {
+                if (startNode->nodeType != ComboNodeType::Grab && startNode->nodeType != ComboNodeType::GrabStrike)
+                {
+                    canConnect = false;
+                    // エラー通知を出す場合はここに書く (例: ImGui::OpenPopup("Invalid Link"))
+                }
+            }
+
+            // 【制限ルール2】 接続元が「つかみ」の場合、接続先は「つかみ打撃」以外つなげない
+            if (startNode->nodeType == ComboNodeType::Grab)
+            {
+                if (endNode->nodeType != ComboNodeType::GrabStrike)
+                {
+                    canConnect = false;
+                }
+            }
+
+            // 制限をクリアした場合のみリンクを生成する
+            if (canConnect)
+            {
+                ComboEditorLink link;
+                link.id = GetNextId();
+                link.startPinId = startPinId;
+                link.endPinId = endPinId;
+                links_.push_back(link);
+                HandleChange(); // 変更履歴へ
+            }
+        }
     }
 
     ImGui::End();
@@ -620,8 +751,6 @@ void ComboTreeEditor::DrawPropertyPanel()
         ComboEditorNode* node = GetNodeById(selectedNodeId);
         if (node)
         {
-            ImGui::InputText("Node Name", node->name, sizeof(node->name));
-
 
             ImGui::Text("Attack Motion");
             // 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
@@ -770,6 +899,84 @@ void ComboTreeEditor::DrawPropertyPanel()
                     node->grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
                 }
             }
+			else if (node->nodeType == ComboNodeType::GrabStrike)
+			{
+				ImGui::Separator();
+				ImGui::DragFloat("Attack Time", &node->grabStrikeAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+				ImGui::Spacing();
+
+				ImGui::Text("Movement");
+				ImGui::DragFloat("Move Speed", &node->grabStrikeAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+				ImGui::DragFloat("Move Start Time", &node->grabStrikeAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+				ImGui::DragFloat("Move End Time", &node->grabStrikeAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+				ImGui::Spacing();
+
+				ImGui::Text("Release");
+				ImGui::DragFloat("Release Time", &node->grabStrikeAttackInitData.releaseTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+				ImGui::Checkbox("Is Release", &node->grabStrikeAttackInitData.isRelease);
+				ImGui::Spacing();
+
+				ImGui::Text("Knockback");
+				ImGui::DragFloat("Knockback", &node->grabStrikeAttackInitData.knockback, 0.1f, 0.0f, 100.0f);
+				ImGui::DragFloat3("Knockback Dir", &node->grabStrikeAttackInitData.knockbackDirection.x, 0.01f);
+
+
+				// 相手のやられモーションの選択
+				std::vector<std::string> targetMotionNames = MotionManager::GetInstance()->GetMotionNames(MotionType::Stagger);
+                std::string targetMotionName = node->targetMotionName;
+
+                // モーション名のリストが空の場合はエラーメッセージを表示
+                if (targetMotionNames.empty())
+                {
+                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
+                } 
+                else
+                {
+                    // 現在選択されているモーション名をプレビュー用の文字列として設定
+                    const char* previewValue = targetMotionName.empty() ? "モーションを選択..." : targetMotionName.c_str();
+
+                    // モーション名選択用のコンボボックスを描画
+                    if (ImGui::BeginCombo("相手のやられモーション", previewValue))
+                    {
+                        for (const auto& name : targetMotionNames)
+                        {
+                            // 現在のモーション名と同じものが選択されている状態にする
+                            bool isSelected = (targetMotionName == name);
+                            if (ImGui::Selectable(name.c_str(), isSelected))
+                            {
+                                node->targetMotionName = name; // 選択されたモーション名をノードに設定
+                            }
+                            if (isSelected) ImGui::SetItemDefaultFocus();
+                        }
+                        ImGui::EndCombo();
+                    }
+                }
+
+                // 列挙型 (DamageReaction) のコンボボックス
+                // 怯みなし, 小怯み, 大怯み, ダウン, 受け流され, 弾かれ を選択できるようにする
+                const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
+                int currentReaction = static_cast<int>(node->grabStrikeAttackInitData.damageReaction);
+                if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
+                {
+                    node->grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                }
+
+				for (auto& hit : node->grabStrikeAttackInitData.hits)
+				{
+					ImGui::Separator();
+					ImGui::Text("Hitbox");
+					ImGui::DragFloat("Hit Time", &hit.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+					ImGui::DragInt("Damage", &hit.damage, 1, 0, 9999);
+
+					// ジョイントタイプ
+					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
+					int currentJoint = static_cast<int>(hit.hitJoint);
+					if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+					{
+						hit.hitJoint = static_cast<JointType>(currentJoint);
+					}
+				}
+			}
         }
     }
     else

@@ -90,7 +90,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				for (const auto& def : node.grabStrikeAttackInitData.hits)
 				{
 					json h;
-					h["targetHitJoint"] = static_cast<int>(def.targetHitJoint);
+					h["hitJoint"] = static_cast<int>(def.hitJoint);
 					h["hitTime"] = def.hitTime;
 					h["damage"] = def.damage;
 					hitsJson.push_back(h);
@@ -305,7 +305,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						for (const auto& h : n["grab_strike_data"]["hits"])
 						{
 							HitDefinition def;
-							def.targetHitJoint = static_cast<JointType>(h.value("targetHitJoint", 0));
+							def.hitJoint = static_cast<JointType>(h.value("hitJoint", 0));
 							def.hitTime = h.value("hitTime", 0.0f);
 							def.damage = h.value("damage", 10);
 
