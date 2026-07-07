@@ -41,11 +41,6 @@
             "start": 51
         },
         {
-            "end": 35,
-            "id": 81,
-            "start": 3
-        },
-        {
             "end": 50,
             "id": 82,
             "start": 36
@@ -79,6 +74,46 @@
             "end": 26,
             "id": 88,
             "start": 6
+        },
+        {
+            "end": 90,
+            "id": 92,
+            "start": 39
+        },
+        {
+            "end": 109,
+            "id": 138,
+            "start": 131
+        },
+        {
+            "end": 94,
+            "id": 139,
+            "start": 131
+        },
+        {
+            "end": 97,
+            "id": 143,
+            "start": 95
+        },
+        {
+            "end": 146,
+            "id": 147,
+            "start": 110
+        },
+        {
+            "end": 161,
+            "id": 163,
+            "start": 3
+        },
+        {
+            "end": 35,
+            "id": 164,
+            "start": 162
+        },
+        {
+            "end": 130,
+            "id": 165,
+            "start": 162
         }
     ],
     "nodes": [
@@ -102,7 +137,7 @@
             "output_pin": 6,
             "pos": [
                 150.0,
-                1080.0
+                1440.0
             ],
             "type": 2
         },
@@ -114,7 +149,7 @@
             "output_pin": 27,
             "pos": [
                 300.0,
-                1080.0
+                1440.0
             ],
             "type": 3
         },
@@ -127,7 +162,7 @@
             "output_pin": 30,
             "pos": [
                 450.0,
-                1080.0
+                1440.0
             ],
             "type": 4
         },
@@ -145,7 +180,7 @@
             "output_pin": 33,
             "pos": [
                 450.0,
-                1200.0
+                1560.0
             ],
             "type": 5
         },
@@ -156,7 +191,7 @@
             "name": "",
             "output_pin": 36,
             "pos": [
-                150.0,
+                300.0,
                 0.0
             ],
             "type": 1
@@ -168,7 +203,7 @@
             "name": "攻撃前の判定",
             "output_pin": 39,
             "pos": [
-                300.0,
+                450.0,
                 0.0
             ],
             "type": 3
@@ -181,8 +216,8 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": 42,
             "pos": [
-                450.0,
-                0.0
+                600.0,
+                120.0
             ],
             "type": 4
         },
@@ -194,8 +229,8 @@
             "name": "自分が一番ターゲットに近いかどうか",
             "output_pin": 45,
             "pos": [
-                450.0,
-                240.0
+                600.0,
+                360.0
             ],
             "type": 4
         },
@@ -207,8 +242,8 @@
             "name": "ターゲットが立っているとき",
             "output_pin": 48,
             "pos": [
-                450.0,
-                120.0
+                600.0,
+                240.0
             ],
             "type": 4
         },
@@ -219,34 +254,22 @@
             "name": "一連の攻撃",
             "output_pin": 51,
             "pos": [
-                300.0,
-                360.0
+                450.0,
+                480.0
             ],
             "type": 1
         },
         {
-            "action_type": 0,
-            "combo_data": {
-                "attackTime": 0.800000011920929,
-                "hitDefinitions": [
-                    {
-                        "damage": 5,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 8.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 4.0,
-                "moveStartTime": 0.0
+            "action_type": 1,
+            "grab_data": {
+                "attackTime": 1.0,
+                "grabTime": 3.0,
+                "hitboxEndTime": 0.30000001192092896,
+                "hitboxStartTime": 0.10000000149011612,
+                "jointType": 9,
+                "moveEndTime": 0.30000001192092896,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.10000000149011612
             },
             "id": 55,
             "input_pin": 56,
@@ -256,8 +279,8 @@
             "name": "パンチ",
             "output_pin": 57,
             "pos": [
-                449.0,
-                720.0
+                600.0,
+                840.0
             ],
             "type": 5
         },
@@ -274,8 +297,8 @@
             },
             "output_pin": 60,
             "pos": [
-                450.0,
-                600.0
+                600.0,
+                720.0
             ],
             "type": 5
         },
@@ -287,8 +310,8 @@
             "name": "攻撃終了",
             "output_pin": 63,
             "pos": [
-                443.0,
-                835.0
+                600.0,
+                960.0
             ],
             "type": 5
         },
@@ -300,8 +323,8 @@
             "name": "攻撃開始",
             "output_pin": 66,
             "pos": [
-                450.0,
-                480.0
+                600.0,
+                600.0
             ],
             "type": 5
         },
@@ -313,8 +336,8 @@
             "name": "トークン開放",
             "output_pin": 69,
             "pos": [
-                450.0,
-                960.0
+                600.0,
+                1080.0
             ],
             "type": 5
         },
@@ -326,10 +349,116 @@
             "name": "リクエスト",
             "output_pin": 72,
             "pos": [
-                450.0,
-                360.0
+                600.0,
+                480.0
             ],
             "type": 5
+        },
+        {
+            "condition_type": 5,
+            "id": 89,
+            "input_pin": 90,
+            "is_collapsed": false,
+            "name": "掴んでいないかどうか",
+            "output_pin": 91,
+            "pos": [
+                600.0,
+                0.0
+            ],
+            "type": 4
+        },
+        {
+            "id": 93,
+            "input_pin": 94,
+            "is_collapsed": false,
+            "name": "攻撃前の判定",
+            "output_pin": 95,
+            "pos": [
+                450.0,
+                1200.0
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 4,
+            "id": 96,
+            "input_pin": 97,
+            "is_collapsed": false,
+            "name": "掴んでいるかどうか",
+            "output_pin": 98,
+            "pos": [
+                600.0,
+                1200.0
+            ],
+            "type": 4
+        },
+        {
+            "id": 108,
+            "input_pin": 109,
+            "is_collapsed": false,
+            "name": "一連の攻撃",
+            "output_pin": 110,
+            "pos": [
+                450.0,
+                1320.0
+            ],
+            "type": 1
+        },
+        {
+            "id": 129,
+            "input_pin": 130,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 131,
+            "pos": [
+                300.0,
+                1200.0
+            ],
+            "type": 1
+        },
+        {
+            "action_type": 2,
+            "grab_strike_data": {
+                "attackTime": 0.5,
+                "damageReaction": 1,
+                "hits": [],
+                "isRelease": false,
+                "knockback": 0.0,
+                "knockbackDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0,
+                "targetMotionName": "Front",
+                "targetMotionType": 6
+            },
+            "id": 145,
+            "input_pin": 146,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "name": "",
+            "output_pin": -1,
+            "pos": [
+                600.0,
+                1320.0
+            ],
+            "type": 5
+        },
+        {
+            "id": 160,
+            "input_pin": 161,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 162,
+            "pos": [
+                150.0,
+                0.0
+            ],
+            "type": 0
         }
     ]
 }

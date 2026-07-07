@@ -79,7 +79,6 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["grab_strike_data"]["knockback"] = node.grabStrikeAttackInitData.knockback;
 				n["grab_strike_data"]["knockbackDirection"] = { node.grabStrikeAttackInitData.knockbackDirection.x, node.grabStrikeAttackInitData.knockbackDirection.y, node.grabStrikeAttackInitData.knockbackDirection.z };
 				n["grab_strike_data"]["isRelease"] = node.grabStrikeAttackInitData.isRelease;
-				n["grab_strike_data"]["releaseTime"] = node.grabStrikeAttackInitData.releaseTime;
 				n["grab_strike_data"]["damageReaction"] = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
 
 				n["grab_strike_data"]["targetMotionType"] = static_cast<int>(node.targetMotionType);
@@ -278,7 +277,6 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabStrikeAttackInitData.knockback = n["grab_strike_data"].value("knockback", 0.0f);
 					node.grabStrikeAttackInitData.hAttackAnimation = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
 					node.grabStrikeAttackInitData.isRelease = n["grab_strike_data"].value("isRelease", false);
-					node.grabStrikeAttackInitData.releaseTime = n["grab_strike_data"].value("releaseTime", 0.0f);
 					node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(n["grab_strike_data"].value("damageReaction", 0));
 
 					// ノックバックの方向は配列で保存されているので、読み込むときは配列からVector3に変換する

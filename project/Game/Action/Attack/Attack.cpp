@@ -14,8 +14,11 @@ void Attack::Exec()
 /// @brief 中断・終了
 void Attack::Exit()
 {
-	// もし現在の攻撃が自分自身であれば、攻撃ポインタをnullptrにする
-	owner_->SetCurrentAttack(nullptr);
+	if (owner_->GetCurrentAttack() == this)
+	{
+		// 攻撃ポインタをnullptrにする
+		owner_->SetCurrentAttack(nullptr);
+	}
 
 	Action::Exit();
 }

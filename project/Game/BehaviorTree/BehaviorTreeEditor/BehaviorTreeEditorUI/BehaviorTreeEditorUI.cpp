@@ -1274,14 +1274,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			HistorySaveIfChanged();
 			ImGui::Checkbox("離すかどうか", &node.grabStrikeAttackInitData.isRelease);
 
-
-			// 離すタイミングの入力は、isReleaseがtrueの場合にのみ表示
-			if (node.grabStrikeAttackInitData.isRelease)
-			{
-				HistorySaveIfChanged();
-				ImGui::DragFloat("離す時間", &node.grabStrikeAttackInitData.releaseTime, 0.01f);
-			}
-
 			// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
 			node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
 

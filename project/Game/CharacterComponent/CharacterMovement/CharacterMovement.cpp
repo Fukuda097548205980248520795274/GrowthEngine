@@ -50,7 +50,7 @@ void CharacterMovement::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	const float length = direction.Length();
 
 	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || owner_->IsAttack() || owner_->IsIncapacitated())
+	if (length <= 0.0f || owner_->IsAttack()|| owner_->IsIncapacitated())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;

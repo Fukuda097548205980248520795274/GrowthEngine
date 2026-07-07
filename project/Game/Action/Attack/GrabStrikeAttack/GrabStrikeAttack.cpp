@@ -12,7 +12,6 @@ GrabStrikeAttack::GrabStrikeAttack(Character* character, const GrabStrikeAttackI
 	moveStartTime_ = initData.moveStartTime;
 	moveEndTime_ = initData.moveEndTime;
 	attackTime_ = initData.attackTime;
-	releaseTime_ = initData.releaseTime;
 	damageReaction_ = initData.damageReaction;
 	isRelease_ = initData.isRelease;
 	knockback_ = initData.knockback;
@@ -37,7 +36,10 @@ void GrabStrikeAttack::Exec()
 
 	// もし掴んでいる相手がいない場合は、攻撃を終了する
 	if (!grabbedTarget_)
+	{
 		Exit();
+		return;
+	}
 
 	// アニメーションを設定（ループなし）
 	owner_->SetAnimation(hAttackMotion_, true, false);
@@ -51,40 +53,48 @@ void GrabStrikeAttack::Exec()
 /// @brief 更新処理
 void GrabStrikeAttack::Update()
 {
+	// 掴んでいる相手を取得
+	grabbedTarget_ = owner_->GetGrabTarget();
+
 	// もし掴んでいる相手がいない場合は、攻撃を終了する
-	if (!grabbedTarget_)
+	if (!grabbedTarget_ || grabbedTarget_->IsDead() || grabbedTarget_->IsFinished())
+	{
 		Exit();
 
-	// 攻撃キャンセル可能な時間帯であれば、バッファされた攻撃入力を確認する
-	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
-	{
-		if (owner_)
-		{
-			// バッファされた攻撃入力を取得する
-			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
+		// Character側の掴み状態を解除する処理を呼ぶ
+		owner_->ReleaseGrab();
+		return;
+	}
 
-			if (bufferedInput == AttackInputType::InputX && nextInputXAttack_)
-			{
-				// ライト攻撃への移行は、ヘビー攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
-				owner_->ConsumeBufferedAttackInput();
-				this->Exit();
-				nextInputXAttack_->Exec();
-				return;
-			} else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
-			{
-				// ヘビー攻撃への移行は、ライト攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
-				owner_->ConsumeBufferedAttackInput();
-				this->Exit();
-				nextInputYAttack_->Exec();
-				return;
-			} else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
-			{
-				// バッファされた攻撃入力を消費する
-				owner_->ConsumeBufferedAttackInput();
-				this->Exit();
-				nextInputBAttack_->Exec();
-				return;
-			}
+	// 攻撃タイマーが攻撃時間に達したら、次の攻撃への移行を確認する
+	if (attackTimer_ >= attackTime_)
+	{
+		// バッファされた攻撃入力を取得する
+		AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
+
+		if (bufferedInput == AttackInputType::InputX && nextInputXAttack_)
+		{
+			// ライト攻撃への移行は、ヘビー攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
+			owner_->ConsumeBufferedAttackInput();
+			this->Exit();
+			nextInputXAttack_->Exec();
+			return;
+		}
+		else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
+		{
+			// ヘビー攻撃への移行は、ライト攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
+			owner_->ConsumeBufferedAttackInput();
+			this->Exit();
+			nextInputYAttack_->Exec();
+			return;
+		}
+		else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
+		{
+			// バッファされた攻撃入力を消費する
+			owner_->ConsumeBufferedAttackInput();
+			this->Exit();
+			nextInputBAttack_->Exec();
+			return;
 		}
 	}
 
@@ -104,8 +114,8 @@ void GrabStrikeAttack::Update()
 		}
 	}
 
-	// 離すタイミングになったら、ダメージリアクションを入れる
-	if (isRelease_ && !isReleased_ && attackTimer_ >= releaseTime_)
+	// 掴んでいる相手を離すタイミングになったら、掴み状態を解除する
+	if (isRelease_ && !isReleased_ && attackTimer_ >= attackTime_)
 	{
 		if (grabbedTarget_)
 		{
@@ -150,13 +160,17 @@ void GrabStrikeAttack::Update()
 	if (owner_->IsJustAvoided() || owner_->IsIncapacitated())
 	{
 		this->Exit();
+
+		// Character側の掴み状態を解除する処理を呼ぶ
+		owner_->ReleaseGrab();
 		return;
 	}
 
 	// 攻撃時間が経過したら、攻撃を終了する
-	if (attackTimer_ >= attackTime_)
+	if (attackTimer_ >= attackTime_ && !owner_->IsPlayer())
 	{
-		Attack::Update(); // Action::Update()が呼ばれ、Exit処理へ
+		// タイマーをリセットする
+		attackTimer_ = 0.0f;
 	}
 }
 

@@ -27,9 +27,6 @@ struct GrabStrikeAttackInitData
 	// 相手を離すかどうか
 	bool isRelease = false;
 
-	// 離すタイミング（攻撃開始からの遅延時間）
-	float releaseTime = 0.0f;
-
 	// ダメージリアクション
 	DamageReaction damageReaction = DamageReaction::None;
 
@@ -58,10 +55,6 @@ public:
 	/// @brief 終了、中断
 	virtual void Exit() override;
 
-	/// @brief 攻撃キャンセル可能かどうか
-	/// @return 
-	bool IsCancelable() const override{return (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_);}
-
 
 private:
 
@@ -83,9 +76,6 @@ private:
 	// 離すかどうか
 	bool isRelease_ = false;
 
-	// 離すタイミング（攻撃開始からの遅延時間）
-	float releaseTime_ = 0.0f;
-
 	/// @brief ダメージリアクション
 	DamageReaction damageReaction_ = DamageReaction::None;
 
@@ -94,14 +84,5 @@ private:
 
 	// 既に相手を手放したかどうか
 	bool isReleased_ = false;
-
-
-private:
-
-	// コンボキャンセル受付時間
-	float cancelStartTime_ = 0.0f;
-
-	// コンボキャンセル終了時間
-	float cancelEndTime_ = 0.0f;
 };
 

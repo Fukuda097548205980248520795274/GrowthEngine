@@ -156,6 +156,10 @@ public:
 	/// @return 
 	virtual bool IsCancelable() const { return false; }
 
+	/// @brief 時間が攻撃が終了したかどうか
+	/// @return 
+	bool IsFinishedTimer() const { return attackTimer_ >= attackTime_; }
+
 
 protected:
 

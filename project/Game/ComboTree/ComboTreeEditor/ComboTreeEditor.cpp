@@ -187,7 +187,6 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
                 node.grabStrikeAttackInitData.knockbackDirection.y,
                 node.grabStrikeAttackInitData.knockbackDirection.z 
             };
-			grabStrikeParams["releaseTime"] = node.grabStrikeAttackInitData.releaseTime;
 			grabStrikeParams["isRelease"] = node.grabStrikeAttackInitData.isRelease;
 			grabStrikeParams["damageReaction"] = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
 			
@@ -308,7 +307,6 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.grabStrikeAttackInitData.moveSpeed = grabStrikeParams.value("moveSpeed", 0.0f);
 			node.grabStrikeAttackInitData.moveStartTime = grabStrikeParams.value("moveStartTime", 0.0f);
 			node.grabStrikeAttackInitData.moveEndTime = grabStrikeParams.value("moveEndTime", 0.0f);
-			node.grabStrikeAttackInitData.releaseTime = grabStrikeParams.value("releaseTime", 0.0f);
 			node.grabStrikeAttackInitData.isRelease = grabStrikeParams.value("isRelease", false);
 			node.grabStrikeAttackInitData.knockback = grabStrikeParams.value("knockback", 0.0f);
 			node.grabStrikeAttackInitData.knockbackDirection = Vector3(
@@ -319,9 +317,9 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(grabStrikeParams.value("damageReaction", 0));
 
             // 当たり判定配列の復元
-            if (grabStrikeParams.contains("hitDefinitions"))
+            if (grabStrikeParams.contains("hits"))
             {
-                for (const auto& defJson : grabStrikeParams["hitDefinitions"])
+                for (const auto& defJson : grabStrikeParams["hits"])
                 {
                     HitDefinition def;
                     def.damage = defJson.value("damage", 0);
@@ -913,22 +911,23 @@ void ComboTreeEditor::DrawPropertyPanel()
 			{
 				ImGui::Separator();
 				ImGui::DragFloat("Attack Time", &node->grabStrikeAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
-				ImGui::Spacing();
 
-				ImGui::Text("Movement");
-				ImGui::DragFloat("Move Speed", &node->grabStrikeAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
-				ImGui::DragFloat("Move Start Time", &node->grabStrikeAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
-				ImGui::DragFloat("Move End Time", &node->grabStrikeAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
-				ImGui::Spacing();
+                ImGui::Text("Release");
+                ImGui::Checkbox("Is Release", &node->grabStrikeAttackInitData.isRelease);
+				
+                if (node->grabStrikeAttackInitData.isRelease)
+                {
+                    ImGui::Spacing();
+                    ImGui::Text("Movement");
+                    ImGui::DragFloat("Move Speed", &node->grabStrikeAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+                    ImGui::DragFloat("Move Start Time", &node->grabStrikeAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+                    ImGui::DragFloat("Move End Time", &node->grabStrikeAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 
-				ImGui::Text("Release");
-				ImGui::DragFloat("Release Time", &node->grabStrikeAttackInitData.releaseTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
-				ImGui::Checkbox("Is Release", &node->grabStrikeAttackInitData.isRelease);
-				ImGui::Spacing();
-
-				ImGui::Text("Knockback");
-				ImGui::DragFloat("Knockback", &node->grabStrikeAttackInitData.knockback, 0.1f, 0.0f, 100.0f);
-				ImGui::DragFloat3("Knockback Dir", &node->grabStrikeAttackInitData.knockbackDirection.x, 0.01f);
+                    ImGui::Spacing();
+                    ImGui::Text("Knockback");
+                    ImGui::DragFloat("Knockback", &node->grabStrikeAttackInitData.knockback, 0.1f, 0.0f, 100.0f);
+                    ImGui::DragFloat3("Knockback Dir", &node->grabStrikeAttackInitData.knockbackDirection.x, 0.01f);
+                }
 
 
 				// 相手のやられモーションの選択
@@ -963,29 +962,67 @@ void ComboTreeEditor::DrawPropertyPanel()
                 }
 
                 // 列挙型 (DamageReaction) のコンボボックス
-                // 怯みなし, 小怯み, 大怯み, ダウン, 受け流され, 弾かれ を選択できるようにする
-                const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
-                int currentReaction = static_cast<int>(node->grabStrikeAttackInitData.damageReaction);
-                if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
+                if (node->grabStrikeAttackInitData.isRelease)
                 {
-                    node->grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                    const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
+                    int currentReaction = static_cast<int>(node->grabStrikeAttackInitData.damageReaction);
+                    if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
+                    {
+                        node->grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+                    }
                 }
 
-				for (auto& hit : node->grabStrikeAttackInitData.hits)
-				{
-					ImGui::Separator();
-					ImGui::Text("Hitbox");
-					ImGui::DragFloat("Hit Time", &hit.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
-					ImGui::DragInt("Damage", &hit.damage, 1, 0, 9999);
 
-					// ジョイントタイプ
-					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
-					int currentJoint = static_cast<int>(hit.hitJoint);
-					if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
-					{
-						hit.hitJoint = static_cast<JointType>(currentJoint);
-					}
-				}
+                // 新しい当たり判定を追加するボタン
+                if (ImGui::Button("Add Hitbox"))
+                {
+                    node->grabStrikeAttackInitData.hits.push_back(HitDefinition());
+                }
+				
+                // 配列の各要素を描画
+                for (int i = 0; i < node->grabStrikeAttackInitData.hits.size(); ++i)
+                {
+                    // ImGuiのID衝突を避けるためにインデックスでPushする
+                    ImGui::PushID(i);
+
+                    // 折りたたみ可能なツリーノードでまとめる
+                    char hitboxName[32];
+                    sprintf_s(hitboxName, "Hitbox [%d]", i);
+                    if (ImGui::TreeNode(hitboxName))
+                    {
+                        HitDefinition& def = node->grabStrikeAttackInitData.hits[i];
+
+                        ImGui::DragInt("damage", &def.damage, 1, 0, 9999);
+						ImGui::DragFloat("hitTime", &def.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+
+                        // ジョイントタイプ
+                        const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
+                        int currentJoint = static_cast<int>(def.hitJoint);
+                        if (ImGui::Combo("hitJoint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+                        {
+                            def.hitJoint = static_cast<JointType>(currentJoint);
+                        }
+
+                        ImGui::Spacing();
+
+                        // 削除ボタン
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+                        if (ImGui::Button("Delete Hitbox"))
+                        {
+                            node->grabStrikeAttackInitData.hits.erase(node->grabStrikeAttackInitData.hits.begin() + i);
+                            ImGui::PopStyleColor();
+                            ImGui::TreePop();
+                            ImGui::PopID();
+                            --i; // 要素を削除したのでインデックスを戻す
+                            continue; // ループの次へ
+                        }
+                        ImGui::PopStyleColor();
+
+                        ImGui::TreePop(); // TreeNodeの終了
+                    }
+
+                    ImGui::PopID(); // PushIDの終了
+                }
 			}
         }
     }

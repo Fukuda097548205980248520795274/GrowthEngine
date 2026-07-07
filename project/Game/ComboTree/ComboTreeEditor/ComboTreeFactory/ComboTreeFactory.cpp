@@ -149,12 +149,11 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 			);
 
 			initData.isRelease = paramsJson.value("isRelease", false);
-			initData.releaseTime = paramsJson.value("releaseTime", 0.0f);
 			initData.damageReaction = static_cast<DamageReaction>(paramsJson.value("damageReaction", 0));
 
-            if (paramsJson.contains("hitDefinitions"))
+            if (paramsJson.contains("hits"))
             {
-                for (const auto& defJson : paramsJson["hitDefinitions"])
+                for (const auto& defJson : paramsJson["hits"])
                 {
                     HitDefinition def;
 					def.hitTime = defJson["hitTime"];

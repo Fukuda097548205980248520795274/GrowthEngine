@@ -214,6 +214,12 @@ void Character::Update()
 		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる (Y軸のみ180度反転させる)
 		// Quaternionでの計算を避け、直接オイラー角を指定する
 		grabbedTarget_->worldTransform_->rotate_ = Vector3(0.0f, worldTransform_->rotate_.y + std::numbers::pi_v<float>, 0.0f);
+
+		// 掴んでいる相手が掴まれている状態でない場合は、相手を解除する
+		if (!grabbedTarget_->IsGrabbed())
+		{
+			grabbedTarget_ = nullptr;
+		}
 	}
 
 	// ノックバックの方向を取得する
