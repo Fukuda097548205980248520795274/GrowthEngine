@@ -260,25 +260,6 @@ void ComboAttack::Reset()
 	}
 }
 
-/// @brief 次の攻撃があるかどうか
-/// @return 
-bool ComboAttack::HasNextAttack(AttackInputType inputType) const
-{
-	if (inputType == AttackInputType::InputX)
-	{
-		return nextInputXAttack_ != nullptr; // 弱の派生先がセットされていればtrue
-	} 
-	else if (inputType == AttackInputType::InputY)
-	{
-		return nextInputYAttack_ != nullptr; // 強の派生先がセットされていればtrue
-	}
-	else if (inputType == AttackInputType::InputB)
-	{
-		return nextInputBAttack_ != nullptr; // 特殊の派生先がセットされていればtrue
-	}
-	return false;
-}
-
 /// @brief 終了、中断
 void ComboAttack::Exit()
 {

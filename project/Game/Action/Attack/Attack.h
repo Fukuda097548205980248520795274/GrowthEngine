@@ -112,10 +112,6 @@ public:
 	/// @brief 更新処理
 	virtual void Update() override;
 
-	/// @brief 次の攻撃があるかどうか
-	/// @return 
-	virtual bool HasNextAttack(AttackInputType inputType) const { return false; }
-
 	/// @brief 攻撃中かどうか
 	/// @return 
 	bool IsUse() const override;
@@ -123,6 +119,42 @@ public:
 	/// @brief 攻撃の種類を取得する
 	/// @return 
 	AttackType GetType() const { return attackType_; }
+
+
+	/// @brief 次の攻撃があるかどうか
+	/// @param inputType 
+	/// @return 
+	virtual bool HasNextAttack(AttackInputType inputType) const;
+
+	
+	/// @brief 次の攻撃を設定する
+	/// @param next 
+	void SetNextInputXAttack(Attack* next) { nextInputXAttack_ = next; }
+
+	/// @brief 次の攻撃を設定する
+	/// @param next 
+	void SetNextInputYAttack(Attack* next) { nextInputYAttack_ = next; }
+
+	/// @brief 次の攻撃を設定する
+	/// @param next 
+	void SetNextInputBAttack(Attack* next) { nextInputBAttack_ = next; }
+
+	
+	/// @brief 次の攻撃を取得する
+	/// @return 
+	Attack* GetNextInputXAttack() const { return nextInputXAttack_; }
+
+	/// @brief 次の攻撃を取得する
+	/// @return 
+	Attack* GetNextInputYAttack() const { return nextInputYAttack_; }
+
+	/// @brief 次の攻撃を取得する
+	/// @return 
+	Attack* GetNextInputBAttack() const { return nextInputBAttack_; }
+
+	/// @brief 攻撃キャンセル可能かどうか
+	/// @return 
+	virtual bool IsCancelable() const { return false; }
 
 
 protected:
@@ -156,6 +188,14 @@ protected:
 
 	/// @brief 攻撃の種類
 	AttackType attackType_ = AttackType::None;
+
+
+protected:
+
+	// 派生先のポインタを基底クラスで保持する
+	Attack* nextInputXAttack_ = nullptr;
+	Attack* nextInputYAttack_ = nullptr;
+	Attack* nextInputBAttack_ = nullptr;
 };
 
 

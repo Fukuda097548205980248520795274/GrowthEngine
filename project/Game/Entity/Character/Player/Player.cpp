@@ -229,7 +229,7 @@ void Player::UpdateAttack()
 	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
 	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
-	if (IsDamageReaction() || IsGrabbing() || IsGrabbed() || IsDown() || IsStyleChanging())
+	if (IsDamageReaction() || IsGrabbed() || IsDown() || IsStyleChanging())
 		return;
 
 	// 攻撃入力のバッファ時間を減らす

@@ -316,6 +316,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 				grabStrikeParams.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
 				grabStrikeParams.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
 			);
+			node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(grabStrikeParams.value("damageReaction", 0));
 
             // 当たり判定配列の復元
             if (grabStrikeParams.contains("hitDefinitions"))
@@ -716,6 +717,15 @@ void ComboTreeEditor::DrawNodeEditor()
                     canConnect = false;
                 }
             }
+
+			// 【制限ルール3】 接続元が「つかみ打撃」の場合、接続先は「つかみ打撃」以外つなげない
+			if (startNode->nodeType == ComboNodeType::GrabStrike)
+			{
+				if (endNode->nodeType != ComboNodeType::GrabStrike)
+				{
+					canConnect = false;
+				}
+			}
 
             // 制限をクリアした場合のみリンクを生成する
             if (canConnect)

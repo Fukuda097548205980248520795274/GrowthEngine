@@ -58,6 +58,10 @@ public:
 	/// @brief 終了、中断
 	virtual void Exit() override;
 
+	/// @brief 攻撃キャンセル可能かどうか
+	/// @return 
+	bool IsCancelable() const override{return (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_);}
+
 
 private:
 
@@ -90,5 +94,14 @@ private:
 
 	// 既に相手を手放したかどうか
 	bool isReleased_ = false;
+
+
+private:
+
+	// コンボキャンセル受付時間
+	float cancelStartTime_ = 0.0f;
+
+	// コンボキャンセル終了時間
+	float cancelEndTime_ = 0.0f;
 };
 

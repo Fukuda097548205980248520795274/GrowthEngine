@@ -1,5 +1,5 @@
 {
-    "currentId": 72,
+    "currentId": 84,
     "links": [
         {
             "endPinId": 7,
@@ -94,7 +94,8 @@
             "pos": [
                 372.0,
                 234.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_2",
@@ -132,7 +133,8 @@
             "pos": [
                 484.0,
                 234.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_3",
@@ -170,7 +172,8 @@
             "pos": [
                 595.0,
                 236.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -208,7 +211,8 @@
             "pos": [
                 711.0,
                 237.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -246,7 +250,8 @@
             "pos": [
                 962.0,
                 238.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -284,7 +289,8 @@
             "pos": [
                 842.0,
                 238.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -322,7 +328,8 @@
             "pos": [
                 829.0,
                 385.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -360,7 +367,8 @@
             "pos": [
                 713.0,
                 380.0
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -398,7 +406,8 @@
             "pos": [
                 709.7583618164063,
                 499.23834228515625
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -436,7 +445,8 @@
             "pos": [
                 593.75830078125,
                 494.23834228515625
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -474,7 +484,8 @@
             "pos": [
                 597.7583618164063,
                 615.2384033203125
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -512,7 +523,8 @@
             "pos": [
                 475.75830078125,
                 609.2384033203125
-            ]
+            ],
+            "targetAnimationName": ""
         }
     ]
 }

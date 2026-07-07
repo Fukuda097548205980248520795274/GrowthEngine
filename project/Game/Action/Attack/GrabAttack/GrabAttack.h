@@ -35,6 +35,10 @@ public:
 	/// @brief 終了処理
 	virtual void Exit() override;
 
+	/// @brief 攻撃キャンセル可能かどうか
+	/// @return 
+	bool IsCancelable() const override { return hasHit_ && !hasThrown_; }
+
 private:
 
 	/// @brief 攻撃の終了時間

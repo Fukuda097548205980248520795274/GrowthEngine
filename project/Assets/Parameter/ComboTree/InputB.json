@@ -1,30 +1,68 @@
 {
-    "currentId": 85,
-    "links": [],
+    "currentId": 97,
+    "links": [
+        {
+            "endPinId": 86,
+            "id": 96,
+            "startPinId": 93
+        }
+    ],
     "nodes": [
         {
-            "animationName": "Player_Combo_1",
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.5,
+                "damageReaction": 3,
+                "hits": [],
+                "isRelease": true,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    1.0,
+                    0.30000001192092896
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0,
+                "releaseTime": 0.5
+            },
+            "id": 85,
+            "inputPinId": 86,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 89,
+            "outputInputXPinId": 87,
+            "outputInputYPinId": 88,
+            "pos": [
+                865.7583618164063,
+                618.7384033203125
+            ],
+            "targetAnimationName": "Front"
+        },
+        {
+            "animationName": "Player_Combo_3",
             "grabParams": {
-                "attackTime": 1.0,
+                "attackTime": 0.5,
                 "grabTime": 0.0,
-                "hitboxEndTime": 0.4000000059604645,
+                "hitboxEndTime": 0.20000000298023224,
                 "hitboxStartTime": 0.10000000149011612,
                 "jointType": 9,
                 "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 5.0,
+                "moveSpeed": 3.0,
                 "moveStartTime": 0.10000000149011612
             },
-            "id": 83,
-            "inputPinId": 84,
-            "name": "Combo Attack",
+            "id": 91,
+            "inputPinId": 92,
+            "name": "",
             "nodeType": 1,
-            "outputInputBPinId": -1,
-            "outputInputXPinId": -1,
-            "outputInputYPinId": -1,
+            "outputInputBPinId": 95,
+            "outputInputXPinId": 93,
+            "outputInputYPinId": 94,
             "pos": [
-                655.7583618164063,
-                612.7384033203125
-            ]
+                708.2583618164063,
+                611.7384033203125
+            ],
+            "targetAnimationName": ""
         }
     ]
 }

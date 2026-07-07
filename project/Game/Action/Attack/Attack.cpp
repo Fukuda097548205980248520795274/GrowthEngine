@@ -45,3 +45,14 @@ bool Attack::IsUse() const
 	// 現在の攻撃が自分自身かどうか
 	return this == owner_->GetCurrentAttack();
 }
+
+/// @brief 次の攻撃があるかどうか
+/// @param inputType 
+/// @return 
+bool Attack::HasNextAttack(AttackInputType inputType) const
+{
+	if (inputType == AttackInputType::InputX) return nextInputXAttack_ != nullptr;
+	if (inputType == AttackInputType::InputY) return nextInputYAttack_ != nullptr;
+	if (inputType == AttackInputType::InputB) return nextInputBAttack_ != nullptr;
+	return false;
+}

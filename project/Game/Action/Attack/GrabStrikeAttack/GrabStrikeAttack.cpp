@@ -55,6 +55,40 @@ void GrabStrikeAttack::Update()
 	if (!grabbedTarget_)
 		Exit();
 
+	// 攻撃キャンセル可能な時間帯であれば、バッファされた攻撃入力を確認する
+	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
+	{
+		if (owner_)
+		{
+			// バッファされた攻撃入力を取得する
+			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
+
+			if (bufferedInput == AttackInputType::InputX && nextInputXAttack_)
+			{
+				// ライト攻撃への移行は、ヘビー攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
+				owner_->ConsumeBufferedAttackInput();
+				this->Exit();
+				nextInputXAttack_->Exec();
+				return;
+			} else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
+			{
+				// ヘビー攻撃への移行は、ライト攻撃への移行よりも優先されると仮定する（両方入力されている場合はヘビー攻撃に移行する）
+				owner_->ConsumeBufferedAttackInput();
+				this->Exit();
+				nextInputYAttack_->Exec();
+				return;
+			} else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
+			{
+				// バッファされた攻撃入力を消費する
+				owner_->ConsumeBufferedAttackInput();
+				this->Exit();
+				nextInputBAttack_->Exec();
+				return;
+			}
+		}
+	}
+
+
 	// タイマーを記録する
 	prevTimer_ = attackTimer_;
 

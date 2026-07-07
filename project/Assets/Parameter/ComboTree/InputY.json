@@ -20,11 +20,11 @@
                         "damageReaction": 3,
                         "endTime": 0.20000000298023224,
                         "jointType": 12,
-                        "knockback": 0.0,
+                        "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
-                            0.0,
-                            1.0
+                            1.0,
+                            0.5
                         ],
                         "radius": 0.25,
                         "startTime": 0.0
@@ -44,7 +44,8 @@
             "pos": [
                 760.7583618164063,
                 661.2384033203125
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -82,7 +83,8 @@
             "pos": [
                 644.75830078125,
                 657.2384033203125
-            ]
+            ],
+            "targetAnimationName": ""
         }
     ]
 }

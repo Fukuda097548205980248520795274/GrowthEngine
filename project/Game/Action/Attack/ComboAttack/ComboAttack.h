@@ -36,35 +36,6 @@ public:
 	/// @brief 終了、中断
 	virtual void Exit() override;
 
-	/// @brief 次の攻撃があるかどうか
-	/// @return 
-	bool HasNextAttack(AttackInputType inputType) const override;
-
-
-	/// @brief 次のX入力攻撃を設定する
-	/// @param nextInputXAttack 
-	void SetNextInputXAttack(Attack* nextInputXAttack) { nextInputXAttack_ = nextInputXAttack; }
-
-	/// @brief 次のY入力攻撃を設定する
-	/// @param nextHeavyAttack 
-	void SetNextInputYAttack(Attack* nextInputYAttack) { nextInputYAttack_ = nextInputYAttack; }
-
-	/// @brief 次のB入力攻撃を設定する
-	/// @param nextInputBAttack 
-	void SetNextInputBAttack(Attack* nextInputBAttack) { nextInputBAttack_ = nextInputBAttack; }
-
-	/// @brief 次のX入力攻撃を取得する
-	/// @return 
-	Attack* GetNextInputXAttack() const { return nextInputXAttack_; }
-
-	/// @brief 次のY入力攻撃を取得する
-	/// @return 
-	Attack* GetNextInputYAttack() const { return nextInputYAttack_; }
-
-	/// @brief 次のB攻撃を取得する
-	/// @return 
-	Attack* GetNextInputBAttack() const { return nextInputBAttack_; }
-
 
 	/// @brief コンボキャンセル可能かどうか
 	/// @return 
@@ -82,18 +53,6 @@ private:
 
 	// コンボキャンセル終了時間
 	float cancelEndTime_ = 0.0f;
-
-
-private:
-
-	/// @brief 次のX入力攻撃
-	Attack* nextInputXAttack_ = nullptr;
-
-	/// @brief 次のY入力攻撃
-	Attack* nextInputYAttack_ = nullptr;
-
-	/// @brief 次のB入力攻撃
-	Attack* nextInputBAttack_ = nullptr;
 
 
 private:

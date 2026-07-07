@@ -195,7 +195,7 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
         int endNodeId = pinToNodeMap[endPinId];
 
         // 繋ぎ元（親）は必ず ComboAttack なのでキャスト
-        ComboAttack* parentAttack = dynamic_cast<ComboAttack*>(nodeMap[startNodeId]);
+        Attack* parentAttack = nodeMap[startNodeId];
 
         // 繋ぎ先（子）は ComboAttack または GrabAttack (基底の Attack*)
         Attack* childAttack = nodeMap[endNodeId];
