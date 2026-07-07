@@ -110,13 +110,12 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			HUD* newHUD = scene_->CreateAttackTutorial(initData);
 			data.instancePtr = newHUD;
 		}
-		else if (data.subType == static_cast<int32_t>(HUD::Tag::GuardTutorial))
+		else if (data.subType == static_cast<int32_t>(HUD::Tag::RageTutorial))
 		{
-			GuardTutorial::InitData initData;
+			RageTutorial::InitData initData;
 			initData.practiceTime = data.practiceTime;
-			initData.guardMaxCount = data.maxGuardCount;
 
-			HUD* newHUD = scene_->CreateGuardTutorial(initData);
+			HUD* newHUD = scene_->CreateRageTutorial(initData);
 			data.instancePtr = newHUD;
 		}
 	}

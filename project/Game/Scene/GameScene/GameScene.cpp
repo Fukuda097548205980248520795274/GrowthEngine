@@ -173,6 +173,17 @@ void GameScene::Initialize()
 	bButton_ = std::make_unique<MashButton>();
 	bButton_->Initialize(bButtonInitData);
 
+	TriggerButton::InitData rtTriggerButtonInitData;
+	rtTriggerButtonInitData.buttonSprite = rtButtonSprite_->CreateInstance();
+	rtTriggerButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
+	rtTriggerButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
+	rtTriggerButtonInitData.position = Vector2(200.0f, 200.0f);
+	rtTriggerButtonInitData.scale = Vector2(0.3f, 0.3f);
+	rtTriggerButtonInitData.color = Vector3(1.0f, 1.0f, 0.5f);
+	rtTriggerButton_ = std::make_unique<TriggerButton>();
+	rtTriggerButton_->Initialize(rtTriggerButtonInitData);
+	
+
 	
 	// プレイヤー側の当たり判定グループの生成と初期化
 	playerHurtboxGroup_ = std::make_unique<Collision3DBaseSphere>("PlayerSide_Hurtbox");
@@ -213,7 +224,7 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	//stageEditor_->LoadStage("Tutorial.json");
+	stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -296,6 +307,10 @@ void GameScene::Initialize()
 			xButtonSprite_->Draw();
 			bButtonSprite_->Draw();
 			aButtonSprite_->Draw();
+			rbButtonSprite_->Draw();
+			rtButtonSprite_->Draw();
+			lbButtonSprite_->Draw();
+			ltButtonSprite_->Draw();
 
 			// チュートリアルの描画
 			tutorialMoveText_->Draw();
@@ -435,6 +450,7 @@ void GameScene::Update()
 	if (yButton_)yButton_->Update();
 	if (aButton_)aButton_->Update();
 	if (bButton_)bButton_->Update();
+	if (rtTriggerButton_)rtTriggerButton_->Update();
 
 	// カメラシェイクの更新
 	cameraShake_->Update(dt);
@@ -767,6 +783,24 @@ AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& 
 	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
 	newTutorial->Initialize(tutorialInitData);
 	AttackTutorial* tutorial = newTutorial.get();
+
+	huds_.push_back(std::move(newTutorial));
+
+	return tutorial;
+}
+
+/// @brief レイジチュートリアルを生成する
+/// @param initData 
+/// @return 
+RageTutorial* GameScene::CreateRageTutorial(const RageTutorial::InitData& initData)
+{
+	RageTutorial::InitData tutorialInitData = initData;
+	tutorialInitData.player = player_.get();
+	tutorialInitData.buttonHud = rtTriggerButton_.get();
+
+	std::unique_ptr<RageTutorial> newTutorial = std::make_unique<RageTutorial>();
+	newTutorial->Initialize(tutorialInitData);
+	RageTutorial* tutorial = newTutorial.get();
 
 	huds_.push_back(std::move(newTutorial));
 
@@ -1129,6 +1163,10 @@ void GameScene::LoadHUDs()
 	bButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/b_button.png"), 50, "Button_B_Sprite");
 	xButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), 50, "Button_X_Sprite");
 	yButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), 50, "Button_Y_Sprite");
+	rbButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rb_button.png"), 50, "Button_RB_Sprite");
+	lbButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), 50, "Button_LB_Sprite");
+	rtButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rt_button.png"), 50, "Button_RT_Sprite");
+	ltButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lt_button.png"), 50, "Button_LT_Sprite");
 
 	buttonInSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_in_circle.png"), 50, "Button_In_Sprite");
 	buttonInSprite_->param_->transform.scale = Vector2(0.7f, 0.7f);

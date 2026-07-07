@@ -214,6 +214,10 @@ void Player::StartUpdate()
 	isPrevInputLightAttack_ = isInputLightAttack_;
 	isInputLightAttack_ = false;
 
+	// レイジモード入力をしたかどうかのフラグを更新する
+	isPrevInputRageMode_ = isInputRageMode_;
+	isInputRageMode_ = false;
+
 	// 基底クラスの更新処理開始前のリセット
 	Character::StartUpdate();
 }
@@ -549,6 +553,22 @@ void Player::UpdateTargetByCamera()
 	// 最もカメラ前方向に近いターゲットをロックオンする
 	if (bestTarget != nullptr && bestTarget != lockOnTarget_)
 		lockOnTarget_ = bestTarget;
+}
+
+/// @brief レイジモード入力処理
+void Player::RageModeInput()
+{
+	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中ならレイジモード入力を受け付けない
+	if (IsIncapacitated())return;
+
+	// レイジゲージが最大値に達している場合はレイジモード入力を受け付ける
+	if (IsRageGageThresholdExceeded())
+	{
+		isInputRageMode_ = true;
+	}
+
+	// 基底クラスのレイジモード入力処理を呼び出す
+	Character::RageModeInput();
 }
 
 /// @brief 防御状態を更新する

@@ -13,6 +13,7 @@
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
+#include "HUD/Tutorial/RageTutorial/RageTutorial.h"
 #include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
 #include "HUD/HP/HP.h"
 
@@ -92,6 +93,11 @@ public:
 	/// @param initData 
 	/// @return 
 	AttackTutorial* CreateAttackTutorial(const AttackTutorial::InitData& initData);
+
+	/// @brief レイジチュートリアルを生成する
+	/// @param initData 
+	/// @return 
+	RageTutorial* CreateRageTutorial(const RageTutorial::InitData& initData);
 
 	/// @brief ガードチュートリアルを生成する
 	/// @param initData 
@@ -273,11 +279,14 @@ private:
 	/// @brief 試験的な立方体
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
 
-	/// @brief Xボタン
+	/// @brief ボタン
 	std::unique_ptr<MashButton> xButton_ = nullptr;
 	std::unique_ptr<MashButton> yButton_ = nullptr;
 	std::unique_ptr<MashButton> aButton_ = nullptr;
 	std::unique_ptr<MashButton> bButton_ = nullptr;
+
+	// @brief トリガーボタン
+	std::unique_ptr<TriggerButton> rtTriggerButton_ = nullptr;
 
 
 	/// @brief カメラのピボットポイント
@@ -348,6 +357,10 @@ private:
 	std::unique_ptr<PrefabBaseSprite> bButtonSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> xButtonSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> yButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> rbButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> lbButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> rtButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> ltButtonSprite_ = nullptr;
 
 	// ボタンの内側と外側のスプライト
 	std::unique_ptr<PrefabBaseSprite> buttonInSprite_ = nullptr;

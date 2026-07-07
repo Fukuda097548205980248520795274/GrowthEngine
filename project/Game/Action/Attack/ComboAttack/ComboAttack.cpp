@@ -232,7 +232,7 @@ void ComboAttack::Update()
 	{
 		Vector3 direction = owner_->GetDirection();
 		Vector3 position = owner_->GetPosition();
-		position += currentMoveSpeed_ * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale());
+		position += (currentMoveSpeed_ * owner_->RageModeAttackSpeed()) * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale());
 		owner_->SetPosition(position);
 	}
 

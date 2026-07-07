@@ -32,6 +32,10 @@ public:
 	/// @return 
 	bool IsInputLightAttack() const { return isInputLightAttack_; }
 
+	/// @brief レイジモード入力があったかどうかを取得する
+	/// @return 
+	bool IsInputRageMode() const { return isInputRageMode_ || isPrevInputRageMode_; }
+
 private:
 
 	/// @brief 更新処理開始前のリセット
@@ -78,6 +82,9 @@ private:
 	/// @brief カメラによるターゲットの更新
 	void UpdateTargetByCamera();
 
+	/// @brief レイジモード入力処理
+	void RageModeInput() override;
+
 
 private:
 
@@ -106,6 +113,13 @@ private:
 
 	// 前フレームの攻撃入力状態
 	bool isPrevInputLightAttack_ = false;
+
+
+	/// @brief レイジモード入力状態
+	bool isInputRageMode_ = false;
+
+	/// @brief 前フレームのレイジモード入力状態
+	bool isPrevInputRageMode_ = false;
 
 
 private:

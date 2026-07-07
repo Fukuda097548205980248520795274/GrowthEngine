@@ -1124,6 +1124,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\HUD\Button\TriggerButton\TriggerButton.cpp" />
     <ClCompile Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.cpp" />
     <ClCompile Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.cpp" />
+    <ClCompile Include="Game\HUD\Tutorial\RageTutorial\RageTutorial.cpp" />
     <ClCompile Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.cpp" />
     <ClCompile Include="Game\Shake\Shake.cpp" />
     <ClCompile Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.cpp" />
@@ -1543,6 +1544,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\HUD\Button\TriggerButton\TriggerButton.h" />
     <ClInclude Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.h" />
     <ClInclude Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.h" />
+    <ClInclude Include="Game\HUD\Tutorial\RageTutorial\RageTutorial.h" />
     <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h" />
     <ClInclude Include="Game\Pool\Pool.h" />
     <ClInclude Include="Game\Shake\Shake.h" />

@@ -53,7 +53,6 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.eventStageDataFileName[0] = '\0';
 		currentData.practiceTime = 0.0f;
 		currentData.maxAttackCount = 1;
-		currentData.maxGuardCount = 1;
 		currentData.standMotion.name = "Standing";
 		currentData.stanceMotion.name = "Fighter";
 		currentData.walkMotion.name = "Walk";
@@ -224,13 +223,13 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		// HUDの種類
 		if (ImGui::Combo("HUDの種類", &currentData.subType, hudTagNames, IM_ARRAYSIZE(hudTagNames)))
 		{
-			if (currentData.subType = 1)
+			if (currentData.subType == 1)
 			{
 				currentData.subType = static_cast<int>(HUD::Tag::AttackTutorial);
 			} 
-			else if (currentData.subType = 2)
+			else if (currentData.subType == 2)
 			{
-				currentData.subType = static_cast<int>(HUD::Tag::GuardTutorial);
+				currentData.subType = static_cast<int>(HUD::Tag::RageTutorial);
 			}
 		}
 
@@ -245,12 +244,10 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 			ImGui::DragInt("攻撃の最大回数", &currentData.maxAttackCount,1, 1, 100);
 		}
 
-		// ガードチュートリアル
-		if (static_cast<HUD::Tag>(currentData.subType) == HUD::Tag::GuardTutorial)
+		// レイジチュートリアル
+		if (static_cast<HUD::Tag>(currentData.subType) == HUD::Tag::RageTutorial)
 		{
 			ImGui::DragFloat("練習時間", &currentData.practiceTime, 0.1f, 0.0f, 10000.0f);
-
-			ImGui::DragInt("ガードの最大回数", &currentData.maxGuardCount, 1, 1, 100);
 		}
 	}
 
@@ -278,7 +275,6 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.isUnbreakable = currentData.isUnbreakable;
 		newData.practiceTime = currentData.practiceTime;
 		newData.maxAttackCount = currentData.maxAttackCount;
-		newData.maxGuardCount = currentData.maxGuardCount;
 		newData.standMotion = currentData.standMotion;
 		newData.stanceMotion = currentData.stanceMotion;
 		newData.walkMotion = currentData.walkMotion;

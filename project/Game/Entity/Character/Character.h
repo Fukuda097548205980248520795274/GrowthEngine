@@ -466,6 +466,10 @@ public:
 	/// @return 
 	bool IsSuccessRageModeStart() const { return isSuccessRageModeStart_ || isPrevSuccessRageModeStart_; }
 
+	/// @brief レイジゲージを取得する
+	/// @param rageGage 
+	void SetRageGage(float rageGage) { rageGage_ = rageGage; }
+
 
 
 
@@ -748,7 +752,7 @@ protected:
 	void ChargeRageGage(DamageReaction damageReaction);
 
 	/// @brief レイジモードの入力処理
-	void RageModeInput();
+	virtual void RageModeInput();
 
 
 	/// @brief レイジゲージ

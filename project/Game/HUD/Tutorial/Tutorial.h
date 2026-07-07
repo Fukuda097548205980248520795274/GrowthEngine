@@ -4,7 +4,7 @@
 class Player;
 class Timer;
 class MashButton;
-class SingleButton;
+class TriggerButton;
 
 class Tutorial : public HUD
 {

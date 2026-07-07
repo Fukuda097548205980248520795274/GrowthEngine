@@ -355,6 +355,8 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		else if (target.category == EditCategory::HUD)
 		{
 			HUD* hudPtr = static_cast<HUD*>(target.instancePtr);
+
+
 			hudPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
 		}
 	}

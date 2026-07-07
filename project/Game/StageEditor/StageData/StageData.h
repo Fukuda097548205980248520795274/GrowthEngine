@@ -26,7 +26,7 @@ inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", 
 inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
 inline const char* eventTypeNames[] = { "None", "敵生成" };
-inline const char* hudTagNames[] = { "None", "攻撃チュートリアル", "ガードチュートリアル" };
+inline const char* hudTagNames[] = { "None", "攻撃チュートリアル", "レイジチュートリアル" };
 
 struct MotionConfig
 {
@@ -82,9 +82,6 @@ struct PlacementData
 
 	// 攻撃の最大回数 (攻撃チュートリアルの場合)
 	int maxAttackCount = 1;
-
-	// ガードの最大回数 (ガードチュートリアルの場合)
-	int maxGuardCount = 1;
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;
@@ -177,7 +174,6 @@ inline void toJson(json& j, const PlacementData& s)
 		else if (s.subType == 8)
 		{
 			j["practiceTime"] = s.practiceTime;
-			j["maxGuardCount"] = s.maxGuardCount;
 		}
 	}
 }
@@ -264,7 +260,6 @@ inline void fromJson(const json& j, PlacementData& s)
 
 	s.practiceTime = j.value("practiceTime", 0.0f);
 	s.maxAttackCount = j.value("maxAttackCount", 1);
-	s.maxGuardCount = j.value("maxGuardCount", 1);
 
 	s.standMotion.name = j.value("standMotionName", "Stand");
 	s.stanceMotion.name = j.value("stanceMotionName", "Fighter");
