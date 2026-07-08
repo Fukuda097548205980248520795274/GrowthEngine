@@ -121,6 +121,17 @@ void ComboAttack::Update()
 			if (state.hitbox.collider_ == nullptr)
 			{
 				state.hitbox.collider_ = owner_->GetHitboxGroup()->CreateInstance();
+
+				// 攻撃の種類に応じて、攻撃のSEを再生する
+				SoundManager* soundManager = SoundManager::GetInstance();
+				if (state.def.damageReaction == DamageReaction::LightStagger)
+				{
+					soundManager->SeLightAttack();
+				} 
+				else if (state.def.damageReaction == DamageReaction::HeavyStagger || state.def.damageReaction == DamageReaction::Down)
+				{
+					soundManager->SeHeavyAttack();
+				}
 			}
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する

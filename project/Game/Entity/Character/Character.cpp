@@ -1617,6 +1617,9 @@ void Character::ExecuteGrab(Character* target, float duration)
 
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
+	
+	// 掴みSEを再生する
+	soundManager_->SeGrab();
 }
 
 /// @brief 掴まれた相手の処理

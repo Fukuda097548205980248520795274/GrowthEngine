@@ -60,6 +60,15 @@ public:
 	/// @brief レイジモード終了のSE
 	void SeRageModeEnd() { if (seRageModeEnd_)seRageModeEnd_->Play(); }
 
+	/// @brief 軽攻撃のSE
+	void SeLightAttack() { if (seLightAttack_)seLightAttack_->Play(); }
+
+	/// @brief 重攻撃のSE
+	void SeHeavyAttack() { if (seHeavyAttack_)seHeavyAttack_->Play(); }
+
+	/// @brief 掴みのSE
+	void SeGrab() { if (seGrab_)seGrab_->Play(); }
+
 
 	/// @brief 旋嵐スタイルのBGM
 	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
@@ -116,6 +125,15 @@ private:
 
 	/// @brief レイジモード終了のSE
 	std::unique_ptr<Se> seRageModeEnd_ = nullptr;
+
+	/// @brief 軽攻撃のSE
+	std::unique_ptr<Se> seLightAttack_ = nullptr;
+
+	/// @brief 重攻撃のSE
+	std::unique_ptr<Se> seHeavyAttack_ = nullptr;
+
+	/// @brief 掴み攻撃のSE
+	std::unique_ptr<Se> seGrab_ = nullptr;
 
 
 private:

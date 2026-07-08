@@ -1,5 +1,5 @@
 {
-    "currentId": 110,
+    "currentId": 115,
     "links": [
         {
             "endPinId": 86,
@@ -20,6 +20,16 @@
             "endPinId": 105,
             "id": 109,
             "startPinId": 94
+        },
+        {
+            "endPinId": 105,
+            "id": 113,
+            "startPinId": 88
+        },
+        {
+            "endPinId": 105,
+            "id": 114,
+            "startPinId": 100
         }
     ],
     "nodes": [
@@ -31,7 +41,7 @@
                 "hits": [
                     {
                         "damage": 10,
-                        "hitJoint": 0,
+                        "hitJoint": 9,
                         "hitTime": 0.10000000149011612
                     }
                 ],
@@ -54,7 +64,7 @@
             "outputInputXPinId": 87,
             "outputInputYPinId": 88,
             "pos": [
-                875.7583618164063,
+                874.7583618164063,
                 515.7384033203125
             ],
             "targetAnimationName": "Front"
@@ -92,7 +102,7 @@
                 "hits": [
                     {
                         "damage": 10,
-                        "hitJoint": 0,
+                        "hitJoint": 9,
                         "hitTime": 0.10000000149011612
                     }
                 ],
@@ -151,8 +161,8 @@
             "outputInputXPinId": 106,
             "outputInputYPinId": 107,
             "pos": [
-                877.2583618164063,
-                797.7384033203125
+                1051.162109375,
+                584.4148559570313
             ],
             "targetAnimationName": "Front"
         }

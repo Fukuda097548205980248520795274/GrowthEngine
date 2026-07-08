@@ -324,7 +324,7 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
                     HitDefinition def;
                     def.damage = defJson.value("damage", 0);
 					def.hitTime = defJson.value("hitTime", 0.0f);
-					def.hitJoint = static_cast<JointType>(defJson.value("jointType", 0));
+					def.hitJoint = static_cast<JointType>(defJson.value("hitJoint", 0));
                     node.grabStrikeAttackInitData.hits.push_back(def);
                 }
             }

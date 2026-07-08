@@ -77,6 +77,17 @@ void SoundManager::Initialize()
 
 	// レイジモード終了のSE
 	seRageModeEnd_ = std::make_unique<Se>("RageModeEnd", engine_->LoadAudio("./Assets/Sounds/se/rageModeEnd.mp3"));
+
+	// 軽攻撃のSE
+	seLightAttack_ = std::make_unique<Se>("LightAttack", engine_->LoadAudio("./Assets/Sounds/se/lightAttack.mp3"));
+	seLightAttack_->param_->volume = 0.25f; // 音量を調整する
+
+	// 重攻撃のSE
+	seHeavyAttack_ = std::make_unique<Se>("HeavyAttack", engine_->LoadAudio("./Assets/Sounds/se/heavyAttack.mp3"));
+	seHeavyAttack_->param_->volume = 0.25f; // 音量を調整する
+
+	// 掴みのSe
+	seGrab_ = std::make_unique<Se>("Grab", engine_->LoadAudio("./Assets/Sounds/se/grab.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE
