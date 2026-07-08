@@ -1264,7 +1264,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbedDamage())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);

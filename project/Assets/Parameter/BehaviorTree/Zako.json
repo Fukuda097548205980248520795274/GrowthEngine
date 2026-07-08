@@ -421,7 +421,13 @@
             "grab_strike_data": {
                 "attackTime": 0.5,
                 "damageReaction": 1,
-                "hits": [],
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.30000001192092896
+                    }
+                ],
                 "isRelease": false,
                 "knockback": 0.0,
                 "knockbackDirection": [

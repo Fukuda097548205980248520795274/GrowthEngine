@@ -292,6 +292,10 @@ public:
 	/// @brief 掴んでいる相手を取得する
 	/// @return 
 	Character* GetGrabTarget() const { return grabbedTarget_; }
+
+	/// @brief 掴まれている相手を取得する
+	/// @param grabber 
+	void SetGrabber(Character* grabber) { grabber_ = grabber; }
 	
 	/// @brief 掴んだ状態の攻撃をしているかどうか
 	/// @return 

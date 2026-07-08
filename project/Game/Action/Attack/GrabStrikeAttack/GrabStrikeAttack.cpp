@@ -41,9 +41,8 @@ void GrabStrikeAttack::Exec()
 		return;
 	}
 
-	// アニメーションを設定（ループなし）
-	owner_->SetAnimation(hAttackMotion_, true, false);
-	grabbedTarget_->SetAnimation(hTargetAnimation_, true, false);
+	// 掴んでいる相手に攻撃者を設定する
+	grabbedTarget_->SetGrabber(owner_);
 
 	// タイマーとフラグをリセット
 	attackTimer_ = 0.0f;
@@ -64,6 +63,13 @@ void GrabStrikeAttack::Update()
 		// Character側の掴み状態を解除する処理を呼ぶ
 		owner_->ReleaseGrab();
 		return;
+	}
+
+	// 0.0f秒以下の攻撃タイマーの場合、アニメーションを設定する
+	if (attackTimer_ <= 0.0f)
+	{
+		owner_->SetAnimation(hAttackMotion_, true, false);
+		grabbedTarget_->SetAnimation(hTargetAnimation_, true, false);
 	}
 
 	// 攻撃タイマーが攻撃時間に達したら、次の攻撃への移行を確認する

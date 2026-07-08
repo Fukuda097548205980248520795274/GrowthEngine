@@ -1257,35 +1257,38 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::DragFloat("攻撃時間", &node.grabStrikeAttackInitData.attackTime, 0.01f);
 
 			HistorySaveIfChanged();
-			ImGui::DragFloat("移動速度", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat("移動開始時間", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat("移動終了時間", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat("ノックバック", &node.grabStrikeAttackInitData.knockback, 0.1f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat3("ノックバック方向", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
-
-			HistorySaveIfChanged();
 			ImGui::Checkbox("離すかどうか", &node.grabStrikeAttackInitData.isRelease);
 
-			// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
-			node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
-
-			// ダメージリアクション
-			const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
-			int currentReaction = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
-			if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+			if (node.grabStrikeAttackInitData.isRelease)
 			{
-				history_->SaveHistory(nodes_, links_, currentId_);
-				isDirty_ = true;
+				HistorySaveIfChanged();
+				ImGui::DragFloat("移動速度", &node.grabStrikeAttackInitData.moveSpeed, 0.1f);
 
-				node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+				HistorySaveIfChanged();
+				ImGui::DragFloat("移動開始時間", &node.grabStrikeAttackInitData.moveStartTime, 0.01f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("移動終了時間", &node.grabStrikeAttackInitData.moveEndTime, 0.01f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("ノックバック", &node.grabStrikeAttackInitData.knockback, 0.1f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat3("ノックバック方向", &node.grabStrikeAttackInitData.knockbackDirection.x, 0.1f);
+
+				// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
+				node.grabStrikeAttackInitData.knockbackDirection = node.grabStrikeAttackInitData.knockbackDirection.Normalize();
+
+				// ダメージリアクション
+				const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+				int currentReaction = static_cast<int>(node.grabStrikeAttackInitData.damageReaction);
+				if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+				{
+					history_->SaveHistory(nodes_, links_, currentId_);
+					isDirty_ = true;
+
+					node.grabStrikeAttackInitData.damageReaction = static_cast<DamageReaction>(currentReaction);
+				}
 			}
 
 
@@ -1359,31 +1362,69 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			}
 
 
-			// ジョイントタイプ
-			const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
-			auto& hits = node.grabStrikeAttackInitData.hits;
-			for (size_t i = 0; i < hits.size(); ++i)
+			ImGui::Text("当たり判定");
+
+			// 当たり判定のリストを描画
+			auto& hitDefs = node.grabStrikeAttackInitData.hits;
+			for (size_t i = 0; i < hitDefs.size(); ++i)
 			{
+				// 各当たり判定のUIを描画するためにIDをプッシュ
 				ImGui::PushID(static_cast<int>(i));
+
 				if (ImGui::TreeNode((std::string("当たり判定 ") + std::to_string(i + 1)).c_str()))
 				{
 					HistorySaveIfChanged();
-					ImGui::DragFloat("当たり判定時間", &hits[i].hitTime, 0.01f);
+					ImGui::InputInt("攻撃力", &hitDefs[i].damage);
 
 					HistorySaveIfChanged();
-					ImGui::InputInt("攻撃力", &hits[i].damage);
+					ImGui::DragFloat("攻撃が入る時間", &hitDefs[i].hitTime, 0.01f, 0.0f, 100000.0f);
 
-					// ターゲットのジョイントタイプ
-					int targetJoint = static_cast<int>(node.grabAttackInitData.jointType);
-					if (ImGui::Combo("ジョイントタイプ", &targetJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+					// ジョイントタイプ
+					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
+					int currentJoint = static_cast<int>(hitDefs[i].hitJoint);
+					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
 					{
 						history_->SaveHistory(nodes_, links_, currentId_);
 						isDirty_ = true;
 
-						node.grabStrikeAttackInitData.hits[i].hitJoint = static_cast<JointType>(targetJoint);
+						hitDefs[i].hitJoint = static_cast<JointType>(currentJoint);
 					}
+
+					// 削除ボタン
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+					if (ImGui::Button("当たり判定を削除"))
+					{
+						// 当たり判定を削除する前に、履歴に保存して変更フラグを立てる
+						history_->SaveHistory(nodes_, links_, currentId_);
+						isDirty_ = true;
+
+						hitDefs.erase(hitDefs.begin() + i);
+						ImGui::PopStyleColor();
+						ImGui::TreePop();
+						ImGui::PopID();
+						break; // 要素を削除した場合はループを抜ける（次のフレームで再描画される）
+					}
+
+					ImGui::PopStyleColor();
+
+					ImGui::TreePop();
 				}
+				ImGui::PopID();
 			}
+
+			// 新しい判定を追加するボタン
+			if (ImGui::Button("当たり判定を追加"))
+			{
+				// 新しい当たり判定を追加する前に、履歴に保存して変更フラグを立てる
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+
+				HitDefinition newDef;
+				// 必要ならデフォルト値を設定
+				hitDefs.push_back(newDef);
+			}
+
+
 
 			ImGui::TreePop();
 		}
