@@ -137,8 +137,11 @@ void GrabAttack::Update()
 							hasHit_ = true;
 							DeleteHitbox();
 
+							// つかみが成功したら、掴んだ位置を取得する
+							std::optional<Vector3> hitPosition = owner_->GetBonePosition(jointType_);
+
 							// Characterクラスへ状態を移行する（時間はCharacter側で管理するか、引数で渡す）
-							owner_->ExecuteGrab(target, grabMaxTime_);
+							owner_->ExecuteGrab(target, grabMaxTime_, hitPosition);
 
 							// プレイヤー以外は掴んだら処理が成功
 							if (!owner_->IsPlayer())

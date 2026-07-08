@@ -107,6 +107,10 @@ public:
 	/// @param position 
 	void DashSmoke000(const Vector3& position);
 
+	/// @brief 掴みインパクトを放出する
+	/// @param position 
+	void GrabImpact000(const Vector3& position);
+
 
 private:
 
@@ -223,5 +227,11 @@ private:
 
 	/// @brief 走りスモーク000
 	std::unique_ptr<Particle3D> dashSmoke000_ = nullptr;
+
+
+private:
+
+	/// @brief 掴みインパクト000
+	std::unique_ptr<Particle3D> grabImpact000_ = nullptr;
 };
 

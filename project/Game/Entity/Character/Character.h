@@ -16,6 +16,7 @@ class Attack;
 class Move;
 class Avoid;
 class NavMesh;
+class EffectManager;
 
 class Character : public Entity
 {
@@ -269,7 +270,7 @@ public:
 	/// @brief 相手をつかむ
 	/// @param target 
 	/// @param duration つかむ時間
-	void ExecuteGrab(Character* target, float duration);
+	void ExecuteGrab(Character* target, float duration, const std::optional<Vector3>& hitPosition = std::nullopt);
 
 	/// @brief 掴まれた相手の処理
 	void OnGrabbed(Character* grabber);
@@ -509,6 +510,9 @@ protected:
 
 	/// @brief サウンドマネージャ
 	SoundManager* soundManager_ = nullptr;
+
+	/// @brief エフェクトマネージャ
+	EffectManager* effectManager_ = nullptr;
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;

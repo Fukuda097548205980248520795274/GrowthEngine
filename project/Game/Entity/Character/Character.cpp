@@ -28,6 +28,7 @@ Character::Character() : Entity()
 	// マネージャのインスタンスを取得する
 	motionManager_ = MotionManager::GetInstance();
 	soundManager_ = SoundManager::GetInstance();
+	effectManager_ = EffectManager::GetInstance();
 
 	// タグを指定する
 	entityTag_ = EntityTag::Character;
@@ -157,7 +158,7 @@ void Character::Update()
 				dashTimer_ -= dt;
 				if (dashTimer_ <= 0.0f)
 				{
-					EffectManager::GetInstance()->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
+					effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
 					dashTimer_ = 0.15f;
 				}
 			}
@@ -301,7 +302,7 @@ void Character::Update()
 
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayFront:
-				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
+				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
 				if (knockbackDirection.y + velocityY <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
@@ -311,7 +312,7 @@ void Character::Update()
 
 				// 落下速度が負の場合は、落下中状態へ移行する
 			case DamageReactionState::BlownAwayBack:
-				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
+				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
 				if (knockbackDirection.y + velocityY <= 0.0f)
 				{
 					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
@@ -331,13 +332,13 @@ void Character::Update()
 					soundManager_->SeDownLanding();
 
 					// ダウン着地のエフェクトを生成する
-					EffectManager::GetInstance()->ImpactGround000(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround001(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround005(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround006(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
 				}
 				break;
 
@@ -353,13 +354,13 @@ void Character::Update()
 					soundManager_->SeDownLanding();
 
 					// ダウン着地のエフェクトを生成する
-					EffectManager::GetInstance()->ImpactGround000(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround001(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround002(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround003(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround004(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround005(GetBonePosition(JointType::Root));
-					EffectManager::GetInstance()->ImpactGround006(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
+					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
 				}
 				break;
 			}
@@ -506,7 +507,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		soundManager_->SeGuard();
 
 		// ガードエフェクト
-		EffectManager::GetInstance()->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
+		effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
 
 		SetAnimation(hGuardHitMotion_, false, true);
 
@@ -593,15 +594,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// エフェクトを再生する
 		if (hitPosition)
 		{
-			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			EffectManager::GetInstance()->Impact001(*hitPosition);
-			EffectManager::GetInstance()->Impact002(*hitPosition);
-			EffectManager::GetInstance()->Impact003(*hitPosition);
-			EffectManager::GetInstance()->Impact004(*hitPosition);
-			EffectManager::GetInstance()->Impact005(*hitPosition);
+			effectManager_->ImpactDrop000(*hitPosition);
+			effectManager_->ImpactSmoke000(*hitPosition);
+			effectManager_->ImpactSmoke001(*hitPosition);
+			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			effectManager_->Impact001(*hitPosition);
+			effectManager_->Impact002(*hitPosition);
+			effectManager_->Impact003(*hitPosition);
+			effectManager_->Impact004(*hitPosition);
+			effectManager_->Impact005(*hitPosition);
 		}
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
@@ -629,15 +630,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// エフェクトを再生する
 		if (hitPosition)
 		{
-			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			EffectManager::GetInstance()->Impact001(*hitPosition);
-			EffectManager::GetInstance()->Impact002(*hitPosition);
-			EffectManager::GetInstance()->Impact003(*hitPosition);
-			EffectManager::GetInstance()->Impact004(*hitPosition);
-			EffectManager::GetInstance()->Impact005(*hitPosition);
+			effectManager_->ImpactDrop000(*hitPosition);
+			effectManager_->ImpactSmoke000(*hitPosition);
+			effectManager_->ImpactSmoke001(*hitPosition);
+			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			effectManager_->Impact001(*hitPosition);
+			effectManager_->Impact002(*hitPosition);
+			effectManager_->Impact003(*hitPosition);
+			effectManager_->Impact004(*hitPosition);
+			effectManager_->Impact005(*hitPosition);
 		}
 
 		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
@@ -675,15 +676,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
 			{
-				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				EffectManager::GetInstance()->Impact001(*hitPosition);
-				EffectManager::GetInstance()->Impact002(*hitPosition);
-				EffectManager::GetInstance()->Impact003(*hitPosition);
-				EffectManager::GetInstance()->Impact004(*hitPosition);
-				EffectManager::GetInstance()->Impact005(*hitPosition);
+				effectManager_->ImpactDrop000(*hitPosition);
+				effectManager_->ImpactSmoke000(*hitPosition);
+				effectManager_->ImpactSmoke001(*hitPosition);
+				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				effectManager_->Impact001(*hitPosition);
+				effectManager_->Impact002(*hitPosition);
+				effectManager_->Impact003(*hitPosition);
+				effectManager_->Impact004(*hitPosition);
+				effectManager_->Impact005(*hitPosition);
 			}
 
 			// 軽い怯みのSEを再生する
@@ -711,15 +712,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
 			{
-				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				EffectManager::GetInstance()->Impact001(*hitPosition);
-				EffectManager::GetInstance()->Impact002(*hitPosition);
-				EffectManager::GetInstance()->Impact003(*hitPosition);
-				EffectManager::GetInstance()->Impact004(*hitPosition);
-				EffectManager::GetInstance()->Impact005(*hitPosition);
+				effectManager_->ImpactDrop000(*hitPosition);
+				effectManager_->ImpactSmoke000(*hitPosition);
+				effectManager_->ImpactSmoke001(*hitPosition);
+				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				effectManager_->Impact001(*hitPosition);
+				effectManager_->Impact002(*hitPosition);
+				effectManager_->Impact003(*hitPosition);
+				effectManager_->Impact004(*hitPosition);
+				effectManager_->Impact005(*hitPosition);
 			}
 
 			// 重い怯みのSEを再生する
@@ -746,7 +747,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				currentDamageReaction_ = DamageReactionState::BlownAwayFront; // ここではとりあえず前方向の吹っ飛びを設定。
 				SetAnimation(hDownFallMotion_, true, false);
-				EffectManager::GetInstance()->BlownSmoke000(GetBonePosition(JointType::Root));
+				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
 
 				movement_->SetGrounded(false); // 地面に接地していない状態にする
 			}
@@ -762,15 +763,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
 			{
-				EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-				EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-				if(attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				EffectManager::GetInstance()->Impact001(*hitPosition);
-				EffectManager::GetInstance()->Impact002(*hitPosition);
-				EffectManager::GetInstance()->Impact003(*hitPosition);
-				EffectManager::GetInstance()->Impact004(*hitPosition);
-				EffectManager::GetInstance()->Impact005(*hitPosition);
+				effectManager_->ImpactDrop000(*hitPosition);
+				effectManager_->ImpactSmoke000(*hitPosition);
+				effectManager_->ImpactSmoke001(*hitPosition);
+				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				effectManager_->Impact001(*hitPosition);
+				effectManager_->Impact002(*hitPosition);
+				effectManager_->Impact003(*hitPosition);
+				effectManager_->Impact004(*hitPosition);
+				effectManager_->Impact005(*hitPosition);
 			}
 
 			// ダウン落下のSEを再生する
@@ -935,15 +936,15 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// 軽い怯みのエフェクトを再生する
 		if (hitPosition)
 		{
-			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			EffectManager::GetInstance()->Impact001(*hitPosition);
-			EffectManager::GetInstance()->Impact002(*hitPosition);
-			EffectManager::GetInstance()->Impact003(*hitPosition);
-			EffectManager::GetInstance()->Impact004(*hitPosition);
-			EffectManager::GetInstance()->Impact005(*hitPosition);
+			effectManager_->ImpactDrop000(*hitPosition);
+			effectManager_->ImpactSmoke000(*hitPosition);
+			effectManager_->ImpactSmoke001(*hitPosition);
+			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			effectManager_->Impact001(*hitPosition);
+			effectManager_->Impact002(*hitPosition);
+			effectManager_->Impact003(*hitPosition);
+			effectManager_->Impact004(*hitPosition);
+			effectManager_->Impact005(*hitPosition);
 		}
 
 		// 軽い怯みのSEを再生する
@@ -968,15 +969,15 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// 軽い怯みのエフェクトを再生する
 		if (hitPosition)
 		{
-			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			EffectManager::GetInstance()->Impact001(*hitPosition);
-			EffectManager::GetInstance()->Impact002(*hitPosition);
-			EffectManager::GetInstance()->Impact003(*hitPosition);
-			EffectManager::GetInstance()->Impact004(*hitPosition);
-			EffectManager::GetInstance()->Impact005(*hitPosition);
+			effectManager_->ImpactDrop000(*hitPosition);
+			effectManager_->ImpactSmoke000(*hitPosition);
+			effectManager_->ImpactSmoke001(*hitPosition);
+			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			effectManager_->Impact001(*hitPosition);
+			effectManager_->Impact002(*hitPosition);
+			effectManager_->Impact003(*hitPosition);
+			effectManager_->Impact004(*hitPosition);
+			effectManager_->Impact005(*hitPosition);
 		}
 
 		// 重い怯みのSEを再生する
@@ -1001,15 +1002,15 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// 軽い怯みのエフェクトを再生する
 		if (hitPosition)
 		{
-			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
-			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
-			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			EffectManager::GetInstance()->Impact001(*hitPosition);
-			EffectManager::GetInstance()->Impact002(*hitPosition);
-			EffectManager::GetInstance()->Impact003(*hitPosition);
-			EffectManager::GetInstance()->Impact004(*hitPosition);
-			EffectManager::GetInstance()->Impact005(*hitPosition);
+			effectManager_->ImpactDrop000(*hitPosition);
+			effectManager_->ImpactSmoke000(*hitPosition);
+			effectManager_->ImpactSmoke001(*hitPosition);
+			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			effectManager_->Impact001(*hitPosition);
+			effectManager_->Impact002(*hitPosition);
+			effectManager_->Impact003(*hitPosition);
+			effectManager_->Impact004(*hitPosition);
+			effectManager_->Impact005(*hitPosition);
 		}
 
 		// ダウン落下のSEを再生する
@@ -1611,12 +1612,18 @@ bool Character::IsBlownDown() const
 
 /// @brief 相手をつかむ
 /// @param target 
-void Character::ExecuteGrab(Character* target, float duration)
+void Character::ExecuteGrab(Character* target, float duration,const std::optional<Vector3>& hitPosition)
 {
 	grabbedTarget_ = target;
 
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
+
+	// 掴みエフェクトを発生させる
+	if (hitPosition)
+	{
+		effectManager_->GrabImpact000(*hitPosition);
+	}
 	
 	// 掴みSEを再生する
 	soundManager_->SeGrab();
@@ -1751,11 +1758,11 @@ void Character::ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosi
 	// 弾きのエフェクトを発生させる
 	if (hitPosition)
 	{
-		EffectManager::GetInstance()->CreateRepelEffect(*hitPosition);
-		EffectManager::GetInstance()->EmitSpark000(*hitPosition);
-		EffectManager::GetInstance()->Impact001(*hitPosition);
-		EffectManager::GetInstance()->Impact003(*hitPosition);
-		EffectManager::GetInstance()->Impact005(*hitPosition);
+		effectManager_->CreateRepelEffect(*hitPosition);
+		effectManager_->EmitSpark000(*hitPosition);
+		effectManager_->Impact001(*hitPosition);
+		effectManager_->Impact003(*hitPosition);
+		effectManager_->Impact005(*hitPosition);
 	}
 
 	// 相手が武器を持っている場合は、武器を落とさせる

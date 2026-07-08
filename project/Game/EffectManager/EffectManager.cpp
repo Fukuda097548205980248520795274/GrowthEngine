@@ -77,6 +77,9 @@ void EffectManager::Initialize()
 
 	// 走りスモークを生成
 	dashSmoke000_ = std::make_unique<Particle3D>("dashSmoke_000", 1000, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// 掴みインパクトを生成
+	grabImpact000_ = std::make_unique<Particle3D>("grabImpact_000", 500, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -124,6 +127,9 @@ void EffectManager::Draw()
 	// インパクトスモーク001を描画
 	impactSmoke000_->Draw();
 	impactSmoke001_->Draw();
+
+	// 掴みインパクト000を描画
+	grabImpact000_->Draw();
 
 	// インパクト000を描画
 	impact004_->Draw();
@@ -345,6 +351,15 @@ void EffectManager::ImpactGround006(const Vector3& position)
 void EffectManager::DashSmoke000(const Vector3& position)
 {
 	Emitter3D emitter("dashSmoke_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief 掴みインパクトを放出する
+/// @param position 
+void EffectManager::GrabImpact000(const Vector3& position)
+{
+	Emitter3D emitter("grabImpact_000");
 	emitter.param_->position = position;
 	emitter.Emit();
 }
