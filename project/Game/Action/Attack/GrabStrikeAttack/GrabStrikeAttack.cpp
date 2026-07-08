@@ -116,7 +116,7 @@ void GrabStrikeAttack::Update()
 	{
 		if (attackTimer_ >= state.hitTime && prevTimer_ <= state.hitTime)
 		{
-			grabbedTarget_->OnGrabDamage(state.damage);
+			grabbedTarget_->OnGrabDamage(state.damage, damageReaction_);
 		}
 	}
 

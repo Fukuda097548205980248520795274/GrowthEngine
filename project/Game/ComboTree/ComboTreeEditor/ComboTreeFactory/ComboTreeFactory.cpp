@@ -126,15 +126,16 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 
 			GrabStrikeAttackInitData initData;
 
+			// 攻撃側のアニメーション
 			if (!animName.empty())
 			{
-				// ※ プロジェクトの MotionManager の仕様に合わせて関数名は適宜調整してください
 				initData.hAttackAnimation = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
 			}
 
+			// 相手側のアニメーション
 			if (!targetAnimName.empty())
 			{
-				initData.hTargetAnimation = MotionManager::GetInstance()->GetMotion(MotionType::Attack, targetAnimName);
+				initData.hTargetAnimation = MotionManager::GetInstance()->GetMotion(MotionType::Stagger, targetAnimName);
 			}
 
 			initData.attackTime = paramsJson.value("attackTime", 0.0f);

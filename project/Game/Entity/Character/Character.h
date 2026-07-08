@@ -69,7 +69,7 @@ public:
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
-	virtual void OnGrabDamage(int damage);
+	virtual void OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt);
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }

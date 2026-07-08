@@ -21,7 +21,7 @@
         {
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
-                "attackTime": 1.0,
+                "attackTime": 0.30000001192092896,
                 "damageReaction": 3,
                 "hits": [
                     {
@@ -82,7 +82,7 @@
         {
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
-                "attackTime": 1.0,
+                "attackTime": 0.30000001192092896,
                 "damageReaction": 3,
                 "hits": [
                     {

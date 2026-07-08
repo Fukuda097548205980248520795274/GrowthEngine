@@ -907,14 +907,168 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 
 /// @brief 掴みダメージを受けた時の処理
 /// @param damage 
-void Character::OnGrabDamage(int damage)
+void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker, std::optional<Vector3> hitPosition)
 {
+	// すでに死亡している場合は、ダメージを受けない
+	if (IsDead())return;
+
+	// 回避とダッシュのフラグをリセットする
+	bufferedAttackInput_ = AttackInputType::None;
+
+
+	// ダメージを受ける処理
+
+	// 攻撃者が攻撃をヒットさせたことを通知する
+	if (attacker)
+	{
+		attacker->SetHitAttack(true);
+
+		// 攻撃者のレイジゲージを増加させる
+		attacker->ChargeRageGage(damageReaction);
+	}
+
+	switch (damageReaction)
+	{
+		// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
+	case DamageReaction::LightStagger:
+
+		// 軽い怯みのエフェクトを再生する
+		if (hitPosition)
+		{
+			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			EffectManager::GetInstance()->Impact001(*hitPosition);
+			EffectManager::GetInstance()->Impact002(*hitPosition);
+			EffectManager::GetInstance()->Impact003(*hitPosition);
+			EffectManager::GetInstance()->Impact004(*hitPosition);
+			EffectManager::GetInstance()->Impact005(*hitPosition);
+		}
+
+		// 軽い怯みのSEを再生する
+		soundManager_->SeLightDamage();
+
+		// ダメージを受けたことを通知する
+		isHitDamage_ = true;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+
+		break;
+
+		// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
+	case DamageReaction::HeavyStagger:
+
+		// 軽い怯みのエフェクトを再生する
+		if (hitPosition)
+		{
+			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			EffectManager::GetInstance()->Impact001(*hitPosition);
+			EffectManager::GetInstance()->Impact002(*hitPosition);
+			EffectManager::GetInstance()->Impact003(*hitPosition);
+			EffectManager::GetInstance()->Impact004(*hitPosition);
+			EffectManager::GetInstance()->Impact005(*hitPosition);
+		}
+
+		// 重い怯みのSEを再生する
+		soundManager_->SeHeavyDamage();
+
+		// ダメージを受けたことを通知する
+		isHitDamage_ = true;
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
+
+		break;
+
+		// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
+	case DamageReaction::Down:
+
+		// 軽い怯みのエフェクトを再生する
+		if (hitPosition)
+		{
+			EffectManager::GetInstance()->ImpactDrop000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke000(*hitPosition);
+			EffectManager::GetInstance()->ImpactSmoke001(*hitPosition);
+			if (attacker)EffectManager::GetInstance()->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+			EffectManager::GetInstance()->Impact001(*hitPosition);
+			EffectManager::GetInstance()->Impact002(*hitPosition);
+			EffectManager::GetInstance()->Impact003(*hitPosition);
+			EffectManager::GetInstance()->Impact004(*hitPosition);
+			EffectManager::GetInstance()->Impact005(*hitPosition);
+		}
+
+		// ダウン落下のSEを再生する
+		soundManager_->SeHeavyDamage();
+
+		// ダメージを受けたことを通知する
+		isHitDamage_ = true;
+
+		// シェイクさせる
+		shake_->StartShake(0.08f, 0.2f);
+
+		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
+
+		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+		if (IsPlayer())if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
+
+		break;
+	}
+
+
+	// 最終的な攻撃力を計算する
+	int finalDamage = damage;
+	finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * attackPower_);
+
+	if (attacker)
+	{
+		// レイジモード中の攻撃力を考慮して最終的なダメージを計算する
+		finalDamage = static_cast<int>(static_cast<float>(finalDamage) * attacker->RageModeAttackPower());
+
+		// 武器の攻撃力を考慮して最終的なダメージを計算する
+		if (attacker->HasWeapon())
+		{
+			finalDamage = static_cast<int>(static_cast<float>(finalDamage) * attacker->GetWeapon()->GetAttackPower());
+
+			// 武器の耐久力を1減らす
+			attacker->GetWeapon()->TakeDamage(1);
+		}
+	}
+
 	// 体力を減らし、0未満にならないようにする
-	hp_ = std::max(0, hp_ - damage);
+	if (!GameScene::IsTutorialActive())
+		hp_ = std::max(0, hp_ - finalDamage);
 
 	// 死亡判定
 	if (hp_ == 0)
+	{
 		Dead();
+
+		// プレイヤーが相手を倒した場合は、スローモーションを開始する
+		if (attacker && attacker->IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.2f, 0.55f);
+
+		// プレイヤーが倒された場合は、スローモーションを開始する
+		if (IsPlayer())
+			GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 3.0f);
+	}
 }
 
 /// @brief レイジゲージの更新
@@ -1356,6 +1510,20 @@ void Character::UpdateAnimation()
 					// つかみモーションを再生する
 					SetAnimation(hGrabMotion_, false, true);
 				}
+			}
+			else
+			{
+				// 掴み攻撃が終了した場合は、掴みモーションに戻す
+				if (currentAttack_->IsFinishedTimer())
+				{
+					SetAnimation(hGrabMotion_, false, true);
+				}
+			}
+
+			// 掴んでいる攻撃の最中で、掴んでいる相手の攻撃が終了した場合は、掴まれモーションに戻す
+			if (grabber_ && grabber_->IsGrabStrikeAttack() && grabber_->GetCurrentAttack()->IsFinishedTimer())
+			{
+				SetAnimation(hGrabbedMotion_, false, true);
 			}
 		}
 	}
