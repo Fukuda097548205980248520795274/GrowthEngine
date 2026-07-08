@@ -48,7 +48,7 @@ public:
 
 	/// @brief デバッグ用の再帰描画処理
 	/// @return 
-	virtual void DrawDebuggerRecursive();
+	virtual void DrawDebuggerRecursive(float zoom = 1.0f);
 
 	/// @brief デバッグ情報を設定する
 	/// @param id 

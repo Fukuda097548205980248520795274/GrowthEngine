@@ -351,15 +351,29 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	// ラインタイムでノードを確認するためのデバッグ情報を設定
 	if (runtime_node)
 	{
-		// ビューアー上に表示するノード名を設定
-		std::string nodeName = "未設定";
-		if (editor_node.type == EditorNodeType::Action) nodeName = "アクション";
-		else if (editor_node.type == EditorNodeType::Condition) nodeName = "条件";
-		else if (editor_node.type == EditorNodeType::PersistentSelector) nodeName = "永続 選択";
-		else if (editor_node.type == EditorNodeType::PersistentSequence) nodeName = "永続 シーケンス";
-		else if (editor_node.type == EditorNodeType::RestartingSelector) nodeName = "再起動 選択";
-		else if (editor_node.type == EditorNodeType::RestartingSequence) nodeName = "再起動 シーケンス";
+		std::string nodeName = "";
 
+		// エディタ側でユーザーが名前を入力しているかチェック
+		if (editor_node.name[0] != '\0')
+		{
+			nodeName = editor_node.name;
+		}
+		else
+		{
+			// 空欄だった場合は、これまで通りノードのタイプに応じたデフォルト名を設定
+			switch (editor_node.type)
+			{
+			case EditorNodeType::PersistentSelector: nodeName = "永続 選択"; break;
+			case EditorNodeType::PersistentSequence: nodeName = "永続 シーケンス"; break;
+			case EditorNodeType::RestartingSelector: nodeName = "再起動 選択"; break;
+			case EditorNodeType::RestartingSequence: nodeName = "再起動 シーケンス"; break;
+			case EditorNodeType::Condition:          nodeName = "条件"; break;
+			case EditorNodeType::Action:             nodeName = "アクション"; break;
+			default:                                 nodeName = "未知のノード"; break;
+			}
+		}
+
+		// 決定した名前をランタイムノードのデバッグ情報としてセット
 		runtime_node->SetDebugInfo(
 			editor_node.id,
 			editor_node.inputPinId,

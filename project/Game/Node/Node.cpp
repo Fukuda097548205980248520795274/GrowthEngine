@@ -20,7 +20,7 @@ Node::State Node::UpdateNode()
 }
 
 /// @brief デバッグ用の再帰描画処理
-void Node::DrawDebuggerRecursive()
+void Node::DrawDebuggerRecursive(float zoom)
 {
 	if (editorNodeId_ < 0) return;
 
@@ -45,8 +45,8 @@ void Node::DrawDebuggerRecursive()
 	ImNodes::PushColorStyle(ImNodesCol_NodeBackground, color);
 	ImNodes::PushColorStyle(ImNodesCol_NodeBackgroundSelected, color);
 
-	// エディタと全く同じ座標に強制配置
-	ImNodes::SetNodeGridSpacePos(editorNodeId_, ImVec2(pos_.x, pos_.y));
+	// ノードの位置を設定（ズーム率を考慮）
+	ImNodes::SetNodeGridSpacePos(editorNodeId_, ImVec2(pos_.x * zoom, pos_.y * zoom));
 
 	// ノードの描画開始
 	ImNodes::BeginNode(editorNodeId_);
@@ -55,7 +55,7 @@ void Node::DrawDebuggerRecursive()
 	ImGui::Text("%s", nodeName_.c_str());
 	ImNodes::EndNodeTitleBar();
 
-	ImGui::Dummy(ImVec2(100.0f, 0.0f));
+	ImGui::Dummy(ImVec2(50.0f * zoom, 0.0f));
 
 	// 入力ピンの描画（ピンIDが有効な場合のみ）
 	if (inputPinId_ > 0)

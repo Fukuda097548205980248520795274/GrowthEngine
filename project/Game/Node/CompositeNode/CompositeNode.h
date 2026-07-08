@@ -24,7 +24,7 @@ public:
 	void ResetStatusRecursive() override;
 
 	/// @brief デバッグ用の再帰描画処理
-	void DrawDebuggerRecursive() override;
+	void DrawDebuggerRecursive(float zoom = 1.0f) override;
 
 
 protected:
