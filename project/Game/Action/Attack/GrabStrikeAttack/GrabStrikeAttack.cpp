@@ -116,7 +116,8 @@ void GrabStrikeAttack::Update()
 	{
 		if (attackTimer_ >= state.hitTime && prevTimer_ <= state.hitTime)
 		{
-			grabbedTarget_->OnGrabDamage(state.damage, damageReaction_);
+			std::optional<Vector3> hitPosition = owner_->GetBonePosition(state.hitJoint);
+			grabbedTarget_->OnGrabDamage(state.damage, damageReaction_, owner_, hitPosition);
 		}
 	}
 

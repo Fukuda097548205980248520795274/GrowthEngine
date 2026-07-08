@@ -1,5 +1,5 @@
 {
-    "currentId": 104,
+    "currentId": 110,
     "links": [
         {
             "endPinId": 86,
@@ -15,6 +15,11 @@
             "endPinId": 86,
             "id": 103,
             "startPinId": 99
+        },
+        {
+            "endPinId": 105,
+            "id": 109,
+            "startPinId": 94
         }
     ],
     "nodes": [
@@ -49,8 +54,8 @@
             "outputInputXPinId": 87,
             "outputInputYPinId": 88,
             "pos": [
-                865.7583618164063,
-                618.7384033203125
+                875.7583618164063,
+                515.7384033203125
             ],
             "targetAnimationName": "Front"
         },
@@ -110,8 +115,44 @@
             "outputInputXPinId": 99,
             "outputInputYPinId": 100,
             "pos": [
-                867.25830078125,
-                763.7384033203125
+                877.25830078125,
+                660.7384033203125
+            ],
+            "targetAnimationName": "Front"
+        },
+        {
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.5,
+                "damageReaction": 3,
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.30000001192092896
+                    }
+                ],
+                "isRelease": true,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    0.5,
+                    1.0
+                ],
+                "moveEndTime": 0.30000001192092896,
+                "moveSpeed": 3.0,
+                "moveStartTime": 0.10000000149011612
+            },
+            "id": 104,
+            "inputPinId": 105,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 108,
+            "outputInputXPinId": 106,
+            "outputInputYPinId": 107,
+            "pos": [
+                877.2583618164063,
+                797.7384033203125
             ],
             "targetAnimationName": "Front"
         }
