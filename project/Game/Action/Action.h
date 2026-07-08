@@ -7,6 +7,18 @@ class Action
 {
 public:
 
+	/// @brief ブレークポイント
+	struct Breakpoints
+	{
+		bool onExec = false;
+		bool onUpdate = false;
+		bool onExit = false;
+		bool onReset = false;
+	};
+
+
+public:
+
 	/// @brief コンストラクタ
 	/// @param owner 
 	Action(Character* owner) : owner_(owner) { engine_ = GrowthEngine::GetInstance(); }
@@ -42,6 +54,10 @@ public:
 	/// @return 
 	virtual bool IsUse() const = 0;
 
+	/// @brief ブレークポイントを取得する
+	/// @return 
+	Breakpoints& GetBreakpoints() { return breakpoints_; }
+
 
 protected:
 
@@ -62,5 +78,17 @@ private:
 
 	/// @brief 失敗したかどうか
 	bool isFailure_ = false;
+
+
+protected:
+
+	// ブレイクポイントのチェック
+	void BreakpointOnExec();
+	void BreakpointOnUpdate();
+	void BreakpointOnExit();
+	void BreakpointOnReset();
+
+	/// @brief ブレークポイント
+	Breakpoints breakpoints_;
 };
 

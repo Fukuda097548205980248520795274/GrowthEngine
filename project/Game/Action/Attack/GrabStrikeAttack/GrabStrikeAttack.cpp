@@ -28,6 +28,9 @@ GrabStrikeAttack::GrabStrikeAttack(Character* character, const GrabStrikeAttackI
 /// @brief 実行
 void GrabStrikeAttack::Exec()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnExec();
+
 	// 基底クラスの実行
 	Attack::Exec();
 
@@ -52,6 +55,9 @@ void GrabStrikeAttack::Exec()
 /// @brief 更新処理
 void GrabStrikeAttack::Update()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnUpdate();
+
 	// 掴んでいる相手を取得
 	grabbedTarget_ = owner_->GetGrabTarget();
 
@@ -184,6 +190,9 @@ void GrabStrikeAttack::Update()
 /// @brief リセット
 void GrabStrikeAttack::Reset()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnReset();
+
 	Attack::Reset();
 	attackTimer_ = 0.0f;
 	isReleased_ = false;
@@ -193,6 +202,9 @@ void GrabStrikeAttack::Reset()
 /// @brief 終了、中断
 void GrabStrikeAttack::Exit()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnExit();
+
 	// もし掴んでいる相手がいる状態で攻撃が終了した場合は、確実に手を離す
 	if (isRelease_ && !isReleased_ && grabbedTarget_)
 	{

@@ -5,6 +5,9 @@
 /// @brief 実行
 void RequestToken::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
 	// トークン要求フラグをリセット
 	isRequested_ = false;
 

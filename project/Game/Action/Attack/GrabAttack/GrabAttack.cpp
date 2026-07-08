@@ -21,6 +21,9 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 /// @brief 実行
 void GrabAttack::Exec()
 {
+	// ブレークポイント
+	BreakpointOnExec();
+
 	// 基底クラスの実行処理
 	Attack::Exec();
 
@@ -39,6 +42,9 @@ void GrabAttack::Exec()
 /// @brief 更新処理
 void GrabAttack::Update()
 {
+	// ブレークポイント
+	BreakpointOnUpdate();
+
 	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// すでにつかんでいる、またはつかまれている状態なら、攻撃処理は行わずに終了する
@@ -197,6 +203,9 @@ void GrabAttack::Update()
 /// @brief アクションが成功したとき、または再度実行されたときに呼ばれる
 void GrabAttack::Reset()
 {
+	// ブレークポイント
+	BreakpointOnReset();
+
 	Attack::Reset();
 	attackTimer_ = 0.0f;
 	hasHit_ = false;
@@ -206,6 +215,9 @@ void GrabAttack::Reset()
 /// @brief アクションが終了したとき、または中断されたときに呼ばれる
 void GrabAttack::Exit()
 {
+	// ブレークポイント
+	BreakpointOnExit();
+
 	DeleteHitbox();
 	Attack::Exit();
 }

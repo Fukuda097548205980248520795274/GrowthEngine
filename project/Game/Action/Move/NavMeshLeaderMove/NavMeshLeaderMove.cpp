@@ -17,6 +17,9 @@ NavMeshLeaderMove::NavMeshLeaderMove(Character* character, const NavMeshLeaderMo
 /// @brief 実行
 void NavMeshLeaderMove::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
     if (IsExec()) return;
 
     // 基底クラス
@@ -119,6 +122,9 @@ void NavMeshLeaderMove::Exec()
 /// @brief 更新処理
 void NavMeshLeaderMove::Update()
 {
+	// ブレークポイントのチェック
+	BreakpointOnUpdate();
+
     // 動けない状態や回避中の場合は移動を停止して終了
     if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
     {

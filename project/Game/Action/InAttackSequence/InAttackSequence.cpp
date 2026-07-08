@@ -4,6 +4,9 @@
 /// @brief 実行
 void InAttackSequence::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
 	// 攻撃シーケンスがすでに開始されている場合はエラー
 	if (owner_->IsInAttackSequence())
 	{

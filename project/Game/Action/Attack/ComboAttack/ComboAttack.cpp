@@ -32,6 +32,9 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 /// @brief 実行
 void ComboAttack::Exec()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnExec();
+
 	// 基底の実行
 	Attack::Exec();
 
@@ -58,6 +61,9 @@ void ComboAttack::Exec()
 /// @brief 更新処理
 void ComboAttack::Update()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnUpdate();
+
 	// コンボキャンセル受付時間内であれば、次の攻撃への入力をチェックする
 	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 	{
@@ -257,6 +263,9 @@ void ComboAttack::Update()
 /// @brief リセット
 void ComboAttack::Reset()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnReset();
+
 	// 基底のリセット
 	Attack::Reset();
 
@@ -274,6 +283,9 @@ void ComboAttack::Reset()
 /// @brief 終了、中断
 void ComboAttack::Exit()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnExit();
+
 	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)
 	{

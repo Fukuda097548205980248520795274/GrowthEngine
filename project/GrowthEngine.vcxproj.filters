@@ -1255,9 +1255,6 @@
     <Filter Include="Game\EffectManager\Effect\DeflectEffect">
       <UniqueIdentifier>{df746e58-6f19-40c4-8cb8-9519b9082dd2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Action\Turn">
-      <UniqueIdentifier>{17e744cc-5a08-4847-aed8-22632ac9c377}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Action\Defence">
       <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
     </Filter>

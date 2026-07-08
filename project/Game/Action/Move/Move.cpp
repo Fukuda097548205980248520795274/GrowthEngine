@@ -21,6 +21,9 @@ void Move::Update()
 /// @brief 中断・終了
 void Move::Exit()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExit();
+
 	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
 	if (owner_->GetCurrentMove() == this)
 	{

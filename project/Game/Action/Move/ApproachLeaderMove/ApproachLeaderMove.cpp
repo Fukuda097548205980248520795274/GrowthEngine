@@ -4,6 +4,9 @@
 /// @brief 実行
 void ApproachLeaderMove::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
     // 実行済みが処理しない
     if (IsExec())return;
 
@@ -49,6 +52,9 @@ void ApproachLeaderMove::Exec()
 /// @brief 更新処理
 void ApproachLeaderMove::Update()
 {
+	// ブレークポイントのチェック
+	BreakpointOnUpdate();
+
 	// リーダーがいない場合は移動を停止して終了する
 	if (!leader_)if (leader_->IsDead() || leader_->IsFinished())
     {

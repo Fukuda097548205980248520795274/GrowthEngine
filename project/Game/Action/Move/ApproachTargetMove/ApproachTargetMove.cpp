@@ -3,6 +3,9 @@
 /// @brief 実行
 void ApproachTargetMove::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
     // 実行済みが処理しない
     if (IsExec())return;
 
@@ -13,6 +16,9 @@ void ApproachTargetMove::Exec()
 /// @brief 更新処理
 void ApproachTargetMove::Update()
 {
+	// ブレークポイントのチェック
+	BreakpointOnUpdate();
+
     // ターゲットを取得する
     Character* target = owner_->GetLockOnTarget();
 

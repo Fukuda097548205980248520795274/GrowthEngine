@@ -20,6 +20,13 @@ public:
 
 protected:
 
+	/// @brief カスタムノードUIを描画する
+	/// @param zoom 
+	void DrawCustomNodeUI(float zoom) override;
+
+
+protected:
+
 	/// @brief アクション
 	std::unique_ptr<Action> action_ = nullptr;
 };

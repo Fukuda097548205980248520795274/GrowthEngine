@@ -13,6 +13,9 @@ Avoid::Avoid(Character* character, const AvoidInitData& initData)
 /// @brief 実行
 void Avoid::Exec()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnExec();
+
 	// すでに実行されている場合は何もしない
 	if (IsExec()) return;
 
@@ -40,28 +43,12 @@ void Avoid::Exec()
 	owner_->SetCurrentAvoid(this);
 }
 
-/// @brief 終了、中断
-void Avoid::Exit()
-{
-	// 自分が現在の回避処理として登録されている場合のみ、停止とクリアを行う
-	if (owner_->GetCurrentAvoid() == this)
-	{
-		// 回避を停止する
-		owner_->SetCurrentAvoid(nullptr);
-	}
-
-	Action::Exit();
-}
-
-/// @brief リセット
-void Avoid::Reset()
-{
-	Action::Reset(); 
-}
-
 /// @brief 更新処理
 void Avoid::Update()
 {
+	// ブレイクポイントのチェック
+	BreakpointOnUpdate();
+
 	// 実行されていない場合は何もしない
 	if (!IsExec()) return;
 
@@ -88,6 +75,31 @@ void Avoid::Update()
 		// 回避が終了した場合は、成功フラグを立ててExit()を呼ぶ
 		Action::Update();
 	}
+}
+
+/// @brief リセット
+void Avoid::Reset()
+{
+	// ブレイクポイントのチェック
+	BreakpointOnReset();
+
+	Action::Reset();
+}
+
+/// @brief 終了、中断
+void Avoid::Exit()
+{
+	// ブレイクポイントのチェック
+	BreakpointOnExit();
+
+	// 自分が現在の回避処理として登録されている場合のみ、停止とクリアを行う
+	if (owner_->GetCurrentAvoid() == this)
+	{
+		// 回避を停止する
+		owner_->SetCurrentAvoid(nullptr);
+	}
+
+	Action::Exit();
 }
 
 /// @brief 使用中かどうか

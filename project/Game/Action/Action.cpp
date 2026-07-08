@@ -46,3 +46,51 @@ void Action::Exit()
 	if (!isSuccess_)
 		isFailure_ = true;
 }
+
+/// @brief ブレークポイントのチェック
+void Action::BreakpointOnExec()
+{
+#ifdef _DEVELOPMENT
+	if (breakpoints_.onExec)
+	{
+		__debugbreak();
+		breakpoints_.onExec = false; // 一度ブレークしたらフラグを下す
+	}
+#endif
+}
+
+/// @brief ブレークポイントのチェック
+void Action::BreakpointOnUpdate()
+{
+#ifdef _DEVELOPMENT
+	if (breakpoints_.onUpdate)
+	{
+		__debugbreak();
+		breakpoints_.onUpdate = false; // 一度ブレークしたらフラグを下す
+	}
+#endif
+}
+
+/// @brief ブレークポイントのチェック
+void Action::BreakpointOnExit()
+{
+#ifdef _DEVELOPMENT
+	if (breakpoints_.onExit)
+	{
+		__debugbreak();
+		breakpoints_.onExit = false; // 一度ブレークしたらフラグを下す
+	}
+#endif
+}
+
+/// @brief ブレークポイントのチェック
+void Action::BreakpointOnReset()
+{
+#ifdef _DEVELOPMENT
+	if (breakpoints_.onReset)
+	{
+		__debugbreak();
+		breakpoints_.onReset = false; // 一度ブレークしたらフラグを下す
+	}
+#endif
+}

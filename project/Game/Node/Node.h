@@ -78,6 +78,13 @@ public:
 
 protected:
 
+	/// @brief カスタムノードUIを描画する
+	/// @param zoom 
+	virtual void DrawCustomNodeUI(float zoom) {}
+
+
+protected:
+
 	/// @brief エンジン
 	const GrowthEngine* engine_ = nullptr;
 
@@ -86,6 +93,9 @@ protected:
 
 	// 最後の状態
 	State lastState_ = State::None;
+
+	/// @brief ブレークポイントが設定されているかどうか
+	bool isBreakpoint_ = false;
 
 	// エディタ上のノードID
 	int editorNodeId_ = -1;

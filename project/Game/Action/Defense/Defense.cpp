@@ -3,6 +3,9 @@
 
 void Defense::Exec()
 {
+    // ブレークポイントのチェック
+	BreakpointOnExec();
+
     Action::Exec();
     owner_->SetGuard(true); // キャラクターを防御状態にする
     guardTimer_ = 0.0f;
@@ -10,6 +13,9 @@ void Defense::Exec()
 
 void Defense::Update()
 {
+	// ブレークポイントのチェック
+	BreakpointOnUpdate();
+
     guardTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
 
     // 一定時間ガードしたら終了
@@ -22,6 +28,9 @@ void Defense::Update()
 
 void Defense::Exit()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExit();
+
     owner_->SetGuard(false); // 念のため解除
     Action::Exit();
 }

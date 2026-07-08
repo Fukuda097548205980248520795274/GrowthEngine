@@ -45,3 +45,28 @@ void ActionNode::Abort()
 	// アクションをリセットする
 	action_->Reset();
 }
+
+/// @brief カスタムノードUIを描画する
+/// @param zoom 
+void ActionNode::DrawCustomNodeUI(float zoom)
+{
+	if (!action_) return;
+
+	ImGui::PushID(editorNodeId_ + 10000);
+
+	ImGui::Text("Breakpoints:");
+
+	// Actionの構造体の参照を取得して直接チェックボックスと紐づける
+	Action::Breakpoints& bp = action_->GetBreakpoints();
+
+	// ImGui::SameLine() を使って2列×2行でコンパクトに配置
+	ImGui::Checkbox("Exec", &bp.onExec);
+	ImGui::SameLine();
+	ImGui::Checkbox("Update", &bp.onUpdate);
+
+	ImGui::Checkbox("Exit", &bp.onExit);
+	ImGui::SameLine();
+	ImGui::Checkbox("Reset", &bp.onReset);
+
+	ImGui::PopID();
+}

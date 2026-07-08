@@ -15,6 +15,12 @@ Node::Node()
 /// @return 
 Node::State Node::UpdateNode()
 {
+	// ブレークポイントが設定されている場合、デバッガを起動する
+	if (isBreakpoint_)
+	{
+		__debugbreak();
+	}
+
 	lastState_ = Exec();
 	return lastState_;
 }
@@ -54,6 +60,20 @@ void Node::DrawDebuggerRecursive(float zoom)
 	ImNodes::BeginNodeTitleBar();
 	ImGui::Text("%s", nodeName_.c_str());
 	ImNodes::EndNodeTitleBar();
+
+
+	// ImGuiのID衝突を避けるため、ノードIDをプッシュする
+	ImGui::PushID(editorNodeId_);
+
+	// ズーム率に合わせて余白やチェックボックスのスケールを調整
+	ImGui::Dummy(ImVec2(0.0f, 2.0f * zoom));
+	ImGui::Checkbox("Break", &isBreakpoint_);
+
+	// カスタムノードUIの描画
+	DrawCustomNodeUI(zoom);
+
+	ImGui::PopID();
+
 
 	ImGui::Dummy(ImVec2(50.0f * zoom, 0.0f));
 

@@ -5,6 +5,9 @@
 /// @brief 実行
 void ReleaseToken::Exec()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExec();
+
 	// 攻撃トークンを返却する
 	BattleDirector::GetInstance().ReleaseAttackToken(owner_);
 
@@ -15,6 +18,9 @@ void ReleaseToken::Exec()
 /// @brief 終了、中断
 void ReleaseToken::Exit()
 {
+	// ブレークポイントのチェック
+	BreakpointOnExit();
+
 	// 攻撃トークンを返却する
 	BattleDirector::GetInstance().ReleaseAttackToken(owner_);
 }
