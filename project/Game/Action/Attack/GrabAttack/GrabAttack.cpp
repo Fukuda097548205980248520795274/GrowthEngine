@@ -122,6 +122,9 @@ void GrabAttack::Update()
 						// 自分自身は判定しない
 						if (target == owner_) continue;
 
+						// すでにつかまれているキャラクターは判定しない
+						if (target->IsGrabbed())continue;
+
 						// 同じ側のキャラクターは判定しない（プレイヤー側ならプレイヤー側のキャラクターは判定しない、敵側なら敵側のキャラクターは判定しない）
 						if (target->IsPlayerSide() == owner_->IsPlayerSide() && target->IsEnemySide() == owner_->IsEnemySide())continue;
 

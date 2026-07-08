@@ -9,37 +9,37 @@
 // ノードの種類を表す列挙型
 enum class ComboNodeType
 {
-    Combo,
-    Grab,
-    GrabStrike,
+	Combo,
+	Grab,
+	GrabStrike,
 };
 
 
 // ノード情報を保持する構造体
 struct ComboEditorNode
 {
-    int id = 0;
+	int id = 0;
 
-    // 攻撃名
-    std::string name{};
+	// 攻撃名
+	std::string name{};
 
-    // 遷移元から入ってくるピン
-    int inputPinId = 0;
+	// 遷移元から入ってくるピン
+	int inputPinId = 0;
 
-    // X入力派生用ピン
-    int outputInputXPinId = 0;
+	// X入力派生用ピン
+	int outputInputXPinId = 0;
 
 	// B入力派生用ピン
 	int outputInputBPinId = 0;
 
-    // Y入力派生用ピン
-    int outputInputYPinId = 0;
+	// Y入力派生用ピン
+	int outputInputYPinId = 0;
 
 	/// @brief ノードの種類
-    ComboNodeType nodeType = ComboNodeType::Combo;
+	ComboNodeType nodeType = ComboNodeType::Combo;
 
-    // エディタ上の座標
-    ImVec2 pos;
+	// エディタ上の座標
+	ImVec2 pos;
 
 
 	/// @brief コンボ攻撃の初期化データ
@@ -49,28 +49,28 @@ struct ComboEditorNode
 	GrabAttackInitData grabAttackInitData;
 
 	/// @brief つかみ打撃攻撃の初期化データ
-    GrabStrikeAttackInitData grabStrikeAttackInitData;
+	GrabStrikeAttackInitData grabStrikeAttackInitData;
 
 
 	// 攻撃アニメーション名
-    std::string motionName;
+	std::string motionName;
 
-    // GrabStrike用のターゲットアニメーション名
+	// GrabStrike用のターゲットアニメーション名
 	std::string targetMotionName;
 };
 
 // リンク情報を保持する構造体
 struct ComboEditorLink
 {
-    int id = 0;
+	int id = 0;
 
-    // 出力ピンのID
-    int startPinId = 0;
+	// 出力ピンのID
+	int startPinId = 0;
 
-    // 入力ピンのID
-    int endPinId = 0;
+	// 入力ピンのID
+	int endPinId = 0;
 
 
 	// リンクの種類（1: 弱攻撃, 2: 強攻撃）
-    int linkType = 0;
+	int linkType = 0;
 };
