@@ -32,25 +32,42 @@ void CompositeNode::DrawDebuggerRecursive(float zoom)
         // 子ノードのデバッグ描画を再帰呼び出し
         child->DrawDebuggerRecursive(zoom);
 
-		// リンクの色を子ノードの状態に応じて変更
+		// 変更：リンクの色と太さを決定
 		uint32_t linkColor = IM_COL32(60, 60, 60, 255); // None: グレー
-		switch (child->GetLastState())
+		float thickness = 1.5f;
+
+		Node::State childState = child->GetLastState();
+
+		if (childState == Node::State::Running)
 		{
-		case State::Running:
 			linkColor = IM_COL32(30, 180, 30, 255);  // Running: 緑
-			break;
-		case State::Success:
+			thickness = 4.0f; // Running時は線を太く
+		}
+		else if (childState == Node::State::Success)
+		{
 			linkColor = IM_COL32(30, 30, 180, 255);  // Success: 青
-			break;
-		case State::Failure:
+		}
+		else if (childState == Node::State::Failure)
+		{
 			linkColor = IM_COL32(180, 30, 30, 255);  // Failure: 赤
-			break;
-		default:
-			break;
+		} 
+		else if (child->GetFadeTimer() > 0.0f)
+		{
+			// リンクも残像フェードさせる
+			float t = child->GetFadeTimer() / 1.0f; // Node.hのFADE_DURATIONに合わせる
+			Node::State fadeState = child->GetFadeState();
+
+			int targetR = (fadeState == Node::State::Success) ? 30 : 180;
+			int targetG = 30;
+			int targetB = (fadeState == Node::State::Success) ? 180 : 30;
+
+			int r = static_cast<int>(60.0f + (targetR - 60.0f) * t);
+			int g = static_cast<int>(60.0f + (targetG - 60.0f) * t);
+			int b = static_cast<int>(60.0f + (targetB - 60.0f) * t);
+
+			linkColor = IM_COL32(r, g, b, 255);
 		}
 
-		// 状態がRunningなら線を太く、それ以外は通常
-		float thickness = (child->GetLastState() == State::Running) ? 4.0f : 1.5f;
 		ImNodes::PushStyleVar(ImNodesStyleVar_LinkThickness, thickness);
 
 		// リンクの色を設定して描画

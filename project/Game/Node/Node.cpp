@@ -30,21 +30,58 @@ void Node::DrawDebuggerRecursive(float zoom)
 {
 	if (editorNodeId_ < 0) return;
 
-	// 現在の実行状態（lastState_）に応じてノードの背景色を決定
-	uint32_t color = IM_COL32(60, 60, 60, 255); // None (未実行): グレー
-	switch (lastState_)
+	// デルタタイムを取得
+	float dt = ImGui::GetIO().DeltaTime;
+
+	if (lastState_ == State::Success || lastState_ == State::Failure)
 	{
-	case State::Running:
+		// 実行されたフレームでフェード情報とタイマーをリセット
+		fadeState_ = lastState_;
+		fadeTimer_ = FADE_DURATION;
+	} 
+	else if (lastState_ == State::None && fadeTimer_ > 0.0f)
+	{
+		// 非実行状態（None）になったらタイマーを減算
+		fadeTimer_ -= dt;
+		if (fadeTimer_ < 0.0f) fadeTimer_ = 0.0f;
+	}
+	else if (lastState_ == State::Running)
+	{
+		// 実行中の場合は残像を消す
+		fadeTimer_ = 0.0f;
+	}
+
+	// ノードの背景色を決定
+	uint32_t color = IM_COL32(60, 60, 60, 255); // None (未実行): グレー
+
+	if (lastState_ == State::Running)
+	{
 		color = IM_COL32(30, 180, 30, 255);  // Running: 緑
-		break;
-	case State::Success:
+	} 
+	else if (lastState_ == State::Success)
+	{
 		color = IM_COL32(30, 30, 180, 255);  // Success: 青
-		break;
-	case State::Failure:
+	} 
+	else if (lastState_ == State::Failure)
+	{
 		color = IM_COL32(180, 30, 30, 255);  // Failure: 赤
-		break;
-	default:
-		break;
+	} 
+	else if (fadeTimer_ > 0.0f)
+	{
+		// 残像の色を計算 (t は 1.0 から 0.0 に減衰)
+		float t = fadeTimer_ / FADE_DURATION;
+
+		// 目標色（Successなら青、Failureなら赤）
+		int targetR = (fadeState_ == State::Success) ? 30 : 180;
+		int targetG = 30;
+		int targetB = (fadeState_ == State::Success) ? 180 : 30;
+
+		// グレー (60, 60, 60) に向かって線形補間（徐々に色を戻す）
+		int r = static_cast<int>(60.0f + (targetR - 60.0f) * t);
+		int g = static_cast<int>(60.0f + (targetG - 60.0f) * t);
+		int b = static_cast<int>(60.0f + (targetB - 60.0f) * t);
+
+		color = IM_COL32(r, g, b, 255);
 	}
 
 	// ノードの背景色を適用
@@ -59,6 +96,7 @@ void Node::DrawDebuggerRecursive(float zoom)
 
 	ImNodes::BeginNodeTitleBar();
 	ImGui::Text("%s", nodeName_.c_str());
+
 	ImNodes::EndNodeTitleBar();
 
 

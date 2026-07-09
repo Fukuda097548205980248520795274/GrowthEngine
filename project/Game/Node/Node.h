@@ -75,6 +75,14 @@ public:
 	/// @return 
 	int GetOutputPinId() const { return outputPinId_; }
 
+	/// @brief ノードの位置を取得する
+	/// @return 
+	float GetFadeTimer() const { return fadeTimer_; }
+
+	/// @brief フェード状態を取得する
+	/// @return 
+	State GetFadeState() const { return fadeState_; }
+
 
 protected:
 
@@ -114,5 +122,15 @@ protected:
 
 	// ノードのタイプ
 	EditorNodeType type_;
+
+
+	// フェード状態
+	State fadeState_ = State::None;
+
+	// フェードタイマー
+	float fadeTimer_ = 0.0f;
+
+	// フェード時間
+	const float FADE_DURATION = 0.5f;
 };
 
