@@ -2105,6 +2105,9 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 /// @brief 死亡処理
 void Character::Dead()
 {
+	// 移動を止める
+	MoveStop();
+
 	// 死亡タイマーをリセットする
 	deadTimer_ = kDeadDuration;
 

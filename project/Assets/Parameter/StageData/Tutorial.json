@@ -828,6 +828,22 @@
             "scaleY": 1.0,
             "scaleZ": 5.8447442054748535,
             "subType": 3
+        },
+        {
+            "category": 1,
+            "eventStageDataFileName": "",
+            "eventType": 2,
+            "name": "",
+            "posX": 0.019999999552965164,
+            "posY": 0.7699999809265137,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 3
         }
     ]
 }

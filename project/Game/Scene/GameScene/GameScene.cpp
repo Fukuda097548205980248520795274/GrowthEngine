@@ -310,10 +310,7 @@ void GameScene::Initialize()
 			ltButtonSprite_->Draw();
 
 			// チュートリアルの描画
-			tutorialMoveText_->Draw();
-			tutorialPerspectiveText_->Draw();
-			lStickSprite_->Draw();
-			rStickSprite_->Draw();
+			stickTutorial_->Draw();
 		}
 	);
 
@@ -410,6 +407,16 @@ void GameScene::Update()
 			return hud->IsFinished(); 
 		}
 	);
+
+	// チュートリアルの更新
+	stickTutorial_->Update();
+	dashTutorial_->Update();
+	attackTutorial_->Update();
+	comboTutorial_->Update();
+	grabTutorial_->Update();
+	guardTutorial_->Update();
+	avoidTutorial_->Update();
+	rageTutorial_->Update();
 
 	// エフェクトの更新
 	effectManager_->Update();
@@ -1032,7 +1039,46 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 			return false;
 		}
 		break;
-		
+
+
+		// スティック操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::StickTutorial:
+		stickTutorial_->SetEnable(true);
+		break;
+
+		// ダッシュ操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::DashTutorial:
+		dashTutorial_->SetEnable(true);
+		break;
+
+		// 攻撃操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::AttackTutorial:
+		attackTutorial_->SetEnable(true);
+		break;
+
+		// コンボ操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::ComboTutorial:
+		comboTutorial_->SetEnable(true);
+		break;
+
+		// 掴み操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::GrabTutorial:
+		grabTutorial_->SetEnable(true);
+		break;
+
+		// ガード操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::GuardTutorial:
+		guardTutorial_->SetEnable(true);
+		break;
+
+		// 回避操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::AvoidTutorial:
+		avoidTutorial_->SetEnable(true);
+		break;
+
+		// レイジモード操作のチュートリアルイベント
+	case StaticEventTrigger::EventType::RageModeTutorial:
+		rageTutorial_->SetEnable(true);
 		break;
 	}
 
@@ -1125,6 +1171,8 @@ void GameScene::LoadHUDs()
 	textFrameLeftSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/text_frame_left.png"), 50, "Text_Frame_Left_Sprite");
 	textFrameLeftSprite_->param_->texture.anchor = Vector2(1.0f, 0.5f);
 
+
+
 	// チュートリアル用テキスト
 	tutorialMoveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/move_text.png"), "Tutorial_Move_Text_Sprite");
 	tutorialPerspectiveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/perspective_text.png"), "Tutorial_Perspective_Text_Sprite");
@@ -1133,4 +1181,19 @@ void GameScene::LoadHUDs()
 	lStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/l_stick.png"), "L_Stick_Sprite");
 	rStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/r_stick.png"), "R_Stick_Sprite");
 
+
+	// スティック操作のチュートリアルを生成する
+	stickTutorial_ = std::make_unique<Tutorial>();
+	stickTutorial_->AddSprite(tutorialMoveText_.get());
+	stickTutorial_->AddSprite(lStickSprite_.get());
+	stickTutorial_->AddSprite(rStickSprite_.get());
+	stickTutorial_->AddSprite(tutorialPerspectiveText_.get());
+
+	dashTutorial_ = std::make_unique<Tutorial>();
+	attackTutorial_ = std::make_unique<Tutorial>();
+	comboTutorial_ = std::make_unique<Tutorial>();
+	grabTutorial_ = std::make_unique<Tutorial>();
+	guardTutorial_ = std::make_unique<Tutorial>();
+	avoidTutorial_ = std::make_unique<Tutorial>();
+	rageTutorial_ = std::make_unique<Tutorial>();
 }

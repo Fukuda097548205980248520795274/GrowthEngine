@@ -19,6 +19,7 @@ Node::State Node::UpdateNode()
 	if (isBreakpoint_)
 	{
 		__debugbreak();
+		isBreakpoint_ = false; // ブレークポイントをリセット
 	}
 
 	lastState_ = Exec();

@@ -13,6 +13,7 @@
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
+#include "HUD/Tutorial/Tutorial.h"
 
 #include "PivotPoint/PivotPoint.h"
 #include "Shake/Shake.h"
@@ -353,6 +354,17 @@ private:
 	/// @brief スティックのスプライト
 	std::unique_ptr<Sprite> lStickSprite_ = nullptr;
 	std::unique_ptr<Sprite> rStickSprite_ = nullptr;
+
+
+	// チュートリアル
+	std::unique_ptr<Tutorial> stickTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> dashTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> attackTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> comboTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> grabTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> guardTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> avoidTutorial_ = nullptr;
+	std::unique_ptr<Tutorial> rageTutorial_ = nullptr;
 
 
 private:

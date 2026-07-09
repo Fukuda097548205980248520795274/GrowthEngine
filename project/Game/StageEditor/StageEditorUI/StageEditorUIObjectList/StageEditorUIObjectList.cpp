@@ -287,11 +287,9 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "--- イベントトリガー設定 ---");
 					ImGui::Indent();
 
-
-					const char* eventTypes[] = { "None (なし)", "敵生成" };
 					int currentType = target.eventType;
 
-					if (ImGui::Combo("イベントタイプ", &currentType, eventTypes, IM_ARRAYSIZE(eventTypes)))
+					if (ImGui::Combo("イベントタイプ", &currentType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames)))
 					{
 						// 変更前に履歴を保存
 						history_->SaveHistory(placementList);

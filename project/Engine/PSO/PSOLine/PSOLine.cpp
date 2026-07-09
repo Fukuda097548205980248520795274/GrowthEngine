@@ -143,7 +143,7 @@ void Engine::PSOLine::Initialize(ID3D12Device* device, ShaderCompiler* compiler,
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 
 	// Depthを有効化する
-	depthStencilDesc.DepthEnable = false;
+	depthStencilDesc.DepthEnable = true;
 
 	// 書き込む
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;

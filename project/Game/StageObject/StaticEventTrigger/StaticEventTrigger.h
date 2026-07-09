@@ -31,7 +31,15 @@ public:
 	enum class EventType
 	{
 		None,
-		ObjectSpawn
+		ObjectSpawn,
+		StickTutorial, // スティック操作チュートリアル
+		DashTutorial, // ダッシュ操作チュートリアル
+		AttackTutorial, // 攻撃操作チュートリアル
+		ComboTutorial, // コンボ操作チュートリアル
+		GrabTutorial, // 掴み操作チュートリアル
+		GuardTutorial, // ガード操作チュートリアル
+		AvoidTutorial, // 回避操作チュートリアル
+		RageModeTutorial, // レイジモード操作チュートリアル
 	};
 
 public:

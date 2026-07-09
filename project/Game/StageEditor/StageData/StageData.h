@@ -24,7 +24,8 @@ inline const char* categoryNames[] = { "キャラクター", "オブジェクト
 inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
 inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
-inline const char* eventTypeNames[] = { "None", "敵生成" };
+inline const char* eventTypeNames[] = { "None", "敵生成","スティック操作チュートリアル", "ダッシュ操作チュートリアル", "攻撃操作チュートリアル", "コンボ操作チュートリアル",
+"掴み操作チュートリアル", "防御操作チュートリアル", "回避操作チュートリアル", "レイジモードチュートリアル" };
 
 struct MotionConfig
 {

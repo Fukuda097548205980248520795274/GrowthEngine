@@ -1336,6 +1336,9 @@
     <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory">
       <UniqueIdentifier>{1b4498f9-fcdb-48bf-91ee-984851f95175}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\Tutorial">
+      <UniqueIdentifier>{33b8287f-bcf2-4757-b7e7-d4abf2c2b17e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2414,6 +2417,9 @@
     </ClCompile>
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.cpp">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp">
+      <Filter>Game\HUD\Tutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3622,6 +3628,9 @@
     </ClInclude>
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.h">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Tutorial\Tutorial.h">
+      <Filter>Game\HUD\Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
