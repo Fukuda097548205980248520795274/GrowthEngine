@@ -820,8 +820,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 
 	// 体力を減らし、0未満にならないようにする
-	if(!GameScene::IsTutorialActive())
-		hp_ = std::max(0, hp_ - finalDamage);
+	hp_ = std::max(0, hp_ - finalDamage);
 
 	// ノックバック処理
 	if (knockback > 0.0f)
@@ -1054,8 +1053,7 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 	}
 
 	// 体力を減らし、0未満にならないようにする
-	if (!GameScene::IsTutorialActive())
-		hp_ = std::max(0, hp_ - finalDamage);
+	hp_ = std::max(0, hp_ - finalDamage);
 
 	// 死亡判定
 	if (hp_ == 0)

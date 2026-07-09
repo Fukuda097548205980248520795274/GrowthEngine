@@ -17,8 +17,6 @@ public:
 		EnemyHP,
 		BossHP,
 		Timer,
-		AttackTutorial,
-		RageTutorial
 	};
 
 

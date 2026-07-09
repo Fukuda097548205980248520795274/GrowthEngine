@@ -22,9 +22,6 @@ namespace
 	const Vector3 kPivotCenterOffset = Vector3(0.0f, 1.5f, 0.0f);
 }
 
-/// @brief チュートリアルがアクティブかどうか
-bool GameScene::isTutorialActive_ = false;
-
 /// @brief 初期化
 void GameScene::Initialize()
 {
@@ -407,11 +404,9 @@ void GameScene::Update()
 	weapons_.remove_if([](const std::unique_ptr<Weapon>& weapon) {weapon->Update();return weapon->IsFinished();});
 
 	// HUDの更新
-	isTutorialActive_ = false;
 	huds_.remove_if([](const std::unique_ptr<HUD>& hud) 
 		{
 			hud->Update();
-			if (!isTutorialActive_)isTutorialActive_ = hud->IsTutorial();
 			return hud->IsFinished(); 
 		}
 	);
@@ -769,59 +764,6 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 	objects_.push_back(std::move(newTrigger));
 
 	return trigger;
-}
-
-/// @brief 攻撃チュートリアルを生成する
-/// @param initData 
-/// @return 
-AttackTutorial* GameScene::CreateAttackTutorial(const AttackTutorial::InitData& initData)
-{
-	AttackTutorial::InitData tutorialInitData = initData;
-	tutorialInitData.player = player_.get();
-	tutorialInitData.buttonHud = xButton_.get();
-
-	std::unique_ptr<AttackTutorial> newTutorial = std::make_unique<AttackTutorial>();
-	newTutorial->Initialize(tutorialInitData);
-	AttackTutorial* tutorial = newTutorial.get();
-
-	huds_.push_back(std::move(newTutorial));
-
-	return tutorial;
-}
-
-/// @brief レイジチュートリアルを生成する
-/// @param initData 
-/// @return 
-RageTutorial* GameScene::CreateRageTutorial(const RageTutorial::InitData& initData)
-{
-	RageTutorial::InitData tutorialInitData = initData;
-	tutorialInitData.player = player_.get();
-	tutorialInitData.buttonHud = rtTriggerButton_.get();
-
-	std::unique_ptr<RageTutorial> newTutorial = std::make_unique<RageTutorial>();
-	newTutorial->Initialize(tutorialInitData);
-	RageTutorial* tutorial = newTutorial.get();
-
-	huds_.push_back(std::move(newTutorial));
-
-	return tutorial;
-}
-
-/// @brief ガードチュートリアルを生成する
-/// @param initData 
-/// @return 
-GuardTutorial* GameScene::CreateGuardTutorial(const GuardTutorial::InitData& initData)
-{
-	GuardTutorial::InitData tutorialInitData = initData;
-	tutorialInitData.player = player_.get();
-
-	std::unique_ptr<GuardTutorial> newTutorial = std::make_unique<GuardTutorial>();
-	newTutorial->Initialize(tutorialInitData);
-	GuardTutorial* tutorial = newTutorial.get();
-
-	huds_.push_back(std::move(newTutorial));
-
-	return tutorial;
 }
 
 /// @brief リセットする

@@ -16,8 +16,7 @@ enum class EditCategory
 {
 	Character,
 	Object,
-	Weapon,
-	HUD
+	Weapon
 };
 
 // 大分類と小分類の表示用文字列
@@ -26,7 +25,6 @@ inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", 
 inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
 inline const char* eventTypeNames[] = { "None", "敵生成" };
-inline const char* hudTagNames[] = { "None", "攻撃チュートリアル", "レイジチュートリアル" };
 
 struct MotionConfig
 {
@@ -76,12 +74,6 @@ struct PlacementData
 
 	// イベントトリガーのステージデータファイル名 (イベントトリガーの場合)
 	char eventStageDataFileName[256] = "";
-
-	// 練習時間 (チュートリアルの場合)
-	float practiceTime = 0.0f;
-
-	// 攻撃の最大回数 (攻撃チュートリアルの場合)
-	int maxAttackCount = 1;
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;
@@ -164,18 +156,6 @@ inline void toJson(json& j, const PlacementData& s)
 		j["attackPower"] = s.attackPower;
 		j["isUnbreakable"] = s.isUnbreakable;
 	}
-	else if (s.category == EditCategory::HUD)
-	{
-		if (s.subType == 7)
-		{
-			j["practiceTime"] = s.practiceTime;
-			j["maxAttackCount"] = s.maxAttackCount;
-		}
-		else if (s.subType == 8)
-		{
-			j["practiceTime"] = s.practiceTime;
-		}
-	}
 }
 
 /// @brief PlacementDataのリストをJSONに変換（シリアライズ）
@@ -257,9 +237,6 @@ inline void fromJson(const json& j, PlacementData& s)
 
 
 	MotionManager* motionManager = MotionManager::GetInstance();
-
-	s.practiceTime = j.value("practiceTime", 0.0f);
-	s.maxAttackCount = j.value("maxAttackCount", 1);
 
 	s.standMotion.name = j.value("standMotionName", "Stand");
 	s.stanceMotion.name = j.value("stanceMotionName", "Fighter");

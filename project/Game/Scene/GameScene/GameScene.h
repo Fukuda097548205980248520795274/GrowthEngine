@@ -12,9 +12,6 @@
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
 #include "HUD/Timer/Timer.h"
-#include "HUD/Tutorial/AttackTutorial/AttackTutorial.h"
-#include "HUD/Tutorial/RageTutorial/RageTutorial.h"
-#include "HUD/Tutorial/GuardTutorial/GuardTutorial.h"
 #include "HUD/HP/HP.h"
 
 #include "PivotPoint/PivotPoint.h"
@@ -89,21 +86,6 @@ public:
 	/// @return 
 	Timer* CreateTimer(const Timer::InitData& initData);
 
-	/// @brief 攻撃チュートリアルを生成する
-	/// @param initData 
-	/// @return 
-	AttackTutorial* CreateAttackTutorial(const AttackTutorial::InitData& initData);
-
-	/// @brief レイジチュートリアルを生成する
-	/// @param initData 
-	/// @return 
-	RageTutorial* CreateRageTutorial(const RageTutorial::InitData& initData);
-
-	/// @brief ガードチュートリアルを生成する
-	/// @param initData 
-	/// @return 
-	GuardTutorial* CreateGuardTutorial(const GuardTutorial::InitData& initData);
-
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	NavMesh* GetNavMesh() const { return navMesh_.get(); }
@@ -114,10 +96,6 @@ public:
 
 	/// @brief リセットする
 	void Reset();
-
-	/// @brief チュートリアルがアクティブかどうかを取得する
-	/// @return 
-	static bool IsTutorialActive() { return isTutorialActive_; }
 
 
 private:
@@ -272,9 +250,6 @@ private:
 
 	/// @brief HUDのリスト
 	std::list<std::unique_ptr<HUD>> huds_;
-
-	/// @brief チュートリアルがアクティブかどうか
-	static bool isTutorialActive_;
 
 	/// @brief 試験的な立方体
 	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;

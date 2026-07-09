@@ -1219,15 +1219,6 @@
     <Filter Include="Game\HUD\HP\BossHP">
       <UniqueIdentifier>{3976fcc1-c980-4f88-a72d-b3b312871f93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\HUD\Tutorial">
-      <UniqueIdentifier>{49bff084-59cf-43bf-9b0c-e54c51045c75}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\AttackTutorial">
-      <UniqueIdentifier>{3aed4065-6cd4-4d52-bf55-8196d942912d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\GuardTutorial">
-      <UniqueIdentifier>{0f8ba193-f1d7-4653-a11e-738b9f9b3962}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\HUD\Timer">
       <UniqueIdentifier>{e127f022-ff89-403e-a9fa-240a0eb57dd4}</UniqueIdentifier>
     </Filter>
@@ -1255,6 +1246,9 @@
     <Filter Include="Game\EffectManager\Effect\DeflectEffect">
       <UniqueIdentifier>{df746e58-6f19-40c4-8cb8-9519b9082dd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Turn">
+      <UniqueIdentifier>{17e744cc-5a08-4847-aed8-22632ac9c377}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Action\Defence">
       <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
     </Filter>
@@ -1278,15 +1272,6 @@
     </Filter>
     <Filter Include="Game\HUD\Button\TriggerButton">
       <UniqueIdentifier>{b760b2ea-cbf4-4239-aa6e-2848405e42ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\AvoidTutorial">
-      <UniqueIdentifier>{8a554a59-5a58-4edc-8397-4e9a9b66088a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\DashTutorial">
-      <UniqueIdentifier>{74630fe7-766b-45df-b989-93bea8c6692d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\StyleChangeTutorial">
-      <UniqueIdentifier>{2200fc4b-93ba-4007-8687-d5d14f2a3a45}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\RenderContext\DX12Offscreen\RenderTargetPool">
       <UniqueIdentifier>{120957fd-3978-4ac7-80ae-0d7d8d2f76e3}</UniqueIdentifier>
@@ -1350,9 +1335,6 @@
     </Filter>
     <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory">
       <UniqueIdentifier>{1b4498f9-fcdb-48bf-91ee-984851f95175}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Tutorial\RageTutorial">
-      <UniqueIdentifier>{ec6df81d-1a67-4bc3-ba1e-08c4f2a2e447}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2334,15 +2316,6 @@
     <ClCompile Include="Game\HUD\HP\BossHP\BossHP.cpp">
       <Filter>Game\HUD\HP\BossHP</Filter>
     </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp">
-      <Filter>Game\HUD\Tutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\AttackTutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\GuardTutorial</Filter>
-    </ClCompile>
     <ClCompile Include="Game\HUD\Timer\Timer.cpp">
       <Filter>Game\HUD\Timer</Filter>
     </ClCompile>
@@ -2384,15 +2357,6 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\Button\PressButton\PressButton.cpp">
       <Filter>Game\HUD\Button\PressButton</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\AvoidTutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\DashTutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.cpp">
       <Filter>Engine\Include\Store\RenderPassStore\RenderPassData</Filter>
@@ -2450,9 +2414,6 @@
     </ClCompile>
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.cpp">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\HUD\Tutorial\RageTutorial\RageTutorial.cpp">
-      <Filter>Game\HUD\Tutorial\RageTutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3551,15 +3512,6 @@
     <ClInclude Include="Game\HUD\HP\BossHP\BossHP.h">
       <Filter>Game\HUD\HP\BossHP</Filter>
     </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\Tutorial.h">
-      <Filter>Game\HUD\Tutorial</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\AttackTutorial\AttackTutorial.h">
-      <Filter>Game\HUD\Tutorial\AttackTutorial</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\GuardTutorial\GuardTutorial.h">
-      <Filter>Game\HUD\Tutorial\GuardTutorial</Filter>
-    </ClInclude>
     <ClInclude Include="Game\HUD\Timer\Timer.h">
       <Filter>Game\HUD\Timer</Filter>
     </ClInclude>
@@ -3604,15 +3556,6 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Button\PressButton\PressButton.h">
       <Filter>Game\HUD\Button\PressButton</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\AvoidTutorial\AvoidTutorial.h">
-      <Filter>Game\HUD\Tutorial\AvoidTutorial</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\DashTutorial\DashTutorial.h">
-      <Filter>Game\HUD\Tutorial\DashTutorial</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\StyleChangeTutorial\StyleChangeTutorial.h">
-      <Filter>Game\HUD\Tutorial\StyleChangeTutorial</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.h">
       <Filter>Engine\Include\Store\RenderPassStore\RenderPassData</Filter>
@@ -3679,9 +3622,6 @@
     </ClInclude>
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.h">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\HUD\Tutorial\RageTutorial\RageTutorial.h">
-      <Filter>Game\HUD\Tutorial\RageTutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -63,7 +63,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -102,7 +102,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -141,7 +141,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -180,7 +180,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -219,7 +219,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -258,7 +258,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -297,7 +297,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -336,7 +336,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -365,8 +365,8 @@
             "outputInputXPinId": 43,
             "outputInputYPinId": 44,
             "pos": [
-                713.0,
-                380.0
+                712.0,
+                381.0
             ],
             "targetAnimationName": ""
         },
@@ -375,7 +375,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -414,7 +414,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -453,7 +453,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -492,7 +492,7 @@
             "comboParams": {
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
-                "cancelStartTime": 0.10000000149011612,
+                "cancelStartTime": 0.20000000298023224,
                 "hitDefinitions": [
                     {
                         "damage": 10,
