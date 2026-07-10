@@ -20,11 +20,15 @@ public:
 	virtual void Abort() override;
 
 
+#ifdef _DEVELOPMENT
+
 	/// @brief デバッグ状態のリセット（毎フレームのツリー更新の先頭で呼ぶ）
 	void ResetStatusRecursive() override;
 
 	/// @brief デバッグ用の再帰描画処理
 	void DrawDebuggerRecursive(float zoom = 1.0f) override;
+
+#endif
 
 
 protected:

@@ -7,14 +7,20 @@ Node::Node()
 	// インスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
+#ifdef _DEVELOPMENT
+
 	// デフォルトのノードタイプはアクション
 	type_ = EditorNodeType::Action;
+
+#endif
 }
 
 /// @brief ノードの更新
 /// @return 
 Node::State Node::UpdateNode()
 {
+#ifdef _DEVELOPMENT
+
 	// ブレークポイントが設定されている場合、デバッガを起動する
 	if (isBreakpoint_)
 	{
@@ -22,9 +28,13 @@ Node::State Node::UpdateNode()
 		isBreakpoint_ = false; // ブレークポイントをリセット
 	}
 
+#endif
+
 	lastState_ = Exec();
 	return lastState_;
 }
+
+#ifdef _DEVELOPMENT
 
 /// @brief デバッグ用の再帰描画処理
 void Node::DrawDebuggerRecursive(float zoom)
@@ -154,3 +164,5 @@ void Node::SetDebugInfo(int id, int inPin, int outPin, const Vector2& pos, const
 	nodeName_ = name;
 	type_ = type;
 }
+
+#endif

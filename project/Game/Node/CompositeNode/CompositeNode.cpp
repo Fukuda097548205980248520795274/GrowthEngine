@@ -7,6 +7,8 @@ void CompositeNode::Abort()
 		child->Abort();
 }
 
+#ifdef _DEVELOPMENT
+
 /// @brief デバッグ状態のリセット（毎フレームのツリー更新の先頭で呼ぶ）
 void CompositeNode::ResetStatusRecursive()
 {
@@ -78,3 +80,5 @@ void CompositeNode::DrawDebuggerRecursive(float zoom)
 		ImNodes::PopStyleVar(); // 太さのスタイルをポップ
     }
 }
+
+#endif

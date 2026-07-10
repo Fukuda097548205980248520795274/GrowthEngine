@@ -13,7 +13,7 @@ public:
 	virtual ~BehaviorTree() = default;
 
 	/// @brief 実行
-	void Exec() { root_->ResetStatusRecursive(); if (root_) root_->UpdateNode(); }
+	void Exec();
 
 	/// @brief ルートノードを取得する
 	/// @return 

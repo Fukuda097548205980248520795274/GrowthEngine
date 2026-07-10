@@ -348,6 +348,8 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	}
 
 
+#ifdef _DEVVELOPMENT
+
 	// ラインタイムでノードを確認するためのデバッグ情報を設定
 	if (runtime_node)
 	{
@@ -383,6 +385,8 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			editor_node.type
 		);
 	}
+
+#endif
 
 
 	return runtime_node;

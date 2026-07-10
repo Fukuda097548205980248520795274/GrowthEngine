@@ -42,6 +42,12 @@ public:
 	/// @brief 中断処理
 	virtual void Abort() {};
 
+	/// @brief 最後の状態を取得する
+	/// @return 
+	State GetLastState() const { return lastState_; }
+
+
+#ifdef _DEVELOPMENT
 
 	/// @brief デバッグ状態のリセット（毎フレームのツリー更新の先頭で呼ぶ）
 	virtual void ResetStatusRecursive() { lastState_ = State::None; }
@@ -58,10 +64,6 @@ public:
 	/// @param name 
 	/// @param type 
 	void SetDebugInfo(int id, int inPin, int outPin, const Vector2& pos, const std::string& name, EditorNodeType type);
-
-	/// @brief 最後の状態を取得する
-	/// @return 
-	State GetLastState() const { return lastState_; }
 
 	/// @brief エディタ上のノードIDを取得する
 	/// @return 
@@ -90,6 +92,8 @@ protected:
 	/// @param zoom 
 	virtual void DrawCustomNodeUI(float zoom) {}
 
+#endif
+
 
 protected:
 
@@ -101,6 +105,8 @@ protected:
 
 	// 最後の状態
 	State lastState_ = State::None;
+
+#ifdef _DEVELOPMENT
 
 	/// @brief ブレークポイントが設定されているかどうか
 	bool isBreakpoint_ = false;
@@ -132,5 +138,7 @@ protected:
 
 	// フェード時間
 	const float FADE_DURATION = 0.5f;
+
+#endif
 };
 
