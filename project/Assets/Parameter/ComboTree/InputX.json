@@ -185,8 +185,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
@@ -224,8 +224,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 3,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 10.0,
                         "knockbackDirection": [
                             0.0,
@@ -263,8 +263,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
@@ -302,8 +302,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 3,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 8.0,
                         "knockbackDirection": [
                             1.0,
@@ -341,8 +341,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 5.0,
                         "knockbackDirection": [
                             0.0,
@@ -366,7 +366,7 @@
             "outputInputYPinId": 44,
             "pos": [
                 712.0,
-                381.0
+                380.0
             ],
             "targetAnimationName": ""
         },
@@ -380,8 +380,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 3,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 8.0,
                         "knockbackDirection": [
                             0.0,
@@ -419,8 +419,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
@@ -458,12 +458,12 @@
                     {
                         "damage": 10,
                         "damageReaction": 3,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
-                            1.0,
+                            0.0,
                             1.0
                         ],
                         "radius": 0.25,
@@ -497,8 +497,8 @@
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 13,
                         "knockback": 4.0,
                         "knockbackDirection": [
                             0.0,

@@ -34,17 +34,17 @@ void MotionManager::Initialize()
 	hSkeleton_ = engine_->LoadSkeleton(dir , "bone.gltf");
 
 	// ジョイントマップを作成する
-	jointMap_[JointType::HandL] = "ボーン.007";
-	jointMap_[JointType::HandR] = "ボーン.015";
-	jointMap_[JointType::ArmL] = "ボーン.006";
-	jointMap_[JointType::ArmR] = "ボーン.014";
-	jointMap_[JointType::FootL] = "ボーン.011";
-	jointMap_[JointType::FootR] = "ボーン.019";
-	jointMap_[JointType::LegL] = "ボーン.010";
-	jointMap_[JointType::LegR] = "ボーン.018";
-	jointMap_[JointType::Chest] = "ボーン.001";
-	jointMap_[JointType::Head] = "ボーン.003";
-	jointMap_[JointType::Root] = "ボーン";
+	jointMap_[JointType::HandL] = "mixamorig:LeftHand";
+	jointMap_[JointType::HandR] = "mixamorig:RightHand";
+	jointMap_[JointType::ArmL] = "mixamorig:LeftArm";
+	jointMap_[JointType::ArmR] = "mixamorig:RightArm";
+	jointMap_[JointType::FootL] = "mixamorig:LeftFoot";
+	jointMap_[JointType::FootR] = "mixamorig:RightFoot";
+	jointMap_[JointType::LegL] = "mixamorig:LeftLeg";
+	jointMap_[JointType::LegR] = "mixamorig:RightLeg";
+	jointMap_[JointType::Chest] = "mixamorig:Spine2";
+	jointMap_[JointType::Head] = "mixamorig:Head";
+	jointMap_[JointType::Root] = "mixamorig:Spine";
 
 	parentMap_[JointType::HandL] = JointType::ArmL;
 	parentMap_[JointType::HandR] = JointType::ArmR;
