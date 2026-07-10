@@ -1618,15 +1618,15 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 /// @brief 掴まれた相手の処理
 void Character::OnGrabbed(Character* grabber)
 {
+	// 掴まれた状態に遷移する
+	stateMachine_->ChangeState("Grabbed");
+
 	// 掴まれた状態のキャラクターに掴んだキャラクターを設定する
 	auto currentState = stateMachine_->GetCurrentState();
 	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
 	{
 		grabbedState->SetGrabber(grabber);
 	}
-
-	// 掴まれた状態に遷移する
-	stateMachine_->ChangeState("Grabbed");
 
 	// 掴まれた状態になったときの処理をここに書く
 	isGuard_ = false;
@@ -1668,11 +1668,15 @@ bool Character::IsGrabbedDamage()const
 {
 	if (!IsGrabbed())return false;
 
-	// 自分を掴む相手を取得する
-	if (auto grabber = static_cast<CharacterStateGrabbed*>(stateMachine_->GetCurrentState())->GetGrabber())
+	auto currentState = stateMachine_->GetCurrentState();
+	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
 	{
-		// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
-		return grabber->IsGrabStrikeAttack();
+		// 自分を掴む相手を取得する
+		if (auto grabber = grabbedState->GetGrabber())
+		{
+			// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
+			return grabber->IsGrabStrikeAttack();
+		}
 	}
 
 	return false;

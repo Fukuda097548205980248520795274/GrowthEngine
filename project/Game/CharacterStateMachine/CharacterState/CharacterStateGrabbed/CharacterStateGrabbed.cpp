@@ -14,6 +14,13 @@ void CharacterStateGrabbed::Enter()
 /// @param dt 
 void CharacterStateGrabbed::Update(float dt)
 {
+	// 掴んでいる相手がいない場合は、掴まれ状態を解除する
+	if (!grabber_)
+	{
+		owner_->GetStateMachine()->ChangeState("None");
+		return;
+	}
+
 	if (owner_->GetCharacterTag() == CharacterTag::Player)
 	{
 		// プレイヤーの場合は、掴まれ解き入力を受け付ける
@@ -60,6 +67,12 @@ void CharacterStateGrabbed::Update(float dt)
 
 		// ダメージリアクションを解除する
 		owner_->SetDamageReaction(DamageReactionState::None);
+		owner_->GetStateMachine()->ChangeState("None");
+	}
+
+	// 使いでいるはずの相手が掴んでいない場合は、掴まれ状態を解除する
+	if (!grabber_->GetGrabTarget())
+	{
 		owner_->GetStateMachine()->ChangeState("None");
 	}
 }
