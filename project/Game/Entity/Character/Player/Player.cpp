@@ -177,22 +177,6 @@ void Player::Update()
 	// アクションの更新処理
 	ActionUpdate();
 
-	// 動けない状態なら、攻撃やスタイルチェンジなどの入力は受け付けず、状態の更新と描画のみ行う
-	if (isIncapacitatedState)
-	{
-		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
-		if (IsGrabbed())
-		{
-			bool isStruggleInput = false;
-			if (inputController_->IsEscapeMashRequested()) isStruggleInput = true;
-
-			if (isStruggleInput)
-			{
-				grabbedTimer_ += 0.2f;
-			}
-		}
-	}
-
 	// 基底クラスの更新
 	Character::Update();
 }

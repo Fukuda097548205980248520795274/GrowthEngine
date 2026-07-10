@@ -12,6 +12,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Shake/Shake.h"
 
+#include "CharacterStateMachine/CharacterStateMachine.h"
+
 class Attack;
 class Move;
 class Avoid;
@@ -46,6 +48,10 @@ public:
 
 	/// @brief 更新処理開始前のリセット
 	virtual void StartUpdate();
+
+	/// @brief 更新処理終了後のリセット
+	/// @return 
+	CharacterStateMachine* GetStateMachine() const { return stateMachine_.get(); }
 
 	/// @brief ダメージを受けたときの処理
 	/// @param damage 
@@ -247,6 +253,10 @@ public:
 	/// @return 
 	bool IsBlownFalling() const { return currentDamageReaction_ == DamageReactionState::BlownFallingFront || currentDamageReaction_ == DamageReactionState::BlownFallingBack; }
 
+	/// @brief ダメージリアクションの状態を設定する
+	/// @param reaction 
+	void SetDamageReaction(DamageReactionState reaction) { currentDamageReaction_ = reaction; }
+
 	/// @brief 頭の当たり判定を取得する
 	/// @return 
 	AppCollider& GetHurtboxHead() { return hurtboxHead_; }
@@ -265,7 +275,7 @@ public:
 
 	/// @brief 自分をつかんでいる相手がいるかどうか
 	/// @return 
-	bool IsGrabbed() const { return grabber_ != nullptr; }
+	bool IsGrabbed() const { return stateMachine_->GetCurrentStateName() == "Grabbed"; }
 
 	/// @brief 相手をつかむ
 	/// @param target 
@@ -295,8 +305,8 @@ public:
 	Character* GetGrabTarget() const { return grabbedTarget_; }
 
 	/// @brief 掴まれている相手を取得する
-	/// @param grabber 
-	void SetGrabber(Character* grabber) { grabber_ = grabber; }
+	/// @param target 
+	void SetGrabTarget(Character* target) { grabbedTarget_ = target; }
 	
 	/// @brief 掴んだ状態の攻撃をしているかどうか
 	/// @return 
@@ -516,6 +526,9 @@ protected:
 
 	// キャラクターのタグ
 	CharacterTag characterTag_;
+
+	/// @brief ステートマシン
+	std::unique_ptr<CharacterStateMachine> stateMachine_ = nullptr;
 
 	/// @brief 移動コンポーネント
 	std::unique_ptr<CharacterMovement> movement_ = nullptr;
@@ -809,16 +822,6 @@ protected:
 
 	/// @brief 自分がつかんでいるターゲット
 	Character* grabbedTarget_ = nullptr;
-
-	/// @brief 自分をつかんでいる相手
-	Character* grabber_ = nullptr;
-
-
-	/// @brief 掴まれ時間
-	float grabbedTimer_ = 0.0f;
-
-	/// @brief つかみ時間の上限
-	float escapeTimeLimit_ = 3.0f;
 
 
 protected:

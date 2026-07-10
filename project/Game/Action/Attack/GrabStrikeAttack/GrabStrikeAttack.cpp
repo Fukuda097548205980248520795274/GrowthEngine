@@ -44,9 +44,6 @@ void GrabStrikeAttack::Exec()
 		return;
 	}
 
-	// 掴んでいる相手に攻撃者を設定する
-	grabbedTarget_->SetGrabber(owner_);
-
 	// タイマーとフラグをリセット
 	attackTimer_ = 0.0f;
 	isReleased_ = false;

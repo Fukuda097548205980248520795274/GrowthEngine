@@ -112,12 +112,6 @@ void NPC::Update()
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{
-		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
-		if(IsGrabbed())
-		{
-			grabbedTimer_ += engine_->GetDeltaTime();
-		}
-
 		// 攻撃トークンを返却する
 		BattleDirector::GetInstance().ReleaseAttackToken(this);
 

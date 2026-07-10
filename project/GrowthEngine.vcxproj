@@ -1110,6 +1110,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterStateMachine.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterState.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTree.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard\ComboTreeEditorClipboard.cpp" />
@@ -1522,6 +1526,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />
     <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterStateMachine.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterState.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.h" />
     <ClInclude Include="Game\ComboTree\ComboTree.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeData\ComboTreeData.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.h" />

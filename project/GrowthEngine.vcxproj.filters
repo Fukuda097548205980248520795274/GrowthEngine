@@ -1339,6 +1339,18 @@
     <Filter Include="Game\HUD\Tutorial">
       <UniqueIdentifier>{33b8287f-bcf2-4757-b7e7-d4abf2c2b17e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine">
+      <UniqueIdentifier>{8b004725-75ff-4ae4-aee6-4a001a15b7f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState">
+      <UniqueIdentifier>{3aeaad09-69a2-4033-9485-535f00f75b6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone">
+      <UniqueIdentifier>{21d62348-f742-4d14-8e8a-76700dc4f57a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed">
+      <UniqueIdentifier>{f75d4543-7783-461f-b99b-f1a55bb8d194}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2420,6 +2432,18 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp">
       <Filter>Game\HUD\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterState.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterStateMachine.cpp">
+      <Filter>Game\CharacterStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateNone</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3631,6 +3655,18 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Tutorial\Tutorial.h">
       <Filter>Game\HUD\Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterState.h">
+      <Filter>Game\CharacterStateMachine\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterStateMachine.h">
+      <Filter>Game\CharacterStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateNone</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,9 @@
 
 #include "HUD/HP/HP.h"
 
+#include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
+
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 
@@ -41,6 +44,12 @@ Character::Character() : Entity()
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
+
+	// ステートマシンの生成
+	stateMachine_ = std::make_unique<CharacterStateMachine>();
+	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
+	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
+	stateMachine_->ChangeState("None");
 }
 
 /// @brief デストラクタ
@@ -79,9 +88,11 @@ void Character::Update()
 	// 更新が無効なら何もしない
 	if (!updateEnabled_)return;
 
+
 	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
+
 
 	// 着地判定をチェックする
 	LandingCheck();
@@ -177,29 +188,12 @@ void Character::Update()
 			}
 		};
 
-	// 掴まれている場合の処理
-	if (IsGrabbed())
+	// ステートマシンの更新
+	stateMachine_->Update(dt);
+
+	// ステートマシンがNone状態でない場合は、体力HUDの更新を行い、処理を終了する
+	if (stateMachine_->GetCurrentStateName() != "None")
 	{
-		// 掴まれタイマーが過ぎたら、掴まれ状態を解除する
-		if (grabbedTimer_ >= escapeTimeLimit_)
-		{
-			// 振りほどかれた際の怯みを入れる
-			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
-
-			// 掴んでいる相手から離れる
-			worldTransform_->rotate_ = Vector3(0.0f, grabber_->GetWorldTransform()->rotate_.y + std::numbers::pi_v<float>, 0.0f);
-			worldTransform_->translate_.y = grabber_->GetWorldPosition().y;
-
-			// 掴んでいる相手から離れる
-			grabber_->grabbedTarget_ = nullptr;
-			grabber_ = nullptr;
-			grabbedTimer_ = 0.0f;
-
-			// ダメージリアクションを解除する
-			currentDamageReaction_ = DamageReactionState::None;
-		}
-
-		// まとめた後処理を呼んで終了
 		FinalizeUpdate();
 		return;
 	}
@@ -1518,12 +1512,6 @@ void Character::UpdateAnimation()
 					SetAnimation(hGrabMotion_, false, true);
 				}
 			}
-
-			// 掴んでいる攻撃の最中で、掴んでいる相手の攻撃が終了した場合は、掴まれモーションに戻す
-			if (grabber_ && grabber_->IsGrabStrikeAttack() && grabber_->GetCurrentAttack()->IsFinishedTimer())
-			{
-				SetAnimation(hGrabbedMotion_, false, true);
-			}
 		}
 	}
 
@@ -1630,9 +1618,15 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 /// @brief 掴まれた相手の処理
 void Character::OnGrabbed(Character* grabber)
 {
-	// 自分を掴んでいる相手を設定する
-	grabber_ = grabber;
-	grabbedTimer_ = 0.0f;
+	// 掴まれた状態のキャラクターに掴んだキャラクターを設定する
+	auto currentState = stateMachine_->GetCurrentState();
+	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
+	{
+		grabbedState->SetGrabber(grabber);
+	}
+
+	// 掴まれた状態に遷移する
+	stateMachine_->ChangeState("Grabbed");
 
 	// 掴まれた状態になったときの処理をここに書く
 	isGuard_ = false;
@@ -1646,7 +1640,6 @@ void Character::ReleaseGrab()
 	// 掴んでいる相手がいる場合は、相手のgrabber_をクリアする
 	if (grabbedTarget_) 
 	{
-		grabbedTarget_->grabber_ = nullptr;
 		grabbedTarget_ = nullptr;
 	}
 }
@@ -1673,10 +1666,16 @@ bool Character::IsGrabStrikeAttack() const
 /// @return 
 bool Character::IsGrabbedDamage()const
 {
-	if (!grabber_)return false;
+	if (!IsGrabbed())return false;
 
-	// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
-	return grabber_->IsGrabStrikeAttack();
+	// 自分を掴む相手を取得する
+	if (auto grabber = static_cast<CharacterStateGrabbed*>(stateMachine_->GetCurrentState())->GetGrabber())
+	{
+		// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
+		return grabber->IsGrabStrikeAttack();
+	}
+
+	return false;
 }
 
 /// @brief 武器を掴む

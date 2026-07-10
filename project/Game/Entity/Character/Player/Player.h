@@ -36,6 +36,10 @@ public:
 	/// @return 
 	bool IsInputRageMode() const { return isInputRageMode_ || isPrevInputRageMode_; }
 
+	/// @brief 入力コントローラーを取得する
+	/// @return 
+	PlayerInputController* GetInputController() const { return inputController_.get(); }
+
 private:
 
 	/// @brief 更新処理開始前のリセット
