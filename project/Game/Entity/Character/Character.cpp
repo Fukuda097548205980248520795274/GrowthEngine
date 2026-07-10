@@ -662,7 +662,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
 				SetAnimation(hDamageLightMotion_, true, false);
-				damageReactionTimer_ = 0.3f;
+				damageReactionTimer_ = 0.5f;
 			}
 			else
 			{
@@ -707,7 +707,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		case DamageReaction::HeavyStagger:
 			currentDamageReaction_ = DamageReactionState::HeavyStaggerFront; // ここではとりあえず前方向の怯みを設定。
 			SetAnimation(hDamageHeavyMotion_, true, false);
-			damageReactionTimer_ = 1.0f;
+			damageReactionTimer_ = 1.5f;
 
 			// 軽い怯みのエフェクトを再生する
 			if (hitPosition)
@@ -757,7 +757,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 				currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
 				SetAnimation(hDownFallMotion_, true, false);
-				damageReactionTimer_ = 0.3f;
+				damageReactionTimer_ = 1.0f;
 			}
 
 			// 軽い怯みのエフェクトを再生する
@@ -2233,7 +2233,7 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hGuardHitMotion_ = initData.hGuardHitMotion;
 
 	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
-	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
+	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy");
 	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
 
 	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");

@@ -85,6 +85,7 @@ struct PlacementData
 	MotionConfig avoidBackMotion;
 	MotionConfig avoidLeftMotion;
 	MotionConfig avoidRightMotion;
+	MotionConfig guardMotion;
 
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
@@ -136,6 +137,7 @@ inline void toJson(json& j, const PlacementData& s)
 		j["avoidBackMotionName"] = s.avoidBackMotion.name;
 		j["avoidLeftMotionName"] = s.avoidLeftMotion.name;
 		j["avoidRightMotionName"] = s.avoidRightMotion.name;
+		j["guardMotionName"] = s.guardMotion.name;
 
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
 		if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
@@ -247,6 +249,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.avoidBackMotion.name = j.value("avoidBackMotionName", "Back");
 	s.avoidLeftMotion.name = j.value("avoidLeftMotionName", "Front");
 	s.avoidRightMotion.name = j.value("avoidRightMotionName", "Back");
+	s.guardMotion.name = j.value("guardMotionName", "BothHands");
 
 	s.standMotion.handle = motionManager->GetMotion(MotionType::Stand, s.standMotion.name);
 	s.stanceMotion.handle = motionManager->GetMotion(MotionType::Stance, s.stanceMotion.name);
@@ -256,4 +259,5 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.avoidBackMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidBackMotion.name);
 	s.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidLeftMotion.name);
 	s.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidRightMotion.name);
+	s.guardMotion.handle = motionManager->GetMotion(MotionType::Guard, s.guardMotion.name);
 }

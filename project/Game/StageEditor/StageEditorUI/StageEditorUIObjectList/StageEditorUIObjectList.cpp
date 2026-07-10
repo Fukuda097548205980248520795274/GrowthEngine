@@ -199,6 +199,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			MotionSelecter("後方回避モーション", MotionType::Avoid, target.avoidBackMotion, placementList, isDirty);
 			MotionSelecter("左回避モーション", MotionType::Avoid, target.avoidLeftMotion, placementList, isDirty);
 			MotionSelecter("右回避モーション", MotionType::Avoid, target.avoidRightMotion, placementList, isDirty);
+			MotionSelecter("防御モーション", MotionType::Guard, target.guardMotion, placementList, isDirty);
 
 			// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
 			if (isChangeAnimation_)
@@ -212,6 +213,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 				animData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidBackMotion.name);
 				animData.hAvoidLeftMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
 				animData.hAvoidRightMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
+				animData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, target.guardMotion.name);
 
 				charPtr->SetAnimationHandle(animData);
 

@@ -56,6 +56,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.avoidBackMotion.name = "Back";
 		currentData.avoidLeftMotion.name = "Front";
 		currentData.avoidRightMotion.name = "Back";
+		currentData.guardMotion.name = "BothHands";
 
 		isInitialized = true;
 	}
@@ -93,6 +94,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		MotionSelecter("後方回避モーション", MotionType::Avoid, currentData.avoidBackMotion);
 		MotionSelecter("左回避モーション", MotionType::Avoid, currentData.avoidLeftMotion);
 		MotionSelecter("右回避モーション", MotionType::Avoid, currentData.avoidRightMotion);
+		MotionSelecter("防御モーション", MotionType::Guard, currentData.guardMotion);
 
 		// プレイヤーと未選択以外　ビヘイビアツリーデータ
 		if (currentData.subType != 0 && currentData.subType != 1)
@@ -244,6 +246,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.avoidBackMotion = currentData.avoidBackMotion;
 		newData.avoidLeftMotion = currentData.avoidLeftMotion;
 		newData.avoidRightMotion = currentData.avoidRightMotion;
+		newData.guardMotion = currentData.guardMotion;
 
 		// 実際のゲーム画面に生成してリストに追加
 		spawner_->SpawnActualEntity(newData);

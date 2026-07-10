@@ -852,9 +852,8 @@ void ComboTreeEditor::DrawPropertyPanel()
 						}
 
 						// ジョイントタイプ
-						const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
 						int currentJoint = static_cast<int>(def.jointType);
-						if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+						if (ImGui::Combo("Joint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 						{
 							def.jointType = static_cast<JointType>(currentJoint);
 						}
@@ -900,9 +899,8 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::DragFloat("Hitbox End Time", &node->grabAttackInitData.hitboxEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 
 				// ジョイントタイプ
-				const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
 				int currentJoint = static_cast<int>(node->grabAttackInitData.jointType);
-				if (ImGui::Combo("Joint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+				if (ImGui::Combo("Joint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 				{
 					node->grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
 				}
@@ -996,9 +994,8 @@ void ComboTreeEditor::DrawPropertyPanel()
 						ImGui::DragFloat("hitTime", &def.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 
 						// ジョイントタイプ
-						const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
 						int currentJoint = static_cast<int>(def.hitJoint);
-						if (ImGui::Combo("hitJoint", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+						if (ImGui::Combo("hitJoint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 						{
 							def.hitJoint = static_cast<JointType>(currentJoint);
 						}

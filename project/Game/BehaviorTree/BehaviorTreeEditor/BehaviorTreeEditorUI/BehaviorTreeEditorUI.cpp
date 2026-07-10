@@ -1127,9 +1127,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 					}
 
 					// ジョイントタイプ
-					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
 					int currentJoint = static_cast<int>(hitDefs[i].jointType);
-					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 					{
 						history_->SaveHistory(nodes_, links_, currentId_);
 						isDirty_ = true;
@@ -1236,9 +1235,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 
 			// ジョイントタイプ
-			const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR" };
 			int currentJoint = static_cast<int>(node.grabAttackInitData.jointType);
-			if (ImGui::Combo("Joint Type", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+			if (ImGui::Combo("Joint Type", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 			{
 				history_->SaveHistory(nodes_, links_, currentId_);
 				isDirty_ = true;
@@ -1380,9 +1378,8 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 					ImGui::DragFloat("攻撃が入る時間", &hitDefs[i].hitTime, 0.01f, 0.0f, 100000.0f);
 
 					// ジョイントタイプ
-					const char* jointNames[] = { "None","Root","Spine","Chest","Neck","Head","ArmL","ArmR","HandL","HandR","LegL","LegR","FootL","FootR","Weapon" };
 					int currentJoint = static_cast<int>(hitDefs[i].hitJoint);
-					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointNames, IM_ARRAYSIZE(jointNames)))
+					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 					{
 						history_->SaveHistory(nodes_, links_, currentId_);
 						isDirty_ = true;

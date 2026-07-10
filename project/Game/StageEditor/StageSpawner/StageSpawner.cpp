@@ -39,6 +39,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.hAvoidBackMotion = data.avoidBackMotion.handle;
 		initData.hAvoidLeftMotion = data.avoidLeftMotion.handle;
 		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
+		initData.hGuardMotion = data.guardMotion.handle;
 
 		// タグに応じて、NPCの初期化データを設定する
 		Character* newCharacter = scene_->CreateCharacter(initData, tag);

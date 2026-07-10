@@ -38,7 +38,34 @@ enum class JointType
 	LegR,
 	FootL,
 	FootR,
+	ToeEndL,
+	ToeEndR,
+	ToeBaseL,
+	ToeBaseR,
 	Weapon,
+};
+
+inline const char* jointTypeNames[] =
+{
+	"None",
+	"Root",
+	"Spine",
+	"Chest",
+	"Neck",
+	"Head",
+	"ArmL",
+	"ArmR",
+	"HandL",
+	"HandR",
+	"LegL",
+	"LegR",
+	"FootL",
+	"FootR",
+	"ToeEndL",
+	"ToeEndR",
+	"ToeBaseL",
+	"ToeBaseR",
+	"Weapon" 
 };
 
 class MotionManager

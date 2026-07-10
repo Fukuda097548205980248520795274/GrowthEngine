@@ -42,6 +42,10 @@ void MotionManager::Initialize()
 	jointMap_[JointType::FootR] = "mixamorig:RightFoot";
 	jointMap_[JointType::LegL] = "mixamorig:LeftLeg";
 	jointMap_[JointType::LegR] = "mixamorig:RightLeg";
+	jointMap_[JointType::ToeEndL] = "mixamorig:LeftToe_End";
+	jointMap_[JointType::ToeEndR] = "mixamorig:RightToe_End";
+	jointMap_[JointType::ToeBaseL] = "mixamorig:LeftToeBase";
+	jointMap_[JointType::ToeBaseR] = "mixamorig:RightToeBase";
 	jointMap_[JointType::Chest] = "mixamorig:Spine2";
 	jointMap_[JointType::Head] = "mixamorig:Head";
 	jointMap_[JointType::Root] = "mixamorig:Spine";
@@ -50,6 +54,10 @@ void MotionManager::Initialize()
 	parentMap_[JointType::HandR] = JointType::ArmR;
 	parentMap_[JointType::FootL] = JointType::LegL;
 	parentMap_[JointType::FootR] = JointType::LegR;
+	parentMap_[JointType::ToeEndL] = JointType::ToeBaseL;
+	parentMap_[JointType::ToeEndR] = JointType::ToeBaseR;
+	parentMap_[JointType::ToeBaseL] = JointType::FootL;
+	parentMap_[JointType::ToeBaseR] = JointType::FootR;
 
 	// モーション読み込み
 	LoadStand(dir);
@@ -164,6 +172,8 @@ void MotionManager::LoadStagger(const std::string& dir)
 	table_[MotionType::Stagger]["Front"] = engine_->LoadAnimation(dir + "/stagger/stagger_000", "stagger_000.gltf");
 	table_[MotionType::Stagger]["Back"] = engine_->LoadAnimation(dir + "/stagger/stagger_001", "stagger_001.gltf");
 	table_[MotionType::Stagger]["Front_Down"] = engine_->LoadAnimation(dir + "/stagger/stagger_002", "stagger_002.gltf");
+	table_[MotionType::Stagger]["Front_Middle"] = engine_->LoadAnimation(dir + "/stagger/stagger_003", "stagger_003.gltf");
+	table_[MotionType::Stagger]["Front_Heavy"] = engine_->LoadAnimation(dir + "/stagger/stagger_004", "stagger_004.gltf");
 }
 
 /// @brief 掴みモーション読み込み

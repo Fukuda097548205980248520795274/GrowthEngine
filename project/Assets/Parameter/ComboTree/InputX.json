@@ -218,21 +218,21 @@
             "animationName": "Player_Combo_4",
             "comboParams": {
                 "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 3,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 10.0,
                         "knockbackDirection": [
                             0.0,
                             1.0,
                             0.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -249,29 +249,29 @@
             "outputInputYPinId": 27,
             "pos": [
                 962.0,
-                238.0
+                237.0
             ],
             "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "attackTime": 0.75,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -288,7 +288,7 @@
             "outputInputYPinId": 32,
             "pos": [
                 842.0,
-                238.0
+                239.0
             ],
             "targetAnimationName": ""
         },
@@ -296,21 +296,21 @@
             "animationName": "Player_Combo_4",
             "comboParams": {
                 "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 3,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 8.0,
                         "knockbackDirection": [
                             1.0,
                             0.0,
                             0.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -326,7 +326,7 @@
             "outputInputXPinId": 38,
             "outputInputYPinId": 39,
             "pos": [
-                829.0,
+                831.0,
                 385.0
             ],
             "targetAnimationName": ""
@@ -334,22 +334,22 @@
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "attackTime": 0.75,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 5.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -374,21 +374,21 @@
             "animationName": "Player_Combo_4",
             "comboParams": {
                 "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 3,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 8.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.0
                     }
                 ],
@@ -412,22 +412,22 @@
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "attackTime": 0.75,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -452,21 +452,21 @@
             "animationName": "Player_Combo_4",
             "comboParams": {
                 "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 3,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -490,22 +490,22 @@
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "attackTime": 0.75,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
                         "endTime": 0.4000000059604645,
-                        "jointType": 13,
+                        "jointType": 17,
                         "knockback": 4.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
+                        "radius": 0.5,
                         "startTime": 0.10000000149011612
                     }
                 ],
@@ -522,7 +522,7 @@
             "outputInputYPinId": 68,
             "pos": [
                 475.75830078125,
-                609.2384033203125
+                610.2384033203125
             ],
             "targetAnimationName": ""
         }
