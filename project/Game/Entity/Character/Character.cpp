@@ -145,6 +145,9 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// 移動の更新
+			movement_->Update(dt);
+
 			// レイジゲージの更新
 			RageGageUpdate(dt);
 
@@ -300,9 +303,6 @@ void Character::Update()
 
 		worldTransform_->rotate_.y += diff * movement_->GetRotationSpeed() * dt;
 	}
-
-	// 移動の更新
-	movement_->Update(dt);
 
 	// 壁接触の処理
 	WallTouchUpdate();
@@ -601,7 +601,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
-		if(!isBlownHit)movement_->AddKnockback(knockDirection.Normalize() * knockback);
+		if (!isBlownHit)
+		{
+			movement_->AddKnockback(knockDirection.Normalize() * knockback);
+		}
 	}
 
 	// 死亡判定
@@ -695,110 +698,57 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		attacker->ChargeRageGage(damageReaction);
 	}
 
-	switch (damageReaction)
+
+	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
+	float slowMotionDuration = 0.0f; // スローモーションの持続時間
+
+	// リアクションごとの処理
+	if (damageReaction == DamageReaction::LightStagger)
 	{
-		// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
-	case DamageReaction::LightStagger:
-
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
 		// 軽い怯みのSEを再生する
 		soundManager_->SeLightDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
 
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		break;
-
-		// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
-	case DamageReaction::HeavyStagger:
-
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
+		// 軽い怯みの状態に遷移する
+		stateMachine_->ChangeState("LightDamage");
+		if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
+			if (hitPosition)state->DamageReaction(hitPosition.value());
+	}
+	else if (damageReaction == DamageReaction::HeavyStagger)
+	{
 		// 重い怯みのSEを再生する
 		soundManager_->SeHeavyDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
+		// 重い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionTimeScale = 0.125f;
 
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-		break;
-
-		// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-	case DamageReaction::Down:
-
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
-		// ダウン落下のSEを再生する
+		// 重い怯みの状態に遷移する
+		stateMachine_->ChangeState("HeavyDamage");
+		if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
+			if (hitPosition)state->DamageReaction(hitPosition.value());
+	}
+	else if (damageReaction == DamageReaction::Down)
+	{
+		// 重い怯みのSEを再生する
 		soundManager_->SeHeavyDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
+		// ダウンのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.15f;
 
-		// シェイクさせる
-		shake_->StartShake(0.08f, 0.2f);
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-		break;
+		// ダウンの状態に遷移する
+		stateMachine_->ChangeState("DownFalling");
+		if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
+			if (hitPosition)state->DamageReaction(hitPosition.value());
 	}
+
+	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
 
 
 	// 最終的な攻撃力を計算する

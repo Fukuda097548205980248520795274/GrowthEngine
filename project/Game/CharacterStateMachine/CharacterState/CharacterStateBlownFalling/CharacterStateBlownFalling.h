@@ -2,6 +2,7 @@
 #include "../CharacterState.h"
 
 class Character;
+class SoundManager;
 
 class CharacterStateBlownFalling : public CharacterState
 {
@@ -46,5 +47,11 @@ private:
 	/// @brief アニメーションハンドル
 	AnimationHandle hFront_ = 0;
 	AnimationHandle hBack_ = 0;
+
+
+private:
+
+	/// @brief サウンドマネージャー
+	SoundManager* soundManager_ = nullptr;
 };
 

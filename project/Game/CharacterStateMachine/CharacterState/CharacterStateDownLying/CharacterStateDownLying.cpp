@@ -37,19 +37,21 @@ void CharacterStateDownLying::Update(float dt)
 	if (owner_->IsHitDamage())
 	{
 		auto stateMachine = owner_->GetStateMachine();
-		stateMachine->ChangeState("DownStagger");
-		if (auto downStaggerState = dynamic_cast<CharacterStateDownStagger*>(stateMachine->GetCurrentState()))
+		if (auto nextState = static_cast<CharacterStateDownStagger*>(stateMachine->GetState("DownStagger")))
 		{
 			// ダメージリアクションを設定する
 			if (reaction_ == DownLyingDamageReaction::Front)
 			{
-				downStaggerState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Front);
 			}
 			else if (reaction_ == DownLyingDamageReaction::Back)
 			{
-				downStaggerState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Back);
 			}
 		}
+
+		// 状態をダウン怯み状態に変更する
+		stateMachine->ChangeState("DownStagger");
 
 		return;
 	}
@@ -58,19 +60,24 @@ void CharacterStateDownLying::Update(float dt)
 	if (damageTimer_ <= 0.0f)
 	{
 		auto stateMachine = owner_->GetStateMachine();
-		stateMachine->ChangeState("DownGettingUp");
-		if (auto downGettingUpState = dynamic_cast<CharacterStateDownGettingUp*>(stateMachine->GetCurrentState()))
+		if (auto nextState = static_cast<CharacterStateDownGettingUp*>(stateMachine->GetState("DownGettingUp")))
 		{
 			// ダメージリアクションの方向を設定する
 			if (reaction_ == DownLyingDamageReaction::Front)
 			{
-				downGettingUpState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Front);
 			}
 			else if (reaction_ == DownLyingDamageReaction::Back)
 			{
-				downGettingUpState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Back);
 			}
 		}
+
+		// 状態をダウン起き上がり状態に変更する
+		stateMachine->ChangeState("DownGettingUp");
+
+		// ダメージリアクションをリセットする
+		reaction_ = DownLyingDamageReaction::None;
 
 		return;
 	}

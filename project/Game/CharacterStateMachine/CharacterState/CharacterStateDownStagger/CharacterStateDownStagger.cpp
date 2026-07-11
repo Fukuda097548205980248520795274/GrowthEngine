@@ -29,19 +29,21 @@ void CharacterStateDownStagger::Update(float dt)
 	if (damageTimer_ <= 0.0f)
 	{
 		auto stateMachine = owner_->GetStateMachine();
-		stateMachine->ChangeState("DownLying");
-		if (auto downLyingState = dynamic_cast<CharacterStateDownLying*>(stateMachine->GetCurrentState()))
+		if (auto nextState = dynamic_cast<CharacterStateDownLying*>(stateMachine->GetState("DownLying")))
 		{
 			// ダメージリアクションを設定する
 			if (reaction_ == DownStaggerDamageReaction::Front)
 			{
-				downLyingState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
 			}
 			else if (reaction_ == DownStaggerDamageReaction::Back)
 			{
-				downLyingState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
 			}
 		}
+
+		// 状態をダウン状態に変更する
+		stateMachine->ChangeState("DownLying");
 
 		return;
 	}

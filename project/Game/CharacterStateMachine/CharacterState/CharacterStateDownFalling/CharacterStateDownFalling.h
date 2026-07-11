@@ -2,6 +2,7 @@
 #include "../CharacterState.h"
 
 class Character;
+class SoundManager;
 
 class CharacterStateDownFalling : public CharacterState
 {
@@ -56,5 +57,11 @@ private:
 	AnimationHandle hBack_ = 0;
 	AnimationHandle hLeft_ = 0;
 	AnimationHandle hRight_ = 0;
+
+
+private:
+
+	/// @brief サウンドマネージャー
+	SoundManager* soundManager_ = nullptr;
 };
 

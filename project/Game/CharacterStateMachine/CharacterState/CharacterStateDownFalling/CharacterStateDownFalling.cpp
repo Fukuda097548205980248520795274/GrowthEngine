@@ -1,12 +1,15 @@
 #include "CharacterStateDownFalling.h"
 #include "Entity/Character/Character.h"
 #include "../CharacterStateDownLying/CharacterStateDownLying.h"
+#include "SoundManager/SoundManager.h"
 
 /// @brief コンストラクタ
 	/// @param owner 
 CharacterStateDownFalling::CharacterStateDownFalling(Character* owner, AnimationHandle hFront, AnimationHandle hBack, AnimationHandle hLeft, AnimationHandle hRight)
 	: CharacterState(owner), hFront_(hFront), hBack_(hBack), hLeft_(hLeft), hRight_(hRight)
 {
+	// サウンドマネージャーを取得する
+	soundManager_ = SoundManager::GetInstance();
 }
 
 /// @brief この状態に入るときに呼ばれる処理
@@ -27,19 +30,24 @@ void CharacterStateDownFalling::Update(float dt)
 	if (damageTimer_ <= 0.0f)
 	{
 		auto stateMachine = owner_->GetStateMachine();
-		stateMachine->ChangeState("DownLying");
-		if (auto downLyingState = dynamic_cast<CharacterStateDownLying*>(stateMachine->GetCurrentState()))
+		if (auto nextState = static_cast<CharacterStateDownLying*>(stateMachine->GetState("DownLying")))
 		{
 			// ダメージリアクションの方向を設定する
 			if (reaction_ == DownFallingDamageReaction::Front || reaction_ == DownFallingDamageReaction::Right)
 			{
-				downLyingState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
 			}
 			else if (reaction_ == DownFallingDamageReaction::Back || reaction_ == DownFallingDamageReaction::Left)
 			{
-				downLyingState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
 			}
 		}
+
+		// 状態をダウン状態に変更する
+		stateMachine->ChangeState("DownLying");
+
+		// ダウン中着地のSEを再生する
+		soundManager_->SeDownLanding();
 
 		return;
 	}

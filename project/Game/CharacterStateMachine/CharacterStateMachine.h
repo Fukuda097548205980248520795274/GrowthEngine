@@ -35,6 +35,11 @@ public:
 	/// @return 
 	CharacterState* GetCurrentState() const { return currentState_; }
 
+	/// @brief 状態を取得する
+	/// @param name 
+	/// @return 
+	CharacterState* GetState(const std::string& name) const { return states_.at(name).get(); }
+
 
 private:
 

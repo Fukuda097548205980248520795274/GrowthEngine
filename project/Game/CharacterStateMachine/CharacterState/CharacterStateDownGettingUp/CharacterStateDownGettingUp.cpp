@@ -44,9 +44,6 @@ void CharacterStateDownGettingUp::Exit()
 /// @param attacker 
 void CharacterStateDownGettingUp::DamageReaction(DownLyingDamageReaction reaction)
 {
-	// ダウン中着地のSEを再生する
-	//soundManager_->SeDownLanding();
-
 	// ダメージリアクションを設定する
 	reaction_ = reaction;
 	if (reaction_ == DownLyingDamageReaction::Front)

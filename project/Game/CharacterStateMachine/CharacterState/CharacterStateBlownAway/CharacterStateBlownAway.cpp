@@ -1,5 +1,6 @@
 #include "CharacterStateBlownAway.h"
 #include "Entity/Character/Character.h"
+#include "../CharacterStateBlownFalling/CharacterStateBlownFalling.h"
 
 /// @brief コンストラクタ
 	/// @param owner 
@@ -34,7 +35,22 @@ void CharacterStateBlownAway::Update(float dt)
 	if (knockbackDirection.y + velocityY <= 0.0f)
 	{
 		auto stateMachine = owner_->GetStateMachine();
+		if (auto nextState = static_cast<CharacterStateBlownFalling*>(stateMachine->GetState("BlownFalling")))
+		{
+			// ダメージリアクションを設定する
+			if (reaction_ == BlownAwayDamageReaction::Front)
+			{
+				nextState->DamageReaction(CharacterStateBlownFalling::BlownFallingDamageReaction::Front);
+			}
+			else if (reaction_ == BlownAwayDamageReaction::Back)
+			{
+				nextState->DamageReaction(CharacterStateBlownFalling::BlownFallingDamageReaction::Back);
+			}
+		}
+
+		// 状態をダウン落下状態に変更する
 		stateMachine->ChangeState("BlownFalling");
+
 		return;
 	}
 }
