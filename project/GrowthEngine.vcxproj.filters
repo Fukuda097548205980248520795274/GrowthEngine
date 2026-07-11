@@ -1351,6 +1351,39 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed">
       <UniqueIdentifier>{f75d4543-7783-461f-b99b-f1a55bb8d194}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDamage">
+      <UniqueIdentifier>{7dac0258-596d-496e-87de-76de66b681fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateRepelled">
+      <UniqueIdentifier>{d13ab2ef-839f-4abe-b8ef-a76a56ddde44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDeflected">
+      <UniqueIdentifier>{7d0915e7-ec24-476a-a4ec-b57926240843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage">
+      <UniqueIdentifier>{041de4db-7f38-49de-9d8d-0971b7977253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage">
+      <UniqueIdentifier>{76bc47ae-f64f-412a-8c9d-ad3dccc10fe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling">
+      <UniqueIdentifier>{49d30cf2-a4db-4b32-ab2c-6e588044fef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownLying">
+      <UniqueIdentifier>{462ac101-5a37-4732-8629-fca3f06ef13f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownGettingUp">
+      <UniqueIdentifier>{fbafc9bc-87fd-435a-910b-55e4df9f335d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway">
+      <UniqueIdentifier>{1358658c-8fae-455f-b38e-0f045f880744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling">
+      <UniqueIdentifier>{23e26a01-99d6-4b8f-8200-529762461e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger">
+      <UniqueIdentifier>{8332fa30-6742-44fb-b8ab-eb5caea9a4b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2444,6 +2477,36 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling\CharacterStateDownFalling.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownLying\CharacterStateDownLying.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownLying</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownGettingUp\CharacterStateDownGettingUp.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownGettingUp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger\CharacterStateDownStagger.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway\CharacterStateBlownAway.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling\CharacterStateBlownFalling.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateRepelled\CharacterStateRepelled.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateRepelled</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDeflected\CharacterStateDeflected.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDeflected</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3667,6 +3730,36 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling\CharacterStateDownFalling.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownLying\CharacterStateDownLying.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownLying</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownGettingUp\CharacterStateDownGettingUp.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownGettingUp</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger\CharacterStateDownStagger.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway\CharacterStateBlownAway.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling\CharacterStateBlownFalling.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateRepelled\CharacterStateRepelled.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateRepelled</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDeflected\CharacterStateDeflected.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDeflected</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,16 @@
 
 #include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownLying/CharacterStateDownLying.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownGettingUp/CharacterStateDownGettingUp.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownStagger/CharacterStateDownStagger.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateBlownAway/CharacterStateBlownAway.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateBlownFalling/CharacterStateBlownFalling.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateRepelled/CharacterStateRepelled.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDeflected/CharacterStateDeflected.h"
 
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
@@ -49,6 +59,38 @@ Character::Character() : Entity()
 	stateMachine_ = std::make_unique<CharacterStateMachine>();
 	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
 	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
+	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateLightDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateHeavyDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("DownLying", std::make_unique<CharacterStateDownLying>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("DownGettingUp", std::make_unique<CharacterStateDownGettingUp>(this,
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front"),
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front")));
+	stateMachine_->AddState("DownStagger", std::make_unique<CharacterStateDownStagger>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Down"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Down")));
+	stateMachine_->AddState("BlownAway", std::make_unique<CharacterStateBlownAway>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("BlownFalling", std::make_unique<CharacterStateBlownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateRepelled>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateDeflected>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->ChangeState("None");
 }
 
@@ -188,6 +230,21 @@ void Character::Update()
 			}
 		};
 
+
+	// ダウン着地のエフェクトを生成する
+	if (IsBlownFalling() && IsGrounded())
+	{
+		// ダウン着地のエフェクトを生成する
+		effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
+	}
+
+
 	// ステートマシンの更新
 	stateMachine_->Update(dt);
 
@@ -214,150 +271,6 @@ void Character::Update()
 		if (!grabbedTarget_->IsGrabbed())
 		{
 			grabbedTarget_ = nullptr;
-		}
-	}
-
-	// ノックバックの方向を取得する
-	Vector3 knockbackDirection = movement_->GetKnockbackVelocity();
-	float velocityY = movement_->GetVelocityY();
-
-	// ダメージリアクションの更新
-	if (IsDamageReaction())
-	{
-		damageReactionTimer_ -= dt;
-
-		// ダメージリアクションがダウン中の場合は、起き上がり条件をチェックし、それ以外の場合はダメージリアクションの時間が十分経過したかをチェックする
-		bool shouldTransition = (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack)
-			? CheckGetUpCondition() : (damageReactionTimer_ <= 0.0f);
-
-		if (shouldTransition)
-		{
-			switch (currentDamageReaction_)
-			{
-				// ダメージリアクションが終了したら、通常状態へ移行する
-			case DamageReactionState::LightStaggerFront:
-			case DamageReactionState::LightStaggerBack:
-			case DamageReactionState::LightStaggerLeft:
-			case DamageReactionState::LightStaggerRight:
-			case DamageReactionState::HeavyStaggerFront:
-			case DamageReactionState::HeavyStaggerBack:
-			case DamageReactionState::HeavyStaggerLeft:
-			case DamageReactionState::HeavyStaggerRight:
-			case DamageReactionState::DownGettingUpFront:
-			case DamageReactionState::DownGettingUpBack:
-			case DamageReactionState::Deflected:
-			case DamageReactionState::Repelled:
-				currentDamageReaction_ = DamageReactionState::None;
-				break;
-
-				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
-			case DamageReactionState::DownFallingFront:
-				currentDamageReaction_ = DamageReactionState::DownLyingFront;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
-			case DamageReactionState::DownFallingBack:
-			case DamageReactionState::DownFallingLeft:
-			case DamageReactionState::DownFallingRight:
-				currentDamageReaction_ = DamageReactionState::DownLyingBack;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
-			case DamageReactionState::DownStaggerFront:
-				currentDamageReaction_ = DamageReactionState::DownLyingFront;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
-			case DamageReactionState::DownStaggerBack:
-				currentDamageReaction_ = DamageReactionState::DownLyingBack;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
-			case DamageReactionState::DownLyingFront:
-				currentDamageReaction_ = DamageReactionState::DownGettingUpFront;
-				damageReactionTimer_ = 1.0f;
-				SetAnimation(hDownGetUpMotion_, true, false);
-				break;
-
-				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
-			case DamageReactionState::DownLyingBack:
-				currentDamageReaction_ = DamageReactionState::DownGettingUpBack;
-				damageReactionTimer_ = 1.0f;
-				SetAnimation(hDownGetUpMotion_, true, false);
-				break;
-
-				// 落下速度が負の場合は、落下中状態へ移行する
-			case DamageReactionState::BlownAwayFront:
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackDirection.y + velocityY <= 0.0f)
-				{
-					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
-					SetAnimation(hDownLyingMotion_, true, true);
-				}
-				break;
-
-				// 落下速度が負の場合は、落下中状態へ移行する
-			case DamageReactionState::BlownAwayBack:
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackDirection.y + velocityY <= 0.0f)
-				{
-					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
-					SetAnimation(hDownLyingMotion_, true, true);
-				}
-				break;
-
-				// 地上に着地した場合は、ダウン中状態へ移行する
-			case DamageReactionState::BlownFallingFront:
-				if (movement_->IsGrounded())
-				{
-					currentDamageReaction_ = DamageReactionState::DownLyingFront;
-					damageReactionTimer_ = 2.0f;
-					SetAnimation(hDownLyingMotion_, true, true);
-
-					// ダウン着地のSEを再生する
-					soundManager_->SeDownLanding();
-
-					// ダウン着地のエフェクトを生成する
-					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
-				}
-				break;
-
-				// 地上に着地した場合は、ダウン中状態へ移行する
-			case DamageReactionState::BlownFallingBack:
-				if (movement_->IsGrounded())
-				{
-					currentDamageReaction_ = DamageReactionState::DownLyingBack;
-					damageReactionTimer_ = 2.0f;
-					SetAnimation(hDownLyingMotion_, true, true);
-
-					// ダウン着地のSEを再生する
-					soundManager_->SeDownLanding();
-
-					// ダウン着地のエフェクトを生成する
-					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
-				}
-				break;
-			}
 		}
 	}
 
@@ -530,265 +443,134 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 弱攻撃が攻撃中のプレイヤーやボスに当たったかどうか
 	bool isLightAttackHit = false;
 
-	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
-	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
+	// ヒットエフェクト
+	if (hitPosition)
 	{
-		currentDamageReaction_ = DamageReactionState::DownStaggerFront;
-		SetAnimation(hDownStaggerMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
-
-		// ダウン中はノックバックが入らない
-		knockback = 0.0f;
-
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-	}
-	else if (currentDamageReaction_ == DamageReactionState::DownLyingBack || currentDamageReaction_ == DamageReactionState::DownStaggerBack)
-	{
-		currentDamageReaction_ = DamageReactionState::DownStaggerBack;
-		SetAnimation(hDownStaggerMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
-
-		// ダウン中はノックバックが入らない
-		knockback = 0.0f;
-
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-	}
-	else if (currentDamageReaction_ == DamageReactionState::BlownAwayBack || currentDamageReaction_ == DamageReactionState::BlownFallingBack)
-	{
-		currentDamageReaction_ = DamageReactionState::BlownFallingBack;
-		SetAnimation(hDownLyingMotion_, true, true);
-
-		// 落下速度をリセットする
-		movement_->SetVelocityY(0.0f);
-		
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
-
 		// エフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+		effectManager_->ImpactDrop000(*hitPosition);
+		effectManager_->ImpactSmoke000(*hitPosition);
+		effectManager_->ImpactSmoke001(*hitPosition);
+		if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+		effectManager_->Impact001(*hitPosition);
+		effectManager_->Impact002(*hitPosition);
+		effectManager_->Impact003(*hitPosition);
+		effectManager_->Impact004(*hitPosition);
+		effectManager_->Impact005(*hitPosition);
 	}
-	else if (currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownFallingFront)
+
+
+	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
+	float slowMotionDuration = 0.0f; // スローモーションの持続時間
+
+	if (IsDownLying() || IsDownStagger())
 	{
-		currentDamageReaction_ = DamageReactionState::BlownFallingFront;
-		SetAnimation(hDownLyingMotion_, true, true);
+		// 軽い怯みのSEを再生する
+		soundManager_->SeLightDamage();
 
-		// 落下速度をリセットする
-		movement_->SetVelocityY(0.0f);
-
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
-
-		// エフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
 	}
 	else
 	{
-
-		switch (damageReaction)
+		// リアクションごとの処理
+		if (damageReaction == DamageReaction::LightStagger)
 		{
-			// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
-		case DamageReaction::LightStagger:
-
-			// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
-			if ((!IsPlayer() && !IsBoss()) || !IsAttack())
-			{
-				currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
-				SetAnimation(hDamageLightMotion_, true, false);
-				damageReactionTimer_ = 0.5f;
-			}
-			else
-			{
-				// 弱攻撃が攻撃中のプレイヤーに当たった
-				isLightAttackHit = true;
-
-				// ノックバックを無効化する
-				knockback = 0.0f;
-			}
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
-			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
-			}
-
 			// 軽い怯みのSEを再生する
 			soundManager_->SeLightDamage();
 
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
+			// 軽い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.1f;
 
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-			break;
-
-			// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
-		case DamageReaction::HeavyStagger:
-			currentDamageReaction_ = DamageReactionState::HeavyStaggerFront; // ここではとりあえず前方向の怯みを設定。
-			SetAnimation(hDamageHeavyMotion_, true, false);
-			damageReactionTimer_ = 1.5f;
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
+			if (!IsLightDamage())
 			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
-			}
-
-			// 重い怯みのSEを再生する
-			soundManager_->SeHeavyDamage();
-
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
-
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-			break;
-
-			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-		case DamageReaction::Down:
-
-			// ノックバックの方向が上方向の場合は、吹っ飛び状態にする
-			if (knockDirection.y * knockback > 0.0f)
-			{
-				currentDamageReaction_ = DamageReactionState::BlownAwayFront; // ここではとりあえず前方向の吹っ飛びを設定。
-				SetAnimation(hDownFallMotion_, true, false);
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-
-				movement_->SetGrounded(false); // 地面に接地していない状態にする
+				// 軽い怯みの状態に遷移する
+				stateMachine_->ChangeState("LightDamage");
+				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
+					if (hitPosition)state->DamageReaction(hitPosition.value());
 			}
 			else
 			{
-				// 上に跳ばない場合は、ダウン落下状態にする
-
-				currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
-				SetAnimation(hDownFallMotion_, true, false);
-				damageReactionTimer_ = 1.0f;
+				// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+				stateMachine_->GetCurrentState()->Enter();
+				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
+					if (hitPosition)state->DamageReaction(hitPosition.value());
 			}
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
-			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
-			}
-
-			// ダウン落下のSEを再生する
+		}
+		else if (damageReaction == DamageReaction::HeavyStagger)
+		{
+			// 重い怯みのSEを再生する
 			soundManager_->SeHeavyDamage();
 
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
+			// 重い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionTimeScale = 0.125f;
 
-			// シェイクさせる
-			shake_->StartShake(0.08f, 0.2f);
+			if (!IsHeavyDamage())
+			{
+				// 重い怯みの状態に遷移する
+				stateMachine_->ChangeState("HeavyDamage");
+				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
+					if (hitPosition)state->DamageReaction(hitPosition.value());
+			}
+			else
+			{
+				// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+				stateMachine_->GetCurrentState()->Enter();
+				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
+					if (hitPosition)state->DamageReaction(hitPosition.value());
+			}
+		}
+		else if (damageReaction == DamageReaction::Down)
+		{
+			// 重い怯みのSEを再生する
+			soundManager_->SeHeavyDamage();
 
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if(attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
+			// ダウンのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.15f;
 
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-			break;
+			// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
+			if (knockDirection.y * knockback > 0.0f)
+			{
+				if (!IsBlownAway())
+				{
+					stateMachine_->ChangeState("BlownAway");
+					if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
+						if (hitPosition)state->DamageReaction(hitPosition.value());
+				}
+			}
+			else
+			{
+				if (!IsDownFalling() || !IsDownLying())
+				{
+					// ダウンの状態に遷移する
+					stateMachine_->ChangeState("DownFalling");
+					if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
+						if (hitPosition)state->DamageReaction(hitPosition.value());
+				}
+			}
 		}
 	}
 
+	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+
+
+	// ダメージを受けたことを通知する
+	isHitDamage_ = true;
+
+	// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
+	if (!((!IsPlayer() && !IsBoss()) || !IsAttack()))
+	{
+		// 弱攻撃が攻撃中のプレイヤーに当たった
+		isLightAttackHit = true;
+
+		// ノックバックを無効化する
+		knockback = 0.0f;
+	}
 
 	// 弱攻撃を受けたプレイヤーとボス以外は、攻撃者をロックオンターゲットに設定する
 	if (!isLightAttackHit)if (attacker)lockOnTarget_ = attacker;
@@ -859,15 +641,11 @@ void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDire
 	// 受け流し成功の位置を設定する
 	SetPosition(pullPosition);
 
-	// 受け流し成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Deflected;
-	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
+	// 受け流され状態に遷移する
+	stateMachine_->ChangeState("Deflected");
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
 	movement_->AddKnockback(pushDirection * knockBackPower);
-
-	// 受け流し成功モーションを再生する
-	SetAnimation(hDamageHeavyMotion_, true, false);
 }
 
 /// @brief 弾かれた時の処理
@@ -885,15 +663,11 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
-	// 弾き成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Repelled;
-	damageReactionTimer_ = 1.0f;
+	// 弾かれ状態に遷移する
+	stateMachine_->ChangeState("Repelled");
 
 	// ノックバックを入れる
 	movement_->AddKnockback(pushDirection * knockBackPower);
-
-	// 弾き成功モーションを再生する
-	SetAnimation(hGuardHitMotion_, true, false);
 
 	// シェイクさせる
 	shake_->StartShake(0.05f, 0.15f);
@@ -1150,19 +924,6 @@ void Character::RageModeInput()
 		soundManager_->SeRageModeStart();
 	}
 }
-
-/// @brief ダウンからの起き上がり条件を満たしているかどうか
-/// @return 
-bool Character::CheckGetUpCondition()
-{
-	// 地面に接地していない場合は起き上がれない
-	if (!IsGrounded())return false;
-
-	// ダウン中の時間が十分経過しているかどうか
-	return damageReactionTimer_ <= 0.0f &&
-		currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack;
-}
-
 /// @brief 回避を開始する
 /// @param direction 
 /// @param distance 
@@ -1555,45 +1316,6 @@ Vector3 Character::GetBonePosition(const JointType& jointType) const
 {
 	Matrix4x4 boneMatrix = GetBoneMatrix(jointType);
 	return Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
-}
-
-/// @brief 倒れこみ中かどうか
-/// @return 
-bool Character::IsDownFalling() const
-{
-	return
-		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
-		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
-		currentDamageReaction_ == DamageReactionState::DownFallingRight;
-}
-
-/// @brief 地面に倒れているかどうか
-/// @return 
-bool Character::IsGrondedDown() const
-{
-	// 地面に倒れている状態は、前後左右に倒れている状態か、前後に倒れている状態か、前後に倒れて起き上がっている状態のいずれかである
-	return
-		currentDamageReaction_ == DamageReactionState::DownLyingFront ||
-		currentDamageReaction_ == DamageReactionState::DownLyingBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownStaggerFront ||
-		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
-		currentDamageReaction_ == DamageReactionState::DownGettingUpBack;
-}
-
-/// @brief 吹き飛ばされてダウンしているかどうか
-/// @return 
-bool Character::IsBlownDown() const
-{
-	// 吹き飛ばされてダウンしている状態は、吹き飛ばされて前後に倒れている状態か、吹き飛ばされて落下している状態のいずれかである
-	return
-		currentDamageReaction_ == DamageReactionState::BlownAwayFront ||
-		currentDamageReaction_ == DamageReactionState::BlownAwayBack ||
-		currentDamageReaction_ == DamageReactionState::BlownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::BlownFallingBack;
 }
 
 /// @brief 相手をつかむ
@@ -2032,7 +1754,7 @@ void Character::UpdatePushOut()
 		if (!other->HasModel())continue;
 
 		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
-		if (IsGrondedDown() || other->IsGrondedDown() ||IsGrabbed() || other->IsGrabbed() ||
+		if (IsGroundedDown() || other->IsGroundedDown() ||IsGrabbed() || other->IsGrabbed() ||
 			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected())
 			continue;
 
@@ -2115,7 +1837,7 @@ void Character::Dead()
 	deadTimer_ = kDeadDuration;
 
 	// 死亡モーションを再生する
-	SetAnimation(hDownFallMotion_, true, false);
+	SetAnimation(motionManager_->GetMotion(MotionType::DownFall, "Front"), true, false);
 
 	// 死亡フラグを立てる
 	isDead_ = true;
@@ -2178,10 +1900,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	// ロックオンターゲットをリセットする
 	lockOnTarget_ = nullptr;
 
-	// ダメージリアクションの状態をリセットする
-	currentDamageReaction_ = DamageReactionState::None;
-	damageReactionTimer_ = 0.0f;
-
 	// レイジゲージをリセットする
 	rageGage_ = 0;
 	rageGageThresholdIndex_ = 0;
@@ -2234,14 +1952,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hAvoidRightMotion_ = initData.hAvoidRightMotion;
 	hGuardMotion_ = initData.hGuardMotion;
 	hGuardHitMotion_ = initData.hGuardHitMotion;
-
-	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
-	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy");
-	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
-
-	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
-	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
-	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, "Front");
 
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");

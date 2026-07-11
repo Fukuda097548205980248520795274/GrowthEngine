@@ -379,19 +379,6 @@ float Player::GetCameraYaw() const
 	return 0.0f;
 }
 
-/// @brief ダウン後起き上がり条件を満たしているかどうか
-/// @return 
-bool Player::CheckGetUpCondition()
-{
-	// 地面に接地していない場合は起き上がれない
-	if (!IsGrounded())return false;
-
-	// プレイヤーはダウン後、すぐに起き上がるようにする
-	damageReactionTimer_ = 0.0f;
-
-	return true;
-}
-
 /// @brief スタイルチェンジ開始時の処理
 void Player::StyleChangeStart()
 {

@@ -1,4 +1,5 @@
 #pragma once
+#include "GrowthEngine.h"
 
 class Character;
 

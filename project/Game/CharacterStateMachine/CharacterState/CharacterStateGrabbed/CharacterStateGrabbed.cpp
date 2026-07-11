@@ -66,14 +66,15 @@ void CharacterStateGrabbed::Update(float dt)
 		grabbedTimer_ = 0.0f;
 
 		// ダメージリアクションを解除する
-		owner_->SetDamageReaction(DamageReactionState::None);
 		owner_->GetStateMachine()->ChangeState("None");
+		return;
 	}
 
 	// 使いでいるはずの相手が掴んでいない場合は、掴まれ状態を解除する
 	if (!grabber_->GetGrabTarget())
 	{
 		owner_->GetStateMachine()->ChangeState("None");
+		return;
 	}
 }
 

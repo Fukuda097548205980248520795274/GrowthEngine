@@ -33,63 +33,7 @@ enum class DamageReaction
 	HeavyStagger,
 	
 	// ダウン
-	Down,
-
-	// 受け流され
-	Deflected,
-
-	// 弾かれ
-	Repelled,
-};
-
-enum class DamageReactionState
-{
-	// 怯みなし
-	None,
-
-	// 小怯み
-	LightStaggerFront,
-	LightStaggerBack,
-	LightStaggerLeft,
-	LightStaggerRight,
-
-	// 大怯み
-	HeavyStaggerFront,
-	HeavyStaggerBack,
-	HeavyStaggerLeft,
-	HeavyStaggerRight,
-
-	// 倒れこみ
-	DownFallingFront,
-	DownFallingBack,
-	DownFallingLeft,
-	DownFallingRight,
-
-	// ダウン中
-	DownLyingFront,
-	DownLyingBack,
-
-	// 起き上がり
-	DownGettingUpFront,
-	DownGettingUpBack,
-
-	// ダウン中の怯み
-	DownStaggerFront,
-	DownStaggerBack,
-
-	// 吹き飛び
-	BlownAwayFront,
-	BlownAwayBack,
-
-	// 落下
-	BlownFallingFront,
-	BlownFallingBack,
-
-	// 受け流され
-	Deflected,
-
-	// 弾かれ
-	Repelled,
+	Down
 };
 
 class Attack : public Action

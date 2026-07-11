@@ -219,43 +219,51 @@ public:
 
 	/// @brief ダメージリアクション中かどうか
 	/// @return 
-	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReactionState::None; }
+	bool IsDamageReaction() const { return IsLightDamage() || IsHeavyDamage() || IsGroundedDown() || IsBlownDown() || IsDeflected() || IsRepelled(); }
 
 	/// @brief 地面に倒れているかどうか
 	/// @return 
-	bool IsGrondedDown() const;
+	bool IsGroundedDown() const { return IsDownFalling() || IsDownLying() || IsGettingUp() || IsDownStagger(); }
 
 	/// @brief 吹き飛ばされてダウンしているかどうか
 	/// @return 
-	bool IsBlownDown() const;
+	bool IsBlownDown() const { return IsBlownAway() || IsBlownFalling(); }
 
 	/// @brief ダウン中かどうか
 	/// @return 
 	bool IsDown()const { return IsDownFalling() || IsDownLying() || IsGettingUp(); }
 
+	/// @brief 軽ダメージ中かどうか
+	/// @return 
+	bool IsLightDamage() const { return stateMachine_->GetCurrentStateName() == "LightDamage"; }
+
+	/// @brief 重ダメージ中かどうか
+	/// @return 
+	bool IsHeavyDamage() const { return stateMachine_->GetCurrentStateName() == "HeavyDamage"; }
+
 	/// @brief 倒れこみ中かどうか
 	/// @return 
-	bool IsDownFalling() const;
+	bool IsDownFalling() const { return stateMachine_->GetCurrentStateName() == "DownFalling"; }
 
 	/// @brief ダウン中かどうか
 	/// @return 
-	bool IsDownLying() const { return currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack; }
+	bool IsDownLying() const { return stateMachine_->GetCurrentStateName() == "DownLying"; }
 
 	/// @brief 起き上がり中かどうか
 	/// @return 
-	bool IsGettingUp() const { return currentDamageReaction_ == DamageReactionState::DownGettingUpFront || currentDamageReaction_ == DamageReactionState::DownGettingUpBack; }
+	bool IsGettingUp() const { return stateMachine_->GetCurrentStateName() == "DownGettingUp"; }
+
+	/// @brief ダウン中に怯んでいるかどうか
+	/// @return 
+	bool IsDownStagger() const { return stateMachine_->GetCurrentStateName() == "DownStagger"; }
 
 	/// @brief 吹き飛び中かどうか
 	/// @return 
-	bool IsBlownAway() const { return currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownAwayBack; }
+	bool IsBlownAway() const { return stateMachine_->GetCurrentStateName() == "BlownAway"; }
 
 	/// @brief 吹き飛び落下中かどうか
 	/// @return 
-	bool IsBlownFalling() const { return currentDamageReaction_ == DamageReactionState::BlownFallingFront || currentDamageReaction_ == DamageReactionState::BlownFallingBack; }
-
-	/// @brief ダメージリアクションの状態を設定する
-	/// @param reaction 
-	void SetDamageReaction(DamageReactionState reaction) { currentDamageReaction_ = reaction; }
+	bool IsBlownFalling() const { return stateMachine_->GetCurrentStateName() == "BlownFalling"; }
 
 	/// @brief 頭の当たり判定を取得する
 	/// @return 
@@ -327,11 +335,11 @@ public:
 
 	/// @brief 受け流されているかどうか
 	/// @return 
-	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflected; }
+	bool IsDeflected() const { return stateMachine_->GetCurrentStateName() == "Deflected"; }
 
 	/// @brief 弾かれたかどうか
 	/// @return 
-	bool IsRepelled() const { return currentDamageReaction_ == DamageReactionState::Repelled; }
+	bool IsRepelled() const { return stateMachine_->GetCurrentStateName() == "Repelled"; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -484,6 +492,10 @@ public:
 	/// @brief レイジゲージを取得する
 	/// @param rageGage 
 	void SetRageGage(float rageGage) { rageGage_ = rageGage; }
+
+	/// @brief 移動コンポーネントを取得する
+	/// @return 
+	CharacterMovement* GetMovement() const { return movement_.get(); }
 
 
 
@@ -807,19 +819,6 @@ protected:
 
 protected:
 
-	/// @brief ダウンからの起き上がり条件を満たしているかどうか
-	/// @return 
-	virtual bool CheckGetUpCondition();
-
-	/// @brief 現在のダメージリアクション
-	DamageReactionState currentDamageReaction_ = DamageReactionState::None;
-
-	/// @brief ダメージリアクションの経過時間
-	float damageReactionTimer_ = 0.0f;
-
-
-protected:
-
 	/// @brief 自分がつかんでいるターゲット
 	Character* grabbedTarget_ = nullptr;
 
@@ -853,26 +852,6 @@ protected:
 
 	/// @brief 右回避モーション
 	AnimationHandle hAvoidRightMotion_ = 0;
-
-
-	/// @brief 軽い怯みモーション
-	AnimationHandle hDamageLightMotion_ = 0;
-
-	/// @brief 重い怯みモーション
-	AnimationHandle hDamageHeavyMotion_ = 0;
-
-	/// @brief ダウン怯みモーション
-	AnimationHandle hDownStaggerMotion_ = 0;
-
-
-	/// @brief ダウンモーション
-	AnimationHandle hDownFallMotion_ = 0;
-
-	/// @brief ダウン中モーション
-	AnimationHandle hDownLyingMotion_ = 0;
-
-	/// @brief 立ち上がりモーション
-	AnimationHandle hDownGetUpMotion_ = 0;
 
 
 	/// @brief つかみモーション

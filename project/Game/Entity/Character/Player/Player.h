@@ -69,10 +69,6 @@ private:
 	/// @return
 	float GetCameraYaw() const;
 
-	/// @brief ダウン後起き上がり条件を満たしているかどうか
-	/// @return 
-	bool CheckGetUpCondition()override;
-
 	/// @brief スタイルチェンジ開始時の処理
 	void StyleChangeStart() override;
 
