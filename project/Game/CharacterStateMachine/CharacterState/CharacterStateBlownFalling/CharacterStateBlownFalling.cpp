@@ -78,3 +78,21 @@ void CharacterStateBlownFalling::DamageReaction(BlownFallingDamageReaction react
 		owner_->SetAnimation(hFront_, true, false);
 	}
 }
+
+/// @brief ダメージリアクションを起こす
+void CharacterStateBlownFalling::DamageReaction()
+{
+	// 何も設定されていない場合は、前方向のリアクションを設定する
+	if (reaction_ == BlownFallingDamageReaction::None)
+		reaction_ = BlownFallingDamageReaction::Front;
+
+	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (reaction_ == BlownFallingDamageReaction::Back)
+	{
+		owner_->SetAnimation(hBack_, true, false);
+	}
+	else if (reaction_ == BlownFallingDamageReaction::Front)
+	{
+		owner_->SetAnimation(hFront_, true, false);
+	}
+}

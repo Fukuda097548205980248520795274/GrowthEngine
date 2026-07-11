@@ -471,6 +471,33 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.1f;
 	}
+	else if (IsBlownAway() || IsBlownFalling())
+	{
+		// 落下速度をリセットする
+		movement_->SetVelocityY(0.0f);
+
+		// 重い怯みのSEを再生する
+		soundManager_->SeHeavyDamage();
+
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
+
+		// 落下中の状態に遷移する
+		if (!IsBlownAway())
+		{
+			stateMachine_->ChangeState("BlownFalling");
+			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				state->DamageReaction();
+		}
+		else
+		{
+			// すでに落下中の状態の場合は、再度Enterを呼び出して、落下の時間をリセットする
+			stateMachine_->GetCurrentState()->Enter();
+			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				state->DamageReaction();
+		}
+	}
 	else
 	{
 		// リアクションごとの処理

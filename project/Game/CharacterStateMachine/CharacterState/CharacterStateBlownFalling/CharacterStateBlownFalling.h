@@ -38,6 +38,9 @@ public:
 	/// @param attacker 
 	void DamageReaction(BlownFallingDamageReaction reaction);
 
+	/// @brief ダメージリアクションを起こす
+	void DamageReaction();
+
 
 private:
 

@@ -1351,9 +1351,6 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed">
       <UniqueIdentifier>{f75d4543-7783-461f-b99b-f1a55bb8d194}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDamage">
-      <UniqueIdentifier>{7dac0258-596d-496e-87de-76de66b681fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateRepelled">
       <UniqueIdentifier>{d13ab2ef-839f-4abe-b8ef-a76a56ddde44}</UniqueIdentifier>
     </Filter>
