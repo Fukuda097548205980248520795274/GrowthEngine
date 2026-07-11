@@ -1381,6 +1381,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger">
       <UniqueIdentifier>{8332fa30-6742-44fb-b8ab-eb5caea9a4b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing">
+      <UniqueIdentifier>{93ce8db0-9a8c-4841-876a-1cbafd27399e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2504,6 +2507,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDeflected\CharacterStateDeflected.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDeflected</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3757,6 +3763,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDeflected\CharacterStateDeflected.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDeflected</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -64,7 +64,7 @@ void GrabStrikeAttack::Update()
 		Exit();
 
 		// Character側の掴み状態を解除する処理を呼ぶ
-		owner_->ReleaseGrab();
+		owner_->SetGrabTarget(nullptr);
 		return;
 	}
 
@@ -162,7 +162,7 @@ void GrabStrikeAttack::Update()
 				nullptr, std::nullopt, false, true);
 
 			// Character側の掴み状態を解除する処理を呼ぶ
-			owner_->ReleaseGrab();
+			owner_->SetGrabTarget(nullptr);
 		}
 
 		isReleased_ = true; // 解除済みフラグを立てる
@@ -178,7 +178,7 @@ void GrabStrikeAttack::Update()
 		this->Exit();
 
 		// Character側の掴み状態を解除する処理を呼ぶ
-		owner_->ReleaseGrab();
+		owner_->SetGrabTarget(nullptr);
 		return;
 	}
 
@@ -210,9 +210,7 @@ void GrabStrikeAttack::Exit()
 
 	// もし掴んでいる相手がいる状態で攻撃が終了した場合は、確実に手を離す
 	if (isRelease_ && !isReleased_ && grabbedTarget_)
-	{
-		owner_->ReleaseGrab();
-	}
+		owner_->SetGrabTarget(nullptr);
 
 	Attack::Exit();
 }

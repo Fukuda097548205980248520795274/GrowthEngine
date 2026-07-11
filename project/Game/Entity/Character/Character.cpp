@@ -17,6 +17,7 @@
 
 #include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
@@ -59,6 +60,7 @@ Character::Character() : Entity()
 	stateMachine_ = std::make_unique<CharacterStateMachine>();
 	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
 	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
+	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
 	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateLightDamage>(this,
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
@@ -256,25 +258,6 @@ void Character::Update()
 	{
 		FinalizeUpdate();
 		return;
-	}
-
-	// 掴んでいる場合の処理
-	if (IsGrabbing())
-	{
-		// 掴んでいる相手の位置を、掴んでいる自分の手の位置に合わせる
-		Matrix4x4 handMatrix = GetBoneMatrix(JointType::HandR);
-		Vector3 handPos(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
-		grabbedTarget_->SetPosition(handPos + Vector3(0.0f, -1.2f, 0.1f));
-
-		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる (Y軸のみ180度反転させる)
-		// Quaternionでの計算を避け、直接オイラー角を指定する
-		grabbedTarget_->worldTransform_->rotate_ = Vector3(0.0f, worldTransform_->rotate_.y + std::numbers::pi_v<float>, 0.0f);
-
-		// 掴んでいる相手が掴まれている状態でない場合は、相手を解除する
-		if (!grabbedTarget_->IsGrabbed())
-		{
-			grabbedTarget_ = nullptr;
-		}
 	}
 
 	// ガードタイマーの更新
@@ -1293,7 +1276,12 @@ Vector3 Character::GetBonePosition(const JointType& jointType) const
 /// @param target 
 void Character::ExecuteGrab(Character* target, float duration,const std::optional<Vector3>& hitPosition)
 {
-	grabbedTarget_ = target;
+	// 掴み状態に遷移する
+	stateMachine_->ChangeState("Grabbing");
+	if (auto state = dynamic_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState()))
+	{
+		state->SetGrabTarget(target);
+	}
 
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
@@ -1327,22 +1315,38 @@ void Character::OnGrabbed(Character* grabber)
 	isAvoid_ = false;
 }
 
-/// @brief 掴んだ相手を離す
-void Character::ReleaseGrab()
-{
-	// 掴んでいる相手がいる場合は、相手のgrabber_をクリアする
-	if (grabbedTarget_) 
-	{
-		grabbedTarget_ = nullptr;
-	}
-}
-
 /// @brief 防御を設定する
 /// @param isGuard 
 void Character::SetGuard(bool isGuard)
 {
 	if (isGuard && !isGuard_) guardActiveTimer_ = 0.0f; // ガードした瞬間にリセット
 	isGuard_ = isGuard;
+}
+
+/// @brief 掴んでいる相手を取得する
+/// @return 
+Character* Character::GetGrabTarget() const
+{
+	// 掴んでいる状態でない場合はnullptrを返す
+	if (stateMachine_->GetCurrentStateName() != "Grabbing")
+		return nullptr;
+
+	// 掴んでいる状態のキャラクターのgrabTarget_を取得する
+	auto state = static_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState());
+	return state->GetGrabTarget();
+}
+
+/// @brief 掴まれている相手を取得する
+/// @param target 
+void Character::SetGrabTarget(Character* target)
+{
+	// 掴んでいる状態でない場合は処理しない
+	if (stateMachine_->GetCurrentStateName() != "Grabbing")
+		return;
+
+	// 掴んでいる状態のキャラクターのgrabTarget_を設定する
+	auto state = static_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState());
+	state->SetGrabTarget(target);
 }
 
 /// @brief 掴んだ状態の攻撃をしているかどうか

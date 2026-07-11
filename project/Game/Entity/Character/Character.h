@@ -280,7 +280,7 @@ public:
 
 	/// @brief 相手をつかんでいるかどうか
 	/// @return 
-	bool IsGrabbing() const { return grabbedTarget_ != nullptr; }
+	bool IsGrabbing() const { return stateMachine_->GetCurrentStateName() == "Grabbing"; }
 
 	/// @brief 自分をつかんでいる相手がいるかどうか
 	/// @return 
@@ -293,9 +293,6 @@ public:
 
 	/// @brief 掴まれた相手の処理
 	void OnGrabbed(Character* grabber);
-
-	/// @brief 掴んだ相手を離す
-	void ReleaseGrab();
 
 	/// @brief 防御しているかどうか
 	/// @return 
@@ -311,11 +308,11 @@ public:
 
 	/// @brief 掴んでいる相手を取得する
 	/// @return 
-	Character* GetGrabTarget() const { return grabbedTarget_; }
+	Character* GetGrabTarget() const;
 
 	/// @brief 掴まれている相手を取得する
 	/// @param target 
-	void SetGrabTarget(Character* target) { grabbedTarget_ = target; }
+	void SetGrabTarget(Character* target);
 	
 	/// @brief 掴んだ状態の攻撃をしているかどうか
 	/// @return 
@@ -816,12 +813,6 @@ protected:
 
 	/// @brief 前フレームでレイジモード開始に成功したかどうか
 	bool isPrevSuccessRageModeStart_ = false;
-
-
-protected:
-
-	/// @brief 自分がつかんでいるターゲット
-	Character* grabbedTarget_ = nullptr;
 
 
 protected:
