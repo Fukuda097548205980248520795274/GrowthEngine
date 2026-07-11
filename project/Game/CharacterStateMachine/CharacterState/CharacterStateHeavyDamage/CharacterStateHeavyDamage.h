@@ -38,8 +38,7 @@ public:
 
 	/// @brief ダメージリアクションを起こす
 	/// @param hitPosition 
-	/// @param attacker 
-	void DamageReaction(const Vector3& hitPosition);
+	void DamageReaction(const std::optional<Vector3>& hitPosition);
 
 
 private:

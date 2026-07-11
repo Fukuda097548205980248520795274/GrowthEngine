@@ -63,40 +63,51 @@ void CharacterStateDownFalling::Exit()
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateDownFalling::DamageReaction(const Vector3& hitPosition)
+void CharacterStateDownFalling::DamageReaction(const std::optional<Vector3>& hitPosition)
 {
 	/*----------------------
 		向きによる種類分け
 	----------------------*/
 
-	Vector2 ownerDirectionXZ = Vector2(owner_->GetDirection().x, owner_->GetDirection().z).Normalize();
-	Vector2 hitDirectionXZ = Vector2(hitPosition.x - owner_->GetWorldPosition().x, hitPosition.z - owner_->GetWorldPosition().z).Normalize();
-
-	// 右方向ベクトルを計算する
-	Vector2 rightDirectionXZ = Vector2(ownerDirectionXZ.y, -ownerDirectionXZ.x);
-
-	// XZ平面でのローカル座標を計算する
-	float localX = -Dot(hitDirectionXZ, rightDirectionXZ);
-	float localZ = -Dot(hitDirectionXZ, ownerDirectionXZ);
-
-	// ダメージリアクションの方向を判定する
-	if (localX < 0.0f && localZ > 0.0f)
+	if (hitPosition)
 	{
-		reaction_ = DownFallingDamageReaction::Left;
-		owner_->SetAnimation(hLeft_, true, false);
-	}
-	else if (localX > 0.0f && localZ > 0.0f)
-	{
-		reaction_ = DownFallingDamageReaction::Right;
-		owner_->SetAnimation(hRight_, true, false);
-	}
-	else if (localX < 0.0f && localZ < 0.0f)
-	{
-		reaction_ = DownFallingDamageReaction::Back;
-		owner_->SetAnimation(hBack_, true, false);
+		Vector3 hitPos = hitPosition.value();
+
+		Vector2 ownerDirectionXZ = Vector2(owner_->GetDirection().x, owner_->GetDirection().z).Normalize();
+		Vector2 hitDirectionXZ = Vector2(hitPos.x - owner_->GetWorldPosition().x, hitPos.z - owner_->GetWorldPosition().z).Normalize();
+
+		// 右方向ベクトルを計算する
+		Vector2 rightDirectionXZ = Vector2(ownerDirectionXZ.y, -ownerDirectionXZ.x);
+
+		// XZ平面でのローカル座標を計算する
+		float localX = -Dot(hitDirectionXZ, rightDirectionXZ);
+		float localZ = -Dot(hitDirectionXZ, ownerDirectionXZ);
+
+		// ダメージリアクションの方向を判定する
+		if (localX < 0.0f && localZ > 0.0f)
+		{
+			reaction_ = DownFallingDamageReaction::Left;
+			owner_->SetAnimation(hLeft_, true, false);
+		}
+		else if (localX > 0.0f && localZ > 0.0f)
+		{
+			reaction_ = DownFallingDamageReaction::Right;
+			owner_->SetAnimation(hRight_, true, false);
+		}
+		else if (localX < 0.0f && localZ < 0.0f)
+		{
+			reaction_ = DownFallingDamageReaction::Back;
+			owner_->SetAnimation(hBack_, true, false);
+		}
+		else
+		{
+			reaction_ = DownFallingDamageReaction::Front;
+			owner_->SetAnimation(hFront_, true, false);
+		}
 	}
 	else
 	{
+		// ヒット位置が不明な場合は、正面のダメージリアクションを再生する
 		reaction_ = DownFallingDamageReaction::Front;
 		owner_->SetAnimation(hFront_, true, false);
 	}

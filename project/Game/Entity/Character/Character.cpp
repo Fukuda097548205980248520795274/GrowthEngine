@@ -65,10 +65,10 @@ Character::Character() : Entity()
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateHeavyDamage>(this,
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front")));
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy")));
 	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
 		motionManager_->GetMotion(MotionType::DownFall, "Front"),
 		motionManager_->GetMotion(MotionType::DownFall, "Front"),
@@ -345,7 +345,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -476,60 +476,69 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// リアクションごとの処理
 		if (damageReaction == DamageReaction::LightStagger)
 		{
-			// 軽い怯みのSEを再生する
-			soundManager_->SeLightDamage();
+			if (!isThrow)
+			{
+				// 軽い怯みのSEを再生する
+				soundManager_->SeLightDamage();
 
-			// 軽い怯みのスローモーションを設定する
-			slowMotionTimeScale = 0.0f;
-			slowMotionDuration = 0.1f;
+				// 軽い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.1f;
+			}
 
 			if (!IsLightDamage())
 			{
 				// 軽い怯みの状態に遷移する
 				stateMachine_->ChangeState("LightDamage");
 				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
-					if (hitPosition)state->DamageReaction(hitPosition.value());
+					state->DamageReaction(hitPosition);
 			}
 			else
 			{
 				// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 				stateMachine_->GetCurrentState()->Enter();
 				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
-					if (hitPosition)state->DamageReaction(hitPosition.value());
+					state->DamageReaction(hitPosition);
 			}
 		}
 		else if (damageReaction == DamageReaction::HeavyStagger)
 		{
-			// 重い怯みのSEを再生する
-			soundManager_->SeHeavyDamage();
+			if (!isThrow)
+			{
+				// 重い怯みのSEを再生する
+				soundManager_->SeHeavyDamage();
 
-			// 重い怯みのスローモーションを設定する
-			slowMotionTimeScale = 0.0f;
-			slowMotionTimeScale = 0.125f;
+				// 重い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionTimeScale = 0.125f;
+			}
 
 			if (!IsHeavyDamage())
 			{
 				// 重い怯みの状態に遷移する
 				stateMachine_->ChangeState("HeavyDamage");
 				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
-					if (hitPosition)state->DamageReaction(hitPosition.value());
+					state->DamageReaction(hitPosition);
 			}
 			else
 			{
 				// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 				stateMachine_->GetCurrentState()->Enter();
 				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
-					if (hitPosition)state->DamageReaction(hitPosition.value());
+					state->DamageReaction(hitPosition);
 			}
 		}
 		else if (damageReaction == DamageReaction::Down)
 		{
-			// 重い怯みのSEを再生する
-			soundManager_->SeHeavyDamage();
+			if (!isThrow)
+			{
+				// 重い怯みのSEを再生する
+				soundManager_->SeHeavyDamage();
 
-			// ダウンのスローモーションを設定する
-			slowMotionTimeScale = 0.0f;
-			slowMotionDuration = 0.15f;
+				// ダウンのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.15f;
+			}
 
 			// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
 			if (knockDirection.y * knockback > 0.0f)
@@ -538,7 +547,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				{
 					stateMachine_->ChangeState("BlownAway");
 					if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
-						if (hitPosition)state->DamageReaction(hitPosition.value());
+						state->DamageReaction(hitPosition);
 				}
 			}
 			else
@@ -548,7 +557,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 					// ダウンの状態に遷移する
 					stateMachine_->ChangeState("DownFalling");
 					if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
-						if (hitPosition)state->DamageReaction(hitPosition.value());
+						state->DamageReaction(hitPosition);
 				}
 			}
 		}
@@ -711,11 +720,6 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// 軽い怯みのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.1f;
-
-		// 軽い怯みの状態に遷移する
-		stateMachine_->ChangeState("LightDamage");
-		if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
-			if (hitPosition)state->DamageReaction(hitPosition.value());
 	}
 	else if (damageReaction == DamageReaction::HeavyStagger)
 	{
@@ -725,11 +729,6 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// 重い怯みのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionTimeScale = 0.125f;
-
-		// 重い怯みの状態に遷移する
-		stateMachine_->ChangeState("HeavyDamage");
-		if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
-			if (hitPosition)state->DamageReaction(hitPosition.value());
 	}
 	else if (damageReaction == DamageReaction::Down)
 	{
@@ -739,11 +738,6 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		// ダウンのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.15f;
-
-		// ダウンの状態に遷移する
-		stateMachine_->ChangeState("DownFalling");
-		if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
-			if (hitPosition)state->DamageReaction(hitPosition.value());
 	}
 
 	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する

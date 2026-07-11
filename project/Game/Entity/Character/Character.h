@@ -62,7 +62,8 @@ public:
 	/// @param attacker 
 	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
-		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt, bool isGuardBreak = false);
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
+		bool isGuardBreak = false, bool isThrow = false);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 

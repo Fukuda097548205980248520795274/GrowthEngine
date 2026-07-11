@@ -157,13 +157,19 @@ void GrabStrikeAttack::Update()
 			knockBackDirection.z = right.z * knockbackDirection_.x + up.z * knockbackDirection_.y + forward.z * knockbackDirection_.z;
 			knockBackDirection = knockBackDirection.Normalize();
 
-			grabbedTarget_->OnDamage(0, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition());
+			// 相手を飛ばす用のダメージ処理を呼ぶ
+			grabbedTarget_->OnDamage(0, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition(),
+				nullptr, std::nullopt, false, true);
 
 			// Character側の掴み状態を解除する処理を呼ぶ
 			owner_->ReleaseGrab();
 		}
 
 		isReleased_ = true; // 解除済みフラグを立てる
+
+		// 攻撃を終了する
+		Attack::Update();
+		return;
 	}
 
 	// 攻撃の特定の時間帯は、攻撃者が回避または無力化されているかどうかを確認する
