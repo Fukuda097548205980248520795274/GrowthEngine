@@ -330,9 +330,17 @@ public:
 	/// @param hitPosition 
 	void ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosition = std::nullopt);
 
+	/// @brief 受け流し中かどうか
+	/// @return 
+	bool IsDeflecting() const { return stateMachine_->GetCurrentStateName() == "Deflect"; }
+
 	/// @brief 受け流されているかどうか
 	/// @return 
 	bool IsDeflected() const { return stateMachine_->GetCurrentStateName() == "Deflected"; }
+
+	/// @brief 弾き中かどうか
+	/// @return 
+	bool IsRepeling() const { return stateMachine_->GetCurrentStateName() == "Repel"; }
 
 	/// @brief 弾かれたかどうか
 	/// @return 
@@ -395,7 +403,8 @@ public:
 
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
-	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart(); }
+	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || 
+		IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart() || IsDeflecting() || IsRepeling(); }
 
 	/// @brief プレイヤー側かどうか
 	/// @return 

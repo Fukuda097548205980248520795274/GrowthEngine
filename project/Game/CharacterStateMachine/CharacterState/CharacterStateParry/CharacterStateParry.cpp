@@ -1,18 +1,18 @@
-#include "CharacterStateDeflected.h"
+#include "CharacterStateParry.h"
 #include "Entity/Character/Character.h"
 
 /// @brief コンストラクタ
 	/// @param owner 
-CharacterStateDeflected::CharacterStateDeflected(Character* owner, AnimationHandle hMotion)
+CharacterStateParry::CharacterStateParry(Character* owner, AnimationHandle hMotion)
 	: CharacterState(owner), hMotion_(hMotion)
 {
 }
 
 /// @brief この状態に入るときに呼ばれる処理
-void CharacterStateDeflected::Enter()
+void CharacterStateParry::Enter()
 {
 	// タイマーをリセットする
-	damageTimer_ = maxDamageTime_;
+	actionTimer_ = maxActionTime_;
 
 	// アニメーションを設定する
 	owner_->SetAnimation(hMotion_, true, false);
@@ -20,13 +20,13 @@ void CharacterStateDeflected::Enter()
 
 /// @brief 更新処理
 /// @param dt 
-void CharacterStateDeflected::Update(float dt)
+void CharacterStateParry::Update(float dt)
 {
 	// ダメージタイマーを更新する
-	damageTimer_ -= dt;
+	actionTimer_ -= dt;
 
 	// ダメージタイマーが0以下になったら、通常状態へ移行する
-	if (damageTimer_ <= 0.0f)
+	if (actionTimer_ <= 0.0f)
 	{
 		owner_->GetStateMachine()->ChangeState("None");
 		return;
@@ -34,7 +34,8 @@ void CharacterStateDeflected::Update(float dt)
 }
 
 /// @brief この状態からでるときに呼ばれる処理
-void CharacterStateDeflected::Exit()
+void CharacterStateParry::Exit()
 {
-
+	// タイマーをリセットする
+	actionTimer_ = maxActionTime_;
 }

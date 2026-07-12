@@ -3,13 +3,13 @@
 
 class Character;
 
-class CharacterStateDeflected : public CharacterState
+class CharacterStateParry : public CharacterState
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param owner 
-	CharacterStateDeflected(Character* owner, AnimationHandle hMotion);
+	CharacterStateParry(Character* owner, AnimationHandle hMotion);
 
 	/// @brief この状態に入るときに呼ばれる処理
 	void Enter() override;
@@ -24,11 +24,11 @@ public:
 
 private:
 
-	/// @brief ダメージ状態の最大時間
-	float maxDamageTime_ = 1.0f;
+	/// @brief アクションの最大時間
+	float maxActionTime_ = 0.2f;
 
-	// ダメージ状態のタイマー
-	float damageTimer_ = 0.0f;
+	// アクションのタイマー
+	float actionTimer_ = 0.0f;
 
 	/// @brief アニメーションハンドル
 	AnimationHandle hMotion_ = 0;

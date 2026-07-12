@@ -3,13 +3,13 @@
 
 class Character;
 
-class CharacterStateRepelled : public CharacterState
+class CharacterStateParried : public CharacterState
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param owner 
-	CharacterStateRepelled(Character* owner, AnimationHandle hMotion);
+	CharacterStateParried(Character* owner, AnimationHandle hMotion);
 
 	/// @brief この状態に入るときに呼ばれる処理
 	void Enter() override;

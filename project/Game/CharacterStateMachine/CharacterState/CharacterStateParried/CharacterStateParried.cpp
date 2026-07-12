@@ -1,15 +1,15 @@
-#include "CharacterStateRepelled.h"
+#include "CharacterStateParried.h"
 #include "Entity/Character/Character.h"
 
 /// @brief コンストラクタ
 	/// @param owner 
-CharacterStateRepelled::CharacterStateRepelled(Character* owner, AnimationHandle hMotion)
+CharacterStateParried::CharacterStateParried(Character* owner, AnimationHandle hMotion)
 	: CharacterState(owner), hMotion_(hMotion)
 {
 }
 
 /// @brief この状態に入るときに呼ばれる処理
-void CharacterStateRepelled::Enter()
+void CharacterStateParried::Enter()
 {
 	// タイマーをリセットする
 	damageTimer_ = maxDamageTime_;
@@ -20,7 +20,7 @@ void CharacterStateRepelled::Enter()
 
 /// @brief 更新処理
 /// @param dt 
-void CharacterStateRepelled::Update(float dt)
+void CharacterStateParried::Update(float dt)
 {
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
@@ -34,7 +34,8 @@ void CharacterStateRepelled::Update(float dt)
 }
 
 /// @brief この状態からでるときに呼ばれる処理
-void CharacterStateRepelled::Exit()
+void CharacterStateParried::Exit()
 {
-	
+	// タイマーをリセットする
+	damageTimer_ = maxDamageTime_;
 }

@@ -19,6 +19,8 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateParried/CharacterStateParried.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateParry/CharacterStateParry.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
@@ -27,8 +29,6 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateDownStagger/CharacterStateDownStagger.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownAway/CharacterStateBlownAway.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownFalling/CharacterStateBlownFalling.h"
-#include "CharacterStateMachine/CharacterState/CharacterStateRepelled/CharacterStateRepelled.h"
-#include "CharacterStateMachine/CharacterState/CharacterStateDeflected/CharacterStateDeflected.h"
 
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
@@ -95,8 +95,10 @@ Character::Character() : Entity()
 	stateMachine_->AddState("BlownFalling", std::make_unique<CharacterStateBlownFalling>(this,
 		motionManager_->GetMotion(MotionType::DownLying, "Front"),
 		motionManager_->GetMotion(MotionType::DownLying, "Front")));
-	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateRepelled>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
-	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateDeflected>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Repel", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Deflect", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->ChangeState("None");
 }
 
@@ -344,9 +346,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 受け流す
 			ExecuteDeflect(attacker);
 
-			// 受け流し成功モーションを設定
-			// SetAnimation(hDeflectSuccessMotion_, false, false);
-
 			// ダメージ無効
 			return false;
 		}
@@ -356,9 +355,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
-
-			// 弾き成功モーションを設定
-			// SetAnimation(hRepelSuccessMotion_, false, false);
 			
 			// ダメージ無効
 			return false;
@@ -1125,7 +1121,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1415,6 +1411,9 @@ void Character::ExecuteDeflect(Character* attacker)
 	// 引き込む位置
 	Vector3 pullPos = myPos - myForward * 0.2f;
 
+	// 受け流し状態に遷移する
+	stateMachine_->ChangeState("Deflect");
+
 	// 受け流され処理を実行
 	attacker->OnDeflected(pullPos, attacker->GetDirection(), 4.0f);
 
@@ -1436,8 +1435,13 @@ void Character::ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosi
 	// ノックバック方向を正規化する
 	pushDir = pushDir.Normalize();
 
+	// 弾き状態に遷移する
+	stateMachine_->ChangeState("Repel");
+
 	// 相手に弾きのリアクションを与える
 	attacker->OnRepelled(pushDir, 5.0f);
+
+	// 弾きのフラグを立てる
 	isHitRepel_ = true;
 
 	// 弾きのエフェクトを発生させる
