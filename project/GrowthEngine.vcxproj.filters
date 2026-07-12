@@ -1387,6 +1387,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried">
       <UniqueIdentifier>{5417c9d6-84ad-494a-9c8a-dea6e27eada3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid">
+      <UniqueIdentifier>{c56e51eb-5b78-4dc3-b3b3-b79d709b102d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2516,6 +2519,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateParried</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateAvoid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3775,6 +3781,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateParried</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateAvoid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

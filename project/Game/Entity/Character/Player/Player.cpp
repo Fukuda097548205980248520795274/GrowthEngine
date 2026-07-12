@@ -4,6 +4,8 @@
 
 #include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
 
+#include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
+
 #include <cmath>
 
 namespace
@@ -118,16 +120,8 @@ void Player::Update()
 		UpdateGuardState();
 
 		// 回避中は回避更新のみ行い、他の操作は受け付けない
-		if (isAvoid_)
+		if (IsAvoid())
 		{
-			// 回避中でも回避ボタン入力があれば次の回避を予約する
-			bool hasMoveInput = false;
-			const Vector2 moveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
-			if (isStance_ && inputController_->IsAvoidRequested())
-			{
-				ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
-			}
-
 			// アクションの更新処理
 			ActionUpdate();
 			Character::Update();
@@ -291,31 +285,6 @@ void Player::UpdateStanceState()
 	}
 
 	isStance_ = true;
-}
-
-/// @brief 連続回避を試行する
-/// @param moveInputDirection
-/// @param hasMoveInput
-/// @param cameraYaw
-void Player::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
-{
-	// 回避中でない場合は何もしない
-	if (!isAvoid_)
-	{
-		return;
-	}
-
-	// 最大連続回避回数に達している場合は連続回避できない
-	if (currentAvoidCount_ >= maxConsecutiveAvoidCount_)
-	{
-		return;
-	}
-
-	// 現在位置から次の連続回避を即時開始する
-	++currentAvoidCount_;
-
-	Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, cameraYaw);
-	StartAvoid(Vector3(avoidDirection.x, 0.0f, avoidDirection.y), 1.5f, 0.3f);
 }
 
 /// @brief ダッシュ状態を更新する

@@ -138,7 +138,7 @@ public:
 
 	/// @brief 回避しているかどうか
 	/// @return 
-	bool IsAvoid() const { return isAvoid_; }
+	bool IsAvoid() const { return stateMachine_->GetCurrentStateName() == "Avoid"; }
 
 	/// @brief 回避した瞬間かどうか
 	/// @return 
@@ -504,6 +504,14 @@ public:
 	CharacterMovement* GetMovement() const { return movement_.get(); }
 
 
+	/// @brief 回避方向を取得する
+	/// @param moveInputDirection
+	/// @param hasMoveInput
+	/// @param cameraYaw
+	/// @return
+	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
+
+
 
 
 protected:
@@ -594,41 +602,9 @@ protected:
 
 protected:
 
-	/// @brief 回避フラグ
-	bool isAvoid_ = false;
-
 	/// @brief 回避した瞬間かどうか
 	bool isJustAvoided_ = false;
 	bool isJustAvoidedPrev_ = false;
-
-	/// @brief 回避開始位置
-	Vector3 avoidStartPosition_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// @brief 回避終了位置
-	Vector3 avoidEndPosition_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// @brief 回避経過時間
-	float avoidElapsedTime_ = 0.0f;
-
-	/// @brief 回避時間
-	float avoidDuration_ = 0.3f;
-
-	/// @brief 連続回避の最大回数
-	int maxConsecutiveAvoidCount_ = 3;
-
-	/// @brief 現在の連続回避回数
-	int currentAvoidCount_ = 0;
-
-	/// @brief 回避方向を取得する
-	/// @param moveInputDirection
-	/// @param hasMoveInput
-	/// @param cameraYaw
-	/// @return
-	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
-
-	/// @brief 回避中の更新処理
-	/// @param deltaTime
-	void UpdateAvoid(float deltaTime);
 
 
 protected:

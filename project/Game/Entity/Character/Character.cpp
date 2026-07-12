@@ -21,6 +21,7 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateParried/CharacterStateParried.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateParry/CharacterStateParry.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
@@ -99,6 +100,11 @@ Character::Character() : Entity()
 	stateMachine_->AddState("Deflect", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
 	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
+		motionManager_->GetMotion(MotionType::Avoid, "avoidFront_000"),
+		motionManager_->GetMotion(MotionType::Avoid, "avoidBack_000"),
+		motionManager_->GetMotion(MotionType::Avoid, "avoidFront_000"),
+		motionManager_->GetMotion(MotionType::Avoid, "avoidBack_000")));
 	stateMachine_->ChangeState("None");
 }
 
@@ -264,10 +270,6 @@ void Character::Update()
 		return;
 	}
 
-	// 回避の更新
-	if (isAvoid_)
-		UpdateAvoid(dt);
-
 	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
@@ -324,7 +326,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	MoveStop();
 
 	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
@@ -637,7 +638,6 @@ void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDire
 	MoveStop();
 
 	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
@@ -662,7 +662,6 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 	MoveStop();
 
 	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
 	isDash_ = false;
 	bufferedAttackInput_ = AttackInputType::None;
 
@@ -873,63 +872,6 @@ void Character::RageModeInput()
 		soundManager_->SeRageModeStart();
 	}
 }
-/// @brief 回避を開始する
-/// @param direction 
-/// @param distance 
-/// @param time 
-void Character::StartAvoid(const Vector3& direction, float distance, float time)
-{
-	// 新しい連続回避の開始時に回数を初期化する
-	if (!isAvoid_ && currentAvoidCount_ == 0)
-	{
-		currentAvoidCount_ = 1;
-	}
-
-	// 回避開始時にダッシュは解除する
-	isDash_ = false;
-
-	// 回避パラメータを初期化する
-	isAvoid_ = true;
-	avoidElapsedTime_ = time;
-	avoidDuration_ = time;
-	avoidStartPosition_ = worldTransform_->translate_;
-	avoidEndPosition_ = avoidStartPosition_ + Vector3(direction.x * distance, 0.0f, direction.z * distance);
-
-	// 回避瞬間のフラグを立てる
-	isJustAvoided_ = true;
-
-	// 回避se
-	soundManager_->SeAvoid();
-
-	// 通常移動は停止して回避移動へ移行する
-	MoveStop();
-}
-
-/// @brief 回避中の更新処理
-/// @param deltaTime
-void Character::UpdateAvoid(float deltaTime)
-{
-	// 回避時間が0以下だったら処理しない
-	if (avoidDuration_ <= 0.0f)
-		return;
-
-	// 回避時間を進める
-	avoidElapsedTime_ -= deltaTime;
-
-	// 開始位置から終了位置まで線形補間で移動する
-	const float t = std::clamp<float>(1.0f - (avoidElapsedTime_ / avoidDuration_), 0.0f, 1.0f);
-	const float easeOutT = 1.0f - std::powf(1.0f - t, 3); // イーズアウト補間
-	worldTransform_->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
-
-	// 到達したら回避フラグを下ろす
-	if (t >= 1.0f)
-	{
-		// 連続回避が終了したので回避回数を回復する
-		isAvoid_ = false;
-		avoidElapsedTime_ = 0.0f;
-		currentAvoidCount_ = 0;
-	}
-}
 
 /// @brief 回避方向を取得する
 /// @param moveInputDirection
@@ -1101,6 +1043,25 @@ void Character::ActionUpdate()
 		currentAvoid_->Update();
 }
 
+/// @brief 回避を開始する
+/// @param direction 
+/// @param distance 
+/// @param time 
+void Character::StartAvoid(const Vector3& direction, float distance, float time)
+{
+	// すでに回避中の場合は、回避を開始しない
+	if (IsAvoid())return;
+
+	// 回避状態で、かつ回避方向が入力されている場合は、次の回避を予約する
+	stateMachine_->ChangeState("Avoid");
+	if (auto avoidState = static_cast<CharacterStateAvoid*>(stateMachine_->GetCurrentState()))
+	{
+		avoidState->SetAvoidDistance(distance);
+		avoidState->SetAvoidDuration(time);
+		avoidState->SetAvoidDirection(direction);
+	}
+}
+
 /// @brief アニメーションの更新
 void Character::UpdateAnimation()
 {
@@ -1121,7 +1082,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1137,54 +1098,6 @@ void Character::UpdateAnimation()
 				// 構え中は構えモーションを優先して再生する
 				if (isStance_)
 					SetAnimation(hStanceMotion_, false, true);
-
-				// 回避中は回避モーションを優先して再生する
-				if (isAvoid_)
-				{
-					// 回避方向
-					Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
-
-					if (avoidDirection.Length() > 0.0f)
-					{
-						// キャラクターの向き（前）と右方向
-						Vector3 forward = movement_->GetDirection();
-						Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
-
-						// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
-						float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
-						float localX = Dot(avoidDirection, right);   // +なら右、-なら左
-
-						// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-						if (std::abs(localZ) > std::abs(localX))
-						{
-							// 前後への回避
-							if (localZ > 0.0f)
-							{
-								// 前回避モーションを再生する
-								SetAnimation(hAvoidFrontMotion_, false, false);
-							}
-							else
-							{
-								// 後ろ回避モーションを再生する
-								SetAnimation(hAvoidBackMotion_, false, false);
-							}
-						}
-						else
-						{
-							// 左右への回避
-							if (localX > 0.0f)
-							{
-								// 右回避モーションを再生する
-								SetAnimation(hAvoidRightMotion_, false, false);
-							}
-							else
-							{
-								// 左回避モーションを再生する
-								SetAnimation(hAvoidLeftMotion_, false, false);
-							}
-						}
-					}
-				}
 			}
 
 			// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
@@ -1293,7 +1206,6 @@ void Character::OnGrabbed(Character* grabber)
 
 	// 掴まれた状態になったときの処理をここに書く
 	isDash_ = false;
-	isAvoid_ = false;
 }
 
 /// @brief 防御を実行する
@@ -1842,7 +1754,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	isDead_ = false;
 	isInAttackSequence_ = false;
 	isDash_ = false;
-	isAvoid_ = false;
 	isJustAvoided_ = false;
 	isJustAvoidedPrev_ = false;
 	isStance_ = false;

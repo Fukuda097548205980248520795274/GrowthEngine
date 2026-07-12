@@ -1112,6 +1112,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterStateMachine.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterState.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway\CharacterStateBlownAway.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling\CharacterStateBlownFalling.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling\CharacterStateDownFalling.cpp" />
@@ -1540,6 +1541,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterStateMachine.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterState.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownAway\CharacterStateBlownAway.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateBlownFalling\CharacterStateBlownFalling.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownFalling\CharacterStateDownFalling.h" />
