@@ -259,6 +259,12 @@ void Character::Update()
 		effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
 	}
 
+	// 吹き飛ばし中のエフェクトを生成する
+	if (IsBlownAway())
+	{
+		effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
+	}
+
 
 	// ステートマシンの更新
 	stateMachine_->Update(dt);
