@@ -45,6 +45,8 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 	// 初期化データを設定する
 	SetInitData(initData);
 
+	// ステートを初期化する
+	stateMachine_->ChangeState("None");
 
 	switch (characterTag_)
 	{

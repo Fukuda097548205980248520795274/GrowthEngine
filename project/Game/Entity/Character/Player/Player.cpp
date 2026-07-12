@@ -43,6 +43,9 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton,
 	// 初期化データを設定する
 	SetInitData(initData);
 
+	// ステートを初期化する
+	stateMachine_->ChangeState("None");
+
 	// 入力コントローラーを作成する
 	inputController_ = std::make_unique<PlayerInputController>();
 	inputController_->Initialize();

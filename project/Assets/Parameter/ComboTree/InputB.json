@@ -134,7 +134,7 @@
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
                 "attackTime": 0.5,
-                "damageReaction": 2,
+                "damageReaction": 3,
                 "hits": [
                     {
                         "damage": 10,
@@ -146,8 +146,8 @@
                 "knockback": 6.0,
                 "knockbackDirection": [
                     0.0,
-                    0.5,
-                    1.0
+                    1.0,
+                    0.0
                 ],
                 "moveEndTime": 0.30000001192092896,
                 "moveSpeed": 3.0,

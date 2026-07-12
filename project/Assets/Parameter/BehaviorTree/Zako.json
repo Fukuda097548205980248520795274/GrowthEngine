@@ -428,7 +428,7 @@
                         "hitTime": 0.5
                     }
                 ],
-                "isRelease": true,
+                "isRelease": false,
                 "knockback": 2.0,
                 "knockbackDirection": [
                     0.0,

@@ -5,7 +5,8 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateGrabbing::Enter()
 {
-	
+	// 掴む相手をリセットする
+	grabTarget_ = nullptr;
 }
 
 /// @brief 更新処理
