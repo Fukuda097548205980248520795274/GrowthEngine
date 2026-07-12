@@ -351,7 +351,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 float Player::GetCurrentMoveSpeed() const
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら移動速度は0
-	if (isGuard_ || IsIncapacitated())
+	if (IsGuard() || IsIncapacitated())
 		return 0.0f;
 
 	// 構え中は移動速度を半分にする
@@ -545,20 +545,10 @@ void Player::RageModeInput()
 /// @brief 防御状態を更新する
 void Player::UpdateGuardState()
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら防御状態にならない
-	if(IsGrabbing() || IsAttack() || IsIncapacitated())
-	{
-		SetGuard(false);
-		return;
-	}
+	// 既に防御中なら何もしない
+	if (IsGuard() || IsGrabbing() || IsAttack() || IsIncapacitated())return;
 
 	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
 	if(inputController_->IsGuardRequested())
-	{
-		SetGuard(true);
-	}
-	else
-	{
-		SetGuard(false);
-	}
+		ExecuteGuard();
 }

@@ -296,11 +296,10 @@ public:
 
 	/// @brief 防御しているかどうか
 	/// @return 
-	bool IsGuard() const { return isGuard_; }
+	bool IsGuard() const { return stateMachine_->GetCurrentStateName() == "Guard"; }
 
-	/// @brief 防御を設定する
-	/// @param isGuard 
-	void SetGuard(bool isGuard);
+	/// @brief 防御を実行する
+	void ExecuteGuard();
 
 	/// @brief 着地しているかどうか
 	/// @return 
@@ -643,30 +642,11 @@ protected:
 
 protected:
 
-	/// @brief 防御中かどうか
-	bool isGuard_ = false;
-
-	/// @brief 防御のリアクション中かどうか
-	bool isGuardReaction_ = false;
-
-	/// @brief 防御のリアクションの経過時間
-	float guardReactionTimer_ = 0.0f;
-
-
 	// ガードに成功したかどうか
 	bool isGuardHit_ = false;
 
 	// 前フレームでガードに成功したかどうか
 	bool isPrevGuardHit_ = false;
-
-
-protected:
-
-	// ガードしてからの経過時間
-	float guardActiveTimer_ = 0.0f;
-
-	// ジャストガード（受け流し）の受付時間
-	const float kJustGuardTime = 0.2f;
 
 
 private:
@@ -851,13 +831,6 @@ protected:
 
 	/// @brief つかまれているモーション
 	AnimationHandle hGrabbedMotion_ = 0;
-
-
-	// 防御モーション
-	AnimationHandle hGuardMotion_ = 0;
-
-	// 防御成功モーション
-	AnimationHandle hGuardHitMotion_ = 0;
 
 
 protected:

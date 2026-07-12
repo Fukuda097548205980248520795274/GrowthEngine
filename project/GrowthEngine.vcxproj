@@ -1121,6 +1121,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger\CharacterStateDownStagger.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.cpp" />
@@ -1548,6 +1549,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDownStagger\CharacterStateDownStagger.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.h" />

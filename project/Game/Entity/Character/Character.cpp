@@ -18,6 +18,7 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
@@ -61,6 +62,9 @@ Character::Character() : Entity()
 	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
 	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
 	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
+	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, 
+		motionManager_->GetMotion(MotionType::Guard, "BothHands"),
+		motionManager_->GetMotion(MotionType::Stand, "Standing")));
 	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateLightDamage>(this,
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
@@ -122,8 +126,6 @@ void Character::SetAnimationHandle(const AnimationHandleData& animData)
 	hAvoidBackMotion_ = animData.hAvoidBackMotion;
 	hAvoidLeftMotion_ = animData.hAvoidLeftMotion;
 	hAvoidRightMotion_ = animData.hAvoidRightMotion;
-	hGuardMotion_ = animData.hGuardMotion;
-	hGuardHitMotion_ = animData.hGuardHitMotion;
 }
 
 /// @brief 更新処理
@@ -260,10 +262,6 @@ void Character::Update()
 		return;
 	}
 
-	// ガードタイマーの更新
-	if (isGuard_)
-		guardActiveTimer_ += dt;
-
 	// 回避の更新
 	if (isAvoid_)
 		UpdateAvoid(dt);
@@ -273,19 +271,6 @@ void Character::Update()
 
 	/// ターゲットの方向を向く処理
 	movement_->TargetDirection(dt);
-
-	// ガードリアクション中は、攻撃してきた相手の方向を向くようにする
-	if (isGuardReaction_)
-	{
-		float diff = movement_->GetTargetRotationY() - worldTransform_->rotate_.y;
-		const float pi = std::numbers::pi_v<float>;
-
-		// 角度の正規化
-		while (diff > pi) diff -= 2.0f * pi;
-		while (diff < -pi) diff += 2.0f * pi;
-
-		worldTransform_->rotate_.y += diff * movement_->GetRotationSpeed() * dt;
-	}
 
 	// 壁接触の処理
 	WallTouchUpdate();
@@ -344,6 +329,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
+		// 防御状態のステートを取得する
+		auto guardState = static_cast<CharacterStateGuard*>(stateMachine_->GetCurrentState());
+
 		// 攻撃者をロックオンターゲットに設定する
 		if (attacker)lockOnTarget_ = attacker;
 
@@ -351,7 +339,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canDeflect_ && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteDeflect(attacker);
@@ -364,7 +352,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 
 		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
-		if (canRepel_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canRepel_ && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
@@ -389,17 +377,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 攻撃者の方向と逆方向にノックバックを加える
 		movement_->AddKnockback(-dirToAttacker * 2.0f);
 
-		// ガードリアクションのフラグを立てる
-		isGuardReaction_ = true;
-		guardReactionTimer_ = 0.0f;
+		// ガード成功の処理を行う
+		guardState->HitGuard();
 
 		// ガードse
 		soundManager_->SeGuard();
 
 		// ガードエフェクト
 		effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
-
-		SetAnimation(hGuardHitMotion_, false, true);
 
 		// ガードしたのがプレイヤーの場合は、スローモーションを開始する
 		if (IsPlayer())
@@ -717,6 +702,20 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		attacker->ChargeRageGage(damageReaction);
 	}
 
+	// ヒットエフェクト
+	if (hitPosition)
+	{
+		// エフェクトを再生する
+		effectManager_->ImpactDrop000(*hitPosition);
+		effectManager_->ImpactSmoke000(*hitPosition);
+		effectManager_->ImpactSmoke001(*hitPosition);
+		if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+		effectManager_->Impact001(*hitPosition);
+		effectManager_->Impact002(*hitPosition);
+		effectManager_->Impact003(*hitPosition);
+		effectManager_->Impact004(*hitPosition);
+		effectManager_->Impact005(*hitPosition);
+	}
 
 	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
 	float slowMotionDuration = 0.0f; // スローモーションの持続時間
@@ -1126,7 +1125,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1142,10 +1141,6 @@ void Character::UpdateAnimation()
 				// 構え中は構えモーションを優先して再生する
 				if (isStance_)
 					SetAnimation(hStanceMotion_, false, true);
-
-				// 防御の待機モーションを再生する
-				if (IsGuard())
-					SetAnimation(hGuardMotion_, true, false);
 
 				// 回避中は回避モーションを優先して再生する
 				if (isAvoid_)
@@ -1203,15 +1198,6 @@ void Character::UpdateAnimation()
 				if (IsGrabbed() && !IsGrabbedDamage())
 				{
 					SetAnimation(hGrabbedMotion_, false, true);
-				}
-				else if (isGuardReaction_)
-				{
-					// 防御成功時のノックバック中
-					guardReactionTimer_ += dt;
-					if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
-					{
-						isGuardReaction_ = false;
-					}
 				}
 				else if (IsGrabbing())
 				{
@@ -1286,11 +1272,11 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
 
-	// 掴みエフェクトを発生させる
-	if (hitPosition)
-	{
-		effectManager_->GrabImpact000(*hitPosition);
-	}
+	//// 掴みエフェクトを発生させる
+	//if (hitPosition)
+	//{
+	//	effectManager_->GrabImpact000(*hitPosition);
+	//}
 	
 	// 掴みSEを再生する
 	soundManager_->SeGrab();
@@ -1310,17 +1296,18 @@ void Character::OnGrabbed(Character* grabber)
 	}
 
 	// 掴まれた状態になったときの処理をここに書く
-	isGuard_ = false;
 	isDash_ = false;
 	isAvoid_ = false;
 }
 
-/// @brief 防御を設定する
-/// @param isGuard 
-void Character::SetGuard(bool isGuard)
+/// @brief 防御を実行する
+void Character::ExecuteGuard()
 {
-	if (isGuard && !isGuard_) guardActiveTimer_ = 0.0f; // ガードした瞬間にリセット
-	isGuard_ = isGuard;
+	// 既に防御中の場合は処理しない
+	if (IsGuard())return;
+
+	// 防御状態に遷移する
+	stateMachine_->ChangeState("Guard");
 }
 
 /// @brief 掴んでいる相手を取得する
@@ -1856,8 +1843,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	isJustAvoidedPrev_ = false;
 	isStance_ = false;
 	canLockOnWithoutStance_ = false;
-	isGuard_ = false;
-	isGuardReaction_ = false;
 	isGuardHit_ = false;
 	isPrevGuardHit_ = false;
 	canDeflect_ = false;
@@ -1925,8 +1910,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hAvoidBackMotion_ = initData.hAvoidBackMotion;
 	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
 	hAvoidRightMotion_ = initData.hAvoidRightMotion;
-	hGuardMotion_ = initData.hGuardMotion;
-	hGuardHitMotion_ = initData.hGuardHitMotion;
 
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");

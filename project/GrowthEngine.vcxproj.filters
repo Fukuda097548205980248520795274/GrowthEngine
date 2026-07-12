@@ -1384,6 +1384,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing">
       <UniqueIdentifier>{93ce8db0-9a8c-4841-876a-1cbafd27399e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard">
+      <UniqueIdentifier>{a94c9c58-1455-45cb-b300-0b189e295046}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2510,6 +2513,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGuard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3766,6 +3772,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateGuard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

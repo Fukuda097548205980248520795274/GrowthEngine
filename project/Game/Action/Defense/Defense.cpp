@@ -1,5 +1,6 @@
 #include "Defense.h"
 #include "Entity/Character/Character.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
 
 void Defense::Exec()
 {
@@ -7,23 +8,20 @@ void Defense::Exec()
 	BreakpointOnExec();
 
     Action::Exec();
-    owner_->SetGuard(true); // キャラクターを防御状態にする
-    guardTimer_ = 0.0f;
-}
+    
+	// ガード状態に変更する
+	owner_->GetStateMachine()->ChangeState("Guard");
+	if (auto state = static_cast<CharacterStateGuard*>(owner_->GetStateMachine()->GetCurrentState()))
+	{
+		state->SetGuardDuration(guardDuration_);
 
-void Defense::Update()
-{
-	// ブレークポイントのチェック
-	BreakpointOnUpdate();
+		// 成功
+		Update();
+		return;
+	}
 
-    guardTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale();
-
-    // 一定時間ガードしたら終了
-    if (guardTimer_ >= guardDuration_)
-    {
-        owner_->SetGuard(false);
-        Action::Update(); // 成功フラグを立ててExit()を呼ぶ
-    }
+	// 失敗
+	Exit();
 }
 
 void Defense::Exit()
@@ -31,6 +29,5 @@ void Defense::Exit()
 	// ブレークポイントのチェック
 	BreakpointOnExit();
 
-    owner_->SetGuard(false); // 念のため解除
     Action::Exit();
 }
