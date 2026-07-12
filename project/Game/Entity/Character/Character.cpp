@@ -101,10 +101,10 @@ Character::Character() : Entity()
 	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
 	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
-		motionManager_->GetMotion(MotionType::Avoid, "avoidFront_000"),
-		motionManager_->GetMotion(MotionType::Avoid, "avoidBack_000"),
-		motionManager_->GetMotion(MotionType::Avoid, "avoidFront_000"),
-		motionManager_->GetMotion(MotionType::Avoid, "avoidBack_000")));
+		motionManager_->GetMotion(MotionType::Avoid, "Front"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back")));
 	stateMachine_->ChangeState("None");
 }
 
