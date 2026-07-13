@@ -356,6 +356,8 @@ private:
 	std::unique_ptr<Sprite> tutorialStrongAttackText_ = nullptr;
 	std::unique_ptr<Sprite> tutorialGrabText_ = nullptr;
 	std::unique_ptr<Sprite> tutorialGuardText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialComboText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialAvoidText_ = nullptr;
 	
 	std::unique_ptr<Sprite> xButtonSprite_ = nullptr;
 	std::unique_ptr<Sprite> yButtonSprite_ = nullptr;
@@ -365,6 +367,7 @@ private:
 	std::unique_ptr<Sprite> lbButtonSprite_ = nullptr;
 	std::unique_ptr<Sprite> rtButtonSprite_ = nullptr;
 	std::unique_ptr<Sprite> ltButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> comboButtonSprite_ = nullptr;
 
 	/// @brief スティックのスプライト
 	std::unique_ptr<Sprite> lStickSprite_ = nullptr;

@@ -815,6 +815,54 @@
             "scaleY": 1.0,
             "scaleZ": 7.978548526763916,
             "subType": 2
+        },
+        {
+            "category": 1,
+            "eventStageDataFileName": "",
+            "eventType": 5,
+            "name": "",
+            "posX": 0.019999999552965164,
+            "posY": 0.699999988079071,
+            "posZ": 62.599998474121094,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 3.609999895095825,
+            "scaleY": 1.0,
+            "scaleZ": 11.449999809265137,
+            "subType": 3
+        },
+        {
+            "category": 1,
+            "eventStageDataFileName": "",
+            "eventType": 8,
+            "name": "",
+            "posX": 17.5,
+            "posY": 0.699999988079071,
+            "posZ": 91.0530014038086,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 20.969999313354492,
+            "scaleY": 1.0,
+            "scaleZ": 8.890000343322754,
+            "subType": 3
+        },
+        {
+            "category": 1,
+            "eventStageDataFileName": "",
+            "eventType": 7,
+            "name": "",
+            "posX": 33.31610107421875,
+            "posY": 0.699999988079071,
+            "posZ": 51.286720275878906,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 17.306873321533203,
+            "scaleY": 1.0,
+            "scaleZ": 13.787460327148438,
+            "subType": 3
         }
     ]
 }

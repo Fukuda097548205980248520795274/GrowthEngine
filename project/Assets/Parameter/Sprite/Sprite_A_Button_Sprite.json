@@ -1,5 +1,5 @@
 {
-    "Sprite_Tutorial_Strong_Attack_Text_Sprite": {
+    "Sprite_A_Button_Sprite": {
         "BlendMode": 1,
         "Material_Color": [
             1.0,
@@ -17,23 +17,23 @@
             0.0
         ],
         "ScreenAnchor": 7,
-        "Texture": "./Assets/Textures/strongAttack_text.png",
+        "Texture": "./Assets/Textures/a_button.png",
         "Texture_Anchor": [
-            1.0,
+            0.5,
             0.5
         ],
         "Texture_Size": [
-            544.0,
-            228.0
+            128.0,
+            128.0
         ],
         "Transform_Rotate": 0.0,
         "Transform_Scale": [
-            0.30000001192092896,
-            0.30000001192092896
+            0.5,
+            0.5
         ],
         "Transform_Translate": [
-            -41.630001068115234,
-            80.0
+            30.0,
+            120.0
         ]
     }
 }

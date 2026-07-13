@@ -16,7 +16,7 @@
             0.0,
             0.0
         ],
-        "ScreenAnchor": 6,
+        "ScreenAnchor": 7,
         "Texture": "./Assets/Textures/x_button.png",
         "Texture_Anchor": [
             0.5,
@@ -32,8 +32,8 @@
             0.5
         ],
         "Transform_Translate": [
-            680.0,
-            161.88999938964844
+            30.0,
+            160.0
         ]
     }
 }

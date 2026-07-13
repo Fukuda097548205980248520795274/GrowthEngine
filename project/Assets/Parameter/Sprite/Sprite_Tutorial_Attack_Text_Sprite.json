@@ -16,10 +16,10 @@
             0.0,
             0.0
         ],
-        "ScreenAnchor": 6,
+        "ScreenAnchor": 7,
         "Texture": "./Assets/Textures/attack_text.png",
         "Texture_Anchor": [
-            0.5,
+            1.0,
             0.5
         ],
         "Texture_Size": [
@@ -32,8 +32,8 @@
             0.30000001192092896
         ],
         "Transform_Translate": [
-            562.3300170898438,
-            161.4600067138672
+            -30.0,
+            160.0
         ]
     }
 }

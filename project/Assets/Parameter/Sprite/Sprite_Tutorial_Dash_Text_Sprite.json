@@ -16,10 +16,10 @@
             0.0,
             0.0
         ],
-        "ScreenAnchor": 6,
+        "ScreenAnchor": 7,
         "Texture": "./Assets/Textures/dash_text.png",
         "Texture_Anchor": [
-            0.5,
+            1.0,
             0.5
         ],
         "Texture_Size": [
@@ -32,8 +32,8 @@
             1.0
         ],
         "Transform_Translate": [
-            562.77001953125,
-            63.650001525878906
+            -30.0,
+            120.0
         ]
     }
 }

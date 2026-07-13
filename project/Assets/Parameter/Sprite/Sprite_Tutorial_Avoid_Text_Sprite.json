@@ -1,5 +1,5 @@
 {
-    "Sprite_Tutorial_Strong_Attack_Text_Sprite": {
+    "Sprite_Tutorial_Avoid_Text_Sprite": {
         "BlendMode": 1,
         "Material_Color": [
             1.0,
@@ -17,14 +17,14 @@
             0.0
         ],
         "ScreenAnchor": 7,
-        "Texture": "./Assets/Textures/strongAttack_text.png",
+        "Texture": "./Assets/Textures/avoid_text.png",
         "Texture_Anchor": [
             1.0,
             0.5
         ],
         "Texture_Size": [
-            544.0,
-            228.0
+            384.0,
+            288.0
         ],
         "Transform_Rotate": 0.0,
         "Transform_Scale": [
@@ -32,8 +32,8 @@
             0.30000001192092896
         ],
         "Transform_Translate": [
-            -41.630001068115234,
-            80.0
+            -30.0,
+            120.0
         ]
     }
 }

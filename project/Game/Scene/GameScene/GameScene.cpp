@@ -313,6 +313,11 @@ void GameScene::Initialize()
 			stickTutorial_->Draw();
 			dashTutorial_->Draw();
 			attackTutorial_->Draw();
+			comboTutorial_->Draw();
+			grabTutorial_->Draw();
+			guardTutorial_->Draw();
+			avoidTutorial_->Draw();
+
 		}
 	);
 
@@ -1183,6 +1188,8 @@ void GameScene::LoadHUDs()
 	tutorialStrongAttackText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/strongAttack_text.png"), "Tutorial_Strong_Attack_Text_Sprite");
 	tutorialGrabText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/grab_text.png"), "Tutorial_Grab_Text_Sprite");
 	tutorialGuardText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/guard_text.png"), "Tutorial_Guard_Text_Sprite");
+	tutorialComboText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/combo_text.png"), "Tutorial_Combo_Text_Sprite");
+	tutorialAvoidText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/avoid_text.png"), "Tutorial_Avoid_Text_Sprite");
 
 	// ボタンの画像
 	xButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), "X_Button_Sprite");
@@ -1193,6 +1200,8 @@ void GameScene::LoadHUDs()
 	lbButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), "LB_Button_Sprite");
 	rtButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/rt_button.png"), "RT_Button_Sprite");
 	ltButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/lt_button.png"), "LT_Button_Sprite");
+	comboButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/combo_button.png"), "Combo_Button_Sprite");
+
 
 	// スティックの画像
 	lStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/l_stick.png"), "L_Stick_Sprite");
@@ -1218,11 +1227,25 @@ void GameScene::LoadHUDs()
 	attackTutorial_->AddSprite(tutorialStrongAttackText_.get());
 	attackTutorial_->AddSprite(yButtonSprite_.get());
 
+	// コンボ操作のチュートリアルを生成する
 	comboTutorial_ = std::make_unique<Tutorial>();
+	comboTutorial_->AddSprite(tutorialComboText_.get());
+	comboTutorial_->AddSprite(comboButtonSprite_.get());
+
+	// 掴み操作のチュートリアルを生成する
 	grabTutorial_ = std::make_unique<Tutorial>();
+	grabTutorial_->AddSprite(tutorialGrabText_.get());
+	grabTutorial_->AddSprite(aButtonSprite_.get());
 
+	// ガード操作のチュートリアルを生成する
 	guardTutorial_ = std::make_unique<Tutorial>();
+	guardTutorial_->AddSprite(tutorialGuardText_.get());
+	guardTutorial_->AddSprite(lbButtonSprite_.get());
 
+	// 回避操作のチュートリアルを生成する
 	avoidTutorial_ = std::make_unique<Tutorial>();
+	avoidTutorial_->AddSprite(tutorialAvoidText_.get());
+	avoidTutorial_->AddSprite(aButtonSprite_.get());
+
 	rageTutorial_ = std::make_unique<Tutorial>();
 }
