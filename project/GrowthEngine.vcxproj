@@ -1122,8 +1122,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.cpp" />
-    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.cpp" />
-    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDamage\CharacterStateDamage.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateParry\CharacterStateParry.cpp" />
@@ -1551,8 +1550,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbed\CharacterStateGrabbed.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGrabbing\CharacterStateGrabbing.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateGuard\CharacterStateGuard.h" />
-    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateHeavyDamage\CharacterStateHeavyDamage.h" />
-    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateLightDamage\CharacterStateLightDamage.h" />
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDamage\CharacterStateDamage.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateParry\CharacterStateParry.h" />

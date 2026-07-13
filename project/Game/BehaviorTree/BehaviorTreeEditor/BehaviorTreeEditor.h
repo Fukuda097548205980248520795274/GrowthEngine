@@ -152,6 +152,10 @@ private:
 	/// @param node 
 	void SetNodeWindowCenter(const EditorNode& node);
 
+	/// @brief ルートノードのIDを取得する関数
+	/// @return 
+	int FindRootNodeId() const;
+
 
 private:
 

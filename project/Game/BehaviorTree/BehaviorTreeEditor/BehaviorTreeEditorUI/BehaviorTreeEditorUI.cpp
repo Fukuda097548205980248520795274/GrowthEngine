@@ -114,6 +114,16 @@ void BehaviorTreeEditor::DrawNodeTable()
 			// 変更があったのでフラグを立てる
 			isDirty_ = true;
 		}
+
+		// Homeキー または Ctrl + F でルートノードにカメラを移動
+		if (ImGui::IsKeyPressed(ImGuiKey_Home) || (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_F)))
+		{
+			int rootId = FindRootNodeId();
+			if (rootId != -1)
+			{
+				ImNodes::EditorContextMoveToNode(rootId);
+			}
+		}
 	}
 
 
@@ -240,6 +250,9 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 
 	// --- ノード自動整列の表示 ---
 	ImGui::Text("Ctrl + Shift + N : ノード自動整列");
+
+	// --- ルートノードにカメラを移動 ---
+	ImGui::Text("Ctrl + F : ルートノードにカメラを移動");
 
 	ImGui::Separator();
 

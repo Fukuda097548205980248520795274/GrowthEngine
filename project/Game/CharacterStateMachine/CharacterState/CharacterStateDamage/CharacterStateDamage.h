@@ -1,16 +1,14 @@
 #pragma once
 #include "../CharacterState.h"
 
-class SoundManager;
-class EffectManager;
 class Character;
 
-class CharacterStateHeavyDamage : public CharacterState
+class CharacterStateDamage : public CharacterState
 {
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class HeavyDamageReaction
+	enum class LightDamageReaction
 	{
 		None,
 		Front,
@@ -24,7 +22,7 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param owner 
-	CharacterStateHeavyDamage(Character* owner, AnimationHandle hFront, AnimationHandle hBack, AnimationHandle hLeft, AnimationHandle hRight);
+	CharacterStateDamage(Character* owner, AnimationHandle hFront, AnimationHandle hBack, AnimationHandle hLeft, AnimationHandle hRight, float maxDamageTime = 0.5f);
 
 	/// @brief この状態に入るときに呼ばれる処理
 	void Enter() override;
@@ -40,14 +38,18 @@ public:
 	/// @param hitPosition 
 	void DamageReaction(const std::optional<Vector3>& hitPosition);
 
+	/// @brief ダメージ時間の最大値を設定する
+	/// @param maxDamageTime 
+	void SetMaxDamageTime(float maxDamageTime) { maxDamageTime_ = maxDamageTime; }
+
 
 private:
 
 	/// @brief アクション
-	HeavyDamageReaction reaction_ = HeavyDamageReaction::None;
+	LightDamageReaction reaction_ = LightDamageReaction::None;
 
 	/// @brief ダメージ状態の最大時間
-	float maxDamageTime_ = 1.5f;
+	float maxDamageTime_ = 0.5f;
 
 	// ダメージ状態のタイマー
 	float damageTimer_ = 0.0f;
@@ -57,14 +59,5 @@ private:
 	AnimationHandle hBack_ = 0;
 	AnimationHandle hLeft_ = 0;
 	AnimationHandle hRight_ = 0;
-
-
-private:
-
-	/// @brief サウンドマネージャー
-	SoundManager* soundManager_ = nullptr;
-
-	/// @brief エフェクトマネージャー
-	EffectManager* effectManager_ = nullptr;
 };
 

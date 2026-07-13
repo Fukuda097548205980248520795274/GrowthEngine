@@ -1,24 +1,31 @@
-#include "CharacterStateHeavyDamage.h"
+#include "CharacterStateDamage.h"
 #include "Entity/Character/Character.h"
 
 /// @brief コンストラクタ
 	/// @param owner 
-CharacterStateHeavyDamage::CharacterStateHeavyDamage(Character* owner, AnimationHandle hFront, AnimationHandle hBack, AnimationHandle hLeft, AnimationHandle hRight)
-	: CharacterState(owner), hFront_(hFront), hBack_(hBack), hLeft_(hLeft), hRight_(hRight)
+CharacterStateDamage::CharacterStateDamage(Character* owner, AnimationHandle hFront, AnimationHandle hBack, AnimationHandle hLeft, AnimationHandle hRight, float maxDamageTime)
+	: CharacterState(owner), hFront_(hFront), hBack_(hBack), hLeft_(hLeft), hRight_(hRight), maxDamageTime_(maxDamageTime)
 {
-	
 }
 
 /// @brief この状態に入るときに呼ばれる処理
-void CharacterStateHeavyDamage::Enter()
+void CharacterStateDamage::Enter()
 {
-	// ダメージタイマーをリセットする
-	damageTimer_ = maxDamageTime_;
+	// プレイヤーとボス以外のキャラクター、または攻撃中でない場合は、ダメージタイマーをリセットする
+	if ((!owner_->IsPlayer() && !owner_->IsBoss()) || !owner_->IsAttack())
+	{
+		// ダメージタイマーをリセットする
+		damageTimer_ = maxDamageTime_;
+	}
+	else
+	{
+		damageTimer_ = 0.0f;
+	}
 }
 
 /// @brief 更新処理
 /// @param dt 
-void CharacterStateHeavyDamage::Update(float dt)
+void CharacterStateDamage::Update(float dt)
 {
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
@@ -32,19 +39,27 @@ void CharacterStateHeavyDamage::Update(float dt)
 }
 
 /// @brief この状態からでるときに呼ばれる処理
-void CharacterStateHeavyDamage::Exit()
+void CharacterStateDamage::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = HeavyDamageReaction::None;
+	reaction_ = LightDamageReaction::None;
 }
 
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateHeavyDamage::DamageReaction(const std::optional<Vector3>& hitPosition)
+void CharacterStateDamage::DamageReaction(const std::optional<Vector3>& hitPosition)
 {
+	// 既にタイマーが0以下の場合は、ここで終了する
+	if (damageTimer_ <= 0.0f)
+	{
+		owner_->GetStateMachine()->ChangeState("None");
+		return;
+	}
+
+
 	/*----------------------
-		向きによる種類分け
+	    向きによる種類分け
 	----------------------*/
 
 	if (hitPosition)
@@ -64,29 +79,29 @@ void CharacterStateHeavyDamage::DamageReaction(const std::optional<Vector3>& hit
 		// ダメージリアクションの方向を判定する
 		if (localX < 0.0f && localZ > 0.0f)
 		{
-			reaction_ = HeavyDamageReaction::Left;
+			reaction_ = LightDamageReaction::Left;
 			owner_->SetAnimation(hLeft_, true, false);
 		}
 		else if (localX > 0.0f && localZ > 0.0f)
 		{
-			reaction_ = HeavyDamageReaction::Right;
+			reaction_ = LightDamageReaction::Right;
 			owner_->SetAnimation(hRight_, true, false);
 		}
 		else if (localX < 0.0f && localZ < 0.0f)
 		{
-			reaction_ = HeavyDamageReaction::Back;
+			reaction_ = LightDamageReaction::Back;
 			owner_->SetAnimation(hBack_, true, false);
 		}
 		else
 		{
-			reaction_ = HeavyDamageReaction::Front;
+			reaction_ = LightDamageReaction::Front;
 			owner_->SetAnimation(hFront_, true, false);
 		}
 	}
 	else
 	{
-		// ヒット位置が不明な場合は、正面のダメージリアクションを再生する
-		reaction_ = HeavyDamageReaction::Front;
+		// hitPositionがない場合は、正面のリアクションをデフォルトとして設定する
+		reaction_ = LightDamageReaction::Front;
 		owner_->SetAnimation(hFront_, true, false);
 	}
 }

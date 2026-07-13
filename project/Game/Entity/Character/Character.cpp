@@ -22,8 +22,7 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateParried/CharacterStateParried.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateParry/CharacterStateParry.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
-#include "CharacterStateMachine/CharacterState/CharacterStateLightDamage/CharacterStateLightDamage.h"
-#include "CharacterStateMachine/CharacterState/CharacterStateHeavyDamage/CharacterStateHeavyDamage.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDamage/CharacterStateDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownLying/CharacterStateDownLying.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownGettingUp/CharacterStateDownGettingUp.h"
@@ -66,16 +65,16 @@ Character::Character() : Entity()
 	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, 
 		motionManager_->GetMotion(MotionType::Guard, "BothHands"),
 		motionManager_->GetMotion(MotionType::Stand, "Standing")));
-	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateLightDamage>(this,
+	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateDamage>(this,
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front")));
-	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateHeavyDamage>(this,
+	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateDamage>(this,
 		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
 		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy")));
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"), 1.5f));
 	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
 		motionManager_->GetMotion(MotionType::DownFall, "Front"),
 		motionManager_->GetMotion(MotionType::DownFall, "Front"),
@@ -488,14 +487,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				// 軽い怯みの状態に遷移する
 				stateMachine_->ChangeState("LightDamage");
-				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction(hitPosition);
 			}
 			else
 			{
 				// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 				stateMachine_->GetCurrentState()->Enter();
-				if (auto state = dynamic_cast<CharacterStateLightDamage*>(stateMachine_->GetCurrentState()))
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction(hitPosition);
 			}
 		}
@@ -515,14 +514,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				// 重い怯みの状態に遷移する
 				stateMachine_->ChangeState("HeavyDamage");
-				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction(hitPosition);
 			}
 			else
 			{
 				// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 				stateMachine_->GetCurrentState()->Enter();
-				if (auto state = dynamic_cast<CharacterStateHeavyDamage*>(stateMachine_->GetCurrentState()))
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction(hitPosition);
 			}
 		}
