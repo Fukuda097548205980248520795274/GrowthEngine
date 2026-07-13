@@ -33,13 +33,13 @@ void CharacterStateBlownFalling::Update(float dt)
 		if (auto nextState = static_cast<CharacterStateDownLying*>(stateMachine->GetState("DownLying")))
 		{
 			// ダメージリアクションの方向を設定する
-			if (reaction_ == BlownFallingDamageReaction::Front)
+			if (reaction_ == DamageReactionType::Front)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Front);
 			}
-			else if (reaction_ == BlownFallingDamageReaction::Back)
+			else if (reaction_ == DamageReactionType::Back)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Back);
 			}
 		}
 
@@ -57,23 +57,23 @@ void CharacterStateBlownFalling::Update(float dt)
 void CharacterStateBlownFalling::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = BlownFallingDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateBlownFalling::DamageReaction(BlownFallingDamageReaction reaction)
+void CharacterStateBlownFalling::DamageReaction(DamageReactionType reaction)
 {
 	// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
 	reaction_ = reaction;
 
 	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-	if (reaction_ == BlownFallingDamageReaction::Back)
+	if (reaction_ == DamageReactionType::Back)
 	{
 		owner_->SetAnimation(hBack_, true, false);
 	}
-	else if (reaction_ == BlownFallingDamageReaction::Front)
+	else if (reaction_ == DamageReactionType::Front)
 	{
 		owner_->SetAnimation(hFront_, true, false);
 	}
@@ -83,15 +83,15 @@ void CharacterStateBlownFalling::DamageReaction(BlownFallingDamageReaction react
 void CharacterStateBlownFalling::DamageReaction()
 {
 	// 何も設定されていない場合は、前方向のリアクションを設定する
-	if (reaction_ == BlownFallingDamageReaction::None)
-		reaction_ = BlownFallingDamageReaction::Front;
+	if (reaction_ == DamageReactionType::None)
+		reaction_ = DamageReactionType::Front;
 
 	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-	if (reaction_ == BlownFallingDamageReaction::Back)
+	if (reaction_ == DamageReactionType::Back)
 	{
 		owner_->SetAnimation(hBack_, true, false);
 	}
-	else if (reaction_ == BlownFallingDamageReaction::Front)
+	else if (reaction_ == DamageReactionType::Front)
 	{
 		owner_->SetAnimation(hFront_, true, false);
 	}

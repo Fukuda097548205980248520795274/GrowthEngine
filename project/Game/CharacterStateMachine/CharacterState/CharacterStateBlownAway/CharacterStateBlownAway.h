@@ -8,7 +8,7 @@ class CharacterStateBlownAway : public CharacterState
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class BlownAwayDamageReaction
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -40,7 +40,7 @@ public:
 private:
 
 	/// @brief アクション
-	BlownAwayDamageReaction reaction_ = BlownAwayDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief アニメーションハンドル
 	AnimationHandle hFront_ = 0;

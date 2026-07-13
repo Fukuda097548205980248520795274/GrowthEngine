@@ -7,8 +7,8 @@ class CharacterStateDamage : public CharacterState
 {
 public:
 
-	/// @brief 軽い怯みの種類
-	enum class LightDamageReaction
+	/// @brief 怯みの種類
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -46,7 +46,7 @@ public:
 private:
 
 	/// @brief アクション
-	LightDamageReaction reaction_ = LightDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief ダメージ状態の最大時間
 	float maxDamageTime_ = 0.5f;

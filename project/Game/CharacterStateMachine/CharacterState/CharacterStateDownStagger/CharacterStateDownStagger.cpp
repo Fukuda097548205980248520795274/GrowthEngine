@@ -32,13 +32,13 @@ void CharacterStateDownStagger::Update(float dt)
 		if (auto nextState = dynamic_cast<CharacterStateDownLying*>(stateMachine->GetState("DownLying")))
 		{
 			// ダメージリアクションを設定する
-			if (reaction_ == DownStaggerDamageReaction::Front)
+			if (reaction_ == DamageReactionType::Front)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Front);
 			}
-			else if (reaction_ == DownStaggerDamageReaction::Back)
+			else if (reaction_ == DamageReactionType::Back)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Back);
 			}
 		}
 
@@ -53,22 +53,22 @@ void CharacterStateDownStagger::Update(float dt)
 void CharacterStateDownStagger::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = DownStaggerDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateDownStagger::DamageReaction(DownStaggerDamageReaction reaction)
+void CharacterStateDownStagger::DamageReaction(DamageReactionType reaction)
 {
 	// ダメージリアクションを設定する
 	reaction_ = reaction;
-	if (reaction_ == DownStaggerDamageReaction::Front)
+	if (reaction_ == DamageReactionType::Front)
 	{
 		// 前向きのアニメーションを再生する
 		owner_->SetAnimation(hFront_, true, false);
 	}
-	else if (reaction_ == DownStaggerDamageReaction::Back)
+	else if (reaction_ == DamageReactionType::Back)
 	{
 		// 後ろ向きのアニメーションを再生する
 		owner_->SetAnimation(hBack_, true, false);

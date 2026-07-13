@@ -9,7 +9,7 @@ class CharacterStateDownFalling : public CharacterState
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class DownFallingDamageReaction
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -44,7 +44,7 @@ public:
 private:
 
 	/// @brief アクション
-	DownFallingDamageReaction reaction_ = DownFallingDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief ダメージ状態の最大時間
 	float maxDamageTime_ = 1.0f;

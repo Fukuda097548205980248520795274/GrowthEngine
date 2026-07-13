@@ -8,7 +8,7 @@ class CharacterStateDownGettingUp : public CharacterState
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class DownLyingDamageReaction
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -35,13 +35,13 @@ public:
 	/// @brief ダメージリアクションを起こす
 	/// @param hitPosition 
 	/// @param attacker 
-	void DamageReaction(DownLyingDamageReaction reaction);
+	void DamageReaction(DamageReactionType reaction);
 
 
 private:
 
 	/// @brief アクション
-	DownLyingDamageReaction reaction_ = DownLyingDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief ダメージ状態の最大時間
 	float maxDamageTime_ = 1.0f;

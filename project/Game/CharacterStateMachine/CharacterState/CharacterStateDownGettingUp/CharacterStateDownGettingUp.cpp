@@ -36,22 +36,22 @@ void CharacterStateDownGettingUp::Update(float dt)
 void CharacterStateDownGettingUp::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = DownLyingDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateDownGettingUp::DamageReaction(DownLyingDamageReaction reaction)
+void CharacterStateDownGettingUp::DamageReaction(DamageReactionType reaction)
 {
 	// ダメージリアクションを設定する
 	reaction_ = reaction;
-	if (reaction_ == DownLyingDamageReaction::Front)
+	if (reaction_ == DamageReactionType::Front)
 	{
 		// 前向きのアニメーションを再生する
 		owner_->SetAnimation(hFront_, true, false);
 	}
-	else if (reaction_ == DownLyingDamageReaction::Back)
+	else if (reaction_ == DamageReactionType::Back)
 	{
 		// 後ろ向きのアニメーションを再生する
 		owner_->SetAnimation(hBack_, true, false);

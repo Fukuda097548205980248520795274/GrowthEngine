@@ -440,6 +440,35 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 軽い怯みのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.1f;
+
+		if (!IsDownStagger() && IsDownLying())
+		{
+			auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetState("DownStagger"));
+			if (auto lyingState = static_cast<CharacterStateDownLying*>(stateMachine_->GetCurrentState()))
+			{
+				// ダウン状態のリアクションを取得する
+				CharacterStateDownStagger::DamageReactionType staggerReaction = CharacterStateDownStagger::DamageReactionType::None;
+
+				// ダウン状態のリアクションに応じて、ダウン怯み状態のリアクションを設定する
+				if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Front)
+					staggerReaction = CharacterStateDownStagger::DamageReactionType::Front;
+				else if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Back)
+					staggerReaction = CharacterStateDownStagger::DamageReactionType::Back;
+
+				// ダウン怯み状態に遷移する
+				stateMachine_->ChangeState("DownStagger");
+				staggerState->DamageReaction(staggerReaction);
+			}
+		}
+		else if(IsDownStagger())
+		{
+			// すでにダウン怯み状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+			if (auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetCurrentState()))
+			{
+				staggerState->Enter();
+				staggerState->DamageReaction(staggerState->GetDamageReaction());
+			}
+		}
 	}
 	else if (IsBlownAway() || IsBlownFalling())
 	{

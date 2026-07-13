@@ -19,6 +19,9 @@ public:
 	/// @return 
 	Node* GetRoot() const { return root_.get(); }
 
+	/// @brief 中断処理
+	void Abort() { if (root_) root_->Abort(); }
+
 protected:
 
 	/// @brief ルートノード

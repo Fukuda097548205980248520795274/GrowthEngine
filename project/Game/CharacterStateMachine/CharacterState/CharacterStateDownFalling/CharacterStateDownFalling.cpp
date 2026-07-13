@@ -33,13 +33,13 @@ void CharacterStateDownFalling::Update(float dt)
 		if (auto nextState = static_cast<CharacterStateDownLying*>(stateMachine->GetState("DownLying")))
 		{
 			// ダメージリアクションの方向を設定する
-			if (reaction_ == DownFallingDamageReaction::Front || reaction_ == DownFallingDamageReaction::Right)
+			if (reaction_ == DamageReactionType::Front || reaction_ == DamageReactionType::Right)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Front);
 			}
-			else if (reaction_ == DownFallingDamageReaction::Back || reaction_ == DownFallingDamageReaction::Left)
+			else if (reaction_ == DamageReactionType::Back || reaction_ == DamageReactionType::Left)
 			{
-				nextState->DamageReaction(CharacterStateDownLying::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownLying::DamageReactionType::Back);
 			}
 		}
 
@@ -57,7 +57,7 @@ void CharacterStateDownFalling::Update(float dt)
 void CharacterStateDownFalling::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = DownFallingDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
@@ -86,29 +86,29 @@ void CharacterStateDownFalling::DamageReaction(const std::optional<Vector3>& hit
 		// ダメージリアクションの方向を判定する
 		if (localX < 0.0f && localZ > 0.0f)
 		{
-			reaction_ = DownFallingDamageReaction::Left;
+			reaction_ = DamageReactionType::Left;
 			owner_->SetAnimation(hLeft_, true, false);
 		}
 		else if (localX > 0.0f && localZ > 0.0f)
 		{
-			reaction_ = DownFallingDamageReaction::Right;
+			reaction_ = DamageReactionType::Right;
 			owner_->SetAnimation(hRight_, true, false);
 		}
 		else if (localX < 0.0f && localZ < 0.0f)
 		{
-			reaction_ = DownFallingDamageReaction::Back;
+			reaction_ = DamageReactionType::Back;
 			owner_->SetAnimation(hBack_, true, false);
 		}
 		else
 		{
-			reaction_ = DownFallingDamageReaction::Front;
+			reaction_ = DamageReactionType::Front;
 			owner_->SetAnimation(hFront_, true, false);
 		}
 	}
 	else
 	{
 		// ヒット位置が不明な場合は、正面のダメージリアクションを再生する
-		reaction_ = DownFallingDamageReaction::Front;
+		reaction_ = DamageReactionType::Front;
 		owner_->SetAnimation(hFront_, true, false);
 	}
 }

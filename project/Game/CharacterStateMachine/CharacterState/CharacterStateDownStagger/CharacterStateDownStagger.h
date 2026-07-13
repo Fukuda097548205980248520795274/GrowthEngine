@@ -8,7 +8,7 @@ class CharacterStateDownStagger : public CharacterState
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class DownStaggerDamageReaction
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -35,13 +35,17 @@ public:
 	/// @brief ダメージリアクションを起こす
 	/// @param hitPosition 
 	/// @param attacker 
-	void DamageReaction(DownStaggerDamageReaction reaction);
+	void DamageReaction(DamageReactionType reaction);
+
+	/// @brief ダメージリアクションの種類を取得する
+	/// @return 
+	DamageReactionType GetDamageReaction() const { return reaction_; }
 
 
 private:
 
 	/// @brief アクション
-	DownStaggerDamageReaction reaction_ = DownStaggerDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief ダメージ状態の最大時間
 	float maxDamageTime_ = 0.3f;

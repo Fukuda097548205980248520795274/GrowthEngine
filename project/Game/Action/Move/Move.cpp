@@ -1,6 +1,14 @@
 #include "Move.h"
 #include "Entity/Character/Character.h"
 
+/// @brief デストラクタ
+Move::~Move()
+{
+	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
+	if (owner_->GetCurrentMove() == this)
+		owner_->SetCurrentMove(nullptr);
+}
+
 /// @brief 実行
 void Move::Exec()
 {

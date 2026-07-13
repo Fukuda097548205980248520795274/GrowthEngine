@@ -33,29 +33,6 @@ void CharacterStateDownLying::Update(float dt)
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
 
-	// ダウン中にダメージを受けた場合は、ダウン怯み状態へ移行する
-	if (owner_->IsHitDamage())
-	{
-		auto stateMachine = owner_->GetStateMachine();
-		if (auto nextState = static_cast<CharacterStateDownStagger*>(stateMachine->GetState("DownStagger")))
-		{
-			// ダメージリアクションを設定する
-			if (reaction_ == DownLyingDamageReaction::Front)
-			{
-				nextState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Front);
-			}
-			else if (reaction_ == DownLyingDamageReaction::Back)
-			{
-				nextState->DamageReaction(CharacterStateDownStagger::DownStaggerDamageReaction::Back);
-			}
-		}
-
-		// 状態をダウン怯み状態に変更する
-		stateMachine->ChangeState("DownStagger");
-
-		return;
-	}
-
 	// ダメージタイマーが0以下になったら、ダウン状態へ移行する
 	if (damageTimer_ <= 0.0f)
 	{
@@ -63,13 +40,13 @@ void CharacterStateDownLying::Update(float dt)
 		if (auto nextState = static_cast<CharacterStateDownGettingUp*>(stateMachine->GetState("DownGettingUp")))
 		{
 			// ダメージリアクションの方向を設定する
-			if (reaction_ == DownLyingDamageReaction::Front)
+			if (reaction_ == DamageReactionType::Front)
 			{
-				nextState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateDownGettingUp::DamageReactionType::Front);
 			}
-			else if (reaction_ == DownLyingDamageReaction::Back)
+			else if (reaction_ == DamageReactionType::Back)
 			{
-				nextState->DamageReaction(CharacterStateDownGettingUp::DownLyingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateDownGettingUp::DamageReactionType::Back);
 			}
 		}
 
@@ -77,7 +54,7 @@ void CharacterStateDownLying::Update(float dt)
 		stateMachine->ChangeState("DownGettingUp");
 
 		// ダメージリアクションをリセットする
-		reaction_ = DownLyingDamageReaction::None;
+		reaction_ = DamageReactionType::None;
 
 		return;
 	}
@@ -87,25 +64,25 @@ void CharacterStateDownLying::Update(float dt)
 void CharacterStateDownLying::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = DownLyingDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
 /// @param hitPosition 
 /// @param attacker 
-void CharacterStateDownLying::DamageReaction(DownLyingDamageReaction reaction)
+void CharacterStateDownLying::DamageReaction(DamageReactionType reaction)
 {
 	// ダウン中着地のSEを再生する
 	//soundManager_->SeDownLanding();
 
 	// ダメージリアクションを設定する
 	reaction_ = reaction;
-	if (reaction_ == DownLyingDamageReaction::Front)
+	if (reaction_ == DamageReactionType::Front)
 	{
 		// 前向きのアニメーションを再生する
 		owner_->SetAnimation(hFront_, true, false);
 	}
-	else if (reaction_ == DownLyingDamageReaction::Back)
+	else if (reaction_ == DamageReactionType::Back)
 	{
 		// 後ろ向きのアニメーションを再生する
 		owner_->SetAnimation(hBack_, true, false);

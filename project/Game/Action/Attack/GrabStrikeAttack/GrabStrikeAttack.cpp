@@ -25,6 +25,14 @@ GrabStrikeAttack::GrabStrikeAttack(Character* character, const GrabStrikeAttackI
 		hits_.push_back(def);
 }
 
+/// @brief デストラクタ
+GrabStrikeAttack::~GrabStrikeAttack()
+{
+	// 攻撃中であれば、攻撃を終了する
+	if (owner_ && owner_->GetCurrentAttack() == this)
+		owner_->SetCurrentAttack(nullptr);
+}
+
 /// @brief 実行
 void GrabStrikeAttack::Exec()
 {

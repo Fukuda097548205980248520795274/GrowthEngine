@@ -42,7 +42,7 @@ void CharacterStateDamage::Update(float dt)
 void CharacterStateDamage::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = LightDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
@@ -79,29 +79,29 @@ void CharacterStateDamage::DamageReaction(const std::optional<Vector3>& hitPosit
 		// ダメージリアクションの方向を判定する
 		if (localX < 0.0f && localZ > 0.0f)
 		{
-			reaction_ = LightDamageReaction::Left;
+			reaction_ = DamageReactionType::Left;
 			owner_->SetAnimation(hLeft_, true, false);
 		}
 		else if (localX > 0.0f && localZ > 0.0f)
 		{
-			reaction_ = LightDamageReaction::Right;
+			reaction_ = DamageReactionType::Right;
 			owner_->SetAnimation(hRight_, true, false);
 		}
 		else if (localX < 0.0f && localZ < 0.0f)
 		{
-			reaction_ = LightDamageReaction::Back;
+			reaction_ = DamageReactionType::Back;
 			owner_->SetAnimation(hBack_, true, false);
 		}
 		else
 		{
-			reaction_ = LightDamageReaction::Front;
+			reaction_ = DamageReactionType::Front;
 			owner_->SetAnimation(hFront_, true, false);
 		}
 	}
 	else
 	{
 		// hitPositionがない場合は、正面のリアクションをデフォルトとして設定する
-		reaction_ = LightDamageReaction::Front;
+		reaction_ = DamageReactionType::Front;
 		owner_->SetAnimation(hFront_, true, false);
 	}
 }

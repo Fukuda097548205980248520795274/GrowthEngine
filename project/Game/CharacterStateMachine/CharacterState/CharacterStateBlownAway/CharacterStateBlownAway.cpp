@@ -38,13 +38,13 @@ void CharacterStateBlownAway::Update(float dt)
 		if (auto nextState = static_cast<CharacterStateBlownFalling*>(stateMachine->GetState("BlownFalling")))
 		{
 			// ダメージリアクションを設定する
-			if (reaction_ == BlownAwayDamageReaction::Front)
+			if (reaction_ == DamageReactionType::Front)
 			{
-				nextState->DamageReaction(CharacterStateBlownFalling::BlownFallingDamageReaction::Front);
+				nextState->DamageReaction(CharacterStateBlownFalling::DamageReactionType::Front);
 			}
-			else if (reaction_ == BlownAwayDamageReaction::Back)
+			else if (reaction_ == DamageReactionType::Back)
 			{
-				nextState->DamageReaction(CharacterStateBlownFalling::BlownFallingDamageReaction::Back);
+				nextState->DamageReaction(CharacterStateBlownFalling::DamageReactionType::Back);
 			}
 		}
 
@@ -59,7 +59,7 @@ void CharacterStateBlownAway::Update(float dt)
 void CharacterStateBlownAway::Exit()
 {
 	// ダメージリアクションをリセットする
-	reaction_ = BlownAwayDamageReaction::None;
+	reaction_ = DamageReactionType::None;
 }
 
 /// @brief ダメージリアクションを起こす
@@ -88,19 +88,19 @@ void CharacterStateBlownAway::DamageReaction(const std::optional<Vector3>& hitPo
 		// ダメージリアクションの方向を判定する
 		if (localZ < 0.0f)
 		{
-			reaction_ = BlownAwayDamageReaction::Back;
+			reaction_ = DamageReactionType::Back;
 			owner_->SetAnimation(hBack_, true, false);
 		}
 		else
 		{
-			reaction_ = BlownAwayDamageReaction::Front;
+			reaction_ = DamageReactionType::Front;
 			owner_->SetAnimation(hFront_, true, false);
 		}
 	}
 	else
 	{
 		// ヒット位置が不明な場合は、正面のダメージリアクションを再生する
-		reaction_ = BlownAwayDamageReaction::Front;
+		reaction_ = DamageReactionType::Front;
 		owner_->SetAnimation(hFront_, true, false);
 	}
 }

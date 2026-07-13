@@ -9,7 +9,7 @@ class CharacterStateBlownFalling : public CharacterState
 public:
 
 	/// @brief 軽い怯みの種類
-	enum class BlownFallingDamageReaction
+	enum class DamageReactionType
 	{
 		None,
 		Front,
@@ -36,7 +36,7 @@ public:
 	/// @brief ダメージリアクションを起こす
 	/// @param hitPosition 
 	/// @param attacker 
-	void DamageReaction(BlownFallingDamageReaction reaction);
+	void DamageReaction(DamageReactionType reaction);
 
 	/// @brief ダメージリアクションを起こす
 	void DamageReaction();
@@ -45,7 +45,7 @@ public:
 private:
 
 	/// @brief アクション
-	BlownFallingDamageReaction reaction_ = BlownFallingDamageReaction::None;
+	DamageReactionType reaction_ = DamageReactionType::None;
 
 	/// @brief アニメーションハンドル
 	AnimationHandle hFront_ = 0;
