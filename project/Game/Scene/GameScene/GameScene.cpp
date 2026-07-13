@@ -1220,7 +1220,9 @@ void GameScene::LoadHUDs()
 
 	comboTutorial_ = std::make_unique<Tutorial>();
 	grabTutorial_ = std::make_unique<Tutorial>();
+
 	guardTutorial_ = std::make_unique<Tutorial>();
+
 	avoidTutorial_ = std::make_unique<Tutorial>();
 	rageTutorial_ = std::make_unique<Tutorial>();
 }
