@@ -329,14 +329,14 @@ private:
 private:
 
 	/// @brief ボタンのスプライト
-	std::unique_ptr<PrefabBaseSprite> aButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> bButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> xButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> yButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> rbButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> lbButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> rtButtonSprite_ = nullptr;
-	std::unique_ptr<PrefabBaseSprite> ltButtonSprite_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> aButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> bButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> xButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> yButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> rbButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> lbButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> rtButtonPrefab_ = nullptr;
+	std::unique_ptr<PrefabBaseSprite> ltButtonPrefab_ = nullptr;
 
 	// ボタンの内側と外側のスプライト
 	std::unique_ptr<PrefabBaseSprite> buttonInSprite_ = nullptr;
@@ -347,9 +347,24 @@ private:
 	std::unique_ptr<PrefabBaseSprite> textFrameMiddleSprite_ = nullptr;
 	std::unique_ptr<PrefabBaseSprite> textFrameLeftSprite_ = nullptr;
 
+
 	/// @brief チュートリアルのテキストスプライト
 	std::unique_ptr<Sprite> tutorialMoveText_ = nullptr;
 	std::unique_ptr<Sprite> tutorialPerspectiveText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialDashText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialAttackText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialStrongAttackText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialGrabText_ = nullptr;
+	std::unique_ptr<Sprite> tutorialGuardText_ = nullptr;
+	
+	std::unique_ptr<Sprite> xButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> yButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> aButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> bButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> rbButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> lbButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> rtButtonSprite_ = nullptr;
+	std::unique_ptr<Sprite> ltButtonSprite_ = nullptr;
 
 	/// @brief スティックのスプライト
 	std::unique_ptr<Sprite> lStickSprite_ = nullptr;

@@ -35,11 +35,11 @@ protected:
 	float t_ = 0.0f;
 
 	// フェードインの時間
-	static constexpr float kFadeInDuration = 1.0f;
+	static constexpr float kFadeInDuration = 0.5f;
 	float fadeInTimer_ = 0.0f;
 
 	// フェードアウトの時間
-	static constexpr float kFadeOutDuration = 1.0f;
+	static constexpr float kFadeOutDuration = 0.5f;
 	float fadeOutTimer_ = 0.0f;
 
 	/// @brief チュートリアルのスプライトリスト

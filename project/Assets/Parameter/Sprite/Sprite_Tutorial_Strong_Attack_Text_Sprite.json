@@ -1,0 +1,39 @@
+{
+    "Sprite_Tutorial_Strong_Attack_Text_Sprite": {
+        "BlendMode": 1,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "ScreenAnchor": 6,
+        "Texture": "./Assets/Textures/strongAttack_text.png",
+        "Texture_Anchor": [
+            0.5,
+            0.5
+        ],
+        "Texture_Size": [
+            544.0,
+            228.0
+        ],
+        "Transform_Rotate": 0.0,
+        "Transform_Scale": [
+            0.30000001192092896,
+            0.30000001192092896
+        ],
+        "Transform_Translate": [
+            539.1500244140625,
+            83.12000274658203
+        ]
+    }
+}
