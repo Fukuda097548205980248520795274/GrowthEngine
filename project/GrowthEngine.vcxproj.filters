@@ -1387,6 +1387,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDamage">
       <UniqueIdentifier>{041de4db-7f38-49de-9d8d-0971b7977253}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CutsceneManager">
+      <UniqueIdentifier>{c39c4131-0a15-4814-a0dc-f438f7f2ec28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2516,6 +2519,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateAvoid</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CutsceneManager\CutsceneManager.cpp">
+      <Filter>Game\CutsceneManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3775,6 +3781,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateAvoid\CharacterStateAvoid.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateAvoid</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CutsceneManager\CutsceneManager.h">
+      <Filter>Game\CutsceneManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

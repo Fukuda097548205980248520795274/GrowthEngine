@@ -11,11 +11,13 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "Scene/GameScene/GameScene.h"
+
 /// @brief コンストラクタ
 /// @param spawner 
 /// @param history 
-StageEditorUIPlacement::StageEditorUIPlacement(StageSpawner* spawner, StageEditorHistory* history)
-	: spawner_(spawner), history_(history)
+StageEditorUIPlacement::StageEditorUIPlacement(StageSpawner* spawner, StageEditorHistory* history, GameScene* scene)
+	: spawner_(spawner), history_(history), scene_(scene)
 { 
 	// モーションマネージャのインスタンスを取得
 	motionManager_ = MotionManager::GetInstance();
@@ -163,39 +165,73 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 
 			// イベントの種類
 			ImGui::Combo("イベントタイプ", &currentData.eventType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames));
-
-
 			ImGui::Separator();
-			ImGui::Text("ステージデータの設定");
 
-			// プレビュー用の文字列（未設定の場合は "ステージデータを選択..." と表示）
-			std::string currentSdName = currentData.eventStageDataFileName;
-			const char* previewSdValue = currentSdName.empty() ? "ステージデータを選択..." : currentSdName.c_str();
-
-			// プルダウンメニュー（コンボボックス）の描画
-			if (ImGui::BeginCombo("ステージデータ", previewSdValue))
+			// イベントタイプが「オブジェクト生成」の場合、ステージデータの設定UIを表示する
+			if (currentData.eventType == 1)
 			{
-				for (const auto& name : eventStageDataFileNames)
+				ImGui::Text("ステージデータの設定");
+
+				// プレビュー用の文字列（未設定の場合は "ステージデータを選択..." と表示）
+				std::string currentSdName = currentData.eventStageDataFileName;
+				const char* previewSdValue = currentSdName.empty() ? "ステージデータを選択..." : currentSdName.c_str();
+
+				// プルダウンメニュー（コンボボックス）の描画
+				if (ImGui::BeginCombo("ステージデータ", previewSdValue))
 				{
-					// 現在のステージデータ名と同じものが選択されている状態にする
-					bool isSelected = (currentSdName == name);
-					if (ImGui::Selectable(name.c_str(), isSelected))
+					for (const auto& name : eventStageDataFileNames)
 					{
-						// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
-						history_->SaveHistory(placementList);
-						isDirty = true;
+						// 現在のステージデータ名と同じものが選択されている状態にする
+						bool isSelected = (currentSdName == name);
+						if (ImGui::Selectable(name.c_str(), isSelected))
+						{
+							// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
+							history_->SaveHistory(placementList);
+							isDirty = true;
 
-						// 選択された名前を PlacementData の配列にコピーする
-						strcpy_s(currentData.eventStageDataFileName, sizeof(currentData.eventStageDataFileName), name.c_str());
+							// 選択された名前を PlacementData の配列にコピーする
+							strcpy_s(currentData.eventStageDataFileName, sizeof(currentData.eventStageDataFileName), name.c_str());
+						}
+
+						// 選択中のアイテムにフォーカスを合わせる
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
 					}
+					ImGui::EndCombo();
+				}
+			}
+			else if (currentData.eventType == 2)
+			{
+				// GameScene経由で登録されている演出名一覧を取得
+				std::vector<std::string> cutsceneNames = scene_->GetCutsceneManager()->GetCutsceneNames();
 
-					// 選択中のアイテムにフォーカスを合わせる
-					if (isSelected)
+				// プレビュー用の文字列（未設定の場合は "演出を選択..." と表示）
+				if (cutsceneNames.empty())
+				{
+					ImGui::TextColored(ImVec4(1, 1, 0, 1), "カメラワークが登録されていません");
+				}
+				else
+				{
+					// 現在選択されている演出名をプレビュー表示用にする
+					const char* previewValue = (strlen(currentData.eventCutsceneName) == 0) ? "演出を選択..." : currentData.eventCutsceneName;
+
+					if (ImGui::BeginCombo("再生するカメラワーク", previewValue))
 					{
-						ImGui::SetItemDefaultFocus();
+						for (const auto& name : cutsceneNames)
+						{
+							bool isSelected = (name == currentData.eventCutsceneName);
+							if (ImGui::Selectable(name.c_str(), isSelected))
+							{
+								// 選択された演出名をバッファにコピー
+								strcpy_s(currentData.eventCutsceneName, sizeof(currentData.eventCutsceneName), name.c_str());
+							}
+							if (isSelected) ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
 					}
 				}
-				ImGui::EndCombo();
 			}
 		}
 	} 

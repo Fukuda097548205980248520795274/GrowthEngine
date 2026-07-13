@@ -80,7 +80,13 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			initData.position = data.position;
 			initData.scale = data.scale;
 			initData.eventType = data.eventType;
-			strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
+
+			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
+			if(data.eventType == 1)
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
+			else if(data.eventType == 2)
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
+
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
 		}

@@ -84,6 +84,17 @@ void NPC::Update()
 	// 更新が無効なら何もしない
 	if (!updateEnabled_)return;
 
+	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
+	if (Character::IsCutsceneActive())
+	{
+		// ステートをNoneに変更する
+		stateMachine_->ChangeState("None");
+		MoveStop();
+
+		Character::Update();
+		return;
+	}
+
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 

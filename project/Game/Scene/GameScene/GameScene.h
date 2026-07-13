@@ -21,6 +21,7 @@
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
 #include "EffectManager/EffectManager.h"
+#include "CutsceneManager/CutsceneManager.h"
 
 #include "EditorWorkspaceManager/EditorWorkspaceManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
@@ -95,6 +96,10 @@ public:
 	/// @return 
 	BehaviorTreeEditor* GetBehaviorTreeEditor() const { return behaviorTreeEditor_.get(); }
 
+	/// @brief カットシーンマネージャを取得する
+	/// @return 
+	CutsceneManager* GetCutsceneManager() const { return cutsceneManager_.get(); }
+
 	/// @brief リセットする
 	void Reset();
 
@@ -135,6 +140,9 @@ private:
 
 	/// @brief ポストエフェクトマネージャ
 	std::unique_ptr<PostEffectManager> postEffectManager_ = nullptr;
+
+	/// @brief カットシーンマネージャ
+	std::unique_ptr<CutsceneManager> cutsceneManager_ = nullptr;
 
 	// モーションマネージャエディタ
 	std::unique_ptr<MotionManagerEditor> motionManagerEditor_ = nullptr;

@@ -25,7 +25,28 @@ namespace
 /// @brief 初期化
 void GameScene::Initialize()
 {
+	// カメラの読み込みと切り替え
 	engine_->LoadCamera3D("MainCamera");
+	engine_->Camera3DSwitch("MainCamera");
+
+	// 演出用カメラの読み込みとカットシーンマネージャの生成
+	engine_->LoadCamera3D("CutsceneCamera");
+	cutsceneManager_ = std::make_unique<CutsceneManager>();
+
+	// カットシーンの登録
+	cutsceneManager_->RegisterCutscene("BossAppear", 4.0f, [this](float progress, float dt)
+		{
+
+		}
+	);
+
+	// カットシーンの登録
+	cutsceneManager_->RegisterCutscene("StagePan", 3.0f, [this](float progress, float dt)
+		{
+
+		}
+	);
+
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
@@ -334,6 +355,10 @@ void GameScene::Update()
 {
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+	// カットシーンの更新
+	if (cutsceneManager_->IsPlaying())
+		cutsceneManager_->Update(dt);
 
 	// プレイヤーの更新
 	if (player_)
@@ -992,16 +1017,12 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 	// ここではイベントの種類に応じて処理を分岐させることができます
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
 
-	switch (type)
+	if (type == StaticEventTrigger::EventType::None)
 	{
-		// イベントなし
-	case StaticEventTrigger::EventType::None:
 		return true;
-		break;
-
-		// オブジェクトのスポーンイベント
-	case StaticEventTrigger::EventType::ObjectSpawn:
-
+	}
+	else if (type == StaticEventTrigger::EventType::ObjectSpawn)
+	{
 		try
 		{
 			// param が空文字列の場合は何もしない
@@ -1045,48 +1066,66 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 			(void)e; // 未使用変数の警告を消すため
 			return false;
 		}
-		break;
+	}
+	else if (type == StaticEventTrigger::EventType::PlayCutscene)
+	{
+		// すでにカットシーンが再生中の場合は何もしない
+		if (cutsceneManager_->IsPlaying())
+			return false;
 
+		// プレイヤーの操作を無効化する
+		player_->SetIsCutsceneActive(false);
 
-		// スティック操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::StickTutorial:
+		// カットシーン用のカメラに切り替える
+		engine_->Camera3DSwitch("CutsceneCamera");
+
+		// カットシーン名を取得する
+		std::string cutsceneName = param;
+
+		// カットシーン再生が終了したら、コールバックで元のカメラに戻し、プレイヤー操作を解放する
+		cutsceneManager_->Play(cutsceneName, [this]()
+			{
+				// メインカメラに戻す
+				engine_->Camera3DSwitch("MainCamera");
+
+				// プレイヤーの操作を解放する
+				player_->SetIsCutsceneActive(true);
+			}
+		);
+
+		return true; // トリガーを削除
+	}
+	else if (type == StaticEventTrigger::EventType::StickTutorial)
+	{
 		stickTutorial_->SetEnable(true);
-		break;
-
-		// ダッシュ操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::DashTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::DashTutorial)
+	{
 		dashTutorial_->SetEnable(true);
-		break;
-
-		// 攻撃操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::AttackTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::AttackTutorial)
+	{
 		attackTutorial_->SetEnable(true);
-		break;
-
-		// コンボ操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::ComboTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::ComboTutorial)
+	{
 		comboTutorial_->SetEnable(true);
-		break;
-
-		// 掴み操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::GrabTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::GrabTutorial)
+	{
 		grabTutorial_->SetEnable(true);
-		break;
-
-		// ガード操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::GuardTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::GuardTutorial)
+	{
 		guardTutorial_->SetEnable(true);
-		break;
-
-		// 回避操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::AvoidTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::AvoidTutorial)
+	{
 		avoidTutorial_->SetEnable(true);
-		break;
-
-		// レイジモード操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::RageModeTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::RageModeTutorial)
+	{
 		rageTutorial_->SetEnable(true);
-		break;
 	}
 
 	// イベントを処理した場合はtrueを返し、処理しなかった場合はfalseを返す

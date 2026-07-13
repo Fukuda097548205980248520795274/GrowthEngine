@@ -91,9 +91,15 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
-	if(IsJustAvoided())
+	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
+	if (Character::IsCutsceneActive())
 	{
-		int a = 0;
+		// ステートをNoneに変更する
+		stateMachine_->ChangeState("None");
+		MoveStop();
+
+		Character::Update();
+		return;
 	}
 
 	// 動けない状態かどうか

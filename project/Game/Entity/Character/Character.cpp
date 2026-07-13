@@ -32,6 +32,7 @@
 
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
+bool Character::isCutsceneActive_ = false;
 
 /// @brief 
 /// @param position 

@@ -12,11 +12,13 @@
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
+#include "Scene/GameScene/GameScene.h"
+
 /// @brief コンストラクタ
 /// @param spawner 
 /// @param history 
-StageEditorUIObjectList::StageEditorUIObjectList(StageSpawner* spawner, StageEditorHistory* history, BehaviorTreeEditor* behaviorTreeEditor)
-	: spawner_(spawner), history_(history), behaviorTreeEditor_(behaviorTreeEditor)
+StageEditorUIObjectList::StageEditorUIObjectList(StageSpawner* spawner, StageEditorHistory* history, GameScene* scene, BehaviorTreeEditor* behaviorTreeEditor)
+	: spawner_(spawner), history_(history),scene_(scene), behaviorTreeEditor_(behaviorTreeEditor)
 {
 	// モーションマネージャのインスタンスを取得
 	motionManager_ = MotionManager::GetInstance();
@@ -340,8 +342,43 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 							ImGui::EndCombo();
 						}
 					}
-				}
+					else if (target.eventType == 2)
+					{
+						std::vector<std::string> cutsceneNames = scene_->GetCutsceneManager()->GetCutsceneNames();
 
+						if (cutsceneNames.empty())
+						{
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "カメラワークが登録されていません");
+						}
+						else
+						{
+							const char* previewValue = (strlen(target.eventCutsceneName) == 0) ? "演出を選択..." : target.eventCutsceneName;
+
+							if (ImGui::BeginCombo("再生するカメラワーク", previewValue))
+							{
+								for (const auto& name : cutsceneNames)
+								{
+									bool isSelected = (name == target.eventCutsceneName);
+									if (ImGui::Selectable(name.c_str(), isSelected))
+									{
+										history_->SaveHistory(placementList); // 履歴を保存
+										strcpy_s(target.eventCutsceneName, sizeof(target.eventCutsceneName), name.c_str());
+										isDirty = true; // 変更フラグを立てる
+
+										// すでに配置されている実体（トリガー）にも即座に反映する場合
+										if (target.instancePtr)
+										{
+											auto* trigger = static_cast<StaticEventTrigger*>(target.instancePtr);
+											trigger->SetEventStringParam(name.c_str());
+										}
+									}
+									if (isSelected) ImGui::SetItemDefaultFocus();
+								}
+								ImGui::EndCombo();
+							}
+						}
+					}
+				}
 			}
 		}
 		else if (target.category == EditCategory::Weapon)

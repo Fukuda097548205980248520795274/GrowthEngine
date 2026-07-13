@@ -504,6 +504,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 2,
             "name": "",
@@ -534,6 +535,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 3,
             "name": "",
@@ -550,6 +552,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 4,
             "name": "",
@@ -818,6 +821,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 5,
             "name": "",
@@ -834,6 +838,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 8,
             "name": "",
@@ -850,6 +855,7 @@
         },
         {
             "category": 1,
+            "eventCutsceneName": "",
             "eventStageDataFileName": "",
             "eventType": 7,
             "name": "",
@@ -862,6 +868,23 @@
             "scaleX": 17.306873321533203,
             "scaleY": 1.0,
             "scaleZ": 13.787460327148438,
+            "subType": 3
+        },
+        {
+            "category": 1,
+            "eventCutsceneName": "BossAppear",
+            "eventStageDataFileName": "",
+            "eventType": 2,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
             "subType": 3
         }
     ]

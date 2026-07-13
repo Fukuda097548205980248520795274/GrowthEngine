@@ -7,6 +7,7 @@ class StageSpawner;
 class StageEditorHistory;
 class NavMesh;
 class BehaviorTreeEditor;
+class GameScene;
 
 class StageEditorUIObjectList
 {
@@ -15,7 +16,7 @@ public:
 	/// @brief コンストラクタ
 	/// @param spawner 
 	/// @param history 
-	StageEditorUIObjectList(StageSpawner* spawner, StageEditorHistory* history, BehaviorTreeEditor* behaviorTreeEditor);
+	StageEditorUIObjectList(StageSpawner* spawner, StageEditorHistory* history, GameScene* scene, BehaviorTreeEditor* behaviorTreeEditor);
 
 	/// @brief 配置されたオブジェクトのリストを描画する
 	/// @param placementList 
@@ -32,6 +33,9 @@ private:
 
 	/// @brief 編集の履歴を管理するクラスへのポインタ
 	StageEditorHistory* history_;
+
+	/// @brief 
+	GameScene* scene_ = nullptr;
 
 	/// @brief ビヘイビアツリーエディタ
 	BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;

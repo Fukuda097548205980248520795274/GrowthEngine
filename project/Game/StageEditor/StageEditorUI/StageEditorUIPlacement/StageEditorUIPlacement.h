@@ -4,6 +4,7 @@
 
 class StageSpawner;
 class StageEditorHistory;
+class GameScene;
 
 class StageEditorUIPlacement
 {
@@ -12,7 +13,7 @@ public:
 	/// @brief コンストラクタ
 	/// @param spawner 
 	/// @param history 
-	StageEditorUIPlacement(StageSpawner* spawner, StageEditorHistory* history);
+	StageEditorUIPlacement(StageSpawner* spawner, StageEditorHistory* history, GameScene* scene);
 
 	/// @brief UIの描画
 	/// @param placementList 
@@ -29,6 +30,9 @@ private:
 
 	/// @brief 編集の履歴を管理するクラスへのポインタ
 	StageEditorHistory* history_;
+
+	// ゲームシーン
+	GameScene* scene_ = nullptr;
 
 	/// @brief モーションマネージャ
 	MotionManager* motionManager_ = nullptr;

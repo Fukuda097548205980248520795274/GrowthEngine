@@ -511,6 +511,14 @@ public:
 	/// @return
 	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
 
+	/// @brief カットシーンの有効化を設定する
+	/// @param isCutscene 
+	static void SetIsCutsceneActive(bool isCutscene) { isCutsceneActive_ = isCutscene; }
+
+	/// @brief カットシーンが有効かどうかを取得する
+	/// @return 
+	static bool IsCutsceneActive() { return isCutsceneActive_; }
+
 
 
 
@@ -866,6 +874,12 @@ protected:
 
 	// 押し出し判定の半径
 	static constexpr float kPushOutRadius = 0.25f;
+
+
+protected:
+
+	/// @brief カットシーン中かどうか
+	static bool isCutsceneActive_;
 
 
 protected:
