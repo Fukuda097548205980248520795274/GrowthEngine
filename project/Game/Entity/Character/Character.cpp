@@ -215,17 +215,6 @@ void Character::Update()
 			UpdateHurtbox(hurtboxHead_, JointType::Head);
 			UpdateHurtbox(hurtboxChest_, JointType::Chest);
 			UpdateHurtbox(hurtboxRoot_, JointType::Root);
-
-			//// ダッシュ中のエフェクト更新
-			//if (isDash_ && !isStance_)
-			//{
-			//	dashTimer_ -= dt;
-			//	if (dashTimer_ <= 0.0f)
-			//	{
-			//		effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
-			//		dashTimer_ = 0.15f;
-			//	}
-			//}
 		};
 
 
