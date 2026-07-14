@@ -22,6 +22,7 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateParried/CharacterStateParried.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateParry/CharacterStateParry.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDead/CharacterStateDead.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDamage/CharacterStateDamage.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDownLying/CharacterStateDownLying.h"
@@ -105,6 +106,7 @@ Character::Character() : Entity()
 		motionManager_->GetMotion(MotionType::Avoid, "Back"),
 		motionManager_->GetMotion(MotionType::Avoid, "Back"),
 		motionManager_->GetMotion(MotionType::Avoid, "Back")));
+	stateMachine_->AddState("Dead", std::make_unique<CharacterStateDead>(this, motionManager_->GetMotion(MotionType::DownFall, "Front")));
 	stateMachine_->ChangeState("None");
 }
 
@@ -118,8 +120,8 @@ Character::~Character()
 	if (wallTouchCollision_) wallTouchCollision_->Delete();
 	wallTouchCollision_ = nullptr;
 
-	// 死亡処理
-	Dead();
+	// 死亡状態になっていない場合は、死亡処理を呼び出す
+	if (!IsDead())Dead();
 }
 
 /// @brief アニメーションの初期化
@@ -228,19 +230,6 @@ void Character::Update()
 				{
 					effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
 					dashTimer_ = 0.15f;
-				}
-			}
-
-			// 死亡処理の更新
-			if (isDead_)
-			{
-				// 死亡タイマーを減算する
-				deadTimer_ -= dt;
-
-				// 死亡タイマーが0以下になったら、終了フラグを立てる
-				if (deadTimer_ <= 0.0f)
-				{
-					isFinished_ = true;
 				}
 			}
 		};
@@ -643,10 +632,11 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 	}
 
-	// 死亡判定
+	// 死亡処理
 	if (hp_ == 0)
 	{
-		Dead();
+		// 死亡状態に遷移する
+		stateMachine_->ChangeState("Dead");
 
 		// プレイヤーが相手を倒した場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -1037,9 +1027,6 @@ void Character::UpdateLockOnTargets()
 /// @param hAnimation 
 void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLoop)
 {
-	// 死亡したら、モーション設定は行わない
-	if (isDead_)return;
-
 	if (!model_)return;
 
 	if (!(model_->param_->animation.hAnimation == hAnimation))
@@ -1117,7 +1104,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1752,18 +1739,6 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 /// @brief 死亡処理
 void Character::Dead()
 {
-	// 移動を止める
-	MoveStop();
-
-	// 死亡タイマーをリセットする
-	deadTimer_ = kDeadDuration;
-
-	// 死亡モーションを再生する
-	SetAnimation(motionManager_->GetMotion(MotionType::DownFall, "Front"), true, false);
-
-	// 死亡フラグを立てる
-	isDead_ = true;
-
 	// 当たり判定の削除
 	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
 	eventTriggerCollision_ = nullptr;
@@ -1795,7 +1770,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 {
 	// フラグをリセットする
 	isFinished_ = false;
-	isDead_ = false;
 	isInAttackSequence_ = false;
 	isDash_ = false;
 	isJustAvoided_ = false;

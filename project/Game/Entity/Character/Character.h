@@ -150,7 +150,7 @@ public:
 
 	/// @brief 死亡しているかどうか
 	/// @return 
-	bool IsDead() const { return isDead_; }
+	bool IsDead() const { return stateMachine_->GetCurrentStateName() == "Dead"; }
 
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
@@ -579,16 +579,6 @@ protected:
 
 	/// @brief 攻撃力
 	float attackPower_ = 1.0f;
-
-	// やられたかどうか
-	bool isDead_ = false;
-
-
-	// 死亡してからの経過時間
-	const float kDeadDuration = 5.0f;
-
-	// 死亡してからの経過時間
-	float deadTimer_ = kDeadDuration;
 
 
 protected:
