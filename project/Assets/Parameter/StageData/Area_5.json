@@ -1,0 +1,298 @@
+{
+    "navMesh": [
+        {
+            "id": 0,
+            "neighborIds": [
+                1,
+                -1,
+                2,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    -2.0
+                ]
+            ]
+        },
+        {
+            "id": 1,
+            "neighborIds": [
+                0,
+                -1,
+                -1,
+                3
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -4.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    2.0
+                ]
+            ]
+        },
+        {
+            "id": 2,
+            "neighborIds": [
+                0,
+                5,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    2.0,
+                    0.0,
+                    -2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    -2.0
+                ]
+            ]
+        },
+        {
+            "id": 3,
+            "neighborIds": [
+                1,
+                -1,
+                4,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    2.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    4.0
+                ]
+            ]
+        },
+        {
+            "id": 4,
+            "neighborIds": [
+                3,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    4.0
+                ],
+                [
+                    -3.983673334121704,
+                    0.0,
+                    6.0
+                ],
+                [
+                    -1.983673334121704,
+                    0.0,
+                    6.0
+                ]
+            ]
+        },
+        {
+            "id": 5,
+            "neighborIds": [
+                2,
+                -1,
+                6,
+                -1
+            ],
+            "vertices": [
+                [
+                    4.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    2.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    4.0
+                ]
+            ]
+        },
+        {
+            "id": 6,
+            "neighborIds": [
+                5,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    4.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    4.0
+                ],
+                [
+                    2.0,
+                    0.0,
+                    6.0
+                ],
+                [
+                    4.0,
+                    0.0,
+                    6.0
+                ]
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "New",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "guardMotionName": "BothHands",
+            "hp": 100,
+            "name": "",
+            "posX": 36.97163009643555,
+            "posY": 0.0,
+            "posZ": 1.1436265707015991,
+            "rotX": 0.0,
+            "rotY": 3.140000104904175,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Standard",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "New",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "guardMotionName": "BothHands",
+            "hp": 100,
+            "name": "",
+            "posX": 40.1148681640625,
+            "posY": 0.0,
+            "posZ": 0.7446503639221191,
+            "rotX": 0.0,
+            "rotY": 3.140000104904175,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Standard",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        },
+        {
+            "avoidBackMotionName": "Back",
+            "avoidFrontMotionName": "Front",
+            "avoidLeftMotionName": "Front",
+            "avoidRightMotionName": "Back",
+            "behaviorScriptName": "New",
+            "category": 0,
+            "dashMotionName": "Dash",
+            "guardMotionName": "BothHands",
+            "hp": 100,
+            "name": "",
+            "posX": 34.57416534423828,
+            "posY": 0.0,
+            "posZ": 2.114870548248291,
+            "rotX": 0.0,
+            "rotY": 3.140000104904175,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "Standard",
+            "standMotionName": "Standing",
+            "subType": 4,
+            "walkMotionName": "Walk"
+        }
+    ]
+}

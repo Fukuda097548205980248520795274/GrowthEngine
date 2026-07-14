@@ -9,6 +9,13 @@ void ApproachTargetMove::Exec()
     // 実行済みが処理しない
     if (IsExec())return;
 
+    // ダッシュ状態に遷移する
+    auto stateMachine = owner_->GetStateMachine();
+    if (isDash_)
+    {
+        stateMachine->ChangeState("Dash");
+    }
+
     // 基底クラスで実行
     Move::Exec();
 }

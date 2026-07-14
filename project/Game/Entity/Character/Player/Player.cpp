@@ -4,6 +4,8 @@
 
 #include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
 
+#include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
+
 #include <cmath>
 
 namespace
@@ -40,6 +42,9 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton,
 
 	// 初期化データを設定する
 	SetInitData(initData);
+
+	// ステートを初期化する
+	stateMachine_->ChangeState("None");
 
 	// 入力コントローラーを作成する
 	inputController_ = std::make_unique<PlayerInputController>();
@@ -86,9 +91,15 @@ void Player::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
-	if(IsJustAvoided())
+	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
+	if (Character::IsCutsceneActive())
 	{
-		int a = 0;
+		// ステートをNoneに変更する
+		stateMachine_->ChangeState("None");
+		MoveStop();
+
+		Character::Update();
+		return;
 	}
 
 	// 動けない状態かどうか
@@ -118,16 +129,8 @@ void Player::Update()
 		UpdateGuardState();
 
 		// 回避中は回避更新のみ行い、他の操作は受け付けない
-		if (isAvoid_)
+		if (IsAvoid())
 		{
-			// 回避中でも回避ボタン入力があれば次の回避を予約する
-			bool hasMoveInput = false;
-			const Vector2 moveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
-			if (isStance_ && inputController_->IsAvoidRequested())
-			{
-				ReserveNextAvoid(moveInputDirection, hasMoveInput, GetCameraYaw());
-			}
-
 			// アクションの更新処理
 			ActionUpdate();
 			Character::Update();
@@ -176,22 +179,6 @@ void Player::Update()
 
 	// アクションの更新処理
 	ActionUpdate();
-
-	// 動けない状態なら、攻撃やスタイルチェンジなどの入力は受け付けず、状態の更新と描画のみ行う
-	if (isIncapacitatedState)
-	{
-		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
-		if (IsGrabbed())
-		{
-			bool isStruggleInput = false;
-			if (inputController_->IsEscapeMashRequested()) isStruggleInput = true;
-
-			if (isStruggleInput)
-			{
-				grabbedTimer_ += 0.2f;
-			}
-		}
-	}
 
 	// 基底クラスの更新
 	Character::Update();
@@ -300,7 +287,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 怯み状態、動けない状態は構え状態にならない
-	if(IsGrabbing() || IsIncapacitated() || isDash_ || !GetLockOnTarget())
+	if(IsGrabbing() || IsIncapacitated() || IsDash() || !GetLockOnTarget())
 	{
 		isStance_ = false;
 		return;
@@ -309,56 +296,23 @@ void Player::UpdateStanceState()
 	isStance_ = true;
 }
 
-/// @brief 連続回避を試行する
-/// @param moveInputDirection
-/// @param hasMoveInput
-/// @param cameraYaw
-void Player::ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw)
-{
-	// 回避中でない場合は何もしない
-	if (!isAvoid_)
-	{
-		return;
-	}
-
-	// 最大連続回避回数に達している場合は連続回避できない
-	if (currentAvoidCount_ >= maxConsecutiveAvoidCount_)
-	{
-		return;
-	}
-
-	// 現在位置から次の連続回避を即時開始する
-	++currentAvoidCount_;
-
-	Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, cameraYaw);
-	StartAvoid(Vector3(avoidDirection.x, 0.0f, avoidDirection.y), 1.5f, 0.3f);
-}
-
 /// @brief ダッシュ状態を更新する
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中ならダッシュにならない
-	// ダッシュ中に構えた場合もダッシュを解除する
+	// 怯み状態、動けない状態はダッシュ状態にならない
 	if (IsGrabbing() || IsIncapacitated())
 	{
-		isDash_ = false;
 		return;
 	}
 
 	// ダッシュ入力があって、移動入力もあって、ダッシュ中でない場合はダッシュを開始する
-	if (inputController_->IsDashRequested() && hasMoveInput && !isDash_)
+	if (inputController_->IsDashRequested() && hasMoveInput && !IsDash())
 	{
-		isDash_ = true;
+		stateMachine_->ChangeState("Dash");
 
 		// ダッシュ開始時にスローモーションを開始する
 		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.1f);
-	}
-
-	// ダッシュ中に移動入力がなくなったらダッシュを終了する
-	if (isDash_ && !hasMoveInput)
-	{
-		isDash_ = false;
 	}
 }
 
@@ -367,7 +321,7 @@ void Player::UpdateDashState(bool hasMoveInput)
 float Player::GetCurrentMoveSpeed() const
 {
 	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら移動速度は0
-	if (isGuard_ || IsIncapacitated())
+	if (IsGuard() || IsIncapacitated())
 		return 0.0f;
 
 	// 構え中は移動速度を半分にする
@@ -375,7 +329,7 @@ float Player::GetCurrentMoveSpeed() const
 	float moveSpeed = isStance_ ? (kNormalMoveSpeed * kStanceMoveSpeedMultiplier) : kNormalMoveSpeed;
 
 	// ダッシュ中は移動速度を2倍にする
-	if (isDash_)
+	if (IsDash())
 	{
 		moveSpeed *= kDashSpeedMultiplier;
 	}
@@ -393,19 +347,6 @@ float Player::GetCameraYaw() const
 	}
 
 	return 0.0f;
-}
-
-/// @brief ダウン後起き上がり条件を満たしているかどうか
-/// @return 
-bool Player::CheckGetUpCondition()
-{
-	// 地面に接地していない場合は起き上がれない
-	if (!IsGrounded())return false;
-
-	// プレイヤーはダウン後、すぐに起き上がるようにする
-	damageReactionTimer_ = 0.0f;
-
-	return true;
 }
 
 /// @brief スタイルチェンジ開始時の処理
@@ -574,20 +515,10 @@ void Player::RageModeInput()
 /// @brief 防御状態を更新する
 void Player::UpdateGuardState()
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中なら防御状態にならない
-	if(IsGrabbing() || IsAttack() || IsIncapacitated())
-	{
-		SetGuard(false);
-		return;
-	}
+	// 既に防御中なら何もしない
+	if (IsGuard() || IsGrabbing() || IsAttack() || IsIncapacitated())return;
 
 	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
 	if(inputController_->IsGuardRequested())
-	{
-		SetGuard(true);
-	}
-	else
-	{
-		SetGuard(false);
-	}
+		ExecuteGuard();
 }

@@ -25,6 +25,14 @@ GrabStrikeAttack::GrabStrikeAttack(Character* character, const GrabStrikeAttackI
 		hits_.push_back(def);
 }
 
+/// @brief デストラクタ
+GrabStrikeAttack::~GrabStrikeAttack()
+{
+	// 攻撃中であれば、攻撃を終了する
+	if (owner_ && owner_->GetCurrentAttack() == this)
+		owner_->SetCurrentAttack(nullptr);
+}
+
 /// @brief 実行
 void GrabStrikeAttack::Exec()
 {
@@ -43,9 +51,6 @@ void GrabStrikeAttack::Exec()
 		Exit();
 		return;
 	}
-
-	// 掴んでいる相手に攻撃者を設定する
-	grabbedTarget_->SetGrabber(owner_);
 
 	// タイマーとフラグをリセット
 	attackTimer_ = 0.0f;
@@ -67,7 +72,7 @@ void GrabStrikeAttack::Update()
 		Exit();
 
 		// Character側の掴み状態を解除する処理を呼ぶ
-		owner_->ReleaseGrab();
+		owner_->SetGrabTarget(nullptr);
 		return;
 	}
 
@@ -160,13 +165,19 @@ void GrabStrikeAttack::Update()
 			knockBackDirection.z = right.z * knockbackDirection_.x + up.z * knockbackDirection_.y + forward.z * knockbackDirection_.z;
 			knockBackDirection = knockBackDirection.Normalize();
 
-			grabbedTarget_->OnDamage(0, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition());
+			// 相手を飛ばす用のダメージ処理を呼ぶ
+			grabbedTarget_->OnDamage(0, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition(),
+				nullptr, std::nullopt, false, true);
 
 			// Character側の掴み状態を解除する処理を呼ぶ
-			owner_->ReleaseGrab();
+			owner_->SetGrabTarget(nullptr);
 		}
 
 		isReleased_ = true; // 解除済みフラグを立てる
+
+		// 攻撃を終了する
+		Attack::Update();
+		return;
 	}
 
 	// 攻撃の特定の時間帯は、攻撃者が回避または無力化されているかどうかを確認する
@@ -175,7 +186,7 @@ void GrabStrikeAttack::Update()
 		this->Exit();
 
 		// Character側の掴み状態を解除する処理を呼ぶ
-		owner_->ReleaseGrab();
+		owner_->SetGrabTarget(nullptr);
 		return;
 	}
 
@@ -207,9 +218,7 @@ void GrabStrikeAttack::Exit()
 
 	// もし掴んでいる相手がいる状態で攻撃が終了した場合は、確実に手を離す
 	if (isRelease_ && !isReleased_ && grabbedTarget_)
-	{
-		owner_->ReleaseGrab();
-	}
+		owner_->SetGrabTarget(nullptr);
 
 	Attack::Exit();
 }

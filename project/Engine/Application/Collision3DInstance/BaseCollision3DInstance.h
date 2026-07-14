@@ -1,6 +1,7 @@
 #pragma once
 #include "Data/CollisionData/CollisionData.h"
 #include "Handle/Handle.h"
+#include <vector>
 #include <memory>
 
 namespace Engine
@@ -27,7 +28,7 @@ namespace Engine
 		bool isCollision_ = false;
 
 		/// @brief 衝突した相手の衝突判定インスタンス
-		BaseCollision3DInstance* hitOpponent_ = nullptr;
+		std::vector<BaseCollision3DInstance*> hitOpponents_;
 
 	protected:
 

@@ -18,6 +18,16 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 	attackType_ = AttackType::Grab;
 }
 
+/// @brief デストラクタ
+GrabAttack::~GrabAttack()
+{
+	// 攻撃中であれば、攻撃を終了する
+	if (owner_ && owner_->GetCurrentAttack() == this)
+		owner_->SetCurrentAttack(nullptr);
+
+	DeleteHitbox();
+}
+
 /// @brief 実行
 void GrabAttack::Exec()
 {

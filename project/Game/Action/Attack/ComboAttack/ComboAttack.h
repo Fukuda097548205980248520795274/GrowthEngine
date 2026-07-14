@@ -24,6 +24,9 @@ public:
 	/// @param initData 
 	ComboAttack(Character* character, const CombAttackInitData& initData);
 
+	/// @brief デストラクタ
+	~ComboAttack();
+
 	/// @brief 実行
 	virtual void Exec() override;
 

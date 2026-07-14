@@ -24,8 +24,20 @@ inline const char* categoryNames[] = { "キャラクター", "オブジェクト
 inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
 inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
-inline const char* eventTypeNames[] = { "None", "敵生成","スティック操作チュートリアル", "ダッシュ操作チュートリアル", "攻撃操作チュートリアル", "コンボ操作チュートリアル",
-"掴み操作チュートリアル", "防御操作チュートリアル", "回避操作チュートリアル", "レイジモードチュートリアル" };
+inline const char* eventTypeNames[] = 
+{
+	"None", 
+	"オブジェクト生成",
+	"カットシーン再生",
+	"スティック操作チュートリアル", 
+	"ダッシュ操作チュートリアル",
+	"攻撃操作チュートリアル", 
+	"コンボ操作チュートリアル",
+	"掴み操作チュートリアル",
+	"防御操作チュートリアル", 
+	"回避操作チュートリアル", 
+	"レイジモードチュートリアル" 
+};
 
 struct MotionConfig
 {
@@ -75,6 +87,9 @@ struct PlacementData
 
 	// イベントトリガーのステージデータファイル名 (イベントトリガーの場合)
 	char eventStageDataFileName[256] = "";
+
+	/// @brief イベントトリガーのカットシーン名 (イベントトリガーの場合)
+	char eventCutsceneName[256] = "";
 
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;
@@ -151,6 +166,7 @@ inline void toJson(json& j, const PlacementData& s)
 		{
 			j["eventType"] = s.eventType;
 			j["eventStageDataFileName"] = s.eventStageDataFileName;
+			j["eventCutsceneName"] = s.eventCutsceneName;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -235,8 +251,12 @@ inline void fromJson(const json& j, PlacementData& s)
 
 
 	s.eventType = j.value("eventType", 0);
+
 	std::string eventStageDataFileNameStr = j.value("eventStageDataFileName", "");
 	strncpy_s(s.eventStageDataFileName, eventStageDataFileNameStr.c_str(), sizeof(s.eventStageDataFileName) - 1);
+
+	std::string eventCutsceneNameStr = j.value("eventCutsceneName", "");
+	strncpy_s(s.eventCutsceneName, eventCutsceneNameStr.c_str(), sizeof(s.eventCutsceneName) - 1);
 
 
 	MotionManager* motionManager = MotionManager::GetInstance();

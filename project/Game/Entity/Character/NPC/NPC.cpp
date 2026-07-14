@@ -45,6 +45,8 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 	// 初期化データを設定する
 	SetInitData(initData);
 
+	// ステートを初期化する
+	stateMachine_->ChangeState("None");
 
 	switch (characterTag_)
 	{
@@ -82,6 +84,17 @@ void NPC::Update()
 	// 更新が無効なら何もしない
 	if (!updateEnabled_)return;
 
+	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
+	if (Character::IsCutsceneActive())
+	{
+		// ステートをNoneに変更する
+		stateMachine_->ChangeState("None");
+		MoveStop();
+
+		Character::Update();
+		return;
+	}
+
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
@@ -105,19 +118,9 @@ void NPC::Update()
 	// アクションの更新
 	ActionUpdate();
 
-	// 移動の更新
-	if (currentMove_) isDash_ = currentMove_->IsDash();
-	else isDash_ = false;
-
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{
-		// つかまれている状態なら、つかまれ解き入力を受け付けて、入力があればつかまれ解きの処理を行う
-		if(IsGrabbed())
-		{
-			grabbedTimer_ += engine_->GetDeltaTime();
-		}
-
 		// 攻撃トークンを返却する
 		BattleDirector::GetInstance().ReleaseAttackToken(this);
 

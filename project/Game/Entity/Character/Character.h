@@ -12,6 +12,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Shake/Shake.h"
 
+#include "CharacterStateMachine/CharacterStateMachine.h"
+
 class Attack;
 class Move;
 class Avoid;
@@ -47,6 +49,10 @@ public:
 	/// @brief 更新処理開始前のリセット
 	virtual void StartUpdate();
 
+	/// @brief 更新処理終了後のリセット
+	/// @return 
+	CharacterStateMachine* GetStateMachine() const { return stateMachine_.get(); }
+
 	/// @brief ダメージを受けたときの処理
 	/// @param damage 
 	/// @param damageReaction 
@@ -56,7 +62,8 @@ public:
 	/// @param attacker 
 	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
-		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt, bool isGuardBreak = false);
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
+		bool isGuardBreak = false, bool isThrow = false);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
@@ -131,7 +138,7 @@ public:
 
 	/// @brief 回避しているかどうか
 	/// @return 
-	bool IsAvoid() const { return isAvoid_; }
+	bool IsAvoid() const { return stateMachine_->GetCurrentStateName() == "Avoid"; }
 
 	/// @brief 回避した瞬間かどうか
 	/// @return 
@@ -141,9 +148,13 @@ public:
 	/// @return 
 	bool IsStance() const { return isStance_; }
 
+	/// @brief ダッシュしているかどうか
+	/// @return 
+	bool IsDash()const { return stateMachine_->GetCurrentStateName() == "Dash"; }
+
 	/// @brief 死亡しているかどうか
 	/// @return 
-	bool IsDead() const { return isDead_; }
+	bool IsDead() const { return stateMachine_->GetCurrentStateName() == "Dead"; }
 
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
@@ -213,39 +224,51 @@ public:
 
 	/// @brief ダメージリアクション中かどうか
 	/// @return 
-	bool IsDamageReaction() const { return currentDamageReaction_ != DamageReactionState::None; }
+	bool IsDamageReaction() const { return IsLightDamage() || IsHeavyDamage() || IsGroundedDown() || IsBlownDown() || IsDeflected() || IsRepelled(); }
 
 	/// @brief 地面に倒れているかどうか
 	/// @return 
-	bool IsGrondedDown() const;
+	bool IsGroundedDown() const { return IsDownFalling() || IsDownLying() || IsGettingUp() || IsDownStagger(); }
 
 	/// @brief 吹き飛ばされてダウンしているかどうか
 	/// @return 
-	bool IsBlownDown() const;
+	bool IsBlownDown() const { return IsBlownAway() || IsBlownFalling(); }
 
 	/// @brief ダウン中かどうか
 	/// @return 
 	bool IsDown()const { return IsDownFalling() || IsDownLying() || IsGettingUp(); }
 
+	/// @brief 軽ダメージ中かどうか
+	/// @return 
+	bool IsLightDamage() const { return stateMachine_->GetCurrentStateName() == "LightDamage"; }
+
+	/// @brief 重ダメージ中かどうか
+	/// @return 
+	bool IsHeavyDamage() const { return stateMachine_->GetCurrentStateName() == "HeavyDamage"; }
+
 	/// @brief 倒れこみ中かどうか
 	/// @return 
-	bool IsDownFalling() const;
+	bool IsDownFalling() const { return stateMachine_->GetCurrentStateName() == "DownFalling"; }
 
 	/// @brief ダウン中かどうか
 	/// @return 
-	bool IsDownLying() const { return currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack; }
+	bool IsDownLying() const { return stateMachine_->GetCurrentStateName() == "DownLying"; }
 
 	/// @brief 起き上がり中かどうか
 	/// @return 
-	bool IsGettingUp() const { return currentDamageReaction_ == DamageReactionState::DownGettingUpFront || currentDamageReaction_ == DamageReactionState::DownGettingUpBack; }
+	bool IsGettingUp() const { return stateMachine_->GetCurrentStateName() == "DownGettingUp"; }
+
+	/// @brief ダウン中に怯んでいるかどうか
+	/// @return 
+	bool IsDownStagger() const { return stateMachine_->GetCurrentStateName() == "DownStagger"; }
 
 	/// @brief 吹き飛び中かどうか
 	/// @return 
-	bool IsBlownAway() const { return currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownAwayBack; }
+	bool IsBlownAway() const { return stateMachine_->GetCurrentStateName() == "BlownAway"; }
 
 	/// @brief 吹き飛び落下中かどうか
 	/// @return 
-	bool IsBlownFalling() const { return currentDamageReaction_ == DamageReactionState::BlownFallingFront || currentDamageReaction_ == DamageReactionState::BlownFallingBack; }
+	bool IsBlownFalling() const { return stateMachine_->GetCurrentStateName() == "BlownFalling"; }
 
 	/// @brief 頭の当たり判定を取得する
 	/// @return 
@@ -261,11 +284,11 @@ public:
 
 	/// @brief 相手をつかんでいるかどうか
 	/// @return 
-	bool IsGrabbing() const { return grabbedTarget_ != nullptr; }
+	bool IsGrabbing() const { return stateMachine_->GetCurrentStateName() == "Grabbing"; }
 
 	/// @brief 自分をつかんでいる相手がいるかどうか
 	/// @return 
-	bool IsGrabbed() const { return grabber_ != nullptr; }
+	bool IsGrabbed() const { return stateMachine_->GetCurrentStateName() == "Grabbed"; }
 
 	/// @brief 相手をつかむ
 	/// @param target 
@@ -275,16 +298,12 @@ public:
 	/// @brief 掴まれた相手の処理
 	void OnGrabbed(Character* grabber);
 
-	/// @brief 掴んだ相手を離す
-	void ReleaseGrab();
-
 	/// @brief 防御しているかどうか
 	/// @return 
-	bool IsGuard() const { return isGuard_; }
+	bool IsGuard() const { return stateMachine_->GetCurrentStateName() == "Guard"; }
 
-	/// @brief 防御を設定する
-	/// @param isGuard 
-	void SetGuard(bool isGuard);
+	/// @brief 防御を実行する
+	void ExecuteGuard();
 
 	/// @brief 着地しているかどうか
 	/// @return 
@@ -292,11 +311,11 @@ public:
 
 	/// @brief 掴んでいる相手を取得する
 	/// @return 
-	Character* GetGrabTarget() const { return grabbedTarget_; }
+	Character* GetGrabTarget() const;
 
 	/// @brief 掴まれている相手を取得する
-	/// @param grabber 
-	void SetGrabber(Character* grabber) { grabber_ = grabber; }
+	/// @param target 
+	void SetGrabTarget(Character* target);
 	
 	/// @brief 掴んだ状態の攻撃をしているかどうか
 	/// @return 
@@ -315,13 +334,21 @@ public:
 	/// @param hitPosition 
 	void ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosition = std::nullopt);
 
+	/// @brief 受け流し中かどうか
+	/// @return 
+	bool IsDeflecting() const { return stateMachine_->GetCurrentStateName() == "Deflect"; }
+
 	/// @brief 受け流されているかどうか
 	/// @return 
-	bool IsDeflected() const { return currentDamageReaction_ == DamageReactionState::Deflected; }
+	bool IsDeflected() const { return stateMachine_->GetCurrentStateName() == "Deflected"; }
+
+	/// @brief 弾き中かどうか
+	/// @return 
+	bool IsRepeling() const { return stateMachine_->GetCurrentStateName() == "Repel"; }
 
 	/// @brief 弾かれたかどうか
 	/// @return 
-	bool IsRepelled() const { return currentDamageReaction_ == DamageReactionState::Repelled; }
+	bool IsRepelled() const { return stateMachine_->GetCurrentStateName() == "Repelled"; }
 
 	/// @brief スタイルチェンジを開始する
 	/// @param style 
@@ -380,7 +407,8 @@ public:
 
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
-	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart(); }
+	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || 
+		IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart() || IsDeflecting() || IsRepeling(); }
 
 	/// @brief プレイヤー側かどうか
 	/// @return 
@@ -475,6 +503,26 @@ public:
 	/// @param rageGage 
 	void SetRageGage(float rageGage) { rageGage_ = rageGage; }
 
+	/// @brief 移動コンポーネントを取得する
+	/// @return 
+	CharacterMovement* GetMovement() const { return movement_.get(); }
+
+
+	/// @brief 回避方向を取得する
+	/// @param moveInputDirection
+	/// @param hasMoveInput
+	/// @param cameraYaw
+	/// @return
+	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
+
+	/// @brief カットシーンの有効化を設定する
+	/// @param isCutscene 
+	static void SetIsCutsceneActive(bool isCutscene) { isCutsceneActive_ = isCutscene; }
+
+	/// @brief カットシーンが有効かどうかを取得する
+	/// @return 
+	static bool IsCutsceneActive() { return isCutsceneActive_; }
+
 
 
 
@@ -517,6 +565,9 @@ protected:
 	// キャラクターのタグ
 	CharacterTag characterTag_;
 
+	/// @brief ステートマシン
+	std::unique_ptr<CharacterStateMachine> stateMachine_ = nullptr;
+
 	/// @brief 移動コンポーネント
 	std::unique_ptr<CharacterMovement> movement_ = nullptr;
 
@@ -533,16 +584,6 @@ protected:
 	/// @brief 攻撃力
 	float attackPower_ = 1.0f;
 
-	// やられたかどうか
-	bool isDead_ = false;
-
-
-	// 死亡してからの経過時間
-	const float kDeadDuration = 5.0f;
-
-	// 死亡してからの経過時間
-	float deadTimer_ = kDeadDuration;
-
 
 protected:
 
@@ -555,49 +596,9 @@ protected:
 
 protected:
 
-	/// @brief ダッシュフラグ
-	bool isDash_ = false;
-
-	float dashTimer_ = 0.1f;
-
-
-protected:
-
-	/// @brief 回避フラグ
-	bool isAvoid_ = false;
-
 	/// @brief 回避した瞬間かどうか
 	bool isJustAvoided_ = false;
 	bool isJustAvoidedPrev_ = false;
-
-	/// @brief 回避開始位置
-	Vector3 avoidStartPosition_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// @brief 回避終了位置
-	Vector3 avoidEndPosition_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	/// @brief 回避経過時間
-	float avoidElapsedTime_ = 0.0f;
-
-	/// @brief 回避時間
-	float avoidDuration_ = 0.3f;
-
-	/// @brief 連続回避の最大回数
-	int maxConsecutiveAvoidCount_ = 3;
-
-	/// @brief 現在の連続回避回数
-	int currentAvoidCount_ = 0;
-
-	/// @brief 回避方向を取得する
-	/// @param moveInputDirection
-	/// @param hasMoveInput
-	/// @param cameraYaw
-	/// @return
-	Vector2 GetAvoidDirection(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw) const;
-
-	/// @brief 回避中の更新処理
-	/// @param deltaTime
-	void UpdateAvoid(float deltaTime);
 
 
 protected:
@@ -620,30 +621,11 @@ protected:
 
 protected:
 
-	/// @brief 防御中かどうか
-	bool isGuard_ = false;
-
-	/// @brief 防御のリアクション中かどうか
-	bool isGuardReaction_ = false;
-
-	/// @brief 防御のリアクションの経過時間
-	float guardReactionTimer_ = 0.0f;
-
-
 	// ガードに成功したかどうか
 	bool isGuardHit_ = false;
 
 	// 前フレームでガードに成功したかどうか
 	bool isPrevGuardHit_ = false;
-
-
-protected:
-
-	// ガードしてからの経過時間
-	float guardActiveTimer_ = 0.0f;
-
-	// ジャストガード（受け流し）の受付時間
-	const float kJustGuardTime = 0.2f;
 
 
 private:
@@ -794,35 +776,6 @@ protected:
 
 protected:
 
-	/// @brief ダウンからの起き上がり条件を満たしているかどうか
-	/// @return 
-	virtual bool CheckGetUpCondition();
-
-	/// @brief 現在のダメージリアクション
-	DamageReactionState currentDamageReaction_ = DamageReactionState::None;
-
-	/// @brief ダメージリアクションの経過時間
-	float damageReactionTimer_ = 0.0f;
-
-
-protected:
-
-	/// @brief 自分がつかんでいるターゲット
-	Character* grabbedTarget_ = nullptr;
-
-	/// @brief 自分をつかんでいる相手
-	Character* grabber_ = nullptr;
-
-
-	/// @brief 掴まれ時間
-	float grabbedTimer_ = 0.0f;
-
-	/// @brief つかみ時間の上限
-	float escapeTimeLimit_ = 3.0f;
-
-
-protected:
-
 	/// @brief 立ちモーション
 	AnimationHandle hStandMotion_ = 0;
 
@@ -832,44 +785,8 @@ protected:
 	/// @brief 歩きモーション
 	AnimationHandle hWalkMotion_ = 0;
 
-	/// @brief ダッシュモーション
-	AnimationHandle hDashMotion_ = 0;
-
 	/// @brief スタイルチェンジモーション
 	AnimationHandle hStyleChangeMotion_ = 0;
-
-
-	/// @brief 前回避モーション
-	AnimationHandle hAvoidFrontMotion_ = 0;
-
-	/// @brief 後ろ回避モーション
-	AnimationHandle hAvoidBackMotion_ = 0;
-
-	/// @brief 左回避モーション
-	AnimationHandle hAvoidLeftMotion_ = 0;
-
-	/// @brief 右回避モーション
-	AnimationHandle hAvoidRightMotion_ = 0;
-
-
-	/// @brief 軽い怯みモーション
-	AnimationHandle hDamageLightMotion_ = 0;
-
-	/// @brief 重い怯みモーション
-	AnimationHandle hDamageHeavyMotion_ = 0;
-
-	/// @brief ダウン怯みモーション
-	AnimationHandle hDownStaggerMotion_ = 0;
-
-
-	/// @brief ダウンモーション
-	AnimationHandle hDownFallMotion_ = 0;
-
-	/// @brief ダウン中モーション
-	AnimationHandle hDownLyingMotion_ = 0;
-
-	/// @brief 立ち上がりモーション
-	AnimationHandle hDownGetUpMotion_ = 0;
 
 
 	/// @brief つかみモーション
@@ -877,13 +794,6 @@ protected:
 
 	/// @brief つかまれているモーション
 	AnimationHandle hGrabbedMotion_ = 0;
-
-
-	// 防御モーション
-	AnimationHandle hGuardMotion_ = 0;
-
-	// 防御成功モーション
-	AnimationHandle hGuardHitMotion_ = 0;
 
 
 protected:
@@ -934,6 +844,12 @@ protected:
 
 	// 押し出し判定の半径
 	static constexpr float kPushOutRadius = 0.25f;
+
+
+protected:
+
+	/// @brief カットシーン中かどうか
+	static bool isCutsceneActive_;
 
 
 protected:

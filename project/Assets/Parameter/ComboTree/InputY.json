@@ -1,10 +1,10 @@
 {
-    "currentId": 83,
+    "currentId": 94,
     "links": [
         {
-            "endPinId": 73,
-            "id": 82,
-            "startPinId": 80
+            "endPinId": 84,
+            "id": 93,
+            "startPinId": 91
         }
     ],
     "nodes": [
@@ -12,77 +12,77 @@
             "animationName": "Player_Combo_4",
             "comboParams": {
                 "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 3,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
-                        "knockback": 6.0,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 17,
+                        "knockback": 10.0,
                         "knockbackDirection": [
                             0.0,
                             1.0,
-                            0.5
+                            0.0
                         ],
-                        "radius": 0.25,
-                        "startTime": 0.0
+                        "radius": 0.5,
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 72,
-            "inputPinId": 73,
+            "id": 83,
+            "inputPinId": 84,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputInputBPinId": 76,
-            "outputInputXPinId": 74,
-            "outputInputYPinId": 75,
+            "outputInputBPinId": 87,
+            "outputInputXPinId": 85,
+            "outputInputYPinId": 86,
             "pos": [
-                760.7583618164063,
-                661.2384033203125
+                736.0,
+                678.0
             ],
             "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 0.5,
-                "cancelStartTime": 0.20000000298023224,
+                "attackTime": 0.75,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
                 "hitDefinitions": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
-                        "knockback": 0.0,
+                        "endTime": 0.4000000059604645,
+                        "jointType": 17,
+                        "knockback": 6.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "radius": 0.25,
-                        "startTime": 0.0
+                        "radius": 0.5,
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "moveEndTime": 0.10000000149011612,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
             },
-            "id": 77,
-            "inputPinId": 78,
+            "id": 88,
+            "inputPinId": 89,
             "name": "Combo Attack",
             "nodeType": 0,
-            "outputInputBPinId": 81,
-            "outputInputXPinId": 79,
-            "outputInputYPinId": 80,
+            "outputInputBPinId": 92,
+            "outputInputXPinId": 90,
+            "outputInputYPinId": 91,
             "pos": [
-                644.75830078125,
-                657.2384033203125
+                614.0,
+                679.0
             ],
             "targetAnimationName": ""
         }

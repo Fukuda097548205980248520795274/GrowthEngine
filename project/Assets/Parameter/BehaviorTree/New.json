@@ -77,43 +77,8 @@
         },
         {
             "end": 10,
-            "id": 74,
+            "id": 101,
             "start": 72
-        },
-        {
-            "end": 79,
-            "id": 85,
-            "start": 77
-        },
-        {
-            "end": 87,
-            "id": 89,
-            "start": 77
-        },
-        {
-            "end": 76,
-            "id": 90,
-            "start": 72
-        },
-        {
-            "end": 92,
-            "id": 93,
-            "start": 77
-        },
-        {
-            "end": 95,
-            "id": 96,
-            "start": 77
-        },
-        {
-            "end": 98,
-            "id": 99,
-            "start": 77
-        },
-        {
-            "end": 101,
-            "id": 103,
-            "start": 27
         }
     ],
     "nodes": [
@@ -124,8 +89,8 @@
             "name": "",
             "output_pin": 11,
             "pos": [
-                300.0,
-                1800.0
+                364.47930908203125,
+                1155.3084716796875
             ],
             "type": 3
         },
@@ -142,8 +107,8 @@
             },
             "output_pin": -1,
             "pos": [
-                450.0,
-                1920.0
+                514.4794311523438,
+                1275.30859375
             ],
             "type": 5
         },
@@ -155,8 +120,8 @@
             "name": "攻撃状態でないとき",
             "output_pin": -1,
             "pos": [
-                450.0,
-                1800.0
+                514.4794311523438,
+                1155.3084716796875
             ],
             "type": 4
         },
@@ -206,7 +171,7 @@
             "output_pin": -1,
             "pos": [
                 450.0,
-                1080.0
+                960.0
             ],
             "type": 5
         },
@@ -232,7 +197,7 @@
             "output_pin": 39,
             "pos": [
                 450.0,
-                960.0
+                840.0
             ],
             "type": 5
         },
@@ -245,7 +210,7 @@
             "nav_mesh_move_data": {
                 "isDash": true,
                 "moveSpeed": 6.0,
-                "stopDistance": 4.0
+                "stopDistance": 2.0
             },
             "output_pin": 44,
             "pos": [
@@ -260,15 +225,15 @@
                 "attackTime": 0.800000011920929,
                 "hitDefinitions": [
                     {
-                        "damage": 10,
-                        "damageReaction": 3,
+                        "damage": 3,
+                        "damageReaction": 1,
                         "endTime": 0.20000000298023224,
                         "jointType": 9,
                         "knockback": 8.0,
                         "knockbackDirection": [
                             0.0,
-                            1.0,
-                            0.0
+                            0.0,
+                            1.0
                         ],
                         "radius": 0.25,
                         "startTime": 0.0
@@ -286,8 +251,8 @@
             "name": "パンチ",
             "output_pin": -1,
             "pos": [
-                450.0,
-                840.0
+                452.0,
+                720.0
             ],
             "type": 5
         },
@@ -362,118 +327,9 @@
             "output_pin": 72,
             "pos": [
                 150.0,
-                1200.0
+                1080.0
             ],
             "type": 2
-        },
-        {
-            "id": 75,
-            "input_pin": 76,
-            "is_collapsed": false,
-            "name": "",
-            "output_pin": 77,
-            "pos": [
-                300.0,
-                1200.0
-            ],
-            "type": 3
-        },
-        {
-            "condition_type": 15,
-            "id": 78,
-            "input_pin": 79,
-            "is_collapsed": false,
-            "name": "攻撃状態でないとき",
-            "output_pin": 80,
-            "pos": [
-                450.0,
-                1200.0
-            ],
-            "type": 4
-        },
-        {
-            "condition_type": 8,
-            "id": 86,
-            "input_pin": 87,
-            "is_collapsed": false,
-            "name": "相手が攻撃状態",
-            "output_pin": 88,
-            "pos": [
-                450.0,
-                1320.0
-            ],
-            "type": 4
-        },
-        {
-            "action_type": 3,
-            "avoid_data": {
-                "Distance": 1.0,
-                "Duration": 0.30000001192092896,
-                "LocalDirection": [
-                    1.0,
-                    0.0
-                ]
-            },
-            "id": 91,
-            "input_pin": 92,
-            "is_collapsed": false,
-            "name": "回避",
-            "output_pin": -1,
-            "pos": [
-                450.0,
-                1680.0
-            ],
-            "type": 5
-        },
-        {
-            "condition_param": {
-                "distance_to_target": 3.0
-            },
-            "condition_type": 6,
-            "id": 94,
-            "input_pin": 95,
-            "is_collapsed": false,
-            "name": "",
-            "output_pin": -1,
-            "pos": [
-                450.0,
-                1440.0
-            ],
-            "type": 4
-        },
-        {
-            "condition_type": 17,
-            "id": 97,
-            "input_pin": 98,
-            "is_collapsed": false,
-            "name": "",
-            "output_pin": -1,
-            "pos": [
-                450.0,
-                1560.0
-            ],
-            "type": 4
-        },
-        {
-            "action_type": 3,
-            "avoid_data": {
-                "Distance": 1.0,
-                "Duration": 0.30000001192092896,
-                "LocalDirection": [
-                    1.0,
-                    0.0
-                ]
-            },
-            "id": 100,
-            "input_pin": 101,
-            "is_collapsed": false,
-            "name": "回避",
-            "output_pin": 102,
-            "pos": [
-                450.0,
-                720.0
-            ],
-            "type": 5
         }
     ]
 }

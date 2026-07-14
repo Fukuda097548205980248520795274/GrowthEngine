@@ -29,6 +29,21 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	}
 }
 
+/// @brief デストラクタ
+ComboAttack::~ComboAttack()
+{
+	// 攻撃中であれば、攻撃を終了する
+	if (owner_ && owner_->GetCurrentAttack() == this)
+		owner_->SetCurrentAttack(nullptr);
+
+	// すべての判定をリセット・削除する
+	for (auto& state : hitStates_)
+	{
+		state.hitCharacters.clear();
+		state.DeleteHitbox();
+	}
+}
+
 /// @brief 実行
 void ComboAttack::Exec()
 {

@@ -205,6 +205,32 @@ void BehaviorTreeEditor::SetNodeWindowCenter(const EditorNode& node)
 	pendingCenterNodeId_ = node.id;
 }
 
+/// @brief ルートノードのIDを取得する関数
+/// @return 
+int BehaviorTreeEditor::FindRootNodeId() const
+{
+	if (nodes_.empty()) return -1;
+
+	// すべてのリンクの終了ピン（入力ピン）をハッシュセットにまとめる
+	std::unordered_set<int> connectedInputPins;
+	for (const auto& link : links_)
+	{
+		connectedInputPins.insert(link.endPinId);
+	}
+
+	// リンクがどこからも繋がっていない入力ピンを持つノードを探す
+	for (const auto& node : nodes_)
+	{
+		if (connectedInputPins.find(node.inputPinId) == connectedInputPins.end())
+		{
+			return node.id; // これがルートノード
+		}
+	}
+
+	// 複雑な循環参照などで見つからなかった場合は、先頭のノードを暫定ルートとする
+	return nodes_.front().id;
+}
+
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param fileName 
 /// @return 

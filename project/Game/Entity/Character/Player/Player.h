@@ -36,6 +36,14 @@ public:
 	/// @return 
 	bool IsInputRageMode() const { return isInputRageMode_ || isPrevInputRageMode_; }
 
+	/// @brief 入力コントローラーを取得する
+	/// @return 
+	PlayerInputController* GetInputController() const { return inputController_.get(); }
+
+	/// @brief カメラのY回転を取得する
+	/// @return
+	float GetCameraYaw() const;
+
 private:
 
 	/// @brief 更新処理開始前のリセット
@@ -47,12 +55,6 @@ private:
 	/// @brief 構え状態を更新する
 	void UpdateStanceState();
 
-	/// @brief 連続回避を試行する
-	/// @param moveInputDirection
-	/// @param hasMoveInput
-	/// @param cameraYaw
-	void ReserveNextAvoid(const Vector2& moveInputDirection, bool hasMoveInput, float cameraYaw);
-
 	/// @brief ダッシュ状態を更新する
 	/// @param hasMoveInput
 	void UpdateDashState(bool hasMoveInput);
@@ -60,14 +62,6 @@ private:
 	/// @brief 現在の移動速度を取得する
 	/// @return
 	float GetCurrentMoveSpeed() const;
-
-	/// @brief カメラのY回転を取得する
-	/// @return
-	float GetCameraYaw() const;
-
-	/// @brief ダウン後起き上がり条件を満たしているかどうか
-	/// @return 
-	bool CheckGetUpCondition()override;
 
 	/// @brief スタイルチェンジ開始時の処理
 	void StyleChangeStart() override;

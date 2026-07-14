@@ -25,7 +25,28 @@ namespace
 /// @brief 初期化
 void GameScene::Initialize()
 {
+	// 演出用カメラの読み込みとカットシーンマネージャの生成
+	engine_->LoadCamera3D("CutsceneCamera");
+	cutsceneManager_ = std::make_unique<CutsceneManager>();
+
+	// カメラの読み込みと切り替え
 	engine_->LoadCamera3D("MainCamera");
+	engine_->Camera3DSwitch("MainCamera");
+
+	// カットシーンの登録
+	cutsceneManager_->RegisterCutscene("BossAppear", 4.0f, [this](float progress, float dt)
+		{
+
+		}
+	);
+
+	// カットシーンの登録
+	cutsceneManager_->RegisterCutscene("StagePan", 3.0f, [this](float progress, float dt)
+		{
+
+		}
+	);
+
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
@@ -131,7 +152,7 @@ void GameScene::Initialize()
 
 
 	MashButton::InitData xButtonInitData;
-	xButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
+	xButtonInitData.buttonSprite = xButtonPrefab_->CreateInstance();
 	xButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	xButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	xButtonInitData.position = Vector2(200.0f, 200.0f);
@@ -141,7 +162,7 @@ void GameScene::Initialize()
 	xButton_->Initialize(xButtonInitData);
 
 	MashButton::InitData yButtonInitData;
-	yButtonInitData.buttonSprite = yButtonSprite_->CreateInstance();
+	yButtonInitData.buttonSprite = yButtonPrefab_->CreateInstance();
 	yButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	yButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	yButtonInitData.position = Vector2(200.0f, 300.0f);
@@ -151,7 +172,7 @@ void GameScene::Initialize()
 	yButton_->Initialize(yButtonInitData);
 
 	MashButton::InitData aButtonInitData;
-	aButtonInitData.buttonSprite = xButtonSprite_->CreateInstance();
+	aButtonInitData.buttonSprite = xButtonPrefab_->CreateInstance();
 	aButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	aButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	aButtonInitData.position = Vector2(200.0f, 200.0f);
@@ -161,7 +182,7 @@ void GameScene::Initialize()
 	aButton_->Initialize(aButtonInitData);
 
 	MashButton::InitData bButtonInitData;
-	bButtonInitData.buttonSprite = yButtonSprite_->CreateInstance();
+	bButtonInitData.buttonSprite = yButtonPrefab_->CreateInstance();
 	bButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	bButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	bButtonInitData.position = Vector2(200.0f, 300.0f);
@@ -171,7 +192,7 @@ void GameScene::Initialize()
 	bButton_->Initialize(bButtonInitData);
 
 	TriggerButton::InitData rtTriggerButtonInitData;
-	rtTriggerButtonInitData.buttonSprite = rtButtonSprite_->CreateInstance();
+	rtTriggerButtonInitData.buttonSprite = rtButtonPrefab_->CreateInstance();
 	rtTriggerButtonInitData.buttonInSprite = buttonInSprite_->CreateInstance();
 	rtTriggerButtonInitData.buttonOutSprite = buttonOutSprite_->CreateInstance();
 	rtTriggerButtonInitData.position = Vector2(200.0f, 200.0f);
@@ -221,7 +242,7 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	stageEditor_->LoadStage("Tutorial.json");
+	//stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -300,17 +321,24 @@ void GameScene::Initialize()
 			textFrameMiddleSprite_->Draw();
 			textFrameLeftSprite_->Draw();
 			textFrameRightSprite_->Draw();
-			yButtonSprite_->Draw();
-			xButtonSprite_->Draw();
-			bButtonSprite_->Draw();
-			aButtonSprite_->Draw();
-			rbButtonSprite_->Draw();
-			rtButtonSprite_->Draw();
-			lbButtonSprite_->Draw();
-			ltButtonSprite_->Draw();
+			yButtonPrefab_->Draw();
+			xButtonPrefab_->Draw();
+			bButtonPrefab_->Draw();
+			aButtonPrefab_->Draw();
+			rbButtonPrefab_->Draw();
+			rtButtonPrefab_->Draw();
+			lbButtonPrefab_->Draw();
+			ltButtonPrefab_->Draw();
 
 			// チュートリアルの描画
 			stickTutorial_->Draw();
+			dashTutorial_->Draw();
+			attackTutorial_->Draw();
+			comboTutorial_->Draw();
+			grabTutorial_->Draw();
+			guardTutorial_->Draw();
+			avoidTutorial_->Draw();
+
 		}
 	);
 
@@ -327,6 +355,10 @@ void GameScene::Update()
 {
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+	// カットシーンの更新
+	if (cutsceneManager_->IsPlaying())
+		cutsceneManager_->Update(dt);
 
 	// プレイヤーの更新
 	if (player_)
@@ -985,16 +1017,12 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 	// ここではイベントの種類に応じて処理を分岐させることができます
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
 
-	switch (type)
+	if (type == StaticEventTrigger::EventType::None)
 	{
-		// イベントなし
-	case StaticEventTrigger::EventType::None:
 		return true;
-		break;
-
-		// オブジェクトのスポーンイベント
-	case StaticEventTrigger::EventType::ObjectSpawn:
-
+	}
+	else if (type == StaticEventTrigger::EventType::ObjectSpawn)
+	{
 		try
 		{
 			// param が空文字列の場合は何もしない
@@ -1038,48 +1066,73 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 			(void)e; // 未使用変数の警告を消すため
 			return false;
 		}
-		break;
+	}
+	else if (type == StaticEventTrigger::EventType::PlayCutscene)
+	{
+		// すでにカットシーンが再生中の場合は何もしない
+		if (cutsceneManager_->IsPlaying())
+			return false;
 
+		// プレイヤーの操作を無効化する
+		player_->SetIsCutsceneActive(false);
 
-		// スティック操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::StickTutorial:
+		// カットシーン用のカメラに切り替える
+		engine_->Camera3DSwitch("CutsceneCamera");
+
+		// カットシーン名を取得する
+		std::string cutsceneName = param;
+
+		// カットシーン再生が終了したら、コールバックで元のカメラに戻し、プレイヤー操作を解放する
+		cutsceneManager_->Play(cutsceneName, [this]()
+			{
+				// メインカメラに戻す
+				engine_->Camera3DSwitch("MainCamera");
+
+				// プレイヤーの操作を解放する
+				player_->SetIsCutsceneActive(true);
+			}
+		);
+
+		return true; // トリガーを削除
+	}
+	else if (type == StaticEventTrigger::EventType::StickTutorial)
+	{
 		stickTutorial_->SetEnable(true);
-		break;
-
-		// ダッシュ操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::DashTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::DashTutorial)
+	{
 		dashTutorial_->SetEnable(true);
-		break;
-
-		// 攻撃操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::AttackTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::AttackTutorial)
+	{
 		attackTutorial_->SetEnable(true);
-		break;
-
-		// コンボ操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::ComboTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::ComboTutorial)
+	{
 		comboTutorial_->SetEnable(true);
-		break;
-
-		// 掴み操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::GrabTutorial:
-		grabTutorial_->SetEnable(true);
-		break;
-
-		// ガード操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::GuardTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::GrabTutorial)
+	{
+		if (player_->IsGrabbing())
+		{
+			attackTutorial_->SetEnable(true);
+		}
+		else
+		{
+			grabTutorial_->SetEnable(true);
+		}
+	}
+	else if (type == StaticEventTrigger::EventType::GuardTutorial)
+	{
 		guardTutorial_->SetEnable(true);
-		break;
-
-		// 回避操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::AvoidTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::AvoidTutorial)
+	{
 		avoidTutorial_->SetEnable(true);
-		break;
-
-		// レイジモード操作のチュートリアルイベント
-	case StaticEventTrigger::EventType::RageModeTutorial:
+	}
+	else if (type == StaticEventTrigger::EventType::RageModeTutorial)
+	{
 		rageTutorial_->SetEnable(true);
-		break;
 	}
 
 	// イベントを処理した場合はtrueを返し、処理しなかった場合はfalseを返す
@@ -1147,14 +1200,14 @@ void GameScene::LoadHUDs()
 	hpSeparatorSprite_->param_->transform.rotate = -0.5f;
 
 	// ボタン
-	aButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/a_button.png"), 50, "Button_A_Sprite");
-	bButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/b_button.png"), 50, "Button_B_Sprite");
-	xButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), 50, "Button_X_Sprite");
-	yButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), 50, "Button_Y_Sprite");
-	rbButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rb_button.png"), 50, "Button_RB_Sprite");
-	lbButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), 50, "Button_LB_Sprite");
-	rtButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rt_button.png"), 50, "Button_RT_Sprite");
-	ltButtonSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lt_button.png"), 50, "Button_LT_Sprite");
+	aButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/a_button.png"), 50, "Button_A_Sprite");
+	bButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/b_button.png"), 50, "Button_B_Sprite");
+	xButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), 50, "Button_X_Sprite");
+	yButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), 50, "Button_Y_Sprite");
+	rbButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rb_button.png"), 50, "Button_RB_Sprite");
+	lbButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), 50, "Button_LB_Sprite");
+	rtButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/rt_button.png"), 50, "Button_RT_Sprite");
+	ltButtonPrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/lt_button.png"), 50, "Button_LT_Sprite");
 
 	buttonInSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_in_circle.png"), 50, "Button_In_Sprite");
 	buttonInSprite_->param_->transform.scale = Vector2(0.7f, 0.7f);
@@ -1176,6 +1229,25 @@ void GameScene::LoadHUDs()
 	// チュートリアル用テキスト
 	tutorialMoveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/move_text.png"), "Tutorial_Move_Text_Sprite");
 	tutorialPerspectiveText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/perspective_text.png"), "Tutorial_Perspective_Text_Sprite");
+	tutorialDashText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/dash_text.png"), "Tutorial_Dash_Text_Sprite");
+	tutorialAttackText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/attack_text.png"), "Tutorial_Attack_Text_Sprite");
+	tutorialStrongAttackText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/strongAttack_text.png"), "Tutorial_Strong_Attack_Text_Sprite");
+	tutorialGrabText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/grab_text.png"), "Tutorial_Grab_Text_Sprite");
+	tutorialGuardText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/guard_text.png"), "Tutorial_Guard_Text_Sprite");
+	tutorialComboText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/combo_text.png"), "Tutorial_Combo_Text_Sprite");
+	tutorialAvoidText_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/avoid_text.png"), "Tutorial_Avoid_Text_Sprite");
+
+	// ボタンの画像
+	xButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/x_button.png"), "X_Button_Sprite");
+	yButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/y_button.png"), "Y_Button_Sprite");
+	aButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/a_button.png"), "A_Button_Sprite");
+	bButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/b_button.png"), "B_Button_Sprite");
+	rbButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/rb_button.png"), "RB_Button_Sprite");
+	lbButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), "LB_Button_Sprite");
+	rtButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/rt_button.png"), "RT_Button_Sprite");
+	ltButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/lt_button.png"), "LT_Button_Sprite");
+	comboButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/combo_button.png"), "Combo_Button_Sprite");
+
 
 	// スティックの画像
 	lStickSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/l_stick.png"), "L_Stick_Sprite");
@@ -1189,11 +1261,37 @@ void GameScene::LoadHUDs()
 	stickTutorial_->AddSprite(rStickSprite_.get());
 	stickTutorial_->AddSprite(tutorialPerspectiveText_.get());
 
+	// ダッシュ操作のチュートリアルを生成する
 	dashTutorial_ = std::make_unique<Tutorial>();
+	dashTutorial_->AddSprite(tutorialDashText_.get());
+	dashTutorial_->AddSprite(rbButtonSprite_.get());
+
+	// 攻撃操作のチュートリアルを生成する
 	attackTutorial_ = std::make_unique<Tutorial>();
+	attackTutorial_->AddSprite(tutorialAttackText_.get());
+	attackTutorial_->AddSprite(xButtonSprite_.get());
+	attackTutorial_->AddSprite(tutorialStrongAttackText_.get());
+	attackTutorial_->AddSprite(yButtonSprite_.get());
+
+	// コンボ操作のチュートリアルを生成する
 	comboTutorial_ = std::make_unique<Tutorial>();
+	comboTutorial_->AddSprite(tutorialComboText_.get());
+	comboTutorial_->AddSprite(comboButtonSprite_.get());
+
+	// 掴み操作のチュートリアルを生成する
 	grabTutorial_ = std::make_unique<Tutorial>();
+	grabTutorial_->AddSprite(tutorialGrabText_.get());
+	grabTutorial_->AddSprite(aButtonSprite_.get());
+
+	// ガード操作のチュートリアルを生成する
 	guardTutorial_ = std::make_unique<Tutorial>();
+	guardTutorial_->AddSprite(tutorialGuardText_.get());
+	guardTutorial_->AddSprite(lbButtonSprite_.get());
+
+	// 回避操作のチュートリアルを生成する
 	avoidTutorial_ = std::make_unique<Tutorial>();
+	avoidTutorial_->AddSprite(tutorialAvoidText_.get());
+	avoidTutorial_->AddSprite(aButtonSprite_.get());
+
 	rageTutorial_ = std::make_unique<Tutorial>();
 }

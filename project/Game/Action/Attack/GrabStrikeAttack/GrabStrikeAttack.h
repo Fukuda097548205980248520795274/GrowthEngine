@@ -43,6 +43,9 @@ public:
 	/// @param initData 
 	GrabStrikeAttack(Character* character, const GrabStrikeAttackInitData& initData);
 
+	/// @brief デストラクタ
+	~GrabStrikeAttack();
+
 	/// @brief 実行
 	virtual void Exec() override;
 

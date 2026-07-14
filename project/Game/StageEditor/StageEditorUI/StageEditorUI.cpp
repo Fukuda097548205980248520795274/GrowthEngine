@@ -18,10 +18,10 @@ void StageEditorUI::Initialize()
 	motionManager_ = MotionManager::GetInstance();
 
 	// UIクラスの初期化
-	placementUI_ = std::make_unique<StageEditorUIPlacement>(spawner_, history_);
+	placementUI_ = std::make_unique<StageEditorUIPlacement>(spawner_, history_, scene_);
 	navMeshUI_ = std::make_unique<StageEditorUINavMesh>();
 	navMeshInfoUI_ = std::make_unique<StageEditorUINavMeshInfo>();
-	objectListUI_ = std::make_unique<StageEditorUIObjectList>(spawner_, history_, scene_->GetBehaviorTreeEditor());
+	objectListUI_ = std::make_unique<StageEditorUIObjectList>(spawner_, history_, scene_, scene_->GetBehaviorTreeEditor());
 	guizmo_ = std::make_unique<StageEditorGuizmo>();
 
 	// 入力キーの初期化

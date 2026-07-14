@@ -15,8 +15,26 @@
 
 #include "HUD/HP/HP.h"
 
+#include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDash/CharacterStateDash.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateParried/CharacterStateParried.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateParry/CharacterStateParry.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDead/CharacterStateDead.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDamage/CharacterStateDamage.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownFalling/CharacterStateDownFalling.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownLying/CharacterStateDownLying.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownGettingUp/CharacterStateDownGettingUp.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDownStagger/CharacterStateDownStagger.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateBlownAway/CharacterStateBlownAway.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateBlownFalling/CharacterStateBlownFalling.h"
+
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
+bool Character::isCutsceneActive_ = false;
 
 /// @brief 
 /// @param position 
@@ -41,6 +59,57 @@ Character::Character() : Entity()
 
 	// ブラックボードの生成
 	blackboard_ = std::make_unique<Blackboard>();
+
+	// ステートマシンの生成
+	stateMachine_ = std::make_unique<CharacterStateMachine>();
+	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
+	stateMachine_->AddState("Dash", std::make_unique<CharacterStateDash>(this, motionManager_->GetMotion(MotionType::Dash, "Dash")));
+	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
+	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
+	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, 
+		motionManager_->GetMotion(MotionType::Guard, "BothHands"),
+		motionManager_->GetMotion(MotionType::Stand, "Standing")));
+	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"), 1.5f));
+	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("DownLying", std::make_unique<CharacterStateDownLying>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("DownGettingUp", std::make_unique<CharacterStateDownGettingUp>(this,
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front"),
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front")));
+	stateMachine_->AddState("DownStagger", std::make_unique<CharacterStateDownStagger>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Standing"),
+		motionManager_->GetMotion(MotionType::Stagger, "Standing")));
+	stateMachine_->AddState("BlownAway", std::make_unique<CharacterStateBlownAway>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("BlownFalling", std::make_unique<CharacterStateBlownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("Repel", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Deflect", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
+		motionManager_->GetMotion(MotionType::Avoid, "Front"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back"),
+		motionManager_->GetMotion(MotionType::Avoid, "Back")));
+	stateMachine_->AddState("Dead", std::make_unique<CharacterStateDead>(this, motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->ChangeState("None");
 }
 
 /// @brief デストラクタ
@@ -53,8 +122,8 @@ Character::~Character()
 	if (wallTouchCollision_) wallTouchCollision_->Delete();
 	wallTouchCollision_ = nullptr;
 
-	// 死亡処理
-	Dead();
+	// 死亡状態になっていない場合は、死亡処理を呼び出す
+	if (!IsDead())Dead();
 }
 
 /// @brief アニメーションの初期化
@@ -64,13 +133,6 @@ void Character::SetAnimationHandle(const AnimationHandleData& animData)
 	hStandMotion_ = animData.hStandMotion;
 	hStanceMotion_ = animData.hStanceMotion;
 	hWalkMotion_ = animData.hWalkMotion;
-	hDashMotion_ = animData.hDashMotion;
-	hAvoidFrontMotion_ = animData.hAvoidFrontMotion;
-	hAvoidBackMotion_ = animData.hAvoidBackMotion;
-	hAvoidLeftMotion_ = animData.hAvoidLeftMotion;
-	hAvoidRightMotion_ = animData.hAvoidRightMotion;
-	hGuardMotion_ = animData.hGuardMotion;
-	hGuardHitMotion_ = animData.hGuardHitMotion;
 }
 
 /// @brief 更新処理
@@ -79,9 +141,11 @@ void Character::Update()
 	// 更新が無効なら何もしない
 	if (!updateEnabled_)return;
 
+
 	// デルタタイムを取得する
 	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
+
 
 	// 着地判定をチェックする
 	LandingCheck();
@@ -92,6 +156,9 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// 移動の更新
+			movement_->Update(dt);
+
 			// レイジゲージの更新
 			RageGageUpdate(dt);
 
@@ -112,12 +179,6 @@ void Character::Update()
 			{
 				// プレイヤー以外はスローモーションの影響を受ける
 				UpdateStyleChange(dt);
-			}
-
-			// ダッシュ中に攻撃をした場合は、ダッシュを解除する
-			if (IsAttack())
-			{
-				isDash_ = false;
 			}
 
 			// 押し出し処理
@@ -152,250 +213,55 @@ void Character::Update()
 			UpdateHurtbox(hurtboxChest_, JointType::Chest);
 			UpdateHurtbox(hurtboxRoot_, JointType::Root);
 
-			// ダッシュ中のエフェクト更新
-			if (isDash_ && !isStance_)
-			{
-				dashTimer_ -= dt;
-				if (dashTimer_ <= 0.0f)
-				{
-					effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
-					dashTimer_ = 0.15f;
-				}
-			}
-
-			// 死亡処理の更新
-			if (isDead_)
-			{
-				// 死亡タイマーを減算する
-				deadTimer_ -= dt;
-
-				// 死亡タイマーが0以下になったら、終了フラグを立てる
-				if (deadTimer_ <= 0.0f)
-				{
-					isFinished_ = true;
-				}
-			}
+			//// ダッシュ中のエフェクト更新
+			//if (isDash_ && !isStance_)
+			//{
+			//	dashTimer_ -= dt;
+			//	if (dashTimer_ <= 0.0f)
+			//	{
+			//		effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
+			//		dashTimer_ = 0.15f;
+			//	}
+			//}
 		};
 
-	// 掴まれている場合の処理
-	if (IsGrabbed())
+
+	// ダウン着地のエフェクトを生成する
+	if (IsBlownFalling() && IsGrounded())
 	{
-		// 掴まれタイマーが過ぎたら、掴まれ状態を解除する
-		if (grabbedTimer_ >= escapeTimeLimit_)
-		{
-			// 振りほどかれた際の怯みを入れる
-			grabber_->OnDamage(0, DamageReaction::LightStagger, 0.1f, Vector3(0.0f, 0.0f, -1.0f), GetWorldPosition());
+		// ダウン着地のエフェクトを生成する
+		effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
+		effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
+	}
 
-			// 掴んでいる相手から離れる
-			worldTransform_->rotate_ = Vector3(0.0f, grabber_->GetWorldTransform()->rotate_.y + std::numbers::pi_v<float>, 0.0f);
-			worldTransform_->translate_.y = grabber_->GetWorldPosition().y;
+	// 吹き飛ばし中のエフェクトを生成する
+	if (IsBlownAway())
+	{
+		effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
+	}
 
-			// 掴んでいる相手から離れる
-			grabber_->grabbedTarget_ = nullptr;
-			grabber_ = nullptr;
-			grabbedTimer_ = 0.0f;
 
-			// ダメージリアクションを解除する
-			currentDamageReaction_ = DamageReactionState::None;
-		}
+	// ステートマシンの更新
+	stateMachine_->Update(dt);
 
-		// まとめた後処理を呼んで終了
+	// 現在のステートがNoneまたはDash以外の場合は、まとめた処理を行って終了する
+	if (stateMachine_->GetCurrentStateName() != "None" &&
+		stateMachine_->GetCurrentStateName() != "Dash")
+	{
 		FinalizeUpdate();
 		return;
 	}
-
-	// 掴んでいる場合の処理
-	if (IsGrabbing())
-	{
-		// 掴んでいる相手の位置を、掴んでいる自分の手の位置に合わせる
-		Matrix4x4 handMatrix = GetBoneMatrix(JointType::HandR);
-		Vector3 handPos(handMatrix.m[3][0], handMatrix.m[3][1], handMatrix.m[3][2]);
-		grabbedTarget_->SetPosition(handPos + Vector3(0.0f, -1.2f, 0.1f));
-
-		// 掴んでいる相手の向きを、掴んでいる自分の向きに合わせる (Y軸のみ180度反転させる)
-		// Quaternionでの計算を避け、直接オイラー角を指定する
-		grabbedTarget_->worldTransform_->rotate_ = Vector3(0.0f, worldTransform_->rotate_.y + std::numbers::pi_v<float>, 0.0f);
-
-		// 掴んでいる相手が掴まれている状態でない場合は、相手を解除する
-		if (!grabbedTarget_->IsGrabbed())
-		{
-			grabbedTarget_ = nullptr;
-		}
-	}
-
-	// ノックバックの方向を取得する
-	Vector3 knockbackDirection = movement_->GetKnockbackVelocity();
-	float velocityY = movement_->GetVelocityY();
-
-	// ダメージリアクションの更新
-	if (IsDamageReaction())
-	{
-		damageReactionTimer_ -= dt;
-
-		// ダメージリアクションがダウン中の場合は、起き上がり条件をチェックし、それ以外の場合はダメージリアクションの時間が十分経過したかをチェックする
-		bool shouldTransition = (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack)
-			? CheckGetUpCondition() : (damageReactionTimer_ <= 0.0f);
-
-		if (shouldTransition)
-		{
-			switch (currentDamageReaction_)
-			{
-				// ダメージリアクションが終了したら、通常状態へ移行する
-			case DamageReactionState::LightStaggerFront:
-			case DamageReactionState::LightStaggerBack:
-			case DamageReactionState::LightStaggerLeft:
-			case DamageReactionState::LightStaggerRight:
-			case DamageReactionState::HeavyStaggerFront:
-			case DamageReactionState::HeavyStaggerBack:
-			case DamageReactionState::HeavyStaggerLeft:
-			case DamageReactionState::HeavyStaggerRight:
-			case DamageReactionState::DownGettingUpFront:
-			case DamageReactionState::DownGettingUpBack:
-			case DamageReactionState::Deflected:
-			case DamageReactionState::Repelled:
-				currentDamageReaction_ = DamageReactionState::None;
-				break;
-
-				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
-			case DamageReactionState::DownFallingFront:
-				currentDamageReaction_ = DamageReactionState::DownLyingFront;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン落下の時間が十分経過したら、ダウン中状態へ移行する
-			case DamageReactionState::DownFallingBack:
-			case DamageReactionState::DownFallingLeft:
-			case DamageReactionState::DownFallingRight:
-				currentDamageReaction_ = DamageReactionState::DownLyingBack;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
-			case DamageReactionState::DownStaggerFront:
-				currentDamageReaction_ = DamageReactionState::DownLyingFront;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中に攻撃を受けて怯んだ場合は、ダウン中状態へ移行する
-			case DamageReactionState::DownStaggerBack:
-				currentDamageReaction_ = DamageReactionState::DownLyingBack;
-				damageReactionTimer_ = 2.0f;
-				SetAnimation(hDownLyingMotion_, true, true);
-				break;
-
-				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
-			case DamageReactionState::DownLyingFront:
-				currentDamageReaction_ = DamageReactionState::DownGettingUpFront;
-				damageReactionTimer_ = 1.0f;
-				SetAnimation(hDownGetUpMotion_, true, false);
-				break;
-
-				// ダウン中の時間が十分経過したら、起き上がりモーションへ移行する
-			case DamageReactionState::DownLyingBack:
-				currentDamageReaction_ = DamageReactionState::DownGettingUpBack;
-				damageReactionTimer_ = 1.0f;
-				SetAnimation(hDownGetUpMotion_, true, false);
-				break;
-
-				// 落下速度が負の場合は、落下中状態へ移行する
-			case DamageReactionState::BlownAwayFront:
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackDirection.y + velocityY <= 0.0f)
-				{
-					currentDamageReaction_ = DamageReactionState::BlownFallingFront;
-					SetAnimation(hDownLyingMotion_, true, true);
-				}
-				break;
-
-				// 落下速度が負の場合は、落下中状態へ移行する
-			case DamageReactionState::BlownAwayBack:
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-				if (knockbackDirection.y + velocityY <= 0.0f)
-				{
-					currentDamageReaction_ = DamageReactionState::BlownFallingBack;
-					SetAnimation(hDownLyingMotion_, true, true);
-				}
-				break;
-
-				// 地上に着地した場合は、ダウン中状態へ移行する
-			case DamageReactionState::BlownFallingFront:
-				if (movement_->IsGrounded())
-				{
-					currentDamageReaction_ = DamageReactionState::DownLyingFront;
-					damageReactionTimer_ = 2.0f;
-					SetAnimation(hDownLyingMotion_, true, true);
-
-					// ダウン着地のSEを再生する
-					soundManager_->SeDownLanding();
-
-					// ダウン着地のエフェクトを生成する
-					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
-				}
-				break;
-
-				// 地上に着地した場合は、ダウン中状態へ移行する
-			case DamageReactionState::BlownFallingBack:
-				if (movement_->IsGrounded())
-				{
-					currentDamageReaction_ = DamageReactionState::DownLyingBack;
-					damageReactionTimer_ = 2.0f;
-					SetAnimation(hDownLyingMotion_, true, true);
-
-					// ダウン着地のSEを再生する
-					soundManager_->SeDownLanding();
-
-					// ダウン着地のエフェクトを生成する
-					effectManager_->ImpactGround000(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround001(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround002(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround003(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround004(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround005(GetBonePosition(JointType::Root));
-					effectManager_->ImpactGround006(GetBonePosition(JointType::Root));
-				}
-				break;
-			}
-		}
-	}
-
-	// ガードタイマーの更新
-	if (isGuard_)
-		guardActiveTimer_ += dt;
-
-	// 回避の更新
-	if (isAvoid_)
-		UpdateAvoid(dt);
 
 	// ターゲットをロックオンする処理
 	UpdateLockOnTargets();
 
 	/// ターゲットの方向を向く処理
 	movement_->TargetDirection(dt);
-
-	// ガードリアクション中は、攻撃してきた相手の方向を向くようにする
-	if (isGuardReaction_)
-	{
-		float diff = movement_->GetTargetRotationY() - worldTransform_->rotate_.y;
-		const float pi = std::numbers::pi_v<float>;
-
-		// 角度の正規化
-		while (diff > pi) diff -= 2.0f * pi;
-		while (diff < -pi) diff += 2.0f * pi;
-
-		worldTransform_->rotate_.y += diff * movement_->GetRotationSpeed() * dt;
-	}
-
-	// 移動の更新
-	movement_->Update(dt);
 
 	// 壁接触の処理
 	WallTouchUpdate();
@@ -438,7 +304,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -446,14 +312,15 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 攻撃をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
-	isDash_ = false;
+	// 攻撃入力のバッファをクリアする
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
 	if (IsGuard())
 	{
+		// 防御状態のステートを取得する
+		auto guardState = static_cast<CharacterStateGuard*>(stateMachine_->GetCurrentState());
+
 		// 攻撃者をロックオンターゲットに設定する
 		if (attacker)lockOnTarget_ = attacker;
 
@@ -461,26 +328,20 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canDeflect_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canDeflect_ && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteDeflect(attacker);
-
-			// 受け流し成功モーションを設定
-			// SetAnimation(hDeflectSuccessMotion_, false, false);
 
 			// ダメージ無効
 			return false;
 		}
 
 		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
-		if (canRepel_ && guardActiveTimer_ <= kJustGuardTime && attacker != nullptr)
+		if (canRepel_ && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
-
-			// 弾き成功モーションを設定
-			// SetAnimation(hRepelSuccessMotion_, false, false);
 			
 			// ダメージ無効
 			return false;
@@ -499,17 +360,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 攻撃者の方向と逆方向にノックバックを加える
 		movement_->AddKnockback(-dirToAttacker * 2.0f);
 
-		// ガードリアクションのフラグを立てる
-		isGuardReaction_ = true;
-		guardReactionTimer_ = 0.0f;
+		// ガード成功の処理を行う
+		guardState->HitGuard();
 
 		// ガードse
 		soundManager_->SeGuard();
 
 		// ガードエフェクト
 		effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
-
-		SetAnimation(hGuardHitMotion_, false, true);
 
 		// ガードしたのがプレイヤーの場合は、スローモーションを開始する
 		if (IsPlayer())
@@ -536,265 +394,199 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 弱攻撃が攻撃中のプレイヤーやボスに当たったかどうか
 	bool isLightAttackHit = false;
 
-	// ダウン中に攻撃を受けた場合は、ダウン怯み状態へ移行する
-	if (currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownStaggerFront)
+	// ヒットエフェクト
+	if (hitPosition)
 	{
-		currentDamageReaction_ = DamageReactionState::DownStaggerFront;
-		SetAnimation(hDownStaggerMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
-
-		// ダウン中はノックバックが入らない
-		knockback = 0.0f;
-
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+		// エフェクトを再生する
+		effectManager_->ImpactDrop000(*hitPosition);
+		effectManager_->ImpactSmoke000(*hitPosition);
+		effectManager_->ImpactSmoke001(*hitPosition);
+		if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+		effectManager_->Impact001(*hitPosition);
+		effectManager_->Impact002(*hitPosition);
+		effectManager_->Impact003(*hitPosition);
+		effectManager_->Impact004(*hitPosition);
+		effectManager_->Impact005(*hitPosition);
 	}
-	else if (currentDamageReaction_ == DamageReactionState::DownLyingBack || currentDamageReaction_ == DamageReactionState::DownStaggerBack)
+
+
+	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
+	float slowMotionDuration = 0.0f; // スローモーションの持続時間
+
+	if (IsDownLying() || IsDownStagger())
 	{
-		currentDamageReaction_ = DamageReactionState::DownStaggerBack;
-		SetAnimation(hDownStaggerMotion_, true, false);
-		damageReactionTimer_ = 0.3f;
+		// 軽い怯みのSEを再生する
+		soundManager_->SeLightDamage();
 
-		// ダウン中はノックバックが入らない
-		knockback = 0.0f;
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
+		if (!IsDownStagger() && IsDownLying())
+		{
+			auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetState("DownStagger"));
+			if (auto lyingState = static_cast<CharacterStateDownLying*>(stateMachine_->GetCurrentState()))
+			{
+				// ダウン状態のリアクションを取得する
+				CharacterStateDownStagger::DamageReactionType staggerReaction = CharacterStateDownStagger::DamageReactionType::None;
 
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+				// ダウン状態のリアクションに応じて、ダウン怯み状態のリアクションを設定する
+				if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Front)
+					staggerReaction = CharacterStateDownStagger::DamageReactionType::Front;
+				else if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Back)
+					staggerReaction = CharacterStateDownStagger::DamageReactionType::Back;
 
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+				// ダウン怯み状態に遷移する
+				stateMachine_->ChangeState("DownStagger");
+				staggerState->DamageReaction(staggerReaction);
+			}
+		}
+		else if(IsDownStagger())
+		{
+			// すでにダウン怯み状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+			if (auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetCurrentState()))
+			{
+				staggerState->Enter();
+				staggerState->DamageReaction(staggerState->GetDamageReaction());
+			}
+		}
 	}
-	else if (currentDamageReaction_ == DamageReactionState::BlownAwayBack || currentDamageReaction_ == DamageReactionState::BlownFallingBack)
+	else if (IsBlownAway() || IsBlownFalling())
 	{
-		currentDamageReaction_ = DamageReactionState::BlownFallingBack;
-		SetAnimation(hDownLyingMotion_, true, true);
-
 		// 落下速度をリセットする
 		movement_->SetVelocityY(0.0f);
-		
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
 
 		// 重い怯みのSEを再生する
 		soundManager_->SeHeavyDamage();
 
-		// エフェクトを再生する
-		if (hitPosition)
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
+
+		// 落下中の状態に遷移する
+		if (!IsBlownAway())
 		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
+			stateMachine_->ChangeState("BlownFalling");
+			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				state->DamageReaction();
 		}
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-	}
-	else if (currentDamageReaction_ == DamageReactionState::BlownAwayFront || currentDamageReaction_ == DamageReactionState::BlownFallingFront)
-	{
-		currentDamageReaction_ = DamageReactionState::BlownFallingFront;
-		SetAnimation(hDownLyingMotion_, true, true);
-
-		// 落下速度をリセットする
-		movement_->SetVelocityY(0.0f);
-
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
-
-		// エフェクトを再生する
-		if (hitPosition)
+		else
 		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
+			// すでに落下中の状態の場合は、再度Enterを呼び出して、落下の時間をリセットする
+			stateMachine_->GetCurrentState()->Enter();
+			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				state->DamageReaction();
 		}
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
 	}
 	else
 	{
-
-		switch (damageReaction)
+		// リアクションごとの処理
+		if (damageReaction == DamageReaction::LightStagger)
 		{
-			// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
-		case DamageReaction::LightStagger:
-
-			// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
-			if ((!IsPlayer() && !IsBoss()) || !IsAttack())
+			if (!isThrow)
 			{
-				currentDamageReaction_ = DamageReactionState::LightStaggerFront; // ここではとりあえず前方向の怯みを設定。
-				SetAnimation(hDamageLightMotion_, true, false);
-				damageReactionTimer_ = 0.5f;
+				// 軽い怯みのSEを再生する
+				soundManager_->SeLightDamage();
+
+				// 軽い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.1f;
+			}
+
+			if (!IsLightDamage())
+			{
+				// 軽い怯みの状態に遷移する
+				stateMachine_->ChangeState("LightDamage");
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction(hitPosition);
 			}
 			else
 			{
-				// 弱攻撃が攻撃中のプレイヤーに当たった
-				isLightAttackHit = true;
-
-				// ノックバックを無効化する
-				knockback = 0.0f;
+				// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+				stateMachine_->GetCurrentState()->Enter();
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction(hitPosition);
 			}
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
+		}
+		else if (damageReaction == DamageReaction::HeavyStagger)
+		{
+			if (!isThrow)
 			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
+				// 重い怯みのSEを再生する
+				soundManager_->SeHeavyDamage();
+
+				// 重い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionTimeScale = 0.125f;
 			}
 
-			// 軽い怯みのSEを再生する
-			soundManager_->SeLightDamage();
-
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
-
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-			break;
-
-			// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
-		case DamageReaction::HeavyStagger:
-			currentDamageReaction_ = DamageReactionState::HeavyStaggerFront; // ここではとりあえず前方向の怯みを設定。
-			SetAnimation(hDamageHeavyMotion_, true, false);
-			damageReactionTimer_ = 1.5f;
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
+			if (!IsHeavyDamage())
 			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
+				// 重い怯みの状態に遷移する
+				stateMachine_->ChangeState("HeavyDamage");
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction(hitPosition);
+			}
+			else
+			{
+				// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+				stateMachine_->GetCurrentState()->Enter();
+				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction(hitPosition);
+			}
+		}
+		else if (damageReaction == DamageReaction::Down)
+		{
+			if (!isThrow)
+			{
+				// 重い怯みのSEを再生する
+				soundManager_->SeHeavyDamage();
+
+				// ダウンのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.15f;
 			}
 
-			// 重い怯みのSEを再生する
-			soundManager_->SeHeavyDamage();
-
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
-
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if (attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-			break;
-
-			// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-		case DamageReaction::Down:
-
-			// ノックバックの方向が上方向の場合は、吹っ飛び状態にする
+			// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
 			if (knockDirection.y * knockback > 0.0f)
 			{
-				currentDamageReaction_ = DamageReactionState::BlownAwayFront; // ここではとりあえず前方向の吹っ飛びを設定。
-				SetAnimation(hDownFallMotion_, true, false);
-				effectManager_->BlownSmoke000(GetBonePosition(JointType::Root));
-
-				movement_->SetGrounded(false); // 地面に接地していない状態にする
+				if (!IsBlownAway())
+				{
+					stateMachine_->ChangeState("BlownAway");
+					if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
 			}
 			else
 			{
-				// 上に跳ばない場合は、ダウン落下状態にする
-
-				currentDamageReaction_ = DamageReactionState::DownFallingFront; // ここではとりあえず前方向のダウンを設定。
-				SetAnimation(hDownFallMotion_, true, false);
-				damageReactionTimer_ = 1.0f;
+				if (!IsDownFalling() || !IsDownLying())
+				{
+					// ダウンの状態に遷移する
+					stateMachine_->ChangeState("DownFalling");
+					if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
 			}
-
-			// 軽い怯みのエフェクトを再生する
-			if (hitPosition)
-			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				if(attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->Impact001(*hitPosition);
-				effectManager_->Impact002(*hitPosition);
-				effectManager_->Impact003(*hitPosition);
-				effectManager_->Impact004(*hitPosition);
-				effectManager_->Impact005(*hitPosition);
-			}
-
-			// ダウン落下のSEを再生する
-			soundManager_->SeHeavyDamage();
-
-			// ダメージを受けたことを通知する
-			isHitDamage_ = true;
-
-			// シェイクさせる
-			shake_->StartShake(0.08f, 0.2f);
-
-			// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-			if(attacker && attacker->IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-			// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-			if (IsPlayer())if (IsHitDamage())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-			break;
 		}
 	}
 
+	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+
+
+	// ダメージを受けたことを通知する
+	isHitDamage_ = true;
+
+	// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
+	if (!((!IsPlayer() && !IsBoss()) || !IsAttack()))
+	{
+		// 弱攻撃が攻撃中のプレイヤーに当たった
+		isLightAttackHit = true;
+
+		// ノックバックを無効化する
+		knockback = 0.0f;
+	}
 
 	// 弱攻撃を受けたプレイヤーとボス以外は、攻撃者をロックオンターゲットに設定する
 	if (!isLightAttackHit)if (attacker)lockOnTarget_ = attacker;
@@ -825,13 +617,17 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// ノックバック処理
 	if (knockback > 0.0f)
 	{
-		if(!isBlownHit)movement_->AddKnockback(knockDirection.Normalize() * knockback);
+		if (!isBlownHit)
+		{
+			movement_->AddKnockback(knockDirection.Normalize() * knockback);
+		}
 	}
 
-	// 死亡判定
+	// 死亡処理
 	if (hp_ == 0)
 	{
-		Dead();
+		// 死亡状態に遷移する
+		stateMachine_->ChangeState("Dead");
 
 		// プレイヤーが相手を倒した場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -857,23 +653,17 @@ void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDire
 	// 攻撃や移動をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
-	isDash_ = false;
+	// 攻撃入力をキャンセルする
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// 受け流し成功の位置を設定する
 	SetPosition(pullPosition);
 
-	// 受け流し成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Deflected;
-	damageReactionTimer_ = 1.0f; // 相手が無防備になる時間
+	// 受け流され状態に遷移する
+	stateMachine_->ChangeState("Deflected");
 
 	// 受け流し成功のノックバックを設定する（相手を押し出す）
 	movement_->AddKnockback(pushDirection * knockBackPower);
-
-	// 受け流し成功モーションを再生する
-	SetAnimation(hDamageHeavyMotion_, true, false);
 }
 
 /// @brief 弾かれた時の処理
@@ -886,20 +676,14 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 	// 攻撃や移動をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isAvoid_ = false;
-	isDash_ = false;
+	// 攻撃入力をキャンセルする
 	bufferedAttackInput_ = AttackInputType::None;
 
-	// 弾き成功のリアクションを設定する
-	currentDamageReaction_ = DamageReactionState::Repelled;
-	damageReactionTimer_ = 1.0f;
+	// 弾かれ状態に遷移する
+	stateMachine_->ChangeState("Repelled");
 
 	// ノックバックを入れる
 	movement_->AddKnockback(pushDirection * knockBackPower);
-
-	// 弾き成功モーションを再生する
-	SetAnimation(hGuardHitMotion_, true, false);
 
 	// シェイクさせる
 	shake_->StartShake(0.05f, 0.15f);
@@ -927,110 +711,56 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 		attacker->ChargeRageGage(damageReaction);
 	}
 
-	switch (damageReaction)
+	// ヒットエフェクト
+	if (hitPosition)
 	{
-		// 軽い怯みは、ノックバックも少なく、短い時間リアクションが続く
-	case DamageReaction::LightStagger:
+		// エフェクトを再生する
+		effectManager_->ImpactDrop000(*hitPosition);
+		effectManager_->ImpactSmoke000(*hitPosition);
+		effectManager_->ImpactSmoke001(*hitPosition);
+		if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+		effectManager_->Impact001(*hitPosition);
+		effectManager_->Impact002(*hitPosition);
+		effectManager_->Impact003(*hitPosition);
+		effectManager_->Impact004(*hitPosition);
+		effectManager_->Impact005(*hitPosition);
+	}
 
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
+	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
+	float slowMotionDuration = 0.0f; // スローモーションの持続時間
 
+	// リアクションごとの処理
+	if (damageReaction == DamageReaction::LightStagger)
+	{
 		// 軽い怯みのSEを再生する
 		soundManager_->SeLightDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-
-		break;
-
-		// 重い怯みは、軽い怯みよりも長い時間リアクションが続く
-	case DamageReaction::HeavyStagger:
-
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
+		// 軽い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.1f;
+	}
+	else if (damageReaction == DamageReaction::HeavyStagger)
+	{
 		// 重い怯みのSEを再生する
 		soundManager_->SeHeavyDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.125f);
-
-		break;
-
-		// ダウン落下は、落下モーションを再生してから、ダウン中状態へ移行する
-	case DamageReaction::Down:
-
-		// 軽い怯みのエフェクトを再生する
-		if (hitPosition)
-		{
-			effectManager_->ImpactDrop000(*hitPosition);
-			effectManager_->ImpactSmoke000(*hitPosition);
-			effectManager_->ImpactSmoke001(*hitPosition);
-			if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-			effectManager_->Impact001(*hitPosition);
-			effectManager_->Impact002(*hitPosition);
-			effectManager_->Impact003(*hitPosition);
-			effectManager_->Impact004(*hitPosition);
-			effectManager_->Impact005(*hitPosition);
-		}
-
-		// ダウン落下のSEを再生する
+		// 重い怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionTimeScale = 0.125f;
+	}
+	else if (damageReaction == DamageReaction::Down)
+	{
+		// 重い怯みのSEを再生する
 		soundManager_->SeHeavyDamage();
 
-		// ダメージを受けたことを通知する
-		isHitDamage_ = true;
-
-		// シェイクさせる
-		shake_->StartShake(0.08f, 0.2f);
-
-		// 攻撃した側がプレイヤーの場合は、スローモーションを開始する
-		if (attacker && attacker->IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-		// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-		if (IsPlayer())if (IsHitDamage())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.15f);
-
-		break;
+		// ダウンのスローモーションを設定する
+		slowMotionTimeScale = 0.0f;
+		slowMotionDuration = 0.15f;
 	}
+
+	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
 
 
 	// 最終的な攻撃力を計算する
@@ -1058,7 +788,8 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 	// 死亡判定
 	if (hp_ == 0)
 	{
-		Dead();
+		// 死亡状態に遷移する
+		stateMachine_->ChangeState("Dead");
 
 		// プレイヤーが相手を倒した場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -1154,76 +885,6 @@ void Character::RageModeInput()
 
 		// レイジモード開始のSEを再生する
 		soundManager_->SeRageModeStart();
-	}
-}
-
-/// @brief ダウンからの起き上がり条件を満たしているかどうか
-/// @return 
-bool Character::CheckGetUpCondition()
-{
-	// 地面に接地していない場合は起き上がれない
-	if (!IsGrounded())return false;
-
-	// ダウン中の時間が十分経過しているかどうか
-	return damageReactionTimer_ <= 0.0f &&
-		currentDamageReaction_ == DamageReactionState::DownLyingFront || currentDamageReaction_ == DamageReactionState::DownLyingBack;
-}
-
-/// @brief 回避を開始する
-/// @param direction 
-/// @param distance 
-/// @param time 
-void Character::StartAvoid(const Vector3& direction, float distance, float time)
-{
-	// 新しい連続回避の開始時に回数を初期化する
-	if (!isAvoid_ && currentAvoidCount_ == 0)
-	{
-		currentAvoidCount_ = 1;
-	}
-
-	// 回避開始時にダッシュは解除する
-	isDash_ = false;
-
-	// 回避パラメータを初期化する
-	isAvoid_ = true;
-	avoidElapsedTime_ = time;
-	avoidDuration_ = time;
-	avoidStartPosition_ = worldTransform_->translate_;
-	avoidEndPosition_ = avoidStartPosition_ + Vector3(direction.x * distance, 0.0f, direction.z * distance);
-
-	// 回避瞬間のフラグを立てる
-	isJustAvoided_ = true;
-
-	// 回避se
-	soundManager_->SeAvoid();
-
-	// 通常移動は停止して回避移動へ移行する
-	MoveStop();
-}
-
-/// @brief 回避中の更新処理
-/// @param deltaTime
-void Character::UpdateAvoid(float deltaTime)
-{
-	// 回避時間が0以下だったら処理しない
-	if (avoidDuration_ <= 0.0f)
-		return;
-
-	// 回避時間を進める
-	avoidElapsedTime_ -= deltaTime;
-
-	// 開始位置から終了位置まで線形補間で移動する
-	const float t = std::clamp<float>(1.0f - (avoidElapsedTime_ / avoidDuration_), 0.0f, 1.0f);
-	const float easeOutT = 1.0f - std::powf(1.0f - t, 3); // イーズアウト補間
-	worldTransform_->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
-
-	// 到達したら回避フラグを下ろす
-	if (t >= 1.0f)
-	{
-		// 連続回避が終了したので回避回数を回復する
-		isAvoid_ = false;
-		avoidElapsedTime_ = 0.0f;
-		currentAvoidCount_ = 0;
 	}
 }
 
@@ -1356,9 +1017,6 @@ void Character::UpdateLockOnTargets()
 /// @param hAnimation 
 void Character::SetAnimation(AnimationHandle hAnimation, bool isReset, bool isLoop)
 {
-	// 死亡したら、モーション設定は行わない
-	if (isDead_)return;
-
 	if (!model_)return;
 
 	if (!(model_->param_->animation.hAnimation == hAnimation))
@@ -1397,6 +1055,25 @@ void Character::ActionUpdate()
 		currentAvoid_->Update();
 }
 
+/// @brief 回避を開始する
+/// @param direction 
+/// @param distance 
+/// @param time 
+void Character::StartAvoid(const Vector3& direction, float distance, float time)
+{
+	// すでに回避中の場合は、回避を開始しない
+	if (IsAvoid())return;
+
+	// 回避状態で、かつ回避方向が入力されている場合は、次の回避を予約する
+	stateMachine_->ChangeState("Avoid");
+	if (auto avoidState = static_cast<CharacterStateAvoid*>(stateMachine_->GetCurrentState()))
+	{
+		avoidState->SetAvoidDistance(distance);
+		avoidState->SetAvoidDuration(time);
+		avoidState->SetAvoidDirection(direction);
+	}
+}
+
 /// @brief アニメーションの更新
 void Character::UpdateAnimation()
 {
@@ -1417,7 +1094,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1426,65 +1103,9 @@ void Character::UpdateAnimation()
 				if (movement_->GetTargetVelocity().Length() > 0.0f)
 					SetAnimation(hWalkMotion_, false, true);
 
-				// ダッシュしている場合はダッシュモーションを再生する
-				if (isDash_)
-					SetAnimation(hDashMotion_, false, true);
-
 				// 構え中は構えモーションを優先して再生する
 				if (isStance_)
 					SetAnimation(hStanceMotion_, false, true);
-
-				// 防御の待機モーションを再生する
-				if (IsGuard())
-					SetAnimation(hGuardMotion_, true, false);
-
-				// 回避中は回避モーションを優先して再生する
-				if (isAvoid_)
-				{
-					// 回避方向
-					Vector3 avoidDirection = (avoidEndPosition_ - avoidStartPosition_).Normalize();
-
-					if (avoidDirection.Length() > 0.0f)
-					{
-						// キャラクターの向き（前）と右方向
-						Vector3 forward = movement_->GetDirection();
-						Vector3 right = Vector3(forward.z, 0.0f, -forward.x); // 左手系(DirectX等)の右方向
-
-						// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
-						float localZ = Dot(avoidDirection, forward); // +なら前、-なら後ろ
-						float localX = Dot(avoidDirection, right);   // +なら右、-なら左
-
-						// 前後成分と左右成分、どちらの影響が強いか（絶対値で比較）
-						if (std::abs(localZ) > std::abs(localX))
-						{
-							// 前後への回避
-							if (localZ > 0.0f)
-							{
-								// 前回避モーションを再生する
-								SetAnimation(hAvoidFrontMotion_, false, false);
-							}
-							else
-							{
-								// 後ろ回避モーションを再生する
-								SetAnimation(hAvoidBackMotion_, false, false);
-							}
-						}
-						else
-						{
-							// 左右への回避
-							if (localX > 0.0f)
-							{
-								// 右回避モーションを再生する
-								SetAnimation(hAvoidRightMotion_, false, false);
-							}
-							else
-							{
-								// 左回避モーションを再生する
-								SetAnimation(hAvoidLeftMotion_, false, false);
-							}
-						}
-					}
-				}
 			}
 
 			// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
@@ -1494,15 +1115,6 @@ void Character::UpdateAnimation()
 				if (IsGrabbed() && !IsGrabbedDamage())
 				{
 					SetAnimation(hGrabbedMotion_, false, true);
-				}
-				else if (isGuardReaction_)
-				{
-					// 防御成功時のノックバック中
-					guardReactionTimer_ += dt;
-					if (guardReactionTimer_ > 0.3f) // ノックバック時間（任意）
-					{
-						isGuardReaction_ = false;
-					}
 				}
 				else if (IsGrabbing())
 				{
@@ -1517,12 +1129,6 @@ void Character::UpdateAnimation()
 				{
 					SetAnimation(hGrabMotion_, false, true);
 				}
-			}
-
-			// 掴んでいる攻撃の最中で、掴んでいる相手の攻撃が終了した場合は、掴まれモーションに戻す
-			if (grabber_ && grabber_->IsGrabStrikeAttack() && grabber_->GetCurrentAttack()->IsFinishedTimer())
-			{
-				SetAnimation(hGrabbedMotion_, false, true);
 			}
 		}
 	}
@@ -1569,59 +1175,25 @@ Vector3 Character::GetBonePosition(const JointType& jointType) const
 	return Vector3(boneMatrix.m[3][0], boneMatrix.m[3][1], boneMatrix.m[3][2]);
 }
 
-/// @brief 倒れこみ中かどうか
-/// @return 
-bool Character::IsDownFalling() const
-{
-	return
-		currentDamageReaction_ == DamageReactionState::DownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::DownFallingBack ||
-		currentDamageReaction_ == DamageReactionState::DownFallingLeft ||
-		currentDamageReaction_ == DamageReactionState::DownFallingRight;
-}
-
-/// @brief 地面に倒れているかどうか
-/// @return 
-bool Character::IsGrondedDown() const
-{
-	// 地面に倒れている状態は、前後左右に倒れている状態か、前後に倒れている状態か、前後に倒れて起き上がっている状態のいずれかである
-	return
-		currentDamageReaction_ == DamageReactionState::DownLyingFront ||
-		currentDamageReaction_ == DamageReactionState::DownLyingBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownStaggerFront ||
-		currentDamageReaction_ == DamageReactionState::DownStaggerBack ||
-
-		currentDamageReaction_ == DamageReactionState::DownGettingUpFront ||
-		currentDamageReaction_ == DamageReactionState::DownGettingUpBack;
-}
-
-/// @brief 吹き飛ばされてダウンしているかどうか
-/// @return 
-bool Character::IsBlownDown() const
-{
-	// 吹き飛ばされてダウンしている状態は、吹き飛ばされて前後に倒れている状態か、吹き飛ばされて落下している状態のいずれかである
-	return
-		currentDamageReaction_ == DamageReactionState::BlownAwayFront ||
-		currentDamageReaction_ == DamageReactionState::BlownAwayBack ||
-		currentDamageReaction_ == DamageReactionState::BlownFallingFront ||
-		currentDamageReaction_ == DamageReactionState::BlownFallingBack;
-}
-
 /// @brief 相手をつかむ
 /// @param target 
 void Character::ExecuteGrab(Character* target, float duration,const std::optional<Vector3>& hitPosition)
 {
-	grabbedTarget_ = target;
+	// 掴み状態に遷移する
+	stateMachine_->ChangeState("Grabbing");
+	if (auto state = dynamic_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState()))
+	{
+		state->SetGrabTarget(target);
+	}
 
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
 
-	// 掴みエフェクトを発生させる
-	if (hitPosition)
-	{
-		effectManager_->GrabImpact000(*hitPosition);
-	}
+	//// 掴みエフェクトを発生させる
+	//if (hitPosition)
+	//{
+	//	effectManager_->GrabImpact000(*hitPosition);
+	//}
 	
 	// 掴みSEを再生する
 	soundManager_->SeGrab();
@@ -1630,33 +1202,51 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 /// @brief 掴まれた相手の処理
 void Character::OnGrabbed(Character* grabber)
 {
-	// 自分を掴んでいる相手を設定する
-	grabber_ = grabber;
-	grabbedTimer_ = 0.0f;
+	// 掴まれた状態に遷移する
+	stateMachine_->ChangeState("Grabbed");
 
-	// 掴まれた状態になったときの処理をここに書く
-	isGuard_ = false;
-	isDash_ = false;
-	isAvoid_ = false;
-}
-
-/// @brief 掴んだ相手を離す
-void Character::ReleaseGrab()
-{
-	// 掴んでいる相手がいる場合は、相手のgrabber_をクリアする
-	if (grabbedTarget_) 
+	// 掴まれた状態のキャラクターに掴んだキャラクターを設定する
+	auto currentState = stateMachine_->GetCurrentState();
+	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
 	{
-		grabbedTarget_->grabber_ = nullptr;
-		grabbedTarget_ = nullptr;
+		grabbedState->SetGrabber(grabber);
 	}
 }
 
-/// @brief 防御を設定する
-/// @param isGuard 
-void Character::SetGuard(bool isGuard)
+/// @brief 防御を実行する
+void Character::ExecuteGuard()
 {
-	if (isGuard && !isGuard_) guardActiveTimer_ = 0.0f; // ガードした瞬間にリセット
-	isGuard_ = isGuard;
+	// 既に防御中の場合は処理しない
+	if (IsGuard())return;
+
+	// 防御状態に遷移する
+	stateMachine_->ChangeState("Guard");
+}
+
+/// @brief 掴んでいる相手を取得する
+/// @return 
+Character* Character::GetGrabTarget() const
+{
+	// 掴んでいる状態でない場合はnullptrを返す
+	if (stateMachine_->GetCurrentStateName() != "Grabbing")
+		return nullptr;
+
+	// 掴んでいる状態のキャラクターのgrabTarget_を取得する
+	auto state = static_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState());
+	return state->GetGrabTarget();
+}
+
+/// @brief 掴まれている相手を取得する
+/// @param target 
+void Character::SetGrabTarget(Character* target)
+{
+	// 掴んでいる状態でない場合は処理しない
+	if (stateMachine_->GetCurrentStateName() != "Grabbing")
+		return;
+
+	// 掴んでいる状態のキャラクターのgrabTarget_を設定する
+	auto state = static_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState());
+	state->SetGrabTarget(target);
 }
 
 /// @brief 掴んだ状態の攻撃をしているかどうか
@@ -1673,10 +1263,20 @@ bool Character::IsGrabStrikeAttack() const
 /// @return 
 bool Character::IsGrabbedDamage()const
 {
-	if (!grabber_)return false;
+	if (!IsGrabbed())return false;
 
-	// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
-	return grabber_->IsGrabStrikeAttack();
+	auto currentState = stateMachine_->GetCurrentState();
+	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
+	{
+		// 自分を掴む相手を取得する
+		if (auto grabber = grabbedState->GetGrabber())
+		{
+			// 掴まれた状態で攻撃されているかどうかは、掴んでいる相手の攻撃が掴み攻撃かどうかで判断する
+			return grabber->IsGrabStrikeAttack();
+		}
+	}
+
+	return false;
 }
 
 /// @brief 武器を掴む
@@ -1728,6 +1328,9 @@ void Character::ExecuteDeflect(Character* attacker)
 	// 引き込む位置
 	Vector3 pullPos = myPos - myForward * 0.2f;
 
+	// 受け流し状態に遷移する
+	stateMachine_->ChangeState("Deflect");
+
 	// 受け流され処理を実行
 	attacker->OnDeflected(pullPos, attacker->GetDirection(), 4.0f);
 
@@ -1749,8 +1352,13 @@ void Character::ExecuteRepel(Character* attacker, std::optional<Vector3> hitPosi
 	// ノックバック方向を正規化する
 	pushDir = pushDir.Normalize();
 
+	// 弾き状態に遷移する
+	stateMachine_->ChangeState("Repel");
+
 	// 相手に弾きのリアクションを与える
 	attacker->OnRepelled(pushDir, 5.0f);
+
+	// 弾きのフラグを立てる
 	isHitRepel_ = true;
 
 	// 弾きのエフェクトを発生させる
@@ -1906,9 +1514,15 @@ void Character::LandingCheck()
 	// コリジョンの状態を確認する
 	if (landingCollision_->isCollision_)
 	{
-		// コリジョンの当たり判定がAABBであることを前提に、床との接触位置を計算する
-		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
-		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		for (auto& hitOpponent : landingCollision_->hitOpponents_)
+		{
+			// 着地判定はAABBの床に対してのみ行う
+			if (hitOpponent->GetType() != Engine::Collision3D::Type::AABB)
+				return;
+
+			auto floorCollision = static_cast<Collision3DInstanceAABB*>(hitOpponent);
+			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		}
 
 		// 着地していると判定する
 		movement_->SetGrounded(true);
@@ -1937,66 +1551,69 @@ void Character::WallTouchUpdate()
 	// 壁に接触していない場合は処理しない
 	if (!isWallTouch_) return;
 
-	// コリジョンの当たり判定がOBBであることを前提に、押し出しベクトルを計算する
-	if (wallTouchCollision_->hitOpponent_->GetType() == Engine::Collision3D::Type::OBB)
+	for (auto& hitOpponent : wallTouchCollision_->hitOpponents_)
 	{
-		// カプセルの情報
-		auto capsule = wallTouchCollision_->param_.get();
-
-		// 当たった相手のOBBの情報
-		auto hitColliders = static_cast<Collision3DInstanceOBB*>(wallTouchCollision_->hitOpponent_);
-		auto obbParam = hitColliders->param_.get();
-
-
-		// キャラクターの位置（カプセルの始点）を取得する
-		Vector3 pos = capsule->start;
-
-		// キャラクターの位置からOBBの中心へのベクトルを計算する
-		Vector3 offset = pos - obbParam->center;
-
-		// ワールド座標系のベクトルをOBBのローカル座標系に変換する
-		Vector3 localPos;
-		localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
-		localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
-		localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
-
-		// OBBのローカル座標系で、キャラクターの位置をOBBの中心から見たときのベクトルを、OBBの半径内にクランプする
-		Vector3 closestLocal;
-		closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
-		closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
-		closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
-
-		// クランプされたローカル座標をワールド座標に変換する
-		Vector3 closestWorld = obbParam->center;
-		closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
-		closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
-		closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
-
-		// キャラクターの位置とクランプされた点との距離を計算する
-		Vector3 diff = pos - closestWorld;
-		float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
-
-		// めり込んでいる場合（距離がカプセルの半径未満）
-		if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
+		// コリジョンの当たり判定がOBBであることを前提に、押し出しベクトルを計算する
+		if (hitOpponent->GetType() == Engine::Collision3D::Type::OBB)
 		{
-			float dist = std::sqrt(distSq);
-			float penetration = capsule->radius - dist; // めり込み量
+			// カプセルの情報
+			auto capsule = wallTouchCollision_->param_.get();
 
-			// 押し出しベクトル（正規化方向ベクトル × めり込み量）
-			Vector3 pushVector = (diff / dist) * penetration;
+			// 当たった相手のOBBの情報
+			auto hitColliders = static_cast<Collision3DInstanceOBB*>(hitOpponent);
+			auto obbParam = hitColliders->param_.get();
 
-			// ここでもY軸の押し出しは無効化する
-			pushVector.y = 0.0f;
 
-			// 位置を補正する
-			Vector3 currentPos = GetPosition();
-			currentPos.x += pushVector.x;
-			currentPos.z += pushVector.z;
-			SetPosition(currentPos);
+			// キャラクターの位置（カプセルの始点）を取得する
+			Vector3 pos = capsule->start;
 
-			// カプセルの始点も補正に合わせて更新しておく
-			capsule->start.x = currentPos.x;
-			capsule->start.z = currentPos.z;
+			// キャラクターの位置からOBBの中心へのベクトルを計算する
+			Vector3 offset = pos - obbParam->center;
+
+			// ワールド座標系のベクトルをOBBのローカル座標系に変換する
+			Vector3 localPos;
+			localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
+			localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
+			localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
+
+			// OBBのローカル座標系で、キャラクターの位置をOBBの中心から見たときのベクトルを、OBBの半径内にクランプする
+			Vector3 closestLocal;
+			closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
+			closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
+			closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
+
+			// クランプされたローカル座標をワールド座標に変換する
+			Vector3 closestWorld = obbParam->center;
+			closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
+			closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
+			closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
+
+			// キャラクターの位置とクランプされた点との距離を計算する
+			Vector3 diff = pos - closestWorld;
+			float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
+
+			// めり込んでいる場合（距離がカプセルの半径未満）
+			if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
+			{
+				float dist = std::sqrt(distSq);
+				float penetration = capsule->radius - dist; // めり込み量
+
+				// 押し出しベクトル（正規化方向ベクトル × めり込み量）
+				Vector3 pushVector = (diff / dist) * penetration;
+
+				// ここでもY軸の押し出しは無効化する
+				pushVector.y = 0.0f;
+
+				// 位置を補正する
+				Vector3 currentPos = GetPosition();
+				currentPos.x += pushVector.x;
+				currentPos.z += pushVector.z;
+				SetPosition(currentPos);
+
+				// カプセルの始点も補正に合わせて更新しておく
+				capsule->start.x = currentPos.x;
+				capsule->start.z = currentPos.z;
+			}
 		}
 	}
 }
@@ -2029,7 +1646,7 @@ void Character::UpdatePushOut()
 		if (!other->HasModel())continue;
 
 		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
-		if (IsGrondedDown() || other->IsGrondedDown() ||IsGrabbed() || other->IsGrabbed() ||
+		if (IsGroundedDown() || other->IsGroundedDown() ||IsGrabbed() || other->IsGrabbed() ||
 			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected())
 			continue;
 
@@ -2105,18 +1722,6 @@ void Character::SetTrailPos(const Vector3& basePosition, const Vector3& tipPosit
 /// @brief 死亡処理
 void Character::Dead()
 {
-	// 移動を止める
-	MoveStop();
-
-	// 死亡タイマーをリセットする
-	deadTimer_ = kDeadDuration;
-
-	// 死亡モーションを再生する
-	SetAnimation(hDownFallMotion_, true, false);
-
-	// 死亡フラグを立てる
-	isDead_ = true;
-
 	// 当たり判定の削除
 	if (eventTriggerCollision_) eventTriggerCollision_->Delete();
 	eventTriggerCollision_ = nullptr;
@@ -2148,16 +1753,11 @@ void Character::SetInitData(const CharacterInitData& initData)
 {
 	// フラグをリセットする
 	isFinished_ = false;
-	isDead_ = false;
 	isInAttackSequence_ = false;
-	isDash_ = false;
-	isAvoid_ = false;
 	isJustAvoided_ = false;
 	isJustAvoidedPrev_ = false;
 	isStance_ = false;
 	canLockOnWithoutStance_ = false;
-	isGuard_ = false;
-	isGuardReaction_ = false;
 	isGuardHit_ = false;
 	isPrevGuardHit_ = false;
 	canDeflect_ = false;
@@ -2174,10 +1774,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 
 	// ロックオンターゲットをリセットする
 	lockOnTarget_ = nullptr;
-
-	// ダメージリアクションの状態をリセットする
-	currentDamageReaction_ = DamageReactionState::None;
-	damageReactionTimer_ = 0.0f;
 
 	// レイジゲージをリセットする
 	rageGage_ = 0;
@@ -2224,21 +1820,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;
 	hWalkMotion_ = initData.hWalkMotion;
-	hDashMotion_ = initData.hDashMotion;
-	hAvoidFrontMotion_ = initData.hAvoidFrontMotion;
-	hAvoidBackMotion_ = initData.hAvoidBackMotion;
-	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
-	hAvoidRightMotion_ = initData.hAvoidRightMotion;
-	hGuardMotion_ = initData.hGuardMotion;
-	hGuardHitMotion_ = initData.hGuardHitMotion;
-
-	hDamageLightMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front");
-	hDamageHeavyMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy");
-	hDownStaggerMotion_ = motionManager_->GetMotion(MotionType::Stagger, "Front_Down");
-
-	hDownFallMotion_ = motionManager_->GetMotion(MotionType::DownFall, "Front");
-	hDownLyingMotion_ = motionManager_->GetMotion(MotionType::DownLying, "Front");
-	hDownGetUpMotion_ = motionManager_->GetMotion(MotionType::DowoGetUp, "Front");
 
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");

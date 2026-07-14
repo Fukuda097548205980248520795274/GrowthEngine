@@ -21,9 +21,6 @@ public:
 	/// @brief 実行
 	virtual void Exec() override;
 
-	/// @brief 更新処理
-	virtual void Update() override;
-
 	/// @brief 終了、中断
 	virtual void Exit() override;
 
@@ -36,8 +33,5 @@ private:
 
 	// ガードの持続時間
 	float guardDuration_ = 0.5f;
-
-	// ガードの経過時間
-	float guardTimer_ = 0.0f;
 };
 

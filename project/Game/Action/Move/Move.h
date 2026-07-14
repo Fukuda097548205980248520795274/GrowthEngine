@@ -9,6 +9,9 @@ public:
 	/// @param character 
 	Move(Character* character, bool isDash = false) : Action(character), isDash_(isDash) {}
 
+	/// @brief デストラクタ
+	virtual ~Move();
+
 	/// @brief 実行
 	virtual void Exec() override;
 

@@ -1,0 +1,39 @@
+{
+    "Sprite_RB_Button_Sprite": {
+        "BlendMode": 1,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "ScreenAnchor": 7,
+        "Texture": "./Assets/Textures/rb_button.png",
+        "Texture_Anchor": [
+            0.0,
+            0.5
+        ],
+        "Texture_Size": [
+            128.0,
+            128.0
+        ],
+        "Transform_Rotate": 0.0,
+        "Transform_Scale": [
+            0.75,
+            0.75
+        ],
+        "Transform_Translate": [
+            30.0,
+            120.0
+        ]
+    }
+}

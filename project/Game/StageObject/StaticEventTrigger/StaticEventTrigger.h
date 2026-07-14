@@ -32,6 +32,7 @@ public:
 	{
 		None,
 		ObjectSpawn,
+		PlayCutscene, // カットシーン再生
 		StickTutorial, // スティック操作チュートリアル
 		DashTutorial, // ダッシュ操作チュートリアル
 		AttackTutorial, // 攻撃操作チュートリアル

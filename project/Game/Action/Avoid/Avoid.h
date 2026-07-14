@@ -20,6 +20,9 @@ class Avoid : public Action
 {
 public:
 
+	/// @brief デストラクタ
+	~Avoid();
+
 	/// @brief コンストラクタ
 	/// @param character 
 	/// @param initData 

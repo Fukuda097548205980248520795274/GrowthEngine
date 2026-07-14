@@ -1,6 +1,14 @@
 #include "Avoid.h"
 #include "Entity/Character/Character.h"
 
+/// @brief デストラクタ
+Avoid::~Avoid()
+{
+	// 消すときは、所有者の持つ現在の回避処理が自分であれば、クリアする
+	if (owner_ && owner_->GetCurrentAvoid() == this)
+		owner_->SetCurrentAvoid(nullptr);
+}
+
 /// @brief コンストラクタ
 /// @param character 
 /// @param initData 
@@ -56,12 +64,6 @@ void Avoid::Update()
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 	timer_ += dt;
 
-	// ターゲット方向を向く場合は、ターゲットの方向を向く
-	if (isTargetDirection_ && owner_->GetLockOnTarget())
-	{
-		
-	}
-
 	// キャラクターが掴まれているか、行動不能状態なら回避を終了する
 	if (owner_->IsGrabbing() || owner_->IsIncapacitated())
 	{
@@ -69,11 +71,11 @@ void Avoid::Update()
 		return;
 	}
 
-	// 時間を超えたら成功
-	if (timer_ >= time_)
+	// 回避が終了している場合は成功として終了する
+	if (!owner_->IsAvoid())
 	{
-		// 回避が終了した場合は、成功フラグを立ててExit()を呼ぶ
 		Action::Update();
+		return;
 	}
 }
 

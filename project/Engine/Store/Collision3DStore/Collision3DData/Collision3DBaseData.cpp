@@ -32,8 +32,8 @@ void Engine::Collision3DBaseData::Update()
 			// 衝突フラグをリセットする
 			instance->isCollision_ = false; 
 
-			// 衝突した相手のインスタンスをnullptrにする
-			instance->hitOpponent_ = nullptr;
+			// 衝突した相手のインスタンスをクリアする
+			instance->hitOpponents_.clear();
 
 			// 削除フラグが立っているインスタンスは削除する
 			if (instance->IsDelete()) 
@@ -74,7 +74,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -89,7 +89,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -104,7 +104,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -119,7 +119,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -134,7 +134,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -149,7 +149,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -162,8 +162,9 @@ void Engine::Collision3DBaseData::CollisionCheck()
 				{
 					// 衝突フラグを立てる
 					myInstance->isCollision_ = true;
+
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -178,7 +179,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -193,7 +194,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -208,7 +209,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -223,7 +224,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -238,7 +239,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -253,7 +254,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -268,7 +269,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -283,7 +284,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -298,7 +299,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -313,7 +314,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -328,7 +329,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -343,7 +344,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -358,7 +359,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -373,7 +374,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -388,7 +389,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -403,7 +404,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -418,7 +419,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -433,7 +434,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -448,7 +449,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -463,7 +464,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -478,7 +479,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -493,7 +494,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -508,7 +509,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -523,7 +524,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -538,7 +539,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -553,7 +554,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -568,7 +569,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
@@ -583,7 +584,7 @@ void Engine::Collision3DBaseData::CollisionCheck()
 					myInstance->isCollision_ = true;
 
 					// 衝突した相手のインスタンスを保存する
-					myInstance->hitOpponent_ = yourInstance.get();
+					myInstance->hitOpponents_.push_back(yourInstance.get());
 				}
 
 				continue;
