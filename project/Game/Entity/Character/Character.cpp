@@ -184,6 +184,9 @@ void Character::Update()
 			// 押し出し処理
 			UpdatePushOut();
 
+			// 壁接触の処理
+			WallTouchUpdate();
+
 			// アニメーションの更新
 			UpdateAnimation();
 
@@ -262,9 +265,6 @@ void Character::Update()
 
 	/// ターゲットの方向を向く処理
 	movement_->TargetDirection(dt);
-
-	// 壁接触の処理
-	WallTouchUpdate();
 
 	// 最後のまとめた処理
 	FinalizeUpdate();
