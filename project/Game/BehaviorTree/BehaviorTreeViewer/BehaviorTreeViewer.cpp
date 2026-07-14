@@ -78,6 +78,7 @@ void BehaviorTreeViewer::DrawUI()
 			{
 				selectedNpcIndex_ = i;
 			}
+
 			if (isSelected)
 			{
 				ImGui::SetItemDefaultFocus();

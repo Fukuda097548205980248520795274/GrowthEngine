@@ -85,6 +85,10 @@ public:
 	/// @return 
 	State GetFadeState() const { return fadeState_; }
 
+	/// @brief ノードの位置を取得する
+	/// @return 
+	const Vector2& GetPos() const { return pos_; }
+
 
 protected:
 

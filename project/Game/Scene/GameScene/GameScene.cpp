@@ -25,13 +25,13 @@ namespace
 /// @brief 初期化
 void GameScene::Initialize()
 {
-	// カメラの読み込みと切り替え
-	engine_->LoadCamera3D("MainCamera");
-	engine_->Camera3DSwitch("MainCamera");
-
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	engine_->LoadCamera3D("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
+
+	// カメラの読み込みと切り替え
+	engine_->LoadCamera3D("MainCamera");
+	engine_->Camera3DSwitch("MainCamera");
 
 	// カットシーンの登録
 	cutsceneManager_->RegisterCutscene("BossAppear", 4.0f, [this](float progress, float dt)
@@ -1113,7 +1113,14 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 	}
 	else if (type == StaticEventTrigger::EventType::GrabTutorial)
 	{
-		grabTutorial_->SetEnable(true);
+		if (player_->IsGrabbing())
+		{
+			attackTutorial_->SetEnable(true);
+		}
+		else
+		{
+			grabTutorial_->SetEnable(true);
+		}
 	}
 	else if (type == StaticEventTrigger::EventType::GuardTutorial)
 	{
