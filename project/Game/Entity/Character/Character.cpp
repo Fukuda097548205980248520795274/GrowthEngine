@@ -1544,9 +1544,15 @@ void Character::LandingCheck()
 	// コリジョンの状態を確認する
 	if (landingCollision_->isCollision_)
 	{
-		// コリジョンの当たり判定がAABBであることを前提に、床との接触位置を計算する
-		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
-		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		for (auto& hitOpponent : landingCollision_->hitOpponents_)
+		{
+			// 着地判定はAABBの床に対してのみ行う
+			if (hitOpponent->GetType() != Engine::Collision3D::Type::AABB)
+				return;
+
+			auto floorCollision = static_cast<Collision3DInstanceAABB*>(hitOpponent);
+			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		}
 
 		// 着地していると判定する
 		movement_->SetGrounded(true);
@@ -1575,66 +1581,69 @@ void Character::WallTouchUpdate()
 	// 壁に接触していない場合は処理しない
 	if (!isWallTouch_) return;
 
-	// コリジョンの当たり判定がOBBであることを前提に、押し出しベクトルを計算する
-	if (wallTouchCollision_->hitOpponent_->GetType() == Engine::Collision3D::Type::OBB)
+	for (auto& hitOpponent : wallTouchCollision_->hitOpponents_)
 	{
-		// カプセルの情報
-		auto capsule = wallTouchCollision_->param_.get();
-
-		// 当たった相手のOBBの情報
-		auto hitColliders = static_cast<Collision3DInstanceOBB*>(wallTouchCollision_->hitOpponent_);
-		auto obbParam = hitColliders->param_.get();
-
-
-		// キャラクターの位置（カプセルの始点）を取得する
-		Vector3 pos = capsule->start;
-
-		// キャラクターの位置からOBBの中心へのベクトルを計算する
-		Vector3 offset = pos - obbParam->center;
-
-		// ワールド座標系のベクトルをOBBのローカル座標系に変換する
-		Vector3 localPos;
-		localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
-		localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
-		localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
-
-		// OBBのローカル座標系で、キャラクターの位置をOBBの中心から見たときのベクトルを、OBBの半径内にクランプする
-		Vector3 closestLocal;
-		closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
-		closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
-		closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
-
-		// クランプされたローカル座標をワールド座標に変換する
-		Vector3 closestWorld = obbParam->center;
-		closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
-		closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
-		closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
-
-		// キャラクターの位置とクランプされた点との距離を計算する
-		Vector3 diff = pos - closestWorld;
-		float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
-
-		// めり込んでいる場合（距離がカプセルの半径未満）
-		if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
+		// コリジョンの当たり判定がOBBであることを前提に、押し出しベクトルを計算する
+		if (hitOpponent->GetType() == Engine::Collision3D::Type::OBB)
 		{
-			float dist = std::sqrt(distSq);
-			float penetration = capsule->radius - dist; // めり込み量
+			// カプセルの情報
+			auto capsule = wallTouchCollision_->param_.get();
 
-			// 押し出しベクトル（正規化方向ベクトル × めり込み量）
-			Vector3 pushVector = (diff / dist) * penetration;
+			// 当たった相手のOBBの情報
+			auto hitColliders = static_cast<Collision3DInstanceOBB*>(hitOpponent);
+			auto obbParam = hitColliders->param_.get();
 
-			// ここでもY軸の押し出しは無効化する
-			pushVector.y = 0.0f;
 
-			// 位置を補正する
-			Vector3 currentPos = GetPosition();
-			currentPos.x += pushVector.x;
-			currentPos.z += pushVector.z;
-			SetPosition(currentPos);
+			// キャラクターの位置（カプセルの始点）を取得する
+			Vector3 pos = capsule->start;
 
-			// カプセルの始点も補正に合わせて更新しておく
-			capsule->start.x = currentPos.x;
-			capsule->start.z = currentPos.z;
+			// キャラクターの位置からOBBの中心へのベクトルを計算する
+			Vector3 offset = pos - obbParam->center;
+
+			// ワールド座標系のベクトルをOBBのローカル座標系に変換する
+			Vector3 localPos;
+			localPos.x = offset.x * obbParam->oriented[0].x + offset.y * obbParam->oriented[0].y + offset.z * obbParam->oriented[0].z;
+			localPos.y = offset.x * obbParam->oriented[1].x + offset.y * obbParam->oriented[1].y + offset.z * obbParam->oriented[1].z;
+			localPos.z = offset.x * obbParam->oriented[2].x + offset.y * obbParam->oriented[2].y + offset.z * obbParam->oriented[2].z;
+
+			// OBBのローカル座標系で、キャラクターの位置をOBBの中心から見たときのベクトルを、OBBの半径内にクランプする
+			Vector3 closestLocal;
+			closestLocal.x = std::clamp(localPos.x, -obbParam->radius.x, obbParam->radius.x);
+			closestLocal.y = std::clamp(localPos.y, -obbParam->radius.y, obbParam->radius.y);
+			closestLocal.z = std::clamp(localPos.z, -obbParam->radius.z, obbParam->radius.z);
+
+			// クランプされたローカル座標をワールド座標に変換する
+			Vector3 closestWorld = obbParam->center;
+			closestWorld.x += obbParam->oriented[0].x * closestLocal.x + obbParam->oriented[1].x * closestLocal.y + obbParam->oriented[2].x * closestLocal.z;
+			closestWorld.y += obbParam->oriented[0].y * closestLocal.x + obbParam->oriented[1].y * closestLocal.y + obbParam->oriented[2].y * closestLocal.z;
+			closestWorld.z += obbParam->oriented[0].z * closestLocal.x + obbParam->oriented[1].z * closestLocal.y + obbParam->oriented[2].z * closestLocal.z;
+
+			// キャラクターの位置とクランプされた点との距離を計算する
+			Vector3 diff = pos - closestWorld;
+			float distSq = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
+
+			// めり込んでいる場合（距離がカプセルの半径未満）
+			if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
+			{
+				float dist = std::sqrt(distSq);
+				float penetration = capsule->radius - dist; // めり込み量
+
+				// 押し出しベクトル（正規化方向ベクトル × めり込み量）
+				Vector3 pushVector = (diff / dist) * penetration;
+
+				// ここでもY軸の押し出しは無効化する
+				pushVector.y = 0.0f;
+
+				// 位置を補正する
+				Vector3 currentPos = GetPosition();
+				currentPos.x += pushVector.x;
+				currentPos.z += pushVector.z;
+				SetPosition(currentPos);
+
+				// カプセルの始点も補正に合わせて更新しておく
+				capsule->start.x = currentPos.x;
+				capsule->start.z = currentPos.z;
+			}
 		}
 	}
 }

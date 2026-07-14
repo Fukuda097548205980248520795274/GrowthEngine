@@ -226,9 +226,16 @@ void Weapon::LandingCheck()
 	// 着地判定の衝突があるかどうか
 	if (landingCollision_->isCollision_)
 	{
-		// 着地したときの位置を計算する
-		auto floorCollision = static_cast<Collision3DInstanceAABB*>(landingCollision_->hitOpponent_);
-		worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		for (auto& hitOpponent : landingCollision_->hitOpponents_)
+		{
+			// 着地判定の相手がAABBでない場合は無視する
+			if (hitOpponent->GetType() != Engine::Collision3D::Type::AABB) 
+				continue;
+
+			// 着地したときの位置を計算する
+			auto floorCollision = static_cast<Collision3DInstanceAABB*>(hitOpponent);
+			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+		}
 
 		// 着地したので接地フラグを立てる
 		isGrounded_ = true;
