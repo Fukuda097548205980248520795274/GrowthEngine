@@ -1393,6 +1393,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDead">
       <UniqueIdentifier>{f6521f38-5064-4fb5-9da8-4afb880075bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash">
+      <UniqueIdentifier>{f6a692d9-653d-4317-b082-90aef905efc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2528,6 +2531,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDead\CharacterStateDead.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDead</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash\CharacterStateDash.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDash</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3793,6 +3799,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDead\CharacterStateDead.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDead</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash\CharacterStateDash.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDash</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -72,6 +72,14 @@ void NavMeshMove::Exec()
                 // 復帰ポイントを仮の目的地にして経路を再設定（または直接そこへ向かう）
                 path_ = { myNearestPos.value()};
                 currentPathIndex_ = 0;
+
+                // ダッシュ状態に遷移する
+                auto stateMachine = owner_->GetStateMachine();
+                if (isDash_)
+                {
+                    stateMachine->ChangeState("Dash");
+                }
+
                 return; // 復帰へ向かう
             }
 
@@ -86,6 +94,13 @@ void NavMeshMove::Exec()
             Exit();
             return;
         }
+    }
+
+    // ダッシュ状態に遷移する
+    auto stateMachine = owner_->GetStateMachine();
+    if (isDash_)
+    {
+        stateMachine->ChangeState("Dash");
     }
 }
 

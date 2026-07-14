@@ -287,7 +287,7 @@ void Player::UpdateAttack()
 void Player::UpdateStanceState()
 {
 	// 怯み状態、動けない状態は構え状態にならない
-	if(IsGrabbing() || IsIncapacitated() || isDash_ || !GetLockOnTarget())
+	if(IsGrabbing() || IsIncapacitated() || IsDash() || !GetLockOnTarget())
 	{
 		isStance_ = false;
 		return;
@@ -300,27 +300,19 @@ void Player::UpdateStanceState()
 /// @param hasMoveInput
 void Player::UpdateDashState(bool hasMoveInput)
 {
-	// 怯み状態、または構え状態、または「つかまれている状態」、または攻撃中、またはダウン中、または空中にいる状態、またはスタイルチェンジ中ならダッシュにならない
-	// ダッシュ中に構えた場合もダッシュを解除する
+	// 怯み状態、動けない状態はダッシュ状態にならない
 	if (IsGrabbing() || IsIncapacitated())
 	{
-		isDash_ = false;
 		return;
 	}
 
 	// ダッシュ入力があって、移動入力もあって、ダッシュ中でない場合はダッシュを開始する
-	if (inputController_->IsDashRequested() && hasMoveInput && !isDash_)
+	if (inputController_->IsDashRequested() && hasMoveInput && !IsDash())
 	{
-		isDash_ = true;
+		stateMachine_->ChangeState("Dash");
 
 		// ダッシュ開始時にスローモーションを開始する
 		GrowthEngine::GetInstance()->StartSlowMotion(0.1f, 0.1f);
-	}
-
-	// ダッシュ中に移動入力がなくなったらダッシュを終了する
-	if (isDash_ && !hasMoveInput)
-	{
-		isDash_ = false;
 	}
 }
 
@@ -337,7 +329,7 @@ float Player::GetCurrentMoveSpeed() const
 	float moveSpeed = isStance_ ? (kNormalMoveSpeed * kStanceMoveSpeedMultiplier) : kNormalMoveSpeed;
 
 	// ダッシュ中は移動速度を2倍にする
-	if (isDash_)
+	if (IsDash())
 	{
 		moveSpeed *= kDashSpeedMultiplier;
 	}

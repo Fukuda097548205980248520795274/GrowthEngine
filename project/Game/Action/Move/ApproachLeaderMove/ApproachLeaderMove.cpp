@@ -44,6 +44,12 @@ void ApproachLeaderMove::Exec()
 
 	leader_ = leaderCandidates.front().first;
 
+	// ダッシュ状態に遷移する
+	auto stateMachine = owner_->GetStateMachine();
+    if (isDash_)
+    {
+		stateMachine->ChangeState("Dash");
+    }
 
     // 基底クラスで実行
     Move::Exec();

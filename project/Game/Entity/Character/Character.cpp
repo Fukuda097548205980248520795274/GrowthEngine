@@ -16,6 +16,7 @@
 #include "HUD/HP/HP.h"
 
 #include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateDash/CharacterStateDash.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbed/CharacterStateGrabbed.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateGuard/CharacterStateGuard.h"
@@ -62,6 +63,7 @@ Character::Character() : Entity()
 	// ステートマシンの生成
 	stateMachine_ = std::make_unique<CharacterStateMachine>();
 	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
+	stateMachine_->AddState("Dash", std::make_unique<CharacterStateDash>(this, motionManager_->GetMotion(MotionType::Dash, "Dash")));
 	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
 	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
 	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, 
@@ -131,11 +133,6 @@ void Character::SetAnimationHandle(const AnimationHandleData& animData)
 	hStandMotion_ = animData.hStandMotion;
 	hStanceMotion_ = animData.hStanceMotion;
 	hWalkMotion_ = animData.hWalkMotion;
-	hDashMotion_ = animData.hDashMotion;
-	hAvoidFrontMotion_ = animData.hAvoidFrontMotion;
-	hAvoidBackMotion_ = animData.hAvoidBackMotion;
-	hAvoidLeftMotion_ = animData.hAvoidLeftMotion;
-	hAvoidRightMotion_ = animData.hAvoidRightMotion;
 }
 
 /// @brief 更新処理
@@ -184,12 +181,6 @@ void Character::Update()
 				UpdateStyleChange(dt);
 			}
 
-			// ダッシュ中に攻撃をした場合は、ダッシュを解除する
-			if (IsAttack())
-			{
-				isDash_ = false;
-			}
-
 			// 押し出し処理
 			UpdatePushOut();
 
@@ -222,16 +213,16 @@ void Character::Update()
 			UpdateHurtbox(hurtboxChest_, JointType::Chest);
 			UpdateHurtbox(hurtboxRoot_, JointType::Root);
 
-			// ダッシュ中のエフェクト更新
-			if (isDash_ && !isStance_)
-			{
-				dashTimer_ -= dt;
-				if (dashTimer_ <= 0.0f)
-				{
-					effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
-					dashTimer_ = 0.15f;
-				}
-			}
+			//// ダッシュ中のエフェクト更新
+			//if (isDash_ && !isStance_)
+			//{
+			//	dashTimer_ -= dt;
+			//	if (dashTimer_ <= 0.0f)
+			//	{
+			//		effectManager_->DashSmoke000(GetWorldPosition() + Vector3(0.0f, 0.0f, 0.0f));
+			//		dashTimer_ = 0.15f;
+			//	}
+			//}
 		};
 
 
@@ -258,8 +249,9 @@ void Character::Update()
 	// ステートマシンの更新
 	stateMachine_->Update(dt);
 
-	// ステートマシンがNone状態でない場合は、体力HUDの更新を行い、処理を終了する
-	if (stateMachine_->GetCurrentStateName() != "None")
+	// 現在のステートがNoneまたはDash以外の場合は、まとめた処理を行って終了する
+	if (stateMachine_->GetCurrentStateName() != "None" &&
+		stateMachine_->GetCurrentStateName() != "Dash")
 	{
 		FinalizeUpdate();
 		return;
@@ -320,8 +312,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 攻撃をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isDash_ = false;
+	// 攻撃入力のバッファをクリアする
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// ガードしている場合は、ダメージを無効にして、ガードリアクションを行う
@@ -662,8 +653,7 @@ void Character::OnDeflected(const Vector3& pullPosition, const Vector3& pushDire
 	// 攻撃や移動をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isDash_ = false;
+	// 攻撃入力をキャンセルする
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// 受け流し成功の位置を設定する
@@ -686,8 +676,7 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 	// 攻撃や移動をキャンセルする
 	MoveStop();
 
-	// 回避とダッシュのフラグをリセットする
-	isDash_ = false;
+	// 攻撃入力をキャンセルする
 	bufferedAttackInput_ = AttackInputType::None;
 
 	// 弾かれ状態に遷移する
@@ -799,7 +788,8 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 	// 死亡判定
 	if (hp_ == 0)
 	{
-		Dead();
+		// 死亡状態に遷移する
+		stateMachine_->ChangeState("Dead");
 
 		// プレイヤーが相手を倒した場合は、スローモーションを開始する
 		if (attacker && attacker->IsPlayer())
@@ -1104,7 +1094,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);
@@ -1112,10 +1102,6 @@ void Character::UpdateAnimation()
 				//　移動している場合は歩きモーションを再生する
 				if (movement_->GetTargetVelocity().Length() > 0.0f)
 					SetAnimation(hWalkMotion_, false, true);
-
-				// ダッシュしている場合はダッシュモーションを再生する
-				if (isDash_)
-					SetAnimation(hDashMotion_, false, true);
 
 				// 構え中は構えモーションを優先して再生する
 				if (isStance_)
@@ -1225,9 +1211,6 @@ void Character::OnGrabbed(Character* grabber)
 	{
 		grabbedState->SetGrabber(grabber);
 	}
-
-	// 掴まれた状態になったときの処理をここに書く
-	isDash_ = false;
 }
 
 /// @brief 防御を実行する
@@ -1771,7 +1754,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	// フラグをリセットする
 	isFinished_ = false;
 	isInAttackSequence_ = false;
-	isDash_ = false;
 	isJustAvoided_ = false;
 	isJustAvoidedPrev_ = false;
 	isStance_ = false;
@@ -1838,11 +1820,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hStandMotion_ = initData.hStandMotion;
 	hStanceMotion_ = initData.hStanceMotion;
 	hWalkMotion_ = initData.hWalkMotion;
-	hDashMotion_ = initData.hDashMotion;
-	hAvoidFrontMotion_ = initData.hAvoidFrontMotion;
-	hAvoidBackMotion_ = initData.hAvoidBackMotion;
-	hAvoidLeftMotion_ = initData.hAvoidLeftMotion;
-	hAvoidRightMotion_ = initData.hAvoidRightMotion;
 
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");

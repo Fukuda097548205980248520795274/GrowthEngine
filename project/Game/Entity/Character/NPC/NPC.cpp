@@ -118,10 +118,6 @@ void NPC::Update()
 	// アクションの更新
 	ActionUpdate();
 
-	// 移動の更新
-	if (currentMove_) isDash_ = currentMove_->IsDash();
-	else isDash_ = false;
-
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{

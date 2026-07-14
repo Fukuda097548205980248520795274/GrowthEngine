@@ -148,6 +148,10 @@ public:
 	/// @return 
 	bool IsStance() const { return isStance_; }
 
+	/// @brief ダッシュしているかどうか
+	/// @return 
+	bool IsDash()const { return stateMachine_->GetCurrentStateName() == "Dash"; }
+
 	/// @brief 死亡しているかどうか
 	/// @return 
 	bool IsDead() const { return stateMachine_->GetCurrentStateName() == "Dead"; }
@@ -592,14 +596,6 @@ protected:
 
 protected:
 
-	/// @brief ダッシュフラグ
-	bool isDash_ = false;
-
-	float dashTimer_ = 0.1f;
-
-
-protected:
-
 	/// @brief 回避した瞬間かどうか
 	bool isJustAvoided_ = false;
 	bool isJustAvoidedPrev_ = false;
@@ -789,24 +785,8 @@ protected:
 	/// @brief 歩きモーション
 	AnimationHandle hWalkMotion_ = 0;
 
-	/// @brief ダッシュモーション
-	AnimationHandle hDashMotion_ = 0;
-
 	/// @brief スタイルチェンジモーション
 	AnimationHandle hStyleChangeMotion_ = 0;
-
-
-	/// @brief 前回避モーション
-	AnimationHandle hAvoidFrontMotion_ = 0;
-
-	/// @brief 後ろ回避モーション
-	AnimationHandle hAvoidBackMotion_ = 0;
-
-	/// @brief 左回避モーション
-	AnimationHandle hAvoidLeftMotion_ = 0;
-
-	/// @brief 右回避モーション
-	AnimationHandle hAvoidRightMotion_ = 0;
 
 
 	/// @brief つかみモーション
