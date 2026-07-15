@@ -37,17 +37,13 @@ public:
 	/// @param cooltime 
 	void SetAttackCooltime(float cooltime)override { attackCooltime_ = cooltime; }
 
-	/// @brief ビヘイビアツリーの設定
-	/// @param behaviorTree 
-	void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) override { behaviorTree_ = std::move(behaviorTree); }
-
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	const NavMesh* GetNavMesh() const override { return navMesh_; }
 
-	/// @brief ビヘイビアツリーの取得
-	/// @return 
-	BehaviorTree* GetBehaviorTree() const override { return behaviorTree_.get(); }
+	/// @brief ビヘイビアツリーの変更をリクエストする
+	/// @param newTree 
+	void RequestBehaviorTreeChange(BehaviorTree* newTree);
 
 
 private:
@@ -68,7 +64,10 @@ private:
 	bool isFighting_ = false;
 
 	/// @brief ビヘイビアツリー
-	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
+	BehaviorTree* currentBehaviorTree_ = nullptr;
+
+	/// @brief 次のビヘイビアツリー
+	BehaviorTree* nextBehaviorTree_ = nullptr;
 
 	/// @brief ナビメッシュ
 	const NavMesh* navMesh_ = nullptr;

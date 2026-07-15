@@ -5,6 +5,18 @@ class BehaviorTree
 {
 public:
 
+	/// @brief 状態
+	enum class State
+	{
+		None,
+		Success,
+		Failure,
+		Running,
+	};
+
+
+public:
+
 	/// @brief コンストラクタ
 	/// @param root ルートノード
 	BehaviorTree(std::unique_ptr<Node> root) : root_(std::move(root)) {}
@@ -13,7 +25,7 @@ public:
 	virtual ~BehaviorTree() = default;
 
 	/// @brief 実行
-	void Exec();
+	State Exec();
 
 	/// @brief ルートノードを取得する
 	/// @return 
@@ -22,9 +34,16 @@ public:
 	/// @brief 中断処理
 	void Abort() { if (root_) root_->Abort(); }
 
+	/// @brief 現在の状態を取得する
+	/// @return 
+	State GetCurrentState() const { return currentState_; }
+
 protected:
 
 	/// @brief ルートノード
 	std::unique_ptr<Node> root_ = nullptr;
+
+	/// @brief 現在の状態
+	State currentState_ = State::None;
 };
 

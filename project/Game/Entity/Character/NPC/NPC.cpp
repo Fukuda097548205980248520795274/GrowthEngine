@@ -110,9 +110,21 @@ void NPC::Update()
 	// 動ける状態なら、ビヘイビアツリーを実行する
 	if (!isIncapacitated)
 	{
-		// ビヘイビアツリーを実行する
-		if (behaviorTree_)
-			behaviorTree_->Exec();
+		if (currentBehaviorTree_)
+		{
+			// ツリーを実行し、状態を取得
+			BehaviorTree::State state = currentBehaviorTree_->Exec();
+
+			// ツリーの実行が終了（成功 or 失敗）したら、予約されていたツリーに切り替える
+			if (state == BehaviorTree::State::Success || state == BehaviorTree::State::Failure)
+			{
+				if (nextBehaviorTree_)
+				{
+					currentBehaviorTree_ = nextBehaviorTree_;
+					nextBehaviorTree_ = nullptr; // 予約をクリア
+				}
+			}
+		}
 	}
 
 	// アクションの更新
@@ -196,11 +208,31 @@ void NPC::Draw()
 /// @brief 死亡処理
 void NPC::Dead()
 {
-	if (behaviorTree_)behaviorTree_.reset();
-	behaviorTree_ = nullptr;
+	// ビヘイビアツリーをクリアする
+	currentBehaviorTree_ = nullptr;
+	nextBehaviorTree_ = nullptr;
 
 	// 基底クラスの死亡処理
 	Character::Dead();
+}
+
+/// @brief ビヘイビアツリーの変更をリクエストする
+/// @param newTree 
+void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
+{
+	// 現在のビヘイビアツリーが存在しない、または現在のビヘイビアツリーが成功または失敗状態の場合は、すぐに新しいビヘイビアツリーに切り替える
+	if (!currentBehaviorTree_ ||
+		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Success ||
+		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Failure)
+	{
+		currentBehaviorTree_ = newTree;
+		nextBehaviorTree_ = nullptr;
+	}
+	else
+	{
+		// 現在のビヘイビアツリーが実行中の場合は、次のビヘイビアツリーとして設定する
+		nextBehaviorTree_ = newTree;
+	}
 }
 
 /// @brief 攻撃クールタイムの更新処理

@@ -7,6 +7,18 @@ class ComboTree
 {
 public:
 
+	/// @brief 状態
+	enum class State
+	{
+		None,
+		Success,
+		Failure,
+		Running,
+	};
+
+
+public:
+
 	/// @brief コンストラクタ
 	void Exec() { rootAttack->Exec(); }
 

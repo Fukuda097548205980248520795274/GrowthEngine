@@ -1,5 +1,6 @@
 #pragma once
 #include "GrowthEngine.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 class Character;
 
@@ -24,10 +25,21 @@ public:
 	/// @brief この状態からでるときに呼ばれる処理
 	virtual void Exit(){}
 
+	/// @brief ビヘイビアツリーを設定する
+	/// @param behaviorTree 
+	void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) { behaviorTree_ = std::move(behaviorTree); }
+
+	/// @brief ビヘイビアツリーを取得する
+	/// @return 
+	BehaviorTree* GetBehaviorTree() const { return behaviorTree_.get(); }
+
 
 protected:
 
 	// 所有者
 	Character* owner_ = nullptr;
+
+	/// @brief ビヘイビアツリー
+	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
 };
 
