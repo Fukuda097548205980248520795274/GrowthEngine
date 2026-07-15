@@ -34,6 +34,35 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 	// オブジェクト配置モードのUIを描画
 	ImGui::Text("--- オブジェクト配置 ---");
 
+
+	// ビヘイビアツリーの選択UIを描画するラムダ関数
+	auto DrawBehaviorTreeSelector = [&](const char* label, std::string& currentBT) -> bool
+		{
+			bool isChanged = false;
+			const char* previewValue = currentBT.empty() ? "None" : currentBT.c_str();
+
+			if (ImGui::BeginCombo(label, previewValue))
+			{
+				// behaviorTreeNames は既存のリストを利用
+				for (const auto& name : behaviorTreeNames)
+				{
+					bool isSelected = (currentBT == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						currentBT = name;
+						isChanged = true;
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+			return isChanged;
+		};
+
+
 	static PlacementData currentData;
 	static bool isInitialized = false;
 	if (!isInitialized)
@@ -47,7 +76,6 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.durability = 100;
 		currentData.attackPower = 1.0f;
 		currentData.isUnbreakable = false;
-		currentData.behaviorScriptName[0] = '\0';
 		currentData.eventType = 0;
 		currentData.eventStageDataFileName[0] = '\0';
 		currentData.standMotion.name = "Standing";
@@ -102,32 +130,33 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		if (currentData.subType != 0 && currentData.subType != 1)
 		{
 			ImGui::Separator();
-			ImGui::Text("ビヘイビアツリーの設定");
-
-			// プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
-			std::string currentBtName = currentData.behaviorScriptName;
-			const char* previewBtValue = currentBtName.empty() ? "ビヘイビアツリーを選択..." : currentBtName.c_str();
-
-			// プルダウンメニュー（コンボボックス）の描画
-			if (ImGui::BeginCombo("ビヘイビアツリー", previewBtValue))
+			if (ImGui::CollapsingHeader("ビヘイビアツリー設定"))
 			{
-				for (const auto& name : behaviorTreeNames)
-				{
-					bool isSelected = (currentBtName == name);
-					if (ImGui::Selectable(name.c_str(), isSelected))
-					{
-						// 選択された名前を PlacementData の配列にコピーする
-						// ※Visual Studio環境なら strcpy_s を使用して安全にコピーします
-						strcpy_s(currentData.behaviorScriptName, sizeof(currentData.behaviorScriptName), name.c_str());
-					}
+				if (DrawBehaviorTreeSelector("None (待機)", currentData.behaviorTrees.noneStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Dash（ダッシュ）", currentData.behaviorTrees.dashStateBT)) isDirty = true;
 
-					// 選択中のアイテムにフォーカスを合わせる
-					if (isSelected)
-					{
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
+				if (DrawBehaviorTreeSelector("Grabbing（掴み）", currentData.behaviorTrees.grabbingStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Grabbed（掴まれ）", currentData.behaviorTrees.grabbedStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Guard（ガード）", currentData.behaviorTrees.guardStateBT)) isDirty = true;
+
+				if (DrawBehaviorTreeSelector("LightDamage（弱ダメージ）", currentData.behaviorTrees.lightDamageStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("HeavyDamage (強ダメージ)", currentData.behaviorTrees.heavyDamageStateBT)) isDirty = true;
+
+				if (DrawBehaviorTreeSelector("LightDamage（倒れこみ）", currentData.behaviorTrees.downFallingStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("DownLying（ダウン）", currentData.behaviorTrees.downLyingStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("DownGettingUp（起き上がり）", currentData.behaviorTrees.downGettingUpStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("DownStagger（ダウン怯み）", currentData.behaviorTrees.downStaggerStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("BlownAway（吹き飛びあがり）", currentData.behaviorTrees.blownAwayStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("BlownFalling（吹き飛び落下）", currentData.behaviorTrees.blownFallingStateBT)) isDirty = true;
+
+				if (DrawBehaviorTreeSelector("Repel（弾き）", currentData.behaviorTrees.repelStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Deflect（受け流し）", currentData.behaviorTrees.deflectStateBT)) isDirty = true;
+
+				if (DrawBehaviorTreeSelector("Repelled（弾かれ）", currentData.behaviorTrees.repelledStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Deflected（受け流され）", currentData.behaviorTrees.deflectedStateBT)) isDirty = true;
+
+				if (DrawBehaviorTreeSelector("Avoid（回避）", currentData.behaviorTrees.avoidStateBT)) isDirty = true;
+				if (DrawBehaviorTreeSelector("Dead（死亡）", currentData.behaviorTrees.deadStateBT)) isDirty = true;
 			}
 		}
 	}
@@ -270,7 +299,10 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.scale = currentData.scale;
 		newData.hp = currentData.hp;
 		strcpy_s(newData.name, sizeof(newData.name), currentData.name);
-		strcpy_s(newData.behaviorScriptName, sizeof(newData.behaviorScriptName), currentData.behaviorScriptName);
+		newData.eventType = currentData.eventType;
+		strcpy_s(newData.eventStageDataFileName, sizeof(newData.eventStageDataFileName), currentData.eventStageDataFileName);
+		strcpy_s(newData.eventCutsceneName, sizeof(newData.eventCutsceneName), currentData.eventCutsceneName);
+		newData.behaviorTrees = currentData.behaviorTrees;
 		newData.durability = currentData.durability;
 		newData.attackPower = currentData.attackPower;
 		newData.isUnbreakable = currentData.isUnbreakable;

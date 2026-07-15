@@ -7,6 +7,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDash::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// ダッシュモーションを再生
 	owner_->SetAnimation(hMotion_, false, true);
 

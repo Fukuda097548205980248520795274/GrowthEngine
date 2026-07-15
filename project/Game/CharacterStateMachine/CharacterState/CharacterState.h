@@ -36,6 +36,9 @@ public:
 
 protected:
 
+	/// @brief ビヘイビアツリーのリクエスト
+	void BehaviorTreeRequest();
+
 	// 所有者
 	Character* owner_ = nullptr;
 

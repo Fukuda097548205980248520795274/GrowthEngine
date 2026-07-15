@@ -4,6 +4,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDead::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// キャラクターの死亡処理を呼び出す
 	owner_->Dead();
 

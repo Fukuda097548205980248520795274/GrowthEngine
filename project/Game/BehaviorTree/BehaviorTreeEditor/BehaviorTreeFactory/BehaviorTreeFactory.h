@@ -13,7 +13,8 @@ public:
 	/// @param editor_links 
 	/// @param character 
 	/// @return 
-	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editor_nodes, const std::vector<EditorLink>& editor_links, Character* character);
+	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editor_nodes, const std::vector<EditorLink>& editor_links,
+		Character* character, const std::string& name);
 
 private:
 

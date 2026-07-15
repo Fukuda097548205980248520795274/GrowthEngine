@@ -6,6 +6,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateGrabbed::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// タイマーをリセットする
 	grabbedTimer_ = 0.0f;
 }

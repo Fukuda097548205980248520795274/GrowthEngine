@@ -1,8 +1,9 @@
 #pragma once
 #include "../Character.h"
-#include "BehaviorTree/BehaviorTree.h"
 
 class NavMesh;
+class BehaviorTreeEditor;
+class BehaviorTree;
 
 class NPC : public Character
 {
@@ -15,7 +16,7 @@ public:
 	NPC();
 
 	/// @brief 初期化
-	void Initialize(const CharacterInitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
+	void Initialize(const CharacterInitData& initData, CharacterTag characterTag, const NavMesh* navMesh);
 
 	/// @brief プールに返却したときの処理
 	void PoolRelease();
@@ -44,6 +45,11 @@ public:
 	/// @brief ビヘイビアツリーの変更をリクエストする
 	/// @param newTree 
 	void RequestBehaviorTreeChange(BehaviorTree* newTree);
+
+	/// @brief ビヘイビアツリーを初期化する
+	/// @param behaviorTreeConfig 
+	/// @param behaviorTreeEditor 
+	void InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, BehaviorTreeEditor* behaviorTreeEditor);
 
 
 private:

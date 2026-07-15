@@ -3,6 +3,9 @@
 #include "Action/Move/Move.h"
 #include "HUD/HP/HP.h"
 
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
+
 namespace
 {
 	constexpr float kNpcStanceDistance = 5.0f;
@@ -33,7 +36,7 @@ void NPC::PoolRelease()
 }
 
 /// @brief 初期化
-void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh)
+void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTag, const NavMesh* navMesh)
 {
 	// インスタンスリストに登録する
 	characters_.push_back(this);
@@ -74,9 +77,6 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 
 	// ナビゲーションメッシュを設定する
 	navMesh_ = navMesh;
-
-	// ビヘイビアツリーを設定する
-	behaviorTree_ = std::move(behaviorTree);
 }
 
 void NPC::Update()
@@ -107,22 +107,28 @@ void NPC::Update()
 	// 攻撃のクールタイムの更新
 	UpdateAttackCooltime(dt);
 
-	// 動ける状態なら、ビヘイビアツリーを実行する
-	if (!isIncapacitated)
+	// ビヘイビアツリーの更新
+	if (currentBehaviorTree_)
 	{
-		if (currentBehaviorTree_)
-		{
-			// ツリーを実行し、状態を取得
-			BehaviorTree::State state = currentBehaviorTree_->Exec();
+		// ツリーを実行し、状態を取得
+		BehaviorTree::State state = currentBehaviorTree_->Exec();
 
-			// ツリーの実行が終了（成功 or 失敗）したら、予約されていたツリーに切り替える
-			if (state == BehaviorTree::State::Success || state == BehaviorTree::State::Failure)
+		// ツリーの実行が終了（成功 or 失敗）したら、予約されていたツリーに切り替える
+		if (state == BehaviorTree::State::Success || state == BehaviorTree::State::Failure)
+		{
+			// 予約されているツリーが存在し、今のツリーと違う名前のツリーなら切り替える
+			if (nextBehaviorTree_ && currentBehaviorTree_->GetName() != nextBehaviorTree_->GetName())
 			{
-				if (nextBehaviorTree_)
-				{
-					currentBehaviorTree_ = nextBehaviorTree_;
-					nextBehaviorTree_ = nullptr; // 予約をクリア
-				}
+				// 現在のツリーを中断
+				currentBehaviorTree_->Abort();
+
+				currentBehaviorTree_ = nextBehaviorTree_;
+				nextBehaviorTree_ = nullptr; // 予約をクリア
+			}
+			else if (nextBehaviorTree_)
+			{
+				// 予約されているツリーが存在するが、今のツリーと同じ名前のツリーなら、予約をクリアする
+				nextBehaviorTree_ = nullptr;
 			}
 		}
 	}
@@ -168,7 +174,7 @@ void NPC::UpdateStanceStateByTargetDistance()
 void NPC::OnStyleChanged(FightStyle newStyle)
 {
 	// スタイルに応じたビヘイビアツリーを生成して設定する
-	behaviorTree_ = CreateBehaviorTreeForStyle(newStyle);
+	//behaviorTree_ = CreateBehaviorTreeForStyle(newStyle);
 }
 
 /// @brief スタイルに応じたビヘイビアツリーを生成する
@@ -225,6 +231,10 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Success ||
 		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Failure)
 	{
+		// 現在のビヘイビアツリーが存在する場合は中断する
+		if (currentBehaviorTree_)
+			currentBehaviorTree_->Abort();
+
 		currentBehaviorTree_ = newTree;
 		nextBehaviorTree_ = nullptr;
 	}
@@ -245,4 +255,33 @@ void NPC::UpdateAttackCooltime(float deltaTime)
 	// クールタイムを減らす
 	attackCooltime_ -= deltaTime;
 	attackCooltime_ = std::max(0.0f, attackCooltime_);
+}
+
+/// @brief ビヘイビアツリーを初期化する
+/// @param behaviorTreeConfig 
+/// @param behaviorTreeEditor 
+void NPC::InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, BehaviorTreeEditor* behaviorTreeEditor)
+{
+	assert(behaviorTreeEditor);
+
+	// None状態のビヘイビアツリーを設定する
+	stateMachine_->GetState("None")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.noneStateBT, this));
+	stateMachine_->GetState("Dash")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.dashStateBT, this));
+	stateMachine_->GetState("Grabbed")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.grabbedStateBT, this));
+	stateMachine_->GetState("Grabbing")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.grabbingStateBT, this));
+	stateMachine_->GetState("Guard")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.guardStateBT, this));
+	stateMachine_->GetState("LightDamage")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.lightDamageStateBT, this));
+	stateMachine_->GetState("HeavyDamage")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.heavyDamageStateBT, this));
+	stateMachine_->GetState("DownFalling")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.downFallingStateBT, this));
+	stateMachine_->GetState("DownLying")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.downLyingStateBT, this));
+	stateMachine_->GetState("DownGettingUp")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.downGettingUpStateBT, this));
+	stateMachine_->GetState("DownStagger")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.downStaggerStateBT, this));
+	stateMachine_->GetState("BlownAway")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.blownAwayStateBT, this));
+	stateMachine_->GetState("BlownFalling")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.blownFallingStateBT, this));
+	stateMachine_->GetState("Repel")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.repelStateBT, this));
+	stateMachine_->GetState("Deflect")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deflectStateBT, this));
+	stateMachine_->GetState("Repelled")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.repelledStateBT, this));
+	stateMachine_->GetState("Deflected")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deflectedStateBT, this));
+	stateMachine_->GetState("Avoid")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.avoidStateBT, this));
+	stateMachine_->GetState("Dead")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deadStateBT, this));
 }

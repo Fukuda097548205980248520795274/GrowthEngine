@@ -79,9 +79,6 @@ struct PlacementData
 	// 壊れない武器かどうか (武器の場合)
 	bool isUnbreakable = false;
 
-	// 行動パターンを定義したスクリプトファイル名 (キャラクターの場合)
-	char behaviorScriptName[256] = "";
-
 	// イベントトリガーの種類 (イベントトリガーの場合)
 	int eventType = 0;
 
@@ -101,6 +98,9 @@ struct PlacementData
 	MotionConfig avoidLeftMotion;
 	MotionConfig avoidRightMotion;
 	MotionConfig guardMotion;
+
+	/// @brief ビヘイビアツリーの設定 (キャラクターの場合)
+	BehaviorTreeConfig behaviorTrees;
 
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
@@ -157,7 +157,25 @@ inline void toJson(json& j, const PlacementData& s)
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
 		if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
 		{
-			j["behaviorScriptName"] = s.behaviorScriptName;
+			j["noneStateBT"] = s.behaviorTrees.noneStateBT;
+			j["dashStateBT"] = s.behaviorTrees.dashStateBT;
+			j["grabbedStateBT"] = s.behaviorTrees.grabbedStateBT;
+			j["grabbingStateBT"] = s.behaviorTrees.grabbingStateBT;
+			j["guardStateBT"] = s.behaviorTrees.guardStateBT;
+			j["lightDamageStateBT"] = s.behaviorTrees.lightDamageStateBT;
+			j["heavyDamageStateBT"] = s.behaviorTrees.heavyDamageStateBT;
+			j["downFallingStateBT"] = s.behaviorTrees.downFallingStateBT;
+			j["downLyingStateBT"] = s.behaviorTrees.downLyingStateBT;
+			j["downGettingUpStateBT"] = s.behaviorTrees.downGettingUpStateBT;
+			j["downStaggerStateBT"] = s.behaviorTrees.downStaggerStateBT;
+			j["blownAwayStateBT"] = s.behaviorTrees.blownAwayStateBT;
+			j["blownFallingStateBT"] = s.behaviorTrees.blownFallingStateBT;
+			j["repelStateBT"] = s.behaviorTrees.repelStateBT;
+			j["deflectStateBT"] = s.behaviorTrees.deflectStateBT;
+			j["repelledStateBT"] = s.behaviorTrees.repelledStateBT;
+			j["deflectedStateBT"] = s.behaviorTrees.deflectedStateBT;
+			j["avoidStateBT"] = s.behaviorTrees.avoidStateBT;
+			j["deadStateBT"] = s.behaviorTrees.deadStateBT;
 		}
 	}
 	else if (s.category == EditCategory::Object)
@@ -246,8 +264,27 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
 
-	std::string behaviorScriptStr = j.value("behaviorScriptName", "");
-	strncpy_s(s.behaviorScriptName, behaviorScriptStr.c_str(), sizeof(s.behaviorScriptName) - 1);
+
+	// ビヘイビアツリーの設定を読み込む
+	s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
+	s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
+	s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
+	s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
+	s.behaviorTrees. guardStateBT = j.value("guardStateBT", "");
+	s.behaviorTrees.lightDamageStateBT = j.value("lightDamageStateBT", "");
+	s.behaviorTrees.heavyDamageStateBT = j.value("heavyDamageStateBT", "");
+	s.behaviorTrees.downFallingStateBT = j.value("downFallingStateBT", "");
+	s.behaviorTrees.downLyingStateBT = j.value("downLyingStateBT", "");
+	s.behaviorTrees.downGettingUpStateBT = j.value("downGettingUpStateBT", "");
+	s.behaviorTrees.downStaggerStateBT = j.value("downStaggerStateBT", "");
+	s.behaviorTrees.blownAwayStateBT = j.value("blownAwayStateBT", "");
+	s.behaviorTrees.blownFallingStateBT = j.value("blownFallingStateBT", "");
+	s.behaviorTrees.repelStateBT = j.value("repelStateBT", "");
+	s.behaviorTrees.deflectStateBT = j.value("deflectStateBT", "");
+	s.behaviorTrees.repelledStateBT = j.value("repelledStateBT", "");
+	s.behaviorTrees.deflectedStateBT = j.value("deflectedStateBT", "");
+	s.behaviorTrees.avoidStateBT = j.value("avoidStateBT", "");
+	s.behaviorTrees.deadStateBT = j.value("deadStateBT", "");
 
 
 	s.eventType = j.value("eventType", 0);

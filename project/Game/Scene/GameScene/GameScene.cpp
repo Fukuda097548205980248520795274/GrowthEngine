@@ -510,7 +510,7 @@ void GameScene::Draw()
 /// @brief キャラクターを生成する
 /// @param initData 
 /// @return 
-Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag)
+Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag, const BehaviorTreeConfig& behaviorTreeConfig)
 {
 	Character* character = nullptr;
 
@@ -693,7 +693,8 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = npcPool_->Acquire();
-		npc->Initialize(npcInitData, tag, behaviorTreeEditor_->CreateTree(npcInitData.behaviorTreeName, npc.get()), navMesh_.get());
+		npc->InitBehaviorTree(behaviorTreeConfig, behaviorTreeEditor_.get());
+		npc->Initialize(npcInitData, tag, navMesh_.get());
 		character = npc.get();
 
 		// NPCのリストに追加する

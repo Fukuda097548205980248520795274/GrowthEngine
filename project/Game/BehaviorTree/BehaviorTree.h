@@ -19,7 +19,7 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param root ルートノード
-	BehaviorTree(std::unique_ptr<Node> root) : root_(std::move(root)) {}
+	BehaviorTree(std::unique_ptr<Node> root, const std::string& name) : root_(std::move(root)),name_(name) {}
 
 	/// @brief 仮想デストラクタ
 	virtual ~BehaviorTree() = default;
@@ -38,6 +38,10 @@ public:
 	/// @return 
 	State GetCurrentState() const { return currentState_; }
 
+	/// @brief ツリーの名前を取得する
+	/// @return 
+	const std::string& GetName() const { return name_; }
+
 protected:
 
 	/// @brief ルートノード
@@ -45,5 +49,8 @@ protected:
 
 	/// @brief 現在の状態
 	State currentState_ = State::None;
+
+	/// @brief ツリーの名前
+	std::string name_{};
 };
 

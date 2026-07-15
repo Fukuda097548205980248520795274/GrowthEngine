@@ -5,6 +5,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateGrabbing::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// 掴む相手をリセットする
 	grabTarget_ = nullptr;
 }

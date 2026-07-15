@@ -5,6 +5,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateAvoid::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// タイマーをリセットする
 	avoidTimer_ = avoidDuration_;
 

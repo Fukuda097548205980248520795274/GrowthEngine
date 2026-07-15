@@ -38,6 +38,32 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		return;
 	}
 
+	// ビヘイビアツリーの選択UIを描画するラムダ関数
+	auto DrawBehaviorTreeSelector = [&](const char* label, std::string& currentBT) -> bool
+		{
+			bool isChanged = false;
+			const char* previewValue = currentBT.empty() ? "None" : currentBT.c_str();
+
+			if (ImGui::BeginCombo(label, previewValue)) 
+			{
+				// behaviorTreeNames は既存のリストを利用
+				for (const auto& name : behaviorTreeNames)
+				{
+					bool isSelected = (currentBT == name);
+					if (ImGui::Selectable(name.c_str(), isSelected)) 
+					{
+						currentBT = name;
+						isChanged = true;
+					}
+
+					if (isSelected) 
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+			return isChanged;
+		};
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(ImGui::GetStyle().ItemSpacing.x, 8.0f));
 
@@ -226,39 +252,33 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			if (target.subType != 0 && target.subType != 1)
 			{
 				ImGui::Separator();
-				ImGui::Text("ビヘイビアツリーの設定");
-
-				// プレビュー用の文字列（未設定の場合は "Select Behavior Tree..." と表示）
-				std::string currentBtName = target.behaviorScriptName;
-				const char* previewBtValue = currentBtName.empty() ? "ビヘイビアツリーを選択..." : currentBtName.c_str();
-
-				// プルダウンメニュー（コンボボックス）の描画
-				if (ImGui::BeginCombo("ビヘイビアツリー", previewBtValue))
+				if (ImGui::CollapsingHeader("ビヘイビアツリー設定")) 
 				{
-					for (const auto& name : behaviorTreeNames)
-					{
-						// 現在のビヘイビアツリー名と同じものが選択されている状態にする
-						bool isSelected = (currentBtName == name);
-						if (ImGui::Selectable(name.c_str(), isSelected))
-						{
-							// ビヘイビアツリーを変更する前に、現在の配置リストの状態を履歴に保存する
-							history_->SaveHistory(placementList);
-							isDirty = true;
+					if (DrawBehaviorTreeSelector("None (待機)", target.behaviorTrees.noneStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Dash（ダッシュ）", target.behaviorTrees.dashStateBT)) isDirty = true;
 
-							// 選択された名前を PlacementData の配列にコピーする
-							strcpy_s(target.behaviorScriptName, sizeof(target.behaviorScriptName), name.c_str());
+					if (DrawBehaviorTreeSelector("Grabbing（掴み）", target.behaviorTrees.grabbingStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Grabbed（掴まれ）", target.behaviorTrees.grabbedStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Guard（ガード）", target.behaviorTrees.guardStateBT)) isDirty = true;
 
-							// 実際のキャラクターオブジェクトにビヘイビアツリーを更新する
-							charPtr->SetBehaviorTree(behaviorTreeEditor_->CreateTree(target.behaviorScriptName, charPtr));
-						}
+					if (DrawBehaviorTreeSelector("LightDamage（弱ダメージ）", target.behaviorTrees.lightDamageStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("HeavyDamage (強ダメージ)", target.behaviorTrees.heavyDamageStateBT)) isDirty = true;
 
-						// 選択中のアイテムにフォーカスを合わせる
-						if (isSelected)
-						{
-							ImGui::SetItemDefaultFocus();
-						}
-					}
-					ImGui::EndCombo();
+					if (DrawBehaviorTreeSelector("LightDamage（倒れこみ）", target.behaviorTrees.downFallingStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("DownLying（ダウン）", target.behaviorTrees.downLyingStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("DownGettingUp（起き上がり）", target.behaviorTrees.downGettingUpStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("DownStagger（ダウン怯み）", target.behaviorTrees.downStaggerStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("BlownAway（吹き飛びあがり）", target.behaviorTrees.blownAwayStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("BlownFalling（吹き飛び落下）", target.behaviorTrees.blownFallingStateBT)) isDirty = true;
+
+					if (DrawBehaviorTreeSelector("Repel（弾き）", target.behaviorTrees.repelStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Deflect（受け流し）", target.behaviorTrees.deflectStateBT)) isDirty = true;
+
+					if (DrawBehaviorTreeSelector("Repelled（弾かれ）", target.behaviorTrees.repelledStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Deflected（受け流され）", target.behaviorTrees.deflectedStateBT)) isDirty = true;
+
+					if (DrawBehaviorTreeSelector("Avoid（回避）", target.behaviorTrees.avoidStateBT)) isDirty = true;
+					if (DrawBehaviorTreeSelector("Dead（死亡）", target.behaviorTrees.deadStateBT)) isDirty = true;
 				}
 			}
 		} 

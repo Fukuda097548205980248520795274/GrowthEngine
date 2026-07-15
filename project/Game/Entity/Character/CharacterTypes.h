@@ -22,6 +22,30 @@ enum class CharacterTag
 	EnemyBoss,
 };
 
+/// @brief キャラクターの行動パターンを定義するビヘイビアツリーの設定
+struct BehaviorTreeConfig
+{
+	std::string noneStateBT{};
+	std::string dashStateBT{};
+	std::string grabbedStateBT{};
+	std::string grabbingStateBT{};
+	std::string guardStateBT{};
+	std::string lightDamageStateBT{};
+	std::string heavyDamageStateBT{};
+	std::string downFallingStateBT{};
+	std::string downLyingStateBT{};
+	std::string downGettingUpStateBT{};
+	std::string downStaggerStateBT{};
+	std::string blownAwayStateBT{};
+	std::string blownFallingStateBT{};
+	std::string repelStateBT{};
+	std::string deflectStateBT{};
+	std::string repelledStateBT{};
+	std::string deflectedStateBT{};
+	std::string avoidStateBT{};
+	std::string deadStateBT{};
+};
+
 /// @brief 初期化用データ
 struct CharacterInitData
 {
