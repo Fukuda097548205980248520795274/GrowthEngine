@@ -60,7 +60,7 @@ void CharacterStateDash::Update(float dt)
 	}
 
 	// 1フレーム目の更新時にダッシュ中フラグを立てる
-	isDash_ = true;
+	if(!isDash_ && movement->GetCurrentVelocity().Length() > 0.0f)isDash_ = true;
 }
 
 /// @brief この状態からでるときに呼ばれる処理

@@ -56,6 +56,10 @@ void ComboAttack::Exec()
 	// アニメーションを設定する
 	owner_->SetAnimation(hAttackMotion_, true , false);
 
+	// 状態なしに遷移する
+	auto stateMachine = owner_->GetStateMachine();
+	stateMachine->ChangeState("None");
+
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
 

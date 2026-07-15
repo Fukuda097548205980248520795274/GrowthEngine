@@ -169,38 +169,6 @@ void NPC::UpdateStanceStateByTargetDistance()
 	isStance_ = (distanceSq <= kNpcStanceDistanceSq);
 }
 
-/// @brief スタイルが変化したときの処理
-/// @param newStyle 
-void NPC::OnStyleChanged(FightStyle newStyle)
-{
-	// スタイルに応じたビヘイビアツリーを生成して設定する
-	//behaviorTree_ = CreateBehaviorTreeForStyle(newStyle);
-}
-
-/// @brief スタイルに応じたビヘイビアツリーを生成する
-/// @param style 
-/// @return 
-std::unique_ptr<BehaviorTree> NPC::CreateBehaviorTreeForStyle(FightStyle style)
-{
-	// ビヘイビアツリー
-	std::unique_ptr<BehaviorTree> behaviorTree = nullptr;
-
-	switch (style)
-	{
-	// 旋嵐スタイル
-	case FightStyle::Tempest:
-
-		break;
-
-	// 撃鉄スタイル
-	case FightStyle::Hammer:
-
-		break;
-	}
-
-	return behaviorTree;
-}
-
 /// @brief 描画処理
 void NPC::Draw()
 {
@@ -226,6 +194,10 @@ void NPC::Dead()
 /// @param newTree 
 void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 {
+	// すでに現在のビヘイビアツリーと同じ名前のビヘイビアツリーが設定されている場合は、何もしない
+	if (newTree && currentBehaviorTree_ && newTree->GetName() == currentBehaviorTree_->GetName())
+		return;
+
 	// 現在のビヘイビアツリーが存在しない、または現在のビヘイビアツリーが成功または失敗状態の場合は、すぐに新しいビヘイビアツリーに切り替える
 	if (!currentBehaviorTree_ ||
 		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Success ||

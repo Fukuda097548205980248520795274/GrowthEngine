@@ -33,11 +33,11 @@ public:
 	/// @return 
 	BehaviorTree* GetBehaviorTree() const { return behaviorTree_.get(); }
 
-
-protected:
-
 	/// @brief ビヘイビアツリーのリクエスト
 	void BehaviorTreeRequest();
+
+
+protected:
 
 	// 所有者
 	Character* owner_ = nullptr;

@@ -40,6 +40,10 @@ void GrabAttack::Exec()
 	// 攻撃モーションに切り替え
 	owner_->SetAnimation(hAttackMotion_, true, false);
 
+	// 状態なしに遷移する
+	auto stateMachine = owner_->GetStateMachine();
+	stateMachine->ChangeState("None");
+
 	// タイマーリセット
 	attackTimer_ = 0.0f;
 

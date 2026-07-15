@@ -4,8 +4,12 @@
 /// @param name 
 void CharacterStateMachine::ChangeState(const std::string& name)
 {
-	// すでに同じ状態の場合は何もしない
-	if (currentStateName_ == name)return;
+	// すでに現在の状態と同じ場合は、ビヘイビアツリーのリクエストのみを行う
+	if (currentStateName_ == name)
+	{
+		currentState_->BehaviorTreeRequest();
+		return;
+	}
 
 	// 現在の状態を終了する
 	if (currentState_)currentState_->Exit();
