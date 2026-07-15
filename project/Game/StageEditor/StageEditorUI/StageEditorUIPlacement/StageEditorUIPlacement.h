@@ -40,15 +40,13 @@ private:
 
 private:
 
-	/// @brief モーションの選択UIを表示する
-	/// @param motionType 
-	/// @param motionName 
-	bool MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
+	// Prefabの名前のリスト
+	std::vector<std::string> prefabNames_;
 
-	/// @brief モーションの選択UIを表示する
-	/// @param motionType 
-	/// @param motionName 
-	/// @param placementList
-	void MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig, std::vector<PlacementData>& placementList, bool& isDirty);
+	// Prefabの名前を入力するためのバッファ
+	char newPrefabName_[64] = "";
+
+	// Prefabの選択インデックス
+	int selectedPrefabIdx_ = -1;
 };
 

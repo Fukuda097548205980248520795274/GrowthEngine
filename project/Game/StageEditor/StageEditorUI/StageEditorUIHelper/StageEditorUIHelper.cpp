@@ -1,0 +1,455 @@
+#include "StageEditorUIHelper.h"
+#include <numbers>
+#include "StageEditor/StageSpawner/StageSpawner.h"
+#include "StageEditor/StageEditorHistory/StageEditorHistory.h"
+#include "Scene/GameScene/GameScene.h"
+#include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
+
+// プレハブデータの保存先フォルダ
+constexpr const char* PREFAB_DIR = "./Assets/Parameter/EditorPrefab/";
+
+namespace StageEditorUIHelper
+{
+	/// @brief Prefabの名前を取得する
+	/// @return 
+	std::vector<std::string> GetPrefabNames()
+	{
+		std::vector<std::string> names;
+		if (!std::filesystem::exists(PREFAB_DIR))
+		{
+			std::filesystem::create_directories(PREFAB_DIR);
+			return names;
+		}
+
+		for (const auto& entry : std::filesystem::directory_iterator(PREFAB_DIR))
+		{
+			if (entry.is_regular_file() && entry.path().extension() == ".json")
+			{
+				names.push_back(entry.path().stem().string());
+			}
+		}
+		return names;
+	}
+
+	/// @brief Prefabを保存する
+	/// @param name 
+	/// @param data 
+	void SavePrefab(const std::string& name, const PlacementData& data)
+	{
+		std::filesystem::create_directories(PREFAB_DIR);
+		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
+
+		std::ofstream file(filePath);
+		if (file.is_open())
+		{
+			json j;
+			toJson(j, data);
+			file << j.dump(4);
+			file.close();
+		}
+	}
+
+	/// @brief Prefabをロードする
+	/// @param name 
+	/// @param data 
+	void LoadPrefab(const std::string& name, PlacementData& data)
+	{
+		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
+		std::ifstream file(filePath);
+		if (file.is_open())
+		{
+			json j;
+			file >> j;
+
+			// 既存の実体ポインタなどを退避
+			void* backupPtr = data.instancePtr;
+
+			fromJson(j, data);
+			data.instancePtr = backupPtr; // ポインタを復元
+
+			file.close();
+		}
+	}
+
+	/// @brief テーブルレイアウトの開始
+	/// @param str_id 
+	/// @return 
+	bool BeginPropertyTable(const char* str_id)
+	{
+		// 2列のテーブルを作成（1列目はラベル用に幅固定、2列目は自動ストレッチ）
+		if (ImGui::BeginTable(str_id, 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 130.0f);
+			ImGui::TableSetupColumn("Property", ImGuiTableColumnFlags_WidthStretch);
+			return true;
+		}
+		return false;
+	}
+
+	/// @brief テーブルレイアウトの終了
+	void EndPropertyTable()
+	{
+		ImGui::EndTable();
+	}
+
+	/// @brief プロパティラベルを描画する
+	/// @param label 
+	void PropertyLabel(const char* label)
+	{
+		ImGui::TableNextRow();
+		ImGui::TableNextColumn();
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("%s", label);
+		ImGui::TableNextColumn();
+		ImGui::SetNextItemWidth(-FLT_MIN); // 入力欄を右端まで広げる
+	}
+
+	/// @brief ビヘイビアツリーのセレクターを描画する
+	/// @param label 
+	/// @param currentBT 
+	/// @param behaviorTreeNames 
+	/// @return 
+	bool DrawBehaviorTreeSelector(const char* label, std::string& currentBT, const std::vector<std::string>& behaviorTreeNames)
+	{
+		bool isChanged = false;
+		const char* previewValue = currentBT.empty() ? "None" : currentBT.c_str();
+
+		if (ImGui::BeginCombo(label, previewValue))
+		{
+			for (const auto& name : behaviorTreeNames)
+			{
+				bool isSelected = (currentBT == name);
+				if (ImGui::Selectable(name.c_str(), isSelected))
+				{
+					currentBT = name;
+					isChanged = true;
+				}
+				if (isSelected) ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+		return isChanged;
+	}
+
+	/// @brief ビヘイビアツリーの設定を描画する
+	/// @param btConfig 
+	/// @param behaviorTreeNames 
+	/// @param isDirty 
+	/// @return 
+	bool DrawBehaviorTreeSettings(BehaviorTreeConfig& btConfig, const std::vector<std::string>& behaviorTreeNames, bool& isDirty)
+	{
+		bool anyChanged = false;
+		if (ImGui::CollapsingHeader("ビヘイビアツリー設定"))
+		{
+			if (BeginPropertyTable("BTTable"))
+			{
+				auto DrawRow = [&](const char* label, std::string& currentBT)
+					{
+						PropertyLabel(label);
+						return DrawBehaviorTreeSelector(label, currentBT, behaviorTreeNames);
+					};
+
+				if (DrawRow("None (待機)", btConfig.noneStateBT)) anyChanged = true;
+				if (DrawRow("Dash（ダッシュ）", btConfig.dashStateBT)) anyChanged = true;
+				if (DrawRow("Grabbing（掴み）", btConfig.grabbingStateBT)) anyChanged = true;
+				if (DrawRow("Grabbed（掴まれ）", btConfig.grabbedStateBT)) anyChanged = true;
+				if (DrawRow("Guard（ガード）", btConfig.guardStateBT)) anyChanged = true;
+				if (DrawRow("LightDamage（弱ダメージ）", btConfig.lightDamageStateBT)) anyChanged = true;
+				if (DrawRow("HeavyDamage (強ダメージ)", btConfig.heavyDamageStateBT)) anyChanged = true;
+				if (DrawRow("LightDamage（倒れこみ）", btConfig.downFallingStateBT)) anyChanged = true;
+				if (DrawRow("DownLying（ダウン）", btConfig.downLyingStateBT)) anyChanged = true;
+				if (DrawRow("DownGettingUp（起き上がり）", btConfig.downGettingUpStateBT)) anyChanged = true;
+				if (DrawRow("DownStagger（ダウン怯み）", btConfig.downStaggerStateBT)) anyChanged = true;
+				if (DrawRow("BlownAway（吹き飛びあがり）", btConfig.blownAwayStateBT)) anyChanged = true;
+				if (DrawRow("BlownFalling（吹き飛び落下）", btConfig.blownFallingStateBT)) anyChanged = true;
+				if (DrawRow("Repel（弾き）", btConfig.repelStateBT)) anyChanged = true;
+				if (DrawRow("Deflect（受け流し）", btConfig.deflectStateBT)) anyChanged = true;
+				if (DrawRow("Repelled（弾かれ）", btConfig.repelledStateBT)) anyChanged = true;
+				if (DrawRow("Deflected（受け流され）", btConfig.deflectedStateBT)) anyChanged = true;
+				if (DrawRow("Avoid（回避）", btConfig.avoidStateBT)) anyChanged = true;
+				if (DrawRow("Dead（死亡）", btConfig.deadStateBT)) anyChanged = true;
+
+				EndPropertyTable();
+			}
+		}
+
+		if (anyChanged) isDirty = true;
+		return anyChanged;
+	}
+
+	/// @brief モーションのセレクターを描画する
+	/// @param label 
+	/// @param motionType 
+	/// @param motionConfig 
+	/// @param motionManager 
+	/// @return 
+	bool DrawMotionSelector(const char* label, MotionType motionType, MotionConfig& motionConfig, MotionManager* motionManager)
+	{
+		std::vector<std::string> motionNames = motionManager->GetMotionNames(motionType);
+		bool isChanged = false;
+
+		if (motionNames.empty())
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
+		}
+		else
+		{
+			const char* previewValue = motionConfig.name.empty() ? "モーションを選択..." : motionConfig.name.c_str();
+			if (ImGui::BeginCombo(label, previewValue))
+			{
+				for (const auto& name : motionNames)
+				{
+					bool isSelected = (motionConfig.name == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						motionConfig.name = name;
+						motionConfig.handle = motionManager->GetMotion(motionType, motionConfig.name);
+						isChanged = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		}
+		return isChanged;
+	}
+
+	/// @brief モーションのセレクターを描画する（履歴対応版）
+	/// @param label 
+	/// @param motionType 
+	/// @param motionConfig 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param motionManager 
+	/// @return 
+	bool DrawMotionSelectorWithHistory(const char* label, MotionType motionType, MotionConfig& motionConfig,
+		std::vector<PlacementData>& placementList, bool& isDirty, StageEditorHistory* history, MotionManager* motionManager)
+	{
+		std::vector<std::string> motionNames = motionManager->GetMotionNames(motionType);
+		bool isChanged = false;
+
+		if (motionNames.empty())
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
+		}
+		else
+		{
+			const char* previewValue = motionConfig.name.empty() ? "モーションを選択..." : motionConfig.name.c_str();
+			if (ImGui::BeginCombo(label, previewValue))
+			{
+				for (const auto& name : motionNames)
+				{
+					bool isSelected = (motionConfig.name == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						history->SaveHistory(placementList);
+						isDirty = true;
+
+						motionConfig.name = name;
+						motionConfig.handle = motionManager->GetMotion(motionType, motionConfig.name);
+						isChanged = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		}
+		return isChanged;
+	}
+
+	/// @brief キャラクターのモーション設定を描画する
+	/// @param target 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param motionManager 
+	/// @param useHistory 
+	/// @return 
+	bool DrawCharacterMotionSettings(PlacementData& target, std::vector<PlacementData>& placementList,
+		bool& isDirty, StageEditorHistory* history, MotionManager* motionManager, bool useHistory)
+	{
+		bool anyChanged = false;
+
+		if (ImGui::CollapsingHeader("モーション設定"))
+		{
+			if (BeginPropertyTable("MotionTable"))
+			{
+				// ラベルとモーションセレクターを描画するラムダ関数
+				auto DrawRow = [&](const char* label, MotionType type, MotionConfig& config)
+					{
+						PropertyLabel(label);
+						if (useHistory) {
+							return DrawMotionSelectorWithHistory(label, type, config, placementList, isDirty, history, motionManager);
+						}
+						else {
+							return DrawMotionSelector(label, type, config, motionManager);
+						}
+					};
+
+				// ラベル付きで一行ずつ描画 (Combo内のラベルは空文字にして、PropertyLabelに任せる)
+				if (DrawRow("待機モーション", MotionType::Stand, target.standMotion)) anyChanged = true;
+				if (DrawRow("戦闘モーション", MotionType::Stance, target.stanceMotion)) anyChanged = true;
+				if (DrawRow("歩行モーション", MotionType::Walk, target.walkMotion)) anyChanged = true;
+				if (DrawRow("ダッシュモーション", MotionType::Dash, target.dashMotion)) anyChanged = true;
+				if (DrawRow("前方回避モーション", MotionType::Avoid, target.avoidFrontMotion)) anyChanged = true;
+				if (DrawRow("後方回避モーション", MotionType::Avoid, target.avoidBackMotion)) anyChanged = true;
+				if (DrawRow("左回避モーション", MotionType::Avoid, target.avoidLeftMotion)) anyChanged = true;
+				if (DrawRow("右回避モーション", MotionType::Avoid, target.avoidRightMotion)) anyChanged = true;
+				if (DrawRow("防御モーション", MotionType::Guard, target.guardMotion)) anyChanged = true;
+
+				EndPropertyTable();
+			}
+		}
+		return anyChanged;
+	}
+
+	/// @brief キャラクターの基本設定を描画する
+	/// @param target 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param useHistory 
+	void DrawCharacterBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
+		bool& isDirty, StageEditorHistory* history, bool useHistory)
+	{
+		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			if (BeginPropertyTable("CharBaseTable"))
+			{
+				// 位置情報
+				PropertyLabel("生成位置");
+				if (ImGui::DragFloat3("##Pos", &target.position.x, 0.1f))
+				{
+					isDirty = true;
+					if (useHistory && target.instancePtr)
+					{
+						// 必要に応じてドラッグ終了時のみ履歴保存するよう調整しても良い
+					}
+				}
+
+				// 回転情報
+				PropertyLabel("回転 (Y軸)");
+				if (ImGui::DragFloat("##RotY", &target.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>))
+				{
+					isDirty = true;
+				}
+
+				// HP
+				PropertyLabel("初期 HP");
+				if (ImGui::DragInt("##HP", &target.hp, 1, 0, 10000))
+				{
+					isDirty = true;
+				}
+
+				EndPropertyTable();
+			}
+		}
+	}
+
+	/// @brief イベントトリガーの設定を描画する
+	/// @param target 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param spawner 
+	/// @param scene 
+	/// @param eventStageDataFileNames 
+	void DrawEventTriggerSettings(PlacementData& target, std::vector<PlacementData>& placementList,
+		bool& isDirty, StageEditorHistory* history, StageSpawner* spawner, GameScene* scene,
+		const std::vector<std::string>& eventStageDataFileNames)
+	{
+		StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(target.instancePtr);
+
+		ImGui::Unindent();
+		ImGui::Separator();
+		ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "--- イベントトリガー設定 ---");
+		ImGui::Indent();
+
+		int currentType = target.eventType;
+
+		if (ImGui::Combo("イベントタイプ", &currentType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames)))
+		{
+			if (eventTriggerPtr != nullptr)
+			{
+				history->SaveHistory(placementList);
+				isDirty = true;
+
+				target.eventType = currentType;
+				eventTriggerPtr->SetEventType(currentType);
+
+				// 配置されている実体を再生成して反映する
+				spawner->SpawnActualEntity(target);
+			}
+			else
+			{
+				target.eventType = currentType;
+			}
+		}
+
+		if (target.eventType == 1) // 1: 敵生成(ObjectSpawn) の場合
+		{
+			ImGui::Text("ステージデータの設定");
+
+			std::string currentSdName = target.eventStageDataFileName;
+			const char* previewSdValue = currentSdName.empty() ? "ステージデータを選択..." : currentSdName.c_str();
+
+			if (ImGui::BeginCombo("ステージデータ", previewSdValue))
+			{
+				for (const auto& name : eventStageDataFileNames)
+				{
+					bool isSelected = (currentSdName == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						if (eventTriggerPtr != nullptr)
+						{
+							history->SaveHistory(placementList);
+							isDirty = true;
+						}
+						strcpy_s(target.eventStageDataFileName, sizeof(target.eventStageDataFileName), name.c_str());
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		}
+		else if (target.eventType == 2) // 2: カットシーン再生 の場合
+		{
+			std::vector<std::string> cutsceneNames = scene->GetCutsceneManager()->GetCutsceneNames();
+
+			if (cutsceneNames.empty())
+			{
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "カメラワークが登録されていません");
+			}
+			else
+			{
+				const char* previewValue = (strlen(target.eventCutsceneName) == 0) ? "演出を選択..." : target.eventCutsceneName;
+
+				if (ImGui::BeginCombo("再生するカメラワーク", previewValue))
+				{
+					for (const auto& name : cutsceneNames)
+					{
+						bool isSelected = (name == target.eventCutsceneName);
+						if (ImGui::Selectable(name.c_str(), isSelected))
+						{
+							if (eventTriggerPtr != nullptr)
+							{
+								history->SaveHistory(placementList);
+								isDirty = true;
+							}
+							strcpy_s(target.eventCutsceneName, sizeof(target.eventCutsceneName), name.c_str());
+
+							// 実体に即時反映
+							if (eventTriggerPtr)
+							{
+								eventTriggerPtr->SetEventStringParam(name.c_str());
+							}
+						}
+						if (isSelected) ImGui::SetItemDefaultFocus();
+					}
+					ImGui::EndCombo();
+				}
+			}
+		}
+	}
+}

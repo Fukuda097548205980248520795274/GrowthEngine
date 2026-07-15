@@ -1396,6 +1396,9 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash">
       <UniqueIdentifier>{f6a692d9-653d-4317-b082-90aef905efc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper">
+      <UniqueIdentifier>{6212c48c-1f7f-4052-bf95-c65f8368e5e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2534,6 +2537,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash\CharacterStateDash.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDash</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3802,6 +3808,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateDash\CharacterStateDash.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateDash</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

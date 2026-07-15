@@ -51,17 +51,12 @@ private:
 
 
 private:
+	
+	// オブジェクトのフィルタリング用のImGuiTextFilterオブジェクト
+	ImGuiTextFilter objectFilter_;
 
+	// カテゴリのフィルタリング用のインデックス
+	int categoryFilterIdx_ = 0;
 
-	/// @brief モーションの選択UIを表示する
-	/// @param motionType 
-	/// @param motionName 
-	bool MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig);
-
-	/// @brief モーションの選択UIを表示する
-	/// @param motionType 
-	/// @param motionName 
-	/// @param placementList
-	void MotionSelecter(const char* label, MotionType motionType, MotionConfig& motionConfig, std::vector<PlacementData>& placementList, bool& isDirty);
 };
 
