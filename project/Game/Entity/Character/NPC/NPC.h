@@ -51,6 +51,14 @@ public:
 	/// @param behaviorTreeEditor 
 	void InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, BehaviorTreeEditor* behaviorTreeEditor);
 
+	/// @brief ビヘイビアツリーの取得
+	/// @return 
+	BehaviorTree* GetBehaviorTree() const override { return currentBehaviorTree_; }
+
+	/// @brief ビヘイビアツリーの変更がリクエストされているかどうかを取得する
+	/// @return 
+	bool IsChangeBehaviorTree()const { return nextBehaviorTree_ != nullptr; }
+
 
 private:
 

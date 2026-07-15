@@ -253,7 +253,7 @@ void ComboAttack::Update()
 	}
 
 	// 攻撃の特定の時間帯は、攻撃者が回避、掴み、または無力化されているかどうかを確認する
-	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || (owner_->IsHitDamage()))
+	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
 	{
 		this->Exit();
 		return;
