@@ -30,7 +30,6 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.rotateY = data.rotate_.y;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
-		initData.behaviorTreeName = data.behaviorScriptName;
 		initData.hStandMotion = data.standMotion.handle;
 		initData.hStanceMotion = data.stanceMotion.handle;
 		initData.hWalkMotion = data.walkMotion.handle;
@@ -42,7 +41,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.hGuardMotion = data.guardMotion.handle;
 
 		// タグに応じて、NPCの初期化データを設定する
-		Character* newCharacter = scene_->CreateCharacter(initData, tag);
+		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees);
 
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;

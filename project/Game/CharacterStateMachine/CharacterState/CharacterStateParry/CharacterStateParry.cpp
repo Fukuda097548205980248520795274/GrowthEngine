@@ -11,6 +11,9 @@ CharacterStateParry::CharacterStateParry(Character* owner, AnimationHandle hMoti
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateParry::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// タイマーをリセットする
 	actionTimer_ = maxActionTime_;
 

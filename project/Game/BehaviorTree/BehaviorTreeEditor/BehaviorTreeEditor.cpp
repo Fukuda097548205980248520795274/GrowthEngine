@@ -256,7 +256,7 @@ std::unique_ptr<BehaviorTree> BehaviorTreeEditor::CreateTree(const std::string& 
 		if (l.id >= currentId_) currentId_ = l.id + 1;
 	}
 
-	return BehaviorTreeFactory::CreateTree(nodes, links, character);
+	return BehaviorTreeFactory::CreateTree(nodes, links, character, fileName);
 }
 
 /// @brief UIを描画する

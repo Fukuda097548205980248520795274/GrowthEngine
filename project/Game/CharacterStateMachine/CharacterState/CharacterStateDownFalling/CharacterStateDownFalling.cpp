@@ -15,6 +15,9 @@ CharacterStateDownFalling::CharacterStateDownFalling(Character* owner, Animation
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDownFalling::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// ダメージタイマーをリセットする
 	damageTimer_ = maxDamageTime_;
 }

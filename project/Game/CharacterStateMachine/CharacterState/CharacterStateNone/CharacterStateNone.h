@@ -10,7 +10,7 @@ public:
     CharacterStateNone(Character* owner) : CharacterState(owner) {}
 
 	/// @brief この状態に入るときに呼ばれる処理
-    void Enter() override {}
+    void Enter() override;
 
 	/// @brief 更新処理
     /// @param dt 

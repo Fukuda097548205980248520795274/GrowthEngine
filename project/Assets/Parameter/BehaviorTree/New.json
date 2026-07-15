@@ -1,16 +1,6 @@
 {
     "links": [
         {
-            "end": 16,
-            "id": 17,
-            "start": 11
-        },
-        {
-            "end": 19,
-            "id": 20,
-            "start": 11
-        },
-        {
             "end": 30,
             "id": 31,
             "start": 27
@@ -69,62 +59,9 @@
             "end": 68,
             "id": 69,
             "start": 56
-        },
-        {
-            "end": 71,
-            "id": 73,
-            "start": 23
-        },
-        {
-            "end": 10,
-            "id": 101,
-            "start": 72
         }
     ],
     "nodes": [
-        {
-            "id": 9,
-            "input_pin": 10,
-            "is_collapsed": false,
-            "name": "",
-            "output_pin": 11,
-            "pos": [
-                364.47930908203125,
-                1155.3084716796875
-            ],
-            "type": 3
-        },
-        {
-            "action_type": 5,
-            "id": 15,
-            "input_pin": 16,
-            "is_collapsed": false,
-            "name": "ターゲットを追跡",
-            "nav_mesh_move_data": {
-                "isDash": false,
-                "moveSpeed": 3.0,
-                "stopDistance": 4.0
-            },
-            "output_pin": -1,
-            "pos": [
-                514.4794311523438,
-                1275.30859375
-            ],
-            "type": 5
-        },
-        {
-            "condition_type": 15,
-            "id": 18,
-            "input_pin": 19,
-            "is_collapsed": false,
-            "name": "攻撃状態でないとき",
-            "output_pin": -1,
-            "pos": [
-                514.4794311523438,
-                1155.3084716796875
-            ],
-            "type": 4
-        },
         {
             "id": 21,
             "input_pin": 22,
@@ -318,18 +255,6 @@
                 0.0
             ],
             "type": 4
-        },
-        {
-            "id": 70,
-            "input_pin": 71,
-            "is_collapsed": false,
-            "name": "",
-            "output_pin": 72,
-            "pos": [
-                150.0,
-                1080.0
-            ],
-            "type": 2
         }
     ]
 }

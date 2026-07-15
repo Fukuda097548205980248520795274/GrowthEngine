@@ -6,6 +6,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateGuard::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// 防御のリアクション中かどうかをリセットする
 	isGuardReaction_ = false;
 	guardReactionTimer_ = 0.0f;

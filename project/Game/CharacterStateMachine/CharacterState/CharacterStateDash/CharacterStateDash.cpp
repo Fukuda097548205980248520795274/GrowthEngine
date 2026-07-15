@@ -7,6 +7,9 @@
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDash::Enter()
 {
+	// ビヘイビアツリーのリクエストを行う
+	BehaviorTreeRequest();
+
 	// ダッシュモーションを再生
 	owner_->SetAnimation(hMotion_, false, true);
 
@@ -57,7 +60,7 @@ void CharacterStateDash::Update(float dt)
 	}
 
 	// 1フレーム目の更新時にダッシュ中フラグを立てる
-	isDash_ = true;
+	if(!isDash_ && movement->GetCurrentVelocity().Length() > 0.0f)isDash_ = true;
 }
 
 /// @brief この状態からでるときに呼ばれる処理

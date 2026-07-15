@@ -1,8 +1,9 @@
 #pragma once
 #include "../Character.h"
-#include "BehaviorTree/BehaviorTree.h"
 
 class NavMesh;
+class BehaviorTreeEditor;
+class BehaviorTree;
 
 class NPC : public Character
 {
@@ -15,7 +16,7 @@ public:
 	NPC();
 
 	/// @brief 初期化
-	void Initialize(const CharacterInitData& initData, CharacterTag characterTag, std::unique_ptr<BehaviorTree> behaviorTree, const NavMesh* navMesh);
+	void Initialize(const CharacterInitData& initData, CharacterTag characterTag, const NavMesh* navMesh);
 
 	/// @brief プールに返却したときの処理
 	void PoolRelease();
@@ -37,17 +38,26 @@ public:
 	/// @param cooltime 
 	void SetAttackCooltime(float cooltime)override { attackCooltime_ = cooltime; }
 
-	/// @brief ビヘイビアツリーの設定
-	/// @param behaviorTree 
-	void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) override { behaviorTree_ = std::move(behaviorTree); }
-
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
 	const NavMesh* GetNavMesh() const override { return navMesh_; }
 
+	/// @brief ビヘイビアツリーの変更をリクエストする
+	/// @param newTree 
+	void RequestBehaviorTreeChange(BehaviorTree* newTree);
+
+	/// @brief ビヘイビアツリーを初期化する
+	/// @param behaviorTreeConfig 
+	/// @param behaviorTreeEditor 
+	void InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, BehaviorTreeEditor* behaviorTreeEditor);
+
 	/// @brief ビヘイビアツリーの取得
 	/// @return 
-	BehaviorTree* GetBehaviorTree() const override { return behaviorTree_.get(); }
+	BehaviorTree* GetBehaviorTree() const override { return currentBehaviorTree_; }
+
+	/// @brief ビヘイビアツリーの変更がリクエストされているかどうかを取得する
+	/// @return 
+	bool IsChangeBehaviorTree()const { return nextBehaviorTree_ != nullptr; }
 
 
 private:
@@ -55,20 +65,14 @@ private:
 	/// @brief ターゲットとの距離で構え状態を更新する
 	void UpdateStanceStateByTargetDistance();
 
-	/// @brief スタイルが変化したときの処理
-	/// @param newStyle 
-	void OnStyleChanged(FightStyle newStyle) override;
-
-	/// @brief スタイルに応じたビヘイビアツリーを生成する
-	/// @param style 
-	/// @return 
-	std::unique_ptr<BehaviorTree> CreateBehaviorTreeForStyle(FightStyle style);
-
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
 	/// @brief ビヘイビアツリー
-	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
+	BehaviorTree* currentBehaviorTree_ = nullptr;
+
+	/// @brief 次のビヘイビアツリー
+	BehaviorTree* nextBehaviorTree_ = nullptr;
 
 	/// @brief ナビメッシュ
 	const NavMesh* navMesh_ = nullptr;

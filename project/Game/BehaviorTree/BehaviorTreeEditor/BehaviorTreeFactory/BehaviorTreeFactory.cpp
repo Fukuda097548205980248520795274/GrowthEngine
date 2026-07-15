@@ -18,7 +18,8 @@
 /// @param editor_nodes 
 /// @param editor_links 
 /// @return 
-std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<EditorNode>& editor_nodes, const std::vector<EditorLink>& editor_links, Character* character)
+std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<EditorNode>& editor_nodes, const std::vector<EditorLink>& editor_links, 
+	Character* character, const std::string& name)
 {
 	// ルートノードを見つける
 	const EditorNode* root_editor_node = FindRootNode(editor_nodes, editor_links);
@@ -30,7 +31,7 @@ std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<
 	std::unique_ptr<Node> root_runtime_node = BuildNodeRecursive(*root_editor_node, editor_nodes, editor_links, character);
 
 	// ルートノードが構築できなかった場合は nullptr を返す
-	return std::make_unique<BehaviorTree>(std::move(root_runtime_node));
+	return std::make_unique<BehaviorTree>(std::move(root_runtime_node), name);
 }
 
 /// @brief エディタ上のノードとリンクからルートノードを見つける
