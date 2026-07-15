@@ -38,6 +38,9 @@ public:
 	/// @return 
 	State GetCurrentState() const { return currentState_; }
 
+	/// @brief 状態を初期化する
+	void InitState() { currentState_ = State::None; }
+
 	/// @brief ツリーの名前を取得する
 	/// @return 
 	const std::string& GetName() const { return name_; }

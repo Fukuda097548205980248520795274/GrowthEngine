@@ -123,6 +123,8 @@ void NPC::Update()
 				currentBehaviorTree_->Abort();
 
 				currentBehaviorTree_ = nextBehaviorTree_;
+				currentBehaviorTree_->InitState();
+
 				nextBehaviorTree_ = nullptr; // 予約をクリア
 			}
 			else if (nextBehaviorTree_)
@@ -194,8 +196,12 @@ void NPC::Dead()
 /// @param newTree 
 void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 {
-	// すでに現在のビヘイビアツリーと同じ名前のビヘイビアツリーが設定されている場合は、何もしない
-	if (newTree && currentBehaviorTree_ && newTree->GetName() == currentBehaviorTree_->GetName())
+	// 新しいビヘイビアツリーが存在しない、または現在のビヘイビアツリーと同じ名前のビヘイビアツリーの場合は何もしない
+	if (!newTree)
+		return;
+
+	// 現在のビヘイビアツリーが存在し、かつ新しいビヘイビアツリーと同じ名前のビヘイビアツリーの場合は何もしない
+	if (currentBehaviorTree_ && (newTree->GetName() == currentBehaviorTree_->GetName()))
 		return;
 
 	// 現在のビヘイビアツリーが存在しない、または現在のビヘイビアツリーが成功または失敗状態の場合は、すぐに新しいビヘイビアツリーに切り替える
@@ -207,7 +213,9 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 		if (currentBehaviorTree_)
 			currentBehaviorTree_->Abort();
 
+		// 新しいビヘイビアツリーに切り替える
 		currentBehaviorTree_ = newTree;
+		currentBehaviorTree_->InitState();
 		nextBehaviorTree_ = nullptr;
 	}
 	else
