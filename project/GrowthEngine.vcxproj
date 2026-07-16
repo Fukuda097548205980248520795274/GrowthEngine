@@ -161,6 +161,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="Engine\Application\MainCamera3D\MainCamera3D.cpp" />
     <ClCompile Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp" />
     <ClCompile Include="Engine\Application\RenderPass\RenderPass.cpp" />
     <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp">
@@ -1214,6 +1215,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
     <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />
     <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h" />
+    <ClInclude Include="Engine\Application\MainCamera3D\MainCamera3D.h" />
     <ClInclude Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h" />
     <ClInclude Include="Engine\Application\RenderPass\RenderPass.h" />
     <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h" />

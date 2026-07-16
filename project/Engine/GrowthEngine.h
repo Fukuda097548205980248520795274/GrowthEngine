@@ -28,6 +28,8 @@
 #include "Application/Particle3D/Particle3D.h"
 #include "Application/Emitter3D/Emitter3D.h"
 
+#include "Application/MainCamera3D/MainCamera3D.h"
+
 #include "Application/Render3D/Render3DStaticModel/Render3DStaticModel.h"
 #include "Application/Render3D/Render3DAnimationModel/Render3DAnimationModel.h"
 #include "Application/Render3D/Render3DSkinningModel/Render3DSkinningModel.h"

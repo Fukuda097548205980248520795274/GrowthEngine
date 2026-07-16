@@ -26,12 +26,12 @@ namespace
 void GameScene::Initialize()
 {
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
-	engine_->LoadCamera3D("CutsceneCamera");
+	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
 
 	// カメラの読み込みと切り替え
-	engine_->LoadCamera3D("MainCamera");
-	engine_->Camera3DSwitch("MainCamera");
+	mainCamera_ = std::make_unique<MainCamera3D>("MainCamera");
+	mainCamera_->Switch();
 
 	// カットシーンの登録
 	cutsceneManager_->RegisterCutscene("BossAppear", 4.0f, [this](float progress, float dt)
@@ -989,23 +989,22 @@ void GameScene::ApplyCameraFromPivot()
 	// プレイヤーがいない場合は更新しない
 	if (!player_)return;
 
+	// ピボットのデータを取得する
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
-	// カメラ位置と回転をピボット情報から設定する
-	if (Engine::Camera3DData::Param* cameraParam = engine_->GetCamera3DParam("MainCamera"))
-	{
-		Vector3 finalCameraPos = pivotData->sphericalCoordinates;
-		if (cameraShake_) finalCameraPos += cameraShake_->GetShakeOffset();
+	// カメラの位置をピボットの球面座標から計算する
+	Vector3 finalCameraPos = pivotData->sphericalCoordinates;
+	if (cameraShake_) finalCameraPos += cameraShake_->GetShakeOffset();
 
-		cameraParam->transform.translate = finalCameraPos;
+	// カメラの位置を更新する
+	mainCamera_->param_->transform.translate = finalCameraPos;
 
-		// center方向を向くようにオイラー角を計算する
-		const Vector3 lookDirection = pivotData->toCenter;
-		const float yaw = std::atan2(lookDirection.x, lookDirection.z);
-		const float horizontal = std::sqrt(lookDirection.x * lookDirection.x + lookDirection.z * lookDirection.z);
-		const float pitch = std::atan2(-lookDirection.y, horizontal);
-		cameraParam->transform.rotate = Vector3(pitch, yaw, 0.0f);
-	}
+	// center方向を向くようにオイラー角を計算する
+	const Vector3 lookDirection = pivotData->toCenter;
+	const float yaw = std::atan2(lookDirection.x, lookDirection.z);
+	const float horizontal = std::sqrt(lookDirection.x * lookDirection.x + lookDirection.z * lookDirection.z);
+	const float pitch = std::atan2(-lookDirection.y, horizontal);
+	mainCamera_->param_->transform.rotate = Vector3(pitch, yaw, 0.0f);
 }
 
 /// @brief イベントトリガーに触れたときの処理
@@ -1076,7 +1075,7 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 		player_->SetIsCutsceneActive(false);
 
 		// カットシーン用のカメラに切り替える
-		engine_->Camera3DSwitch("CutsceneCamera");
+		cutsceneCamera_->Switch();
 
 		// カットシーン名を取得する
 		std::string cutsceneName = param;
@@ -1085,7 +1084,7 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 		cutsceneManager_->Play(cutsceneName, [this]()
 			{
 				// メインカメラに戻す
-				engine_->Camera3DSwitch("MainCamera");
+				mainCamera_->Switch();
 
 				// プレイヤーの操作を解放する
 				player_->SetIsCutsceneActive(true);

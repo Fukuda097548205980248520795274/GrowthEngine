@@ -1399,6 +1399,9 @@
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper">
       <UniqueIdentifier>{6212c48c-1f7f-4052-bf95-c65f8368e5e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Application\MainCamera3D">
+      <UniqueIdentifier>{c495dd69-d58e-469d-8b07-784573edcc19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2540,6 +2543,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\MainCamera3D\MainCamera3D.cpp">
+      <Filter>Engine\Include\Application\MainCamera3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3811,6 +3817,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\MainCamera3D\MainCamera3D.h">
+      <Filter>Engine\Include\Application\MainCamera3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

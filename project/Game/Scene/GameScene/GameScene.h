@@ -139,6 +139,15 @@ private:
 	SoundManager* soundManager_ = nullptr;
 	EffectManager* effectManager_ = nullptr;
 
+	/// @brief メインカメラ
+	std::unique_ptr<MainCamera3D> mainCamera_ = nullptr;
+
+	/// @brief カットシーン用カメラ
+	std::unique_ptr<MainCamera3D> cutsceneCamera_ = nullptr;
+
+
+private:
+
 	/// @brief ポストエフェクトマネージャ
 	std::unique_ptr<PostEffectManager> postEffectManager_ = nullptr;
 
