@@ -1,74 +1,7 @@
 {
     "currentId": 115,
-    "links": [
-        {
-            "endPinId": 86,
-            "id": 96,
-            "startPinId": 93
-        },
-        {
-            "endPinId": 98,
-            "id": 102,
-            "startPinId": 87
-        },
-        {
-            "endPinId": 86,
-            "id": 103,
-            "startPinId": 99
-        },
-        {
-            "endPinId": 105,
-            "id": 109,
-            "startPinId": 94
-        },
-        {
-            "endPinId": 105,
-            "id": 113,
-            "startPinId": 88
-        },
-        {
-            "endPinId": 105,
-            "id": 114,
-            "startPinId": 100
-        }
-    ],
+    "links": [],
     "nodes": [
-        {
-            "animationName": "Player_Combo_2",
-            "grabStrikeParams": {
-                "attackTime": 0.30000001192092896,
-                "damageReaction": 3,
-                "hits": [
-                    {
-                        "damage": 10,
-                        "hitJoint": 9,
-                        "hitTime": 0.10000000149011612
-                    }
-                ],
-                "isRelease": false,
-                "knockback": 6.0,
-                "knockbackDirection": [
-                    0.0,
-                    1.0,
-                    0.30000001192092896
-                ],
-                "moveEndTime": 0.0,
-                "moveSpeed": 0.0,
-                "moveStartTime": 0.0
-            },
-            "id": 85,
-            "inputPinId": 86,
-            "name": "",
-            "nodeType": 2,
-            "outputInputBPinId": 89,
-            "outputInputXPinId": 87,
-            "outputInputYPinId": 88,
-            "pos": [
-                874.7583618164063,
-                515.7384033203125
-            ],
-            "targetAnimationName": "Front"
-        },
         {
             "animationName": "Player_Combo_3",
             "grabParams": {
@@ -89,82 +22,10 @@
             "outputInputXPinId": 93,
             "outputInputYPinId": 94,
             "pos": [
-                708.2583618164063,
-                611.7384033203125
+                684.2583618164063,
+                607.7384033203125
             ],
             "targetAnimationName": ""
-        },
-        {
-            "animationName": "Player_Combo_2",
-            "grabStrikeParams": {
-                "attackTime": 0.30000001192092896,
-                "damageReaction": 3,
-                "hits": [
-                    {
-                        "damage": 10,
-                        "hitJoint": 9,
-                        "hitTime": 0.10000000149011612
-                    }
-                ],
-                "isRelease": false,
-                "knockback": 6.0,
-                "knockbackDirection": [
-                    0.0,
-                    1.0,
-                    0.30000001192092896
-                ],
-                "moveEndTime": 0.0,
-                "moveSpeed": 0.0,
-                "moveStartTime": 0.0
-            },
-            "id": 97,
-            "inputPinId": 98,
-            "name": "",
-            "nodeType": 2,
-            "outputInputBPinId": 101,
-            "outputInputXPinId": 99,
-            "outputInputYPinId": 100,
-            "pos": [
-                877.25830078125,
-                660.7384033203125
-            ],
-            "targetAnimationName": "Front"
-        },
-        {
-            "animationName": "Player_Combo_2",
-            "grabStrikeParams": {
-                "attackTime": 0.5,
-                "damageReaction": 3,
-                "hits": [
-                    {
-                        "damage": 10,
-                        "hitJoint": 9,
-                        "hitTime": 0.5
-                    }
-                ],
-                "isRelease": true,
-                "knockback": 6.0,
-                "knockbackDirection": [
-                    0.0,
-                    1.0,
-                    0.0
-                ],
-                "moveEndTime": 0.30000001192092896,
-                "moveSpeed": 3.0,
-                "moveStartTime": 0.10000000149011612
-            },
-            "id": 104,
-            "inputPinId": 105,
-            "name": "",
-            "nodeType": 2,
-            "outputInputBPinId": 108,
-            "outputInputXPinId": 106,
-            "outputInputYPinId": 107,
-            "pos": [
-                1051.162109375,
-                584.4148559570313
-            ],
-            "targetAnimationName": "Front"
         }
     ]
 }

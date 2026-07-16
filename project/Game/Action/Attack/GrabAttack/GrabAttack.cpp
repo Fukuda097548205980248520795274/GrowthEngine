@@ -167,11 +167,8 @@ void GrabAttack::Update()
 							owner_->ExecuteGrab(target, grabMaxTime_, hitPosition);
 
 							// プレイヤー以外は掴んだら処理が成功
-							if (!owner_->IsPlayer())
-							{
-								Attack::Update();
-								return;
-							}
+							Attack::Update();
+							return;
 
 							// プレイヤーは掴んだら処理を終了せず、掴んだ状態で次の攻撃入力を待つ
 							DeleteHitbox();

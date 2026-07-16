@@ -1,0 +1,130 @@
+{
+    "currentId": 20,
+    "links": [
+        {
+            "endPinId": 2,
+            "id": 12,
+            "startPinId": 8
+        },
+        {
+            "endPinId": 14,
+            "id": 18,
+            "startPinId": 3
+        },
+        {
+            "endPinId": 2,
+            "id": 19,
+            "startPinId": 15
+        }
+    ],
+    "nodes": [
+        {
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.30000001192092896,
+                "damageReaction": 3,
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.10000000149011612
+                    }
+                ],
+                "isRelease": false,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    1.0,
+                    0.30000001192092896
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                442.25836181640625,
+                690.7384033203125
+            ],
+            "targetAnimationName": "Front"
+        },
+        {
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.30000001192092896,
+                "damageReaction": 3,
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.10000000149011612
+                    }
+                ],
+                "isRelease": false,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    1.0,
+                    0.30000001192092896
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0
+            },
+            "id": 6,
+            "inputPinId": 7,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 10,
+            "outputInputXPinId": 8,
+            "outputInputYPinId": 9,
+            "pos": [
+                251.2471923828125,
+                688.7103271484375
+            ],
+            "targetAnimationName": "Front"
+        },
+        {
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.30000001192092896,
+                "damageReaction": 3,
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.10000000149011612
+                    }
+                ],
+                "isRelease": false,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    1.0,
+                    0.30000001192092896
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0
+            },
+            "id": 13,
+            "inputPinId": 14,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 17,
+            "outputInputXPinId": 15,
+            "outputInputYPinId": 16,
+            "pos": [
+                447.88818359375,
+                831.1000366210938
+            ],
+            "targetAnimationName": "Front"
+        }
+    ]
+}

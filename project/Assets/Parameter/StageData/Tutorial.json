@@ -525,7 +525,7 @@
             "grabbedStateCT_X": "",
             "grabbedStateCT_Y": "",
             "grabbingStateCT_B": "",
-            "grabbingStateCT_X": "",
+            "grabbingStateCT_X": "Grab_X",
             "grabbingStateCT_Y": "",
             "guardMotionName": "BothHands",
             "guardStateCT_B": "",
