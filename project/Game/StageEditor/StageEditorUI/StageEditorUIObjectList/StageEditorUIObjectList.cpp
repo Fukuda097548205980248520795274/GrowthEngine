@@ -32,7 +32,8 @@ StageEditorUIObjectList::StageEditorUIObjectList(StageSpawner* spawner, StageEdi
 /// @param isDirty 
 /// @param navMesh 
 void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
-	bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh, const std::vector<std::string> behaviorTreeNames, const std::vector<std::string> eventStageDataFileNames)
+	bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh,
+	const std::vector<std::string> behaviorTreeNames, const std::vector<std::string>& comboTreeNames, const std::vector<std::string> eventStageDataFileNames)
 {
 	if (!ImGui::Begin("Object List"))
 	{
@@ -72,8 +73,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 	// 項目の追加や削除があった場合に、走査中のリストが変更されてバグるのを防止するためのフラグ
 	bool listChanged = false;
 
+	// リスト表示領域の開始
+	bool isVisible = ImGui::BeginChild("ObjectListRegion", ImVec2(0, 150), true);
+
 	// オブジェクトのリスト表示
-	if (ImGui::BeginChild("ObjectListRegion", ImVec2(0, 150), true))
+	if (isVisible)
 	{
 		for (int i = 0; i < placementList.size(); ++i)
 		{
@@ -228,9 +232,9 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 				ImGui::EndPopup();
 			}
 		}
-
-		ImGui::EndChild();
 	}
+
+	ImGui::EndChild();
 
 
 	// リストの変更があった場合、選択中のインデックスを安全に更新する
@@ -314,6 +318,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			{
 				// 共通ヘルパーからビヘイビアツリーUIを描画
 				StageEditorUIHelper::DrawBehaviorTreeSettings(target.behaviorTrees, behaviorTreeNames, isDirty);
+			}
+			else if (target.subType == 1)
+			{
+				// 共通ヘルパーからコンボツリーUIを描画
+				StageEditorUIHelper::DrawComboTreeSettings(target.comboTrees, comboTreeNames, isDirty);
 			}
 		} 
 		else if (target.category == EditCategory::Object)

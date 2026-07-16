@@ -50,6 +50,20 @@ namespace StageEditorUIHelper
 	/// @return 
 	bool DrawBehaviorTreeSettings(BehaviorTreeConfig& btConfig, const std::vector<std::string>& behaviorTreeNames, bool& isDirty);
 
+	/// @brief コンボツリーのセレクターを描画する
+	/// @param label 
+	/// @param currentCT 
+	/// @param comboTreeNames 
+	/// @return 
+	bool DrawComboTreeSelector(const char* label, ComboTreeInputName& currentCT, const std::vector<std::string>& comboTreeNames);
+
+	/// @brief コンボツリーの設定を描画する
+	/// @param ctConfig 
+	/// @param comboTreeNames 
+	/// @param isDirty 
+	/// @return 
+	bool DrawComboTreeSettings(ComboTreeConfig& ctConfig, const std::vector<std::string>& comboTreeNames, bool& isDirty);
+
 	/// @brief モーションのセレクターを描画する
 	/// @param label 
 	/// @param motionType 

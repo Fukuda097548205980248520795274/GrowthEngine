@@ -14,8 +14,8 @@ CharacterStateDownLying::CharacterStateDownLying(Character* owner, AnimationHand
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDownLying::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 
 	// プレイヤーはタイマーなしで起き上がれる
 	if (owner_->IsPlayer())

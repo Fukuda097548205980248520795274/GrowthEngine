@@ -30,8 +30,8 @@ StageEditorUIPlacement::StageEditorUIPlacement(StageSpawner* spawner, StageEdito
 /// @param selectedIndex 
 /// @param isDirty 
 /// @param isPlaying
-void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty, 
-	const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& eventStageDataFileNames)
+void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
+	const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& comboTreeNames, const std::vector<std::string>& eventStageDataFileNames)
 {
 	// オブジェクト配置モードのUIを描画
 	ImGui::Text("--- オブジェクト配置 ---");
@@ -124,6 +124,11 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		{
 			// 共通ヘルパーからビヘイビアツリーUIを描画
 			StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
+		}
+		else if (currentData.subType == 1) 
+		{
+			// プレイヤーの場合はコンボツリーUIを描画
+			StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);
 		}
 	}
 	else if (currentData.category == EditCategory::Object)

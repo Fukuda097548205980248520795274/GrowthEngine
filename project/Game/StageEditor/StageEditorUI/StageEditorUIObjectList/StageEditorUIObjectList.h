@@ -25,7 +25,8 @@ public:
 	/// @param isDirty 
 	/// @param navMesh 
 	void DrawWindow(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
-		bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh, const std::vector<std::string> behaviorTreeNames, const std::vector<std::string> eventStageDataFileNames);
+		bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh,
+		const std::vector<std::string> behaviorTreeNames, const std::vector<std::string>& comboTreeNames, const std::vector<std::string> eventStageDataFileNames);
 
 private:
 

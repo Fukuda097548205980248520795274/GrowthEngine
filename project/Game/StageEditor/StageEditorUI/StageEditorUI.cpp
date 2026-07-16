@@ -29,6 +29,7 @@ void StageEditorUI::Initialize()
 
 	// 名前リストをロード
 	LoadBehaviorTreeNames();
+	LoadComboTreeNames();
 	LoadStageDataNames();
 }
 
@@ -244,8 +245,8 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
 		guizmo_->UpdateObject(placementList, selectedIndex_, isDirty, history_);
-		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_, stageDataNames_);
-		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_, stageDataNames_);
+		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_, comboTreeNames_, stageDataNames_);
+		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_, comboTreeNames_, stageDataNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
@@ -837,11 +838,29 @@ void StageEditorUI::LoadBehaviorTreeNames()
 	// フォルダ内のファイルを走査
 	for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
 	{
+		// ファイルのみを対象にする
 		if (entry.is_regular_file())
-		{
-			// stem() を使うと、拡張子を除いたファイル名を取得できます
 			behaviorTreeNames_.push_back(entry.path().stem().string());
-		}
+	}
+}
+
+/// @brief コンボツリーデータの名前を読み込む
+void StageEditorUI::LoadComboTreeNames()
+{
+	comboTreeNames_.clear();
+
+	std::string directoryPath = "./Assets/Parameter/ComboTree/";
+
+	// フォルダが存在しない場合は処理を終了
+	if (!std::filesystem::exists(directoryPath))
+		return;
+
+	// フォルダ内のファイルを走査
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
+	{
+		// ファイルのみを対象にする
+		if (entry.is_regular_file())
+			comboTreeNames_.push_back(entry.path().stem().string());
 	}
 }
 

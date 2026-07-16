@@ -11,7 +11,7 @@ using json = nlohmann::json;
 /// @return 
 std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonFilePath, Character* character)
 {
-	std::string directoryPath = "./Assets/Parameter/ComboTree/" + jsonFilePath;
+	std::string directoryPath = "./Assets/Parameter/ComboTree/" + jsonFilePath + ".json";
 
 	std::unique_ptr<ComboTree> tree = std::make_unique<ComboTree>();
     std::ifstream file(directoryPath);

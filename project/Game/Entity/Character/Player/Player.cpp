@@ -3,6 +3,7 @@
 #include "HUD/HP/HP.h"
 
 #include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
+#include "comboTree/ComboTreeEditor/ComboTreeEditor.h"
 
 #include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
 
@@ -35,8 +36,7 @@ Player::Player() : Character()
 }
 
 /// @brief 初期化
-void Player::Initialize(const CharacterInitData& initData, Weapon* baton,
-	std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB)
+void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 {
 	assert(baton);
 
@@ -75,11 +75,6 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton,
 
 	// スタイルチェンジ開始時の処理
 	OnStyleChanged(currentStyle_);
-
-	// コンボツリーを作成する
-	comboTreeX_ = std::move(comboTreeX);
-	comboTreeY_ = std::move(comboTreeY);
-	comboTreeB_ = std::move(comboTreeB);
 }
 
 /// @brief 更新処理
@@ -109,6 +104,28 @@ void Player::Update()
 	UpdateTargetByCamera();
 	isOperationCamera_ = false;
 
+	// コンボツリーの変更が予約されている場合、攻撃が完全に終了している状態であればコンボツリーを変更する
+	if (isChangeComboTree_)
+	{
+		// 攻撃が完全に終了している状態
+		if (!currentAttack_)
+		{
+			currentComboTreeX_ = nextComboTreeX_;
+			currentComboTreeY_ = nextComboTreeY_;
+			currentComboTreeB_ = nextComboTreeB_;
+
+			// 予約をクリア
+			nextComboTreeX_ = nullptr;
+			nextComboTreeY_ = nullptr;
+			nextComboTreeB_ = nullptr;
+
+			isChangeComboTree_ = false;
+		}
+	}
+
+	// 攻撃の更新処理
+	UpdateAttack();
+
 	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
 	if (!isIncapacitatedState)
 	{
@@ -118,9 +135,6 @@ void Player::Update()
 		// レイジモードを開始する
 		if (inputController_->IsRageModeRequested())
 			RageModeInput();
-
-		// 攻撃の更新処理
-		UpdateAttack();
 
 		// プレイヤーは予備動作はないので、攻撃中が攻撃動作中と同じ扱いになる
 		isInAttackSequence_ = IsAttack();
@@ -215,10 +229,6 @@ void Player::UpdateAttack()
 	// デルタタイムの取得
 	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
-	// 怯み状態、または「つかまれている状態」なら攻撃の更新は行わない
-	if (IsDamageReaction() || IsGrabbed() || IsDown() || IsStyleChanging())
-		return;
-
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
@@ -265,17 +275,17 @@ void Player::UpdateAttack()
 	if (!IsAttack() && bufferedAttackInput_ != AttackInputType::None)
 	{
 		// 入力に応じて別々のコンボツリーを実行する
-		if (bufferedAttackInput_ == AttackInputType::InputX && comboTreeX_)
+		if (bufferedAttackInput_ == AttackInputType::InputX && currentComboTreeX_)
 		{
-			comboTreeX_->Exec();
+			currentComboTreeX_->Exec();
 		}
-		else if (bufferedAttackInput_ == AttackInputType::InputY && comboTreeY_)
+		else if (bufferedAttackInput_ == AttackInputType::InputY && currentComboTreeY_)
 		{
-			comboTreeY_->Exec();
+			currentComboTreeY_->Exec();
 		}
-		else if (bufferedAttackInput_ == AttackInputType::InputB && comboTreeB_)
+		else if (bufferedAttackInput_ == AttackInputType::InputB && currentComboTreeB_)
 		{
-			comboTreeB_->Exec();
+			currentComboTreeB_->Exec();
 		}
 
 		// バッファされた攻撃入力を消す
@@ -348,6 +358,139 @@ float Player::GetCameraYaw() const
 
 	return 0.0f;
 }
+
+/// @brief コンボツリーの変更をリクエストする
+/// @param combTreeX 
+/// @param comboTreeY 
+/// @param comboTreeB 
+void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB)
+{
+	// 攻撃中なら次のコンボツリーとして保存し、攻撃中でなければ現在のコンボツリーとして保存する
+	if (currentAttack_)
+	{
+		nextComboTreeX_ = comboTreeX;
+		nextComboTreeY_ = comboTreeY;
+		nextComboTreeB_ = comboTreeB;
+
+		// コンボツリーの変更フラグを立てる
+		isChangeComboTree_ = true;
+	}
+	else
+	{
+		// 攻撃中でない場合は現在のコンボツリーとして保存する
+		currentComboTreeX_ = comboTreeX;
+		currentComboTreeY_ = comboTreeY;
+		currentComboTreeB_ = comboTreeB;
+
+		nextComboTreeX_ = nullptr;
+		nextComboTreeY_ = nullptr;
+		nextComboTreeB_ = nullptr;
+
+		isChangeComboTree_ = false;
+	}
+}
+
+/// @brief コンボツリーを初期化する
+/// @param comboTreeConfig 
+/// @param comboTreeEditor 
+void Player::InitComboTree(const ComboTreeConfig& comboTreeConfig)
+{
+	stateMachine_->GetState("None")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.bName_, this));
+
+	stateMachine_->GetState("Dash")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.bName_, this));
+
+	stateMachine_->GetState("Grabbed")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.bName_, this));
+
+	stateMachine_->GetState("Grabbing")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.bName_, this));
+
+	stateMachine_->GetState("Guard")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.bName_, this));
+
+	stateMachine_->GetState("LightDamage")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.bName_, this));
+
+	stateMachine_->GetState("HeavyDamage")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.bName_, this));
+
+	stateMachine_->GetState("DownFalling")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.bName_, this));
+
+	stateMachine_->GetState("DownLying")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.bName_, this));
+
+	stateMachine_->GetState("DownGettingUp")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.bName_, this));
+
+	stateMachine_->GetState("DownStagger")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.bName_, this));
+
+	stateMachine_->GetState("BlownAway")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.bName_, this));
+
+	stateMachine_->GetState("BlownFalling")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.bName_, this));
+
+	stateMachine_->GetState("Repel")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.bName_, this));
+
+	stateMachine_->GetState("Deflect")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.bName_, this));
+
+	stateMachine_->GetState("Repelled")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.bName_, this));
+
+	stateMachine_->GetState("Deflected")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.bName_, this));
+
+	stateMachine_->GetState("Avoid")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.bName_, this));
+
+	stateMachine_->GetState("Dead")->SetComboTree(
+		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.xName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.yName_, this),
+		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.bName_, this));
+}
+
 
 /// @brief スタイルチェンジ開始時の処理
 void Player::StyleChangeStart()

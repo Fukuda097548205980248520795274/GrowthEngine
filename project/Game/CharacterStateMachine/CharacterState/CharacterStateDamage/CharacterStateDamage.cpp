@@ -11,8 +11,8 @@ CharacterStateDamage::CharacterStateDamage(Character* owner, AnimationHandle hFr
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDamage::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 
 	// プレイヤーとボス以外のキャラクター、または攻撃中でない場合は、ダメージタイマーをリセットする
 	if ((!owner_->IsPlayer() && !owner_->IsBoss()) || !owner_->IsAttack())
