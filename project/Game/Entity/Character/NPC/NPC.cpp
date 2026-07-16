@@ -116,9 +116,16 @@ void NPC::Update()
 		// ツリーの実行が終了（成功 or 失敗）したら、予約されていたツリーに切り替える
 		if (state == BehaviorTree::State::Success || state == BehaviorTree::State::Failure)
 		{
-			// 予約されているツリーが存在し、今のツリーと違う名前のツリーなら切り替える
-			if (nextBehaviorTree_ && currentBehaviorTree_->GetName() != nextBehaviorTree_->GetName())
+			if (isChangeBehaviorTree_ && !nextBehaviorTree_)
 			{
+				// 現在のツリーを中断
+				currentBehaviorTree_->Abort();
+				currentBehaviorTree_ = nextBehaviorTree_;
+			}
+			else if (isChangeBehaviorTree_ && currentBehaviorTree_->GetName() != nextBehaviorTree_->GetName())
+			{
+				// 予約されているツリーが存在し、今のツリーと違う名前のツリーなら切り替える
+
 				// 現在のツリーを中断
 				currentBehaviorTree_->Abort();
 
@@ -127,11 +134,13 @@ void NPC::Update()
 
 				nextBehaviorTree_ = nullptr; // 予約をクリア
 			}
-			else if (nextBehaviorTree_)
+			else if (isChangeBehaviorTree_)
 			{
 				// 予約されているツリーが存在するが、今のツリーと同じ名前のツリーなら、予約をクリアする
 				nextBehaviorTree_ = nullptr;
 			}
+
+			isChangeBehaviorTree_ = false;
 		}
 	}
 
@@ -196,12 +205,8 @@ void NPC::Dead()
 /// @param newTree 
 void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 {
-	// 新しいビヘイビアツリーが存在しない、または現在のビヘイビアツリーと同じ名前のビヘイビアツリーの場合は何もしない
-	if (!newTree)
-		return;
-
-	// 現在のビヘイビアツリーが存在し、かつ新しいビヘイビアツリーと同じ名前のビヘイビアツリーの場合は何もしない
-	if (currentBehaviorTree_ && (newTree->GetName() == currentBehaviorTree_->GetName()))
+	// 新しいビヘイビアツリーが現在のビヘイビアツリーと同じ名前の場合は、何もしない
+	if (newTree && currentBehaviorTree_ && (newTree->GetName() == currentBehaviorTree_->GetName()))
 		return;
 
 	// 現在のビヘイビアツリーが存在しない、または現在のビヘイビアツリーが成功または失敗状態の場合は、すぐに新しいビヘイビアツリーに切り替える
@@ -215,13 +220,19 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 
 		// 新しいビヘイビアツリーに切り替える
 		currentBehaviorTree_ = newTree;
-		currentBehaviorTree_->InitState();
+		if (currentBehaviorTree_)currentBehaviorTree_->InitState();
 		nextBehaviorTree_ = nullptr;
+
+		// 既に変更が完了しているので、フラグをリセットする
+		isChangeBehaviorTree_ = false;
 	}
 	else
 	{
 		// 現在のビヘイビアツリーが実行中の場合は、次のビヘイビアツリーとして設定する
 		nextBehaviorTree_ = newTree;
+
+		// ビヘイビアツリーの変更がリクエストされたことを示すフラグを立てる
+		isChangeBehaviorTree_ = true;
 	}
 }
 

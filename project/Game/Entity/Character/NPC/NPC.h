@@ -57,7 +57,7 @@ public:
 
 	/// @brief ビヘイビアツリーの変更がリクエストされているかどうかを取得する
 	/// @return 
-	bool IsChangeBehaviorTree()const { return nextBehaviorTree_ != nullptr; }
+	bool IsChangeBehaviorTree()const { return isChangeBehaviorTree_; }
 
 
 private:
@@ -68,15 +68,20 @@ private:
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
+	/// @brief ナビメッシュ
+	const NavMesh* navMesh_ = nullptr;
+
+
+private:
+
+	/// @brief ビヘイビアツリーが変更されるかどうかのフラグ
+	bool isChangeBehaviorTree_ = false;
+
 	/// @brief ビヘイビアツリー
 	BehaviorTree* currentBehaviorTree_ = nullptr;
 
 	/// @brief 次のビヘイビアツリー
 	BehaviorTree* nextBehaviorTree_ = nullptr;
-
-	/// @brief ナビメッシュ
-	const NavMesh* navMesh_ = nullptr;
-
 
 
 private:

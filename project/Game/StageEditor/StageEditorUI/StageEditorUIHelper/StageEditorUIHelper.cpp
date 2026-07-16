@@ -112,10 +112,18 @@ namespace StageEditorUIHelper
 	bool DrawBehaviorTreeSelector(const char* label, std::string& currentBT, const std::vector<std::string>& behaviorTreeNames)
 	{
 		bool isChanged = false;
-		const char* previewValue = currentBT.empty() ? "None" : currentBT.c_str();
+		const char* previewValue = currentBT.empty() ? "選択なし" : currentBT.c_str();
 
 		if (ImGui::BeginCombo(label, previewValue))
 		{
+			// 選択なしのオプションを追加
+			if (ImGui::Selectable("選択なし", currentBT.empty()))
+			{
+				currentBT = "";
+				isChanged = true;
+			}
+			if (currentBT.empty()) ImGui::SetItemDefaultFocus();
+
 			for (const auto& name : behaviorTreeNames)
 			{
 				bool isSelected = (currentBT == name);
@@ -189,9 +197,17 @@ namespace StageEditorUIHelper
 		if (ImGui::TreeNode(label))
 		{
 			// X入力のセレクター
-			const char* previewValueX = currentCT.xName_.empty() ? "None" : currentCT.xName_.c_str();
+			const char* previewValueX = currentCT.xName_.empty() ? "選択なし" : currentCT.xName_.c_str();
 			if (ImGui::BeginCombo("X入力", previewValueX))
 			{
+				// 選択なしのオプションを追加
+				if (ImGui::Selectable("選択なし", currentCT.xName_.empty()))
+				{
+					currentCT.xName_ = "";
+					isChanged = true;
+				}
+				if (currentCT.xName_.empty()) ImGui::SetItemDefaultFocus();
+
 				for (const auto& name : comboTreeNames)
 				{
 					bool isSelected = (currentCT.xName_ == name);
@@ -206,9 +222,17 @@ namespace StageEditorUIHelper
 			}
 
 			// Y入力のセレクター
-			const char* previewValueY = currentCT.yName_.empty() ? "None" : currentCT.yName_.c_str();
+			const char* previewValueY = currentCT.yName_.empty() ? "選択なし" : currentCT.yName_.c_str();
 			if (ImGui::BeginCombo("Y入力", previewValueY))
 			{
+				// 選択なしのオプションを追加
+				if (ImGui::Selectable("選択なし", currentCT.yName_.empty()))
+				{
+					currentCT.yName_ = "";
+					isChanged = true;
+				}
+				if (currentCT.yName_.empty()) ImGui::SetItemDefaultFocus();
+
 				for (const auto& name : comboTreeNames)
 				{
 					bool isSelected = (currentCT.yName_ == name);
@@ -223,9 +247,17 @@ namespace StageEditorUIHelper
 			}
 
 			// B入力のセレクター
-			const char* previewValueB = currentCT.bName_.empty() ? "None" : currentCT.bName_.c_str();
+			const char* previewValueB = currentCT.bName_.empty() ? "選択なし" : currentCT.bName_.c_str();
 			if (ImGui::BeginCombo("B入力", previewValueB))
 			{
+				// 選択なしのオプションを追加
+				if (ImGui::Selectable("選択なし", currentCT.bName_.empty()))
+				{
+					currentCT.bName_ = "";
+					isChanged = true;
+				}
+				if (currentCT.bName_.empty()) ImGui::SetItemDefaultFocus();
+
 				for (const auto& name : comboTreeNames)
 				{
 					bool isSelected = (currentCT.bName_ == name);
