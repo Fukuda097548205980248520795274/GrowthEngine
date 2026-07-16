@@ -132,6 +132,9 @@ private:
 	// 現在のコンボタイプ
 	AttackInputType activeComboType_ = AttackInputType::None;
 
+	/// @brief コンボツリーを変更するかどうかのフラグ
+	bool isChangeComboTree_ = false;
+
 	// 今のコンボツリー
 	ComboTree* currentComboTreeX_ = nullptr;
 	ComboTree* currentComboTreeY_ = nullptr;

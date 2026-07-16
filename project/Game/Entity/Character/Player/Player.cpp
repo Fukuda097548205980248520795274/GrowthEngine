@@ -104,8 +104,8 @@ void Player::Update()
 	UpdateTargetByCamera();
 	isOperationCamera_ = false;
 
-	// コンボツリーの変更が予約されている場合、攻撃が完全に終了している状態であれば変更する
-	if (nextComboTreeX_ != nullptr || nextComboTreeY_ != nullptr || nextComboTreeB_ != nullptr)
+	// コンボツリーの変更が予約されている場合、攻撃が完全に終了している状態であればコンボツリーを変更する
+	if (isChangeComboTree_)
 	{
 		// 攻撃が完全に終了している状態
 		if (!currentAttack_)
@@ -118,6 +118,8 @@ void Player::Update()
 			nextComboTreeX_ = nullptr;
 			nextComboTreeY_ = nullptr;
 			nextComboTreeB_ = nullptr;
+
+			isChangeComboTree_ = false;
 		}
 	}
 
@@ -369,6 +371,9 @@ void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY
 		nextComboTreeX_ = comboTreeX;
 		nextComboTreeY_ = comboTreeY;
 		nextComboTreeB_ = comboTreeB;
+
+		// コンボツリーの変更フラグを立てる
+		isChangeComboTree_ = true;
 	}
 	else
 	{
@@ -380,6 +385,8 @@ void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY
 		nextComboTreeX_ = nullptr;
 		nextComboTreeY_ = nullptr;
 		nextComboTreeB_ = nullptr;
+
+		isChangeComboTree_ = false;
 	}
 }
 
