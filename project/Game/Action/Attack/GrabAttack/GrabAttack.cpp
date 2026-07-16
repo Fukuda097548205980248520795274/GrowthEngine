@@ -186,7 +186,7 @@ void GrabAttack::Update()
 	}
 
 	// つかみが成功していない状態で、回避や気絶などの状態になったらアクションを終了する
-	if (owner_->IsJustAvoided() || owner_->IsIncapacitated())
+	if (owner_->IsJustAvoided() || owner_->IsIncapacitated() || owner_->IsDash())
 	{
 		this->Exit();
 		return;

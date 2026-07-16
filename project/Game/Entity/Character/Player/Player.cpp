@@ -311,7 +311,7 @@ void Player::UpdateStanceState()
 void Player::UpdateDashState(bool hasMoveInput)
 {
 	// 怯み状態、動けない状態はダッシュ状態にならない
-	if (IsGrabbing() || IsIncapacitated())
+	if (IsGrabbing() || IsIncapacitated() || IsAttack())
 	{
 		return;
 	}
