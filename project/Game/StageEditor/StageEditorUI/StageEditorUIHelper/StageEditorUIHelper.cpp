@@ -177,6 +177,121 @@ namespace StageEditorUIHelper
 		return anyChanged;
 	}
 
+	/// @brief コンボツリーのセレクターを描画する
+	/// @param label 
+	/// @param currentCT 
+	/// @param comboTreeNames 
+	/// @return 
+	bool DrawComboTreeSelector(const char* label, ComboTreeInputName& currentCT, const std::vector<std::string>& comboTreeNames)
+	{
+		bool isChanged = false;
+
+		if (ImGui::TreeNode(label))
+		{
+			// X入力のセレクター
+			const char* previewValueX = currentCT.xName_.empty() ? "None" : currentCT.xName_.c_str();
+			if (ImGui::BeginCombo("X入力", previewValueX))
+			{
+				for (const auto& name : comboTreeNames)
+				{
+					bool isSelected = (currentCT.xName_ == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						currentCT.xName_ = name;
+						isChanged = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+			// Y入力のセレクター
+			const char* previewValueY = currentCT.yName_.empty() ? "None" : currentCT.yName_.c_str();
+			if (ImGui::BeginCombo("Y入力", previewValueY))
+			{
+				for (const auto& name : comboTreeNames)
+				{
+					bool isSelected = (currentCT.yName_ == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						currentCT.yName_ = name;
+						isChanged = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+			// B入力のセレクター
+			const char* previewValueB = currentCT.bName_.empty() ? "None" : currentCT.bName_.c_str();
+			if (ImGui::BeginCombo("B入力", previewValueB))
+			{
+				for (const auto& name : comboTreeNames)
+				{
+					bool isSelected = (currentCT.bName_ == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						currentCT.bName_ = name;
+						isChanged = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+
+			ImGui::TreePop();
+		}
+
+		return isChanged;
+	}
+
+	/// @brief コンボツリーの設定を描画する
+	/// @param ctConfig 
+	/// @param comboTreeNames 
+	/// @param isDirty 
+	/// @return 
+	bool DrawComboTreeSettings(ComboTreeConfig& ctConfig, const std::vector<std::string>& comboTreeNames, bool& isDirty)
+	{
+		bool anyChanged = false;
+		if (ImGui::CollapsingHeader("コンボツリー設定"))
+		{
+			if (BeginPropertyTable("BTTable"))
+			{
+				auto DrawRow = [&](const char* label, ComboTreeInputName& currentCT)
+					{
+						PropertyLabel(label);
+						return DrawComboTreeSelector(label, currentCT, comboTreeNames);
+					};
+
+				if (DrawRow("None (待機)", ctConfig.noneStateCT)) anyChanged = true;
+				if (DrawRow("Dash（ダッシュ）", ctConfig.dashStateCT)) anyChanged = true;
+				if (DrawRow("Grabbing（掴み）", ctConfig.grabbingStateCT)) anyChanged = true;
+				if (DrawRow("Grabbed（掴まれ）", ctConfig.grabbedStateCT)) anyChanged = true;
+				if (DrawRow("Guard（ガード）", ctConfig.guardStateCT)) anyChanged = true;
+				if (DrawRow("LightDamage（弱ダメージ）", ctConfig.lightDamageStateCT)) anyChanged = true;
+				if (DrawRow("HeavyDamage (強ダメージ)", ctConfig.heavyDamageStateCT)) anyChanged = true;
+				if (DrawRow("LightDamage（倒れこみ）", ctConfig.downFallingStateCT)) anyChanged = true;
+				if (DrawRow("DownLying（ダウン）", ctConfig.downLyingStateCT)) anyChanged = true;
+				if (DrawRow("DownGettingUp（起き上がり）", ctConfig.downGettingUpStateCT)) anyChanged = true;
+				if (DrawRow("DownStagger（ダウン怯み）", ctConfig.downStaggerStateCT)) anyChanged = true;
+				if (DrawRow("BlownAway（吹き飛びあがり）", ctConfig.blownAwayStateCT)) anyChanged = true;
+				if (DrawRow("BlownFalling（吹き飛び落下）", ctConfig.blownFallingStateCT)) anyChanged = true;
+				if (DrawRow("Repel（弾き）", ctConfig.repelStateCT)) anyChanged = true;
+				if (DrawRow("Deflect（受け流し）", ctConfig.deflectStateCT)) anyChanged = true;
+				if (DrawRow("Repelled（弾かれ）", ctConfig.repelledStateCT)) anyChanged = true;
+				if (DrawRow("Deflected（受け流され）", ctConfig.deflectedStateCT)) anyChanged = true;
+				if (DrawRow("Avoid（回避）", ctConfig.avoidStateCT)) anyChanged = true;
+				if (DrawRow("Dead（死亡）", ctConfig.deadStateCT)) anyChanged = true;
+
+				EndPropertyTable();
+			}
+		}
+
+		if (anyChanged) isDirty = true;
+		return anyChanged;
+	}
+
 	/// @brief モーションのセレクターを描画する
 	/// @param label 
 	/// @param motionType 

@@ -46,6 +46,38 @@ struct BehaviorTreeConfig
 	std::string deadStateBT{};
 };
 
+// / @brief キャラクターの行動パターンを定義するコンボツリーの入力名
+struct ComboTreeInputName
+{
+	std::string xName_{};
+	std::string yName_{};
+	std::string bName_{};
+};
+
+// / @brief キャラクターの行動パターンを定義するコンボツリーの設定
+struct ComboTreeConfig
+{
+	ComboTreeInputName noneStateCT{};
+	ComboTreeInputName dashStateCT{};
+	ComboTreeInputName grabbedStateCT{};
+	ComboTreeInputName grabbingStateCT{};
+	ComboTreeInputName guardStateCT{};
+	ComboTreeInputName lightDamageStateCT{};
+	ComboTreeInputName heavyDamageStateCT{};
+	ComboTreeInputName downFallingStateCT{};
+	ComboTreeInputName downLyingStateCT{};
+	ComboTreeInputName downGettingUpStateCT{};
+	ComboTreeInputName downStaggerStateCT{};
+	ComboTreeInputName blownAwayStateCT{};
+	ComboTreeInputName blownFallingStateCT{};
+	ComboTreeInputName repelStateCT{};
+	ComboTreeInputName deflectStateCT{};
+	ComboTreeInputName repelledStateCT{};
+	ComboTreeInputName deflectedStateCT{};
+	ComboTreeInputName avoidStateCT{};
+	ComboTreeInputName deadStateCT{};
+};
+
 /// @brief 初期化用データ
 struct CharacterInitData
 {

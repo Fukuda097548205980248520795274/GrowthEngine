@@ -126,6 +126,9 @@ private:
 	/// @brief ビヘイビアツリーデータの名前リスト
 	std::vector<std::string> behaviorTreeNames_;
 
+	/// @brief コンボツリーデータの名前リスト
+	std::vector<std::string> comboTreeNames_;
+
 	/// @brief ステージデータの名前リスト
 	std::vector<std::string> stageDataNames_;
 
@@ -180,6 +183,9 @@ private:
 
 	/// @brief ビヘイビアツリーデータの名前を読み込む
 	void LoadBehaviorTreeNames();
+
+	/// @brief コンボツリーデータの名前を読み込む
+	void LoadComboTreeNames();
 
 	/// @brief ステージデータの名前を読み込む
 	void LoadStageDataNames();

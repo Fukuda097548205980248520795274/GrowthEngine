@@ -15,6 +15,7 @@ void CharacterState::TreeRequest()
 	{
 		// 所有者がプレイヤーの場合、プレイヤーにコンボツリーの変更をリクエストする
 		Player* player = static_cast<Player*>(owner_);
+		player->RequestComboTreeChange(comboTreeX_.get(), comboTreeY_.get(), comboTreeB_.get());
 	}
 }
 

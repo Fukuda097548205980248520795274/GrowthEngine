@@ -60,7 +60,8 @@ public:
 	/// @brief キャラクターを生成する
 	/// @param initData 
 	/// @return 
-	Character* CreateCharacter(const CharacterInitData& initData, CharacterTag tag, const BehaviorTreeConfig& behaviorTreeConfig);
+	Character* CreateCharacter(const CharacterInitData& initData, CharacterTag tag,
+		const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig);
 
 	/// @brief 武器を生成する
 	/// @param position 

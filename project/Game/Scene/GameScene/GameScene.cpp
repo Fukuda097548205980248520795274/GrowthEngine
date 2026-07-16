@@ -510,7 +510,7 @@ void GameScene::Draw()
 /// @brief キャラクターを生成する
 /// @param initData 
 /// @return 
-Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag, const BehaviorTreeConfig& behaviorTreeConfig)
+Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag, const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig)
 {
 	Character* character = nullptr;
 
@@ -580,10 +580,8 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.hpHUD = playerHP_.get();
 		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
 		player_ = std::make_unique<Player>();
-		player_->Initialize(playerInitData, playerWeapon_.get(),
-			ComboTreeFactory::CreateTree("InputX.json", player_.get()),
-			ComboTreeFactory::CreateTree("InputY.json", player_.get()),
-			ComboTreeFactory::CreateTree("InputB.json", player_.get()));
+		player_->InitComboTree(comboTreeConfig);
+		player_->Initialize(playerInitData, playerWeapon_.get());
 
 		character = player_.get();
 

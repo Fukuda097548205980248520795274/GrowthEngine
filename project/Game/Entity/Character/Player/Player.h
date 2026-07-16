@@ -3,6 +3,8 @@
 #include "PlayerInputController/PlayerInputController.h"
 #include "ComboTree/ComboTree.h"
 
+class ComboTreeEditor;
+
 class Player : public Character
 {
 public:
@@ -15,8 +17,7 @@ public:
 	/// @param initData 
 	/// @param comboTree 
 	/// @param baton 
-	void Initialize(const CharacterInitData& initData, Weapon* baton,
-		std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB);
+	void Initialize(const CharacterInitData& initData, Weapon* baton);
 
 	/// @brief 更新処理
 	virtual void Update() override;
@@ -49,6 +50,10 @@ public:
 	/// @param comboTreeY 
 	/// @param comboTreeB 
 	void RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB);
+
+	/// @brief コンボツリーを初期化する
+	/// @param comboTreeConfig 
+	void InitComboTree(const ComboTreeConfig& comboTreeConfig);
 
 private:
 
@@ -127,10 +132,15 @@ private:
 	// 現在のコンボタイプ
 	AttackInputType activeComboType_ = AttackInputType::None;
 
-	// コンボツリー
-	std::unique_ptr<ComboTree> comboTreeX_ = nullptr;
-	std::unique_ptr<ComboTree> comboTreeY_ = nullptr;
-	std::unique_ptr<ComboTree> comboTreeB_ = nullptr;
+	// 今のコンボツリー
+	ComboTree* currentComboTreeX_ = nullptr;
+	ComboTree* currentComboTreeY_ = nullptr;
+	ComboTree* currentComboTreeB_ = nullptr;
+
+	// 次のコンボツリー
+	ComboTree* nextComboTreeX_ = nullptr;
+	ComboTree* nextComboTreeY_ = nullptr;
+	ComboTree* nextComboTreeB_ = nullptr;
 
 
 private:
