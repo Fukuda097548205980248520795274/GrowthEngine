@@ -349,6 +349,16 @@ float Player::GetCameraYaw() const
 	return 0.0f;
 }
 
+/// @brief コンボツリーの変更をリクエストする
+/// @param combTreeX 
+/// @param comboTreeY 
+/// @param comboTreeB 
+void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB)
+{
+	// コンボが用意されていないときは何もしない
+	if (!comboTreeX || !comboTreeY || !comboTreeB)return;
+}
+
 /// @brief スタイルチェンジ開始時の処理
 void Player::StyleChangeStart()
 {

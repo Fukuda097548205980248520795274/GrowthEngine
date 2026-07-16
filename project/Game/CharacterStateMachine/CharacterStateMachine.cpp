@@ -7,7 +7,7 @@ void CharacterStateMachine::ChangeState(const std::string& name)
 	// すでに現在の状態と同じ場合は、ビヘイビアツリーのリクエストのみを行う
 	if (currentStateName_ == name)
 	{
-		currentState_->BehaviorTreeRequest();
+		currentState_->TreeRequest();
 		return;
 	}
 

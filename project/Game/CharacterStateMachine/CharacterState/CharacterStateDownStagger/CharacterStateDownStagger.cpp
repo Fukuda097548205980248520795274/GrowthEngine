@@ -14,8 +14,8 @@ CharacterStateDownStagger::CharacterStateDownStagger(Character* owner, Animation
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDownStagger::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 
 	// ダメージタイマーをリセットする
 	damageTimer_ = maxDamageTime_;

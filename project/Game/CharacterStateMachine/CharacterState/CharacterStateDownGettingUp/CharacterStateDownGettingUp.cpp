@@ -11,8 +11,8 @@ CharacterStateDownGettingUp::CharacterStateDownGettingUp(Character* owner, Anima
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateDownGettingUp::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 
 	// ダメージタイマーをリセットする
 	damageTimer_ = maxDamageTime_;

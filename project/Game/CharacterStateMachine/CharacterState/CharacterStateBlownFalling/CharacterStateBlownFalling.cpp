@@ -15,8 +15,8 @@ CharacterStateBlownFalling::CharacterStateBlownFalling(Character* owner, Animati
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateBlownFalling::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 }
 
 /// @brief 更新処理

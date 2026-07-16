@@ -1,8 +1,9 @@
 #include "CharacterState.h"
 #include "Entity/Character/NPC/NPC.h"
+#include "Entity/Character/Player/Player.h"
 
-/// @brief ビヘイビアツリーのリクエスト
-void CharacterState::BehaviorTreeRequest()
+/// @brief ツリーのリクエスト
+void CharacterState::TreeRequest()
 {
 	// 所有者がプレイヤーでない場合、NPCにビヘイビアツリーの変更をリクエストする
 	if (!owner_->IsPlayer())
@@ -10,4 +11,20 @@ void CharacterState::BehaviorTreeRequest()
 		NPC* npc = static_cast<NPC*>(owner_);
 		npc->RequestBehaviorTreeChange(behaviorTree_.get());
 	}
+	else
+	{
+		// 所有者がプレイヤーの場合、プレイヤーにコンボツリーの変更をリクエストする
+		Player* player = static_cast<Player*>(owner_);
+	}
+}
+
+/// @brief コンボツリーを設定する
+/// @param comboTreeX 
+/// @param comboTreeY 
+/// @param comboTreeB 
+void CharacterState::SetComboTree(std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB)
+{
+	comboTreeX_ = std::move(comboTreeX);
+	comboTreeY_ = std::move(comboTreeY);
+	comboTreeB_ = std::move(comboTreeB);
 }

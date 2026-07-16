@@ -44,6 +44,12 @@ public:
 	/// @return
 	float GetCameraYaw() const;
 
+	/// @brief コンボツリーの変更をリクエストする
+	/// @param combTreeX 
+	/// @param comboTreeY 
+	/// @param comboTreeB 
+	void RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB);
+
 private:
 
 	/// @brief 更新処理開始前のリセット

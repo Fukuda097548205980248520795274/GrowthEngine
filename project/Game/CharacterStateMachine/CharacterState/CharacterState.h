@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "ComboTree/ComboTree.h"
 
 class Character;
 
@@ -25,6 +26,12 @@ public:
 	/// @brief この状態からでるときに呼ばれる処理
 	virtual void Exit(){}
 
+	/// @brief ツリーのリクエスト
+	void TreeRequest();
+
+
+public:
+
 	/// @brief ビヘイビアツリーを設定する
 	/// @param behaviorTree 
 	void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) { behaviorTree_ = std::move(behaviorTree); }
@@ -33,8 +40,12 @@ public:
 	/// @return 
 	BehaviorTree* GetBehaviorTree() const { return behaviorTree_.get(); }
 
-	/// @brief ビヘイビアツリーのリクエスト
-	void BehaviorTreeRequest();
+
+	/// @brief コンボツリーを設定する
+	/// @param comboTreeX 
+	/// @param comboTreeY 
+	/// @param comboTreeB 
+	void SetComboTree(std::unique_ptr<ComboTree> comboTreeX, std::unique_ptr<ComboTree> comboTreeY, std::unique_ptr<ComboTree> comboTreeB);
 
 
 protected:
@@ -44,5 +55,15 @@ protected:
 
 	/// @brief ビヘイビアツリー
 	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;
+
+
+	/// @brief コンボツリーX
+	std::unique_ptr<ComboTree> comboTreeX_ = nullptr;
+
+	/// @brief コンボツリーY
+	std::unique_ptr<ComboTree> comboTreeY_ = nullptr;
+
+	/// @brief コンボツリーB
+	std::unique_ptr<ComboTree> comboTreeB_ = nullptr;
 };
 

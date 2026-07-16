@@ -11,8 +11,8 @@ CharacterStateParried::CharacterStateParried(Character* owner, AnimationHandle h
 /// @brief この状態に入るときに呼ばれる処理
 void CharacterStateParried::Enter()
 {
-	// ビヘイビアツリーのリクエストを行う
-	BehaviorTreeRequest();
+	// ツリーのリクエストを行う
+	TreeRequest();
 
 	// タイマーをリセットする
 	damageTimer_ = maxDamageTime_;
