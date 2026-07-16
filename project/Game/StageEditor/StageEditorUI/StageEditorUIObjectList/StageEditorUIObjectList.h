@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <set>
 #include "StageEditor/StageData/StageData.h"
 
 class StageSpawner;
@@ -58,5 +59,10 @@ private:
 	// カテゴリのフィルタリング用のインデックス
 	int categoryFilterIdx_ = 0;
 
+
+private:
+
+	// マルチ選択されたインデックスのセット
+	std::set<int> multiSelectedIndices_;
 };
 

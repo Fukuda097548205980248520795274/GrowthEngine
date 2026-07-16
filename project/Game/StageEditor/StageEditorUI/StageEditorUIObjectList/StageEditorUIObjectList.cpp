@@ -103,11 +103,40 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			// 各アイテムごとに一意のID空間を作る（右クリックメニューのバッティング防止）
 			ImGui::PushID(i);
 
+			// 選択状態の判定
+			bool isSelected = (multiSelectedIndices_.count(i) > 0);
+
 			// 選択されたら selectedIndex_ を更新
 			if (ImGui::Selectable(label.c_str(), selectedIndex == i))
 			{
+				if (ImGui::GetIO().KeyCtrl)
+				{
+					// Ctrlキーが押されている場合：選択のトグル反転
+					if (isSelected) multiSelectedIndices_.erase(i);
+					else multiSelectedIndices_.insert(i);
+				}
+				else if (ImGui::GetIO().KeyShift && !multiSelectedIndices_.empty())
+				{
+					// Shiftキーが押されている場合：範囲選択
+					int minIdx = std::min(selectedIndex, i);
+					int maxIdx = std::max(selectedIndex, i);
+					multiSelectedIndices_.clear();
+					for (int j = minIdx; j <= maxIdx; ++j)
+					{
+						multiSelectedIndices_.insert(j);
+					}
+				}
+				else
+				{
+					// 通常クリック：単一選択
+					multiSelectedIndices_.clear();
+					multiSelectedIndices_.insert(i);
+				}
+
+				// 互換性のため、代表インデックスを記録
 				selectedIndex = i;
 			}
+
 
 			// 各項目に対する右クリックコンテキストメニュー
 			if (ImGui::BeginPopupContextItem("ObjectItemContextMenu"))
@@ -204,11 +233,23 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 	}
 
 
+	// リストの変更があった場合、選択中のインデックスを安全に更新する
+	for (auto it = multiSelectedIndices_.begin(); it != multiSelectedIndices_.end(); )
+	{
+		if (*it >= placementList.size()) it = multiSelectedIndices_.erase(it);
+		else ++it;
+	}
+
+	// もし選択中のインデックスがリストの範囲外になった場合、選択状態をリセットする
+	if (multiSelectedIndices_.empty())
+		selectedIndex = -1;
+
+
 	ImGui::Separator();
 
 
-	// 選択中のオブジェクトがある場合、編集UIを表示
-	if (selectedIndex >= 0 && selectedIndex < placementList.size())
+	// 選択中のオブジェクトが1つだけの場合、詳細編集UIを表示する
+	if (multiSelectedIndices_.size() == 1)
 	{
 		auto& target = placementList[selectedIndex];
 		ImGui::Text("--- 編集中のオブジェクト ---");
@@ -308,6 +349,97 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		{
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
 			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
+		}
+	}
+	else if (multiSelectedIndices_.size() > 1)
+	{
+		// 複数選択されている場合、共通の編集UIを表示する
+
+		ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "--- %d 個のオブジェクトを一括編集中 ---", multiSelectedIndices_.size());
+		ImGui::Separator();
+
+		// 一括移動（オフセット）
+		if (ImGui::CollapsingHeader("一括移動 (相対座標)", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			static float bulkOffset[3] = { 0.0f, 0.0f, 0.0f };
+			ImGui::DragFloat3("移動量", bulkOffset, 0.1f);
+			if (ImGui::Button("適用 (移動)"))
+			{
+				history_->SaveHistory(placementList); // 履歴保存
+				for (int idx : multiSelectedIndices_)
+				{
+					placementList[idx].position.x += bulkOffset[0];
+					placementList[idx].position.y += bulkOffset[1];
+					placementList[idx].position.z += bulkOffset[2];
+				}
+				isDirty = true;
+				bulkOffset[0] = bulkOffset[1] = bulkOffset[2] = 0.0f; // リセット
+			}
+		}
+
+		// プレハブの一括適用
+		if (ImGui::CollapsingHeader("プレハブ (テンプレート) の一括適用", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::TextWrapped("選択中のすべてのオブジェクトに対して、座標を維持したままプレハブのパラメータを上書きします。");
+
+			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
+			static int bulkPrefabIdx = -1;
+			const char* previewPrefab = (bulkPrefabIdx >= 0 && bulkPrefabIdx < prefabNames.size())
+				? prefabNames[bulkPrefabIdx].c_str() : "テンプレートを選択...";
+
+			if (ImGui::BeginCombo("適用するプレハブ", previewPrefab))
+			{
+				for (int i = 0; i < prefabNames.size(); ++i)
+				{
+					if (ImGui::Selectable(prefabNames[i].c_str(), bulkPrefabIdx == i)) bulkPrefabIdx = i;
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::Button("選択中の全オブジェクトに適用") && bulkPrefabIdx >= 0)
+			{
+				history_->SaveHistory(placementList);
+				for (int idx : multiSelectedIndices_)
+				{
+					// 座標と実体ポインタを退避
+					auto originalPos = placementList[idx].position;
+					auto originalRot = placementList[idx].rotate_;
+					void* backupPtr = placementList[idx].instancePtr;
+
+					// プレハブのデータをロード
+					StageEditorUIHelper::LoadPrefab(prefabNames[bulkPrefabIdx], placementList[idx]);
+
+					// 座標とポインタを復元（パラメータとカテゴリだけが書き換わる）
+					placementList[idx].position = originalPos;
+					placementList[idx].rotate_ = originalRot;
+					placementList[idx].instancePtr = backupPtr;
+
+					// もし実体が配置済みなら再生成（StageSpawnerの仕様に合わせて更新）
+					if (backupPtr != nullptr && spawner_ != nullptr)
+					{
+						spawner_->DeleteActualEntity(placementList[idx]);
+						spawner_->SpawnActualEntity(placementList[idx]);
+					}
+				}
+				isDirty = true;
+			}
+		}
+
+		// 一括削除
+		ImGui::Separator();
+		if (ImGui::Button("選択中のオブジェクトを一括削除", ImVec2(-1, 30)))
+		{
+			history_->SaveHistory(placementList);
+
+			// 配列の要素削除によるインデックスのズレを防ぐため、後ろ(降順)から削除する
+			for (auto it = multiSelectedIndices_.rbegin(); it != multiSelectedIndices_.rend(); ++it)
+			{
+				spawner_->DeleteActualEntity(placementList[*it]);
+				placementList.erase(placementList.begin() + *it);
+			}
+			multiSelectedIndices_.clear();
+			selectedIndex = -1;
+			isDirty = true;
 		}
 	}
 
