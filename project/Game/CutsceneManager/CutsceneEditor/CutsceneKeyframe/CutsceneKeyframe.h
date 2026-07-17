@@ -5,20 +5,13 @@
 #include <numbers>
 #include <algorithm>
 
-/// @brief カメラのキーフレーム
-struct CameraKeyframe
+/// @brief キーの構造体
+template<typename T>
+struct Key
 {
-	// 時間
 	float time = 0.0f;
 
-	// 位置
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 回転
-	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 画角
-	float fov = 0.45f;
+	T value;
 };
 
 /// @brief キーフレームカットシーンデータ
@@ -31,7 +24,17 @@ struct KeyframeCutsceneData
 	float duration = 0.0f;
 
 	// カメラのキーフレーム
-	std::vector<CameraKeyframe> keyframes;
+	std::vector<Key<Vector3>> positionKeys;
+	std::vector<Key<Vector3>> rotationKeys;
+	std::vector<Key<float>> fovKeys;
+};
+
+/// @brief サンプリング結果を格納する構造体
+struct CameraSample
+{
+	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
+	float fov = 0.45f;
 };
 
 /// @brief 角度の線形補間
@@ -65,30 +68,43 @@ inline Vector3 LerpRotation(const Vector3& start, const Vector3& end, float t)
 	return Vector3(AngleLerp(start.x, end.x, t), AngleLerp(start.y, end.y, t), AngleLerp(start.z, end.z, t));
 }
 
-/// @brief カットシーンのサンプリング
-/// @param data 
-/// @param cutsceneTime 
+/// @brief 線形補間
+/// @tparam T 
+/// @param start 
+/// @param end 
+/// @param t 
 /// @return 
-inline CameraKeyframe SampleCutscene(const KeyframeCutsceneData& data, float currentTime)
+template<typename T>
+inline T Lerp(const T& start, const T& end, float t)
 {
-	// キーフレームが存在しない場合はデフォルトのキーフレームを返す
-	if (data.keyframes.empty()) 
-		return CameraKeyframe();
+	return start + (end - start) * t;
+}
+
+/// @brief キーフレームのサンプリング
+/// @tparam T 
+/// @param keys 
+/// @param currentTime 
+/// @return 
+template<typename T>
+inline T SampleKey(const std::vector<Key<T>>& keys, float currentTime)
+{
+	// キーフレームが存在しない場合はデフォルトの値を返す
+	if (keys.empty())
+		return T();
 
 	// 最初のキーフレームを超えた場合は最初のキーフレームを返す
-	if (data.keyframes.size() == 1 || currentTime <= data.keyframes.front().time)
-		return data.keyframes.front();
+	if (currentTime <= keys.front().time)
+		return keys.front().value;
 
 	// 最後のキーフレームを超えた場合は最後のキーフレームを返す
-	if (currentTime >= data.keyframes.back().time)
-		return data.keyframes.back();
+	if (currentTime >= keys.back().time)
+		return keys.back().value;
 
 	// 次のキーフレームのインデックスを見つける
 	size_t nextIdx = 0;
-	for (size_t i = 0; i < data.keyframes.size(); ++i)
+	for (size_t i = 0; i < keys.size(); ++i)
 	{
-		// 現在の時間よりも後のキーフレームを見つける
-		if (data.keyframes[i].time > currentTime)
+		if (keys[i].time > currentTime)
 		{
 			nextIdx = i;
 			break;
@@ -97,19 +113,68 @@ inline CameraKeyframe SampleCutscene(const KeyframeCutsceneData& data, float cur
 
 	// 前後のキーフレームを取得
 	size_t prevIdx = nextIdx - 1;
-	const auto& prevKey = data.keyframes[prevIdx];
-	const auto& nextKey = data.keyframes[nextIdx];
+	const auto& prevKey = keys[prevIdx];
+	const auto& nextKey = keys[nextIdx];
 
 	// 補間係数を計算
 	float t = (currentTime - prevKey.time) / (nextKey.time - prevKey.time);
 	t = std::clamp(t, 0.0f, 1.0f);
 
 	// 線形補間
-	CameraKeyframe result;
-	result.time = currentTime;
-	result.position = Lerp(prevKey.position, nextKey.position, t);
-	result.rotation = LerpRotation(prevKey.rotation, nextKey.rotation, t);
-	result.fov = prevKey.fov + (nextKey.fov - prevKey.fov) * t;
+	return Lerp(prevKey.value, nextKey.value, t);
+}
 
-	return result;
+/// @brief 回転のキーフレームのサンプリング
+/// @param keys 
+/// @param currentTime 
+/// @return 
+inline Vector3 SampleRotateKey(const std::vector<Key<Vector3>>& keys, float currentTime)
+{
+	// キーフレームが存在しない場合はデフォルトの値を返す
+	if (keys.empty())
+		return Vector3();
+
+	// 最初のキーフレームを超えた場合は最初のキーフレームを返す
+	if (currentTime <= keys.front().time)
+		return keys.front().value;
+
+	// 最後のキーフレームを超えた場合は最後のキーフレームを返す
+	if (currentTime >= keys.back().time)
+		return keys.back().value;
+
+	// 次のキーフレームのインデックスを見つける
+	size_t nextIdx = 0;
+	for (size_t i = 0; i < keys.size(); ++i)
+	{
+		if (keys[i].time > currentTime)
+		{
+			nextIdx = i;
+			break;
+		}
+	}
+
+	// 前後のキーフレームを取得
+	size_t prevIdx = nextIdx - 1;
+	const auto& prevKey = keys[prevIdx];
+	const auto& nextKey = keys[nextIdx];
+
+	// 補間係数を計算
+	float t = (currentTime - prevKey.time) / (nextKey.time - prevKey.time);
+	t = std::clamp(t, 0.0f, 1.0f);
+
+	// 線形補間
+	return LerpRotation(prevKey.value, nextKey.value, t);
+}
+
+/// @brief カットシーンのサンプリング
+/// @param data 
+/// @param currentTime 
+/// @return 
+inline CameraSample SampleCutscene(const KeyframeCutsceneData& data, float currentTime)
+{
+	CameraSample sample;
+	sample.position = SampleKey<Vector3>(data.positionKeys, currentTime);
+	sample.rotation = SampleRotateKey(data.rotationKeys, currentTime);
+	sample.fov = SampleKey<float>(data.fovKeys, currentTime);
+	return sample;
 }

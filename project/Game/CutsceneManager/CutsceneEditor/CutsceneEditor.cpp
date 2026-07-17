@@ -78,18 +78,20 @@ void CutsceneEditor::Update(float dt)
 	{
 		currentTime_ += dt;
 
-		// 再生時間がカットシーンの長さを超えたら停止
+		// 再生時間が総時間を超えた場合は停止
 		if (currentTime_ >= editingData_.duration)
 		{
 			currentTime_ = editingData_.duration;
 			isPlaying_ = false;
 		}
 
-		// キーフレーム補間を適用
-		CameraKeyframe sample = SampleCutscene(editingData_, currentTime_);
-		cutsceneCamera_->param_->transform.translate = sample.position;
-		cutsceneCamera_->param_->transform.rotate = sample.rotation;
-		cutsceneCamera_->param_->setting.fov = sample.fov;
+		// 戻り値の型を CameraSample に変更
+		CameraSample sample = SampleCutscene(editingData_, currentTime_);
+
+		// カットシーン用カメラのパラメータを更新
+		if (!editingData_.positionKeys.empty()) cutsceneCamera_->param_->transform.translate = sample.position;
+		if (!editingData_.rotationKeys.empty()) cutsceneCamera_->param_->transform.rotate = sample.rotation;
+		if (!editingData_.fovKeys.empty()) cutsceneCamera_->param_->setting.fov = sample.fov;
 	}
 	else
 	{
@@ -110,35 +112,88 @@ void CutsceneEditor::UpdateFreeCamera(float dt)
 /// @brief キーフレームを追加する
 /// @param time 
 /// @param pos 
-/// @param rot 
-/// @param fov 
-void CutsceneEditor::AddKeyframe(float time, const Vector3& pos, const Vector3& rot, float fov)
+void CutsceneEditor::AddPositionKeyframe(float time, const Vector3& pos)
 {
 	// 同一時間軸にキーフレームがすでに存在する場合は上書き
-	auto it = std::find_if(editingData_.keyframes.begin(), editingData_.keyframes.end(),
-		[time](const CameraKeyframe& k) { return std::abs(k.time - time) < 0.01f; });
+	auto it = std::find_if(editingData_.positionKeys.begin(), editingData_.positionKeys.end(),
+		[time](const Key<Vector3>& k) { return std::abs(k.time - time) < 0.01f; });
 
 	// すでに存在する場合は上書き
-	if (it != editingData_.keyframes.end())
+	if (it != editingData_.positionKeys.end())
 	{
-		it->position = pos;
-		it->rotation = rot;
-		it->fov = fov;
+		it->time = time;
+		it->value = pos;
 	}
 	else
 	{
 		// 新しいキーフレームを追加
-		CameraKeyframe newKey;
+		Key<Vector3> newKey;
 		newKey.time = time;
-		newKey.position = pos;
-		newKey.rotation = rot;
-		newKey.fov = fov;
-		editingData_.keyframes.push_back(newKey);
+		newKey.value = pos;
+		editingData_.positionKeys.push_back(newKey);
 	}
 
 	// 時間順に並び替え
-	std::sort(editingData_.keyframes.begin(), editingData_.keyframes.end(),
-		[](const CameraKeyframe& a, const CameraKeyframe& b) { return a.time < b.time; });
+	std::sort(editingData_.positionKeys.begin(), editingData_.positionKeys.end(),
+		[](const Key<Vector3>& a, const Key<Vector3>& b) { return a.time < b.time; });
+}
+
+/// @brief 回転のキーフレームを追加する
+/// @param time 
+/// @param rot 
+void CutsceneEditor::AddRotationKeyframe(float time, const Vector3& rot)
+{
+	// 同一時間軸にキーフレームがすでに存在する場合は上書き
+	auto it = std::find_if(editingData_.rotationKeys.begin(), editingData_.rotationKeys.end(),
+		[time](const Key<Vector3>& k) { return std::abs(k.time - time) < 0.01f; });
+
+	// すでに存在する場合は上書き
+	if (it != editingData_.rotationKeys.end())
+	{
+		it->time = time;
+		it->value = rot;
+	}
+	else
+	{
+		// 新しいキーフレームを追加
+		Key<Vector3> newKey;
+		newKey.time = time;
+		newKey.value = rot;
+		editingData_.rotationKeys.push_back(newKey);
+	}
+
+	// 時間順に並び替え
+	std::sort(editingData_.rotationKeys.begin(), editingData_.rotationKeys.end(),
+		[](const Key<Vector3>& a, const Key<Vector3>& b) { return a.time < b.time; });
+}
+
+/// @brief FOVのキーフレームを追加する
+/// @param time 
+/// @param fov 
+void CutsceneEditor::AddFovKeyframe(float time, float fov)
+{
+	// 同一時間軸にキーフレームがすでに存在する場合は上書き
+	auto it = std::find_if(editingData_.fovKeys.begin(), editingData_.fovKeys.end(),
+		[time](const Key<float>& k) { return std::abs(k.time - time) < 0.01f; });
+
+	// すでに存在する場合は上書き
+	if (it != editingData_.fovKeys.end())
+	{
+		it->time = time;
+		it->value = fov;
+	} 
+	else
+	{
+		// 新しいキーフレームを追加
+		Key<float> newKey;
+		newKey.time = time;
+		newKey.value = fov;
+		editingData_.fovKeys.push_back(newKey);
+	}
+
+	// 時間順に並び替え
+	std::sort(editingData_.fovKeys.begin(), editingData_.fovKeys.end(),
+		[](const Key<float>& a, const Key<float>& b) { return a.time < b.time; });
 }
 
 /// @brief ファイルリストを更新する
@@ -168,6 +223,15 @@ void CutsceneEditor::RefreshFileList()
 
 /// @brief UIを描画する
 void CutsceneEditor::DrawUI()
+{
+#ifdef _DEVELOPMENT
+	DrawEditorUI();
+	DrawTimelineUI();
+#endif
+}
+
+/// @brief エディタUIを描画する
+void CutsceneEditor::DrawEditorUI()
 {
 	if (!isActive_) return;
 
@@ -245,69 +309,6 @@ void CutsceneEditor::DrawUI()
 
 		ImGui::Separator();
 
-		// タイムラインとシークコントロール
-		ImGui::Text("Timeline");
-
-		// タイムラインの描画領域を確保
-		ImVec2 canvasPos = ImGui::GetCursorScreenPos();
-		ImVec2 canvasSize = ImVec2(ImGui::GetContentRegionAvail().x, 40.0f); // 横幅いっぱい、高さ40px
-		ImDrawList* drawList = ImGui::GetWindowDrawList();
-
-		// 1. タイムラインの背景を描画 (ダークグレー)
-		drawList->AddRectFilled(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(40, 40, 40, 255));
-		drawList->AddRect(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(100, 100, 100, 255)); // 枠線
-
-		// 2. キーフレームのマーカーを描画
-		if (editingData_.duration > 0.0f)
-		{
-			for (const auto& kf : editingData_.keyframes)
-			{
-				// 時間からX座標を計算
-				float kfRatio = kf.time / editingData_.duration;
-				float kfX = canvasPos.x + (kfRatio * canvasSize.x);
-
-				// キーフレームの位置にひし形(または円)を描画 (緑色)
-				ImVec2 center(kfX, canvasPos.y + canvasSize.y * 0.5f);
-				float radius = 5.0f;
-				drawList->AddQuadFilled(
-					ImVec2(center.x, center.y - radius),
-					ImVec2(center.x + radius, center.y),
-					ImVec2(center.x, center.y + radius),
-					ImVec2(center.x - radius, center.y),
-					IM_COL32(0, 255, 0, 255)
-				);
-			}
-		}
-
-		// 3. 再生ヘッド（現在時間のライン）を描画
-		float currentRatio = editingData_.duration > 0.0f ? (currentTime_ / editingData_.duration) : 0.0f;
-		float playheadX = canvasPos.x + (currentRatio * canvasSize.x);
-		drawList->AddLine(
-			ImVec2(playheadX, canvasPos.y),
-			ImVec2(playheadX, canvasPos.y + canvasSize.y),
-			IM_COL32(255, 50, 50, 255),
-			2.0f
-		); // 赤い縦線
-
-		// 4. タイムライン上でのマウス操作（シーク操作）
-		ImGui::InvisibleButton("TimelineInteraction", canvasSize);
-		if (ImGui::IsItemActive() || ImGui::IsItemClicked())
-		{
-			// マウスのX座標から現在時間を逆算
-			float mouseX = ImGui::GetIO().MousePos.x - canvasPos.x;
-			float newRatio = std::clamp(mouseX / canvasSize.x, 0.0f, 1.0f);
-			currentTime_ = newRatio * editingData_.duration;
-
-			// シークバーを操作した場合は再生を停止し、即座にプレビュー反映
-			isPlaying_ = false;
-			CameraKeyframe sample = SampleCutscene(editingData_, currentTime_);
-			cutsceneCamera_->param_->transform.translate = sample.position;
-			cutsceneCamera_->param_->transform.rotate = sample.rotation;
-			cutsceneCamera_->param_->setting.fov = sample.fov;
-		}
-
-		ImGui::Separator();
-
 		// キーフレーム操作
 		ImGui::Text("キーフレーム管理");
 		if (cutsceneCamera_)
@@ -315,32 +316,171 @@ void CutsceneEditor::DrawUI()
 			auto& trans = cutsceneCamera_->param_->transform;
 			auto& setting = cutsceneCamera_->param_->setting;
 
-			ImGui::Text("カメラ 位置: (%.2f, %.2f, %.2f)", trans.translate.x, trans.translate.y, trans.translate.z);
-			ImGui::Text("カメラ 回転: (%.2f, %.2f, %.2f)", trans.rotate.x, trans.rotate.y, trans.rotate.z);
+			ImGui::DragFloat3("カメラ 位置", &trans.translate.x, 0.1f);
+			if (ImGui::Button("今の時間に位置キーを追加")) {
+				AddPositionKeyframe(currentTime_, trans.translate);
+			}
 
-			if (ImGui::Button("今の時間にキーフレームを追加する"))
-			{
-				AddKeyframe(currentTime_, trans.translate, trans.rotate, setting.fov);
-			}
-		}
+			ImGui::Separator();
 
-		// 登録されているキーフレームの一覧
-		ImGui::Text("記録されているキーフレーム :");
-		for (auto it = editingData_.keyframes.begin(); it != editingData_.keyframes.end(); )
-		{
-			ImGui::PushID(static_cast<int32_t>(it->time));
-			ImGui::Text("時間 : %.2fs Pos(%.1f, %.1f, %.1f)", it->time, it->position.x, it->position.y, it->position.z);
-			ImGui::SameLine();
-			if (ImGui::Button("削除"))
-			{
-				it = editingData_.keyframes.erase(it);
+			ImGui::DragFloat3("カメラ 回転", &trans.rotate.x, 0.1f);
+			if (ImGui::Button("今の時間に回転キーを追加")) {
+				AddRotationKeyframe(currentTime_, trans.rotate);
 			}
-			else
-			{
-				++it;
+
+			ImGui::Separator();
+
+			ImGui::DragFloat("カメラ 画角", &setting.fov, 0.01f);
+			if (ImGui::Button("今の時間に画角キーを追加")) {
+				AddFovKeyframe(currentTime_, setting.fov);
 			}
-			ImGui::PopID();
 		}
 	}
+	ImGui::End();
+}
+
+/// @brief タイムラインUIを描画する
+void CutsceneEditor::DrawTimelineUI()
+{
+	if (!isActive_) return;
+
+	if (ImGui::Begin("タイムライン", &isActive_))
+	{
+		ImVec2 canvasPos = ImGui::GetCursorScreenPos();
+		ImVec2 canvasSize = ImVec2(ImGui::GetContentRegionAvail().x, 60.0f); // 高さを確保
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+		// 背景の描画
+		drawList->AddRectFilled(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(40, 40, 40, 255));
+		drawList->AddRect(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(100, 100, 100, 255));
+
+		// タイムライン全体とのインタラクション領域を生成
+		ImGui::InvisibleButton("TimelineInteraction", canvasSize);
+		bool isCanvasHovered = ImGui::IsItemHovered();
+		bool isCanvasActive = ImGui::IsItemActive();
+		bool isCanvasClicked = ImGui::IsItemClicked();
+
+		ImVec2 mousePos = ImGui::GetIO().MousePos;
+		float mouseX = mousePos.x - canvasPos.x;
+
+		if (editingData_.duration > 0.0f)
+		{
+			// 各トラックのY座標を計算
+			float posY = canvasPos.y + canvasSize.y * 0.25f;
+			float rotY = canvasPos.y + canvasSize.y * 0.5f;
+			float fovY = canvasPos.y + canvasSize.y * 0.75f;
+
+			// キーフレームのインタラクション範囲を定義
+			float interactRadiusSq = 8.0f * 8.0f; // 掴める範囲(半径8px)
+			bool isHoveringAnyKey = false;
+			DraggingTrack hoveredTrack = DraggingTrack::None;
+			int hoveredIndex = -1;
+
+			// キーフレームのホバー判定を行うラムダ関数
+			auto checkHover = [&](const auto& keys, float trackY, DraggingTrack type) 
+				{
+					for (int i = 0; i < static_cast<int>(keys.size()); ++i) 
+					{
+						float kfX = canvasPos.x + ((keys[i].time / editingData_.duration) * canvasSize.x);
+
+						// マウスカーソルとキーフレームマーカーの距離(二乗)を比較
+						float distSq = (mousePos.x - kfX) * (mousePos.x - kfX) + (mousePos.y - trackY) * (mousePos.y - trackY);
+						if (distSq <= interactRadiusSq)
+						{
+							isHoveringAnyKey = true;
+							hoveredTrack = type;
+							hoveredIndex = i;
+							break;
+						}
+					}
+				};
+
+			// ドラッグ中でなければホバー判定を行う
+			if (isCanvasHovered && draggingTrack_ == DraggingTrack::None)
+			{
+				checkHover(editingData_.positionKeys, posY, DraggingTrack::Position);
+				if (!isHoveringAnyKey) checkHover(editingData_.rotationKeys, rotY, DraggingTrack::Rotation);
+				if (!isHoveringAnyKey) checkHover(editingData_.fovKeys, fovY, DraggingTrack::FOV);
+			}
+
+			// クリックした瞬間にキーフレームの上にいたらドラッグ状態に移行
+			if (isCanvasClicked && isHoveringAnyKey) 
+			{
+				draggingTrack_ = hoveredTrack;
+				draggingKeyIndex_ = hoveredIndex;
+			}
+
+			// ドラッグ中の処理
+			if (isCanvasActive)
+			{
+				float newRatio = std::clamp(mouseX / canvasSize.x, 0.0f, 1.0f);
+				float newTime = newRatio * editingData_.duration;
+
+				if (draggingTrack_ != DraggingTrack::None)
+				{
+					// キーフレームを掴んでいる場合、対象のキーフレームの時間を更新
+					if (draggingTrack_ == DraggingTrack::Position) editingData_.positionKeys[draggingKeyIndex_].time = newTime;
+					else if (draggingTrack_ == DraggingTrack::Rotation) editingData_.rotationKeys[draggingKeyIndex_].time = newTime;
+					else if (draggingTrack_ == DraggingTrack::FOV) editingData_.fovKeys[draggingKeyIndex_].time = newTime;
+
+					// 移動先の時間をシークバーにも反映して即座にプレビュー
+					currentTime_ = newTime;
+				}
+				else
+				{
+					// キーフレームを掴んでいない（何もない場所をクリックした）場合は通常通り再生位置をシーク
+					currentTime_ = newTime;
+				}
+
+				// カメラパラメータの更新
+				isPlaying_ = false;
+				CameraSample sample = SampleCutscene(editingData_, currentTime_);
+				if (!editingData_.positionKeys.empty()) cutsceneCamera_->param_->transform.translate = sample.position;
+				if (!editingData_.rotationKeys.empty()) cutsceneCamera_->param_->transform.rotate = sample.rotation;
+				if (!editingData_.fovKeys.empty()) cutsceneCamera_->param_->setting.fov = sample.fov;
+			}
+
+			// ドラッグを終了した瞬間に、キーフレームの時間をソートして順序を正す
+			if (ImGui::IsMouseReleased(0) && draggingTrack_ != DraggingTrack::None)
+			{
+				// 時間を変更したため、順序が狂わないようにソートし直す
+				auto sortByTime = [](const auto& a, const auto& b) { return a.time < b.time; };
+
+				if (draggingTrack_ == DraggingTrack::Position)
+					std::sort(editingData_.positionKeys.begin(), editingData_.positionKeys.end(), sortByTime);
+				else if (draggingTrack_ == DraggingTrack::Rotation)
+					std::sort(editingData_.rotationKeys.begin(), editingData_.rotationKeys.end(), sortByTime);
+				else if (draggingTrack_ == DraggingTrack::FOV)
+					std::sort(editingData_.fovKeys.begin(), editingData_.fovKeys.end(), sortByTime);
+
+				// ドラッグ状態を解除
+				draggingTrack_ = DraggingTrack::None;
+				draggingKeyIndex_ = -1;
+			}
+
+			// キーフレームの描画
+			for (const auto& kf : editingData_.positionKeys)
+			{
+				float kfX = canvasPos.x + ((kf.time / editingData_.duration) * canvasSize.x);
+				drawList->AddCircleFilled(ImVec2(kfX, posY), 4.0f, IM_COL32(50, 255, 50, 255));
+			}
+			for (const auto& kf : editingData_.rotationKeys) 
+			{
+				float kfX = canvasPos.x + ((kf.time / editingData_.duration) * canvasSize.x);
+				drawList->AddCircleFilled(ImVec2(kfX, rotY), 4.0f, IM_COL32(50, 150, 255, 255));
+			}
+			for (const auto& kf : editingData_.fovKeys)
+			{
+				float kfX = canvasPos.x + ((kf.time / editingData_.duration) * canvasSize.x);
+				drawList->AddCircleFilled(ImVec2(kfX, fovY), 4.0f, IM_COL32(255, 255, 50, 255));
+			}
+		}
+
+		// 再生ヘッド（赤いライン）を描画
+		float currentRatio = editingData_.duration > 0.0f ? (currentTime_ / editingData_.duration) : 0.0f;
+		float playheadX = canvasPos.x + (currentRatio * canvasSize.x);
+		drawList->AddLine(ImVec2(playheadX, canvasPos.y), ImVec2(playheadX, canvasPos.y + canvasSize.y), IM_COL32(255, 50, 50, 255), 2.0f);
+	}
+
 	ImGui::End();
 }

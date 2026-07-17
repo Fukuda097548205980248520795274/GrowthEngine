@@ -8,6 +8,18 @@ class CutsceneEditor
 {
 public:
 
+	/// @brief ドラッグ中のトラックの種類
+	enum class DraggingTrack 
+	{
+		None, 
+		Position, 
+		Rotation,
+		FOV 
+	};
+
+
+public:
+
 	/// @brief コンストラクタ
 	CutsceneEditor() = default;
 
@@ -36,6 +48,12 @@ public:
 
 private:
 
+	/// @brief エディタUIを描画する
+	void DrawEditorUI();
+
+	/// @brief タイムラインUIを描画する
+	void DrawTimelineUI();
+
 	/// @brief エディタを開くときの処理
 	void OnEnableEditor();
 
@@ -46,15 +64,28 @@ private:
 	/// @param dt 
 	void UpdateFreeCamera(float dt);
 
+	/// @brief ファイルリストを更新する
+	void RefreshFileList();
+
+
+
+private:
+
 	/// @brief キーフレームを追加する
 	/// @param time 
 	/// @param pos 
-	/// @param rot 
-	/// @param fov 
-	void AddKeyframe(float time, const Vector3& pos, const Vector3& rot, float fov);
+	void AddPositionKeyframe(float time, const Vector3& pos);
 
-	/// @brief ファイルリストを更新する
-	void RefreshFileList();
+	/// @brief 回転のキーフレームを追加する
+	/// @param time 
+	/// @param rot 
+	void AddRotationKeyframe(float time, const Vector3& rot);
+
+	/// @brief FOVのキーフレームを追加する
+	/// @param time 
+	/// @param fov 
+	void AddFovKeyframe(float time, float fov);
+
 
 private:
 
@@ -102,5 +133,14 @@ private:
 
 	// カットシーンデータを保存するディレクトリパス
 	const std::string kCutsceneDir = "./Assets/Parameter/Cutscene/";
+
+
+private:
+
+	// 現在ドラッグ中のトラック
+	DraggingTrack draggingTrack_ = DraggingTrack::None;
+
+	// 現在ドラッグ中のキーフレームインデックス
+	int draggingKeyIndex_ = -1;
 };
 
