@@ -78,6 +78,10 @@ void GameScene::Initialize()
 	// コンボツリーエディタの生成と初期化
 	comboTreeEditor_ = std::make_unique<ComboTreeEditor>();
 
+	// カットシーンエディタの生成と初期化
+	cutsceneEditor_ = std::make_unique<CutsceneEditor>();
+	cutsceneEditor_->Initialize(cutsceneCamera_.get(), mainCamera_.get());
+
 	// ナビゲーションメッシュの生成と初期化
 	navMesh_ = std::make_unique<NavMesh>();
 
@@ -87,7 +91,8 @@ void GameScene::Initialize()
 
 	// エディタワークスペースマネージャの生成と初期化
 	editorWorkspaceManager_ = std::make_unique<EditorWorkspaceManager>();
-	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(),behaviorTreeViewer_.get(),comboTreeEditor_.get(), motionManagerEditor_.get());
+	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(), behaviorTreeViewer_.get(), comboTreeEditor_.get(),
+		cutsceneEditor_.get(), motionManagerEditor_.get());
 
 	// キャラクターモデルの読み込み
 	hCharacterModel_ = engine_->LoadModel("./Assets/Models/Character", "bone.gltf");
@@ -355,6 +360,12 @@ void GameScene::Update()
 {
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+	// 各エディタの更新処理を呼び出す
+#ifdef _DEVELOPMENT
+	cutsceneEditor_->SetActive(editorWorkspaceManager_->GetCurrentWorkspace() == WorkspaceType::CutsceneEditor ? true : false);
+#endif 
+	cutsceneEditor_->Update(engine_->GetDeltaTime());
 
 	// カットシーンの更新
 	if (cutsceneManager_->IsPlaying())

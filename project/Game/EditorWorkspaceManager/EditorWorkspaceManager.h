@@ -5,6 +5,7 @@
 #include "StageEditor/StageEditor.h"
 #include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
+#include "CutsceneManager/CutsceneEditor/CutsceneEditor.h"
 
 enum class WorkspaceType
 {
@@ -13,6 +14,7 @@ enum class WorkspaceType
 	BehaviorTreeEditor,
 	BehaviorTreeViewer,
 	ComboTreeEditor,
+	CutsceneEditor,
 };
 
 class EditorWorkspaceManager
@@ -24,15 +26,22 @@ public:
 	/// @param behaviorTreeEditor 
 	/// @param motionManagerEditor 
 	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
-		ComboTreeEditor* comboTreeEditor, MotionManagerEditor* motionManagerEditor);
+		ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, MotionManagerEditor* motionManagerEditor);
 
 	/// @brief UIを描画する
 	void DrawUI();
+
+	/// @brief 現在のワークスペースを取得する
+	/// @return 
+	WorkspaceType GetCurrentWorkspace() const { return currentWorkspace_; }
 
 private:
 
 	/// @brief ワークスペース切り替え用のタブバーを描画する
 	void DrawWorkspaceTabBar();
+
+	/// @brief エンジンのインスタンス
+	GrowthEngine* engine_ = GrowthEngine::GetInstance();
 
 	WorkspaceType currentWorkspace_ = WorkspaceType::StageEditor;
 
@@ -41,6 +50,7 @@ private:
 	BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
 	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
 	ComboTreeEditor* comboTreeEditor_ = nullptr;
+	CutsceneEditor* cutsceneEditor_ = nullptr;
 	MotionManagerEditor* motionManagerEditor_ = nullptr;
 
 	// エディタ間で共有するデータなど

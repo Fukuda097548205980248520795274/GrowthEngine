@@ -1402,6 +1402,15 @@
     <Filter Include="Engine\Include\Application\MainCamera3D">
       <UniqueIdentifier>{c495dd69-d58e-469d-8b07-784573edcc19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CutsceneManager\CutsceneEditor">
+      <UniqueIdentifier>{d0e0fcc3-a3ff-4643-8e96-0eed439cc3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe">
+      <UniqueIdentifier>{655a9174-550e-43b1-968b-c8195b4b8afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CutsceneManager\CutsceneEditor\CutsceneSerializer">
+      <UniqueIdentifier>{330034b4-1998-409b-9cf7-b9bb5519ef01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2546,6 +2555,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Application\MainCamera3D\MainCamera3D.cpp">
       <Filter>Engine\Include\Application\MainCamera3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CutsceneManager\CutsceneEditor\CutsceneEditor.cpp">
+      <Filter>Game\CutsceneManager\CutsceneEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3820,6 +3832,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Application\MainCamera3D\MainCamera3D.h">
       <Filter>Engine\Include\Application\MainCamera3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe\CutsceneKeyframe.h">
+      <Filter>Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneSerializer\CutsceneSerializer.h">
+      <Filter>Game\CutsceneManager\CutsceneEditor\CutsceneSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneEditor.h">
+      <Filter>Game\CutsceneManager\CutsceneEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
