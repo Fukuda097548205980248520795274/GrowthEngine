@@ -31,6 +31,7 @@ void StageEditorUI::Initialize()
 	LoadBehaviorTreeNames();
 	LoadComboTreeNames();
 	LoadStageDataNames();
+	LoadCutsceneNames();
 }
 
 /// @brief 更新処理
@@ -245,8 +246,8 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	if (currentMode_ == EditorMode::ObjectPlacement)
 	{
 		guizmo_->UpdateObject(placementList, selectedIndex_, isDirty, history_);
-		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_, comboTreeNames_, stageDataNames_);
-		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_, comboTreeNames_, stageDataNames_);
+		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_, comboTreeNames_, stageDataNames_, cutsceneNames_);
+		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_, comboTreeNames_, stageDataNames_, cutsceneNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
@@ -871,14 +872,33 @@ void StageEditorUI::LoadStageDataNames()
 
 	std::string directoryPath = "./Assets/Parameter/StageData/";
 
+	// フォルダが存在しない場合は処理を終了
 	if (!std::filesystem::exists(directoryPath))
 		return;
 
+	// フォルダ内のファイルを走査
 	for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
 	{
 		if (entry.is_regular_file())
-		{
 			stageDataNames_.push_back(entry.path().stem().string());
-		}
+	}
+}
+
+/// @brief カットシーンの名前を読み込む
+void StageEditorUI::LoadCutsceneNames()
+{
+	cutsceneNames_.clear();
+
+	std::string directoryPath = "./Assets/Parameter/Cutscene/";
+
+	// フォルダが存在しない場合は処理を終了
+	if (!std::filesystem::exists(directoryPath))
+		return;
+
+	// フォルダ内のファイルを走査
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
+	{
+		if (entry.is_regular_file())
+			cutsceneNames_.push_back(entry.path().stem().string());
 	}
 }

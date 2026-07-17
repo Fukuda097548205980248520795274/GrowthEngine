@@ -1,20 +1,15 @@
 #pragma once
+#include "GrowthEngine.h"
 #include <functional>
 #include <string>
+
+#include "CutsceneEditor/CutsceneKeyframe/CutsceneKeyframe.h"
 
 class CutsceneManager
 {
 public:
 
-	using CameraWorkFunc = std::function<void(float progress, float dt)>;
 	using OnEndCallback = std::function<void()>;
-
-	// カットシーンのデータ構造体
-	struct CutsceneData
-	{
-		float duration = 0.0f;
-		CameraWorkFunc cameraWork = nullptr;
-	};
 
 public:
 
@@ -24,12 +19,9 @@ public:
 	/// @brief デストラクタ
 	~CutsceneManager() = default;
 
-
-	/// @brief 演出パターンを登録する
-	/// @param name 
-	/// @param duration 
-	/// @param func 
-	void RegisterCutscene(const std::string& name, float duration, CameraWorkFunc func);
+	/// @brief 初期化処理
+	/// @param cutsceneCamera 
+	void Initialize(MainCamera3D* cutsceneCamera);
 
 	/// @brief 演出を更新する
 	/// @param dt 
@@ -51,8 +43,17 @@ public:
 
 private:
 
+	/// @brief 演出パターンを登録する
+	void RefreshCutsceneList();
+
+
+private:
+
+	/// @brief カットシーン用カメラ
+	MainCamera3D* cutsceneCamera_ = nullptr;
+
 	// 演出データのデータベース
-	std::unordered_map<std::string, CutsceneData> cutscenes_;
+	std::unordered_map<std::string, KeyframeCutsceneData> cutscenes_;
 
 	// 演出中かどうか
 	bool isPlaying_ = false;
@@ -63,10 +64,13 @@ private:
 	// 演出の時間
 	float currentDuration_ = 0.0f;
 
-	// 演出中のカメラワーク関数
-	CameraWorkFunc currentCameraWork_ = nullptr;
+	// 現在再生中の演出データ
+	const KeyframeCutsceneData* currentData_ = nullptr;
 
 	// 演出終了時のコールバック関数
 	OnEndCallback onEndCallback_ = nullptr;
+
+	// カットシーンデータを保存するディレクトリパス
+	const std::string kCutsceneDir = "./Assets/Parameter/Cutscene/";
 };
 

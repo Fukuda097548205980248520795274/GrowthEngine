@@ -33,7 +33,8 @@ StageEditorUIObjectList::StageEditorUIObjectList(StageSpawner* spawner, StageEdi
 /// @param navMesh 
 void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
 	bool& hasCopiedData, PlacementData& copiedData, NavMesh* navMesh,
-	const std::vector<std::string> behaviorTreeNames, const std::vector<std::string>& comboTreeNames, const std::vector<std::string> eventStageDataFileNames)
+	const std::vector<std::string> behaviorTreeNames, const std::vector<std::string>& comboTreeNames, 
+	const std::vector<std::string> eventStageDataFileNames, const std::vector<std::string>& cutsceneNames)
 {
 	if (!ImGui::Begin("Object List"))
 	{
@@ -350,7 +351,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					eventTriggerPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
 
 					// 共通ヘルパーからイベントトリガー設定UIを描画
-					StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames);
+					StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 				}
 			}
 		}

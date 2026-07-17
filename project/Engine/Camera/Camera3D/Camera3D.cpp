@@ -3,10 +3,10 @@
 
 namespace
 {
-	/// @brief Halton数列を取得する
-	/// @param index 現在のフレーム番号 (1, 2, 3...)
-	/// @param base 基準となる素数 (2, 3, 5など)
-	/// @return 0.0 ～ 1.0 未満の範囲の値
+	/// @brief ハルトン列を取得する
+	/// @param index 
+	/// @param base 
+	/// @return 
 	float GetHaltonSequence(int index, int base)
 	{
 		float result = 0.0f;

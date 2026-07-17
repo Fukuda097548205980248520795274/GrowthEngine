@@ -502,9 +502,10 @@ namespace StageEditorUIHelper
 	/// @param spawner 
 	/// @param scene 
 	/// @param eventStageDataFileNames 
+	/// @param cutsceneNames 
 	void DrawEventTriggerSettings(PlacementData& target, std::vector<PlacementData>& placementList,
 		bool& isDirty, StageEditorHistory* history, StageSpawner* spawner, GameScene* scene,
-		const std::vector<std::string>& eventStageDataFileNames)
+		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames)
 	{
 		StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(target.instancePtr);
 
@@ -564,38 +565,26 @@ namespace StageEditorUIHelper
 		{
 			std::vector<std::string> cutsceneNames = scene->GetCutsceneManager()->GetCutsceneNames();
 
-			if (cutsceneNames.empty())
-			{
-				ImGui::TextColored(ImVec4(1, 1, 0, 1), "カメラワークが登録されていません");
-			}
-			else
-			{
-				const char* previewValue = (strlen(target.eventCutsceneName) == 0) ? "演出を選択..." : target.eventCutsceneName;
+			std::string currentCutsceneName = target.eventCutsceneName;
+			const char* previewCutsceneValue = currentCutsceneName.empty() ? "カットシーンを選択..." : currentCutsceneName.c_str();
 
-				if (ImGui::BeginCombo("再生するカメラワーク", previewValue))
+			if (ImGui::BeginCombo("カットシーン", previewCutsceneValue))
+			{
+				for (const auto& name : cutsceneNames)
 				{
-					for (const auto& name : cutsceneNames)
+					bool isSelected = (currentCutsceneName == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
 					{
-						bool isSelected = (name == target.eventCutsceneName);
-						if (ImGui::Selectable(name.c_str(), isSelected))
+						if (eventTriggerPtr != nullptr)
 						{
-							if (eventTriggerPtr != nullptr)
-							{
-								history->SaveHistory(placementList);
-								isDirty = true;
-							}
-							strcpy_s(target.eventCutsceneName, sizeof(target.eventCutsceneName), name.c_str());
-
-							// 実体に即時反映
-							if (eventTriggerPtr)
-							{
-								eventTriggerPtr->SetEventStringParam(name.c_str());
-							}
+							history->SaveHistory(placementList);
+							isDirty = true;
 						}
-						if (isSelected) ImGui::SetItemDefaultFocus();
+						strcpy_s(target.eventCutsceneName, sizeof(target.eventCutsceneName), name.c_str());
 					}
-					ImGui::EndCombo();
+					if (isSelected) ImGui::SetItemDefaultFocus();
 				}
+				ImGui::EndCombo();
 			}
 		}
 	}

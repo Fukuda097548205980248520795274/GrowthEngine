@@ -21,6 +21,8 @@
 #include "MotionManager/MotionManager.h"
 #include "PostEffectManager/PostEffectManager.h"
 #include "EffectManager/EffectManager.h"
+
+#include "CutsceneManager/CutsceneEditor/CutsceneEditor.h"
 #include "CutsceneManager/CutsceneManager.h"
 
 #include "EditorWorkspaceManager/EditorWorkspaceManager.h"
@@ -168,6 +170,9 @@ private:
 
 	/// @brief コンボツリーエディタ
 	std::unique_ptr<ComboTreeEditor> comboTreeEditor_ = nullptr;
+
+	/// @brief カットシーンエディタ
+	std::unique_ptr<CutsceneEditor> cutsceneEditor_ = nullptr;
 
 	/// @brief エディタワークスペースマネージャ
 	std::unique_ptr< EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;

@@ -1129,6 +1129,23 @@
             "scaleY": 1.0,
             "scaleZ": 1.1762011051177979,
             "subType": 3
+        },
+        {
+            "category": 1,
+            "eventCutsceneName": "cutscene_new",
+            "eventStageDataFileName": "Area_1",
+            "eventType": 2,
+            "name": "",
+            "posX": 0.019999999552965164,
+            "posY": 0.9232090711593628,
+            "posZ": 1.2904937267303467,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 3.609999895095825,
+            "scaleY": 1.0,
+            "scaleZ": 1.1762011051177979,
+            "subType": 3
         }
     ]
 }

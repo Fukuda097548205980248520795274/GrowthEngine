@@ -1135,6 +1135,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.cpp" />
+    <ClCompile Include="Game\CutsceneManager\CutsceneEditor\CutsceneEditor.cpp" />
     <ClCompile Include="Game\CutsceneManager\CutsceneManager.cpp" />
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\PlayerInputController\PlayerInputController.cpp" />
@@ -1569,6 +1570,9 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorHistory\ComboTreeEditorHistory.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFactory\ComboTreeFactory.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeProjectManager\ComboTreeProjectManager.h" />
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneEditor.h" />
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe\CutsceneKeyframe.h" />
+    <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneSerializer\CutsceneSerializer.h" />
     <ClInclude Include="Game\CutsceneManager\CutsceneManager.h" />
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h" />
     <ClInclude Include="Game\Entity\Character\CharacterTypes.h" />
