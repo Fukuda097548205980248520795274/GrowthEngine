@@ -1,4 +1,35 @@
 {
+    "characterTracks": [
+        {
+            "characterName": "プレイヤー",
+            "positionKeys": [
+                {
+                    "time": 0.0,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "time": 2.378328800201416,
+                    "value": [
+                        0.0,
+                        3.0,
+                        0.0
+                    ]
+                },
+                {
+                    "time": 5.0,
+                    "value": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ]
+        }
+    ],
     "duration": 5.0,
     "fovKeys": [],
     "name": "NewCutscene",

@@ -14,6 +14,16 @@ struct Key
 	T value;
 };
 
+// / @brief キャラクターのキーフレーム
+struct CharacterCutsceneTrack
+{
+	// キャラクター名
+	std::string characterName;
+
+	// キャラクターのキーフレーム
+	std::vector<Key<Vector3>> positionKeys;
+};
+
 /// @brief キーフレームカットシーンデータ
 struct KeyframeCutsceneData
 {
@@ -27,14 +37,23 @@ struct KeyframeCutsceneData
 	std::vector<Key<Vector3>> positionKeys;
 	std::vector<Key<Vector3>> rotationKeys;
 	std::vector<Key<float>> fovKeys;
+
+	// キャラクターのキーフレーム
+	std::vector<CharacterCutsceneTrack> characterTracks;
 };
 
-/// @brief サンプリング結果を格納する構造体
+/// @brief カメラのサンプリング結果を格納する構造体
 struct CameraSample
 {
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
 	float fov = 0.45f;
+};
+
+/// @brief キャラクターのサンプリング結果を格納する構造体
+struct CharacterSample
+{
+	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 };
 
 /// @brief 角度の線形補間
@@ -176,5 +195,16 @@ inline CameraSample SampleCutscene(const KeyframeCutsceneData& data, float curre
 	sample.position = SampleKey<Vector3>(data.positionKeys, currentTime);
 	sample.rotation = SampleRotateKey(data.rotationKeys, currentTime);
 	sample.fov = SampleKey<float>(data.fovKeys, currentTime);
+	return sample;
+}
+
+/// @brief キャラクターのトラックのサンプリング
+/// @param track 
+/// @param currentTime 
+/// @return 
+inline CharacterSample SampleCharacterTrack(const CharacterCutsceneTrack& track, float currentTime)
+{
+	CharacterSample sample;
+	sample.position = SampleKey<Vector3>(track.positionKeys, currentTime);
 	return sample;
 }

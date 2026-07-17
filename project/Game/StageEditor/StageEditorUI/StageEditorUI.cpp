@@ -767,6 +767,10 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					// クリップボードからデータを複製
 					PlacementData newData = copiedData_;
 
+					// ペースト時に名前が被らないようにする
+					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
+					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
+
 					// 実体をシーンに生成してリストに追加
 					spawner_->SpawnActualEntity(newData);
 					placementList.push_back(newData);
@@ -788,6 +792,10 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 
 					// 選択中のオブジェクトのデータを複製
 					PlacementData newData = placementList[selectedIndex_];
+
+					// 複製時に名前が被らないようにする
+					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
+					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
 
 					// 複製したオブジェクトは少し位置をずらして生成する
 					newData.position.x += 0.5f;

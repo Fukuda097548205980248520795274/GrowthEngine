@@ -167,6 +167,10 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					// 選択中のデータを複製
 					PlacementData newData = placementList[i];
 
+					// 複製したオブジェクトの名前を一意にする
+					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
+					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
+
 					// 完全に重ならないように位置を少しずらす
 					newData.position.x += 0.5f;
 					newData.position.z += 0.5f;
@@ -192,6 +196,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 					// ゲーム内実体の削除
 					spawner_->DeleteActualEntity(placementList[i]);
+
 					// リストから削除
 					placementList.erase(placementList.begin() + i);
 
@@ -225,6 +230,11 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 					// コピーしたデータを新しいオブジェクトとして生成
 					PlacementData newData = copiedData;
+
+					// 貼り付けたオブジェクトの名前を一意にする
+					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
+					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
+
 					spawner_->SpawnActualEntity(newData);
 					placementList.push_back(newData);
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
@@ -277,9 +287,21 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		ImGui::Separator();
 
 
-		// オブジェクト名の編集
+
+		// 入力が完了した（エンターを押すか別の場所をクリックした）タイミングで重複チェック
 		ImGui::InputText("オブジェクト名", target.name, sizeof(target.name));
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			history_->SaveHistory(placementList); // 変更されるので履歴を保存
+			isDirty = true;
+
+			// 重複のない名前に自動変換して上書きする
+			std::string uniqueName = GenerateUniqueName(target.name, selectedIndex, placementList);
+			strncpy_s(target.name, uniqueName.c_str(), sizeof(target.name) - 1);
+		}
 		ImGui::Separator();
+
+
 
 		// カテゴリごとの編集項目
 		if (target.category == EditCategory::Character)

@@ -46,6 +46,27 @@ inline void SaveCutscene(const std::string& filePath, const KeyframeCutsceneData
 	}
 	j["fovKeys"] = fovKeysJson;
 
+	// キャラクターのキーフレームを保存
+	json characterTracksJson = json::array();
+	for (auto& track : data.characterTracks)
+	{
+		json trackJson;
+		trackJson["characterName"] = track.characterName;
+
+		json positionKeysJson = json::array();
+		for (auto& key : track.positionKeys)
+		{
+			json keyJson;
+			keyJson["time"] = key.time;
+			keyJson["value"] = { key.value.x, key.value.y, key.value.z };
+			positionKeysJson.push_back(keyJson);
+		}
+		trackJson["positionKeys"] = positionKeysJson;
+
+		characterTracksJson.push_back(trackJson);
+	}
+	j["characterTracks"] = characterTracksJson;
+
 	std::ofstream file(filePath);
 
 	// インデント4で綺麗に整形して出力
@@ -111,7 +132,37 @@ inline KeyframeCutsceneData LoadCutscene(const std::string& filePath)
 		}
 
 		// 時間順に並び替え
-		auto sortByTime = [](auto& a, auto& b){return a.time < b.time;};
+		auto sortByTime = [](auto& a, auto& b) {return a.time < b.time;};
+
+		// キャラクターのキーフレームを読み込む
+		data.characterTracks.clear();
+		for (auto& trackJson : j["characterTracks"])
+		{
+			CharacterCutsceneTrack track;
+			track.characterName = trackJson.value("characterName", "");
+
+			// キャラクターの位置のキーフレームを読み込む
+			for (auto& keyJson : trackJson["positionKeys"])
+			{
+				Key<Vector3> key;
+				key.time = keyJson.value("time", 0.0f);
+				auto valueArray = keyJson["value"];
+				if (valueArray.is_array() && valueArray.size() == 3)
+				{
+					key.value.x = valueArray[0].get<float>();
+					key.value.y = valueArray[1].get<float>();
+					key.value.z = valueArray[2].get<float>();
+				}
+				track.positionKeys.push_back(key);
+			}
+
+			// キャラクターの位置のキーフレームを時間順に並び替え
+			std::sort(track.positionKeys.begin(), track.positionKeys.end(), sortByTime);
+
+			data.characterTracks.push_back(track);
+		}
+
+		// カメラのキーフレームを時間順に並び替え
 		std::sort(data.positionKeys.begin(), data.positionKeys.end(), sortByTime);
 		std::sort(data.rotationKeys.begin(), data.rotationKeys.end(), sortByTime);
 		std::sort(data.fovKeys.begin(), data.fovKeys.end(), sortByTime);

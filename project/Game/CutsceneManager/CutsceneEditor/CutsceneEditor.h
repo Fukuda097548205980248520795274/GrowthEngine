@@ -86,6 +86,12 @@ private:
 	/// @param fov 
 	void AddFovKeyframe(float time, float fov);
 
+	/// @brief キャラクターの位置キーフレームを追加する
+	/// @param charName 
+	/// @param time 
+	/// @param pos 
+	void AddCharacterPositionKeyframe(const std::string& charName, float time, const Vector3& pos);
+
 
 private:
 
@@ -142,5 +148,11 @@ private:
 
 	// 現在ドラッグ中のキーフレームインデックス
 	int draggingKeyIndex_ = -1;
+
+
+private:
+
+	// 選択中のキャラクター名
+	std::string selectedCharacterName_ = "";
 };
 

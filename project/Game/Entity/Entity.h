@@ -75,6 +75,14 @@ public:
 	/// @brief 削除する
 	void Delete() { isFinished_ = true; }
 
+	/// @brief エディタでの名前を設定する
+	/// @param name 
+	void SetEditorName(const std::string& name) { editorName_ = name; }
+
+	/// @brief エディタでの名前を取得する
+	/// @return 
+	std::string GetEditorName()const { return editorName_; }
+
 
 protected:
 
@@ -86,6 +94,9 @@ protected:
 
 	/// @brief ワールドトランスフォーム
 	std::unique_ptr<WorldTransform3D> worldTransform_ = nullptr;
+
+	/// @brief エディタでの名前
+	std::string editorName_{};
 
 
 public:

@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "CutsceneEditor/CutsceneSerializer/CutsceneSerializer.h"
+#include "Entity/Character/Character.h"
 
 /// @brief 初期化処理
 /// @param cutsceneCamera 
@@ -51,6 +52,31 @@ void CutsceneManager::Update(float dt)
 	if (!currentData_->positionKeys.empty()) cutsceneCamera_->param_->transform.translate = sample.position;
 	if (!currentData_->rotationKeys.empty()) cutsceneCamera_->param_->transform.rotate = sample.rotation;
 	if (!currentData_->fovKeys.empty()) cutsceneCamera_->param_->setting.fov = sample.fov;
+
+	// キャラクターのキーフレームをサンプリングして座標を更新
+	for (const auto& track : currentData_->characterTracks)
+	{
+		// 登録されている全キャラクターを走査して名前が一致するものを探す
+		Character* targetCharacter = nullptr;
+		for (auto* character : Character::GetCharacters()) // Characterクラスの静的リストを活用
+		{
+			if (character && character->GetEditorName() == track.characterName)
+			{
+				targetCharacter = character;
+				break;
+			}
+		}
+
+		// キャラクターが見つかった場合、キーフレームデータをサンプリングして座標を上書き
+		if (targetCharacter)
+		{
+			CharacterSample charSample = SampleCharacterTrack(track, timer_);
+			if (!track.positionKeys.empty())
+			{
+				targetCharacter->SetPosition(charSample.position);
+			}
+		}
+	}
 
 	// タイマー終了
 	if (timer_ >= currentDuration_)

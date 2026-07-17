@@ -1,6 +1,7 @@
 #include "CutsceneEditor.h"
 #include "GrowthEngine.h"
 #include "CutsceneSerializer/CutsceneSerializer.h"
+#include "Entity/Character/Character.h"
 
 /// @brief 初期化処理
 /// @param cutsceneCamera 
@@ -92,6 +93,26 @@ void CutsceneEditor::Update(float dt)
 		if (!editingData_.positionKeys.empty()) cutsceneCamera_->param_->transform.translate = sample.position;
 		if (!editingData_.rotationKeys.empty()) cutsceneCamera_->param_->transform.rotate = sample.rotation;
 		if (!editingData_.fovKeys.empty()) cutsceneCamera_->param_->setting.fov = sample.fov;
+
+		// キャラクターのキーフレームをサンプリングして座標を更新
+		for (const auto& track : editingData_.characterTracks)
+		{
+			Character* targetChar = nullptr;
+			for (auto* character : Character::GetCharacters())
+			{
+				if (character && character->GetEditorName() == track.characterName)
+				{
+					targetChar = character;
+					break;
+				}
+			}
+
+			if (targetChar)
+			{
+				CharacterSample charSample = SampleCharacterTrack(track, currentTime_);
+				if (!track.positionKeys.empty()) targetChar->SetPosition(charSample.position);
+			}
+		}
 	}
 	else
 	{
@@ -194,6 +215,46 @@ void CutsceneEditor::AddFovKeyframe(float time, float fov)
 	// 時間順に並び替え
 	std::sort(editingData_.fovKeys.begin(), editingData_.fovKeys.end(),
 		[](const Key<float>& a, const Key<float>& b) { return a.time < b.time; });
+}
+
+/// @brief キャラクターの位置キーフレームを追加する
+/// @param charName 
+/// @param time 
+/// @param pos 
+void CutsceneEditor::AddCharacterPositionKeyframe(const std::string& charName, float time, const Vector3& pos)
+{
+	// 対象キャラクターのトラックを探す
+	auto itTrack = std::find_if(editingData_.characterTracks.begin(), editingData_.characterTracks.end(),
+		[&charName](const CharacterCutsceneTrack& t) { return t.characterName == charName; });
+
+	// トラックがなければ新しく作る
+	if (itTrack == editingData_.characterTracks.end())
+	{
+		CharacterCutsceneTrack newTrack;
+		newTrack.characterName = charName;
+		editingData_.characterTracks.push_back(newTrack);
+		itTrack = editingData_.characterTracks.end() - 1;
+	}
+
+	// 同一時間のキーフレームがあれば上書き、なければ新規追加
+	auto& keys = itTrack->positionKeys;
+	auto itKey = std::find_if(keys.begin(), keys.end(),
+		[time](const Key<Vector3>& k) { return std::abs(k.time - time) < 0.01f; });
+
+	if (itKey != keys.end())
+	{
+		itKey->value = pos;
+	}
+	else
+	{
+		Key<Vector3> newKey;
+		newKey.time = time;
+		newKey.value = pos;
+		keys.push_back(newKey);
+	}
+
+	// ソート
+	std::sort(keys.begin(), keys.end(), [](const Key<Vector3>& a, const Key<Vector3>& b) { return a.time < b.time; });
 }
 
 /// @brief ファイルリストを更新する
@@ -335,6 +396,82 @@ void CutsceneEditor::DrawEditorUI()
 				AddFovKeyframe(currentTime_, setting.fov);
 			}
 		}
+
+
+		ImGui::Separator();
+		ImGui::Text("--- キャラクター制御 ---");
+
+		// 現在アクティブなキャラクターの名前リストを取得
+		std::vector<std::string> activeCharNames;
+		int selectedCharIndex = -1;
+
+		int idx = 0;
+		for (auto* character : Character::GetCharacters())
+		{
+			if (character)
+			{
+				std::string name = character->GetEditorName();
+				activeCharNames.push_back(name);
+				if (name == selectedCharacterName_)
+				{
+					selectedCharIndex = idx;
+				}
+				idx++;
+			}
+		}
+
+		// キャラクター選択コンボボックス
+		if (!activeCharNames.empty())
+		{
+			std::vector<const char*> charItems;
+			for (const auto& name : activeCharNames)
+			{
+				charItems.push_back(name.c_str());
+			}
+
+			if (ImGui::Combo("動かすキャラ", &selectedCharIndex, charItems.data(), static_cast<int>(charItems.size())))
+			{
+				selectedCharacterName_ = activeCharNames[selectedCharIndex];
+			}
+		}
+		else
+		{
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "シーン上にキャラクターが存在しません。");
+		}
+
+		// 選択されたキャラクターに対する操作
+		Character* selectedChar = nullptr;
+		for (auto* character : Character::GetCharacters())
+		{
+			if (character && character->GetEditorName() == selectedCharacterName_)
+			{
+				selectedChar = character;
+				break;
+			}
+		}
+
+		if (selectedChar)
+		{
+			WorldTransform3D* transform = selectedChar->GetWorldTransform();
+
+			ImGui::Text("選択中: %s", selectedCharacterName_.c_str());
+			ImGui::DragFloat3("キャラ位置", &transform->translate_.x, 0.1f);
+
+			if (ImGui::Button("今の時間にキャラ位置キーを追加"))
+			{
+				AddCharacterPositionKeyframe(selectedCharacterName_, currentTime_, transform->translate_);
+			}
+
+			// トラックの削除機能などもあると便利です
+			if (ImGui::Button("このキャラの全トラックを削除"))
+			{
+				editingData_.characterTracks.erase(
+					std::remove_if(editingData_.characterTracks.begin(), editingData_.characterTracks.end(),
+						[this](const CharacterCutsceneTrack& t) { return t.characterName == selectedCharacterName_; }),
+					editingData_.characterTracks.end()
+				);
+			}
+		}
 	}
 	ImGui::End();
 }
@@ -353,6 +490,28 @@ void CutsceneEditor::DrawTimelineUI()
 		// 背景の描画
 		drawList->AddRectFilled(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(40, 40, 40, 255));
 		drawList->AddRect(canvasPos, ImVec2(canvasPos.x + canvasSize.x, canvasPos.y + canvasSize.y), IM_COL32(100, 100, 100, 255));
+
+
+		// 再生中の時間を示す縦線の描画
+		if (editingData_.duration > 0.0f)
+		{
+			float trackHeight = canvasSize.y / (3 + editingData_.characterTracks.size() * 2);
+			float posY = canvasPos.y + trackHeight * 0.5f;
+
+			// キャラクタートラックの描画
+			float currentTrackY = canvasPos.y + trackHeight * 3.5f; // カメラ3行の下から開始
+			for (const auto& track : editingData_.characterTracks)
+			{
+				// 位置キーフレームの描画
+				for (const auto& kf : track.positionKeys)
+				{
+					float kfX = canvasPos.x + ((kf.time / editingData_.duration) * canvasSize.x);
+					drawList->AddCircleFilled(ImVec2(kfX, currentTrackY), 4.0f, IM_COL32(200, 50, 200, 255)); // 紫色など
+				}
+				currentTrackY += trackHeight;
+			}
+		}
+
 
 		// タイムライン全体とのインタラクション領域を生成
 		ImGui::InvisibleButton("TimelineInteraction", canvasSize);

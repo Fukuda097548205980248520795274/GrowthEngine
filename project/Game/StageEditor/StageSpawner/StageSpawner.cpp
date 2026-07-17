@@ -41,7 +41,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.hGuardMotion = data.guardMotion.handle;
 
 		// タグに応じて、NPCの初期化データを設定する
-		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees);
+		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees, data.name);
 
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;

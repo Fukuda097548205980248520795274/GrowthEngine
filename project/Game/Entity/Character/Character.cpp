@@ -1490,6 +1490,9 @@ void Character::UpdateWeapon()
 /// @brief 着地判定の更新
 void Character::LandingCheck()
 {
+	// 前フレームで着地していたかどうかを記録する
+	bool isPrevGrounded = movement_->IsGrounded();
+
 	// 着地しているかどうかのフラグをリセットする
 	movement_->SetGrounded(false);
 
@@ -1509,8 +1512,12 @@ void Character::LandingCheck()
 			if (hitOpponent->GetType() != Engine::Collision3D::Type::AABB)
 				return;
 
+			// 着地判定の相手のAABBの情報を取得する
 			auto floorCollision = static_cast<Collision3DInstanceAABB*>(hitOpponent);
-			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+
+			// 前フレームで着地していなかった場合は、床の上にキャラクターを移動させる
+			if(!isPrevGrounded && movement_->IsGrounded())
+				worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
 		}
 
 		// 着地していると判定する

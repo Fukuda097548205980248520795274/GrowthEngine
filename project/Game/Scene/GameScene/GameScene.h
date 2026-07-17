@@ -63,7 +63,7 @@ public:
 	/// @param initData 
 	/// @return 
 	Character* CreateCharacter(const CharacterInitData& initData, CharacterTag tag,
-		const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig);
+		const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig, const std::string& editorName);
 
 	/// @brief 武器を生成する
 	/// @param position 

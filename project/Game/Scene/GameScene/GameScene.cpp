@@ -507,7 +507,8 @@ void GameScene::Draw()
 /// @brief キャラクターを生成する
 /// @param initData 
 /// @return 
-Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag, const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig)
+Character* GameScene::CreateCharacter(const CharacterInitData& initData, CharacterTag tag, 
+	const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig, const std::string& editorName)
 {
 	Character* character = nullptr;
 
@@ -578,6 +579,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
 		player_ = std::make_unique<Player>();
 		player_->InitComboTree(comboTreeConfig);
+		player_->SetEditorName(editorName);
 		player_->Initialize(playerInitData, playerWeapon_.get());
 
 		character = player_.get();
@@ -690,6 +692,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		std::unique_ptr<NPC> npc = npcPool_->Acquire();
 		npc->InitBehaviorTree(behaviorTreeConfig, behaviorTreeEditor_.get());
 		npc->Initialize(npcInitData, tag, navMesh_.get());
+		npc->SetEditorName(editorName);
 		character = npc.get();
 
 		// NPCのリストに追加する
