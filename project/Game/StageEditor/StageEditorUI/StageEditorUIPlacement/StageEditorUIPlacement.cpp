@@ -31,7 +31,8 @@ StageEditorUIPlacement::StageEditorUIPlacement(StageSpawner* spawner, StageEdito
 /// @param isDirty 
 /// @param isPlaying
 void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, int& selectedIndex, bool& isDirty,
-	const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& comboTreeNames, const std::vector<std::string>& eventStageDataFileNames)
+	const std::vector<std::string>& behaviorTreeNames, const std::vector<std::string>& comboTreeNames, 
+	const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames)
 {
 	// オブジェクト配置モードのUIを描画
 	ImGui::Text("--- オブジェクト配置 ---");
@@ -164,7 +165,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
 
 			// 共通ヘルパーからトリガー設定UIを呼び出し
-			StageEditorUIHelper::DrawEventTriggerSettings(currentData, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames);
+			StageEditorUIHelper::DrawEventTriggerSettings(currentData, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 		}
 	} 
 	else if (currentData.category == EditCategory::Weapon)

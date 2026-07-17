@@ -28,25 +28,11 @@ void GameScene::Initialize()
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
+	cutsceneManager_->Initialize(cutsceneCamera_.get());
 
 	// カメラの読み込みと切り替え
 	mainCamera_ = std::make_unique<MainCamera3D>("MainCamera");
 	mainCamera_->Switch();
-
-	// カットシーンの登録
-	cutsceneManager_->RegisterCutscene("BossAppear", 4.0f, [this](float progress, float dt)
-		{
-
-		}
-	);
-
-	// カットシーンの登録
-	cutsceneManager_->RegisterCutscene("StagePan", 3.0f, [this](float progress, float dt)
-		{
-
-		}
-	);
-
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
@@ -1082,8 +1068,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 		if (cutsceneManager_->IsPlaying())
 			return false;
 
-		// プレイヤーの操作を無効化する
-		player_->SetIsCutsceneActive(false);
+		// キャラクターの操作を無効化する
+		Character::SetIsCutsceneActive(true);
 
 		// カットシーン用のカメラに切り替える
 		cutsceneCamera_->Switch();
@@ -1097,8 +1083,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 				// メインカメラに戻す
 				mainCamera_->Switch();
 
-				// プレイヤーの操作を解放する
-				player_->SetIsCutsceneActive(true);
+				// キャラクターの操作を有効化する
+				Character::SetIsCutsceneActive(false);
 			}
 		);
 

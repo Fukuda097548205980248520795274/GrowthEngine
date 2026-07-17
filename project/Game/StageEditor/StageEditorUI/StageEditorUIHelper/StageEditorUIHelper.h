@@ -112,7 +112,8 @@ namespace StageEditorUIHelper
 	/// @param spawner 
 	/// @param scene 
 	/// @param eventStageDataFileNames 
+	/// @param cutsceneNames 
 	void DrawEventTriggerSettings(PlacementData& target, std::vector<PlacementData>& placementList,
 		bool& isDirty, StageEditorHistory* history, StageSpawner* spawner, GameScene* scene,
-		const std::vector<std::string>& eventStageDataFileNames);
+		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames);
 }

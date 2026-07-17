@@ -1,13 +1,16 @@
 #include "CutsceneManager.h"
 #include <algorithm>
 
-/// @brief 演出パターンを登録する
-/// @param name 
-/// @param duration 
-/// @param func 
-void CutsceneManager::RegisterCutscene(const std::string& name, float duration, CameraWorkFunc func)
+#include "CutsceneEditor/CutsceneSerializer/CutsceneSerializer.h"
+
+/// @brief 初期化処理
+/// @param cutsceneCamera 
+void CutsceneManager::Initialize(MainCamera3D* cutsceneCamera)
 {
-    cutscenes_[name] = CutsceneData{ duration, func };
+    cutsceneCamera_ = cutsceneCamera;
+
+	// 登録されている演出パターンを更新
+	RefreshCutsceneList();
 }
 
 /// @brief 演出を開始する
@@ -21,8 +24,10 @@ void CutsceneManager::Play(const std::string& name, OnEndCallback onEndCallback)
 
     isPlaying_ = true;
     timer_ = 0.0f;
-    currentDuration_ = it->second.duration;
-    currentCameraWork_ = it->second.cameraWork;
+
+    // 現在のデータをセット
+    currentData_ = &it->second;
+    currentDuration_ = currentData_->duration;
     onEndCallback_ = onEndCallback;
 }
 
@@ -31,29 +36,33 @@ void CutsceneManager::Play(const std::string& name, OnEndCallback onEndCallback)
 void CutsceneManager::Update(float dt)
 {
 	// 演出中でなければスキップ
-    if (!isPlaying_) return;
+	if (!isPlaying_) return;
+
+	// データかカメラが存在しない場合はスキップ
+	if (!currentData_ || !cutsceneCamera_) return;
 
 	// タイマーを進める
-    timer_ += dt;
+	timer_ += dt;
 
-	// 演出の進行度を計算する（0.0f から 1.0f の範囲にクランプ）
-    float progress = std::clamp(timer_ / currentDuration_, 0.0f, 1.0f);
+	// サンプリングしてカメラのパラメータを取得
+	CameraSample sample = SampleCutscene(*currentData_, timer_);
 
-	// カメラワーク関数を呼び出す
-    if (currentCameraWork_)
-        currentCameraWork_(progress, dt);
+	// カットシーン用カメラのパラメータを更新
+	if (!currentData_->positionKeys.empty()) cutsceneCamera_->param_->transform.translate = sample.position;
+	if (!currentData_->rotationKeys.empty()) cutsceneCamera_->param_->transform.rotate = sample.rotation;
+	if (!currentData_->fovKeys.empty()) cutsceneCamera_->param_->setting.fov = sample.fov;
 
-    // タイマー終了
-    if (timer_ >= currentDuration_)
-    {
-        isPlaying_ = false;
-        timer_ = 0.0f;
-        currentCameraWork_ = nullptr;
+	// タイマー終了
+	if (timer_ >= currentDuration_)
+	{
+		isPlaying_ = false;
+		timer_ = 0.0f;
+		currentData_ = nullptr;
 
 		// 演出終了時のコールバックを呼び出す
-        if (onEndCallback_)
-            onEndCallback_();
-    }
+		if (onEndCallback_)
+			onEndCallback_();
+	}
 }
 
 /// @brief 登録されている演出名の一覧を取得する
@@ -66,4 +75,22 @@ std::vector<std::string> CutsceneManager::GetCutsceneNames() const
         names.push_back(name);
     }
     return names;
+}
+
+/// @brief 演出パターンを登録する
+void CutsceneManager::RefreshCutsceneList()
+{
+	// 既存の演出データをクリア
+	cutscenes_.clear();
+
+	// カットシーンディレクトリが存在しない場合は作成
+	if(!std::filesystem::exists(kCutsceneDir))
+		std::filesystem::create_directories(kCutsceneDir);
+
+	// ディレクトリ内のJSONファイルを検索して読み込む
+	for (auto& entry : std::filesystem::directory_iterator(kCutsceneDir))
+	{
+		if (entry.path().extension() == ".json")
+			cutscenes_[entry.path().stem().string()] = LoadCutscene(entry.path().string());
+	}
 }

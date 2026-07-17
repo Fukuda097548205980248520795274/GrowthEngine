@@ -132,6 +132,9 @@ private:
 	/// @brief ステージデータの名前リスト
 	std::vector<std::string> stageDataNames_;
 
+	/// @brief カットシーンの名前リスト
+	std::vector<std::string> cutsceneNames_;
+
 
 private:
 
@@ -189,5 +192,8 @@ private:
 
 	/// @brief ステージデータの名前を読み込む
 	void LoadStageDataNames();
+
+	/// @brief カットシーンの名前を読み込む
+	void LoadCutsceneNames();
 };
 
