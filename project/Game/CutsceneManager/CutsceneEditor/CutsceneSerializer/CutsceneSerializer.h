@@ -20,6 +20,7 @@ inline void SaveCutscene(const std::string& filePath, const KeyframeCutsceneData
 		json keyJson;
 		keyJson["time"] = key.time;
 		keyJson["value"] = { key.value.x, key.value.y, key.value.z };
+		keyJson["interpType"] = static_cast<int>(key.interpType);
 		positionKeysJson.push_back(keyJson);
 	}
 	j["positionKeys"] = positionKeysJson;
@@ -31,6 +32,7 @@ inline void SaveCutscene(const std::string& filePath, const KeyframeCutsceneData
 		json keyJson;
 		keyJson["time"] = key.time;
 		keyJson["value"] = { key.value.x, key.value.y, key.value.z };
+		keyJson["interpType"] = static_cast<int>(key.interpType);
 		rotationKeysJson.push_back(keyJson);
 	}
 	j["rotationKeys"] = rotationKeysJson;
@@ -42,6 +44,7 @@ inline void SaveCutscene(const std::string& filePath, const KeyframeCutsceneData
 		json keyJson;
 		keyJson["time"] = key.time;
 		keyJson["value"] = key.value;
+		keyJson["interpType"] = static_cast<int>(key.interpType);
 		fovKeysJson.push_back(keyJson);
 	}
 	j["fovKeys"] = fovKeysJson;
@@ -59,6 +62,7 @@ inline void SaveCutscene(const std::string& filePath, const KeyframeCutsceneData
 			json keyJson;
 			keyJson["time"] = key.time;
 			keyJson["value"] = { key.value.x, key.value.y, key.value.z };
+			keyJson["interpType"] = static_cast<int>(key.interpType);
 			positionKeysJson.push_back(keyJson);
 		}
 		trackJson["positionKeys"] = positionKeysJson;
@@ -102,6 +106,7 @@ inline KeyframeCutsceneData LoadCutscene(const std::string& filePath)
 				key.value.y = valueArray[1].get<float>();
 				key.value.z = valueArray[2].get<float>();
 			}
+			key.interpType = static_cast<InterpolationType>(keyJson.value("interpType", 0));
 			data.positionKeys.push_back(key);
 		}
 
@@ -118,6 +123,7 @@ inline KeyframeCutsceneData LoadCutscene(const std::string& filePath)
 				key.value.y = valueArray[1].get<float>();
 				key.value.z = valueArray[2].get<float>();
 			}
+			key.interpType = static_cast<InterpolationType>(keyJson.value("interpType", 0));
 			data.rotationKeys.push_back(key);
 		}
 
@@ -128,6 +134,7 @@ inline KeyframeCutsceneData LoadCutscene(const std::string& filePath)
 			Key<float> key;
 			key.time = keyJson.value("time", 0.0f);
 			key.value = keyJson.value("value", 0.0f);
+			key.interpType = static_cast<InterpolationType>(keyJson.value("interpType", 0));
 			data.fovKeys.push_back(key);
 		}
 
@@ -153,6 +160,7 @@ inline KeyframeCutsceneData LoadCutscene(const std::string& filePath)
 					key.value.y = valueArray[1].get<float>();
 					key.value.z = valueArray[2].get<float>();
 				}
+				key.interpType = static_cast<InterpolationType>(keyJson.value("interpType", 0));
 				track.positionKeys.push_back(key);
 			}
 

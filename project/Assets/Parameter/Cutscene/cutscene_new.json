@@ -4,6 +4,7 @@
             "characterName": "プレイヤー",
             "positionKeys": [
                 {
+                    "interpType": 0,
                     "time": 0.0,
                     "value": [
                         0.0,
@@ -12,6 +13,7 @@
                     ]
                 },
                 {
+                    "interpType": 0,
                     "time": 2.378328800201416,
                     "value": [
                         0.0,
@@ -20,6 +22,7 @@
                     ]
                 },
                 {
+                    "interpType": 0,
                     "time": 5.0,
                     "value": [
                         0.0,
@@ -35,6 +38,7 @@
     "name": "NewCutscene",
     "positionKeys": [
         {
+            "interpType": 0,
             "time": 0.0,
             "value": [
                 -3.4969110629390343e-07,
@@ -43,7 +47,8 @@
             ]
         },
         {
-            "time": 2.380254030227661,
+            "interpType": 3,
+            "time": 2.3966941833496094,
             "value": [
                 -3.4969110629390343e-07,
                 3.5,
@@ -51,6 +56,7 @@
             ]
         },
         {
+            "interpType": 0,
             "time": 5.0,
             "value": [
                 -3.4969110629390343e-07,
@@ -61,6 +67,7 @@
     ],
     "rotationKeys": [
         {
+            "interpType": 0,
             "time": 0.0,
             "value": [
                 0.0,
@@ -69,6 +76,7 @@
             ]
         },
         {
+            "interpType": 0,
             "time": 5.0,
             "value": [
                 0.0,

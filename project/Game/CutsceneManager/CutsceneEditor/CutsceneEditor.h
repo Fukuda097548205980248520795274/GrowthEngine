@@ -14,7 +14,8 @@ public:
 		None, 
 		Position, 
 		Rotation,
-		FOV 
+		FOV,
+		CharacterPosition
 	};
 
 
@@ -54,6 +55,7 @@ private:
 	/// @brief タイムラインUIを描画する
 	void DrawTimelineUI();
 
+
 	/// @brief エディタを開くときの処理
 	void OnEnableEditor();
 
@@ -67,30 +69,37 @@ private:
 	/// @brief ファイルリストを更新する
 	void RefreshFileList();
 
-
-
-private:
-
 	/// @brief キーフレームを追加する
+	/// @tparam T 
+	/// @param track 
 	/// @param time 
-	/// @param pos 
-	void AddPositionKeyframe(float time, const Vector3& pos);
+	/// @param value 
+	template<typename T>
+	void AddKeyframeToTrack(std::vector<Key<T>>& track, float time, const T& value)
+	{
+		// 同一時間軸にキーフレームがすでに存在する場合は上書き
+		auto it = std::find_if(track.begin(), track.end(),
+			[time](const Key<T>& key) {return std::abs(key.time - time) < 0.01f;});
 
-	/// @brief 回転のキーフレームを追加する
-	/// @param time 
-	/// @param rot 
-	void AddRotationKeyframe(float time, const Vector3& rot);
+		// すでに存在する場合は上書き
+		if (it != track.end())
+		{
+			it->time = time;
+			it->value = value;
+		}
+		else
+		{
+			// 新しいキーフレームを追加
+			Key<T> newKey;
+			newKey.time = time;
+			newKey.value = value;
+			track.push_back(newKey);
+		}
 
-	/// @brief FOVのキーフレームを追加する
-	/// @param time 
-	/// @param fov 
-	void AddFovKeyframe(float time, float fov);
-
-	/// @brief キャラクターの位置キーフレームを追加する
-	/// @param charName 
-	/// @param time 
-	/// @param pos 
-	void AddCharacterPositionKeyframe(const std::string& charName, float time, const Vector3& pos);
+		// 時間順に並び替え
+		std::sort(track.begin(), track.end(),
+			[](const Key<T>& a, const Key<T>& b) {return a.time < b.time;});
+	}
 
 
 private:
@@ -149,10 +158,31 @@ private:
 	// 現在ドラッグ中のキーフレームインデックス
 	int draggingKeyIndex_ = -1;
 
+	/// @brief ドラッグ中のキャラクター名
+	std::string draggingCharacterName_ = "";
+
+
+private:
+
+	// 選択中のトラック
+	DraggingTrack selectedTrack_ = DraggingTrack::None;
+
+	// 選択中のキーフレームインデックス
+	int selectedKeyIndex_ = -1;
+
 
 private:
 
 	// 選択中のキャラクター名
 	std::string selectedCharacterName_ = "";
+
+
+private:
+
+	// スナップが有効かどうか
+	bool snapEnabled_ = true;
+
+	// スナップのステップ値
+	float snapStep_ = 1.0f / 60.0f;
 };
 
