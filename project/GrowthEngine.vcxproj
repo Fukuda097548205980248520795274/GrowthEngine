@@ -1198,6 +1198,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.cpp" />
     <ClCompile Include="Game\StageEditor\StageFileManager\StageFileManager.cpp" />
     <ClCompile Include="Game\StageEditor\StageSpawner\StageSpawner.cpp" />
+    <ClCompile Include="Game\StageObject\CameraGuard\CameraGuard.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
     <ClCompile Include="Game\StageObject\StageObject.cpp" />
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
@@ -1635,6 +1636,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement\StageEditorUIPlacement.h" />
     <ClInclude Include="Game\StageEditor\StageFileManager\StageFileManager.h" />
     <ClInclude Include="Game\StageEditor\StageSpawner\StageSpawner.h" />
+    <ClInclude Include="Game\StageObject\CameraGuard\CameraGuard.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
     <ClInclude Include="Game\StageObject\StageObject.h" />
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />

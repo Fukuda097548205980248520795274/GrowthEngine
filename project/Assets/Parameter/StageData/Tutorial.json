@@ -1189,6 +1189,20 @@
             "standMotionName": "Standing",
             "subType": 4,
             "walkMotionName": "Walk"
+        },
+        {
+            "category": 1,
+            "name": "",
+            "posX": 0.0,
+            "posY": -0.8700000047683716,
+            "posZ": 29.34000015258789,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 75.0,
+            "scaleY": 1.0,
+            "scaleZ": 75.0,
+            "subType": 4
         }
     ]
 }

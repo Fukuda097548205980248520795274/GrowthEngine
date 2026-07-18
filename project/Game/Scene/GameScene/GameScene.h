@@ -10,6 +10,7 @@
 #include "StageObject/Floor/Floor.h"
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
+#include "StageObject/CameraGuard/CameraGuard.h"
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
@@ -85,6 +86,11 @@ public:
 	/// @param initData 
 	/// @return 
 	StaticEventTrigger* CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData);
+
+	/// @brief カメラガードオブジェクトを生成する
+	/// @param initData 
+	/// @return 
+	CameraGuard* CreateCameraGuard(const CameraGuard::InitData& initData);
 
 	/// @brief タイマーHUDを生成する
 	/// @param initData 
@@ -204,6 +210,14 @@ private:
 
 	/// @brief 壁の当たり判定グループ
 	std::unique_ptr<Collision3DBaseOBB> wallCollision_ = nullptr;
+
+
+	/// @brief カメラガードの当たり判定グループ
+	std::unique_ptr<Collision3DBaseOBB> cameraGuardCollision_ = nullptr;
+
+	/// @brief カメラの線分の当たり判定グループ
+	std::unique_ptr<Collision3DBaseSegment> cameraSegmentCollision_ = nullptr;
+	Collision3DInstanceSegment* cameraSegmentInstance_ = nullptr;
 
 
 	/// @brief イベントトリガーに触れたかどうか

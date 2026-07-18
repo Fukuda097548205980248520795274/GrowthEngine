@@ -214,6 +214,11 @@ void GameScene::Initialize()
 	eventTriggerCollision_ = std::make_unique<Collision3DBaseCapsule>("EventTrigger_Collision");
 	eventTriggerAABBCollision_ = std::make_unique<Collision3DBaseAABB>("EventTriggerAABB_Collision");
 
+	// カメラガードの当たり判定グループの生成と初期化
+	cameraGuardCollision_ = std::make_unique<Collision3DBaseOBB>("CameraGuard_Collision");
+	cameraSegmentCollision_ = std::make_unique<Collision3DBaseSegment>("CameraSegment_Collision");
+	cameraSegmentInstance_ = cameraSegmentCollision_->CreateInstance();
+
 
 
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
@@ -231,9 +236,12 @@ void GameScene::Initialize()
 	// 「イベントトリガー」に当たる
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
+	// 「カメラガード」に当たる
+	//cameraSegmentCollision_->SetCollisionTarget(cameraGuardCollision_->GetHandle());
+
 
 	// ステージ読み込み
-	stageEditor_->LoadStage("Tutorial.json");
+	//stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -804,6 +812,23 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 	return trigger;
 }
 
+/// @brief カメラガードオブジェクトを生成する
+/// @param initData 
+/// @return 
+CameraGuard* GameScene::CreateCameraGuard(const CameraGuard::InitData& initData)
+{
+	CameraGuard::InitData guardInitData = initData;
+	guardInitData.collision = cameraGuardCollision_->CreateInstance();
+
+	std::unique_ptr<CameraGuard> newGuard = std::make_unique<CameraGuard>();
+	newGuard->Initialize(guardInitData);
+	CameraGuard* guard = newGuard.get();
+
+	objects_.push_back(std::move(newGuard));
+
+	return guard;
+}
+
 /// @brief リセットする
 void GameScene::Reset()
 {
@@ -994,6 +1019,42 @@ void GameScene::ApplyCameraFromPivot()
 
 	// カメラの位置をピボットの球面座標から計算する
 	Vector3 finalCameraPos = pivotData->sphericalCoordinates;
+
+	// カメラセグメントのパラメータを更新する
+	cameraSegmentInstance_->param_->start = pivotData->center;
+	cameraSegmentInstance_->param_->diff = finalCameraPos - pivotData->center;
+
+	// カメラセグメントの衝突判定が有効な場合は、カメラの位置を調整する
+	if (cameraSegmentInstance_->isCollision_)
+	{
+		// ピボット中心から元のカメラ位置までの割合 (1.0 = 衝突なしの元の位置)
+		float closestT = 1.0f;
+
+		// 複数の壁（OBB）と衝突している可能性があるため、最も近い交点を探す
+		for (auto* opponent : cameraSegmentInstance_->hitOpponents_)
+		{
+			auto* obb = dynamic_cast<Collision3DInstanceOBB*>(opponent);
+			float t = Engine::IntersectSegmentOBB(*cameraSegmentInstance_->param_, *obb->param_);
+
+			// 最もピボット中心に近い交点を採用する
+			if (t >= 0.0f && t < closestT)
+			{
+				closestT = t;
+			}
+		}
+
+		// 交点の位置を計算
+		Vector3 hitPosition = pivotData->center + (cameraSegmentInstance_->param_->diff * closestT);
+
+		// 壁にピッタリくっつけるとカメラのニアクリップ(Near Clip)で壁の裏側が透けるため、少し手前にオフセットする
+		constexpr float kCameraOffset = 0.2f;
+		Vector3 dir = cameraSegmentInstance_->param_->diff;
+		dir = dir.Normalize();
+
+		finalCameraPos = hitPosition - (dir * kCameraOffset);
+	}
+
+	// カメラシェイクのオフセットを加算する
 	if (cameraShake_) finalCameraPos += cameraShake_->GetShakeOffset();
 
 	// カメラの位置を更新する

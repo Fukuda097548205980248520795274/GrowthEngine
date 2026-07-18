@@ -22,7 +22,7 @@ enum class EditCategory
 // 大分類と小分類の表示用文字列
 inline const char* categoryNames[] = { "キャラクター", "オブジェクト", "武器","HUD"};
 inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
-inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー" };
+inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー", "カメラガード"};
 inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
 inline const char* eventTypeNames[] = 
 {
