@@ -131,7 +131,7 @@ private:
 	void UpdatePivotRotateInput(float deltaTime);
 
 	/// @brief ピボットからカメラ姿勢へ反映する
-	void ApplyCameraFromPivot();
+	void ApplyCameraFromPivot(float deltaTime);
 
 
 	/// @brief イベントトリガーに触れたときの処理
@@ -149,6 +149,9 @@ private:
 
 	/// @brief メインカメラ
 	std::unique_ptr<MainCamera3D> mainCamera_ = nullptr;
+
+	// カメラの今の補間係数
+	float cameraCurrentT_ = 1.0f;
 
 	/// @brief カットシーン用カメラ
 	std::unique_ptr<MainCamera3D> cutsceneCamera_ = nullptr;
