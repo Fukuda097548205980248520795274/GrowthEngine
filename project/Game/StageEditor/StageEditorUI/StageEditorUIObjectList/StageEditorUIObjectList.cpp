@@ -376,6 +376,12 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 				}
 			}
+			else if (target.subType == static_cast<int>(StageObject::StageObjectTag::CameraGuard))
+			{
+				// カメラガードオブジェクトの場合、特定のUIを表示する
+				CameraGuard* cameraGuardPtr = static_cast<CameraGuard*>(target.instancePtr);
+				cameraGuardPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
+			}
 		}
 		else if (target.category == EditCategory::Weapon)
 		{

@@ -10,6 +10,7 @@
 #include "StageObject/Floor/Floor.h"
 #include "StageObject/Wall/Wall.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
+#include "StageObject/CameraGuard/CameraGuard.h"
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
@@ -86,6 +87,11 @@ public:
 	/// @return 
 	StaticEventTrigger* CreateStaticEventTrigger(const StaticEventTrigger::InitData& initData);
 
+	/// @brief カメラガードオブジェクトを生成する
+	/// @param initData 
+	/// @return 
+	CameraGuard* CreateCameraGuard(const CameraGuard::InitData& initData);
+
 	/// @brief タイマーHUDを生成する
 	/// @param initData 
 	/// @return 
@@ -125,7 +131,7 @@ private:
 	void UpdatePivotRotateInput(float deltaTime);
 
 	/// @brief ピボットからカメラ姿勢へ反映する
-	void ApplyCameraFromPivot();
+	void ApplyCameraFromPivot(float deltaTime);
 
 
 	/// @brief イベントトリガーに触れたときの処理
@@ -143,6 +149,9 @@ private:
 
 	/// @brief メインカメラ
 	std::unique_ptr<MainCamera3D> mainCamera_ = nullptr;
+
+	// カメラの今の補間係数
+	float cameraCurrentT_ = 1.0f;
 
 	/// @brief カットシーン用カメラ
 	std::unique_ptr<MainCamera3D> cutsceneCamera_ = nullptr;
@@ -204,6 +213,14 @@ private:
 
 	/// @brief 壁の当たり判定グループ
 	std::unique_ptr<Collision3DBaseOBB> wallCollision_ = nullptr;
+
+
+	/// @brief カメラガードの当たり判定グループ
+	std::unique_ptr<Collision3DBaseOBB> cameraGuardCollision_ = nullptr;
+
+	/// @brief カメラの線分の当たり判定グループ
+	std::unique_ptr<Collision3DBaseSegment> cameraSegmentCollision_ = nullptr;
+	Collision3DInstanceSegment* cameraSegmentInstance_ = nullptr;
 
 
 	/// @brief イベントトリガーに触れたかどうか

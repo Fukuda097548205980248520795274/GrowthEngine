@@ -140,4 +140,10 @@ namespace Engine
 	/// @param sprite 
 	/// @return 
 	bool CollisionCheckFunc(const Vector2& point, const Collision2D::Sprite& sprite);
+
+	/// @brief 線分とOBBの交差判定を行う
+	/// @param segment 
+	/// @param obb 
+	/// @return 
+	float IntersectSegmentOBB(const Collision3D::Segment& segment, const Collision3D::OBB& obb);
 }

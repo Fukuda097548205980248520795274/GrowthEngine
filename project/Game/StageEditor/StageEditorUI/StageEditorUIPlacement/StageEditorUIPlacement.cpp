@@ -167,6 +167,17 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 			// 共通ヘルパーからトリガー設定UIを呼び出し
 			StageEditorUIHelper::DrawEventTriggerSettings(currentData, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 		}
+		else if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::CameraGuard)
+		{
+			// 位置
+			ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
+
+			// 回転
+			ImGui::DragFloat("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+
+			// 拡縮
+			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
+		}
 	} 
 	else if (currentData.category == EditCategory::Weapon)
 	{

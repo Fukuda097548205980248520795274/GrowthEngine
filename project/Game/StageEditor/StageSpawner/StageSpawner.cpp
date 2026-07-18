@@ -89,6 +89,15 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
 		}
+		else if (tag == StageObject::StageObjectTag::CameraGuard)
+		{
+			// カメラガードの生成処理
+			CameraGuard::InitData initData;
+			initData.position = data.position;
+			initData.scale = data.scale;
+			CameraGuard* newCameraGuard = scene_->CreateCameraGuard(initData);
+			data.instancePtr = newCameraGuard;
+		}
 	}
 	else if (data.category == EditCategory::Weapon)
 	{

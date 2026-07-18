@@ -214,6 +214,11 @@ void GameScene::Initialize()
 	eventTriggerCollision_ = std::make_unique<Collision3DBaseCapsule>("EventTrigger_Collision");
 	eventTriggerAABBCollision_ = std::make_unique<Collision3DBaseAABB>("EventTriggerAABB_Collision");
 
+	// カメラガードの当たり判定グループの生成と初期化
+	cameraGuardCollision_ = std::make_unique<Collision3DBaseOBB>("CameraGuard_Collision");
+	cameraSegmentCollision_ = std::make_unique<Collision3DBaseSegment>("CameraSegment_Collision");
+	cameraSegmentInstance_ = cameraSegmentCollision_->CreateInstance();
+
 
 
 	// 「プレイヤーの攻撃」は「敵の体」に当たる
@@ -231,9 +236,13 @@ void GameScene::Initialize()
 	// 「イベントトリガー」に当たる
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
+	// 「カメラガード」に当たる
+	cameraSegmentCollision_->SetCollisionTarget(wallCollision_->GetHandle());
+	cameraSegmentCollision_->SetCollisionTarget(cameraGuardCollision_->GetHandle());
+
 
 	// ステージ読み込み
-	stageEditor_->LoadStage("Tutorial.json");
+	//stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -804,6 +813,23 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 	return trigger;
 }
 
+/// @brief カメラガードオブジェクトを生成する
+/// @param initData 
+/// @return 
+CameraGuard* GameScene::CreateCameraGuard(const CameraGuard::InitData& initData)
+{
+	CameraGuard::InitData guardInitData = initData;
+	guardInitData.collision = cameraGuardCollision_->CreateInstance();
+
+	std::unique_ptr<CameraGuard> newGuard = std::make_unique<CameraGuard>();
+	newGuard->Initialize(guardInitData);
+	CameraGuard* guard = newGuard.get();
+
+	objects_.push_back(std::move(newGuard));
+
+	return guard;
+}
+
 /// @brief リセットする
 void GameScene::Reset()
 {
@@ -836,6 +862,9 @@ void GameScene::InitializeCameraControl()
 
 	// カメラ回転入力の生成
 	inputCameraRotate_ = std::make_unique<InputGamepadRightStick>("Camera_Rotate", InputState::Press, 0, Vector2(0.0f, 0.0f), 0.5f);
+
+	// 補間係数を初期化する
+	cameraCurrentT_ = 1.0f;
 }
 
 /// @brief カメラ制御の更新
@@ -859,7 +888,7 @@ void GameScene::UpdateCameraControl(float deltaTime)
 	pivotPoint_->Update();
 
 	// ピボットからカメラ姿勢を更新する
-	ApplyCameraFromPivot();
+	ApplyCameraFromPivot(deltaTime);
 }
 
 /// @brief ピボット中心をプレイヤーへ追従させる
@@ -984,7 +1013,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 }
 
 /// @brief ピボットからカメラ姿勢へ反映する
-void GameScene::ApplyCameraFromPivot()
+void GameScene::ApplyCameraFromPivot(float deltaTime)
 {
 	// プレイヤーがいない場合は更新しない
 	if (!player_)return;
@@ -994,6 +1023,59 @@ void GameScene::ApplyCameraFromPivot()
 
 	// カメラの位置をピボットの球面座標から計算する
 	Vector3 finalCameraPos = pivotData->sphericalCoordinates;
+
+	// カメラセグメントのパラメータを更新する
+	cameraSegmentInstance_->param_->start = pivotData->center;
+	cameraSegmentInstance_->param_->diff = finalCameraPos - pivotData->center;
+
+	// 係数Tの初期値を1.0fに設定する 
+	float targetT = 1.0f;
+
+	// カメラセグメントの衝突判定が有効な場合は、カメラの位置を調整する
+	if (cameraSegmentInstance_->isCollision_)
+	{
+		// 複数の壁（OBB）と衝突している可能性があるため、最も近い交点を探す
+		for (auto* opponent : cameraSegmentInstance_->hitOpponents_)
+		{
+			auto* obb = dynamic_cast<Collision3DInstanceOBB*>(opponent);
+			float t = Engine::IntersectSegmentOBB(*cameraSegmentInstance_->param_, *obb->param_);
+
+			// 最もピボット中心に近い交点を採用する
+			if (t >= 0.0f && t < targetT)
+			{
+				targetT = t;
+			}
+		}
+	}
+
+	// 近づくとき（縮む）と、離れるとき（戻る）で補間速度を変えられるようにします
+	constexpr float kCameraShrinkSpeed = 25.0f; // 壁に近づくときの速度（速めが快適）
+	constexpr float kCameraExpandSpeed = 5.0f;  // 元の位置に戻るときの速度（ゆったり）
+
+	// 現在よりターゲットが近い（縮む）か、遠い（戻る）かで速度を分岐
+	float lerpSpeed = (targetT < cameraCurrentT_) ? kCameraShrinkSpeed : kCameraExpandSpeed;
+
+	// 線形補間（Lerp）で現在のTを目標のTへ近づける
+	cameraCurrentT_ += (targetT - cameraCurrentT_) * lerpSpeed * deltaTime;
+	cameraCurrentT_ = std::clamp(cameraCurrentT_, 0.0f, 1.0f);
+
+	// 補間された割合を使って、最終的なカメラ位置を計算
+	Vector3 hitPosition = pivotData->center + (cameraSegmentInstance_->param_->diff * cameraCurrentT_);
+
+	// 壁に近づいている（Tが1.0未満）場合はニアクリップ対策のオフセットを適用
+	if (cameraCurrentT_ < 0.99f)
+	{
+		constexpr float kCameraOffset = 0.2f;
+		Vector3 dir = cameraSegmentInstance_->param_->diff;
+		dir = dir.Normalize();
+		finalCameraPos = hitPosition - (dir * kCameraOffset);
+	}
+	else
+	{
+		finalCameraPos = hitPosition;
+	}
+
+	// カメラシェイクのオフセットを加算する
 	if (cameraShake_) finalCameraPos += cameraShake_->GetShakeOffset();
 
 	// カメラの位置を更新する

@@ -1758,3 +1758,61 @@ bool Engine::CollisionCheckFunc(const Vector2& point, const Collision2D::Sprite&
 
 	return false;
 }
+
+/// @brief 線分とOBBの交差判定を行う
+/// @param segment 
+/// @param obb 
+/// @return 
+float Engine::IntersectSegmentOBB(const Collision3D::Segment& segment, const Collision3D::OBB& obb)
+{
+	// 線分のパラメータ範囲
+	float tMin = 0.0f;
+	float tMax = 1.0f;
+
+	// OBBの中心から線分の始点へのベクトル
+	Vector3 p;
+	p.x = segment.start.x - obb.center.x;
+	p.y = segment.start.y - obb.center.y;
+	p.z = segment.start.z - obb.center.z;
+
+	Vector3 d = segment.diff;
+
+	// OBBの半径を配列に格納
+	const float radius[3] = { obb.radius.x, obb.radius.y, obb.radius.z };
+
+	// OBBの各軸に対して交差判定を行う
+	for (int i = 0; i < 3; ++i)
+	{
+		Vector3 axis = obb.oriented[i];
+		float e = radius[i];
+
+		// 軸上への投影（成分）
+		float f = Dot(p, axis);
+		float g = Dot(d, axis);
+
+		// 線分がスラブに対して平行でない場合
+		if (std::abs(g) > 1e-6f)
+		{
+			float t1 = (-e - f) / g;
+			float t2 = (e - f) / g;
+
+			// t1とt2を昇順に並べ替える
+			if (t1 > t2) std::swap(t1, t2);
+
+			// 交差範囲を狭める
+			if (t1 > tMin) tMin = t1;
+			if (t2 < tMax) tMax = t2;
+
+			// 交差範囲が無効になった場合、交差しない
+			if (tMin > tMax) return -1.0f;
+		}
+		else
+		{
+			// 線分がスラブに対して平行で、かつ線分がスラブの外側にある場合
+			if (-e - f > 0.0f || e - f < 0.0f) return -1.0f;
+		}
+	}
+
+	// 交差範囲が有効な場合、tMinが交差点のパラメータ値
+	return tMin;
+}

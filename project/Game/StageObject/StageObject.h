@@ -15,6 +15,7 @@ public:
 		Floor,
 		Wall,
 		StaticEventTrigger, // 静的イベントトリガー
+		CameraGuard, // カメラガード
 	};
 
 
