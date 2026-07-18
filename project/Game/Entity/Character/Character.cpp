@@ -156,6 +156,9 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// 壁接触の処理
+			WallTouchUpdate();
+
 			// 移動の更新
 			movement_->Update(dt);
 
@@ -183,9 +186,6 @@ void Character::Update()
 
 			// 押し出し処理
 			UpdatePushOut();
-
-			// 壁接触の処理
-			WallTouchUpdate();
 
 			// アニメーションの更新
 			UpdateAnimation();
