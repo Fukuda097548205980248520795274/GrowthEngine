@@ -1028,7 +1028,7 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 	cameraSegmentInstance_->param_->start = pivotData->center;
 	cameraSegmentInstance_->param_->diff = finalCameraPos - pivotData->center;
 
-	// 係数Tの初期値を1.0fに設定する
+	// 係数Tの初期値を1.0fに設定する 
 	float targetT = 1.0f;
 
 	// カメラセグメントの衝突判定が有効な場合は、カメラの位置を調整する
