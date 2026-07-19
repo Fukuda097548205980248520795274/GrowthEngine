@@ -374,6 +374,82 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 					// 共通ヘルパーからイベントトリガー設定UIを描画
 					StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
+
+					// イベントトリガーの種類が「生成イベント」の場合、生成ファイル編集UIを表示する
+					if (target.eventType == 1)
+					{
+						std::string fileName = target.eventStageDataFileName;
+						LoadPreviewData(fileName);
+
+						// 生成ファイル編集のUI
+						ImGui::Separator();
+						if (ImGui::TreeNode(("生成ファイル編集: " + fileName + ".json").c_str()))
+						{
+							// 追加・保存ボタン
+							if (ImGui::Button("オブジェクト追加"))
+							{
+								PlacementData newData;
+								newData.position = target.position; // 初期位置をトリガーと同じ位置に
+								cachedPreviewData_.push_back(newData);
+								selectedPreviewIndex_ = static_cast<int32_t>(cachedPreviewData_.size()) - 1;
+							}
+							ImGui::SameLine();
+							if (ImGui::Button("変更を保存 (上書き)"))
+							{
+								SavePreviewData();
+							}
+
+							// プレビューデータの一覧リスト
+							if (ImGui::BeginListBox("生成オブジェクト一覧"))
+							{
+								for (int i = 0; i < cachedPreviewData_.size(); ++i)
+								{
+									std::string label = "Item " + std::to_string(i) + " (Cat:" + std::to_string(static_cast<int>(cachedPreviewData_[i].category)) + ")";
+									if (ImGui::Selectable(label.c_str(), selectedPreviewIndex_ == i))
+									{
+										selectedPreviewIndex_ = i;
+									}
+								}
+								ImGui::EndListBox();
+							}
+
+							// 選択されたプレビューデータの詳細編集
+							if (selectedPreviewIndex_ >= 0 && selectedPreviewIndex_ < cachedPreviewData_.size())
+							{
+								auto& editTarget = cachedPreviewData_[selectedPreviewIndex_];
+								ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
+
+								// 位置・回転・スケールの調整
+								ImGui::DragFloat3("位置 (Position)", &editTarget.position.x, 0.1f);
+								ImGui::DragFloat3("回転 (Rotation)", &editTarget.rotate_.x, 0.1f);
+
+								// 削除ボタン
+								ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+								if (ImGui::Button("このオブジェクトを削除"))
+								{
+									cachedPreviewData_.erase(cachedPreviewData_.begin() + selectedPreviewIndex_);
+									selectedPreviewIndex_ = -1;
+								}
+								ImGui::PopStyleColor();
+							}
+							ImGui::TreePop();
+						}
+
+						// プレビュー描画 (engine_ が既に定義されているため、そのまま使用可能)
+						GrowthEngine* engine = GrowthEngine::GetInstance();
+						for (int i = 0; i < cachedPreviewData_.size(); ++i)
+						{
+							const auto& previewData = cachedPreviewData_[i];
+
+							// 選択中のプレビューオブジェクトは色を変える（例：選択中は赤、それ以外は黄色）
+							Vector4 color = (i == selectedPreviewIndex_) ? Vector4(1.0f, 0.0f, 0.0f, 1.0f) : Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+							Vector4 cubeColor = color;
+							cubeColor.w = 0.5f; // 半透明
+
+							engine->DrawDebugLine3D(target.position, previewData.position, color);
+							engine->DrawDebugCube(previewData.position, previewData.rotate_, previewData.scale, cubeColor);
+						}
+					}
 				}
 			}
 			else if (target.subType == static_cast<int>(StageObject::StageObjectTag::CameraGuard))
@@ -484,4 +560,68 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 	ImGui::PopStyleVar();
 
 	ImGui::End();
+}
+
+
+/// @brief プレビュー用の配置データを読み込む
+/// @param fileName 
+void StageEditorUIObjectList::LoadPreviewData(const std::string& fileName)
+{
+	// ファイル名が変わっていない場合は読み込みをスキップ
+	if (currentPreviewFileName_ == fileName) return;
+
+	cachedPreviewData_.clear();
+	currentPreviewFileName_ = fileName;
+
+	if (fileName.empty()) return;
+
+	std::string filePath = "./Assets/Parameter/StageData/" + fileName + ".json";
+	std::ifstream ifs(filePath);
+	if (!ifs.is_open()) return;
+
+	try
+	{
+		nlohmann::json j;
+		ifs >> j;
+		ifs.close();
+
+		if (j.contains("objects") && j["objects"].is_array())
+		{
+			for (const auto& objectDataJson : j["objects"])
+			{
+				PlacementData data;
+				fromJson(objectDataJson, data); // StageData.h の関数を利用
+				cachedPreviewData_.push_back(data);
+			}
+		}
+	}
+	catch (const std::exception& e)
+	{
+		(void)e;
+	}
+}
+
+/// @brief プレビュー用の配置データを保存する
+void StageEditorUIObjectList::SavePreviewData()
+{
+	if (currentPreviewFileName_.empty()) return;
+
+	std::string filePath = "./Assets/Parameter/StageData/" + currentPreviewFileName_ + ".json";
+
+	nlohmann::json j;
+	j["objects"] = nlohmann::json::array(); // 空の配列を作成
+
+	for (const auto& data : cachedPreviewData_)
+	{
+		nlohmann::json objJson;
+		toJson(objJson, data); // PlacementData を JSON に変換
+		j["objects"].push_back(objJson);
+	}
+
+	std::ofstream ofs(filePath);
+	if (ofs.is_open())
+	{
+		ofs << j.dump(4); // 4マスのインデントをつけて綺麗に保存
+		ofs.close();
+	}
 }

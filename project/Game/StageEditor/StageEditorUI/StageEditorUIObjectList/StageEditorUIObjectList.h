@@ -32,6 +32,16 @@ public:
 
 private:
 
+	/// @brief プレビュー用の配置データを読み込む
+	/// @param fileName 
+	void LoadPreviewData(const std::string& fileName);
+
+	/// @brief プレビュー用の配置データを保存する
+	void SavePreviewData();
+
+
+private:
+
 	/// @brief 配置されたオブジェクトのリストを描画する
 	StageSpawner* spawner_;
 
@@ -67,6 +77,16 @@ private:
 
 	// マルチ選択されたインデックスのセット
 	std::set<int> multiSelectedIndices_;
+
+
+	// プレビュー用の配置データをキャッシュする
+	std::vector<PlacementData> cachedPreviewData_;
+
+	// プレビュー用のファイル名
+	std::string currentPreviewFileName_ = "";
+
+	// プレビュー用の選択中のインデックス
+	int selectedPreviewIndex_ = -1;
 };
 
 /// @brief 指定された名前が既に存在する場合、唯一の名前を生成する
