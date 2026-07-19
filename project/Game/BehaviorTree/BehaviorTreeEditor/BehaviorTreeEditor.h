@@ -129,6 +129,15 @@ private:
 
 private:
 
+	// ズーム倍率
+	float zoom_ = 1.0f;
+
+	// 前フレームのズーム倍率
+	float prevZoom_ = 1.0f;
+
+
+private:
+
 	// 次のIDを取得してインクリメントする
 	int GetNextId() { return currentId_++; }
 

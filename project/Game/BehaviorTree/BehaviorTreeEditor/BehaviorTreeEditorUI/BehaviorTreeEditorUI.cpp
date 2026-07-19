@@ -38,6 +38,42 @@ void BehaviorTreeEditor::DrawNodeTable()
 	}
 
 
+	ImGui::Separator();
+
+	// 拡縮用のUIボタンと現在の倍率表示
+	ImGui::Text("ズーム: %d%%", static_cast<int>(zoom_ * 100.0f));
+	ImGui::SameLine();
+	if (ImGui::Button(" ＋ ")) { zoom_ += 0.1f; }
+	ImGui::SameLine();
+	if (ImGui::Button(" － ")) { zoom_ -= 0.1f; }
+	ImGui::SameLine();
+	if (ImGui::Button("等倍 (100%)")) { zoom_ = 1.0f; }
+
+	// マウスホイール単体での拡縮操作
+	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+	{
+		float wheel = ImGui::GetIO().MouseWheel;
+		if (wheel != 0.0f)
+		{
+			zoom_ += wheel * 0.05f; // スクロール感度の調整
+		}
+	}
+
+	// ズーム率の限界値を制限
+	if (zoom_ < 0.4f) zoom_ = 0.4f;
+	if (zoom_ > 1.5f) zoom_ = 1.5f;
+
+	// ズーム率が変更された場合、全ノードに位置更新フラグを立てる
+	if (zoom_ != prevZoom_)
+	{
+		for (auto& node : nodes_)
+		{
+			node.needSetPos = true;
+		}
+		prevZoom_ = zoom_;
+	}
+
+
 	// ノードエディタのキャンバスを描画
 	DrawNodeEditorCanvas();
 
@@ -719,9 +755,16 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			node.needSetPos = true;
 	}
 
+	// ImGuiのスタイルを取得して、ズーム率に応じてフレームパディングとアイテム間隔を調整する
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x * zoom_, style.FramePadding.y * zoom_));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(style.ItemSpacing.x * zoom_, style.ItemSpacing.y * zoom_));
 
 	// ノードエディタの開始
 	ImNodes::BeginNodeEditor();
+
+	// ズーム率をImGuiに設定する
+	ImGui::SetWindowFontScale(zoom_);
 
 	// 特定のノードをエディタウィンドウの中心に配置する処理を行う
 	if (pendingCenterNodeId_ != -1)
@@ -735,13 +778,13 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		// スクロール状態を考慮した「グリッド空間上の中心座標」を算出
 		ImVec2 gridCenter = ImVec2(viewCenter.x - panning.x, viewCenter.y - panning.y);
 
-		// 対象のノードを探して計算した座標を代入し、ImNodesへの適用フラグを立てる
+		// 保留されているノードIDに対応するノードの位置を、グリッド空間上の中心座標に設定する
 		for (auto& node : nodes_)
 		{
 			if (node.id == pendingCenterNodeId_)
 			{
-				node.pos.x = gridCenter.x;
-				node.pos.y = gridCenter.y;
+				node.pos.x = gridCenter.x / zoom_;
+				node.pos.y = gridCenter.y / zoom_;
 				node.needSetPos = true;
 				break;
 			}
@@ -760,10 +803,10 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		// ノードが非表示のセットに含まれている場合は描画をスキップする
 		if (hiddenNodes.count(node.id) > 0) continue;
 
-		// ノードの位置をImNodesに反映する必要がある場合は、SetNodeGridSpacePosを呼び出して位置を更新する
+		// ノードの位置をImNodesに設定する必要がある場合は、ズーム率を考慮して位置を設定する
 		if (node.needSetPos)
 		{
-			ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+			ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x * zoom_, node.pos.y * zoom_));
 			node.needSetPos = false;
 		}
 
@@ -817,12 +860,16 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 		ImVec2 currentPos = ImNodes::GetNodeGridSpacePos(node.id);
 		if (currentPos.x > -99999.0f && currentPos.y > -99999.0f) 
 		{
-			// ノードの位置が変更された場合は、ノードデータを更新して変更フラグを立てる
-			if (node.pos.x != currentPos.x || node.pos.y != currentPos.y)
+			// 取得した座標をズーム倍率で割って、実際の保存座標に戻す
+			float realX = currentPos.x / zoom_;
+			float realY = currentPos.y / zoom_;
+
+			// ノードの位置が変更された場合は、変更フラグを立てる
+			if (node.pos.x != realX || node.pos.y != realY)
 				isDirty_ = true;
 
-			node.pos.x = currentPos.x;
-			node.pos.y = currentPos.y;
+			node.pos.x = realX;
+			node.pos.y = realY;
 		}
 	}
 
@@ -855,6 +902,11 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 	// ノードエディタの終了
 	ImNodes::EndNodeEditor();
 
+	// ImGuiのスタイルを元に戻す
+	ImGui::PopStyleVar(2);
+
+	// ImGuiのフォントスケールを元に戻す
+	ImGui::SetWindowFontScale(1.0f);
 
 	// 折りたたみ/展開のトグルボタンがクリックされたノードがある場合は、そのノードの折りたたみ状態を変更する
 	if (toggleCollapsedNodeId != -1)
@@ -973,7 +1025,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 		ImNodes::BeginOutputAttribute(node.outputPinId);
 
 		// 出力ピンを右側に配置するためにインデントを追加
-		ImGui::Indent(60);
+		ImGui::Indent(static_cast<int>(60.0f * zoom_));
 		ImGui::Text("Out");
 		ImNodes::EndOutputAttribute();
 	}
@@ -996,7 +1048,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
 	int currentItem = static_cast<int>(node.conditionType);
-	ImGui::PushItemWidth(120.0f);
+	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
 	if (ImGui::Combo("条件", &currentItem, CONDITION_TYPE_NAMES, IM_ARRAYSIZE(CONDITION_TYPE_NAMES)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
@@ -1017,7 +1069,7 @@ void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
 /// @param node 
 void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 {
-	ImGui::PushItemWidth(120.0f);
+	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
 
 	// 履歴と変更フラグをまとめて処理するラムダ関数の例
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};

@@ -96,11 +96,11 @@ void BehaviorTreeViewer::DrawUI()
 		BehaviorTree* bt = targetNpc->GetBehaviorTree();
 		if (bt && bt->GetRoot())
 		{
-			// ビューアー専用のズーム倍率を設定
-			ImGui::SetWindowFontScale(zoom_);
-
 			// ビビューアー専用のImNodesキャンバスを開始
 			ImNodes::BeginNodeEditor();
+
+			// ビューアー専用のズーム倍率を設定
+			ImGui::SetWindowFontScale(zoom_);
 
 			// ルートノードから再帰的に子ノード・リンクを全自動描画
 			bt->GetRoot()->DrawDebuggerRecursive(zoom_);
