@@ -171,6 +171,18 @@ private:
 
 private:
 
+	// プレビュー用の配置データをキャッシュする
+	std::vector<PlacementData> cachedPreviewData_;
+
+	// プレビュー用のファイル名
+	std::string currentPreviewFileName_ = "";
+
+	// プレビュー用の選択中のインデックス
+	int selectedPreviewIndex_ = -1;
+
+
+private:
+
 	/// @brief 保留中のアクションを実行する
 	/// @param placementList 
 	/// @param currentFileName 
@@ -195,5 +207,12 @@ private:
 
 	/// @brief カットシーンの名前を読み込む
 	void LoadCutsceneNames();
+
+	/// @brief プレビュー用の配置データを読み込む
+	/// @param fileName 
+	void LoadPreviewData(const std::string& fileName);
+	
+	/// @brief プレビュー用の配置データを保存する
+	void SavePreviewData();
 };
 
