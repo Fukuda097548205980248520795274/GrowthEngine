@@ -202,6 +202,9 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 					selectedIndex = -1; // 選択状態をリセット
 					listChanged = true;
+
+					// 複数選択状態もリセットする
+					multiSelectedIndices_.clear();
 				}
 				ImGui::PopStyleColor();
 
@@ -263,8 +266,8 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 	ImGui::Separator();
 
 
-	// 選択中のオブジェクトが1つだけの場合、詳細編集UIを表示する
-	if (multiSelectedIndices_.size() == 1)
+	// 選択中のオブジェクトの詳細編集UIを描画する
+	if (multiSelectedIndices_.size() == 1 && selectedIndex >= 0 && selectedIndex < placementList.size())
 	{
 		auto& target = placementList[selectedIndex];
 		ImGui::Text("--- 編集中のオブジェクト ---");
