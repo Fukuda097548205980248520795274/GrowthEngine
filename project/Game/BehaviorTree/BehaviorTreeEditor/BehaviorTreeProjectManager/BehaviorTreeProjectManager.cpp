@@ -60,3 +60,29 @@ bool BehaviorTreeProjectManager::CopyProjectFile(const std::string& sourceFileNa
 
 	return success;
 }
+
+/// @brief プロジェクトファイルをリネームする
+/// @param oldFileName 
+/// @param newFileName 
+/// @return 
+bool BehaviorTreeProjectManager::RenameProjectFile(const std::string& oldFileName, const std::string& newFileName)
+{
+	std::string oldPath = directoryPath_ + oldFileName + ".json";
+	std::string newPath = directoryPath_ + newFileName + ".json";
+
+	// 変更前のファイルが存在するか確認
+	if (std::filesystem::exists(oldPath))
+	{
+		std::error_code ec;
+		// ファイル名を変更
+		std::filesystem::rename(oldPath, newPath, ec);
+
+		// エラーコードが発生していなければ成功
+		if (!ec)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

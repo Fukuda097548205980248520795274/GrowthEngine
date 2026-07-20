@@ -424,6 +424,7 @@ void BehaviorTreeEditor::DrawProjectWindow()
 	// ポップアップを開くための状態管理変数
 	static std::string fileToCopy = "";
 	static std::string fileToDelete = "";
+	static std::string fileToRename = "";
 
 	// ImGuiのテーブルを使用してグリッドレイアウトを作成
 	if (ImGui::BeginTable("AssetGrid", columnCount))
@@ -480,7 +481,13 @@ void BehaviorTreeEditor::DrawProjectWindow()
 
 				ImGui::Separator();
 
-				// CopyとDeleteはファイルが選択されているときのみ表示
+				// Renameは常に表示
+				if (ImGui::MenuItem("名前を変更"))
+				{
+					fileToRename = file;
+				}
+
+				// Copyは常に表示
 				if (ImGui::MenuItem("コピー"))
 				{
 					fileToCopy = file;
@@ -505,6 +512,47 @@ void BehaviorTreeEditor::DrawProjectWindow()
 		}
 
 		ImGui::EndTable();
+	}
+
+
+	// 名前の変更用のポップアップ
+	if (!fileToRename.empty())
+	{
+		ImGui::OpenPopup("RenamePopup");
+	}
+
+	if (ImGui::BeginPopup("RenamePopup"))
+	{
+		static char newFileName[64] = "";
+		ImGui::Text("'%s' の新しい名前:", fileToRename.c_str());
+		ImGui::InputText("新規ファイル名", newFileName, 64);
+
+		if (ImGui::Button("変更実行"))
+		{
+			if (strlen(newFileName) > 0)
+			{
+				// BehaviorTreeProjectManager に RenameProjectFile メソッドがある場合の想定
+				projectManager_.RenameProjectFile(fileToRename, newFileName);
+
+				// 名前を変更したファイルが現在開いているファイルだった場合、内部のファイル名も更新する
+				if (currentFileName_ == fileToRename)
+				{
+					currentFileName_ = newFileName;
+				}
+
+				fileToRename = "";
+				memset(newFileName, 0, sizeof(newFileName)); // 入力バッファのクリア
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("キャンセル"))
+		{
+			fileToRename = "";
+			memset(newFileName, 0, sizeof(newFileName)); // 入力バッファのクリア
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
 
 

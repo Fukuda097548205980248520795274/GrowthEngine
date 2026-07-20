@@ -25,6 +25,12 @@ public:
 	/// @return 
 	bool CopyProjectFile(const std::string& sourceFileName, const std::string& destFileName);
 
+	/// @brief プロジェクトファイルをリネームする
+	/// @param oldFileName 
+	/// @param newFileName 
+	/// @return 
+	bool RenameProjectFile(const std::string& oldFileName, const std::string& newFileName);
+
 private:
 
 	// ツリー構造の保存先ディレクトリパス

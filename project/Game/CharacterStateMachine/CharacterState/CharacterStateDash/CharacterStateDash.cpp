@@ -50,6 +50,17 @@ void CharacterStateDash::Update(float dt)
 			return;
 		}
 	}
+	else
+	{
+		// NPCの場合は、現在の移動がない場合は、ダッシュ状態を解除する
+		auto currentMove = owner_->GetCurrentMove();
+		if (!currentMove)
+		{
+			auto stateMachine = owner_->GetStateMachine();
+			stateMachine->ChangeState("None");
+			return;
+		}
+	}
 	
 	// ダッシュ中に移動速度が0以下になった場合は、ダッシュ状態を解除する
 	if (isDash_ && movement->GetCurrentVelocity().Length() <= 0.0f)
