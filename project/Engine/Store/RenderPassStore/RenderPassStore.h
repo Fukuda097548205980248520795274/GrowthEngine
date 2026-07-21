@@ -25,14 +25,14 @@ namespace Engine
 		/// @param handle 
 		/// @param commandList 
 		/// @param dsvHandle 
-		OffscreenResource* RenderPassDraw(RenderPassHandle handle, DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource);
+		OffscreenResource* RenderPassDraw(RenderPassHandle handle, DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
 		/// @brief レンダーパスに対応する描画関数を実行する
 		/// @param name 
 		/// @param offscreen 
 		/// @param commandList 
 		/// @param dsvHandle 
-		OffscreenResource* RenderPassDraw(const std::string& name, DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource);
+		OffscreenResource* RenderPassDraw(const std::string& name, DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
 		/// @brief レンダーパスに描画する
 		/// @param handle 
@@ -52,15 +52,6 @@ namespace Engine
 		/// @brief レンダーパスを返却する
 		void Return();
 
-
-		/// @brief レンダーパスに対応する描画関数をループで実行する
-		/// @param name 
-		/// @param commandList 
-		/// @param dsvHandle 
-		/// @param firstInput 
-		/// @param loopCount 
-		/// @return 
-		OffscreenResource* PingPongDraw(const std::string& name,DX12Offscreen* offscreen, ID3D12GraphicsCommandList* commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* firstInput, int32_t loopCount);
 
 		/// @brief レンダーパスを取得する
 		/// @param handle 
@@ -87,6 +78,14 @@ namespace Engine
 		/// @brief 中間リソースを解放する
 		/// @param resource 
 		void ReleaseIntermediateResource(OffscreenResource* resource);
+
+		/// @brief ソースリソースを返却する
+		/// @param resource 
+		void ReturnSourceResource(OffscreenResource* resource);
+
+		/// @brief アクティブなリソースを設定する
+		/// @param resource 
+		void SetActiveResources(OffscreenResource* resource) { activeResources_.push_back(resource); }
 
 
 	private:

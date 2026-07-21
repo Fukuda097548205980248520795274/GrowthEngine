@@ -1,6 +1,7 @@
 #include "RenderTargetPool.h"
 #include "RenderContext/DX12Heap/DX12Heap.h"
 #include "RenderContext/DX12Buffering/DX12Buffering.h"
+#include "Func/ConvertString/ConvertString.h"
 
 /// @brief 初期化
 /// @param device 
@@ -88,6 +89,9 @@ void Engine::RenderTargetPool::CreateRenderTarget(int width, int height, ID3D12G
 	// レンダーターゲットを作成
 	auto renderTarget = std::make_unique<OffscreenResource>();
 	renderTarget->Initialize(device_, heap_, width, height, nullptr);
+	std::string name = "RenderTarget_" + std::to_string(resources_.size());
+	renderTarget->GetResource()->SetName(Engine::ConvertString(name).c_str());
+	renderTarget->SetName(name);
 	renderTarget->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// プールに追加

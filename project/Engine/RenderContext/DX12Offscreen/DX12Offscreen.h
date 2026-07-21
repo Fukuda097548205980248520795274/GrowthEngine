@@ -42,7 +42,7 @@ namespace Engine
 		void PerSceneReset();
 
 		/// @brief フレームの最後の処理
-		void EndFrame();
+		void EndFrame(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief サイズを作り直す
 		/// @param device 
@@ -57,10 +57,6 @@ namespace Engine
 		/// @param commandList 
 		void RenderSwapChain(ID3D12GraphicsCommandList* commandList);
 
-		/// @brief 現在のレンダーターゲットのリソースを取得する
-		/// @return 
-		OffscreenResource* GetCurrentResource() { return currentResource_; }
-
 		/// @brief 書き込み先のレンダーターゲットのリソースを取得する
 		/// @return 
 		OffscreenResource* GetDestinationResource() { return destinationResource_; }
@@ -69,9 +65,13 @@ namespace Engine
 		/// @return 
 		D3D12_GPU_DESCRIPTOR_HANDLE GetCurrentResourceSrvHandle() { return currentResource_->GetSrvGpuHandle(); }
 
-		/// @brief 現在のレンダーターゲットのリソースを設定する
+		/// @brief 現在のソースリソースを設定する
 		/// @param resource 
 		void SetSourceResource(OffscreenResource* resource) { sourceResource_ = resource; }
+
+		/// @brief 現在のソースリソースを取得する
+		/// @return 
+		OffscreenResource* GetSourceResource() { return sourceResource_; }
 
 		/// @brief 現在のレンダーターゲットのリソースを設定する
 		/// @param resource 

@@ -43,18 +43,13 @@ namespace Engine
 		/// @param renderTargetPool 
 		/// @param dsvHandle 
 		OffscreenResource* Execute(ID3D12GraphicsCommandList* commandList, RenderTargetPool* renderTargetPool,DX12Offscreen* offscreen,
-			D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource = nullptr);
+			D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle);
 
 		/// @brief レンダーパスに描画する
 		/// @param commandList 
 		/// @param psoFullscreen 
 		/// @param textureResource 
 		void DrawToRenderPass(ID3D12GraphicsCommandList* commandList, PSOFullscreen* psoFullscreen, OffscreenResource* textureResource, Param* param);
-
-		/// @brief レンダーパスを返却する
-		/// @param commandList 
-		/// @param renderTargetPool 
-		void Return(RenderTargetPool* renderTargetPool);
 
 		/// @brief 名前を取得する
 		/// @return 
@@ -67,10 +62,6 @@ namespace Engine
 		/// @brief レンダーターゲットを取得する
 		/// @return 
 		OffscreenResource* GetOffscreenResource() const { return offscreenResource_; }
-
-		/// @brief 前のパスから渡されたレンダーターゲットを取得する
-		/// @return 
-		OffscreenResource* GetInputResource() const { return inputResource_; }
 
 		/// @brief パラメータを取得する
 		/// @return 
@@ -90,9 +81,6 @@ namespace Engine
 
 		/// @brief レンダーターゲット
 		OffscreenResource* offscreenResource_ = nullptr;
-
-		/// @brief 前のパスから渡されたレンダーターゲット
-		OffscreenResource* inputResource_ = nullptr;
 
 		/// @brief 描画関数
 		std::function<void()> drawFunc_;

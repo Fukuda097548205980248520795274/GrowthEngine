@@ -8,23 +8,17 @@
 /// @param commandList 
 /// @param renderTargetPool 
 Engine::OffscreenResource* Engine::RenderPassData::Execute(ID3D12GraphicsCommandList* commandList, RenderTargetPool* renderTargetPool, DX12Offscreen* offscreen,
-	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle, OffscreenResource* inputResource)
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle)
 {
 	// nullptrチェック
 	assert(commandList);
 	assert(renderTargetPool);
-
-	// 前のパスから渡されたレンダーターゲットを保持する
-	inputResource_ = inputResource;
 
 	// レンダーターゲットを借りる
 	offscreenResource_ = renderTargetPool->Rent(commandList);
 	
 	// 書き込み先（Destination）には新しく借りたテクスチャをセット
 	offscreen->SetDestinationResource(offscreenResource_);
-
-	// 読み込み元（Source）には、前のパスから回ってきた入力テクスチャをセット
-	offscreen->SetSourceResource(inputResource_);
 
 	offscreenResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	offscreenResource_->ClearRenderTarget(commandList, dsvHandle);
@@ -39,6 +33,7 @@ Engine::OffscreenResource* Engine::RenderPassData::Execute(ID3D12GraphicsCommand
 	if (offscreenResource_ != destinationResource)
 	{
 		// 描画先が変わってしまった場合は、描画先を戻す
+		offscreen->SetSourceResource(offscreenResource_);
 		offscreenResource_ = destinationResource;
 	}
 	
@@ -69,19 +64,4 @@ void Engine::RenderPassData::DrawToRenderPass(ID3D12GraphicsCommandList* command
 
 	// 3つの頂点を描画する
 	commandList->DrawInstanced(3, 1, 0, 0);
-}
-
-/// @brief レンダーパスを返却する
-/// @param commandList 
-/// @param renderTargetPool 
-void Engine::RenderPassData::Return(RenderTargetPool* renderTargetPool)
-{
-	// nullptrチェック
-	assert(renderTargetPool);
-
-	if (offscreenResource_)
-	{
-		renderTargetPool->Return(offscreenResource_);
-		offscreenResource_ = nullptr;
-	}
 }

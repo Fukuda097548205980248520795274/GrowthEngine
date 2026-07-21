@@ -3,6 +3,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include <utility>
+#include <string>
 
 namespace Engine
 {
@@ -65,6 +66,14 @@ namespace Engine
 		/// @return 
 		ID3D12Resource* GetResource() { return resource_.Get(); }
 
+		/// @brief 名前を取得する
+		/// @return 
+		const std::string& GetName() { return name_; }
+
+		/// @brief 名前を設定する
+		/// @param name 
+		void SetName(const std::string& name) { name_ = name; }
+
 
 		template<typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -79,5 +88,8 @@ namespace Engine
 
 		// SRV用ハンドル
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> srvHandle_{};
+
+		/// @brief 名前
+		std::string name_{};
 	};
 }

@@ -71,9 +71,10 @@ void Engine::DX12Offscreen::PerSceneReset()
 }
 
 /// @brief フレームの最後の処理
-void Engine::DX12Offscreen::EndFrame()
+void Engine::DX12Offscreen::EndFrame(ID3D12GraphicsCommandList* commandList)
 {
 	renderPassStore_->Return();
+	sourceResource_ = nullptr;
 }
 
 /// @brief サイズを作り直す
@@ -145,6 +146,13 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
 	const bool isBloom = postEffectStore_->IsBloom(hPostEffect);
 
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
+
 	// レンダーターゲットの設定とクリア
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	sourceResource_->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
@@ -210,6 +218,13 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
 	const bool isBloom = postEffectStore_->IsBloom(name);
+
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
 
 	// レンダーターゲットの設定とクリア
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -278,12 +293,11 @@ void Engine::DX12Offscreen::ExecuteRenderPass(RenderPassHandle handle, ID3D12Gra
 	assert(renderPassStore_);
 	assert(depthResource_);
 
-	// 内部のデプスリソースからDSVハンドルを取得 (お使いの関数名に合わせて調整してください)
+	// 内部のデプスリソースからDSVハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthResource_->GetDsvCpuHandle();
 
-	// 前のパスの出力（currentResource_）を入力テクスチャとして渡し、
-	// 今回のパスの出力テクスチャを新しい「最新リソース」として更新する
-	currentResource_ = renderPassStore_->RenderPassDraw(handle, this, commandList, dsvHandle, currentResource_);
+	// レンダーパスを実行し、出力リソースを取得してcurrentResource_に設定する
+	currentResource_ = renderPassStore_->RenderPassDraw(handle, this, commandList, dsvHandle);
 }
 
 /// @brief レンダーパスを実行する
@@ -298,12 +312,11 @@ void Engine::DX12Offscreen::ExecuteRenderPass(const std::string& name, ID3D12Gra
 	assert(renderPassStore_);
 	assert(depthResource_);
 
-	// 内部のデプスリソースからDSVハンドルを取得 (お使いの関数名に合わせて調整してください)
+	// 内部のデプスリソースからDSVハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = depthResource_->GetDsvCpuHandle();
 
-	// 前のパスの出力（currentResource_）を入力テクスチャとして渡し、
-	// 今回のパスの出力テクスチャを新しい「最新リソース」として更新する
-	currentResource_ = renderPassStore_->RenderPassDraw(name, this, commandList, dsvHandle, currentResource_);
+	// レンダーパスを実行し、出力リソースを取得してcurrentResource_に設定する
+	currentResource_ = renderPassStore_->RenderPassDraw(name, this, commandList, dsvHandle);
 }
 
 /// @brief レンダーパスに描画する

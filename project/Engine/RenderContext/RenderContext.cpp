@@ -339,7 +339,7 @@ void Engine::RenderContext::PostDraw()
 	commandList_->OMSetRenderTargets(1, &backBufferCPUHandle, false, nullptr);
 
 	// 指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f , 0.1f , 0.1f , 0.0f };
+	float clearColor[] = { 0.1f , 0.1f , 0.1f , 1.0f };
 	commandList_->ClearRenderTargetView(backBufferCPUHandle, clearColor, 0, nullptr);
 
 	// スワップチェインのリソースにオフスクリーンテクスチャを書き込む
@@ -354,7 +354,8 @@ void Engine::RenderContext::PostDraw()
 	// バックバッファリソース RenderTarget -> Present
 	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, commandList_);
 
-
+	// オフスクリーンのフレーム終了処理
+	offscreen_->EndFrame(commandList_);
 
 	// コマンドの内容を確定させる（閉じる）
 	HRESULT hr = commandList_->Close();
@@ -381,9 +382,6 @@ void Engine::RenderContext::PostDraw()
 	assert(SUCCEEDED(hr));
 	hr = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr));
-
-	// オフスクリーンのフレーム終了処理
-	offscreen_->EndFrame();
 
 	// プレハブをリセット
 	prefab_->PrefabReset();
