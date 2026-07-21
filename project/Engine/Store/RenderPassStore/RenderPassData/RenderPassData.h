@@ -76,6 +76,10 @@ namespace Engine
 		/// @return 
 		Param* GetParam() { return param_.get(); }
 
+		/// @brief 描画関数を設定する
+		/// @param func 
+		void SetDrawFunc(std::function<void()> func) { drawFunc_ = func; }
+
 	private:
 
 		/// @brief レンダーパス名

@@ -25,6 +25,15 @@ namespace
 /// @brief 初期化
 void GameScene::Initialize()
 {
+	// リストをクリアする
+	npcModels_.clear();
+	npcTrails_.clear();
+	npcParticles_.clear();
+	weapons_.clear();
+	objects_.clear();
+	huds_.clear();
+
+
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
@@ -242,7 +251,7 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	//stageEditor_->LoadStage("Tutorial.json");
+	stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -353,6 +362,11 @@ void GameScene::Initialize()
 /// @brief 更新処理
 void GameScene::Update()
 {
+	if (engine_->GetKeyTrigger(DIK_SPACE))
+	{
+		Transition("Title");
+	}
+
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 

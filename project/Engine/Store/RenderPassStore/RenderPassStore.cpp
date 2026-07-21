@@ -25,7 +25,10 @@ RenderPassHandle Engine::RenderPassStore::Load(const std::string& name, std::fun
 	for (auto& data : dataTable_)
 	{
 		if (data->GetName() == name)
+		{
+			data->SetDrawFunc(drawFunc);
 			return data->GetHandle();
+		}
 	}
 
 	// ハンドルを作る

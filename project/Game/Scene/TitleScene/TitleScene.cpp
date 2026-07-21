@@ -6,11 +6,9 @@ void TitleScene::Initialize()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-	engine_->LoadPostEffect("Test", Engine::PostEffect::Type::WhiteNoise);
-
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
-			engine_->DrawPostEffect("Test");
+			
 		}
 	);
 }
@@ -18,7 +16,10 @@ void TitleScene::Initialize()
 /// @brief 更新処理
 void TitleScene::Update()
 {
-
+	if (engine_->GetKeyTrigger(DIK_SPACE))
+	{
+		Transition("Game");
+	}
 }
 
 /// @brief 描画処理
