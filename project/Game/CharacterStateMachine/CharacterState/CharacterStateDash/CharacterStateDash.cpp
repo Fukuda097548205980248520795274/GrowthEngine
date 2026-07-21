@@ -22,6 +22,9 @@ void CharacterStateDash::Enter()
 /// @param dt 
 void CharacterStateDash::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// ダッシュ中に攻撃状態になった場合は、ダッシュ状態を解除する
 	if (owner_->IsAttack())
 	{

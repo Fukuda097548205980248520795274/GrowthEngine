@@ -119,6 +119,14 @@ void ComboAttack::Update()
 	}
 
 
+	// 攻撃の特定の時間帯は、攻撃者が回避、掴み、または無力化されているかどうかを確認する
+	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash())
+	{
+		this->Exit();
+		return;
+	}
+
+
 	// レイジモードの攻撃速度を取得する
 	float rageModeSpeed = owner_->RageModeAttackSpeed();
 
@@ -254,13 +262,6 @@ void ComboAttack::Update()
 			// 攻撃の時間帯を過ぎたら当たり判定を削除する
 			state.DeleteHitbox();
 		}
-	}
-
-	// 攻撃の特定の時間帯は、攻撃者が回避、掴み、または無力化されているかどうかを確認する
-	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash())
-	{
-		this->Exit();
-		return;
 	}
 
 	// 攻撃の特定の時間帯は移動する

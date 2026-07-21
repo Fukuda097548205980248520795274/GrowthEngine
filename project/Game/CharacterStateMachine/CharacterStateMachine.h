@@ -40,6 +40,10 @@ public:
 	/// @return 
 	CharacterState* GetState(const std::string& name) const { return states_.at(name).get(); }
 
+	/// @brief 状態が変更されたかどうかを取得する
+	/// @return 
+	bool IsChangeState() const { return isChangeState_ || isPrevChangeState_; }
+
 
 private:
 
@@ -51,5 +55,9 @@ private:
 
 	/// @brief 現在の状態の名前
 	std::string currentStateName_{};
+
+	/// @brief 状態が変更されたかどうか
+	bool isChangeState_ = false;
+	bool isPrevChangeState_ = false;
 };
 

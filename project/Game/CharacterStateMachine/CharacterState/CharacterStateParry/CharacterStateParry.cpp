@@ -25,6 +25,9 @@ void CharacterStateParry::Enter()
 /// @param dt 
 void CharacterStateParry::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// ダメージタイマーを更新する
 	actionTimer_ -= dt;
 

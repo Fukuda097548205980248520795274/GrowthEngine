@@ -221,6 +221,22 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		case ConditionType::IsNotAvoiding:
 			conditionFunc = [character]() {return !character->IsAvoid();};
 			break;
+
+		case ConditionType::IsDamageReaction:
+			conditionFunc = [character]() {return character->IsDamageReaction(); };
+			break;
+
+		case ConditionType::IsNotDamageReaction:
+			conditionFunc = [character]() {return !character->IsDamageReaction(); };
+			break;
+
+		case ConditionType::IsChangeState:
+			conditionFunc = [character]() {return character->GetStateMachine()->IsChangeState(); };
+			break;
+
+		case ConditionType::IsNotChangeState:
+			conditionFunc = [character]() {return !character->GetStateMachine()->IsChangeState(); };
+			break;
 		}
 
 		// 実際は editor_node.condition_name 等をもとに、

@@ -29,3 +29,35 @@ void CharacterState::SetComboTree(std::unique_ptr<ComboTree> comboTreeX, std::un
 	comboTreeY_ = std::move(comboTreeY);
 	comboTreeB_ = std::move(comboTreeB);
 }
+
+/// @brief ビヘイビアツリーが設定されていなかったときの処理
+void CharacterState::HandleBehaviorTreeNotSet()
+{
+	// 所有者がNPCの場合、ビヘイビアツリーを設定する
+	if (!owner_->IsPlayer())
+	{
+		NPC* npc = static_cast<NPC*>(owner_);
+		BehaviorTree* currentTree = npc->GetBehaviorTree();
+		if (!currentTree && behaviorTree_)
+		{
+			npc->SetBehaviorTree(behaviorTree_.get());
+		}
+	}
+	else if(owner_->IsPlayer())
+	{
+		// 所有者がプレイヤーの場合、コンボツリーを設定する
+		Player* player = static_cast<Player*>(owner_);
+		if(!player->GetCurrentComboTreeX() && comboTreeX_)
+		{
+			player->SetCurrentComboTreeX(comboTreeX_.get());
+		}
+		if(!player->GetCurrentComboTreeY() && comboTreeY_)
+		{
+			player->SetCurrentComboTreeY(comboTreeY_.get());
+		}
+		if(!player->GetCurrentComboTreeB() && comboTreeB_)
+		{
+			player->SetCurrentComboTreeB(comboTreeB_.get());
+		}
+	}
+}

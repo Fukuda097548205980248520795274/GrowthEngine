@@ -33,6 +33,9 @@ void CharacterStateDownLying::Enter()
 /// @param dt 
 void CharacterStateDownLying::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
 

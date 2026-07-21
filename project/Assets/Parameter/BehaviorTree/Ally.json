@@ -99,6 +99,11 @@
             "end": 102,
             "id": 104,
             "start": 27
+        },
+        {
+            "end": 106,
+            "id": 108,
+            "start": 3
         }
     ],
     "nodes": [
@@ -404,6 +409,19 @@
             "pos": [
                 450.0,
                 1200.0
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 18,
+            "id": 105,
+            "input_pin": 106,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 107,
+            "pos": [
+                212.0,
+                937.0
             ],
             "type": 4
         }

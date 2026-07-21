@@ -19,6 +19,9 @@ void CharacterStateAvoid::Enter()
 /// @param dt 
 void CharacterStateAvoid::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// 回避時間が終了したら状態をNoneに変更する
 	if (avoidDuration_ <= 0.0f)
 	{

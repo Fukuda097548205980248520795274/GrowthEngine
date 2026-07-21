@@ -37,7 +37,7 @@ public:
 
 	/// @brief ビヘイビアツリーの設定
 	/// @param behaviorTreeName 
-	virtual void SetBehaviorTree(std::unique_ptr<BehaviorTree> behaviorTree) { (void)behaviorTree; }
+	virtual void SetBehaviorTree(BehaviorTree* behaviorTree) { (void)behaviorTree; }
 
 	/// @brief ビヘイビアツリーの取得
 	/// @return 
@@ -448,6 +448,10 @@ public:
 
 	/// @brief 死亡処理
 	virtual void Dead();
+
+	/// @brief 状態が変更されたかどうか
+	/// @return 
+	bool IsChangeState() const { return stateMachine_->IsChangeState(); }
 
 	/// @brief シェイクを開始する
 	/// @param duration 

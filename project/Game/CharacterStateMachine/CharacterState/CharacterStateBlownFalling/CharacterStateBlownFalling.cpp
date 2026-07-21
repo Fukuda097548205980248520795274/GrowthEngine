@@ -23,6 +23,9 @@ void CharacterStateBlownFalling::Enter()
 /// @param dt 
 void CharacterStateBlownFalling::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// キャラクターの移動コンポーネントを取得する
 	auto movement = owner_->GetMovement();
 	bool isGrounded = movement ? movement->IsGrounded() : false;

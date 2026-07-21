@@ -22,6 +22,9 @@ void CharacterStateDownGettingUp::Enter()
 /// @param dt 
 void CharacterStateDownGettingUp::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
 

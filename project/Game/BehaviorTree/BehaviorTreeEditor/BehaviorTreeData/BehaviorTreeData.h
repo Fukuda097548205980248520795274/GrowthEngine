@@ -106,6 +106,12 @@ enum class ConditionType
 
 	IsAvoiding, // 回避動作中かどうか
 	IsNotAvoiding, // 回避動作中でないかどうか
+
+	IsDamageReaction, // ダメージリアクション中かどうか
+	IsNotDamageReaction, // ダメージリアクション中でないかどうか
+
+	IsChangeState, // 状態遷移中かどうか
+	IsNotChangeState, // 状態遷移中でないかどうか
 };
 
 // コンディションの種類を文字列で表す配列
@@ -127,7 +133,11 @@ constexpr inline const char* CONDITION_TYPE_NAMES[] = {
 	"IsInAttackSequence",
 	"IsNotInAttackSequence",
 	"IsAvoiding",
-	"IsNotAvoiding"
+	"IsNotAvoiding",
+	"IsDamageReaction",
+	"IsNotDamageReaction",
+	"IsChangeState",
+	"IsNotChangeState",
 };
 
 /// @brief 条件ノードパラメータ

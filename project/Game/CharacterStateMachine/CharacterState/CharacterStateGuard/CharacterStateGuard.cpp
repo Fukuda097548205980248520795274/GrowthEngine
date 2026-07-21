@@ -24,6 +24,9 @@ void CharacterStateGuard::Enter()
 /// @param dt 
 void CharacterStateGuard::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// 移動コンポーネントとワールドトランスフォームを取得する
 	auto movement = owner_->GetMovement();
 	WorldTransform3D* worldTransform = owner_->GetWorldTransform();

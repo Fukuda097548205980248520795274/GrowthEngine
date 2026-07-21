@@ -14,7 +14,11 @@ public:
 
 	/// @brief 更新処理
     /// @param dt 
-    void Update(float dt) override {}
+    void Update(float dt) override 
+    {
+        /// ツリーのリクエストを行う
+        HandleBehaviorTreeNotSet();
+    }
 
 	/// @brief この状態からでるときに呼ばれる処理
     void Exit() override {}

@@ -1,4 +1,5 @@
 {
+    "navMesh": [],
     "objects": [
         {
             "avoidBackMotionName": "Back",
@@ -15,7 +16,7 @@
             "deflectStateBT": "",
             "deflectedStateBT": "",
             "downFallingStateBT": "",
-            "downGettingUpStateBT": "GetUpAttack",
+            "downGettingUpStateBT": "",
             "downLyingStateBT": "",
             "downStaggerStateBT": "",
             "grabbedStateBT": "",
@@ -27,9 +28,9 @@
             "lightDamageStateBT": "",
             "name": "",
             "noneStateBT": "New",
-            "posX": 3.0889999866485596,
+            "posX": 0.09057560563087463,
             "posY": 0.0,
-            "posZ": 40.0,
+            "posZ": 39.995262145996094,
             "repelStateBT": "",
             "repelledStateBT": "",
             "rotX": 0.0,

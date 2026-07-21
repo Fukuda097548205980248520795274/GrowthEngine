@@ -23,6 +23,9 @@ void CharacterStateMachine::ChangeState(const std::string& name)
 
 		// 新しい状態に入る
 		currentState_->Enter();
+
+		// 状態が変更されたことを記録する
+		isChangeState_ = true;
 	}
 }
 
@@ -30,5 +33,9 @@ void CharacterStateMachine::ChangeState(const std::string& name)
 /// @param dt 
 void CharacterStateMachine::Update(float dt)
 {
+	// 前フレームの状態変更フラグを更新する
+	isPrevChangeState_ = isChangeState_;
+	isChangeState_ = false;
+
 	if (currentState_)currentState_->Update(dt);
 }

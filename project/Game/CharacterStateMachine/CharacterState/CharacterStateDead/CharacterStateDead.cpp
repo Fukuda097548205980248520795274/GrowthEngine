@@ -25,6 +25,9 @@ void CharacterStateDead::Enter()
 /// @param dt 
 void CharacterStateDead::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// タイマーを進める
 	deadTimer_ += dt;
 

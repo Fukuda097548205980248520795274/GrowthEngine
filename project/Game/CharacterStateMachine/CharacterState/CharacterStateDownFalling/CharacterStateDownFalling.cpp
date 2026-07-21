@@ -26,6 +26,9 @@ void CharacterStateDownFalling::Enter()
 /// @param dt 
 void CharacterStateDownFalling::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// ダメージタイマーを更新する
 	damageTimer_ -= dt;
 

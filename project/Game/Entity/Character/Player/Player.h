@@ -55,6 +55,30 @@ public:
 	/// @param comboTreeConfig 
 	void InitComboTree(const ComboTreeConfig& comboTreeConfig);
 
+	/// @brief 現在のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetCurrentComboTreeX() const { return currentComboTreeX_; }
+
+	/// @brief 現在のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetCurrentComboTreeY() const { return currentComboTreeY_; }
+
+	/// @brief 現在のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetCurrentComboTreeB() const { return currentComboTreeB_; }
+
+	/// @brief 現在のコンボツリーを設定する
+	/// @param comboTree 
+	void SetCurrentComboTreeX(ComboTree* comboTree) { currentComboTreeX_ = comboTree; nextComboTreeX_ = nullptr; }
+
+	/// @brief 現在のコンボツリーを設定する
+	/// @param comboTree 
+	void SetCurrentComboTreeY(ComboTree* comboTree) { currentComboTreeY_ = comboTree; nextComboTreeY_ = nullptr; }
+
+	/// @brief 現在のコンボツリーを設定する
+	/// @param comboTree 
+	void SetCurrentComboTreeB(ComboTree* comboTree) { currentComboTreeB_ = comboTree; nextComboTreeB_ = nullptr; }
+
 private:
 
 	/// @brief 更新処理開始前のリセット

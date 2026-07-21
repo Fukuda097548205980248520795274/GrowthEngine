@@ -50,6 +50,12 @@ public:
 
 protected:
 
+	/// @brief ビヘイビアツリーが設定されていなかったときの処理
+	void HandleBehaviorTreeNotSet();
+
+
+protected:
+
 	// 所有者
 	Character* owner_ = nullptr;
 

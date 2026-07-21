@@ -1073,7 +1073,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 		ImNodes::BeginOutputAttribute(node.outputPinId);
 
 		// 出力ピンを右側に配置するためにインデントを追加
-		ImGui::Indent(static_cast<int>(60.0f * zoom_));
+		ImGui::Indent(60.0f * zoom_);
 		ImGui::Text("Out");
 		ImNodes::EndOutputAttribute();
 	}

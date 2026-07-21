@@ -20,6 +20,9 @@ void CharacterStateBlownAway::Enter()
 /// @param dt 
 void CharacterStateBlownAway::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// キャラクターの移動コンポーネントを取得する
 	auto movement = owner_->GetMovement();
 	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);

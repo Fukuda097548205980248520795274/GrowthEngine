@@ -16,6 +16,9 @@ void CharacterStateGrabbing::Enter()
 /// @param dt 
 void CharacterStateGrabbing::Update(float dt)
 {
+	/// ツリーのリクエストを行う
+	HandleBehaviorTreeNotSet();
+
 	// 掴んでいる相手がいない場合は、状態を解除する
 	if (!grabTarget_)
 	{

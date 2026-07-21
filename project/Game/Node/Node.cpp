@@ -105,10 +105,31 @@ void Node::DrawDebuggerRecursive(float zoom)
 	// ノードの描画開始
 	ImNodes::BeginNode(editorNodeId_);
 
+
 	ImNodes::BeginNodeTitleBar();
+	// ノードの状態をテキストで表示
+	std::string stateText = "";
+	if (lastState_ == State::Running)
+	{
+		stateText = "実行中";
+	} else if (lastState_ == State::Success)
+	{
+		stateText = "成功";
+	} else if (lastState_ == State::Failure)
+	{
+		stateText = "失敗";
+	} else if (fadeTimer_ > 0.0f)
+	{
+		// フェードアウト中（直前の状態）も分かりやすいように表示
+		stateText = (fadeState_ == State::Success) ? "成功（Fade）" : "失敗（Fade）";
+	}
+
 	ImGui::Text("%s", nodeName_.c_str());
 
+	if (!stateText.empty())ImGui::Text("%s", stateText.c_str());
+	else ImGui::Text(" ");
 	ImNodes::EndNodeTitleBar();
+
 
 
 	// ImGuiのID衝突を避けるため、ノードIDをプッシュする
@@ -116,6 +137,8 @@ void Node::DrawDebuggerRecursive(float zoom)
 
 	// ズーム率に合わせて余白やチェックボックスのスケールを調整
 	ImGui::Dummy(ImVec2(0.0f, 2.0f * zoom));
+
+	// ブレークポイントのチェックボックスを描画
 	ImGui::Checkbox("Break", &isBreakpoint_);
 
 	// カスタムノードUIの描画

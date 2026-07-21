@@ -59,6 +59,10 @@ public:
 	/// @return 
 	bool IsChangeBehaviorTree()const { return isChangeBehaviorTree_; }
 
+	/// @brief ビヘイビアツリーを設定する
+	/// @param behaviorTree 
+	void SetBehaviorTree(BehaviorTree* behaviorTree) override { currentBehaviorTree_ = behaviorTree; }
+
 
 private:
 
