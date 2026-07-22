@@ -277,8 +277,8 @@ void Engine::Camera3DResource::DebugGuizmo(const Matrix4x4& viewMatrix, const Ma
 		// ワールド行列から回転・移動を分解する
 		ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
 
-		// 度数法(Degrees)から弧度法(Radians)へ変換するための係数
-		constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+		// 度数法からラジアンに変換する
+		constexpr float kDeg2Rad = std::numbers::pi_v<float> / 180.0f;
 
 		if (guizmoData_.mode == DebugData::GuizmoMode::Translate)
 		{
@@ -286,9 +286,9 @@ void Engine::Camera3DResource::DebugGuizmo(const Matrix4x4& viewMatrix, const Ma
 		}
 		else
 		{
-			param_->transform.rotate.x = rotation[0] * DEG2RAD;
-			param_->transform.rotate.y = rotation[1] * DEG2RAD;
-			param_->transform.rotate.z = rotation[2] * DEG2RAD;
+			param_->transform.rotate.x = rotation[0] * kDeg2Rad;
+			param_->transform.rotate.y = rotation[1] * kDeg2Rad;
+			param_->transform.rotate.z = rotation[2] * kDeg2Rad;
 		}
 	}
 }

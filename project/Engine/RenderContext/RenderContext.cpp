@@ -455,12 +455,10 @@ void Engine::RenderContext::UpdateFixFPS()
 	// 現在時間を取得する
 	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
-	// 1/60 秒経過するまで、スリープせずにループで待つ（ビジーウェイト）
+	// 1/60 秒経過するまで、スリープせずにループで待つ
 	while (std::chrono::steady_clock::now() - reference_ < kMinTime)
 	{
-		// 何もせず待つことで、1マイクロ秒の狂いもなく正確に60FPSに固定します
 #if defined(_MSC_VER)
-		// CPUの無駄な負荷をわずかに抑えるヒント命令（オプション）
 		__nop();
 #endif
 	}

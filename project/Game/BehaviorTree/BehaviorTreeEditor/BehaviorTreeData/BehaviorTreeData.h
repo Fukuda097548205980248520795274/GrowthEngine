@@ -141,7 +141,7 @@ constexpr inline const char* CONDITION_TYPE_NAMES[] = {
 };
 
 /// @brief 条件ノードパラメータ
-struct CondtionNodeParam
+struct ConditionNodeParam
 {
 	float distanceToTarget = 0.0f; // ターゲットとの距離
 };
@@ -181,9 +181,9 @@ struct EditorNode
 	NavMeshLeaderMoveInitData navMeshLeaderMoveInitData;
 
 	// 条件ノードのパラメータ
-	CondtionNodeParam conditionParam;
+	ConditionNodeParam conditionParam;
 
-	// ノードが展開されているかどうかを示すフラグ（条件ノードの設定UIを表示するかどうかの判定に使用）
+	// ノードが展開されているかどうかを示すフラグ
 	bool isCollapsed = false;
 
 	// ノードの位置を次の描画フレームでImNodesに反映する必要があるかどうかを示すフラグ

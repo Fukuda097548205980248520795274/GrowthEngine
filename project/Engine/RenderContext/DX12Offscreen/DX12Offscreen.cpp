@@ -143,8 +143,8 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	assert(commandList);
 
 	// このポストエフェクトが深度を必要とするかどうか
-	const bool isUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
-	const bool isBloom = postEffectStore_->IsBloom(hPostEffect);
+	const bool kIsUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
+	const bool kIsBloom = postEffectStore_->IsBloom(hPostEffect);
 
 	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
 	if (!sourceResource_)
@@ -165,7 +165,7 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	destinationResource_ = temp;
 
 	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
-	if (isBloom)
+	if (kIsBloom)
 	{
 		// 登録用コンテキストを作る
 		PostEffectRenderContext registerContext{};
@@ -173,14 +173,14 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
 	}
 	else
 	{
-		if (isUseDepth)
+		if (kIsUseDepth)
 		{
 			// 深度書き込み -> 読み込みテクスチャ
 			TransitionBarrier(depthResource_->GetResource(),
@@ -193,12 +193,12 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
 
-		if (isUseDepth)
+		if (kIsUseDepth)
 		{
 			// 読み込みテクスチャ -> 深度書き込み
 			TransitionBarrier(depthResource_->GetResource(),
@@ -216,8 +216,8 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	assert(commandList);
 
 	// このポストエフェクトが深度を必要とするかどうか
-	const bool isUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
-	const bool isBloom = postEffectStore_->IsBloom(name);
+	const bool kIsUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
+	const bool kIsBloom = postEffectStore_->IsBloom(name);
 
 	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
 	if (!sourceResource_)
@@ -238,7 +238,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	destinationResource_ = temp;
 
 	// ブルームは複数回描画する必要があるため、描画コマンドの登録の仕方を変える
-	if (isBloom)
+	if (kIsBloom)
 	{
 		// 登録用コンテキストを作る
 		PostEffectRenderContext registerContext{};
@@ -246,7 +246,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
 		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -254,7 +254,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	}
 	else
 	{
-		if (isUseDepth)
+		if (kIsUseDepth)
 		{
 			// 深度書き込み -> 読み込みテクスチャ
 			TransitionBarrier(depthResource_->GetResource(),
@@ -267,12 +267,12 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = isUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(name, registerContext);
 
-		if (isUseDepth)
+		if (kIsUseDepth)
 		{
 			// 読み込みテクスチャ -> 深度書き込み
 			TransitionBarrier(depthResource_->GetResource(),

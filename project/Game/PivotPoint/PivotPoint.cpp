@@ -21,7 +21,7 @@ void PivotPoint::Update()
 	data_->toCenter = (data_->center - data_->sphericalCoordinates).Normalize();
 
 	// オイラー角を計算
-	data_->eulerAngles = Vector3(data_->theta, data_->phi, 0.0f);
+	data_->eularAngles = Vector3(data_->theta, data_->phi, 0.0f);
 }
 
 /// @brief データを取得する

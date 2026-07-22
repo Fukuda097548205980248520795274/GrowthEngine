@@ -32,8 +32,8 @@ public:
 	virtual ~Character() override;
 
 	/// @brief アニメーションの初期化
-	/// @param animData 
-	void SetAnimationHandle(const AnimationHandleData& animData);
+	/// @param animationData 
+	void SetAnimationHandle(const AnimationHandleData& animationData);
 
 	/// @brief ビヘイビアツリーの設定
 	/// @param behaviorTreeName 

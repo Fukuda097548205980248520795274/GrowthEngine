@@ -171,7 +171,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 /// @param fileName 
 /// @param out_nodes 
 /// @param out_links 
-void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<EditorNode>& out_nodes, std::vector<EditorLink>& out_links)
+void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks)
 {
 	// ファイルパスの構築
 	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
@@ -183,8 +183,8 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 	ifs >> root;
 
 	// 読み込む前に出力用のコンテナをクリア
-	out_nodes.clear();
-	out_links.clear();
+	outNodes.clear();
+	outLinks.clear();
 
 	// ノードの読み込み
 	if (root.contains("nodes")) 
@@ -319,7 +319,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 				{
 					if (n.contains("avoid_data") && n["avoid_data"].is_object())
 					{
-						// 参照を作っておくと、記述がスッキリし、無駄なアクセスも減ります
+						// avoid_dataの内容をavoidInitDataにコピーする
 						const auto& avoid_data = n["avoid_data"];
 
 						node.avoidInitData.time = avoid_data.value("Duration", 0.0f);
@@ -329,8 +329,6 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 							avoid_data["LocalDirection"].is_array() &&
 							avoid_data["LocalDirection"].size() == 2)
 						{
-							// 2. get<float>() を使って明示的に型を変換して代入する
-							// ※ x, y が double 型の場合は get<double>() に変更してください
 							node.avoidInitData.localDirection.x = avoid_data["LocalDirection"][0].get<float>();
 							node.avoidInitData.localDirection.y = avoid_data["LocalDirection"][1].get<float>();
 						}
@@ -390,7 +388,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 				}
 			}
 
-			out_nodes.push_back(node);
+			outNodes.push_back(node);
 		}
 	}
 
@@ -403,7 +401,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 			link.id = l["id"];
 			link.startPinId = l["start"];
 			link.endPinId = l["end"];
-			out_links.push_back(link);
+			outLinks.push_back(link);
 		}
 	}
 }

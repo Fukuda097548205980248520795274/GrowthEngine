@@ -13,7 +13,7 @@ public:
 	/// @param editor_links 
 	/// @param character 
 	/// @return 
-	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editor_nodes, const std::vector<EditorLink>& editor_links,
+	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editorModes, const std::vector<EditorLink>& editorLinks,
 		Character* character, const std::string& name);
 
 private:
@@ -30,6 +30,6 @@ private:
 	/// @param links 
 	/// @param character 
 	/// @return 
-	static std::unique_ptr<Node> BuildNodeRecursive(const EditorNode& editor_node, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, Character* character);
+	static std::unique_ptr<Node> BuildNodeRecursive(const EditorNode& editorNode, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, Character* character);
 };
 

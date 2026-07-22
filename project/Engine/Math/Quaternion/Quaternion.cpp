@@ -82,7 +82,7 @@ Quaternion Slerp(const Quaternion& q1, const Quaternion& q2 , float t)
 	// q1 のコピー
 	Quaternion q0Copy = q1;
 
-	// 内積（q1 と q2 の内積を取る必要がある）
+	// 内積
 	float dot = Dot(q0Copy, q2);
 
 	// 最短経路を確保
@@ -92,10 +92,10 @@ Quaternion Slerp(const Quaternion& q1, const Quaternion& q2 , float t)
 		dot = -dot;
 	}
 
-	const float DOT_THRESHOLD = 1.0f - 1e-4f;
+	const float kDotThreshold = 1.0f - 1e-4f;
 
 	// 非常に近い場合は Lerp
-	if (dot > DOT_THRESHOLD)
+	if (dot > kDotThreshold)
 	{
 		Quaternion result = (1.0f - t) * q0Copy + t * q2;
 		return result.Normalize();

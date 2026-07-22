@@ -184,9 +184,6 @@ void StageEditorNavMeshController::SelectNavMeshItem()
 
 	Engine::Collision3D::Ray ray = RaycastFromMouse();
 
-	// 見上げる角度の操作を考慮し、 ray.diff.y >= 0.0f の制限を外すか、必要に応じて残してください。
-	// if (ray.diff.y >= 0.0f) return; 
-
 	int closestPolyId = -1;
 	int closestItemIdx = -1;
 
@@ -295,8 +292,7 @@ void StageEditorNavMeshController::SelectNavMeshItem()
 		}
 	}
 
-	// === 選択リストへの追加処理（複数選択対応）===
-	// (現状のコードをそのまま配置してください)
+	// Shiftキーが押されているかどうかをチェック（複数選択のため）
 	bool isMultiSelect = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
 
 	if (closestPolyId != -1)
@@ -465,7 +461,7 @@ void StageEditorNavMeshController::BridgeSelectedEdges(std::vector<PlacementData
 	float distSqB = (diffB1.x * diffB1.x + diffB1.y * diffB1.y + diffB1.z * diffB1.z) +
 		(diffB2.x * diffB2.x + diffB2.y * diffB2.y + diffB2.z * diffB2.z);
 
-	// 接合面の頂点は、法線が裏返らないようにするため元の辺とは逆の順番でセットします
+	// 頂点の並び順を決定して新しいポリゴンにセット
 	newPoly.vertices[0] = p1_v1;
 	newPoly.vertices[1] = p1_v0;
 

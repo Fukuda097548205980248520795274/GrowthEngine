@@ -366,10 +366,10 @@ void GameScene::Initialize()
 void GameScene::Update()
 {
 	// デルタタイムを取得する
-	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+	const float kDt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// バトルディレクターの更新
-	BattleDirector::GetInstance().Update(dt);
+	BattleDirector::GetInstance().Update(kDt);
 
 	// 各エディタの更新処理を呼び出す
 #ifdef _DEVELOPMENT
@@ -379,7 +379,7 @@ void GameScene::Update()
 
 	// カットシーンの更新
 	if (cutsceneManager_->IsPlaying())
-		cutsceneManager_->Update(dt);
+		cutsceneManager_->Update(kDt);
 
 	// プレイヤーの更新
 	if (player_)
@@ -475,10 +475,10 @@ void GameScene::Update()
 	effectManager_->Update();
 
 	// ステージエディタの更新
-	stageEditor_->Update(dt);
+	stageEditor_->Update(kDt);
 
 	// カメラ制御の更新
-	UpdateCameraControl(dt);
+	UpdateCameraControl(kDt);
 
 	// プレイヤーの動きによるシェイクの更新
 	if (player_)
@@ -508,7 +508,7 @@ void GameScene::Update()
 	if (rtTriggerButton_)rtTriggerButton_->Update();
 
 	// カメラシェイクの更新
-	cameraShake_->Update(dt);
+	cameraShake_->Update(kDt);
 }
 
 /// @brief 描画処理
@@ -960,7 +960,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 	PivotPoint::Data* pivotData = pivotPoint_->GetData();
 
 	// キー入力でカメラ回転しているかを判定する
-	const bool isKeyCameraRotate =
+	const bool kIsKeyCameraRotate =
 		engine_->GetKeyPress(DIK_LEFT) || engine_->GetKeyPress(DIK_RIGHT) ||
 		engine_->GetKeyPress(DIK_DOWN) || engine_->GetKeyPress(DIK_UP);
 
@@ -972,7 +972,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 	}
 
 	// キー入力または右スティック入力がある場合は手動でカメラ回転しているとみなす
-	bool isManualCameraControl = isKeyCameraRotate || (rightStick.Length() > 0.01f);
+	bool isManualCameraControl = kIsKeyCameraRotate || (rightStick.Length() > 0.01f);
 	
 	// 手動でカメラ回転入力がある場合はピボットを回転させる
 	if (isManualCameraControl)
@@ -981,7 +981,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 		player_->SetIsOperationCamera(true);
 
 		// 手動でカメラ回転入力がある場合はピボットを回転させる
-		if (!isKeyCameraRotate)
+		if (!kIsKeyCameraRotate)
 		{
 			pivotData->phi += -rightStick.x * kPivotRotateSpeed * deltaTime;
 			pivotData->theta += -rightStick.y * kPivotRotateSpeed * deltaTime;
@@ -1063,9 +1063,9 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 		}
 	}
 
-	// 近づくとき（縮む）と、離れるとき（戻る）で補間速度を変えられるようにします
-	constexpr float kCameraShrinkSpeed = 25.0f; // 壁に近づくときの速度（速めが快適）
-	constexpr float kCameraExpandSpeed = 5.0f;  // 元の位置に戻るときの速度（ゆったり）
+	// カメラの位置を補間する速度を設定する
+	constexpr float kCameraShrinkSpeed = 25.0f; // 壁に近づくときの速度
+	constexpr float kCameraExpandSpeed = 5.0f;  // 元の位置に戻るときの速度
 
 	// 現在よりターゲットが近い（縮む）か、遠い（戻る）かで速度を分岐
 	float lerpSpeed = (targetT < cameraCurrentT_) ? kCameraShrinkSpeed : kCameraExpandSpeed;
@@ -1097,11 +1097,11 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 	mainCamera_->param_->transform.translate = finalCameraPos;
 
 	// center方向を向くようにオイラー角を計算する
-	const Vector3 lookDirection = pivotData->toCenter;
-	const float yaw = std::atan2(lookDirection.x, lookDirection.z);
-	const float horizontal = std::sqrt(lookDirection.x * lookDirection.x + lookDirection.z * lookDirection.z);
-	const float pitch = std::atan2(-lookDirection.y, horizontal);
-	mainCamera_->param_->transform.rotate = Vector3(pitch, yaw, 0.0f);
+	const Vector3 kLookDirection = pivotData->toCenter;
+	const float kYaw = std::atan2(kLookDirection.x, kLookDirection.z);
+	const float kHorizontal = std::sqrt(kLookDirection.x * kLookDirection.x + kLookDirection.z * kLookDirection.z);
+	const float kPitch = std::atan2(-kLookDirection.y, kHorizontal);
+	mainCamera_->param_->transform.rotate = Vector3(kPitch, kYaw, 0.0f);
 }
 
 /// @brief イベントトリガーに触れたときの処理
@@ -1109,7 +1109,7 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 /// @param param 
 bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 {
-	// ここではイベントの種類に応じて処理を分岐させることができます
+	// イベントタイプを列挙型に変換する
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
 
 	if (type == StaticEventTrigger::EventType::None)

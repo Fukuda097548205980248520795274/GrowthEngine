@@ -99,6 +99,7 @@ namespace Engine
 		// リングの最大値
 		static constexpr int32_t kMaxRings = 16;
 
+		// 前回の値
 		int32_t preSlices_ = 0;
 		int32_t preRings_ = 0;
 

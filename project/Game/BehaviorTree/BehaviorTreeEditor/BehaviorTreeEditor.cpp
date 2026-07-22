@@ -425,9 +425,9 @@ void BehaviorTreeEditor::AutoArrangeNodes()
 	std::sort(rootNodes.begin(), rootNodes.end(), [&](int a, int b) {return nodeMap[a]->pos.y < nodeMap[b]->pos.y;});
 
 	// 段組みレイアウトの計算
-	const float spacingX = 150.0f; // ノードの横の間隔
-	const float spacingY = 120.0f; // ノードの縦の間隔（1段の高さ）
-	float currentY = 0.0f;         // 全体で共有する現在のY座標
+	const float kSpacingX = 150.0f;
+	const float kSpacingY = 120.0f;
+	float currentY = 0.0f;
 
 	// 再帰的にノードを配置するラムダ関数
 	std::function<void(int, int)> arrangeNode = [&](int nodeId, int depthX) 
@@ -435,7 +435,7 @@ void BehaviorTreeEditor::AutoArrangeNodes()
 			EditorNode* node = nodeMap[nodeId];
 
 			// X座標は深さに応じて決定 
-			node->pos.x = depthX * spacingX;
+			node->pos.x = depthX * kSpacingX;
 			node->pos.y = currentY;
 
 			// 座標を反映させるフラグ
@@ -444,13 +444,13 @@ void BehaviorTreeEditor::AutoArrangeNodes()
 			// 子ノードの配置
 			if (!childrenMap[nodeId].empty())
 			{
-				// 1番目の子ノードは、親と同じY座標(高さを変えない)で配置
+				// 1番目の子ノードは、親と同じY座標で配置
 				arrangeNode(childrenMap[nodeId][0], depthX + 1);
 
 				// 2番目以降の子ノードは、Y座標を1段ずつ下げて配置
 				for (size_t i = 1; i < childrenMap[nodeId].size(); ++i)
 				{
-					currentY += spacingY;
+					currentY += kSpacingY;
 					arrangeNode(childrenMap[nodeId][i], depthX + 1);
 				}
 			}
@@ -461,7 +461,7 @@ void BehaviorTreeEditor::AutoArrangeNodes()
 	{
 		// ルートノード間のY座標の間隔を確保
 		if (i > 0)
-			currentY += spacingY;
+			currentY += kSpacingY;
 
 		// 深さ0からスタート
 		arrangeNode(rootNodes[i], 0);

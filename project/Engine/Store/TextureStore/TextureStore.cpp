@@ -67,16 +67,16 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 		return ext;
 	};
 
-	const std::string extension1 = normalizeExtension(filePath);
+	const std::string kExtension1 = normalizeExtension(filePath);
 
 	// 過去に取得したミップイメージと被っているかどうかを判断する
 	for (std::unique_ptr<TextureData>& data : dataTable_)
 	{
 		const DirectX::Image* image2 = data->mipImages.GetImages();
 		size_t hash2 = CalculateTextureHash(*image2);
-		const std::string extension2 = normalizeExtension(data->name);
+		const std::string kExtension2 = normalizeExtension(data->name);
 
-     if (hash1 == hash2 && extension1 == extension2)
+     if (hash1 == hash2 && kExtension1 == kExtension2)
 		{
 			return data->handle;
 		}
@@ -204,16 +204,16 @@ TextureHandle Engine::TextureStore::GetHandle(const std::string& filePath)
 		return ext;
 	};
 
-	const std::string extension1 = normalizeExtension(filePath);
+	const std::string kExtension1 = normalizeExtension(filePath);
 
 	// 過去に取得したミップイメージと被っているかどうかを判断する
 	for (std::unique_ptr<TextureData>& data : dataTable_)
 	{
 		const DirectX::Image* image2 = data->mipImages.GetImages();
 		size_t hash2 = CalculateTextureHash(*image2);
-		const std::string extension2 = normalizeExtension(data->name);
+		const std::string kExtension2 = normalizeExtension(data->name);
 
-     if (hash1 == hash2 && extension1 == extension2)
+     if (hash1 == hash2 && kExtension1 == kExtension2)
 		{
 			return data->handle;
 		}
@@ -242,9 +242,10 @@ void Engine::TextureStore::DrawUI()
 {
 	static int selected = -1;
 
-	const int thumbSize = 32;
-	const int padding = 8;
-	const int columns = 4;
+	// サムネイルのサイズ
+	const int kThumbSize = 32;
+	const int kPadding = 8;
+	const int kColumns = 4;
 
 	int count = 0;
 
@@ -260,42 +261,31 @@ void Engine::TextureStore::DrawUI()
 
 		ImGui::PushID(i);
 
-		bool clicked = ImGui::ImageButton(
-			tex->name.c_str(),
-			tex->srvHandle.second.ptr,
-			ImVec2((float)thumbSize, (float)thumbSize),
-			ImVec2(0, 0),
-			ImVec2(1, 1),
-			ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
-			ImVec4(1, 1, 1, 1)
-		);
+		bool clicked =
+			ImGui::ImageButton(tex->name.c_str(), tex->srvHandle.second.ptr, ImVec2((float)kThumbSize, (float)kThumbSize),
+				ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.2f, 0.2f, 0.2f, 1.0f), ImVec4(1, 1, 1, 1));
 
+		// クリックされたら選択状態にする
 		if (clicked)
-		{
 			selected = i;
-		}
 
-		// --- ここからドラッグ元処理 ---
+		// ドラッグ処理
 		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 		{
 			// ペイロードとして index を渡す
 			ImGui::SetDragDropPayload("TEXTURE_ID", &i, sizeof(int));
 
 			// ドラッグ中に表示されるプレビュー
-			ImGui::Image(
-				tex->srvHandle.second.ptr,
-				ImVec2((float)thumbSize, (float)thumbSize)
-			);
+			ImGui::Image(tex->srvHandle.second.ptr, ImVec2((float)kThumbSize, (float)kThumbSize));
 			ImGui::TextUnformatted(tex->name.c_str());
 
 			ImGui::EndDragDropSource();
 		}
-		// --- ここまで ---
 
 		ImGui::PopID();
 
 		count++;
-		if (count % columns != 0)
+		if (count % kColumns != 0)
 			ImGui::SameLine();
 	}
 

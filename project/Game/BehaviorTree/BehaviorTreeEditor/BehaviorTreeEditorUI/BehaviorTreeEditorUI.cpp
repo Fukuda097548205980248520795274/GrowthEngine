@@ -326,7 +326,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 			// ノードの種類に応じて、パラメータ設定UIをここで描画する
 			if (node.type == EditorNodeType::Condition)
 			{
-				DrawCondtionNodeSettings(node);
+				DrawConditionNodeSettings(node);
 			}
 			else if (node.type == EditorNodeType::Action)
 			{
@@ -972,7 +972,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 	// リンクがホバーされているかどうかを取得するための変数
 	int hoveredLinkId;
 
-	// imnodesの場合、リンクがホバーされているか取得できる
+	// リンクがホバーされている場合は、Ctrlキーが押されていて、かつ左クリックされた瞬間かどうかを判定する
 	if (ImNodes::IsLinkHovered(&hoveredLinkId))
 	{
 		// Ctrlキーが押されていて、かつ左クリックされた瞬間か判定
@@ -983,8 +983,9 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
 			// 対象のリンクIDを持つ要素を links_ から削除
 			links_.erase(std::remove_if(links_.begin(), links_.end(),
-				[hoveredLinkId](const EditorLink& link) {
-					return link.id == hoveredLinkId; // ※ EditorLink 構造体のID変数名に合わせてください
+				[hoveredLinkId](const EditorLink& link)
+				{
+					return link.id == hoveredLinkId;
 				}), links_.end());
 
 			// 変更があったのでフラグを立てる
@@ -1087,11 +1088,11 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 
 /// @brief 条件ノードの設定UIを描画する
 /// @param node 
-void BehaviorTreeEditor::DrawCondtionNodeSettings(EditorNode& node)
+void BehaviorTreeEditor::DrawConditionNodeSettings(EditorNode& node)
 {
 	ImGui::Text("関数 :");
 
-	// 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
+	// 履歴と変更フラグをまとめて処理するラムダ関数
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
@@ -1119,7 +1120,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 {
 	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
 
-	// 履歴と変更フラグをまとめて処理するラムダ関数の例
+	// 履歴と変更フラグをまとめて処理するラムダ関数
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
 
 	// コンボボックスに表示する文字列の配列

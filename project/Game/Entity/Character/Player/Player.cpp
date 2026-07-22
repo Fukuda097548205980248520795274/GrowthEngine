@@ -156,13 +156,13 @@ void Player::Update()
 
 		// 移動入力方向を取得する
 		bool hasMoveInput = false;
-		const Vector2 moveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
+		const Vector2 kMoveInputDirection = inputController_->GetMoveDirection(hasMoveInput);
 
 		// 構え中に回避ボタンを押したら回避を開始する
 		if (isStance_ && inputController_->IsAvoidRequested())
 		{
 			// 入力方向に応じた回避方向を計算して回避を開始する
-			Vector2 avoidDirection = GetAvoidDirection(moveInputDirection, hasMoveInput, GetCameraYaw());
+			Vector2 avoidDirection = GetAvoidDirection(kMoveInputDirection, hasMoveInput, GetCameraYaw());
 			StartAvoid(Vector3(avoidDirection.x, 0.0f, avoidDirection.y), 1.5f, 0.3f);
 
 			Character::Update();
@@ -173,18 +173,18 @@ void Player::Update()
 		UpdateDashState(hasMoveInput);
 
 		// 状態に応じた移動速度を計算する
-		const float moveSpeed = GetCurrentMoveSpeed();
+		const float kMoveSpeed = GetCurrentMoveSpeed();
 
 		if (hasMoveInput)
 		{
 			// カメラ基準の入力方向をワールド方向へ変換する
-			const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, GetCameraYaw());
-			SetMoveInputXZ(worldMoveDirection.Normalize(), moveSpeed);
+			const Vector2 kWorldMoveDirection = ToWorldMoveDirectionFromCamera(kMoveInputDirection, GetCameraYaw());
+			SetMoveInputXZ(kWorldMoveDirection.Normalize(), kMoveSpeed);
 		}
 		else
 		{
 			// 入力がない場合は移動を停止する
-			SetMoveInputXZ(Vector2(0.0f, 0.0f), moveSpeed);
+			SetMoveInputXZ(Vector2(0.0f, 0.0f), kMoveSpeed);
 		}
 	}
 
@@ -227,12 +227,12 @@ void Player::StartUpdate()
 void Player::UpdateAttack()
 {
 	// デルタタイムの取得
-	const float deltaTime = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
+	const float kDt = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
-		attackInputBufferTime_ -= deltaTime;
+		attackInputBufferTime_ -= kDt;
 
 		// バッファ時間が0以下になったらバッファされた攻撃入力を消す
 		if (attackInputBufferTime_ <= 0.0f)
@@ -532,10 +532,10 @@ void Player::StyleChangeStart()
 		if (soundManager_->bgmStyleSenran_->IsPlaying())
 			soundManager_->bgmStyleSenran_->Stop();
 
-		// もし旋嵐スタイル中にフィールドの「別の武器」を拾って持っていたら、落とす
+		// 現在持っているのが「警棒」以外の武器だった場合
 		if (weapon_ != nullptr && weapon_ != baton_)
 		{
-			ReleaseWeapon(); // ※キャラクタークラスの既存関数で手放す
+			ReleaseWeapon();
 		}
 
 		// 警棒を再度装備する

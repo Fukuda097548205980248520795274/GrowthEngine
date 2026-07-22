@@ -70,13 +70,13 @@ namespace Engine
 
 	/// @brief スケルトンのフォワードキネマティクス
 	/// @param skeleton 
-	void ForwardKinematices(Skeleton& skeleton);
+	void ForwardKinematics(Skeleton& skeleton);
 
 	/// @brief スケルトンのインバースキネマティクス
 	/// @param skeleton 
 	/// @param boneName 
 	/// @param targetPosition
-	void InverseKinematices(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition);
+	void InverseKinematics(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition);
 
 	/// @brief 任意の時刻の値を取得する
 	/// @param keyframe 

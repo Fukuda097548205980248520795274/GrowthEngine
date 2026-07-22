@@ -101,7 +101,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
         );
     }
 
-    // 元のコードと完全に同じ行列合成フローを適用（これで座標のズレや消失を防ぎます）
+    // ビルボード行列を適用して、パーティクルのローカル座標をワールド座標に変換
     float4x4 billboardedMatrix = mul(localMatrix, gView.billboard);
     billboardedMatrix[3].xyz = particle.translate;
 

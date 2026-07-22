@@ -142,11 +142,11 @@ Vector2 PlayerInputController::GetMoveDirection(bool& outHasMoveInput) const
 	// 左スティックの入力を取得する
 	if (inputMove_ && inputMove_->param_ && inputMove_->IsInput())
 	{
-		const Vector2 stick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
-		if (stick.Length() > 0.0f)
+		const Vector2 kStick = GrowthEngine::GetInstance()->GetGamepadLeftStick(inputMove_->param_->controller);
+		if (kStick.Length() > 0.0f)
 		{
 			outHasMoveInput = true;
-			return stick.Normalize();
+			return kStick.Normalize();
 		}
 	}
 

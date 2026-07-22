@@ -38,11 +38,11 @@ void CharacterStateGuard::Update(float dt)
 	if (isGuardReaction_)
 	{
 		float diff = movement->GetTargetRotationY() - worldTransform->rotate_.y;
-		const float pi = std::numbers::pi_v<float>;
+		const float kPi = std::numbers::pi_v<float>;
 
 		// 角度の正規化
-		while (diff > pi) diff -= 2.0f * pi;
-		while (diff < -pi) diff += 2.0f * pi;
+		while (diff > kPi) diff -= 2.0f * kPi;
+		while (diff < -kPi) diff += 2.0f * kPi;
 
 		worldTransform->rotate_.y += diff * movement->GetRotationSpeed() * dt;
 

@@ -73,7 +73,7 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 	assert(device);
 	assert(commandList);
 
- // 同じ名前がある場合はデータを作り直す（emitter数変更を反映するため）
+	// 同じ名前がある場合はデータを作り直す（emitter数変更を反映するため）
 	for (size_t i = 0; i < dataTable_.size(); ++i)
 	{
 		if (name != dataTable_[i]->GetName())
@@ -81,12 +81,12 @@ Particle3DHandle Engine::Particle3DStore::Load(ID3D12Device* device, ID3D12Graph
 			continue;
 		}
 
-		const Particle3DHandle handle = static_cast<Particle3DHandle>(i);
+		const Particle3DHandle kHandle = static_cast<Particle3DHandle>(i);
 		std::unique_ptr<Particle3DData> data = std::make_unique<Particle3DData>(name, hModel, numInstance, emitterNum);
 		data->Initialize(device, commandList, heap_, parameter_.get(), modelStore_, textureStore_, psoParticle_.get(), computePsoParticle3DInit_.get(), log);
 		dataTable_[i] = std::move(data);
-		nameTable_[name] = handle;
-		return handle;
+		nameTable_[name] = kHandle;
+		return kHandle;
 	}
 
 	// ハンドルを取得する

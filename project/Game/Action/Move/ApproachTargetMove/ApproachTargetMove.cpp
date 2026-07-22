@@ -41,7 +41,7 @@ void ApproachTargetMove::Update()
     toTarget.y = 0.0f;
 
 	// ターゲットとの距離の二乗を計算する
-    const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
+    const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
 
 	// 動けない状態や回避中の場合は移動を停止して終了する
     if (owner_->IsJustAvoided() ||  owner_->IsGrabbing() || owner_->IsIncapacitated())
@@ -51,13 +51,13 @@ void ApproachTargetMove::Update()
     }
 
 	// ターゲットとの距離が停止距離以内の場合は移動を停止して終了する
-    if (distanceSq <= stopDistanceSq_)
+    if (kDistanceSq <= stopDistanceSq_)
     {
         Move::Update();
         return;
     }
 
 	// ターゲットへの方向を計算して移動入力を設定する
-    const Vector2 moveDirection = Vector2(toTarget.x, toTarget.z).Normalize();
-    owner_->SetMoveInputXZ(moveDirection, moveSpeed_);
+    const Vector2 kMoveDirection = Vector2(toTarget.x, toTarget.z).Normalize();
+    owner_->SetMoveInputXZ(kMoveDirection, moveSpeed_);
 }

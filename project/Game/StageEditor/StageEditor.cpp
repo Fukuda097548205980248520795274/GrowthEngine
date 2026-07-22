@@ -37,7 +37,7 @@ void StageEditor::Update(float dt)
 	// 実行中に消えたエンティティを配置リストから削除する
 	if (isPlaying_)
 	{
-		// 削除によってインデックスがズレるのを防ぐため、逆順でループを回します
+		// 逆順にループして、消えたエンティティを削除する
 		for (int i = static_cast<int>(placementList_.size()) - 1; i >= 0; --i)
 		{
 			auto& data = placementList_[i];
@@ -68,8 +68,7 @@ void StageEditor::Update(float dt)
 				}
 				else if (currentSelected > i)
 				{
-					// 削除された要素よりも後ろのオブジェクトを選択していた場合、
-					// リストが詰まった分だけ選択インデックスを1つ繰り上げる
+					// 選択していたオブジェクトのインデックスが削除された要素より後ろにある場合、インデックスを1つ前にずらす
 					editorUI_->SetSelectedIndex(currentSelected - 1);
 				}
 			}

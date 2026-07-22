@@ -73,7 +73,7 @@ void ApproachLeaderMove::Update()
     toLeader.y = 0.0f;
 
     // リーダーとの距離の二乗を計算する
-    const float distanceSq = toLeader.x * toLeader.x + toLeader.z * toLeader.z;
+    const float kDistanceSq = toLeader.x * toLeader.x + toLeader.z * toLeader.z;
 
     // 動けない状態や回避中の場合は移動を停止して終了する
     if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
@@ -83,13 +83,13 @@ void ApproachLeaderMove::Update()
     }
 
     // リーダーとの距離が停止距離以内の場合は移動を停止して終了する
-    if (distanceSq <= stopDistanceSq_)
+    if (kDistanceSq <= stopDistanceSq_)
     {
         Move::Update();
         return;
     }
 
     // リーダーへの方向を計算して移動入力を設定する
-    const Vector2 moveDirection = Vector2(toLeader.x, toLeader.z).Normalize();
-    owner_->SetMoveInputXZ(moveDirection, moveSpeed_);
+    const Vector2 kMoveDirection = Vector2(toLeader.x, toLeader.z).Normalize();
+    owner_->SetMoveInputXZ(kMoveDirection, moveSpeed_);
 }

@@ -230,7 +230,7 @@ void Engine::Render3DSkinningModelData::Update()
 	LerpSkeleton(skeleton_, endSkeleton, 0.3f);
 
 	// スケルトンの更新
-	ForwardKinematices(skeleton_);
+	ForwardKinematics(skeleton_);
 
 	// モデルデータを取得する
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);

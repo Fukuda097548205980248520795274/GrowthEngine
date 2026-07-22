@@ -17,19 +17,18 @@ static const float2 kIndex5x5[5][5] =
 };
 
 // 円周率
-static const float PI = 3.14159265f;
+static const float kPI = 3.14159265f;
 
 // ガウス関数
 float gauss(float x, float y, float sigma)
 {
     float exponent = -(x * x + y * y) * rcp(2.0f * sigma * sigma);
-    float denomnator = 2.0f * PI * sigma * sigma;
+    float denomnator = 2.0f * kPI * sigma * sigma;
     
     // ガウス関数の値を返す
     return exp(exponent) * rcp(denomnator);
 }
 
-// スレッドグループのサイズ指定 (例: 8x8。環境に合わせて変更してください)
 [numthreads(8, 8, 1)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
@@ -49,8 +48,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     // カーネルの重みの合計
     float weight = 0.0f;
     
-    // ※注意: パフォーマンスを考慮する場合、このカーネル計算は事前にCPUで行い、
-    // Constant Buffer (cbuffer) 経由で渡すことを推奨します。
+    // 5x5のガウスカーネルを計算
     for (int y = 0; y < 5; y++)
     {
         for (int x = 0; x < 5; x++)

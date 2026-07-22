@@ -692,9 +692,9 @@ bool Engine::CollisionCheckFunc(const Collision3D::Capsule& capsule, const Colli
 	float high = 1.0f;
 
 	// 分割数
-	const int numSamples = 15;
+	const int kNumSamples = 15;
 
-	for (int i = 0; i < numSamples; ++i)
+	for (int i = 0; i < kNumSamples; ++i)
 	{
 		// 線分を三等分して、最近接点とAABBの距離を求める
 		float m1 = low + (high - low) / 3.0f;
@@ -1778,13 +1778,13 @@ float Engine::IntersectSegmentOBB(const Collision3D::Segment& segment, const Col
 	Vector3 d = segment.diff;
 
 	// OBBの半径を配列に格納
-	const float radius[3] = { obb.radius.x, obb.radius.y, obb.radius.z };
+	const float kRadius[3] = { obb.radius.x, obb.radius.y, obb.radius.z };
 
 	// OBBの各軸に対して交差判定を行う
 	for (int i = 0; i < 3; ++i)
 	{
 		Vector3 axis = obb.oriented[i];
-		float e = radius[i];
+		float e = kRadius[i];
 
 		// 軸上への投影（成分）
 		float f = Dot(p, axis);

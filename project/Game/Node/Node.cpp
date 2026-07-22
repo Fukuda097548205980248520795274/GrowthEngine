@@ -48,8 +48,8 @@ void Node::DrawDebuggerRecursive(float zoom)
 	{
 		// 実行されたフレームでフェード情報とタイマーをリセット
 		fadeState_ = lastState_;
-		fadeTimer_ = FADE_DURATION;
-	} 
+		fadeTimer_ = kFadeDuration;
+	}
 	else if (lastState_ == State::None && fadeTimer_ > 0.0f)
 	{
 		// 非実行状態（None）になったらタイマーを減算
@@ -80,7 +80,7 @@ void Node::DrawDebuggerRecursive(float zoom)
 	else if (fadeTimer_ > 0.0f)
 	{
 		// 残像の色を計算 (t は 1.0 から 0.0 に減衰)
-		float t = fadeTimer_ / FADE_DURATION;
+		float t = fadeTimer_ / kFadeDuration;
 
 		// 目標色（Successなら青、Failureなら赤）
 		int targetR = (fadeState_ == State::Success) ? 30 : 180;

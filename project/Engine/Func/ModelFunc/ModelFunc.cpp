@@ -412,7 +412,7 @@ Engine::Skeleton Engine::CreateSkeleton(const std::vector<ModelNode>& nodes)
 	}
 
 	// スケルトンを更新する
-	ForwardKinematices(skeleton);
+	ForwardKinematics(skeleton);
 
 	return skeleton;
 }
@@ -445,7 +445,7 @@ int32_t Engine::CreateJoint(const std::vector<ModelNode>& nodes, const ModelNode
 
 /// @brief スケルトンのフォワードキネマティクスを行う
 /// @param skeleton 
-void Engine::ForwardKinematices(Skeleton& skeleton)
+void Engine::ForwardKinematics(Skeleton& skeleton)
 {
 	// 全てのjointを更新する
 	for (Joint& joint : skeleton.joints)
@@ -470,10 +470,10 @@ void Engine::ForwardKinematices(Skeleton& skeleton)
 
 /// @brief スケルトンのインバースキネマティクス
 /// @param skeleton 
-void Engine::InverseKinematices(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition)
+void Engine::InverseKinematics(Skeleton& skeleton, const std::string& effectedBoneName, const Vector3& targetPosition)
 {
 	// 末端のジョイントのインデックス
-	const int32_t effectedBoneIndex = skeleton.jointMap[effectedBoneName];
+	const int32_t kEffectedBoneIndex = skeleton.jointMap[effectedBoneName];
 
 	// 反復回数
 	const int32_t kMaxIteration = 5;
@@ -484,14 +484,14 @@ void Engine::InverseKinematices(Skeleton& skeleton, const std::string& effectedB
 	for (int i = 0; i < kMaxIteration; ++i)
 	{
 		// 末端のジョイントからたどるためのインデックス
-		int32_t currentIndex = effectedBoneIndex;
+		int32_t currentIndex = kEffectedBoneIndex;
 
 		// 親がいなくなるまでループ
 		while (true)
 		{
 			// 現在のジョイントと末端のジョイント
 			Joint& currentJoint = skeleton.joints[currentIndex];
-			Joint& effectedJoint = skeleton.joints[effectedBoneIndex];
+			Joint& effectedJoint = skeleton.joints[kEffectedBoneIndex];
 
 			// 現在のジョイントの位置と末端のジョイントの位置
 			Vector3 currentPosition = Vector3(currentJoint.worldMatrix.m[3][0], currentJoint.worldMatrix.m[3][1], currentJoint.worldMatrix.m[3][2]);
@@ -533,7 +533,7 @@ void Engine::InverseKinematices(Skeleton& skeleton, const std::string& effectedB
 				currentJoint.transform.rotate = currentJoint.transform.rotate.Normalize();
 
 				// 回転を適用した後は、フォワードキネマティクスで行列を更新する必要がある
-				ForwardKinematices(skeleton);
+				ForwardKinematics(skeleton);
 			}
 
 			// 親がいなければ終了

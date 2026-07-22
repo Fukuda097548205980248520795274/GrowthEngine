@@ -788,15 +788,14 @@ void Engine::Particle3DData::DebugParameter()
 			ImVec4(1, 1, 1, 1)
 		);
 
-		// --- ドロップ処理 ---
+		// ドロップ処理
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
 			{
 				int droppedIndex = *(const int*)payload->Data;
 
-				// droppedIndex が dataTable_ の index
-				// ここでマテリアルなどに設定する
+				// ドロップされたテクスチャのインデックスを設定する
 				param_->hTexture = static_cast<uint32_t>(droppedIndex);
 				textureFilePath_ = textureStore_->GetFilePath(param_->hTexture);
 			}

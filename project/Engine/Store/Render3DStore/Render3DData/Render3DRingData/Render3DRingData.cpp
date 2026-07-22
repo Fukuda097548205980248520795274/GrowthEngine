@@ -442,7 +442,7 @@ void Engine::Render3DRingData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 void Engine::Render3DRingData::VertexCalculate()
 {
 	// スライスごとの角度の計算
-	const float radianPerDivid = (param_->size.endAngle - param_->size.startAngle) / static_cast<float>(param_->division.slices);
+	const float kRadianPerDivide = (param_->size.endAngle - param_->size.startAngle) / static_cast<float>(param_->division.slices);
 
 	for (int i = 0; i < param_->division.slices; ++i)
 	{
@@ -466,8 +466,8 @@ void Engine::Render3DRingData::VertexCalculate()
 		    頂点計算
 		--------------*/
 
-		float currentAngle = param_->size.startAngle + i * radianPerDivid;
-		float nextAngle = param_->size.startAngle + (i + 1) * radianPerDivid;
+		float currentAngle = param_->size.startAngle + i * kRadianPerDivide;
+		float nextAngle = param_->size.startAngle + (i + 1) * kRadianPerDivide;
 
 		// 最後のスライスで、全体の角度が2πに近い場合は、誤差を考慮して次の角度をスタート角度にする
 		if (i == param_->division.slices - 1)

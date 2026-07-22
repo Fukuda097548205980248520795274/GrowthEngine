@@ -141,7 +141,7 @@ protected:
 	float fadeTimer_ = 0.0f;
 
 	// フェード時間
-	const float FADE_DURATION = 0.5f;
+	const float kFadeDuration = 0.5f;
 
 #endif
 };

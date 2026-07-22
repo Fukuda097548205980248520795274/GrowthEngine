@@ -49,9 +49,6 @@ public:
 
 private:
 
-	/// @brief エンジンのインスタンス
-	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
-	
 	/// @brief シーン
 	GameScene* scene_ = nullptr;
 

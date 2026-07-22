@@ -47,23 +47,23 @@ void CharacterMovement::Update(float dt)
 void CharacterMovement::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 {
 	// 入力された方向の長さを計算する
-	const float length = direction.Length();
+	const float kLength = direction.Length();
 
 	// 長さが0の場合 や 地面に接していない場合は移動しない
-	if (length <= 0.0f || owner_->IsAttack()|| owner_->IsIncapacitated())
+	if (kLength <= 0.0f || owner_->IsAttack()|| owner_->IsIncapacitated())
 	{
 		targetVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 		return;
 	}
 
 	// 長さが1を超える場合は1にクランプする
-	const float clampedLength = (length < 1.0f) ? length : 1.0f;
-	const float moveSpeed = clampedLength * maxSpeed;
+	const float kClampedLength = (kLength < 1.0f) ? kLength : 1.0f;
+	const float kMoveSpeed = kClampedLength * maxSpeed;
 
 	// 入力された方向を正規化して、目標速度を計算する
-	targetVelocity_.x = direction.x * moveSpeed;
+	targetVelocity_.x = direction.x * kMoveSpeed;
 	targetVelocity_.y = 0.0f;
-	targetVelocity_.z = direction.y * moveSpeed;
+	targetVelocity_.z = direction.y * kMoveSpeed;
 
 	// 移動する場合はノックバックを無効化する
 	knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
@@ -192,6 +192,6 @@ void CharacterMovement::FallUpdate(float dt)
 void CharacterMovement::VelocityUpdate(float dt)
 {
 	// 速度の更新
-	const float velocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * dt);
-	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, velocityLerpT);
+	const float kVelocityLerpT = 1.0f - std::exp(-velocityLerpSpeed_ * dt);
+	currentVelocity_ = Lerp(currentVelocity_, targetVelocity_, kVelocityLerpT);
 }

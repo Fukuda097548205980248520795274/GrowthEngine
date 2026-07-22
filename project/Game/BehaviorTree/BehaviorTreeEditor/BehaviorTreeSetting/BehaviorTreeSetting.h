@@ -20,7 +20,7 @@ public:
 	/// @param fileName 
 	/// @param out_nodes 
 	/// @param out_links 
-	void LoadTree(const std::string& fileName, std::vector<EditorNode>& out_nodes, std::vector<EditorLink>& out_links);
+	void LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks);
 
 
     

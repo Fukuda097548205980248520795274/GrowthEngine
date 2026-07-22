@@ -54,7 +54,6 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 
             if (!animName.empty())
             {
-                // ※ プロジェクトの MotionManager の仕様に合わせて関数名は適宜調整してください
                 initData.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
             }
 
@@ -100,7 +99,6 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 
             if (!animName.empty())
             {
-                // ※ プロジェクトの MotionManager の仕様に合わせて関数名は適宜調整してください
                 initData.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
             }
 

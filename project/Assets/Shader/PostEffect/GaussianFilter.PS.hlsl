@@ -20,13 +20,13 @@ static const float2 kIndex5x5[5][5] =
 };
 
 // 円周率
-static const float PI = 3.14159265f;
+static const float kPI = 3.14159265f;
 
 // ガウス関数
 float gauss(float x, float y , float sigma)
 {
     float exponent = -(x * x + y * y) * rcp(2.0f * sigma * sigma);
-    float denomnator = 2.0f * PI * sigma * sigma;
+    float denomnator = 2.0f * kPI * sigma * sigma;
     
     // ガウス関数の値を返す
     return exp(exponent) * rcp(denomnator);

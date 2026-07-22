@@ -47,7 +47,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 	ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "リストフィルター");
 
-	// テキスト検索バーの描画 (入力された文字が objectFilter_ に格納されます)
+	// テキスト検索フィルター
 	objectFilter_.Draw("検索 (##ObjectSearchFilter)", 180.0f);
 	ImGui::SameLine();
 
@@ -322,18 +322,18 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
 			if (isChangeAnimation_)
 			{
-				AnimationHandleData animData;
-				animData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, target.standMotion.name);
-				animData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, target.stanceMotion.name);
-				animData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, target.walkMotion.name);
-				animData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, target.dashMotion.name);
-				animData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidFrontMotion.name);
-				animData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidBackMotion.name);
-				animData.hAvoidLeftMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
-				animData.hAvoidRightMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
-				animData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, target.guardMotion.name);
+				AnimationHandleData animationData;
+				animationData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, target.standMotion.name);
+				animationData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, target.stanceMotion.name);
+				animationData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, target.walkMotion.name);
+				animationData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, target.dashMotion.name);
+				animationData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidFrontMotion.name);
+				animationData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidBackMotion.name);
+				animationData.hAvoidLeftMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
+				animationData.hAvoidRightMotion = motionManager_->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
+				animationData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, target.guardMotion.name);
 
-				charPtr->SetAnimationHandle(animData);
+				charPtr->SetAnimationHandle(animationData);
 
 				isChangeAnimation_ = false; // フラグをリセット
 			}

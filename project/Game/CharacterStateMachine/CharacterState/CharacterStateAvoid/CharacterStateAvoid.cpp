@@ -75,12 +75,12 @@ void CharacterStateAvoid::Update(float dt)
 	avoidTimer_ -= dt;
 
 	// 開始位置から終了位置まで線形補間で移動する
-	const float t = std::clamp<float>(1.0f - (avoidTimer_ / avoidDuration_), 0.0f, 1.0f);
-	const float easeOutT = 1.0f - std::powf(1.0f - t, 3); // イーズアウト補間
-	worldTransform->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, easeOutT);
+	const float kT = std::clamp<float>(1.0f - (avoidTimer_ / avoidDuration_), 0.0f, 1.0f);
+	const float kEaseOutT = 1.0f - std::powf(1.0f - kT, 3); // イーズアウト補間
+	worldTransform->translate_ = Lerp(avoidStartPosition_, avoidEndPosition_, kEaseOutT);
 
 	// 到達したら回避フラグを下ろす
-	if (t >= 1.0f)
+	if (kT >= 1.0f)
 	{
 		auto stateMachine = owner_->GetStateMachine();
 		stateMachine->ChangeState("None");

@@ -66,7 +66,7 @@ void Engine::RenderTargetPool::Return(OffscreenResource* resource)
 void Engine::RenderTargetPool::CheckMemoryLeaks()
 {
 	// フレームの最後で、貸し出したリソースが全て返ってきているか確認
-	assert(freeQueue_.size() == resources_.size() && "返却されていないオフスクリーンリソースがあります！(メモリリーク)");
+	assert(freeQueue_.size() == resources_.size() && "返却されていないオフスクリーンリソースがある");
 }
 
 /// @brief サイズを作り直す

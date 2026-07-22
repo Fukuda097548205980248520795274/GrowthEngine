@@ -127,12 +127,12 @@ Character::~Character()
 }
 
 /// @brief アニメーションの初期化
-/// @param animData 
-void Character::SetAnimationHandle(const AnimationHandleData& animData)
+/// @param animationData 
+void Character::SetAnimationHandle(const AnimationHandleData& animationData)
 {
-	hStandMotion_ = animData.hStandMotion;
-	hStanceMotion_ = animData.hStanceMotion;
-	hWalkMotion_ = animData.hWalkMotion;
+	hStandMotion_ = animationData.hStandMotion;
+	hStanceMotion_ = animationData.hStanceMotion;
+	hWalkMotion_ = animationData.hWalkMotion;
 }
 
 /// @brief 更新処理
@@ -143,8 +143,8 @@ void Character::Update()
 
 
 	// デルタタイムを取得する
-	const float dt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
-	const float unscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
+	const float kDt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
+	const float kUnscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
 
 
 	// 着地判定をチェックする
@@ -160,10 +160,10 @@ void Character::Update()
 			WallTouchUpdate();
 
 			// 移動の更新
-			movement_->Update(dt);
+			movement_->Update(kDt);
 
 			// レイジゲージの更新
-			RageGageUpdate(dt);
+			RageGageUpdate(kDt);
 
 			// 壊れたブキを持っている場合は、ブキを離す
 			if (HasWeapon())
@@ -176,12 +176,12 @@ void Character::Update()
 			if (isStyleChanging_ && IsPlayer())
 			{
 				// プレイヤーはスローモーションの影響を受けない
-				UpdateStyleChange(unscaledDt);
+				UpdateStyleChange(kUnscaledDt);
 			}
 			else
 			{
 				// プレイヤー以外はスローモーションの影響を受ける
-				UpdateStyleChange(dt);
+				UpdateStyleChange(kDt);
 			}
 
 			// 押し出し処理
@@ -195,7 +195,7 @@ void Character::Update()
 
 			// シェイクの更新
 			if (model_)model_->param_->modelTransform.translate = shake_->GetShakeOffset();
-			shake_->Update(dt);
+			shake_->Update(kDt);
 
 			// 現在の体力をHUDに反映する
 			if (hpHUD_)
@@ -239,7 +239,7 @@ void Character::Update()
 
 
 	// ステートマシンの更新
-	stateMachine_->Update(dt);
+	stateMachine_->Update(kDt);
 
 	// 現在のステートがNoneまたはDash以外の場合は、まとめた処理を行って終了する
 	if (stateMachine_->GetCurrentStateName() != "None" &&
@@ -253,7 +253,7 @@ void Character::Update()
 	UpdateLockOnTargets();
 
 	/// ターゲットの方向を向く処理
-	movement_->TargetDirection(dt);
+	movement_->TargetDirection(kDt);
 
 	// 最後のまとめた処理
 	FinalizeUpdate();
@@ -887,10 +887,10 @@ Vector2 Character::GetAvoidDirection(const Vector2& moveInputDirection, bool has
 	// 移動入力がある場合はその方向へ回避する
 	if (hasMoveInput)
 	{
-		const Vector2 worldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, cameraYaw);
-		if (worldMoveDirection.Length() > 0.0f)
+		const Vector2 kWorldMoveDirection = ToWorldMoveDirectionFromCamera(moveInputDirection, cameraYaw);
+		if (kWorldMoveDirection.Length() > 0.0f)
 		{
-			return worldMoveDirection.Normalize();
+			return kWorldMoveDirection.Normalize();
 		}
 	}
 
@@ -927,10 +927,10 @@ void Character::UpdateLockOnTargets()
 	float bestDistance = std::numeric_limits<float>::max();
 	float bestDot = -1.0f;
 
-	const Vector3 selfPosition = GetWorldPosition();
+	const Vector3 kSelfPosition = GetWorldPosition();
 
 	// ロックオン対象の側を決定する
-	const bool isSelfPlayerSide = IsPlayerSide();
+	const bool kIsSelfPlayerSide = IsPlayerSide();
 
 	for (Character* character : characters_)
 	{
@@ -938,18 +938,18 @@ void Character::UpdateLockOnTargets()
 		if (!character || character == this)continue;
 
 		// 自分と同じ側の相手は除外する
-		if (isSelfPlayerSide == character->IsPlayerSide()) continue;
+		if (kIsSelfPlayerSide == character->IsPlayerSide()) continue;
 
 		// 死んでいる相手は除外する
 		if(character->IsDead())continue;
 
 		// 自分から相手へのベクトルを計算する
-		Vector3 toTarget = character->GetWorldPosition() - selfPosition;
+		Vector3 toTarget = character->GetWorldPosition() - kSelfPosition;
 		toTarget.y = 0.0f;
 
 		// 距離の二乗を計算する
-		const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-		if (distanceSq <= 0.0f)
+		const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
+		if (kDistanceSq <= 0.0f)
 			continue;
 
 		// ロックオン可能な距離内にいる相手のみを候補にする
@@ -959,29 +959,29 @@ void Character::UpdateLockOnTargets()
 			Vector3 direction = movement_->GetDirection();
 
 			// 目の前にいる相手のみリストに登録する
-			const Vector3 toTargetDirection = toTarget.Normalize();
-			if (Dot(direction, toTargetDirection) <= 0.0f)
+			const Vector3 kToTargetDirection = toTarget.Normalize();
+			if (Dot(direction, kToTargetDirection) <= 0.0f)
 			{
 				continue;
 			}
 
 			// 距離と相手ポインタを登録する
-			const float distance = std::sqrt(distanceSq);
+			const float kDistance = std::sqrt(kDistanceSq);
 
 			// 視線方向との内積を計算する
-			const float viewDot = Dot(direction, toTargetDirection);
+			const float kViewDot = Dot(direction, kToTargetDirection);
 
 			// まず距離が最も近い相手を優先する
-			if (distance < bestDistance)
+			if (kDistance < bestDistance)
 			{
-				bestDistance = distance;
-				bestDot = viewDot;
+				bestDistance = kDistance;
+				bestDot = kViewDot;
 				lockOnTarget_ = character;
 			}
-			else if (distance == bestDistance && viewDot > bestDot)
+			else if (kDistance == bestDistance && kViewDot > bestDot)
 			{
 				// 距離が同じ場合は、視線方向に最も近い相手を優先する
-				bestDot = viewDot;
+				bestDot = kViewDot;
 				lockOnTarget_ = character;
 			}
 		}
@@ -990,12 +990,12 @@ void Character::UpdateLockOnTargets()
 			// NPCの場合は、距離が近い相手をロックオン候補にする
 
 			// 距離と相手ポインタを登録する
-			const float distance = std::sqrt(distanceSq);
+			const float kDistance = std::sqrt(kDistanceSq);
 
 			// まず距離が最も近い相手を優先する
-			if (distance < bestDistance)
+			if (kDistance < bestDistance)
 			{
-				bestDistance = distance;
+				bestDistance = kDistance;
 				lockOnTarget_ = character;
 			}
 		}
@@ -1617,8 +1617,8 @@ void Character::UpdatePushOut()
 	if (!model_)return;
 
 	// キャラクターの押し出し半径
-	constexpr float kPushRadius = 0.25f; // 押し出し半径
-	constexpr float kDistanceLimit = kPushRadius * 2.0f; // 2人の半径の和
+	constexpr float kPushRadius = 0.25f;
+	constexpr float kDistanceLimit = kPushRadius * 2.0f;
 
 	// 押し直しのなめらかさ（抵抗感）の係数
 	constexpr float kPushStrength = 0.2f;
@@ -1945,13 +1945,13 @@ void Character::UpdateCollisionPosition(Collision3DInstanceCapsule* collision)
 Vector2 Character::ToWorldMoveDirectionFromCamera(const Vector2& cameraLocalDirection, float cameraYaw)
 {
 	// カメラ前方向(XZ平面)
-	const Vector2 forward = Vector2(std::sin(cameraYaw), std::cos(cameraYaw));
+	const Vector2 kForward = Vector2(std::sin(cameraYaw), std::cos(cameraYaw));
 
 	// カメラ右方向(XZ平面)
-	const Vector2 right = Vector2(forward.y, -forward.x);
+	const Vector2 kRight = Vector2(kForward.y, -kForward.x);
 
 	// カメラ基準入力をワールド方向へ変換する
-	return right * cameraLocalDirection.x + forward * cameraLocalDirection.y;
+	return kRight * cameraLocalDirection.x + kForward * cameraLocalDirection.y;
 }
 
 /// @brief 体力HUDの位置を更新する

@@ -94,7 +94,7 @@ void Engine::Render2DTextData::Initialize(VertexBufferResource<SpriteVertexData>
 		param_->charTransform[i].rotate = 0.0f;
 		param_->charTransform[i].translate = Vector2(drawX, drawY);
 
-		// advanceは「1/64ピクセル単位」で格納されているので、64で割る（>> 6）必要があります
+		// 64分の1単位で進める
 		penX += static_cast<float>(charData->advance >> 6);
 
 		// テクスチャ
@@ -173,7 +173,7 @@ void Engine::Render2DTextData::Reset()
 			param_->charTransform[i].rotate = 0.0f;
 			param_->charTransform[i].translate = Vector2(drawX, drawY);
 
-			// advanceは「1/64ピクセル単位」で格納されているので、64で割る（>> 6）必要があります
+			// 64分の1単位で進める
 			penX += static_cast<float>(charData->advance >> 6);
 
 			param_->charTexture[i].anchor = Vector2(0.0f, 1.0f);
@@ -263,25 +263,25 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 		const Vector2& size = Vector2(static_cast<float>(charData->size.x), static_cast<float>(charData->size.y));
 		const Vector2& translate = param_->charTransform[i].translate;
 
-		const float left = -anchor.x * size.x + translate.x;
-		const float right = (1.0f - anchor.x) * size.x + translate.x;
-		const float top = anchor.y * size.y + translate.y;
-		const float bottom = (1.0f - anchor.y) * size.y + translate.y;
+		const float kLeft = -anchor.x * size.x + translate.x;
+		const float kRight = (1.0f - anchor.x) * size.x + translate.x;
+		const float kTop = anchor.y * size.y + translate.y;
+		const float kBottom = (1.0f - anchor.y) * size.y + translate.y;
 
 		if (!hasRect)
 		{
-			minX = left;
-			maxX = right;
-			minY = bottom;
-			maxY = top;
+			minX = kLeft;
+			maxX = kRight;
+			minY = kBottom;
+			maxY = kTop;
 			hasRect = true;
 		}
 		else
 		{
-			minX = (std::min)(minX, left);
-			maxX = (std::max)(maxX, right);
-			minY = (std::min)(minY, bottom);
-			maxY = (std::max)(maxY, top);
+			minX = (std::min)(minX, kLeft);
+			maxX = (std::max)(maxX, kRight);
+			minY = (std::min)(minY, kBottom);
+			maxY = (std::max)(maxY, kTop);
 		}
 	}
 
@@ -312,7 +312,7 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 		*materialResource_[i]->data_ = param_->charMaterial[i].color;
 		materialResource_[i]->RegisterGraphics(commandList, 1);
 
-		const Vector2 translate = Vector2(
+		const Vector2 kTranslate = Vector2(
 			param_->charTransform[i].translate.x - textAnchorOffset.x,
 			param_->charTransform[i].translate.y - textAnchorOffset.y);
 

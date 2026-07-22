@@ -69,7 +69,7 @@ void Engine::AudioStore::Initialize(Log* log)
 	if (log)log->Logging("MFStartup : MF_VERSION , MFSTARTUP_NOSOCKET");
 
 	// XAudio2を初期化する
-    hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (FAILED(hr))
 	{
@@ -81,7 +81,7 @@ void Engine::AudioStore::Initialize(Log* log)
 	// マスターボイスを生成する
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
-    if (FAILED(hr))
+	if (FAILED(hr))
 	{
 		if (log)log->Logging("Error : CreateMasteringVoice");
 		return;
@@ -105,7 +105,7 @@ void Engine::AudioStore::Update()
 				// 再生が終了している場合、ソースボイスを破棄する
 				if (state.BuffersQueued <= 0)
 				{
-                    StopAndDestroyVoice(playDatum->pSourceVoice);
+					StopAndDestroyVoice(playDatum->pSourceVoice);
 					return true;
 				}
 			} 
@@ -133,11 +133,11 @@ AudioHandle Engine::AudioStore::Load(const std::string& filePath, Log* log)
 	}
 
 	// wStringに変換する
-	const std::wstring filePathW = ConvertString(filePath);
+	const std::wstring kFilePathW = ConvertString(filePath);
 
 	// ソースレーダを作成する
 	ComPtr<IMFSourceReader> pMFSourceReader{ nullptr };
-	HRESULT hr = MFCreateSourceReaderFromURL(filePathW.c_str(), NULL, &pMFSourceReader);
+	HRESULT hr = MFCreateSourceReaderFromURL(kFilePathW.c_str(), NULL, &pMFSourceReader);
 	assert(SUCCEEDED(hr));
 	if (log)log->Logging(std::format("MFCreateSourceReaderFromURL : {}", filePath.c_str()));
 
@@ -238,7 +238,7 @@ PlayHandle Engine::AudioStore::PlayAudio(AudioHandle handle, float volume)
 	std::unique_ptr<PlayData> playDatum = std::make_unique<PlayData>();
 
 	// プレイハンドルを作成する
-    PlayHandle playHandle = GenerateUniquePlayHandle();
+	PlayHandle playHandle = GenerateUniquePlayHandle();
 	playDatum->handle = playHandle;
 
 
@@ -298,7 +298,7 @@ void Engine::AudioStore::StopAudio(PlayHandle handle)
 			continue;
 		}
 
-        StopAndDestroyVoice(playData->pSourceVoice);
+		StopAndDestroyVoice(playData->pSourceVoice);
 		playTable_.erase(it);
 		return;
 	}
@@ -386,32 +386,32 @@ const Engine::AudioStore::AudioData* Engine::AudioStore::FindAudioData(AudioHand
 /// @return 
 PlayHandle Engine::AudioStore::GenerateUniquePlayHandle() const
 {
-    constexpr uint32_t kMaxRetryCount = 64;
+	constexpr uint32_t kMaxRetryCount = 64;
+
+	// ランダムでユニークなハンドルを生成する
 	for (uint32_t retry = 0; retry < kMaxRetryCount; ++retry)
 	{
-		const PlayHandle playHandle = GetRandomRange(1, 10000000);
-		const bool isDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [playHandle](const std::unique_ptr<PlayData>& data)
+		const PlayHandle kPlayHandle = GetRandomRange(1, 10000000);
+		const bool kIsDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [kPlayHandle](const std::unique_ptr<PlayData>& data)
 			{
-				return playHandle == data->handle;
+				return kPlayHandle == data->handle;
 			});
 
-        if (!isDuplicate)
-		{
-         return playHandle;
-		}
+		if (!kIsDuplicate)
+			return kPlayHandle;
 	}
 
-	for (PlayHandle playHandle = 1; playHandle < std::numeric_limits<PlayHandle>::max(); ++playHandle)
+	// ランダムでユニークなハンドルが見つからなかった場合、連番でユニークなハンドルを生成する
+	for (PlayHandle kPlayHandle = 1; kPlayHandle < std::numeric_limits<PlayHandle>::max(); ++kPlayHandle)
 	{
-		const bool isDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [playHandle](const std::unique_ptr<PlayData>& data)
+		const bool kIsDuplicate = std::any_of(playTable_.begin(), playTable_.end(), [kPlayHandle](const std::unique_ptr<PlayData>& data)
 			{
-				return playHandle == data->handle;
-			});
+				return kPlayHandle == data->handle;
+			}
+		);
 
-		if (!isDuplicate)
-		{
-			return playHandle;
-		}
+		if (!kIsDuplicate)
+			return kPlayHandle;
 	}
 
 	return 0;

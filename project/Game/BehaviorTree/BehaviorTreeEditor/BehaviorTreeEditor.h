@@ -177,7 +177,7 @@ private:
 
 	/// @brief 条件ノードの設定UIを描画する
 	/// @param node 
-	void DrawCondtionNodeSettings(EditorNode& node);
+	void DrawConditionNodeSettings(EditorNode& node);
 
 	/// @brief アクションノードの設定UIを描画する
 	/// @param node 

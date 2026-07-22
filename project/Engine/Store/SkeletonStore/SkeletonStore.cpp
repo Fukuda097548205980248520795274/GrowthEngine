@@ -49,16 +49,16 @@ void Engine::SkeletonStore::DrawDebugSkeleton(const Skeleton& skeleton, const Ve
 		}
 		
 		// 親のインデックスを取得する
-		const int32_t parentIndex = *joint.parent;
+		const int32_t kParentIndex = *joint.parent;
 
 		// 親のインデックスが不正なときは線を描画しない
-		if (parentIndex < 0 || parentIndex >= static_cast<int32_t>(skeleton.joints.size()))
+		if (kParentIndex < 0 || kParentIndex >= static_cast<int32_t>(skeleton.joints.size()))
 		{
 			continue;
 		}
 
 		// 親のジョイントを取得する
-		const Joint& parentJoint = skeleton.joints[parentIndex];
+		const Joint& parentJoint = skeleton.joints[kParentIndex];
 
 		// 線の始点と終点を計算する
 		Vector3 start = 

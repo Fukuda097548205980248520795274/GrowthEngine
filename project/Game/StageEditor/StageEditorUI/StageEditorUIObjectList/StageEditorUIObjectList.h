@@ -57,9 +57,6 @@ private:
 	/// @brief モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
 
-	/// @brief エンジンのインスタンス
-	const GrowthEngine* engine_ = GrowthEngine::GetInstance();
-
 	/// @brief アニメーションをチェンジしたかどうか
 	bool isChangeAnimation_ = false;
 

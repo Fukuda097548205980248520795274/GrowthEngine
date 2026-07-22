@@ -1,6 +1,6 @@
 
 // 円周率
-static const float PI = 3.141592653589f;
+static const float kPI = 3.141592653589f;
 
 // 頂点
 struct Vertex
@@ -41,7 +41,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
         return;
 
     // 円周方向の角度
-    float phi = (2.0f * PI * s) / gParam.slices;
+    float phi = (2.0f * kPI * s) / gParam.slices;
     
     // vは上(t=0)なら0.0、下(t=1)なら1.0になる
     float v = (float) t;

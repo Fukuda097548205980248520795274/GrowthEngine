@@ -1,9 +1,13 @@
 #include "NavMeshMove.h"
 #include "Entity/Character/Character.h"
 
-namespace {
-    constexpr float kRepathDistanceSq = 1.0f * 1.0f; // 再計算するターゲットの移動距離の二乗
-    constexpr float kMinMoveDistance = 0.001f;       // 移動入力を行う最小距離
+namespace 
+{
+    // 再計算するターゲットの移動距離の二乗
+    constexpr float kReDistanceSq = 1.0f * 1.0f;
+
+    // 移動入力を行う最小距離
+    constexpr float kMinMoveDistance = 0.001f;
 }
 
 /// @brief コンストラクタ
@@ -135,7 +139,7 @@ void NavMeshMove::Update()
         float dx = currentTargetPos.x - lastTargetPosition_.x;
         float dz = currentTargetPos.z - lastTargetPosition_.z;
 
-        if ((dx * dx + dz * dz) > kRepathDistanceSq)
+        if ((dx * dx + dz * dz) > kReDistanceSq)
         {
             // ターゲットが1m以上動いていたら経路を再計算
             lastTargetPosition_ = currentTargetPos;

@@ -1,6 +1,6 @@
 
 // 円周率
-static const float PI = 3.141592653589f;
+static const float kPI = 3.141592653589f;
 
 // 頂点
 struct Vertex
@@ -48,8 +48,8 @@ void main( uint3 DTid : SV_DispatchThreadID )
         return; // 完全な範囲外のスレッドはここで終了
     }
 
-    float phi = (2.0 * PI * s) / gParam.slices;
-    float theta = (PI * t) / gParam.segments;
+    float phi = (2.0 * kPI * s) / gParam.slices;
+    float theta = (kPI * t) / gParam.segments;
 
     float3 pos;
     pos.x = sin(theta) * cos(phi);

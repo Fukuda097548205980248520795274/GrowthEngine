@@ -27,7 +27,7 @@ public:
 		Vector3 toCenter = Vector3(0.0f, 0.0f, 0.0f);
 
 		/// @brief オイラー角
-		Vector3 eulerAngles = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 eularAngles = Vector3(0.0f, 0.0f, 0.0f);
 	};
 
 

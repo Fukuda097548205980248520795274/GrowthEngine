@@ -8,6 +8,7 @@
 
 namespace
 {
+	// NPCが構え状態になる距離
 	constexpr float kNpcStanceDistance = 5.0f;
 	constexpr float kNpcStanceDistanceSq = kNpcStanceDistance * kNpcStanceDistance;
 }
@@ -178,8 +179,8 @@ void NPC::UpdateStanceStateByTargetDistance()
 	Vector3 toTarget = lockOnTarget_->GetWorldPosition() - GetWorldPosition();
 	toTarget.y = 0.0f;
 
-	const float distanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-	isStance_ = (distanceSq <= kNpcStanceDistanceSq);
+	const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
+	isStance_ = (kDistanceSq <= kNpcStanceDistanceSq);
 }
 
 /// @brief 描画処理

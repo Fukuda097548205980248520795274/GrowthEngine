@@ -62,7 +62,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			ImGuizmo::DecomposeMatrixToComponents(&worldMatrix.m[0][0], translation, rotation, scale);
 
 			// 回転はImGuizmoが度単位で返すので、ラジアンに変換するための定数
-			constexpr float DEG2RAD = std::numbers::pi_v<float> / 180.0f;
+			constexpr float kDeg2Rad = std::numbers::pi_v<float> / 180.0f;
 
 			switch (currentOperation_)
 			{
@@ -72,9 +72,9 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 				break;
 			case ImGuizmo::ROTATE:
 				// 回転成分抽出
-				data.rotate_.x = rotation[0] * DEG2RAD;
-				data.rotate_.y = rotation[1] * DEG2RAD;
-				data.rotate_.z = rotation[2] * DEG2RAD;
+				data.rotate_.x = rotation[0] * kDeg2Rad;
+				data.rotate_.y = rotation[1] * kDeg2Rad;
+				data.rotate_.z = rotation[2] * kDeg2Rad;
 				break;
 			case ImGuizmo::SCALE:
 				// 拡縮成分抽出
@@ -154,7 +154,7 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 	Matrix4x4 viewMatrix = engine_->GetCamera3DView();
 	Matrix4x4 projectionMatrix = engine_->GetCamera3DProjection();
 
-	// 1. 選択されているすべての要素から「中心座標（重心）」を計算する
+	// 選択されているすべての要素から「中心座標（重心）」を計算する
 	Vector3 center = { 0.0f, 0.0f, 0.0f };
 	int vertexCount = 0;
 
@@ -192,7 +192,7 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 	// ワールド行列を選択要素の中心位置に設定
 	Matrix4x4 worldMatrix = Make3DTranslateMatrix4x4(center);
 
-	// 2. ギズモの描画と操作（ループの外で1回だけ呼び出す）
+	// ギズモの描画と操作
 	ImGuizmo::Manipulate(&viewMatrix.m[0][0], &projectionMatrix.m[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &worldMatrix.m[0][0]);
 
 	// ギズモを使ってオブジェクトを操作中かどうかをチェック

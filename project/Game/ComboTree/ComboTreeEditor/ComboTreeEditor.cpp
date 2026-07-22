@@ -473,13 +473,13 @@ void ComboTreeEditor::DrawProjectPanel()
 	std::vector<std::string> fileList = projectManager_->GetFileList();
 
 	// タイルのサイズ設定
-	const float thumbnailSize = 64.0f;
-	const float padding = 12.0f;
-	const float cellSize = thumbnailSize + padding;
+	const float kThumbnailSize = 64.0f;
+	const float kPadding = 12.0f;
+	const float kCellSize = kThumbnailSize + kPadding;
 
-	// ウィンドウの利用可能な横幅から、1行に収まる列数を自動計算
+	// パネルの幅に応じて列数を計算
 	float panelWidth = ImGui::GetContentRegionAvail().x;
-	int columnCount = static_cast<int>(panelWidth / cellSize);
+	int columnCount = static_cast<int>(panelWidth / kCellSize);
 	if (columnCount < 1) columnCount = 1; // 最低でも1列は確保
 
 	if (ImGui::BeginTable("AssetGrid", columnCount, ImGuiTableFlags_None))
@@ -500,7 +500,7 @@ void ComboTreeEditor::DrawProjectPanel()
 			}
 
 			// 正方形のボタン領域（ホバー・クリックに反応するのはこの四角形のみ）
-			if (ImGui::Button(fileName.c_str(), ImVec2(thumbnailSize, thumbnailSize)))
+			if (ImGui::Button(fileName.c_str(), ImVec2(kThumbnailSize, kThumbnailSize)))
 			{
 				currentFileName_ = fileName;
 				LoadFromFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
@@ -513,7 +513,7 @@ void ComboTreeEditor::DrawProjectPanel()
 
 			// ボタンの下に表示する名前
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 2.0f);
-			ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + thumbnailSize);
+			ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + kThumbnailSize);
 			ImGui::TextUnformatted(fileName.c_str());
 			ImGui::PopTextWrapPos();
 
