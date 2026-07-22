@@ -44,6 +44,8 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 	// タグを設定する
 	characterTag_ = characterTag;
 
+	// 攻撃性の値を設定する
+	aggressiveness_ = initData.aggressiveness;
 
 	// 初期化データを設定する
 	SetInitData(initData);
@@ -275,4 +277,22 @@ void NPC::InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, Behavio
 	stateMachine_->GetState("Deflected")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deflectedStateBT, this));
 	stateMachine_->GetState("Avoid")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.avoidStateBT, this));
 	stateMachine_->GetState("Dead")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deadStateBT, this));
+}
+
+/// @brief デバッグUIを描画する
+/// @param placementData 
+/// @param placementList 
+/// @param history 
+/// @param isDirty 
+void NPC::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
+{
+	// キャラクターの状態を表示する
+	Entity::DrawDebugUI(placementData, placementList, history, isDirty);
+
+	ImGui::Separator();
+
+	// 攻撃性を表示・編集する
+	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
+	ImGui::DragFloat("攻撃性", &aggressiveness_, 1, 0, 1000000);
+	if (ImGui::IsItemDeactivatedAfterEdit())placementData->aggressiveness = aggressiveness_;
 }

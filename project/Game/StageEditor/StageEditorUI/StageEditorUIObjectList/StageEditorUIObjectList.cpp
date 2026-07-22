@@ -311,7 +311,6 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		{
 			// キャラクターの場合、キャラクター固有のUIを描画する
 			Character* charPtr = static_cast<Character*>(target.instancePtr);
-			charPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
 
 			// 共通ヘルパーからキャラクターの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawCharacterBaseSettings(target, placementList, isDirty, history_, true);

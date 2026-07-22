@@ -1417,6 +1417,9 @@
     <Filter Include="Game\CharacterStateMachine\StateMachineEditor">
       <UniqueIdentifier>{a682f011-e63f-4c06-a404-c6404067c47b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\PhaseManager">
+      <UniqueIdentifier>{f6202391-471f-437a-834b-9a753dcff65f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2570,6 +2573,9 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.cpp">
       <Filter>Game\CharacterStateMachine\StateMachineEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\PhaseManager\PhaseManager.cpp">
+      <Filter>Game\PhaseManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3859,6 +3865,9 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.h">
       <Filter>Game\CharacterStateMachine\StateMachineEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\PhaseManager\PhaseManager.h">
+      <Filter>Game\PhaseManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

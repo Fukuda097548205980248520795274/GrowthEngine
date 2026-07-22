@@ -65,10 +65,11 @@ void BattleDirector::ReleaseAttackToken(Character* npc)
 	// 現在の攻撃トークン保持者を取得
 	Character* target = it->second;
 
+	float aggressiveness = std::max(0.1f, npc->GetAggressiveness());
 
 	// 攻撃トークンのクールタイムを計算する
 	float bestInterval = 1.5f;
-	float finalInterval = bestInterval / globalTension_;
+	float finalInterval = bestInterval / (std::max(0.01f, globalTension_) * aggressiveness);
 
 	// ターゲットのクールタイムを設定する
 	targetTokenCooldowns_[target] = finalInterval;
@@ -76,7 +77,7 @@ void BattleDirector::ReleaseAttackToken(Character* npc)
 
 	// 攻撃クールタイムを計算する
 	float bestCooltime = 5.0f;
-	float finalCooltime = bestCooltime / npc->GetAggressiveness();
+	float finalCooltime = bestCooltime /aggressiveness;
 
 	// NPCの攻撃クールタイムを設定する
 	npc->SetAttackCooltime(finalCooltime);
@@ -187,6 +188,9 @@ float BattleDirector::CalculateUtilityScore(Character* attacker, Character* targ
 	toTarget.y = 0.0f;
 	float distanceSq = toTarget.LengthSq();
 	score -= distanceSq * 2.0f; // 重みをかけて距離の二乗を減算する
+
+	// スコアが1.0未満にならないようにする
+	score = std::max(1.0f, score);
 
 	// 攻撃者の攻撃力に基づくスコアの加算
 	float finalAggressiveness = attacker->GetAggressiveness() * globalTension_;

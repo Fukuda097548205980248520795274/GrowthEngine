@@ -90,6 +90,9 @@ struct CharacterInitData
 	/// @brief 体力
 	int hp = 0;
 
+	/// @brief 攻撃性
+	float aggressiveness = 1.0f;
+
 	/// @brief レイジゲージの閾値
 	std::vector<float> rageGageThresholds;
 

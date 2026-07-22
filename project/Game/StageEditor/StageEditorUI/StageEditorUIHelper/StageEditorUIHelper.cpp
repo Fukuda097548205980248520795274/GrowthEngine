@@ -460,19 +460,24 @@ namespace StageEditorUIHelper
 	void DrawCharacterBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
 		bool& isDirty, StageEditorHistory* history, bool useHistory)
 	{
+		if (target.instancePtr == nullptr)
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "キャラクターの実体が存在しません。配置を再生成してください。");
+			return;
+		}
+
 		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (BeginPropertyTable("CharBaseTable"))
 			{
+				// キャラクターの実体ポインタを取得
+				Character* charPtr = static_cast<Character*>(target.instancePtr);
+
 				// 位置情報
 				PropertyLabel("生成位置");
 				if (ImGui::DragFloat3("##Pos", &target.position.x, 0.1f))
 				{
 					isDirty = true;
-					if (useHistory && target.instancePtr)
-					{
-						// 必要に応じてドラッグ終了時のみ履歴保存するよう調整しても良い
-					}
 				}
 
 				// 回転情報
@@ -483,10 +488,26 @@ namespace StageEditorUIHelper
 				}
 
 				// HP
-				PropertyLabel("初期 HP");
-				if (ImGui::DragInt("##HP", &target.hp, 1, 0, 10000))
+				PropertyLabel("HP");
+				if (ImGui::DragInt("##HP", &target.hp, 1, 0, charPtr->GetMaxHp()))
 				{
+					
 					isDirty = true;
+					charPtr->SetHp(target.hp);
+				}
+
+				// NPCの場合は攻撃性を設定できるようにする
+				if (target.subType != static_cast<int32_t>(CharacterTag::Player))
+				{
+					NPC* npcPtr = static_cast<NPC*>(target.instancePtr);
+
+					// 攻撃性
+					PropertyLabel("攻撃性");
+					if (ImGui::DragFloat("##Aggressiveness", &target.aggressiveness, 0.1f, 0.0f, 100.0f))
+					{
+						npcPtr->SetAggressiveness(target.aggressiveness);
+						isDirty = true;
+					}
 				}
 
 				EndPropertyTable();

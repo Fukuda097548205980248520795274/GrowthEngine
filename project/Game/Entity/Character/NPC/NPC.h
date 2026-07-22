@@ -69,7 +69,7 @@ public:
 
 	/// @brief 攻撃性の値を設定する
 	/// @param aggressiveness 
-	void SetAggressiveness(float aggressiveness) override { aggressiveness_ = aggressiveness; }
+	void SetAggressiveness(float aggressiveness) override { aggressiveness_ = std::max(0.1f, aggressiveness); }
 
 
 private:
@@ -107,5 +107,15 @@ private:
 
 	/// @brief 攻撃性の値
 	float aggressiveness_ = 1.0f;
+
+
+private:
+
+	/// @brief デバッグUIを描画する
+	/// @param placementData 
+	/// @param placementList 
+	/// @param history 
+	/// @param isDirty 
+	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

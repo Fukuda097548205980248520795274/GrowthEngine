@@ -1731,6 +1731,39 @@ void Character::Dead()
 	if (hpHUD_)hpHUD_->Death();
 	hpHUD_ = nullptr;
 
+
+	
+	// 武器を持っている場合は、武器を離す
+	if (HasWeapon())
+		ReleaseWeapon();
+
+	// 他のキャラクターとの関係を解除する
+	for (Character* other : characters_)
+	{
+		if (other == this) continue;
+
+		// 自分をロックオンしている相手が死亡した場合は、ロックオン状態を解除する
+		if (other->GetLockOnTarget() == this)
+			other->ClearLockOnTarget();
+
+		// 自分を掴んでいる相手が死亡した場合は、掴み状態を解除する
+		if (other->GetGrabTarget() == this)
+		{
+			other->SetGrabTarget(nullptr);
+
+			if (other->IsGrabbing())
+				other->GetStateMachine()->ChangeState("None");
+		}
+
+		// 自分が掴んでいる相手が死亡した場合は、掴み状態を解除する
+		if (this->IsGrabbing() && this->GetGrabTarget() == other)
+		{
+			if (other->IsGrabbed())
+				other->GetStateMachine()->ChangeState("None");
+		}
+	}
+
+
 	// インスタンスリストから自分を除外する
 	auto it = std::find(characters_.begin(), characters_.end(), this);
 	if (it != characters_.end())

@@ -1,6 +1,7 @@
 #pragma once
 #pragma once
 #include "GrowthEngine.h"
+#include "PhaseManager/PhaseManager.h"
 
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
@@ -42,6 +43,18 @@
 
 class GameScene : public Scene
 {
+public:
+
+	// @brief ゲームのフェーズ
+	enum class PhaseType
+	{
+		Intro,
+		Playing,
+		GameOver,
+		GameClear,
+	};
+
+
 public:
 
 	/// @brief コンストラクタ
@@ -141,6 +154,9 @@ private:
 
 
 private:
+
+	/// @brief フェーズマネージャ
+	std::unique_ptr<PhaseManager<PhaseType>> phaseManager_;
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;

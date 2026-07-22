@@ -33,7 +33,6 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
-
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
@@ -357,16 +356,15 @@ void GameScene::Initialize()
 			engine_->DrawToRenderPass("MainPass", "HUD");
 		}
 	);
+
+
+	// フェーズマネージャの生成と初期化
+	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
 }
 
 /// @brief 更新処理
 void GameScene::Update()
 {
-	if (engine_->GetKeyTrigger(DIK_SPACE))
-	{
-		Transition("Title");
-	}
-
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 

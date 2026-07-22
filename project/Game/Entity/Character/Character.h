@@ -82,6 +82,14 @@ public:
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
 
+	/// @brief 体力を設定する
+	/// @param hp 
+	void SetHp(int hp) { hp_ = std::clamp(hp, 0, maxHp_); }
+
+	/// @brief 最大体力を設定する
+	/// @param maxHp 
+	void SetMaxHp(int maxHp) { maxHp_ = std::max(maxHp, 1); }
+
 	/// @brief 体力を取得する
 	/// @return 
 	int GetHp()const { return hp_; }
@@ -119,6 +127,9 @@ public:
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }
+
+	/// @brief ロックオンした相手をクリアする
+	void ClearLockOnTarget() { lockOnTarget_ = nullptr; }
 
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 
@@ -877,9 +888,6 @@ protected:
 	/// @brief 体力HUD
 	HP* hpHUD_ = nullptr;
 
-	/// @brief 体力HUDの初期化
-	void HpHudInit();
-
 	/// @brief 体力HUDの位置を更新する
 	void HpHudUpdate();
 
@@ -891,6 +899,6 @@ public:
 	/// @param placementList 
 	/// @param history 
 	/// @param isDirty 
-	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
+	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

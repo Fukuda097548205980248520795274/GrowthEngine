@@ -73,6 +73,9 @@ struct PlacementData
 	// 耐久力 (武器の場合)
 	int32_t durability = 100;
 
+	// 攻撃性（NPCの場合）
+	float aggressiveness = 1.0f;
+
 	// 攻撃力 (武器の場合)
 	float attackPower = 1.0f;
 
