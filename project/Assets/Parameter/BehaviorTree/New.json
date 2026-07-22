@@ -51,11 +51,6 @@
             "start": 56
         },
         {
-            "end": 65,
-            "id": 66,
-            "start": 56
-        },
-        {
             "end": 68,
             "id": 69,
             "start": 56
@@ -247,19 +242,6 @@
             "pos": [
                 450.0,
                 120.0
-            ],
-            "type": 4
-        },
-        {
-            "condition_type": 12,
-            "id": 64,
-            "input_pin": 65,
-            "is_collapsed": false,
-            "name": "自分が一番ターゲットに近いかどうか",
-            "output_pin": -1,
-            "pos": [
-                450.0,
-                240.0
             ],
             "type": 4
         },

@@ -86,6 +86,10 @@ public:
 	/// @return 
 	int GetHp()const { return hp_; }
 
+	/// @brief 最大体力を取得する
+	/// @return 
+	int GetMaxHp()const { return maxHp_; }
+
 	/// @brief 回避を開始する
 	/// @param direction 
 	/// @param distance 
@@ -528,6 +532,15 @@ public:
 	static bool IsCutsceneActive() { return isCutsceneActive_; }
 
 
+	/// @brief 攻撃性の値を取得する
+	/// @return 
+	virtual float GetAggressiveness() const { return 1.0f; }
+
+	/// @brief 攻撃性の値を設定する
+	/// @param aggressiveness 
+	virtual void SetAggressiveness(float aggressiveness) {}
+
+
 
 
 protected:
@@ -581,6 +594,9 @@ protected:
 	/// @brief シェイク
 	std::unique_ptr<Shake> shake_ = nullptr;
 
+
+	/// @brief 最大の体力
+	int maxHp_ = 0;
 
 	/// @brief 体力
 	int hp_ = 0;

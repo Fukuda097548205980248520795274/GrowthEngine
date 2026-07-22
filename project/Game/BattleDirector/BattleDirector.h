@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 class Character;
+class Player;
 
 class BattleDirector
 {
@@ -25,10 +26,14 @@ public:
 	/// @brief クリア処理
 	void Clear();
 
-	/// @brief NPCがターゲットに最も近いかどうかを判断する
-	/// @param npc 
+	/// @brief 更新処理
+	/// @param dt 
+	void Update(float dt);
+
+	/// @brief 指定されたNPCが最も攻撃に適しているかどうかを判定する
+	/// @param NPC 
 	/// @return 
-	bool IsClosestToTarget(Character* npc);
+	bool IsBestAttacker(Character* NPC);
 
 private:
 
@@ -43,5 +48,36 @@ private:
 
 	/// @brief NPCとそのターゲットのマッピング
 	std::unordered_map<Character*, Character*> npcToTargetMap_;
+
+
+private:
+
+	/// @brief 攻撃トークンのユーティリティスコアを計算する
+	/// @param attacker 
+	/// @param target 
+	/// @return 
+	float CalculateUtilityScore(Character* attacker, Character* target);
+
+	/// @brief ターゲットごとの攻撃トークンのクールダウン時間
+	std::unordered_map<Character*, float> targetTokenCooldowns_;
+
+
+private:
+
+	/// @brief 戦況のテンションを更新する
+	/// @param player 
+	void UpdateTension(Player* player);
+
+	/// @brief 戦況のテンション
+	float globalTension_ = 1.0f;
+
+	/// @brief プレイヤーの体力が少ないときのテンションの減少率
+	float lowHpTensionMultiplier_ = 0.5f;
+
+	/// @brief プレイヤーの体力が中程度のときのテンションの増加率
+	float mediumHpTensionMultiplier_ = 0.8f;
+
+	/// @brief プレイヤーの体力が多いときのテンションの増加率
+	float highHpTensionMultiplier_ = 1.0f;
 };
 

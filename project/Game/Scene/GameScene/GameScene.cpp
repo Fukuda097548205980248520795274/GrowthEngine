@@ -370,6 +370,9 @@ void GameScene::Update()
 	// デルタタイムを取得する
 	const float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
+	// バトルディレクターの更新
+	BattleDirector::GetInstance().Update(dt);
+
 	// 各エディタの更新処理を呼び出す
 #ifdef _DEVELOPMENT
 	cutsceneEditor_->SetActive(editorWorkspaceManager_->GetCurrentWorkspace() == WorkspaceType::CutsceneEditor ? true : false);

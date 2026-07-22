@@ -184,24 +184,6 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 				};
 			break;
 
-			// ターゲットに最も近いかどうかをチェックする条件
-		case ConditionType::IsClosestToTarget:
-			conditionFunc = [character]()
-				{
-					if (!character->HasTarget()) return false;
-					return BattleDirector::GetInstance().IsClosestToTarget(character);
-				};
-			break;
-
-			// ターゲットに最も近くないかどうかをチェックする条件
-		case ConditionType::IsNotClosestToTarget:
-			conditionFunc = [character]()
-				{
-					if (!character->HasTarget()) return true;
-					return !BattleDirector::GetInstance().IsClosestToTarget(character);
-				};
-			break;
-
 			// 攻撃動作中かどうかをチェックする条件
 		case ConditionType::IsInAttackSequence:
 			conditionFunc = [character]() {return character->IsInAttackSequence();};

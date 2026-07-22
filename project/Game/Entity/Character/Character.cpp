@@ -1780,6 +1780,7 @@ void Character::SetInitData(const CharacterInitData& initData)
 
 	// 体力
 	hp_ = initData.hp;
+	maxHp_ = hp_;
 
 	// レイジゲージの閾値 昇順
 	rageGageThresholds_ = initData.rageGageThresholds;

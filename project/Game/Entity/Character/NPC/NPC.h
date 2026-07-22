@@ -63,6 +63,14 @@ public:
 	/// @param behaviorTree 
 	void SetBehaviorTree(BehaviorTree* behaviorTree) override { currentBehaviorTree_ = behaviorTree; }
 
+	/// @brief 攻撃性の値を取得する
+	/// @return 
+	float GetAggressiveness() const override { return aggressiveness_; }
+
+	/// @brief 攻撃性の値を設定する
+	/// @param aggressiveness 
+	void SetAggressiveness(float aggressiveness) override { aggressiveness_ = aggressiveness; }
+
 
 private:
 
@@ -96,5 +104,8 @@ private:
 
 	/// @brief 攻撃のクールタイム
 	float attackCooltime_ = 0.0f;
+
+	/// @brief 攻撃性の値
+	float aggressiveness_ = 1.0f;
 };
 
