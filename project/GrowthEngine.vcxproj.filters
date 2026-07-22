@@ -1414,6 +1414,9 @@
     <Filter Include="Game\StageObject\CameraGuard">
       <UniqueIdentifier>{518f026d-3210-468f-b3ef-b322d91aeb1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\StateMachineEditor">
+      <UniqueIdentifier>{a682f011-e63f-4c06-a404-c6404067c47b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2564,6 +2567,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageObject\CameraGuard\CameraGuard.cpp">
       <Filter>Game\StageObject\CameraGuard</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.cpp">
+      <Filter>Game\CharacterStateMachine\StateMachineEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3850,6 +3856,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageObject\CameraGuard\CameraGuard.h">
       <Filter>Game\StageObject\CameraGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.h">
+      <Filter>Game\CharacterStateMachine\StateMachineEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

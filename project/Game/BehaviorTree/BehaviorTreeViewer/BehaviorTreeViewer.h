@@ -1,5 +1,7 @@
 #pragma once
 
+class NPC;
+
 class BehaviorTreeViewer
 {
 public:
@@ -10,14 +12,14 @@ public:
 	/// @brief デストラクタ
 	~BehaviorTreeViewer() = default;
 
-	/// @brief ビューアーウィンドウを描画する
+	/// @brief UIを描画する
 	void DrawUI();
 
 
 private:
 
-	// 現在デバッグ対象に選択されているNPCのインデックス
-	int selectedNpcIndex_ = 0;
+	// 選択されたNPCのインデックス
+	NPC* selectedNpc_ = nullptr;
 
 	// ズーム倍率 (1.0f = 等倍)
 	float zoom_ = 1.0f;

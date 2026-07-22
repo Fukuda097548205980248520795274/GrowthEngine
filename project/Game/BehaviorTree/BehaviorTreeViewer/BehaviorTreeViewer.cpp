@@ -1,5 +1,5 @@
 #include "BehaviorTreeViewer.h"
-#include "Entity/Character/Character.h" // Character::characters_ を利用するため
+#include "Entity/Character/Character.h"
 #include "Entity/Character/NPC/NPC.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Node/Node.h"
@@ -13,9 +13,82 @@ void BehaviorTreeViewer::DrawUI()
 #ifdef _DEVELOPMENT
 
 
-	ImGui::Begin("Behavior Tree Runtime Viewer");
+	// NPCのリストを取得
+	std::vector<NPC*> activeNpcs;
+	std::vector<std::string> npcNames;
+	auto& characters = Character::GetCharacters();
+
+	for (Character* character : characters)
+	{
+		if (character && character->GetCharacterTag() != CharacterTag::Player)
+		{
+			// CharacterからNPCへ安全にキャスト
+			if (NPC* npc = dynamic_cast<NPC*>(character))
+			{
+				activeNpcs.push_back(npc);
+
+				// エディタ用に設定された名前を取得
+				std::string name = npc->GetEditorName();
+				if (name.empty())
+				{
+					name = "Unnamed_NPC_" + std::to_string(activeNpcs.size());
+				}
+
+				// リスト用の表示名を作成
+				npcNames.push_back(name + " (Tag: " + std::to_string((int)npc->GetCharacterTag()) + ")");
+			}
+		}
+	}
+
+	
+	ImGui::Begin("NPC選択");
+	if (activeNpcs.empty())
+	{
+		ImGui::Text("有効なNPCが見つかりません。");
+	}
+	else
+	{
+		// 選択されているNPCがまだ生存しているかどうかを確認
+		bool isTargetAlive = false;
+		for (NPC* npc : activeNpcs)
+		{
+			if (npc == selectedNpc_)
+			{
+				isTargetAlive = true;
+				break;
+			}
+		}
+
+		// 選択されているNPCが死亡している場合、最初のNPCを選択する
+		if (!isTargetAlive)
+			selectedNpc_ = activeNpcs[0];
+
+		ImGui::Text("選択中のNPC :");
+
+		// 選択中のNPCの名前を表示
+		if (ImGui::BeginListBox("##NPCリスト", ImVec2(-FLT_MIN, 150.0f))) 
+		{
+			for (int i = 0; i < npcNames.size(); ++i)
+			{
+				// ポインタが一致しているかどうかで選択状態を判定
+				const bool isSelected = (selectedNpc_ == activeNpcs[i]);
+
+				// 選択されたNPCを更新
+				if (ImGui::Selectable(npcNames[i].c_str(), isSelected))
+					selectedNpc_ = activeNpcs[i];
+
+				// 選択されたNPCにフォーカスを当てる
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndListBox();
+		}
+	}
+	ImGui::End();
 
 
+
+	ImGui::Begin("ランタイムビヘイビアツリービュー");
 	// 拡縮用のUIボタンと現在の倍率表示
 	ImGui::Text("ズーム: %d%%", static_cast<int>(zoom_ * 100.0f));
 	ImGui::SameLine();
@@ -35,65 +108,17 @@ void BehaviorTreeViewer::DrawUI()
 		}
 	}
 
-	// ズーム率の限界値を制限（例: 40% 〜 150% 程度が文字が潰れず綺麗です）
+	// ズーム率の限界値を制限
 	if (zoom_ < 0.4f) zoom_ = 0.4f;
 	if (zoom_ > 1.5f) zoom_ = 1.5f;
-
-
-	// シーン内の全アクティブキャラクターからNPC（プレイヤー以外）を抽出
-	std::vector<NPC*> activeNpcs;
-	std::vector<std::string> npcNames;
-	auto& characters = Character::GetCharacters(); // Characterクラスの静的メンバから全キャラクターを取得
-
-	for (Character* character : characters)
-	{
-		if (character && character->GetCharacterTag() != CharacterTag::Player)
-		{
-			// CharacterからNPCへ安全にキャスト
-			if (NPC* npc = dynamic_cast<NPC*>(character))
-			{
-				activeNpcs.push_back(npc);
-				// コンボボックス用の表示名を作成（Tagやアドレス等で識別）
-				npcNames.push_back("NPC_" + std::to_string(activeNpcs.size()) + " (Tag: " + std::to_string((int)npc->GetCharacterTag()) + ")");
-			}
-		}
-	}
-
-	if (activeNpcs.empty())
-	{
-		ImGui::Text("No active NPCs found in the scene.");
-		ImGui::End();
-		return;
-	}
-
-	// デバッグ監視したいNPCをコンボボックスで選択
-	if (selectedNpcIndex_ >= activeNpcs.size()) selectedNpcIndex_ = 0;
-
-	if (ImGui::BeginCombo("Target NPC", npcNames[selectedNpcIndex_].c_str()))
-	{
-		for (int i = 0; i < npcNames.size(); ++i)
-		{
-			const bool isSelected = (selectedNpcIndex_ == i);
-			if (ImGui::Selectable(npcNames[i].c_str(), isSelected))
-			{
-				selectedNpcIndex_ = i;
-			}
-
-			if (isSelected)
-			{
-				ImGui::SetItemDefaultFocus();
-			}
-		}
-		ImGui::EndCombo();
-	}
 
 	ImGui::Separator();
 
 	// 選択されたNPCのビヘイビアツリーをキャンバスに描画
-	NPC* targetNpc = activeNpcs[selectedNpcIndex_];
-	if (targetNpc)
+	if (!activeNpcs.empty())
 	{
-		BehaviorTree* bt = targetNpc->GetBehaviorTree();
+		// NPCのビヘイビアツリーを取得
+		BehaviorTree* bt = selectedNpc_->GetBehaviorTree();
 		if (bt && bt->GetRoot())
 		{
 			// ビビューアー専用のImNodesキャンバスを開始
@@ -107,15 +132,18 @@ void BehaviorTreeViewer::DrawUI()
 
 			ImNodes::EndNodeEditor();
 
-			// 最後にフォントスケールを等倍に戻す（他のウィンドウに影響させないため）
+			// 最後にフォントスケールを等倍に戻す
 			ImGui::SetWindowFontScale(1.0f);
 		}
 		else
 		{
-			ImGui::Text("This NPC does not have an active Behavior Tree.");
+			ImGui::Text("このNPCは有効なビヘイビアツリーを持っていません。");
 		}
 	}
-
+	else
+	{
+		ImGui::Text("ターゲットを選択してください。");
+	}
 	ImGui::End();
 
 #endif

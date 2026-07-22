@@ -1129,6 +1129,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateParry\CharacterStateParry.cpp" />
+    <ClCompile Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTree.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditorClipboard\ComboTreeEditorClipboard.cpp" />
@@ -1564,6 +1565,7 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateNone\CharacterStateNone.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateParried\CharacterStateParried.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateParry\CharacterStateParry.h" />
+    <ClInclude Include="Game\CharacterStateMachine\StateMachineEditor\StateMachineEditor.h" />
     <ClInclude Include="Game\ComboTree\ComboTree.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeData\ComboTreeData.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeEditor.h" />

@@ -8,6 +8,11 @@ class CharacterStateMachine
 {
 public:
 
+	using StateMap = std::unordered_map<std::string, std::unique_ptr<CharacterState>>;
+
+
+public:
+
 	/// @brief コンストラクタ
 	CharacterStateMachine() = default;
 
@@ -44,11 +49,15 @@ public:
 	/// @return 
 	bool IsChangeState() const { return isChangeState_ || isPrevChangeState_; }
 
+	/// @brief 状態のマップを取得する
+	/// @return 
+	const StateMap& GetStates() const { return states_; }
+
 
 private:
 
 	/// @brief 状態のマップ
-	std::unordered_map<std::string, std::unique_ptr<CharacterState>> states_;
+	StateMap states_;
 
 	/// @brief 現在の状態
 	CharacterState* currentState_ = nullptr;
