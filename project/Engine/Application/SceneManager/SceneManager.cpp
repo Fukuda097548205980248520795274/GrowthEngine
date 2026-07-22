@@ -20,7 +20,7 @@ SceneManager::SceneManager(const std::string& sceneName) :sceneName_(sceneName)
 /// @brief 更新処理
 void SceneManager::Update()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	ImGui::Begin("Reset Scene");
 

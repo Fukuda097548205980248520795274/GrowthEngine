@@ -98,7 +98,7 @@ void Engine::PostEffectBlurShadow2DData::Register(const PostEffectRenderContext&
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectBlurShadow2DData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode((name_ + "_BlurShadow2D").c_str()))
 	{

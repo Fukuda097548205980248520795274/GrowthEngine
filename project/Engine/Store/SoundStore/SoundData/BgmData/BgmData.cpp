@@ -124,7 +124,7 @@ bool Engine::BgmData::IsPlay() const { return audioStore_->IsAudioPlay(hPlay_); 
 /// @brief デバッグ用パラメータ
 void Engine::BgmData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode(name_.c_str()))
 	{

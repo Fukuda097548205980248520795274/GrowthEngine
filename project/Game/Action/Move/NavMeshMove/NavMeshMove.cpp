@@ -132,7 +132,7 @@ void NavMeshMove::Update()
         return;
     }
 
-    // ターゲットキャラクターを追従している場合、ターゲットが一定距離（例: 1m）動いたら経路を再計算（リパス）
+    // ターゲットキャラクターを追従している場合、ターゲットが一定距離動いたら経路を再計算（リパス）
     if (target)
     {
         Vector3 currentTargetPos = target->GetWorldPosition();

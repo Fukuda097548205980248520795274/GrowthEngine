@@ -1029,7 +1029,7 @@ public:
 	/// @param color 
 	void DrawDebugLine3D(const Vector3& start, const Vector3& end, const Vector4& color) const
 	{
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		renderContext_->DrawDebugLine3D(start, end, color);
 #endif
 	}
@@ -1040,7 +1040,7 @@ public:
 	/// @param color 
 	void DrawDebugLine2D(const Vector2& start, const Vector2& end, const Vector4& color) const
 	{
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		renderContext_->DrawDebugLine2D(start, end, color);
 #endif
 	}
@@ -1052,7 +1052,7 @@ public:
 	/// @param color 
 	void DrawDebugTriangle3D(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector4& color) const
 	{
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		renderContext_->DrawDebugTriangle3D(v1, v2, v3, color);
 #endif
 	}
@@ -1064,7 +1064,7 @@ public:
 	/// @param color 
 	void DrawDebugCube(const Vector3& position, const Vector3& rotate, const Vector3& scale, const Vector4& color) const
 	{
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		renderContext_->DrawDebugCube(position, rotate, scale, color);
 #endif
 	}

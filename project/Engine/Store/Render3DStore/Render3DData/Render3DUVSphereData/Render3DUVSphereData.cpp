@@ -497,7 +497,7 @@ void Engine::Render3DUVSphereData::VertexCalculation()
 /// @brief デバッグ用パラメータ
 void Engine::Render3DUVSphereData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;
@@ -554,25 +554,18 @@ void Engine::Render3DUVSphereData::DebugParameter()
 			// テクスチャ
 			ImGui::Text("Texture");
 
-			ImGui::ImageButton(
-				textureStore_->GetFilePath(param_->material.hTexture).c_str(),
-				textureStore_->GetSrvGpuHandle(param_->material.hTexture).ptr,
-				ImVec2(32.0f, 32.0f),
-				ImVec2(0, 0),
-				ImVec2(1, 1),
-				ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
-				ImVec4(1, 1, 1, 1)
-			);
+			// テクスチャボタン
+			ImGui::ImageButton(textureStore_->GetFilePath(param_->material.hTexture).c_str(), textureStore_->GetSrvGpuHandle(param_->material.hTexture).ptr,
+				ImVec2(32.0f, 32.0f), ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.2f, 0.2f, 0.2f, 1.0f), ImVec4(1, 1, 1, 1));
 
-			// --- ドロップ処理 ---
+			// ドラッグアンドドロップの受け入れ
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
 				{
 					int droppedIndex = *(const int*)payload->Data;
 
-					// droppedIndex が dataTable_ の index
-					// ここでマテリアルなどに設定する
+					// ドロップされたテクスチャのハンドルを取得
 					param_->material.hTexture = static_cast<uint32_t>(droppedIndex);
 					textureFilePath_ = textureStore_->GetFilePath(param_->material.hTexture);
 				}

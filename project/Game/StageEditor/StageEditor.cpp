@@ -32,7 +32,7 @@ void StageEditor::Initialize()
 /// @param dt 
 void StageEditor::Update(float dt)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 実行中に消えたエンティティを配置リストから削除する
 	if (isPlaying_)
@@ -99,7 +99,7 @@ void StageEditor::LoadStage(const std::string& fileName)
 /// @brief 描画処理（デバッグ用）
 void StageEditor::DrawUI()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	navMeshController_->DrawDebug();
 

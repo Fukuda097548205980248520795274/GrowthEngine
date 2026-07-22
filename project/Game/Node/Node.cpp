@@ -7,7 +7,7 @@ Node::Node()
 	// インスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デフォルトのノードタイプはアクション
 	type_ = EditorNodeType::Action;
@@ -19,7 +19,7 @@ Node::Node()
 /// @return 
 Node::State Node::UpdateNode()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// ブレークポイントが設定されている場合、デバッガを起動する
 	if (isBreakpoint_)
@@ -34,7 +34,7 @@ Node::State Node::UpdateNode()
 	return lastState_;
 }
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 /// @brief デバッグ用の再帰描画処理
 void Node::DrawDebuggerRecursive(float zoom)

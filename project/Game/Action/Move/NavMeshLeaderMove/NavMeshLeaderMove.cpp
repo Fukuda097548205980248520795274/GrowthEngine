@@ -161,7 +161,7 @@ void NavMeshLeaderMove::Update()
         return;
     }
 
-    // リーダーがキャラクターを追従している場合、リーダーがが一定距離（例: 1m）動いたら経路を再計算（リパス）
+    // リーダーがキャラクターを追従している場合、リーダーがが一定距離動いたら経路を再計算（リパス）
     if (leader_)
     {
         Vector3 currentLeaderPos = leader_->GetWorldPosition();
@@ -237,7 +237,7 @@ void NavMeshLeaderMove::Update()
     // 中継点までの距離の二乗を計算
     float distSq = toWaypoint.x * toWaypoint.x + toWaypoint.z * toWaypoint.z;
 
-    // 現在の中継点が「最後のゴール地点」かどうか
+    // 現在の中継点が 最後のゴール地点 かどうか
     bool isLastWaypoint = (currentPathIndex_ == path_.size() - 1);
 
     // 中継点に到達したとみなす距離を選択（最後のゴール地点なら停止距離、それ以外はウェイポイントの半径）

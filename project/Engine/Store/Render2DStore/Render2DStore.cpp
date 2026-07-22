@@ -176,7 +176,7 @@ void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cam
 /// @brief デバッグ用パラメータ
 void Engine::Render2DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
 }

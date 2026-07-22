@@ -108,7 +108,7 @@ void Engine::PostEffectGrayscaleData::Register(const PostEffectRenderContext& co
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectGrayscaleData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode((name_ + "_Grayscale").c_str()))
 	{

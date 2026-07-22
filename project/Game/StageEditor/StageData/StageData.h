@@ -115,7 +115,7 @@ struct PlacementData
 // イベントチェーンのデータ構造
 struct ChainEventData
 {
-	// イベントの種類（例：敵生成、アイテム生成、トリガー発動など）
+	// イベントの種類
 	int eventType = 0;
 
 	// イベントのパラメータ（イベントの種類によって内容が異なる）

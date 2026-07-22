@@ -126,7 +126,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	scissorRect_.top = 0;
 	scissorRect_.bottom = winApp_->GetClientHeight();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// DX12Lineの生成と初期化
 	line_ = std::make_unique<DX12Line>();
@@ -165,7 +165,7 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	);
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 線の描画前処理のレンダーパスを登録する
 	LoadRenderPass("LineDraw", [&]()
@@ -222,7 +222,7 @@ void Engine::RenderContext::NewFrame()
 	if (winApp_->IsResized())
 		Resize(winApp_->GetClientWidth(), winApp_->GetClientHeight());
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// フレームの開始をImGuiに伝える
 	imguiRender_->FrameStart();
 
@@ -248,7 +248,7 @@ void Engine::RenderContext::NewFrame()
 	// プレハブの更新
 	prefab_->Update();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// Dockスペースを作成する
 	imguiRender_->CreateDockSpace();
 
@@ -263,7 +263,7 @@ void Engine::RenderContext::PreDraw()
 	bool isHoverViewWindow = false;
 
 	// パラメータやGuizmo操作などのデバッグ表示
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	camera3DStore_->DebugParameter();
 	render_->DebugParameter();
 	prefab_->DebugParameter();
@@ -316,7 +316,7 @@ void Engine::RenderContext::PostDraw()
 	// 描画後ポストエフェクトのレンダーパスを呼び出す
 	ExecuteRenderPass("LastPostDraw");
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	ExecuteRenderPass("LineDraw");
 #endif
 
@@ -346,7 +346,7 @@ void Engine::RenderContext::PostDraw()
 	offscreen_->RenderSwapChain(commandList_);
 
 	// ImGuiDockingに最終的なオフスクリーンを描画する
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// ImGuiに表示するスクリーンを描画する
 	imguiRender_->DrawImGuiScreen(offscreen_->GetCurrentResource()->GetResource(), offscreen_->GetCurrentResourceSrvHandle(), commandList_);
 #endif
@@ -474,16 +474,16 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 {
 	if (width == 0 || height == 0) return;
 
-	// 1. GPU待機
+	// GPU待機
 	fence_->WaitGPU();
 
 	// スワップチェーンのリサイズ
 	buffering_->Resize(core_->GetDevice(), width, height);
 
-	// 5. オフスクリーン再生成
+	// オフスクリーン再生成
 	offscreen_->Resize(core_->GetDevice(),commandList_, buffering_.get());
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// IMGUIのリサイズ
 	imguiRender_->Resize(width, height);
 #endif
@@ -507,7 +507,7 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 }
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 /// @brief デバッグ用レイピッキング
 void Engine::RenderContext::DebugRayPicking()

@@ -40,25 +40,25 @@ void main( uint3 DTid : SV_DispatchThreadID )
     uint s = DTid.x; // 経度のインデックス
     uint t = DTid.y; // 緯度のインデックス
 
-    // ----------------------------------------------------
-    // 1. 頂点計算 (slices + 1, segments + 1 の範囲で実行)
-    // ----------------------------------------------------
+    // 範囲外のスレッドは処理しない
     if (s > gParam.slices || t > gParam.segments)
-    {
-        return; // 完全な範囲外のスレッドはここで終了
-    }
+        return;
 
+    // 球面座標を計算
     float phi = (2.0 * kPI * s) / gParam.slices;
     float theta = (kPI * t) / gParam.segments;
 
+    // 球面座標から直交座標に変換
     float3 pos;
     pos.x = sin(theta) * cos(phi);
     pos.y = cos(theta);
     pos.z = sin(theta) * sin(phi);
 
+    // 法線は球の中心からの方向
     float3 normal = normalize(pos);
     float2 uv = float2((float) s / gParam.slices, (float) t / gParam.segments);
 
+    // 頂点バッファのインデックスを計算
     uint stride = gParam.slices + 1;
     uint vertexIndex = s + t * stride;
 
@@ -68,11 +68,7 @@ void main( uint3 DTid : SV_DispatchThreadID )
     v.texcoord = uv;
     gVertex[vertexIndex] = v;
 
-    // ----------------------------------------------------
-    // 2. インデックス計算 (slices, segments の範囲でのみ実行)
-    // ----------------------------------------------------
-    // 端の頂点 (s == slices または t == segments) は
-    // 新たな四角形の起点にはならないためスキップする
+    // インデックスバッファの生成
     if (s < gParam.slices && t < gParam.segments)
     {
         

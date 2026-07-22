@@ -4,7 +4,7 @@
 /// @brief エディタの描画
 void MotionManagerEditor::Draw()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
     ImGui::Begin("Motion Manager Editor");
 

@@ -53,7 +53,7 @@ void Engine::PostEffectSmoothingData::Register(const PostEffectRenderContext& co
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectSmoothingData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 #endif
 }

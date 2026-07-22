@@ -47,7 +47,7 @@ public:
 	State GetLastState() const { return lastState_; }
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	/// @brief デバッグ状態のリセット（毎フレームのツリー更新の先頭で呼ぶ）
 	virtual void ResetStatusRecursive() { lastState_ = State::None; }
@@ -110,7 +110,7 @@ protected:
 	// 最後の状態
 	State lastState_ = State::None;
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	/// @brief ブレークポイントが設定されているかどうか
 	bool isBreakpoint_ = false;

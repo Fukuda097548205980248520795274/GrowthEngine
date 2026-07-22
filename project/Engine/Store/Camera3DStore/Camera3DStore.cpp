@@ -11,7 +11,7 @@ Engine::Camera3DStore::Camera3DStore()
 	// 初期カメラを読み込む
 	selectHCamera_ = InitialLoad("Initial");
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラの生成
 	debugCamera_ = std::make_unique<DebugCamera3DResource>();
@@ -82,7 +82,7 @@ void Engine::Camera3DStore::Update(bool isHoverViewWindow)
 
 	Vector3 cameraPosition = dataTable_[selectHCamera_]->GetCamera3D().GetWorldPosition();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラ更新
 	if(!enableJitter_)debugCamera_->Update(isHoverViewWindow);
@@ -104,7 +104,7 @@ void Engine::Camera3DStore::Update(bool isHoverViewWindow)
 /// @return 
 const Engine::Camera3D& Engine::Camera3DStore::GetCamera3D() const
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラ有効時
 	if (debugCamera_->IsEnable())
@@ -117,7 +117,7 @@ const Engine::Camera3D& Engine::Camera3DStore::GetCamera3D() const
 
 Engine::Camera3DData::Param* Engine::Camera3DStore::GetSelectParam()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラ有効時
 	if(debugCamera_->IsEnable())
@@ -146,7 +146,7 @@ void Engine::Camera3DStore::DebugDrawLine()
 			data->DebugDrawLine(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 		// デバッグカメラ使用中
 		if (debugCamera_->IsEnable())
@@ -166,7 +166,7 @@ void Engine::Camera3DStore::DebugDrawLine()
 /// @brief デバッグ用パラメータ
 void Engine::Camera3DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// メニューバーを使用する
 	if (!ImGui::Begin("Camera3D"))
 	{
@@ -186,7 +186,7 @@ void Engine::Camera3DStore::DebugParameter()
 /// @param pickList 
 void Engine::Camera3DStore::DebugRayPicking(const Collision3D::Ray& ray, std::vector<std::pair<float, DebugData::DebugGuizmoData*>>& pickList)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	for (auto& data : dataTable_)
 	{

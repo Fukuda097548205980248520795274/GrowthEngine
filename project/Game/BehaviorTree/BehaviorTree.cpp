@@ -3,7 +3,7 @@
 /// @brief 実行
 BehaviorTree::State BehaviorTree::Exec()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	root_->ResetStatusRecursive();
 #endif
 

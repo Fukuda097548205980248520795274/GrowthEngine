@@ -67,7 +67,7 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 /// @brief デバッグ用描画処理
 void StageEditorNavMeshController::DrawDebug()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// ナビメッシュが存在しない場合は描画しない
 	if (!navMesh_) return;
@@ -95,7 +95,7 @@ void StageEditorNavMeshController::DrawDebug()
 		Vector3 p2_v0 = poly2->vertices[eIdx2];
 		Vector3 p2_v1 = poly2->vertices[(eIdx2 + 1) % 4];
 
-		// プレビュー用の半透明な色（例：薄い水色）と、少し濃い境界線の色
+		// プレビュー用の半透明な色と、少し濃い境界線の色
 		Vector4 previewFaceColor = { 0.0f, 1.0f, 1.0f, 0.3f };
 		Vector4 previewLineColor = { 0.0f, 1.0f, 1.0f, 0.8f };
 
@@ -194,7 +194,7 @@ void StageEditorNavMeshController::SelectNavMeshItem()
 
 	for (const auto& poly : navMesh_->GetPolygons())
 	{
-		// 1. ポリゴンの近似法線を計算 (頂点0, 1, 2を使用)
+		// ポリゴンの近似法線を計算 (頂点0, 1, 2を使用)
 		Vector3 v0 = poly.vertices[0];
 		Vector3 v1 = poly.vertices[1];
 		Vector3 v2 = poly.vertices[2];
@@ -215,7 +215,7 @@ void StageEditorNavMeshController::SelectNavMeshItem()
 			normal.x /= nLen; normal.y /= nLen; normal.z /= nLen;
 		}
 
-		// 2. レイと「このポリゴンの平面」の交差距離 t を計算
+		// レイと「このポリゴンの平面」の交差距離 t を計算
 		float dotND = normal.x * ray.diff.x + normal.y * ray.diff.y + normal.z * ray.diff.z;
 
 		// レイと平面がほぼ平行な場合はスキップ
@@ -227,10 +227,10 @@ void StageEditorNavMeshController::SelectNavMeshItem()
 		// 視点より後ろにある場合はスキップ
 		if (t < 0.0f) continue;
 
-		// 3. このポリゴンの平面上での交点 (3D座標)
+		// このポリゴンの平面上での交点 (3D座標)
 		Vector3 hitPoint = ray.start + (ray.diff * t);
 
-		// === モードごとの当たり判定 ===
+		// モードごとの当たり判定
 		if (selectionMode_ == SelectionMode::Vertex)
 		{
 			for (int i = 0; i < 4; ++i)
@@ -365,7 +365,7 @@ void StageEditorNavMeshController::ExtrudeSelectedEdge(std::vector<PlacementData
 	float length = std::sqrt(normal.x * normal.x + normal.z * normal.z);
 	if (length > 0) { normal.x /= length; normal.z /= length; }
 
-	// 押し出す距離 (例として2.0f)
+	// 押し出す距離を設定（ここでは2.0f単位で押し出す）
 	Vector3 offset(normal.x * 2.0f, 0.0f, normal.z * 2.0f);
 
 	newPoly.vertices[2] = v0 + offset;
@@ -592,7 +592,8 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 		{
 			Vector3 v = poly->vertices[item.itemIndex];
 			Vector3 renderV = Vector3(v.x, v.y + 0.05f, v.z);
-			// 点を強調表示（Engine側に球やBoxを描画する機能があればそれを使用。例として短い線を描画）
+
+			// 頂点の強調表示
 			engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 		}
 		else if (selectionMode_ == SelectionMode::Edge)
@@ -601,6 +602,8 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 			Vector3 v1 = poly->vertices[(item.itemIndex + 1) % 4];
 			Vector3 renderV0 = Vector3(v0.x, v0.y + 0.01f, v0.z);
 			Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
+
+			// 辺の強調表示
 			engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 		}
 		else if (selectionMode_ == SelectionMode::Polygon)
@@ -610,6 +613,7 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 			Vector3 v2 = poly->vertices[2]; Vector3 v3 = poly->vertices[3];
 			v0.y += 0.01f; v1.y += 0.01f; v2.y += 0.01f; v3.y += 0.01f;
 
+			// 半透明の黄色で塗りつぶす
 			engine_->DrawDebugTriangle3D(v0, v1, v2, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
 			engine_->DrawDebugTriangle3D(v0, v2, v3, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
 		}

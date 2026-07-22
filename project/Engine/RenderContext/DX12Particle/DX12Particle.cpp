@@ -33,7 +33,7 @@ void Engine::DX12Particle::Update(ID3D12GraphicsCommandList* commandList)
 /// @brief デバッグ用パラメータ
 void Engine::DX12Particle::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin("Particle"))

@@ -372,7 +372,7 @@ void GameScene::Update()
 	BattleDirector::GetInstance().Update(kDt);
 
 	// 各エディタの更新処理を呼び出す
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	cutsceneEditor_->SetActive(editorWorkspaceManager_->GetCurrentWorkspace() == WorkspaceType::CutsceneEditor ? true : false);
 #endif 
 	cutsceneEditor_->Update(engine_->GetDeltaTime());

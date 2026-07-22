@@ -447,7 +447,7 @@ void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandLis
 /// @brief デバッグ用パラメータ
 void Engine::DX12Offscreen::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin("PostEffect"))

@@ -222,7 +222,7 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 /// @brief デバッグパラメータ
 void Engine::Render3DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	// データ更新
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif

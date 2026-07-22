@@ -70,7 +70,7 @@ namespace Engine
 
 	private:
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 		// デバッグカメラ
 		std::unique_ptr<DebugCamera2DResource> debugCamera_ = nullptr;

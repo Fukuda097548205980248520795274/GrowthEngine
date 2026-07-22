@@ -21,9 +21,9 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
     file >> rootJson;
 
     // 一時的な検索用マップ
-    std::unordered_map<int, Attack*> nodeMap;           // ノードID -> インスタンスポインタ
-    std::unordered_map<int, int> pinToNodeMap;               // ピンID -> そのピンを持つノードID
-    std::unordered_map<int, AttackInputType> pinToTypeMap;   // 出力ピンID -> 弱か強か
+    std::unordered_map<int, Attack*> nodeMap; // ノードID -> インスタンスポインタ
+    std::unordered_map<int, int> pinToNodeMap; // ピンID -> そのピンを持つノードID
+    std::unordered_map<int, AttackInputType> pinToTypeMap; // 出力ピンID -> 弱か強か
 
     // どのノードが「入力」を受けたかを記録するセット（ルートノード特定用）
     std::unordered_set<int> hasInputNodes;

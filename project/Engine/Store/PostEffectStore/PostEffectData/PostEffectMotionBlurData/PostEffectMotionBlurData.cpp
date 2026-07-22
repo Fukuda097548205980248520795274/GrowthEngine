@@ -175,7 +175,7 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectMotionBlurData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// UV
 	if (ImGui::TreeNode((name_ + "_MotionBlur").c_str()))

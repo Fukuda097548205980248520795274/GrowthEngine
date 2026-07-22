@@ -43,7 +43,7 @@ void Engine::DX12Prefab::Initialize(ID3D12Device* device, ID3D12GraphicsCommandL
 	prefab2DStore_ = std::make_unique<Prefab2DStore>();
 	prefab2DStore_->Initialize(device, compiler, log);
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 立方体を生成とインスタンス確保
 	cube_ = std::make_unique<PrefabBaseCube>(textureStore->Load("./Assets/Textures/white2x2.png", heap, device, commandList, log) , 512 , "Debug_Object_Cube");
@@ -64,7 +64,7 @@ void Engine::DX12Prefab::Update()
 /// @brief リセット
 void Engine::DX12Prefab::Reset()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 描画数
 	cubeNumDraw_ = 0;
@@ -106,7 +106,7 @@ void Engine::DX12Prefab::PrefabReset()
 /// @brief デバッグ用パラメータ
 void Engine::DX12Prefab::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin("Prefab"))
@@ -133,7 +133,7 @@ void Engine::DX12Prefab::DebugParameter()
 
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 /// @brief 立方体を描画する
 /// @param position 

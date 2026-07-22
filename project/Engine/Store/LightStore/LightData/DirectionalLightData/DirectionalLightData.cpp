@@ -96,7 +96,7 @@ Matrix4x4 Engine::DirectionalLightData::GetViewProjectionMatrix() const
 /// @brief デバッグ用描画処理
 void Engine::DirectionalLightData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないときは使えない
 	if (!isLoad_)return;

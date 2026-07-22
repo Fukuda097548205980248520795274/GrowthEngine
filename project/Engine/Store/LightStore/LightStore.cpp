@@ -302,7 +302,7 @@ void Engine::LightStore::SetSpot(BaseLightData* lightData)
 /// @brief デバッグ用パラメータ
 void Engine::LightStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin("Light"))

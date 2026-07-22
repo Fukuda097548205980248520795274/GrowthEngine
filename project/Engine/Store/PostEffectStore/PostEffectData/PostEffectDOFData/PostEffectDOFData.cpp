@@ -283,7 +283,7 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectDOFData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode((name_ + "_DOF").c_str()))
 	{

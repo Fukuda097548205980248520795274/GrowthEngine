@@ -29,7 +29,7 @@ void Entity::Update()
 /// @param isDirty 
 void Entity::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 更新処理中は位置の変更はできないようにする
 	if (updateEnabled_)return;

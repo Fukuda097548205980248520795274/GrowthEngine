@@ -205,7 +205,7 @@ void GrowthEngine::PreDraw()
 	// 描画前処理
 	renderContext_->PreDraw();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// サウンドストアのパラメータを表示する
 	soundStore_->DebugParameter();
@@ -229,7 +229,7 @@ void GrowthEngine::PreDraw()
 /// @brief 描画後処理
 void GrowthEngine::PostDraw()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::Begin("FPS Overlay"))
 	{
@@ -284,7 +284,7 @@ Vector2 GrowthEngine::GetMousePosition()const
 {
 	Vector2 mousePos = Vector2(0.0f, 0.0f);
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// ビューウィンドウ内
 	mousePos = renderContext_->GetViewWindowCursorPos();
@@ -308,7 +308,7 @@ bool GrowthEngine::IsCursorWindowHover() const
 {
 	bool isHover = false;
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// ビューウィンドウ内
 	isHover = renderContext_->IsViewWindowHover();

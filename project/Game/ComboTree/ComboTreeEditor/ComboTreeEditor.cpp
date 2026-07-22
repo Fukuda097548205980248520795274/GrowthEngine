@@ -554,7 +554,7 @@ void ComboTreeEditor::DrawNodeEditor()
 	}
 
 
-	// --- ノードの位置変更を検知して履歴に保存する処理 ---
+	// ノードの位置変更を検知して履歴に保存する処理
 	for (auto& node : nodes_)
 	{
 		ImVec2 gridPos = ImNodes::GetNodeGridSpacePos(node.id);
@@ -593,7 +593,7 @@ void ComboTreeEditor::DrawNodeEditor()
 
 	for (const auto& node : nodes_)
 	{
-		// --- ノードの描画開始 ---
+		// ノードの描画開始
 		ImNodes::BeginNode(node.id);
 
 		// ノードのタイトルバー
@@ -650,7 +650,7 @@ void ComboTreeEditor::DrawNodeEditor()
 		ImNodes::EndOutputAttribute();
 		ImNodes::PopColorStyle();
 
-		// --- ノードの描画終了 ---
+		// ノードの描画終了
 		ImNodes::EndNode();
 	}
 
@@ -681,7 +681,7 @@ void ComboTreeEditor::DrawNodeEditor()
 
 
 
-	// --- リンクが作成されたときの処理 ---
+	// リンクが作成されたときの処理
 	int startPinId, endPinId;
 	if (ImNodes::IsLinkCreated(&startPinId, &endPinId))
 	{
@@ -693,21 +693,21 @@ void ComboTreeEditor::DrawNodeEditor()
 			if (node.inputPinId == endPinId) endNode = &node;
 		}
 
+		// 接続元と接続先のノードが見つかった場合のみリンクを作成する
 		if (startNode && endNode)
 		{
 			bool canConnect = true;
 
-			// 【制限ルール1】 接続先が「つかみ打撃」の場合、接続元は「つかみ」か「つかみ打撃」でなければならない
+			// 接続先が「つかみ打撃」の場合、接続元は「つかみ」か「つかみ打撃」でなければならない
 			if (endNode->nodeType == ComboNodeType::GrabStrike)
 			{
 				if (startNode->nodeType != ComboNodeType::Grab && startNode->nodeType != ComboNodeType::GrabStrike)
 				{
 					canConnect = false;
-					// エラー通知を出す場合はここに書く (例: ImGui::OpenPopup("Invalid Link"))
 				}
 			}
 
-			// 【制限ルール2】 接続元が「つかみ」の場合、接続先は「つかみ打撃」以外つなげない
+			// 接続元が「つかみ」の場合、接続先は「つかみ打撃」以外つなげない
 			if (startNode->nodeType == ComboNodeType::Grab)
 			{
 				if (endNode->nodeType != ComboNodeType::GrabStrike)
@@ -716,7 +716,7 @@ void ComboTreeEditor::DrawNodeEditor()
 				}
 			}
 
-			// 【制限ルール3】 接続元が「つかみ打撃」の場合、接続先は「つかみ打撃」以外つなげない
+			// 接続元が「つかみ打撃」の場合、接続先は「つかみ打撃」以外つなげない
 			if (startNode->nodeType == ComboNodeType::GrabStrike)
 			{
 				if (endNode->nodeType != ComboNodeType::GrabStrike)

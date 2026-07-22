@@ -68,7 +68,7 @@ void CharacterMovement::SetMoveInputXZ(const Vector2& direction, float maxSpeed)
 	// 移動する場合はノックバックを無効化する
 	knockbackVelocity_ = Vector3(0.0f, 0.0f, 0.0f);
 
-	// つかまれていない場合は入力方向を向く。つかんでいる場合は入力方向の逆を向く
+	// つかまれているかどうかで向く方向を変える
 	if (!owner_->IsGrabbing())
 	{
 		// つかまれていない場合は入力方向を向く

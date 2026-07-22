@@ -73,7 +73,7 @@ void Engine::SeData::Play()
 /// @brief デバッグ用パラメータ
 void Engine::SeData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode(("SE_" + name_).c_str()))
 	{

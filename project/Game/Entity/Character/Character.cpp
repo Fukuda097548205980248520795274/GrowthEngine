@@ -1989,7 +1989,7 @@ void Character::HpHudUpdate()
 /// @param isDirty 
 void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// キャラクターの状態を表示する
 	Entity::DrawDebugUI(placementData, placementList, history, isDirty);

@@ -28,7 +28,7 @@ cbuffer TemporalParams : register(b0)
     // 残像の強さを調整するためのパラメータ
     float g_Intensity;
     
-    // 残像の色調補正用のパラメータ（例: RGBそれぞれに乗算する値）
+    // 残像の色調補正用のパラメータ
     float3 g_TintColor;
     
     // 現在のフレームの逆ビュー射影行列

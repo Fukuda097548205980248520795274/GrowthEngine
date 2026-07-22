@@ -10,7 +10,7 @@
 
 void BehaviorTreeViewer::DrawUI()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 
 	// NPCのリストを取得

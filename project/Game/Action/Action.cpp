@@ -50,7 +50,7 @@ void Action::Exit()
 /// @brief ブレークポイントのチェック
 void Action::BreakpointOnExec()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	if (breakpoints_.onExec)
 	{
 		__debugbreak();
@@ -62,7 +62,7 @@ void Action::BreakpointOnExec()
 /// @brief ブレークポイントのチェック
 void Action::BreakpointOnUpdate()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	if (breakpoints_.onUpdate)
 	{
 		__debugbreak();
@@ -74,7 +74,7 @@ void Action::BreakpointOnUpdate()
 /// @brief ブレークポイントのチェック
 void Action::BreakpointOnExit()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	if (breakpoints_.onExit)
 	{
 		__debugbreak();
@@ -86,7 +86,7 @@ void Action::BreakpointOnExit()
 /// @brief ブレークポイントのチェック
 void Action::BreakpointOnReset()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	if (breakpoints_.onReset)
 	{
 		__debugbreak();

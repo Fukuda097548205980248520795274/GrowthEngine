@@ -98,7 +98,7 @@ void Engine::PostEffectVignettingData::Register(const PostEffectRenderContext& c
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectVignettingData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// UV
 	if (ImGui::TreeNode((name_ + "_Vignetting").c_str()))

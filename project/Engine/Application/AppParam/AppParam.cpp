@@ -4,7 +4,7 @@
 /// @brief 更新処理
 void AppParam::Update()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin(folderName_.c_str()))

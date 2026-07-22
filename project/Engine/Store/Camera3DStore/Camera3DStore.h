@@ -121,7 +121,7 @@ namespace Engine
 
 	private:
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 		// デバッグカメラ
 		std::unique_ptr<DebugCamera3DResource> debugCamera_ = nullptr;

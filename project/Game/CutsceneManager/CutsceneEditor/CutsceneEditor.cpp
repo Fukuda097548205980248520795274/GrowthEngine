@@ -178,7 +178,7 @@ void CutsceneEditor::RefreshFileList()
 /// @brief UIを描画する
 void CutsceneEditor::DrawUI()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	DrawEditorUI();
 	DrawTimelineUI();
 #endif
@@ -354,7 +354,6 @@ void CutsceneEditor::DrawEditorUI()
 					AddKeyframeToTrack(it->positionKeys, currentTime_, transform->translate_);
 			}
 
-			// トラックの削除機能などもあると便利です
 			if (ImGui::Button("このキャラの全トラックを削除"))
 			{
 				editingData_.characterTracks.erase(
@@ -407,7 +406,6 @@ void CutsceneEditor::DrawEditorUI()
 					*targetInterp = static_cast<InterpolationType>(currentInterpInt);
 				}
 
-				// 選択中のキーを削除するボタンなどがあるとさらに便利です
 				if (ImGui::Button("選択中のキーを削除"))
 				{
 					auto removeKey = [&](auto& keys)

@@ -1,7 +1,7 @@
 Texture2D<float4> InputVelocityTexture : register(t0);
 RWTexture2D<float4> OutputVelocityTexture : register(u0);
 
-// 検索する半径（1なら3x3=9ピクセル、2なら5x5=25ピクセルを検索）
+// 膨張処理の半径（ピクセル単位）
 #define DILATION_RADIUS 2
 
 [numthreads(8, 8, 1)]
@@ -32,8 +32,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
             // Load関数を使って、ピクセル座標から直接データを取得
             float4 vData = InputVelocityTexture.Load(int3(samplePos, 0));
             
-            // ベクトルの長さ（速度）を計算。
-            // length()は内部で平方根(sqrt)を使い重いため、比較だけなら内積(dot)による「長さの2乗」を使うのが定石です。
+            // 速度の大きさの二乗を計算（平方根を取る必要はない）
             float speedSq = dot(vData.xy, vData.xy);
 
             // 今までの最大速度よりも大きければ更新

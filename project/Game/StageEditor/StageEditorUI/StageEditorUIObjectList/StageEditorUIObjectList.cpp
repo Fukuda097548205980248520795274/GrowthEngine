@@ -437,13 +437,13 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 							ImGui::TreePop();
 						}
 
-						// プレビュー描画 (engine_ が既に定義されているため、そのまま使用可能)
+						// プレビュー表示
 						GrowthEngine* engine = GrowthEngine::GetInstance();
 						for (int i = 0; i < cachedPreviewData_.size(); ++i)
 						{
 							const auto& previewData = cachedPreviewData_[i];
 
-							// 選択中のプレビューオブジェクトは色を変える（例：選択中は赤、それ以外は黄色）
+							// 選択中のプレビューオブジェクトは色を変える
 							Vector4 color = (i == selectedPreviewIndex_) ? Vector4(1.0f, 0.0f, 0.0f, 1.0f) : Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 							Vector4 cubeColor = color;
 							cubeColor.w = 0.5f; // 半透明

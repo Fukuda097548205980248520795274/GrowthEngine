@@ -341,7 +341,7 @@ void Engine::Render2DTextData::Register(const Matrix4x4& viewProjection, ID3D12G
 /// @brief デバッグ用パラメータ
 void Engine::Render2DTextData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;

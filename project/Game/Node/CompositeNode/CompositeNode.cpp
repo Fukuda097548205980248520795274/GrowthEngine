@@ -7,7 +7,7 @@ void CompositeNode::Abort()
 		child->Abort();
 }
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 /// @brief デバッグ状態のリセット（毎フレームのツリー更新の先頭で呼ぶ）
 void CompositeNode::ResetStatusRecursive()

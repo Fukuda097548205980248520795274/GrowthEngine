@@ -16,7 +16,7 @@ void BehaviorTreeEditorHistory::SaveHistory(const std::vector<EditorNode>& nodes
 	undoHistory_.push_back(snapshot);
 	redoHistory_.clear(); // 新しい操作が行われたらRedo履歴は破棄する
 
-	// 履歴の最大数を制限（メモリ節約のため、例として50回まで）
+	// 履歴の最大数を50に制限する
 	if (undoHistory_.size() > 50)
 	{
 		undoHistory_.erase(undoHistory_.begin());

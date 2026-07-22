@@ -53,7 +53,7 @@ void Engine::PostEffectGaussianFilterData::Register(const PostEffectRenderContex
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectGaussianFilterData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 #endif
 }

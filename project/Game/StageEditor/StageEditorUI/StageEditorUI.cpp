@@ -61,7 +61,7 @@ void StageEditorUI::Update()
 void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
 	NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (!ImGui::Begin("Stage Editor")) 
 	{
@@ -88,10 +88,10 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	// ショートカットキーの説明
 	ImGui::Text("ショートカットキー 一覧");
 
-	// --- 保存の表示 ---
+	// 保存の表示
 	ImGui::Text("Ctrl + S : 上書き保存");
 
-	// --- Undo の表示切り替え ---
+	// Undo の表示切り替え
 	if (history_->CanUndo())
 	{
 		ImGui::Text("Ctrl + Z : Undo");
@@ -101,7 +101,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Z : Undo (無効)");
 	}
 
-	// --- Redo の表示切り替え ---
+	// Redo の表示切り替え
 	if (history_->CanRedo())
 	{
 		ImGui::Text("Ctrl + Y : Redo");
@@ -111,7 +111,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Y : Redo (無効)");
 	}
 
-	// --- コピーの表示切り替え ---
+	// コピーの表示切り替え
 	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
 	{
 		ImGui::Text("Ctrl + C : コピー");
@@ -121,7 +121,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + C : コピー (リスト内で選択時のみ有効)");
 	}
 
-	// --- 貼り付けの表示切り替え ---
+	// 貼り付けの表示切り替え
 	if (hasCopiedData_)
 	{
 		ImGui::Text("Ctrl + V : 貼り付け");
@@ -132,7 +132,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + V : 貼り付け (無効)");
 	}
 
-	// --- 複製の表示切り替え ---
+	// 複製の表示切り替え
 	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
 	{
 		ImGui::Text("Ctrl + D : 複製");
@@ -142,7 +142,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + D : 複製 (リスト内で選択時のみ有効)");
 	}
 
-	// --- 削除の表示切り替え ---
+	// 削除の表示切り替え
 	if (selectedIndex_ >= 0 && selectedIndex_ < static_cast<int>(placementList.size()))
 	{
 		ImGui::Text("Delete / Backspace キー : 削除");
@@ -152,7 +152,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Delete / Backspace キー : 削除 (リスト内で選択時のみ有効)");
 	}
 
-	// --- モード切り替えの表示 ---
+	// モード切り替えの表示
 	ImGui::Text("Tab キー : モード切替 (現在のモード : %s)", currentMode_ == EditorMode::ObjectPlacement ? "オブジェクト配置" : "ナビメッシュ編集");
 
 	ImGui::Separator();
@@ -168,7 +168,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		ImGui::Text("2 キー : 辺 選択");
 		ImGui::Text("3 キー : 面 選択");
 
-		// --- 押し出し (Extrude) の表示切り替え ---
+		// 押し出し (Extrude) の表示切り替え
 		if (canExtrude)
 		{
 			// 成功時: 緑色でショートカットを表示
@@ -182,7 +182,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			ImGui::TextColored(ImVec4(1.0f, 0.6f, 0.0f, 1.0f), "<- 辺を1つ選択してください ( 2キー で 辺選択 )");
 		}
 
-		// --- ブリッジ (Bridge) の表示切り替え ---
+		// ブリッジ (Bridge) の表示切り替え
 		if (canBridge)
 		{
 			// 成功時: 緑色でショートカットを表示
@@ -271,7 +271,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @param navMesh 
 void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (!ImGui::Begin("Stage Project Assets")) 
 	{

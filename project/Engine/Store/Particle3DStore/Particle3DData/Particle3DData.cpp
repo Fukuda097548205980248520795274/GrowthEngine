@@ -732,7 +732,7 @@ void Engine::Particle3DData::Draw(ID3D12GraphicsCommandList* commandList, const 
 /// @brief デバッグパラメータ
 void Engine::Particle3DData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;

@@ -22,7 +22,7 @@ int NavMesh::FindPolygonAt(const Vector3& position) const
 /// @brief デバッグ用に描画する
 void NavMesh::DrawDebug() const
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	for (auto& poly : polygons_)
 	{
@@ -393,8 +393,7 @@ std::vector<Vector3> NavMesh::SmoothPath(const Vector3& start, const Vector3& en
 		Vector3 left = lefts[i];
 		Vector3 right = rights[i];
 	
-		// --- 右側の更新 ---
-		// 新しい右端が、現在の右端より「内側（左側）」にあるか判定
+		// 右端のチェック
 		if (TriArea2D(portalApex, portalRight, right) >= 0.0f)
 		{
 			// portalApexとportalRightが同じ（初期状態）、または新しい右端が「左端」を越えていないか
@@ -419,8 +418,7 @@ std::vector<Vector3> NavMesh::SmoothPath(const Vector3& start, const Vector3& en
 			}
 		}
 	
-		// --- 左側の更新 ---
-		// 新しい左端が、現在の左端より「内側（右側）」にあるか判定
+		// 右端のチェックが終わったら、左端のチェック
 		if (TriArea2D(portalApex, portalLeft, left) <= 0.0f)
 		{
 			// portalApexとportalLeftが同じ（初期状態）、または新しい左端が「右端」を越えていないか

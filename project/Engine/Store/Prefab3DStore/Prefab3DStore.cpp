@@ -215,7 +215,7 @@ void Engine::Prefab3DStore::PerSceneReset()
 /// @brief デバッグ用パラメータ
 void Engine::Prefab3DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
 }

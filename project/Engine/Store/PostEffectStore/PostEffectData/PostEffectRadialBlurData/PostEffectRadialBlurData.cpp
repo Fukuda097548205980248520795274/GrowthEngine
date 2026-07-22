@@ -98,7 +98,7 @@ void Engine::PostEffectRadialBlurData::Register(const PostEffectRenderContext& c
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectRadialBlurData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// UV
 	if (ImGui::TreeNode((name_ + "_RadialBlur").c_str()))

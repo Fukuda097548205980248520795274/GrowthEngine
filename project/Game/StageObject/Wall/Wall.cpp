@@ -113,7 +113,7 @@ void Wall::Draw()
 /// @param isDirty 
 void Wall::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 更新が有効なときはUIを表示しない（誤操作防止のため）
 	if (updateEnabled_)return;

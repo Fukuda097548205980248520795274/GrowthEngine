@@ -150,7 +150,7 @@ void Engine::Prefab2DStore::Reset()
 /// @brief デバッグ用パラメータ
 void Engine::Prefab2DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
 }

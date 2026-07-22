@@ -252,7 +252,7 @@ void Weapon::LandingCheck()
 /// @param isDirty 
 void Weapon::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 基底クラスのデバッグUIを描画する
 	Entity::DrawDebugUI(placementData, placementList, history, isDirty);

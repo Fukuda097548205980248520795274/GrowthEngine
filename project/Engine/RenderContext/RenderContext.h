@@ -684,7 +684,7 @@ namespace Engine
 		RenderPassData::Param* GetRenderPassParam(const std::string& name) { return offscreen_->GetRenderPassParam(name); }
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 		/// @brief デバッグ用の線を描画する
 		/// @param start 
@@ -733,7 +733,7 @@ namespace Engine
 		std::unique_ptr<DX12Debug> debug_ = nullptr;
 #endif
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		/// @brief DX12Line
 		std::unique_ptr<DX12Line> line_ = nullptr;
 #endif
@@ -838,7 +838,7 @@ namespace Engine
 	private:
 
 		// ImGui用SRVハンドル
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		std::unique_ptr<ImGuiRender> imguiRender_ = nullptr;
 #endif
 

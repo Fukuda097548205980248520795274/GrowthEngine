@@ -193,7 +193,7 @@ namespace Engine
 
 	public:
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 		/// @brief 立方体を描画する
 		/// @param position 
@@ -214,7 +214,7 @@ namespace Engine
 		std::unique_ptr<Prefab2DStore> prefab2DStore_ = nullptr;
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	private:
 

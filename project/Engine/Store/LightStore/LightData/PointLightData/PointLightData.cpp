@@ -66,7 +66,7 @@ void Engine::PointLightData::Reset()
 /// @brief デバッグ用描画処理
 void Engine::PointLightData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないときは使えない
 	if (!isLoad_)return;

@@ -7,7 +7,7 @@ Engine::Camera2DStore::Camera2DStore()
 	// 初期カメラを読み込む
 	selectHCamera_ = InitialLoad("Initial");
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラの生成
 	debugCamera_ = std::make_unique<DebugCamera2DResource>();
@@ -49,7 +49,7 @@ void Engine::Camera2DStore::Update(bool isHoverViewWindow)
 	// 指定されたカメラの更新
 	dataTable_[selectHCamera_]->Update();
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラ更新
 	debugCamera_->Update(isHoverViewWindow);
@@ -61,7 +61,7 @@ void Engine::Camera2DStore::Update(bool isHoverViewWindow)
 /// @return 
 const Engine::Camera2D& Engine::Camera2DStore::GetCamera2D() const
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// デバッグカメラ有効時
 	if (debugCamera_->IsEnable())

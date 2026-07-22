@@ -3,7 +3,7 @@
 /// @brief ノードテーブルを描画する
 void BehaviorTreeEditor::DrawNodeTable()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	ImGui::Begin("Behavior Tree Editor");
 
@@ -212,7 +212,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 /// @brief プロパティウィンドウを描画する
 void BehaviorTreeEditor::DrawPropertyWindow()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// プロパティウィンドウの開始
 	ImGui::Begin("Node Properties");
@@ -229,10 +229,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 	// ショートカットキーの説明
 	ImGui::Text("ショートカットキー 一覧");
 
-	// --- 保存の表示 ---
+	// 保存の表示
 	ImGui::Text("Ctrl + S : 上書き保存");
 
-	// --- Undo の表示切り替え ---
+	// Undo の表示切り替え
 	if (history_->CanUndo())
 	{
 		ImGui::Text("Ctrl + Z : Undo");
@@ -242,7 +242,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Z : Undo (無効)");
 	}
 
-	// --- Redo の表示切り替え ---
+	// Redo の表示切り替え
 	if (history_->CanRedo())
 	{
 		ImGui::Text("Ctrl + Y : Redo");
@@ -252,7 +252,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + Y : Redo (無効)");
 	}
 
-	// --- コピーとペーストの表示切り替え ---
+	// コピーとペーストの表示切り替え
 	if (numSelected > 0)
 	{
 		ImGui::Text("Ctrl + C : コピー");
@@ -264,7 +264,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + V : ペースト (コピーしたノードがある場合のみ有効)");
 	}
 
-	// -- リンク（接続線）の削除 --
+	// リンク（接続線）の削除
 	if (ImNodes::NumSelectedLinks() > 0)
 	{
 		ImGui::Text("Ctrl + 左クリック : リンク（接続線）削除");
@@ -274,7 +274,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Ctrl + 左クリック : リンク（接続線）削除 (リンク選択時のみ有効)");
 	}
 
-	// --- ノード削除の表示切り替え ---
+	// ノード削除の表示切り替え
 	if (numSelected > 0)
 	{
 		ImGui::Text("Delete / Backspace : ノード削除");
@@ -284,10 +284,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		ImGui::TextColored(ImVec4(0.2f, 0.2f, 0.2f, 1.0f), "Delete / Backspace : ノード削除 (ノード選択時のみ有効)");
 	}
 
-	// --- ノード自動整列の表示 ---
+	// ノード自動整列の表示
 	ImGui::Text("Ctrl + Shift + N : ノード自動整列");
 
-	// --- ルートノードにカメラを移動 ---
+	// ルートノードにカメラを移動
 	ImGui::Text("Ctrl + F : ルートノードにカメラを移動");
 
 	ImGui::Separator();
@@ -298,7 +298,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 		パラメータ調整
 	------------------*/
 
-	// 履歴と変更フラグをまとめて処理するラムダ関数の例（必要に応じてUIの種類ごとに作成）
+	// 履歴と変更フラグをまとめて処理するラムダ関数
 	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_); isDirty_ = true; }};
 
 	if (numSelected == 1)
@@ -361,7 +361,7 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 /// @brief　プロジェクトウィンドウを描画する
 void BehaviorTreeEditor::DrawProjectWindow()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	
 	ImGui::Begin("Tree Project Assets");
 

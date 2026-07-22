@@ -37,7 +37,7 @@ SkeletonHandle Engine::SkeletonStore::Load(const std::string& directory, const s
 /// @param color 
 void Engine::SkeletonStore::DrawDebugSkeleton(const Skeleton& skeleton, const Vector3& position, const Vector4& color)
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// ジョイントをループして線を描画する
 	for (const Joint& joint : skeleton.joints)

@@ -46,10 +46,10 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
     
     float4x4 localMatrix = (float4x4) 0;
 
-    // ▼ 進行方向に向けるフラグが有効な場合
+    // 進行方向に向けるフラグが有効な場合
     if (gEnable.alignToDirection != 0)
     {
-        // カメラの「右方向」と「上方向」のベクトルをビルボード行列から抽出
+        // カメラの右方向と上方向のベクトルをビルボード行列から抽出
         float3 camRight = gView.billboard[0].xyz;
         float3 camUp = gView.billboard[1].xyz;
 
@@ -69,11 +69,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
         {
             float2 d = normalize(screenDir);
             
-            // 進行方向の角度に合わせてポリゴンをZ軸回転させる行列（行優先）
-            // これにより：
-            // 画面上で上(+Y)に進む時 => 回転なし (0, 0, 0)
-            // 画面上で下(-Y)に進む時 => 180度回転 (0, 0, 3.14)
-            // 画面上で右(+X)に進む時 => -90度回転
+            // 2D回転行列を作成（Z軸は固定）
             rotMatrix = float3x3(
                 float3(d.y, -d.x, 0.0f), // 新しいX軸（右）
                 float3(d.x, d.y, 0.0f), // 新しいY軸（上）
@@ -81,7 +77,7 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
             );
         }
 
-        // スケールを適用（元のコードの構造に合わせる）
+        // パーティクルのスケールを適用
         localMatrix = float4x4(
             float4(rotMatrix[0] * particle.scale.x, 0.0f),
             float4(rotMatrix[1] * particle.scale.y, 0.0f),
@@ -89,9 +85,10 @@ VertexShaderOutput main(VertexShaderInput input, uint instanceID : SV_InstanceID
             float4(0.0f, 0.0f, 0.0f, 1.0f)
         );
     }
-    // ▼ 通常のビルボードの場合（元の処理と100%同じ）
+    // 通常のビルボードの場合（元の処理と100%同じ）
     else
     {
+        // パーティクルの回転を行列に変換
         float3x3 rotMatrix = QuaternionToMatrix(particle.rotation);
         localMatrix = float4x4(
             float4(rotMatrix[0] * particle.scale.x, 0.0f),

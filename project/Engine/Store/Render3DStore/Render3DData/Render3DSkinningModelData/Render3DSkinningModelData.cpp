@@ -500,7 +500,7 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 		// デバッグ用の線を描画する
 		skeletonStore_->DrawDebugSkeleton(skeleton_,
 			Vector3(meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][0],
@@ -673,7 +673,7 @@ Matrix4x4 Engine::Render3DSkinningModelData::GetBoneWorldMatrix(const std::strin
 /// @brief デバッグ用パラメータ
 void Engine::Render3DSkinningModelData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// 読み込んでいないと処理しない
 	if (!isLoad_)return;
@@ -768,25 +768,18 @@ void Engine::Render3DSkinningModelData::DebugParameter()
 						// テクスチャ
 						ImGui::Text("Texture");
 
-						ImGui::ImageButton(
-							textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture).c_str(),
-							textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture).ptr,
-							ImVec2(32.0f, 32.0f),
-							ImVec2(0, 0),
-							ImVec2(1, 1),
-							ImVec4(0.2f, 0.2f, 0.2f, 1.0f),
-							ImVec4(1, 1, 1, 1)
-						);
+						// テクスチャのボタンを作成する
+						ImGui::ImageButton(textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture).c_str(), textureStore_->GetSrvGpuHandle(param_->meshMaterial[meshIndex].hTexture).ptr,
+							ImVec2(32.0f, 32.0f), ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.2f, 0.2f, 0.2f, 1.0f), ImVec4(1, 1, 1, 1));
 
-						// --- ドロップ処理 ---
+						// ドラッグアンドドロップのターゲットを作成する
 						if (ImGui::BeginDragDropTarget())
 						{
 							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
 							{
 								int droppedIndex = *(const int*)payload->Data;
 
-								// droppedIndex が dataTable_ の index
-								// ここでマテリアルなどに設定する
+								// ドロップされたテクスチャを設定する
 								param_->meshMaterial[meshIndex].hTexture = static_cast<uint32_t>(droppedIndex);
 								textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 							}

@@ -46,7 +46,7 @@ void ActionNode::Abort()
 	action_->Reset();
 }
 
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 /// @brief カスタムノードUIを描画する
 /// @param zoom 

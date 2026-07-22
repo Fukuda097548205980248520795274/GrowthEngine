@@ -88,7 +88,7 @@ void Engine::PostEffectWhiteNoiseData::Register(const PostEffectRenderContext& c
 /// @brief デバッグ用パラメータ
 void Engine::PostEffectWhiteNoiseData::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	if (ImGui::TreeNode((name_ + "_Grayscale").c_str()))
 	{

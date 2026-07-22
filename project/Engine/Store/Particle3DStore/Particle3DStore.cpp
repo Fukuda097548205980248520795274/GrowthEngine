@@ -175,7 +175,7 @@ void Engine::Particle3DStore::Draw(ID3D12GraphicsCommandList* commandList, const
 /// @brief デバッグパラメータ
 void Engine::Particle3DStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 	for (auto& data : dataTable_)data->DebugParameter();
 #endif
 }

@@ -26,6 +26,7 @@ float4 Tonemap(float4 c)
 float4 InverseTonemap(float4 c)
 {
     float maxCol = max(max(c.r, c.g), c.b);
+    
     // 最大値を0.9999などに制限し、分母がゼロ以下になるのを防ぐ
     maxCol = min(maxCol, 0.9999f);
     return c / (1.0f - maxCol);
@@ -93,7 +94,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     float2 historyUV = uv - bestVelocity;
     float4 historyColor = prevTex.SampleLevel(gSampler, historyUV, 0);
 
-    // --- ここからすべてトーンマップ（圧縮）空間での処理 ---
+
 
     // 現在の色と履歴の色をトーンマップしてからモーメント計算に使用
     float4 tmCurrent = Tonemap(linearCurrentColor);
@@ -131,7 +132,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
     // ブレンド
     float4 tmFinal = lerp(tmHistory, tmCurrent, gParams.blendFactor);
 
-    // --- 線形空間に戻す ---
+    // 逆トーンマップして最終色を出力
     float4 finalColor = InverseTonemap(tmFinal);
 
     // 履歴UVが画面外の場合は履歴を使わず現在の色をそのまま出力

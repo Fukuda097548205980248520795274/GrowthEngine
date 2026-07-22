@@ -67,7 +67,7 @@ bool PointLightIntersectsTile(
     float3 frustumMin,
     float3 frustumMax)
 {
-    // AABB vs Sphere（かなり雑だが速い）
+    // AABB vs Sphere
     float3 closest = clamp(light.position, frustumMin, frustumMax);
     float dist2 = dot(closest - light.position,
                       closest - light.position);

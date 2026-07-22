@@ -42,7 +42,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			Make3DRotateMatrix4x4(rotateQ) *
 			Make3DTranslateMatrix4x4(data.position);
 
-		// キーボード入力などで操作モードを切り替える例
+		// ギズモの操作モードを切り替えるためのキー入力をチェック
 		ImGuiIO& io = ImGui::GetIO();
 		if (ImGui::IsKeyPressed(ImGuiKey_T) && !io.KeyCtrl) currentOperation_ = ImGuizmo::TRANSLATE;
 		if (ImGui::IsKeyPressed(ImGuiKey_R) && !io.KeyCtrl) currentOperation_ = ImGuizmo::ROTATE;
@@ -125,7 +125,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			isDirty = true;
 		}
 
-		// ギズモを操作している間は、スナップ機能を有効にする例（オプション）
+		// ギズモを使ってオブジェクトを操作中かどうかのフラグを更新
 		useObjectSnap_ = ImGuizmo::IsUsing();
 	}
 }
@@ -215,7 +215,7 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 		};
 		std::vector<VertexMove> vertexMoves;
 
-		// 3. 各要素の頂点に対して移動量を加算し、リストに記録する
+		// 各要素の頂点に対して移動量を加算し、リストに記録する
 		for (const auto& selectedItem : selectedItems)
 		{
 			NavPolygon* poly = navMesh->GetMutablePolygon(selectedItem.polygonId);
@@ -243,7 +243,7 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 			}
 		}
 
-		// --- 共有頂点の同期更新 ---
+		// 共有頂点の同期更新
 		for (auto& poly : navMesh->GetMutablePolygons())
 		{
 			for (int i = 0; i < 4; ++i)
@@ -251,6 +251,7 @@ void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshContro
 				for (const auto& vm : vertexMoves)
 				{
 					Vector3 diff = poly.vertices[i] - vm.oldPos;
+
 					// 浮動小数点の誤差を考慮して同じ頂点か判定
 					if ((diff.x * diff.x + diff.y * diff.y + diff.z * diff.z) < 0.01f)
 					{

@@ -128,7 +128,7 @@ std::vector<std::string> StageFileManager::GetSavedStageFiles() const
 			// 「通常のファイル」かつ「拡張子が .json」のものだけをピックアップ
 			if (entry.is_regular_file(ec) && entry.path().extension() == ".json")
 			{
-				// ファイル名（例: "stage1.json"）だけを抽出してリストに追加
+				// ファイル名だけを抽出してリストに追加
 				files.push_back(entry.path().filename().string());
 			}
 		}

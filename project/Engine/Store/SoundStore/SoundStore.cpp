@@ -73,7 +73,7 @@ SoundHandle Engine::SoundStore::Load(const std::string& name, AudioHandle hAudio
 /// @brief デバッグ用パラメータを表示する
 void Engine::SoundStore::DebugParameter()
 {
-#ifdef _DEVELOPMENT
+#ifdef DEVELOPMENT
 
 	// メニューバーを使用する
 	if (!ImGui::Begin("Sound"))
