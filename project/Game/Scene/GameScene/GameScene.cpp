@@ -33,6 +33,8 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
+	engine_->LoadPostEffect("TestPostEffect", Engine::PostEffect::Type::Bloom);
+
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
@@ -354,6 +356,9 @@ void GameScene::Initialize()
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			
+			engine_->DrawPostEffect("TestPostEffect");
 		}
 	);
 
