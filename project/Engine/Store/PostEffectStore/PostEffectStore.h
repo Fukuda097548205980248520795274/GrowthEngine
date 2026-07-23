@@ -17,6 +17,8 @@
 #include "PSO/PSOPostEffect/PSOWhiteNoise/PSOWhiteNoise.h"
 #include "PSO/PSOPostEffect/PSODOF/PSODOF.h"
 #include "PSO/PSOPostEffect/PSOBlurShadow2D/PSOBlurShadow2D.h"
+#include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
+#include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
 
 #include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
 #include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
@@ -29,6 +31,9 @@
 
 #include "PSO/PSOMotionVector/PSOMotionVectorRender/PSOMotionVectorRender.h"
 #include "PSO/PSOMotionVector/PSOMotionVectorPrefab/PSOMotionVectorPrefab.h"
+
+#include "PSO/PSOOutline/PSOOutlineRender/PSOOutlineRender.h"
+#include "PSO/PSOOutline/PSOOutlinePrefab/PSOOutlinePrefab.h"
 
 #include "Resource/MotionVectorTextureResource/MotionVectorTextureResource.h"
 
@@ -220,6 +225,12 @@ namespace Engine
 		/// @brief ブラーシャドウ2DPSO
 		std::unique_ptr<PSOBlurShadow2D> psoBlurShadow2D_ = nullptr;
 
+		/// @brief 輝度ベースのアウトラインPSO
+		std::unique_ptr<PSOLuminanceBasedOutline> psoLuminanceBasedOutline_ = nullptr;
+
+		/// @brief 深度ベースのアウトラインPSO
+		std::unique_ptr<PSODepthBasedOutline> psoDepthBasedOutline_ = nullptr;
+
 
 	private:
 
@@ -265,6 +276,15 @@ namespace Engine
 
 		/// @brief モーションベクトルを有効にするかどうか
 		static bool enableMotionVector_;
+
+
+	private:
+
+		// @brief アウトライン描画PSO
+		std::unique_ptr<PSOOutlineRender> psoOutlineRender_ = nullptr;
+
+		// @brief アウトラインPrefab描画PSO
+		std::unique_ptr<PSOOutlinePrefab> psoOutlinePrefab_ = nullptr;
 
 
 	private:

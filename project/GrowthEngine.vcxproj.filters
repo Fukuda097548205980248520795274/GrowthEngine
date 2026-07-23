@@ -1420,6 +1420,30 @@
     <Filter Include="Game\PhaseManager">
       <UniqueIdentifier>{f6202391-471f-437a-834b-9a753dcff65f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Shader\Outline">
+      <UniqueIdentifier>{b79e1626-a91c-463d-a3df-5c390d683136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Outline\OutlineRender">
+      <UniqueIdentifier>{9f777fae-9140-4edc-b3a4-761b212afa6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shader\Outline\OutlinePrefab">
+      <UniqueIdentifier>{97244063-2a89-4dcc-b73c-76657593e69d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOOutline">
+      <UniqueIdentifier>{a705e338-6d29-4d24-9213-3be0281571e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOOutline\PSOOutlineRender">
+      <UniqueIdentifier>{eebeaf89-2fec-4fc4-98f9-2f9f09ea493c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOOutline\PSOOutlinePrefab">
+      <UniqueIdentifier>{49f40884-dd10-4ade-bb4e-f76301cf6af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline">
+      <UniqueIdentifier>{9ef63c9a-077e-4299-ae34-f33be14a3617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline">
+      <UniqueIdentifier>{2f51f7b3-b083-4012-b316-e260763ab770}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2576,6 +2600,21 @@
     </ClCompile>
     <ClCompile Include="Game\PhaseManager\PhaseManager.cpp">
       <Filter>Game\PhaseManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOOutline\BasePSOOutline.cpp">
+      <Filter>Engine\Include\PSO\PSOOutline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOOutline\PSOOutlinePrefab\PSOOutlinePrefab.cpp">
+      <Filter>Engine\Include\PSO\PSOOutline\PSOOutlinePrefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOOutline\PSOOutlineRender\PSOOutlineRender.cpp">
+      <Filter>Engine\Include\PSO\PSOOutline\PSOOutlineRender</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.cpp">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3869,6 +3908,21 @@
     <ClInclude Include="Game\PhaseManager\PhaseManager.h">
       <Filter>Game\PhaseManager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOOutline\BasePSOOutline.h">
+      <Filter>Engine\Include\PSO\PSOOutline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOOutline\PSOOutlinePrefab\PSOOutlinePrefab.h">
+      <Filter>Engine\Include\PSO\PSOOutline\PSOOutlinePrefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOOutline\PSOOutlineRender\PSOOutlineRender.h">
+      <Filter>Engine\Include\PSO\PSOOutline\PSOOutlineRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.h">
+      <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">
@@ -3909,6 +3963,12 @@
     </None>
     <None Include="Assets\Shader\Triangle\Triangle.hlsli">
       <Filter>Engine\Shader\Triangle</Filter>
+    </None>
+    <None Include="Assets\Shader\Outline\OutlinePrefab\OutlinePrefab.hlsli">
+      <Filter>Engine\Shader\Outline\OutlinePrefab</Filter>
+    </None>
+    <None Include="Assets\Shader\Outline\OutlineRender\OutlineRender.hlsli">
+      <Filter>Engine\Shader\Outline\OutlineRender</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -4070,6 +4130,24 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\BlurShadow2D.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\OutlinePrefab\OutlinePrefab.VS.hlsl">
+      <Filter>Engine\Shader\Outline\OutlinePrefab</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\OutlinePrefab\OutlinePrefab.PS.hlsl">
+      <Filter>Engine\Shader\Outline\OutlinePrefab</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\OutlineRender\OutlineRender.VS.hlsl">
+      <Filter>Engine\Shader\Outline\OutlineRender</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\OutlineRender\OutlineRender.PS.hlsl">
+      <Filter>Engine\Shader\Outline\OutlineRender</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\LuminanceBasedOutline.PS.hlsl">
+      <Filter>Engine\Shader\Outline</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Outline\DepthBasedOutline.PS.hlsl">
+      <Filter>Engine\Shader\Outline</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -81,6 +81,14 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	psoBlurShadow2D_ = std::make_unique<PSOBlurShadow2D>();
 	psoBlurShadow2D_->Initialize(device, compiler, vertexShaderBlob, log);
 
+	// 輝度ベースのアウトラインPSO
+	psoLuminanceBasedOutline_ = std::make_unique<PSOLuminanceBasedOutline>();
+	psoLuminanceBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
+
+	// 深度ベースのアウトラインPSO
+	psoDepthBasedOutline_ = std::make_unique<PSODepthBasedOutline>();
+	psoDepthBasedOutline_->Initialize(device, compiler, vertexShaderBlob, log);
+
 
 	// CSデュアルブラー縮小PSO
 	computePSODualBlurDownsample_ = std::make_unique<ComputePSODualBlurDownsample>();
@@ -129,6 +137,15 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// モーションベクトルテクスチャリソースの初期化
 	motionVectorTextureResource_ = std::make_unique<MotionVectorTextureResource>();
 	motionVectorTextureResource_->Initialize(device, width, height, heap_, log);
+
+
+	// アウトライン描画用PSOの初期化
+	psoOutlineRender_ = std::make_unique<PSOOutlineRender>();
+	psoOutlineRender_->Initialize(device, compiler, log);
+
+	// アウトラインPrefab描画用PSOの初期化
+	psoOutlinePrefab_ = std::make_unique<PSOOutlinePrefab>();
+	psoOutlinePrefab_->Initialize(device, compiler, log);
 }
 
 /// @brief リサイズ
