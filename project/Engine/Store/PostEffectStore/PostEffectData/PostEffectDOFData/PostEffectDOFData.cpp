@@ -136,9 +136,13 @@ void Engine::PostEffectDOFData::Register(const PostEffectRenderContext& context)
 
 	ID3D12GraphicsCommandList* commandList = context.commandList;
 	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
-	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
 	DepthResource* depthResource = context.depthResource;
 	Camera3DStore* camera3DStore = context.camera3DStore;
+
+	assert(commandList);
+	assert(offscreenPixelShaderResource);
+	assert(depthResource);
+	assert(camera3DStore);
 
 	/*------------------------
 	    縮小サンプルをかける

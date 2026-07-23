@@ -115,7 +115,7 @@ void Engine::PostEffectTAAData::Register(const PostEffectRenderContext& context)
 	// PSOを登録
 	psoTAA_->Register(commandList);
 
-	// ピクセルシェーダに書くリソースをSRVとして登録する
+	// TAA用の入力リソースをSRVとして登録する
 	offscreenPixelShaderResource->RegisterCompute(commandList, 0);
 
 	// TAA用の前のフレームのリソースをSRVとして登録する

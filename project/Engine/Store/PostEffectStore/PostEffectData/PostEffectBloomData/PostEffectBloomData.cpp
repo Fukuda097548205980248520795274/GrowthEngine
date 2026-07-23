@@ -127,11 +127,11 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 
 
 	ID3D12GraphicsCommandList* commandList = context.commandList;
-	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
+	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
 	PSOFullscreen* psoFullscreen = context.psoFullscreen;
 
 	assert(commandList);
-	assert(offscreenRenderTargetResource);
+	assert(offscreenPixelShaderResource);
 	assert(psoFullscreen);
 	
 
@@ -148,14 +148,14 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	--------------------*/
 
 	// オフスクリーンのテクスチャにバリアを張る 読み込み -> ComputeShader書き込み
-	TransitionBarrier(offscreenRenderTargetResource->GetResource(),
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
 
 	// PSOの設定
 	highLuminanceExtractionPSO_->Register(commandList);
 
 	// 読み込みテクスチャを設定
-	offscreenRenderTargetResource->RegisterCompute(commandList, 0);
+	offscreenPixelShaderResource->RegisterCompute(commandList, 0);
 
 	// 書き込みテクスチャを設定
 	dualBlurTextureResources_[0]->RegisterComputeUAV(commandList, 1);
@@ -165,10 +165,6 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 
 	// ディスパッチ
 	commandList->Dispatch((dualBlurTextureResources_[0]->GetWidth() + 7) / 8, (dualBlurTextureResources_[0]->GetHeight() + 7) / 8, 1);
-
-	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader書き込み
-	TransitionBarrier(offscreenRenderTargetResource->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
 
 
 	/*----------------------
@@ -268,11 +264,12 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 
 
 	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
-	TransitionBarrier(dualBlurTextureResources_[0]->GetResource(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
+	TransitionBarrier(dualBlurTextureResources_[0]->GetResource(),
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
 
 	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader書き込み
-	TransitionBarrier(offscreenRenderTargetResource->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 }
 

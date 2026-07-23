@@ -372,22 +372,31 @@ void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
 	// nullptrチェック
 	assert(commandList);
 
+
+	// レンダーターゲットの設定とクリア
+	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	sourceResource_->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
+
+	destinationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
+
+
+	// sourceとdestinationを入れ替える
+	OffscreenResource* temp = sourceResource_;
+	sourceResource_ = destinationResource_;
+	destinationResource_ = temp;
+
+
 	PostEffectRenderContext context{};
 	context.commandList = commandList;
 	context.offscreenPixelShaderResource = sourceResource_;
 	context.offscreenRenderTargetResource = destinationResource_;
 	context.psoFullscreen = psoFullscreen_.get();
 
-	// 書き込み対象 -> 読み込ませテクスチャ
-	TransitionBarrier(sourceResource_->GetResource(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, commandList);
-
 	// TAAの描画コマンドを登録する
 	postEffectStore_->DrawTAA(context);
 
-	// 読み込ませテクスチャ -> 書き込み対象
-	TransitionBarrier(sourceResource_->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList);
+	// CSで書き込んだリソースをPSで読み込むためにバリアを張る
+	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
 /// @brief モーションブラーを描画する
