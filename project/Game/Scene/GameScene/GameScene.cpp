@@ -33,8 +33,6 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
-	engine_->LoadPostEffect("TestPostEffect", Engine::PostEffect::Type::TAA);
-
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();

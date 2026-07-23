@@ -166,6 +166,10 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	// ディスパッチ
 	commandList->Dispatch((dualBlurTextureResources_[0]->GetWidth() + 7) / 8, (dualBlurTextureResources_[0]->GetHeight() + 7) / 8, 1);
 
+	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader書き込み
+	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
+		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
+
 
 	/*----------------------
 	    縮小サンプルを行う
@@ -245,6 +249,22 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 		}
 	}
 
+	/*---------------------------------------
+		元画像を描画するコマンドリストに登録
+	---------------------------------------*/
+
+	// PSOの設定
+	psoFullscreen->Register(commandList, BlendMode::kNone);
+
+	// 元画像のテクスチャを設定
+	offscreenPixelShaderResource->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawInstanced(3, 1, 0, 0);
+
 
 	/*---------------------------------
 		元画像に加算のコマンドリストに登録
@@ -266,10 +286,6 @@ void Engine::PostEffectBloomData::Register(const PostEffectRenderContext& contex
 	// ブラー用テクスチャにバリアを張る　読み込み -> 書き込み
 	TransitionBarrier(dualBlurTextureResources_[0]->GetResource(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, commandList);
-
-	// オフスクリーンのテクスチャにバリアを張る ComputeShader書き込み -> PixelShader書き込み
-	TransitionBarrier(offscreenPixelShaderResource->GetResource(),
-		D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, commandList);
 
 }
 

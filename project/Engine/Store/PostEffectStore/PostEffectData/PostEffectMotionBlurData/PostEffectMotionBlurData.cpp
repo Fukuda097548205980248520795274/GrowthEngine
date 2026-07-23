@@ -114,18 +114,19 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	motionVectorTextureResource->RegisterComputeSRV(commandList, 0);
 
-	// TAA用の出力リソースをUAVとして登録する
+	// 出力リソースをUAVとして登録する
 	velocityDilationResource_->RegisterComputeUAV(commandList, 1);
 
+	// ディスパッチ
 	commandList->Dispatch((velocityDilationResource_->GetWidth() + 7) / 8, (velocityDilationResource_->GetHeight() + 7) / 8, 1);
 
 	// バリアを張る
 	motionVectorTextureResource->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 
-	/*---------------
-		TAAの処理
-	---------------*/
+	/*----------------------
+	    モーションブラー
+	----------------------*/
 
 	// バリアを張る
 	velocityDilationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
@@ -136,10 +137,10 @@ void Engine::PostEffectMotionBlurData::Register(const PostEffectRenderContext& c
 	// ピクセルシェーダに書くリソースをSRVとして登録する
 	offscreenPixelShaderResource->RegisterCompute(commandList, 0);
 
-	// TAA用のリソースをSRVとして登録する
+	// 速度膨張用のリソースをSRVとして登録する
 	velocityDilationResource_->RegisterComputeSRV(commandList, 1);
 
-	// TAA用の出力リソースをUAVとして登録する
+	// 出力リソースをUAVとして登録する
 	outputResource_->RegisterComputeUAV(commandList, 2);
 
 	// 定数バッファを登録する
