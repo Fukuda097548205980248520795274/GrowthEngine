@@ -20,7 +20,7 @@
 #pragma comment(lib, "xaudio2.lib")
 
 // インスタンス
-std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
+std::unique_ptr<GrowthEngine> GrowthEngine::pInstance_ = nullptr;
 
 /// @brief インスタンスを取得する
 /// @param screenWidth スクリーン横幅
@@ -29,13 +29,13 @@ std::unique_ptr<GrowthEngine> GrowthEngine::instance_ = nullptr;
 /// @return 
 GrowthEngine* GrowthEngine::GetInstance(int32_t screenWidth, int32_t screenHeight, const std::string& title)
 {
-	if (instance_ == nullptr)
+	if (pInstance_ == nullptr)
 	{
-		instance_.reset(new GrowthEngine());
-		instance_->Initialize(screenWidth, screenHeight, title);
+		pInstance_.reset(new GrowthEngine());
+		pInstance_->Initialize(screenWidth, screenHeight, title);
 	}
 
-	return instance_.get();
+	return pInstance_.get();
 }
 
 /// @brief インスタンスを取得する
@@ -43,8 +43,8 @@ GrowthEngine* GrowthEngine::GetInstance(int32_t screenWidth, int32_t screenHeigh
 GrowthEngine* GrowthEngine::GetInstance()
 {
 	// インスタンスがないと失敗
-	assert(instance_ != nullptr);
-	return instance_.get();
+	assert(pInstance_ != nullptr);
+	return pInstance_.get();
 }
 
 
@@ -61,75 +61,75 @@ void GrowthEngine::Initialize(int32_t screenWidth, int32_t screenHeight, const s
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	// ログの生成
-	log_ = std::make_unique<Engine::Log>();
+	pLog_ = std::make_unique<Engine::Log>();
 
 	// ウィンドウアプリケーションの生成と初期化
-	winApp_ = std::make_unique<Engine::WinApp>();
-	winApp_->Initialize(screenWidth, screenHeight, title , log_.get());
+	pWinApp_ = std::make_unique<Engine::WinApp>();
+	pWinApp_->Initialize(screenWidth, screenHeight, title , pLog_.get());
 
 	// 入力の生成と初期化
-	input_ = std::make_unique<Engine::Input>();
-	input_->Initialize(winApp_.get(), log_.get());
+	pInput_ = std::make_unique<Engine::Input>();
+	pInput_->Initialize(pWinApp_.get(), pLog_.get());
 
 	// オーディオストアの生成と初期化
-	audioStore_ = std::make_unique<Engine::AudioStore>();
-	audioStore_->Initialize(log_.get());
+	pAudioStore_ = std::make_unique<Engine::AudioStore>();
+	pAudioStore_->Initialize(pLog_.get());
 
 	// サウンドストアの生成と初期化
-	soundStore_ = std::make_unique<Engine::SoundStore>();
-	soundStore_->Initialize(audioStore_.get());
+	pSoundStore_ = std::make_unique<Engine::SoundStore>();
+	pSoundStore_->Initialize(pAudioStore_.get());
 
 	// 入力ストアの生成と初期化
-	inputStore_ = std::make_unique<Engine::InputStore>();
-	inputStore_->Initialize(input_.get());
+	pInputStore_ = std::make_unique<Engine::InputStore>();
+	pInputStore_->Initialize(pInput_.get());
 
 	// 描画統括の生成と初期化
-	renderContext_ = std::make_unique<Engine::RenderContext>();
-	renderContext_->Initialize(winApp_.get(), log_.get());
+	pRenderContext_ = std::make_unique<Engine::RenderContext>();
+	pRenderContext_->Initialize(pWinApp_.get(), pLog_.get());
 }
 
 /// @brief デストラクタ
 GrowthEngine::~GrowthEngine()
 {
 	// 描画統括の終了
-	renderContext_.reset();
-	renderContext_ = nullptr;
-	if (log_)log_->Logging("RenderContext released \n");
+	pRenderContext_.reset();
+	pRenderContext_ = nullptr;
+	if (pLog_)pLog_->Logging("RenderContext released \n");
 
 	// 入力ストアの終了
-	inputStore_.reset();
-	inputStore_ = nullptr;
-	if (log_)log_->Logging("InputStore released \n");
+	pInputStore_.reset();
+	pInputStore_ = nullptr;
+	if (pLog_)pLog_->Logging("InputStore released \n");
 
 	// サウンドストアの終了
-	soundStore_.reset();
-	soundStore_ = nullptr;
-	if (log_)log_->Logging("SoundStore released \n");
+	pSoundStore_.reset();
+	pSoundStore_ = nullptr;
+	if (pLog_)pLog_->Logging("SoundStore released \n");
 
 	// オーディオストアの終了
-	audioStore_.reset();
-	audioStore_ = nullptr;
-	if (log_)log_->Logging("AudioStore released \n");
+	pAudioStore_.reset();
+	pAudioStore_ = nullptr;
+	if (pLog_)pLog_->Logging("AudioStore released \n");
 
 	// 入力の終了
-	input_.reset();
-	input_ = nullptr;
-	if (log_)log_->Logging("Input released \n");
+	pInput_.reset();
+	pInput_ = nullptr;
+	if (pLog_)pLog_->Logging("Input released \n");
 
 	// ウィンドウアプリケーションの終了
-	winApp_.reset();
-	winApp_ = nullptr;
-	if (log_)log_->Logging("WinApp released \n");
+	pWinApp_.reset();
+	pWinApp_ = nullptr;
+	if (pLog_)pLog_->Logging("WinApp released \n");
 
 	// 解放漏れを検知する
 #ifdef _DEBUG
 	Engine::LeakChecker();
-	if (log_)log_->Logging("LeakChecker executed \n");
+	if (pLog_)pLog_->Logging("LeakChecker executed \n");
 #endif
 
 	// ログの終了
-	log_.reset();
-	log_ = nullptr;
+	pLog_.reset();
+	pLog_ = nullptr;
 
 	// COM終了
 	CoUninitialize();
@@ -139,7 +139,7 @@ GrowthEngine::~GrowthEngine()
 void GrowthEngine::PerScene()
 {
 	// シーン前処理
-	renderContext_->PerScene();
+	pRenderContext_->PerScene();
 
 	// デルタタイムの初期化
 	isDeltaTimeFirst_ = true;
@@ -162,7 +162,7 @@ void GrowthEngine::NewFrame()
 		deltaTime_ = 0.0f;
 
 	// 全ての入力情報を取得する
-	input_->CheckInputInfo();
+	pInput_->CheckInputInfo();
 
 	// Alt + Enter の同時押し
 	bool isAltPressed = GetKeyPress(DIK_LALT) || GetKeyPress(DIK_RALT);
@@ -172,7 +172,7 @@ void GrowthEngine::NewFrame()
 	{
 		if (!isPushFullscreenButton_)
 		{
-			winApp_->Fullscreen();
+			pWinApp_->Fullscreen();
 		}
 		isPushFullscreenButton_ = true;
 	} else
@@ -181,19 +181,19 @@ void GrowthEngine::NewFrame()
 	}
 
 	// 入力ストアの更新
-	inputStore_->Update();
+	pInputStore_->Update();
 
 	// サウンドストアの更新
-	soundStore_->Update();
+	pSoundStore_->Update();
 
 	// オーディオストアの更新
-	audioStore_->Update();
+	pAudioStore_->Update();
 
 	// 新フレーム処理
-	renderContext_->NewFrame();
+	pRenderContext_->NewFrame();
 
 	// ウィンドウの更新
-	winApp_->Update();
+	pWinApp_->Update();
 
 	// タイムスケールのタイマーを更新する
 	UpdateTimeScale();
@@ -203,17 +203,17 @@ void GrowthEngine::NewFrame()
 void GrowthEngine::PreDraw() 
 {
 	// 描画前処理
-	renderContext_->PreDraw();
+	pRenderContext_->PreDraw();
 
 #ifdef DEVELOPMENT
 
 	// サウンドストアのパラメータを表示する
-	soundStore_->DebugParameter();
+	pSoundStore_->DebugParameter();
 
 	// マウスでオブジェクト選択
-	if (input_->GetMouseTrigger(static_cast<uint32_t>(MouseButton::Left)))
+	if (pInput_->GetMouseTrigger(static_cast<uint32_t>(MouseButton::Left)))
 		if (!ImGuizmo::IsOver())
-			renderContext_->DebugRayPicking();
+			pRenderContext_->DebugRayPicking();
 
 
 	// ImGuiがキーボード入力をキャプチャしているときはデルタタイムを0にする
@@ -240,10 +240,10 @@ void GrowthEngine::PostDraw()
 #endif
 
 	// 描画後処理
-	renderContext_->PostDraw();
+	pRenderContext_->PostDraw();
 
 	// 全ての入力情報をコピーする
-	input_->CopyInputInfo();
+	pInput_->CopyInputInfo();
 
 	// デルタタイム二週目を終わらせる
 	if(!isDeltaTimeFirst_)
@@ -287,14 +287,14 @@ Vector2 GrowthEngine::GetMousePosition()const
 #ifdef DEVELOPMENT
 
 	// ビューウィンドウ内
-	mousePos = renderContext_->GetViewWindowCursorPos();
+	mousePos = pRenderContext_->GetViewWindowCursorPos();
 
 #else
 
 	// ウィンドウ内
 	POINT p;
 	GetCursorPos(&p);
-	ScreenToClient(winApp_->GetHwnd(), &p);
+	ScreenToClient(pWinApp_->GetHwnd(), &p);
 	mousePos = Vector2(static_cast<float>(p.x), static_cast<float>(p.y));
 
 #endif
@@ -311,7 +311,7 @@ bool GrowthEngine::IsCursorWindowHover() const
 #ifdef DEVELOPMENT
 
 	// ビューウィンドウ内
-	isHover = renderContext_->IsViewWindowHover();
+	isHover = pRenderContext_->IsViewWindowHover();
 
 #else
 
@@ -319,8 +319,8 @@ bool GrowthEngine::IsCursorWindowHover() const
 	Vector2 mousePos = GetMousePosition();
 
 	// ウィンドウ内
-	if (mousePos.x >= 0.0f && mousePos.x <= static_cast<float>(winApp_->GetClientWidth()) &&
-		mousePos.y >= 0.0f && mousePos.y <= static_cast<float>(winApp_->GetClientHeight()))
+	if (mousePos.x >= 0.0f && mousePos.x <= static_cast<float>(pWinApp_->GetClientWidth()) &&
+		mousePos.y >= 0.0f && mousePos.y <= static_cast<float>(pWinApp_->GetClientHeight()))
 	{
 		isHover = true;
 	}

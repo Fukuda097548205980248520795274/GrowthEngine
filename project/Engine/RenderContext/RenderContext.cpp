@@ -6,115 +6,115 @@
 
 /// @brief 初期化
 /// @param log 
-void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
+void Engine::RenderContext::Initialize(WinApp* pWinApp, Log* pLog)
 {
 	// nullptrチェック
-	assert(winApp);
+	assert(pWinApp);
 
 	// 引数を受け取る
-	winApp_ = winApp;
+	pWinApp_ = pWinApp;
 
 	// FPS固定初期化
 	InitializeFixFPS();
 
 #ifdef _DEBUG
 	// DX12Debugの生成と初期化
-	debug_ = std::make_unique<DX12Debug>();
-	debug_->Initialize(log);
+	pDebug_ = std::make_unique<DX12Debug>();
+	pDebug_->Initialize(pLog);
 #endif
 
 	// DX12Coreの生成と初期化
-	core_ = std::make_unique<DX12Core>();
-	core_->Initialize(log);
+	pCore_ = std::make_unique<DX12Core>();
+	pCore_->Initialize(pLog);
 
 #ifdef _DEBUG
 	// デバッグモードならデバイス生成後に警告・エラーで停止させる
-	debug_->Stop(core_->GetDevice());
+	pDebug_->Stop(pCore_->GetDevice());
 #endif
 
 	// DX12Commandの生成と初期化
-	command_ = std::make_unique<DX12Command>();
-	command_->Initialize(core_->GetDevice(), log);
+	pCommand_ = std::make_unique<DX12Command>();
+	pCommand_->Initialize(pCore_->GetDevice(), pLog);
 
 	// コマンドリストの取得
-	commandList_ = command_->GetCommandList();
+	pCommandList_ = pCommand_->GetCommandList();
 
 	// DX12Heapの生成と初期化
-	heap_ = std::make_unique<DX12Heap>();
-	heap_->Initialize(core_->GetDevice(), log);
+	pHeap_ = std::make_unique<DX12Heap>();
+	pHeap_->Initialize(pCore_->GetDevice(), pLog);
 
 	// DX12Bufferingの生成と初期化
-	buffering_ = std::make_unique<DX12Buffering>();
-	buffering_->Initialize(log, heap_.get(), winApp_,
-		core_->GetDXGIFactory(), core_->GetDevice(), command_->GetCommandQueue());
+	pBuffering_ = std::make_unique<DX12Buffering>();
+	pBuffering_->Initialize(pLog, pHeap_.get(), pWinApp_,
+		pCore_->GetDXGIFactory(), pCore_->GetDevice(), pCommand_->GetCommandQueue());
 
 	// DX12Fenceの生成と初期化
-	fence_ = std::make_unique<DX12Fence>();
-	fence_->Initialize(log, core_->GetDevice());
+	pFence_ = std::make_unique<DX12Fence>();
+	pFence_->Initialize(pLog, pCore_->GetDevice());
 
 	// シェーダコンパイラの生成と初期化
-	shaderCompiler_ = std::make_unique<ShaderCompiler>();
-	shaderCompiler_->Initialize(log);
+	pShaderCompiler_ = std::make_unique<ShaderCompiler>();
+	pShaderCompiler_->Initialize(pLog);
 
 	// テクスチャストアの生成
-	textureStore_ = std::make_unique<TextureStore>();
+	pTextureStore_ = std::make_unique<TextureStore>();
 
 	// DX12Offscreenの生成と初期化
-	offscreen_ = std::make_unique<DX12Offscreen>();
-	offscreen_->Initialize(core_->GetDevice(), commandList_, heap_.get(), buffering_.get(), shaderCompiler_.get(), textureStore_.get(), log);
+	pOffscreen_ = std::make_unique<DX12Offscreen>();
+	pOffscreen_->Initialize(pCore_->GetDevice(), pCommandList_, pHeap_.get(), pBuffering_.get(), pShaderCompiler_.get(), pTextureStore_.get(), pLog);
 
 	// 3Dカメラストア
-	camera3DStore_ = std::make_unique<Camera3DStore>();
-	camera3DStore_->Initialize(core_->GetDevice(), log);
+	pCamera3DStore_ = std::make_unique<Camera3DStore>();
+	pCamera3DStore_->Initialize(pCore_->GetDevice(), pLog);
 
 	// 2Dカメラストア
-	camera2DStore_ = std::make_unique<Camera2DStore>();
+	pCamera2DStore_ = std::make_unique<Camera2DStore>();
 
 	// モデルストアの生成
-	modelStore_ = std::make_unique<ModelStore>();
-	modelStore_->Initilaize(core_->GetDevice(), log);
+	pModelStore_ = std::make_unique<ModelStore>();
+	pModelStore_->Initilaize(pCore_->GetDevice(), pLog);
 
 	// アニメーションストアの生成
-	animationStore_ = std::make_unique<AnimationStore>();
+	pAnimationStore_ = std::make_unique<AnimationStore>();
 
 	// スケルトンストアの生成
-	skeletonStore_ = std::make_unique<SkeletonStore>();
+	pSkeletonStore_ = std::make_unique<SkeletonStore>();
 
 	// ライトストアの生成と初期化
-	lightStore_ = std::make_unique<LightStore>();
-	lightStore_->Initialize(core_->GetDevice(), commandList_, heap_.get(), shaderCompiler_.get(), log);
+	pLightStore_ = std::make_unique<LightStore>();
+	pLightStore_->Initialize(pCore_->GetDevice(), pCommandList_, pHeap_.get(), pShaderCompiler_.get(), pLog);
 
 	// スカイボックスストアの生成と初期化
-	skyboxStore_ = std::make_unique<SkyboxStore>();
-	skyboxStore_->Initialize(core_->GetDevice(), commandList_, shaderCompiler_.get(), textureStore_.get(), heap_.get(), log);
+	pSkyboxStore_ = std::make_unique<SkyboxStore>();
+	pSkyboxStore_->Initialize(pCore_->GetDevice(), pCommandList_, pShaderCompiler_.get(), pTextureStore_.get(), pHeap_.get(), pLog);
 
 	// 3D衝突ストアの生成と初期化
-	collision3DStore_ = std::make_unique<Collision3DStore>();
+	pCollision3DStore_ = std::make_unique<Collision3DStore>();
 
 	// 2D衝突ストアの生成と初期化
-	collision2DStore_ = std::make_unique<Collision2DStore>();
+	pCollision2DStore_ = std::make_unique<Collision2DStore>();
 
 	// フォントストアの生成と初期化
-	fontStore_ = std::make_unique<FontStore>();
+	pFontStore_ = std::make_unique<FontStore>();
 
 	// DX12Modelの生成と初期化
-	render_ = std::make_unique<DX12Render>();
-	render_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(), camera3DStore_.get(),
-		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), log);
+	pRender_ = std::make_unique<DX12Render>();
+	pRender_->Initialize(pCore_->GetDevice(), pShaderCompiler_.get(), pHeap_.get(), pCamera3DStore_.get(),
+		pModelStore_.get(), pTextureStore_.get(), pAnimationStore_.get(), pSkeletonStore_.get(), pLightStore_.get(), pLog);
 
 	// DX12Prefabの生成と初期化
-	prefab_ = std::make_unique<DX12Prefab>();
-	prefab_->Initialize(core_->GetDevice(),commandList_, shaderCompiler_.get(), heap_.get(),
-		modelStore_.get(), textureStore_.get(), animationStore_.get(), skeletonStore_.get(), lightStore_.get(), camera3DStore_.get(), log);
+	pPrefab_ = std::make_unique<DX12Prefab>();
+	pPrefab_->Initialize(pCore_->GetDevice(),pCommandList_, pShaderCompiler_.get(), pHeap_.get(),
+		pModelStore_.get(), pTextureStore_.get(), pAnimationStore_.get(), pSkeletonStore_.get(), pLightStore_.get(), pCamera3DStore_.get(), pLog);
 
 	// DX12Particleの生成と初期化
-	particle_ = std::make_unique<DX12Particle>();
-	particle_->Initialize(core_->GetDevice(), shaderCompiler_.get(), heap_.get(),
-		modelStore_.get(), textureStore_.get(), log);
+	pParticle_ = std::make_unique<DX12Particle>();
+	pParticle_->Initialize(pCore_->GetDevice(), pShaderCompiler_.get(), pHeap_.get(),
+		pModelStore_.get(), pTextureStore_.get(), pLog);
 
 	// ビューポートの設定
-	viewport_.Width = static_cast<float>(winApp_->GetClientWidth());
-	viewport_.Height = static_cast<float>(winApp_->GetClientHeight());
+	viewport_.Width = static_cast<float>(pWinApp_->GetClientWidth());
+	viewport_.Height = static_cast<float>(pWinApp_->GetClientHeight());
 	viewport_.TopLeftX = 0;
 	viewport_.TopLeftY = 0;
 	viewport_.MinDepth = 0.0f;
@@ -122,26 +122,26 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 
 	// シザー矩形の設定
 	scissorRect_.left = 0;
-	scissorRect_.right = winApp_->GetClientWidth();
+	scissorRect_.right = pWinApp_->GetClientWidth();
 	scissorRect_.top = 0;
-	scissorRect_.bottom = winApp_->GetClientHeight();
+	scissorRect_.bottom = pWinApp_->GetClientHeight();
 
 #ifdef DEVELOPMENT
 
 	// DX12Lineの生成と初期化
-	line_ = std::make_unique<DX12Line>();
-	line_->Initialize(core_->GetDevice(), heap_.get(), shaderCompiler_.get(), log);
+	pLine_ = std::make_unique<DX12Line>();
+	pLine_->Initialize(pCore_->GetDevice(), pHeap_.get(), pShaderCompiler_.get(), pLog);
 
 	// ImGuiの初期設定
-	imguiRender_ = std::make_unique<ImGuiRender>();
-	imguiRender_->Initialize(core_->GetDevice(), winApp_, heap_.get(), buffering_.get(), log);
+	pImguiRender_ = std::make_unique<ImGuiRender>();
+	pImguiRender_->Initialize(pCore_->GetDevice(), pWinApp_, pHeap_.get(), pBuffering_.get(), pLog);
 #endif
 
 	// 描画前処理のレンダーパスを登録する
 	LoadRenderPass("PrevDraw", [&]() 
 		{
 			// スカイボックスの描画
-			skyboxStore_->Draw(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPMatrix());
+			pSkyboxStore_->Draw(pCommandList_, pCamera3DStore_->GetCamera3D().GetCurrentVPMatrix());
 		}
 	);
 
@@ -151,16 +151,16 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 			DrawToRenderPass("LastPostDraw", "MainPass");
 
 			// モーションベクトルの描画
-			offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
+			pOffscreen_->DrawMotionVector(pCommandList_, pRender_.get(), pPrefab_.get());
 
 			// モーションブラーの描画
-			offscreen_->DrawMotionBlur(commandList_);
+			pOffscreen_->DrawMotionBlur(pCommandList_);
 
 			// 残像の描画
-			offscreen_->DrawAfterImage(commandList_, camera3DStore_.get());
+			pOffscreen_->DrawAfterImage(pCommandList_, pCamera3DStore_.get());
 
 			// TAAの描画
-			offscreen_->DrawTAA(commandList_);
+			pOffscreen_->DrawTAA(pCommandList_);
 		}
 	);
 
@@ -173,19 +173,19 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 			DrawToRenderPass("LineDraw", "LastPostDraw");
 
 			// 衝突ストアのデバッグ線
-			collision3DStore_->DebugDrawLine();
-			collision2DStore_->DebugDrawLine();
+			pCollision3DStore_->DebugDrawLine();
+			pCollision2DStore_->DebugDrawLine();
 
 			// カメラのデバッグ線
-			camera3DStore_->DebugDrawLine();
+			pCamera3DStore_->DebugDrawLine();
 
 			// ライトのデバッグ線
-			lightStore_->DebugDrawLine();
+			pLightStore_->DebugDrawLine();
 
 			// 線の描画
-			line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
-			line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
-			line_->DrawTriangle3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+			pLine_->DrawLine3D(pCommandList_, pCamera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
+			pLine_->DrawLine2D(pCommandList_, pCamera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
+			pLine_->DrawTriangle3D(pCommandList_, pCamera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
 		}
 	);
 
@@ -196,64 +196,64 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 void Engine::RenderContext::PerScene()
 { 
 	// カメラのリセット
-	camera3DStore_->PerSceneReset();
+	pCamera3DStore_->PerSceneReset();
 
 	// 描画のリセット
-	render_->PerSceneReset();
+	pRender_->PerSceneReset();
 
 	// プレハブのリセット
-	prefab_->PerSceneReset();
+	pPrefab_->PerSceneReset();
 
 	// オフスクリーンのリセット
-	offscreen_->PerSceneReset();
+	pOffscreen_->PerSceneReset();
 
 	// ライトストアのリセット
-	lightStore_->PerSceneReset();
+	pLightStore_->PerSceneReset();
 
 	// コリジョンのインスタンスを削除する
-	collision3DStore_->DestroyAllInstance(); 
-	collision2DStore_->DestroyAllInstance(); 
+	pCollision3DStore_->DestroyAllInstance(); 
+	pCollision2DStore_->DestroyAllInstance(); 
 }
 
 /// @brief 新フレーム処理
 void Engine::RenderContext::NewFrame()
 {
 	// リサイズ処理
-	if (winApp_->IsResized())
-		Resize(winApp_->GetClientWidth(), winApp_->GetClientHeight());
+	if (pWinApp_->IsResized())
+		Resize(pWinApp_->GetClientWidth(), pWinApp_->GetClientHeight());
 
 #ifdef DEVELOPMENT
 	// フレームの開始をImGuiに伝える
-	imguiRender_->FrameStart();
+	pImguiRender_->FrameStart();
 
 	// 線のリセット
-	line_->Reset();
+	pLine_->Reset();
 #endif
 
 	// リセット
-	prefab_->Reset();
-	lightStore_->FrameReset();
+	pPrefab_->Reset();
+	pLightStore_->FrameReset();
 
 	// コマンドリストの取得
-	commandList_ = command_->GetCommandList();
+	pCommandList_ = pCommand_->GetCommandList();
 
 	// ビューポート、シザー矩形の設定
-	commandList_->RSSetViewports(1, &viewport_);
-	commandList_->RSSetScissorRects(1, &scissorRect_);
+	pCommandList_->RSSetViewports(1, &viewport_);
+	pCommandList_->RSSetScissorRects(1, &scissorRect_);
 
 	// 描画用のディスクリプタヒープを設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { heap_->GetSrvDescriptorHeap() };
-	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { pHeap_->GetSrvDescriptorHeap() };
+	pCommandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 	// プレハブの更新
-	prefab_->Update();
+	pPrefab_->Update();
 
 #ifdef DEVELOPMENT
 	// Dockスペースを作成する
-	imguiRender_->CreateDockSpace();
+	pImguiRender_->CreateDockSpace();
 
 	// テクスチャストアのUI
-	textureStore_->DrawUI();
+	pTextureStore_->DrawUI();
 #endif 
 }
 
@@ -264,47 +264,47 @@ void Engine::RenderContext::PreDraw()
 
 	// パラメータやGuizmo操作などのデバッグ表示
 #ifdef DEVELOPMENT
-	camera3DStore_->DebugParameter();
-	render_->DebugParameter();
-	prefab_->DebugParameter();
-	offscreen_->DebugParameter();
-	particle_->DebugParameter();
+	pCamera3DStore_->DebugParameter();
+	pRender_->DebugParameter();
+	pPrefab_->DebugParameter();
+	pOffscreen_->DebugParameter();
+	pParticle_->DebugParameter();
 
-	lightStore_->DebugGuizmo(camera3DStore_->GetCamera3D().GetViewMatrix(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
-	lightStore_->DebugParameter();
+	pLightStore_->DebugGuizmo(pCamera3DStore_->GetCamera3D().GetViewMatrix(), pCamera3DStore_->GetCamera3D().GetProjectionMatrix());
+	pLightStore_->DebugParameter();
 
 	// ImGuiDockingのビューウィンドウがホバーしているかどうかを取得する
-	isHoverViewWindow = imguiRender_->IsViewWindowHover();
+	isHoverViewWindow = pImguiRender_->IsViewWindowHover();
 #endif
 
 	// コマンドリストの取得
-	commandList_ = command_->GetCommandList();
+	pCommandList_ = pCommand_->GetCommandList();
 
 	// モデル全体の更新
-	render_->Update(commandList_);
+	pRender_->Update(pCommandList_);
 
 	// パーティクルの更新
-	particle_->Update(commandList_);
+	pParticle_->Update(pCommandList_);
 
 	// カメラストアの更新
-	camera3DStore_->Update(isHoverViewWindow);
-	camera2DStore_->Update(isHoverViewWindow);
+	pCamera3DStore_->Update(isHoverViewWindow);
+	pCamera2DStore_->Update(isHoverViewWindow);
 
 	// ライトストアの更新
-	lightStore_->Update();
+	pLightStore_->Update();
 
 	// 衝突判定
-	collision3DStore_->Update();
-	collision2DStore_->Update();
+	pCollision3DStore_->Update();
+	pCollision2DStore_->Update();
 
 	// シャドウマップ処理
-	lightStore_->ShadowMap(commandList_, render_.get(), prefab_.get(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
+	pLightStore_->ShadowMap(pCommandList_, pRender_.get(), pPrefab_.get(), pCamera3DStore_->GetCamera3D().GetProjectionMatrix());
 
 	// シャドウマップをテクスチャとして使えるようにする
-	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	pLightStore_->GetShadowMapTextureResource()->Barrier(pCommandList_, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	// オフスクリーンのクリア
-	offscreen_->Clear(commandList_);
+	pOffscreen_->Clear(pCommandList_);
 
 	// 描画前処理のレンダーパスを呼び出す
 	ExecuteRenderPass("PrevDraw");
@@ -321,85 +321,86 @@ void Engine::RenderContext::PostDraw()
 #endif
 
 	// コマンドリスト・アロケータの取得
-	commandList_ = command_->GetCommandList();
-	commandAllocator_ = command_->GetCommandAllocator();
+	pCommandList_ = pCommand_->GetCommandList();
+	pCommandAllocator_ = pCommand_->GetCommandAllocator();
 
 	// バックバッファのインデックス・リソース・RTV用CPUハンドルを取得
-	UINT backBufferIndex = buffering_->GetSwapChain()->GetCurrentBackBufferIndex();
-	ID3D12Resource* backBufferResource = buffering_->GetSwapChainResource(backBufferIndex);
-	D3D12_CPU_DESCRIPTOR_HANDLE backBufferCPUHandle = buffering_->GetSwapChainRtvCPUHandle(backBufferIndex);
+	UINT backBufferIndex = pBuffering_->GetSwapChain()->GetCurrentBackBufferIndex();
+	ID3D12Resource* backBufferResource = pBuffering_->GetSwapChainResource(backBufferIndex);
+	D3D12_CPU_DESCRIPTOR_HANDLE backBufferCPUHandle = pBuffering_->GetSwapChainRtvCPUHandle(backBufferIndex);
 
 	// シャドウマップを深度テクスチャに戻す
-	lightStore_->GetShadowMapTextureResource()->Barrier(commandList_,D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	pLightStore_->GetShadowMapTextureResource()->Barrier(pCommandList_,D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 	// バックバッファリソース Present -> RenderTarget
-	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET, commandList_);
+	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET, pCommandList_);
 
 	// 描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &backBufferCPUHandle, false, nullptr);
+	pCommandList_->OMSetRenderTargets(1, &backBufferCPUHandle, false, nullptr);
 
 	// 指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f , 0.1f , 0.1f , 1.0f };
-	commandList_->ClearRenderTargetView(backBufferCPUHandle, clearColor, 0, nullptr);
+	pCommandList_->ClearRenderTargetView(backBufferCPUHandle, clearColor, 0, nullptr);
 
 	// スワップチェインのリソースにオフスクリーンテクスチャを書き込む
-	offscreen_->RenderSwapChain(commandList_);
+	pOffscreen_->RenderSwapChain(pCommandList_);
 
 	// ImGuiDockingに最終的なオフスクリーンを描画する
 #ifdef DEVELOPMENT
 	// ImGuiに表示するスクリーンを描画する
-	imguiRender_->DrawImGuiScreen(offscreen_->GetCurrentResource()->GetResource(), offscreen_->GetCurrentResourceSrvHandle(), commandList_);
+	pImguiRender_->DrawImGuiScreen(pOffscreen_->GetCurrentResource()->GetResource(), pOffscreen_->GetCurrentResourceSrvHandle(), pCommandList_);
 #endif
 
 	// バックバッファリソース RenderTarget -> Present
-	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, commandList_);
+	TransitionBarrier(backBufferResource, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT, pCommandList_);
 
 	// オフスクリーンのフレーム終了処理
-	offscreen_->EndFrame(commandList_);
+	pOffscreen_->EndFrame(pCommandList_);
 
 	// コマンドの内容を確定させる（閉じる）
-	HRESULT hr = commandList_->Close();
+	HRESULT hr = pCommandList_->Close();
 	assert(SUCCEEDED(hr));
 
 	// GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_ };
-	command_->GetCommandQueue()->ExecuteCommandLists(1, commandLists);
+	ID3D12CommandList* commandLists[] = { pCommandList_ };
+	pCommand_->GetCommandQueue()->ExecuteCommandLists(1, commandLists);
 
 	// GPUとOSに画面の交換を行うよう通知する
-	buffering_->GetSwapChain()->Present(0, 0);
+	pBuffering_->GetSwapChain()->Present(0, 0);
 
 	// GPUにシグナルを送る
-	fence_->SendSignal(command_->GetCommandQueue());
+	pFence_->SendSignal(pCommand_->GetCommandQueue());
 
 	// フェンスの値を確認してGPUを待つ
-	fence_->WaitGPU();
+	pFence_->WaitGPU();
 
 	// FPS固定更新処理
 	UpdateFixFPS();
 
 	// 次のフレーム用のコマンドリストを準備
-	hr = commandAllocator_->Reset();
+	hr = pCommandAllocator_->Reset();
 	assert(SUCCEEDED(hr));
-	hr = commandList_->Reset(commandAllocator_, nullptr);
+	hr = pCommandList_->Reset(pCommandAllocator_, nullptr);
 	assert(SUCCEEDED(hr));
 
 	// プレハブをリセット
-	prefab_->PrefabReset();
+	pPrefab_->PrefabReset();
 }
 
 
 /// @brief スケルトンを読み込む
 /// @param directory 
 /// @param fileName 
+/// @param pLog 
 /// @return 
-SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory, const std::string& fileName, Log* log)
+SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory, const std::string& fileName, Log* pLog)
 {
 	// モデルハンドルを取得する
-	ModelHandle modelHandle = modelStore_->Load(directory, fileName, textureStore_.get(), heap_.get(), core_->GetDevice(), commandList_, log);
-	ModelData modelData = modelStore_->GetModelData(modelHandle);
+	ModelHandle modelHandle = pModelStore_->Load(directory, fileName, pTextureStore_.get(), pHeap_.get(), pCore_->GetDevice(), pCommandList_, pLog);
+	ModelData modelData = pModelStore_->GetModelData(modelHandle);
 
 	// スケルトンハンドルを取得する
-	SkeletonHandle skeletonHandle = skeletonStore_->Load(directory, fileName, modelData.nodes);
+	SkeletonHandle skeletonHandle = pSkeletonStore_->Load(directory, fileName, modelData.nodes);
 	return skeletonHandle;
 }
 
@@ -407,15 +408,15 @@ SkeletonHandle Engine::RenderContext::LoadSkeleton(const std::string& directory,
 /// @brief ポストエフェクトを読み込む
 /// @param name 
 /// @param type 
-/// @param log 
+/// @param pLog 
 /// @return 
-PostEffectHandle Engine::RenderContext::LoadPostEffect(const std::string& name, PostEffect::Type type, Log* log)
+PostEffectHandle Engine::RenderContext::LoadPostEffect(const std::string& name, PostEffect::Type type, Log* pLog)
 {
 	// TAAの場合、カメラストアでジッタリングを有効にする
 	if(type == PostEffect::Type::TAA)
-		camera3DStore_->SetEnableJitter(true);
+		pCamera3DStore_->SetEnableJitter(true);
 
-	return offscreen_->LoadPostEffect(name, type, core_->GetDevice(), commandList_, log);
+	return pOffscreen_->LoadPostEffect(name, type, pCore_->GetDevice(), pCommandList_, pLog);
 }
 
 /// @brief ポストエフェクトを描画する
@@ -423,9 +424,9 @@ PostEffectHandle Engine::RenderContext::LoadPostEffect(const std::string& name, 
 void Engine::RenderContext::DrawPostEffect(PostEffectHandle hPostEffect)
 {
 	PostEffectRenderContext context;
-	context.camera3DStore = camera3DStore_.get();
+	context.camera3DStore = pCamera3DStore_.get();
 
-	return offscreen_->DrawPostEffect(hPostEffect, commandList_, context);
+	return pOffscreen_->DrawPostEffect(hPostEffect, pCommandList_, context);
 }
 
 /// @brief ポストエフェクトを描画する
@@ -433,9 +434,9 @@ void Engine::RenderContext::DrawPostEffect(PostEffectHandle hPostEffect)
 void Engine::RenderContext::DrawPostEffect(const std::string& name)
 {
 	PostEffectRenderContext context;
-	context.camera3DStore = camera3DStore_.get();
+	context.camera3DStore = pCamera3DStore_.get();
 
-	return offscreen_->DrawPostEffect(name, commandList_, context);
+	return pOffscreen_->DrawPostEffect(name, pCommandList_, context);
 }
 
 
@@ -475,21 +476,21 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 	if (width == 0 || height == 0) return;
 
 	// GPU待機
-	fence_->WaitGPU();
+	pFence_->WaitGPU();
 
 	// スワップチェーンのリサイズ
-	buffering_->Resize(core_->GetDevice(), width, height);
+	pBuffering_->Resize(pCore_->GetDevice(), width, height);
 
 	// オフスクリーン再生成
-	offscreen_->Resize(core_->GetDevice(),commandList_, buffering_.get());
+	pOffscreen_->Resize(pCore_->GetDevice(),pCommandList_, pBuffering_.get());
 
 #ifdef DEVELOPMENT
 	// IMGUIのリサイズ
-	imguiRender_->Resize(width, height);
+	pImguiRender_->Resize(width, height);
 #endif
 
 	// シャドウマップテクスチャのリサイズ
-	lightStore_->Resize(core_->GetDevice(), width, height);
+	pLightStore_->Resize(pCore_->GetDevice(), width, height);
 
 	// ビューポートの設定
 	viewport_.Width = static_cast<float>(width);
@@ -513,7 +514,7 @@ void Engine::RenderContext::Resize(int32_t width, int32_t height)
 void Engine::RenderContext::DebugRayPicking()
 {
 	// imguiのビューウィンドウ内のカーソルの位置を取得する
-	Vector2 mouseScreenPos = imguiRender_->GetViewWindowCursorPos();
+	Vector2 mouseScreenPos = pImguiRender_->GetViewWindowCursorPos();
 
 	// 正規化デバイス座標系
 	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(1280.0f) - 1.0f;
@@ -525,8 +526,8 @@ void Engine::RenderContext::DebugRayPicking()
 
 	// 逆ビュープロジェクション行列
 	Matrix4x4 invVP =
-		(camera3DStore_->GetCamera3D().GetViewMatrix() *
-			camera3DStore_->GetCamera3D().GetProjectionMatrix()).Inverse();
+		(pCamera3DStore_->GetCamera3D().GetViewMatrix() *
+			pCamera3DStore_->GetCamera3D().GetProjectionMatrix()).Inverse();
 
 	Vector4 nearWorld = Transform(nearClip, invVP);
 	Vector4 farWorld = Transform(farClip, invVP);
@@ -538,12 +539,12 @@ void Engine::RenderContext::DebugRayPicking()
 	ray.diff = Vector3(farWorld.x - nearWorld.x, farWorld.y - nearWorld.y, farWorld.z - nearWorld.z).Normalize();
 
 	// 2D描画の座標に変換する
-	Vector2 render2DCoordinatePos = Vector2(mouseScreenPos.x, static_cast<float>(winApp_->GetClientHeight()) - mouseScreenPos.y);
+	Vector2 render2DCoordinatePos = Vector2(mouseScreenPos.x, static_cast<float>(pWinApp_->GetClientHeight()) - mouseScreenPos.y);
 
 	// リストを作成し、判定
 	std::vector<std::pair<float, DebugData::DebugGuizmoData*>> pickList;
-	camera3DStore_->DebugRayPicking(ray, pickList);
-	lightStore_->DebugRayPicking(ray, pickList);
+	pCamera3DStore_->DebugRayPicking(ray, pickList);
+	pLightStore_->DebugRayPicking(ray, pickList);
 
 	if (!pickList.empty())
 	{
