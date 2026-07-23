@@ -81,9 +81,9 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			initData.eventType = data.eventType;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
-			if(data.eventType == 1)
+			if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
 				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
-			else if(data.eventType == 2)
+			else if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
 				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
 
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);

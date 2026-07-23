@@ -657,22 +657,24 @@ void ComboTreeEditor::DrawNodeEditor()
 	// リンクの描画
 	for (const auto& link : links_)
 	{
-		if (link.linkType == 1) 
+		if (link.linkType == ComboTreeInputType::X) 
 		{
 			ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(100, 200, 250, 255)); // 水色
 		}
-		else if (link.linkType == 2) 
+		else if (link.linkType == ComboTreeInputType::Y) 
 		{
 			ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(250, 100, 100, 255)); // 赤色
 		}
-		else if (link.linkType == 3)
+		else if (link.linkType == ComboTreeInputType::B)
 		{
 			ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(100, 250, 100, 255)); // 緑色
 		}
 
 		ImNodes::Link(link.id, link.startPinId, link.endPinId);
 
-		if (link.linkType != 0) {
+		// リンクの色を元に戻す
+		if (link.linkType != ComboTreeInputType::None) 
+		{
 			ImNodes::PopColorStyle();
 		}
 	}

@@ -59,6 +59,14 @@ struct ComboEditorNode
 	std::string targetMotionName;
 };
 
+enum class ComboTreeInputType
+{
+	None,
+	X,
+	Y,
+	B,
+};
+
 // リンク情報を保持する構造体
 struct ComboEditorLink
 {
@@ -71,6 +79,6 @@ struct ComboEditorLink
 	int endPinId = 0;
 
 
-	// リンクの種類（1: 弱攻撃, 2: 強攻撃）
-	int linkType = 0;
+	// 接続されている入力の種類（X, Y, B）
+	ComboTreeInputType linkType = ComboTreeInputType::None;
 };

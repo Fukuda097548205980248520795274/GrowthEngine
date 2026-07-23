@@ -121,12 +121,12 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		StageEditorUIHelper::DrawCharacterMotionSettings(currentData, placementList, isDirty, history_, motionManager_, false);
 
 		// プレイヤーと未選択以外　ビヘイビアツリーデータ
-		if (currentData.subType != 0 && currentData.subType != 1)
+		if (currentData.subType != static_cast<int32_t>(CharacterTag::None) && currentData.subType != static_cast<int32_t>(CharacterTag::Player))
 		{
 			// 共通ヘルパーからビヘイビアツリーUIを描画
 			StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
 		}
-		else if (currentData.subType == 1) 
+		else if (currentData.subType == static_cast<int32_t>(CharacterTag::Player)) 
 		{
 			// プレイヤーの場合はコンボツリーUIを描画
 			StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);

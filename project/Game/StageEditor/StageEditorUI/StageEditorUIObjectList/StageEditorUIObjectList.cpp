@@ -339,12 +339,12 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			}
 
 			// プレイヤーと未選択以外　ビヘイビアツリーデータ
-			if (target.subType != 0 && target.subType != 1)
+			if (target.subType != static_cast<int32_t>(CharacterTag::None) && target.subType != static_cast<int32_t>(CharacterTag::Player))
 			{
 				// 共通ヘルパーからビヘイビアツリーUIを描画
 				StageEditorUIHelper::DrawBehaviorTreeSettings(target.behaviorTrees, behaviorTreeNames, isDirty);
 			}
-			else if (target.subType == 1)
+			else if (target.subType == static_cast<int32_t>(CharacterTag::Player))
 			{
 				// 共通ヘルパーからコンボツリーUIを描画
 				StageEditorUIHelper::DrawComboTreeSettings(target.comboTrees, comboTreeNames, isDirty);
@@ -378,7 +378,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 
 					// イベントトリガーの種類が「生成イベント」の場合、生成ファイル編集UIを表示する
-					if (target.eventType == 1)
+					if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
 					{
 						std::string fileName = target.eventStageDataFileName;
 						LoadPreviewData(fileName);

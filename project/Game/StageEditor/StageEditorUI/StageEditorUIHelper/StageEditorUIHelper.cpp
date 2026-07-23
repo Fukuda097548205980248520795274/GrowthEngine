@@ -556,7 +556,7 @@ namespace StageEditorUIHelper
 			}
 		}
 
-		if (target.eventType == 1) // 1: 敵生成(ObjectSpawn) の場合
+		if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
 		{
 			ImGui::Text("ステージデータの設定");
 
@@ -582,7 +582,7 @@ namespace StageEditorUIHelper
 				ImGui::EndCombo();
 			}
 		}
-		else if (target.eventType == 2) // 2: カットシーン再生 の場合
+		else if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
 		{
 			std::vector<std::string> cutsceneNames = scene->GetCutsceneManager()->GetCutsceneNames();
 
