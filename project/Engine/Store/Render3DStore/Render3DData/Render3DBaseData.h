@@ -13,6 +13,7 @@
 #include "PSO/PSOModel/BasePSOModel.h"
 #include "PSO/ComputePSO/BaseComputePSO.h"
 #include "PSO/PSOMotionVector/BasePSOMotionVector.h"
+#include "PSO/PSOOutline/BasePSOOutline.h"
 
 #include "Resource/ConstantBufferResource/ConstantBufferResource.h"
 #include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"
@@ -76,6 +77,12 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		virtual void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) = 0;
+
+		/// @brief アウトライン用のコマンドリストに登録
+		/// @param commandList 
+		/// @param cameraStore 
+		/// @param pso 
+		virtual void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) = 0;
 
 		/// @brief 名前を取得する
 		/// @return 

@@ -161,5 +161,36 @@ namespace Engine
 
 			float padding[1]; // 16バイトアラインメントのためのパディング
         };
+
+		/// @brief GPUに送る輝度ベースのアウトライン
+        struct LuminanceBasedOutlineDataForGPU
+        {
+			// スクリーンの解像度
+            Vector2 screenResolution;
+
+			// アウトラインの幅
+            float outlineWidth;
+
+			// 色の閾値
+            float colorThreshold;
+        };
+
+		/// @brief GPUに送る深度ベースのアウトライン
+        struct DepthBasedOutlineDataForGPU
+        {
+			// スクリーンの解像度
+            Vector2 screenResolution;
+
+			// アウトラインの幅
+            float outlineWidth;
+
+			// 深度の閾値
+            float depthThreshold;
+
+			// 色の閾値
+            float colorThreshold;
+
+            float padding[3]; // 16バイト境界に合わせるためのパディング
+        };
 	}
 }

@@ -143,5 +143,31 @@ namespace Engine
 			// ぼかしの強さ
 			float blurSize;
 		};
+
+		/// @brief 輝度ベースのアウトライン
+		struct LuminanceBasedOutline
+		{
+			// スクリーンの解像度
+			Vector2 screenResolution;
+
+			// アウトラインの幅
+			float outlineWidth;
+
+			// 色の閾値
+			float colorThreshold;
+		};
+
+		/// @brief 深度ベースのアウトライン
+		struct DepthBasedOutline
+		{
+			// アウトラインの幅
+			float outlineWidth;
+
+			// 深度の閾値
+			float depthThreshold;
+
+			// 色の閾値
+			float colorThreshold;
+		};
 	}
 }

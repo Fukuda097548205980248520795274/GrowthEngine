@@ -80,9 +80,11 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
+	param_->meshOutline.resize(static_cast<int32_t>(modelData.meshes.size()));
 	primitiveResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	motionVectorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	outlineResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// ファイルパス
 	textureFilePathTable_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -115,6 +117,10 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		param_->meshBlur[meshIndex].afterImageMask = 0.0f;
 		param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
 
+		// アウトライン
+		param_->meshOutline[meshIndex].enableOutline = false;
+		param_->meshOutline[meshIndex].color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 
@@ -139,6 +145,8 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_DrawShadowMap", &param_->meshMaterial[meshIndex].drawShadowMap);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Outline_Enable", &param_->meshOutline[meshIndex].enableOutline);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Outline_Color", &param_->meshOutline[meshIndex].color);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
 
@@ -153,6 +161,10 @@ void Engine::Prefab3DStaticModelData::Initialize(ModelStore* modelStore, Texture
 		// モーションベクター
 		motionVectorResources_[meshIndex] = std::make_unique<StructuredBufferResource<MotionVectorDataForGPU>>();
 		motionVectorResources_[meshIndex]->Initialize(device, heap, numInstance_, log);
+
+		// アウトライン
+		outlineResources_[meshIndex] = std::make_unique<StructuredBufferResource<PrefabOutlineDataForGPU>>();
+		outlineResources_[meshIndex]->Initialize(device, heap, numInstance_, log);
 	}
 
 	// 値を反映させる
@@ -218,6 +230,10 @@ void Engine::Prefab3DStaticModelData::Reset()
 			// ブラー
 			param_->meshBlur[meshIndex].afterImageMask = 0.0f;
 			param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
+
+			// アウトライン
+			param_->meshOutline[meshIndex].enableOutline = false;
+			param_->meshOutline[meshIndex].color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -375,6 +391,45 @@ void Engine::Prefab3DStaticModelData::RegisterMotionVector(ID3D12GraphicsCommand
 
 		// モーションベクトルの設定
 		motionVectorResources_[meshIndex]->RegisterGraphics(commandList, 0);
+
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), numUseInstance_, 0, 0, 0);
+	}
+}
+
+/// @brief アウトラインを描画する
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStaticModelData::RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// インスタンス描画命令を行っていないときは処理しない
+	if (numUseInstance_ <= 0)
+		return;
+
+
+	// モデルデータを取得する
+	ModelData modelData = modelStore_->GetModelData(hModel_);
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// メッシュごとに処理
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelData.meshes.size()); meshIndex++)
+	{
+		// アウトラインが有効でなかったら処理しない
+		if (!param_->meshOutline[meshIndex].enableOutline)continue;
+
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		// アウトラインの設定
+		outlineResources_[meshIndex]->RegisterGraphics(commandList, 0);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -10,13 +10,12 @@
 /// @param device 
 /// @param log 
 void Engine::PostEffectDOFData::Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, DX12Buffering* buffering, DX12Heap* heap,
-	BasePSOPostEffect* pso, BaseComputePSO* computePSO, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log)
+	BasePSOPostEffect* pso, BaseComputePSO* upsamplePSO, BaseComputePSO* downsamplePSO, Log* log)
 {
 	// nullptrチェック
 	assert(device);
 	assert(pso);
 	assert(buffering);
-	assert(computePSO);
 	assert(upsamplePSO);
 	assert(downsamplePSO);
 

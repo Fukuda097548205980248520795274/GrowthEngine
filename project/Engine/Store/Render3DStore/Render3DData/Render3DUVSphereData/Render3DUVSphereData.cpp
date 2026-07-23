@@ -54,6 +54,10 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	param_->blur.afterImageMask = 0.0f;
 	param_->blur.motionBlurMask = 0.0f;
 
+	// アウトライン
+	param_->outline.enableOutline = false;
+	param_->outline.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
 	// テクスチャ
 	param_->material.hTexture = hTexture_;
 	textureFilePath_ = textureStore_->GetFilePath(param_->material.hTexture);
@@ -85,7 +89,9 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 		parameter_->SetValue(group_, "Division_Rings", &param_->division.rings);
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
-
+		parameter_->SetValue(group_, "Outline_Enable", &param_->outline.enableOutline);
+		parameter_->SetValue(group_, "Outline_Color", &param_->outline.color);
+		
 		// 値を反映させる
 		parameter_->RegisterGroupDataReflection(group_);
 		param_->material.hTexture = textureStore_->GetHandle(textureFilePath_);
@@ -119,6 +125,14 @@ void Engine::Render3DUVSphereData::Initialize(TextureStore* textureStore, LightS
 	// モーションベクトルリソースの生成
 	motionVectorResource_ = std::make_unique<ConstantBufferResource<MotionVectorDataForGPU>>();
 	motionVectorResource_->Initialize(device, log);
+
+	// アウトライン用座標変換リソースの生成
+	outlineTransformationResource_ = std::make_unique<ConstantBufferResource<Matrix4x4>>();
+	outlineTransformationResource_->Initialize(device, log);
+
+	// アウトライン用色リソースの生成
+	outlineColorResource_ = std::make_unique<ConstantBufferResource<Vector4>>();
+	outlineColorResource_->Initialize(device, log);
 
 
 	// 頂点計算
@@ -180,6 +194,10 @@ void Engine::Render3DUVSphereData::Reset()
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
 		param_->blur.motionBlurMask = 0.0f;
+
+		// アウトライン
+		param_->outline.enableOutline = false;
+		param_->outline.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	// 読み込み
@@ -400,6 +418,50 @@ void Engine::Render3DUVSphereData::RegisterMotionVector(ID3D12GraphicsCommandLis
 
 	// モーションベクトルの設定
 	motionVectorResource_->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(preSlices_ * preRings_ * 6, 1, 0, 0, 0);
+}
+
+
+/// @brief アウトライン用のコマンドリストに登録
+/// @param commandList 
+/// @param cameraStore 
+/// @param pso 
+void Engine::Render3DUVSphereData::RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// アウトラインを描画しないときは処理しない
+	if (!param_->outline.enableOutline)return;
+
+	// 今フレーム描画していないと処理しない
+	if (!isDrew_)return;
+
+	// データを渡す
+	*outlineTransformationResource_->data_ = transformationResources_->data_->worldViewProjectionMatrix;
+	*outlineColorResource_->data_ = param_->outline.color;
+
+	/*-----------------------------
+		コマンドリストに登録する
+	-----------------------------*/
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+	indexResource_->Register(commandList);
+
+	// 座標変換の設定
+	outlineTransformationResource_->RegisterGraphics(commandList, 0);
+
+	// 色の設定
+	outlineColorResource_->RegisterGraphics(commandList, 1);
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -71,6 +71,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	motionVectorResource_ = std::make_unique<StructuredBufferResource<MotionVectorDataForGPU>>();
 	motionVectorResource_->Initialize(device, heap, numInstance_, log);
 
+	// アウトラインリソースの生成と初期化
+	outlineResource_ = std::make_unique<StructuredBufferResource<PrefabOutlineDataForGPU>>();
+	outlineResource_->Initialize(device, heap, numInstance_, log);
+
 
 	// ブレンドモード
 	param_->blendMode = BlendMode::kNone;
@@ -100,6 +104,10 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 	param_->blur.afterImageMask = 0.0f;
 	param_->blur.motionBlurMask = 0.0f;
 
+	// アウトライン
+	param_->outline.enableOutline = false;
+	param_->outline.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
 	// テクスチャファイルパス
 	textureFilePath_ = textureStore_->GetFilePath(hTexture_);
 
@@ -127,6 +135,8 @@ void Engine::Prefab3DCubeData::Initialize(TextureStore* textureStore, LightStore
 		parameter_->SetValue(group_, "Material_DrawShadowMap", &param_->material.drawShadowMap);
 		parameter_->SetValue(group_, "Blur_AfterImageMask", &param_->blur.afterImageMask);
 		parameter_->SetValue(group_, "Blur_MotionBlurMask", &param_->blur.motionBlurMask);
+		parameter_->SetValue(group_, "Outline_Enable", &param_->outline.enableOutline);
+		parameter_->SetValue(group_, "Outline_Color", &param_->outline.color);
 		parameter_->SetValue(group_, "Material_Texture", &textureFilePath_);
 
 		// 値を反映させる
@@ -180,6 +190,10 @@ void Engine::Prefab3DCubeData::Reset()
 		// ブラー
 		param_->blur.afterImageMask = 0.0f;
 		param_->blur.motionBlurMask = 0.0f;
+
+		// アウトライン
+		param_->outline.enableOutline = false;
+		param_->outline.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	// 読み込まれたことにする
@@ -314,6 +328,37 @@ void Engine::Prefab3DCubeData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 
 	// モーションベクトルの設定
 	motionVectorResource_->RegisterGraphics(commandList, 0);
+
+	// 形状の設定
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// ドローコール
+	commandList->DrawIndexedInstanced(36, numUseInstance_, 0, 0, 0);
+}
+
+/// @brief アウトラインを描画する
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DCubeData::RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// デバッグ指定のオブジェクトは処理しない
+	if (!param_->outline.enableOutline)return;
+
+	// インスタンス描画命令を行っていないときは処理しない
+	if (numUseInstance_ <= 0)
+		return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	// 頂点の設定
+	vertexResource_->Register(commandList);
+
+	// アウトラインの設定
+	outlineResource_->RegisterGraphics(commandList, 0);
 
 	// 形状の設定
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

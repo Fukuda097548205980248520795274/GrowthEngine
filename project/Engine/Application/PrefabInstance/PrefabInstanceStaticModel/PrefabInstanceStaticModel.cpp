@@ -14,6 +14,7 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 	param_.meshMaterial.resize(static_cast<int32_t>(param->meshMaterial.size()));
 	param_.meshTransforms.resize(static_cast<int32_t>(param->meshMaterial.size()));
 	param_.meshBlur.resize(static_cast<int32_t>(param->meshMaterial.size()));
+	param_.meshOutline.resize(static_cast<int32_t>(param->meshMaterial.size()));
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(param->meshMaterial.size()); ++meshIndex)
 	{
@@ -39,6 +40,10 @@ PrefabInstanceStaticModel::PrefabInstanceStaticModel(std::function<void(const En
 		// ブラー
 		param_.meshBlur[meshIndex].afterImageMask = param->meshBlur[meshIndex].afterImageMask;
 		param_.meshBlur[meshIndex].motionBlurMask = param->meshBlur[meshIndex].motionBlurMask;
+
+		// アウトライン
+		param_.meshOutline[meshIndex].enableOutline = param->meshOutline[meshIndex].enableOutline;
+		param_.meshOutline[meshIndex].color = param->meshOutline[meshIndex].color;
 	}
 }
 

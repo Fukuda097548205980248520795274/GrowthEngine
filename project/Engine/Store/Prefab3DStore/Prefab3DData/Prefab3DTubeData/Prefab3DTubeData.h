@@ -63,6 +63,11 @@ namespace Engine
 		/// @param pso 
 		void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) override;
 
+		/// @brief アウトラインを描画する
+		/// @param commandList 
+		/// @param pso 
+		void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) override;
+
 
 		/// @brief パラメータを取得する
 		/// @return 
@@ -126,6 +131,9 @@ namespace Engine
 
 		/// @brief モーションベクターリソース
 		std::unique_ptr<StructuredBufferResource<MotionVectorDataForGPU>> motionVectorResource_;
+
+		/// @brief アウトラインリソース
+		std::unique_ptr<StructuredBufferResource<PrefabOutlineDataForGPU>> outlineResource_;
 
 
 	private:

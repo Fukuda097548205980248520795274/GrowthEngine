@@ -1,8 +1,7 @@
 
 // テクスチャレジスタの設定
 Texture2D<float4> gMainScene : register(t0);
-Texture2D<float> gCustomDepth : register(t1);
-Texture2D<float4> gCustomColor : register(t2);
+Texture2D<float4> gCustomColor : register(t1);
 SamplerState gSampler : register(s0);
 
 // 調整用パラメータ
@@ -10,7 +9,6 @@ struct OutlineParams
 {
     float2 screenResolution; // 画面解像度 (1.0/width, 1.0/height)
     float outlineWidth; // 線の太さ
-    float depthThreshold; // （今回は不使用）
     float colorThreshold; // シーンカラーのエッジ検出感度
 };
 ConstantBuffer<OutlineParams> gParams : register(b0);

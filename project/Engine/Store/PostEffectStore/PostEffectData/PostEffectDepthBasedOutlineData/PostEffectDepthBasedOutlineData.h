@@ -3,9 +3,7 @@
 
 namespace Engine
 {
-	class Log;
-
-	class PostEffectVignettingData : public PostEffectBaseData
+	class PostEffectDepthBasedOutlineData : public PostEffectBaseData
 	{
 	public:
 
@@ -13,7 +11,7 @@ namespace Engine
 		/// @param name 
 		/// @param type 
 		/// @param hPostEffect 
-		PostEffectVignettingData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
+		PostEffectDepthBasedOutlineData(const std::string name, PostEffect::Type type, PostEffectHandle hPostEffect, PostEffectParameter* parameter)
 			: PostEffectBaseData(name, type, hPostEffect, parameter) {
 		}
 
@@ -40,9 +38,9 @@ namespace Engine
 	private:
 
 		/// @brief パラメータ
-		std::unique_ptr<PostEffect::Vignetting> param_ = nullptr;
+		std::unique_ptr<PostEffect::DepthBasedOutline> param_ = nullptr;
 
 		// リソース
-		std::unique_ptr<ConstantBufferResource<PostEffect::VignettingDataForGPU>> resource_ = nullptr;
+		std::unique_ptr<ConstantBufferResource<PostEffect::DepthBasedOutlineDataForGPU>> resource_ = nullptr;
 	};
 }

@@ -1444,6 +1444,12 @@
     <Filter Include="Engine\Include\PSO\PSOPostEffect\PSODepthBasedOutline">
       <UniqueIdentifier>{2f51f7b3-b083-4012-b316-e260763ab770}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData">
+      <UniqueIdentifier>{461da019-0fd8-4a08-821d-0c2870688660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData">
+      <UniqueIdentifier>{667efaa7-6141-4dc0-8bb6-888d03dda202}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2615,6 +2621,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3922,6 +3934,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSOLuminanceBasedOutline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
+      <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

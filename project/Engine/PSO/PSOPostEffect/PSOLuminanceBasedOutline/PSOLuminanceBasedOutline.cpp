@@ -33,17 +33,9 @@ void Engine::PSOLuminanceBasedOutline::Initialize(ID3D12Device* device, ShaderCo
 	colorTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	colorTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	// t1 深度テクスチャ
-	D3D12_DESCRIPTOR_RANGE depthTextureDescriptor[1];
-	depthTextureDescriptor[0].BaseShaderRegister = 1;
-	depthTextureDescriptor[0].RegisterSpace = 0;
-	depthTextureDescriptor[0].NumDescriptors = 1;
-	depthTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	depthTextureDescriptor[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	// t2 アウトライン用テクスチャ
+	// t1 アウトライン用テクスチャ
 	D3D12_DESCRIPTOR_RANGE outlineTextureDescriptor[1];
-	outlineTextureDescriptor[0].BaseShaderRegister = 2;
+	outlineTextureDescriptor[0].BaseShaderRegister = 1;
 	outlineTextureDescriptor[0].RegisterSpace = 0;
 	outlineTextureDescriptor[0].NumDescriptors = 1;
 	outlineTextureDescriptor[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -54,7 +46,7 @@ void Engine::PSOLuminanceBasedOutline::Initialize(ID3D12Device* device, ShaderCo
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[4];
+	D3D12_ROOT_PARAMETER rootParameter[3];
 
 	// DescriptorTable テクスチャ
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -62,23 +54,17 @@ void Engine::PSOLuminanceBasedOutline::Initialize(ID3D12Device* device, ShaderCo
 	rootParameter[0].DescriptorTable.pDescriptorRanges = colorTextureDescriptor;
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = _countof(colorTextureDescriptor);
 
-	// DescriptorTable 深度テクスチャ
+	// DescriptorTable アウトライン用テクスチャ
 	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[1].DescriptorTable.pDescriptorRanges = depthTextureDescriptor;
-	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(depthTextureDescriptor);
-
-	// DescriptorTable アウトライン用テクスチャ
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[2].DescriptorTable.pDescriptorRanges = outlineTextureDescriptor;
-	rootParameter[2].DescriptorTable.NumDescriptorRanges = _countof(outlineTextureDescriptor);
+	rootParameter[1].DescriptorTable.pDescriptorRanges = outlineTextureDescriptor;
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = _countof(outlineTextureDescriptor);
 
 	// CBV b0
-	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[3].Descriptor.RegisterSpace = 0;
-	rootParameter[3].Descriptor.ShaderRegister = 0;
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[2].Descriptor.RegisterSpace = 0;
+	rootParameter[2].Descriptor.ShaderRegister = 0;
 
 
 	/*--------------------

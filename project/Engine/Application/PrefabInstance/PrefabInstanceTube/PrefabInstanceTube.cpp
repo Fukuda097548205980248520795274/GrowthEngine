@@ -29,6 +29,9 @@ PrefabInstanceTube::PrefabInstanceTube(std::function<void(const Engine::Prefab3D
 	param_.size.radiusTop = param->size.radiusTop;
 	param_.size.radiusBottom = param->size.radiusBottom;
 
+	param_.outline.enableOutline = param->outline.enableOutline;
+	param_.outline.color = param->outline.color;
+
 }
 
 /// @brief 描画処理

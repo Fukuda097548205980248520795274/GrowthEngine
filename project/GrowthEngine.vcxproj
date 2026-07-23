@@ -187,6 +187,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.cpp" />
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.cpp" />
     <ClCompile Include="Engine\PSO\PSOTriangle\PSOTriangle.cpp" />
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.cpp" />
+    <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp" />
     <ClCompile Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1238,6 +1240,8 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSODepthBasedOutline\PSODepthBasedOutline.h" />
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSOLuminanceBasedOutline\PSOLuminanceBasedOutline.h" />
     <ClInclude Include="Engine\PSO\PSOTriangle\PSOTriangle.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData\PostEffectDepthBasedOutlineData.h" />
+    <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h" />
     <ClInclude Include="Engine\Store\RenderPassStore\RenderPassData\RenderPassData.h" />
     <ClInclude Include="Engine\RenderContext\DX12Offscreen\RenderTargetPool\RenderTargetPool.h" />
     <ClInclude Include="Engine\Resource\VertexBufferResource\PlaneVertexResource\PlaneVertexResource.h" />

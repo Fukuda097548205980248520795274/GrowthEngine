@@ -37,6 +37,9 @@
 
 #include "Resource/MotionVectorTextureResource/MotionVectorTextureResource.h"
 
+#include "Resource/OffscreenResource/OffscreenResource.h"
+#include "Resource/DepthResource/DepthResource.h"
+
 namespace Engine
 {
 	class ShaderCompiler;
@@ -240,9 +243,6 @@ namespace Engine
 		/// @brief デュアルブラー拡大PSO
 		std::unique_ptr<ComputePSODualBlurUpsample> computePSODualBlurUpsample_ = nullptr;
 
-		/// @brief CSガウシアンフィルタPSO
-		std::unique_ptr<ComputePSOGaussianFilter> computePSOGaussianFilter_ = nullptr;
-
 		/// @brief CS高輝度抽出PSO
 		std::unique_ptr<ComputePSOHighLuminanceExtraction> computePSOHighLuminanceExtraction_ = nullptr;
 
@@ -285,6 +285,19 @@ namespace Engine
 
 		// @brief アウトラインPrefab描画PSO
 		std::unique_ptr<PSOOutlinePrefab> psoOutlinePrefab_ = nullptr;
+
+
+		/// @brief アウトライン描画に使用するリソース
+		std::unique_ptr<OffscreenResource> outlineRenderResource_ = nullptr;
+
+		/// @brief アウトライン描画に使用する深度リソース
+		std::unique_ptr<DepthResource> outlineDepthResource_ = nullptr;
+
+		/// @brief アウトラインを読み込んでいるかどうか
+		static bool isLoadOutline_;
+
+		/// @brief アウトラインのハンドル
+		PostEffectHandle hOutline_ = 0;
 
 
 	private:

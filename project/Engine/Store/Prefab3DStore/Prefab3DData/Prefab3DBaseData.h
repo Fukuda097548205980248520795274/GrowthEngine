@@ -14,6 +14,8 @@
 
 #include "PSO/PSOMotionVector/BasePSOMotionVector.h"
 
+#include "PSO/PSOOutline/BasePSOOutline.h"
+
 namespace Engine
 {
 	class BasePSOModel;
@@ -73,6 +75,11 @@ namespace Engine
 		/// @param commandList 
 		/// @param pso 
 		virtual void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) = 0;
+
+		/// @brief アウトラインを描画する
+		/// @param commandList 
+		/// @param pso 
+		virtual void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) = 0;
 
 		/// @brief パラメータを取得する
 		/// @return 

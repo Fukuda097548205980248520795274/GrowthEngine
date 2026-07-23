@@ -11,6 +11,8 @@ struct OutlineParams
     float outlineWidth; // 線の太さ
     float depthThreshold; // 深度の感度
     float colorThreshold; // 色の感度
+    
+    float padding[3]; // 16バイト境界に合わせるためのパディング
 };
 ConstantBuffer<OutlineParams> gParams : register(b0);
 

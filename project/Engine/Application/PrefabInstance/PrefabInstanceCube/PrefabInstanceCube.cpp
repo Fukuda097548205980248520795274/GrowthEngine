@@ -25,6 +25,8 @@ PrefabInstanceCube::PrefabInstanceCube(std::function<void(const Engine::Prefab3D
 	param_.material.enableShadow = param->material.enableShadow;
 	param_.blur.afterImageMask = param->blur.afterImageMask;
 	param_.blur.motionBlurMask = param->blur.motionBlurMask;
+	param_.outline.enableOutline = param->outline.enableOutline;
+	param_.outline.color = param->outline.color;
 }
 
 /// @brief 描画処理

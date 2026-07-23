@@ -20,88 +20,132 @@ namespace Engine
 			Tube
 		};
 
+		/// @brief トランスフォーム
+		struct Transform
+		{
+			// 拡縮
+			Vector3 scale;
+
+			// 回転
+			Vector3 rotate;
+
+			// 移動
+			Vector3 translate;
+		};
+
+		/// @brief UVトランスフォーム
+		struct UVTransform
+		{
+			// 拡縮
+			Vector2 scale;
+
+			// 回転
+			float radius;
+
+			// 移動
+			Vector2 translate;
+		};
+
+		/// @brief マテリアル
+		struct BaseMaterial
+		{
+			/// @brief テクスチャハンドル
+			TextureHandle hTexture;
+
+			/// @brief 色
+			Vector4 color;
+
+			/// @brief UV
+			UVTransform uv;
+
+			/// @brief 環境
+			float environment;
+
+			// 光沢度
+			float shininess;
+
+			// ライティング有効化
+			bool enableLighting;
+
+			// ディフューズ
+			bool enableDiffuse;
+
+			// ハーフランバート有効化
+			bool enableHalfLambert;
+
+			// スペキュラー有効化
+			bool enableSpecular;
+
+			// ブリンフォン有効化
+			bool enableBlinnPhong;
+
+			// シャドウ有効化
+			bool enableShadow;
+
+			/// @brief シャドウマップ描画
+			bool drawShadowMap;
+		};
+
+		/// @brief インスタンス用マテリアル
+		struct InstanceMaterial
+		{
+			/// @brief 色
+			Vector4 color;
+
+			/// @brief UV
+			UVTransform uv;
+
+			/// @brief 環境
+			float environment;
+
+			// 光沢度
+			float shininess;
+
+			// ライティング有効化
+			bool enableLighting;
+
+			// ディフューズ
+			bool enableDiffuse;
+
+			// ハーフランバート有効化
+			bool enableHalfLambert;
+
+			// スペキュラー有効化
+			bool enableSpecular;
+
+			// ブリンフォン有効化
+			bool enableBlinnPhong;
+
+			// シャドウ有効化
+			bool enableShadow;
+		};
+
+		/// @brief ブラー
+		struct Blur
+		{
+			// 残像用マスク
+			float afterImageMask;
+
+			// モーションブラー用マスク
+			float motionBlurMask;
+		};
+
+		/// @brief アウトライン
+		struct Outline
+		{
+			// アウトライン有効化
+			bool enableOutline;
+
+			// 色
+			Vector4 color;
+		};
+
 		/// @brief 静的モデル
 		namespace StaticModel
 		{
 			/// @brief 基底
 			namespace Base
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief テクスチャハンドル
-					TextureHandle hTexture;
-
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-
-					/// @brief シャドウマップ描画
-					bool drawShadowMap;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
-				};
-
 				/// @brief パラメータ
 				struct Param
 				{
@@ -116,86 +160,19 @@ namespace Engine
 					std::vector<Transform> meshTransforms;
 
 					/// @brief メッシュマテリアル
-					std::vector<Material> meshMaterial;
+					std::vector<BaseMaterial> meshMaterial;
 
 					/// @brief ブラー
 					std::vector<Blur> meshBlur;
+
+					/// @brief アウトライン
+					std::vector<Outline> meshOutline;
 				};
 			}
 
 			/// @brief インスタンス
 			namespace Instance
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
-				};
-
 				/// @brief パラメータ
 				struct Param
 				{
@@ -210,10 +187,13 @@ namespace Engine
 					std::vector<Transform> meshTransforms;
 
 					/// @brief メッシュマテリアル
-					std::vector<Material> meshMaterial;
+					std::vector<InstanceMaterial> meshMaterial;
 
 					/// @brief ブラー
 					std::vector<Blur> meshBlur;
+
+					/// @brief アウトライン
+					std::vector<Outline> meshOutline;
 				};
 			}
 		}
@@ -224,82 +204,6 @@ namespace Engine
 			/// @brief 基底
 			namespace Base
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief テクスチャハンドル
-					TextureHandle hTexture;
-
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-
-					/// @brief シャドウマップ描画
-					bool drawShadowMap;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
-				};
-
 				/// @brief パラメータ
 				struct Param
 				{
@@ -310,86 +214,19 @@ namespace Engine
 					Transform transform;
 
 					/// @brief マテリアル
-					Material material;
+					BaseMaterial material;
 
 					/// @brief ブラー
 					Blur blur;
+
+					/// @brief アウトライン
+					Outline outline;
 				};
 			}
 
 			/// @brief インスタンス
 			namespace Instance
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
-				};
-
 				/// @brief パラメータ
 				struct Param
 				{
@@ -400,112 +237,39 @@ namespace Engine
 					WorldTransform3D* parent = nullptr;
 
 					/// @brief マテリアル
-					Material material;
+					InstanceMaterial material;
 
 					/// @brief ブラー
 					Blur blur;
+
+					/// @brief アウトライン
+					Outline outline;
 				};
 			}
 		}
 
 		namespace Tube
 		{
+			/// @brief サイズ
+			struct Size
+			{
+				/// @brief 高さ
+				float height;
+
+				/// @brief 上の半径
+				float radiusTop;
+
+				/// @brief 下の半径
+				float radiusBottom;
+			};
+
 			/// @brief 基底
 			namespace Base
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
 				/// @brief 分割数
 				struct Division
 				{
 					int32_t slices; // 円周方向の分割数
-				};
-
-				/// @brief サイズ
-				struct Size
-				{
-					/// @brief 高さ
-					float height;
-
-					/// @brief 上の半径
-					float radiusTop;
-
-					/// @brief 下の半径
-					float radiusBottom;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief テクスチャハンドル
-					TextureHandle hTexture;
-
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-
-					/// @brief シャドウマップ描画
-					bool drawShadowMap;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
 				};
 
 				/// @brief パラメータ
@@ -518,7 +282,7 @@ namespace Engine
 					Transform transform;
 
 					/// @brief マテリアル
-					Material material;
+					BaseMaterial material;
 
 					/// @brief ブラー
 					Blur blur;
@@ -528,95 +292,15 @@ namespace Engine
 
 					/// @brief サイズ
 					Size size;
+
+					/// @brief アウトライン
+					Outline outline;
 				};
 			}
 
 			/// @brief インスタンス
 			namespace Instance
 			{
-				/// @brief トランスフォーム
-				struct Transform
-				{
-					// 拡縮
-					Vector3 scale;
-
-					// 回転
-					Vector3 rotate;
-
-					// 移動
-					Vector3 translate;
-				};
-
-				/// @brief サイズ
-				struct Size
-				{
-					/// @brief 高さ
-					float height;
-
-					/// @brief 上の半径
-					float radiusTop;
-
-					/// @brief 下の半径
-					float radiusBottom;
-				};
-
-				/// @brief UVトランスフォーム
-				struct UVTransform
-				{
-					// 拡縮
-					Vector2 scale;
-
-					// 回転
-					float radius;
-
-					// 移動
-					Vector2 translate;
-				};
-
-				/// @brief マテリアル
-				struct Material
-				{
-					/// @brief 色
-					Vector4 color;
-
-					/// @brief UV
-					UVTransform uv;
-
-					/// @brief 環境
-					float environment;
-
-					// 光沢度
-					float shininess;
-
-					// ライティング有効化
-					bool enableLighting;
-
-					// ディフューズ
-					bool enableDiffuse;
-
-					// ハーフランバート有効化
-					bool enableHalfLambert;
-
-					// スペキュラー有効化
-					bool enableSpecular;
-
-					// ブリンフォン有効化
-					bool enableBlinnPhong;
-
-					// シャドウ有効化
-					bool enableShadow;
-				};
-
-				/// @brief ブラー
-				struct Blur
-				{
-					// 残像用マスク
-					float afterImageMask;
-
-					// モーションブラー用マスク
-					float motionBlurMask;
-				};
-
 				/// @brief パラメータ
 				struct Param
 				{
@@ -627,13 +311,16 @@ namespace Engine
 					WorldTransform3D* parent = nullptr;
 
 					/// @brief マテリアル
-					Material material;
+					InstanceMaterial material;
 
 					/// @brief ブラー
 					Blur blur;
 
 					/// @brief サイズ
 					Size size;
+
+					/// @brief アウトライン
+					Outline outline;
 				};
 			}
 		}

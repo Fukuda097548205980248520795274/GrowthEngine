@@ -75,12 +75,15 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
+	param_->meshOutline.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// リソース領域確保
 	meshTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	meshMaterialResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	shadowMapTransformationResource_.resize(static_cast<int32_t>(modelData.meshes.size()));
 	motionVectorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	outlineColorResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
+	outlineTransformationResources_.resize(static_cast<int32_t>(modelData.meshes.size()));
 
 	// ファイルパス
 	textureFilePathTable_.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -112,6 +115,10 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 		param_->meshBlur[meshIndex].afterImageMask = 0.0f;
 		param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
 
+		// アウトライン
+		param_->meshOutline[meshIndex].enableOutline = false;
+		param_->meshOutline[meshIndex].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
 		// テクスチャファイルパス
 		textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
 
@@ -139,6 +146,9 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_AfterImageMask", &param_->meshBlur[meshIndex].afterImageMask);
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Blur_MotionBlurMask", &param_->meshBlur[meshIndex].motionBlurMask);
 
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Outline_Enable", &param_->meshOutline[meshIndex].enableOutline);
+			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Mesh_Outline_Color", &param_->meshOutline[meshIndex].color);
+
 			parameter_->SetValue(group_, modelData.meshNames[meshIndex] + "_Material_Texture", &textureFilePathTable_[meshIndex]);
 		}
 
@@ -159,6 +169,14 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 		// モーションベクトルリソース
 		motionVectorResources_[meshIndex] = std::make_unique<ConstantBufferResource<MotionVectorDataForGPU>>();
 		motionVectorResources_[meshIndex]->Initialize(device, log);
+
+		// アウトライン用座標変換リソース
+		outlineTransformationResources_[meshIndex] = std::make_unique<ConstantBufferResource<Matrix4x4>>();
+		outlineTransformationResources_[meshIndex]->Initialize(device, log);
+
+		// アウトライン用色リソース
+		outlineColorResources_[meshIndex] = std::make_unique<ConstantBufferResource<Vector4>>();
+		outlineColorResources_[meshIndex]->Initialize(device, log);
 	}
 
 	// 値を反映させる
@@ -232,6 +250,10 @@ void Engine::Render3DAnimationModelData::Reset()
 			// ブラー
 			param_->meshBlur[meshIndex].afterImageMask = 0.0f;
 			param_->meshBlur[meshIndex].motionBlurMask = 0.0f;
+
+			// アウトライン
+			param_->meshOutline[meshIndex].enableOutline = false;
+			param_->meshOutline[meshIndex].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 			// テクスチャファイルパス
 			textureFilePathTable_[meshIndex] = textureStore_->GetFilePath(param_->meshMaterial[meshIndex].hTexture);
@@ -502,6 +524,47 @@ void Engine::Render3DAnimationModelData::RegisterMotionVector(ID3D12GraphicsComm
 
 		// モーションベクター用座標変換の設定
 		motionVectorResources_[meshIndex]->RegisterGraphics(commandList, 0);
+
+		// 形状の設定
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// ドローコール
+		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+	}
+}
+
+/// @brief アウトライン用のコマンドリストに登録
+/// @param commandList 
+/// @param cameraStore 
+/// @param pso 
+void Engine::Render3DAnimationModelData::RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	// 読み込まれていないときは処理しない
+	if (!isLoad_)return;
+
+	// 直前で描画されているときのみ
+	if (!isDrew_)return;
+
+	// PSOの設定
+	pso->Register(commandList);
+
+	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
+	{
+		// アウトラインを描画しないときは処理しない
+		if (!param_->meshOutline[meshIndex].enableOutline)continue;
+
+		// データを渡す
+		*outlineTransformationResources_[meshIndex]->data_ = meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix;
+		*outlineColorResources_[meshIndex]->data_ = param_->meshOutline[meshIndex].color;
+
+		// 頂点の設定
+		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		// アウトライン座標変換の設定
+		outlineTransformationResources_[meshIndex]->RegisterGraphics(commandList, 0);
+
+		// アウトライン色の設定
+		outlineColorResources_[meshIndex]->RegisterGraphics(commandList, 1);
 
 		// 形状の設定
 		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

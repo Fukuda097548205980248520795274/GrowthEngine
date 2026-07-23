@@ -113,4 +113,14 @@ namespace Engine
             float height;
 		};
 	}
+
+	// @brief GPUに送るアウトラインのデータ
+	struct PrefabOutlineDataForGPU
+	{
+		// WVP行列
+		Matrix4x4 worldViewProjection;
+
+		// 色
+		Vector4 color;
+	};
 }

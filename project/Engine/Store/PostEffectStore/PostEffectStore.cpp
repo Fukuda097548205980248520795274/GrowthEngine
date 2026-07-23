@@ -23,6 +23,7 @@
 bool Engine::PostEffectStore::isLoadMotionBlur_ = false;
 bool Engine::PostEffectStore::isLoadAfterImage_ = false;
 bool Engine::PostEffectStore::enableMotionVector_ = false;
+bool Engine::PostEffectStore::isLoadOutline_ = false;
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -98,10 +99,6 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	computePSODualBlurUpsample_ = std::make_unique<ComputePSODualBlurUpsample>();
 	computePSODualBlurUpsample_->Initialize(device, compiler, log);
 
-	// CSガウシアンフィルタPSO
-	computePSOGaussianFilter_ = std::make_unique<ComputePSOGaussianFilter>();
-	computePSOGaussianFilter_->Initialize(device, compiler, log);
-
 	// CS高輝度抽出PSO
 	computePSOHighLuminanceExtraction_ = std::make_unique<ComputePSOHighLuminanceExtraction>();
 	computePSOHighLuminanceExtraction_->Initialize(device, compiler, log);
@@ -146,6 +143,15 @@ void Engine::PostEffectStore::Initialize(ID3D12Device* device, ShaderCompiler* c
 	// アウトラインPrefab描画用PSOの初期化
 	psoOutlinePrefab_ = std::make_unique<PSOOutlinePrefab>();
 	psoOutlinePrefab_->Initialize(device, compiler, log);
+
+
+	// アウトラインテクスチャリソースの初期化
+	outlineRenderResource_ = std::make_unique<OffscreenResource>();
+	outlineRenderResource_->Initialize(device, heap_,width, height, log);
+
+	// アウトライン深度リソースの初期化
+	outlineDepthResource_ = std::make_unique<DepthResource>();
+	outlineDepthResource_->Initialize(device, width, height, heap_, log);	
 }
 
 /// @brief リサイズ
@@ -162,6 +168,14 @@ void Engine::PostEffectStore::Resize(ID3D12Device* device, ID3D12GraphicsCommand
 	// モーションベクトルテクスチャリソースをリサイズする
 	if (motionVectorTextureResource_)
 		motionVectorTextureResource_->Resize(device, width, height);
+
+	// アウトラインテクスチャリソースをリサイズする
+	if (outlineRenderResource_)
+		outlineRenderResource_->Resize(device, width, height);
+
+	// アウトライン深度リソースをリサイズする
+	if (outlineDepthResource_)
+		outlineDepthResource_->Resize(device, width, height);
 }
 
 /// @brief 読み込み
@@ -264,7 +278,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	{
 		std::unique_ptr<PostEffectDOFData> data = std::make_unique<PostEffectDOFData>(name, type, handle, parameter_.get());
 		data->Initialize(device, commandList, buffering, heap_, psoDOF_.get(),
-			computePSOGaussianFilter_.get(), computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
+			computePSODualBlurUpsample_.get(), computePSODualBlurDownsample_.get(), log);
 		dataTable_.push_back(std::move(data));
 		return handle;
 	}

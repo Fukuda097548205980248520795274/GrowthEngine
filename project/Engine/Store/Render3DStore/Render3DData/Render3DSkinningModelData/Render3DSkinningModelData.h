@@ -65,6 +65,12 @@ namespace Engine
 		/// @param pso 
 		void RegisterMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso) override;
 
+		/// @brief アウトライン用のコマンドリストに登録
+		/// @param commandList 
+		/// @param cameraStore 
+		/// @param pso 
+		void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) override;
+
 		/// @brief ボーンのワールド行列を取得する
 		/// @param name 
 		/// @return 
@@ -109,6 +115,12 @@ namespace Engine
 
 		/// @brief モーションベクター用リソース
 		std::vector<std::unique_ptr<ConstantBufferResource<MotionVectorDataForGPU>>> motionVectorResources_;
+
+		// アウトライン用座標変換リソース
+		std::vector<std::unique_ptr<ConstantBufferResource<Matrix4x4>>> outlineTransformationResources_;
+
+		// アウトライン用色リソース
+		std::vector<std::unique_ptr<ConstantBufferResource<Vector4>>> outlineColorResources_;
 
 
 	private:
