@@ -20,7 +20,6 @@
 #include "PSO/PSOPostEffect/PSOLuminanceBasedOutline/PSOLuminanceBasedOutline.h"
 #include "PSO/PSOPostEffect/PSODepthBasedOutline/PSODepthBasedOutline.h"
 
-#include "PSO/ComputePSO/ComputePSOGaussianFilter/ComputePSOGaussianFilter.h"
 #include "PSO/ComputePSO/ComputePSODualBlurDownsample/ComputePSODualBlurDownsample.h"
 #include "PSO/ComputePSO/ComputePSODualBlurUpsample/ComputePSODualBlurUpsample.h"
 #include "PSO/ComputePSO/ComputePSOHighLuminanceExtraction/ComputePSOHighLuminanceExtraction.h"
@@ -138,6 +137,16 @@ namespace Engine
 		/// @param name 
 		/// @return 
 		bool IsBloom(const std::string& name) { return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::Bloom; }
+
+		/// @brief 指定のポストエフェクトがガウシアンフィルタかどうか
+		/// @param hPostEffect 
+		/// @return 
+		bool IsGaussianFilter(PostEffectHandle hPostEffect) const { return dataTable_[hPostEffect]->GetType() == PostEffect::Type::GaussianFilter; }
+
+		/// @brief 指定のポストエフェクトがガウシアンフィルタかどうか
+		/// @param name 
+		/// @return 
+		bool IsGaussianFilter(const std::string& name) { return dataTable_[nameTable_[name]]->GetType() == PostEffect::Type::GaussianFilter; }
 
 		/// @brief TAAを読み込んでいるかどうか
 		/// @return 

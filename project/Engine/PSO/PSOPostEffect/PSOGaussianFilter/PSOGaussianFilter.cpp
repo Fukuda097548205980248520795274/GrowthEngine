@@ -38,13 +38,19 @@ void Engine::PSOGaussianFilter::Initialize(ID3D12Device* device, ShaderCompiler*
 		ルートパラメータの設定
 	-------------------------*/
 
-	D3D12_ROOT_PARAMETER rootParameter[1];
+	D3D12_ROOT_PARAMETER rootParameter[2];
 
 	// DescriptorTable PixelShader t0 テクスチャ
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = descriptorRange;
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+
+	// ConstantBuffer PixelShader b0
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[1].Descriptor.ShaderRegister = 0;
+	rootParameter[1].Descriptor.RegisterSpace = 0;
 
 
 	/*--------------------

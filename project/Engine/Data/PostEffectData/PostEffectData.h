@@ -169,5 +169,15 @@ namespace Engine
 			// 色の閾値
 			float colorThreshold;
 		};
+
+		/// @brief ガウスフィルター
+		struct GaussianFilter
+		{
+			// ガウス関数の標準偏差
+			float sigma;
+
+			// ガウス関数の半径
+			int radius;
+		};
 	}
 }

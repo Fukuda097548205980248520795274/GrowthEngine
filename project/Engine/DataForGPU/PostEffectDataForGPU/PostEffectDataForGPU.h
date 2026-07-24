@@ -192,5 +192,18 @@ namespace Engine
 
             float padding[3]; // 16バイト境界に合わせるためのパディング
         };
+
+		/// @brief GPUに送るガウシアンフィルタ
+        struct GaussianFilterDataForGPU
+        {
+            // ブラー方向（例：水平ブラーなら(1, 0)、垂直ブラーなら(0, 1)）
+            Vector2 blurDir;
+
+            // ガウス関数の標準偏差
+            float sigma;
+
+            // ガウス関数の半径
+            int radius;
+        };
 	}
 }

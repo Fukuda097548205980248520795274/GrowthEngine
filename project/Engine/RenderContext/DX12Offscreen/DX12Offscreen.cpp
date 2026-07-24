@@ -145,6 +145,7 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool kIsUseDepth = postEffectStore_->IsRequiredInput(hPostEffect, PostEffectInput::DepthTexture);
 	const bool kIsBloom = postEffectStore_->IsBloom(hPostEffect);
+	const bool kIsGaussianFilter = postEffectStore_->IsGaussianFilter(hPostEffect);
 
 	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
 	if (!sourceResource_)
@@ -173,7 +174,8 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = depthResource_.get();
+		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
@@ -193,7 +195,8 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = depthResource_.get();
+		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(hPostEffect, registerContext);
@@ -204,6 +207,14 @@ void Engine::DX12Offscreen::DrawPostEffect(PostEffectHandle hPostEffect, ID3D12G
 			TransitionBarrier(depthResource_->GetResource(),
 				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
 		}
+	}
+
+	// ガウスフィルタの場合は、sourceとdestinationを入れ替える
+	if (kIsGaussianFilter)
+	{
+		OffscreenResource* temp = sourceResource_;
+		sourceResource_ = destinationResource_;
+		destinationResource_ = temp;
 	}
 }
 
@@ -218,6 +229,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 	// このポストエフェクトが深度を必要とするかどうか
 	const bool kIsUseDepth = postEffectStore_->IsRequiredInput(name, PostEffectInput::DepthTexture);
 	const bool kIsBloom = postEffectStore_->IsBloom(name);
+	const bool kIsGaussianFilter = postEffectStore_->IsGaussianFilter(name);
 
 	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
 	if (!sourceResource_)
@@ -246,7 +258,7 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = depthResource_.get();
 		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
@@ -267,7 +279,8 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 		registerContext.commandList = commandList;
 		registerContext.offscreenPixelShaderResource = sourceResource_;
 		registerContext.offscreenRenderTargetResource = destinationResource_;
-		registerContext.depthResource = kIsUseDepth ? depthResource_.get() : nullptr;
+		registerContext.depthResource = depthResource_.get();
+		registerContext.psoFullscreen = psoFullscreen_.get();
 
 		// ポストエフェクトの描画コマンドを登録する
 		postEffectStore_->DrawPostEffect(name, registerContext);
@@ -278,6 +291,14 @@ void Engine::DX12Offscreen::DrawPostEffect(const std::string& name, ID3D12Graphi
 			TransitionBarrier(depthResource_->GetResource(),
 				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE, commandList);
 		}
+	}
+
+	// ガウスフィルタの場合は、sourceとdestinationを入れ替える
+	if (kIsGaussianFilter)
+	{
+		OffscreenResource* temp = sourceResource_;
+		sourceResource_ = destinationResource_;
+		destinationResource_ = temp;
 	}
 }
 

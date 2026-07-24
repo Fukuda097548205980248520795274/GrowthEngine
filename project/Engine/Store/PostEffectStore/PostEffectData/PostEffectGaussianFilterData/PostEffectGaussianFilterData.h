@@ -24,7 +24,7 @@ namespace Engine
 		void Reset() override;
 
 		/// @brief コマンドリストに登録する
-     /// @param context
+		/// @param context
 		void Register(const PostEffectRenderContext& context) override;
 
 		/// @brief パラメータを取得する
@@ -33,5 +33,17 @@ namespace Engine
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;
+
+
+	private:
+
+		/// @brief パラメータ
+		std::unique_ptr<PostEffect::GaussianFilter> param_ = nullptr;
+
+		// @brief 水平方向のガウスフィルタ用の定数バッファリソース
+		std::unique_ptr<ConstantBufferResource<PostEffect::GaussianFilterDataForGPU>> horizontalResource_ = nullptr;
+
+		// @brief 垂直方向のガウスフィルタ用の定数バッファリソース
+		std::unique_ptr<ConstantBufferResource<PostEffect::GaussianFilterDataForGPU>> verticalResource_ = nullptr;
 	};
 }

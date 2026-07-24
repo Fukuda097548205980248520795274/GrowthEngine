@@ -38,6 +38,9 @@ void GameScene::Initialize()
 	auto outlineParam = engine_->GetPostEffectParam<Engine::PostEffect::DepthBasedOutline>("Outline");
 	outlineParam->outlineWidth = 2.5f;
 
+	// ガウスフィルタのポストエフェクトを読み込む
+	engine_->LoadPostEffect("Gaussian", Engine::PostEffect::Type::GaussianFilter);
+
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
 	cutsceneManager_ = std::make_unique<CutsceneManager>();
@@ -310,6 +313,8 @@ void GameScene::Initialize()
 
 			// ポストエフェクトの描画処理
 			postEffectManager_->Draw(player_.get());
+
+			engine_->DrawPostEffect("Gaussian");
 		}
 	);
 
