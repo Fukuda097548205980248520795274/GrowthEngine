@@ -19,11 +19,14 @@
 #include "PostEffectData/PostEffectMotionBlurData/PostEffectMotionBlurData.h"
 #include "PostEffectData/PostEffectAfterImageData/PostEffectAfterImageData.h"
 #include "PostEffectData/PostEffectBlurShadow2DData/PostEffectBlurShadow2DData.h"
+#include "PostEffectData/PostEffectLuminanceBasedOutlineData/PostEffectLuminanceBasedOutlineData.h"
+#include "PostEffectData/PostEffectDepthBasedOutlineData/PostEffectDepthBasedOutlineData.h"
 
 bool Engine::PostEffectStore::isLoadMotionBlur_ = false;
 bool Engine::PostEffectStore::isLoadAfterImage_ = false;
-bool Engine::PostEffectStore::enableMotionVector_ = false;
-bool Engine::PostEffectStore::isLoadOutline_ = false;
+bool Engine::PostEffectStore::isLoadTAA_ = false;
+bool Engine::PostEffectStore::isLoadLuminanceBasedOutline_ = false;
+bool Engine::PostEffectStore::isLoadDepthBasedOutline_ = false;
 
 /// @brief コンストラクタ
 Engine::PostEffectStore::PostEffectStore()
@@ -197,7 +200,7 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 	}
 
 	// TAAやモーションブラーはモーションベクトルを必要とするため、すでに読み込まれている場合はリセットしてハンドルを返す
-	if (isLoadTAA_ || isLoadMotionBlur_ || isLoadAfterImage_)
+	if (IsEnableMotionVector())
 	{
 		if (PostEffect::Type::TAA == type || PostEffect::Type::MotionBlur == type)
 		{
@@ -211,6 +214,23 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 			}
 		}
 	}
+
+	// アウトラインはアウトライン用のリソースを必要とするため、すでに読み込まれている場合はリセットしてハンドルを返す
+	if (IsLoadOutline())
+	{
+		if (PostEffect::Type::LuminanceBasedOutline == type || PostEffect::Type::DepthBasedOutline == type)
+		{
+			for (auto& data : dataTable_)
+			{
+				if (type == data->GetType())
+				{
+					data->Reset();
+					return data->GetHandle();
+				}
+			}
+		}
+	}
+
 
 	// ハンドル
 	PostEffectHandle handle = static_cast<PostEffectHandle>(dataTable_.size());
@@ -309,9 +329,6 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		data->Initialize(device, commandList, heap_, buffering, computePSOTAA_.get(), log);
 		dataTable_.push_back(std::move(data));
 
-		// TAAはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
-		enableMotionVector_ = true;
-
 		// TAAのハンドルを保存しておく
 		isLoadTAA_ = true;
 		hTAA_ = handle;
@@ -325,9 +342,6 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		std::unique_ptr<PostEffectMotionBlurData> data = std::make_unique<PostEffectMotionBlurData>(name, type, handle, parameter_.get());
 		data->Initialize(device, commandList, heap_, buffering, computePSOMotionBlur_.get(), computePSOVelocityDilation_.get(), log);
 		dataTable_.push_back(std::move(data));
-
-		// モーションブラーはモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
-		enableMotionVector_ = true;
 
 		// モーションブラーのハンドルを保存しておく
 		isLoadMotionBlur_ = true;
@@ -343,13 +357,36 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 		data->Initialize(device, commandList, heap_, buffering, computePSOAfterImage_.get(), log);
 		dataTable_.push_back(std::move(data));
 
-		// 残像はモーションベクトルを必要とするため、モーションベクトル有効化フラグを立てる
-		enableMotionVector_ = true;
-
 		// 残像のハンドルを保存しておく
 		isLoadAfterImage_ = true;
 		hAfterImage_ = handle;
 
+		return handle;
+	}
+
+	// 輝度ベースのアウトライン
+	if (type == PostEffect::Type::LuminanceBasedOutline)
+	{
+		std::unique_ptr<PostEffectLuminanceBasedOutlineData> data = std::make_unique<PostEffectLuminanceBasedOutlineData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoLuminanceBasedOutline_.get());
+		dataTable_.push_back(std::move(data));
+
+		// 輝度ベースのアウトラインのハンドルを保存しておく
+		isLoadLuminanceBasedOutline_ = true;
+		hLuminanceBasedOutline_ = handle;
+		return handle;
+	}
+
+	// 深度ベースのアウトライン
+	if (type == PostEffect::Type::DepthBasedOutline)
+	{
+		std::unique_ptr<PostEffectDepthBasedOutlineData> data = std::make_unique<PostEffectDepthBasedOutlineData>(name, type, handle, parameter_.get());
+		data->Initialize(device, log, psoDepthBasedOutline_.get());
+		dataTable_.push_back(std::move(data));
+
+		// 深度ベースのアウトラインのハンドルを保存しておく
+		isLoadDepthBasedOutline_ = true;
+		hDepthBasedOutline_ = handle;
 		return handle;
 	}
 
@@ -360,13 +397,12 @@ PostEffectHandle Engine::PostEffectStore::Load(const std::string& name, PostEffe
 /// @brief シーン前のリセット処理
 void Engine::PostEffectStore::PerSceneReset()
 {
-	// モーションベクトル有効化を初期化
-	enableMotionVector_ = false;
-
 	// 読み込みフラグを初期化
 	isLoadTAA_ = false;
 	isLoadMotionBlur_ = false;
 	isLoadAfterImage_ = false;
+	isLoadLuminanceBasedOutline_ = false;
+	isLoadDepthBasedOutline_ = false;
 }
 
 /// @brief モーションベクトルの描画処理をコマンドリストに登録する
@@ -376,7 +412,7 @@ void Engine::PostEffectStore::DrawMotionVector(ID3D12GraphicsCommandList* comman
 	DX12Render* render, DX12Prefab* prefab)
 {
 	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
-	if (!enableMotionVector_)return;
+	if (!IsEnableMotionVector())return;
 
 	// モーションベクトルテクスチャをレンダーターゲットに設定
 	motionVectorTextureResource_->ClearRenderTarget(commandList, dsvHandle);
@@ -391,7 +427,7 @@ void Engine::PostEffectStore::DrawMotionVector(ID3D12GraphicsCommandList* comman
 void Engine::PostEffectStore::DrawTAA(const PostEffectRenderContext& context)
 {
 	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
-	if (!enableMotionVector_)return;
+	if (!IsEnableMotionVector())return;
 
 	// TAAがない場合は描画しない
 	if (!isLoadTAA_)return;
@@ -409,7 +445,7 @@ void Engine::PostEffectStore::DrawTAA(const PostEffectRenderContext& context)
 void Engine::PostEffectStore::DrawMotionBlur(const PostEffectRenderContext& context)
 {
 	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
-	if (!enableMotionVector_)return;
+	if (!IsEnableMotionVector())return;
 
 	// モーションブラーがない場合は描画しない
 	if (!isLoadMotionBlur_)return;
@@ -427,7 +463,7 @@ void Engine::PostEffectStore::DrawMotionBlur(const PostEffectRenderContext& cont
 void Engine::PostEffectStore::DrawAfterImage(const PostEffectRenderContext& context)
 {
 	// モーションベクトルが必要なポストエフェクトがない場合は描画しない
-	if (!enableMotionVector_)return;
+	if (!IsEnableMotionVector())return;
 
 	// 残像がない場合は描画しない
 	if (!isLoadAfterImage_)return;
@@ -438,6 +474,59 @@ void Engine::PostEffectStore::DrawAfterImage(const PostEffectRenderContext& cont
 
 	// 残像の描画処理をコマンドリストに登録する
 	dataTable_[hAfterImage_]->Register(renderContext);
+}
+
+/// @brief アウトライン描画処理をコマンドリストに登録する
+/// @param context 
+void Engine::PostEffectStore::DrawOutline(const PostEffectRenderContext& context)
+{
+	// アウトラインがない場合は描画しない
+	if (!IsLoadOutline())return;
+
+	ID3D12GraphicsCommandList* commandList = context.commandList;
+	OffscreenResource* offscreenRenderTargetResource = context.offscreenRenderTargetResource;
+	OffscreenResource* offscreenPixelShaderResource = context.offscreenPixelShaderResource;
+	DepthResource* depthResource = context.depthResource;
+	DX12Render* dx12Render = context.dx12Render;
+	DX12Prefab* dx12Prefab = context.dx12Prefab;
+
+	assert(commandList);
+	assert(offscreenRenderTargetResource);
+	assert(offscreenPixelShaderResource);
+	assert(depthResource);
+	assert(dx12Render);
+	assert(dx12Prefab);
+
+	PostEffectRenderContext renderContext = context;
+	renderContext.outlineTextureResource = outlineRenderResource_.get();
+	renderContext.outlineDepthResource = outlineDepthResource_.get();
+
+	// アウトライン描画のレンダーターゲットと深度ステンシルをクリアする
+	outlineRenderResource_->ClearRenderTarget(commandList, outlineDepthResource_->GetDsvCpuHandle());
+	outlineDepthResource_->ClearDepthStencil(commandList);
+
+	// アウトライン描画の描画処理をコマンドリストに登録する
+	dx12Render->DrawOutline(commandList, psoOutlineRender_.get());
+	dx12Prefab->DrawOutline(commandList, psoOutlinePrefab_.get());
+
+	// レンダーターゲットの設定
+	offscreenRenderTargetResource->SetRenderTarget(commandList, outlineDepthResource_->GetDsvCpuHandle());
+
+	// バリアを張る
+	outlineRenderResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	outlineDepthResource_->Barrier(commandList, D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// 深度ベースのアウトライン描画の描画処理をコマンドリストに登録する
+	if(isLoadDepthBasedOutline_)
+		dataTable_[hDepthBasedOutline_]->Register(renderContext);
+
+	// 輝度ベースのアウトライン描画の描画処理をコマンドリストに登録する
+	if(isLoadLuminanceBasedOutline_)
+		dataTable_[hLuminanceBasedOutline_]->Register(renderContext);
+
+	// バリアを張る
+	outlineRenderResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	outlineDepthResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 }
 
 /// @brief デバッグ用パラメータ

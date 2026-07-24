@@ -108,6 +108,16 @@ void Engine::Render3DStore::DrawMotionVector(ID3D12GraphicsCommandList* commandL
 }
 
 
+/// @brief アウトライン用の描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::Render3DStore::DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	for (auto& data : dataTable_)
+		data->RegisterOutline(commandList, pso);
+}
+
+
 /// @brief 読み込み
 /// @param modelStore 
 /// @param textureStore 

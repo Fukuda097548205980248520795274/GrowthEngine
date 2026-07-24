@@ -474,6 +474,43 @@ void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandLis
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 }
 
+/// @brief アウトラインを描画する
+/// @param commandList 
+/// @param render 
+/// @param prefab 
+void Engine::DX12Offscreen::DrawOutline(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab)
+{
+	// 残像を読み込んでいない場合は描画しない
+	if (!postEffectStore_->IsLoadOutline())return;
+
+	// nullptrチェック
+	assert(commandList);
+	assert(render);
+	assert(prefab);
+
+	// バリアを張る
+	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	destinationResource_->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
+	// sourceとdestinationを入れ替える
+	OffscreenResource* temp = sourceResource_;
+	sourceResource_ = destinationResource_;
+	destinationResource_ = temp;
+
+
+	PostEffectRenderContext context{};
+	context.commandList = commandList;
+	context.offscreenPixelShaderResource = sourceResource_;
+	context.offscreenRenderTargetResource = destinationResource_;
+	context.depthResource = depthResource_.get();
+	context.psoFullscreen = psoFullscreen_.get();
+	context.dx12Render = render;
+	context.dx12Prefab = prefab;
+
+	// アウトラインの描画コマンドを登録する
+	postEffectStore_->DrawOutline(context);
+}
+
 /// @brief デバッグ用パラメータ
 void Engine::DX12Offscreen::DebugParameter()
 {

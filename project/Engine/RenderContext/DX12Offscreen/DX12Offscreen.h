@@ -167,6 +167,12 @@ namespace Engine
 		/// @param cameraStore
 		void DrawAfterImage(ID3D12GraphicsCommandList* commandList , Camera3DStore* cameraStore);
 
+		/// @brief アウトラインを描画する
+		/// @param commandList 
+		/// @param render 
+		/// @param prefab 
+		void DrawOutline(ID3D12GraphicsCommandList* commandList, DX12Render* render, DX12Prefab* prefab);
+
 
 		/// @brief ポストエフェクトのパラメータを取得する
 		/// @tparam T 

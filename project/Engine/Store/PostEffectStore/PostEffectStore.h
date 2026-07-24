@@ -114,6 +114,10 @@ namespace Engine
 		/// @param context 
 		void DrawAfterImage(const PostEffectRenderContext& context);
 
+		/// @brief アウトライン描画処理をコマンドリストに登録する
+		/// @param context 
+		void DrawOutline(const PostEffectRenderContext& context);
+
 
 
 		/// @brief 指定入力が必要かどうか
@@ -147,6 +151,10 @@ namespace Engine
 		/// @return 
 		static bool IsLoadAfterImage() { return isLoadAfterImage_; }
 
+		/// @brief アウトラインを読み込んでいるかどうか
+		/// @return 
+		static bool IsLoadOutline() { return isLoadLuminanceBasedOutline_ || isLoadDepthBasedOutline_; }
+
 		/// @brief 指定入力が必要かどうか
 		/// @param name
 		/// @param input
@@ -161,9 +169,9 @@ namespace Engine
 		/// @return
 		bool IsUseOffscreenRenderTarget(PostEffectHandle hPostEffect) const { return dataTable_[hPostEffect]->GetType() != PostEffect::Type::DOF; }
 
-		/// @brief モーションベクトルが有効かどうか
+		/// @brief モーションベクトルが必要かどうか
 		/// @return 
-		static bool IsEnableMotionVector() { return enableMotionVector_; }
+		static bool IsEnableMotionVector() { return isLoadTAA_ || isLoadMotionBlur_ || isLoadAfterImage_; }
 
 
 		/// @brief パラメータを取得する
@@ -274,9 +282,6 @@ namespace Engine
 		/// @brief モーションベクトルテクスチャリソース
 		std::unique_ptr<MotionVectorTextureResource> motionVectorTextureResource_ = nullptr;
 
-		/// @brief モーションベクトルを有効にするかどうか
-		static bool enableMotionVector_;
-
 
 	private:
 
@@ -293,11 +298,17 @@ namespace Engine
 		/// @brief アウトライン描画に使用する深度リソース
 		std::unique_ptr<DepthResource> outlineDepthResource_ = nullptr;
 
-		/// @brief アウトラインを読み込んでいるかどうか
-		static bool isLoadOutline_;
+		/// @brief 輝度ベースのアウトラインを読み込んでいるかどうか
+		static bool isLoadLuminanceBasedOutline_;
 
-		/// @brief アウトラインのハンドル
-		PostEffectHandle hOutline_ = 0;
+		/// @brief 深度ベースのアウトラインを読み込んでいるかどうか
+		static bool isLoadDepthBasedOutline_;
+
+		/// @brief 深度ベースのアウトラインのハンドル
+		PostEffectHandle hDepthBasedOutline_ = 0;
+
+		/// @brief 輝度ベースのアウトラインのハンドル
+		PostEffectHandle hLuminanceBasedOutline_ = 0;
 
 
 	private:
@@ -306,7 +317,7 @@ namespace Engine
 		PostEffectHandle hTAA_ = 0;
 
 		/// @brief TAAを読み込んでいるかどうか
-		bool isLoadTAA_;
+		static bool isLoadTAA_;
 
 
 	private:

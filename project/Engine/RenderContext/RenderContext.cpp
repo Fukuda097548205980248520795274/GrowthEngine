@@ -150,6 +150,9 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 		{
 			DrawToRenderPass("LastPostDraw", "MainPass");
 
+			// アウトラインの描画
+			offscreen_->DrawOutline(commandList_, render_.get(), prefab_.get());
+
 			// モーションベクトルの描画
 			offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
 

@@ -228,6 +228,12 @@ namespace Engine
 		void Trail3DClear(const std::string& name) { trailStore_->Clear(name); }
 
 
+		/// @brief アウトライン用描画処理
+		/// @param commandList 
+		/// @param pso 
+		void DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) { render3DStore_->DrawOutline(commandList, pso); }
+
+
 	public:
 
 		/// @brief デバッグ用パラメータ

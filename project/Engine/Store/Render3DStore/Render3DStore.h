@@ -64,6 +64,11 @@ namespace Engine
 		/// @param pso 
 		void DrawMotionVector(ID3D12GraphicsCommandList* commandList, BasePSOMotionVector* pso);
 
+		/// @brief アウトライン用の描画処理
+		/// @param commandList 
+		/// @param pso 
+		void DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso);
+
 		/// @brief プリミティブを読み込む
 		/// @param device 
 		/// @param commandList 

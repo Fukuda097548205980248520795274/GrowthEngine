@@ -200,6 +200,14 @@ void Engine::Prefab3DStore::DrawMotionVector(ID3D12GraphicsCommandList* commandL
 	for (auto& data : dataTable_)data->RegisterMotionVector(commandList, pso);
 }
 
+/// @brief アウトラインの描画処理
+/// @param commandList 
+/// @param pso 
+void Engine::Prefab3DStore::DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso)
+{
+	for (auto& data : dataTable_)data->RegisterOutline(commandList, pso);
+}
+
 /// @brief リセット
 void Engine::Prefab3DStore::Reset()
 {

@@ -180,6 +180,12 @@ namespace Engine
 		T* CreatePrefab2DInstance(const std::string& name) { return prefab2DStore_->CreateInstance<T>(name); }
 
 
+		/// @brief アウトラインの描画処理
+		/// @param commandList 
+		/// @param pso 
+		void DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) { prefab3DStore_->DrawOutline(commandList, pso); }
+
+
 		/// @brief プレハブリセット
 		void PrefabReset();
 

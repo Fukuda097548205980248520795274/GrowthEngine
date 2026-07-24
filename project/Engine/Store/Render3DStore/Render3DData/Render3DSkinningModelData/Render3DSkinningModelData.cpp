@@ -913,6 +913,22 @@ void Engine::Render3DSkinningModelData::DebugParameter()
 						}
 					}
 
+					// アウトライン
+					if (PostEffectStore::IsLoadOutline())
+					{
+						if (ImGui::TreeNode("Outline"))
+						{
+							// アウトライン有効化
+							ImGui::Checkbox("EnableOutline", &param_->meshOutline[meshIndex].enableOutline);
+
+							// アウトライン色
+							ImGui::ColorEdit4("Color", &param_->meshOutline[meshIndex].color.x);
+
+							// 終了
+							ImGui::TreePop();
+						}
+					}
+
 					// 終了
 					ImGui::TreePop();
 				}
