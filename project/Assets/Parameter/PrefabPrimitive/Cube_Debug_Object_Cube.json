@@ -1,0 +1,54 @@
+{
+    "Cube_Debug_Object_Cube": {
+        "BlendMode": 0,
+        "Blur_AfterImageMask": 0.0,
+        "Blur_MotionBlurMask": 0.0,
+        "Material_Color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Material_DrawShadowMap": true,
+        "Material_Enable_BlinnPhong": true,
+        "Material_Enable_Diffuse": true,
+        "Material_Enable_HalfLambert": true,
+        "Material_Enable_Lighting": true,
+        "Material_Enable_Shadow": true,
+        "Material_Enable_Specular": true,
+        "Material_Environment": 0.0,
+        "Material_Shininess": 10.0,
+        "Material_Texture": "./Assets/Textures/white2x2.png",
+        "Material_UV_Rotate": 0.0,
+        "Material_UV_Scale": [
+            1.0,
+            1.0
+        ],
+        "Material_UV_Translate": [
+            0.0,
+            0.0
+        ],
+        "Outline_Color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "Outline_Enable": false,
+        "Transform_Rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Transform_Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Transform_Translate": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    }
+}

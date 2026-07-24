@@ -33,7 +33,10 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
-	engine_->LoadPostEffect("test", Engine::PostEffect::Type::LuminanceBasedOutline);
+	// アウトラインのポストエフェクトを読み込む
+	engine_->LoadPostEffect("Outline", Engine::PostEffect::Type::DepthBasedOutline);
+	auto outlineParam = engine_->GetPostEffectParam<Engine::PostEffect::DepthBasedOutline>("Outline");
+	outlineParam->outlineWidth = 2.5f;
 
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
@@ -46,6 +49,7 @@ void GameScene::Initialize()
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
+	sunLight_->param_->intensity = 0.1f;
 
 	// マネージャの生成と初期化
 	motionManager_ = MotionManager::GetInstance();
@@ -134,6 +138,8 @@ void GameScene::Initialize()
 
 	// プレイヤーのモデルの生成と初期化
 	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
+	playerModel_->param_->meshOutline[0].enableOutline = true;
+	playerModel_->param_->meshOutline[0].color = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	// プレイヤーの生成と初期化
 	playerTrail_ = std::make_unique<Trail3D>("Player_Trail", 0.15f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
@@ -624,6 +630,27 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		// NPCのモデルの生成と初期化
 		std::unique_ptr<Render3DSkinningModel> npcModel = npcModelPool_->Acquire();
 		npcModel->param_->isUpdate = true;
+
+		if (tag == CharacterTag::EnemyNormal)
+		{
+			npcModel->param_->meshOutline[0].enableOutline = true;
+			npcModel->param_->meshOutline[0].color = Vector4(0.6f, 0.0f, 0.0f, 1.0f);
+		} 
+		else if (tag == CharacterTag::EnemyBoss)
+		{
+			npcModel->param_->meshOutline[0].enableOutline = true;
+			npcModel->param_->meshOutline[0].color = Vector4(0.6f, 0.0f, 1.0f, 1.0f);
+		} 
+		else if (tag == CharacterTag::Ally)
+		{
+			npcModel->param_->meshOutline[0].enableOutline = true;
+			npcModel->param_->meshOutline[0].color = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
+		}
+		else if (tag == CharacterTag::Vip)
+		{
+			npcModel->param_->meshOutline[0].enableOutline = true;
+			npcModel->param_->meshOutline[0].color = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+		}
 
 		// NPCのトレイルの生成と初期化
 		std::unique_ptr<Trail3D> npcTrail = npcTrailPool_->Acquire();

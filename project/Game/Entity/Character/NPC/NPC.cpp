@@ -54,30 +54,6 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 	// ステートを初期化する
 	stateMachine_->ChangeState("None");
 
-	switch (characterTag_)
-	{
-		// 味方は青色にする
-	case CharacterTag::Ally:
-		model_->param_->meshMaterial[0].color = Vector4(0.1f, 0.1f, 1.0f, 1.0f);
-		break;
-
-		// VIPは緑色にする
-	case CharacterTag::Vip:
-		model_->param_->meshMaterial[0].color = Vector4(0.1f, 1.0f, 0.1f, 1.0f);
-		break;
-
-		// 敵は赤色にする
-	case CharacterTag::EnemyNormal:
-		model_->param_->meshMaterial[0].color = Vector4(1.0f, 0.1f, 0.1f, 1.0f);
-		break;
-
-		// ボスは紫色にする
-	case CharacterTag::EnemyBoss:
-		model_->param_->meshMaterial[0].color = Vector4(1.0f, 0.1f, 1.0f, 1.0f);
-		break;
-	}
-
-
 	// ナビゲーションメッシュを設定する
 	navMesh_ = navMesh;
 }
