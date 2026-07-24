@@ -1450,6 +1450,18 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectDepthBasedOutlineData">
       <UniqueIdentifier>{667efaa7-6141-4dc0-8bb6-888d03dda202}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\TitleScene\Intro">
+      <UniqueIdentifier>{c785f863-4f30-448a-887a-78acd3d124e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TitleScene\MainMenu">
+      <UniqueIdentifier>{91d7328d-835f-4d53-a3b5-1f03bea7f971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TitleScene\Play">
+      <UniqueIdentifier>{c3f7949a-10fc-4635-bfc3-dc2e35c16bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\TitleScene\Quit">
+      <UniqueIdentifier>{caccbf08-e3d2-41b2-b560-add1c02b362b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2627,6 +2639,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\Intro\TitleSceneIntro.cpp">
+      <Filter>Game\Scene\TitleScene\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\MainMenu\TitleSceneMainMenu.cpp">
+      <Filter>Game\Scene\TitleScene\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\Play\TitleScenePlay.cpp">
+      <Filter>Game\Scene\TitleScene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\Quit\TitleSceneQuit.cpp">
+      <Filter>Game\Scene\TitleScene\Quit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

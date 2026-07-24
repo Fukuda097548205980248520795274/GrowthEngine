@@ -1153,6 +1153,10 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClCompile Include="Game\HUD\Button\TriggerButton\TriggerButton.cpp" />
     <ClCompile Include="Game\HUD\Tutorial\Tutorial.cpp" />
     <ClCompile Include="Game\PhaseManager\PhaseManager.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\Intro\TitleSceneIntro.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\MainMenu\TitleSceneMainMenu.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\Play\TitleScenePlay.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\Quit\TitleSceneQuit.cpp" />
     <ClCompile Include="Game\Shake\Shake.cpp" />
     <ClCompile Include="Game\EditorWorkspaceManager\EditorWorkspaceManager.cpp" />
     <ClCompile Include="Game\EffectManager\EffectManager.cpp" />
