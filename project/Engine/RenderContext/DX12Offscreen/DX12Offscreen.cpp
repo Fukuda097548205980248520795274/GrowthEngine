@@ -373,6 +373,14 @@ void Engine::DX12Offscreen::DrawTAA(ID3D12GraphicsCommandList* commandList)
 	assert(commandList);
 
 
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
+
+
 	// レンダーターゲットの設定とクリア
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	sourceResource_->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
@@ -412,6 +420,14 @@ void Engine::DX12Offscreen::DrawMotionBlur(ID3D12GraphicsCommandList* commandLis
 	assert(commandList);
 
 
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
+
+
 	// レンダーターゲットの設定とクリア
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	sourceResource_->ClearRenderTarget(commandList, depthResource_->GetDsvCpuHandle());
@@ -447,6 +463,14 @@ void Engine::DX12Offscreen::DrawAfterImage(ID3D12GraphicsCommandList* commandLis
 	// nullptrチェック
 	assert(commandList);
 	assert(cameraStore);
+
+
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
 
 
 	// レンダーターゲットの設定とクリア
@@ -487,6 +511,13 @@ void Engine::DX12Offscreen::DrawOutline(ID3D12GraphicsCommandList* commandList, 
 	assert(commandList);
 	assert(render);
 	assert(prefab);
+
+	// ソースリソースがnullptrの場合はレンダリングターゲットプールから借りる
+	if (!sourceResource_)
+	{
+		sourceResource_ = renderTargetPool_->Rent(commandList);
+		renderPassStore_->SetActiveResources(sourceResource_);
+	}
 
 	// バリアを張る
 	sourceResource_->Barrier(commandList, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);

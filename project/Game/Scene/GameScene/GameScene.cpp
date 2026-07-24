@@ -33,7 +33,7 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
-	engine_->LoadPostEffect("test", Engine::PostEffect::Type::DepthBasedOutline);
+	engine_->LoadPostEffect("test", Engine::PostEffect::Type::LuminanceBasedOutline);
 
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
@@ -291,6 +291,9 @@ void GameScene::Initialize()
 
 			// プレイヤーの体力バーの描画
 			if (playerHP_)playerHP_->Draw();
+
+			// アウトラインの描画
+			engine_->DrawOutline();
 		}
 	);
 

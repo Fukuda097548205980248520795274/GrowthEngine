@@ -145,35 +145,13 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 		}
 	);
 
-	// 描画後処理のレンダーパスを登録する
-	LoadRenderPass("LastPostDraw", [&]()
-		{
-			DrawToRenderPass("LastPostDraw", "MainPass");
-
-			// アウトラインの描画
-			offscreen_->DrawOutline(commandList_, render_.get(), prefab_.get());
-
-			// モーションベクトルの描画
-			offscreen_->DrawMotionVector(commandList_, render_.get(), prefab_.get());
-
-			// モーションブラーの描画
-			offscreen_->DrawMotionBlur(commandList_);
-
-			// 残像の描画
-			offscreen_->DrawAfterImage(commandList_, camera3DStore_.get());
-
-			// TAAの描画
-			offscreen_->DrawTAA(commandList_);
-		}
-	);
-
 
 #ifdef DEVELOPMENT
 
 	// 線の描画前処理のレンダーパスを登録する
 	LoadRenderPass("LineDraw", [&]()
 		{
-			DrawToRenderPass("LineDraw", "LastPostDraw");
+			DrawToRenderPass("LineDraw", "MainPass");
 
 			// 衝突ストアのデバッグ線
 			collision3DStore_->DebugDrawLine();
@@ -316,9 +294,6 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-	// 描画後ポストエフェクトのレンダーパスを呼び出す
-	ExecuteRenderPass("LastPostDraw");
-
 #ifdef DEVELOPMENT
 	ExecuteRenderPass("LineDraw");
 #endif
@@ -439,6 +414,12 @@ void Engine::RenderContext::DrawPostEffect(const std::string& name)
 	context.camera3DStore = camera3DStore_.get();
 
 	return offscreen_->DrawPostEffect(name, commandList_, context);
+}
+
+/// @brief 輝度ベースのアウトラインを描画する
+void Engine::RenderContext::DrawOutline()
+{
+	offscreen_->DrawOutline(commandList_, render_.get(), prefab_.get());
 }
 
 

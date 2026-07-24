@@ -672,6 +672,9 @@ void Engine::Render3DSkinningModelData::RegisterOutline(ID3D12GraphicsCommandLis
 	// 直前で描画されているときのみ
 	if (!isDrew_)return;
 
+	// モデルデータを取得する
+	const ModelData& modelData = modelStore_->GetModelData(hModel_);
+
 	// PSOの設定
 	pso->Register(commandList);
 
@@ -684,8 +687,18 @@ void Engine::Render3DSkinningModelData::RegisterOutline(ID3D12GraphicsCommandLis
 		*outlineTransformationResources_[meshIndex]->data_ = meshTransformationResources_[meshIndex]->data_->worldViewProjectionMatrix;
 		*outlineColorResources_[meshIndex]->data_ = param_->meshOutline[meshIndex].color;
 
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
+
+		D3D12_VERTEX_BUFFER_VIEW vbv = {};
+		vbv.BufferLocation = outputVertexResource_[meshIndex]->GetResource()->GetGPUVirtualAddress();
+		vbv.SizeInBytes = UINT(modelData.meshes[meshIndex].vertices.size()) * sizeof(VertexDataForGPU);
+		vbv.StrideInBytes = sizeof(VertexDataForGPU);
+
+		commandList->IASetVertexBuffers(0, 1, &vbv);
+
 
 		// アウトライン座標変換の設定
 		outlineTransformationResources_[meshIndex]->RegisterGraphics(commandList, 0);
@@ -698,6 +711,9 @@ void Engine::Render3DSkinningModelData::RegisterOutline(ID3D12GraphicsCommandLis
 
 		// ドローコール
 		commandList->DrawIndexedInstanced(static_cast<UINT>(modelStore_->GetModelData(hModel_).meshes[meshIndex].indices.size()), 1, 0, 0, 0);
+
+		// 次フレームのスキニング用に戻す
+		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	}
 }
 

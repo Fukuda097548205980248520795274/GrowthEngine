@@ -42,7 +42,7 @@ void Engine::PostEffectDepthBasedOutlineData::Initialize(ID3D12Device* device, L
 	resource_->data_->depthThreshold = param_->depthThreshold;
 	resource_->data_->outlineWidth = param_->outlineWidth;
 	resource_->data_->screenResolution = 
-		Vector2(static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
+		Vector2(1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), 1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
 }
 
 /// @brief リセット
@@ -79,7 +79,7 @@ void Engine::PostEffectDepthBasedOutlineData::Register(const PostEffectRenderCon
 	resource_->data_->depthThreshold = param_->depthThreshold;
 	resource_->data_->outlineWidth = param_->outlineWidth;
 	resource_->data_->screenResolution = 
-		Vector2(static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
+		Vector2(1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), 1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
 
 	/*------------------------
 		コマンドリストに登録

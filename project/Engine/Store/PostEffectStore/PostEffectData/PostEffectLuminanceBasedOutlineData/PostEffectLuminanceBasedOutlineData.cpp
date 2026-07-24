@@ -39,7 +39,7 @@ void Engine::PostEffectLuminanceBasedOutlineData::Initialize(ID3D12Device* devic
 	resource_->data_->colorThreshold = param_->colorThreshold;
 	resource_->data_->outlineWidth = param_->outlineWidth;
 	resource_->data_->screenResolution =
-		Vector2(static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
+		Vector2(1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), 1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
 }
 
 /// @brief リセット
@@ -68,7 +68,7 @@ void Engine::PostEffectLuminanceBasedOutlineData::Register(const PostEffectRende
 	resource_->data_->colorThreshold = param_->colorThreshold;
 	resource_->data_->outlineWidth = param_->outlineWidth;
 	resource_->data_->screenResolution =
-		Vector2(static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
+		Vector2(1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()), 1.0f / static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight()));
 
 	/*------------------------
 		コマンドリストに登録

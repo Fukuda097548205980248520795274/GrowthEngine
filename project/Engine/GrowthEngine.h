@@ -819,6 +819,9 @@ public:
 	/// @param name 
 	void DrawPostEffect(const std::string& name)const { return renderContext_->DrawPostEffect(name); }
 
+	/// @brief アウトラインを描画する
+	void DrawOutline()const { renderContext_->DrawOutline(); }
+
 	/// @brief パラメータを取得する
 	/// @tparam T 
 	/// @param hPostEffect 

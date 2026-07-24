@@ -474,6 +474,9 @@ namespace Engine
 		/// @param name 
 		void DrawPostEffect(const std::string& name);
 
+		/// @brief 輝度ベースのアウトラインを描画する
+		void DrawOutline();
+
 		/// @brief パラメータを取得する
 		/// @tparam T 
 		/// @param hPostEffect 
