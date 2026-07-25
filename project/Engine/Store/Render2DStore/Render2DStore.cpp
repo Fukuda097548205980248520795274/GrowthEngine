@@ -58,18 +58,10 @@ void Engine::Render2DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	render2DPS_ = compiler->Compile(L"./Assets/Shader/Render/Render2D/Render2D.PS.hlsl", L"ps_6_0");
 	assert(render2DPS_);
 
-	// テキストピクセルシェーダ
-	textPS_ = compiler->Compile(L"./Assets/Shader/Render/Text/Text.PS.hlsl", L"ps_6_0");
-	assert(textPS_);
-
 
 	// 2D描画PSOの生成と初期化
 	psoRender2D_ = std::make_unique<PSORender2D>();
 	psoRender2D_->Initialize(device, render2DVS_.Get(), render2DPS_.Get(), log);
-
-	// テキストPSOの生成と初期化
-	psoText_ = std::make_unique<PSORender2D>();
-	psoText_->Initialize(device, render2DVS_.Get(), textPS_.Get(), log);
 }
 
 /// @brief 更新処理
@@ -137,11 +129,6 @@ void Engine::Render2DStore::Register(Render2DHandle hRender2D, Camera2DStore* ca
 	{
 		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoRender2D_.get());
 	}
-	else if(dataTable_[hRender2D]->GetType() == Render2D::Type::Text)
-	{
-		// テキスト
-		dataTable_[hRender2D]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoText_.get());
-	}
 }
 
 /// @brief コマンドリストに登録する
@@ -155,11 +142,6 @@ void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cam
 	if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Sprite)
 	{
 		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoRender2D_.get());
-	}
-	else if (dataTable_[nameTable_[name]]->GetType() == Render2D::Type::Text)
-	{
-		// テキスト
-		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoText_.get());
 	}
 }
 

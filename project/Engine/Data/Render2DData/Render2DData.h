@@ -12,8 +12,7 @@ namespace Engine
 		/// @brief 種類
 		enum class Type
 		{
-			Sprite,
-			Text
+			Sprite
 		};
 
 		// @brief スクリーンアンカー
@@ -86,61 +85,6 @@ namespace Engine
 
 				/// @brief テクスチャ
 				Texture texture;
-			};
-		}
-
-		/// @brief テキスト
-		namespace Text
-		{
-			/// @brief トランスフォーム
-			struct Transform
-			{
-				/// @brief 拡縮
-				Vector2 scale;
-
-				/// @brief 回転
-				float rotate;
-
-				/// @brief 移動
-				Vector2 translate;
-			};
-
-			/// @brief マテリアル
-			struct Material
-			{
-				/// @brief 色
-				Vector4 color;
-			};
-
-			/// @brief テクスチャ
-			struct Texture
-			{
-				Vector2 anchor;
-			};
-
-			/// @brief パラメータ
-			struct Param
-			{
-				/// @brief ブレンドモード
-				BlendMode blendMode;
-
-				/// @brief 画面のアンカー
-				ScreenAnchor screenAnchor = ScreenAnchor::LeftBottom;
-
-				/// @brief トランスフォーム
-				Transform transform;
-
-				/// @brief テクスチャ
-				Texture texture;
-
-				/// @brief 文字トランスフォーム
-				std::vector<Transform> charTransform;
-
-				/// @brief 文字テクスチャ
-				std::vector<Texture> charTexture;
-
-				/// @brief 文字マテリアル
-				std::vector<Material> charMaterial;
 			};
 		}
 	}

@@ -101,17 +101,11 @@ namespace Engine
 		// 2D描画ピクセルシェーダ
 		ComPtr<IDxcBlob> render2DPS_ = nullptr;
 
-		/// @brief テキストピクセルシェーダ
-		ComPtr<IDxcBlob> textPS_ = nullptr;
-
 
 	private:
 
 		// 2D描画PSO
 		std::unique_ptr<PSORender2D> psoRender2D_ = nullptr;
-
-		// テキストPSO
-		std::unique_ptr<PSORender2D> psoText_ = nullptr;
 
 
 	private:

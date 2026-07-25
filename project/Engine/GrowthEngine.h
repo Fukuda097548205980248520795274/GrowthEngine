@@ -1152,15 +1152,6 @@ public:
 		return renderContext_->LoadRender2D(name, Engine::Render2D::Type::Sprite, hTexture, 0, log_.get());
 	}
 
-	/// @brief テキストを読み込む
-	/// @param hText 
-	/// @param name 
-	/// @return 
-	Render2DHandle LoadText(TextHandle hText, const std::string& name) const
-	{
-		return renderContext_->LoadRender2D(name, Engine::Render2D::Type::Text, 0, hText, log_.get());
-	}
-
 
 private:
 

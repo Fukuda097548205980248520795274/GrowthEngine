@@ -577,9 +577,6 @@
     <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseCube">
       <UniqueIdentifier>{632ea143-a45e-483e-8944-8e22490965ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Store\FontStore">
-      <UniqueIdentifier>{485dea5a-e4c6-4555-8c59-1b59d8dcad18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Data\Render3DData">
       <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
     </Filter>
@@ -654,9 +651,6 @@
     </Filter>
     <Filter Include="Engine\Include\Parameter\DebugCameraParameter">
       <UniqueIdentifier>{d6d8e19c-4f48-4631-b5ae-86585638051d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData">
-      <UniqueIdentifier>{72c443f1-d031-46a4-a17b-324830b75516}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Data\DebugData">
       <UniqueIdentifier>{e1a39dc7-fe80-4783-942c-e3967b2c0557}</UniqueIdentifier>
@@ -786,9 +780,6 @@
     </Filter>
     <Filter Include="Engine\Shader\Prefab">
       <UniqueIdentifier>{bb0c5f4f-2f10-434b-a0c9-fce4ec5248bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Shader\Render\Text">
-      <UniqueIdentifier>{753f42d5-59bb-4b9e-8f7b-5ed12993e5c1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Shader\Render\Render3D">
       <UniqueIdentifier>{3c399668-26d0-4674-bd4f-a5735895c6f5}</UniqueIdentifier>
@@ -4043,9 +4034,6 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Skybox\Skybox.PS.hlsl">
       <Filter>Engine\Shader\Skybox</Filter>
-    </FxCompile>
-    <FxCompile Include="Assets\Shader\Render\Text\Text.PS.hlsl">
-      <Filter>Engine\Shader\Render\Text</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\PostEffect\Grayscale.PS.hlsl">
       <Filter>Engine\Shader\PostEffect</Filter>
