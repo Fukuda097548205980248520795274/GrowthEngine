@@ -23,7 +23,7 @@ Particle3D::Particle3D(const std::string& name, uint32_t numInstance, uint32_t n
 /// @param emitterIndex 
 void Particle3D::Emit(int32_t emitterIndex)
 {
-	engine_->EmittParticle3D(hParticle_, emitterIndex);
+	engine_->EmitParticle3D(hParticle_, emitterIndex);
 }
 
 /// @brief 停止

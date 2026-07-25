@@ -12,7 +12,6 @@ namespace Engine
 	class BasePSOShadowMap;
 	class ModelStore;
 	class TextureStore;
-	class FontStore;
 	class Camera3DStore;
 	class SkyboxStore;
 
@@ -110,14 +109,13 @@ namespace Engine
 		/// @param hTexture 
 		/// @param hText 
 		/// @param textureStore 
-		/// @param fontStore 
 		/// @param device 
 		/// @param log 
 		/// @return 
 		Render2DHandle LoadRender2D(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
-			TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log)
+			TextureStore* textureStore, ID3D12Device* device, Log* log)
 		{
-			return render2DStore_->Load(name,type, hTexture,hText, textureStore,fontStore, device, log);
+			return render2DStore_->Load(name,type, hTexture,hText, textureStore,device, log);
 		}
 
 		/// @brief トレイルの読み込み

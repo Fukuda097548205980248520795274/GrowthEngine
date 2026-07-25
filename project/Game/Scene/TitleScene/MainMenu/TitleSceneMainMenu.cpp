@@ -28,11 +28,11 @@ void TitleScene::SelectMainMenuOption()
 {
 	int moveDirection = 0;
 
-	if (wKey_->IsInput())
+	if (wKey_->IsInput() || upLeftStick_->IsInput())
 	{
 		moveDirection = -1;
 	}
-	else if (sKey_->IsInput())
+	else if (sKey_->IsInput() || downLeftStick_->IsInput())
 	{
 		moveDirection = 1;
 	}
@@ -42,20 +42,17 @@ void TitleScene::SelectMainMenuOption()
 		return;
 
 	// メインメニューの選択肢を更新する
-	if (static_cast<int>(mainManuOption_) != 0 && 
-		static_cast<int>(mainManuOption_) != static_cast<int>(MainMenuOption::MaxOption) - 1)
+	if(static_cast<int>(mainManuOption_) + moveDirection >= 0 &&
+		static_cast<int>(mainManuOption_) + moveDirection < static_cast<int>(MainMenuOption::MaxOption))
 	{
-		int currentOption = static_cast<int>(mainManuOption_);
-		currentOption += moveDirection;
-		currentOption = std::max(0, std::min(currentOption, static_cast<int>(MainMenuOption::MaxOption) - 1));
-		mainManuOption_ = static_cast<MainMenuOption>(currentOption);
+		mainManuOption_ = static_cast<MainMenuOption>(static_cast<int>(mainManuOption_) + moveDirection);
 	}
 }
 
 /// @brief メインメニューの選択肢を実行する
 void TitleScene::ExecuteMainMenuOption()
 {
-	if (spaceKey_->IsInput())
+	if (spaceKey_->IsInput() || aButton_->IsInput())
 	{
 		switch (mainManuOption_)
 		{

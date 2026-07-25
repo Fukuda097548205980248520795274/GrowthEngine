@@ -42,7 +42,7 @@ Emitter3D::Emitter3D(const Particle3D* particle)
 void Emitter3D::Emit()
 {
 	// 放出する
-	engine_->EmittParticle3D(particleName_, emitterIndex_);
+	engine_->EmitParticle3D(particleName_, emitterIndex_);
 }
 
 /// @brief 停止

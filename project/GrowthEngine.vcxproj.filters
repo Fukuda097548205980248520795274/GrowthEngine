@@ -1962,17 +1962,11 @@
     <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp">
       <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Store\FontStore\FontStore.cpp">
-      <Filter>Engine\Include\Store\FontStore</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.cpp">
       <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.cpp">
-      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\Camera2DParameter\Camera2DParameter.cpp">
       <Filter>Engine\Include\Parameter\Camera2DParameter</Filter>
@@ -3242,9 +3236,6 @@
     <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h">
       <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Store\FontStore\FontStore.h">
-      <Filter>Engine\Include\Store\FontStore</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
     </ClInclude>
@@ -3253,9 +3244,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Parameter\DebugCameraParameter\DebugCameraParameter.h">
       <Filter>Engine\Include\Parameter\DebugCameraParameter</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h">
-      <Filter>Engine\Include\Store\Render2DStore\Render2DData\Render2DTextData</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\DebugData\DebugData.h">
       <Filter>Engine\Include\Data\DebugData</Filter>

@@ -10,6 +10,9 @@ void TitleScene::QuitInitialize()
 /// @brief タイトルシーンの終了更新処理
 void TitleScene::QuitUpdate()
 {
+	float t = 1.0f - (quitTimer_ / kQuitDuration); // 経過時間の割合を計算
+	fadeSprite_->param_->material.color.w = t; // フェードインのアルファ値を設定
+
 	if (quitTimer_ <= 0.0f)
 	{
 		// 終了が終了したらアプリケーションを終了
@@ -19,6 +22,7 @@ void TitleScene::QuitUpdate()
 	{
 		// 終了の経過時間を減少
 		quitTimer_ -= engine_->GetDeltaTime();
+		quitTimer_ = std::max(quitTimer_, 0.0f); // 0未満にならないようにする
 	}
 }
 

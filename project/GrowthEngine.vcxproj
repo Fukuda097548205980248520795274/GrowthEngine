@@ -87,12 +87,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
       <AdditionalOptions>/ignore:4049 /ignore:4098 /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Debug;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\;$(ProjectDir)Externals\freetype\lib\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;%(AdditionalDependencies);imgui.lib;freetype-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Debug;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;%(AdditionalDependencies);imgui.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
-copy "$(ProjectDir)Externals\freetype\lib\Debug\freetype-d.dll" "$(TargetDir)freetype-d.dll"</Command>
+      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -112,12 +111,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Debug\freetype-d.dll" "$(TargetDir)fre
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\;$(ProjectDir)Externals\freetype\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies);imgui.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies);imgui.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
-copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)freetype.dll"</Command>
+      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
@@ -140,12 +138,11 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <LinkTimeCodeGeneration />
-      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\;$(ProjectDir)Externals\freetype\lib\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies);imgui.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Externals\assimp\lib\Release;%(AdditionalLibraryDirectories);$(SolutionDir)..\build\output\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies);imgui.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
-copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)freetype.dll"</Command>
+      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -837,10 +834,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="Engine\Store\FontStore\FontStore.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="Engine\Store\InputStore\InputResource\InputBaseResource.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -990,10 +983,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1463,7 +1452,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSegmentData\Collision3DSegmentData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSphereData\Collision3DSphereData.h" />
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DStore.h" />
-    <ClInclude Include="Engine\Store\FontStore\FontStore.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputBaseResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadButtonResource\InputGamepadButtonResource.h" />
     <ClInclude Include="Engine\Store\InputStore\InputResource\InputGamepadLeftStickResource\InputGamepadLeftStickResource.h" />
@@ -1505,7 +1493,6 @@ copy "$(ProjectDir)Externals\freetype\lib\Release\freetype.dll" "$(TargetDir)fre
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.h" />
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DStore.h" />
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h" />
-    <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DTextData\Render2DTextData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DAnimationModelData\Render3DAnimationModelData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.h" />
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DCylinderData\Render3DCylinderData.h" />

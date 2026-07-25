@@ -220,13 +220,6 @@ public:
 	/// @return 
 	LightHandle LoadLight(const std::string& name, Engine::Light::Type type) const { return renderContext_->LoadLight(name, type); }
 
-	/// @brief フォントを読み込む
-	/// @param text 
-	/// @param fontName 
-	/// @param pixel 
-	/// @return 
-	TextHandle LoadFont(const std::string& text, const std::string& fontName, int pixel)const { return renderContext_->LoadFont(text, fontName, pixel, log_.get()); }
-
 	/// @brief サウンドを読み込む
 	/// @param name 
 	/// @param hAudio 
@@ -939,12 +932,12 @@ public:
 	/// @brief 3Dパーティクルを放出する
 	/// @param hParticle 
 	/// @param emitterIndex 
-	void EmittParticle3D(Particle3DHandle hParticle, int32_t emitterIndex)const { renderContext_->EmitParticle3D(hParticle, emitterIndex); }
+	void EmitParticle3D(Particle3DHandle hParticle, int32_t emitterIndex)const { renderContext_->EmitParticle3D(hParticle, emitterIndex); }
 
 	/// @brief 3Dパーティクルを放出する
 	/// @param name 
 	/// @param emitterIndex 
-	void EmittParticle3D(const std::string& name, int32_t emitterIndex)const { renderContext_->EmitParticle3D(name, emitterIndex); }
+	void EmitParticle3D(const std::string& name, int32_t emitterIndex)const { renderContext_->EmitParticle3D(name, emitterIndex); }
 
 	/// @brief 3Dパーティクルを停止する
 	/// @param hParticle 

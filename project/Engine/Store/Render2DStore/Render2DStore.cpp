@@ -1,6 +1,5 @@
 #include "Render2DStore.h"
 #include "Render2DData/Render2DSpriteData/Render2DSpriteData.h"
-#include "Render2DData/Render2DTextData/Render2DTextData.h"
 
 #include "Store/Camera2DStore/Camera2DStore.h"
 
@@ -91,7 +90,7 @@ void Engine::Render2DStore::PerSceneReset()
 /// @param textureStore 
 /// @return 
 Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
-	TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log)
+	TextureStore* textureStore, ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(textureStore);
@@ -120,15 +119,6 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 		// データの生成と初期化
 		std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name, parameter_.get());
 		data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
-		dataTable_.push_back(std::move(data));
-	}
-
-	// テキスト
-	if (type == Render2D::Type::Text)
-	{
-		// データの生成と初期化
-		std::unique_ptr<Render2DTextData> data = std::make_unique<Render2DTextData>(handle, name, parameter_.get(), hText);
-		data->Initialize(vertexResource_.get(), indexResource_.get(), fontStore, device, log);
 		dataTable_.push_back(std::move(data));
 	}
 

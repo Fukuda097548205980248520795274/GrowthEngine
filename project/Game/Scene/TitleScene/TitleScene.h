@@ -57,7 +57,7 @@ private:
 	float introTimer_ = 0.0f;
 
 	/// @brief イントロの表示時間
-	static constexpr float kIntroDuration = 3.0f;
+	static constexpr float kIntroDuration = 1.0f;
 
 
 private:
@@ -96,7 +96,7 @@ private:
 	float playTimer_ = 0.0f;
 
 	/// @brief プレイの表示時間
-	static constexpr float kPlayDuration = 3.0f;
+	static constexpr float kPlayDuration = 1.0f;
 
 
 private:
@@ -114,7 +114,7 @@ private:
 	float quitTimer_ = 0.0f;
 
 	/// @brief 終了の表示時間
-	static constexpr float kQuitDuration = 3.0f;
+	static constexpr float kQuitDuration = 1.0f;
 
 
 private:
@@ -122,11 +122,21 @@ private:
 	/// @brief フェーズマネージャ
 	std::unique_ptr<PhaseManager<PhaseType>> phaseManager_;
 
+	/// @brief フェード用スプライト
+	std::unique_ptr<Sprite> fadeSprite_;
+
 	//  上下のキー入力
 	std::unique_ptr<InputKey> wKey_;
 	std::unique_ptr<InputKey> sKey_;
 
 	// 決定キー入力
 	std::unique_ptr<InputKey> spaceKey_;
+
+	// 上下の左スティック入力
+	std::unique_ptr<InputGamepadLeftStick> upLeftStick_;
+	std::unique_ptr<InputGamepadLeftStick> downLeftStick_;
+
+	// Aボタン
+	std::unique_ptr<InputGamepadButton> aButton_;
 };
 

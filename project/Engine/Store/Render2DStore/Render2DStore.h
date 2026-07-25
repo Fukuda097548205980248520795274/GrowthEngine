@@ -9,7 +9,6 @@ class WorldTransform2D;
 
 namespace Engine
 {
-	class FontStore;
 	class Camera2DStore;
 	class ShaderCompiler;
 
@@ -37,12 +36,11 @@ namespace Engine
 		/// @param hTexture 
 		/// @param hText 
 		/// @param textureStore 
-		/// @param fontStore 
 		/// @param device 
 		/// @param log 
 		/// @return 
 		Render2DHandle Load(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText,
-			TextureStore* textureStore, FontStore* fontStore, ID3D12Device* device, Log* log);
+			TextureStore* textureStore, ID3D12Device* device, Log* log);
 
 		/// @brief コマンドリストに登録する
 		/// @param hSprite 

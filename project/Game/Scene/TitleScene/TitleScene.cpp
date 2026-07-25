@@ -13,6 +13,20 @@ void TitleScene::Initialize()
 	// 決定キー入力を作成する
 	spaceKey_ = std::make_unique<InputKey>("TitleSpaceKey", InputState::Trigger, DIK_SPACE);
 
+	// 上下の左スティック入力を作成する
+	upLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleUpLeftStick", InputState::Trigger, 0, Vector2(0.0f, -1.0f), 0.5f);
+	downLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleDownLeftStick", InputState::Trigger, 0, Vector2(0.0f, 1.0f), 0.5f);
+
+	// Aボタン入力を作成する
+	aButton_ = std::make_unique<InputGamepadButton>("TitleAButton", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+
+	// フェード用スプライトを作成する
+	fadeSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), "Fade");
+	fadeSprite_->param_->texture.anchor = Vector2(0.0f, 1.0f);
+	fadeSprite_->param_->screenAnchor = Engine::Render2D::ScreenAnchor::LeftBottom;
+	fadeSprite_->param_->transform.scale = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
+	fadeSprite_->param_->material.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
 	// フェーズマネージャを作成する
 	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
 	phaseManager_->SetOnEnter(PhaseType::Intro, [&]() { IntroInitialize(); });
@@ -50,6 +64,9 @@ void TitleScene::Initialize()
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			// フェード用スプライトの描画
+			fadeSprite_->Draw();
 		}
 	);
 }

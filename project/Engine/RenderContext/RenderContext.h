@@ -26,8 +26,6 @@
 #include "Store/Collision3DStore/Collision3DStore.h"
 #include "Store/SkyboxStore/SkyboxStore.h"
 
-#include "Store/FontStore/FontStore.h"
-
 namespace Engine
 {
 	class Log;
@@ -114,14 +112,6 @@ namespace Engine
 		/// @param log 
 		/// @return 
 		LightHandle LoadLight(const std::string& name, Light::Type type) { return lightStore_->Load(name, type); }
-
-		/// @brief フォントを読み込む
-		/// @param text 
-		/// @param fontName 
-		/// @param pixel 
-		/// @param log 
-		/// @return 
-		TextHandle LoadFont(const std::string& text, const std::string& fontName, int pixel, Log* log) { return fontStore_->Load(text, fontName, pixel, core_->GetDevice(), commandList_, heap_.get(), log); }
 
 
 
@@ -281,7 +271,7 @@ namespace Engine
 		/// @return 
 		Render2DHandle LoadRender2D(const std::string& name, Render2D::Type type, TextureHandle hTexture, TextHandle hText, Log* log)
 		{
-			return render_->LoadRender2D(name, type, hTexture, hText, textureStore_.get(), fontStore_.get(), core_->GetDevice(), log);
+			return render_->LoadRender2D(name, type, hTexture, hText, textureStore_.get(), core_->GetDevice(), log);
 		}
 
 		/// @brief トレイル読み込み
@@ -815,9 +805,6 @@ namespace Engine
 
 		/// @brief スカイボックスストア
 		std::unique_ptr<SkyboxStore> skyboxStore_ = nullptr;
-
-		/// @brief フォントストア
-		std::unique_ptr<FontStore> fontStore_ = nullptr;
 
 
 	private:
