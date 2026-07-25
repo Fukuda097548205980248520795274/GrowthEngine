@@ -15,6 +15,16 @@ public:
 		Quit,
 	};
 
+	/// @brief タイトルシーンのメインメニューの選択肢
+	enum class MainMenuOption
+	{
+		StartGame,
+		QuitGame,
+
+		// 選択肢の最大数を表すためのダミー値
+		MaxOption,
+	};
+
 
 public:
 
@@ -43,6 +53,12 @@ private:
 	/// @brief タイトルシーンのイントロ描画処理
 	void IntroDraw();
 
+	/// @brief イントロの経過時間
+	float introTimer_ = 0.0f;
+
+	/// @brief イントロの表示時間
+	static constexpr float kIntroDuration = 3.0f;
+
 
 private:
 
@@ -54,6 +70,9 @@ private:
 
 	/// @brief タイトルシーンのメインメニュー描画処理
 	void MainMenuDraw();
+
+	/// @brief メインメニューの選択肢
+	MainMenuOption mainManuOption_ = MainMenuOption::StartGame;
 
 
 private:
@@ -67,6 +86,18 @@ private:
 	/// @brief タイトルシーンのプレイ描画処理
 	void PlayDraw();
 
+	/// @brief メインメニューの選択肢を処理する
+	void SelectMainMenuOption();
+
+	/// @brief メインメニューの選択肢を実行する
+	void ExecuteMainMenuOption();
+
+	/// @brief プレイの経過時間
+	float playTimer_ = 0.0f;
+
+	/// @brief プレイの表示時間
+	static constexpr float kPlayDuration = 3.0f;
+
 
 private:
 
@@ -79,11 +110,23 @@ private:
 	/// @brief タイトルシーンの終了描画処理
 	void QuitDraw();
 
+	/// @brief 終了の経過時間
+	float quitTimer_ = 0.0f;
+
+	/// @brief 終了の表示時間
+	static constexpr float kQuitDuration = 3.0f;
+
 
 private:
 
 	/// @brief フェーズマネージャ
 	std::unique_ptr<PhaseManager<PhaseType>> phaseManager_;
 
+	//  上下のキー入力
+	std::unique_ptr<InputKey> wKey_;
+	std::unique_ptr<InputKey> sKey_;
+
+	// 決定キー入力
+	std::unique_ptr<InputKey> spaceKey_;
 };
 
