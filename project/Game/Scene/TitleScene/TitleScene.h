@@ -2,6 +2,8 @@
 #include "GrowthEngine.h"
 #include "PhaseManager/PhaseManager.h"
 
+#include "UIEditor/UIEditor.h"
+
 class TitleScene : public Scene
 {
 public:
@@ -138,5 +140,11 @@ private:
 
 	// Aボタン
 	std::unique_ptr<InputGamepadButton> aButton_;
+
+	
+private:
+
+	/// @brief UIエディタ
+	std::unique_ptr<UIEditor> uiEditor_ = nullptr;
 };
 

@@ -1450,6 +1450,15 @@
     <Filter Include="Game\Scene\TitleScene\Quit">
       <UniqueIdentifier>{caccbf08-e3d2-41b2-b560-add1c02b362b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\UIEditor">
+      <UniqueIdentifier>{db5376fc-0c3b-43d9-a547-a9f2efdaeda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UIEditor\UIData">
+      <UniqueIdentifier>{4e735117-93d5-49f9-b522-ae74575b7782}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UIEditor\UISerializer">
+      <UniqueIdentifier>{91589ceb-94f3-4e8f-a804-9d31dd86350d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2630,6 +2639,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene\Quit\TitleSceneQuit.cpp">
       <Filter>Game\Scene\TitleScene\Quit</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UIEditor\UIEditor.cpp">
+      <Filter>Game\UIEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3934,6 +3946,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UIEditor\UIEditor.h">
+      <Filter>Game\UIEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UIEditor\UIData\UIData.h">
+      <Filter>Game\UIEditor\UIData</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UIEditor\UISerializer\UISerializer.h">
+      <Filter>Game\UIEditor\UISerializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

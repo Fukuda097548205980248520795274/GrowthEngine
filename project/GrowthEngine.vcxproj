@@ -1202,6 +1202,7 @@
     <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
     <ClCompile Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.cpp" />
     <ClCompile Include="Game\StageObject\Wall\Wall.cpp" />
+    <ClCompile Include="Game\UIEditor\UIEditor.cpp" />
     <ClCompile Include="main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
@@ -1646,6 +1647,9 @@
     <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />
     <ClInclude Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.h" />
     <ClInclude Include="Game\StageObject\Wall\Wall.h" />
+    <ClInclude Include="Game\UIEditor\UIData\UIData.h" />
+    <ClInclude Include="Game\UIEditor\UIEditor.h" />
+    <ClInclude Include="Game\UIEditor\UISerializer\UISerializer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

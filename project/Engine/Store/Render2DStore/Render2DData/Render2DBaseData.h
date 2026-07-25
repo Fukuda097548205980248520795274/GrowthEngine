@@ -34,7 +34,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		Render2DBaseData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter);
+		Render2DBaseData(Render2DHandle hRender2D, std::string name);
 
 		/// @brief リセット
 		virtual void Reset() = 0;
@@ -65,12 +65,6 @@ namespace Engine
 		/// @brief 親を設定する
 		/// @param parent 
 		void SetParent(WorldTransform2D* parent) { parent_ = parent; }
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		virtual void DebugParameter() = 0;
 
 
 	protected:
@@ -110,11 +104,5 @@ namespace Engine
 
 		// 読み込んだかどうか
 		bool isLoad_ = false;
-
-
-	protected:
-
-		/// @brief パラメータ
-		Render2DParameter* parameter_ = nullptr;
 	};
 }

@@ -87,12 +87,6 @@ namespace Engine
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter();
-
 	private:
 
 		// 2D描画頂点シェーダ
@@ -124,11 +118,5 @@ namespace Engine
 
 		/// @brief インデックスリソース
 		std::unique_ptr<IndexBufferResource> indexResource_ = nullptr;
-
-
-	private:
-
-		// パラメータ
-		std::unique_ptr<Render2DParameter> parameter_ = nullptr;
 	};
 }

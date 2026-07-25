@@ -15,10 +15,7 @@ namespace Engine
 
 		/// @brief コンストラクタ
 		/// @param hSprite 
-		Render2DSpriteData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter) 
-			: Render2DBaseData(hRender2D, name, parameter) {
-			type_ = Render2D::Type::Sprite;
-		}
+		Render2DSpriteData(Render2DHandle hRender2D, std::string name) : Render2DBaseData(hRender2D, name) {type_ = Render2D::Type::Sprite;}
 
 		/// @brief 初期化
 		/// @param vertexResource 
@@ -37,12 +34,6 @@ namespace Engine
 		/// @brief パラメータを取得する
 		/// @return 
 		void* GetParam() override { return param_.get(); }
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter() override;
 
 
 	private:

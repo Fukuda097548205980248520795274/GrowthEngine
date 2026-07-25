@@ -72,14 +72,7 @@ void Engine::DX12Render::DebugParameter()
 		return;
 	}
 
-	ImGui::SeparatorText("Primitive");
-
 	render3DStore_->DebugParameter();
-
-	ImGui::Text("\n\n\n\n\n");
-	ImGui::SeparatorText("Sprite");
-
-	render2DStore_->DebugParameter();
 
 	// 終了
 	ImGui::End();

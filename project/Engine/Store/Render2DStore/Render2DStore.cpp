@@ -8,8 +8,7 @@
 /// @brief コンストラクタ
 Engine::Render2DStore::Render2DStore()
 {
-	// パラメータの生成
-	parameter_ = std::make_unique<Render2DParameter>("Sprite");
+	
 }
 
 /// @brief 初期化
@@ -109,7 +108,7 @@ Render2DHandle Engine::Render2DStore::Load(const std::string& name, Render2D::Ty
 	if (type == Render2D::Type::Sprite)
 	{
 		// データの生成と初期化
-		std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name, parameter_.get());
+		std::unique_ptr<Render2DSpriteData> data = std::make_unique<Render2DSpriteData>(handle, name);
 		data->Initialize(vertexResource_.get(), indexResource_.get(), textureStore, hTexture, device, log);
 		dataTable_.push_back(std::move(data));
 	}
@@ -143,12 +142,4 @@ void Engine::Render2DStore::Register(const std::string& name, Camera2DStore* cam
 	{
 		dataTable_[nameTable_[name]]->Register(cameraStore->GetCamera2D().GetCurrentVPMatrix(), commandList, psoRender2D_.get());
 	}
-}
-
-/// @brief デバッグ用パラメータ
-void Engine::Render2DStore::DebugParameter()
-{
-#ifdef DEVELOPMENT
-	for (auto& data : dataTable_)data->DebugParameter();
-#endif
 }

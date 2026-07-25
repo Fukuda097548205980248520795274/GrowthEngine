@@ -3,8 +3,8 @@
 
 /// @brief コンストラクタ
 /// @param hSprite 
-Engine::Render2DBaseData::Render2DBaseData(Render2DHandle hRender2D, std::string name, Render2DParameter* parameter) 
-	: hRender2D_(hRender2D), name_(name), parameter_(parameter) 
+Engine::Render2DBaseData::Render2DBaseData(Render2DHandle hRender2D, std::string name) 
+	: hRender2D_(hRender2D), name_(name)
 {
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
