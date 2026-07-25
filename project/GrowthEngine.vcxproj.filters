@@ -1450,13 +1450,16 @@
     <Filter Include="Game\Scene\TitleScene\Quit">
       <UniqueIdentifier>{caccbf08-e3d2-41b2-b560-add1c02b362b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UIEditor">
+    <Filter Include="Tool">
+      <UniqueIdentifier>{49b31f0e-93c5-480c-b84c-6e428d4a70d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\UIEditor">
       <UniqueIdentifier>{db5376fc-0c3b-43d9-a547-a9f2efdaeda9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UIEditor\UIData">
+    <Filter Include="Tool\UIEditor\UIData">
       <UniqueIdentifier>{4e735117-93d5-49f9-b522-ae74575b7782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UIEditor\UISerializer">
+    <Filter Include="Tool\UIEditor\UISerializer">
       <UniqueIdentifier>{91589ceb-94f3-4e8f-a804-9d31dd86350d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -2640,8 +2643,8 @@
     <ClCompile Include="Game\Scene\TitleScene\Quit\TitleSceneQuit.cpp">
       <Filter>Game\Scene\TitleScene\Quit</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UIEditor\UIEditor.cpp">
-      <Filter>Game\UIEditor</Filter>
+    <ClCompile Include="Tool\UIEditor\UIEditor.cpp">
+      <Filter>Tool\UIEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3947,14 +3950,14 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UIEditor\UIEditor.h">
-      <Filter>Game\UIEditor</Filter>
+    <ClInclude Include="Tool\UIEditor\UIEditor.h">
+      <Filter>Tool\UIEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UIEditor\UIData\UIData.h">
-      <Filter>Game\UIEditor\UIData</Filter>
+    <ClInclude Include="Tool\UIEditor\UIData\UIData.h">
+      <Filter>Tool\UIEditor\UIData</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UIEditor\UISerializer\UISerializer.h">
-      <Filter>Game\UIEditor\UISerializer</Filter>
+    <ClInclude Include="Tool\UIEditor\UISerializer\UISerializer.h">
+      <Filter>Tool\UIEditor\UISerializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
