@@ -256,10 +256,10 @@ void ModelEditor::DrawControlWindow()
 				newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
 			{
 				// モデルの選択コンボボックス
-				if (!modelNames_.empty())
+				if (!animationNames_.empty())
 				{
 					std::vector<const char*> items;
-					for (const auto& name : modelNames_)
+					for (const auto& name : animationNames_)
 					{
 						items.push_back(name.c_str());
 					}
@@ -275,10 +275,10 @@ void ModelEditor::DrawControlWindow()
 			if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
 			{
 				// モデルの選択コンボボックス
-				if (!modelNames_.empty())
+				if (!skeletonNames_.empty())
 				{
 					std::vector<const char*> items;
-					for (const auto& name : modelNames_)
+					for (const auto& name : skeletonNames_)
 					{
 						items.push_back(name.c_str());
 					}
@@ -405,21 +405,23 @@ void ModelEditor::DrawControlWindow()
 						newData.type = Engine::Render3D::Type::SkinningModel;
 						newData.render3D = std::make_unique<Render3DSkinningModel>(hModel, hAnimation, hSkeleton, newData.modelName);
 					}
-					else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::UVSphere))
-					{
-						newData.type = Engine::Render3D::Type::UVSphere;
-						newData.render3D = std::make_unique<Render3DUVSphere>(newData.modelName);
-					}
-					else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Ring))
-					{
-						newData.type = Engine::Render3D::Type::Ring;
-						newData.render3D = std::make_unique<Render3DRing>(newData.modelName);
-					}
-					else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Cylinder))
-					{
-						newData.type = Engine::Render3D::Type::Cylinder;
-						newData.render3D = std::make_unique<Render3DCylinder>(newData.modelName);
-					}
+				}
+				
+				// モデルの種類が UVSphere, Ring, Cylinder の場合は、特定のハンドルは不要
+				if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::UVSphere))
+				{
+					newData.type = Engine::Render3D::Type::UVSphere;
+					newData.render3D = std::make_unique<Render3DUVSphere>(newData.modelName);
+				}
+				else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Ring))
+				{
+					newData.type = Engine::Render3D::Type::Ring;
+					newData.render3D = std::make_unique<Render3DRing>(newData.modelName);
+				}
+				else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Cylinder))
+				{
+					newData.type = Engine::Render3D::Type::Cylinder;
+					newData.render3D = std::make_unique<Render3DCylinder>(newData.modelName);
 				}
 
 				modelElements_.push_back(std::move(newData));
@@ -470,7 +472,7 @@ void ModelEditor::DrawInspectorWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - インスペクター"))
+	if (ImGui::Begin("モデルエディタ - インスペクター"))
 	{
 		if (selectedElementIndex_ >= 0 && selectedElementIndex_ < modelElements_.size())
 		{
@@ -513,84 +515,11 @@ void ModelEditor::DrawInspectorWindow()
 				{
 					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
 					{
-						// トランスフォームの編集
-						ImGui::DragFloat3("位置 (Translate)", &param->meshTransforms[i].translate.x, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("大きさ (Scale)", &param->meshTransforms[i].scale.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("回転 (Rotate)", &param->meshTransforms[i].rotate.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-						// マテリアルの編集
-						ImGui::ColorEdit4("色 (Color)", &param->meshMaterial[i].color.x);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("ライティング有効", &param->meshMaterial[i].enableLighting);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("シャドウマップ描画", &param->meshMaterial[i].drawShadowMap);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						if (param->meshMaterial[i].enableLighting)
-						{
-							ImGui::Checkbox("ディフューズ有効", &param->meshMaterial[i].enableDiffuse);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							if (param->meshMaterial[i].enableDiffuse)
-							{
-								ImGui::Checkbox("ハーフランバート有効", &param->meshMaterial[i].enableHalfLambert);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("スペキュラー有効", &param->meshMaterial[i].enableSpecular);
-
-							if (param->meshMaterial[i].enableSpecular)
-							{
-								ImGui::Checkbox("ブリンフォン有効化", &param->meshMaterial[i].enableBlinnPhong);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-
-								ImGui::DragFloat("光沢度", &param->meshMaterial[i].shininess, 0.1f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("影", &param->meshMaterial[i].enableShadow);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							ImGui::SliderFloat("環境", &param->meshMaterial[i].environment, 0.0f, 1.0f);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
-
-
-						// ブラー
-						if (Engine::PostEffectStore::IsEnableMotionVector())
-						{
-							if (Engine::PostEffectStore::IsLoadAfterImage())
-							{
-								ImGui::DragFloat("残像", &param->meshBlur[i].afterImageMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							if (Engine::PostEffectStore::IsLoadMotionBlur())
-							{
-								ImGui::DragFloat("モーションブラー", &param->meshBlur[i].motionBlurMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-						}
-
-						// アウトライン描画
-						if (Engine::PostEffectStore::IsLoadOutline())
-						{
-							// アウトライン描画
-							ImGui::Checkbox("アウトライン描画", &param->meshOutline[i].enableOutline);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							// アウトラインの色
-							ImGui::ColorEdit4("アウトラインの色", &param->meshOutline[i].color.x);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
+						BlenderInspectorUI(&param->blendMode);
+						TransformInspectorUI(&param->meshTransforms[i]);
+						MaterialInspectorUI(&param->meshMaterial[i]);
+						BlurInspectorUI(&param->meshBlur[i]);
+						OutlineInspectorUI(&param->meshOutline[i]);
 
 						ImGui::TreePop();
 					}
@@ -606,84 +535,11 @@ void ModelEditor::DrawInspectorWindow()
 				{
 					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
 					{
-						// トランスフォームの編集
-						ImGui::DragFloat3("位置 (Translate)", &param->meshTransforms[i].translate.x, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("大きさ (Scale)", &param->meshTransforms[i].scale.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("回転 (Rotate)", &param->meshTransforms[i].rotate.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-						// マテリアルの編集
-						ImGui::ColorEdit4("色 (Color)", &param->meshMaterial[i].color.x);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("ライティング有効", &param->meshMaterial[i].enableLighting);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("シャドウマップ描画", &param->meshMaterial[i].drawShadowMap);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						if (param->meshMaterial[i].enableLighting)
-						{
-							ImGui::Checkbox("ディフューズ有効", &param->meshMaterial[i].enableDiffuse);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							if (param->meshMaterial[i].enableDiffuse)
-							{
-								ImGui::Checkbox("ハーフランバート有効", &param->meshMaterial[i].enableHalfLambert);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("スペキュラー有効", &param->meshMaterial[i].enableSpecular);
-
-							if (param->meshMaterial[i].enableSpecular)
-							{
-								ImGui::Checkbox("ブリンフォン有効化", &param->meshMaterial[i].enableBlinnPhong);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-
-								ImGui::DragFloat("光沢度", &param->meshMaterial[i].shininess, 0.1f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("影", &param->meshMaterial[i].enableShadow);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							ImGui::SliderFloat("環境", &param->meshMaterial[i].environment, 0.0f, 1.0f);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
-
-
-						// ブラー
-						if (Engine::PostEffectStore::IsEnableMotionVector())
-						{
-							if (Engine::PostEffectStore::IsLoadAfterImage())
-							{
-								ImGui::DragFloat("残像", &param->meshBlur[i].afterImageMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							if (Engine::PostEffectStore::IsLoadMotionBlur())
-							{
-								ImGui::DragFloat("モーションブラー", &param->meshBlur[i].motionBlurMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-						}
-
-						// アウトライン描画
-						if (Engine::PostEffectStore::IsLoadOutline())
-						{
-							// アウトライン描画
-							ImGui::Checkbox("アウトライン描画", &param->meshOutline[i].enableOutline);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							// アウトラインの色
-							ImGui::ColorEdit4("アウトラインの色", &param->meshOutline[i].color.x);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
+						BlenderInspectorUI(&param->blendMode);
+						TransformInspectorUI(&param->meshTransforms[i]);
+						MaterialInspectorUI(&param->meshMaterial[i]);
+						BlurInspectorUI(&param->meshBlur[i]);
+						OutlineInspectorUI(&param->meshOutline[i]);
 
 						ImGui::TreePop();
 					}
@@ -703,84 +559,11 @@ void ModelEditor::DrawInspectorWindow()
 				{
 					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
 					{
-						// トランスフォームの編集
-						ImGui::DragFloat3("位置 (Translate)", &param->meshTransforms[i].translate.x, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("大きさ (Scale)", &param->meshTransforms[i].scale.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat3("回転 (Rotate)", &param->meshTransforms[i].rotate.x, 0.01f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-						// マテリアルの編集
-						ImGui::ColorEdit4("色 (Color)", &param->meshMaterial[i].color.x);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("ライティング有効", &param->meshMaterial[i].enableLighting);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::Checkbox("シャドウマップ描画", &param->meshMaterial[i].drawShadowMap);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						if (param->meshMaterial[i].enableLighting)
-						{
-							ImGui::Checkbox("ディフューズ有効", &param->meshMaterial[i].enableDiffuse);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							if (param->meshMaterial[i].enableDiffuse)
-							{
-								ImGui::Checkbox("ハーフランバート有効", &param->meshMaterial[i].enableHalfLambert);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("スペキュラー有効", &param->meshMaterial[i].enableSpecular);
-
-							if (param->meshMaterial[i].enableSpecular)
-							{
-								ImGui::Checkbox("ブリンフォン有効化", &param->meshMaterial[i].enableBlinnPhong);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-
-								ImGui::DragFloat("光沢度", &param->meshMaterial[i].shininess, 0.1f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							ImGui::Checkbox("影", &param->meshMaterial[i].enableShadow);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							ImGui::SliderFloat("環境", &param->meshMaterial[i].environment, 0.0f, 1.0f);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
-
-
-						// ブラー
-						if (Engine::PostEffectStore::IsEnableMotionVector())
-						{
-							if (Engine::PostEffectStore::IsLoadAfterImage())
-							{
-								ImGui::DragFloat("残像", &param->meshBlur[i].afterImageMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-
-							if (Engine::PostEffectStore::IsLoadMotionBlur())
-							{
-								ImGui::DragFloat("モーションブラー", &param->meshBlur[i].motionBlurMask, 0.01f, 0.0f, 1.0f);
-								if (ImGui::IsItemActivated()) SaveHistoryState();
-							}
-						}
-
-						// アウトライン描画
-						if (Engine::PostEffectStore::IsLoadOutline())
-						{
-							// アウトライン描画
-							ImGui::Checkbox("アウトライン描画", &param->meshOutline[i].enableOutline);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-
-							// アウトラインの色
-							ImGui::ColorEdit4("アウトラインの色", &param->meshOutline[i].color.x);
-							if (ImGui::IsItemActivated()) SaveHistoryState();
-						}
+						BlenderInspectorUI(&param->blendMode);
+						TransformInspectorUI(&param->meshTransforms[i]);
+						MaterialInspectorUI(&param->meshMaterial[i]);
+						BlurInspectorUI(&param->meshBlur[i]);
+						OutlineInspectorUI(&param->meshOutline[i]);
 
 						ImGui::TreePop();
 					}
@@ -796,93 +579,23 @@ void ModelEditor::DrawInspectorWindow()
 				auto uvSphereModel = static_cast<Render3DUVSphere*>(selectedData.render3D.get());
 				auto param = uvSphereModel->param_;
 
-				// トランスフォームの編集
-				ImGui::DragFloat3("位置 (Translate)", &param->transform.translate.x, 1.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
+				BlenderInspectorUI(&param->blendMode);
+				TransformInspectorUI(&param->transform);
+				MaterialInspectorUI(&param->material);
 
-				ImGui::DragFloat3("大きさ (Scale)", &param->transform.scale.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat3("回転 (Rotate)", &param->transform.rotate.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// マテリアルの編集
-				ImGui::ColorEdit4("色 (Color)", &param->material.color.x);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("ライティング有効", &param->material.enableLighting);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("シャドウマップ描画", &param->material.drawShadowMap);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				if (param->material.enableLighting)
+				if (ImGui::TreeNode("分割"))
 				{
-					ImGui::Checkbox("ディフューズ有効", &param->material.enableDiffuse);
+					ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					if (param->material.enableDiffuse)
-					{
-						ImGui::Checkbox("ハーフランバート有効", &param->material.enableHalfLambert);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					ImGui::Checkbox("スペキュラー有効", &param->material.enableSpecular);
-
-					if (param->material.enableSpecular)
-					{
-						ImGui::Checkbox("ブリンフォン有効化", &param->material.enableBlinnPhong);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat("光沢度", &param->material.shininess, 0.1f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					ImGui::Checkbox("影", &param->material.enableShadow);
+					ImGui::DragInt("リング", &param->division.rings, 1, 3, 16);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					ImGui::SliderFloat("環境", &param->material.environment, 0.0f, 1.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					ImGui::TreePop();
 				}
 
-
-				// スライス
-				ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				// リング
-				ImGui::DragInt("リング", &param->division.rings, 1, 3, 16);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// ブラー
-				if (Engine::PostEffectStore::IsEnableMotionVector())
-				{
-					if (Engine::PostEffectStore::IsLoadAfterImage())
-					{
-						ImGui::DragFloat("残像", &param->blur.afterImageMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					if (Engine::PostEffectStore::IsLoadMotionBlur())
-					{
-						ImGui::DragFloat("モーションブラー", &param->blur.motionBlurMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-				}
-
-				// アウトライン描画
-				if (Engine::PostEffectStore::IsLoadOutline())
-				{
-					// アウトライン描画
-					ImGui::Checkbox("アウトライン描画", &param->outline.enableOutline);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
-
-					// アウトラインの色
-					ImGui::ColorEdit4("アウトラインの色", &param->outline.color.x);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
-				}
+				BlurInspectorUI(&param->blur);
+				OutlineInspectorUI(&param->outline);
 			}
 			else if (selectedData.render3D->GetType() == Engine::Render3D::Type::Ring)
 			{
@@ -890,109 +603,44 @@ void ModelEditor::DrawInspectorWindow()
 				auto ringModel = static_cast<Render3DRing*>(selectedData.render3D.get());
 				auto param = ringModel->param_;
 
-				// トランスフォームの編集
-				ImGui::DragFloat3("位置 (Translate)", &param->transform.translate.x, 1.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
+				BlenderInspectorUI(&param->blendMode);
+				TransformInspectorUI(&param->transform);
+				MaterialInspectorUI(&param->material);
 
-				ImGui::DragFloat3("大きさ (Scale)", &param->transform.scale.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat3("回転 (Rotate)", &param->transform.rotate.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// マテリアルの編集
-				ImGui::ColorEdit4("色 (Color)", &param->material.color.x);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("ライティング有効", &param->material.enableLighting);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("シャドウマップ描画", &param->material.drawShadowMap);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				if (param->material.enableLighting)
+				if (ImGui::TreeNode("分割"))
 				{
-					ImGui::Checkbox("ディフューズ有効", &param->material.enableDiffuse);
+					ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					if (param->material.enableDiffuse)
-					{
-						ImGui::Checkbox("ハーフランバート有効", &param->material.enableHalfLambert);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
+					ImGui::TreePop();
+				}
 
-					ImGui::Checkbox("スペキュラー有効", &param->material.enableSpecular);
-
-					if (param->material.enableSpecular)
-					{
-						ImGui::Checkbox("ブリンフォン有効化", &param->material.enableBlinnPhong);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat("光沢度", &param->material.shininess, 0.1f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					ImGui::Checkbox("影", &param->material.enableShadow);
+				if (ImGui::TreeNode("サイズ"))
+				{
+					ImGui::DragFloat("最初の内半径", &param->size.startInRadius, 0.01f, 0.0f, 1000.0f);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					ImGui::SliderFloat("環境", &param->material.environment, 0.0f, 1.0f);
+					ImGui::DragFloat("最初の外半径", &param->size.startOutRadius, 0.01f, 0.0f, 1000.0f);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::DragFloat("最初の角度", &param->size.startAngle, 0.01f, 0.0f, 360.0f);
+					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::DragFloat("最後の内半径", &param->size.endInRadius, 0.01f, 0.0f, 1000.0f);
+					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::DragFloat("最後の外半径", &param->size.endOutRadius, 0.01f, 0.0f, 1000.0f);
+					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::DragFloat("最後の角度", &param->size.endAngle, 0.01f, 0.0f, 360.0f);
+					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::TreePop();
 				}
 
 
-				// スライス
-				ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// 最初の内半径
-				ImGui::DragFloat("最初の内半径", &param->size.startInRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("最初の外半径", &param->size.startOutRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("最初の角度", &param->size.startAngle, 0.01f, 0.0f, 360.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("最後の内半径", &param->size.endInRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("最後の外半径", &param->size.endOutRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("最後の角度", &param->size.endAngle, 0.01f, 0.0f, 360.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// ブラー
-				if (Engine::PostEffectStore::IsEnableMotionVector())
-				{
-					if (Engine::PostEffectStore::IsLoadAfterImage())
-					{
-						ImGui::DragFloat("残像", &param->blur.afterImageMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					if (Engine::PostEffectStore::IsLoadMotionBlur())
-					{
-						ImGui::DragFloat("モーションブラー", &param->blur.motionBlurMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-				}
-
-				// アウトライン描画
-				if (Engine::PostEffectStore::IsLoadOutline())
-				{
-					// アウトライン描画
-					ImGui::Checkbox("アウトライン描画", &param->outline.enableOutline);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
-
-					// アウトラインの色
-					ImGui::ColorEdit4("アウトラインの色", &param->outline.color.x);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
-				}
+				BlurInspectorUI(&param->blur);
+				OutlineInspectorUI(&param->outline);
 			}
 			else if (selectedData.render3D->GetType() == Engine::Render3D::Type::Cylinder)
 			{
@@ -1000,101 +648,34 @@ void ModelEditor::DrawInspectorWindow()
 				auto cylinderModel = static_cast<Render3DCylinder*>(selectedData.render3D.get());
 				auto param = cylinderModel->param_;
 
+				BlenderInspectorUI(&param->blendMode);
+				TransformInspectorUI(&param->transform);
+				MaterialInspectorUI(&param->material);
 
-				// トランスフォームの編集
-				ImGui::DragFloat3("位置 (Translate)", &param->transform.translate.x, 1.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat3("大きさ (Scale)", &param->transform.scale.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat3("回転 (Rotate)", &param->transform.rotate.x, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// マテリアルの編集
-				ImGui::ColorEdit4("色 (Color)", &param->material.color.x);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("ライティング有効", &param->material.enableLighting);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::Checkbox("シャドウマップ描画", &param->material.drawShadowMap);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				if (param->material.enableLighting)
+				if (ImGui::TreeNode("分割"))
 				{
-					ImGui::Checkbox("ディフューズ有効", &param->material.enableDiffuse);
+					ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					if (param->material.enableDiffuse)
-					{
-						ImGui::Checkbox("ハーフランバート有効", &param->material.enableHalfLambert);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					ImGui::Checkbox("スペキュラー有効", &param->material.enableSpecular);
-
-					if (param->material.enableSpecular)
-					{
-						ImGui::Checkbox("ブリンフォン有効化", &param->material.enableBlinnPhong);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-
-						ImGui::DragFloat("光沢度", &param->material.shininess, 0.1f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					ImGui::Checkbox("影", &param->material.enableShadow);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
-
-					ImGui::SliderFloat("環境", &param->material.environment, 0.0f, 1.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					ImGui::TreePop();
 				}
 
-
-				// スライス
-				ImGui::DragInt("スライス", &param->division.slices, 1, 3, 32);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// サイズ
-				ImGui::DragFloat("上半径", &param->size.topRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("下半径", &param->size.bottomRadius, 0.01f, 0.0f, 1000.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-				ImGui::DragFloat("高さ", &param->size.height, 0.01f, 0.0f, 360.0f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
-
-
-				// ブラー
-				if (Engine::PostEffectStore::IsEnableMotionVector())
+				if (ImGui::TreeNode("サイズ"))
 				{
-					if (Engine::PostEffectStore::IsLoadAfterImage())
-					{
-						ImGui::DragFloat("残像", &param->blur.afterImageMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-
-					if (Engine::PostEffectStore::IsLoadMotionBlur())
-					{
-						ImGui::DragFloat("モーションブラー", &param->blur.motionBlurMask, 0.01f, 0.0f, 1.0f);
-						if (ImGui::IsItemActivated()) SaveHistoryState();
-					}
-				}
-
-				// アウトライン描画
-				if (Engine::PostEffectStore::IsLoadOutline())
-				{
-					// アウトライン描画
-					ImGui::Checkbox("アウトライン描画", &param->outline.enableOutline);
+					ImGui::DragFloat("上半径", &param->size.topRadius, 0.01f, 0.0f, 1000.0f);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
 
-					// アウトラインの色
-					ImGui::ColorEdit4("アウトラインの色", &param->outline.color.x);
+					ImGui::DragFloat("下半径", &param->size.bottomRadius, 0.01f, 0.0f, 1000.0f);
 					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::DragFloat("高さ", &param->size.height, 0.01f, 0.0f, 360.0f);
+					if (ImGui::IsItemActivated()) SaveHistoryState();
+
+					ImGui::TreePop();
 				}
+
+				BlurInspectorUI(&param->blur);
+				OutlineInspectorUI(&param->outline);
 			}
 
 
@@ -1307,4 +888,127 @@ void ModelEditor::Redo()
 	redoStack_.pop_back();
 
 	if (selectedElementIndex_ >= modelElements_.size()) selectedElementIndex_ = -1;
+}
+
+/// @brief ブレンドモードのインスペクターウィンドウ描画
+/// @param blendMode 
+void ModelEditor::BlenderInspectorUI(BlendMode* blendMode)
+{
+	const char* blendModeNames[] = { "なし", "ノーマル", "加算", "減算", "乗算", "スクリーン" };
+	ImGui::Combo("ブレンドモード", reinterpret_cast<int*>(blendMode), blendModeNames, IM_ARRAYSIZE(blendModeNames));
+}
+
+/// @brief トランスフォームのインスペクターウィンドウ描画
+/// @param transform 
+void ModelEditor::TransformInspectorUI(Engine::Render3D::Transform* transform)
+{
+	if (ImGui::TreeNode("トランスフォーム"))
+	{
+		// トランスフォームの編集
+		ImGui::DragFloat3("位置", &transform->translate.x, 1.0f);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		ImGui::DragFloat3("大きさ", &transform->scale.x, 0.01f);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		ImGui::DragFloat3("回転", &transform->rotate.x, 0.01f);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		ImGui::TreePop();
+	}
+}
+
+/// @brief マテリアルのインスペクターウィンドウ描画
+/// @param material 
+void ModelEditor::MaterialInspectorUI(Engine::Render3D::Material* material)
+{
+	if (ImGui::TreeNode("マテリアル"))
+	{
+		ImGui::ColorEdit4("色 (Color)", &material->color.x);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		ImGui::Checkbox("ライティング有効", &material->enableLighting);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		ImGui::Checkbox("シャドウマップ描画", &material->drawShadowMap);
+		if (ImGui::IsItemActivated()) SaveHistoryState();
+
+		if (material->enableLighting)
+		{
+			ImGui::Checkbox("ディフューズ有効", &material->enableDiffuse);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			if (material->enableDiffuse)
+			{
+				ImGui::Checkbox("ハーフランバート有効", &material->enableHalfLambert);
+				if (ImGui::IsItemActivated()) SaveHistoryState();
+			}
+
+			ImGui::Checkbox("スペキュラー有効", &material->enableSpecular);
+
+			if (material->enableSpecular)
+			{
+				ImGui::Checkbox("ブリンフォン有効化", &material->enableBlinnPhong);
+				if (ImGui::IsItemActivated()) SaveHistoryState();
+
+				ImGui::DragFloat("光沢度", &material->shininess, 0.1f);
+				if (ImGui::IsItemActivated()) SaveHistoryState();
+			}
+
+			ImGui::Checkbox("影", &material->enableShadow);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			ImGui::SliderFloat("環境", &material->environment, 0.0f, 1.0f);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+		}
+
+		ImGui::TreePop();
+	}
+}
+
+/// @brief ブラーのインスペクターウィンドウ描画
+/// @param blur 
+void ModelEditor::BlurInspectorUI(Engine::Render3D::Blur* blur)
+{
+	if (Engine::PostEffectStore::IsEnableMotionVector())
+	{
+		if (ImGui::TreeNode("ブラー"))
+		{
+			if (Engine::PostEffectStore::IsLoadAfterImage())
+			{
+				ImGui::DragFloat("残像", &blur->afterImageMask, 0.01f, 0.0f, 1.0f);
+				if (ImGui::IsItemActivated()) SaveHistoryState();
+			}
+
+			if (Engine::PostEffectStore::IsLoadMotionBlur())
+			{
+				ImGui::DragFloat("モーションブラー", &blur->motionBlurMask, 0.01f, 0.0f, 1.0f);
+				if (ImGui::IsItemActivated()) SaveHistoryState();
+			}
+
+			ImGui::TreePop();
+		}
+	}
+}
+
+/// @brief アウトラインのインスペクターウィンドウ描画
+/// @param outline 
+void ModelEditor::OutlineInspectorUI(Engine::Render3D::Outline* outline)
+{
+	// アウトライン描画
+	if (Engine::PostEffectStore::IsLoadOutline())
+	{
+		if (ImGui::TreeNode("ブラー"))
+		{
+			// アウトライン描画
+			ImGui::Checkbox("アウトライン描画", &outline->enableOutline);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			// アウトラインの色
+			ImGui::ColorEdit4("アウトラインの色", &outline->color.x);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			ImGui::TreePop();
+		}
+	}
 }

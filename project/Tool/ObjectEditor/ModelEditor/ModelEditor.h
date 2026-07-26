@@ -86,6 +86,29 @@ private:
 
 private:
 
+	/// @brief ブレンドモードのインスペクターウィンドウ描画
+	/// @param blendMode 
+	void BlenderInspectorUI(BlendMode* blendMode);
+
+	/// @brief トランスフォームのインスペクターウィンドウ描画
+	/// @param transform 
+	void TransformInspectorUI(Engine::Render3D::Transform* transform);
+
+	/// @brief マテリアルのインスペクターウィンドウ描画
+	/// @param material 
+	void MaterialInspectorUI(Engine::Render3D::Material* material);
+
+	/// @brief ブラーのインスペクターウィンドウ描画
+	/// @param blur 
+	void BlurInspectorUI(Engine::Render3D::Blur* blur);
+
+	/// @brief アウトラインのインスペクターウィンドウ描画
+	/// @param outline 
+	void OutlineInspectorUI(Engine::Render3D::Outline* outline);
+
+
+private:
+
 	// 保存・読み込み用のファイル名
 	char saveFilename_[128] = "model_new";
 

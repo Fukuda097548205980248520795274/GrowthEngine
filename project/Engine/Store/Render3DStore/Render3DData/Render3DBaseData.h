@@ -42,7 +42,7 @@ namespace Engine
 		/// @param name 
 		/// @param hRender3D 
 		/// @param parameter 
-		Render3DBaseData(const std::string& name, Render3DHandle hRender3D, Render3DParameter* parameter);
+		Render3DBaseData(const std::string& name, Render3DHandle hRender3D);
 
 		/// @brief 仮想デストラクタ
 		virtual ~Render3DBaseData() = default;
@@ -110,22 +110,10 @@ namespace Engine
 		virtual Matrix4x4 GetBoneWorldMatrix(const std::string& name) { return MakeIdentityMatrix4x4(); }
 
 
-	public:
-
-		/// @brief デバッグ用パラメータ
-		virtual void DebugParameter() = 0;
-
-
 	protected:
 
 		/// @brief エンジン
 		const GrowthEngine* engine_ = nullptr;
-
-		/// @brief パラメータ
-		Render3DParameter* parameter_ = nullptr;
-
-
-	protected:
 
 		// 種別名
 		Render3D::Type type_;

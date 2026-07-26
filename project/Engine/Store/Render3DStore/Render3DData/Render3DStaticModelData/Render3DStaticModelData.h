@@ -19,8 +19,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		Render3DStaticModelData(const std::string& name , ModelHandle hModel, Render3DHandle hRender3D, Render3DParameter* parameter)
-			: hModel_(hModel), Render3DBaseData(name, hRender3D,parameter) { type_ = Render3D::Type::StaticModel; }
+		Render3DStaticModelData(const std::string& name , ModelHandle hModel, Render3DHandle hRender3D)
+			: hModel_(hModel), Render3DBaseData(name, hRender3D) { type_ = Render3D::Type::StaticModel; }
 
 		/// @brief 初期化
 		/// @param modelStore 
@@ -60,12 +60,6 @@ namespace Engine
 		/// @param cameraStore 
 		/// @param pso 
 		void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) override;
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter() override;
 
 
 	private:

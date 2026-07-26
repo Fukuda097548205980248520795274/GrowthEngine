@@ -232,12 +232,6 @@ namespace Engine
 		void DrawOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) { render3DStore_->DrawOutline(commandList, pso); }
 
 
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter();
-
-
 		template <typename T>
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 

@@ -59,23 +59,3 @@ void Engine::DX12Render::DrawMotionVector(ID3D12GraphicsCommandList* commandList
 {
 	render3DStore_->DrawMotionVector(commandList, pso);
 }
-
-/// @brief デバッグ用パラメータ
-void Engine::DX12Render::DebugParameter()
-{
-#ifdef DEVELOPMENT
-
-	// メニューバーを使用する
-	if (!ImGui::Begin("Model"))
-	{
-		ImGui::End();
-		return;
-	}
-
-	render3DStore_->DebugParameter();
-
-	// 終了
-	ImGui::End();
-
-#endif
-}

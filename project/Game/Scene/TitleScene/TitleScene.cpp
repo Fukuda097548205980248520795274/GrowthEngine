@@ -49,6 +49,9 @@ void TitleScene::Initialize()
 
 			// UIエディタのUI描画処理を呼び出す
 			modelEditor_->DrawUI();
+
+			// UIの描画処理を呼び出す
+			modelEditor_->Draw();
 		}
 	);
 
@@ -63,9 +66,6 @@ void TitleScene::Initialize()
 	engine_->LoadRenderPass("HUD", [&]()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
-
-			// UIの描画処理を呼び出す
-			modelEditor_->Draw();
 
 		}
 	);

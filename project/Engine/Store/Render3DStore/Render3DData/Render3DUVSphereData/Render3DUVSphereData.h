@@ -19,8 +19,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hTexture 
-		Render3DUVSphereData(const std::string& name, TextureHandle hTexture, Render3DHandle hRender3D, Render3DParameter* parameter)
-			: hTexture_(hTexture), Render3DBaseData(name, hRender3D, parameter) {
+		Render3DUVSphereData(const std::string& name, TextureHandle hTexture, Render3DHandle hRender3D)
+			: hTexture_(hTexture), Render3DBaseData(name, hRender3D) {
 			type_ = Render3D::Type::UVSphere;
 		}
 
@@ -62,12 +62,6 @@ namespace Engine
 		/// @param cameraStore 
 		/// @param pso 
 		void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) override;
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter() override;
 
 
 	private:
@@ -131,9 +125,6 @@ namespace Engine
 
 
 	private:
-
-		// CSUV球PSO
-		BaseComputePSO* psoUVSphere_ = nullptr;
 
 		/// @brief テクスチャストア
 		TextureStore* textureStore_ = nullptr;

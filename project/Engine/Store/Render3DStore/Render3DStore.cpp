@@ -13,8 +13,6 @@
 /// @brief コンストラクタ
 Engine::Render3DStore::Render3DStore()
 {
-	// パラメータの生成
-	parameter_ = std::make_unique<Render3DParameter>("Primitive");
 }
 
 /// @brief 初期化
@@ -55,11 +53,6 @@ void Engine::Render3DStore::Initialize(ID3D12Device* device, ShaderCompiler* com
 	// 3D描画PSOの生成と初期化
 	psoRender3D_ = std::make_unique<PSORender3D>();
 	psoRender3D_->Initialize(device, render3DVS_.Get(), render3DPS_.Get(), log);
-
-
-	// CSUVS球PSOの生成と初期化
-	psoUVSphere_ = std::make_unique<ComputePSOUVSphere>();
-	psoUVSphere_->Initialize(device, compiler, log);
 
 	// スキニングPSOの生成と初期化
 	psoSkinning_ = std::make_unique<ComputePSOSkinning>();
@@ -152,7 +145,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// 静的モデル
 	if (type == Render3D::Type::StaticModel)
 	{
-		std::unique_ptr<Render3DStaticModelData> data = std::make_unique<Render3DStaticModelData>(name, hModel, handle, parameter_.get());
+		std::unique_ptr<Render3DStaticModelData> data = std::make_unique<Render3DStaticModelData>(name, hModel, handle);
 		data->Initialize(modelStore_, textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -161,7 +154,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// アニメーションモデル
 	if (type == Render3D::Type::AnimationModel)
 	{
-		std::unique_ptr<Render3DAnimationModelData> data = std::make_unique<Render3DAnimationModelData>(name, hModel, hAnimation, handle, parameter_.get());
+		std::unique_ptr<Render3DAnimationModelData> data = std::make_unique<Render3DAnimationModelData>(name, hModel, hAnimation, handle);
 		data->Initialize(modelStore_, textureStore_, animationStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -170,7 +163,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// スキニングモデル
 	if (type == Render3D::Type::SkinningModel)
 	{
-		std::unique_ptr<Render3DSkinningModelData> data = std::make_unique<Render3DSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle, parameter_.get());
+		std::unique_ptr<Render3DSkinningModelData> data = std::make_unique<Render3DSkinningModelData>(name, hModel,hAnimation, hSkeleton, handle);
 		data->Initialize(modelStore_, textureStore_, animationStore_, skeletonStore_, lightStore_, heap_, device, commandList, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -179,7 +172,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// UV球
 	if (type == Render3D::Type::UVSphere)
 	{
-		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle, parameter_.get());
+		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -188,7 +181,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// リング
 	if (type == Render3D::Type::Ring)
 	{
-		std::unique_ptr<Render3DRingData> data = std::make_unique<Render3DRingData>(name, hTexture, handle, parameter_.get());
+		std::unique_ptr<Render3DRingData> data = std::make_unique<Render3DRingData>(name, hTexture, handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -197,7 +190,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// 円柱
 	if (type == Render3D::Type::Cylinder)
 	{
-		std::unique_ptr<Render3DCylinderData> data = std::make_unique<Render3DCylinderData>(name, hTexture, handle, parameter_.get());
+		std::unique_ptr<Render3DCylinderData> data = std::make_unique<Render3DCylinderData>(name, hTexture, handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -227,13 +220,4 @@ void Engine::Render3DStore::Register(Camera3DStore* cameraStore, SkyboxStore* sk
 {
 	// コマンドリストの登録する
 	dataTable_[nameTable_[name]]->Register(cameraStore, skyboxStore, commandList, psoRender3D_.get());
-}
-
-/// @brief デバッグパラメータ
-void Engine::Render3DStore::DebugParameter()
-{
-#ifdef DEVELOPMENT
-	// データ更新
-	for (auto& data : dataTable_)data->DebugParameter();
-#endif
 }

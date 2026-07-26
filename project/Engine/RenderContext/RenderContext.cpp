@@ -243,7 +243,6 @@ void Engine::RenderContext::PreDraw()
 	// パラメータやGuizmo操作などのデバッグ表示
 #ifdef DEVELOPMENT
 	camera3DStore_->DebugParameter();
-	render_->DebugParameter();
 	prefab_->DebugParameter();
 	offscreen_->DebugParameter();
 	particle_->DebugParameter();

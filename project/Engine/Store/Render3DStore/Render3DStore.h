@@ -145,12 +145,6 @@ namespace Engine
 		using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter();
-
-
 	private:
 
 		// データテーブル
@@ -158,10 +152,6 @@ namespace Engine
 
 		// 名前テーブル
 		std::unordered_map<std::string, Render3DHandle> nameTable_;
-
-
-		// プリミティブ用パラメータ
-		std::unique_ptr<Render3DParameter> parameter_ = nullptr;
 
 
 	private:
@@ -177,10 +167,6 @@ namespace Engine
 
 		// 3DD描画PSO
 		std::unique_ptr<PSORender3D> psoRender3D_ = nullptr;
-
-
-		// CSUV球PSO
-		std::unique_ptr<ComputePSOUVSphere> psoUVSphere_ = nullptr;
 
 		// CSスキニングPSO
 		std::unique_ptr<ComputePSOSkinning> psoSkinning_ = nullptr;

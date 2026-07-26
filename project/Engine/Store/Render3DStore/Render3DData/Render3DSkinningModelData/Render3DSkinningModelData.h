@@ -24,8 +24,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		Render3DSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, Render3DHandle hRender3D, Render3DParameter* parameter)
-			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), Render3DBaseData(name, hRender3D, parameter) {
+		Render3DSkinningModelData(const std::string& name, ModelHandle hModel,AnimationHandle hAnimation, SkeletonHandle hSkeleton, Render3DHandle hRender3D)
+			: hModel_(hModel),hAnimation_(hAnimation), hSkeleton_(hSkeleton), Render3DBaseData(name, hRender3D) {
 			type_ = Render3D::Type::SkinningModel;
 		}
 
@@ -75,12 +75,6 @@ namespace Engine
 		/// @param name 
 		/// @return 
 		Matrix4x4 GetBoneWorldMatrix(const std::string& name) override;
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter() override;
 
 
 	private:

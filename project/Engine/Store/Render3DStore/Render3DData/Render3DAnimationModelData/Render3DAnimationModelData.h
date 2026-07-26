@@ -20,8 +20,8 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hModel 
-		Render3DAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, Render3DHandle hRender3D, Render3DParameter* parameter)
-			: hModel_(hModel),hAnimation_(hAnimation), Render3DBaseData(name, hRender3D, parameter) {
+		Render3DAnimationModelData(const std::string& name, ModelHandle hModel, AnimationHandle hAnimation, Render3DHandle hRender3D)
+			: hModel_(hModel),hAnimation_(hAnimation), Render3DBaseData(name, hRender3D) {
 			type_ = Render3D::Type::AnimationModel;
 		}
 
@@ -62,12 +62,6 @@ namespace Engine
 		/// @param cameraStore 
 		/// @param pso 
 		void RegisterOutline(ID3D12GraphicsCommandList* commandList, BasePSOOutline* pso) override;
-
-
-	public:
-
-		/// @brief デバッグ用パラメータ
-		void DebugParameter() override;
 
 
 	private:
