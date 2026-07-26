@@ -97,10 +97,10 @@ namespace Engine
 		/// @param log 
 		/// @return 
 		Render3DHandle LoadRender3D(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton,
+			ModelHandle hModel, AnimationHandle hAnimation,SkeletonHandle hSkeleton,
 			const std::string& name, Render3D::Type type, Log* log)
 		{
-			return render3DStore_->Load(device, commandList, hTexture, hModel, hAnimation, hSkeleton, name, type, log);
+			return render3DStore_->Load(device, commandList,hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
 		/// @brief 2D描画読み込み

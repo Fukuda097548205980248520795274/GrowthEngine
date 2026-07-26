@@ -576,9 +576,9 @@ public:
 	/// @param name 
 	/// @param type 
 	/// @return 
-	Render3DHandle LoadRender3D(TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Engine::Render3D::Type type) const
+	Render3DHandle LoadRender3D(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Engine::Render3D::Type type) const
 	{
-		return renderContext_->LoadRender3D(hTexture, hModel, hAnimation, hSkeleton, name, type, log_.get());
+		return renderContext_->LoadRender3D(hModel, hAnimation, hSkeleton, name, type, log_.get());
 	}
 
 	/// @brief プリミティブを描画する
@@ -1099,7 +1099,7 @@ public:
 	/// @return 
 	Render3DHandle LoadPrimitiveStaticModel(ModelHandle hModel, const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(0, hModel, 0, 0, name, Engine::Render3D::Type::StaticModel, log_.get());
+		return renderContext_->LoadRender3D(hModel, 0, 0, name, Engine::Render3D::Type::StaticModel, log_.get());
 	}
 
 	/// @brief プリミティブのアニメーションモデルを読み込む
@@ -1109,7 +1109,7 @@ public:
 	/// @return 
 	Render3DHandle LoadPrimitiveAnimationModel(ModelHandle hModel, AnimationHandle hAnimation, const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(0, hModel, hAnimation, 0, name, Engine::Render3D::Type::AnimationModel, log_.get());
+		return renderContext_->LoadRender3D(hModel, hAnimation, 0, name, Engine::Render3D::Type::AnimationModel, log_.get());
 	}
 
 	/// @brief プリミティブのスキニングモデルを読み込む
@@ -1120,34 +1120,34 @@ public:
 	/// @return 
 	Render3DHandle LoadPrimitiveSkinningModel(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(0, hModel, hAnimation, hSkeleton, name, Engine::Render3D::Type::SkinningModel, log_.get());
+		return renderContext_->LoadRender3D(hModel, hAnimation, hSkeleton, name, Engine::Render3D::Type::SkinningModel, log_.get());
 	}
 
 	/// @brief UV球を読み込む
 	/// @param hTexture 
 	/// @param name 
 	/// @return 
-	Render3DHandle LoadUVSphere(TextureHandle hTexture, const std::string& name) const
+	Render3DHandle LoadUVSphere(const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::UVSphere, log_.get());
+		return renderContext_->LoadRender3D(0, 0, 0, name, Engine::Render3D::Type::UVSphere, log_.get());
 	}
 
 	/// @brief リングを読み込む
 	/// @param hTexture 
 	/// @param name 
 	/// @return 
-	Render3DHandle LoadRing(TextureHandle hTexture, const std::string& name) const
+	Render3DHandle LoadRing(const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::Ring, log_.get());
+		return renderContext_->LoadRender3D(0, 0, 0, name, Engine::Render3D::Type::Ring, log_.get());
 	}
 
 	/// @brief 円柱を読み込む
 	/// @param hTexture 
 	/// @param name 
 	/// @return 
-	Render3DHandle LoadCylinder(TextureHandle hTexture, const std::string& name) const
+	Render3DHandle LoadCylinder(const std::string& name) const
 	{
-		return renderContext_->LoadRender3D(hTexture, 0, 0, 0, name, Engine::Render3D::Type::Cylinder, log_.get());
+		return renderContext_->LoadRender3D(0, 0, 0, name, Engine::Render3D::Type::Cylinder, log_.get());
 	}
 
 	/// @brief スプライトを読み込む

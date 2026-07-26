@@ -80,7 +80,7 @@ namespace Engine
 		/// @param log 
 		/// @return 
 		Render3DHandle Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-			TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+			ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 			const std::string& name, Render3D::Type type, Log* log);
 
 		/// @brief コマンドリストに登録する

@@ -121,7 +121,7 @@ void Engine::Render3DStore::DrawOutline(ID3D12GraphicsCommandList* commandList, 
 /// @param log 
 /// @return 
 Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsCommandList* commandList,
-	TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
+	ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton,
 	const std::string& name, Render3D::Type type, Log* log)
 {
 	// 同じデータがあるかどうか
@@ -172,7 +172,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// UV球
 	if (type == Render3D::Type::UVSphere)
 	{
-		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name, hTexture, handle);
+		std::unique_ptr<Render3DUVSphereData> data = std::make_unique<Render3DUVSphereData>(name,handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -181,7 +181,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// リング
 	if (type == Render3D::Type::Ring)
 	{
-		std::unique_ptr<Render3DRingData> data = std::make_unique<Render3DRingData>(name, hTexture, handle);
+		std::unique_ptr<Render3DRingData> data = std::make_unique<Render3DRingData>(name,handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;
@@ -190,7 +190,7 @@ Render3DHandle Engine::Render3DStore::Load(ID3D12Device* device, ID3D12GraphicsC
 	// 円柱
 	if (type == Render3D::Type::Cylinder)
 	{
-		std::unique_ptr<Render3DCylinderData> data = std::make_unique<Render3DCylinderData>(name, hTexture, handle);
+		std::unique_ptr<Render3DCylinderData> data = std::make_unique<Render3DCylinderData>(name,handle);
 		data->Initialize(textureStore_, lightStore_, device, log);
 		dataTable_.push_back(std::move(data));
 		return handle;

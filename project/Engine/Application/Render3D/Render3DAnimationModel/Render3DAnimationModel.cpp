@@ -13,7 +13,7 @@ Render3DAnimationModel::Render3DAnimationModel(ModelHandle hModel, AnimationHand
 	type_ = Engine::Render3D::Type::AnimationModel;
 
 	// 読み込み
-	hRender3D_ = engine_->LoadRender3D(0, hModel, hAnimation,0, name_, type_);
+	hRender3D_ = engine_->LoadRender3D(hModel, hAnimation,0, name_, type_);
 
 	// パラメータを取得する
 	param_ = engine_->GetRender3DParam<Engine::Render3D::AnimationModel::Param>(hRender3D_);

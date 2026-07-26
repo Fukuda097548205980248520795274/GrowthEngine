@@ -265,9 +265,9 @@ namespace Engine
 		/// @param type 
 		/// @param log 
 		/// @return 
-		Render3DHandle LoadRender3D(TextureHandle hTexture, ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Render3D::Type type, Log* log)
+		Render3DHandle LoadRender3D(ModelHandle hModel, AnimationHandle hAnimation, SkeletonHandle hSkeleton, const std::string& name, Render3D::Type type, Log* log)
 		{
-			return render_->LoadRender3D(core_->GetDevice(), commandList_, hTexture, hModel, hAnimation, hSkeleton, name, type, log);
+			return render_->LoadRender3D(core_->GetDevice(), commandList_, hModel, hAnimation, hSkeleton, name, type, log);
 		}
 
 		/// @brief スプライト読み込み

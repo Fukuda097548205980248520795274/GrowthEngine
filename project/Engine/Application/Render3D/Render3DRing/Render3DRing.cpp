@@ -13,7 +13,7 @@ Render3DRing::Render3DRing(const std::string& name) : BaseRender3D(name)
 	type_ = Engine::Render3D::Type::Ring;
 
 	// 読み込み
-	hRender3D_ = engine_->LoadRender3D(0, 0, 0, 0, name_, type_);
+	hRender3D_ = engine_->LoadRender3D(0, 0, 0, name_, type_);
 
 	// パラメータを取得する
 	param_ = engine_->GetRender3DParam<Engine::Render3D::Ring::Param>(hRender3D_);

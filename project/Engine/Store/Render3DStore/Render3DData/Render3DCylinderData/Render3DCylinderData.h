@@ -17,10 +17,7 @@ namespace Engine
 		/// @brief コンストラクタ
 		/// @param name 
 		/// @param hTexture 
-		Render3DCylinderData(const std::string& name, TextureHandle hTexture, Render3DHandle hRender3D)
-			: hTexture_(hTexture), Render3DBaseData(name, hRender3D) {
-			type_ = Render3D::Type::Cylinder;
-		}
+		Render3DCylinderData(const std::string& name, Render3DHandle hRender3D) : Render3DBaseData(name, hRender3D) { type_ = Render3D::Type::Cylinder; }
 
 		/// @brief 初期化
 		/// @param modelStore 
@@ -65,17 +62,8 @@ namespace Engine
 
 	private:
 
-		// テクスチャハンドル
-		TextureHandle hTexture_ = 0;
-
-
-	private:
-
 		/// @brief パラメータ
 		std::unique_ptr<Render3D::Cylinder::Param> param_ = nullptr;
-
-		// テクスチャファイルパス
-		std::string textureFilePath_;
 
 
 	private:

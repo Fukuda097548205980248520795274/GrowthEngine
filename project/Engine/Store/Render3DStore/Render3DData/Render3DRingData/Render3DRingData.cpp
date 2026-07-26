@@ -70,8 +70,7 @@ void Engine::Render3DRingData::Initialize(TextureStore* textureStore, LightStore
 	param_->outline.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// テクスチャ
-	param_->material.hTexture = hTexture_;
-	textureFilePath_ = textureStore_->GetFilePath(param_->material.hTexture);
+	param_->material.hTexture = engine_->LoadTexture("./Assets/Textures/white2x2.png");
 
 
 	// 頂点リソースの生成
