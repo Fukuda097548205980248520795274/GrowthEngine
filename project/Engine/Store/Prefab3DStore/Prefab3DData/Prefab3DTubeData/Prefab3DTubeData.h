@@ -1,6 +1,6 @@
 #pragma once
 #include "../Prefab3DBaseData.h"
-#include "Application/PrefabInstance/PrefabInstanceTube/PrefabInstanceTube.h"
+#include "EngineObject/PrefabInstance/PrefabInstanceTube/PrefabInstanceTube.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 #include "DataForGPU/PrimitiveDataForGPU/PrimitiveDataForGPU.h"
 #include "Resource/RWStructuredVertexBufferResource/RWStructuredVertexBufferResource.h"

@@ -8,7 +8,7 @@
 #include "Store/SkyboxStore/SkyboxStore.h"
 #include "Store/PostEffectStore/PostEffectStore.h"
 
-#include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
+#include "EngineObject/WorldTransform/WorldTransform3D/WorldTransform3D.h"
 
 #include "PSO/PSOModel/BasePSOModel.h"
 

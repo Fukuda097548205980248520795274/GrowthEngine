@@ -5,7 +5,7 @@
 #include <list>
 #include "Handle/Handle.h"
 #include "Data/CollisionData/CollisionData.h"
-#include "Application/Collision2DInstance/BaseCollision2DInstance.h"
+#include "EngineObject/Collision2DInstance/BaseCollision2DInstance.h"
 
 namespace Engine
 {

@@ -11,7 +11,7 @@
 
 #include "Parameter/Prefab3DParameter/Prefab3DParameter.h"
 
-#include "Application/WorldTransform/WorldTransform3D/WorldTransform3D.h"
+#include "EngineObject/WorldTransform/WorldTransform3D/WorldTransform3D.h"
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 

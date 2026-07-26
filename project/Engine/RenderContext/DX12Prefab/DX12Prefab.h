@@ -4,7 +4,7 @@
 #include "Store/Prefab3DStore/Prefab3DStore.h"
 #include "Store/Prefab2DStore/Prefab2DStore.h"
 
-#include "Application/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
+#include "EngineObject/PrefabBase/PrefabBaseCube/PrefabBaseCube.h"
 
 namespace Engine
 {

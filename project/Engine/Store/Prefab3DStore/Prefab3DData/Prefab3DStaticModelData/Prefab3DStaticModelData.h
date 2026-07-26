@@ -3,7 +3,7 @@
 
 #include "Data/ModelData/ModelData.h"
 
-#include "Application/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
+#include "EngineObject/PrefabInstance/PrefabInstanceStaticModel/PrefabInstanceStaticModel.h"
 
 namespace Engine
 {

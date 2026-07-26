@@ -6,7 +6,7 @@
 
 #include "Store/TextureStore/TextureStore.h"
 
-#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
+#include "EngineObject/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
 
 /// @brief 初期化
 /// @param device 

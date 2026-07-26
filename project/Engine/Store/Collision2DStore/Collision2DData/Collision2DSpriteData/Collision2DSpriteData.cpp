@@ -1,5 +1,5 @@
 #include "Collision2DSpriteData.h"
-#include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
+#include "EngineObject/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
 #include "Math/Vector/Vector4/Vector4.h"
 
 #include "GrowthEngine.h"

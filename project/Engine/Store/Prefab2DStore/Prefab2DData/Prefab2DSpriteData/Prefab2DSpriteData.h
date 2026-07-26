@@ -2,7 +2,7 @@
 #include "../Prefab2DBaseData.h"
 
 #include "Data/ModelData/ModelData.h"
-#include "Application/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
+#include "EngineObject/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
 
 class PrefabInstanceSprite;
 

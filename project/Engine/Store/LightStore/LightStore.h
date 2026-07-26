@@ -8,7 +8,7 @@
 #include "Handle/Handle.h"
 #include "LightData/BaseLightData.h"
 
-#include "Application/Light/LightDirectional/LightDirectional.h"
+#include "EngineObject/Light/LightDirectional/LightDirectional.h"
 
 #include "PSO/PSOShadowMap/PSOShadowMapRender/PSOShadowMapRender.h"
 #include "PSO/PSOShadowMap/PSOShadowMapPrefab/PSOShadowMapPrefab.h"

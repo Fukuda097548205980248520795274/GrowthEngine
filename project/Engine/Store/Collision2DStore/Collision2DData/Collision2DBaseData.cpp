@@ -4,8 +4,8 @@
 #include "Func/CollisionFunc/CollisionFunc.h"
 #include <cassert>
 
-#include "Application/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
-#include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
+#include "EngineObject/Collision2DInstance/Collision2DInstanceCircle/Collision2DInstanceCircle.h"
+#include "EngineObject/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
 
 /// @brief 初期化
 /// @param collisionStore 

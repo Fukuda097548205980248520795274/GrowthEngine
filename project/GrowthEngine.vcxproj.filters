@@ -136,21 +136,6 @@
     <Filter Include="Engine\Include\Data\TransformData">
       <UniqueIdentifier>{f43b7ffb-746e-4a00-9fcb-c43611a3ce4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application">
-      <UniqueIdentifier>{cbd2def3-55ef-4a0e-abc3-4e9c519d108c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Framework">
-      <UniqueIdentifier>{28a11f44-7230-499b-914e-50d8699ab992}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\WorldTransform">
-      <UniqueIdentifier>{0ad18073-ba3c-494e-b0c6-9496ce2e47ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform3D">
-      <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Scene">
-      <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Handle">
       <UniqueIdentifier>{8d8048e8-594f-4a10-aa6c-4de57edcf1d7}</UniqueIdentifier>
     </Filter>
@@ -223,18 +208,6 @@
     <Filter Include="Engine\Include\Store\LightStore\LightData\DirectionalLightData">
       <UniqueIdentifier>{a0af1495-ffd8-496c-b020-f06457883a6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Light">
-      <UniqueIdentifier>{68563ec2-f748-4625-a305-962723fa95f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Light\LightDirectional">
-      <UniqueIdentifier>{b3de79f3-1152-41bf-8686-93cfbffbf4b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Light\LightPoint">
-      <UniqueIdentifier>{cb69b633-a23b-47e5-b581-77671f6881ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Light\LightSpot">
-      <UniqueIdentifier>{a46a55ba-b53d-4754-9807-374562128a89}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\LightStore\LightData\PointLightData">
       <UniqueIdentifier>{d03df424-c5af-4457-a1db-a8c245d02818}</UniqueIdentifier>
     </Filter>
@@ -301,23 +274,8 @@
     <Filter Include="Engine\Include\Resource\IndexBufferResource">
       <UniqueIdentifier>{50ed5d52-e417-4493-9ba2-f8b1a33ce612}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Sprite">
-      <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\RenderContext\DX12Prefab">
       <UniqueIdentifier>{376c0382-fd73-4a2d-8616-b1d1e8aeb0f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase">
-      <UniqueIdentifier>{78a30a99-d6c2-4c6a-b7ae-edd4acc4c186}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseSprite">
-      <UniqueIdentifier>{b3dfd094-7118-4a15-acd9-e853d364d754}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance">
-      <UniqueIdentifier>{abc4a254-5c74-46c4-8de3-16758da0c0af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceSprite">
-      <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\DataForGPU\PrefabDataForGPU">
       <UniqueIdentifier>{f7ce20fc-3b83-4187-8bbe-886b9e5378f7}</UniqueIdentifier>
@@ -340,35 +298,11 @@
     <Filter Include="Engine\Include\PSO\PSOPostEffect\PSORadialBlur">
       <UniqueIdentifier>{91ea5746-73b9-4817-9d8a-b298be3981ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PostEffect">
-      <UniqueIdentifier>{76f3db5b-a8a3-4c5e-9c34-32dd5c4b8f4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PostEffect\PostEffectRadialBlur">
-      <UniqueIdentifier>{e48f281a-7be3-4b31-bae1-6f5e4f1dd82e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\SceneManager">
-      <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab">
       <UniqueIdentifier>{d86e0a75-7686-49ef-94e3-812802ec9be5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel">
-      <UniqueIdentifier>{6e4136c7-9aef-4244-b722-7cabfd819b1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseStaticModel">
-      <UniqueIdentifier>{437a42e9-b027-45bf-a2a6-2f19e2f3ddeb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Parameter">
       <UniqueIdentifier>{3496d5fe-cf2f-46f5-8ba6-50915cfe8f42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\GameCamera">
-      <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\GameCamera\GameCamera3D">
-      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\GameCamera\GameCamera2D">
-      <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Camera">
       <UniqueIdentifier>{d6334dd0-a548-46d7-8b1e-b11643fea0b8}</UniqueIdentifier>
@@ -421,54 +355,6 @@
     <Filter Include="Game\Scene\GameScene">
       <UniqueIdentifier>{20ad2d6e-d1e4-4bc1-b05b-90791888966f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase">
-      <UniqueIdentifier>{bf757dc0-3fbd-4024-87bd-4faa314e7336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance">
-      <UniqueIdentifier>{e32fc2ce-9d2c-41ae-8c65-6a376d3fc36b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseAABB">
-      <UniqueIdentifier>{0cd4bc99-c018-47ba-a75c-42852a3680e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseLine">
-      <UniqueIdentifier>{685625ac-4c9a-4856-a6e8-e96ca071c1c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseOBB">
-      <UniqueIdentifier>{b11c2d2c-f916-45d5-80f5-21b267976d6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBasePlane">
-      <UniqueIdentifier>{a91ef55c-e8cf-4cf7-a440-e0d2d590f4e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseRay">
-      <UniqueIdentifier>{e9d62f2f-2871-4390-abf1-043eadf76c6e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseSegment">
-      <UniqueIdentifier>{44670564-be98-41c1-aaa9-95f5f1a15f48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseSphere">
-      <UniqueIdentifier>{14b31d19-5238-43c8-96b4-7e8089266a64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceAABB">
-      <UniqueIdentifier>{dc2f8208-0a73-47ee-a03d-341de726fc87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceLine">
-      <UniqueIdentifier>{d4636c75-8d33-4ea0-946b-44280b625ee5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceOBB">
-      <UniqueIdentifier>{c7432c81-b5e3-425b-8966-2cd1de9d7f7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstancePlane">
-      <UniqueIdentifier>{03be47d4-e449-45b4-bd95-fd5751946a89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceRay">
-      <UniqueIdentifier>{d7bfa3b4-3b55-4a23-8177-ad37d1568046}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceSegment">
-      <UniqueIdentifier>{2d97dfd7-24a1-4272-b9f4-849a131f2a64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceSphere">
-      <UniqueIdentifier>{1b8d6404-66b7-49cf-a393-6e2553b36d2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DAABBData">
       <UniqueIdentifier>{570bdc21-de1a-4b4a-b7f9-511c9622091b}</UniqueIdentifier>
     </Filter>
@@ -490,24 +376,6 @@
     <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DSphereData">
       <UniqueIdentifier>{b9adbf9f-6e23-4c43-b6a7-b8f34e82f291}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DBase">
-      <UniqueIdentifier>{5dbb610a-d695-4afd-8f29-f39bd8697a9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DInstance">
-      <UniqueIdentifier>{9bc8e965-8c20-4311-b30d-6c99e7d6b20e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite">
-      <UniqueIdentifier>{07020b70-2671-448c-9df5-ac702db46faf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle">
-      <UniqueIdentifier>{8c650a55-056e-4c86-a8d1-3d56c1deb9d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseCircle">
-      <UniqueIdentifier>{cd63af27-0c7d-48bb-b05a-392f2fa12b1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision2DBase\Collision2DBaseSprite">
-      <UniqueIdentifier>{3f6dda46-067a-4d5a-8b87-2d952dc326b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\Skybox">
       <UniqueIdentifier>{52c3a4a7-4ad9-4ed4-a38f-c0e696bfad32}</UniqueIdentifier>
     </Filter>
@@ -522,9 +390,6 @@
     </Filter>
     <Filter Include="Engine\Include\Data\SkyboxData">
       <UniqueIdentifier>{d0e784c8-4bc9-4ed6-a670-2d94ef212661}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\AppParam">
-      <UniqueIdentifier>{94f25f2a-1e96-49ad-a3ff-97615df4471c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Data\InputData">
       <UniqueIdentifier>{89299a22-0e16-4731-89cf-ea3ea8b2ff73}</UniqueIdentifier>
@@ -559,23 +424,14 @@
     <Filter Include="Engine\Include\Store\Camera2DStore\DebugCamera2DResource">
       <UniqueIdentifier>{4b49fd25-11d2-4796-b4d5-11734e14500b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\WorldTransform\WorldTransform2D">
-      <UniqueIdentifier>{a44c1fe7-a5ed-4b9f-a5d9-029f540f74e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Parameter\LightParameter">
       <UniqueIdentifier>{78a27541-5636-48c5-9db2-e3c5c8674c2b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Math\Vector\VectorInt3">
       <UniqueIdentifier>{235ce479-464c-4209-9145-cb41c79c1479}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceCube">
-      <UniqueIdentifier>{8d831ee4-4556-43e2-98a3-dc37d1ee1fdb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Resource\VertexBufferResource\CubeVertexResource">
       <UniqueIdentifier>{e3de5fd3-7c1e-4702-9748-875def845da9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseCube">
-      <UniqueIdentifier>{632ea143-a45e-483e-8944-8e22490965ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Data\Render3DData">
       <UniqueIdentifier>{ff53e2a2-7e7a-45f9-8c67-e62fd37fc969}</UniqueIdentifier>
@@ -606,18 +462,6 @@
     </Filter>
     <Filter Include="Engine\Include\Parameter\Render2DParameter">
       <UniqueIdentifier>{d2edf250-df92-4888-bdb0-96ec339feef9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Render3D">
-      <UniqueIdentifier>{f36c5669-5b0c-4b43-9eb6-3d03ff6f8422}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DAnimationModel">
-      <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DSkinningModel">
-      <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DStaticModel">
-      <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\Render2DStore\Render2DData">
       <UniqueIdentifier>{80b5d22c-dc11-4382-a076-19605d5acbb1}</UniqueIdentifier>
@@ -838,27 +682,6 @@
     <Filter Include="Engine\Include\Parameter\SoundParameter">
       <UniqueIdentifier>{f4645d6b-1b0a-4740-86a5-4485fe69fc48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Input">
-      <UniqueIdentifier>{81f1ee84-dd67-4e6a-9c5e-4b84755eb869}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputGamepadButton">
-      <UniqueIdentifier>{23093cff-a48d-4937-adca-8d38ec1d5db9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputGamepadLeftStick">
-      <UniqueIdentifier>{9f356b26-8637-4709-b760-c7093a20c826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputGamepadRightStick">
-      <UniqueIdentifier>{25fc738b-b74b-4103-b031-dfc42b2bf44b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputGamepadLeftTrigger">
-      <UniqueIdentifier>{c6da5ce2-4984-42b1-b0bd-1db332dbdc32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputGamepadRightTrigger">
-      <UniqueIdentifier>{e89f902d-7a73-4141-9e43-9d616cc6072a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Input\InputKey">
-      <UniqueIdentifier>{105581f1-4836-4549-b60a-e6db2ee459bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\PivotPoint">
       <UniqueIdentifier>{1ee2b896-c9d9-42c6-8cba-98271490b4b5}</UniqueIdentifier>
     </Filter>
@@ -1012,12 +835,6 @@
     <Filter Include="Game\PostEffectManager">
       <UniqueIdentifier>{03a9b087-0f93-4549-b1fd-b5bac2a9dcac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PostEffect\PostEffectGrayscale">
-      <UniqueIdentifier>{1ab28f50-3f7b-4767-b1e1-391d3bdff1e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PostEffect\PostEffectVignetting">
-      <UniqueIdentifier>{ee25eb5f-15ea-428b-bc1a-9931090546ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shader\Trail">
       <UniqueIdentifier>{61c2c151-09f2-4588-940b-1bdb29f9fc20}</UniqueIdentifier>
     </Filter>
@@ -1042,9 +859,6 @@
     <Filter Include="Game\SoundManager">
       <UniqueIdentifier>{9d00b6c9-4c46-470a-9b64-c90dc33d4eaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Sound">
-      <UniqueIdentifier>{d8d3949f-ba85-41d5-b6d8-270890aa6240}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\PSO\ComputePSO\ComputePSOTube">
       <UniqueIdentifier>{adba3ada-89d5-4740-959f-59ae2a71cad3}</UniqueIdentifier>
     </Filter>
@@ -1054,17 +868,8 @@
     <Filter Include="Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData">
       <UniqueIdentifier>{871c04b9-b1d7-4c71-8a92-7e86e6871656}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PrefabBase\PrefabBaseTube">
-      <UniqueIdentifier>{667dbd39-8f43-47aa-85c0-1cd743ad78ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\PrefabInstance\PrefabInstanceTube">
-      <UniqueIdentifier>{3d2bc46b-b6d1-4ce0-96e3-1f3d3df10a32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\EffectManager">
       <UniqueIdentifier>{57bbb7f5-81bb-4032-b0e6-e373fa96dc6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Particle3D">
-      <UniqueIdentifier>{4cb1885d-ab4f-4e53-ab71-5a44aaa013d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\EffectManager\Effect">
       <UniqueIdentifier>{ce9941f7-6584-4eb4-89e8-bbcfb3e67538}</UniqueIdentifier>
@@ -1174,12 +979,6 @@
     <Filter Include="Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData">
       <UniqueIdentifier>{c4dae24d-f0dc-471a-9d2b-fe60df0d36d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule">
-      <UniqueIdentifier>{108da74b-0a1e-4f23-8fad-2a35a6603070}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule">
-      <UniqueIdentifier>{e2330321-b3a2-4e9c-8229-5eaa9cbaa626}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIPlacement">
       <UniqueIdentifier>{054e9389-c22f-438c-990c-4d7a6edcc55b}</UniqueIdentifier>
     </Filter>
@@ -1210,23 +1009,11 @@
     <Filter Include="Game\HUD\Timer">
       <UniqueIdentifier>{e127f022-ff89-403e-a9fa-240a0eb57dd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Emitter3D">
-      <UniqueIdentifier>{a499c0f5-cf8a-4e64-aab5-210bf128e16d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\SoundStore\SoundData\BgmData">
       <UniqueIdentifier>{0795d898-e02a-439c-96bf-648702eb47c2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\SoundStore\SoundData\SeData">
       <UniqueIdentifier>{0896478c-3a24-42ff-9f54-7c1ab9d41d16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Sound\Bgm">
-      <UniqueIdentifier>{482ad6a8-a785-4d12-ba5a-46c218ca4544}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Sound\Se">
-      <UniqueIdentifier>{4f4bc02a-9ac1-4fd6-a692-29750b12d0f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\Trail3D">
-      <UniqueIdentifier>{a916ff01-0e24-4130-ac3c-c9594fe903b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Shake">
       <UniqueIdentifier>{53e6f0a5-a949-4a97-8553-b9a11c934b00}</UniqueIdentifier>
@@ -1294,14 +1081,8 @@
     <Filter Include="Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData">
       <UniqueIdentifier>{13519fe3-dcc9-4361-a9e7-de765eca1816}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\PostEffect\PostEffectBlurShadow2D">
-      <UniqueIdentifier>{721d5e0b-6f6f-4504-9d96-44d167b10aaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Include\Store\RenderPassStore\RenderPassData">
       <UniqueIdentifier>{0a61744d-7b26-457a-a3f5-48a4d43e5b28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\RenderPass">
-      <UniqueIdentifier>{5a649636-c473-4742-ad81-e1d192edda95}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\ComboTree">
       <UniqueIdentifier>{8acefced-f188-42da-af7e-f19665008ce6}</UniqueIdentifier>
@@ -1386,9 +1167,6 @@
     </Filter>
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper">
       <UniqueIdentifier>{6212c48c-1f7f-4052-bf95-c65f8368e5e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Include\Application\MainCamera3D">
-      <UniqueIdentifier>{c495dd69-d58e-469d-8b07-784573edcc19}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\CutsceneManager\CutsceneEditor">
       <UniqueIdentifier>{d0e0fcc3-a3ff-4643-8e96-0eed439cc3b0}</UniqueIdentifier>
@@ -1483,14 +1261,236 @@
     <Filter Include="Tool\ObjectEditor\ModelEditor\ModelSerializer">
       <UniqueIdentifier>{afd29c6a-b4e0-40e9-9b2b-1b94a29feb9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DUVSphere">
+    <Filter Include="Tool\EngineObject">
+      <UniqueIdentifier>{cbd2def3-55ef-4a0e-abc3-4e9c519d108c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Framework">
+      <UniqueIdentifier>{28a11f44-7230-499b-914e-50d8699ab992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\WorldTransform">
+      <UniqueIdentifier>{0ad18073-ba3c-494e-b0c6-9496ce2e47ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\WorldTransform\WorldTransform3D">
+      <UniqueIdentifier>{43656b36-dfaf-4cc2-abb8-56670278bac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\WorldTransform\WorldTransform2D">
+      <UniqueIdentifier>{a44c1fe7-a5ed-4b9f-a5d9-029f540f74e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Scene">
+      <UniqueIdentifier>{2b6987f3-1661-4e35-87a4-741846bb7173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Light">
+      <UniqueIdentifier>{68563ec2-f748-4625-a305-962723fa95f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Light\LightDirectional">
+      <UniqueIdentifier>{b3de79f3-1152-41bf-8686-93cfbffbf4b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Light\LightPoint">
+      <UniqueIdentifier>{cb69b633-a23b-47e5-b581-77671f6881ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Light\LightSpot">
+      <UniqueIdentifier>{a46a55ba-b53d-4754-9807-374562128a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Sprite">
+      <UniqueIdentifier>{e717fd1d-9a27-4113-a25d-2f248374c112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabBase">
+      <UniqueIdentifier>{78a30a99-d6c2-4c6a-b7ae-edd4acc4c186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabBase\PrefabBaseSprite">
+      <UniqueIdentifier>{b3dfd094-7118-4a15-acd9-e853d364d754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabBase\PrefabBaseStaticModel">
+      <UniqueIdentifier>{437a42e9-b027-45bf-a2a6-2f19e2f3ddeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabBase\PrefabBaseCube">
+      <UniqueIdentifier>{632ea143-a45e-483e-8944-8e22490965ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabBase\PrefabBaseTube">
+      <UniqueIdentifier>{667dbd39-8f43-47aa-85c0-1cd743ad78ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabInstance">
+      <UniqueIdentifier>{abc4a254-5c74-46c4-8de3-16758da0c0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabInstance\PrefabInstanceSprite">
+      <UniqueIdentifier>{c05182e2-654a-43b6-81b7-7047ac279b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabInstance\PrefabInstanceStaticModel">
+      <UniqueIdentifier>{6e4136c7-9aef-4244-b722-7cabfd819b1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabInstance\PrefabInstanceCube">
+      <UniqueIdentifier>{8d831ee4-4556-43e2-98a3-dc37d1ee1fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PrefabInstance\PrefabInstanceTube">
+      <UniqueIdentifier>{3d2bc46b-b6d1-4ce0-96e3-1f3d3df10a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect">
+      <UniqueIdentifier>{76f3db5b-a8a3-4c5e-9c34-32dd5c4b8f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectRadialBlur">
+      <UniqueIdentifier>{e48f281a-7be3-4b31-bae1-6f5e4f1dd82e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectGrayscale">
+      <UniqueIdentifier>{1ab28f50-3f7b-4767-b1e1-391d3bdff1e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectVignetting">
+      <UniqueIdentifier>{ee25eb5f-15ea-428b-bc1a-9931090546ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D">
+      <UniqueIdentifier>{721d5e0b-6f6f-4504-9d96-44d167b10aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\SceneManager">
+      <UniqueIdentifier>{14ba5a41-a36a-4229-838a-536f9284aadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\GameCamera">
+      <UniqueIdentifier>{369b95b5-4e1d-453f-83f0-5a840ea621b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\GameCamera\GameCamera3D">
+      <UniqueIdentifier>{7f0d2530-be02-4c40-b8ad-977e643d91e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\GameCamera\GameCamera2D">
+      <UniqueIdentifier>{39d44b91-58c3-49b6-ae9d-c351548fe26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase">
+      <UniqueIdentifier>{bf757dc0-3fbd-4024-87bd-4faa314e7336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseAABB">
+      <UniqueIdentifier>{0cd4bc99-c018-47ba-a75c-42852a3680e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseLine">
+      <UniqueIdentifier>{685625ac-4c9a-4856-a6e8-e96ca071c1c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseOBB">
+      <UniqueIdentifier>{b11c2d2c-f916-45d5-80f5-21b267976d6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBasePlane">
+      <UniqueIdentifier>{a91ef55c-e8cf-4cf7-a440-e0d2d590f4e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseRay">
+      <UniqueIdentifier>{e9d62f2f-2871-4390-abf1-043eadf76c6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSegment">
+      <UniqueIdentifier>{44670564-be98-41c1-aaa9-95f5f1a15f48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSphere">
+      <UniqueIdentifier>{14b31d19-5238-43c8-96b4-7e8089266a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule">
+      <UniqueIdentifier>{108da74b-0a1e-4f23-8fad-2a35a6603070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance">
+      <UniqueIdentifier>{e32fc2ce-9d2c-41ae-8c65-6a376d3fc36b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceAABB">
+      <UniqueIdentifier>{dc2f8208-0a73-47ee-a03d-341de726fc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceLine">
+      <UniqueIdentifier>{d4636c75-8d33-4ea0-946b-44280b625ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceOBB">
+      <UniqueIdentifier>{c7432c81-b5e3-425b-8966-2cd1de9d7f7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstancePlane">
+      <UniqueIdentifier>{03be47d4-e449-45b4-bd95-fd5751946a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceRay">
+      <UniqueIdentifier>{d7bfa3b4-3b55-4a23-8177-ad37d1568046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSegment">
+      <UniqueIdentifier>{2d97dfd7-24a1-4272-b9f4-849a131f2a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSphere">
+      <UniqueIdentifier>{1b8d6404-66b7-49cf-a393-6e2553b36d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule">
+      <UniqueIdentifier>{e2330321-b3a2-4e9c-8229-5eaa9cbaa626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DBase">
+      <UniqueIdentifier>{5dbb610a-d695-4afd-8f29-f39bd8697a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DBase\Collision2DBaseCircle">
+      <UniqueIdentifier>{cd63af27-0c7d-48bb-b05a-392f2fa12b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DBase\Collision2DBaseSprite">
+      <UniqueIdentifier>{3f6dda46-067a-4d5a-8b87-2d952dc326b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DInstance">
+      <UniqueIdentifier>{9bc8e965-8c20-4311-b30d-6c99e7d6b20e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceSprite">
+      <UniqueIdentifier>{07020b70-2671-448c-9df5-ac702db46faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceCircle">
+      <UniqueIdentifier>{8c650a55-056e-4c86-a8d1-3d56c1deb9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\AppParam">
+      <UniqueIdentifier>{94f25f2a-1e96-49ad-a3ff-97615df4471c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Render3D">
+      <UniqueIdentifier>{f36c5669-5b0c-4b43-9eb6-3d03ff6f8422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Render3D\Render3DAnimationModel">
+      <UniqueIdentifier>{243b18ba-7d4b-4653-93aa-2e7217f7bb19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Render3D\Render3DSkinningModel">
+      <UniqueIdentifier>{18d68a23-e4b9-48c5-9ee7-f3df9b2dfc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Render3D\Render3DStaticModel">
+      <UniqueIdentifier>{aeb3e892-b829-4e1f-baa9-13b47e0bbf7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Render3D\Render3DUVSphere">
       <UniqueIdentifier>{8a8073ea-dd33-4b8e-8d7f-13bf2f5d5d9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DRing">
+    <Filter Include="Tool\EngineObject\Render3D\Render3DRing">
       <UniqueIdentifier>{6cf8e56c-5e03-41f8-8f69-62d336de4c4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Include\Application\Render3D\Render3DCylinder">
+    <Filter Include="Tool\EngineObject\Render3D\Render3DCylinder">
       <UniqueIdentifier>{f55e6aa6-1902-46a5-83d3-7fdb1bf03b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input">
+      <UniqueIdentifier>{81f1ee84-dd67-4e6a-9c5e-4b84755eb869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputGamepadButton">
+      <UniqueIdentifier>{23093cff-a48d-4937-adca-8d38ec1d5db9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputGamepadLeftStick">
+      <UniqueIdentifier>{9f356b26-8637-4709-b760-c7093a20c826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputGamepadRightStick">
+      <UniqueIdentifier>{25fc738b-b74b-4103-b031-dfc42b2bf44b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputGamepadLeftTrigger">
+      <UniqueIdentifier>{c6da5ce2-4984-42b1-b0bd-1db332dbdc32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputGamepadRightTrigger">
+      <UniqueIdentifier>{e89f902d-7a73-4141-9e43-9d616cc6072a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Input\InputKey">
+      <UniqueIdentifier>{105581f1-4836-4549-b60a-e6db2ee459bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Sound">
+      <UniqueIdentifier>{d8d3949f-ba85-41d5-b6d8-270890aa6240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Sound\Bgm">
+      <UniqueIdentifier>{482ad6a8-a785-4d12-ba5a-46c218ca4544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Sound\Se">
+      <UniqueIdentifier>{4f4bc02a-9ac1-4fd6-a692-29750b12d0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Particle3D">
+      <UniqueIdentifier>{4cb1885d-ab4f-4e53-ab71-5a44aaa013d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Emitter3D">
+      <UniqueIdentifier>{a499c0f5-cf8a-4e64-aab5-210bf128e16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\Trail3D">
+      <UniqueIdentifier>{a916ff01-0e24-4130-ac3c-c9594fe903b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\RenderPass">
+      <UniqueIdentifier>{5a649636-c473-4742-ad81-e1d192edda95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\MainCamera3D">
+      <UniqueIdentifier>{c495dd69-d58e-469d-8b07-784573edcc19}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1575,17 +1575,17 @@
     <ClCompile Include="Engine\Func\ModelFunc\ModelFunc.cpp">
       <Filter>Engine\Include\Func\ModelFunc</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
-      <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
+    <ClCompile Include="Tool\EngineObject\WorldTransform\WorldTransform3D\WorldTransform3D.cpp">
+      <Filter>Tool\EngineObject\WorldTransform\WorldTransform3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Camera\Camera3D\Camera3D.cpp">
       <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Framework\Framework.cpp">
-      <Filter>Engine\Include\Application\Framework</Filter>
+    <ClCompile Include="Tool\EngineObject\Framework\Framework.cpp">
+      <Filter>Tool\EngineObject\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Scene\Scene.cpp">
-      <Filter>Engine\Include\Application\Scene</Filter>
+    <ClCompile Include="Tool\EngineObject\Scene\Scene.cpp">
+      <Filter>Tool\EngineObject\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\TextureStore\TextureStore.cpp">
       <Filter>Engine\Include\Store\TextureStore</Filter>
@@ -1629,8 +1629,8 @@
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.cpp">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DStaticModelData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DStaticModel</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DStaticModel\Render3DStaticModel.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DStaticModel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Render3DStore\Render3DData\Render3DBaseData.cpp">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData</Filter>
@@ -1650,8 +1650,8 @@
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DStore.cpp">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.cpp">
-      <Filter>Engine\Include\Application\GameCamera\GameCamera3D</Filter>
+    <ClCompile Include="Tool\EngineObject\GameCamera\GameCamera3D\GameCamera3D.cpp">
+      <Filter>Tool\EngineObject\GameCamera\GameCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.cpp">
       <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
@@ -1665,14 +1665,14 @@
     <ClCompile Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.cpp">
       <Filter>Engine\Include\Store\LightStore\LightData\DirectionalLightData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Light\LightDirectional\LightDirectional.cpp">
-      <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
+    <ClCompile Include="Tool\EngineObject\Light\LightDirectional\LightDirectional.cpp">
+      <Filter>Tool\EngineObject\Light\LightDirectional</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Light\LightPoint\LightPoint.cpp">
-      <Filter>Engine\Include\Application\Light\LightPoint</Filter>
+    <ClCompile Include="Tool\EngineObject\Light\LightPoint\LightPoint.cpp">
+      <Filter>Tool\EngineObject\Light\LightPoint</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Light\LightSpot\LightSpot.cpp">
-      <Filter>Engine\Include\Application\Light\LightSpot</Filter>
+    <ClCompile Include="Tool\EngineObject\Light\LightSpot\LightSpot.cpp">
+      <Filter>Tool\EngineObject\Light\LightSpot</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.cpp">
       <Filter>Engine\Include\Store\LightStore\LightData\PointLightData</Filter>
@@ -1707,11 +1707,11 @@
     <ClCompile Include="Engine\Data\SkinCluster\SkinCluster.cpp">
       <Filter>Engine\Include\Data\SkinCluster</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DAnimationModel</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DAnimationModel\Render3DAnimationModel.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DAnimationModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DSkinningModel</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DSkinningModel\Render3DSkinningModel.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DSkinningModel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DStore.cpp">
       <Filter>Engine\Include\Store\Prefab3DStore</Filter>
@@ -1728,8 +1728,8 @@
     <ClCompile Include="Engine\Camera\Camera2D\Camera2D.cpp">
       <Filter>Engine\Include\Camera\Camera2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.cpp">
-      <Filter>Engine\Include\Application\GameCamera\GameCamera2D</Filter>
+    <ClCompile Include="Tool\EngineObject\GameCamera\GameCamera2D\GameCamera2D.cpp">
+      <Filter>Tool\EngineObject\GameCamera\GameCamera2D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Camera2DStore\Camera2DStore.cpp">
       <Filter>Engine\Include\Store\Camera2DStore</Filter>
@@ -1755,14 +1755,14 @@
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab2D\PSOPrefab2D.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.cpp">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sprite\Sprite.cpp">
-      <Filter>Engine\Include\Application\Sprite</Filter>
+    <ClCompile Include="Tool\EngineObject\Sprite\Sprite.cpp">
+      <Filter>Tool\EngineObject\Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.cpp">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData\Prefab2DSpriteData.cpp">
       <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData</Filter>
@@ -1779,14 +1779,14 @@
     <ClCompile Include="Engine\PSO\PSOPostEffect\PSORadialBlur\PSORadialBlur.cpp">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSORadialBlur</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectRadialBlur</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene\GameScene.cpp">
       <Filter>Game\Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\SceneManager\SceneManager.cpp">
-      <Filter>Engine\Include\Application\SceneManager</Filter>
+    <ClCompile Include="Tool\EngineObject\SceneManager\SceneManager.cpp">
+      <Filter>Tool\EngineObject\SceneManager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.cpp">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
@@ -1794,11 +1794,11 @@
     <ClCompile Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.cpp">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.cpp">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseStaticModel</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.cpp">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseStaticModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.cpp">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceStaticModel</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\Parameter.cpp">
       <Filter>Engine\Include\Parameter</Filter>
@@ -1821,8 +1821,8 @@
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DAABBData\Collision3DAABBData.cpp">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DAABBData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseAABB\Collision3DBaseAABB.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseAABB</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseAABB\Collision3DBaseAABB.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseAABB</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Func\CollisionFunc\CollisionFunc.cpp">
       <Filter>Engine\Include\Func\CollisionFunc</Filter>
@@ -1845,26 +1845,26 @@
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSegmentData\Collision3DSegmentData.cpp">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DSegmentData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\BaseCollision3DBase.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\BaseCollision3DBase.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseOBB\Collision3DBaseOBB.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseOBB</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseOBB\Collision3DBaseOBB.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseOBB</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseSphere\Collision3DBaseSphere.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseSphere</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSphere\Collision3DBaseSphere.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseSphere</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBasePlane\Collision3DBasePlane.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBasePlane</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBasePlane\Collision3DBasePlane.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBasePlane</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseLine\Collision3DBaseLine.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseLine</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseLine\Collision3DBaseLine.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseLine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseRay\Collision3DBaseRay.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseRay</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseRay\Collision3DBaseRay.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseRay</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseSegment\Collision3DBaseSegment.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseSegment</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSegment\Collision3DBaseSegment.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseSegment</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\Render2DParameter\Render2DParameter.cpp">
       <Filter>Engine\Include\Parameter\Render2DParameter</Filter>
@@ -1890,14 +1890,14 @@
     <ClCompile Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.cpp">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DBase\BaseCollision2DBase.cpp">
-      <Filter>Engine\Include\Application\Collision2DBase</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision2DBase\BaseCollision2DBase.cpp">
+      <Filter>Tool\EngineObject\Collision2DBase</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp">
-      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseCircle</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.cpp">
+      <Filter>Tool\EngineObject\Collision2DBase\Collision2DBaseCircle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
-      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.cpp">
+      <Filter>Tool\EngineObject\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.cpp">
       <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
@@ -1908,35 +1908,35 @@
     <ClCompile Include="Engine\Store\SkyboxStore\SkyboxResource\SkyboxResource.cpp">
       <Filter>Engine\Include\Store\SkyboxStore\SkyboxResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp">
-      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.cpp">
+      <Filter>Tool\EngineObject\Collision2DInstance\Collision2DInstanceSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp">
-      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.cpp">
+      <Filter>Tool\EngineObject\Collision2DInstance\Collision2DInstanceCircle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceAABB</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceAABB</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceLine</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceLine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceOBB</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceOBB</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstancePlane</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstancePlane</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceRay</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceRay</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSegment</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceSegment</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSphere</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceSphere</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\AppParam\AppParam.cpp">
-      <Filter>Engine\Include\Application\AppParam</Filter>
+    <ClCompile Include="Tool\EngineObject\AppParam\AppParam.cpp">
+      <Filter>Tool\EngineObject\AppParam</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\InputStore\InputStore.cpp">
       <Filter>Engine\Include\Store\InputStore</Filter>
@@ -1965,11 +1965,11 @@
     <ClCompile Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.cpp">
       <Filter>Engine\Include\Store\Camera2DStore\DebugCamera2DResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.cpp">
-      <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
+    <ClCompile Include="Tool\EngineObject\WorldTransform\WorldTransform2D\WorldTransform2D.cpp">
+      <Filter>Tool\EngineObject\WorldTransform\WorldTransform2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Light\BaseLight.cpp">
-      <Filter>Engine\Include\Application\Light</Filter>
+    <ClCompile Include="Tool\EngineObject\Light\BaseLight.cpp">
+      <Filter>Tool\EngineObject\Light</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Parameter\LightParameter\LightParameter.cpp">
       <Filter>Engine\Include\Parameter\LightParameter</Filter>
@@ -1977,23 +1977,23 @@
     <ClCompile Include="Engine\Math\Vector\VectorInt3\VectorInt3.cpp">
       <Filter>Engine\Include\Math\Vector\VectorInt3</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\BasePrefabBase.cpp">
-      <Filter>Engine\Include\Application\PrefabBase</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabBase\BasePrefabBase.cpp">
+      <Filter>Tool\EngineObject\PrefabBase</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\BasePrefabInstance.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabInstance\BasePrefabInstance.cpp">
+      <Filter>Tool\EngineObject\PrefabInstance</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.cpp">
       <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.cpp">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceCube</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Resource\VertexBufferResource\CubeVertexResource\CubeVertexResource.cpp">
       <Filter>Engine\Include\Resource\VertexBufferResource\CubeVertexResource</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabBase\PrefabBaseCube\PrefabBaseCube.cpp">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseCube</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.cpp">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
@@ -2115,26 +2115,26 @@
     <ClCompile Include="Engine\Parameter\SoundParameter\SoundParameter.cpp">
       <Filter>Engine\Include\Parameter\SoundParameter</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\BaseInput.cpp">
-      <Filter>Engine\Include\Application\Input</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\BaseInput.cpp">
+      <Filter>Tool\EngineObject\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.cpp">
-      <Filter>Engine\Include\Application\Input\InputGamepadButton</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputGamepadButton\InputGamepadButton.cpp">
+      <Filter>Tool\EngineObject\Input\InputGamepadButton</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.cpp">
-      <Filter>Engine\Include\Application\Input\InputGamepadLeftStick</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputGamepadLeftStick\InputGamepadLeftStick.cpp">
+      <Filter>Tool\EngineObject\Input\InputGamepadLeftStick</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.cpp">
-      <Filter>Engine\Include\Application\Input\InputGamepadRightStick</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputGamepadRightStick\InputGamepadRightStick.cpp">
+      <Filter>Tool\EngineObject\Input\InputGamepadRightStick</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.cpp">
-      <Filter>Engine\Include\Application\Input\InputGamepadLeftTrigger</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.cpp">
+      <Filter>Tool\EngineObject\Input\InputGamepadLeftTrigger</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp">
-      <Filter>Engine\Include\Application\Input\InputGamepadRightTrigger</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.cpp">
+      <Filter>Tool\EngineObject\Input\InputGamepadRightTrigger</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Input\InputKey\InputKey.cpp">
-      <Filter>Engine\Include\Application\Input\InputKey</Filter>
+    <ClCompile Include="Tool\EngineObject\Input\InputKey\InputKey.cpp">
+      <Filter>Tool\EngineObject\Input\InputKey</Filter>
     </ClCompile>
     <ClCompile Include="Game\Entity\Entity.cpp">
       <Filter>Game\Entity</Filter>
@@ -2148,8 +2148,8 @@
     <ClCompile Include="Game\Entity\Character\NPC\NPC.cpp">
       <Filter>Game\Entity\Character\NPC</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\BaseRender3D.cpp">
-      <Filter>Engine\Include\Application\Render3D</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\BaseRender3D.cpp">
+      <Filter>Tool\EngineObject\Render3D</Filter>
     </ClCompile>
     <ClCompile Include="Game\PivotPoint\PivotPoint.cpp">
       <Filter>Game\PivotPoint</Filter>
@@ -2292,11 +2292,11 @@
     <ClCompile Include="Game\PostEffectManager\PostEffectManager.cpp">
       <Filter>Game\PostEffectManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGrayscale\PostEffectGrayscale.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectGrayscale</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.cpp">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectVignetting\PostEffectVignetting.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectVignetting</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\PSOTrail\PSOTrail.cpp">
       <Filter>Engine\Include\PSO\PSOTrail</Filter>
@@ -2310,8 +2310,8 @@
     <ClCompile Include="Game\SoundManager\SoundManager.cpp">
       <Filter>Game\SoundManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sound\Sound.cpp">
-      <Filter>Engine\Include\Application\Sound</Filter>
+    <ClCompile Include="Tool\EngineObject\Sound\Sound.cpp">
+      <Filter>Tool\EngineObject\Sound</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.cpp">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTube</Filter>
@@ -2322,17 +2322,17 @@
     <ClCompile Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.cpp">
       <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.cpp">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseTube</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabBase\PrefabBaseTube\PrefabBaseTube.cpp">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseTube</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.cpp">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
+    <ClCompile Include="Tool\EngineObject\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.cpp">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceTube</Filter>
     </ClCompile>
     <ClCompile Include="Game\EffectManager\EffectManager.cpp">
       <Filter>Game\EffectManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Particle3D\Particle3D.cpp">
-      <Filter>Engine\Include\Application\Particle3D</Filter>
+    <ClCompile Include="Tool\EngineObject\Particle3D\Particle3D.cpp">
+      <Filter>Tool\EngineObject\Particle3D</Filter>
     </ClCompile>
     <ClCompile Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.cpp">
       <Filter>Game\EffectManager\Effect\GuardEffect</Filter>
@@ -2430,11 +2430,11 @@
     <ClCompile Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.cpp">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
+    <ClCompile Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.cpp">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule</Filter>
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUINavMesh</Filter>
@@ -2466,8 +2466,8 @@
     <ClCompile Include="Game\HUD\Timer\Timer.cpp">
       <Filter>Game\HUD\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Emitter3D\Emitter3D.cpp">
-      <Filter>Engine\Include\Application\Emitter3D</Filter>
+    <ClCompile Include="Tool\EngineObject\Emitter3D\Emitter3D.cpp">
+      <Filter>Tool\EngineObject\Emitter3D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.cpp">
       <Filter>Engine\Include\Store\SoundStore\SoundData\BgmData</Filter>
@@ -2475,14 +2475,14 @@
     <ClCompile Include="Engine\Store\SoundStore\SoundData\SeData\SeData.cpp">
       <Filter>Engine\Include\Store\SoundStore\SoundData\SeData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sound\Se\Se.cpp">
-      <Filter>Engine\Include\Application\Sound\Se</Filter>
+    <ClCompile Include="Tool\EngineObject\Sound\Se\Se.cpp">
+      <Filter>Tool\EngineObject\Sound\Se</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Sound\Bgm\Bgm.cpp">
-      <Filter>Engine\Include\Application\Sound\Bgm</Filter>
+    <ClCompile Include="Tool\EngineObject\Sound\Bgm\Bgm.cpp">
+      <Filter>Tool\EngineObject\Sound\Bgm</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Trail3D\Trail3D.cpp">
-      <Filter>Engine\Include\Application\Trail3D</Filter>
+    <ClCompile Include="Tool\EngineObject\Trail3D\Trail3D.cpp">
+      <Filter>Tool\EngineObject\Trail3D</Filter>
     </ClCompile>
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
@@ -2538,11 +2538,11 @@
     <ClCompile Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.cpp">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectBlurShadow2D</Filter>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectBlurShadow2D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\RenderPass\RenderPass.cpp">
-      <Filter>Engine\Include\Application\RenderPass</Filter>
+    <ClCompile Include="Tool\EngineObject\RenderPass\RenderPass.cpp">
+      <Filter>Tool\EngineObject\RenderPass</Filter>
     </ClCompile>
     <ClCompile Include="Game\ComboTree\ComboTree.cpp">
       <Filter>Game\ComboTree</Filter>
@@ -2625,8 +2625,8 @@
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\MainCamera3D\MainCamera3D.cpp">
-      <Filter>Engine\Include\Application\MainCamera3D</Filter>
+    <ClCompile Include="Tool\EngineObject\MainCamera3D\MainCamera3D.cpp">
+      <Filter>Tool\EngineObject\MainCamera3D</Filter>
     </ClCompile>
     <ClCompile Include="Game\CutsceneManager\CutsceneEditor\CutsceneEditor.cpp">
       <Filter>Game\CutsceneManager\CutsceneEditor</Filter>
@@ -2685,14 +2685,14 @@
     <ClCompile Include="Tool\ObjectEditor\ModelEditor\ModelEditor.cpp">
       <Filter>Tool\ObjectEditor\ModelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DUVSphere\Render3DUVSphere.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DUVSphere</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DUVSphere\Render3DUVSphere.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DUVSphere</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DRing\Render3DRing.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DRing</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DRing\Render3DRing.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DRing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Application\Render3D\Render3DCylinder\Render3DCylinder.cpp">
-      <Filter>Engine\Include\Application\Render3D\Render3DCylinder</Filter>
+    <ClCompile Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.cpp">
+      <Filter>Tool\EngineObject\Render3D\Render3DCylinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2783,17 +2783,17 @@
     <ClInclude Include="Engine\Data\TransformData\TransformData.h">
       <Filter>Engine\Include\Data\TransformData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\WorldTransform\WorldTransform3D\WorldTransform3D.h">
-      <Filter>Engine\Include\Application\WorldTransform\WorldTransform3D</Filter>
+    <ClInclude Include="Tool\EngineObject\WorldTransform\WorldTransform3D\WorldTransform3D.h">
+      <Filter>Tool\EngineObject\WorldTransform\WorldTransform3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Camera\Camera3D\Camera3D.h">
       <Filter>Engine\Include\Camera\Camera3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Framework\Framework.h">
-      <Filter>Engine\Include\Application\Framework</Filter>
+    <ClInclude Include="Tool\EngineObject\Framework\Framework.h">
+      <Filter>Tool\EngineObject\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Scene\Scene.h">
-      <Filter>Engine\Include\Application\Scene</Filter>
+    <ClInclude Include="Tool\EngineObject\Scene\Scene.h">
+      <Filter>Tool\EngineObject\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Handle\Handle.h">
       <Filter>Engine\Include\Handle</Filter>
@@ -2849,8 +2849,8 @@
     <ClInclude Include="Engine\Store\Render3DStore\Render3DData\Render3DStaticModelData\Render3DStaticModelData.h">
       <Filter>Engine\Include\Store\Render3DStore\Render3DData\Render3DStaticModelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DStaticModel\Render3DStaticModel.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DStaticModel</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DStaticModel\Render3DStaticModel.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DStaticModel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\MaterialDataForGPU\MaterialDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\MaterialDataForGPU</Filter>
@@ -2876,8 +2876,8 @@
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DStore.h">
       <Filter>Engine\Include\Store\Camera3DStore</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\GameCamera\GameCamera3D\GameCamera3D.h">
-      <Filter>Engine\Include\Application\GameCamera\GameCamera3D</Filter>
+    <ClInclude Include="Tool\EngineObject\GameCamera\GameCamera3D\GameCamera3D.h">
+      <Filter>Tool\EngineObject\GameCamera\GameCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera3DStore\Camera3DResource\Camera3DResource.h">
       <Filter>Engine\Include\Store\Camera3DStore\Camera3DResource</Filter>
@@ -2891,14 +2891,14 @@
     <ClInclude Include="Engine\Store\LightStore\LightData\DirectionalLightData\DirectionalLightData.h">
       <Filter>Engine\Include\Store\LightStore\LightData\DirectionalLightData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Light\LightDirectional\LightDirectional.h">
-      <Filter>Engine\Include\Application\Light\LightDirectional</Filter>
+    <ClInclude Include="Tool\EngineObject\Light\LightDirectional\LightDirectional.h">
+      <Filter>Tool\EngineObject\Light\LightDirectional</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Light\LightPoint\LightPoint.h">
-      <Filter>Engine\Include\Application\Light\LightPoint</Filter>
+    <ClInclude Include="Tool\EngineObject\Light\LightPoint\LightPoint.h">
+      <Filter>Tool\EngineObject\Light\LightPoint</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Light\LightSpot\LightSpot.h">
-      <Filter>Engine\Include\Application\Light\LightSpot</Filter>
+    <ClInclude Include="Tool\EngineObject\Light\LightSpot\LightSpot.h">
+      <Filter>Tool\EngineObject\Light\LightSpot</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\LightStore\LightData\PointLightData\PointLightData.h">
       <Filter>Engine\Include\Store\LightStore\LightData\PointLightData</Filter>
@@ -2948,11 +2948,11 @@
     <ClInclude Include="Engine\Data\Render3DData\Render3DData.h">
       <Filter>Engine\Include\Data\Render3DData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DAnimationModel\Render3DAnimationModel.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DAnimationModel</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DAnimationModel\Render3DAnimationModel.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DAnimationModel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DSkinningModel\Render3DSkinningModel.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DSkinningModel</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DSkinningModel\Render3DSkinningModel.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DSkinningModel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DataForGPU\VertexDataForGPU\VertexDataForGPU.h">
       <Filter>Engine\Include\DataForGPU\VertexDataForGPU</Filter>
@@ -2984,8 +2984,8 @@
     <ClInclude Include="Engine\Camera\Camera2D\Camera2D.h">
       <Filter>Engine\Include\Camera\Camera2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\GameCamera\GameCamera2D\GameCamera2D.h">
-      <Filter>Engine\Include\Application\GameCamera\GameCamera2D</Filter>
+    <ClInclude Include="Tool\EngineObject\GameCamera\GameCamera2D\GameCamera2D.h">
+      <Filter>Tool\EngineObject\GameCamera\GameCamera2D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Camera2DStore\Camera2DStore.h">
       <Filter>Engine\Include\Store\Camera2DStore</Filter>
@@ -3017,14 +3017,14 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab2D\PSOPrefab2D.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseSprite</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabBase\PrefabBaseSprite\PrefabBaseSprite.h">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Sprite\Sprite.h">
-      <Filter>Engine\Include\Application\Sprite</Filter>
+    <ClInclude Include="Tool\EngineObject\Sprite\Sprite.h">
+      <Filter>Tool\EngineObject\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceSprite</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabInstance\PrefabInstanceSprite\PrefabInstanceSprite.h">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceSprite</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData\Prefab2DSpriteData.h">
       <Filter>Engine\Include\Store\Prefab2DStore\Prefab2DData\Prefab2DSpriteData</Filter>
@@ -3050,14 +3050,14 @@
     <ClInclude Include="Engine\PSO\PSOPostEffect\PSORadialBlur\PSORadialBlur.h">
       <Filter>Engine\Include\PSO\PSOPostEffect\PSORadialBlur</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectRadialBlur</Filter>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectRadialBlur\PostEffectRadialBlur.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectRadialBlur</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\GameScene\GameScene.h">
       <Filter>Game\Scene\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\SceneManager\SceneManager.h">
-      <Filter>Engine\Include\Application\SceneManager</Filter>
+    <ClInclude Include="Tool\EngineObject\SceneManager\SceneManager.h">
+      <Filter>Tool\EngineObject\SceneManager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOShadowMap\PSOShadowMapPrefab\PSOShadowMapPrefab.h">
       <Filter>Engine\Include\PSO\PSOShadowMap\PSOShadowMapPrefab</Filter>
@@ -3065,11 +3065,11 @@
     <ClInclude Include="Engine\PSO\PSOModel\PSOPrefab3D\PSOPrefab3D.h">
       <Filter>Engine\Include\PSO\PSOModel\PSOPrefab3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.h">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseStaticModel</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabBase\PrefabBaseStaticModel\PrefabBaseStaticModel.h">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseStaticModel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceStaticModel</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabInstance\PrefabInstanceStaticModel\PrefabInstanceStaticModel.h">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceStaticModel</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Parameter\Parameter.h">
       <Filter>Engine\Include\Parameter</Filter>
@@ -3077,14 +3077,14 @@
     <ClInclude Include="Engine\Parameter\Render3DParameter\Render3DParameter.h">
       <Filter>Engine\Include\Parameter\Render3DParameter</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\BaseRender3D.h">
-      <Filter>Engine\Include\Application\Render3D</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\BaseRender3D.h">
+      <Filter>Tool\EngineObject\Render3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PostEffect\BasePostEffect.h">
-      <Filter>Engine\Include\Application\PostEffect</Filter>
+    <ClInclude Include="Tool\EngineObject\PostEffect\BasePostEffect.h">
+      <Filter>Tool\EngineObject\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\GameCamera\BaseGameCamera.h">
-      <Filter>Engine\Include\Application\GameCamera</Filter>
+    <ClInclude Include="Tool\EngineObject\GameCamera\BaseGameCamera.h">
+      <Filter>Tool\EngineObject\GameCamera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOLine\PSOLine.h">
       <Filter>Engine\Include\PSO\PSOLine</Filter>
@@ -3104,14 +3104,14 @@
     <ClInclude Include="Engine\Data\CollisionData\CollisionData.h">
       <Filter>Engine\Include\Data\CollisionData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseAABB\Collision3DBaseAABB.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseAABB</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseAABB\Collision3DBaseAABB.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseAABB</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceAABB</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceAABB\Collision3DInstanceAABB.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceAABB</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\BaseCollision3DInstance.h">
-      <Filter>Engine\Include\Application\Collision3DInstance</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\BaseCollision3DInstance.h">
+      <Filter>Tool\EngineObject\Collision3DInstance</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Func\CollisionFunc\CollisionFunc.h">
       <Filter>Engine\Include\Func\CollisionFunc</Filter>
@@ -3134,44 +3134,44 @@
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DSegmentData\Collision3DSegmentData.h">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DSegmentData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\BaseCollision3DBase.h">
-      <Filter>Engine\Include\Application\Collision3DBase</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\BaseCollision3DBase.h">
+      <Filter>Tool\EngineObject\Collision3DBase</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseOBB\Collision3DBaseOBB.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseOBB</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseOBB\Collision3DBaseOBB.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseOBB</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseSphere\Collision3DBaseSphere.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseSphere</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSphere\Collision3DBaseSphere.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseSphere</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBasePlane\Collision3DBasePlane.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBasePlane</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBasePlane\Collision3DBasePlane.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBasePlane</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseLine\Collision3DBaseLine.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseLine</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseLine\Collision3DBaseLine.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseLine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseRay\Collision3DBaseRay.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseRay</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseRay\Collision3DBaseRay.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseRay</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseSegment\Collision3DBaseSegment.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseSegment</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseSegment\Collision3DBaseSegment.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseSegment</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceOBB</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceOBB\Collision3DInstanceOBB.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceOBB</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSphere</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSphere\Collision3DInstanceSphere.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceSphere</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstancePlane</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstancePlane\Collision3DInstancePlane.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstancePlane</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceLine</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceLine\Collision3DInstanceLine.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceLine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceRay</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceRay\Collision3DInstanceRay.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceRay</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceSegment</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceSegment\Collision3DInstanceSegment.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceSegment</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Parameter\Render2DParameter\Render2DParameter.h">
       <Filter>Engine\Include\Parameter\Render2DParameter</Filter>
@@ -3197,23 +3197,23 @@
     <ClInclude Include="Engine\Store\Collision2DStore\Collision2DData\Collision2DSpriteData\Collision2DSpriteData.h">
       <Filter>Engine\Include\Store\Collision2DStore\Collision2DData\CollisionSpriteData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DBase\BaseCollision2DBase.h">
-      <Filter>Engine\Include\Application\Collision2DBase</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DBase\BaseCollision2DBase.h">
+      <Filter>Tool\EngineObject\Collision2DBase</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DInstance\BaseCollision2DInstance.h">
-      <Filter>Engine\Include\Application\Collision2DInstance</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DInstance\BaseCollision2DInstance.h">
+      <Filter>Tool\EngineObject\Collision2DInstance</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.h">
-      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceSprite</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceSprite\Collision2DInstanceSprite.h">
+      <Filter>Tool\EngineObject\Collision2DInstance\Collision2DInstanceSprite</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.h">
-      <Filter>Engine\Include\Application\Collision2DInstance\Collision2DInstanceCircle</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DInstance\Collision2DInstanceCircle\Collision2DInstanceCircle.h">
+      <Filter>Tool\EngineObject\Collision2DInstance\Collision2DInstanceCircle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.h">
-      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseCircle</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DBase\Collision2DBaseCircle\Collision2DBaseCircle.h">
+      <Filter>Tool\EngineObject\Collision2DBase\Collision2DBaseCircle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h">
-      <Filter>Engine\Include\Application\Collision2DBase\Collision2DBaseSprite</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision2DBase\Collision2DBaseSprite\Collision2DBaseSprite.h">
+      <Filter>Tool\EngineObject\Collision2DBase\Collision2DBaseSprite</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOSkybox\PSOSkybox\PSOSkybox.h">
       <Filter>Engine\Include\PSO\PSOSkybox\PSOSkybox</Filter>
@@ -3227,8 +3227,8 @@
     <ClInclude Include="Engine\Data\SkyboxData\SkyboxData.h">
       <Filter>Engine\Include\Data\SkyboxData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\AppParam\AppParam.h">
-      <Filter>Engine\Include\Application\AppParam</Filter>
+    <ClInclude Include="Tool\EngineObject\AppParam\AppParam.h">
+      <Filter>Tool\EngineObject\AppParam</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Data\InputData\InputData.h">
       <Filter>Engine\Include\Data\InputData</Filter>
@@ -3260,11 +3260,11 @@
     <ClInclude Include="Engine\Store\Camera2DStore\DebugCamera2DResource\DebugCamera2DResource.h">
       <Filter>Engine\Include\Store\Camera2DStore\DebugCamera2DResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\WorldTransform\WorldTransform2D\WorldTransform2D.h">
-      <Filter>Engine\Include\Application\WorldTransform\WorldTransform2D</Filter>
+    <ClInclude Include="Tool\EngineObject\WorldTransform\WorldTransform2D\WorldTransform2D.h">
+      <Filter>Tool\EngineObject\WorldTransform\WorldTransform2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Light\BaseLight.h">
-      <Filter>Engine\Include\Application\Light</Filter>
+    <ClInclude Include="Tool\EngineObject\Light\BaseLight.h">
+      <Filter>Tool\EngineObject\Light</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Parameter\LightParameter\LightParameter.h">
       <Filter>Engine\Include\Parameter\LightParameter</Filter>
@@ -3272,23 +3272,23 @@
     <ClInclude Include="Engine\Math\Vector\VectorInt3\VectorInt3.h">
       <Filter>Engine\Include\Math\Vector\VectorInt3</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\BasePrefabBase.h">
-      <Filter>Engine\Include\Application\PrefabBase</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabBase\BasePrefabBase.h">
+      <Filter>Tool\EngineObject\PrefabBase</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\BasePrefabInstance.h">
-      <Filter>Engine\Include\Application\PrefabInstance</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabInstance\BasePrefabInstance.h">
+      <Filter>Tool\EngineObject\PrefabInstance</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData\Prefab3DCubeData.h">
       <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DCubeData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceCube</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabInstance\PrefabInstanceCube\PrefabInstanceCube.h">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceCube</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Resource\VertexBufferResource\CubeVertexResource\CubeVertexResource.h">
       <Filter>Engine\Include\Resource\VertexBufferResource\CubeVertexResource</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseCube\PrefabBaseCube.h">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseCube</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabBase\PrefabBaseCube\PrefabBaseCube.h">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseCube</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\Render2DStore\Render2DData\Render2DBaseData.h">
       <Filter>Engine\Include\Store\Render2DStore\Render2DData</Filter>
@@ -3425,26 +3425,26 @@
     <ClInclude Include="Engine\Parameter\SoundParameter\SoundParameter.h">
       <Filter>Engine\Include\Parameter\SoundParameter</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\BaseInput.h">
-      <Filter>Engine\Include\Application\Input</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\BaseInput.h">
+      <Filter>Tool\EngineObject\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputGamepadButton\InputGamepadButton.h">
-      <Filter>Engine\Include\Application\Input\InputGamepadButton</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputGamepadButton\InputGamepadButton.h">
+      <Filter>Tool\EngineObject\Input\InputGamepadButton</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputGamepadLeftStick\InputGamepadLeftStick.h">
-      <Filter>Engine\Include\Application\Input\InputGamepadLeftStick</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputGamepadLeftStick\InputGamepadLeftStick.h">
+      <Filter>Tool\EngineObject\Input\InputGamepadLeftStick</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputGamepadRightStick\InputGamepadRightStick.h">
-      <Filter>Engine\Include\Application\Input\InputGamepadRightStick</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputGamepadRightStick\InputGamepadRightStick.h">
+      <Filter>Tool\EngineObject\Input\InputGamepadRightStick</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.h">
-      <Filter>Engine\Include\Application\Input\InputGamepadLeftTrigger</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputGamepadLeftTrigger\InputGamepadLeftTrigger.h">
+      <Filter>Tool\EngineObject\Input\InputGamepadLeftTrigger</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.h">
-      <Filter>Engine\Include\Application\Input\InputGamepadRightTrigger</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputGamepadRightTrigger\InputGamepadRightTrigger.h">
+      <Filter>Tool\EngineObject\Input\InputGamepadRightTrigger</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Input\InputKey\InputKey.h">
-      <Filter>Engine\Include\Application\Input\InputKey</Filter>
+    <ClInclude Include="Tool\EngineObject\Input\InputKey\InputKey.h">
+      <Filter>Tool\EngineObject\Input\InputKey</Filter>
     </ClInclude>
     <ClInclude Include="Game\Entity\Entity.h">
       <Filter>Game\Entity</Filter>
@@ -3608,11 +3608,11 @@
     <ClInclude Include="Game\PostEffectManager\PostEffectManager.h">
       <Filter>Game\PostEffectManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectGrayscale</Filter>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGrayscale\PostEffectGrayscale.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectGrayscale</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PostEffect\PostEffectVignetting\PostEffectVignetting.h">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectVignetting</Filter>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectVignetting\PostEffectVignetting.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectVignetting</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\PSOTrail\PSOTrail.h">
       <Filter>Engine\Include\PSO\PSOTrail</Filter>
@@ -3629,8 +3629,8 @@
     <ClInclude Include="Game\SoundManager\SoundManager.h">
       <Filter>Game\SoundManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Sound\Sound.h">
-      <Filter>Engine\Include\Application\Sound</Filter>
+    <ClInclude Include="Tool\EngineObject\Sound\Sound.h">
+      <Filter>Tool\EngineObject\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PSO\ComputePSO\ComputePSOTube\ComputePSOTube.h">
       <Filter>Engine\Include\PSO\ComputePSO\ComputePSOTube</Filter>
@@ -3641,17 +3641,17 @@
     <ClInclude Include="Engine\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData\Prefab3DTubeData.h">
       <Filter>Engine\Include\Store\Prefab3DStore\Prefab3DData\Prefab3DTubeData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabBase\PrefabBaseTube\PrefabBaseTube.h">
-      <Filter>Engine\Include\Application\PrefabBase\PrefabBaseTube</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabBase\PrefabBaseTube\PrefabBaseTube.h">
+      <Filter>Tool\EngineObject\PrefabBase\PrefabBaseTube</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.h">
-      <Filter>Engine\Include\Application\PrefabInstance\PrefabInstanceTube</Filter>
+    <ClInclude Include="Tool\EngineObject\PrefabInstance\PrefabInstanceTube\PrefabInstanceTube.h">
+      <Filter>Tool\EngineObject\PrefabInstance\PrefabInstanceTube</Filter>
     </ClInclude>
     <ClInclude Include="Game\EffectManager\EffectManager.h">
       <Filter>Game\EffectManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Particle3D\Particle3D.h">
-      <Filter>Engine\Include\Application\Particle3D</Filter>
+    <ClInclude Include="Tool\EngineObject\Particle3D\Particle3D.h">
+      <Filter>Tool\EngineObject\Particle3D</Filter>
     </ClInclude>
     <ClInclude Include="Game\EffectManager\Effect\GuardEffect\GuardEffect.h">
       <Filter>Game\EffectManager\Effect\GuardEffect</Filter>
@@ -3749,11 +3749,11 @@
     <ClInclude Include="Engine\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData\Collision3DCapsuleData.h">
       <Filter>Engine\Include\Store\Collision3DStore\Collision3DData\Collision3DCapsuleData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h">
-      <Filter>Engine\Include\Application\Collision3DBase\Collision3DBaseCapsule</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h">
+      <Filter>Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h">
-      <Filter>Engine\Include\Application\Collision3DInstance\Collision3DInstanceCapsule</Filter>
+    <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h">
+      <Filter>Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule</Filter>
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUINavMesh\StageEditorUINavMesh.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUINavMesh</Filter>
@@ -3785,8 +3785,8 @@
     <ClInclude Include="Game\HUD\Timer\Timer.h">
       <Filter>Game\HUD\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Emitter3D\Emitter3D.h">
-      <Filter>Engine\Include\Application\Emitter3D</Filter>
+    <ClInclude Include="Tool\EngineObject\Emitter3D\Emitter3D.h">
+      <Filter>Tool\EngineObject\Emitter3D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Store\SoundStore\SoundData\BgmData\BgmData.h">
       <Filter>Engine\Include\Store\SoundStore\SoundData\BgmData</Filter>
@@ -3794,14 +3794,14 @@
     <ClInclude Include="Engine\Store\SoundStore\SoundData\SeData\SeData.h">
       <Filter>Engine\Include\Store\SoundStore\SoundData\SeData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Sound\Se\Se.h">
-      <Filter>Engine\Include\Application\Sound\Se</Filter>
+    <ClInclude Include="Tool\EngineObject\Sound\Se\Se.h">
+      <Filter>Tool\EngineObject\Sound\Se</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Sound\Bgm\Bgm.h">
-      <Filter>Engine\Include\Application\Sound\Bgm</Filter>
+    <ClInclude Include="Tool\EngineObject\Sound\Bgm\Bgm.h">
+      <Filter>Tool\EngineObject\Sound\Bgm</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Trail3D\Trail3D.h">
-      <Filter>Engine\Include\Application\Trail3D</Filter>
+    <ClInclude Include="Tool\EngineObject\Trail3D\Trail3D.h">
+      <Filter>Tool\EngineObject\Trail3D</Filter>
     </ClInclude>
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
@@ -3866,11 +3866,11 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData\PostEffectBlurShadow2DData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectBlurShadow2DData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h">
-      <Filter>Engine\Include\Application\PostEffect\PostEffectBlurShadow2D</Filter>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectBlurShadow2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\RenderPass\RenderPass.h">
-      <Filter>Engine\Include\Application\RenderPass</Filter>
+    <ClInclude Include="Tool\EngineObject\RenderPass\RenderPass.h">
+      <Filter>Tool\EngineObject\RenderPass</Filter>
     </ClInclude>
     <ClInclude Include="Game\ComboTree\ComboTree.h">
       <Filter>Game\ComboTree</Filter>
@@ -3956,8 +3956,8 @@
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUIHelper\StageEditorUIHelper.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUIHelper</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\MainCamera3D\MainCamera3D.h">
-      <Filter>Engine\Include\Application\MainCamera3D</Filter>
+    <ClInclude Include="Tool\EngineObject\MainCamera3D\MainCamera3D.h">
+      <Filter>Tool\EngineObject\MainCamera3D</Filter>
     </ClInclude>
     <ClInclude Include="Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe\CutsceneKeyframe.h">
       <Filter>Game\CutsceneManager\CutsceneEditor\CutsceneKeyframe</Filter>
@@ -4028,14 +4028,14 @@
     <ClInclude Include="Tool\ObjectEditor\ModelEditor\ModelSerializer\ModelSerializer.h">
       <Filter>Tool\ObjectEditor\ModelEditor\ModelSerializer</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DUVSphere\Render3DUVSphere.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DUVSphere</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DUVSphere\Render3DUVSphere.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DUVSphere</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DRing\Render3DRing.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DRing</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DRing\Render3DRing.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DRing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Application\Render3D\Render3DCylinder\Render3DCylinder.h">
-      <Filter>Engine\Include\Application\Render3D\Render3DCylinder</Filter>
+    <ClInclude Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.h">
+      <Filter>Tool\EngineObject\Render3D\Render3DCylinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

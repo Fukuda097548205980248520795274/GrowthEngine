@@ -1,6 +1,6 @@
 #pragma once
 #include "../Prefab3DBaseData.h"
-#include "Application/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
+#include "EngineObject/PrefabInstance/PrefabInstanceCube/PrefabInstanceCube.h"
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
