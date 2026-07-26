@@ -114,6 +114,12 @@ namespace Engine
 		LightHandle LoadLight(const std::string& name, Light::Type type) { return lightStore_->Load(name, type); }
 
 
+		/// @brief テクスチャのファイルパスを取得する
+		/// @param hTexture 
+		/// @return 
+		std::string GetTextureFilePath(TextureHandle hTexture)const { return textureStore_->GetFilePath(hTexture); }
+
+
 
 		/// @brief 3Dカメラのパラメータを取得する
 		/// @param hCamera 

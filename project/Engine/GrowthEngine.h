@@ -237,6 +237,10 @@ public:
 	RenderPassHandle LoadRenderPass(const std::string& name, std::function<void()> drawFunc)const { return renderContext_->LoadRenderPass(name, drawFunc); }
 
 
+	/// @brief テクスチャのファイルパスを取得する
+	/// @param hTexture 
+	/// @return 
+	std::string GetTextureFilePath(TextureHandle hTexture)const { return renderContext_->GetTextureFilePath(hTexture); }
 
 public:
 

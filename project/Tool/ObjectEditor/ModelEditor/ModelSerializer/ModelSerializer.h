@@ -38,6 +38,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 				// メッシュごとのJSONオブジェクト
 				json meshJsonItem;
 
+				// テクスチャパスを取得
+				std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(staticModel->param_->meshMaterial[i].hTexture);
+				if (!texturePath.empty())
+				{
+					meshJsonItem["texturePath"] = texturePath;
+				}
+
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
 					staticModel->param_->meshTransforms[i].translate.x,
@@ -113,6 +120,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 			{
 				// メッシュごとのJSONオブジェクト
 				json meshJsonItem;
+
+				// テクスチャパスを取得
+				std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(animationModel->param_->meshMaterial[i].hTexture);
+				if (!texturePath.empty())
+				{
+					meshJsonItem["texturePath"] = texturePath;
+				}
 
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
@@ -190,6 +204,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 				// メッシュごとのJSONオブジェクト
 				json meshJsonItem;
 
+				// テクスチャパスを取得
+				std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(skinningModel->param_->meshMaterial[i].hTexture);
+				if (!texturePath.empty())
+				{
+					meshJsonItem["texturePath"] = texturePath;
+				}
+
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
 					skinningModel->param_->meshTransforms[i].translate.x,
@@ -260,6 +281,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(uvSphere->param_->blendMode);
 
+			// テクスチャパスを取得
+			std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(uvSphere->param_->material.hTexture);
+			if (!texturePath.empty())
+			{
+				elemJson["texturePath"] = texturePath;
+			}
+
 			// トランスフォーム
 			elemJson["translate"] = {
 				uvSphere->param_->transform.translate.x,
@@ -326,6 +354,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(ring->param_->blendMode);
+
+			// テクスチャパスを取得
+			std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(ring->param_->material.hTexture);
+			if (!texturePath.empty())
+			{
+				elemJson["texturePath"] = texturePath;
+			}
 
 			// トランスフォーム
 			elemJson["translate"] = {
@@ -400,6 +435,13 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(cylinder->param_->blendMode);
+
+			// テクスチャパスを取得
+			std::string texturePath = GrowthEngine::GetInstance()->GetTextureFilePath(cylinder->param_->material.hTexture);
+			if (!texturePath.empty())
+			{
+				elemJson["texturePath"] = texturePath;
+			}
 
 			// トランスフォーム
 			elemJson["translate"] = {
@@ -527,6 +569,19 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 					elemJson["meshData"][i]["rotate"][1].get<float>(),
 					elemJson["meshData"][i]["rotate"][2].get<float>()
 				};
+
+				// テクスチャパスを取得
+				std::string texturePath = elemJson["meshData"][i].value("texturePath", "");
+				if (!texturePath.empty())
+				{
+					// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+					staticModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+				}
+				else
+				{
+					staticModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+				}
+
 				// マテリアルを復元
 				staticModel->param_->meshMaterial[i].color = {
 					elemJson["meshData"][i]["color"][0].get<float>(),
@@ -603,6 +658,18 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 					elemJson["meshData"][i]["rotate"][1].get<float>(),
 					elemJson["meshData"][i]["rotate"][2].get<float>()
 				};
+
+				// テクスチャパスを取得
+				std::string texturePath = elemJson["meshData"][i].value("texturePath", "");
+				if (!texturePath.empty())
+				{
+					// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+					animationModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+				}
+				else
+				{
+					animationModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+				}
 
 				// マテリアルを復元
 				animationModel->param_->meshMaterial[i].color = {
@@ -685,6 +752,19 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 					elemJson["meshData"][i]["rotate"][1].get<float>(),
 					elemJson["meshData"][i]["rotate"][2].get<float>()
 				};
+
+				// テクスチャパスを取得
+				std::string texturePath = elemJson["meshData"][i].value("texturePath", "");
+				if (!texturePath.empty())
+				{
+					// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+					skinningModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+				}
+				else
+				{
+					skinningModel->param_->meshMaterial[i].hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+				}
+
 				// マテリアルを復元
 				skinningModel->param_->meshMaterial[i].color = {
 					elemJson["meshData"][i]["color"][0].get<float>(),
@@ -749,6 +829,18 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 				elemJson["rotate"][1].get<float>(),
 				elemJson["rotate"][2].get<float>()
 			};
+
+			// テクスチャパスを取得
+			std::string texturePath = elemJson.value("texturePath", "");
+			if (!texturePath.empty())
+			{
+				// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+				uvSphere->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+			}
+			else
+			{
+				uvSphere->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+			}
 
 			// マテリアルを復元
 			uvSphere->param_->material.color = {
@@ -817,6 +909,18 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 				elemJson["rotate"][1].get<float>(),
 				elemJson["rotate"][2].get<float>()
 			};
+
+			// テクスチャパスを取得
+			std::string texturePath = elemJson.value("texturePath", "");
+			if (!texturePath.empty())
+			{
+				// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+				ring->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+			}
+			else
+			{
+				ring->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+			}
 
 			// マテリアルを復元
 			ring->param_->material.color = {
@@ -892,6 +996,18 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 				elemJson["rotate"][1].get<float>(),
 				elemJson["rotate"][2].get<float>()
 			};
+
+			// テクスチャパスを取得
+			std::string texturePath = elemJson.value("texturePath", "");
+			if (!texturePath.empty())
+			{
+				// パスからテクスチャをロード（または取得）し、新しいハンドルを発行する
+				cylinder->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture(texturePath);
+			}
+			else
+			{
+				cylinder->param_->material.hTexture = GrowthEngine::GetInstance()->LoadTexture("./Assets/Textures/white2x2.png");
+			}
 
 			// マテリアルを復元
 			cylinder->param_->material.color = {

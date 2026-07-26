@@ -172,6 +172,21 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	return handle;
 }
 
+/// @brief ファイルパスを取得する
+/// @param hTexture 
+/// @return 
+std::string Engine::TextureStore::GetFilePath(TextureHandle hTexture)const
+{
+	auto it = std::find_if(dataTable_.begin(), dataTable_.end(),
+		[hTexture](const std::unique_ptr<TextureData>& data) {return data->handle == hTexture;});
+
+	// ハンドルが見つかった場合、名前を返す
+	if (it != dataTable_.end())
+		return (*it)->name;
+
+	return "";
+}
+
 /// @brief ハンドルを取得する
 /// @param filePath 
 /// @return 

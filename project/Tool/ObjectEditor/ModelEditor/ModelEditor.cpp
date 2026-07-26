@@ -924,6 +924,32 @@ void ModelEditor::MaterialInspectorUI(Engine::Render3D::Material* material)
 {
 	if (ImGui::TreeNode("マテリアル"))
 	{
+		ImGui::Text("テクスチャ");
+
+		// ドロップ先のターゲットとなるUI（ボタン等をプレースホルダーとして使用）
+		ImGui::Button(std::format("Handle: {}", material->hTexture).c_str(), ImVec2(150, 30));
+
+		// ドラッグ＆ドロップの受け取り処理
+		if (ImGui::BeginDragDropTarget())
+		{
+			// "TEXTURE_ID" という名前のペイロードを受け入れる
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_ID"))
+			{
+				IM_ASSERT(payload->DataSize == sizeof(int));
+
+				// ペイロードからインデックス（テクスチャハンドル）を取得
+				int textureIndex = *(const int*)payload->Data;
+
+				// マテリアルにテクスチャハンドルを設定
+				material->hTexture = static_cast<TextureHandle>(textureIndex);
+
+				// 履歴（Undo/Redo用）を保存
+				SaveHistoryState();
+			}
+			ImGui::EndDragDropTarget();
+		}
+		
+
 		ImGui::ColorEdit4("色 (Color)", &material->color.x);
 		if (ImGui::IsItemActivated()) SaveHistoryState();
 

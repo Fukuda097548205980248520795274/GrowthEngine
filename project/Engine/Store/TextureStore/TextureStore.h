@@ -62,7 +62,7 @@ namespace Engine
 		/// @brief ファイルパスを取得する
 		/// @param hTexture 
 		/// @return 
-		std::string GetFilePath(TextureHandle hTexture)const { return dataTable_[hTexture]->name; }
+		std::string GetFilePath(TextureHandle hTexture)const;
 
 		/// @brief SRV用GPUハンドルを取得する
 		/// @param handle 

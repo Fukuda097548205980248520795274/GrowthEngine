@@ -39,8 +39,9 @@
                     1.0
                 ],
                 "shininess": 10.0,
+                "texturePath": "./Assets/Models/AnimatedCube/AnimatedCube_BaseColor.png",
                 "translate": [
-                    -23.0,
+                    0.0,
                     0.0,
                     0.0
                 ],
