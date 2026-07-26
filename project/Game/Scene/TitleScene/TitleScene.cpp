@@ -7,9 +7,8 @@ void TitleScene::Initialize()
 	engine_ = GrowthEngine::GetInstance();
 
 	// UIエディタを作成する
-	uiEditor_ = std::make_unique<UIEditor>();
-	uiEditor_->Initialize();
-
+	modelEditor_ = std::make_unique<ModelEditor>();
+	
 	// 上下のキー入力を作成する
 	wKey_ = std::make_unique<InputKey>("TitleWKey", InputState::Trigger, DIK_W);
 	sKey_ = std::make_unique<InputKey>("TitleSKey", InputState::Trigger, DIK_S);
@@ -49,7 +48,7 @@ void TitleScene::Initialize()
 			engine_->DrawToRenderPass("Object", "PrevDraw");
 
 			// UIエディタのUI描画処理を呼び出す
-			uiEditor_->DrawUI();
+			modelEditor_->DrawUI();
 		}
 	);
 
@@ -66,7 +65,7 @@ void TitleScene::Initialize()
 			engine_->DrawToRenderPass("HUD", "PostEffect");
 
 			// UIの描画処理を呼び出す
-			uiEditor_->Draw();
+			modelEditor_->Draw();
 
 		}
 	);
@@ -87,7 +86,7 @@ void TitleScene::Update()
 	float dt = engine_->GetDeltaTime();
 
 	// UIエディタの更新処理を呼び出す
-	uiEditor_->Update(dt);
+	modelEditor_->Update(dt);
 
 	// フェーズマネージャの更新処理を呼び出す
 	phaseManager_->Update();

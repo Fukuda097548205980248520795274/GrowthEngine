@@ -13,6 +13,7 @@ namespace Engine
 		/// @brief 種類
 		enum class Type
 		{
+			None,
 			StaticModel,
 			AnimationModel,
 			SkinningModel,

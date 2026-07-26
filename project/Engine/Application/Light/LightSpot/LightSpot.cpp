@@ -6,6 +6,9 @@
 	/// @param name 
 LightSpot::LightSpot(const std::string& name) : BaseLight(name)
 {
+	// 種類を設定する
+	type_ = Engine::Light::Type::Spot;
+
 	// ライトを読み込む
 	hLight_ = engine_->LoadLight(name, Engine::Light::Type::Spot);
 

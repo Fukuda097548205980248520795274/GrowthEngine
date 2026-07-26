@@ -33,6 +33,9 @@
 #include "Application/Render3D/Render3DStaticModel/Render3DStaticModel.h"
 #include "Application/Render3D/Render3DAnimationModel/Render3DAnimationModel.h"
 #include "Application/Render3D/Render3DSkinningModel/Render3DSkinningModel.h"
+#include "Application/Render3D/Render3DUVSphere/Render3DUVSphere.h"
+#include "Application/Render3D/Render3DCylinder/Render3DCylinder.h"
+#include "Application/Render3D/Render3DRing/Render3DRing.h"
 
 #include "Application/Sprite/Sprite.h"
 

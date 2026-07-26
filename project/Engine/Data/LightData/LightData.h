@@ -9,6 +9,7 @@ namespace Engine
 		/// @brief ライト種類
 		enum class Type
 		{
+			None,
 			Directional,
 			Point,
 			Spot,

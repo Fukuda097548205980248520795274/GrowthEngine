@@ -1453,14 +1453,44 @@
     <Filter Include="Tool">
       <UniqueIdentifier>{49b31f0e-93c5-480c-b84c-6e428d4a70d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tool\UIEditor">
+    <Filter Include="Tool\ObjectEditor">
+      <UniqueIdentifier>{c3254537-ee82-4367-8b0a-eff365bc0b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\UIEditor">
       <UniqueIdentifier>{db5376fc-0c3b-43d9-a547-a9f2efdaeda9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tool\UIEditor\UIData">
+    <Filter Include="Tool\ObjectEditor\UIEditor\UIData">
       <UniqueIdentifier>{4e735117-93d5-49f9-b522-ae74575b7782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tool\UIEditor\UISerializer">
+    <Filter Include="Tool\ObjectEditor\UIEditor\UISerializer">
       <UniqueIdentifier>{91589ceb-94f3-4e8f-a804-9d31dd86350d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\LightEditor">
+      <UniqueIdentifier>{6d71e869-7bb0-4fb1-b1e8-0c253495485c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\LightEditor\LightData">
+      <UniqueIdentifier>{c9cea360-ef39-4723-9f95-418e0e654061}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\LightEditor\LightSerializer">
+      <UniqueIdentifier>{0cd39b38-5649-4d9e-a6b9-4fc5944fee01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\ModelEditor">
+      <UniqueIdentifier>{4e6cf05e-5c3e-48bf-b85b-b22f24661178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\ModelEditor\ModelData">
+      <UniqueIdentifier>{4d470917-a496-4ed3-91b8-a6b5b9215b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\ObjectEditor\ModelEditor\ModelSerializer">
+      <UniqueIdentifier>{afd29c6a-b4e0-40e9-9b2b-1b94a29feb9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DUVSphere">
+      <UniqueIdentifier>{8a8073ea-dd33-4b8e-8d7f-13bf2f5d5d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DRing">
+      <UniqueIdentifier>{6cf8e56c-5e03-41f8-8f69-62d336de4c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Include\Application\Render3D\Render3DCylinder">
+      <UniqueIdentifier>{f55e6aa6-1902-46a5-83d3-7fdb1bf03b00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2643,8 +2673,26 @@
     <ClCompile Include="Game\Scene\TitleScene\Quit\TitleSceneQuit.cpp">
       <Filter>Game\Scene\TitleScene\Quit</Filter>
     </ClCompile>
-    <ClCompile Include="Tool\UIEditor\UIEditor.cpp">
-      <Filter>Tool\UIEditor</Filter>
+    <ClCompile Include="Tool\ObjectEditor\UIEditor\UIEditor.cpp">
+      <Filter>Tool\ObjectEditor\UIEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\ObjectEditor\ObjectEditor.cpp">
+      <Filter>Tool\ObjectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\ObjectEditor\LightEditor\LightEditor.cpp">
+      <Filter>Tool\ObjectEditor\LightEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\ObjectEditor\ModelEditor\ModelEditor.cpp">
+      <Filter>Tool\ObjectEditor\ModelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Render3D\Render3DUVSphere\Render3DUVSphere.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DUVSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Render3D\Render3DRing\Render3DRing.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DRing</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Application\Render3D\Render3DCylinder\Render3DCylinder.cpp">
+      <Filter>Engine\Include\Application\Render3D\Render3DCylinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3950,14 +3998,44 @@
     <ClInclude Include="Engine\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData\PostEffectLuminanceBasedOutlineData.h">
       <Filter>Engine\Include\Store\PostEffectStore\PostEffectData\PostEffectLuminanceBasedOutlineData</Filter>
     </ClInclude>
-    <ClInclude Include="Tool\UIEditor\UIEditor.h">
-      <Filter>Tool\UIEditor</Filter>
+    <ClInclude Include="Tool\ObjectEditor\UIEditor\UIEditor.h">
+      <Filter>Tool\ObjectEditor\UIEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Tool\UIEditor\UIData\UIData.h">
-      <Filter>Tool\UIEditor\UIData</Filter>
+    <ClInclude Include="Tool\ObjectEditor\UIEditor\UIData\UIData.h">
+      <Filter>Tool\ObjectEditor\UIEditor\UIData</Filter>
     </ClInclude>
-    <ClInclude Include="Tool\UIEditor\UISerializer\UISerializer.h">
-      <Filter>Tool\UIEditor\UISerializer</Filter>
+    <ClInclude Include="Tool\ObjectEditor\UIEditor\UISerializer\UISerializer.h">
+      <Filter>Tool\ObjectEditor\UIEditor\UISerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\ObjectEditor.h">
+      <Filter>Tool\ObjectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\LightEditor\LightData\LightData.h">
+      <Filter>Tool\ObjectEditor\LightEditor\LightData</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\LightEditor\LightSerializer\LightSerializer.h">
+      <Filter>Tool\ObjectEditor\LightEditor\LightSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\LightEditor\LightEditor.h">
+      <Filter>Tool\ObjectEditor\LightEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\ModelEditor\ModelEditor.h">
+      <Filter>Tool\ObjectEditor\ModelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\ModelEditor\ModelData\ModelData.h">
+      <Filter>Tool\ObjectEditor\ModelEditor\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\ObjectEditor\ModelEditor\ModelSerializer\ModelSerializer.h">
+      <Filter>Tool\ObjectEditor\ModelEditor\ModelSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Render3D\Render3DUVSphere\Render3DUVSphere.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DUVSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Render3D\Render3DRing\Render3DRing.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DRing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Application\Render3D\Render3DCylinder\Render3DCylinder.h">
+      <Filter>Engine\Include\Application\Render3D\Render3DCylinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

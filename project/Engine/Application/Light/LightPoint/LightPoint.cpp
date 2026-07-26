@@ -3,9 +3,12 @@
 #include "Store/LightStore/LightData/PointLightData/PointLightData.h"
 
 /// @brief コンストラクタ
-	/// @param name 
+/// @param name 
 LightPoint::LightPoint(const std::string& name) : BaseLight(name)
 {
+	// 種類を設定する
+	type_ = Engine::Light::Type::Point;
+
 	// ライトを読み込む
 	hLight_ = engine_->LoadLight(name, Engine::Light::Type::Point);
 

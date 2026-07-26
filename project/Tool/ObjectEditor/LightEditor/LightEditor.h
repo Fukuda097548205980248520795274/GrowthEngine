@@ -1,38 +1,34 @@
 #pragma once
-#include "UIData/UIData.h"
+#include "LightData/LightData.h"
 
-class UIEditor
+class LightEditor
 {
 public:
 
 	/// @brief コンストラクタ
-	UIEditor() = default;
-
-	/// @brief デストラクタ
-	~UIEditor() = default;
-
-	/// @brief 初期化処理
-	void Initialize();
+	LightEditor() = default;
 
 	/// @brief 更新処理
 	/// @param dt 
 	void Update(float dt);
 
-	/// @brief 描画処理
-	void Draw();
-
 	/// @brief UIを描画する
 	void DrawUI();
 
-	/// @brief スプライトを取得する
+	/// @brief 平行光源を取得する
 	/// @param name 
 	/// @return 
-	Sprite* GetSprite(const std::string& name) const;
+	LightDirectional* GetDirectionalLight(const std::string& name) const;
 
-private:
+	/// @brief 点光源を取得する
+	/// @param name 
+	/// @return 
+	LightPoint* GetPointLight(const std::string& name) const;
 
-	/// @brief テクスチャフォルダを走査してロードする
-	void RefreshTextureList();
+	/// @brief スポットライトを取得する
+	/// @param name 
+	/// @return 
+	LightSpot* GetSpotLight(const std::string& name) const;
 
 
 private:
@@ -52,8 +48,14 @@ private:
 
 private:
 
-	/// @brief UIデータをファイルに保存する
-	void SaveUI();
+	/// @brief UI要素の名前が重複しないようにユニークな名前を生成する
+	/// @param baseName 
+	/// @param ignoreIndex 
+	/// @return 
+	std::string GetUniqueName(const std::string& baseName, int ignoreIndex = -1) const;
+
+	/// @brief ファイルに保存する
+	void Save();
 
 	/// @brief 選択中のUI要素を削除する
 	void DeleteSelectedElement();
@@ -71,32 +73,23 @@ private:
 private:
 
 	// 保存・読み込み用のファイル名
-	char saveFilename_[128] = "ui_new";
+	char saveFilename_[128] = "light_new";
 
 	// 編集中のUI要素リスト
-	std::vector<UIElementData> uiElements_;
+	std::vector<LightElementData> lightElements_;
 
 	// 現在選択されているUI要素のインデックス
 	int selectedElementIndex_ = -1;
 
-	// 読み込み済みのテクスチャリスト（ファイル名 -> ハンドル）
-	std::unordered_map<std::string, TextureHandle> loadedTextures_;
-
-	// コンボボックス表示用のファイル名リスト
-	std::vector<std::string> textureNames_;
-
-	// テクスチャフォルダのパス
-	const std::string kTextureDir = "./Assets/Textures/";
-
 	// UIデータを保存するディレクトリパス
-	const std::string kUIDir = "./Assets/Parameter/UI/";
+	const std::string kLightDir = "./Assets/Parameter/Light/";
 
 
 private:
 
 	// undoスタック
 	std::vector<nlohmann::json> undoStack_;
-	
+
 	// redoスタック
 	std::vector<nlohmann::json> redoStack_;
 };

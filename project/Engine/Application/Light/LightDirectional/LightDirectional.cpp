@@ -3,9 +3,12 @@
 #include "Store/LightStore/LightData/DirectionalLightData/DirectionalLightData.h"
 
 /// @brief コンストラクタ
-	/// @param name 
+/// @param name 
 LightDirectional::LightDirectional(const std::string& name) : BaseLight(name)
 {
+	// 種類を設定する
+	type_ = Engine::Light::Type::Directional;
+
 	// ライトを読み込む
 	hLight_ = engine_->LoadLight(name, Engine::Light::Type::Directional);
 

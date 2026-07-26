@@ -1,8 +1,8 @@
 #include "UIEditor.h"
 #include "UISerializer/UISerializer.h"
 
-/// @brief 初期化処理
-void UIEditor::Initialize()
+/// @brief コンストラクタ
+UIEditor::UIEditor()
 {
 	// テクスチャフォルダを走査してロードする
 	RefreshTextureList();
@@ -220,7 +220,7 @@ void UIEditor::DrawControlWindow()
 				SaveHistoryState();
 
 				UIElementData newData;
-				newData.name = newSpriteName;
+				newData.name = GetUniqueName(newSpriteName);
 
 				// テクスチャが選択されているか確認
 				TextureHandle hTex = 0;
@@ -296,10 +296,23 @@ void UIEditor::DrawInspectorWindow()
 			// 名前の変更
 			char nameBuffer[64];
 			strcpy_s(nameBuffer, selectedData.name.c_str());
-			if (ImGui::InputText("名前", nameBuffer, IM_ARRAYSIZE(nameBuffer)))
+
+			// Enterキーが押されたか、入力が終了したかを判定
+			bool isNameEntered = ImGui::InputText("名前", nameBuffer, IM_ARRAYSIZE(nameBuffer), ImGuiInputTextFlags_EnterReturnsTrue);
+
+			// 名前が変更された場合、または入力が終了した場合に処理を行う
+			if (isNameEntered || ImGui::IsItemDeactivatedAfterEdit())
 			{
-				selectedData.name = nameBuffer;
+				std::string newName(nameBuffer);
+				if (newName != selectedData.name)
+				{
+					SaveHistoryState();
+
+					// 自分自身のインデックスを除外して重複チェック
+					selectedData.name = GetUniqueName(newName, selectedElementIndex_);
+				}
 			}
+
 
 			// テクスチャのコンボボックス
 			if (!textureNames_.empty())
@@ -450,6 +463,44 @@ void UIEditor::DrawAssetsWindow()
 	ImGui::End();
 
 #endif
+}
+
+/// @brief UI要素の名前が重複しないようにユニークな名前を生成する
+/// @param baseName 
+/// @param ignoreIndex 
+/// @return 
+std::string UIEditor::GetUniqueName(const std::string& baseName, int ignoreIndex) const
+{
+	std::string currentName = baseName;
+	int count = 1;
+
+	while (true)
+	{
+		bool isDuplicate = false;
+
+		for (int i = 0; i < uiElements_.size(); ++i)
+		{
+			// 自分自身は重複チェックから除外する
+			if (i == ignoreIndex) continue;
+
+			// 名前が重複しているかチェック
+			if (uiElements_[i].name == currentName)
+			{
+				isDuplicate = true;
+				break;
+			}
+		}
+
+		// 重複がなければその名前で確定
+		if (!isDuplicate)
+			break;
+
+		// 重複している場合は _1, _2 のように連番を付与して再チェック
+		currentName = baseName + "_" + std::to_string(count);
+		count++;
+	}
+
+	return currentName;
 }
 
 /// @brief UIデータをファイルに保存する

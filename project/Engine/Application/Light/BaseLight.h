@@ -18,6 +18,10 @@ namespace Engine
 		/// @param name 
 		BaseLight(const std::string& name);
 
+		/// @brief ライトの種類を取得する
+		/// @return 
+		Light::Type GetType() const { return type_; }
+
 
 	protected:
 
@@ -29,5 +33,8 @@ namespace Engine
 
 		/// @brief ハンドル
 		LightHandle hLight_ = 0;
+
+		/// @brief ライトの種類
+		Light::Type type_ = Engine::Light::Type::None;
 	};
 }

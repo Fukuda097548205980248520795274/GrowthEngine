@@ -26,6 +26,10 @@ namespace Engine
 		/// @brief 描画処理
 		virtual void Draw() = 0;
 
+		/// @brief 種類を取得する
+		/// @return 
+		Engine::Render3D::Type GetType() const { return type_; }
+
 
 	protected:
 
