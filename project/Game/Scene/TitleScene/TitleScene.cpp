@@ -6,7 +6,8 @@ void TitleScene::Initialize()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-	// UIエディタを作成する
+	// エディタを作成する
+	lightEditor_ = std::make_unique<LightEditor>();
 	modelEditor_ = std::make_unique<ModelEditor>();
 	
 	// 上下のキー入力を作成する
@@ -49,6 +50,7 @@ void TitleScene::Initialize()
 
 			// UIエディタのUI描画処理を呼び出す
 			modelEditor_->DrawUI();
+			lightEditor_->DrawUI();
 
 			// UIの描画処理を呼び出す
 			modelEditor_->Draw();
@@ -87,6 +89,7 @@ void TitleScene::Update()
 
 	// UIエディタの更新処理を呼び出す
 	modelEditor_->Update(dt);
+	lightEditor_->Update(dt);
 
 	// フェーズマネージャの更新処理を呼び出す
 	phaseManager_->Update();

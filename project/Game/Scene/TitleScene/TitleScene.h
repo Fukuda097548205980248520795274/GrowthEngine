@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 #include "PhaseManager/PhaseManager.h"
 
+#include "ObjectEditor/LightEditor/LightEditor.h"
 #include "ObjectEditor/ModelEditor/ModelEditor.h"
 
 class TitleScene : public Scene
@@ -143,6 +144,9 @@ private:
 
 	
 private:
+
+	/// @brief ライトエディタ
+	std::unique_ptr<LightEditor> lightEditor_ = nullptr;
 
 	/// @brief UIエディタ
 	std::unique_ptr<ModelEditor> modelEditor_ = nullptr;

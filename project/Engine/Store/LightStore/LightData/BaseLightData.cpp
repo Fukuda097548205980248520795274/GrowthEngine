@@ -13,14 +13,3 @@ Engine::BaseLightData::BaseLightData(const std::string& name, LightHandle handle
 	// 読み込む
 	isLoad_ = true; 
 }
-
-/// @brief 初期化
-/// @param parameter 
-void Engine::BaseLightData::Initialize(LightParameter* parameter)
-{
-	// nullptrチェック
-	assert(parameter);
-
-	// 引数を受け取る
-	parameter_ = parameter;
-}

@@ -12,10 +12,6 @@ namespace Engine
 		/// @param handle 
 		PointLightData(const std::string& name, LightHandle handle);
 
-		/// @brief 初期化
-		/// @param parameter 
-		void Initialize(LightParameter* parameter) override;
-
 		/// @brief 更新処理
 		void Update() override;
 
@@ -36,9 +32,6 @@ namespace Engine
 
 
 	public:
-
-		/// @brief デバッグ用描画処理
-		void DebugParameter() override;
 
 		/// @brief デバッグ用の線を描画する
 		void DebugDrawLine() override;

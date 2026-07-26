@@ -27,10 +27,6 @@ namespace Engine
 		/// @param handle 
 		BaseLightData(const std::string& name, LightHandle handle);
 
-		/// @brief 初期化
-		/// @param parameter 
-		virtual void Initialize(LightParameter* parameter);
-
 		/// @brief 更新処理
 		virtual void Update() = 0;
 
@@ -67,9 +63,6 @@ namespace Engine
 
 	public:
 
-		/// @brief デバッグ用パラメータ
-		virtual void DebugParameter() = 0;
-
 		/// @brief デバッグ用の線を描画する
 		virtual void DebugDrawLine() = 0;
 
@@ -90,14 +83,8 @@ namespace Engine
 		// 名前
 		std::string name_{};
 
-		/// @brief グループ名
-		std::string group_{};
-
 		// ハンドル
 		LightHandle handle_ = 0;
-
-		/// @brief パラメータ
-		LightParameter* parameter_ = nullptr;
 
 		// 読み込んでいるかどうか
 		bool isLoad_ = false;

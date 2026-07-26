@@ -248,7 +248,6 @@ void Engine::RenderContext::PreDraw()
 	particle_->DebugParameter();
 
 	lightStore_->DebugGuizmo(camera3DStore_->GetCamera3D().GetViewMatrix(), camera3DStore_->GetCamera3D().GetProjectionMatrix());
-	lightStore_->DebugParameter();
 
 	// ImGuiDockingのビューウィンドウがホバーしているかどうかを取得する
 	isHoverViewWindow = imguiRender_->IsViewWindowHover();

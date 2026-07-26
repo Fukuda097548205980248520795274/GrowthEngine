@@ -113,9 +113,6 @@ namespace Engine
 
 	public:
 
-		/// @brief デバッグ用パラメータ
-		void DebugParameter();
-
 		/// @brief デバッグ用の線を描画
 		void DebugDrawLine();
 
@@ -152,9 +149,6 @@ namespace Engine
 
 		/// @brief 名前テーブル
 		std::unordered_map<std::string, LightHandle> nameTable_;
-
-		/// @brief パラメータ
-		std::unique_ptr<LightParameter> parameter_ = nullptr;
 
 
 	private:
