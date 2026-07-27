@@ -80,14 +80,11 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 /// @brief 更新処理
 void Player::Update()
 {
-	// 更新が無効なら何もしない
-	if (!updateEnabled_)return;
-
 	// 更新処理開始前のリセット
 	StartUpdate();
 
 	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
-	if (Character::IsCutsceneActive())
+	if (Character::IsCutsceneActive() || !updateEnabled_)
 	{
 		// ステートをNoneに変更する
 		stateMachine_->ChangeState("None");

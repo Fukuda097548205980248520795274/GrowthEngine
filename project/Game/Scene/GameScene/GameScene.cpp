@@ -267,7 +267,7 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	stageEditor_->LoadStage("Tutorial.json");
+	//stageEditor_->LoadStage("Tutorial.json");
 
 
 	// オブジェクトの描画レンダーパスの読み込み

@@ -19,8 +19,11 @@
 /// @param selectedIndex 
 /// @param isDirty 
 /// @param history 
-void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history)
+void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history, bool isPlaying)
 {
+	// ゲームが再生中の場合はギズモの操作を無効化する
+	if (isPlaying)return;
+
 	// 選択されているオブジェクトがあれば、そのオブジェクトをギズモで操作できるようにする
 	if (selectedIndex >= 0 && selectedIndex < placementList.size())
 	{
@@ -136,8 +139,11 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 /// @param navMeshController 
 /// @param isDirty 
 /// @param history 
-void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, StageEditorHistory* history)
+void StageEditorGuizmo::UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, StageEditorHistory* history, bool isPlaying)
 {
+	// ゲームが再生中の場合はナビメッシュの編集を行わない
+	if (isPlaying)return;
+
 	// ナビメッシュやコントローラーが存在しない場合は何もしない
 	if (navMesh == nullptr || navMeshController == nullptr) return;
 
