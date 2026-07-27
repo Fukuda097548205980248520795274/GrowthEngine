@@ -8,10 +8,6 @@ public:
 	/// @brief コンストラクタ
 	LightEditor() = default;
 
-	/// @brief 更新処理
-	/// @param dt 
-	void Update(float dt);
-
 	/// @brief UIを描画する
 	void DrawUI();
 
@@ -32,9 +28,6 @@ public:
 
 
 private:
-
-	/// @brief コントロールウィンドウ描画
-	void DrawControlWindow();
 
 	/// @brief ヒエラルキーウィンドウ描画
 	void DrawHierarchyWindow();
@@ -72,9 +65,6 @@ private:
 
 private:
 
-	// 保存・読み込み用のファイル名
-	char saveFilename_[128] = "light_new";
-
 	// 編集中のUI要素リスト
 	std::vector<LightElementData> lightElements_;
 
@@ -83,6 +73,18 @@ private:
 
 	// UIデータを保存するディレクトリパス
 	const std::string kLightDir = "./Assets/Parameter/Light/";
+
+
+private:
+
+	// ファイルを開いている状態かどうかのフラグ
+	bool isFileOpen_ = false;
+
+	// 現在実際に開いて編集しているファイル名
+	std::string currentFileName_ = "";
+
+	// UIの入力欄用
+	char inputFilename_[128] = "";
 
 
 private:

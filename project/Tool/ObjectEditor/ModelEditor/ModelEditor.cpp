@@ -9,13 +9,6 @@ ModelEditor::ModelEditor()
 	RefreshAnimationList();
 }
 
-/// @brief 更新処理
-/// @param dt 
-void ModelEditor::Update(float dt)
-{
-
-}
-
 /// @brief 描画処理
 void ModelEditor::Draw()
 {
@@ -33,7 +26,39 @@ void ModelEditor::Draw()
 void ModelEditor::DrawUI()
 {
 #ifdef DEVELOPMENT
-	DrawControlWindow();
+
+	// ImGuiのIOを取得
+	ImGuiIO& io = ImGui::GetIO();
+	bool isCtrl = io.KeyCtrl;
+
+	// テキスト入力中やアイテムがアクティブな場合には無効にする
+	if (!ImGui::GetIO().WantTextInput && !ImGui::IsAnyItemActive())
+	{
+		// Ctrl + Z で Undo
+		if (isCtrl && ImGui::IsKeyPressed(ImGuiKey_Z))
+		{
+			Undo();
+		}
+
+		// Ctrl + Y で Redo
+		if (isCtrl && ImGui::IsKeyPressed(ImGuiKey_Y))
+		{
+			Redo();
+		}
+
+		// Ctrl + S で 保存
+		if (isCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+		{
+			Save();
+		}
+
+		// Deleteキーで選択中のスプライトを削除
+		if (ImGui::IsKeyPressed(ImGuiKey_Delete))
+		{
+			DeleteSelectedElement();
+		}
+	}
+
 	DrawHierarchyWindow();
 	DrawInspectorWindow();
 	DrawAssetsWindow();
@@ -147,303 +172,6 @@ void ModelEditor::RefreshAnimationList()
 			}
 		}
 	}
-}
-
-/// @brief コントロールウィンドウ描画
-void ModelEditor::DrawControlWindow()
-{
-#ifdef DEVELOPMENT
-
-	if (ImGui::Begin("モデル - コントロール"))
-	{
-		// ファイル名の入力欄
-		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
-
-		// 保存ボタン
-		if (ImGui::Button("保存"))
-		{
-			Save();
-		}
-
-		ImGui::SameLine();
-
-		// 読み込みボタン
-		if (ImGui::Button("読み込み"))
-		{
-			std::string filenameStr(saveFilename_);
-			if (filenameStr.find(".json") == std::string::npos)
-			{
-				filenameStr += ".json";
-			}
-
-			std::string path = kModelDataDir + filenameStr;
-
-			if (std::filesystem::exists(path))
-			{
-				selectedElementIndex_ = -1;
-				modelElements_ = FromJson(path, loadedModels_, loadedAnimations_, loadedSkeletons_);
-			}
-		}
-
-		ImGui::SameLine();
-
-		// 新規作成（リストのクリア）
-		if (ImGui::Button("新規データ"))
-		{
-			modelElements_.clear();
-			selectedElementIndex_ = -1;
-			strcpy_s(saveFilename_, "model_new");
-		}
-
-		ImGui::Separator();
-
-		if (ImGui::Button("モデル再読み込み"))
-		{
-			RefreshModelList();
-			RefreshAnimationList();
-		}
-		ImGui::SameLine();
-
-
-		static char newModelName[64] = "New Model";
-		static int newModelTypeIndex = 0; // モデルの種類のインデックス
-		static int newModelIndex = 0;
-		static int newAnimationIndex = 0;
-		static int newSkeletonIndex = 0;
-
-		// 新規モデル追加ボタン
-		if (ImGui::Button("新規モデル追加"))
-		{
-			// ポップアップを開く前に初期値をセット
-			strcpy_s(newModelName, "New Model");
-			newModelIndex = 0;
-			ImGui::OpenPopup("新規モデル作成");
-		}
-
-		// 新規モデル作成のポップアップ
-		if (ImGui::BeginPopupModal("新規モデル作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			// 名前の入力
-			ImGui::InputText("名前", newModelName, IM_ARRAYSIZE(newModelName));
-
-			// モデルの選択
-			const char* modelTypes[] = { "None", "StaticModel", "AnimationModel", "SkinningModel", "UVSphere", "Ring", "Cylinder" };
-			ImGui::Combo("モデルの種類", &newModelTypeIndex, modelTypes, IM_ARRAYSIZE(modelTypes));
-
-			// モデルの種類が StaticModel, AnimationModel, SkinningModel の場合のみ、モデルの選択コンボボックスを表示
-			if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::StaticModel) || 
-				newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel) ||
-				newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
-			{
-				// モデルの選択コンボボックス
-				if (!modelNames_.empty())
-				{
-					std::vector<const char*> items;
-					for (const auto& name : modelNames_)
-					{
-						items.push_back(name.c_str());
-					}
-					ImGui::Combo("モデル", &newModelIndex, items.data(), static_cast<int>(items.size()));
-				}
-				else
-				{
-					ImGui::TextDisabled("※モデルが見つかりません");
-				}
-			}
-
-			// モデルの種類が AnimationModel, SkinningModel の場合のみ、アニメーションの選択コンボボックスを表示
-			if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel) ||
-				newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
-			{
-				// モデルの選択コンボボックス
-				if (!animationNames_.empty())
-				{
-					std::vector<const char*> items;
-					for (const auto& name : animationNames_)
-					{
-						items.push_back(name.c_str());
-					}
-					ImGui::Combo("アニメーション", &newAnimationIndex, items.data(), static_cast<int>(items.size()));
-				}
-				else
-				{
-					ImGui::TextDisabled("※アニメーションが見つかりません");
-				}
-			}
-
-			// モデルの種類が SkinningModel の場合のみ、スケルトンの選択コンボボックスを表示
-			if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
-			{
-				// モデルの選択コンボボックス
-				if (!skeletonNames_.empty())
-				{
-					std::vector<const char*> items;
-					for (const auto& name : skeletonNames_)
-					{
-						items.push_back(name.c_str());
-					}
-					ImGui::Combo("スケルトン", &newSkeletonIndex, items.data(), static_cast<int>(items.size()));
-				}
-				else
-				{
-					ImGui::TextDisabled("※スケルトンが見つかりません");
-				}
-			}
-
-			ImGui::Separator();
-
-			// 作成ボタン
-			if (newModelTypeIndex != static_cast<int>(Engine::Render3D::Type::None) && ImGui::Button("作成", ImVec2(120, 0)))
-			{
-				SaveHistoryState();
-
-				ModelElementData newData;
-				newData.modelName = GetUniqueName(newModelName);
-
-				// 選択されたモデルの名前から、ディレクトリとファイル名を特定してハンドルを取得
-				if (!modelNames_.empty() && newModelIndex >= 0 && newModelIndex < modelNames_.size())
-				{
-					if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::StaticModel))
-					{
-						ModelHandle hModel = 0;
-						std::string selectedModelFile = modelNames_[newModelIndex];
-
-						// モデルのハンドルを取得
-						for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
-						{
-							if (it->first.second == selectedModelFile)
-							{
-								newData.modelDirectory = it->first.first;
-								newData.modelFileName = it->first.second;
-								hModel = it->second;
-								break;
-							}
-						}
-
-						newData.type = Engine::Render3D::Type::StaticModel;
-						newData.render3D = std::make_unique<Render3DStaticModel>(hModel, newData.modelName);
-					}
-					else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel))
-					{
-						ModelHandle hModel = 0;
-						AnimationHandle hAnimation = 0;
-						std::string selectedModelFile = modelNames_[newModelIndex];
-						std::string selectedAnimationFile = modelNames_[newAnimationIndex];
-
-						// モデルのハンドルを取得
-						for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
-						{
-							if (it->first.second == selectedModelFile)
-							{
-								newData.modelDirectory = it->first.first;
-								newData.modelFileName = it->first.second;
-								hModel = it->second;
-								break;
-							}
-						}
-
-						// アニメーションのハンドルを取得
-						for (auto it = loadedAnimations_.begin(); it != loadedAnimations_.end(); ++it)
-						{
-							if (it->first.second == selectedAnimationFile)
-							{
-								newData.animationDirectory = it->first.first;
-								newData.animationFileName = it->first.second;
-								hAnimation = it->second;
-								break;
-							}
-						}
-
-						newData.type = Engine::Render3D::Type::AnimationModel;
-						newData.render3D = std::make_unique<Render3DAnimationModel>(hModel,hAnimation, newData.modelName);
-					}
-					else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
-					{
-						ModelHandle hModel = 0;
-						AnimationHandle hAnimation = 0;
-						SkeletonHandle hSkeleton = 0;
-						std::string selectedModelFile = modelNames_[newModelIndex];
-						std::string selectedAnimationFile = modelNames_[newAnimationIndex];
-						std::string selectedSkeletonFile = modelNames_[newSkeletonIndex];
-
-						// モデルのハンドルを取得
-						for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
-						{
-							if (it->first.second == selectedModelFile)
-							{
-								newData.modelDirectory = it->first.first;
-								newData.modelFileName = it->first.second;
-								hModel = it->second;
-								break;
-							}
-						}
-
-						// アニメーションのハンドルを取得
-						for (auto it = loadedAnimations_.begin(); it != loadedAnimations_.end(); ++it)
-						{
-							if (it->first.second == selectedAnimationFile)
-							{
-								newData.animationDirectory = it->first.first;
-								newData.animationFileName = it->first.second;
-								hAnimation = it->second;
-								break;
-							}
-						}
-
-						// スケルトンのハンドルを取得
-						for (auto it = loadedSkeletons_.begin(); it != loadedSkeletons_.end(); ++it)
-						{
-							if (it->first.second == selectedSkeletonFile)
-							{
-								newData.skeletonDirectory = it->first.first;
-								newData.skeletonFileName = it->first.second;
-								hSkeleton = it->second;
-								break;
-							}
-						}
-
-						newData.type = Engine::Render3D::Type::SkinningModel;
-						newData.render3D = std::make_unique<Render3DSkinningModel>(hModel, hAnimation, hSkeleton, newData.modelName);
-					}
-				}
-				
-				// モデルの種類が UVSphere, Ring, Cylinder の場合は、特定のハンドルは不要
-				if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::UVSphere))
-				{
-					newData.type = Engine::Render3D::Type::UVSphere;
-					newData.render3D = std::make_unique<Render3DUVSphere>(newData.modelName);
-				}
-				else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Ring))
-				{
-					newData.type = Engine::Render3D::Type::Ring;
-					newData.render3D = std::make_unique<Render3DRing>(newData.modelName);
-				}
-				else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Cylinder))
-				{
-					newData.type = Engine::Render3D::Type::Cylinder;
-					newData.render3D = std::make_unique<Render3DCylinder>(newData.modelName);
-				}
-
-				modelElements_.push_back(std::move(newData));
-				selectedElementIndex_ = static_cast<int>(modelElements_.size()) - 1;
-
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::SameLine();
-
-			// キャンセルボタン
-			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-	ImGui::End();
-
-#endif
 }
 
 /// @brief ヒエラルキーウィンドウ描画
@@ -727,6 +455,304 @@ void ModelEditor::DrawAssetsWindow()
 
 	if (ImGui::Begin("モデル - アセットブラウザ"))
 	{
+		// 新規ファイル作成ボタン
+		if (ImGui::Button("新規ファイル作成"))
+		{
+			// ポップアップを開く前に入力欄にデフォルト名を入れておく
+			strcpy_s(inputFilename_, "model_new");
+			ImGui::OpenPopup("新規ファイル作成ポップアップ");
+		}
+
+		if (ImGui::BeginPopupModal("新規ファイル作成ポップアップ", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::InputText("ファイル名", inputFilename_, IM_ARRAYSIZE(inputFilename_));
+
+			ImGui::Separator();
+
+			// 作成ボタン
+			if (ImGui::Button("作成", ImVec2(120, 0)))
+			{
+				if (strlen(inputFilename_) > 0)
+				{
+					// 既存のデータをクリア
+					modelElements_.clear();
+					selectedElementIndex_ = -1;
+
+					// 入力された名前を「今開いているファイル名」として保持
+					currentFileName_ = inputFilename_;
+					isFileOpen_ = true;
+
+					// 保持した名前で空のファイルを作成
+					Save();
+
+					ImGui::CloseCurrentPopup(); // ポップアップを閉じる
+				}
+			}
+
+			ImGui::SameLine();
+
+			// キャンセルボタン
+			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+			}
+
+			ImGui::EndPopup();
+		}
+
+
+		// ファイルを開くボタン
+		if (isFileOpen_)
+		{
+			ImGui::SameLine();
+			ImGui::Text("編集中: %s.json", currentFileName_.c_str());
+			ImGui::Separator();
+
+			// 保存ボタン
+			if (ImGui::Button("保存"))
+				Save();
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("モデル再読み込み"))
+			{
+				RefreshModelList();
+				RefreshAnimationList();
+			}
+			ImGui::SameLine();
+
+
+			static char newModelName[64] = "New Model";
+			static int newModelTypeIndex = 0; // モデルの種類のインデックス
+			static int newModelIndex = 0;
+			static int newAnimationIndex = 0;
+			static int newSkeletonIndex = 0;
+
+			// 新規モデル追加ボタン
+			if (ImGui::Button("新規モデル追加"))
+			{
+				// ポップアップを開く前に初期値をセット
+				strcpy_s(newModelName, "New Model");
+				newModelIndex = 0;
+				ImGui::OpenPopup("新規モデル作成");
+			}
+
+			// 新規モデル作成のポップアップ
+			if (ImGui::BeginPopupModal("新規モデル作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				// 名前の入力
+				ImGui::InputText("名前", newModelName, IM_ARRAYSIZE(newModelName));
+
+				// モデルの選択
+				const char* modelTypes[] = { "None", "StaticModel", "AnimationModel", "SkinningModel", "UVSphere", "Ring", "Cylinder" };
+				ImGui::Combo("モデルの種類", &newModelTypeIndex, modelTypes, IM_ARRAYSIZE(modelTypes));
+
+				// モデルの種類が StaticModel, AnimationModel, SkinningModel の場合のみ、モデルの選択コンボボックスを表示
+				if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::StaticModel) ||
+					newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel) ||
+					newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
+				{
+					// モデルの選択コンボボックス
+					if (!modelNames_.empty())
+					{
+						std::vector<const char*> items;
+						for (const auto& name : modelNames_)
+						{
+							items.push_back(name.c_str());
+						}
+						ImGui::Combo("モデル", &newModelIndex, items.data(), static_cast<int>(items.size()));
+					} else
+					{
+						ImGui::TextDisabled("※モデルが見つかりません");
+					}
+				}
+
+				// モデルの種類が AnimationModel, SkinningModel の場合のみ、アニメーションの選択コンボボックスを表示
+				if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel) ||
+					newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
+				{
+					// モデルの選択コンボボックス
+					if (!animationNames_.empty())
+					{
+						std::vector<const char*> items;
+						for (const auto& name : animationNames_)
+						{
+							items.push_back(name.c_str());
+						}
+						ImGui::Combo("アニメーション", &newAnimationIndex, items.data(), static_cast<int>(items.size()));
+					} else
+					{
+						ImGui::TextDisabled("※アニメーションが見つかりません");
+					}
+				}
+
+				// モデルの種類が SkinningModel の場合のみ、スケルトンの選択コンボボックスを表示
+				if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
+				{
+					// モデルの選択コンボボックス
+					if (!skeletonNames_.empty())
+					{
+						std::vector<const char*> items;
+						for (const auto& name : skeletonNames_)
+						{
+							items.push_back(name.c_str());
+						}
+						ImGui::Combo("スケルトン", &newSkeletonIndex, items.data(), static_cast<int>(items.size()));
+					} else
+					{
+						ImGui::TextDisabled("※スケルトンが見つかりません");
+					}
+				}
+
+				ImGui::Separator();
+
+				// 作成ボタン
+				if (newModelTypeIndex != static_cast<int>(Engine::Render3D::Type::None) && ImGui::Button("作成", ImVec2(120, 0)))
+				{
+					SaveHistoryState();
+
+					ModelElementData newData;
+					newData.modelName = GetUniqueName(newModelName);
+
+					// 選択されたモデルの名前から、ディレクトリとファイル名を特定してハンドルを取得
+					if (!modelNames_.empty() && newModelIndex >= 0 && newModelIndex < modelNames_.size())
+					{
+						if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::StaticModel))
+						{
+							ModelHandle hModel = 0;
+							std::string selectedModelFile = modelNames_[newModelIndex];
+
+							// モデルのハンドルを取得
+							for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
+							{
+								if (it->first.second == selectedModelFile)
+								{
+									newData.modelDirectory = it->first.first;
+									newData.modelFileName = it->first.second;
+									hModel = it->second;
+									break;
+								}
+							}
+
+							newData.type = Engine::Render3D::Type::StaticModel;
+							newData.render3D = std::make_unique<Render3DStaticModel>(hModel, newData.modelName);
+						} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel))
+						{
+							ModelHandle hModel = 0;
+							AnimationHandle hAnimation = 0;
+							std::string selectedModelFile = modelNames_[newModelIndex];
+							std::string selectedAnimationFile = modelNames_[newAnimationIndex];
+
+							// モデルのハンドルを取得
+							for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
+							{
+								if (it->first.second == selectedModelFile)
+								{
+									newData.modelDirectory = it->first.first;
+									newData.modelFileName = it->first.second;
+									hModel = it->second;
+									break;
+								}
+							}
+
+							// アニメーションのハンドルを取得
+							for (auto it = loadedAnimations_.begin(); it != loadedAnimations_.end(); ++it)
+							{
+								if (it->first.second == selectedAnimationFile)
+								{
+									newData.animationDirectory = it->first.first;
+									newData.animationFileName = it->first.second;
+									hAnimation = it->second;
+									break;
+								}
+							}
+
+							newData.type = Engine::Render3D::Type::AnimationModel;
+							newData.render3D = std::make_unique<Render3DAnimationModel>(hModel, hAnimation, newData.modelName);
+						} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
+						{
+							ModelHandle hModel = 0;
+							AnimationHandle hAnimation = 0;
+							SkeletonHandle hSkeleton = 0;
+							std::string selectedModelFile = modelNames_[newModelIndex];
+							std::string selectedAnimationFile = modelNames_[newAnimationIndex];
+							std::string selectedSkeletonFile = modelNames_[newSkeletonIndex];
+
+							// モデルのハンドルを取得
+							for (auto it = loadedModels_.begin(); it != loadedModels_.end(); ++it)
+							{
+								if (it->first.second == selectedModelFile)
+								{
+									newData.modelDirectory = it->first.first;
+									newData.modelFileName = it->first.second;
+									hModel = it->second;
+									break;
+								}
+							}
+
+							// アニメーションのハンドルを取得
+							for (auto it = loadedAnimations_.begin(); it != loadedAnimations_.end(); ++it)
+							{
+								if (it->first.second == selectedAnimationFile)
+								{
+									newData.animationDirectory = it->first.first;
+									newData.animationFileName = it->first.second;
+									hAnimation = it->second;
+									break;
+								}
+							}
+
+							// スケルトンのハンドルを取得
+							for (auto it = loadedSkeletons_.begin(); it != loadedSkeletons_.end(); ++it)
+							{
+								if (it->first.second == selectedSkeletonFile)
+								{
+									newData.skeletonDirectory = it->first.first;
+									newData.skeletonFileName = it->first.second;
+									hSkeleton = it->second;
+									break;
+								}
+							}
+
+							newData.type = Engine::Render3D::Type::SkinningModel;
+							newData.render3D = std::make_unique<Render3DSkinningModel>(hModel, hAnimation, hSkeleton, newData.modelName);
+						}
+					}
+
+					// モデルの種類が UVSphere, Ring, Cylinder の場合は、特定のハンドルは不要
+					if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::UVSphere))
+					{
+						newData.type = Engine::Render3D::Type::UVSphere;
+						newData.render3D = std::make_unique<Render3DUVSphere>(newData.modelName);
+					} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Ring))
+					{
+						newData.type = Engine::Render3D::Type::Ring;
+						newData.render3D = std::make_unique<Render3DRing>(newData.modelName);
+					} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::Cylinder))
+					{
+						newData.type = Engine::Render3D::Type::Cylinder;
+						newData.render3D = std::make_unique<Render3DCylinder>(newData.modelName);
+					}
+
+					modelElements_.push_back(std::move(newData));
+					selectedElementIndex_ = static_cast<int>(modelElements_.size()) - 1;
+
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SameLine();
+
+				// キャンセルボタン
+				if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+				{
+					ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+				}
+
+				ImGui::EndPopup();
+			}
+		}
+
+
 		if (std::filesystem::exists(kModelDataDir))
 		{
 			// ウィンドウの右端の座標を取得（折り返しの計算用）
@@ -742,8 +768,8 @@ void ModelEditor::DrawAssetsWindow()
 					std::string filename = entry.path().filename().string();
 					std::string path = entry.path().string();
 
-					// ボタンとして表示（100x100のサイズ）
-					if (ImGui::Button(filename.c_str(), ImVec2(100, 100)))
+					// ボタンとして表示（50x50のサイズ）
+					if (ImGui::Button(filename.c_str(), ImVec2(50, 50)))
 					{
 						// ファイルを読み込む前に、現在の状態を履歴に保存
 						SaveHistoryState();
@@ -753,7 +779,11 @@ void ModelEditor::DrawAssetsWindow()
 
 						// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
 						std::string nameWithoutExt = entry.path().stem().string();
-						strcpy_s(saveFilename_, nameWithoutExt.c_str());
+						strcpy_s(inputFilename_, nameWithoutExt.c_str());
+
+						// 現在開いているファイル名を設定
+						currentFileName_ = nameWithoutExt;
+						isFileOpen_ = true;
 					}
 
 					// 次のアイテムを描画した時にウィンドウの右端をはみ出さないか計算
@@ -819,15 +849,18 @@ std::string ModelEditor::GetUniqueName(const std::string& baseName, int ignoreIn
 /// @brief UIデータをファイルに保存する
 void ModelEditor::Save()
 {
+	// ファイル名が空の場合は保存しない
+	if (currentFileName_.empty()) return;
+
 	// 保存先ディレクトリが存在しない場合は作成する
 	if (!std::filesystem::exists(kModelDataDir))
 		std::filesystem::create_directories(kModelDataDir);
 
 	// 保存するファイル名に .json 拡張子が含まれていない場合は追加する
-	std::string filenameStr(saveFilename_);
+	std::string filenameStr = currentFileName_;
 	if (filenameStr.find(".json") == std::string::npos)
 		filenameStr += ".json";
-
+	
 	std::string path = kModelDataDir + filenameStr;
 	ToJson(path, modelElements_);
 }

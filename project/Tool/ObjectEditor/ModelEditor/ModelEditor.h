@@ -8,10 +8,6 @@ public:
 	/// @brief コンストラクタ
 	ModelEditor();
 
-	/// @brief 更新処理
-	/// @param dt 
-	void Update(float dt);
-
 	/// @brief 描画処理
 	void Draw();
 
@@ -46,9 +42,6 @@ private:
 
 
 private:
-
-	/// @brief コントロールウィンドウ描画
-	void DrawControlWindow();
 
 	/// @brief ヒエラルキーウィンドウ描画
 	void DrawHierarchyWindow();
@@ -109,9 +102,6 @@ private:
 
 private:
 
-	// 保存・読み込み用のファイル名
-	char saveFilename_[128] = "model_new";
-
 	// 編集中のモデル要素リスト
 	std::vector<ModelElementData> modelElements_;
 
@@ -120,6 +110,18 @@ private:
 
 	// モデルデータを保存するディレクトリパス
 	const std::string kModelDataDir = "./Assets/Parameter/Models/";
+
+
+private:
+
+	// ファイルを開いている状態かどうかのフラグ
+	bool isFileOpen_ = false;
+
+	// 現在実際に開いて編集しているファイル名
+	std::string currentFileName_ = "";
+
+	// UIの入力欄用
+	char inputFilename_[128] = "";
 
 
 private:

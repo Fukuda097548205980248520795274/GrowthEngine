@@ -1,15 +1,13 @@
 #include "LightEditor.h"
 #include "LightSerializer/LightSerializer.h"
 
-/// @brief 更新処理
-/// @param dt 
-void LightEditor::Update(float dt)
+/// @brief UIを描画する
+void LightEditor::DrawUI()
 {
 #ifdef DEVELOPMENT
 
+	// ImGuiのIOを取得
 	ImGuiIO& io = ImGui::GetIO();
-
-	// Ctrlキーが押されているか
 	bool isCtrl = io.KeyCtrl;
 
 	// テキスト入力中やアイテムがアクティブな場合には無効にする
@@ -40,16 +38,7 @@ void LightEditor::Update(float dt)
 		}
 	}
 
-#endif
-}
-
-/// @brief UIを描画する
-void LightEditor::DrawUI()
-{
-#ifdef DEVELOPMENT
-
 	// ImGuiウィンドウの描画
-	DrawControlWindow();
 	DrawHierarchyWindow();
 	DrawInspectorWindow();
 	DrawAssetsWindow();
@@ -101,125 +90,6 @@ LightSpot* LightEditor::GetSpotLight(const std::string& name) const
 		}
 	}
 	return nullptr;
-}
-
-/// @brief コントロールウィンドウ描画
-void LightEditor::DrawControlWindow()
-{
-#ifdef DEVELOPMENT
-
-	if (ImGui::Begin("ライト - コントロール"))
-	{
-		// ファイル名の入力欄
-		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
-
-		// 保存ボタン
-		if (ImGui::Button("保存"))
-		{
-			Save();
-		}
-
-		ImGui::SameLine();
-
-		// 読み込みボタン
-		if (ImGui::Button("読み込み"))
-		{
-			std::string filenameStr(saveFilename_);
-			if (filenameStr.find(".json") == std::string::npos)
-			{
-				filenameStr += ".json";
-			}
-
-			std::string path = kLightDir + filenameStr;
-
-			if (std::filesystem::exists(path))
-			{
-				selectedElementIndex_ = -1;
-				lightElements_ = FromJson(path);
-			}
-		}
-
-		ImGui::SameLine();
-
-		// 新規作成（リストのクリア）
-		if (ImGui::Button("新規データ"))
-		{
-			lightElements_.clear();
-			selectedElementIndex_ = -1;
-			strcpy_s(saveFilename_, "light_new");
-		}
-
-
-		static char newLightName[64] = "New Light";
-		static int newLightType = 0; // 0: None, 1: Directional, 2: Point, 3: Spot
-
-		// 新規ライト追加ボタン
-		if (ImGui::Button("新規ライト追加"))
-		{
-			// ポップアップを開く前に初期値をセット
-			strcpy_s(newLightName, "New Light");
-			ImGui::OpenPopup("新規ライト作成");
-		}
-
-		// 新規ライト作成のポップアップ
-		if (ImGui::BeginPopupModal("新規ライト作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			// 名前の入力
-			ImGui::InputText("名前", newLightName, IM_ARRAYSIZE(newLightName));
-
-			// ライトの種類の選択
-			const char* lightTypes[] = { "None", "Directional", "Point", "Spot" };
-			ImGui::Combo("ライトの種類", &newLightType, lightTypes, IM_ARRAYSIZE(lightTypes));
-
-			ImGui::Separator();
-
-			// 作成ボタン
-			if(newLightType != static_cast<int>(Engine::Light::Type::None) && ImGui::Button("作成", ImVec2(120, 0)))
-			{
-				// 新規作成時の状態を履歴に保存
-				SaveHistoryState();
-
-				LightElementData newData;
-				newData.name = GetUniqueName(newLightName);
-				newData.lightType = static_cast<Engine::Light::Type>(newLightType);
-
-				// ライトの種類に応じてライトを生成
-				if(newData.lightType == Engine::Light::Type::Directional)
-				{
-					newData.light = std::make_unique<LightDirectional>(newData.name);
-				}
-				else if(newData.lightType == Engine::Light::Type::Point)
-				{
-					newData.light = std::make_unique<LightPoint>(newData.name);
-				}
-				else if(newData.lightType == Engine::Light::Type::Spot)
-				{
-					newData.light = std::make_unique<LightSpot>(newData.name);
-				}
-
-				// 新規作成したライトをリストに追加
-				lightElements_.push_back(std::move(newData));
-
-				// 選択状態を新規作成したものに合わせる
-				selectedElementIndex_ = static_cast<int>(lightElements_.size()) - 1;
-
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::SameLine();
-
-			// キャンセルボタン
-			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-	ImGui::End();
-
-#endif
 }
 
 /// @brief ヒエラルキーウィンドウ描画
@@ -382,6 +252,129 @@ void LightEditor::DrawAssetsWindow()
 
 	if (ImGui::Begin("ライト - アセット"))
 	{
+		if (ImGui::Button("新規ファイル作成"))
+		{
+			// ポップアップを開く前に入力欄にデフォルト名を入れておく
+			strcpy_s(inputFilename_, "light_new");
+			ImGui::OpenPopup("新規ファイル作成ポップアップ");
+		}
+
+		if (ImGui::BeginPopupModal("新規ファイル作成ポップアップ", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::InputText("ファイル名", inputFilename_, IM_ARRAYSIZE(inputFilename_));
+
+			ImGui::Separator();
+
+			// 作成ボタン
+			if (ImGui::Button("作成", ImVec2(120, 0)))
+			{
+				if (strlen(inputFilename_) > 0)
+				{
+					// 既存のデータをクリア
+					lightElements_.clear();
+					selectedElementIndex_ = -1;
+
+					// 入力された名前を「今開いているファイル名」として保持
+					currentFileName_ = inputFilename_;
+					isFileOpen_ = true;
+
+					// 保持した名前で空のファイルを作成
+					Save();
+
+					ImGui::CloseCurrentPopup(); // ポップアップを閉じる
+				}
+			}
+
+			ImGui::SameLine();
+
+			// キャンセルボタン
+			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (isFileOpen_)
+		{
+			ImGui::SameLine();
+			ImGui::Text("編集中: %s.json", currentFileName_.c_str());
+			ImGui::Separator();
+
+			// 保存ボタン
+			if (ImGui::Button("保存"))
+				Save();
+
+			ImGui::SameLine();
+
+			static char newLightName[64] = "New Light";
+			static int newLightType = 0; // 0: None, 1: Directional, 2: Point, 3: Spot
+
+			// 新規ライト追加ボタン
+			if (ImGui::Button("新規ライト追加"))
+			{
+				// ポップアップを開く前に初期値をセット
+				strcpy_s(newLightName, "New Light");
+				ImGui::OpenPopup("新規ライト作成");
+			}
+
+			// 新規ライト作成のポップアップ
+			if (ImGui::BeginPopupModal("新規ライト作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				// 名前の入力
+				ImGui::InputText("名前", newLightName, IM_ARRAYSIZE(newLightName));
+
+				// ライトの種類の選択
+				const char* lightTypes[] = { "None", "Directional", "Point", "Spot" };
+				ImGui::Combo("ライトの種類", &newLightType, lightTypes, IM_ARRAYSIZE(lightTypes));
+
+				ImGui::Separator();
+
+				// 作成ボタン
+				if (newLightType != static_cast<int>(Engine::Light::Type::None) && ImGui::Button("作成", ImVec2(120, 0)))
+				{
+					// 新規作成時の状態を履歴に保存
+					SaveHistoryState();
+
+					LightElementData newData;
+					newData.name = GetUniqueName(newLightName);
+					newData.lightType = static_cast<Engine::Light::Type>(newLightType);
+
+					// ライトの種類に応じてライトを生成
+					if (newData.lightType == Engine::Light::Type::Directional)
+					{
+						newData.light = std::make_unique<LightDirectional>(newData.name);
+					} else if (newData.lightType == Engine::Light::Type::Point)
+					{
+						newData.light = std::make_unique<LightPoint>(newData.name);
+					} else if (newData.lightType == Engine::Light::Type::Spot)
+					{
+						newData.light = std::make_unique<LightSpot>(newData.name);
+					}
+
+					// 新規作成したライトをリストに追加
+					lightElements_.push_back(std::move(newData));
+
+					// 選択状態を新規作成したものに合わせる
+					selectedElementIndex_ = static_cast<int>(lightElements_.size()) - 1;
+
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SameLine();
+
+				// キャンセルボタン
+				if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+				{
+					ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+				}
+
+				ImGui::EndPopup();
+			}
+		}
+
+
 		if (std::filesystem::exists(kLightDir))
 		{
 			// ウィンドウの右端の座標を取得（折り返しの計算用）
@@ -397,8 +390,8 @@ void LightEditor::DrawAssetsWindow()
 					std::string filename = entry.path().filename().string();
 					std::string path = entry.path().string();
 
-					// ボタンとして表示（100x100のサイズ）
-					if (ImGui::Button(filename.c_str(), ImVec2(100, 100)))
+					// ボタンとして表示（50x50のサイズ）
+					if (ImGui::Button(filename.c_str(), ImVec2(50, 50)))
 					{
 						// ファイルを読み込む前に、現在の状態を履歴に保存
 						SaveHistoryState();
@@ -408,7 +401,11 @@ void LightEditor::DrawAssetsWindow()
 
 						// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
 						std::string nameWithoutExt = entry.path().stem().string();
-						strcpy_s(saveFilename_, nameWithoutExt.c_str());
+						strcpy_s(inputFilename_, nameWithoutExt.c_str());
+
+						// 現在開いているファイル名を更新
+						currentFileName_ = nameWithoutExt;
+						isFileOpen_ = true;
 					}
 
 					// 次のアイテムを描画した時にウィンドウの右端をはみ出さないか計算
@@ -474,16 +471,17 @@ std::string LightEditor::GetUniqueName(const std::string& baseName, int ignoreIn
 /// @brief ファイルに保存する
 void LightEditor::Save()
 {
-	if (!std::filesystem::exists(kLightDir))
-	{
-		std::filesystem::create_directories(kLightDir);
-	}
+	// ファイル名が空の場合は保存しない
+	if (currentFileName_.empty()) return;
 
-	std::string filenameStr(saveFilename_);
+	// ディレクトリが存在しない場合は作成する
+	if (!std::filesystem::exists(kLightDir))
+		std::filesystem::create_directories(kLightDir);
+
+	// ファイル名に拡張子が含まれていない場合は .json を付与する
+	std::string filenameStr = currentFileName_;
 	if (filenameStr.find(".json") == std::string::npos)
-	{
 		filenameStr += ".json";
-	}
 
 	std::string path = kLightDir + filenameStr;
 	ToJson(path, lightElements_);

@@ -23,22 +23,22 @@ Collapsed=0
 Pos=0,18
 Size=967,490
 Collapsed=0
-DockId=0x00000005,1
+DockId=0x00000025,1
 
 [Window][Texture]
 Pos=0,482
-Size=1280,238
+Size=221,238
 Collapsed=0
-DockId=0x0000000B,0
+DockId=0x00000023,0
 
 [Window][Reset Scene]
 Pos=0,482
-Size=1280,238
+Size=242,238
 Collapsed=0
-DockId=0x0000000B,2
+DockId=0x00000023,2
 
 [Window][Stage Editor]
-Pos=706,18
+Pos=658,18
 Size=302,462
 Collapsed=0
 DockId=0x00000008,0
@@ -47,13 +47,13 @@ DockId=0x00000008,0
 Pos=0,550
 Size=1222,170
 Collapsed=0
-DockId=0x0000000B,1
+DockId=0x00000023,1
 
 [Window][Camera3D]
-Pos=1010,18
-Size=270,462
+Pos=962,18
+Size=318,462
 Collapsed=0
-DockId=0x00000002,4
+DockId=0x00000002,2
 
 [Window][Model]
 Pos=1010,18
@@ -62,16 +62,16 @@ Collapsed=0
 DockId=0x00000002,3
 
 [Window][Prefab]
-Pos=1010,18
-Size=270,462
-Collapsed=0
-DockId=0x00000002,2
-
-[Window][PostEffect]
-Pos=1010,18
-Size=270,462
+Pos=962,18
+Size=318,462
 Collapsed=0
 DockId=0x00000002,1
+
+[Window][PostEffect]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,0
 
 [Window][Light]
 Pos=1010,18
@@ -81,24 +81,24 @@ DockId=0x00000002,0
 
 [Window][View]
 Pos=0,18
-Size=1008,462
+Size=679,462
 Collapsed=0
-DockId=0x00000005,0
+DockId=0x00000025,0
 
 [Window][Particle]
-Pos=1010,18
-Size=270,462
+Pos=962,18
+Size=318,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,3
 
 [Window][Sound]
-Pos=1010,18
-Size=270,462
+Pos=962,18
+Size=318,462
 Collapsed=0
-DockId=0x00000002,6
+DockId=0x00000002,4
 
 [Window][Behavior Tree Editor]
-Pos=470,18
+Pos=422,18
 Size=538,462
 Collapsed=0
 DockId=0x00000006,0
@@ -106,19 +106,19 @@ DockId=0x00000006,0
 [Window][Motion Manager Editor]
 Size=934,480
 Collapsed=0
-DockId=0x00000005,2
+DockId=0x00000025,2
 
 [Window][FPS Overlay]
 Pos=0,482
-Size=1280,238
+Size=221,238
 Collapsed=0
-DockId=0x0000000B,1
+DockId=0x00000023,1
 
 [Window][Node Properties]
-Pos=1010,18
-Size=270,462
+Pos=962,18
+Size=318,462
 Collapsed=0
-DockId=0x00000002,7
+DockId=0x00000002,5
 
 [Window][Tree Project Assets]
 Pos=226,482
@@ -153,20 +153,168 @@ Size=270,462
 Collapsed=0
 DockId=0x00000002,7
 
+[Window][UI - コントロール]
+Pos=691,482
+Size=589,238
+Collapsed=0
+DockId=0x00000010,0
+
+[Window][UI - ヒエラルキー]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][UI - インスペクター]
+Pos=693,18
+Size=267,462
+Collapsed=0
+DockId=0x00000012,0
+
+[Window][UI - アセットブラウザ]
+Pos=244,482
+Size=445,238
+Collapsed=0
+DockId=0x0000000F,0
+
+[Window][モデル - コントロール]
+Pos=659,482
+Size=621,238
+Collapsed=0
+DockId=0x00000016,0
+
+[Window][モデル - ヒエラルキー]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][モデル - インスペクター]
+Pos=681,18
+Size=279,462
+Collapsed=0
+DockId=0x00000018,0
+
+[Window][モデル - アセットブラウザ]
+Pos=223,482
+Size=434,238
+Collapsed=0
+DockId=0x00000015,0
+
+[Window][ライト - アセットブラウザ]
+Pos=228,482
+Size=464,238
+Collapsed=0
+DockId=0x0000001D,0
+
+[Window][ライト - コントロール]
+Pos=0,482
+Size=294,238
+Collapsed=0
+DockId=0x00000023,2
+
+[Window][ライト - ヒエラルキー]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][ライト - インスペクター]
+Pos=714,18
+Size=246,462
+Collapsed=0
+DockId=0x0000001C,0
+
+[Window][カットシーンエディタ]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][タイムライン]
+Pos=223,482
+Size=1057,238
+Collapsed=0
+DockId=0x00000020,0
+
+[Window][Combo Tree Browser]
+Pos=221,482
+Size=1059,238
+Collapsed=0
+DockId=0x00000024,0
+
+[Window][Combo Tree]
+Pos=437,18
+Size=523,462
+Collapsed=0
+DockId=0x00000022,0
+
+[Window][Combo Properties]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][NPC選択]
+Pos=962,18
+Size=318,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][ランタイムビヘイビアツリービュー]
+Pos=390,18
+Size=570,462
+Collapsed=0
+DockId=0x00000026,0
+
+[Window][ライト - アセット]
+Pos=296,482
+Size=984,238
+Collapsed=0
+DockId=0x0000001E,0
+
 [Docking][Data]
-DockSpace         ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
-  DockNode        ID=0x00000003 Parent=0x14621557 SizeRef=1280,462 Split=X
-    DockNode      ID=0x00000001 Parent=0x00000003 SizeRef=1008,702 Split=X Selected=0xCD8A0BD6
-      DockNode    ID=0x00000007 Parent=0x00000001 SizeRef=704,462 Split=X Selected=0xCD8A0BD6
-        DockNode  ID=0x00000005 Parent=0x00000007 SizeRef=468,462 CentralNode=1 Selected=0xCD8A0BD6
-        DockNode  ID=0x00000006 Parent=0x00000007 SizeRef=538,462 Selected=0xFCC94F6D
-      DockNode    ID=0x00000008 Parent=0x00000001 SizeRef=302,462 Selected=0xBE78FE5F
-    DockNode      ID=0x00000002 Parent=0x00000003 SizeRef=270,702 Selected=0x321620B2
-  DockNode        ID=0x00000004 Parent=0x14621557 SizeRef=1280,238 Split=X Selected=0xB4599F82
-    DockNode      ID=0x00000009 Parent=0x00000004 SizeRef=195,238 Split=X Selected=0xFDB80A1C
-      DockNode    ID=0x0000000B Parent=0x00000009 SizeRef=224,238 Selected=0xFDB80A1C
-      DockNode    ID=0x0000000C Parent=0x00000009 SizeRef=1054,238 Selected=0xB4599F82
-    DockNode      ID=0x0000000A Parent=0x00000004 SizeRef=1083,238 Selected=0x801F0B42
+DockSpace                   ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
+  DockNode                  ID=0x00000003 Parent=0x14621557 SizeRef=1280,462 Split=X
+    DockNode                ID=0x00000001 Parent=0x00000003 SizeRef=960,702 Split=X Selected=0xCD8A0BD6
+      DockNode              ID=0x00000007 Parent=0x00000001 SizeRef=704,462 Split=X Selected=0xCD8A0BD6
+        DockNode            ID=0x00000005 Parent=0x00000007 SizeRef=468,462 Split=X Selected=0xCD8A0BD6
+          DockNode          ID=0x00000011 Parent=0x00000005 SizeRef=756,462 Split=X Selected=0xCD8A0BD6
+            DockNode        ID=0x00000017 Parent=0x00000011 SizeRef=744,462 Split=X Selected=0xCD8A0BD6
+              DockNode      ID=0x0000001B Parent=0x00000017 SizeRef=712,462 Split=X Selected=0xCD8A0BD6
+                DockNode    ID=0x00000021 Parent=0x0000001B SizeRef=435,462 Split=X Selected=0xCD8A0BD6
+                  DockNode  ID=0x00000025 Parent=0x00000021 SizeRef=388,462 CentralNode=1 Selected=0xCD8A0BD6
+                  DockNode  ID=0x00000026 Parent=0x00000021 SizeRef=570,462 Selected=0x1DC949F7
+                DockNode    ID=0x00000022 Parent=0x0000001B SizeRef=523,462 Selected=0xA12B48AF
+              DockNode      ID=0x0000001C Parent=0x00000017 SizeRef=246,462 Selected=0x49094915
+            DockNode        ID=0x00000018 Parent=0x00000011 SizeRef=279,462 Selected=0x1A2396DC
+          DockNode          ID=0x00000012 Parent=0x00000005 SizeRef=267,462 Selected=0xB96B4D63
+        DockNode            ID=0x00000006 Parent=0x00000007 SizeRef=538,462 Selected=0xFCC94F6D
+      DockNode              ID=0x00000008 Parent=0x00000001 SizeRef=302,462 Selected=0xBE78FE5F
+    DockNode                ID=0x00000002 Parent=0x00000003 SizeRef=318,702 Selected=0x17D0B0E3
+  DockNode                  ID=0x00000004 Parent=0x14621557 SizeRef=1280,238 Split=X Selected=0xB4599F82
+    DockNode                ID=0x00000009 Parent=0x00000004 SizeRef=195,238 Split=X Selected=0xFDB80A1C
+      DockNode              ID=0x0000000B Parent=0x00000009 SizeRef=224,238 Split=X Selected=0xFDB80A1C
+        DockNode            ID=0x0000000D Parent=0x0000000B SizeRef=242,238 Split=X Selected=0xFFE73297
+          DockNode          ID=0x00000013 Parent=0x0000000D SizeRef=221,238 Split=X Selected=0xFFE73297
+            DockNode        ID=0x00000019 Parent=0x00000013 SizeRef=294,238 Split=X Selected=0xFFE73297
+              DockNode      ID=0x0000001F Parent=0x00000019 SizeRef=221,238 Split=X Selected=0xFFE73297
+                DockNode    ID=0x00000023 Parent=0x0000001F SizeRef=219,238 Selected=0xFFE73297
+                DockNode    ID=0x00000024 Parent=0x0000001F SizeRef=1059,238 Selected=0xBA9D03C1
+              DockNode      ID=0x00000020 Parent=0x00000019 SizeRef=1057,238 Selected=0x1BA90DDD
+            DockNode        ID=0x0000001A Parent=0x00000013 SizeRef=984,238 Split=X Selected=0x9E9F6D75
+              DockNode      ID=0x0000001D Parent=0x0000001A SizeRef=464,238 Selected=0x9E9F6D75
+              DockNode      ID=0x0000001E Parent=0x0000001A SizeRef=586,238 Selected=0x6964819E
+          DockNode          ID=0x00000014 Parent=0x0000000D SizeRef=1057,238 Split=X Selected=0xD8FA5760
+            DockNode        ID=0x00000015 Parent=0x00000014 SizeRef=434,238 Selected=0xD8FA5760
+            DockNode        ID=0x00000016 Parent=0x00000014 SizeRef=621,238 Selected=0xBD423B15
+        DockNode            ID=0x0000000E Parent=0x0000000B SizeRef=1036,238 Split=X Selected=0xD7DA1F9C
+          DockNode          ID=0x0000000F Parent=0x0000000E SizeRef=445,238 Selected=0xD7DA1F9C
+          DockNode          ID=0x00000010 Parent=0x0000000E SizeRef=589,238 Selected=0x2B0B66C9
+      DockNode              ID=0x0000000C Parent=0x00000009 SizeRef=1054,238 Selected=0xB4599F82
+    DockNode                ID=0x0000000A Parent=0x00000004 SizeRef=1083,238 Selected=0x801F0B42
+
+
 )";
 
 /// @brief デストラクタ

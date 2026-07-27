@@ -295,6 +295,9 @@ void GameScene::Initialize()
 			// 武器の描画
 			for (auto& weapon : weapons_)weapon->Draw();
 
+			// エディタ内のモデル描画
+			modelEditor_->Draw();
+
 			// プレハブの描画処理
 			oneHandedWeaponModel_->Draw();
 
@@ -367,6 +370,8 @@ void GameScene::Initialize()
 			guardTutorial_->Draw();
 			avoidTutorial_->Draw();
 
+			// エディタ内のUI描画
+			uiEditor_->Draw();
 		}
 	);
 
