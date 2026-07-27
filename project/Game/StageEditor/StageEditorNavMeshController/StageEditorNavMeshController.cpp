@@ -155,8 +155,8 @@ Engine::Collision3D::Ray StageEditorNavMeshController::RaycastFromMouse()
 	Vector2 mouseScreenPos = engine_->GetMousePosition();
 
 	// 正規化デバイス座標系
-	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(1280.0f) - 1.0f;
-	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(720.0f);
+	float ndcX = (2.0f * mouseScreenPos.x) / static_cast<float>(GrowthEngine::GetInstance()->GetScreenWidth()) - 1.0f;
+	float ndcY = 1.0f - (2.0f * mouseScreenPos.y) / static_cast<float>(GrowthEngine::GetInstance()->GetScreenHeight());
 
 	// 同次クリップ空間
 	Vector4 nearClip = { ndcX, ndcY, 0.0f, 1.0f };

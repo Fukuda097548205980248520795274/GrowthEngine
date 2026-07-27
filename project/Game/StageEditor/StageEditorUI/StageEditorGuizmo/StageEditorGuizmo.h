@@ -15,14 +15,14 @@ public:
 	/// @param selectedIndex 
 	/// @param isDirty 
 	/// @param history 
-	void UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history);
+	void UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history, bool isPlaying);
 
 	/// @brief ナビメッシュの変形を更新する
 	/// @param navMesh 
 	/// @param navMeshController 
 	/// @param isDirty 
 	/// @param history 
-	void UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, StageEditorHistory* history);
+	void UpdateNavMesh(NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, StageEditorHistory* history, bool isPlaying);
 
 
 private:

@@ -1,5 +1,5 @@
 #include "Collision2DBaseSprite.h"
-#include "Application/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
+#include "EngineObject/Collision2DInstance/Collision2DInstanceSprite/Collision2DInstanceSprite.h"
 #include "GrowthEngine.h"
 
 /// @brief コンストラクタ

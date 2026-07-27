@@ -8,14 +8,26 @@ UIEditor::UIEditor()
 	RefreshTextureList();
 }
 
-/// @brief 更新処理
-/// @param dt 
-void UIEditor::Update(float dt)
+/// @brief 描画処理
+void UIEditor::Draw()
+{
+	// 保持しているすべてのUI要素（スプライト）を描画する
+	for (auto& elem : uiElements_)
+	{
+		if (elem.sprite)
+		{
+			elem.sprite->Draw();
+		}
+	}
+}
+
+/// @brief UIを描画する
+void UIEditor::DrawUI()
 {
 #ifdef DEVELOPMENT
 
+	// ImGuiのIOを取得
 	ImGuiIO& io = ImGui::GetIO();
-	// Ctrlキーが押されているか
 	bool isCtrl = io.KeyCtrl;
 
 	// テキスト入力中やアイテムがアクティブな場合には無効にする
@@ -36,39 +48,17 @@ void UIEditor::Update(float dt)
 		// Ctrl + S で 保存
 		if (isCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
 		{
-			SaveUI();
+			Save();
 		}
 
 		// Deleteキーで選択中のスプライトを削除
-		if (ImGui::IsKeyPressed(ImGuiKey_Delete))
+		if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
 		{
 			DeleteSelectedElement();
 		}
 	}
 
-#endif
-}
-
-/// @brief 描画処理
-void UIEditor::Draw()
-{
-	// 保持しているすべてのUI要素（スプライト）を描画する
-	for (auto& elem : uiElements_)
-	{
-		if (elem.sprite)
-		{
-			elem.sprite->Draw();
-		}
-	}
-}
-
-/// @brief UIを描画する
-void UIEditor::DrawUI()
-{
-#ifdef DEVELOPMENT
-
 	// ImGuiウィンドウの描画
-	DrawControlWindow();
 	DrawHierarchyWindow();
 	DrawInspectorWindow();
 	DrawAssetsWindow();
@@ -126,146 +116,12 @@ void UIEditor::RefreshTextureList()
 	}
 }
 
-/// @brief コントロールウィンドウ描画
-void UIEditor::DrawControlWindow()
-{
-#ifdef DEVELOPMENT
-
-	if (ImGui::Begin("UIエディタ - コントロール"))
-	{
-		// ファイル名の入力欄
-		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
-
-		// 保存ボタン
-		if (ImGui::Button("保存"))
-		{
-			SaveUI();
-		}
-
-		ImGui::SameLine();
-
-		// 読み込みボタン
-		if (ImGui::Button("読み込み"))
-		{
-			std::string filenameStr(saveFilename_);
-			if (filenameStr.find(".json") == std::string::npos)
-			{
-				filenameStr += ".json";
-			}
-
-			std::string path = kUIDir + filenameStr;
-
-			if (std::filesystem::exists(path))
-			{
-				selectedElementIndex_ = -1;
-				uiElements_ = FromJson(path, loadedTextures_);
-			}
-		}
-
-		ImGui::SameLine();
-
-		// 新規作成（リストのクリア）
-		if (ImGui::Button("新規データ"))
-		{
-			uiElements_.clear();
-			selectedElementIndex_ = -1;
-			strcpy_s(saveFilename_, "ui_new");
-		}
-
-		ImGui::Separator();
-
-		if (ImGui::Button("テクスチャ再読み込み")) RefreshTextureList();
-		ImGui::SameLine();
-
-
-		static char newSpriteName[64] = "New Sprite";
-		static int newTextureIndex = 0;
-
-		// 新規スプライト追加ボタン
-		if (ImGui::Button("新規スプライト追加"))
-		{
-			// ポップアップを開く前に初期値をセット
-			strcpy_s(newSpriteName, "New Sprite");
-			newTextureIndex = 0;
-			ImGui::OpenPopup("新規スプライト作成");
-		}
-
-		// 新規スプライト作成のポップアップ
-		if (ImGui::BeginPopupModal("新規スプライト作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			// 名前の入力
-			ImGui::InputText("名前", newSpriteName, IM_ARRAYSIZE(newSpriteName));
-
-			// テクスチャの選択
-			if (!textureNames_.empty())
-			{
-				std::vector<const char*> items;
-				for (const auto& name : textureNames_)
-				{
-					items.push_back(name.c_str());
-				}
-				ImGui::Combo("テクスチャ", &newTextureIndex, items.data(), static_cast<int>(items.size()));
-			}
-			else
-			{
-				ImGui::TextDisabled("※テクスチャが見つかりません");
-			}
-
-			ImGui::Separator();
-
-			// 作成ボタン
-			if (ImGui::Button("作成", ImVec2(120, 0)))
-			{
-				// 新規作成時の状態を履歴に保存
-				SaveHistoryState();
-
-				UIElementData newData;
-				newData.name = GetUniqueName(newSpriteName);
-
-				// テクスチャが選択されているか確認
-				TextureHandle hTex = 0;
-				if (!textureNames_.empty() && newTextureIndex >= 0 && newTextureIndex < textureNames_.size())
-				{
-					newData.textureFilename = textureNames_[newTextureIndex];
-					hTex = loadedTextures_[newData.textureFilename];
-				}
-				else
-				{
-					newData.textureFilename = "";
-				}
-
-				// スプライトを生成してリストに追加
-				newData.sprite = std::make_unique<Sprite>(hTex, newData.name);
-				uiElements_.push_back(std::move(newData));
-
-				// 選択状態を新規作成したものに合わせる
-				selectedElementIndex_ = static_cast<int>(uiElements_.size()) - 1;
-
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::SameLine();
-
-			// キャンセルボタン
-			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-	ImGui::End();
-
-#endif
-}
-
 /// @brief ヒエラルキーウィンドウ描画
 void UIEditor::DrawHierarchyWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - ヒエラルキー"))
+	if (ImGui::Begin("UI - ヒエラルキー"))
 	{
 		for (int i = 0; i < uiElements_.size(); ++i)
 		{
@@ -286,7 +142,7 @@ void UIEditor::DrawInspectorWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - インスペクター"))
+	if (ImGui::Begin("UI - インスペクター"))
 	{
 		if (selectedElementIndex_ >= 0 && selectedElementIndex_ < uiElements_.size())
 		{
@@ -412,8 +268,151 @@ void UIEditor::DrawAssetsWindow()
 {
 #ifdef DEVELOPMENT
 	
-	if (ImGui::Begin("アセットブラウザ"))
+	if (ImGui::Begin("UI - アセットブラウザ"))
 	{
+		// 新規ファイル作成ボタン
+		if (ImGui::Button("新規ファイル作成"))
+		{
+			// ポップアップを開く前に入力欄にデフォルト名を入れておく
+			strcpy_s(inputFilename_, "ui_new");
+			ImGui::OpenPopup("新規ファイル作成ポップアップ");
+		}
+
+		// 新規ファイル作成のポップアップ
+		if (ImGui::BeginPopupModal("新規ファイル作成ポップアップ", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::InputText("ファイル名", inputFilename_, IM_ARRAYSIZE(inputFilename_));
+
+			ImGui::Separator();
+
+			// 作成ボタン
+			if (ImGui::Button("作成", ImVec2(120, 0)))
+			{
+				if (strlen(inputFilename_) > 0)
+				{
+					// 既存のデータをクリア
+					uiElements_.clear();
+					selectedElementIndex_ = -1;
+
+					// 入力された名前を「今開いているファイル名」として保持
+					currentFileName_ = inputFilename_;
+					isFileOpen_ = true;
+
+					// 保持した名前で空のファイルを作成
+					Save();
+
+					ImGui::CloseCurrentPopup(); // ポップアップを閉じる
+				}
+			}
+
+			ImGui::SameLine();
+
+			// キャンセルボタン
+			if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+			}
+
+			ImGui::EndPopup();
+		}
+
+
+		// ファイルが開いているとき
+		if (isFileOpen_)
+		{
+			ImGui::SameLine();
+			ImGui::Text("編集中: %s.json", currentFileName_.c_str());
+			ImGui::Separator();
+
+			// 保存ボタン
+			if (ImGui::Button("保存"))
+				Save();
+
+			ImGui::SameLine();
+			if (ImGui::Button("テクスチャ再読み込み")) RefreshTextureList();
+			
+			ImGui::SameLine();
+
+			static char newSpriteName[64] = "New Sprite";
+			static int newTextureIndex = 0;
+
+			// 新規スプライト追加ボタン
+			if (ImGui::Button("新規スプライト追加"))
+			{
+				// ポップアップを開く前に初期値をセット
+				strcpy_s(newSpriteName, "New Sprite");
+				newTextureIndex = 0;
+				ImGui::OpenPopup("新規スプライト作成");
+			}
+
+			// 新規スプライト作成のポップアップ
+			if (ImGui::BeginPopupModal("新規スプライト作成", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				// 名前の入力
+				ImGui::InputText("名前", newSpriteName, IM_ARRAYSIZE(newSpriteName));
+
+				// テクスチャの選択
+				if (!textureNames_.empty())
+				{
+					std::vector<const char*> items;
+					for (const auto& name : textureNames_)
+					{
+						items.push_back(name.c_str());
+					}
+					ImGui::Combo("テクスチャ", &newTextureIndex, items.data(), static_cast<int>(items.size()));
+				} 
+				else
+				{
+					ImGui::TextDisabled("※テクスチャが見つかりません");
+				}
+
+				ImGui::Separator();
+
+				// 作成ボタン
+				if (ImGui::Button("作成", ImVec2(120, 0)))
+				{
+					// 新規作成時の状態を履歴に保存
+					SaveHistoryState();
+
+					UIElementData newData;
+					newData.name = GetUniqueName(newSpriteName);
+
+					// テクスチャが選択されているか確認
+					TextureHandle hTex = 0;
+					if (!textureNames_.empty() && newTextureIndex >= 0 && newTextureIndex < textureNames_.size())
+					{
+						newData.textureFilename = textureNames_[newTextureIndex];
+						hTex = loadedTextures_[newData.textureFilename];
+					} else
+					{
+						newData.textureFilename = "";
+					}
+
+					// スプライトを生成してリストに追加
+					newData.sprite = std::make_unique<Sprite>(hTex, newData.name);
+					uiElements_.push_back(std::move(newData));
+
+					// 選択状態を新規作成したものに合わせる
+					selectedElementIndex_ = static_cast<int>(uiElements_.size()) - 1;
+
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SameLine();
+
+				// キャンセルボタン
+				if (ImGui::Button("キャンセル", ImVec2(120, 0)))
+				{
+					ImGui::CloseCurrentPopup(); // 何もせずに閉じる
+				}
+
+				ImGui::EndPopup();
+			}
+		}
+
+		ImGui::Separator();
+
+		// ファイル一覧の表示
 		if (std::filesystem::exists(kUIDir))
 		{
 			// ウィンドウの右端の座標を取得（折り返しの計算用）
@@ -429,8 +428,8 @@ void UIEditor::DrawAssetsWindow()
 					std::string filename = entry.path().filename().string();
 					std::string path = entry.path().string();
 
-					// ボタンとして表示（100x100のサイズ）
-					if (ImGui::Button(filename.c_str(), ImVec2(100, 100)))
+					// ボタンとして表示（50x50のサイズ）
+					if (ImGui::Button(filename.c_str(), ImVec2(50, 50)))
 					{
 						// ファイルを読み込む前に、現在の状態を履歴に保存
 						SaveHistoryState(); 
@@ -440,7 +439,11 @@ void UIEditor::DrawAssetsWindow()
 
 						// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
 						std::string nameWithoutExt = entry.path().stem().string();
-						strcpy_s(saveFilename_, nameWithoutExt.c_str());
+						strcpy_s(inputFilename_, nameWithoutExt.c_str());
+
+						// 読み込み成功時に「今開いているファイル名」として保持
+						currentFileName_ = nameWithoutExt;
+						isFileOpen_ = true;
 					}
 
 					// 次のアイテムを描画した時にウィンドウの右端をはみ出さないか計算
@@ -504,18 +507,19 @@ std::string UIEditor::GetUniqueName(const std::string& baseName, int ignoreIndex
 }
 
 /// @brief UIデータをファイルに保存する
-void UIEditor::SaveUI()
+void UIEditor::Save()
 {
-	if (!std::filesystem::exists(kUIDir))
-	{
-		std::filesystem::create_directories(kUIDir);
-	}
+	// ファイル名が空の場合は保存しない
+	if (currentFileName_.empty()) return;
 
-	std::string filenameStr(saveFilename_);
+	// ディレクトリが存在しない場合は作成
+	if (!std::filesystem::exists(kUIDir))
+		std::filesystem::create_directories(kUIDir);
+
+	// 拡張子が .json でない場合は追加する
+	std::string filenameStr = currentFileName_;
 	if (filenameStr.find(".json") == std::string::npos)
-	{
 		filenameStr += ".json";
-	}
 
 	std::string path = kUIDir + filenameStr;
 	ToJson(path, uiElements_);

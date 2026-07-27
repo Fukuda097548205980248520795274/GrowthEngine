@@ -87,10 +87,6 @@ void TitleScene::Update()
 {
 	float dt = engine_->GetDeltaTime();
 
-	// UIエディタの更新処理を呼び出す
-	modelEditor_->Update(dt);
-	lightEditor_->Update(dt);
-
 	// フェーズマネージャの更新処理を呼び出す
 	phaseManager_->Update();
 }

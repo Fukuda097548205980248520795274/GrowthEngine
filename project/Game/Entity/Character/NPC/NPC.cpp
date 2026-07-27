@@ -60,11 +60,8 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 
 void NPC::Update()
 {
-	// 更新が無効なら何もしない
-	if (!updateEnabled_)return;
-
 	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
-	if (Character::IsCutsceneActive())
+	if (Character::IsCutsceneActive() || !updateEnabled_)
 	{
 		// ステートをNoneに変更する
 		stateMachine_->ChangeState("None");

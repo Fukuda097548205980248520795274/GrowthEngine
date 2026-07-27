@@ -6,6 +6,9 @@
 #include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "CutsceneManager/CutsceneEditor/CutsceneEditor.h"
+#include "ObjectEditor/UIEditor/UIEditor.h"
+#include "ObjectEditor/ModelEditor/ModelEditor.h"
+#include "ObjectEditor/LightEditor/LightEditor.h"
 
 enum class WorkspaceType
 {
@@ -15,6 +18,9 @@ enum class WorkspaceType
 	BehaviorTreeViewer,
 	ComboTreeEditor,
 	CutsceneEditor,
+	UIEditor,
+	ModelEditor,
+	LightEditor,
 };
 
 class EditorWorkspaceManager
@@ -26,7 +32,7 @@ public:
 	/// @param behaviorTreeEditor 
 	/// @param motionManagerEditor 
 	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
-		ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, MotionManagerEditor* motionManagerEditor);
+		ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, UIEditor* uiEditor, ModelEditor* modelEditor, LightEditor* lightEditor);
 
 	/// @brief UIを描画する
 	void DrawUI();
@@ -51,7 +57,9 @@ private:
 	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
 	ComboTreeEditor* comboTreeEditor_ = nullptr;
 	CutsceneEditor* cutsceneEditor_ = nullptr;
-	MotionManagerEditor* motionManagerEditor_ = nullptr;
+	UIEditor* uiEditor_ = nullptr;
+	ModelEditor* modelEditor_ = nullptr;
+	LightEditor* lightEditor_ = nullptr;
 
 	// エディタ間で共有するデータなど
 	std::vector<PlacementData> placementList_;

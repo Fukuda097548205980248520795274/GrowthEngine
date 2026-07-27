@@ -139,7 +139,11 @@ void Character::SetAnimationHandle(const AnimationHandleData& animationData)
 void Character::Update()
 {
 	// 更新が無効なら何もしない
-	if (!updateEnabled_)return;
+	if (!updateEnabled_)
+	{
+		worldTransform_->Update();
+		return;
+	}
 
 
 	// デルタタイムを取得する

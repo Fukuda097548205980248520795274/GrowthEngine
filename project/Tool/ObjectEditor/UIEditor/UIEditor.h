@@ -8,10 +8,6 @@ public:
 	/// @brief コンストラクタ
 	UIEditor();
 
-	/// @brief 更新処理
-	/// @param dt 
-	void Update(float dt);
-
 	/// @brief 描画処理
 	void Draw();
 
@@ -31,9 +27,6 @@ private:
 
 private:
 
-	/// @brief コントロールウィンドウ描画
-	void DrawControlWindow();
-
 	/// @brief ヒエラルキーウィンドウ描画
 	void DrawHierarchyWindow();
 
@@ -52,8 +45,8 @@ private:
 	/// @return 
 	std::string GetUniqueName(const std::string& baseName, int ignoreIndex = -1) const;
 
-	/// @brief UIデータをファイルに保存する
-	void SaveUI();
+	/// @brief データをファイルに保存する
+	void Save();
 
 	/// @brief 選択中のUI要素を削除する
 	void DeleteSelectedElement();
@@ -69,9 +62,6 @@ private:
 
 
 private:
-
-	// 保存・読み込み用のファイル名
-	char saveFilename_[128] = "ui_new";
 
 	// 編集中のUI要素リスト
 	std::vector<UIElementData> uiElements_;
@@ -90,6 +80,18 @@ private:
 
 	// UIデータを保存するディレクトリパス
 	const std::string kUIDir = "./Assets/Parameter/UI/";
+
+
+private:
+
+	// ファイルを開いている状態かどうかのフラグ
+	bool isFileOpen_ = false;
+
+	// 現在実際に開いて編集しているファイル名
+	std::string currentFileName_ = "";
+
+	// UIの入力欄用
+	char inputFilename_[128] = "";
 
 
 private:

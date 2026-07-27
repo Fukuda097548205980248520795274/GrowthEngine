@@ -4,7 +4,7 @@
 /// @param stageEditor 
 /// @param behaviorTreeEditor 
 void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
-	ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, MotionManagerEditor* motionManagerEditor)
+	ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, UIEditor* uiEditor, ModelEditor* modelEditor, LightEditor* lightEditor)
 {
 	// nullptrチェック
 	assert(stageEditor);
@@ -12,7 +12,9 @@ void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEd
 	assert(behaviorTreeViewer);
 	assert(comboTreeEditor);
 	assert(cutsceneEditor);
-	assert(motionManagerEditor);
+	assert(uiEditor);
+	assert(modelEditor);
+	assert(lightEditor);
 
 	// 引数を受け取る
 	stageEditor_ = stageEditor;
@@ -20,7 +22,9 @@ void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEd
 	behaviorTreeViewer_ = behaviorTreeViewer;
 	comboTreeEditor_ = comboTreeEditor;
 	cutsceneEditor_ = cutsceneEditor;
-	motionManagerEditor_ = motionManagerEditor;
+	uiEditor_ = uiEditor;
+	modelEditor_ = modelEditor;
+	lightEditor_ = lightEditor;
 }
 
 /// @brief UIを描画する
@@ -65,6 +69,27 @@ void EditorWorkspaceManager::DrawUI()
 		{
 			cutsceneEditor_->SetActive(true);
 			cutsceneEditor_->DrawUI();
+		}
+		break;
+
+	case WorkspaceType::UIEditor:
+		if (uiEditor_)
+		{
+			uiEditor_->DrawUI();
+		}
+		break;
+
+	case WorkspaceType::ModelEditor:
+		if (modelEditor_)
+		{
+			modelEditor_->DrawUI();
+		}
+		break;
+
+	case WorkspaceType::LightEditor:
+		if (lightEditor_)
+		{
+			lightEditor_->DrawUI();
 		}
 		break;
 	}
@@ -114,6 +139,24 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
 			if (ImGui::BeginTabItem("Cutscene Editor"))
 			{
 				currentWorkspace_ = WorkspaceType::CutsceneEditor;
+				ImGui::EndTabItem();
+			}
+			
+			if (ImGui::BeginTabItem("UI Editor"))
+			{
+				currentWorkspace_ = WorkspaceType::UIEditor;
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Model Editor"))
+			{
+				currentWorkspace_ = WorkspaceType::ModelEditor;
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Light Editor"))
+			{
+				currentWorkspace_ = WorkspaceType::LightEditor;
 				ImGui::EndTabItem();
 			}
 
