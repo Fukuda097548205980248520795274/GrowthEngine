@@ -154,7 +154,7 @@ void ModelEditor::DrawControlWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("モデルエディタ - コントロール"))
+	if (ImGui::Begin("モデル - コントロール"))
 	{
 		// ファイル名の入力欄
 		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
@@ -451,7 +451,7 @@ void ModelEditor::DrawHierarchyWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("モデルエディタ - ヒエラルキー"))
+	if (ImGui::Begin("モデル - ヒエラルキー"))
 	{
 		for (int i = 0; i < modelElements_.size(); ++i)
 		{
@@ -472,7 +472,7 @@ void ModelEditor::DrawInspectorWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("モデルエディタ - インスペクター"))
+	if (ImGui::Begin("モデル - インスペクター"))
 	{
 		if (selectedElementIndex_ >= 0 && selectedElementIndex_ < modelElements_.size())
 		{
@@ -725,7 +725,7 @@ void ModelEditor::DrawAssetsWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("アセットブラウザ"))
+	if (ImGui::Begin("モデル - アセットブラウザ"))
 	{
 		if (std::filesystem::exists(kModelDataDir))
 		{

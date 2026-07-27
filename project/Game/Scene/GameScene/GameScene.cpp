@@ -82,6 +82,15 @@ void GameScene::Initialize()
 	cutsceneEditor_ = std::make_unique<CutsceneEditor>();
 	cutsceneEditor_->Initialize(cutsceneCamera_.get(), mainCamera_.get());
 
+	// UIエディタの生成と初期化
+	uiEditor_ = std::make_unique<UIEditor>();
+
+	// モデルエディタの生成と初期化
+	modelEditor_ = std::make_unique<ModelEditor>();
+
+	// ライトエディタの生成と初期化
+	lightEditor_ = std::make_unique<LightEditor>();
+
 	// ナビゲーションメッシュの生成と初期化
 	navMesh_ = std::make_unique<NavMesh>();
 
@@ -92,7 +101,7 @@ void GameScene::Initialize()
 	// エディタワークスペースマネージャの生成と初期化
 	editorWorkspaceManager_ = std::make_unique<EditorWorkspaceManager>();
 	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(), behaviorTreeViewer_.get(), comboTreeEditor_.get(),
-		cutsceneEditor_.get(), motionManagerEditor_.get());
+		cutsceneEditor_.get(), uiEditor_.get(), modelEditor_.get(), lightEditor_.get());
 
 	// キャラクターモデルの読み込み
 	hCharacterModel_ = engine_->LoadModel("./Assets/Models/Character", "bone.gltf");

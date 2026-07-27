@@ -108,7 +108,7 @@ void LightEditor::DrawControlWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("ライトエディタ - コントロール"))
+	if (ImGui::Begin("ライト - コントロール"))
 	{
 		// ファイル名の入力欄
 		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
@@ -227,7 +227,7 @@ void LightEditor::DrawHierarchyWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("ライトエディタ - ヒエラルキー"))
+	if (ImGui::Begin("ライト - ヒエラルキー"))
 	{
 		for (int i = 0; i < lightElements_.size(); ++i)
 		{
@@ -248,7 +248,7 @@ void LightEditor::DrawInspectorWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("ライトエディタ - インスペクター"))
+	if (ImGui::Begin("ライト - インスペクター"))
 	{
 		if (selectedElementIndex_ >= 0 && selectedElementIndex_ < lightElements_.size())
 		{
@@ -380,7 +380,7 @@ void LightEditor::DrawAssetsWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("アセットブラウザ"))
+	if (ImGui::Begin("ライト - アセット"))
 	{
 		if (std::filesystem::exists(kLightDir))
 		{

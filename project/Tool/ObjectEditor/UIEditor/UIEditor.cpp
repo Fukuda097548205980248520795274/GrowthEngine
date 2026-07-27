@@ -131,7 +131,7 @@ void UIEditor::DrawControlWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - コントロール"))
+	if (ImGui::Begin("UI - コントロール"))
 	{
 		// ファイル名の入力欄
 		ImGui::InputText("ファイル名", saveFilename_, IM_ARRAYSIZE(saveFilename_));
@@ -265,7 +265,7 @@ void UIEditor::DrawHierarchyWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - ヒエラルキー"))
+	if (ImGui::Begin("UI - ヒエラルキー"))
 	{
 		for (int i = 0; i < uiElements_.size(); ++i)
 		{
@@ -286,7 +286,7 @@ void UIEditor::DrawInspectorWindow()
 {
 #ifdef DEVELOPMENT
 
-	if (ImGui::Begin("UIエディタ - インスペクター"))
+	if (ImGui::Begin("UI - インスペクター"))
 	{
 		if (selectedElementIndex_ >= 0 && selectedElementIndex_ < uiElements_.size())
 		{
@@ -412,7 +412,7 @@ void UIEditor::DrawAssetsWindow()
 {
 #ifdef DEVELOPMENT
 	
-	if (ImGui::Begin("アセットブラウザ"))
+	if (ImGui::Begin("UI - アセットブラウザ"))
 	{
 		if (std::filesystem::exists(kUIDir))
 		{

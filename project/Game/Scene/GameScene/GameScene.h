@@ -199,6 +199,15 @@ private:
 	/// @brief カットシーンエディタ
 	std::unique_ptr<CutsceneEditor> cutsceneEditor_ = nullptr;
 
+	// @brief UIエディタ
+	std::unique_ptr<UIEditor> uiEditor_ = nullptr;
+
+	// @brief モデルエディタ
+	std::unique_ptr<ModelEditor> modelEditor_ = nullptr;
+
+	// @brief ライトエディタ
+	std::unique_ptr<LightEditor> lightEditor_ = nullptr;
+
 	/// @brief エディタワークスペースマネージャ
 	std::unique_ptr< EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;
 
