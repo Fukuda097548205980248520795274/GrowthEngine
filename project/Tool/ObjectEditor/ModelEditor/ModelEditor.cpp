@@ -53,7 +53,7 @@ void ModelEditor::DrawUI()
 		}
 
 		// Deleteキーで選択中のスプライトを削除
-		if (ImGui::IsKeyPressed(ImGuiKey_Delete))
+		if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
 		{
 			DeleteSelectedElement();
 		}
