@@ -421,9 +421,37 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 								auto& editTarget = cachedPreviewData_[selectedPreviewIndex_];
 								ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
 
+								// オブジェクト名の編集
+								ImGui::InputText("オブジェクト名", editTarget.name, sizeof(editTarget.name));
+
+								int currentCategory = static_cast<int>(editTarget.category);
+								// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
+								if (ImGui::Combo("カテゴリ", &currentCategory, categoryNames, 3))
+								{
+									editTarget.category = static_cast<EditCategory>(currentCategory);
+									editTarget.subType = 0; // カテゴリが変わったらタイプをリセットする
+								}
+
+								// カテゴリに応じたサブタイプのコンボボックスを表示
+								if (editTarget.category == EditCategory::Character)
+								{
+									ImGui::Combo("タイプ", &editTarget.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+								}
+								else if (editTarget.category == EditCategory::Object)
+								{
+									ImGui::Combo("タイプ", &editTarget.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+								}
+								else if (editTarget.category == EditCategory::Weapon)
+								{
+									ImGui::Combo("タイプ", &editTarget.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+								}
+
+								ImGui::Separator();
+
 								// 位置・回転・スケールの調整
 								ImGui::DragFloat3("位置 (Position)", &editTarget.position.x, 0.1f);
 								ImGui::DragFloat3("回転 (Rotation)", &editTarget.rotate_.x, 0.1f);
+								ImGui::DragFloat3("スケール (Scale)", &editTarget.scale.x, 0.1f); // スケールも調整可能にしておくと便利です
 
 								// 削除ボタン
 								ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));

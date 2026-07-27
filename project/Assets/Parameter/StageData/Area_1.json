@@ -1,5 +1,4 @@
 {
-    "navMesh": [],
     "objects": [
         {
             "avoidBackMotionName": "Back",
@@ -43,6 +42,49 @@
             "standMotionName": "Standing",
             "subType": 4,
             "walkMotionName": "Walk"
+        },
+        {
+            "avoidBackMotionName": "",
+            "avoidFrontMotionName": "",
+            "avoidLeftMotionName": "",
+            "avoidRightMotionName": "",
+            "avoidStateBT": "",
+            "blownAwayStateBT": "",
+            "blownFallingStateBT": "",
+            "category": 0,
+            "dashMotionName": "",
+            "dashStateBT": "",
+            "deadStateBT": "",
+            "deflectStateBT": "",
+            "deflectedStateBT": "",
+            "downFallingStateBT": "",
+            "downGettingUpStateBT": "",
+            "downLyingStateBT": "",
+            "downStaggerStateBT": "",
+            "grabbedStateBT": "",
+            "grabbingStateBT": "",
+            "guardMotionName": "",
+            "guardStateBT": "",
+            "heavyDamageStateBT": "",
+            "hp": 100,
+            "lightDamageStateBT": "",
+            "name": "",
+            "noneStateBT": "",
+            "posX": 6.920000076293945,
+            "posY": 6.623000144958496,
+            "posZ": 42.887001037597656,
+            "repelStateBT": "",
+            "repelledStateBT": "",
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "stanceMotionName": "",
+            "standMotionName": "",
+            "subType": 4,
+            "walkMotionName": ""
         }
     ]
 }
