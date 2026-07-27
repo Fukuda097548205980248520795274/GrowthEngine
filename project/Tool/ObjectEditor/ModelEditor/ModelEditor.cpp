@@ -114,7 +114,7 @@ void ModelEditor::RefreshModelList()
 
 				// 読み込んだ情報をマップとリストに保存
 				loadedModels_[{dirPath, targetFile}] = handle;
-				modelNames_.push_back(modelName);
+				modelNames_.push_back(targetFile);
 			}
 		}
 	}
@@ -165,10 +165,10 @@ void ModelEditor::RefreshAnimationList()
 
 				// 読み込んだ情報をマップとリストに保存
 				loadedAnimations_[{dirPath, targetFile}] = hAnimation;
-				animationNames_.push_back(modelName);
+				animationNames_.push_back(targetFile);
 
 				loadedSkeletons_[{dirPath, targetFile}] = hSkeleton;
-				skeletonNames_.push_back(modelName);
+				skeletonNames_.push_back(targetFile);
 			}
 		}
 	}
