@@ -1082,7 +1082,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	// アクションノードの場合はアクション選択UIを描画
 	if (node.type == EditorNodeType::Action)
 	{
-		ImGui::Text("%s", ACTION_TYPE_NAMES[static_cast<int32_t>(node.actionType)]);
+		ImGui::Text("%s", actionTypeNames[static_cast<int32_t>(node.actionType)]);
 	}
 }
 
@@ -1098,7 +1098,7 @@ void BehaviorTreeEditor::DrawConditionNodeSettings(EditorNode& node)
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
 	int currentItem = static_cast<int>(node.conditionType);
 	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
-	if (ImGui::Combo("条件", &currentItem, CONDITION_TYPE_NAMES, IM_ARRAYSIZE(CONDITION_TYPE_NAMES)))
+	if (ImGui::Combo("条件", &currentItem, conditionTypeNames, IM_ARRAYSIZE(conditionTypeNames)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -1125,9 +1125,9 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 	// コンボボックスに表示する文字列の配列
 	int currentItem = 0;
-	for (int i = 0; i < IM_ARRAYSIZE(ACTION_TYPE_NAMES); ++i)
+	for (int i = 0; i < IM_ARRAYSIZE(actionTypeNames); ++i)
 	{
-		if (ACTION_TYPE_NAMES[static_cast<int32_t>(node.actionType)] == ACTION_TYPE_NAMES[i])
+		if (actionTypeNames[static_cast<int32_t>(node.actionType)] == actionTypeNames[i])
 		{
 			currentItem = i;
 			break;
@@ -1135,7 +1135,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 
 	// コンボボックスを描画し、変更があったら選択された文字列をノードに保存
-	if (ImGui::Combo("アクションの種類", &currentItem, ACTION_TYPE_NAMES, IM_ARRAYSIZE(ACTION_TYPE_NAMES)))
+	if (ImGui::Combo("アクションの種類", &currentItem, actionTypeNames, IM_ARRAYSIZE(actionTypeNames)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -1620,6 +1620,10 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 			ImGui::TreePop();
 		}
+	}
+	else if (node.actionType == ActionType::RequestToken)
+	{
+		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), tokenTypeNames, IM_ARRAYSIZE(tokenTypeNames));
 	}
 
 	ImGui::PopItemWidth();

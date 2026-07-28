@@ -46,7 +46,7 @@
             "walkMotionName": "Walk"
         },
         {
-            "aggressiveness": 1.0,
+            "aggressiveness": 30.700000762939453,
             "avoidBackMotionName": "Back",
             "avoidFrontMotionName": "Front",
             "avoidLeftMotionName": "Front",

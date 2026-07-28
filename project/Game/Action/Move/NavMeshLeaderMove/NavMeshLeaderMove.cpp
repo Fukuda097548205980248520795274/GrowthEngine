@@ -161,10 +161,23 @@ void NavMeshLeaderMove::Update()
         return;
     }
 
-    // リーダーがキャラクターを追従している場合、リーダーがが一定距離動いたら経路を再計算（リパス）
+	// リーダーがいる場合は、リーダーの位置をチェックして経路を再計算する
     if (leader_)
     {
+		// リーダーの現在位置を取得
         Vector3 currentLeaderPos = leader_->GetWorldPosition();
+
+		// すでに目的地（停止距離内）にいるかチェック
+        Vector3 toLeader = leader_->GetWorldPosition() - owner_->GetWorldPosition();
+        toLeader.y = 0.0f;
+        if ((toLeader.x * toLeader.x + toLeader.z * toLeader.z) <= stopDistanceSq_)
+        {
+            // すでに到着しているので成功終了
+            Action::Update();
+            return;
+        }
+
+		// リーダーの位置が前回の位置からどれだけ動いたかを計算
         float dx = currentLeaderPos.x - lastLeaderPosition_.x;
         float dz = currentLeaderPos.z - lastLeaderPosition_.z;
 
@@ -180,16 +193,6 @@ void NavMeshLeaderMove::Update()
             // 経路が見つからなかった場合
             if (path_.empty())
             {
-                // すでに目的地（停止距離内）にいるかチェック
-                Vector3 toLeader = leader_->GetWorldPosition() - owner_->GetWorldPosition();
-                toLeader.y = 0.0f;
-                if ((toLeader.x * toLeader.x + toLeader.z * toLeader.z) <= stopDistanceSq_)
-                {
-                    // すでに到着しているので成功終了
-                    Action::Update();
-                    return;
-                }
-
                 // 自分の最も近いNavMesh上の点を取得
                 std::optional<Vector3> myNearestPos = navMesh->GetNearestPoint(owner_->GetWorldPosition(), 1.5f);
 

@@ -1,6 +1,5 @@
 #include "RequestToken.h"
 #include "Entity/Character/Character.h"
-#include "BattleDirector/BattleDirector.h"
 
 /// @brief 実行
 void RequestToken::Exec()
@@ -16,5 +15,5 @@ void RequestToken::Exec()
 		return;
 
 	// 攻撃トークンを要求する
-	isRequested_ = BattleDirector::GetInstance().RequestAttackToken(owner_);
+	isRequested_ = BattleDirector::GetInstance().RequestAttackToken(owner_, tokenType_);
 }

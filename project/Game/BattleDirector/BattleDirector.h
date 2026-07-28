@@ -6,6 +6,26 @@
 class Character;
 class Player;
 
+// @brief トークンの種類
+enum class ActionTokenType
+{
+	// 攻撃
+	Attack,
+
+	// 挑発
+	Taunt,
+
+	// フェイント
+	Feint
+};
+
+// @brief トークンのデータ
+struct TokenData
+{
+	Character* target;
+	ActionTokenType type;
+};
+
 class BattleDirector
 {
 public:
@@ -16,8 +36,9 @@ public:
 
 	/// @brief 攻撃トークンを要求する
 	/// @param npc 
+	/// @param type 
 	/// @return 
-	bool RequestAttackToken(Character* npc);
+	bool RequestAttackToken(Character* npc, ActionTokenType type);
 
 	/// @brief 攻撃トークンを返却する
 	/// @param npc 
@@ -40,14 +61,14 @@ private:
 	// シングルトンのためコンストラクタはprivate
 	BattleDirector() = default;
 
-	// 最大攻撃トークン数
-	size_t maxAttackTokens_ = 1;
+	/// @brief 最大トークン数
+	std::unordered_map<ActionTokenType, size_t> maxTokens_ = { {ActionTokenType::Attack, 1},{ActionTokenType::Taunt, 2},{ActionTokenType::Feint, 1} };
 
-	/// @brief 攻撃トークンを保持しているキャラクターのセット
-	std::unordered_map<Character*, std::set<Character*>> targetTokenHolders_;
+	/// @brief ターゲットごとの攻撃トークンの保持者
+	std::unordered_map<Character*, std::unordered_map<ActionTokenType, std::set<Character*>>> targetTokenHolders_;
 
 	/// @brief NPCとそのターゲットのマッピング
-	std::unordered_map<Character*, Character*> npcToTargetMap_;
+	std::unordered_map<Character*, TokenData> npcToTargetMap_;
 
 
 private:

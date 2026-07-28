@@ -49,7 +49,7 @@ void GameScene::Initialize()
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
-	sunLight_->param_->intensity = 0.1f;
+	sunLight_->param_->intensity = 0.4f;
 
 	// マネージャの生成と初期化
 	motionManager_ = MotionManager::GetInstance();

@@ -1,5 +1,6 @@
 #pragma once
 #include "../Action.h"
+#include "BattleDirector/BattleDirector.h"
 
 class RequestToken : public Action
 {
@@ -8,7 +9,7 @@ public:
 	/// @brief コンストラクタ
 	/// @param character 
 	/// @param avoidDirection 
-	RequestToken(Character* character) : Action(character) {}
+	RequestToken(Character* character, ActionTokenType tokenType) : Action(character), tokenType_(tokenType) {}
 
 	/// @brief 実行
 	void Exec() override;
@@ -29,5 +30,10 @@ private:
 
 	/// @brief トークンが要求されたかどうか
 	bool isRequested_ = false;
+
+	/// @brief トークンの種類
+	ActionTokenType tokenType_ = ActionTokenType::Attack;
+
+
 };
 

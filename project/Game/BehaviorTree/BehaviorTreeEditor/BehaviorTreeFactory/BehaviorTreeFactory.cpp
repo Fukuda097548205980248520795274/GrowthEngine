@@ -254,7 +254,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		else if (editorNode.actionType == ActionType::RequestToken)
 		{
 			// トークン要求ノードの生成
-			runtimeNode = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character));
+			runtimeNode = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character, editorNode.tokenType));
 		} 
 		else if (editorNode.actionType == ActionType::ReleaseToken)
 		{

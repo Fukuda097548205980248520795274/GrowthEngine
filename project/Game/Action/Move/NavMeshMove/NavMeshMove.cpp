@@ -132,10 +132,23 @@ void NavMeshMove::Update()
         return;
     }
 
-    // ターゲットキャラクターを追従している場合、ターゲットが一定距離動いたら経路を再計算（リパス）
+	// ターゲットが動いている場合は経路を再計算する
     if (target)
     {
+		// ターゲットの現在位置を取得
         Vector3 currentTargetPos = target->GetWorldPosition();
+
+        // すでに目的地（停止距離内）にいるかチェック
+        Vector3 toTarget = currentTargetPos - owner_->GetWorldPosition();
+        toTarget.y = 0.0f;
+        if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) <= stopDistanceSq_)
+        {
+            // すでに到着しているので成功終了
+            Action::Update();
+            return;
+        }
+
+		// ターゲットの移動距離を計算
         float dx = currentTargetPos.x - lastTargetPosition_.x;
         float dz = currentTargetPos.z - lastTargetPosition_.z;
 
@@ -152,16 +165,6 @@ void NavMeshMove::Update()
             // 経路が見つからなかった場合
             if (path_.empty())
             {
-                // すでに目的地（停止距離内）にいるかチェック
-                Vector3 toTarget = target->GetWorldPosition() - owner_->GetWorldPosition();
-                toTarget.y = 0.0f;
-                if ((toTarget.x * toTarget.x + toTarget.z * toTarget.z) <= stopDistanceSq_)
-                {
-                    // すでに到着しているので成功終了
-                    Action::Update();
-                    return;
-                }
-
                 // 自分の最も近いNavMesh上の点を取得
                 std::optional<Vector3> myNearestPos = navMesh->GetNearestPoint(owner_->GetWorldPosition(), 1.5f);
 

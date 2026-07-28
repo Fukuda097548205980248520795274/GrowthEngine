@@ -2,7 +2,7 @@
     "navMesh": [],
     "objects": [
         {
-            "aggressiveness": 1.0,
+            "aggressiveness": 17.399999618530273,
             "avoidBackMotionName": "Back",
             "avoidFrontMotionName": "Front",
             "avoidLeftMotionName": "Front",

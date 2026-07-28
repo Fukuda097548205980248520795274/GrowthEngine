@@ -10,6 +10,7 @@
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
 #include "MotionManager/MotionManager.h"
+#include "BattleDirector/BattleDirector.h"
 
 // ノードの種類
 enum class EditorNodeType
@@ -53,7 +54,7 @@ enum class ActionType
 };
 
 /// @brief アクションの種類を文字列で表す配列
-constexpr inline const char* ACTION_TYPE_NAMES[] = {
+constexpr inline const char* actionTypeNames[] = {
 	"ComboAttack",
 	"GrabAttack",
 	"GrabStrikeAttack",
@@ -115,7 +116,7 @@ enum class ConditionType
 };
 
 // コンディションの種類を文字列で表す配列
-constexpr inline const char* CONDITION_TYPE_NAMES[] = {
+constexpr inline const char* conditionTypeNames[] = {
 	"None",
 	"HasTarget",
 	"IsTargetDown",
@@ -138,6 +139,13 @@ constexpr inline const char* CONDITION_TYPE_NAMES[] = {
 	"IsNotDamageReaction",
 	"IsChangeState",
 	"IsNotChangeState",
+};
+
+/// @brief トークンの種類を文字列で表す配列
+constexpr inline const char* tokenTypeNames[] = {
+	"攻撃",
+	"挑発",
+	"フェイント"
 };
 
 /// @brief 条件ノードパラメータ
@@ -163,6 +171,9 @@ struct EditorNode
 
 	// 条件ノードの場合の条件の種類
 	ConditionType conditionType = ConditionType::None;
+
+	// アクションノードの場合のトークンの種類
+	ActionTokenType tokenType = ActionTokenType::Attack;
 
 	MotionType motionType = MotionType::Stand; // 条件ノードでモーションを条件にする場合のモーションの種類
 	std::string motionName{};
