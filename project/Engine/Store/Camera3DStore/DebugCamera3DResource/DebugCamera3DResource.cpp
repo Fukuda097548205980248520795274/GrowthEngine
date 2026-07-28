@@ -71,6 +71,68 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 	// パラメータを取得する
 	Camera3DData::Param* param = camera3d_->GetParam();
 
+	// テンキー5: 透視投影(パース) / 平行投影(オルト) の切り替え
+	if (engine_->GetKeyTrigger(DIK_NUMPAD5))
+	{
+		camera3d_->SetOrthographic(!camera3d_->GetOrthographic());
+	}
+
+	// テンキー1: 正面ビュー (Front)
+	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD1))
+	{
+		camera3d_->SetOrthographic(true);
+
+		// 180度回転させる
+		param->transform.rotate.x = std::numbers::pi_v<float>;
+		param->transform.rotate.y = 0.0f;
+	}
+	else if (engine_->GetKeyTrigger(DIK_NUMPAD1))
+	{
+		camera3d_->SetOrthographic(true);
+		param->transform.rotate.x = 0.0f;
+		param->transform.rotate.y = 0.0f;
+	}
+
+	// テンキー3: 右面ビュー (Right)
+	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD3))
+	{
+		camera3d_->SetOrthographic(true);
+		param->transform.rotate.x = 0.0f;
+
+		// -90度回転させる
+		param->transform.rotate.y = -(std::numbers::pi_v<float> / 2.0f);
+	}
+	else if (engine_->GetKeyTrigger(DIK_NUMPAD3))
+	{
+		camera3d_->SetOrthographic(true);
+		param->transform.rotate.x = 0.0f;
+
+		// 90度回転させる
+		param->transform.rotate.y = std::numbers::pi_v<float> / 2.0f;
+	}
+
+	// テンキー7: 上面ビュー (Top)
+	if (engine_->GetKeyTrigger(DIK_NUMPAD7))
+	{
+		camera3d_->SetOrthographic(true);
+
+		// 90度回転させる
+		param->transform.rotate.x = std::numbers::pi_v<float> / 2.0f;
+		param->transform.rotate.y = 0.0f;
+	}
+	else if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD7))
+	{
+		camera3d_->SetOrthographic(true);
+
+		// -90度回転させる
+		param->transform.rotate.x = -(std::numbers::pi_v<float> / 2.0f);
+		param->transform.rotate.y = 0.0f;
+	}
+
+	// 正射影サイズを設定する
+	camera3d_->SetOrthographicSize(pointLength_);
+
+
 	// マウスホイールを上回転させると、向いている方向にズームイン
 	if (engine_->GetMouseWheelUp())
 	{

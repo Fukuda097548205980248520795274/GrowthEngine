@@ -77,9 +77,22 @@ void Engine::Camera3D::Update()
 	// ワールド行列を生成する
 	worldMatrix_ = Make3DRotateMatrix4x4(quaternion_) * Make3DTranslateMatrix4x4(param_->transform.translate);
 
-	// 正射影行列を作成する
-	projectionMatrix_ =
-		MakePerspectiveFovMatrix4x4(param_->setting.fov, param_->aspect.width / param_->aspect.height, param_->setting.nearClip, param_->setting.farClip);
+	if (isOrthographic_)
+	{
+		// 正射影の場合、アスペクト比を考慮して正射影行列を作成する
+		float aspect = param_->aspect.width / param_->aspect.height;
+		float halfHeight = orthographicSize_ * 0.5f;
+		float halfWidth = halfHeight * aspect;
+
+		// 正射影行列を作成する
+		projectionMatrix_ = MakeOrthographicMatrix4x4(-halfWidth, halfHeight, halfWidth, -halfHeight, param_->setting.nearClip, param_->setting.farClip);
+	}
+	else
+	{
+		// 正射影行列を作成する
+		projectionMatrix_ =
+			MakePerspectiveFovMatrix4x4(param_->setting.fov, param_->aspect.width / param_->aspect.height, param_->setting.nearClip, param_->setting.farClip);
+	}
 
 	// ビュー正射影行列を作成する
 	currentVPMatrix_ = worldMatrix_.Inverse() * projectionMatrix_;

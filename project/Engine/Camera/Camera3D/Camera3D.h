@@ -30,6 +30,25 @@ namespace Engine
 		Camera3DData::Param* GetParam() const { return param_.get(); }
 
 
+	public:
+
+		/// @brief 正射影かどうかを設定する
+		/// @param isOrthographic 
+		void SetOrthographic(bool isOrthographic) { isOrthographic_ = isOrthographic; }
+
+		/// @brief 正射影かどうかを取得する
+		/// @return 
+		bool GetOrthographic() const { return isOrthographic_; }
+
+		/// @brief 正射影サイズを設定する
+		/// @param size 
+		void SetOrthographicSize(float size) { orthographicSize_ = size; }
+
+		/// @brief 正射影サイズを取得する
+		/// @return 
+		float GetOrthographicSize() const { return orthographicSize_; }
+
+
 	private:
 
 		/// @brief パラメータ
@@ -40,5 +59,11 @@ namespace Engine
 
 		/// @brief エンジン
 		const GrowthEngine* engine_ = nullptr;
+
+		// 正射影かどうか
+		bool isOrthographic_ = false;
+
+		// 正射影サイズ
+		float orthographicSize_ = 50.0f;
 	};
 }

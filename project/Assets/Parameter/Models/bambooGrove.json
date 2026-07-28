@@ -1,0 +1,81 @@
+[
+    {
+        "animationDirectory": "",
+        "animationFileName": "",
+        "blendMode": 0,
+        "meshData": [
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/bambooGroveRoad/bambooGroveRoad_uv.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            }
+        ],
+        "modelDirectory": "./Assets/Models/bambooGroveRoad",
+        "modelFileName": "bambooGroveRoad.obj",
+        "modelName": "stage",
+        "rotate": [
+            0.0,
+            -1.5700000524520874,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "skeletonDirectory": "",
+        "skeletonFileName": "",
+        "translate": [
+            -0.9700000286102295,
+            0.12999999523162842,
+            21.8799991607666
+        ],
+        "type": 1
+    }
+]

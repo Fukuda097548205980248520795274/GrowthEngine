@@ -49,7 +49,8 @@ void GameScene::Initialize()
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
-	sunLight_->param_->intensity = 0.4f;
+	sunLight_->param_->intensity = 0.2f;
+	sunLight_->param_->color = Vector3(0.5f, 0.5f, 1.0f);
 
 	// マネージャの生成と初期化
 	motionManager_ = MotionManager::GetInstance();
@@ -263,9 +264,9 @@ void GameScene::Initialize()
 
 
 	// ステージ読み込み
-	stageEditor_->LoadStage("Tutorial.json");
-	modelEditor_->Load("town");
-	lightEditor_->Load("town");
+	stageEditor_->LoadStage("bambooGroveStage.json");
+	modelEditor_->Load("bambooGrove");
+	lightEditor_->Load("bambooGrove");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
