@@ -20,13 +20,6 @@ Wall::~Wall()
 		collision_->Delete();
 		collision_ = nullptr;
 	}
-
-	// モデルの削除
-	if (model_)
-	{
-		model_->isDelete_ = true;
-		model_ = nullptr;
-	}
 }
 
 /// @brief 初期化
@@ -44,15 +37,6 @@ void Wall::Initialize(const InitData& initData)
 
 	//　大きさ
 	worldTransform_->scale_ = initData.scale;
-
-	// モデル
-	if (initData.model)
-	{
-		model_ = initData.model;
-
-		// 親
-		model_->param_.parent = worldTransform_.get();
-	}
 
 	// ワールドトランスフォームを更新する
 	worldTransform_->Update();
@@ -103,7 +87,7 @@ void Wall::Update()
 /// @brief 描画処理
 void Wall::Draw()
 {
-	if (model_)model_->Draw();
+	
 }
 
 /// @brief デバッグUIを描画する

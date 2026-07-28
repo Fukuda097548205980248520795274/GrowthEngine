@@ -19,9 +19,6 @@ public:
 
 		// 壁の衝突判定
 		Collision3DInstanceOBB* collision = nullptr;
-
-		/// @brief 壁のモデル
-		PrefabInstanceCube* model = nullptr;
 	};
 
 
@@ -49,9 +46,6 @@ private:
 
 	/// @brief 床の衝突判定
 	Collision3DInstanceOBB* collision_ = nullptr;
-
-	/// @brief 床のモデル
-	PrefabInstanceCube* model_ = nullptr;
 
 
 public:

@@ -156,9 +156,6 @@ void GameScene::Initialize()
 	// 片手武器モデルの読み込み
 	oneHandedWeaponModel_ = std::make_unique<PrefabBaseStaticModel>(engine_->LoadModel("./Assets/Models/weapon/PoliceBaton", "PoliceBaton.obj"), 100, "PoliceBaton");
 
-	// 試験的な立方体の生成と初期化
-	trialCube_ = std::make_unique<PrefabBaseCube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 1000, "Trial_Cube");
-
 
 	// コンマスプライトの生成と初期化
 	commaSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/comma.png"), 100, "Comma_Sprite");
@@ -262,12 +259,13 @@ void GameScene::Initialize()
 	eventTriggerAABBCollision_->SetCollisionTarget(eventTriggerCollision_->GetHandle());
 
 	// 「カメラガード」に当たる
-	cameraSegmentCollision_->SetCollisionTarget(wallCollision_->GetHandle());
 	cameraSegmentCollision_->SetCollisionTarget(cameraGuardCollision_->GetHandle());
 
 
 	// ステージ読み込み
-	//stageEditor_->LoadStage("Tutorial.json");
+	stageEditor_->LoadStage("Tutorial.json");
+	modelEditor_->Load("town");
+	lightEditor_->Load("town");
 
 
 	// オブジェクトの描画レンダーパスの読み込み
@@ -280,7 +278,6 @@ void GameScene::Initialize()
 
 			// ステージオブジェクトの描画
 			for (auto& object : objects_)object->Draw();
-			trialCube_->Draw();
 
 			// プレイヤーの描画
 			if (player_)
@@ -804,7 +801,6 @@ Floor* GameScene::CreateFloorObject(const Floor::InitData& initData)
 	// 床
 	Floor::InitData floorInitData = initData;
 	floorInitData.collision = floorCollision_->CreateInstance();
-	floorInitData.model = trialCube_->CreateInstance();
 
 	std::unique_ptr<Floor> newFloor = std::make_unique<Floor>();
 	newFloor->Initialize(floorInitData);
@@ -824,7 +820,6 @@ Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
 	// 壁
 	Wall::InitData wallInitData = initData;
 	wallInitData.collision = wallCollision_->CreateInstance();
-	wallInitData.model = trialCube_->CreateInstance();
 
 	std::unique_ptr<Wall> newWall = std::make_unique<Wall>();
 	newWall->Initialize(wallInitData);

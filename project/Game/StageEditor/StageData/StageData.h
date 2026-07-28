@@ -150,6 +150,7 @@ inline void toJson(json& j, const PlacementData& s)
 	if (s.category == EditCategory::Character)
 	{
 		j["hp"] = s.hp;
+		j["aggressiveness"] = s.aggressiveness;
 		j["standMotionName"] = s.standMotion.name;
 		j["stanceMotionName"] = s.stanceMotion.name;
 		j["walkMotionName"] = s.walkMotion.name;
@@ -344,6 +345,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
 
 	s.hp = j.value("hp", 100);
+	s.aggressiveness = j.value("aggressiveness", 1.0f);
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);

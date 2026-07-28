@@ -16,9 +16,6 @@ public:
 
 		// 地面の衝突判定
 		Collision3DInstanceAABB* collision = nullptr;
-
-		/// @brief 地面のモデル
-		PrefabInstanceCube* model = nullptr;
 	};
 
 public:
@@ -45,9 +42,6 @@ private:
 
 	/// @brief 床の衝突判定
 	Collision3DInstanceAABB* collision_ = nullptr;
-
-	/// @brief 床のモデル
-	PrefabInstanceCube* model_ = nullptr;
 
 
 public:

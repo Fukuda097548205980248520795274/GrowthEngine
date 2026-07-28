@@ -1,0 +1,846 @@
+[
+    {
+        "animationDirectory": "",
+        "animationFileName": "",
+        "blendMode": 0,
+        "meshData": [
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.11398965120315552,
+                    0.11398965120315552,
+                    0.11398965120315552,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.3316062092781067,
+                    0.7818197011947632,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.27176570892333984,
+                    0.7776232957839966,
+                    0.9896373152732849,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.9896373152732849,
+                    0.3589358329772949,
+                    0.3589358329772949,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            }
+        ],
+        "modelDirectory": "./Assets/Models/town",
+        "modelFileName": "town.obj",
+        "modelName": "New Model",
+        "rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "skeletonDirectory": "",
+        "skeletonFileName": "",
+        "translate": [
+            -17.15999984741211,
+            0.14000000059604645,
+            12.550000190734863
+        ],
+        "type": 1
+    }
+]

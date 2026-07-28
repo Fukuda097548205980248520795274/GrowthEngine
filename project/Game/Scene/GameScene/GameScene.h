@@ -317,9 +317,6 @@ private:
 	/// @brief HUDのリスト
 	std::list<std::unique_ptr<HUD>> huds_;
 
-	/// @brief 試験的な立方体
-	std::unique_ptr<PrefabBaseCube> trialCube_ = nullptr;
-
 	/// @brief ボタン
 	std::unique_ptr<MashButton> xButton_ = nullptr;
 	std::unique_ptr<MashButton> yButton_ = nullptr;

@@ -1,0 +1,266 @@
+[
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light",
+        "position": [
+            0.0,
+            4.0,
+            0.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_1",
+        "position": [
+            0.0,
+            4.0,
+            9.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_2",
+        "position": [
+            0.0,
+            4.0,
+            19.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_3",
+        "position": [
+            0.0,
+            4.0,
+            30.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_4",
+        "position": [
+            -9.0,
+            4.0,
+            30.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_5",
+        "position": [
+            -21.0,
+            4.0,
+            30.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_6",
+        "position": [
+            -34.0,
+            4.0,
+            30.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_7",
+        "position": [
+            -34.0,
+            4.0,
+            38.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_8",
+        "position": [
+            -34.0,
+            4.0,
+            48.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_9",
+        "position": [
+            -34.0,
+            4.0,
+            59.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            0.9815834164619446,
+            0.4922279715538025
+        ],
+        "cosAngle": 0.7599999904632568,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 6.5,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light_10",
+        "position": [
+            -34.0,
+            4.0,
+            73.0
+        ]
+    }
+]

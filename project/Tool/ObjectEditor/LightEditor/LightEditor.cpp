@@ -1,6 +1,24 @@
 #include "LightEditor.h"
 #include "LightSerializer/LightSerializer.h"
 
+/// @brief 読み込む
+/// @param filename 
+void LightEditor::Load(const std::string& filename)
+{
+	std::string path = kLightDir + filename + ".json";
+
+	selectedElementIndex_ = -1;
+	lightElements_ = FromJson(path);
+
+	// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
+	std::string nameWithoutExt = filename;
+	strcpy_s(inputFilename_, nameWithoutExt.c_str());
+
+	// 現在開いているファイル名を更新
+	currentFileName_ = nameWithoutExt;
+	isFileOpen_ = true;
+}
+
 /// @brief UIを描画する
 void LightEditor::DrawUI()
 {
@@ -31,10 +49,16 @@ void LightEditor::DrawUI()
 			Save();
 		}
 
-		// Deleteキーで選択中のスプライトを削除
+		// Deleteキーで選択中のライトを削除
 		if (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace))
 		{
 			DeleteSelectedElement();
+		}
+
+		// Ctrl + D で選択中のライトを複製
+		if (isCtrl && ImGui::IsKeyPressed(ImGuiKey_D))
+		{
+			DuplicateSelectedElement();
 		}
 	}
 
@@ -178,7 +202,7 @@ void LightEditor::DrawInspectorWindow()
 				auto* param = static_cast<LightPoint*>(selectedData.light.get())->param_;
 
 				// 位置の編集
-				ImGui::DragFloat3("位置 (Position)", &param->position.x, 1.0f, 0.0f, 100000.0f);
+				ImGui::DragFloat3("位置 (Position)", &param->position.x, 1.0f, -100000.0f, 100000.0f);
 				if (ImGui::IsItemActivated()) SaveHistoryState();
 
 				// 輝度の編集
@@ -202,7 +226,7 @@ void LightEditor::DrawInspectorWindow()
 				auto* param = static_cast<LightSpot*>(selectedData.light.get())->param_;
 
 				// 位置の編集
-				ImGui::DragFloat3("位置 (Position)", &param->position.x, 1.0f, 0.0f, 100000.0f);
+				ImGui::DragFloat3("位置 (Position)", &param->position.x, 1.0f, -100000.0f, 100000.0f);
 				if (ImGui::IsItemActivated()) SaveHistoryState();
 
 				// 方向の編集
@@ -485,6 +509,75 @@ void LightEditor::Save()
 
 	std::string path = kLightDir + filenameStr;
 	ToJson(path, lightElements_);
+}
+
+/// @brief 選択中のライト要素を複製する
+void LightEditor::DuplicateSelectedElement()
+{
+	// 選択中の要素が存在するかチェック
+	if (selectedElementIndex_ >= 0 && selectedElementIndex_ < lightElements_.size())
+	{
+		// 変更前の状態を履歴に保存
+		SaveHistoryState();
+
+		// 複製元のデータを取得
+		const auto& originalData = lightElements_[selectedElementIndex_];
+		LightElementData newData;
+
+		// 名前の重複を避けるため、一意の名前を生成
+		newData.name = GetUniqueName(originalData.name);
+		newData.lightType = originalData.lightType;
+
+		// ライトの種類に応じてインスタンスを生成し、パラメータをコピー
+		if (newData.lightType == Engine::Light::Type::Directional)
+		{
+			newData.light = std::make_unique<LightDirectional>(newData.name);
+			auto* origLight = static_cast<LightDirectional*>(originalData.light.get());
+			auto* dupLight = static_cast<LightDirectional*>(newData.light.get());
+
+			// パラメータをコピー
+			dupLight->param_->direction = origLight->param_->direction;
+			dupLight->param_->intensity = origLight->param_->intensity;
+			dupLight->param_->color = origLight->param_->color;
+			dupLight->param_->position = origLight->param_->position;
+			dupLight->param_->size = origLight->param_->size;
+			dupLight->param_->minDepth = origLight->param_->minDepth;
+			dupLight->param_->maxDepth = origLight->param_->maxDepth;
+		}
+		else if (newData.lightType == Engine::Light::Type::Point)
+		{
+			newData.light = std::make_unique<LightPoint>(newData.name);
+			auto* origLight = static_cast<LightPoint*>(originalData.light.get());
+			auto* dupLight = static_cast<LightPoint*>(newData.light.get());
+
+			dupLight->param_->position = origLight->param_->position;
+			dupLight->param_->intensity = origLight->param_->intensity;
+			dupLight->param_->color = origLight->param_->color;
+			dupLight->param_->radius = origLight->param_->radius;
+			dupLight->param_->decay = origLight->param_->decay;
+		}
+		else if (newData.lightType == Engine::Light::Type::Spot)
+		{
+			newData.light = std::make_unique<LightSpot>(newData.name);
+			auto* origLight = static_cast<LightSpot*>(originalData.light.get());
+			auto* dupLight = static_cast<LightSpot*>(newData.light.get());
+
+			dupLight->param_->position = origLight->param_->position;
+			dupLight->param_->direction = origLight->param_->direction;
+			dupLight->param_->intensity = origLight->param_->intensity;
+			dupLight->param_->color = origLight->param_->color;
+			dupLight->param_->distance = origLight->param_->distance;
+			dupLight->param_->decay = origLight->param_->decay;
+			dupLight->param_->cosAngle = origLight->param_->cosAngle;
+			dupLight->param_->cosFalloffStart = origLight->param_->cosFalloffStart;
+		}
+
+		// 複製したライトをリストに追加
+		lightElements_.push_back(std::move(newData));
+
+		// 選択状態を新しく複製したものに合わせる
+		selectedElementIndex_ = static_cast<int>(lightElements_.size()) - 1;
+	}
 }
 
 /// @brief 選択中のUI要素を削除する

@@ -9,6 +9,24 @@ ModelEditor::ModelEditor()
 	RefreshAnimationList();
 }
 
+/// @brief 読み込む
+/// @param fileName 
+void ModelEditor::Load(const std::string& fileName)
+{
+	std::string path = kModelDataDir + fileName + ".json";
+
+	selectedElementIndex_ = -1;
+	modelElements_ = FromJson(path, loadedModels_, loadedAnimations_, loadedSkeletons_);
+
+	// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
+	std::string nameWithoutExt = fileName;
+	strcpy_s(inputFilename_, nameWithoutExt.c_str());
+
+	// 現在開いているファイル名を設定
+	currentFileName_ = nameWithoutExt;
+	isFileOpen_ = true;
+}
+
 /// @brief 描画処理
 void ModelEditor::Draw()
 {
@@ -239,6 +257,8 @@ void ModelEditor::DrawInspectorWindow()
 				auto staticModel = static_cast<Render3DStaticModel*>(selectedData.render3D.get());
 				auto param = staticModel->param_;
 
+				TransformInspectorUI(&param->modelTransform);
+
 				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
 				{
 					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
@@ -258,6 +278,8 @@ void ModelEditor::DrawInspectorWindow()
 				ImGui::Text("モデルタイプ: AnimationModel");
 				auto animationModel = static_cast<Render3DAnimationModel*>(selectedData.render3D.get());
 				auto param = animationModel->param_;
+
+				TransformInspectorUI(&param->modelTransform);
 
 				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
 				{
@@ -282,6 +304,8 @@ void ModelEditor::DrawInspectorWindow()
 				ImGui::Text("モデルタイプ: SkinningModel");
 				auto skinningModel = static_cast<Render3DSkinningModel*>(selectedData.render3D.get());
 				auto param = skinningModel->param_;
+
+				TransformInspectorUI(&param->modelTransform);
 
 				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
 				{
@@ -938,7 +962,7 @@ void ModelEditor::TransformInspectorUI(Engine::Render3D::Transform* transform)
 	if (ImGui::TreeNode("トランスフォーム"))
 	{
 		// トランスフォームの編集
-		ImGui::DragFloat3("位置", &transform->translate.x, 1.0f);
+		ImGui::DragFloat3("位置", &transform->translate.x, 0.01f);
 		if (ImGui::IsItemActivated()) SaveHistoryState();
 
 		ImGui::DragFloat3("大きさ", &transform->scale.x, 0.01f);

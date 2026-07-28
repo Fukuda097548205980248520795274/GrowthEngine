@@ -8,6 +8,10 @@ public:
 	/// @brief コンストラクタ
 	LightEditor() = default;
 
+	/// @brief 読み込む
+	/// @param filename 
+	void Load(const std::string& filename);
+
 	/// @brief UIを描画する
 	void DrawUI();
 
@@ -41,7 +45,7 @@ private:
 
 private:
 
-	/// @brief UI要素の名前が重複しないようにユニークな名前を生成する
+	/// @brief ライト要素の名前が重複しないようにユニークな名前を生成する
 	/// @param baseName 
 	/// @param ignoreIndex 
 	/// @return 
@@ -50,7 +54,10 @@ private:
 	/// @brief ファイルに保存する
 	void Save();
 
-	/// @brief 選択中のUI要素を削除する
+	/// @brief 選択中のライト要素を複製する
+	void DuplicateSelectedElement();
+
+	/// @brief 選択中のライト要素を削除する
 	void DeleteSelectedElement();
 
 	/// @brief 現在の状態を履歴に保存する

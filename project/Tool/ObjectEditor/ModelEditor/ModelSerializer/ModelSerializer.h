@@ -31,6 +31,21 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(staticModel->param_->blendMode);
+			elemJson["translate"] = {
+				staticModel->param_->modelTransform.translate.x,
+				staticModel->param_->modelTransform.translate.y,
+				staticModel->param_->modelTransform.translate.z
+			};
+			elemJson["scale"] = {
+				staticModel->param_->modelTransform.scale.x,
+				staticModel->param_->modelTransform.scale.y,
+				staticModel->param_->modelTransform.scale.z
+			};
+			elemJson["rotate"] = {
+				staticModel->param_->modelTransform.rotate.x,
+				staticModel->param_->modelTransform.rotate.y,
+				staticModel->param_->modelTransform.rotate.z
+			};
 
 			json meshJson = json::array();
 			for (int i = 0; i < static_cast<int>(staticModel->param_->meshTransforms.size()); ++i)
@@ -114,6 +129,21 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(animationModel->param_->blendMode);
+			elemJson["translate"] = {
+				animationModel->param_->modelTransform.translate.x,
+				animationModel->param_->modelTransform.translate.y,
+				animationModel->param_->modelTransform.translate.z
+			};
+			elemJson["scale"] = {
+				animationModel->param_->modelTransform.scale.x,
+				animationModel->param_->modelTransform.scale.y,
+				animationModel->param_->modelTransform.scale.z
+			};
+			elemJson["rotate"] = {
+				animationModel->param_->modelTransform.rotate.x,
+				animationModel->param_->modelTransform.rotate.y,
+				animationModel->param_->modelTransform.rotate.z
+			};
 
 			json meshJson = json::array();
 			for (int i = 0; i < static_cast<int>(animationModel->param_->meshTransforms.size()); ++i)
@@ -197,6 +227,21 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 
 			// ブレンドモード
 			elemJson["blendMode"] = static_cast<int>(skinningModel->param_->blendMode);
+			elemJson["translate"] = {
+				skinningModel->param_->modelTransform.translate.x,
+				skinningModel->param_->modelTransform.translate.y,
+				skinningModel->param_->modelTransform.translate.z
+			};
+			elemJson["scale"] = {
+				skinningModel->param_->modelTransform.scale.x,
+				skinningModel->param_->modelTransform.scale.y,
+				skinningModel->param_->modelTransform.scale.z
+			};
+			elemJson["rotate"] = {
+				skinningModel->param_->modelTransform.rotate.x,
+				skinningModel->param_->modelTransform.rotate.y,
+				skinningModel->param_->modelTransform.rotate.z
+			};
 
 			json meshJson = json::array();
 			for (int i = 0; i < static_cast<int>(skinningModel->param_->meshTransforms.size()); ++i)
@@ -551,6 +596,23 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 			// ブレンドモードを復元
 			staticModel->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
 
+			// トランスフォームを復元
+			staticModel->param_->modelTransform.translate = {
+				elemJson["translate"][0].get<float>(),
+				elemJson["translate"][1].get<float>(),
+				elemJson["translate"][2].get<float>()
+			};
+			staticModel->param_->modelTransform.scale = {
+				elemJson["scale"][0].get<float>(),
+				elemJson["scale"][1].get<float>(),
+				elemJson["scale"][2].get<float>()
+			};
+			staticModel->param_->modelTransform.rotate = {
+				elemJson["rotate"][0].get<float>(),
+				elemJson["rotate"][1].get<float>(),
+				elemJson["rotate"][2].get<float>()
+			};
+
 			for (int i = 0; i < static_cast<int>(staticModel->param_->meshTransforms.size()); ++i)
 			{
 				// メッシュトランスフォームを復元
@@ -639,6 +701,23 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// ブレンドモードを復元
 			animationModel->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
+
+			// トランスフォームを復元
+			animationModel->param_->modelTransform.translate = {
+				elemJson["translate"][0].get<float>(),
+				elemJson["translate"][1].get<float>(),
+				elemJson["translate"][2].get<float>()
+			};
+			animationModel->param_->modelTransform.scale = {
+				elemJson["scale"][0].get<float>(),
+				elemJson["scale"][1].get<float>(),
+				elemJson["scale"][2].get<float>()
+			};
+			animationModel->param_->modelTransform.rotate = {
+				elemJson["rotate"][0].get<float>(),
+				elemJson["rotate"][1].get<float>(),
+				elemJson["rotate"][2].get<float>()
+			};
 
 			for (int i = 0; i < static_cast<int>(animationModel->param_->meshTransforms.size()); ++i)
 			{
@@ -733,6 +812,23 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// ブレンドモードを復元
 			skinningModel->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
+
+			// トランスフォームを復元
+			skinningModel->param_->modelTransform.translate = {
+				elemJson["translate"][0].get<float>(),
+				elemJson["translate"][1].get<float>(),
+				elemJson["translate"][2].get<float>()
+			};
+			skinningModel->param_->modelTransform.scale = {
+				elemJson["scale"][0].get<float>(),
+				elemJson["scale"][1].get<float>(),
+				elemJson["scale"][2].get<float>()
+			};
+			skinningModel->param_->modelTransform.rotate = {
+				elemJson["rotate"][0].get<float>(),
+				elemJson["rotate"][1].get<float>(),
+				elemJson["rotate"][2].get<float>()
+			};
 
 			for (int i = 0; i < static_cast<int>(skinningModel->param_->meshTransforms.size()); ++i)
 			{

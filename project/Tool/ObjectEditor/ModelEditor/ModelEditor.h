@@ -8,6 +8,10 @@ public:
 	/// @brief コンストラクタ
 	ModelEditor();
 
+	/// @brief 読み込む
+	/// @param fileName 
+	void Load(const std::string& fileName);
+
 	/// @brief 描画処理
 	void Draw();
 

@@ -26,6 +26,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		// NPCの初期化データの作成
 		CharacterInitData initData;
 		initData.position = data.position;
+		initData.aggressiveness = data.aggressiveness;
 		initData.hp = data.hp;
 		initData.rotateY = data.rotate_.y;
 		initData.model_ = nullptr; // モデルは後で設定する
