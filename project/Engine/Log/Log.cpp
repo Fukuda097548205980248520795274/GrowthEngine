@@ -13,7 +13,7 @@ Engine::Log::Log()
 void Engine::Log::Initialize()
 {
 	// ディレクトリを掘る
-	if (!CreateDirectory(L"../build/logs", nullptr))
+	if (!CreateDirectory(L"./logs", nullptr))
 	{
 		if (GetLastError() != ERROR_ALREADY_EXISTS)
 		{
@@ -35,7 +35,7 @@ void Engine::Log::Initialize()
 	std::string dateString = std::format("{:%Y%m%d_%H%M%S}", localTime);
 
 	// ファイル名は時刻を使う
-	std::string logFilePath = std::string("../build/logs/") + dateString + ".log";
+	std::string logFilePath = std::string("./logs/") + dateString + ".log";
 
 	// ファイルを作って書き込み準備
 	os.open(logFilePath);

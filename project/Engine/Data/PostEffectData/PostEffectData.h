@@ -78,6 +78,30 @@ namespace Engine
 		{
 			// 時間
 			float time;
+
+			// ノイズの強さ (0.0 ~ 1.0)
+			float noiseIntensity;
+
+			// ノイズの細かさ (標準は1.0。大きくすると細かくなる)
+			float noiseScale;
+
+			// ノイズの変化速度 (標準は1.0)
+			float noiseSpeed;
+
+			// 1.0でカラーノイズ、0.0でモノクロノイズ
+			float isColorNoise;
+
+			// 走査線の強さ (0.0 ~ 1.0)
+			float scanlineIntensity;
+
+			// 走査線の本数 (例: 800.0)
+			float scanlineCount;
+
+			// ノイズの色フィルター (RGB)
+			Vector3 noiseColorFilter;
+
+			// スクリーンの色フィルター (RGB)
+			Vector3 screenColorFilter;
 		};
 
 		/// @brief 被写界深度

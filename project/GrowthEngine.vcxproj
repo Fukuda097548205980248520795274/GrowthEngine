@@ -160,6 +160,7 @@
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="Tool\EngineObject\MainCamera3D\MainCamera3D.cpp" />
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.cpp" />
@@ -1228,6 +1229,7 @@
     <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />
     <ClInclude Include="Tool\EngineObject\Emitter3D\Emitter3D.h" />
     <ClInclude Include="Tool\EngineObject\MainCamera3D\MainCamera3D.h" />
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.h" />

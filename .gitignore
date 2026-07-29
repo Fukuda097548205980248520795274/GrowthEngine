@@ -328,3 +328,5 @@ imgui.ini
 *.mdp
 *.pdb
 project/Assets/Parameter/Debug/*
+project/logs/*
+project/dumps/*

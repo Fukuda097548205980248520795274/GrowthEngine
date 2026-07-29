@@ -36,7 +36,7 @@ void GameScene::Initialize()
 	// アウトラインのポストエフェクトを読み込む
 	engine_->LoadPostEffect("Outline", Engine::PostEffect::Type::DepthBasedOutline);
 	auto outlineParam = engine_->GetPostEffectParam<Engine::PostEffect::DepthBasedOutline>("Outline");
-	outlineParam->outlineWidth = 2.5f;
+	outlineParam->outlineWidth = 1.5f;
 
 	// 演出用カメラの読み込みとカットシーンマネージャの生成
 	cutsceneCamera_ = std::make_unique<MainCamera3D>("CutsceneCamera");
@@ -49,7 +49,7 @@ void GameScene::Initialize()
 
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
-	sunLight_->param_->intensity = 0.2f;
+	sunLight_->param_->intensity = 1.0f;
 	sunLight_->param_->color = Vector3(0.5f, 0.5f, 1.0f);
 
 	// マネージャの生成と初期化

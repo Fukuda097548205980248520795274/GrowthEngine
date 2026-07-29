@@ -5,6 +5,11 @@
 void PostEffectManager::Initialize()
 {
 	normalVignetting_ = std::make_unique<PostEffectVignetting>("Normal_Vignetting");
+	normalBloom_ = std::make_unique<PostEffectBloom>("Normal_Bloom");
+
+	// ダメージ時のガウシアンフィルターの生成と初期化
+	damageGaussianFilter_ = std::make_unique<PostEffectGaussianFilter>("Damage_GaussianFilter");
+	damageWhiteNoise_ = std::make_unique<PostEffectWhiteNoise>("Damage_WhiteNoise");
 
 	// スタイルチェンジ中のグレースケールの生成と初期化
 	styleChangeGrayscale_ = std::make_unique<PostEffectGrayscale>("StyleChange_Grayscale");
@@ -23,10 +28,50 @@ void PostEffectManager::Draw(Player* player)
 {
 	// 通常画面のビネットを描画する
 	normalVignetting_->Draw();
+	normalBloom_->Draw();
 
 	// プレイヤーによる描画処理の後にポストエフェクトを描画する
 	if (player)
 	{
+		// ダメージを受けた場合のポストエフェクト
+		if (player->IsHitDamage())
+		{
+			damageWhiteNoiseTimer_ = kDamageWhiteNoiseDuration;
+			damageGaussianFilterTimer_ = kDamageGaussianFilterDuration;
+			damageWhiteNoise_->param_->time = 0.0f;
+		}
+
+		// ダメージを受けた場合のポストエフェクト
+		if (damageGaussianFilterTimer_ >= 0.0f)
+		{
+			float dt = engine_->GetDeltaTime();
+			damageGaussianFilterTimer_ -= dt;
+
+			// 補間係数
+			float t = std::clamp(1.0f - (damageGaussianFilterTimer_ / kDamageGaussianFilterDuration), 0.0f, 1.0f);
+
+			// ガウシアンフィルターの強さを補間する
+			damageGaussianFilter_->param_->sigma = Lerp(10.0f, 0.001f, 1.0f - std::powf(1.0f - t, 3.0f));
+
+			damageGaussianFilter_->Draw();
+		}
+
+		// ダメージを受けた場合のポストエフェクト
+		if (damageWhiteNoiseTimer_ >= 0.0f)
+		{
+			float dt = engine_->GetDeltaTime();
+			damageWhiteNoiseTimer_ -= dt;
+			damageWhiteNoise_->param_->time += dt;
+
+			// 補間係数
+			float t = std::clamp(1.0f - (damageWhiteNoiseTimer_ / kDamageWhiteNoiseDuration), 0.0f, 1.0f);
+
+			damageWhiteNoise_->param_->noiseIntensity = Lerp(0.25f, 0.001f, t);
+
+			// エフェクトを描画する
+			damageWhiteNoise_->Draw();
+		}
+
 		// スタイルチェンジ中のポストエフェクト
 		if (player->IsStyleChanging())
 		{

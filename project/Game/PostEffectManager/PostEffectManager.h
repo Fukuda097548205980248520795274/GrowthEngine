@@ -34,6 +34,32 @@ private:
 	/// @brief 通常画面内のヴィネッティング
 	std::unique_ptr<PostEffectVignetting> normalVignetting_ = nullptr;
 
+	/// @brief 通常画面内のブルーム
+	std::unique_ptr<PostEffectBloom> normalBloom_ = nullptr;
+
+
+	/*--------------
+	    ダメージ
+	--------------*/
+
+	/// @brief ダメージ時のホワイトノイズ
+	std::unique_ptr<PostEffectWhiteNoise> damageWhiteNoise_ = nullptr;
+
+	/// @brief ダメージ時のガウシアンフィルター
+	std::unique_ptr<PostEffectGaussianFilter> damageGaussianFilter_ = nullptr;
+
+	// ダメージエフェクトの持続時間
+	static constexpr float kDamageWhiteNoiseDuration = 0.5f;
+
+	// ダメージエフェクトのタイマー
+	float damageWhiteNoiseTimer_ = 0.0f;
+
+	// ダメージエフェクトの持続時間
+	static constexpr float kDamageGaussianFilterDuration = 2.0f;
+
+	// ダメージエフェクトのタイマー
+	float damageGaussianFilterTimer_ = 0.0f;
+
 
 	/*--------------------
 	    スタイルチェンジ

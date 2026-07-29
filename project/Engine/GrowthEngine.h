@@ -55,6 +55,9 @@
 #include "EngineObject/PostEffect/PostEffectGrayscale/PostEffectGrayscale.h"
 #include "EngineObject/PostEffect/PostEffectVignetting/PostEffectVignetting.h"
 #include "EngineObject/PostEffect/PostEffectBlurShadow2D/PostEffectBlurShadow2D.h"
+#include "EngineObject/PostEffect/PostEffectGaussianFilter/PostEffectGaussianFilter.h"
+#include "EngineObject/PostEffect/PostEffectWhiteNoise/PostEffectWhiteNoise.h"
+#include "EngineObject/PostEffect/PostEffectBloom/PostEffectBloom.h"
 
 #include "EngineObject/Trail3D/Trail3D.h"
 

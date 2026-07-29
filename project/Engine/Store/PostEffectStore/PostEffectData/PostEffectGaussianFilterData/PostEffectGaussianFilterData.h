@@ -29,7 +29,7 @@ namespace Engine
 
 		/// @brief パラメータを取得する
 		/// @return 
-		void* GetParam() override { return nullptr; }
+		void* GetParam() override { return param_.get(); }
 
 		/// @brief デバッグ用パラメータ
 		void DebugParameter() override;

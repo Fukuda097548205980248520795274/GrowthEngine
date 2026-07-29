@@ -21,12 +21,28 @@ void Engine::PostEffectWhiteNoiseData::Initialize(ID3D12Device* device, Log* log
 	// パラメータの生成
 	param_ = std::make_unique<PostEffect::WhiteNoise>();
 	param_->time = 0.0f;
+	param_->noiseIntensity = 0.5f;
+	param_->noiseScale = 1.0f;
+	param_->noiseSpeed = 1.0f;
+	param_->isColorNoise = 1.0f;
+	param_->scanlineIntensity = 0.5f;
+	param_->scanlineCount = 800.0f;
+	param_->noiseColorFilter = Vector3(1.0f, 1.0f, 1.0f);
+	param_->screenColorFilter = Vector3(1.0f, 1.0f, 1.0f);
 
 	// パラメータを記録する
 	group_ = "WhiteNoise_" + name_;
 	if (parameter_)
 	{
 		parameter_->SetValue(group_, "Time", &param_->time);
+		parameter_->SetValue(group_, "NoiseIntensity", &param_->noiseIntensity);
+		parameter_->SetValue(group_, "NoiseScale", &param_->noiseScale);
+		parameter_->SetValue(group_, "NoiseSpeed", &param_->noiseSpeed);
+		parameter_->SetValue(group_, "IsColorNoise", &param_->isColorNoise);
+		parameter_->SetValue(group_, "ScanlineIntensity", &param_->scanlineIntensity);
+		parameter_->SetValue(group_, "ScanlineCount", &param_->scanlineCount);
+		parameter_->SetValue(group_, "NoiseColorFilter", &param_->noiseColorFilter);
+		parameter_->SetValue(group_, "ScreenColorFilter", &param_->screenColorFilter);
 
 		parameter_->RegisterGroupDataReflection(group_);
 	}
@@ -35,6 +51,14 @@ void Engine::PostEffectWhiteNoiseData::Initialize(ID3D12Device* device, Log* log
 	resource_ = std::make_unique<ConstantBufferResource<PostEffect::WhiteNoiseDataForGPU>>();
 	resource_->Initialize(device, log);
 	resource_->data_->time = param_->time;
+	resource_->data_->noiseIntensity = param_->noiseIntensity;
+	resource_->data_->noiseScale = param_->noiseScale;
+	resource_->data_->noiseSpeed = param_->noiseSpeed;
+	resource_->data_->isColorNoise = param_->isColorNoise;
+	resource_->data_->scanlineIntensity = param_->scanlineIntensity;
+	resource_->data_->scanlineCount = param_->scanlineCount;
+	resource_->data_->noiseColorFilter = param_->noiseColorFilter;
+	resource_->data_->screenColorFilter = param_->screenColorFilter;
 }
 
 /// @brief リセット
@@ -47,6 +71,14 @@ void Engine::PostEffectWhiteNoiseData::Reset()
 	else
 	{
 		param_->time = 0.0f;
+		param_->noiseIntensity = 0.5f;
+		param_->noiseScale = 1.0f;
+		param_->noiseSpeed = 1.0f;
+		param_->isColorNoise = 1.0f;
+		param_->scanlineIntensity = 0.5f;
+		param_->scanlineCount = 800.0f;
+		param_->noiseColorFilter = Vector3(1.0f, 1.0f, 1.0f);
+		param_->screenColorFilter = Vector3(1.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -62,6 +94,14 @@ void Engine::PostEffectWhiteNoiseData::Register(const PostEffectRenderContext& c
 	-----------------*/
 
 	resource_->data_->time = param_->time;
+	resource_->data_->noiseIntensity = param_->noiseIntensity;
+	resource_->data_->noiseScale = param_->noiseScale;
+	resource_->data_->noiseSpeed = param_->noiseSpeed;
+	resource_->data_->isColorNoise = param_->isColorNoise;
+	resource_->data_->scanlineIntensity = param_->scanlineIntensity;
+	resource_->data_->scanlineCount = param_->scanlineCount;
+	resource_->data_->noiseColorFilter = param_->noiseColorFilter;
+	resource_->data_->screenColorFilter = param_->screenColorFilter;
 
 
 	/*------------------------
@@ -93,6 +133,14 @@ void Engine::PostEffectWhiteNoiseData::DebugParameter()
 	if (ImGui::TreeNode((name_ + "_Grayscale").c_str()))
 	{
 		ImGui::DragFloat("Time", &param_->time, 0.01f, 0.0f, 1000000.0f);
+		ImGui::DragFloat("NoiseIntensity", &param_->noiseIntensity, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("NoiseScale", &param_->noiseScale, 0.01f, 0.0f, 100.0f);
+		ImGui::DragFloat("NoiseSpeed", &param_->noiseSpeed, 0.01f, 0.0f, 100.0f);
+		ImGui::DragFloat("IsColorNoise", &param_->isColorNoise, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("ScanlineIntensity", &param_->scanlineIntensity, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("ScanlineCount", &param_->scanlineCount, 1.0f, 0.0f, 10000.0f);
+		ImGui::ColorEdit3("NoiseColorFilter", &param_->noiseColorFilter.x);
+		ImGui::ColorEdit3("ScreenColorFilter", &param_->screenColorFilter.x);
 
 		ImGui::Text("\n");
 
