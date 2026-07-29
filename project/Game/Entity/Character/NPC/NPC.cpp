@@ -253,6 +253,53 @@ void NPC::InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, Behavio
 	stateMachine_->GetState("Dead")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deadStateBT, this));
 }
 
+/// @brief 分離ベクトルを計算する
+/// @return 
+Vector2 NPC::CalculateSeparationVector()
+{
+	Vector2 separationMove = Vector2(0.0f, 0.0f);
+	int neighborCount = 0;
+
+	// すべてのキャラクターを取得する
+	auto characters = Character::GetCharacters();
+
+	for(const auto& other : characters)
+	{
+		// 自分自身、または死んでいるキャラなどは除外
+		if (other == this || other->IsDead()) continue;
+
+		// ターゲットが自分をターゲットしている場合は除外
+		if (other->GetLockOnTarget() == this) continue;
+
+		Vector2 diff = Vector2(GetWorldPosition().x, GetWorldPosition().z) - Vector2(other->GetWorldPosition().x, other->GetWorldPosition().z);
+		float distance = diff.Length();
+
+		// 設定した半径内に他のキャラクターがいる場合
+		if (distance > 0 && distance < separationRadius)
+		{
+			// 滑らかな減衰（外側ほど弱く、中心ほど強い 0.0 ～ 1.0 の値）
+			float pushStrength = 1.0f - (distance / separationRadius);
+
+			// 正規化した方向ベクトルに、強さを掛ける
+			separationMove.x += (diff.x / distance) * pushStrength;
+			separationMove.y += (diff.y / distance) * pushStrength;
+			neighborCount++;
+		}
+	}
+
+	// 周囲にキャラがいた場合は平均化して正規化
+	if (neighborCount > 0)
+	{
+		separationMove.x /= static_cast<float>(neighborCount);
+		separationMove.y /= static_cast<float>(neighborCount);
+
+		// 正規化
+		separationMove = separationMove.Normalize();
+	}
+
+	return separationMove;
+}
+
 /// @brief デバッグUIを描画する
 /// @param placementData 
 /// @param placementList 

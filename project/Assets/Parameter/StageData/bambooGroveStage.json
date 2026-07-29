@@ -722,9 +722,9 @@
             "heavyDamageStateCT_X": "",
             "heavyDamageStateCT_Y": "",
             "hp": 100,
-            "lightDamageStateCT_B": "InputB",
-            "lightDamageStateCT_X": "InputB",
-            "lightDamageStateCT_Y": "InputB",
+            "lightDamageStateCT_B": "",
+            "lightDamageStateCT_X": "",
+            "lightDamageStateCT_Y": "",
             "name": "プレイヤー",
             "noneStateCT_B": "InputB",
             "noneStateCT_X": "InputX",
@@ -972,6 +972,23 @@
             "scaleY": 3.5388948917388916,
             "scaleZ": 4.936999797821045,
             "subType": 2
+        },
+        {
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "Area_3",
+            "eventType": 1,
+            "name": "",
+            "posX": -0.5360763072967529,
+            "posY": 0.7992453575134277,
+            "posZ": 38.97406005859375,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.311415195465088,
+            "scaleY": 2.190000057220459,
+            "scaleZ": 1.0,
+            "subType": 3
         }
     ]
 }

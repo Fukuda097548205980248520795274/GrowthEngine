@@ -56,11 +56,6 @@
             "start": 56
         },
         {
-            "end": 77,
-            "id": 100,
-            "start": 72
-        },
-        {
             "end": 74,
             "id": 101,
             "start": 72
@@ -74,6 +69,11 @@
             "end": 111,
             "id": 113,
             "start": 23
+        },
+        {
+            "end": 115,
+            "id": 117,
+            "start": 72
         }
     ],
     "nodes": [
@@ -284,24 +284,6 @@
             "type": 4
         },
         {
-            "action_type": 5,
-            "id": 76,
-            "input_pin": 77,
-            "is_collapsed": false,
-            "name": "ターゲットを追跡",
-            "nav_mesh_move_data": {
-                "isDash": false,
-                "moveSpeed": 3.0,
-                "stopDistance": 4.0
-            },
-            "output_pin": 78,
-            "pos": [
-                300.0,
-                1200.0
-            ],
-            "type": 5
-        },
-        {
             "condition_type": 20,
             "id": 110,
             "input_pin": 111,
@@ -313,6 +295,24 @@
                 959.9999389648438
             ],
             "type": 4
+        },
+        {
+            "action_type": 5,
+            "id": 114,
+            "input_pin": 115,
+            "is_collapsed": false,
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 4.0
+            },
+            "output_pin": 116,
+            "pos": [
+                297.0,
+                1219.0
+            ],
+            "type": 5
         }
     ]
 }

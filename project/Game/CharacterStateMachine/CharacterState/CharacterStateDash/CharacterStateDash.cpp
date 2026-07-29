@@ -57,7 +57,7 @@ void CharacterStateDash::Update(float dt)
 	{
 		// NPCの場合は、現在の移動がない場合は、ダッシュ状態を解除する
 		auto currentMove = owner_->GetCurrentMove();
-		if (!currentMove)
+		if (isDash_ && !currentMove)
 		{
 			auto stateMachine = owner_->GetStateMachine();
 			stateMachine->ChangeState("None");

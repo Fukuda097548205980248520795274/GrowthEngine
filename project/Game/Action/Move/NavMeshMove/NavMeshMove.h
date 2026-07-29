@@ -41,7 +41,19 @@ private:
 	/// @brief 経路上の中継点に到達したとみなす距離の二乗
     float waypointRadiusSq_ = 0.25f;
 
-	/// @brief 最後にターゲットの位置を記憶しておく（ターゲットが動いている場合に経路を再計算するため）
-    Vector3 lastTargetPosition_ = { 0.0f, 0.0f, 0.0f };
+	/// @brief 最後にターゲットの位置を記憶しておく
+    Vector3 lastTargetPosition_ = Vector3(0.0f, 0.0f, 0.0f);
+
+	/// @brief 現在の移動方向（XZ平面）
+    Vector2 currentMoveDirection_ = Vector2(0.0f, 0.0f);
+
+
+private:
+
+    /// @brief 現在の左右の回避方向
+    float avoidanceSide_ = 0;
+
+    /// @brief 回避方向を維持するタイマー
+    float avoidanceTimer_ = 0.0f;
 };
 

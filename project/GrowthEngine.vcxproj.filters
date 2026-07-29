@@ -1492,6 +1492,9 @@
     <Filter Include="Tool\EngineObject\MainCamera3D">
       <UniqueIdentifier>{c495dd69-d58e-469d-8b07-784573edcc19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance">
+      <UniqueIdentifier>{d62924f9-3c6d-4ef9-99fd-1253f7aae815}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2693,6 +2696,9 @@
     </ClCompile>
     <ClCompile Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.cpp">
       <Filter>Tool\EngineObject\Render3D\Render3DCylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4036,6 +4042,9 @@
     </ClInclude>
     <ClInclude Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.h">
       <Filter>Tool\EngineObject\Render3D\Render3DCylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h">
+      <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

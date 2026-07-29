@@ -26,6 +26,7 @@ enum class CharacterTag
 struct BehaviorTreeConfig
 {
 	std::string noneStateBT{};
+	std::string stanceStateBT{};
 	std::string dashStateBT{};
 	std::string grabbedStateBT{};
 	std::string grabbingStateBT{};
@@ -58,6 +59,7 @@ struct ComboTreeInputName
 struct ComboTreeConfig
 {
 	ComboTreeInputName noneStateCT{};
+	ComboTreeInputName stanceStateCT{};
 	ComboTreeInputName dashStateCT{};
 	ComboTreeInputName grabbedStateCT{};
 	ComboTreeInputName grabbingStateCT{};

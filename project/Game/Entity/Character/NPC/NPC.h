@@ -71,6 +71,14 @@ public:
 	/// @param aggressiveness 
 	void SetAggressiveness(float aggressiveness) override { aggressiveness_ = std::max(0.1f, aggressiveness); }
 
+	/// @brief 分離ベクトルを計算する
+	/// @return 
+	Vector2 CalculateSeparationVector();
+
+	/// @brief 分離の重みを取得する
+	/// @return 
+	float GetSeparationWeight() const { return separationWeight; }
+
 
 private:
 
@@ -107,6 +115,15 @@ private:
 
 	/// @brief 攻撃性の値
 	float aggressiveness_ = 1.0f;
+
+
+private:
+
+	// 分離を意識する半径
+	float separationRadius = 3.0f;
+
+	// 分離ベクトルの強さ（重み）
+	float separationWeight = 1.5f;
 
 
 private:

@@ -355,6 +355,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
 	{
 		s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
+		s.behaviorTrees.stanceStateBT = j.value("stanceStateBT", "");
 		s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
 		s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
 		s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
@@ -380,6 +381,10 @@ inline void fromJson(const json& j, PlacementData& s)
 		s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
 		s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
 		s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
+
+		s.comboTrees.stanceStateCT.xName_ = j.value("stanceStateCT_X", "");
+		s.comboTrees.stanceStateCT.yName_ = j.value("stanceStateCT_Y", "");
+		s.comboTrees.stanceStateCT.bName_ = j.value("stanceStateCT_B", "");
 
 		s.comboTrees.dashStateCT.xName_ = j.value("dashStateCT_X", "");
 		s.comboTrees.dashStateCT.yName_ = j.value("dashStateCT_Y", "");

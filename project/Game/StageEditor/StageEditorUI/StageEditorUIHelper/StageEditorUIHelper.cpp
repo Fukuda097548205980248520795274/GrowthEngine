@@ -158,6 +158,7 @@ namespace StageEditorUIHelper
 					};
 
 				if (DrawRow("None (待機)", btConfig.noneStateBT)) anyChanged = true;
+				if (DrawRow("Stance（構え）", btConfig.stanceStateBT)) anyChanged = true;
 				if (DrawRow("Dash（ダッシュ）", btConfig.dashStateBT)) anyChanged = true;
 				if (DrawRow("Grabbing（掴み）", btConfig.grabbingStateBT)) anyChanged = true;
 				if (DrawRow("Grabbed（掴まれ）", btConfig.grabbedStateBT)) anyChanged = true;
@@ -297,6 +298,7 @@ namespace StageEditorUIHelper
 					};
 
 				if (DrawRow("None (待機)", ctConfig.noneStateCT)) anyChanged = true;
+				if (DrawRow("Stance（構え）", ctConfig.stanceStateCT)) anyChanged = true;
 				if (DrawRow("Dash（ダッシュ）", ctConfig.dashStateCT)) anyChanged = true;
 				if (DrawRow("Grabbing（掴み）", ctConfig.grabbingStateCT)) anyChanged = true;
 				if (DrawRow("Grabbed（掴まれ）", ctConfig.grabbedStateCT)) anyChanged = true;
