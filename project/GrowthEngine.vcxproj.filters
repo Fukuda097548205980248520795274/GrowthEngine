@@ -1495,6 +1495,15 @@
     <Filter Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance">
       <UniqueIdentifier>{d62924f9-3c6d-4ef9-99fd-1253f7aae815}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter">
+      <UniqueIdentifier>{a64ef0a8-414b-4312-87db-e939201c69ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter">
+      <UniqueIdentifier>{2030dcf0-a263-41e3-95ba-2966951cf9b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise">
+      <UniqueIdentifier>{7e560b5a-4bbb-490c-beaf-387cfe9e187a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2699,6 +2708,15 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectBoxFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectGaussianFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.cpp">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectWhiteNoise</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4045,6 +4063,15 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectBoxFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectGaussianFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.h">
+      <Filter>Tool\EngineObject\PostEffect\PostEffectWhiteNoise</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

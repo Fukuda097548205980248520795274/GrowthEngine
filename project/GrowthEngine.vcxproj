@@ -161,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="Tool\EngineObject\MainCamera3D\MainCamera3D.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp" />
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.cpp" />
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.cpp" />
+    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.cpp" />
     <ClCompile Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.cpp" />
     <ClCompile Include="Tool\EngineObject\Render3D\Render3DRing\Render3DRing.cpp" />
     <ClCompile Include="Tool\EngineObject\Render3D\Render3DUVSphere\Render3DUVSphere.cpp" />
@@ -1226,6 +1229,9 @@
     <ClInclude Include="Tool\EngineObject\Emitter3D\Emitter3D.h" />
     <ClInclude Include="Tool\EngineObject\MainCamera3D\MainCamera3D.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h" />
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.h" />
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.h" />
+    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.h" />
     <ClInclude Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.h" />
     <ClInclude Include="Tool\EngineObject\Render3D\Render3DRing\Render3DRing.h" />
     <ClInclude Include="Tool\EngineObject\Render3D\Render3DUVSphere\Render3DUVSphere.h" />
