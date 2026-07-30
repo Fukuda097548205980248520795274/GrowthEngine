@@ -25,6 +25,7 @@ void NavMeshMove::Exec()
 	// ブレークポイントのチェック
 	BreakpointOnExec();
 
+	// すでに実行中の場合は何もしない
     if (IsExec()) return;
 
     // 基底クラス
@@ -35,7 +36,8 @@ void NavMeshMove::Exec()
 	const NavMesh* navMesh = owner_->GetNavMesh();
 
 	// ターゲットがいない場合は移動を停止して終了する
-    if (!target || !navMesh)
+    if (!target || !navMesh || 
+        owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
     {
         Exit();
         return;

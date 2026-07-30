@@ -103,7 +103,7 @@ void Weapon::Update()
 			case WeaponCategory::OneHanded:
 
 				// 90度回転させる
-				worldTransform_->rotate_.x = std::numbers::pi_v<float> / 2.0f;
+				worldTransform_->rotate_.z = std::numbers::pi_v<float> / 2.0f;
 
 				// ワールドトランスフォームの親を持ち主の右手に設定する
 				worldTransform_->SetParent(owner_->GetBoneMatrix(JointType::HandR));

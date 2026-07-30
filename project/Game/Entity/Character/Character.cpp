@@ -321,7 +321,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canDeflect_ && guardState->CanJustGuard() && attacker != nullptr)
+		if (canDeflect_ && !IsDeflected() && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteDeflect(attacker);
@@ -331,7 +331,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 
 		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
-		if (canRepel_ && guardState->CanJustGuard() && attacker != nullptr)
+		if (canRepel_ && !IsRepelled() && guardState->CanJustGuard() && attacker != nullptr)
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
