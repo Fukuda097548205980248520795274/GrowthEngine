@@ -411,11 +411,7 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 
 #ifdef DEVELOPMENT
 		// デバッグ用の線を描画する
-		skeletonStore_->DrawDebugSkeleton(skeleton_,
-			Vector3(meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][0],
-				meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][1],
-				meshTransformationResources_[meshIndex]->data_->worldMatrix.m[3][2]),
-			Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+		skeletonStore_->DrawDebugSkeleton(skeleton_, Vector4(1.0f, 0.0f, 0.0f, 1.0f), parent_);
 #endif
 	}
 

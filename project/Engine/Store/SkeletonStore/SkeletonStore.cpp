@@ -35,7 +35,7 @@ SkeletonHandle Engine::SkeletonStore::Load(const std::string& directory, const s
 /// @param skeleton 
 /// @param position 
 /// @param color 
-void Engine::SkeletonStore::DrawDebugSkeleton(const Skeleton& skeleton, const Vector3& position, const Vector4& color)
+void Engine::SkeletonStore::DrawDebugSkeleton(const Skeleton& skeleton, const Vector4& color , const WorldTransform3D* worldTransform)
 {
 #ifdef DEVELOPMENT
 
@@ -44,29 +44,33 @@ void Engine::SkeletonStore::DrawDebugSkeleton(const Skeleton& skeleton, const Ve
 	{
 		// 親がいないときは線を描画しない
 		if (!joint.parent)
-		{
 			continue;
-		}
 		
 		// 親のインデックスを取得する
 		const int32_t kParentIndex = *joint.parent;
 
 		// 親のインデックスが不正なときは線を描画しない
 		if (kParentIndex < 0 || kParentIndex >= static_cast<int32_t>(skeleton.joints.size()))
-		{
 			continue;
-		}
 
 		// 親のジョイントを取得する
 		const Joint& parentJoint = skeleton.joints[kParentIndex];
 
+		Matrix4x4 parentSkeletonSpaceMatrix = joint.skeletonSpaceMatrix;
+		Matrix4x4 jointSkeletonSpaceMatrix = parentJoint.skeletonSpaceMatrix;
+		if (worldTransform)
+		{
+			parentSkeletonSpaceMatrix = parentSkeletonSpaceMatrix * worldTransform->GetWorldMatrix();
+			jointSkeletonSpaceMatrix = jointSkeletonSpaceMatrix * worldTransform->GetWorldMatrix();
+		}
+
 		// 線の始点と終点を計算する
 		Vector3 start = 
-			Vector3(parentJoint.skeletonSpaceMatrix.m[3][0], parentJoint.skeletonSpaceMatrix.m[3][1], parentJoint.skeletonSpaceMatrix.m[3][2]) + position;
+			Vector3(parentSkeletonSpaceMatrix.m[3][0], parentSkeletonSpaceMatrix.m[3][1], parentSkeletonSpaceMatrix.m[3][2]);
 
 		// 線の終点を計算する
 		Vector3 end = 
-			Vector3(joint.skeletonSpaceMatrix.m[3][0], joint.skeletonSpaceMatrix.m[3][1], joint.skeletonSpaceMatrix.m[3][2]) + position;
+			Vector3(jointSkeletonSpaceMatrix.m[3][0], jointSkeletonSpaceMatrix.m[3][1], jointSkeletonSpaceMatrix.m[3][2]);
 
 		engine_->DrawDebugLine3D(start, end, color);
 	}

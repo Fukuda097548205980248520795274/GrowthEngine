@@ -3,6 +3,7 @@
 #include "SkeletonResource/SkeletonResource.h"
 
 class GrowthEngine;
+class WorldTransform3D;
 
 namespace Engine
 {
@@ -37,7 +38,7 @@ namespace Engine
 		/// @param skeleton 
 		/// @param position 
 		/// @param color 
-		void DrawDebugSkeleton(const Skeleton& skeleton, const Vector3& position, const Vector4& color);
+		void DrawDebugSkeleton(const Skeleton& skeleton, const Vector4& color, const WorldTransform3D* worldTransform);
 
 
 	private:
