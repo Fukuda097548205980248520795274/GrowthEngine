@@ -2,6 +2,8 @@
 #include "Entity/Character/Character.h"
 #include "Entity/Weapon/Weapon.h"
 
+#include "EffectManager/EffectManager.h"
+
 /// @brief コンストラクタ
 /// @param character 
 /// @param initData 
@@ -142,12 +144,6 @@ void ComboAttack::Update()
 		// 武器のジョイントタイプの場合は、攻撃者が武器を持っているかどうかを確認する
 		if (state.def.jointType == JointType::Weapon && owner_->GetWeapon() == nullptr)continue;
 
-		// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
-		Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
-		Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
-		owner_->SetTrailPos(bonePosition, boneParentPosition);
-
-
 		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
 		{
 			// 当たり判定がまだ存在しない場合は作成する
@@ -166,6 +162,14 @@ void ComboAttack::Update()
 					soundManager->SeHeavyAttack();
 				}
 			}
+
+			// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
+			Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
+			Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
+			owner_->SetTrailPos(bonePosition, boneParentPosition);
+
+			// 攻撃のエフェクトを再生する
+			EffectManager::GetInstance()->AttackImpact000(bonePosition);
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
 			auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
@@ -197,7 +201,6 @@ void ComboAttack::Update()
 					// 距離が、2つの球の半径の合計値以下なら当たっている
 					return diff.Length() <= (s1->param_->radius + s2->param_->radius);
 				};
-
 
 			// ターゲットのリストを取得する
 			for (Character* target : Character::GetCharacters())

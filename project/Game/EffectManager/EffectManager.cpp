@@ -80,6 +80,9 @@ void EffectManager::Initialize()
 
 	// 掴みインパクトを生成
 	grabImpact000_ = std::make_unique<Particle3D>("grabImpact_000", 500, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// 攻撃インパクトを生成
+	attackImpact000_ = std::make_unique<Particle3D>("attackImpact_000", 500, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 }
 
 /// @brief 更新処理
@@ -130,6 +133,9 @@ void EffectManager::Draw()
 
 	// 掴みインパクト000を描画
 	grabImpact000_->Draw();
+
+	// 攻撃インパクト000を描画
+	attackImpact000_->Draw();
 
 	// インパクト000を描画
 	impact004_->Draw();
@@ -360,6 +366,15 @@ void EffectManager::DashSmoke000(const Vector3& position)
 void EffectManager::GrabImpact000(const Vector3& position)
 {
 	Emitter3D emitter("grabImpact_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief 攻撃インパクトを放出する
+/// @param position 
+void EffectManager::AttackImpact000(const Vector3& position)
+{
+	Emitter3D emitter("attackImpact_000");
 	emitter.param_->position = position;
 	emitter.Emit();
 }

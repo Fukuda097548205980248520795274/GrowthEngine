@@ -111,6 +111,10 @@ public:
 	/// @param position 
 	void GrabImpact000(const Vector3& position);
 
+	/// @brief 攻撃インパクトを放出する
+	/// @param position 
+	void AttackImpact000(const Vector3& position);
+
 
 private:
 
@@ -233,5 +237,12 @@ private:
 
 	/// @brief 掴みインパクト000
 	std::unique_ptr<Particle3D> grabImpact000_ = nullptr;
+
+
+private:
+
+	/// @brief 攻撃インパクト000
+	std::unique_ptr<Particle3D> attackImpact000_ = nullptr;
+
 };
 
