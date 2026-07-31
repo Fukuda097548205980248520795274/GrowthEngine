@@ -150,7 +150,6 @@ void GameScene::Initialize()
 	playerModel_ = std::make_unique<Render3DSkinningModel>(hCharacterModel_, hCharacterAnimation_, hCharacterSkeleton_, "Player_Model");
 	playerModel_->param_->meshOutline[0].enableOutline = true;
 	playerModel_->param_->meshOutline[0].color = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
-	playerModel_->param_->meshMaterial[0].hTexture = engine_->LoadTexture("./Assets/Textures/uvChecker.png");
 
 	// プレイヤーの生成と初期化
 	playerTrail_ = std::make_unique<Trail3D>("Player_Trail", 0.15f, engine_->LoadTexture("./Assets/Textures/trail_000.png"));
@@ -1145,6 +1144,15 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 	const float kHorizontal = std::sqrt(kLookDirection.x * kLookDirection.x + kLookDirection.z * kLookDirection.z);
 	const float kPitch = std::atan2(-kLookDirection.y, kHorizontal);
 	mainCamera_->param_->transform.rotate = Vector3(kPitch, kYaw, 0.0f);
+
+	// カメラの前方向ベクトルを計算する
+	Vector3 cameraForward = kLookDirection;
+	cameraForward.y = 0.0f; // 高さの影響をなくすためにYを0にする
+	if (cameraForward.LengthSq() > 0.0f)
+		cameraForward = cameraForward.Normalize();
+
+	// バトル制御にカメラの前方向を通知する
+	BattleDirector::GetInstance().SetCameraForward(cameraForward);
 }
 
 /// @brief イベントトリガーに触れたときの処理

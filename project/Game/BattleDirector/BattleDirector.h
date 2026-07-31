@@ -56,6 +56,10 @@ public:
 	/// @return 
 	bool IsBestAttacker(Character* NPC);
 
+	/// @brief カメラの前方向を設定する
+	/// @param forward 
+	void SetCameraForward(const Vector3& forward) { cameraForward_ = forward; }
+
 private:
 
 	// シングルトンのためコンストラクタはprivate
@@ -100,5 +104,8 @@ private:
 
 	/// @brief プレイヤーの体力が多いときのテンションの増加率
 	float highHpTensionMultiplier_ = 1.0f;
+
+	/// @brief カメラの前方向
+	Vector3 cameraForward_ = { 0.0f, 0.0f, 1.0f };
 };
 

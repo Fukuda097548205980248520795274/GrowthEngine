@@ -79,6 +79,11 @@ public:
 	/// @param comboTree 
 	void SetCurrentComboTreeB(ComboTree* comboTree) { currentComboTreeB_ = comboTree; nextComboTreeB_ = nullptr; }
 
+	/// @brief コンボ中かどうかを取得する
+	/// @return 
+	bool IsCombo() const { return isCombo_; }
+
+
 private:
 
 	/// @brief 更新処理開始前のリセット
@@ -149,6 +154,9 @@ private:
 
 	/// @brief 前フレームのレイジモード入力状態
 	bool isPrevInputRageMode_ = false;
+
+	/// @brief コンボ中かどうか
+	bool isCombo_ = false;
 
 
 private:

@@ -188,6 +188,18 @@ void Player::Update()
 	// プレイヤーは予備動作はないので、攻撃中が攻撃動作中と同じ扱いになる
 	isInAttackSequence_ = IsAttack();
 
+	// 攻撃中であれば、攻撃がヒットしたかどうかを判定してコンボフラグを更新する
+	if(isInAttackSequence_)
+	{ 
+		if(IsHitAttack())
+			isCombo_ = true;
+	}
+	else
+	{
+		// 攻撃が完全に終了している状態なので、コンボフラグをリセットする
+		isCombo_ = false;
+	}
+
 	// アクションの更新処理
 	ActionUpdate();
 

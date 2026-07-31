@@ -22,6 +22,9 @@ bool BattleDirector::RequestAttackToken(Character* npc, ActionTokenType type)
 	// ターゲットがいない場合は、攻撃トークンの要求を許可する
 	if (!target)return true;
 
+	// NPCが最も攻撃に適していない場合は、攻撃トークンの要求を拒否する
+	if(!IsBestAttacker(npc))return false;
+
 	// ターゲットのクールタイムが残っている場合は、攻撃トークンの要求を拒否する
 	if (type == ActionTokenType::Attack && targetTokenCooldowns_[target] > 0.0f)
 		return false;
@@ -154,6 +157,9 @@ bool BattleDirector::IsBestAttacker(Character* npc)
 	// スコアを計算する
 	float myScore = CalculateUtilityScore(npc, target);
 
+	// スコアが0以下の場合は、最も近い攻撃者ではないと判断する
+	if (myScore <= 0.0f)return false;
+
 	for (auto& other : Character::GetCharacters())
 	{
 		// 自分以外のキャラクターを確認する
@@ -163,12 +169,11 @@ bool BattleDirector::IsBestAttacker(Character* npc)
 		// 他のキャラクターが同じターゲットを狙っている場合は、スコアを計算する
 		if (other->GetLockOnTarget() == target)
 		{
-			// 他のキャラクターのクールタイムが残っていない場合は、スコアを比較する
+			// 他のキャラクターの攻撃クールタイムが0以下の場合は、スコアを比較する
 			if (other->GetAttackCooltime() <= 0.0f)
 			{
 				float otherScore = CalculateUtilityScore(other, target);
-				if (otherScore > myScore)
-					return false;
+				if (otherScore > myScore)return false;
 			}
 		}
 	}
@@ -182,6 +187,18 @@ bool BattleDirector::IsBestAttacker(Character* npc)
 /// @return 
 float BattleDirector::CalculateUtilityScore(Character* attacker, Character* target)
 {
+	// 攻撃者がダウンしている場合はスコアを0にする
+	if (attacker->IsDownLying())
+		return 0.0f;
+
+	// ターゲットがプレイヤーで、コンボ中はスコアを0にする
+	if (target->IsPlayer())
+	{
+		Player* player = static_cast<Player*>(target);
+		if(player->IsCombo())
+			return 0.0f;
+	}
+
 	// 基礎スコアを設定する
 	float score = 1000.0f;
 
@@ -190,6 +207,33 @@ float BattleDirector::CalculateUtilityScore(Character* attacker, Character* targ
 	toTarget.y = 0.0f;
 	float distanceSq = toTarget.LengthSq();
 	score -= distanceSq * 2.0f; // 重みをかけて距離の二乗を減算する
+
+	// プレイヤーがターゲットの場合、カメラの前方にいるかどうかを考慮してスコアを調整する
+	if (target->IsPlayer())
+	{
+		// プレイヤーから攻撃者へのベクトルを求める
+		Vector3 toAttacker = attacker->GetWorldPosition() - target->GetWorldPosition();
+		toAttacker.y = 0.0f;
+
+		if (toAttacker.LengthSq() > 0.0f)
+		{
+			toAttacker = toAttacker.Normalize();
+
+			// カメラの前方向と攻撃者へのベクトルの内積を計算する
+			float dot = (cameraForward_.x * toAttacker.x) + (cameraForward_.z * toAttacker.z);
+
+			// カメラ前方にいる場合はスコアを大きく加算
+			if (dot > 0.0f)
+			{
+				score += dot * 500.0f;
+			}
+			else
+			{
+				// カメラ後方にいる場合はスコアを減算して優先度を下げる
+				score += dot * 300.0f;
+			}
+		}
+	}
 
 	// スコアが1.0未満にならないようにする
 	score = std::max(1.0f, score);

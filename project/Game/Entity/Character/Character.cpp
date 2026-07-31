@@ -931,6 +931,9 @@ void Character::UpdateLockOnTargets()
 	float bestDistance = std::numeric_limits<float>::max();
 	float bestDot = -1.0f;
 
+	// 攻撃中の相手を見つけたかどうかのフラグ
+	bool hasFoundAttackingTarget = false;
+
 	const Vector3 kSelfPosition = GetWorldPosition();
 
 	// ロックオン対象の側を決定する
@@ -975,17 +978,38 @@ void Character::UpdateLockOnTargets()
 			// 視線方向との内積を計算する
 			const float kViewDot = Dot(direction, kToTargetDirection);
 
-			// まず距離が最も近い相手を優先する
-			if (kDistance < bestDistance)
+			// プレイヤーに攻撃を仕掛けてきているかどうか
+			bool isAttacking = false;
+			if(character->GetLockOnTarget() && character->GetLockOnTarget() == this && character->IsInAttackSequence())
+				isAttacking = true;
+
+			// ターゲットを更新すべきかどうかの判定フラグ
+			bool isBetterTarget = false;
+
+			// 攻撃中の相手を優先する
+			if (isAttacking && !hasFoundAttackingTarget)
+			{
+				isBetterTarget = true;
+			}
+			else if (isAttacking == hasFoundAttackingTarget)
+			{
+				// 攻撃中の相手が見つかっている場合は、距離が近い相手を優先する
+				if (kDistance < bestDistance)
+				{
+					isBetterTarget = true;
+				}
+				else if (kDistance == bestDistance && kViewDot > bestDot)
+				{
+					isBetterTarget = true;
+				}
+			}
+
+			// より良いターゲットが見つかった場合の更新処理
+			if (isBetterTarget)
 			{
 				bestDistance = kDistance;
 				bestDot = kViewDot;
-				lockOnTarget_ = character;
-			}
-			else if (kDistance == bestDistance && kViewDot > bestDot)
-			{
-				// 距離が同じ場合は、視線方向に最も近い相手を優先する
-				bestDot = kViewDot;
+				hasFoundAttackingTarget = isAttacking; // 攻撃中の敵を見つけた状態を保存
 				lockOnTarget_ = character;
 			}
 		}
