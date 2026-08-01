@@ -927,107 +927,8 @@ void Character::UpdateLockOnTargets()
 	// ターゲットをクリアする
 	lockOnTarget_ = nullptr;
 
-	// 最も視線方向に近い相手を探す
-	float bestDistance = std::numeric_limits<float>::max();
-	float bestDot = -1.0f;
-
-	// 攻撃中の相手を見つけたかどうかのフラグ
-	bool hasFoundAttackingTarget = false;
-
-	const Vector3 kSelfPosition = GetWorldPosition();
-
-	// ロックオン対象の側を決定する
-	const bool kIsSelfPlayerSide = IsPlayerSide();
-
-	for (Character* character : characters_)
-	{
-		// 無効または自分自身は除外する
-		if (!character || character == this)continue;
-
-		// 自分と同じ側の相手は除外する
-		if (kIsSelfPlayerSide == character->IsPlayerSide()) continue;
-
-		// 死んでいる相手は除外する
-		if(character->IsDead())continue;
-
-		// 自分から相手へのベクトルを計算する
-		Vector3 toTarget = character->GetWorldPosition() - kSelfPosition;
-		toTarget.y = 0.0f;
-
-		// 距離の二乗を計算する
-		const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-		if (kDistanceSq <= 0.0f)
-			continue;
-
-		// ロックオン可能な距離内にいる相手のみを候補にする
-		if (IsPlayer())
-		{
-			// プレイヤーの場合は、目の前にいる相手のみロックオン候補にする
-			Vector3 direction = movement_->GetDirection();
-
-			// 目の前にいる相手のみリストに登録する
-			const Vector3 kToTargetDirection = toTarget.Normalize();
-			if (Dot(direction, kToTargetDirection) <= 0.0f)
-			{
-				continue;
-			}
-
-			// 距離と相手ポインタを登録する
-			const float kDistance = std::sqrt(kDistanceSq);
-
-			// 視線方向との内積を計算する
-			const float kViewDot = Dot(direction, kToTargetDirection);
-
-			// プレイヤーに攻撃を仕掛けてきているかどうか
-			bool isAttacking = false;
-			if(character->GetLockOnTarget() && character->GetLockOnTarget() == this && character->IsInAttackSequence())
-				isAttacking = true;
-
-			// ターゲットを更新すべきかどうかの判定フラグ
-			bool isBetterTarget = false;
-
-			// 攻撃中の相手を優先する
-			if (isAttacking && !hasFoundAttackingTarget)
-			{
-				isBetterTarget = true;
-			}
-			else if (isAttacking == hasFoundAttackingTarget)
-			{
-				// 攻撃中の相手が見つかっている場合は、距離が近い相手を優先する
-				if (kDistance < bestDistance)
-				{
-					isBetterTarget = true;
-				}
-				else if (kDistance == bestDistance && kViewDot > bestDot)
-				{
-					isBetterTarget = true;
-				}
-			}
-
-			// より良いターゲットが見つかった場合の更新処理
-			if (isBetterTarget)
-			{
-				bestDistance = kDistance;
-				bestDot = kViewDot;
-				hasFoundAttackingTarget = isAttacking; // 攻撃中の敵を見つけた状態を保存
-				lockOnTarget_ = character;
-			}
-		}
-		else
-		{
-			// NPCの場合は、距離が近い相手をロックオン候補にする
-
-			// 距離と相手ポインタを登録する
-			const float kDistance = std::sqrt(kDistanceSq);
-
-			// まず距離が最も近い相手を優先する
-			if (kDistance < bestDistance)
-			{
-				bestDistance = kDistance;
-				lockOnTarget_ = character;
-			}
-		}
-	}
+	// ロックオン対象を検索する
+	SearchLockOnTarget();
 }
 
 /// @brief アニメーションを設定する
@@ -1142,7 +1043,7 @@ void Character::UpdateAnimation()
 			else
 			{
 				// 掴み攻撃が終了した場合は、掴みモーションに戻す
-				if (currentAttack_->IsFinishedTimer())
+				if (currentAttack_ && currentAttack_->IsFinishedTimer())
 				{
 					SetAnimation(hGrabMotion_, false, true);
 				}

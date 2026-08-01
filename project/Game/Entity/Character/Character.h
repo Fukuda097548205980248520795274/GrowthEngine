@@ -650,6 +650,9 @@ protected:
 	// 構え中のロックオン候補を更新する
 	void UpdateLockOnTargets();
 
+	/// @brief ロックオンしているターゲットを検索する
+	virtual void SearchLockOnTarget() = 0;
+
 	// Characterインスタンスのリスト
 	static std::vector<Character*> characters_;
 

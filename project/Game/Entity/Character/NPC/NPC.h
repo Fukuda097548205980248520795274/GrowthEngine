@@ -79,6 +79,9 @@ public:
 	/// @return 
 	float GetSeparationWeight() const { return separationWeight; }
 
+	/// @brief ロックオンしているターゲットを検索する
+	void SearchLockOnTarget() override;
+
 
 private:
 
@@ -96,6 +99,13 @@ private:
 
 	/// @brief 構え状態の移動速度
 	float stanceWalkSpeed_ = 2.0f;
+
+
+	// @brief ターゲットの更新タイマー
+	float targetUpdateTimer_ = 0.0f;
+
+	// @brief ターゲットの更新間隔（秒）
+	float targetUpdateInterval = 3.0f;
 
 
 private:

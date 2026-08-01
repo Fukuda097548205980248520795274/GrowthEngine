@@ -143,6 +143,24 @@ void NPC::Update()
 	/// @brief 構え状態の移動処理を更新する
 	UpdateStanceMovement();
 
+
+	// ダメージを受けた場合は、ターゲットの更新タイマーをリセットする
+	if(IsHitDamage())targetUpdateTimer_ = targetUpdateInterval;
+
+	// ターゲットの更新タイマーの更新
+	if (lockOnTarget_ && (currentAttack_ == nullptr && currentMove_ == nullptr && currentAvoid_ == nullptr))
+	{
+		// ターゲットの更新タイマーを更新する
+		targetUpdateTimer_ -= dt;
+
+		// ターゲットの更新タイマーが0以下になった場合は、ターゲットを解除する
+		if (targetUpdateTimer_ <= 0.0f)
+		{
+			lockOnTarget_ = nullptr;
+			targetUpdateTimer_ = targetUpdateInterval;
+		}
+	}
+
 	// 基底クラスの更新
 	Character::Update();
 
@@ -387,6 +405,77 @@ Vector2 NPC::CalculateSeparationVector()
 	}
 
 	return separationMove;
+}
+
+/// @brief ロックオンしているターゲットを検索する
+void NPC::SearchLockOnTarget()
+{
+	// 最も視線方向に近い相手を探す
+	float bestDistance = std::numeric_limits<float>::max();
+	float bestDot = -1.0f;
+
+	// 最小の被ターゲット数
+	int minTargetedCount = std::numeric_limits<int>::max();
+
+	// 攻撃中の相手を見つけたかどうかのフラグ
+	bool hasFoundAttackingTarget = false;
+
+	const Vector3 kSelfPosition = GetWorldPosition();
+
+	// ロックオン対象の側を決定する
+	const bool kIsSelfPlayerSide = IsPlayerSide();
+
+	for (Character* character : characters_)
+	{
+		// 無効または自分自身は除外する
+		if (!character || character == this)continue;
+
+		// 自分と同じ側の相手は除外する
+		if (kIsSelfPlayerSide == character->IsPlayerSide()) continue;
+
+		// 死んでいる相手は除外する
+		if (character->IsDead())continue;
+
+		// 自分から相手へのベクトルを計算する
+		Vector3 toTarget = character->GetWorldPosition() - kSelfPosition;
+		toTarget.y = 0.0f;
+
+		// 距離の二乗を計算する
+		const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
+		if (kDistanceSq <= 0.0f)
+			continue;
+
+
+		// 自分と同勢力のキャラクターから何人にターゲットされているかをカウント
+		int targetedCount = 0;
+		for (Character* other : characters_)
+		{
+			if (other == this || other->IsDead()) continue;
+
+			// 自分と同じ側の勢力で、かつ現在の評価対象(character)をロックオンしているか
+			if (other->IsPlayerSide() == kIsSelfPlayerSide && other->GetLockOnTarget() == character)
+			{
+				targetedCount++;
+			}
+		}
+
+		// 距離を登録する
+		const float kDistance = std::sqrt(kDistanceSq);
+
+		// 優先度1: 被ターゲット数が少ない相手を選ぶ
+		if (targetedCount < minTargetedCount)
+		{
+			minTargetedCount = targetedCount;
+			bestDistance = kDistance;
+			lockOnTarget_ = character;
+		}
+		else if (targetedCount == minTargetedCount && kDistance < bestDistance)
+		{
+			// 優先度2: 被ターゲット数が同じ場合は、距離が近い相手を選ぶ
+			bestDistance = kDistance;
+			lockOnTarget_ = character;
+		}
+	}
 }
 
 /// @brief デバッグUIを描画する

@@ -119,6 +119,9 @@ private:
 	/// @brief レイジモード入力処理
 	void RageModeInput() override;
 
+	/// @brief ロックオンしているターゲットを検索する
+	void SearchLockOnTarget() override;
+
 
 private:
 
