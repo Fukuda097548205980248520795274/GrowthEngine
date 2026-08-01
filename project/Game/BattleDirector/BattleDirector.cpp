@@ -1,6 +1,7 @@
 #include "BattleDirector.h"
 #include "Entity/Character/Character.h"
 #include "Entity/Character/Player/Player.h"
+#include <numbers>
 
 /// @brief インスタンスを取得する
 /// @return 
@@ -108,6 +109,8 @@ void BattleDirector::Clear()
 {
 	targetTokenHolders_.clear();
 	npcToTargetMap_.clear();
+	targetSlots_.clear();
+	npcCurrentSlots_.clear();
 }
 
 /// @brief 更新処理
@@ -179,6 +182,120 @@ bool BattleDirector::IsBestAttacker(Character* npc)
 	}
 
 	return true;
+}
+
+/// @brief NPCにスロットを割り当てる
+/// @param npc 
+/// @param target 
+void BattleDirector::AssignSlot(Character* npc, Character* target)
+{
+	if (!npc || !target) return;
+
+	// 既にスロットを持っている場合は何もしない
+	if (npcCurrentSlots_.find(npc) != npcCurrentSlots_.end()) return;
+
+	// ターゲット用のスロット配列が未作成なら初期化する
+	if (targetSlots_.find(target) == targetSlots_.end())
+	{
+		std::vector<CombatSlot> slots(kMaxSlots);
+		for (int i = 0; i < kMaxSlots; ++i)
+		{
+			// 45度（2π / 8）ずつずらして設定
+			slots[i].angleOffset = (2.0f * std::numbers::pi_v<float> / kMaxSlots) * i;
+			slots[i].distance = npc->GetSlotDistance();
+		}
+
+		// ターゲットに対するスロットを初期化して保存
+		targetSlots_[target] = slots;
+	}
+
+	auto& slots = targetSlots_[target];
+	int bestSlotIndex = -1;
+	float minDistanceSq = std::numeric_limits<float>::max();
+
+	Vector3 npcPos = npc->GetWorldPosition();
+	Vector3 targetPos = target->GetWorldPosition();
+
+	// 空いているスロットの中で、現在のNPCの座標に最も近いスロットを探す
+	for (int i = 0; i < kMaxSlots; ++i)
+	{
+		if (!slots[i].isOccupied)
+		{
+			// スロットの角度オフセットを取得
+			float finalAngle = slots[i].angleOffset;
+
+			// ターゲットの回転を考慮してスロットのワールド座標を計算する
+			float sx = targetPos.x + std::sin(finalAngle) * slots[i].distance;
+			float sz = targetPos.z + std::cos(finalAngle) * slots[i].distance;
+			Vector3 slotPos = { sx, npcPos.y, sz };
+
+			Vector3 diff = slotPos - npcPos;
+			float distSq = diff.LengthSq();
+
+			// 最も近いスロットを更新
+			if (distSq < minDistanceSq)
+			{
+				minDistanceSq = distSq;
+				bestSlotIndex = i;
+			}
+		}
+	}
+
+	// スロットの割り当て
+	if (bestSlotIndex != -1)
+	{
+		slots[bestSlotIndex].isOccupied = true;
+		slots[bestSlotIndex].occupant = npc;
+		npcCurrentSlots_[npc] = bestSlotIndex;
+	}
+}
+
+/// @brief NPCのスロットを解放する
+/// @param npc 
+void BattleDirector::ReleaseSlot(Character* npc)
+{
+	auto it = npcCurrentSlots_.find(npc);
+	if (it == npcCurrentSlots_.end()) return;
+
+	int slotIndex = it->second;
+
+	// ターゲットを特定してスロットを空ける（O(N)検索になりますが、Nが小さいので許容）
+	for (auto& pair : targetSlots_)
+	{
+		auto& slots = pair.second;
+		if (slotIndex < slots.size() && slots[slotIndex].occupant == npc)
+		{
+			slots[slotIndex].isOccupied = false;
+			slots[slotIndex].occupant = nullptr;
+			break;
+		}
+	}
+
+	npcCurrentSlots_.erase(it);
+}
+
+/// @brief NPCのスロットのワールド座標を取得する
+/// @param npc 
+/// @param target 
+/// @return 
+std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Character* target)
+{
+	auto it = npcCurrentSlots_.find(npc);
+	if (it == npcCurrentSlots_.end()) return std::nullopt;
+
+	int slotIndex = it->second;
+	auto targetIt = targetSlots_.find(target);
+	if (targetIt == targetSlots_.end()) return std::nullopt;
+
+	const auto& slot = targetIt->second[slotIndex];
+	Vector3 targetPos = target->GetWorldPosition();
+
+	Vector3 slotWorldPos;
+	slotWorldPos.x = targetPos.x + std::sin(slot.angleOffset) * slot.distance;
+	slotWorldPos.y = targetPos.y; // 高さはターゲットまたは地形に合わせる
+	slotWorldPos.z = targetPos.z + std::cos(slot.angleOffset) * slot.distance;
+
+	return slotWorldPos;
 }
 
 /// @brief 攻撃トークンのユーティリティスコアを計算する

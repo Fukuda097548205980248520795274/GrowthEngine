@@ -8,6 +8,13 @@ float Vector2::Length() const
 	return std::sqrtf(std::powf(x, 2.0f) + std::powf(y, 2.0f));
 }
 
+/// @brief 長さの二乗
+/// @return 
+float Vector2::LengthSq() const
+{
+	return std::powf(x, 2.0f) + std::powf(y, 2.0f);
+}
+
 /// @brief 正規化
 /// @return 
 Vector2 Vector2::Normalize() const

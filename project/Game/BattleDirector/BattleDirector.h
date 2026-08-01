@@ -22,8 +22,27 @@ enum class ActionTokenType
 // @brief トークンのデータ
 struct TokenData
 {
+	/// @brief ターゲット
 	Character* target;
+
+	/// @brief トークンの種類
 	ActionTokenType type;
+};
+
+/// @brief 戦闘スロットの情報
+struct CombatSlot
+{
+	/// @brief 占有しているかどうか
+	bool isOccupied = false;
+
+	/// @brief 占有しているキャラクター
+	Character* occupant = nullptr;
+
+	// @brief ターゲットに対する角度オフセット（ラジアン）
+	float angleOffset = 0.0f;
+
+	// @brief ターゲットとの距離
+	float distance = 4.0f;
 };
 
 class BattleDirector
@@ -60,6 +79,21 @@ public:
 	/// @param forward 
 	void SetCameraForward(const Vector3& forward) { cameraForward_ = forward; }
 
+	/// @brief NPCにスロットを割り当てる
+	/// @param npc 
+	/// @param target 
+	void AssignSlot(Character* npc, Character* target);
+
+	/// @brief NPCのスロットを解放する
+	/// @param npc 
+	void ReleaseSlot(Character* npc);
+
+	/// @brief NPCのスロットのワールド座標を取得する
+	/// @param npc 
+	/// @param target 
+	/// @return 
+	std::optional<Vector3> GetSlotWorldPosition(Character* npc, Character* target);
+
 private:
 
 	// シングルトンのためコンストラクタはprivate
@@ -73,6 +107,21 @@ private:
 
 	/// @brief NPCとそのターゲットのマッピング
 	std::unordered_map<Character*, TokenData> npcToTargetMap_;
+
+
+private:
+
+	/// @brief 戦闘スロットを最適化する
+	void OptimizeSlots();
+
+	/// @brief ターゲットごとの戦闘スロットの情報
+	std::unordered_map<Character*, std::vector<CombatSlot>> targetSlots_;
+
+	/// @brief NPCごとの現在のスロット番号
+	std::unordered_map<Character*, int> npcCurrentSlots_;
+
+	/// @brief 最大スロット数
+	static constexpr int kMaxSlots = 8;
 
 
 private:

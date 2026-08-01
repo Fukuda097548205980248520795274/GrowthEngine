@@ -35,8 +35,9 @@ void Move::Exit()
 	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
 	if (owner_->GetCurrentMove() == this)
 	{
-		// 移動を中断する
-		owner_->MoveStop();
+		// 移動入力をリセットする
+		if(owner_->IsStance())owner_->SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
+		else owner_->MoveStop();
 
 		// 移動を停止する
 		owner_->SetCurrentMove(nullptr);

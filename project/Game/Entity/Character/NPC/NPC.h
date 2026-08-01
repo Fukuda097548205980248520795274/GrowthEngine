@@ -85,11 +85,17 @@ private:
 	/// @brief ターゲットとの距離で構え状態を更新する
 	void UpdateStanceStateByTargetDistance();
 
+	/// @brief 構え状態の移動処理を更新する
+	void UpdateStanceMovement();
+
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
 	/// @brief ナビメッシュ
 	const NavMesh* navMesh_ = nullptr;
+
+	/// @brief 構え状態の移動速度
+	float stanceWalkSpeed_ = 2.0f;
 
 
 private:

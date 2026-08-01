@@ -9,8 +9,12 @@
 namespace
 {
 	// NPCが構え状態になる距離
-	constexpr float kNpcStanceDistance = 5.0f;
-	constexpr float kNpcStanceDistanceSq = kNpcStanceDistance * kNpcStanceDistance;
+	constexpr float kNpcStanceEnterDistance = 4.5f;
+	constexpr float kNpcStanceEnterDistanceSq = kNpcStanceEnterDistance * kNpcStanceEnterDistance;
+
+	// NPCが構え状態を解除する距離
+	constexpr float kNpcStanceExitDistance = 5.5f;
+	constexpr float kNpcStanceExitDistanceSq = kNpcStanceExitDistance * kNpcStanceExitDistance;
 }
 
 /// @brief コンストラクタ
@@ -126,12 +130,18 @@ void NPC::Update()
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{
+		BattleDirector battleDirector = BattleDirector::GetInstance();
+
 		// 攻撃トークンを返却する
-		BattleDirector::GetInstance().ReleaseAttackToken(this);
+		battleDirector.ReleaseAttackToken(this);
+		battleDirector.ReleaseSlot(this);
 
 		Character::Update();
 		return;
 	}
+
+	/// @brief 構え状態の移動処理を更新する
+	UpdateStanceMovement();
 
 	// 基底クラスの更新
 	Character::Update();
@@ -143,17 +153,96 @@ void NPC::Update()
 /// @brief ターゲットとの距離で構え状態を更新する
 void NPC::UpdateStanceStateByTargetDistance()
 {
+	// ターゲットがいない場合は構え状態を解除する
 	if (!lockOnTarget_ || IsInAttackSequence())
 	{
 		isStance_ = false;
 		return;
 	}
 
+	// ターゲットとの水平距離を計算する
 	Vector3 toTarget = lockOnTarget_->GetWorldPosition() - GetWorldPosition();
 	toTarget.y = 0.0f;
 
+	// ターゲットとの距離の二乗を計算する
 	const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-	isStance_ = (kDistanceSq <= kNpcStanceDistanceSq);
+
+	// ヒステリシスを持たせてチャタリングを防ぐ
+	if (isStance_)
+	{
+		// すでに構え状態の場合は、少し遠ざかるまで構えを解除しない
+		if (kDistanceSq > kNpcStanceExitDistanceSq)
+		{
+			isStance_ = false;
+		}
+	}
+	else
+	{
+		// 構え状態でない場合は、少し近づくまで構え状態にしない
+		if (kDistanceSq <= kNpcStanceEnterDistanceSq)
+		{
+			isStance_ = true;
+			BattleDirector::GetInstance().AssignSlot(this, lockOnTarget_);
+		}
+	}
+}
+
+/// @brief 構え状態の移動処理を更新する
+void NPC::UpdateStanceMovement()
+{
+	// 構え状態でない、またはターゲットがいない、または動けない状態、または何らかのアクション中の場合は移動処理を行わない
+	if (!lockOnTarget_ || !isStance_ || IsIncapacitated() ||
+		GetCurrentAttack() || GetCurrentMove() || GetCurrentAvoid())
+		return;
+
+	// スロットのワールド座標を取得
+	auto optSlotPos = BattleDirector::GetInstance().GetSlotWorldPosition(this, lockOnTarget_);
+	if (!optSlotPos) return;
+
+	Vector3 slotWorldPos = optSlotPos.value();
+	Vector3 myPos = GetWorldPosition();
+
+	// スロットへ向かうベクトルを計算
+	Vector2 moveDir(0.0f, 0.0f);
+	Vector3 toSlot = slotWorldPos - myPos;
+	toSlot.y = 0.0f; // 高さは無視して平面で考える
+
+	float distanceToSlot = toSlot.Length();
+	float currentSpeed = stanceWalkSpeed_;
+
+	// 目標地点に近づくにつれて速度を落とす
+	constexpr float kSlowDownRadius = 1.0f;
+	if (distanceToSlot < kSlowDownRadius)
+	{
+		// 距離に応じて減速（0.0 ~ 1.0 の割合でスケール）
+		currentSpeed = stanceWalkSpeed_ * (distanceToSlot / kSlowDownRadius);
+	}
+
+	// スロット方向へのベクトル（デッドゾーンを小さく設定）
+	constexpr float kDeadZone = 0.1f;
+	if (distanceToSlot > kDeadZone)
+	{
+		toSlot = toSlot.Normalize();
+		moveDir = Vector2(toSlot.x, toSlot.z);
+	}
+
+	// 仲間同士の分離ベクトルを取得して合成する
+	Vector2 separation = CalculateSeparationVector();
+
+	// 分離ベクトルの強さを調整する
+	moveDir = moveDir + (separation * GetSeparationWeight());
+
+	// 移動入力の決定
+	if (moveDir.LengthSq() > 0.01f && distanceToSlot > kDeadZone)
+	{
+		moveDir = moveDir.Normalize();
+		SetMoveInputXZ(moveDir, currentSpeed);
+	}
+	else
+	{
+		// デッドゾーン内にいて、かつ押し出しも弱い場合は完全に停止
+		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
+	}
 }
 
 /// @brief 描画処理

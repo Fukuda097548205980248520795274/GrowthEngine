@@ -37,7 +37,8 @@ void NavMeshMove::Exec()
 
 	// ターゲットがいない場合は移動を停止して終了する
     if (!target || !navMesh || 
-        owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
+        owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() ||
+        (!owner_->IsInAttackSequence() && owner_->IsStance()))
     {
         Exit();
         return;
@@ -117,8 +118,9 @@ void NavMeshMove::Update()
 	// ブレークポイントのチェック
 	BreakpointOnUpdate();
 
-    // 動けない状態や回避中の場合は移動を停止して終了
-    if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated())
+	// 移動中に回避、掴み、気絶、構え状態になった場合は移動を中断する
+    if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() ||
+        (!owner_->IsInAttackSequence() && owner_->IsStance()))
     {
         Exit();
         return;

@@ -10,6 +10,10 @@ struct Vector2
 	/// @return 
 	float Length() const;
 
+	/// @brief 長さの二乗
+	/// @return 
+	float LengthSq() const;
+
 	/// @brief 正規化
 	/// @return 
 	Vector2 Normalize() const;

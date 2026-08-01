@@ -16,4 +16,7 @@ void RequestToken::Exec()
 
 	// 攻撃トークンを要求する
 	isRequested_ = BattleDirector::GetInstance().RequestAttackToken(owner_, tokenType_);
+
+	// 攻撃トークンを要求できたら、スロットを開放する
+	if (isRequested_)BattleDirector::GetInstance().ReleaseSlot(owner_);
 }

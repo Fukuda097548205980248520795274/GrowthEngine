@@ -551,6 +551,10 @@ public:
 	/// @param aggressiveness 
 	virtual void SetAggressiveness(float aggressiveness) {}
 
+	/// @brief スロットシステムによる距離を取得する
+	/// @return 
+	float GetSlotDistance() const { return slotDistance_; }
+
 
 
 
@@ -648,6 +652,9 @@ protected:
 
 	// Characterインスタンスのリスト
 	static std::vector<Character*> characters_;
+
+	/// @brief スロットシステムによる距離
+	float slotDistance_ = 4.0f;
 
 
 protected:
