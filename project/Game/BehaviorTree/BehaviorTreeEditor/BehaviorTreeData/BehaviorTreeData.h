@@ -5,8 +5,6 @@
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "Action/Avoid/Avoid.h"
-#include "Action/Move/ApproachTargetMove/ApproachTargetMove.h"
-#include "Action/Move/ApproachLeaderMove/ApproachLeaderMove.h"
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
 #include "MotionManager/MotionManager.h"
@@ -35,8 +33,7 @@ enum class ActionType
 	Avoid,
 
 	// 移動系
-	ApproachTargetMove,
-	NavMeshMove,
+	NavMeshMove = 5,
 
 	// 防御系
 	Guard,
@@ -49,17 +46,17 @@ enum class ActionType
 	RequestToken,
 	ReleaseToken,
 
-	ApproachLeaderMove,
-	NavMeshLeaderMove,
+	NavMeshLeaderMove = 12,
 };
 
 /// @brief アクションの種類を文字列で表す配列
-constexpr inline const char* actionTypeNames[] = {
+constexpr inline const char* actionTypeNames[] = 
+{
 	"ComboAttack",
 	"GrabAttack",
 	"GrabStrikeAttack",
 	"Avoid",
-	"ApproachTargetMove",
+	"",
 	"NavMeshMove",
 	"Guard",
 	"InAttackSequence",
@@ -67,7 +64,7 @@ constexpr inline const char* actionTypeNames[] = {
 	"RequestToken",
 	"ReleaseToken",
 
-	"ApproachLeaderMove",
+	"",
 	"NavMeshLeaderMove"
 };
 
@@ -186,8 +183,6 @@ struct EditorNode
 	GrabAttackInitData grabAttackInitData;
 	GrabStrikeAttackInitData grabStrikeAttackInitData;
 	AvoidInitData avoidInitData;
-	ApproachTargetMoveInitData approachTargetMoveInitData;
-	ApproachLeaderMoveInitData approachLeaderMoveInitData;
 	NavMeshMoveInitData navMeshMoveInitData;
 	NavMeshLeaderMoveInitData navMeshLeaderMoveInitData;
 

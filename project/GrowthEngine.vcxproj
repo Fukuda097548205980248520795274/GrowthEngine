@@ -1091,8 +1091,6 @@
     <ClCompile Include="Game\Action\Defense\Guard\Guard.cpp" />
     <ClCompile Include="Game\Action\Defense\Parry\Parry.cpp" />
     <ClCompile Include="Game\Action\InAttackSequence\InAttackSequence.cpp" />
-    <ClCompile Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.cpp" />
-    <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp" />
     <ClCompile Include="Game\Action\Move\Move.cpp" />
     <ClCompile Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.cpp" />
     <ClCompile Include="Game\Action\Move\NavMeshMove\NavMeshMove.cpp" />
@@ -1547,8 +1545,6 @@
     <ClInclude Include="Game\Action\Defense\Guard\Guard.h" />
     <ClInclude Include="Game\Action\Defense\Parry\Parry.h" />
     <ClInclude Include="Game\Action\InAttackSequence\InAttackSequence.h" />
-    <ClInclude Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.h" />
-    <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h" />
     <ClInclude Include="Game\Action\Move\Move.h" />
     <ClInclude Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.h" />
     <ClInclude Include="Game\Action\Move\NavMeshMove\NavMeshMove.h" />

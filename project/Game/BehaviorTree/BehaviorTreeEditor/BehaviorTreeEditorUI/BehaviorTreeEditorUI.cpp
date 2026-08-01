@@ -1557,38 +1557,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			ImGui::TreePop();
 		}
 	}
-	else if (node.actionType == ActionType::ApproachTargetMove)
-	{
-		if (ImGui::TreeNode("ターゲット接近 設定"))
-		{
-			HistorySaveIfChanged();
-			ImGui::DragFloat("移動速度", &node.approachTargetMoveInitData.moveSpeed, 0.1f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat("停止距離", &node.approachTargetMoveInitData.stopDistance, 0.01f);
-
-			HistorySaveIfChanged();
-			ImGui::Checkbox("走るかどうか", &node.approachTargetMoveInitData.isDash);
-
-			ImGui::TreePop();
-		}
-	}
-	else if (node.actionType == ActionType::ApproachLeaderMove)
-	{
-		if (ImGui::TreeNode("リーダー接近 設定"))
-		{
-			HistorySaveIfChanged();
-			ImGui::DragFloat("移動速度", &node.approachLeaderMoveInitData.moveSpeed, 0.1f);
-
-			HistorySaveIfChanged();
-			ImGui::DragFloat("停止距離", &node.approachLeaderMoveInitData.stopDistance, 0.01f);
-
-			HistorySaveIfChanged();
-			ImGui::Checkbox("走るかどうか", &node.approachLeaderMoveInitData.isDash);
-
-			ImGui::TreePop();
-		}
-	}
 	else if (node.actionType == ActionType::NavMeshMove)
 	{
 		if (ImGui::TreeNode("ナビメッシュ移動 設定"))

@@ -724,9 +724,6 @@
     <Filter Include="Game\Action\Move">
       <UniqueIdentifier>{3115f731-6a56-405a-abf1-92d2ccb24c6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Action\Move\ApproachTargetMove">
-      <UniqueIdentifier>{6f86cdbb-e131-4e0a-a719-bd65dd5b18e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\MotionManager">
       <UniqueIdentifier>{8b8ff10f-d253-4d5e-8c98-98a813da8b65}</UniqueIdentifier>
     </Filter>
@@ -1068,9 +1065,6 @@
     </Filter>
     <Filter Include="Game\CharacterComponent\CharacterMovement">
       <UniqueIdentifier>{512a06a7-bae2-4df9-a353-90d2a7f43383}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Action\Move\ApproachLeaderMove">
-      <UniqueIdentifier>{f1c5dc00-82cd-401d-8bcf-24446a0a0563}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Action\Move\NavMeshLeaderMove">
       <UniqueIdentifier>{baa755df-dd46-4760-bddd-c54d8c051bdc}</UniqueIdentifier>
@@ -2205,9 +2199,6 @@
     <ClCompile Include="Game\Action\Move\Move.cpp">
       <Filter>Game\Action\Move</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.cpp">
-      <Filter>Game\Action\Move\ApproachTargetMove</Filter>
-    </ClCompile>
     <ClCompile Include="Game\MotionManager\MotionManager.cpp">
       <Filter>Game\MotionManager</Filter>
     </ClCompile>
@@ -2540,9 +2531,6 @@
     </ClCompile>
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp">
       <Filter>Game\CharacterComponent\CharacterMovement</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.cpp">
-      <Filter>Game\Action\Move\ApproachLeaderMove</Filter>
     </ClCompile>
     <ClCompile Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.cpp">
       <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>
@@ -3530,9 +3518,6 @@
     <ClInclude Include="Game\Action\Move\Move.h">
       <Filter>Game\Action\Move</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Action\Move\ApproachTargetMove\ApproachTargetMove.h">
-      <Filter>Game\Action\Move\ApproachTargetMove</Filter>
-    </ClInclude>
     <ClInclude Include="Game\MotionManager\MotionManager.h">
       <Filter>Game\MotionManager</Filter>
     </ClInclude>
@@ -3883,9 +3868,6 @@
     </ClInclude>
     <ClInclude Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.h">
       <Filter>Game\CharacterComponent\CharacterMovement</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Action\Move\ApproachLeaderMove\ApproachLeaderMove.h">
-      <Filter>Game\Action\Move\ApproachLeaderMove</Filter>
     </ClInclude>
     <ClInclude Include="Game\Action\Move\NavMeshLeaderMove\NavMeshLeaderMove.h">
       <Filter>Game\Action\Move\NavMeshLeaderMove</Filter>

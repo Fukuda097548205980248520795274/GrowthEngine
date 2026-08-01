@@ -107,18 +107,6 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["avoid_data"]["Distance"] = node.avoidInitData.distance;
 				n["avoid_data"]["LocalDirection"] = { node.avoidInitData.localDirection.x, node.avoidInitData.localDirection.y };
 			}
-			else if (node.actionType == ActionType::ApproachTargetMove)
-			{
-				n["approach_target_move_data"]["moveSpeed"] = node.approachTargetMoveInitData.moveSpeed;
-				n["approach_target_move_data"]["stopDistance"] = node.approachTargetMoveInitData.stopDistance;
-				n["approach_target_move_data"]["isDash"] = node.approachTargetMoveInitData.isDash;
-			}
-			else if (node.actionType == ActionType::ApproachLeaderMove)
-			{
-				n["approach_leader_move_data"]["moveSpeed"] = node.approachLeaderMoveInitData.moveSpeed;
-				n["approach_leader_move_data"]["stopDistance"] = node.approachLeaderMoveInitData.stopDistance;
-				n["approach_leader_move_data"]["isDash"] = node.approachLeaderMoveInitData.isDash;
-			}
 			else if (node.actionType == ActionType::NavMeshMove)
 			{
 				n["nav_mesh_move_data"]["moveSpeed"] = node.navMeshMoveInitData.moveSpeed;
@@ -332,26 +320,6 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 							node.avoidInitData.localDirection.x = avoid_data["LocalDirection"][0].get<float>();
 							node.avoidInitData.localDirection.y = avoid_data["LocalDirection"][1].get<float>();
 						}
-					}
-				}
-				else if (node.actionType == ActionType::ApproachTargetMove)
-				{
-					if (n.contains("approach_target_move_data") && n["approach_target_move_data"].is_object())
-					{
-						const auto& move_data = n["approach_target_move_data"];
-						node.approachTargetMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
-						node.approachTargetMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
-						node.approachTargetMoveInitData.isDash = move_data.value("isDash", false);
-					}
-				}
-				else if (node.actionType == ActionType::ApproachLeaderMove)
-				{
-					if (n.contains("approach_leader_move_data") && n["approach_leader_move_data"].is_object())
-					{
-						const auto& move_data = n["approach_leader_move_data"];
-						node.approachLeaderMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
-						node.approachLeaderMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
-						node.approachLeaderMoveInitData.isDash = move_data.value("isDash", false);
 					}
 				}
 				else if (node.actionType == ActionType::NavMeshLeaderMove)
