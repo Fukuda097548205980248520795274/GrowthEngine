@@ -140,6 +140,9 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			comboParams["moveEndTime"] = node.comboAttackInitData.moveEndTime;
 			comboParams["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
 			comboParams["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
+			comboParams["isGrabWeapon"] = node.comboAttackInitData.isGrabWeapon;
+			comboParams["grabWeaponStartTime"] = node.comboAttackInitData.grabWeaponStartTime;
+			comboParams["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
 
 			// 当たり判定配列の保存
 			comboParams["hitDefinitions"] = json::array();
@@ -153,7 +156,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 				defJson["knockback"] = def.knockback;
 				defJson["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
 				defJson["damageReaction"] = static_cast<int>(def.damageReaction);
-				defJson["jointType"] = static_cast<int>(def.jointType); // 必要に応じて追加
+				defJson["jointType"] = static_cast<int>(def.jointType);
 				comboParams["hitDefinitions"].push_back(defJson);
 			}
 
@@ -170,7 +173,10 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			grabParams["grabTime"] = node.grabAttackInitData.grabTime;
 			grabParams["hitboxStartTime"] = node.grabAttackInitData.hitboxStartTime;
 			grabParams["hitboxEndTime"] = node.grabAttackInitData.hitboxEndTime;
-			grabParams["jointType"] = static_cast<int>(node.grabAttackInitData.jointType); // 必要に応じて追加
+			grabParams["isGrabWeapon"] = node.grabAttackInitData.isGrabWeapon;
+			grabParams["grabWeaponStartTime"] = node.grabAttackInitData.grabWeaponStartTime;
+			grabParams["grabWeaponEndTime"] = node.grabAttackInitData.grabWeaponEndTime;
+			grabParams["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
 
 			nodeJson["grabParams"] = grabParams;
 		}
@@ -196,7 +202,7 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 				json hitJson;
 				hitJson["damage"] = hit.damage;
 				hitJson["hitTime"] = hit.hitTime;
-				hitJson["hitJoint"] = static_cast<int>(hit.hitJoint); // 必要に応じて追加
+				hitJson["hitJoint"] = static_cast<int>(hit.hitJoint);
 				grabStrikeParams["hits"].push_back(hitJson);
 			}
 
@@ -809,10 +815,18 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::DragFloat("Move End Time", &node->comboAttackInitData.moveEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
 				ImGui::Spacing();
-				ImGui::Text("Cancel Window");
+				ImGui::Text("Cancel");
 				ImGui::DragFloat("Cancel Start Time", &node->comboAttackInitData.cancelStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 				ImGui::DragFloat("Cancel End Time", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
+				ImGui::Spacing();
+				ImGui::Text("Grab Weapon");
+				ImGui::Checkbox("Is Grab Weapon", &node->comboAttackInitData.isGrabWeapon);
+				if (node->comboAttackInitData.isGrabWeapon)
+				{
+					ImGui::DragFloat("Grab Weapon Start Time", &node->comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("Grab Weapon End Time", &node->comboAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				}
 
 				ImGui::Spacing();
 				ImGui::Separator();
@@ -844,8 +858,7 @@ void ComboTreeEditor::DrawPropertyPanel()
 						ImGui::DragFloat("Knockback", &def.knockback, 0.1f, 0.0f, 100.0f);
 						ImGui::DragFloat3("Knockback Dir", &def.knockbackDirection.x, 0.01f);
 
-						// 列挙型 (DamageReaction) のコンボボックス
-						// 怯みなし, 小怯み, 大怯み, ダウン, 受け流され, 弾かれ を選択できるようにする
+						// ダメージリアクションの選択
 						const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
 						int currentReaction = static_cast<int>(def.damageReaction);
 						if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
@@ -862,8 +875,7 @@ void ComboTreeEditor::DrawPropertyPanel()
 
 						ImGui::Spacing();
 
-						// 削除ボタン
-						// 削除ボタンを赤色にする（見た目の工夫）
+						// 当たり判定を削除するボタン
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 						if (ImGui::Button("Delete Hitbox"))
 						{
@@ -892,6 +904,15 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::DragFloat("Move Speed", &node->grabAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
 				ImGui::DragFloat("Move Start Time", &node->grabAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 				ImGui::DragFloat("Move End Time", &node->grabAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+
+				ImGui::Spacing();
+				ImGui::Text("Grab Weapon");
+				ImGui::Checkbox("Is Grab Weapon", &node->grabAttackInitData.isGrabWeapon);
+				if (node->grabAttackInitData.isGrabWeapon)
+				{
+					ImGui::DragFloat("Grab Weapon Start Time", &node->grabAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+					ImGui::DragFloat("Grab Weapon End Time", &node->grabAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				}
 
 
 				ImGui::Spacing();

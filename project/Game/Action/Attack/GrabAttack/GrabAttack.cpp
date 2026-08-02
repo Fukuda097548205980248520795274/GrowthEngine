@@ -13,6 +13,9 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 	hitboxStartTime_ = initData.hitboxStartTime;
 	hitboxEndTime_ = initData.hitboxEndTime;
 	grabMaxTime_ = initData.grabTime;
+	isGrabWeapon_ = initData.isGrabWeapon;
+	grabWeaponStartTime_ = initData.grabWeaponStartTime;
+	grabWeaponEndTime_ = initData.grabWeaponEndTime;
 
 	// 攻撃の種類を掴みに設定する
 	attackType_ = AttackType::Grab;
@@ -231,6 +234,13 @@ void GrabAttack::Exit()
 
 	DeleteHitbox();
 	Attack::Exit();
+}
+
+/// @brief 攻撃中かどうか
+/// @return 
+bool GrabAttack::IsGrabWeapon() const
+{
+	return isGrabWeapon_ && IsExec() && !owner_->GetWeapon() ? attackTimer_ >= grabWeaponStartTime_ && attackTimer_ <= grabWeaponEndTime_ : false;
 }
 
 /// @brief 攻撃判定を削除する

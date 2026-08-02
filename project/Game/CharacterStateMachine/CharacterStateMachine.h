@@ -53,6 +53,9 @@ public:
 	/// @return 
 	const StateMap& GetStates() const { return states_; }
 
+	/// @brief ツリーのリクエスト
+	void TreeRequest() { if (currentState_) { currentState_->TreeRequest(); } }
+
 
 private:
 

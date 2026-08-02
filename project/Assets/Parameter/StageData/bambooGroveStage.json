@@ -989,6 +989,23 @@
             "scaleY": 2.190000057220459,
             "scaleZ": 1.0,
             "subType": 3
+        },
+        {
+            "attackPower": 1.0,
+            "category": 2,
+            "durability": 100,
+            "isUnbreakable": false,
+            "name": "",
+            "posX": -3.390000104904175,
+            "posY": 0.7599999904632568,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 1
         }
     ]
 }

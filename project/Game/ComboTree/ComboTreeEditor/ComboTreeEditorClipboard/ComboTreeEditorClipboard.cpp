@@ -67,7 +67,7 @@ void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
 	ImVec2 windowSize = ImGui::GetWindowSize();
 	ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
 
-	// 旧ピンIDから新ピンIDへのマッピング (リンクの再接続に必要)
+	// 旧ピンIDから新ピンIDへのマッピング
 	std::unordered_map<int, int> pinIdMap;
 
 	ImNodes::ClearNodeSelection(); // 既存の選択を解除

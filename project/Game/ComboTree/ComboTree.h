@@ -19,7 +19,7 @@ public:
 
 public:
 
-	/// @brief コンストラクタ
+	/// @brief 実行
 	void Exec() { rootAttack->Exec(); }
 
 	/// @brief 攻撃を追加する

@@ -18,6 +18,9 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	moveEndTime_ = initData.moveEndTime;
 	cancelStartTime_ = initData.cancelStartTime;
 	cancelEndTime_ = initData.cancelEndTime;
+	isGrabWeapon_ = initData.isGrabWeapon;
+	grabWeaponStartTime_ = initData.grabWeaponStartTime;
+	grabWeaponEndTime_ = initData.grabWeaponEndTime;
 
 	// 攻撃の種類をコンボに設定する
 	attackType_ = AttackType::Combo;
@@ -329,4 +332,11 @@ bool ComboAttack::IsCanNextCombo()const
 
 	// 攻撃タイマーがコンボキャンセル受付時間内であれば、次の攻撃に移行できると仮定する
 	return !IsExec() || (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_); 
+}
+
+/// @brief 攻撃中かどうか
+/// @return 
+bool ComboAttack::IsGrabWeapon() const
+{ 
+	return isGrabWeapon_ && IsExec() && !owner_->GetWeapon() ? attackTimer_ >= grabWeaponStartTime_ && attackTimer_ <= grabWeaponEndTime_ : false;
 }

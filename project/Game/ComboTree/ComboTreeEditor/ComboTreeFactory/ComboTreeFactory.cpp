@@ -57,12 +57,15 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
                 initData.hAttackMotion = MotionManager::GetInstance()->GetMotion(MotionType::Attack, animName);
             }
 
-            initData.attackTime = paramsJson["attackTime"];
-            initData.moveSpeed = paramsJson["moveSpeed"];
-            initData.moveStartTime = paramsJson["moveStartTime"];
-            initData.moveEndTime = paramsJson["moveEndTime"];
-            initData.cancelStartTime = paramsJson["cancelStartTime"];
-            initData.cancelEndTime = paramsJson["cancelEndTime"];
+            initData.attackTime = paramsJson.value("attackTime", 0.0f);
+            initData.moveSpeed = paramsJson.value("moveSpeed", 0.0f);
+            initData.moveStartTime = paramsJson.value("moveStartTime", 0.0f);
+            initData.moveEndTime = paramsJson.value("moveEndTime", 0.0f);
+            initData.cancelStartTime = paramsJson.value("cancelStartTime", 0.0f);
+            initData.cancelEndTime = paramsJson.value("cancelEndTime", 0.0f);
+			initData.isGrabWeapon = paramsJson.value("isGrabWeapon", false);
+			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
+			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);
 
             // 当たり判定の読み込み
             if (paramsJson.contains("hitDefinitions"))
@@ -70,15 +73,15 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
                 for (const auto& defJson : paramsJson["hitDefinitions"])
                 {
                     HitboxDefinition def;
-                    def.startTime = defJson["startTime"];
-                    def.endTime = defJson["endTime"];
-                    def.damage = defJson["damage"];
-                    def.radius = defJson["radius"];
-                    def.knockback = defJson["knockback"];
-                    auto dir = defJson["knockbackDirection"];
+                    def.startTime = defJson.value("startTime", 0.0f);
+                    def.endTime = defJson.value("endTime", 0.0f);
+                    def.damage = defJson.value("damage", 0);
+                    def.radius = defJson.value("radius", 0.0f);
+                    def.knockback = defJson.value("knockback", 0.0f);
+                    auto dir = defJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f});
                     def.knockbackDirection = Vector3(dir[0], dir[1], dir[2]);
-                    def.damageReaction = static_cast<DamageReaction>(defJson["damageReaction"].get<int>());
-					def.jointType = static_cast<JointType>(defJson["jointType"].get<int>());
+                    def.damageReaction = static_cast<DamageReaction>(defJson.value("damageReaction", 0));
+					def.jointType = static_cast<JointType>(defJson.value("jointType", 0));
 
                     initData.hitDefinitions.push_back(def);
                 }
@@ -107,6 +110,9 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 			initData.moveStartTime = paramsJson.value("moveStartTime", 0.0f);
 			initData.moveEndTime = paramsJson.value("moveEndTime", 0.0f);
 			initData.grabTime = paramsJson.value("grabTime", 0.0f);
+			initData.isGrabWeapon = paramsJson.value("isGrabWeapon", false);
+			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
+			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);
 
 			initData.hitboxStartTime = paramsJson.value("hitboxStartTime", 0.0f);
 			initData.hitboxEndTime = paramsJson.value("hitboxEndTime", 0.0f);

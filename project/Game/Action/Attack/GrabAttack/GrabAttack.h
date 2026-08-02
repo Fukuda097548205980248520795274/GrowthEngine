@@ -3,15 +3,41 @@
 
 struct GrabAttackInitData
 {
-	AnimationHandle hAttackMotion = 0; // つかみ～投げの一連のモーション
-	float attackTime = 0.0f;           // モーションの総時間
-	float moveSpeed = 0.0f;            // 踏み込み速度
+	// 攻撃モーションのハンドル
+	AnimationHandle hAttackMotion = 0;
+
+	// 攻撃時間
+	float attackTime = 0.0f;
+
+	// 移動速度
+	float moveSpeed = 0.0f;
+
+	// 移動開始時間
 	float moveStartTime = 0.0f;
+
+	// 移動終了時間
 	float moveEndTime = 0.0f;
-	JointType jointType = JointType::HandR; // つかみ判定を行うジョイント
-	float hitboxStartTime = 0.0f;      // つかみ判定の開始時間
-	float hitboxEndTime = 0.0f;        // つかみ判定の終了時間
-	float grabTime = 0.0f;           // つかんでいる時間（投げるまでの時間）
+
+	// 攻撃判定を出すジョイント
+	JointType jointType = JointType::HandR;
+
+	// 攻撃判定開始時間
+	float hitboxStartTime = 0.0f;
+
+	// 攻撃判定終了時間
+	float hitboxEndTime = 0.0f;
+
+	// つかみ時間
+	float grabTime = 0.0f;
+
+	// 武器をつかむかどうか
+	bool isGrabWeapon = false;
+
+	/// @brief 武器をつかむ開始時間
+	float grabWeaponStartTime = 0.0f;
+
+	/// @brief 武器をつかむ終了時間
+	float grabWeaponEndTime = 0.0f;
 };
 
 class GrabAttack : public Attack
@@ -42,6 +68,11 @@ public:
 	/// @return 
 	bool IsCancelable() const override { return hasHit_ && !hasThrown_; }
 
+	/// @brief 攻撃中かどうか
+	/// @return 
+	bool IsGrabWeapon() const override;
+
+
 private:
 
 	/// @brief 攻撃の終了時間
@@ -52,6 +83,18 @@ private:
 
 	// 投げ飛ばしが完了したか
 	bool hasThrown_ = false;
+
+
+private:
+
+	/// @brief 武器をつかむかどうか
+	bool isGrabWeapon_ = false;
+
+	/// @brief 掴み開始時間
+	float grabWeaponStartTime_ = 0.0f;
+
+	/// @brief 掴み終了時間
+	float grabWeaponEndTime_ = 0.0f;
 
 
 private:

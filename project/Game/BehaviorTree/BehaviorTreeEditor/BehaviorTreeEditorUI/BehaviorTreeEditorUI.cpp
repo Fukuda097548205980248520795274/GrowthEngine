@@ -1161,6 +1161,18 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			HistorySaveIfChanged();
 			ImGui::DragFloat("移動終了時間", &node.comboAttackInitData.moveEndTime, 0.01f);
 
+			HistorySaveIfChanged();
+			ImGui::Checkbox("武器をつかむ", &node.comboAttackInitData.isGrabWeapon);
+
+			if (node.comboAttackInitData.isGrabWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器をつかむ開始時間", &node.comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node.comboAttackInitData.grabWeaponEndTime);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器をつかむ終了時間", &node.comboAttackInitData.grabWeaponEndTime, 0.01f, node.comboAttackInitData.grabWeaponStartTime, node.comboAttackInitData.attackTime);
+			}
+
 
 			// 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
 			node.motionType = MotionType::Attack;
@@ -1280,7 +1292,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 				isDirty_ = true;
 
 				HitboxDefinition newDef;
-				// 必要ならデフォルト値を設定
 				hitDefs.push_back(newDef);
 			}
 
@@ -1311,6 +1322,18 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 			HistorySaveIfChanged();
 			ImGui::DragFloat("当たり判定終了時間", &node.grabAttackInitData.hitboxEndTime, 0.01f);
+
+			HistorySaveIfChanged();
+			ImGui::Checkbox("武器をつかむ", &node.grabAttackInitData.isGrabWeapon);
+
+			if (node.grabAttackInitData.isGrabWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器をつかむ開始時間", &node.grabAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node.grabAttackInitData.grabWeaponEndTime);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器をつかむ終了時間", &node.grabAttackInitData.grabWeaponEndTime, 0.01f, node.grabAttackInitData.grabWeaponStartTime, node.grabAttackInitData.attackTime);
+			}
 
 
 			// 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
@@ -1531,7 +1554,6 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 				isDirty_ = true;
 
 				HitDefinition newDef;
-				// 必要ならデフォルト値を設定
 				hitDefs.push_back(newDef);
 			}
 

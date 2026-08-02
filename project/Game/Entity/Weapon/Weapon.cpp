@@ -3,6 +3,9 @@
 #include "StageEditor/StageData/StageData.h"
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
+#include "Entity/Character/Player/Player.h"
+#include "Entity/Character/NPC/NPC.h"
+
 #include <numbers>
 
 // 武器インスタンスの共有リスト

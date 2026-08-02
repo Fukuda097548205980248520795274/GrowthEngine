@@ -1207,11 +1207,12 @@ void Character::GrabWeapon(Weapon* weapon)
 	// 武器を持っていないときは処理しない
 	if (HasWeapon())return;
 
-	weapon_ = weapon;
+	// 武器の所有者を自分に設定する
+	weapon->SetOwner(this);
+	weapon->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
-	// 武器の持ち主を自分に設定する
-	weapon_->SetOwner(this);
-	weapon_->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	// 武器を持っている状態にする
+	weapon_ = weapon;
 }
 
 /// @brief 武器を離す
@@ -1231,6 +1232,9 @@ void Character::ReleaseWeapon(const Vector3& blowVelocity)
 	}
 
 	weapon_ = nullptr;
+
+	// 今の状態のツリーをリクエストする
+	stateMachine_->TreeRequest();
 }
 
 /// @brief 受け流しを実行する

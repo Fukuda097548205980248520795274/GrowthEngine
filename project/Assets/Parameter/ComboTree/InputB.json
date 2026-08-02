@@ -7,8 +7,11 @@
             "grabParams": {
                 "attackTime": 0.5,
                 "grabTime": 0.0,
+                "grabWeaponEndTime": 0.10000000149011612,
+                "grabWeaponStartTime": 0.0,
                 "hitboxEndTime": 0.20000000298023224,
                 "hitboxStartTime": 0.10000000149011612,
+                "isGrabWeapon": true,
                 "jointType": 9,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 3.0,

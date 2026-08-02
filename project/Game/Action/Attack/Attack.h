@@ -104,6 +104,10 @@ public:
 	/// @return 
 	bool IsFinishedTimer() const { return attackTimer_ >= attackTime_; }
 
+	/// @brief 武器をつかむかどうか
+	/// @return 
+	virtual bool IsGrabWeapon()const { return false; }
+
 
 protected:
 

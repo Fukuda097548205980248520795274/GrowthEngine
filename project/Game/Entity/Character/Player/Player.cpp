@@ -238,6 +238,12 @@ void Player::UpdateAttack()
 	// デルタタイムの取得
 	const float kDt = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
+	// 現在の攻撃が「つかみ武器」攻撃で、かつ武器を持っていない場合は、最も近い武器を探して持つ
+	if (currentAttack_ && currentAttack_->IsGrabWeapon() && !weapon_)
+	{
+		GrabWeapon(FindClosestWeapon());
+	}
+
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
@@ -374,6 +380,9 @@ float Player::GetCameraYaw() const
 /// @param comboTreeB 
 void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB)
 {
+	// 武器を持っている場合はコンボツリーの変更を受け付けない
+	if (weapon_)return;
+
 	// 攻撃中なら次のコンボツリーとして保存し、攻撃中でなければ現在のコンボツリーとして保存する
 	if (currentAttack_)
 	{
@@ -749,6 +758,44 @@ void Player::SearchLockOnTarget()
 			lockOnTarget_ = character;
 		}
 	}
+}
+
+/// @brief 最も近い武器を検索する
+/// @return 
+Weapon* Player::FindClosestWeapon()
+{
+	Weapon* closestWeapon = nullptr;
+
+	// 半径3メートルの2乗
+	float minDistanceSq = 3.0f * 3.0f;
+
+	// 自身のワールド座標を取得する
+	Vector3 myPosition = GetWorldPosition();
+
+	// フィールド上のすべての武器リストを取得する
+	const auto& allWeapons = Weapon::GetWeapons();
+
+	for (Weapon* weapon : allWeapons)
+	{
+		// 有効でない武器や壊れた武器、すでに誰かに所持されている武器は除外する
+		if (!weapon->IsActive() || weapon->IsBreak() || weapon->IsEquipped()) continue;
+
+		// 武器のワールド座標を取得する
+		Vector3 weaponPos = weapon->GetWorldPosition();
+
+		// プレイヤーと武器の距離の2乗を計算する
+		Vector3 diff = weaponPos - myPosition;
+		float distanceSq = diff.LengthSq();
+
+		// 3メートル以内かつ、現在の最短距離より近ければ候補を更新する
+		if (distanceSq <= minDistanceSq)
+		{
+			minDistanceSq = distanceSq;
+			closestWeapon = weapon;
+		}
+	}
+
+	return closestWeapon;
 }
 
 /// @brief 防御状態を更新する

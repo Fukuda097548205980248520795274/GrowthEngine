@@ -1,6 +1,7 @@
 #include "BattleDirector.h"
 #include "Entity/Character/Character.h"
 #include "Entity/Character/Player/Player.h"
+#include "NavMesh/NavMesh.h"
 #include <numbers>
 
 /// @brief インスタンスを取得する

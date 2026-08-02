@@ -4,6 +4,7 @@
 #include "ComboTree/ComboTree.h"
 
 class ComboTreeEditor;
+class Weapon;
 
 class Player : public Character
 {
@@ -121,6 +122,10 @@ private:
 
 	/// @brief ロックオンしているターゲットを検索する
 	void SearchLockOnTarget() override;
+
+	/// @brief 最も近い武器を検索する
+	/// @return 
+	Weapon* FindClosestWeapon();
 
 
 private:

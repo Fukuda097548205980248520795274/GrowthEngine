@@ -1,5 +1,7 @@
 #pragma once
 #include "../Entity.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "ComboTree/ComboTree.h"
 
 class Character;
 
@@ -91,6 +93,10 @@ public:
 	/// @brief 武器を吹き飛ばす
 	/// @param velocity 
 	void BlowAway(const Vector3& velocity);
+
+	/// @brief 全武器のリストを取得する
+	/// @return 
+	static const std::vector<Weapon*>& GetWeapons() { return weapons_; }
 
 
 protected:
