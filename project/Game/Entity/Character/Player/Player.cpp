@@ -380,9 +380,6 @@ float Player::GetCameraYaw() const
 /// @param comboTreeB 
 void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY, ComboTree* comboTreeB)
 {
-	// 武器を持っている場合はコンボツリーの変更を受け付けない
-	if (weapon_)return;
-
 	// 攻撃中なら次のコンボツリーとして保存し、攻撃中でなければ現在のコンボツリーとして保存する
 	if (currentAttack_)
 	{

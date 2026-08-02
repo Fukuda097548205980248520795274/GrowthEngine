@@ -1213,6 +1213,9 @@ void Character::GrabWeapon(Weapon* weapon)
 
 	// 武器を持っている状態にする
 	weapon_ = weapon;
+
+	// 今の状態のツリーをリクエストする
+	stateMachine_->TreeRequest();
 }
 
 /// @brief 武器を離す

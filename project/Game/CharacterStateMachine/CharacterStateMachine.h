@@ -22,7 +22,7 @@ public:
 	/// @brief 状態のマップ
 	/// @param name 
 	/// @param state 
-	void AddState(const std::string& name, std::unique_ptr<CharacterState> state) { states_[name] = std::move(state); }
+	void AddState(const std::string& name, std::unique_ptr<CharacterState> state) { states_[name] = std::move(state); states_[name]->SetName(name); }
 
 	/// @brief 状態を変更する
 	/// @param name 

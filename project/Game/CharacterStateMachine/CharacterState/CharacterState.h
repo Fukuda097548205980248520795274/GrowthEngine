@@ -29,6 +29,14 @@ public:
 	/// @brief ツリーのリクエスト
 	void TreeRequest();
 
+	/// @brief 状態の名前を設定する
+	/// @param name 
+	void SetName(const std::string& name) { name_ = name; }
+
+	/// @brief 状態の名前を取得する
+	/// @return 
+	std::string GetName() const { return name_; }
+
 
 public:
 
@@ -58,6 +66,9 @@ protected:
 
 	// 所有者
 	Character* owner_ = nullptr;
+
+	/// @brief 状態の名前
+	std::string name_{};
 
 	/// @brief ビヘイビアツリー
 	std::unique_ptr<BehaviorTree> behaviorTree_ = nullptr;

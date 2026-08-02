@@ -12,6 +12,18 @@ enum class WeaponCategory
 	TwoHanded, // 両手武器
 };
 
+// @brief 武器の状態ツリーセット
+struct WeaponStateTreeSet
+{
+	// Player用
+	std::shared_ptr<ComboTree> comboTreeX = nullptr;
+	std::shared_ptr<ComboTree> comboTreeY = nullptr;
+	std::shared_ptr<ComboTree> comboTreeB = nullptr;
+
+	// NPC用
+	std::shared_ptr<BehaviorTree> behaviorTree = nullptr;
+};
+
 class Weapon : public Entity
 {
 public:
@@ -98,6 +110,16 @@ public:
 	/// @return 
 	static const std::vector<Weapon*>& GetWeapons() { return weapons_; }
 
+	/// @brief 武器の状態ツリーセットを設定する
+	/// @param stateName 
+	/// @param treeSet 
+	void SetStateTreeSet(const std::string& stateName, const WeaponStateTreeSet& treeSet) { stateTrees_[stateName] = treeSet; }
+
+	/// @brief 武器の状態ツリーセットを取得する
+	/// @param stateName 
+	/// @return 
+	WeaponStateTreeSet* GetStateTreeSet(const std::string& stateName);
+
 
 protected:
 
@@ -130,6 +152,9 @@ protected:
 
 	/// @brief 有効かどうか
 	bool isActive_ = true;
+
+	/// @brief 武器の状態ツリーセット
+	std::unordered_map<std::string, WeaponStateTreeSet> stateTrees_;
 
 
 protected:

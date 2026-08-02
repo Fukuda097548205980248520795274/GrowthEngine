@@ -187,6 +187,16 @@ void Weapon::BlowAway(const Vector3& velocity)
 	isGrounded_ = false;
 }
 
+/// @brief 武器の状態ツリーセットを取得する
+/// @param stateName 
+/// @return 
+WeaponStateTreeSet* Weapon::GetStateTreeSet(const std::string& stateName)
+{
+	auto it = stateTrees_.find(stateName);
+	if (it != stateTrees_.end()) return &it->second;
+	return nullptr;
+}
+
 /// @brief 落下の更新
 /// @param deltaTime 
 void Weapon::FallUpdate(float deltaTime)

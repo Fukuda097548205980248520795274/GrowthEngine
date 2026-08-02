@@ -288,9 +288,6 @@ void NPC::Dead()
 /// @param newTree 
 void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 {
-	// 武器を持っている場合は、ビヘイビアツリーの変更を行わない
-	if (weapon_)return;
-
 	// 新しいビヘイビアツリーが現在のビヘイビアツリーと同じ名前の場合は、何もしない
 	if (newTree && currentBehaviorTree_ && (newTree->GetName() == currentBehaviorTree_->GetName()))
 		return;
