@@ -111,7 +111,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.category = static_cast<WeaponCategory>(data.subType);
 		initData.model = nullptr; // モデルは後で設定する
 
-		Weapon* newWeapon = scene_->CreateWeapon(initData);
+		Weapon* newWeapon = scene_->CreateWeapon(initData, data.behaviorTrees, data.comboTrees);
 		data.instancePtr = newWeapon;
 	}
 }

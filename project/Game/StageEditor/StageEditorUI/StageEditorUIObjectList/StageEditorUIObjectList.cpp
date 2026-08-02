@@ -493,6 +493,12 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		{
 			Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
 			weaponPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
+
+			ImGui::Text("コンボツリー");
+			StageEditorUIHelper::DrawComboTreeSettings(target.comboTrees, comboTreeNames, isDirty);
+
+			ImGui::Text("ビヘイビアツリー");
+			StageEditorUIHelper::DrawBehaviorTreeSettings(target.behaviorTrees, behaviorTreeNames, isDirty);
 		}
 	}
 	else if (multiSelectedIndices_.size() > 1)

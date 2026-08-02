@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 
 enum class EditorNodeType;
+class Character;
 
 class Node
 {
@@ -45,6 +46,10 @@ public:
 	/// @brief 最後の状態を取得する
 	/// @return 
 	State GetLastState() const { return lastState_; }
+
+	/// @brief 所有者を設定する
+	/// @param owner 
+	virtual void SetOwner(Character* owner) {}
 
 
 #ifdef DEVELOPMENT

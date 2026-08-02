@@ -80,9 +80,11 @@ public:
 		const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig, const std::string& editorName);
 
 	/// @brief 武器を生成する
-	/// @param position 
+	/// @param initData 
+	/// @param behaviorTreeConfig 
+	/// @param comboTreeConfig 
 	/// @return 
-	Weapon* CreateWeapon(const Weapon::InitData& initData);
+	Weapon* CreateWeapon(const Weapon::InitData& initData, const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig);
 
 	/// @brief 床オブジェクトを生成する
 	/// @param position 

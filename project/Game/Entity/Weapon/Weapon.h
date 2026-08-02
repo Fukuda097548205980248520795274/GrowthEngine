@@ -84,7 +84,7 @@ public:
 
 	/// @brief 所持者を設定する
 	/// @param owner 
-	void SetOwner(Character* owner) { owner_ = owner; }
+	void SetOwner(Character* owner);
 
 	/// @brief 所持されているかどうか
 	/// @return 

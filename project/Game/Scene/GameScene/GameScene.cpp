@@ -775,7 +775,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 /// @brief 武器を生成する
 /// @param position 
 /// @return 
-Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData)
+Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData, const BehaviorTreeConfig& behaviorTreeConfig, const ComboTreeConfig& comboTreeConfig)
 {
 	Weapon* weapon = nullptr;
 

@@ -172,6 +172,59 @@ void Weapon::TakeDamage(int damage)
 	durability_ -= damage;
 }
 
+/// @brief 所持者を設定する
+/// @param owner 
+void Weapon::SetOwner(Character* owner)
+{
+	// 所持者がnullptrのときは、所持者を解除する
+	if (!owner)
+	{
+		if (owner_ && owner_->IsPlayer() && !stateTrees_.empty())
+		{
+			for (auto& [stateName, treeSet] : stateTrees_)
+			{
+				if (treeSet.comboTreeX) treeSet.comboTreeX->SetOwner(nullptr);
+				if (treeSet.comboTreeY) treeSet.comboTreeY->SetOwner(nullptr);
+				if (treeSet.comboTreeB) treeSet.comboTreeB->SetOwner(nullptr);
+			}
+		}
+		else if (owner_ && !stateTrees_.empty())
+		{
+			for (auto& [stateName, treeSet] : stateTrees_)
+			{
+				if (treeSet.behaviorTree) treeSet.behaviorTree->SetOwner(nullptr);
+			}
+		}
+
+		owner_ = nullptr;
+
+		return;
+	}
+
+	// 所持者を設定する
+	owner_ = owner;
+
+	// 所持者がPlayerかNPCかで、状態ツリーの所有者を設定する
+	if (owner_->IsPlayer())
+	{
+		if (stateTrees_.empty()) return;
+		for (auto& [stateName, treeSet] : stateTrees_)
+		{
+			if (treeSet.comboTreeX) treeSet.comboTreeX->SetOwner(static_cast<Player*>(owner_));
+			if (treeSet.comboTreeY) treeSet.comboTreeY->SetOwner(static_cast<Player*>(owner_));
+			if (treeSet.comboTreeB) treeSet.comboTreeB->SetOwner(static_cast<Player*>(owner_));
+		}
+	}
+	else
+	{
+		if (stateTrees_.empty()) return;
+		for (auto& [stateName, treeSet] : stateTrees_)
+		{
+			if (treeSet.behaviorTree) treeSet.behaviorTree->SetOwner(static_cast<NPC*>(owner_));
+		}
+	}
+}
+
 /// @brief 武器を吹き飛ばす
 /// @param velocity 
 void Weapon::BlowAway(const Vector3& velocity)

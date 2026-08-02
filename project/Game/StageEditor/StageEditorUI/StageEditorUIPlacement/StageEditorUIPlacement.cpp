@@ -194,6 +194,12 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 
 		// 壊れない武器かどうか
 		ImGui::Checkbox("壊れるかどうか", &currentData.isUnbreakable);
+
+		ImGui::Text("コンボツリー");
+		StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);
+
+		ImGui::Text("ビヘイビアツリー");
+		StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
 	}
 
 	ImGui::Separator();

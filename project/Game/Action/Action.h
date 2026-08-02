@@ -58,6 +58,10 @@ public:
 	/// @return 
 	Breakpoints& GetBreakpoints() { return breakpoints_; }
 
+	/// @brief 所有者を設定する
+	/// @param owner 
+	void SetOwner(Character* owner) { owner_ = owner; }
+
 
 protected:
 

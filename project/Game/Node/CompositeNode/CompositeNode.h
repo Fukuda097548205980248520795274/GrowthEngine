@@ -1,6 +1,8 @@
 #pragma once
 #include "../Node.h"
 
+class Character;
+
 class CompositeNode : public Node
 {
 public:
@@ -18,6 +20,10 @@ public:
 
 	/// @brief 中断処理
 	virtual void Abort() override;
+
+	/// @brief 所有者を設定する
+	/// @param owner 
+	virtual void SetOwner(Character* owner) override { for (auto& child : children_) { child->SetOwner(owner); } }
 
 
 #ifdef DEVELOPMENT

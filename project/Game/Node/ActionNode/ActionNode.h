@@ -17,6 +17,10 @@ public:
 	/// @brief 中断処理
 	virtual void Abort() override;
 
+	/// @brief 所有者を設定する
+	/// @param owner 
+	void SetOwner(Character* owner) override { action_->SetOwner(owner); }
+
 
 protected:
 

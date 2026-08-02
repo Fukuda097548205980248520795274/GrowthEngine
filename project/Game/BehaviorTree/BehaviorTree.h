@@ -1,6 +1,8 @@
 #pragma once
 #include "Node/Node.h"
 
+class Character;
+
 class BehaviorTree
 {
 public:
@@ -44,6 +46,10 @@ public:
 	/// @brief ツリーの名前を取得する
 	/// @return 
 	const std::string& GetName() const { return name_; }
+
+	/// @brief 所有者を設定する
+	/// @param owner 
+	void SetOwner(Character* owner) { if (root_) root_->SetOwner(owner); }
 
 protected:
 
