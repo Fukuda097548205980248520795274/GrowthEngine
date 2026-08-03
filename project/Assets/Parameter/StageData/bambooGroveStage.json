@@ -974,14 +974,15 @@
             "subType": 2
         },
         {
+            "battleAreaStart": true,
             "category": 1,
             "eventCutsceneName": "",
             "eventStageDataFileName": "Area_3",
             "eventType": 1,
             "name": "",
-            "posX": -0.5360763072967529,
+            "posX": -1.1699621677398682,
             "posY": 0.7992453575134277,
-            "posZ": 38.97406005859375,
+            "posZ": 44.29526138305664,
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,

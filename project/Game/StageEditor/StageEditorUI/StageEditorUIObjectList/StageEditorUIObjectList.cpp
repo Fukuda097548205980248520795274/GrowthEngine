@@ -383,6 +383,9 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 						std::string fileName = target.eventStageDataFileName;
 						LoadPreviewData(fileName);
 
+						// バトルエリア開始のチェックボックス
+						ImGui::Checkbox("バトルエリア開始", &target.battleAreaStart);
+
 						// 生成ファイル編集のUI
 						ImGui::Separator();
 						if (ImGui::TreeNode(("生成ファイル編集: " + fileName + ".json").c_str()))

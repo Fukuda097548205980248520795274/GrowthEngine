@@ -22,6 +22,11 @@ public:
 	/// @param data 
 	void SpawnActualEntity(PlacementData& data);
 
+	/// @brief 実体を生成する（戦闘エリアの情報も渡す）
+	/// @param data 
+	/// @param battleAreas 
+	void SpawnActualEntity(PlacementData& data,BattleArea* battleAreas);
+
 	/// @brief 実体を削除する
 	/// @param data 
 	void DeleteActualEntity(PlacementData& data);
@@ -34,5 +39,9 @@ private:
 
 	/// @brief モーションマネージャ
 	MotionManager* motionManager_ = nullptr;
+
+
+	/// @brief 戦闘エリアのリスト
+	std::vector<std::unique_ptr<BattleArea>> battleAreas_;
 };
 

@@ -480,6 +480,9 @@ void GameScene::Update()
 		}
 	);
 
+	// 戦闘エリアの更新
+	battleAreas_.remove_if([](const std::unique_ptr<BattleArea>& battleArea) {return battleArea->IsCleared(); });
+
 	// チュートリアルの更新
 	stickTutorial_->Update();
 	dashTutorial_->Update();
@@ -878,7 +881,7 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 {
 	StaticEventTrigger::InitData triggerInitData = initData;
 	triggerInitData.collision = eventTriggerAABBCollision_->CreateInstance();
-	triggerInitData.onTriggerCallback = [this](int eventType, const char* param) -> bool { return HandleTriggerEvent(eventType, param); };
+	triggerInitData.onTriggerCallback = [this](int eventType, const char* param, bool isStartBattleArea) -> bool { return HandleTriggerEvent(eventType, param, isStartBattleArea); };
 
 	std::unique_ptr<StaticEventTrigger> newTrigger = std::make_unique<StaticEventTrigger>();
 	newTrigger->Initialize(triggerInitData);
@@ -1177,7 +1180,8 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 /// @brief イベントトリガーに触れたときの処理
 /// @param eventType 
 /// @param param 
-bool GameScene::HandleTriggerEvent(int eventType, const char* param)
+/// @param isStartBattleArea 
+bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea)
 {
 	// イベントタイプを列挙型に変換する
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
@@ -1194,8 +1198,7 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 			std::string fileName = param;
 			if (fileName.empty()) return true;
 
-			// ステージデータが保存されているディレクトリのパスと結合
-			// (必要であれば拡張子 .json を付ける)
+			// JSONファイルのパスを作成する
 			std::string filePath = "./Assets/Parameter/StageData/" + fileName + ".json";
 
 			// ファイルストリームを開く
@@ -1203,22 +1206,42 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param)
 			if (!ifs.is_open())return false;
 
 			// ファイルからJSONを読み込んで解析
-			nlohmann::json j;
+			json j;
 			ifs >> j;
 			ifs.close();
 
 			// JSON配列をループして、記述された各種オブジェクトを生成する
 			if (j.contains("objects") && j["objects"].is_array())
 			{
-				for (const auto& objectDataJson : j["objects"])
+				if (isStartBattleArea)
 				{
-					PlacementData initData;
-					fromJson(objectDataJson, initData);
-					// 解析したデータをもとにオブジェクトを生成する
-					stageEditor_->SpawnObject(initData);
-					stageEditor_->SetPlacementList(initData);
-				}
+					std::unique_ptr<BattleArea> battleArea = std::make_unique<BattleArea>();
 
+					for (const auto& objectDataJson : j["objects"])
+					{
+						PlacementData initData;
+						fromJson(objectDataJson, initData);
+
+						// 解析したデータをもとにオブジェクトを生成する
+						stageEditor_->SpawnObject(initData, battleArea.get());
+						stageEditor_->SetPlacementList(initData);
+					}
+
+					battleAreas_.push_back(std::move(battleArea));
+				}
+				else
+				{
+					for (const auto& objectDataJson : j["objects"])
+					{
+						PlacementData initData;
+						fromJson(objectDataJson, initData);
+
+						// 解析したデータをもとにオブジェクトを生成する
+						stageEditor_->SpawnObject(initData);
+						stageEditor_->SetPlacementList(initData);
+					}
+				}
+			
 				j.erase("objects");
 			}
 

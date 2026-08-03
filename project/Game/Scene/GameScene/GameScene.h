@@ -156,7 +156,8 @@ private:
 	/// @brief イベントトリガーに触れたときの処理
 	/// @param eventType 
 	/// @param param 
-	bool HandleTriggerEvent(int eventType, const char* param);
+	/// @param isStartBattleArea 
+	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea);
 
 
 private:
@@ -319,6 +320,9 @@ private:
 
 	/// @brief ステージオブジェクトのリスト
 	std::list<std::unique_ptr<StageObject>> objects_;
+
+	/// @brief 戦闘エリアのリスト
+	std::list<std::unique_ptr<BattleArea>> battleAreas_;
 
 	/// @brief HUDのリスト
 	std::list<std::unique_ptr<HUD>> huds_;

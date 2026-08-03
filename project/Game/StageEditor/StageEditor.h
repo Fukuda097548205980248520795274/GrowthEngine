@@ -38,6 +38,11 @@ public:
 	/// @param data 
 	void SpawnObject(PlacementData& data) { spawner_->SpawnActualEntity(data); }
 
+	/// @brief オブジェクトを配置する（戦闘エリアの情報も渡す）
+	/// @param data 
+	/// @param battleAreas 
+	void SpawnObject(PlacementData& data, BattleArea* battleAreas) { spawner_->SpawnActualEntity(data, battleAreas); }
+
 	/// @brief オブジェクトを削除する
 	/// @param data 
 	void DeleteObject(PlacementData& data) { spawner_->DeleteActualEntity(data); }

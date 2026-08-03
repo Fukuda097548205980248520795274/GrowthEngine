@@ -4,6 +4,7 @@
 #include "NavMesh/NavMesh.h"
 
 #include "Entity/Character/Character.h"
+#include "Entity/Character/NPC/NPC.h"
 #include "Entity/Weapon/Weapon.h"
 #include "StageObject/StageObject.h"
 #include "HUD/HUD.h"
@@ -108,8 +109,50 @@ struct PlacementData
 	/// @brief コンボツリーの設定 (キャラクターの場合)
 	ComboTreeConfig comboTrees;
 
+	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
+	bool battleAreaStart = false;
+
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
+};
+
+/// @brief 戦闘エリアのデータ構造
+struct BattleArea
+{
+	/// @brief 敵のリスト
+	std::list<NPC*> enemies;
+
+	/// @brief ステージオブジェクトのリスト
+	std::list<StageObject*> stageObjects;
+
+	/// @brief 戦闘エリアがクリアされたかどうかを判定する
+	/// @return 
+	bool IsCleared()
+	{
+		// 死亡または終了した敵をリストから削除する
+		enemies.remove_if([](NPC* enemy)
+			{
+				if (!enemy || enemy->IsDead() || enemy->IsFinished())
+				{
+					return true;
+				}
+
+				return false;
+			}
+		);
+
+		// 敵がすべて倒された場合、戦闘エリアはクリアされたとみなす
+		if (enemies.size() == 0)
+		{
+			// すべてのステージオブジェクトを削除する
+			for (auto& stageObject : stageObjects)
+				if (stageObject) { stageObject->Delete(); }
+
+			return true;
+		}
+		
+		return false;
+	}
 };
 
 // イベントチェーンのデータ構造
@@ -270,6 +313,7 @@ inline void toJson(json& j, const PlacementData& s)
 			j["eventType"] = s.eventType;
 			j["eventStageDataFileName"] = s.eventStageDataFileName;
 			j["eventCutsceneName"] = s.eventCutsceneName;
+			j["battleAreaStart"] = s.battleAreaStart;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -349,6 +393,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
+	s.battleAreaStart = j.value("battleAreaStart", false);
 
 
 	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む

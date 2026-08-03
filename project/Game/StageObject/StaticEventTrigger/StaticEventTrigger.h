@@ -23,8 +23,11 @@ public:
 		// イベントトリガーのステージデータファイル名
 		char eventStageDataFileName[256] = "";
 
+		/// @brief 戦闘エリア開始フラグ
+		bool isStartBattleArea = false;
+
 		// イベントが発生したときのコールバック関数
-		std::function<bool(int, const char*)> onTriggerCallback = nullptr;
+		std::function<bool(int, const char*, bool)> onTriggerCallback = nullptr;
 	};
 
 	/// @brief イベントの種類
@@ -80,8 +83,11 @@ private:
 	// イベントの整数パラメータ
 	char eventStageDataFileName_[256] = {};
 
+	/// @brief 戦闘エリア開始フラグ
+	bool isStartBattleArea_ = false;
+
 	// イベントが発生したときのコールバック関数
-	std::function<bool(int, const char*)> onTriggerCallback_ = nullptr;
+	std::function<bool(int, const char*, bool)> onTriggerCallback_ = nullptr;
 
 
 public:

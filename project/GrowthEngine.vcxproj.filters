@@ -2719,7 +2719,7 @@
       <Filter>Game\StageSelectEditor</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene\StageSelect\TitleSceneStageSelect.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Game\Scene\TitleScene\StageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
