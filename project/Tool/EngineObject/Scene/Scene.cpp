@@ -11,7 +11,7 @@ Scene::Scene(SceneManager* sceneManager) : sceneManager_(sceneManager)
 
 /// @brief シーン遷移する
 /// @param sceneName 
-void Scene::Transition(const std::string& sceneName)
+void Scene::Transition(const std::string& sceneName, const std::string& nextStageName)
 {
-	sceneManager_->Transition(sceneName);
+	sceneManager_->Transition(sceneName, nextStageName);
 }

@@ -58,12 +58,26 @@ void TitleScene::ExecuteMainMenuOption()
 		{
 			// ゲームを開始する処理
 		case MainMenuOption::StartGame:
-			phaseManager_->ChangePhase(PhaseType::Play);
+
+			// チュートリアルをクリアしているかどうかでフェーズを変更する
+			if (sceneManager_->IsTutorialCleared())
+			{
+				phaseManager_->ChangePhase(PhaseType::StageSelect);
+			}
+			else
+			{
+				nextStageName_ = "Tutorial";
+				phaseManager_->ChangePhase(PhaseType::Play);
+			}
+
 			break;
+
 
 			// ゲームを終了する処理
 		case MainMenuOption::QuitGame:
+
 			phaseManager_->ChangePhase(PhaseType::Quit);
+
 			break;
 		}
 	}

@@ -1,9 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "PhaseManager/PhaseManager.h"
-
-#include "ObjectEditor/LightEditor/LightEditor.h"
-#include "ObjectEditor/ModelEditor/ModelEditor.h"
+#include "StageSelectEditor/StageSelectEditor.h"
 
 class TitleScene : public Scene
 {
@@ -15,6 +13,7 @@ public:
 		Intro,
 		MainMenu,
 		Play,
+		StageSelect,
 		Quit,
 	};
 
@@ -74,8 +73,35 @@ private:
 	/// @brief タイトルシーンのメインメニュー描画処理
 	void MainMenuDraw();
 
+	/// @brief メインメニューの選択肢を処理する
+	void SelectMainMenuOption();
+
+	/// @brief メインメニューの選択肢を実行する
+	void ExecuteMainMenuOption();
+
 	/// @brief メインメニューの選択肢
 	MainMenuOption mainManuOption_ = MainMenuOption::StartGame;
+
+
+private:
+
+	/// @brief タイトルシーンのステージセレクト初期化処理
+	void StageSelectInitialize();
+
+	/// @brief タイトルシーンのステージセレクト更新処理
+	void StageSelectUpdate();
+
+	/// @brief タイトルシーンのステージセレクト描画処理
+	void StageSelectDraw();
+
+	/// @brief ステージセレクトの選択肢を処理する
+	void StageSelectMove();
+
+	/// @brief ステージセレクトの選択肢を実行する
+	void StageSelectExecute();
+
+	/// @brief ステージセレクトの選択中のインデックス
+	int stageSelectIndex_ = 0;
 
 
 private:
@@ -88,12 +114,6 @@ private:
 
 	/// @brief タイトルシーンのプレイ描画処理
 	void PlayDraw();
-
-	/// @brief メインメニューの選択肢を処理する
-	void SelectMainMenuOption();
-
-	/// @brief メインメニューの選択肢を実行する
-	void ExecuteMainMenuOption();
 
 	/// @brief プレイの経過時間
 	float playTimer_ = 0.0f;
@@ -122,6 +142,12 @@ private:
 
 private:
 
+	/// @brief 次のステージ名
+	std::string nextStageName_ = "";
+
+
+private:
+
 	/// @brief フェーズマネージャ
 	std::unique_ptr<PhaseManager<PhaseType>> phaseManager_;
 
@@ -142,13 +168,10 @@ private:
 	// Aボタン
 	std::unique_ptr<InputGamepadButton> aButton_;
 
-	
+
 private:
 
-	/// @brief ライトエディタ
-	std::unique_ptr<LightEditor> lightEditor_ = nullptr;
-
-	/// @brief UIエディタ
-	std::unique_ptr<ModelEditor> modelEditor_ = nullptr;
+	/// @brief ステージセレクトエディタ
+	std::unique_ptr<StageSelectEditor> stageSelectEditor_;
 };
 

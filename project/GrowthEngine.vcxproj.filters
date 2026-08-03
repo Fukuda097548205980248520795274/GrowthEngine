@@ -1498,6 +1498,12 @@
     <Filter Include="Tool\EngineObject\PostEffect\PostEffectBloom">
       <UniqueIdentifier>{43f5c8b4-4696-4629-9f10-8fa4c0e2d5d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\TitleScene\StageSelect">
+      <UniqueIdentifier>{2edbcf0a-67cd-4823-b4cb-4c8223bd75f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\StageSelectEditor">
+      <UniqueIdentifier>{d7f59ea5-c9a7-4551-b918-3dd485363ecc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2708,6 +2714,12 @@
     </ClCompile>
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.cpp">
       <Filter>Tool\EngineObject\PostEffect\PostEffectBloom</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageSelectEditor\StageSelectEditor.cpp">
+      <Filter>Game\StageSelectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\TitleScene\StageSelect\StageSelect.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4060,6 +4072,9 @@
     </ClInclude>
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.h">
       <Filter>Tool\EngineObject\PostEffect\PostEffectBloom</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageSelectEditor\StageSelectEditor.h">
+      <Filter>Game\StageSelectEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

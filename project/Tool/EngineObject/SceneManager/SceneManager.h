@@ -19,9 +19,23 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
-	/// @brief 遷移
+	/// @brief シーン遷移する
 	/// @param sceneName 
-	void Transition(const std::string& sceneName) { sceneName_ = sceneName; isTransition_ = true; }
+	/// @param stageName 
+	void Transition(const std::string& sceneName, const std::string& stageName = "") { sceneName_ = sceneName; nextStageName_ = stageName; isTransition_ = true; }
+
+
+	/// @brief 次のステージ名を取得する
+	/// @return 
+	std::string GetNextStageName() const { return nextStageName_; }
+
+	/// @brief チュートリアルクリアフラグを取得する
+	/// @return 
+	bool IsTutorialCleared() const { return isTutorialCleared_; }
+
+	/// @brief チュートリアルクリアフラグを設定する
+	/// @param flag 
+	void SetTutorialCleared(bool flag) { isTutorialCleared_ = flag; }
 
 
 private:
@@ -42,4 +56,13 @@ private:
 
 	// 遷移フラグ
 	bool isTransition_ = true;
+
+
+private:
+
+	/// @brief 次のステージ名
+	std::string nextStageName_{};
+
+	/// @brief チュートリアルクリアフラグ
+	bool isTutorialCleared_ = true;
 };

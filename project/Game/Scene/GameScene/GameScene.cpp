@@ -262,12 +262,8 @@ void GameScene::Initialize()
 	// 「カメラガード」に当たる
 	cameraSegmentCollision_->SetCollisionTarget(cameraGuardCollision_->GetHandle());
 
-
-	// ステージ読み込み
-	stageEditor_->LoadStage("bambooGroveStage.json");
-	modelEditor_->Load("bambooGrove");
-	lightEditor_->Load("bambooGrove");
-
+	// ステージの読み込み
+	stageEditor_->LoadStage(sceneManager_->GetNextStageName());
 
 	// オブジェクトの描画レンダーパスの読み込み
 	engine_->LoadRenderPass("Object", [&]()
@@ -550,6 +546,29 @@ void GameScene::Draw()
 	engine_->ExecuteRenderPass("MainPass");
 }
 
+/// @brief ステージがロードされたときの処理
+/// @param fileName 
+void GameScene::OnStageLoaded(const std::string& fileName)
+{
+	std::string baseName = fileName;
+
+	// 拡張子を削除する
+	size_t extPos = baseName.find(".json");
+	if (extPos != std::string::npos)
+		baseName.erase(extPos, 5);
+
+	// "Stage"という文字列を削除する
+	size_t stagePos = baseName.find("Stage");
+	if (stagePos != std::string::npos) 
+		baseName.erase(stagePos, 5);
+
+	// 他のエディタのロードを呼び出す
+	if (modelEditor_) 
+		modelEditor_->Load(baseName);
+
+	if (lightEditor_)
+		lightEditor_->Load(baseName);
+}
 
 /// @brief キャラクターを生成する
 /// @param initData 

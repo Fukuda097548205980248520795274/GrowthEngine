@@ -680,6 +680,9 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
 		placementList.clear();
 		currentFileName = pendingFileName_;
 		fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
+
+		// ファイルを切り替えた後に、シーンにロード完了の通知を送る
+		scene_->OnStageLoaded(currentFileName);
 	}
 	else if (pendingAction_ == PendingAction::New)
 	{

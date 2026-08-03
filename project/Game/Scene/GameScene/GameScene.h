@@ -73,6 +73,10 @@ public:
 
 public:
 
+	/// @brief ステージがロードされたときの処理
+	/// @param fileName 
+	void OnStageLoaded(const std::string& fileName);
+
 	/// @brief キャラクターを生成する
 	/// @param initData 
 	/// @return 

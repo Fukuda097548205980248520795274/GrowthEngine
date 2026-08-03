@@ -16,7 +16,7 @@ void TitleScene::PlayUpdate()
 	// プレイが終了したらゲームシーンに遷移
 	if (playTimer_ <= 0.0f)
 	{
-		Transition("Game");
+		Transition("Game", nextStageName_);
 	}
 	else
 	{

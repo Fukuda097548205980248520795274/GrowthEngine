@@ -6,10 +6,10 @@ void TitleScene::Initialize()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
-	// エディタを作成する
-	lightEditor_ = std::make_unique<LightEditor>();
-	modelEditor_ = std::make_unique<ModelEditor>();
-	
+	// ステージセレクトエディタを作成する
+	stageSelectEditor_ = std::make_unique<StageSelectEditor>();
+	stageSelectEditor_->Initialize();
+
 	// 上下のキー入力を作成する
 	wKey_ = std::make_unique<InputKey>("TitleWKey", InputState::Trigger, DIK_W);
 	sKey_ = std::make_unique<InputKey>("TitleSKey", InputState::Trigger, DIK_S);
@@ -37,6 +37,8 @@ void TitleScene::Initialize()
 	phaseManager_->SetOnUpdate(PhaseType::Intro, [&]() { IntroUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::MainMenu, [&]() { MainMenuInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::MainMenu, [&]() { MainMenuUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::StageSelect, [&]() { StageSelectInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::StageSelect, [&]() { StageSelectUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Play, [&]() { PlayInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Play, [&]() { PlayUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Quit, [&]() { QuitInitialize(); });
@@ -47,13 +49,6 @@ void TitleScene::Initialize()
 	engine_->LoadRenderPass("Object", [&]()
 		{
 			engine_->DrawToRenderPass("Object", "PrevDraw");
-
-			// UIエディタのUI描画処理を呼び出す
-			modelEditor_->DrawUI();
-			lightEditor_->DrawUI();
-
-			// UIの描画処理を呼び出す
-			modelEditor_->Draw();
 		}
 	);
 
@@ -78,6 +73,9 @@ void TitleScene::Initialize()
 
 			// フェード用スプライトの描画
 			fadeSprite_->Draw();
+
+			// ステージセレクトエディタのUI描画
+			stageSelectEditor_->DrawUI();
 		}
 	);
 }

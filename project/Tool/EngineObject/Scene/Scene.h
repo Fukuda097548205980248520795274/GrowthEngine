@@ -27,7 +27,7 @@ public:
 
 	/// @brief シーン遷移する
 	/// @param sceneName 
-	void Transition(const std::string& sceneName);
+	void Transition(const std::string& sceneName, const std::string& nextStageName = "");
 
 
 protected:
@@ -36,7 +36,7 @@ protected:
 	const GrowthEngine* engine_ = nullptr;
 
 
-private:
+protected:
 
 	/// @brief シーンマネージャ
 	SceneManager* sceneManager_ = nullptr;
