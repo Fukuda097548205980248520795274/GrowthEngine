@@ -384,7 +384,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 						LoadPreviewData(fileName);
 
 						// バトルエリア開始のチェックボックス
-						ImGui::Checkbox("バトルエリア開始", &target.battleAreaStart);
+						ImGui::Checkbox("バトルエリア開始", &target.isBattleAreaStart);
 
 						// 生成ファイル編集のUI
 						ImGui::Separator();

@@ -110,7 +110,7 @@ struct PlacementData
 	ComboTreeConfig comboTrees;
 
 	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
-	bool battleAreaStart = false;
+	bool isBattleAreaStart = false;
 
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
@@ -313,7 +313,7 @@ inline void toJson(json& j, const PlacementData& s)
 			j["eventType"] = s.eventType;
 			j["eventStageDataFileName"] = s.eventStageDataFileName;
 			j["eventCutsceneName"] = s.eventCutsceneName;
-			j["battleAreaStart"] = s.battleAreaStart;
+			j["battleAreaStart"] = s.isBattleAreaStart;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -393,7 +393,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
-	s.battleAreaStart = j.value("battleAreaStart", false);
+	s.isBattleAreaStart = j.value("battleAreaStart", false);
 
 
 	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む

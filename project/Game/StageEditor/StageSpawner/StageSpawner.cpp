@@ -80,7 +80,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			initData.position = data.position;
 			initData.scale = data.scale;
 			initData.eventType = data.eventType;
-			initData.isStartBattleArea = data.battleAreaStart;
+			initData.isStartBattleArea = data.isBattleAreaStart;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
 			if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
@@ -203,7 +203,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 			initData.position = data.position;
 			initData.scale = data.scale;
 			initData.eventType = data.eventType;
-			initData.isStartBattleArea = data.battleAreaStart;
+			initData.isStartBattleArea = data.isBattleAreaStart;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
 			if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
