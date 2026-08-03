@@ -2718,7 +2718,7 @@
     <ClCompile Include="Game\StageSelectEditor\StageSelectEditor.cpp">
       <Filter>Game\StageSelectEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scene\TitleScene\StageSelect\StageSelect.cpp">
+    <ClCompile Include="Game\Scene\TitleScene\StageSelect\TitleSceneStageSelect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,5 +4,6 @@
             "displayName": "Stage1",
             "fileName": "bambooGroveStage"
         }
-    ]
+    ],
+    "tutorialStageName": "bambooGroveStage"
 }

@@ -22,6 +22,10 @@ public:
 	/// @return 
 	const std::vector<StageInfo>& GetStageList() const { return stageList_; }
 
+	/// @brief チュートリアルステージのファイル名を取得する
+	/// @return 
+	const std::string& GetTutorialStageName() const { return tutorialStageName_; }
+
 private:
 
 	/// @brief フォルダからステージファイル名一覧を取得する
@@ -46,5 +50,8 @@ private:
 
 	/// @brief 新規ステージの表示名
 	char inputDisplayName_[256] = "";
+
+	/// @brief チュートリアルステージのファイル名
+	std::string tutorialStageName_ = "Tutorial";
 };
 

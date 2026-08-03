@@ -147,7 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
-    <ClCompile Include="Game\Scene\TitleScene\StageSelect\StageSelect.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene\StageSelect\TitleSceneStageSelect.cpp" />
     <ClCompile Include="Game\StageSelectEditor\StageSelectEditor.cpp" />
     <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Development|x64'">MaxSpeed</Optimization>

@@ -66,7 +66,7 @@ void TitleScene::ExecuteMainMenuOption()
 			}
 			else
 			{
-				nextStageName_ = "Tutorial";
+				nextStageName_ = stageSelectEditor_->GetTutorialStageName();
 				phaseManager_->ChangePhase(PhaseType::Play);
 			}
 

@@ -44,7 +44,7 @@ void TitleScene::StageSelectMove()
 	auto stageList = stageSelectEditor_->GetStageList();
 
 	if (static_cast<int>(stageSelectIndex_) + moveDirection >= 0 &&
-		static_cast<int>(stageSelectIndex_) + moveDirection < static_cast<int>(stageList.size() - 1))
+		static_cast<int>(stageSelectIndex_) + moveDirection < static_cast<int>(stageList.size()))
 	{
 		stageSelectIndex_ = static_cast<int>(stageSelectIndex_) + moveDirection;
 	}

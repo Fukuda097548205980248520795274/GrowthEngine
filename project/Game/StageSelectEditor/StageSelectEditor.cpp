@@ -32,6 +32,32 @@ void StageSelectEditor::DrawUI()
 
 	ImGui::Begin("Stage Select Editor");
 
+	//　チュートリアルステージの設定UI
+	ImGui::Text("Tutorial Stage Setting");
+	if (!availableFiles_.empty())
+	{
+		if (ImGui::BeginCombo("Tutorial Stage", tutorialStageName_.c_str()))
+		{
+			for (const auto& file : availableFiles_)
+			{
+				const bool isSelected = (tutorialStageName_ == file);
+				if (ImGui::Selectable(file.c_str(), isSelected))
+				{
+					tutorialStageName_ = file;
+					Save(); // 選択変更時に即時保存
+				}
+				if (isSelected) ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(1, 0, 0, 1), "No stage files found.");
+	}
+
+	ImGui::Separator();
+
 	// 新規ステージの登録UI
 	ImGui::Text("Add New Stage");
 
@@ -146,10 +172,11 @@ void StageSelectEditor::Save()
 	if(!std::filesystem::exists(kDatabaseDir))
 		std::filesystem::create_directories(kDatabaseDir);
 
-	nlohmann::json j;
+	json j;
+	j["tutorialStageName"] = tutorialStageName_;
 	for (const auto& stage : stageList_)
 	{
-		nlohmann::json item;
+		json item;
 		item["fileName"] = stage.fileName;
 		item["displayName"] = stage.displayName;
 		j["stages"].push_back(item);
@@ -171,8 +198,11 @@ void StageSelectEditor::Load()
 
 	try
 	{
-		nlohmann::json j;
+		json j;
 		ifs >> j;
+
+		// チュートリアルステージの設定を読み込む
+		tutorialStageName_ = j.value("tutorialStageName", "Tutorial");
 
 		if (j.contains("stages") && j["stages"].is_array())
 		{
