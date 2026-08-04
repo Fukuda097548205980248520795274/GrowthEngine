@@ -364,6 +364,9 @@ void GameScene::Initialize()
 			guardTutorial_->Draw();
 			avoidTutorial_->Draw();
 
+			// ナビゲーション矢印の描画
+			navigationArrow_->Draw();
+
 			// エディタ内のUI描画
 			uiEditor_->Draw();
 		}
@@ -412,6 +415,11 @@ void GameScene::Update()
 		// 太陽光をプレイヤーに追従させる
 		sunLight_->param_->position = player_->GetPosition() + Vector3(-5.0f, 10.0f, -5.0f);
 	}
+
+	// ナビゲーション矢印
+	navigationArrow_->SetPlayer(player_.get());
+	if(battleAreas_.size() == 0)navigationArrow_->SetTargetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	navigationArrow_->Update();
 
 	// オブジェクトの更新
 	objects_.remove_if([](const std::unique_ptr<StageObject>& object) {object->Update();return object->IsFinished();});
@@ -1482,4 +1490,9 @@ void GameScene::LoadHUDs()
 	avoidTutorial_->AddSprite(aButtonSprite_.get());
 
 	rageTutorial_ = std::make_unique<Tutorial>();
+
+	// 矢印スプライトを生成する
+	navigationArrowSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/arrow.png"), "Arrow_Sprite");
+	navigationArrow_ = std::make_unique<NavigationArrow>();
+	navigationArrow_->Initialize(navigationArrowSprite_.get());
 }

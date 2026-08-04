@@ -37,6 +37,8 @@
 #include "HUD/Button/TriggerButton/TriggerButton.h"
 #include "HUD/Button/MashButton/MashButton.h"
 
+#include "HUD/NavigationArrow/NavigationArrow.h"
+
 #include "Pool/Pool.h"
 
 #include "NavMesh/NavMesh.h"
@@ -455,6 +457,10 @@ private:
 	std::unique_ptr<Tutorial> guardTutorial_ = nullptr;
 	std::unique_ptr<Tutorial> avoidTutorial_ = nullptr;
 	std::unique_ptr<Tutorial> rageTutorial_ = nullptr;
+
+	/// @brief ナビゲーション矢印
+	std::unique_ptr<Sprite> navigationArrowSprite_ = nullptr;
+	std::unique_ptr<NavigationArrow> navigationArrow_ = nullptr;
 
 
 private:

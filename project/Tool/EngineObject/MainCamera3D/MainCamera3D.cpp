@@ -16,6 +16,23 @@ MainCamera3D::MainCamera3D(const std::string& name)
 	param_ = engine_->GetCamera3DParam(handle_);
 }
 
+/// @brief 向きを取得する
+/// @return 
+Vector3 MainCamera3D::GetDirection() const
+{
+	// 方向ベクトルを計算
+	Vector3 forwardDirection = Vector3(0.0f, 0.0f, 1.0f);
+
+	// 回転を適用
+	forwardDirection.x = std::cos(param_->transform.rotate.x) * std::sin(param_->transform.rotate.y);
+	forwardDirection.z = std::cos(param_->transform.rotate.x) * std::cos(param_->transform.rotate.y);
+
+	// Y軸の回転を適用
+	forwardDirection.y = -std::sin(param_->transform.rotate.x);
+
+	return forwardDirection.Normalize();
+}
+
 /// @brief 切り替え
 void MainCamera3D::Switch()
 {

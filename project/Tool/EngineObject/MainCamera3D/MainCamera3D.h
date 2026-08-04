@@ -13,6 +13,10 @@ public:
 	/// @param name 
 	MainCamera3D(const std::string& name);
 
+	/// @brief 向きを取得する
+	/// @return 
+	Vector3 GetDirection() const;
+
 	/// @brief 切り替え
 	void Switch();
 

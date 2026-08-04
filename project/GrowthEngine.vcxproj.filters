@@ -1504,6 +1504,9 @@
     <Filter Include="Game\StageSelectEditor">
       <UniqueIdentifier>{d7f59ea5-c9a7-4551-b918-3dd485363ecc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\NavigationArrow">
+      <UniqueIdentifier>{50c246c5-22eb-4322-90e7-13e0c67834b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2720,6 +2723,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene\StageSelect\TitleSceneStageSelect.cpp">
       <Filter>Game\Scene\TitleScene\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp">
+      <Filter>Game\HUD\NavigationArrow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4075,6 +4081,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageSelectEditor\StageSelectEditor.h">
       <Filter>Game\StageSelectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h">
+      <Filter>Game\HUD\NavigationArrow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
