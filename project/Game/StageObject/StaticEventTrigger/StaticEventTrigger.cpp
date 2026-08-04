@@ -44,6 +44,9 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 	// 戦闘エリア開始フラグ
 	isStartBattleArea_ = initData.isStartBattleArea;
 
+	// ゲームクリアフラグ
+	isGameClear_ = initData.isGameClear;
+
 	// イベントの整数パラメータ
 	strcpy_s(eventStageDataFileName_, sizeof(eventStageDataFileName_), initData.eventStageDataFileName);
 
@@ -82,7 +85,8 @@ void StaticEventTrigger::Update()
 			// コールバック関数を呼び出す
 			if (onTriggerCallback_)
 			{
-				bool shouldDelete = onTriggerCallback_(eventType_, eventStageDataFileName_, isStartBattleArea_);
+				bool shouldDelete =
+					onTriggerCallback_(eventType_, eventStageDataFileName_, isStartBattleArea_, isGameClear_);
 
 				// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
 				if (shouldDelete)Delete();

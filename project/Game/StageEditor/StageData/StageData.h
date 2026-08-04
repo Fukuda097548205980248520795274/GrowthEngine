@@ -112,6 +112,9 @@ struct PlacementData
 	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
 	bool isBattleAreaStart = false;
 
+	/// @brief ゲームクリアフラグ（イベントトリガーの場合）
+	bool isGameClear = false;
+
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
 };
@@ -124,6 +127,9 @@ struct BattleArea
 
 	/// @brief ステージオブジェクトのリスト
 	std::list<StageObject*> stageObjects;
+
+	// ゲームもクリアするかどうか
+	bool isGameClear = false;
 
 	/// @brief 戦闘エリアがクリアされたかどうかを判定する
 	/// @return 
@@ -314,6 +320,7 @@ inline void toJson(json& j, const PlacementData& s)
 			j["eventStageDataFileName"] = s.eventStageDataFileName;
 			j["eventCutsceneName"] = s.eventCutsceneName;
 			j["battleAreaStart"] = s.isBattleAreaStart;
+			j["gameClear"] = s.isGameClear;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -394,6 +401,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
 	s.isBattleAreaStart = j.value("battleAreaStart", false);
+	s.isGameClear = j.value("gameClear", false);
 
 
 	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む

@@ -26,8 +26,11 @@ public:
 		/// @brief 戦闘エリア開始フラグ
 		bool isStartBattleArea = false;
 
+		/// @brief ゲームクリアフラグ
+		bool isGameClear = false;
+
 		// イベントが発生したときのコールバック関数
-		std::function<bool(int, const char*, bool)> onTriggerCallback = nullptr;
+		std::function<bool(int, const char*, bool, bool)> onTriggerCallback = nullptr;
 	};
 
 	/// @brief イベントの種類
@@ -86,8 +89,11 @@ private:
 	/// @brief 戦闘エリア開始フラグ
 	bool isStartBattleArea_ = false;
 
+	/// @brief ゲームクリアフラグ
+	bool isGameClear_ = false;
+
 	// イベントが発生したときのコールバック関数
-	std::function<bool(int, const char*, bool)> onTriggerCallback_ = nullptr;
+	std::function<bool(int, const char*, bool, bool)> onTriggerCallback_ = nullptr;
 
 
 public:

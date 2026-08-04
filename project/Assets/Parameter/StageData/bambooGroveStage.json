@@ -979,6 +979,7 @@
             "eventCutsceneName": "",
             "eventStageDataFileName": "Area_3",
             "eventType": 1,
+            "gameClear": true,
             "name": "",
             "posX": -1.1699621677398682,
             "posY": 0.7992453575134277,

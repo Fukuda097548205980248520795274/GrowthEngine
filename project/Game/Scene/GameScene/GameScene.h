@@ -159,13 +159,17 @@ private:
 	/// @param eventType 
 	/// @param param 
 	/// @param isStartBattleArea 
-	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea);
+	/// @param isGameClear 
+	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear);
 
 
 private:
 
 	/// @brief フェーズマネージャ
 	std::unique_ptr<PhaseManager<PhaseType>> phaseManager_;
+
+	/// @brief ゲームクリアフラグ
+	bool isGameClear_ = false;
 
 	// モーションマネージャ
 	MotionManager* motionManager_ = nullptr;

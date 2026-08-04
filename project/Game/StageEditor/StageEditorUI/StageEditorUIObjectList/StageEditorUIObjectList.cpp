@@ -386,6 +386,12 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 						// バトルエリア開始のチェックボックス
 						ImGui::Checkbox("バトルエリア開始", &target.isBattleAreaStart);
 
+						if (target.isBattleAreaStart)
+						{
+							// ゲームクリアのチェックボックス
+							ImGui::Checkbox("ゲームクリアにつなげるか", &target.isGameClear);
+						}
+
 						// 生成ファイル編集のUI
 						ImGui::Separator();
 						if (ImGui::TreeNode(("生成ファイル編集: " + fileName + ".json").c_str()))

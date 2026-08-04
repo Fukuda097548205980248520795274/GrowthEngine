@@ -390,6 +390,8 @@ void GameScene::Update()
 	// デルタタイムを取得する
 	const float kDt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
+	if (isGameClear_)Transition("Title");
+
 	// バトルディレクターの更新
 	BattleDirector::GetInstance().Update(kDt);
 
@@ -489,7 +491,16 @@ void GameScene::Update()
 	);
 
 	// 戦闘エリアの更新
-	battleAreas_.remove_if([](const std::unique_ptr<BattleArea>& battleArea) {return battleArea->IsCleared(); });
+	battleAreas_.remove_if([this](const std::unique_ptr<BattleArea>& battleArea)
+		{
+			if (battleArea->IsCleared())
+			{
+				isGameClear_ = battleArea->isGameClear;
+				return true;
+			}
+			return false; 
+		}
+	);
 
 	// チュートリアルの更新
 	stickTutorial_->Update();
@@ -889,7 +900,10 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 {
 	StaticEventTrigger::InitData triggerInitData = initData;
 	triggerInitData.collision = eventTriggerAABBCollision_->CreateInstance();
-	triggerInitData.onTriggerCallback = [this](int eventType, const char* param, bool isStartBattleArea) -> bool { return HandleTriggerEvent(eventType, param, isStartBattleArea); };
+	triggerInitData.onTriggerCallback = [this](int eventType, const char* param, bool isStartBattleArea, bool isGameClear) -> bool
+		{
+			return HandleTriggerEvent(eventType, param, isStartBattleArea, isGameClear); 
+		};
 
 	std::unique_ptr<StaticEventTrigger> newTrigger = std::make_unique<StaticEventTrigger>();
 	newTrigger->Initialize(triggerInitData);
@@ -1189,7 +1203,8 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 /// @param eventType 
 /// @param param 
 /// @param isStartBattleArea 
-bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea)
+/// @param isGameClear 
+bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear)
 {
 	// イベントタイプを列挙型に変換する
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
@@ -1224,6 +1239,7 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 				if (isStartBattleArea)
 				{
 					std::unique_ptr<BattleArea> battleArea = std::make_unique<BattleArea>();
+					battleArea->isGameClear = isGameClear;
 
 					for (const auto& objectDataJson : j["objects"])
 					{
