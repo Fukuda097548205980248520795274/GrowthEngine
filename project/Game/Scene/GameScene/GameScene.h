@@ -50,10 +50,7 @@ public:
 	// @brief ゲームのフェーズ
 	enum class PhaseType
 	{
-		Intro,
-		Playing,
-		GameOver,
-		GameClear,
+		Battle, // 戦闘中
 	};
 
 
@@ -161,6 +158,15 @@ private:
 	/// @param isStartBattleArea 
 	/// @param isGameClear 
 	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear);
+
+
+private:
+
+	/// @brief 戦闘フェーズの初期化処理
+	void BattlePhaseInitialize();
+
+	/// @brief 戦闘フェーズの更新処理
+	void BattlePhaseUpdate();
 
 
 private:

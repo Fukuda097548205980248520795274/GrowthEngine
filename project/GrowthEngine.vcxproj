@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp" />
+    <ClCompile Include="Game\Scene\GameScene\Battle\GameSceneBattle.cpp" />
     <ClCompile Include="Game\Scene\TitleScene\StageSelect\TitleSceneStageSelect.cpp" />
     <ClCompile Include="Game\StageSelectEditor\StageSelectEditor.cpp" />
     <ClCompile Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.cpp">

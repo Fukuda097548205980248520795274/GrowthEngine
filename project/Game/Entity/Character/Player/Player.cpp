@@ -59,18 +59,12 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Standard");
 		baton_->SetActive(true);
 		GrabWeapon(baton_);
-
-		// 撃鉄スタイルのBGMを再生する
-		soundManager_->bgmStyleGekitetu_->Play();
 	}
 	else if (currentStyle_ == FightStyle::Tempest)
 	{
 		hStanceMotion_ = motionManager_->GetMotion(MotionType::Stance, "Fighter");
 		baton_->SetActive(false);
 		ReleaseWeapon();
-
-		// 旋嵐スタイルのBGMを再生する
-		soundManager_->bgmStyleSenran_->Play();
 	}
 
 	// スタイルチェンジ開始時の処理
@@ -518,13 +512,6 @@ void Player::StyleChangeStart()
 		// 旋嵐スタイル（武器なし・他の武器を拾える）
 	case FightStyle::Tempest:
 
-		// 旋嵐スタイルのBGMを再生する
-		soundManager_->bgmStyleSenran_->Play();
-
-		// 撃鉄bgmが流れていたら止める
-		if (soundManager_->bgmStyleGekitetu_->IsPlaying())
-			soundManager_->bgmStyleGekitetu_->Stop();
-
 		// 現在持っているのが「警棒」だった場合
 		if (weapon_ != nullptr && weapon_ == baton_)
 		{
@@ -539,13 +526,6 @@ void Player::StyleChangeStart()
 
 		// 撃鉄スタイル（警棒を装備）
 	case FightStyle::Hammer:
-
-		// 撃鉄スタイルのBGMを再生する
-		soundManager_->bgmStyleGekitetu_->Play();
-
-		// 旋嵐bgmが流れていたら止める
-		if (soundManager_->bgmStyleSenran_->IsPlaying())
-			soundManager_->bgmStyleSenran_->Stop();
 
 		// 現在持っているのが「警棒」以外の武器だった場合
 		if (weapon_ != nullptr && weapon_ != baton_)

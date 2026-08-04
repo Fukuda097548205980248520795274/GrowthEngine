@@ -70,13 +70,6 @@ public:
 	void SeGrab() { if (seGrab_)seGrab_->Play(); }
 
 
-	/// @brief 旋嵐スタイルのBGM
-	std::unique_ptr<Bgm> bgmStyleSenran_ = nullptr;
-
-	/// @brief 撃鉄スタイルのBGM
-	std::unique_ptr<Bgm> bgmStyleGekitetu_ = nullptr;
-
-
 private:
 
 

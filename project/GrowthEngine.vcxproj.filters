@@ -1507,6 +1507,9 @@
     <Filter Include="Game\HUD\NavigationArrow">
       <UniqueIdentifier>{50c246c5-22eb-4322-90e7-13e0c67834b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\GameScene\Battle">
+      <UniqueIdentifier>{72c89f15-405b-4676-b196-c8286b4abbb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2726,6 +2729,9 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp">
       <Filter>Game\HUD\NavigationArrow</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Battle\GameSceneBattle.cpp">
+      <Filter>Game\Scene\GameScene\Battle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
