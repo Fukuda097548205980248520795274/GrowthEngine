@@ -37,24 +37,34 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["combo_data"]["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
 				n["combo_data"]["isGrabWeapon"] = node.comboAttackInitData.isGrabWeapon;
 
-				// 当たり判定の配列データを構築
+				// ヒットグループの配列データを構築
+				json hitGroupsJson = json::array();
+				for (const auto& group : node.comboAttackInitData.groups)
+				{
+					json g;
+					g["groupId"] = group.groupId;
+					g["damageReaction"] = static_cast<int>(group.damageReaction);
+					g["startTime"] = group.startTime;
+					g["endTime"] = group.endTime;
+					g["knockback"] = group.knockback;
+					g["knockbackDirection"] = { group.knockbackDirection.x, group.knockbackDirection.y, group.knockbackDirection.z };
+					g["damage"] = group.damage;
+					hitGroupsJson.push_back(g);
+				}
+				n["combo_data"]["groups"] = hitGroupsJson;
+
+				// ヒットボックスの配列データを構築
 				json hitboxesJson = json::array();
-				for (const auto& def : node.comboAttackInitData.hitDefinitions)
+				for (const auto& hitbox : node.comboAttackInitData.hitboxes)
 				{
 					json h;
-					h["jointType"] = static_cast<int>(def.jointType);
-					h["startTime"] = def.startTime;
-					h["endTime"] = def.endTime;
-					h["radius"] = def.radius;
-					h["damage"] = def.damage;
-					h["damageReaction"] = static_cast<int>(def.damageReaction);
-					h["knockback"] = def.knockback;
-					h["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
+					h["hitJoint"] = static_cast<int>(hitbox.jointType);
+					h["radius"] = hitbox.radius;
+					h["groupId"] = hitbox.groupId;
 					hitboxesJson.push_back(h);
 				}
-
-				// コンボ攻撃のデータに当たり判定の配列を追加
 				n["combo_data"]["hitDefinitions"] = hitboxesJson;
+
 
 				n["motionType"] = static_cast<int>(node.motionType);
 				n["motionName"] = node.motionName;
@@ -232,34 +242,44 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.comboAttackInitData.cancelEndTime = 0.0f;
 					node.comboAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
 
+					
+					node.comboAttackInitData.groups.clear();
+					if (n["combo_data"].contains("groups") && n["combo_data"]["groups"].is_array())
+					{
+						for (const auto& g : n["combo_data"]["groups"])
+						{
+							HitGroupDefinition groupDef;
+							groupDef.groupId = g.value("groupId", 0);
+							groupDef.damageReaction = static_cast<DamageReaction>(g.value("damageReaction", 0));
+							groupDef.startTime = g.value("startTime", 0.0f);
+							groupDef.endTime = g.value("endTime", 0.0f);
+							groupDef.knockback = g.value("knockback", 0.0f);
+							groupDef.damage = g.value("damage", 1);
+							if (g.contains("knockbackDirection") && g["knockbackDirection"].is_array() && g["knockbackDirection"].size() == 3)
+							{
+								groupDef.knockbackDirection.x = g["knockbackDirection"][0];
+								groupDef.knockbackDirection.y = g["knockbackDirection"][1];
+								groupDef.knockbackDirection.z = g["knockbackDirection"][2];
+							}
+							else
+							{
+								groupDef.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+							}
+							node.comboAttackInitData.groups.push_back(groupDef);
+						}
+					}
+
 					// 配列の読み込み
-					node.comboAttackInitData.hitDefinitions.clear();
+					node.comboAttackInitData.hitboxes.clear();
 					if (n["combo_data"].contains("hitDefinitions") && n["combo_data"]["hitDefinitions"].is_array())
 					{
 						for (const auto& h : n["combo_data"]["hitDefinitions"])
 						{
-							HitboxDefinition def;
-							def.jointType = static_cast<JointType>(h.value("jointType", 0));
-							def.startTime = h.value("startTime", 0.0f);
-							def.endTime = h.value("endTime", 0.0f);
-							def.radius = h.value("radius", 0.25f);
-							def.damage = h.value("damage", 1);
-							def.damageReaction = static_cast<DamageReaction>(h.value("damageReaction", 0));
-							def.knockback = h.value("knockback", 0.0f);
-
-							if (h.contains("knockbackDirection") && h["knockbackDirection"].is_array() && h["knockbackDirection"].size() == 3)
-							{
-								def.knockbackDirection.x = h["knockbackDirection"][0];
-								def.knockbackDirection.y = h["knockbackDirection"][1];
-								def.knockbackDirection.z = h["knockbackDirection"][2];
-							}
-							else
-							{
-								def.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
-							}
-
-							// 読み込んだ当たり判定をノードのリストに追加
-							node.comboAttackInitData.hitDefinitions.push_back(def);
+							HitboxDefinition hitboxDef;
+							hitboxDef.jointType = static_cast<JointType>(h.value("hitJoint", 0));
+							hitboxDef.radius = h.value("radius", 0.25f);
+							hitboxDef.groupId = h.value("groupId", 0);
+							node.comboAttackInitData.hitboxes.push_back(hitboxDef);
 						}
 					}
 

@@ -33,8 +33,11 @@ struct CombAttackInitData
 	/// @brief 武器をつかむ終了時間
 	float grabWeaponEndTime = 0.0f;
 
-	// 当たり判定
-	std::vector<HitboxDefinition> hitDefinitions;
+	// ヒット判定のグループ
+	std::vector<HitGroupDefinition> groups;
+
+	// ヒット判定
+	std::vector<HitboxDefinition> hitboxes;
 };
 
 class ComboAttack : public Attack
@@ -95,6 +98,13 @@ private:
 
 private:
 
+	/// @brief ヒット判定の状態を保持するリスト
 	std::vector<HitboxState> hitStates_;
+
+	// グループの定義を保持するリスト
+	std::vector<HitGroupDefinition> groups_;
+
+	/// @brief グループIDごとにヒットしたキャラクターのリストを保持するマップ
+	std::unordered_map<int32_t, std::vector<Character*>> hitCharactersByGroup_;
 };
 

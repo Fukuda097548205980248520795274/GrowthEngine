@@ -22,11 +22,14 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	grabWeaponStartTime_ = initData.grabWeaponStartTime;
 	grabWeaponEndTime_ = initData.grabWeaponEndTime;
 
+	// ヒット判定のグループをコピーする
+	groups_ = initData.groups;
+
 	// 攻撃の種類をコンボに設定する
 	attackType_ = AttackType::Combo;
 
 	// 当たり判定の定義からHitboxStateを作成してリストに追加する
-	for (const auto& def : initData.hitDefinitions)
+	for (const auto& def : initData.hitboxes)
 	{
 		HitboxState state;
 		state.def = def;
@@ -57,6 +60,9 @@ void ComboAttack::Exec()
 
 	// 基底の実行
 	Attack::Exec();
+
+	// ヒットしたキャラクターのリストをクリアする
+	hitCharactersByGroup_.clear();
 
 	// アニメーションを設定する
 	owner_->SetAnimation(hAttackMotion_, true , false);
@@ -147,7 +153,21 @@ void ComboAttack::Update()
 		// 武器のジョイントタイプの場合は、攻撃者が武器を持っているかどうかを確認する
 		if (state.def.jointType == JointType::Weapon && owner_->GetWeapon() == nullptr)continue;
 
-		if (attackTimer_ >= state.def.startTime && attackTimer_ <= state.def.endTime)
+		// グループ定義を取得する
+		const HitGroupDefinition* groupDef = nullptr;
+		for (const auto& g : groups_)
+		{
+			if (g.groupId == state.def.groupId)
+			{
+				groupDef = &g;
+				break;
+			}
+		}
+
+		// グループが見つからない場合はスキップ
+		if (!groupDef) continue;
+
+		if (attackTimer_ >= groupDef->startTime && attackTimer_ <= groupDef->endTime)
 		{
 			// 当たり判定がまだ存在しない場合は作成する
 			if (state.hitbox.collider_ == nullptr)
@@ -156,11 +176,11 @@ void ComboAttack::Update()
 
 				// 攻撃の種類に応じて、攻撃のSEを再生する
 				SoundManager* soundManager = SoundManager::GetInstance();
-				if (state.def.damageReaction == DamageReaction::LightStagger)
+				if (groupDef->damageReaction == DamageReaction::LightStagger)
 				{
 					soundManager->SeLightAttack();
-				} 
-				else if (state.def.damageReaction == DamageReaction::HeavyStagger || state.def.damageReaction == DamageReaction::Down)
+				}
+				else if (groupDef->damageReaction == DamageReaction::HeavyStagger || groupDef->damageReaction == DamageReaction::Down)
 				{
 					soundManager->SeHeavyAttack();
 				}
@@ -211,8 +231,9 @@ void ComboAttack::Update()
 				// ターゲットが攻撃者自身である場合、同じサイドのキャラクターである場合、またはすでに倒れている場合はスキップする
 				if (target == owner_ || (target->IsPlayerSide() == owner_->IsPlayerSide() && target->IsEnemySide() == owner_->IsEnemySide()) || target->IsDead()) continue;
 
-				// すでにこの攻撃でヒットしているターゲットはスキップする
-				if (std::find(state.hitCharacters.begin(), state.hitCharacters.end(), target) != state.hitCharacters.end())
+				// 同じグループIDの攻撃で既にヒットしているキャラクターはスキップする
+				auto& hitList = hitCharactersByGroup_[state.def.groupId];
+				if (std::find(hitList.begin(), hitList.end(), target) != hitList.end())
 					continue;
 
 				// 当たり判定がヒットした場合の処理
@@ -243,16 +264,16 @@ void ComboAttack::Update()
 
 					// 攻撃の定義に基づいて、ノックバックの方向を計算する
 					Vector3 knockBackDirection;
-					knockBackDirection.x = right.x * state.def.knockbackDirection.x + up.x * state.def.knockbackDirection.y + forward.x * state.def.knockbackDirection.z;
-					knockBackDirection.y = right.y * state.def.knockbackDirection.x + up.y * state.def.knockbackDirection.y + forward.y * state.def.knockbackDirection.z;
-					knockBackDirection.z = right.z * state.def.knockbackDirection.x + up.z * state.def.knockbackDirection.y + forward.z * state.def.knockbackDirection.z;
+					knockBackDirection.x = right.x * groupDef->knockbackDirection.x + up.x * groupDef->knockbackDirection.y + forward.x * groupDef->knockbackDirection.z;
+					knockBackDirection.y = right.y * groupDef->knockbackDirection.x + up.y * groupDef->knockbackDirection.y + forward.y * groupDef->knockbackDirection.z;
+					knockBackDirection.z = right.z * groupDef->knockbackDirection.x + up.z * groupDef->knockbackDirection.y + forward.z * groupDef->knockbackDirection.z;
 					knockBackDirection = knockBackDirection.Normalize();
 
 					// 当たり判定の中心点を取得する
 					Vector3 hitPosition = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_)->param_->center;
 
 					// ターゲットにダメージを与える
-					bool isHit = target->OnDamage(state.def.damage, state.def.damageReaction, state.def.knockback, knockBackDirection, owner_->GetWorldPosition(), owner_,
+					bool isHit = target->OnDamage(groupDef->damage, groupDef->damageReaction, groupDef->knockback, knockBackDirection, owner_->GetWorldPosition(), owner_,
 						std::make_optional(hitPosition));
 
 					// 攻撃が何かしら敵に触れたら、攻撃の移動速度を遅くする
@@ -260,6 +281,9 @@ void ComboAttack::Update()
 
 					// この攻撃でヒットしたターゲットをリストに追加する
 					state.hitCharacters.push_back(target);
+
+					// 同じグループIDの攻撃でヒットしたキャラクターを記録する
+					hitList.push_back(target);
 				}
 			}
 		} 
@@ -295,6 +319,9 @@ void ComboAttack::Reset()
 	// 基底のリセット
 	Attack::Reset();
 
+	// ヒットしたキャラクターのリストをクリアする
+	hitCharactersByGroup_.clear();
+
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
 
@@ -311,6 +338,9 @@ void ComboAttack::Exit()
 {
 	// ブレイクポイントのチェック
 	BreakpointOnExit();
+
+	// ヒットしたキャラクターのリストをクリアする
+	hitCharactersByGroup_.clear();
 
 	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)

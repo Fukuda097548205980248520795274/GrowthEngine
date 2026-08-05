@@ -67,24 +67,38 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
 			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);
 
-            // 当たり判定の読み込み
-            if (paramsJson.contains("hitDefinitions"))
-            {
-                for (const auto& defJson : paramsJson["hitDefinitions"])
-                {
-                    HitboxDefinition def;
-                    def.startTime = defJson.value("startTime", 0.0f);
-                    def.endTime = defJson.value("endTime", 0.0f);
-                    def.damage = defJson.value("damage", 0);
-                    def.radius = defJson.value("radius", 0.0f);
-                    def.knockback = defJson.value("knockback", 0.0f);
-                    auto dir = defJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 0.0f});
-                    def.knockbackDirection = Vector3(dir[0], dir[1], dir[2]);
-                    def.damageReaction = static_cast<DamageReaction>(defJson.value("damageReaction", 0));
-					def.jointType = static_cast<JointType>(defJson.value("jointType", 0));
+            initData.groups.clear();
+			if (paramsJson.contains("groups") && paramsJson["groups"].is_array())
+			{
+				for (const auto& groupJson : paramsJson["groups"])
+				{
+					HitGroupDefinition groupDef;
+					groupDef.groupId = groupJson.value("groupId", 0);
+					groupDef.damage = groupJson.value("damage", 10);
+					groupDef.damageReaction = static_cast<DamageReaction>(groupJson.value("damageReaction", 0));
+					groupDef.knockback = groupJson.value("knockback", 0.0f);
+					groupDef.knockbackDirection = Vector3(
+						groupJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+						groupJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+						groupJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+					);
+					groupDef.startTime = groupJson.value("startTime", 0.0f);
+					groupDef.endTime = groupJson.value("endTime", 0.0f);
+					initData.groups.push_back(groupDef);
+				}
+			}
 
-                    initData.hitDefinitions.push_back(def);
-                }
+			initData.hitboxes.clear();
+            if (paramsJson.contains("hitboxes") && paramsJson["hitboxes"].is_array())
+            {
+				for (const auto& hitboxJson : paramsJson["hitboxes"])
+				{
+					HitboxDefinition hitboxDef;
+					hitboxDef.groupId = hitboxJson.value("groupId", 0);
+					hitboxDef.jointType = static_cast<JointType>(hitboxJson.value("jointType", 0));
+					hitboxDef.radius = hitboxJson.value("radius", 0.25f);
+					initData.hitboxes.push_back(hitboxDef);
+				}
             }
 
             // ComboAttackインスタンスを生成してリストに保管

@@ -1300,88 +1300,118 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 			ImGui::Text("当たり判定");
 
-			// 当たり判定のリストを描画
-			auto& hitDefs = node.comboAttackInitData.hitDefinitions;
-			for (size_t i = 0; i < hitDefs.size(); ++i)
+			// ヒットグループ設定
+			if (ImGui::TreeNode("ヒットグループ設定（ダメージ・属性）"))
 			{
-				// 各当たり判定のUIを描画するためにIDをプッシュ
-				ImGui::PushID(static_cast<int>(i));
+				auto& groups = node.comboAttackInitData.groups;
 
-				if (ImGui::TreeNode((std::string("当たり判定 ") + std::to_string(i + 1)).c_str()))
+				if (ImGui::Button("+ グループ追加"))
 				{
-					HistorySaveIfChanged();
-					ImGui::DragFloat("開始時間", &hitDefs[i].startTime, 0.01f);
-
-					HistorySaveIfChanged();
-					ImGui::DragFloat("終了時間", &hitDefs[i].endTime, 0.01f);
-
-					HistorySaveIfChanged();
-					ImGui::DragFloat("半径", &hitDefs[i].radius, 0.01f);
-
-					HistorySaveIfChanged();
-					ImGui::InputInt("攻撃力", &hitDefs[i].damage);
-
-					HistorySaveIfChanged();
-					ImGui::DragFloat("ノックバック", &hitDefs[i].knockback, 0.1f);
-
-					HistorySaveIfChanged();
-					ImGui::DragFloat3("ノックバック方向", &hitDefs[i].knockbackDirection.x, 0.1f);
-
-					// ノーマライズされた方向ベクトルを維持するために、ドラッグ後にベクトルを正規化
-					hitDefs[i].knockbackDirection = hitDefs[i].knockbackDirection.Normalize();
-
-					// ダメージリアクション
-					const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
-					int currentReaction = static_cast<int>(hitDefs[i].damageReaction);
-					if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
-					{
-						history_->SaveHistory(nodes_, links_, currentId_);
-						isDirty_ = true;
-
-						hitDefs[i].damageReaction = static_cast<DamageReaction>(currentReaction);
-					}
-
-					// ジョイントタイプ
-					int currentJoint = static_cast<int>(hitDefs[i].jointType);
-					if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
-					{
-						history_->SaveHistory(nodes_, links_, currentId_);
-						isDirty_ = true;
-
-						hitDefs[i].jointType = static_cast<JointType>(currentJoint);
-					}
-
-					// 削除ボタン
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-					if (ImGui::Button("当たり判定を削除"))
-					{
-						// 当たり判定を削除する前に、履歴に保存して変更フラグを立てる
-						history_->SaveHistory(nodes_, links_, currentId_);
-						isDirty_ = true;
-
-						hitDefs.erase(hitDefs.begin() + i);
-						ImGui::PopStyleColor();
-						ImGui::TreePop();
-						ImGui::PopID();
-						break; // 要素を削除した場合はループを抜ける（次のフレームで再描画される）
-					}
-
-					ImGui::PopStyleColor();
-
-					ImGui::TreePop();
+					HitGroupDefinition newGroup;
+					newGroup.groupId = static_cast<int32_t>(groups.size());
+					groups.push_back(newGroup);
 				}
-				ImGui::PopID();
+
+				for (size_t i = 0; i < groups.size(); ++i)
+				{
+					ImGui::PushID(static_cast<int>(i));
+					std::string label = "グループ ID: " + std::to_string(groups[i].groupId);
+					if (ImGui::TreeNode(label.c_str()))
+					{
+						HistorySaveIfChanged();
+						ImGui::InputInt("グループID", &groups[i].groupId);
+
+						HistorySaveIfChanged();
+						ImGui::DragFloat("開始時間", &groups[i].startTime, 0.01f);
+
+						HistorySaveIfChanged();
+						ImGui::DragFloat("終了時間", &groups[i].endTime, 0.01f);
+
+						HistorySaveIfChanged();
+						ImGui::InputInt("ダメージ", &groups[i].damage);
+
+						// ダメージリアクション
+						const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+						int currentReaction = static_cast<int>(groups[i].damageReaction);
+						if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+						{
+							history_->SaveHistory(nodes_, links_, currentId_);
+							isDirty_ = true;
+
+							groups[i].damageReaction = static_cast<DamageReaction>(currentReaction);
+						}
+
+						HistorySaveIfChanged();
+						ImGui::DragFloat("ノックバック力", &groups[i].knockback, 0.1f);
+
+						HistorySaveIfChanged();
+						ImGui::DragFloat3("ノックバック方向", &groups[i].knockbackDirection.x, 0.05f);
+
+						if (ImGui::Button("削除"))
+						{
+							history_->SaveHistory(nodes_, links_, currentId_);
+							isDirty_ = true;
+
+							groups.erase(groups.begin() + i);
+							ImGui::TreePop();
+							ImGui::PopID();
+							break;
+						}
+						ImGui::TreePop();
+					}
+					ImGui::PopID();
+				}
+				ImGui::TreePop();
 			}
 
-			// 新しい判定を追加するボタン
-			if (ImGui::Button("当たり判定を追加"))
-			{
-				// 新しい当たり判定を追加する前に、履歴に保存して変更フラグを立てる
-				history_->SaveHistory(nodes_, links_, currentId_);
-				isDirty_ = true;
+			ImGui::Separator();
 
-				HitboxDefinition newDef;
-				hitDefs.push_back(newDef);
+			// 当たり判定の配置設定
+			if (ImGui::TreeNode("当たり判定の配置（部位・時間）"))
+			{
+				auto& hitDefs = node.comboAttackInitData.hitboxes;
+
+				if (ImGui::Button("+ 当たり判定追加"))
+				{
+					hitDefs.push_back(HitboxDefinition());
+				}
+
+				for (size_t i = 0; i < hitDefs.size(); ++i)
+				{
+					ImGui::PushID(static_cast<int>(1000 + i));
+					if (ImGui::TreeNode((std::string("判定 ") + std::to_string(i + 1)).c_str()))
+					{
+						HistorySaveIfChanged();
+						ImGui::InputInt("所属グループID", &hitDefs[i].groupId);
+
+						// ジョイントタイプ
+						int currentJoint = static_cast<int>(hitDefs[i].jointType);
+						if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
+						{
+							history_->SaveHistory(nodes_, links_, currentId_);
+							isDirty_ = true;
+
+							hitDefs[i].jointType = static_cast<JointType>(currentJoint);
+						}
+
+						HistorySaveIfChanged();
+						ImGui::DragFloat("半径", &hitDefs[i].radius, 0.01f);
+
+						if (ImGui::Button("削除"))
+						{
+							history_->SaveHistory(nodes_, links_, currentId_);
+							isDirty_ = true;
+
+							hitDefs.erase(hitDefs.begin() + i);
+							ImGui::TreePop();
+							ImGui::PopID();
+							break;
+						}
+						ImGui::TreePop();
+					}
+					ImGui::PopID();
+				}
+				ImGui::TreePop();
 			}
 
 			ImGui::TreePop();

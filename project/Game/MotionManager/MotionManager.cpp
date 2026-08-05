@@ -49,6 +49,8 @@ void MotionManager::Initialize()
 	jointMap_[JointType::Chest] = "mixamorig:Spine2";
 	jointMap_[JointType::Head] = "mixamorig:Head";
 	jointMap_[JointType::Root] = "mixamorig:Spine";
+	jointMap_[JointType::UpLegL] = "mixamorig:LeftUpLeg";
+	jointMap_[JointType::UpLegR] = "mixamorig:RightUpLeg";
 
 	parentMap_[JointType::HandL] = JointType::ArmL;
 	parentMap_[JointType::HandR] = JointType::ArmR;
@@ -58,6 +60,8 @@ void MotionManager::Initialize()
 	parentMap_[JointType::ToeEndR] = JointType::ToeBaseR;
 	parentMap_[JointType::ToeBaseL] = JointType::FootL;
 	parentMap_[JointType::ToeBaseR] = JointType::FootR;
+	parentMap_[JointType::LegL] = JointType::UpLegL;
+	parentMap_[JointType::LegR] = JointType::UpLegR;
 
 	// モーション読み込み
 	LoadStand(dir);

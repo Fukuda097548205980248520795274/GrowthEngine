@@ -144,21 +144,33 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			comboParams["grabWeaponStartTime"] = node.comboAttackInitData.grabWeaponStartTime;
 			comboParams["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
 
-			// 当たり判定配列の保存
-			comboParams["hitDefinitions"] = json::array();
-			for (const auto& def : node.comboAttackInitData.hitDefinitions)
+			// ヒット判定のグループの配列データを構築
+			json groupsJson = json::array();
+			for (const auto& group : node.comboAttackInitData.groups)
 			{
-				json defJson;
-				defJson["startTime"] = def.startTime;
-				defJson["endTime"] = def.endTime;
-				defJson["damage"] = def.damage;
-				defJson["radius"] = def.radius;
-				defJson["knockback"] = def.knockback;
-				defJson["knockbackDirection"] = { def.knockbackDirection.x, def.knockbackDirection.y, def.knockbackDirection.z };
-				defJson["damageReaction"] = static_cast<int>(def.damageReaction);
-				defJson["jointType"] = static_cast<int>(def.jointType);
-				comboParams["hitDefinitions"].push_back(defJson);
+				json groupJson;
+				groupJson["groupId"] = group.groupId;
+				groupJson["damageReaction"] = static_cast<int>(group.damageReaction);
+				groupJson["startTime"] = group.startTime;
+				groupJson["endTime"] = group.endTime;
+				groupJson["knockback"] = group.knockback;
+				groupJson["knockbackDirection"] = { group.knockbackDirection.x, group.knockbackDirection.y, group.knockbackDirection.z };
+				groupJson["damage"] = group.damage;
+				groupsJson.push_back(groupJson);
 			}
+			comboParams["groups"] = groupsJson;
+
+			// ヒットボックスの配列データを構築
+			json hitboxesJson = json::array();
+			for (const auto& hitbox : node.comboAttackInitData.hitboxes)
+			{
+				json hitboxJson;
+				hitboxJson["groupId"] = hitbox.groupId;
+				hitboxJson["jointType"] = static_cast<int>(hitbox.jointType);
+				hitboxJson["radius"] = hitbox.radius;
+				hitboxesJson.push_back(hitboxJson);
+			}
+			comboParams["hitboxes"] = hitboxesJson;
 
 			// JSONに追加
 			nodeJson["comboParams"] = comboParams;
@@ -275,22 +287,44 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.comboAttackInitData.cancelStartTime = comboParams.value("cancelStartTime", 0.0f);
 			node.comboAttackInitData.cancelEndTime = comboParams.value("cancelEndTime", 0.0f);
 
-			// 当たり判定配列の復元
-			if (comboParams.contains("hitDefinitions"))
+			// ヒット判定のグループの復元
+			node.comboAttackInitData.groups.clear();
+			if (comboParams.contains("groups") && comboParams["groups"].is_array())
 			{
-				for (const auto& defJson : comboParams["hitDefinitions"])
+				for (const auto& groupJson : comboParams["groups"])
 				{
-					HitboxDefinition def;
-					def.startTime = defJson.value("startTime", 0.0f);
-					def.endTime = defJson.value("endTime", 0.0f);
-					def.damage = defJson.value("damage", 0);
-					def.radius = defJson.value("radius", 0.0f);
-					def.knockback = defJson.value("knockback", 0.0f);
-					auto targetDir = defJson.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f});
-					def.knockbackDirection = Vector3(targetDir[0], targetDir[1], targetDir[2]);
-					def.damageReaction = static_cast<DamageReaction>(defJson.value("damageReaction", 0));
-					def.jointType = static_cast<JointType>(defJson.value("jointType", 0));
-					node.comboAttackInitData.hitDefinitions.push_back(def);
+					HitGroupDefinition group;
+					group.groupId = groupJson.value("groupId", 0);
+					group.damageReaction = static_cast<DamageReaction>(groupJson.value("damageReaction", 0));
+					group.startTime = groupJson.value("startTime", 0.0f);
+					group.endTime = groupJson.value("endTime", 0.0f);
+					group.knockback = groupJson.value("knockback", 0.0f);
+					if (groupJson.contains("knockbackDirection") && groupJson["knockbackDirection"].is_array() && groupJson["knockbackDirection"].size() == 3)
+					{
+						group.knockbackDirection.x = groupJson["knockbackDirection"][0];
+						group.knockbackDirection.y = groupJson["knockbackDirection"][1];
+						group.knockbackDirection.z = groupJson["knockbackDirection"][2];
+					}
+					else
+					{
+						group.knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+					}
+					group.damage = groupJson.value("damage", 10);
+					node.comboAttackInitData.groups.push_back(group);
+				}
+			}
+			
+			// ヒットボックスの復元
+			node.comboAttackInitData.hitboxes.clear();
+			if (comboParams.contains("hitboxes") && comboParams["hitboxes"].is_array())
+			{
+				for (const auto& hitboxJson : comboParams["hitboxes"])
+				{
+					HitboxDefinition hitbox;
+					hitbox.groupId = hitboxJson.value("groupId", 0);
+					hitbox.jointType = static_cast<JointType>(hitboxJson.value("jointType", 0));
+					hitbox.radius = hitboxJson.value("radius", 0.25f);
+					node.comboAttackInitData.hitboxes.push_back(hitbox);
 				}
 			}
 		}
@@ -832,66 +866,103 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::Separator();
 				ImGui::Text("Hitboxes (当たり判定)");
 
-				// 新しい当たり判定を追加するボタン
-				if (ImGui::Button("Add Hitbox"))
+				// ヒットグループ設定
+				if (ImGui::TreeNode("ヒットグループ設定（ダメージ・属性）"))
 				{
-					node->comboAttackInitData.hitDefinitions.push_back(HitboxDefinition());
-				}
+					auto& groups = node->comboAttackInitData.groups;
 
-				// 配列の各要素を描画
-				for (int i = 0; i < node->comboAttackInitData.hitDefinitions.size(); ++i)
-				{
-					// ImGuiのID衝突を避けるためにインデックスでPushする
-					ImGui::PushID(i);
-
-					// 折りたたみ可能なツリーノードでまとめる
-					char hitboxName[32];
-					sprintf_s(hitboxName, "Hitbox [%d]", i);
-					if (ImGui::TreeNode(hitboxName))
+					if (ImGui::Button("+ グループ追加"))
 					{
-						HitboxDefinition& def = node->comboAttackInitData.hitDefinitions[i];
-
-						ImGui::DragFloat("Start Time", &def.startTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-						ImGui::DragFloat("End Time", &def.endTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-						ImGui::DragInt("Damage", &def.damage, 1, 0, 9999);
-						ImGui::DragFloat("Radius", &def.radius, 0.01f, 0.0f, 10.0f);
-						ImGui::DragFloat("Knockback", &def.knockback, 0.1f, 0.0f, 100.0f);
-						ImGui::DragFloat3("Knockback Dir", &def.knockbackDirection.x, 0.01f);
-
-						// ダメージリアクションの選択
-						const char* reactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down", "Deflected", "Repelled" };
-						int currentReaction = static_cast<int>(def.damageReaction);
-						if (ImGui::Combo("Reaction", &currentReaction, reactionNames, IM_ARRAYSIZE(reactionNames)))
-						{
-							def.damageReaction = static_cast<DamageReaction>(currentReaction);
-						}
-
-						// ジョイントタイプ
-						int currentJoint = static_cast<int>(def.jointType);
-						if (ImGui::Combo("Joint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
-						{
-							def.jointType = static_cast<JointType>(currentJoint);
-						}
-
-						ImGui::Spacing();
-
-						// 当たり判定を削除するボタン
-						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-						if (ImGui::Button("Delete Hitbox"))
-						{
-							node->comboAttackInitData.hitDefinitions.erase(node->comboAttackInitData.hitDefinitions.begin() + i);
-							ImGui::PopStyleColor();
-							ImGui::TreePop();
-							ImGui::PopID();
-							--i; // 要素を削除したのでインデックスを戻す
-							continue; // ループの次へ
-						}
-						ImGui::PopStyleColor();
-
-						ImGui::TreePop(); // TreeNodeの終了
+						HitGroupDefinition newGroup;
+						newGroup.groupId = static_cast<int32_t>(groups.size());
+						groups.push_back(newGroup);
 					}
 
-					ImGui::PopID(); // PushIDの終了
+					for (size_t i = 0; i < groups.size(); ++i)
+					{
+						ImGui::PushID(static_cast<int>(i));
+						std::string label = "グループ ID: " + std::to_string(groups[i].groupId);
+						if (ImGui::TreeNode(label.c_str()))
+						{
+							ImGui::InputInt("グループID", &groups[i].groupId);
+							ImGui::DragFloat("開始時間", &groups[i].startTime, 0.01f);
+							ImGui::DragFloat("終了時間", &groups[i].endTime, 0.01f);
+							ImGui::InputInt("ダメージ", &groups[i].damage);
+
+							// ダメージリアクション
+							const char* damageReactionNames[] = { "None", "LightStagger", "HeavyStagger", "Down" };
+							int currentReaction = static_cast<int>(groups[i].damageReaction);
+							if (ImGui::Combo("ダメージリアクション", &currentReaction, damageReactionNames, IM_ARRAYSIZE(damageReactionNames)))
+							{
+								history_->SaveHistory(nodes_, links_, currentId_);
+
+								groups[i].damageReaction = static_cast<DamageReaction>(currentReaction);
+							}
+
+							ImGui::DragFloat("ノックバック力", &groups[i].knockback, 0.1f);
+							ImGui::DragFloat3("ノックバック方向", &groups[i].knockbackDirection.x, 0.05f);
+
+							if (ImGui::Button("削除"))
+							{
+								history_->SaveHistory(nodes_, links_, currentId_);
+
+								groups.erase(groups.begin() + i);
+								ImGui::TreePop();
+								ImGui::PopID();
+								break;
+							}
+							ImGui::TreePop();
+						}
+						ImGui::PopID();
+					}
+					ImGui::TreePop();
+				}
+
+				ImGui::Separator();
+
+				// 当たり判定の配置設定
+				if (ImGui::TreeNode("当たり判定の配置（部位・時間）"))
+				{
+					auto& hitDefs = node->comboAttackInitData.hitboxes;
+
+					if (ImGui::Button("+ 当たり判定追加"))
+					{
+						hitDefs.push_back(HitboxDefinition());
+					}
+
+					for (size_t i = 0; i < hitDefs.size(); ++i)
+					{
+						ImGui::PushID(static_cast<int>(1000 + i));
+						if (ImGui::TreeNode((std::string("判定 ") + std::to_string(i + 1)).c_str()))
+						{
+							ImGui::InputInt("所属グループID", &hitDefs[i].groupId);
+
+							// ジョイントタイプ
+							int currentJoint = static_cast<int>(hitDefs[i].jointType);
+							if (ImGui::Combo("ジョイントタイプ", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
+							{
+								history_->SaveHistory(nodes_, links_, currentId_);
+
+								hitDefs[i].jointType = static_cast<JointType>(currentJoint);
+							}
+
+							ImGui::DragFloat("半径", &hitDefs[i].radius, 0.01f);
+
+							if (ImGui::Button("削除"))
+							{
+								history_->SaveHistory(nodes_, links_, currentId_);
+
+								hitDefs.erase(hitDefs.begin() + i);
+								ImGui::TreePop();
+								ImGui::PopID();
+								break;
+							}
+							ImGui::TreePop();
+						}
+						ImGui::PopID();
+					}
+
+					ImGui::TreePop();
 				}
 			}
 			else if (node->nodeType == ComboNodeType::Grab)

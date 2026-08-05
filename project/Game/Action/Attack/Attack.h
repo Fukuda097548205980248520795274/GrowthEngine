@@ -152,15 +152,41 @@ protected:
 
 
 
+// 攻撃グループの設定
+struct HitGroupDefinition
+{
+	// グループID
+	int32_t groupId = 0;
+
+	// ダメージ量
+	int32_t damage = 10;
+
+	// ダメージを受けたときのリアクション
+	DamageReaction damageReaction = DamageReaction::LightStagger;
+
+	// ノックバック量
+	float knockback = 0.0f;
+
+	// ノックバック方向（正規化されたベクトル）
+	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+
+	// 攻撃の開始時間（攻撃開始からの遅延時間）
+	float startTime = 0.0f;
+
+	// 攻撃の終了時間（攻撃開始からの遅延時間）
+	float endTime = 0.0f;
+};
+
+// 個々の判定領域の設定
 struct HitboxDefinition
 {
+	// グループID
+	int32_t groupId = 0;
+
+	// ジョイント
 	JointType jointType = JointType::HandR;
-	float startTime = 0.0f;
-	float endTime = 0.0f;
-	int32_t damage = 10;
-	DamageReaction damageReaction = DamageReaction::LightStagger;
-	float knockback = 0.0f;
-	Vector3 knockbackDirection = Vector3(0.0f, 0.0f, 1.0f);
+
+	// 半径
 	float radius = 0.25f;
 };
 

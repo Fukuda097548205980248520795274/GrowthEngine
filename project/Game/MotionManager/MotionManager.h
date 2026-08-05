@@ -42,6 +42,8 @@ enum class JointType
 	ToeEndR,
 	ToeBaseL,
 	ToeBaseR,
+	UpLegL,
+	UpLegR,
 	Weapon,
 };
 
@@ -65,6 +67,8 @@ inline const char* jointTypeNames[] =
 	"ToeEndR",
 	"ToeBaseL",
 	"ToeBaseR",
+	"UpLegL",
+	"UpLegR",
 	"Weapon" 
 };
 

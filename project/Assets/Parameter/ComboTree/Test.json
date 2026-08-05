@@ -24,22 +24,10 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
@@ -54,7 +42,8 @@
             "pos": [
                 750.810791015625,
                 289.24530029296875
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_2",
@@ -62,22 +51,10 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 8,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
@@ -92,7 +69,8 @@
             "pos": [
                 862.810791015625,
                 289.24530029296875
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_3",
@@ -100,22 +78,10 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 9,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
@@ -130,7 +96,8 @@
             "pos": [
                 974.810791015625,
                 291.24530029296875
-            ]
+            ],
+            "targetAnimationName": ""
         },
         {
             "animationName": "Player_Combo_4",
@@ -138,22 +105,10 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.20000000298023224,
-                "hitDefinitions": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.20000000298023224,
-                        "jointType": 12,
-                        "knockback": 0.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "radius": 0.25,
-                        "startTime": 0.0
-                    }
-                ],
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
                 "moveStartTime": 0.0
@@ -168,7 +123,8 @@
             "pos": [
                 1088.810791015625,
                 292.24530029296875
-            ]
+            ],
+            "targetAnimationName": ""
         }
     ]
 }
