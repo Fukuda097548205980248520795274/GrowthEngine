@@ -30,6 +30,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 		if (ImGui::MenuItem("再起動 セレクタ")) AddRestartingSelectorNode();
 		if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
 		if (ImGui::MenuItem("ユーティリティ セレクタ")) AddUtilitySelectorNode();
+		if (ImGui::MenuItem("重み付きランダムセレクタ")) AddWeightedRandomSelectorNode();
 
 		ImGui::SeparatorText("子なし");
 		if (ImGui::MenuItem("条件")) AddConditionNode();
@@ -92,6 +93,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 			if (ImGui::MenuItem("再起動 セレクタ")) AddRestartingSelectorNode();
 			if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
 			if (ImGui::MenuItem("ユーティリティ セレクタ")) AddUtilitySelectorNode();
+			if (ImGui::MenuItem("重み付きランダムセレクタ")) AddWeightedRandomSelectorNode();
 			ImGui::EndMenu();
 		}
 
@@ -339,6 +341,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 			else if (node.type == EditorNodeType::UtilitySelector)
 			{
 				DrawUtilitySelectorNodeSettings(node);
+			}
+			else if (node.type == EditorNodeType::WeightedRandomSelector)
+			{
+				DrawWeightedRandomSelectorNodeSettings(node);
 			}
 			else
 			{
@@ -856,6 +862,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("再起動セレクタ");
 			if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("再起動シーケンス");
 			if (node.type == EditorNodeType::UtilitySelector) ImGui::TextUnformatted("ユーティリティセレクタ");
+			if (node.type == EditorNodeType::WeightedRandomSelector) ImGui::TextUnformatted("重み付きランダムセレクタ");
 			if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
 			if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
 		}
@@ -1038,7 +1045,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	if (!node.isCollapsed &&
 		(node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::PersistentSequence ||
 			node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence ||
-			node.type == EditorNodeType::UtilitySelector))
+			node.type == EditorNodeType::UtilitySelector || node.type == EditorNodeType::WeightedRandomSelector))
 	{
 		ImNodes::BeginOutputAttribute(node.outputPinId);
 
@@ -1059,7 +1066,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 /// @param node 
 void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
 {
-	ImGui::Text("子ノードの評価関数設定:");
+	ImGui::Text("子ノードの評価関数設定 :");
 	ImGui::Separator();
 
 	bool hasChildren = false;
@@ -1108,6 +1115,57 @@ void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
 			ImGui::PopItemWidth();
 
 			ImGui::Spacing(); // 少し隙間を空ける
+		}
+	}
+
+	if (!hasChildren)
+	{
+		ImGui::TextDisabled("※接続されている子ノードがありません");
+	}
+}
+
+/// @brief 重み付きランダムセレクタノードの設定UIを描画する
+/// @param node 
+void BehaviorTreeEditor::DrawWeightedRandomSelectorNodeSettings(EditorNode& node)
+{
+	ImGui::Text("子ノードの重み設定 :");
+	ImGui::Separator();
+
+	// 履歴と変更フラグをまとめて処理するラムダ関数
+	auto HistorySaveIfChanged = [this]() {if (ImGui::IsItemActivated()) { history_->SaveHistory(nodes_, links_, currentId_);isDirty_ = true; }};
+
+	bool hasChildren = false;
+
+	// エディタ上のすべての接続線（リンク）から、このノードが出発点（親）になっているものを探す
+	for (const auto& link : links_)
+	{
+		if (link.startNodeId == node.id)
+		{
+			hasChildren = true;
+			int childId = link.endNodeId; // 繋がっている子ノードのID
+
+			if (node.childWeightMap.find(childId) == node.childWeightMap.end())
+			{
+				node.childWeightMap[childId] = 1.0f; // デフォルトの重みを1.0に設定
+			}
+
+			// UIをわかりやすくするため、子ノードの名前を取得する（Action名など）
+			std::string childName = "Node ID: " + std::to_string(childId);
+			auto childIt = std::find_if(nodes_.begin(), nodes_.end(), [childId](const EditorNode& n) { return n.id == childId; });
+			if (childIt != nodes_.end())
+			{
+				childName = childIt->name;
+			}
+
+			// 子ノードの名前を表示
+			ImGui::Text("▶ %s", childName.c_str());
+
+			// スライダーの描画
+			HistorySaveIfChanged();
+			ImGui::SliderFloat(("##WeightSlider_" + std::to_string(childId)).c_str(), &node.childWeightMap[childId], 0.0f, 1.0f, "%.2f");
+
+			// 少し隙間を空ける
+			ImGui::Spacing();
 		}
 	}
 

@@ -1519,6 +1519,9 @@
     <Filter Include="Game\Node\CompositeNode\UtilitySelectorNode">
       <UniqueIdentifier>{e11a7b20-4efb-4f66-bdbc-066055989c14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Node\CompositeNode\WeightedRandomSelectorNode">
+      <UniqueIdentifier>{d65ee22a-454a-4728-8cc4-470fd38fc236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2750,6 +2753,9 @@
     </ClCompile>
     <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp">
       <Filter>Game\Node\CompositeNode\UtilitySelectorNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.cpp">
+      <Filter>Game\Node\CompositeNode\WeightedRandomSelectorNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4111,6 +4117,9 @@
     </ClInclude>
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h">
       <Filter>Game\Node\CompositeNode\UtilitySelectorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.h">
+      <Filter>Game\Node\CompositeNode\WeightedRandomSelectorNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

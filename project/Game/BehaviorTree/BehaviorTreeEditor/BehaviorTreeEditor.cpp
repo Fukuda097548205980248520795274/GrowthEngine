@@ -117,6 +117,27 @@ void BehaviorTreeEditor::AddUtilitySelectorNode()
 	isDirty_ = true;
 }
 
+/// @brief 重み付きランダムセレクタノードを追加する
+void BehaviorTreeEditor::AddWeightedRandomSelectorNode()
+{
+	// ノード追加前の状態を履歴に保存する
+	history_->SaveHistory(nodes_, links_, currentId_);
+
+	EditorNode node;
+	node.id = GetNextId();
+	node.type = EditorNodeType::WeightedRandomSelector;
+	node.name[0] = '\0'; // 名前を空に初期化
+	node.inputPinId = GetNextId();
+	node.outputPinId = GetNextId();
+	nodes_.push_back(node);
+
+	// ノードをウィンドウの中心に配置する
+	SetNodeWindowCenter(node);
+
+	// 変更があったのでフラグを立てる
+	isDirty_ = true;
+}
+
 /// @brief 条件ノードを追加する
 void BehaviorTreeEditor::AddConditionNode()
 {

@@ -18,6 +18,7 @@ enum class EditorNodeType
 	RestartingSelector,
 	RestartingSequence,
 	UtilitySelector = 6,
+	WeightedRandomSelector,
 	Condition = 4,
 	Action,
 };
@@ -197,6 +198,9 @@ struct EditorNode
 
 	// Utilityセレクタノードの場合の子ノードごとの評価関数の種類を保持するマップ
 	std::unordered_map<int, UtilityType> childUtilityMap;
+
+	// WeightedRandomSelectorノードの場合の子ノードごとの重みを保持するマップ
+	std::unordered_map<int, float> childWeightMap;
 
 	// 初期化用データ（アクションノードの種類に応じて使用）
 	CombAttackInitData comboAttackInitData;

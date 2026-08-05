@@ -149,6 +149,7 @@
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp" />
+    <ClCompile Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Battle\GameSceneBattle.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Finishe\GameSceneFinishe.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Pose\GameScenePose.cpp" />
@@ -1232,6 +1233,7 @@
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h" />
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h" />
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h" />
+    <ClInclude Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.h" />
     <ClInclude Include="Game\StageSelectEditor\StageSelectEditor.h" />
     <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
     <ClInclude Include="Tool\EngineObject\Collision3DInstance\Collision3DInstanceCapsule\Collision3DInstanceCapsule.h" />

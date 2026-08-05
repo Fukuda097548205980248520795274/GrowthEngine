@@ -32,6 +32,9 @@ public:
 	/// @brief ユーティリティセレクタノードを追加する
 	void AddUtilitySelectorNode();
 
+	/// @brief 重み付きランダムセレクタノードを追加する
+	void AddWeightedRandomSelectorNode();
+
 	/// @brief 条件ノードを追加する
 	void AddConditionNode();
 
@@ -189,6 +192,10 @@ private:
 	/// @brief Utilityセレクタノードの設定UIを描画する
 	/// @param node 
 	void DrawUtilitySelectorNodeSettings(EditorNode& node);
+
+	/// @brief 重み付きランダムセレクタノードの設定UIを描画する
+	/// @param node 
+	void DrawWeightedRandomSelectorNodeSettings(EditorNode& node);
 
 	/// @brief 条件ノードの設定UIを描画する
 	/// @param node 

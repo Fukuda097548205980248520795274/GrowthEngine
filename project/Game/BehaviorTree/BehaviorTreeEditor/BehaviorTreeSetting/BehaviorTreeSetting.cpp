@@ -144,6 +144,13 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["child_utility_map"][std::to_string(childId)] = static_cast<int>(utilityType);
 			}
 		}
+		else if (node.type == EditorNodeType::WeightedRandomSelector)
+		{
+			for (auto& [childId, weight] : node.childWeightMap)
+			{
+				n["child_weight_map"][std::to_string(childId)] = weight;
+			}
+		}
 
 		root["nodes"].push_back(n);
 	}
@@ -386,6 +393,19 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						int childId = std::stoi(key);
 						UtilityType utilityType = static_cast<UtilityType>(value.get<int>());
 						node.childUtilityMap[childId] = utilityType;
+					}
+				}
+			}
+			else if (node.type == EditorNodeType::WeightedRandomSelector)
+			{
+				// WeightedRandomSelectorの場合は子ノードとその重みのマッピングを読み込む
+				if (n.contains("child_weight_map") && n["child_weight_map"].is_object())
+				{
+					for (const auto& [key, value] : n["child_weight_map"].items())
+					{
+						int childId = std::stoi(key);
+						float weight = value.get<float>();
+						node.childWeightMap[childId] = weight;
 					}
 				}
 			}

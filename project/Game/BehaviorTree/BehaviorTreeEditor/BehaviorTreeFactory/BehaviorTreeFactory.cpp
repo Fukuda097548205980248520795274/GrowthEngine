@@ -7,6 +7,7 @@
 #include "Node/CompositeNode/RestartingSelectorNode/RestartingSelectorNode.h"
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
 #include "Node/CompositeNode/UtilitySelectorNode/UtilitySelectorNode.h"
+#include "Node/CompositeNode/WeightedRandomSelectorNode/WeightedRandomSelectorNode.h"
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
@@ -121,13 +122,13 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			{
 				// 体力比率を評価する関数
 			case UtilityType::HpRatio:
-				utilityFunc = [character]() { return character->GetHp() / character->GetMaxHp(); };
+				utilityFunc = [character]() ->float { return static_cast<float>(character->GetHp()) / static_cast<float>(character->GetMaxHp()); };
 				break;
 
 				// 固定値を返す関数（デフォルト）
 			case UtilityType::FixedDefault:
 			default:
-				utilityFunc = []() { return 0.5f; };
+				utilityFunc = []() ->float { return 0.5f; };
 				break;
 			}
 
@@ -136,6 +137,35 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		}
 
 		runtimeNode = std::move(utilitySelector);
+	}
+	else if (editorNode.type == EditorNodeType::WeightedRandomSelector)
+	{
+		// WeightedRandomSelectorNode本体の生成
+		auto weightedRandomSelector = std::make_unique<WeightedRandomSelectorNode>();
+
+		// 子ノードのIDを取得
+		std::vector<int> childIds = GetChildNodeIds(nodes, links, editorNode.id);
+
+		for (int childId : childIds)
+		{
+			// 子ノードのエディタノードを取得
+			const EditorNode& childEditorNode = GetEditorNode(nodes, childId);
+
+			// 子ノードを再帰的に生成
+			std::unique_ptr<Node> childRuntimeNode = BuildNodeRecursive(childEditorNode, nodes, links, character);
+
+			// 子ノードの重みを取得（デフォルトは1.0f）
+			float weight = 1.0f;
+			if (editorNode.childWeightMap.find(childId) != editorNode.childWeightMap.end())
+			{
+				weight = editorNode.childWeightMap.at(childId);
+			}
+
+			// 生成した子ノードと重みをセットにして追加
+			weightedRandomSelector->AddChildWithWeight(std::move(childRuntimeNode), weight);
+		}
+		
+		runtimeNode = std::move(weightedRandomSelector);
 	}
 	else if (editorNode.type == EditorNodeType::Condition)
 	{
@@ -340,7 +370,8 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	// ランタイムノードが生成できなかった場合は nullptr を返す
 	if (auto composite_node = dynamic_cast<CompositeNode*>(runtimeNode.get()))
 	{
-		if (editorNode.type != EditorNodeType::UtilitySelector)
+		if (editorNode.type != EditorNodeType::UtilitySelector &&
+			editorNode.type != EditorNodeType::WeightedRandomSelector)
 		{
 			std::vector<const EditorNode*> child_editor_nodes;
 
@@ -405,6 +436,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			case EditorNodeType::RestartingSelector: nodeName = "再起動 セレクタ"; break;
 			case EditorNodeType::RestartingSequence: nodeName = "再起動 シーケンス"; break;
 			case EditorNodeType::UtilitySelector:    nodeName = "ユーティリティ セレクタ"; break;
+			case EditorNodeType::WeightedRandomSelector: nodeName = "重み付きランダム セレクタ"; break;
 			case EditorNodeType::Condition:          nodeName = "条件"; break;
 			case EditorNodeType::Action:             nodeName = "アクション"; break;
 			default:                                 nodeName = "未知のノード"; break;
