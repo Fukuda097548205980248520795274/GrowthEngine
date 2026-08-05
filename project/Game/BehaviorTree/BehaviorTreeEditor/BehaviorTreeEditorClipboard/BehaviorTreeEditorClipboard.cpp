@@ -158,6 +158,10 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
 			newLink.startPinId = oldToNewPinId[clipLink.startPinId];
 			newLink.endPinId = oldToNewPinId[clipLink.endPinId];
 
+			// ピンIDからノードIDを取得して保存
+			newLink.startNodeId = editor.GetNodeIdFromPinId(newLink.startPinId);
+			newLink.endNodeId = editor.GetNodeIdFromPinId(newLink.endPinId);
+
 			editor.links_.push_back(newLink);
 		}
 

@@ -17,7 +17,8 @@ enum class EditorNodeType
 	PersistentSequence,
 	RestartingSelector,
 	RestartingSequence,
-	Condition,
+	UtilitySelector = 6,
+	Condition = 4,
 	Action,
 };
 
@@ -138,6 +139,19 @@ constexpr inline const char* conditionTypeNames[] = {
 	"IsNotChangeState",
 };
 
+/// @brief ユーティリティの種類
+enum class UtilityType
+{
+	FixedDefault,
+	HpRatio,
+};
+
+/// @brief ユーティリティの種類を文字列で表す配列
+constexpr inline const char* utilityTypeNames[] = {
+	"FixedDefault",
+	"HpRatio",
+};
+
 /// @brief トークンの種類を文字列で表す配列
 constexpr inline const char* tokenTypeNames[] = {
 	"攻撃",
@@ -157,8 +171,11 @@ struct EditorNode
 	int id; // ノードのID
 	EditorNodeType type; // ノードの種類
 
-	int inputPinId; // 入力ピンのID（親とつなげる）
-	int outputPinId; // 出力ピンのID（子とつなげる）
+	// 入力ピンのID（親とつなげる）
+	int inputPinId;
+
+	// 出力ピンのID（子とつなげる）
+	int outputPinId;
 
 	char name[128]; // ノードの名前
 	Vector2 pos; // ノードの位置
@@ -177,6 +194,9 @@ struct EditorNode
 
 	MotionType targetMotionType = MotionType::Stand; // 条件ノードでターゲットのモーションを条件にする場合のモーションの種類
 	std::string targetMotionName{};
+
+	// Utilityセレクタノードの場合の子ノードごとの評価関数の種類を保持するマップ
+	std::unordered_map<int, UtilityType> childUtilityMap;
 
 	// 初期化用データ（アクションノードの種類に応じて使用）
 	CombAttackInitData comboAttackInitData;
@@ -199,7 +219,18 @@ struct EditorNode
 // エディタ上のリンクを表す構造体
 struct EditorLink
 {
-	int id; // リンクのID
-	int startPinId; // リンクの開始ピンのID（親）
-	int endPinId; // リンクの終了ピンのID（子）
+	// リンクのID
+	int id;
+
+	// リンクの開始ピンのID（親）
+	int startPinId;
+
+	// リンクの終了ピンのID（子）
+	int endPinId;
+
+	// 入力ピンの親ノードID
+	int startNodeId;
+
+	// 出力ピンの子ノードID
+	int endNodeId;
 };

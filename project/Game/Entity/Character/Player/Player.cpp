@@ -88,6 +88,13 @@ void Player::Update()
 		return;
 	}
 
+	// ゲームが終了している場合は、基底クラスの更新処理のみ行う
+	if (Character::IsGameFinished())
+	{
+		Character::Update();
+		return;
+	}
+
 	// 動けない状態かどうか
 	bool isIncapacitatedState = IsIncapacitated();
 

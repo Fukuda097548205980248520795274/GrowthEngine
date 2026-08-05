@@ -1510,6 +1510,15 @@
     <Filter Include="Game\Scene\GameScene\Battle">
       <UniqueIdentifier>{72c89f15-405b-4676-b196-c8286b4abbb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\GameScene\Pose">
+      <UniqueIdentifier>{470903a8-2450-4b1f-803a-a0f6c50122fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\GameScene\Finishe">
+      <UniqueIdentifier>{59cfb36f-c310-4d43-a5e4-d65d43a5f6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Node\CompositeNode\UtilitySelectorNode">
+      <UniqueIdentifier>{e11a7b20-4efb-4f66-bdbc-066055989c14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2732,6 +2741,15 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene\Battle\GameSceneBattle.cpp">
       <Filter>Game\Scene\GameScene\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Pose\GameScenePose.cpp">
+      <Filter>Game\Scene\GameScene\Pose</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Finishe\GameSceneFinishe.cpp">
+      <Filter>Game\Scene\GameScene\Finishe</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp">
+      <Filter>Game\Node\CompositeNode\UtilitySelectorNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4090,6 +4108,9 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h">
       <Filter>Game\HUD\NavigationArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h">
+      <Filter>Game\Node\CompositeNode\UtilitySelectorNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,88 +2,122 @@
     "links": [
         {
             "end": 47,
+            "end_node": 46,
             "id": 49,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 44,
+            "end_node": 43,
             "id": 50,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 41,
+            "end_node": 40,
             "id": 51,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 38,
+            "end_node": 37,
             "id": 52,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 35,
+            "end_node": 34,
             "id": 53,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 32,
+            "end_node": 31,
             "id": 54,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 17,
+            "end_node": 16,
             "id": 55,
-            "start": 3
+            "start": 3,
+            "start_node": 1
         },
         {
             "end": 29,
+            "end_node": 28,
             "id": 56,
-            "start": 18
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 20,
+            "end_node": 19,
             "id": 57,
-            "start": 18
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 26,
+            "end_node": 25,
             "id": 58,
-            "start": 21
+            "start": 21,
+            "start_node": 19
         },
         {
             "end": 23,
+            "end_node": 22,
             "id": 59,
-            "start": 21
+            "start": 21,
+            "start_node": 19
         },
         {
             "end": 14,
+            "end_node": 13,
             "id": 60,
-            "start": 9
+            "start": 9,
+            "start_node": 7
         },
         {
             "end": 11,
+            "end_node": 10,
             "id": 61,
-            "start": 9
+            "start": 9,
+            "start_node": 7
         },
         {
             "end": 8,
+            "end_node": 7,
             "id": 62,
-            "start": 3
+            "start": 3,
+            "start_node": 1
         },
         {
             "end": 5,
+            "end_node": 4,
             "id": 63,
-            "start": 3
+            "start": 3,
+            "start_node": 1
         },
         {
             "end": 65,
+            "end_node": 64,
             "id": 70,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         },
         {
             "end": 68,
+            "end_node": 67,
             "id": 71,
-            "start": 30
+            "start": 30,
+            "start_node": 28
         }
     ],
     "nodes": [
@@ -187,7 +221,7 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": 24,
             "pos": [
-                450.0,
+                449.9999694824219,
                 0.0
             ],
             "type": 4
@@ -200,7 +234,7 @@
             "name": "ターゲットが立っているとき",
             "output_pin": 27,
             "pos": [
-                450.0,
+                449.9999694824219,
                 119.99998474121094
             ],
             "type": 4
@@ -221,6 +255,8 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 0.30000001192092896,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
                 "hitDefinitions": [
                     {
                         "damage": 3,
@@ -237,6 +273,7 @@
                         "startTime": 0.0
                     }
                 ],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 4.0,
                 "moveStartTime": 0.0
@@ -249,7 +286,7 @@
             "name": "パンチ",
             "output_pin": 33,
             "pos": [
-                450.0,
+                449.9999694824219,
                 598.75
             ],
             "type": 5
@@ -267,7 +304,7 @@
             },
             "output_pin": 36,
             "pos": [
-                450.0,
+                449.9999694824219,
                 479.99993896484375
             ],
             "type": 5
@@ -280,8 +317,8 @@
             "name": "攻撃終了",
             "output_pin": 39,
             "pos": [
-                461.25,
-                885.0
+                461.2499694824219,
+                884.9999389648438
             ],
             "type": 5
         },
@@ -293,7 +330,7 @@
             "name": "攻撃開始",
             "output_pin": 42,
             "pos": [
-                450.0,
+                449.9999694824219,
                 360.0
             ],
             "type": 5
@@ -306,7 +343,7 @@
             "name": "トークン開放",
             "output_pin": 45,
             "pos": [
-                461.25,
+                461.2499694824219,
                 1005.0
             ],
             "type": 5
@@ -319,7 +356,7 @@
             "name": "リクエスト",
             "output_pin": 48,
             "pos": [
-                450.0,
+                449.9999694824219,
                 239.99996948242188
             ],
             "type": 5
@@ -328,6 +365,8 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 0.30000001192092896,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
                 "hitDefinitions": [
                     {
                         "damage": 3,
@@ -344,6 +383,7 @@
                         "startTime": 0.0
                     }
                 ],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 4.0,
                 "moveStartTime": 0.0
@@ -365,6 +405,8 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 0.6000000238418579,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
                 "hitDefinitions": [
                     {
                         "damage": 3,
@@ -381,6 +423,7 @@
                         "startTime": 0.0
                     }
                 ],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 4.0,
                 "moveStartTime": 0.0

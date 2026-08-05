@@ -137,6 +137,13 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["condition_param"]["distance_to_target"] = node.conditionParam.distanceToTarget;
 			}
 		}
+		else if (node.type == EditorNodeType::UtilitySelector)
+		{
+			for (auto& [childId, utilityType] : node.childUtilityMap)
+			{
+				n["child_utility_map"][std::to_string(childId)] = static_cast<int>(utilityType);
+			}
+		}
 
 		root["nodes"].push_back(n);
 	}
@@ -148,6 +155,8 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 		l["id"] = link.id;
 		l["start"] = link.startPinId;
 		l["end"] = link.endPinId;
+		l["start_node"] = link.startNodeId;
+		l["end_node"] = link.endNodeId;
 		root["links"].push_back(l);
 	}
 
@@ -367,6 +376,19 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.conditionParam.distanceToTarget = n["condition_param"].value("distance_to_target", 0.0f);
 				}
 			}
+			else if (node.type == EditorNodeType::UtilitySelector)
+			{
+				// ユーティリティセレクタの場合は子ノードとそのユーティリティのマッピングを読み込む
+				if (n.contains("child_utility_map") && n["child_utility_map"].is_object())
+				{
+					for (const auto& [key, value] : n["child_utility_map"].items())
+					{
+						int childId = std::stoi(key);
+						UtilityType utilityType = static_cast<UtilityType>(value.get<int>());
+						node.childUtilityMap[childId] = utilityType;
+					}
+				}
+			}
 
 			outNodes.push_back(node);
 		}
@@ -381,6 +403,8 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 			link.id = l["id"];
 			link.startPinId = l["start"];
 			link.endPinId = l["end"];
+			link.startNodeId = l.value("start_node", -1); // デフォルト値を-1に設定
+			link.endNodeId = l.value("end_node", -1); // デフォルト値を-1に設定
 			outLinks.push_back(link);
 		}
 	}

@@ -559,7 +559,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 				}
 				catch (const std::exception& e) 
 				{
-					// エラー時の処理 (必要であれば)
+					// エラー時の処理
 					(void)e;
 				}
 			}

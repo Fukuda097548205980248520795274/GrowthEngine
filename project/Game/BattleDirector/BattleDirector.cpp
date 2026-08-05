@@ -281,13 +281,16 @@ void BattleDirector::ReleaseSlot(Character* npc)
 /// @return 
 std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Character* target)
 {
+	// NPCがスロットを持っていない場合は、std::nulloptを返す
 	auto it = npcCurrentSlots_.find(npc);
 	if (it == npcCurrentSlots_.end()) return std::nullopt;
 
+	// ターゲットのスロット情報を取得
 	int slotIndex = it->second;
 	auto targetIt = targetSlots_.find(target);
 	if (targetIt == targetSlots_.end()) return std::nullopt;
 
+	// スロットのワールド座標を計算する
 	const auto& slot = targetIt->second[slotIndex];
 	Vector3 targetPos = target->GetWorldPosition();
 

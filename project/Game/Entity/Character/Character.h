@@ -542,6 +542,14 @@ public:
 	/// @return 
 	static bool IsCutsceneActive() { return isCutsceneActive_; }
 
+	/// @brief ゲームが終了したかどうかを設定する
+	/// @param isFinished 
+	static void SetIsGameFinished(bool isFinished) { isGameFinished_ = isFinished; }
+
+	/// @brief ゲームが終了したかどうかを取得する
+	/// @return 
+	static bool IsGameFinished() { return isGameFinished_; }
+
 
 	/// @brief 攻撃性の値を取得する
 	/// @return 
@@ -891,6 +899,9 @@ protected:
 
 	/// @brief カットシーン中かどうか
 	static bool isCutsceneActive_;
+
+	/// @brief ゲーム終了フラグ
+	static bool isGameFinished_;
 
 
 protected:

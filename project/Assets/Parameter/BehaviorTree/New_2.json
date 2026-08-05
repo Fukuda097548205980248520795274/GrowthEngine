@@ -2,113 +2,157 @@
     "links": [
         {
             "end": 16,
+            "end_node": 15,
             "id": 17,
-            "start": 11
+            "start": 11,
+            "start_node": 9
         },
         {
             "end": 19,
+            "end_node": 18,
             "id": 20,
-            "start": 11
+            "start": 11,
+            "start_node": 9
         },
         {
             "end": 30,
+            "end_node": 29,
             "id": 31,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 33,
+            "end_node": 32,
             "id": 34,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 36,
+            "end_node": 35,
             "id": 40,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 38,
+            "end_node": 37,
             "id": 41,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 43,
+            "end_node": 42,
             "id": 45,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 47,
+            "end_node": 46,
             "id": 48,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 50,
+            "end_node": 49,
             "id": 52,
-            "start": 23
+            "start": 23,
+            "start_node": 21
         },
         {
             "end": 26,
+            "end_node": 25,
             "id": 53,
-            "start": 51
+            "start": 51,
+            "start_node": 49
         },
         {
             "end": 55,
+            "end_node": 54,
             "id": 57,
-            "start": 51
+            "start": 51,
+            "start_node": 49
         },
         {
             "end": 59,
+            "end_node": 58,
             "id": 60,
-            "start": 56
+            "start": 56,
+            "start_node": 54
         },
         {
             "end": 65,
+            "end_node": 64,
             "id": 66,
-            "start": 56
+            "start": 56,
+            "start_node": 54
         },
         {
             "end": 68,
+            "end_node": 67,
             "id": 69,
-            "start": 56
+            "start": 56,
+            "start_node": 54
         },
         {
             "end": 71,
+            "end_node": 70,
             "id": 73,
-            "start": 23
+            "start": 23,
+            "start_node": 21
         },
         {
             "end": 10,
+            "end_node": 9,
             "id": 74,
-            "start": 72
+            "start": 72,
+            "start_node": 70
         },
         {
             "end": 79,
+            "end_node": 78,
             "id": 85,
-            "start": 77
+            "start": 77,
+            "start_node": 75
         },
         {
             "end": 87,
+            "end_node": 86,
             "id": 89,
-            "start": 77
+            "start": 77,
+            "start_node": 75
         },
         {
             "end": 76,
+            "end_node": 75,
             "id": 90,
-            "start": 72
+            "start": 72,
+            "start_node": 70
         },
         {
             "end": 92,
+            "end_node": 91,
             "id": 93,
-            "start": 77
+            "start": 77,
+            "start_node": 75
         },
         {
             "end": 95,
+            "end_node": 94,
             "id": 96,
-            "start": 77
+            "start": 77,
+            "start_node": 75
         },
         {
             "end": 98,
+            "end_node": 97,
             "id": 99,
-            "start": 77
+            "start": 77,
+            "start_node": 75
         }
     ],
     "nodes": [
@@ -120,7 +164,7 @@
             "output_pin": 11,
             "pos": [
                 300.0,
-                1680.0
+                1680.0001220703125
             ],
             "type": 3
         },
@@ -137,8 +181,8 @@
             },
             "output_pin": -1,
             "pos": [
-                450.0,
-                1800.0
+                449.9999694824219,
+                1799.9998779296875
             ],
             "type": 5
         },
@@ -150,8 +194,8 @@
             "name": "攻撃状態でないとき",
             "output_pin": -1,
             "pos": [
-                450.0,
-                1680.0
+                449.9999694824219,
+                1680.0001220703125
             ],
             "type": 4
         },
@@ -187,7 +231,7 @@
             "name": "リクエスト",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 360.0
             ],
             "type": 5
@@ -200,8 +244,8 @@
             "name": "トークン開放",
             "output_pin": -1,
             "pos": [
-                450.0,
-                960.0
+                449.9999694824219,
+                959.9999389648438
             ],
             "type": 5
         },
@@ -213,8 +257,8 @@
             "name": "攻撃開始",
             "output_pin": -1,
             "pos": [
-                450.0,
-                480.0
+                449.9999694824219,
+                479.9999694824219
             ],
             "type": 5
         },
@@ -226,8 +270,8 @@
             "name": "攻撃終了",
             "output_pin": 39,
             "pos": [
-                450.0,
-                840.0
+                449.9999694824219,
+                840.0000610351563
             ],
             "type": 5
         },
@@ -244,7 +288,7 @@
             },
             "output_pin": 44,
             "pos": [
-                450.0,
+                449.9999694824219,
                 600.0
             ],
             "type": 5
@@ -253,6 +297,8 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 0.800000011920929,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
                 "hitDefinitions": [
                     {
                         "damage": 10,
@@ -269,6 +315,7 @@
                         "startTime": 0.0
                     }
                 ],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 4.0,
                 "moveStartTime": 0.0
@@ -281,7 +328,7 @@
             "name": "パンチ",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 721.0
             ],
             "type": 5
@@ -318,8 +365,8 @@
             "name": "ターゲットが立っているとき",
             "output_pin": -1,
             "pos": [
-                450.0,
-                120.0
+                449.9999694824219,
+                119.99999237060547
             ],
             "type": 4
         },
@@ -331,8 +378,8 @@
             "name": "自分が一番ターゲットに近いかどうか",
             "output_pin": -1,
             "pos": [
-                450.0,
-                240.0
+                449.9999694824219,
+                239.99998474121094
             ],
             "type": 4
         },
@@ -344,7 +391,7 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 0.0
             ],
             "type": 4
@@ -381,7 +428,7 @@
             "name": "攻撃状態でないとき",
             "output_pin": 80,
             "pos": [
-                450.0,
+                449.9999694824219,
                 1080.0
             ],
             "type": 4
@@ -394,7 +441,7 @@
             "name": "相手が攻撃状態",
             "output_pin": 88,
             "pos": [
-                450.0,
+                449.9999694824219,
                 1200.0
             ],
             "type": 4
@@ -415,7 +462,7 @@
             "name": "回避",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 1560.0001220703125
             ],
             "type": 5
@@ -431,7 +478,7 @@
             "name": "",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 1320.0
             ],
             "type": 4
@@ -444,7 +491,7 @@
             "name": "",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 1440.0
             ],
             "type": 4

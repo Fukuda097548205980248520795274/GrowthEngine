@@ -29,6 +29,9 @@ public:
 	/// @brief シーケンスノードを追加する
 	void AddRestartingSequenceNode();
 
+	/// @brief ユーティリティセレクタノードを追加する
+	void AddUtilitySelectorNode();
+
 	/// @brief 条件ノードを追加する
 	void AddConditionNode();
 
@@ -44,6 +47,14 @@ public:
 
 	/// @brief UIを描画する
 	void DrawUI();
+
+
+private:
+
+	/// @brief 指定されたピンIDに対応するノードIDを取得する
+	/// @param pinId 
+	/// @return 
+	int GetNodeIdFromPinId(int pinId) const;
 
 
 private:
@@ -174,6 +185,10 @@ private:
 	/// @brief ノードの内容を描画する
 	/// @param node 
 	void DrawNodeContent(EditorNode& node);
+
+	/// @brief Utilityセレクタノードの設定UIを描画する
+	/// @param node 
+	void DrawUtilitySelectorNodeSettings(EditorNode& node);
 
 	/// @brief 条件ノードの設定UIを描画する
 	/// @param node 

@@ -2,78 +2,122 @@
     "links": [
         {
             "end": 30,
+            "end_node": 29,
             "id": 31,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 33,
+            "end_node": 32,
             "id": 34,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 36,
+            "end_node": 35,
             "id": 40,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 38,
+            "end_node": 37,
             "id": 41,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 43,
+            "end_node": 42,
             "id": 45,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 47,
+            "end_node": 46,
             "id": 48,
-            "start": 27
+            "start": 27,
+            "start_node": 25
         },
         {
             "end": 50,
+            "end_node": 49,
             "id": 52,
-            "start": 23
+            "start": 23,
+            "start_node": 21
         },
         {
             "end": 26,
+            "end_node": 25,
             "id": 53,
-            "start": 51
+            "start": 51,
+            "start_node": 49
         },
         {
             "end": 55,
+            "end_node": 54,
             "id": 57,
-            "start": 51
+            "start": 51,
+            "start_node": 49
         },
         {
             "end": 59,
+            "end_node": 58,
             "id": 60,
-            "start": 56
+            "start": 56,
+            "start_node": 54
         },
         {
             "end": 68,
+            "end_node": 67,
             "id": 69,
-            "start": 56
+            "start": 56,
+            "start_node": 54
         },
         {
             "end": 74,
+            "end_node": 73,
             "id": 101,
-            "start": 72
+            "start": 72,
+            "start_node": 70
         },
         {
             "end": 71,
+            "end_node": 70,
             "id": 109,
-            "start": 23
+            "start": 23,
+            "start_node": 21
         },
         {
             "end": 111,
+            "end_node": 110,
             "id": 113,
-            "start": 23
+            "start": 23,
+            "start_node": 21
+        },
+        {
+            "end": 119,
+            "end_node": 118,
+            "id": 121,
+            "start": 72,
+            "start_node": 70
         },
         {
             "end": 115,
-            "id": 117,
-            "start": 72
+            "end_node": 114,
+            "id": 125,
+            "start": 120,
+            "start_node": 118
+        },
+        {
+            "end": 123,
+            "end_node": 122,
+            "id": 126,
+            "start": 120,
+            "start_node": 118
         }
     ],
     "nodes": [
@@ -109,7 +153,7 @@
             "name": "リクエスト",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 239.99998474121094
             ],
             "type": 5
@@ -122,8 +166,8 @@
             "name": "トークン開放",
             "output_pin": -1,
             "pos": [
-                450.0,
-                840.0
+                449.9999694824219,
+                840.0000610351563
             ],
             "type": 5
         },
@@ -135,7 +179,7 @@
             "name": "攻撃開始",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 360.0
             ],
             "type": 5
@@ -148,7 +192,7 @@
             "name": "攻撃終了",
             "output_pin": 39,
             "pos": [
-                450.0,
+                449.9999694824219,
                 720.0
             ],
             "type": 5
@@ -166,7 +210,7 @@
             },
             "output_pin": 44,
             "pos": [
-                450.0,
+                449.9999694824219,
                 479.9999694824219
             ],
             "type": 5
@@ -175,6 +219,8 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 0.800000011920929,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
                 "hitDefinitions": [
                     {
                         "damage": 3,
@@ -191,6 +237,7 @@
                         "startTime": 0.0
                     }
                 ],
+                "isGrabWeapon": false,
                 "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 4.0,
                 "moveStartTime": 0.0
@@ -203,7 +250,7 @@
             "name": "パンチ",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 600.0
             ],
             "type": 5
@@ -240,7 +287,7 @@
             "name": "ターゲットが立っているとき",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 119.99999237060547
             ],
             "type": 4
@@ -253,7 +300,7 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 0.0
             ],
             "type": 4
@@ -265,8 +312,8 @@
             "name": "",
             "output_pin": 72,
             "pos": [
-                150.0,
-                1080.0
+                147.0,
+                1104.0
             ],
             "type": 3
         },
@@ -301,16 +348,50 @@
             "id": 114,
             "input_pin": 115,
             "is_collapsed": false,
+            "name": "ターゲットに歩く",
+            "nav_mesh_move_data": {
+                "isDash": false,
+                "moveSpeed": 3.0,
+                "stopDistance": 4.0
+            },
+            "output_pin": 116,
+            "pos": [
+                532.0,
+                1225.0
+            ],
+            "type": 5
+        },
+        {
+            "child_utility_map": {
+                "114": 1,
+                "122": 0
+            },
+            "id": 118,
+            "input_pin": 119,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 120,
+            "pos": [
+                336.0,
+                1200.0
+            ],
+            "type": 6
+        },
+        {
+            "action_type": 5,
+            "id": 122,
+            "input_pin": 123,
+            "is_collapsed": false,
             "name": "ターゲットに走る",
             "nav_mesh_move_data": {
                 "isDash": true,
                 "moveSpeed": 6.0,
                 "stopDistance": 4.0
             },
-            "output_pin": 116,
+            "output_pin": 124,
             "pos": [
-                297.0,
-                1219.0
+                527.0,
+                1337.0
             ],
             "type": 5
         }

@@ -1,25 +1,20 @@
 #include "../GameScene.h"
 
-/// @brief 戦闘フェーズの初期化処理
-void GameScene::BattlePhaseInitialize()
+/// @brief 終了フェーズの初期化処理
+void GameScene::FinishPhaseInitialize()
 {
-	
+	// 終了フェーズのタイマーを初期化する
+	finishTimer_ = kFinishTime;
+
+	// ゲーム終了フラグを立てる
+	Character::SetIsGameFinished(true);
 }
 
-/// @brief 戦闘フェーズの更新処理
-void GameScene::BattlePhaseUpdate()
+/// @brief 終了フェーズの更新処理
+void GameScene::FinishPhaseUpdate()
 {
 	// デルタタイムを取得する
 	const float kDt = engine_->GetDeltaTime() * engine_->GetTimeScale();
-
-	// ゲームクリア時の処理
-	if (isGameClear_)
-	{
-		phaseManager_->ChangePhase(PhaseType::Finish);
-	}
-
-	// バトルディレクターの更新
-	BattleDirector::GetInstance().Update(kDt);
 
 	// プレイヤーの更新
 	if (player_)
@@ -34,9 +29,6 @@ void GameScene::BattlePhaseUpdate()
 		sunLight_->param_->position = player_->GetPosition() + Vector3(-5.0f, 10.0f, -5.0f);
 	}
 
-	// ナビゲーション矢印
-	navigationArrow_->SetPlayer(player_.get());
-	if (battleAreas_.size() == 0)navigationArrow_->SetTargetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	navigationArrow_->Update();
 
 	// オブジェクトの更新
@@ -165,10 +157,14 @@ void GameScene::BattlePhaseUpdate()
 	cameraShake_->Update(kDt);
 
 
-	// ポーズ画面の切り替え
-	if (engine_->GetKeyTrigger(DIK_ESCAPE) || 
-		engine_->GetGamepadButtonTrigger(0, XINPUT_GAMEPAD_START))
+
+	// 終了フェーズのタイマーを減算する
+	finishTimer_ -= engine_->GetDeltaTime();
+
+	// タイマーが0以下になったらタイトル画面に遷移する
+	if (finishTimer_ <= 0.0f)
 	{
-		phaseManager_->ChangePhase(PhaseType::Pose);
+		// タイトル画面に遷移する
+		Transition("Title");
 	}
 }

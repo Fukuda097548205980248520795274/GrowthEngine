@@ -25,10 +25,11 @@ void BehaviorTreeEditor::DrawNodeTable()
 	if (ImGui::BeginPopup("AddNodePopup"))
 	{
 		ImGui::SeparatorText("子あり");
-		if (ImGui::MenuItem("永続 選択")) AddPersistentSelectorNode();
+		if (ImGui::MenuItem("永続 セレクタ")) AddPersistentSelectorNode();
 		if (ImGui::MenuItem("永続 シーケンス")) AddPersistentSequenceNode();
-		if (ImGui::MenuItem("再起動 選択")) AddRestartingSelectorNode();
+		if (ImGui::MenuItem("再起動 セレクタ")) AddRestartingSelectorNode();
 		if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
+		if (ImGui::MenuItem("ユーティリティ セレクタ")) AddUtilitySelectorNode();
 
 		ImGui::SeparatorText("子なし");
 		if (ImGui::MenuItem("条件")) AddConditionNode();
@@ -86,10 +87,11 @@ void BehaviorTreeEditor::DrawNodeTable()
 		// Compositesノード追加のためのサブメニュー
 		if (ImGui::BeginMenu("子あり"))
 		{
-			if (ImGui::MenuItem("永続 選択")) AddPersistentSelectorNode();
+			if (ImGui::MenuItem("永続 セレクタ")) AddPersistentSelectorNode();
 			if (ImGui::MenuItem("永続 シーケンス")) AddPersistentSequenceNode();
-			if (ImGui::MenuItem("再起動 選択")) AddRestartingSelectorNode();
+			if (ImGui::MenuItem("再起動 セレクタ")) AddRestartingSelectorNode();
 			if (ImGui::MenuItem("再起動 シーケンス")) AddRestartingSequenceNode();
+			if (ImGui::MenuItem("ユーティリティ セレクタ")) AddUtilitySelectorNode();
 			ImGui::EndMenu();
 		}
 
@@ -174,11 +176,13 @@ void BehaviorTreeEditor::DrawNodeTable()
 		history_->SaveHistory(nodes_, links_, currentId_);
 
 		// 新しいリンクを追加
-		EditorLink new_link;
-		new_link.id = GetNextId();
-		new_link.startPinId = start_pin;
-		new_link.endPinId = end_pin;
-		links_.push_back(new_link);
+		EditorLink newLink;
+		newLink.id = GetNextId();
+		newLink.startPinId = start_pin;
+		newLink.endPinId = end_pin;
+		newLink.startNodeId = GetNodeIdFromPinId(start_pin);
+		newLink.endNodeId = GetNodeIdFromPinId(end_pin);
+		links_.push_back(newLink);
 
 		// 変更があったのでフラグを立てる
 		isDirty_ = true;
@@ -186,16 +190,16 @@ void BehaviorTreeEditor::DrawNodeTable()
 
 
 	// リンクが削除された場合
-	int link_id;
+	int linkId;
 
 	// ImNodes::IsLinkDestroyedは削除されたリンクのIDを返す関数
-	if (ImNodes::IsLinkDestroyed(&link_id))
+	if (ImNodes::IsLinkDestroyed(&linkId))
 	{
 		// ノード追加前の状態を履歴に保存する
 		history_->SaveHistory(nodes_, links_, currentId_);
 
 		auto it = std::find_if(links_.begin(), links_.end(),
-			[link_id](const EditorLink& link) { return link.id == link_id; });
+			[linkId](const EditorLink& link) { return link.id == linkId; });
 		if (it != links_.end()) {
 			links_.erase(it);
 		}
@@ -331,6 +335,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 			else if (node.type == EditorNodeType::Action)
 			{
 				DrawActionNodeSettings(node);
+			}
+			else if (node.type == EditorNodeType::UtilitySelector)
+			{
+				DrawUtilitySelectorNodeSettings(node);
 			}
 			else
 			{
@@ -715,57 +723,20 @@ void BehaviorTreeEditor::DrawProjectWindow()
 /// @brief ノードエディタのキャンバスを描画する
 void BehaviorTreeEditor::DrawNodeEditorCanvas()
 {
-	// ピンIDからノードIDと出力ピンか入力ピンかを取得するラムダ関数
-	auto getNodeFromPin = [this](int pinID, bool& outIsOutput) -> int
-		{
-			for (const auto& node : nodes_)
-			{
-				// 出力ピンが一致する場合はそのノードIDを返す
-				if (node.inputPinId == pinID)
-				{
-					outIsOutput = false;
-					return node.id;
-				}
-
-				// 入力ピンが一致する場合はそのノードIDを返す
-				if (node.outputPinId == pinID)
-				{
-					outIsOutput = true;
-					return node.id;
-				}
-			}
-
-			// どちらも一致しない場合は-1を返す
-			return -1;
-		};
-
 	// ノードIDをキー、子ノードIDのリストを値とする隣接リストを作成
 	std::unordered_map<int, std::vector<int>> adjList;
 
 	// すべてのリンクを処理して隣接リストを構築
 	for (const auto& link : links_)
 	{
-		// 開始ピンIDからノードIDと出力ピンか入力ピンかを取得
-		bool startIsOutput = false;
-		int startNode = getNodeFromPin(link.startPinId, startIsOutput);
-
-		// 終了ピンIDからノードIDと出力ピンか入力ピンかを取得
-		bool endIsOutput = false;
-		int endNode = getNodeFromPin(link.endPinId, endIsOutput);
+		// リンクの開始ピンと終了ピンが出力ピンか入力ピンかを判定
+		int startNode = link.startNodeId;
+		int endNode = link.endNodeId;
 
 		// どちらも有効なノードIDが取得できた場合のみ隣接リストに追加
 		if (startNode != -1 && endNode != -1)
 		{
-			// 出力ピンから入力ピンへのリンクの場合は、開始ノードを親、終了ノードを子として隣接リストに追加
-			if (startIsOutput && !endIsOutput)
-			{
-				adjList[startNode].push_back(endNode);
-			}
-			else
-			{
-				// 逆向きのリンクが存在する場合は両方のノードを隣接リストに追加
-				adjList[endNode].push_back(startNode);
-			}
+			adjList[startNode].push_back(endNode);
 		}
 	}
 
@@ -867,7 +838,8 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 
 		// セレクタノードとシーケンスノードの場合は、折りたたみ/展開のトグルボタンを描画する
 		if (node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::RestartingSelector ||
-			node.type == EditorNodeType::PersistentSequence || node.type == EditorNodeType::RestartingSequence)
+			node.type == EditorNodeType::PersistentSequence || node.type == EditorNodeType::RestartingSequence ||
+			node.type == EditorNodeType::UtilitySelector)
 		{
 			if (ImGui::ArrowButton(node.isCollapsed ? "+" : "-", node.isCollapsed ? ImGuiDir_Right : ImGuiDir_Down))
 			{
@@ -883,6 +855,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			if (node.type == EditorNodeType::PersistentSequence) ImGui::TextUnformatted("永続シーケンス");
 			if (node.type == EditorNodeType::RestartingSelector) ImGui::TextUnformatted("再起動セレクタ");
 			if (node.type == EditorNodeType::RestartingSequence) ImGui::TextUnformatted("再起動シーケンス");
+			if (node.type == EditorNodeType::UtilitySelector) ImGui::TextUnformatted("ユーティリティセレクタ");
 			if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
 			if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
 		}
@@ -924,13 +897,8 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 	// リンクの描画
 	for (auto& link : links_)
 	{
-		// リンクの開始ピンと終了ピンからノードIDと出力ピンか入力ピンかを取得する
-		bool startIsOutput = false;
-		int startNode = getNodeFromPin(link.startPinId, startIsOutput);
-
-		// リンクの開始ピンと終了ピンからノードIDと出力ピンか入力ピンかを取得する
-		bool endIsOutput = false;
-		int endNode = getNodeFromPin(link.endPinId, endIsOutput);
+		int startNode = link.startNodeId;
+		int endNode = link.endNodeId;
 
 		// どちらも有効なノードIDが取得できない場合は描画をスキップする
 		if (hiddenNodes.count(startNode) > 0 || hiddenNodes.count(endNode) > 0)continue;
@@ -1069,7 +1037,8 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	// 出力ピンの描画 閉じられていないセレクタノードとシーケンスノードのみ出力ピンを描画する
 	if (!node.isCollapsed &&
 		(node.type == EditorNodeType::PersistentSelector || node.type == EditorNodeType::PersistentSequence ||
-			node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence))
+			node.type == EditorNodeType::RestartingSelector || node.type == EditorNodeType::RestartingSequence ||
+			node.type == EditorNodeType::UtilitySelector))
 	{
 		ImNodes::BeginOutputAttribute(node.outputPinId);
 
@@ -1083,6 +1052,68 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	if (node.type == EditorNodeType::Action)
 	{
 		ImGui::Text("%s", actionTypeNames[static_cast<int32_t>(node.actionType)]);
+	}
+}
+
+/// @brief Utilityセレクタノードの設定UIを描画する
+/// @param node 
+void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
+{
+	ImGui::Text("子ノードの評価関数設定:");
+	ImGui::Separator();
+
+	bool hasChildren = false;
+
+	// エディタ上のすべての接続線（リンク）から、このノードが出発点（親）になっているものを探す
+	for (const auto& link : links_)
+	{
+		if (link.startNodeId == node.id)
+		{
+			hasChildren = true;
+			int childId = link.endNodeId; // 繋がっている子ノードのID
+
+			// マップにまだこの子ノードの設定がなければ、デフォルト値をセットする
+			if (node.childUtilityMap.find(childId) == node.childUtilityMap.end())
+			{
+				node.childUtilityMap[childId] = UtilityType::FixedDefault;
+			}
+
+			// UIをわかりやすくするため、子ノードの名前を取得する（Action名など）
+			std::string childName = "Node ID: " + std::to_string(childId);
+			auto childIt = std::find_if(nodes_.begin(), nodes_.end(), [childId](const EditorNode& n) { return n.id == childId; });
+			if (childIt != nodes_.end())
+			{
+				childName = childIt->name;
+			}
+
+			// 子ノードの名前を表示
+			ImGui::Text("▶ %s", childName.c_str());
+
+			// コンボボックスの描画
+			int currentItem = static_cast<int>(node.childUtilityMap[childId]);
+
+			// ImGuiでは同じラベルのUIが複数あるとバグるため、ラベル名にIDを混ぜて一意にする（##以降は画面に表示されない）
+			std::string comboLabel = "##UtilityCombo_" + std::to_string(childId);
+
+			ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
+			if (ImGui::Combo(comboLabel.c_str(), &currentItem, utilityTypeNames, IM_ARRAYSIZE(utilityTypeNames)))
+			{
+				// 変更があったら履歴保存＆フラグ立て
+				history_->SaveHistory(nodes_, links_, currentId_);
+				isDirty_ = true;
+
+				// マップの値を更新
+				node.childUtilityMap[childId] = static_cast<UtilityType>(currentItem);
+			}
+			ImGui::PopItemWidth();
+
+			ImGui::Spacing(); // 少し隙間を空ける
+		}
+	}
+
+	if (!hasChildren)
+	{
+		ImGui::TextDisabled("※接続されている子ノードがありません");
 	}
 }
 

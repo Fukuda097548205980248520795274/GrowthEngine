@@ -96,6 +96,27 @@ void BehaviorTreeEditor::AddRestartingSequenceNode()
 	isDirty_ = true;
 }
 
+/// @brief ユーティリティセレクタノードを追加する
+void BehaviorTreeEditor::AddUtilitySelectorNode()
+{
+	// ノード追加前の状態を履歴に保存する
+	history_->SaveHistory(nodes_, links_, currentId_);
+
+	EditorNode node;
+	node.id = GetNextId();
+	node.type = EditorNodeType::UtilitySelector;
+	node.name[0] = '\0'; // 名前を空に初期化
+	node.inputPinId = GetNextId();
+	node.outputPinId = GetNextId();
+	nodes_.push_back(node);
+
+	// ノードをウィンドウの中心に配置する
+	SetNodeWindowCenter(node);
+
+	// 変更があったのでフラグを立てる
+	isDirty_ = true;
+}
+
 /// @brief 条件ノードを追加する
 void BehaviorTreeEditor::AddConditionNode()
 {
@@ -267,13 +288,29 @@ void BehaviorTreeEditor::DrawUI()
 	DrawPropertyWindow();
 }
 
+/// @brief 指定されたピンIDに対応するノードIDを取得する
+/// @param pinId 
+/// @return 
+int BehaviorTreeEditor::GetNodeIdFromPinId(int pinId) const
+{
+	for (const auto& node : nodes_)
+	{
+		if (node.inputPinId == pinId || node.outputPinId == pinId)
+		{
+			return node.id;
+		}
+	}
+
+	return -1;
+}
+
 /// @brief 選択されているノードを削除する
 void BehaviorTreeEditor::DeleteSelectedNodes()
 {
 	int numSelectedNodes = ImNodes::NumSelectedNodes();
 	int numSelectedLinks = ImNodes::NumSelectedLinks();
 
-	// リンクの単体削除処理（既存の処理があればそのまま、または適宜追加）
+	// リンクの単体削除処理
 	if (numSelectedLinks > 0)
 	{
 		std::vector<int> selectedLinkIds(numSelectedLinks);
@@ -288,8 +325,8 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
 	// ノードの削除処理（子孫ノードも巻き込んで削除）
 	if (numSelectedNodes > 0)
 	{
-		// 削除前の状態を履歴に保存（履歴機能があれば）
-		// history_->SaveHistory(nodes_, links_, currentId_);
+		// 削除前の状態を履歴に保存
+		history_->SaveHistory(nodes_, links_, currentId_);
 
 		std::vector<int> selectedNodeIds(numSelectedNodes);
 		ImNodes::GetSelectedNodes(selectedNodeIds.data());
@@ -331,8 +368,7 @@ void BehaviorTreeEditor::DeleteSelectedNodes()
 			}
 		}
 
-		// 削除対象ノードが持っているすべてのピンIDを収集
-		// （これらのピンに繋がっているリンクも削除するため）
+		// 削除対象のノードに関連するピンIDを収集
 		std::unordered_set<int> pinsToDelete;
 		for (int nodeId : nodesToDelete)
 		{

@@ -35,6 +35,9 @@ private:
     /// @brief 目的地の停止距離の二乗
     float stopDistanceSq_ = 1.0f;
 
+    /// @brief 停止位置の周りの倍数
+    float stopBeforeDistanceSq_ = 1.5f;
+
     /// @brief 移動速度
     float moveSpeed_ = 3.0f;
 

@@ -35,6 +35,7 @@
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 bool Character::isCutsceneActive_ = false;
+bool Character::isGameFinished_ = false;
 
 /// @brief 
 /// @param position 
@@ -139,7 +140,7 @@ void Character::SetAnimationHandle(const AnimationHandleData& animationData)
 void Character::Update()
 {
 	// 更新が無効なら何もしない
-	if (!updateEnabled_)
+	if (!updateEnabled_ || Character::IsCutsceneActive())
 	{
 		worldTransform_->Update();
 		return;

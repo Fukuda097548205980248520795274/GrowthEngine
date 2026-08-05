@@ -2,8 +2,10 @@
     "links": [
         {
             "end": 8,
+            "end_node": 7,
             "id": 92,
-            "start": 6
+            "start": 6,
+            "start_node": 4
         }
     ],
     "nodes": [

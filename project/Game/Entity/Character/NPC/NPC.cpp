@@ -75,6 +75,14 @@ void NPC::Update()
 		return;
 	}
 
+	// ゲーム終了時は移動を停止して、基底クラスの更新処理のみ行う
+	if (Character::IsGameFinished())
+	{
+		MoveStop();
+		Character::Update();
+		return;
+	}
+
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
@@ -236,7 +244,7 @@ void NPC::UpdateStanceMovement()
 		currentSpeed = stanceWalkSpeed_ * (distanceToSlot / kSlowDownRadius);
 	}
 
-	// スロット方向へのベクトル（デッドゾーンを小さく設定）
+	// デッドゾーンを設定して、スロットに近づきすぎた場合は移動入力を0にする
 	constexpr float kDeadZone = 0.1f;
 	if (distanceToSlot > kDeadZone)
 	{

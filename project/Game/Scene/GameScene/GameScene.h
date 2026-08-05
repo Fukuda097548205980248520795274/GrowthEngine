@@ -51,6 +51,8 @@ public:
 	enum class PhaseType
 	{
 		Battle, // 戦闘中
+		Pose, // ポーズ中
+		Finish, // 終了
 	};
 
 
@@ -167,6 +169,30 @@ private:
 
 	/// @brief 戦闘フェーズの更新処理
 	void BattlePhaseUpdate();
+
+
+private:
+
+	/// @brief ポーズフェーズの初期化処理
+	void PosePhaseInitialize();
+
+	/// @brief ポーズフェーズの更新処理
+	void PosePhaseUpdate();
+
+
+private:
+
+	/// @brief 終了フェーズの初期化処理
+	void FinishPhaseInitialize();
+
+	/// @brief 終了フェーズの更新処理
+	void FinishPhaseUpdate();
+
+	/// @brief 終了フェーズのタイマー
+	float finishTimer_ = kFinishTime;
+
+	/// @brief 終了フェーズの時間
+	static constexpr float kFinishTime = 2.0f;
 
 
 private:

@@ -6,6 +6,7 @@
 #include "Node/CompositeNode/PersistentSequenceNode/PersistentSequenceNode.h"
 #include "Node/CompositeNode/RestartingSelectorNode/RestartingSelectorNode.h"
 #include "Node/CompositeNode/RestartingSequenceNode/RestartingSequenceNode.h"
+#include "Node/CompositeNode/UtilitySelectorNode/UtilitySelectorNode.h"
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
@@ -73,47 +74,91 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	// 条件関数の宣言（条件ノードの場合に使用）
 	std::function<bool()> conditionFunc{};
 
+	// ユーティリティ関数の宣言（ユーティリティノードの場合に使用）
+	std::function<float()> utilityFunc{};
+
 	// ノードの種類に応じて対応するランタイムノードを生成
-	switch (editorNode.type)
+	if (editorNode.type == EditorNodeType::RestartingSelector)
 	{
-	case EditorNodeType::RestartingSelector:
 		runtimeNode = std::make_unique<RestartingSelectorNode>();
-		break;
-
-	case EditorNodeType::PersistentSelector:
+	}
+	else if (editorNode.type == EditorNodeType::PersistentSelector)
+	{
 		runtimeNode = std::make_unique<PersistentSelectorNode>();
-		break;
-
-	case EditorNodeType::RestartingSequence:
+	}
+	else if (editorNode.type == EditorNodeType::RestartingSequence)
+	{
 		runtimeNode = std::make_unique<RestartingSequenceNode>();
-		break;
-
-	case EditorNodeType::PersistentSequence:
+	}
+	else if (editorNode.type == EditorNodeType::PersistentSequence)
+	{
 		runtimeNode = std::make_unique<PersistentSequenceNode>();
-		break;
+	}
+	else if (editorNode.type == EditorNodeType::UtilitySelector)
+	{
+		// UtilitySelectorNode本体の生成
+		auto utilitySelector = std::make_unique<UtilitySelectorNode>();
 
-	case EditorNodeType::Condition:
+		// 子ノードのIDを取得
+		std::vector<int> childIds = GetChildNodeIds(nodes, links, editorNode.id);
 
+		// 子ノードごとに再帰的な生成と評価関数の紐づけを行う
+		for (int childId : childIds)
+		{
+			const EditorNode& childEditorNode = GetEditorNode(nodes, childId);
+			std::unique_ptr<Node> childRuntimeNode = BuildNodeRecursive(childEditorNode, nodes, links, character);
+
+			// 子ノードのIDに対応する評価タイプを取得
+			UtilityType uType = UtilityType::FixedDefault;
+			if (editorNode.childUtilityMap.find(childId) != editorNode.childUtilityMap.end())
+			{
+				uType = editorNode.childUtilityMap.at(childId);
+			}
+
+			// 評価タイプに応じてラムダ式（評価関数）を生成
+			std::function<float()> utilityFunc;
+			switch (uType)
+			{
+				// 体力比率を評価する関数
+			case UtilityType::HpRatio:
+				utilityFunc = [character]() { return character->GetHp() / character->GetMaxHp(); };
+				break;
+
+				// 固定値を返す関数（デフォルト）
+			case UtilityType::FixedDefault:
+			default:
+				utilityFunc = []() { return 0.5f; };
+				break;
+			}
+
+			// 生成した子ノードと評価関数をセットにして追加
+			utilitySelector->AddChildWithUtility(std::move(childRuntimeNode), utilityFunc);
+		}
+
+		runtimeNode = std::move(utilitySelector);
+	}
+	else if (editorNode.type == EditorNodeType::Condition)
+	{
 		// エディタで設定した条件の種類に応じて、条件関数を生成する
 		switch (editorNode.conditionType)
 		{
-		// 関数なし、常に true を返す条件
+			// 関数なし、常に true を返す条件
 		case ConditionType::None:
 		default:
 			conditionFunc = []() { return true; };
 			break;
 
-		// ターゲットがいるかどうかをチェックする条件
+			// ターゲットがいるかどうかをチェックする条件
 		case ConditionType::HasTarget:
 			conditionFunc = [character]() { return character->HasTarget(); };
 			break;
 
-		// ターゲットがダウンしているかどうかをチェックする条件
+			// ターゲットがダウンしているかどうかをチェックする条件
 		case ConditionType::IsTargetDown:
 			conditionFunc = [character]() { return character->HasTarget() && character->GetLockOnTarget()->IsDown(); };
 			break;
 
-		// ターゲットがダウンしていないかどうかをチェックする条件
+			// ターゲットがダウンしていないかどうかをチェックする条件
 		case ConditionType::IsNotTargetDown:
 			conditionFunc = [character]() { return !character->HasTarget() || !character->GetLockOnTarget()->IsDown(); };
 			break;
@@ -130,7 +175,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが一定距離内にいるかどうかをチェックする条件
 		case ConditionType::IsTargetInRange:
-			conditionFunc = [character, editorNode]() 
+			conditionFunc = [character, editorNode]()
 				{
 					if (!character->HasTarget()) return false;
 					float distance = (character->GetLockOnTarget()->GetWorldPosition() - character->GetWorldPosition()).Length();
@@ -150,8 +195,8 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが攻撃しているかどうかをチェックする条件
 		case ConditionType::IsTargetAttacking:
-			conditionFunc = [character]() 
-				{ 
+			conditionFunc = [character]()
+				{
 					if (!character->HasTarget()) return false;
 					return character->GetLockOnTarget()->IsAttack();
 				};
@@ -223,10 +268,9 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 		// 条件関数を使用して条件ノードを生成
 		runtimeNode = std::make_unique<ConditionNode>(conditionFunc);
-		break;
-
-	case EditorNodeType::Action:
-
+	}
+	else if(editorNode.type == EditorNodeType::Action)
+	{
 		// エディターで設定した文字列（actionName）に応じて生成するノードを変える
 		if (editorNode.actionType == ActionType::ComboAttack)
 		{
@@ -255,7 +299,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		{
 			// トークン要求ノードの生成
 			runtimeNode = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character, editorNode.tokenType));
-		} 
+		}
 		else if (editorNode.actionType == ActionType::ReleaseToken)
 		{
 			// トークン解放ノードの生成
@@ -291,48 +335,49 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// 何も設定されていない、または該当しない場合（何もしないノードにする等）
 			runtimeNode = nullptr;
 		}
-
-		break;
 	}
 
 	// ランタイムノードが生成できなかった場合は nullptr を返す
 	if (auto composite_node = dynamic_cast<CompositeNode*>(runtimeNode.get()))
 	{
-		std::vector<const EditorNode*> child_editor_nodes;
-
-		// editorNode の出力ピンに接続されているリンクを探す
-		for (const auto& link : links)
+		if (editorNode.type != EditorNodeType::UtilitySelector)
 		{
-			if (link.startPinId == editorNode.outputPinId)
+			std::vector<const EditorNode*> child_editor_nodes;
+
+			// editorNode の出力ピンに接続されているリンクを探す
+			for (const auto& link : links)
 			{
-				// リンクの終了ピンに対応するノードを探す
-				for (const auto& n : nodes)
+				if (link.startPinId == editorNode.outputPinId)
 				{
-					if (n.inputPinId == link.endPinId)
+					// リンクの終了ピンに対応するノードを探す
+					for (const auto& n : nodes)
 					{
-						child_editor_nodes.push_back(&n);
-						break;
+						if (n.inputPinId == link.endPinId)
+						{
+							child_editor_nodes.push_back(&n);
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		// 子ノードをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
-		std::sort(child_editor_nodes.begin(), child_editor_nodes.end(),
-			[](const EditorNode* a, const EditorNode* b) 
-			{
-				// ImNodesの関数を使わず、ロード済みの EditorNode のデータ(pos)を直接比較する
-				return a->pos.y < b->pos.y;
-			}
-		);
+			// 子ノードをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
+			std::sort(child_editor_nodes.begin(), child_editor_nodes.end(),
+				[](const EditorNode* a, const EditorNode* b)
+				{
+					// ImNodesの関数を使わず、ロード済みの EditorNode のデータ(pos)を直接比較する
+					return a->pos.y < b->pos.y;
+				}
+			);
 
-		// 子ノードを再帰的に構築してコンポジットノードに追加する
-		for (const auto* child_node : child_editor_nodes)
-		{
-			auto child_runtime = BuildNodeRecursive(*child_node, nodes, links, character);
-			if (child_runtime)
+			// 子ノードを再帰的に構築してコンポジットノードに追加する
+			for (const auto* child_node : child_editor_nodes)
 			{
-				composite_node->AddChild(std::move(child_runtime));
+				auto child_runtime = BuildNodeRecursive(*child_node, nodes, links, character);
+				if (child_runtime)
+				{
+					composite_node->AddChild(std::move(child_runtime));
+				}
 			}
 		}
 	}
@@ -355,10 +400,11 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// 空欄だった場合は、これまで通りノードのタイプに応じたデフォルト名を設定
 			switch (editorNode.type)
 			{
-			case EditorNodeType::PersistentSelector: nodeName = "永続 選択"; break;
+			case EditorNodeType::PersistentSelector: nodeName = "永続 セレクタ"; break;
 			case EditorNodeType::PersistentSequence: nodeName = "永続 シーケンス"; break;
-			case EditorNodeType::RestartingSelector: nodeName = "再起動 選択"; break;
+			case EditorNodeType::RestartingSelector: nodeName = "再起動 セレクタ"; break;
 			case EditorNodeType::RestartingSequence: nodeName = "再起動 シーケンス"; break;
+			case EditorNodeType::UtilitySelector:    nodeName = "ユーティリティ セレクタ"; break;
 			case EditorNodeType::Condition:          nodeName = "条件"; break;
 			case EditorNodeType::Action:             nodeName = "アクション"; break;
 			default:                                 nodeName = "未知のノード"; break;
@@ -373,4 +419,52 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 
 	return runtimeNode;
+}
+
+/// @brief 指定された親ノードIDに対応する子ノードのIDを取得する
+/// @param links 
+/// @param parentId 
+/// @return 
+std::vector<int> BehaviorTreeFactory::GetChildNodeIds(const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, int parentId)
+{
+	std::vector<int> childIds;
+
+	// 全リンクの中から、出発点が parentId と一致するものを探す
+	for (const auto& link : links)
+	{
+		if (link.startNodeId == parentId)
+		{
+			childIds.push_back(link.endNodeId);
+		}
+	}
+
+	// 子ノードのIDをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
+	std::sort(childIds.begin(), childIds.end(), [&nodes](int a, int b) 
+		{
+			const EditorNode& nodeA = GetEditorNode(nodes, a);
+			const EditorNode& nodeB = GetEditorNode(nodes, b);
+			return nodeA.pos.y < nodeB.pos.y;
+		}
+	);
+
+	return childIds;
+}
+
+/// @brief 指定されたノードIDに対応するEditorNodeを取得する
+/// @param nodes 
+/// @param nodeId 
+/// @return 
+const EditorNode& BehaviorTreeFactory::GetEditorNode(const std::vector<EditorNode>& nodes, int nodeId)
+{
+	// ノードIDに一致するEditorNodeを検索
+	for (const auto& node : nodes)
+	{
+		if (node.id == nodeId)
+		{
+			return node;
+		}
+	}
+
+	// 一致するノードが見つからなかった場合は例外を投げる
+	throw std::runtime_error("EditorNode not found. ID: " + std::to_string(nodeId));
 }

@@ -33,6 +33,9 @@ void GameScene::Initialize()
 	objects_.clear();
 	huds_.clear();
 
+	// キャラクターの終了フラグをリセットする
+	Character::SetIsGameFinished(false);
+
 	// アウトラインのポストエフェクトを読み込む
 	engine_->LoadPostEffect("Outline", Engine::PostEffect::Type::DepthBasedOutline);
 	auto outlineParam = engine_->GetPostEffectParam<Engine::PostEffect::DepthBasedOutline>("Outline");
@@ -384,6 +387,10 @@ void GameScene::Initialize()
 	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
 	phaseManager_->SetOnEnter(PhaseType::Battle, [&]() { BattlePhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Battle, [&]() { BattlePhaseUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Pose, [&]() { PosePhaseInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Pose, [&]() { PosePhaseUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Finish, [&]() { FinishPhaseInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Finish, [&]() { FinishPhaseUpdate(); });
 	phaseManager_->ChangePhase(PhaseType::Battle);
 }
 
