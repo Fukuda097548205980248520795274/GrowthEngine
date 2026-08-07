@@ -24,6 +24,9 @@ void TitleScene::Initialize()
 	selectSe_ = std::make_unique<Se>("SelectSE", engine_->LoadAudio("./Assets/Sounds/se/title_select.mp3"));
 	executeSe_ = std::make_unique<Se>("ExecuteSE", engine_->LoadAudio("./Assets/Sounds/se/title_execute.mp3"));
 
+	// ポストエフェクトのビネットを作成する
+	vignetting_ = std::make_unique<PostEffectVignetting>("TitleVignetting");
+
 	// 上下のキー入力を作成する
 	wKey_ = std::make_unique<InputKey>("TitleWKey", InputState::Trigger, DIK_W);
 	sKey_ = std::make_unique<InputKey>("TitleSKey", InputState::Trigger, DIK_S);
@@ -89,6 +92,9 @@ void TitleScene::Initialize()
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			// ポストエフェクトのビネット描画
+			vignetting_->Draw();
 
 			// フェード用スプライトの描画
 			fadeSprite_->Draw();

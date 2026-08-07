@@ -143,12 +143,13 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 	);
 
 
-#ifdef DEVELOPMENT
 
 	// 線の描画前処理のレンダーパスを登録する
 	LoadRenderPass("LineDraw", [&]()
 		{
 			DrawToRenderPass("LineDraw", "MainPass");
+
+#ifdef DEVELOPMENT
 
 			// 衝突ストアのデバッグ線
 			collision3DStore_->DebugDrawLine();
@@ -164,10 +165,10 @@ void Engine::RenderContext::Initialize(WinApp* winApp, Log* log)
 			line_->DrawLine3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
 			line_->DrawLine2D(commandList_, camera2DStore_->GetCamera2D().GetCurrentVPUnJitterMatrix());
 			line_->DrawTriangle3D(commandList_, camera3DStore_->GetCamera3D().GetCurrentVPUnJitterMatrix());
-		}
-	);
 
 #endif
+		}
+	);
 }
 
 /// @brief 全てのインスタンスを削除する
@@ -289,9 +290,7 @@ void Engine::RenderContext::PreDraw()
 /// @brief 描画後処理
 void Engine::RenderContext::PostDraw()
 {
-#ifdef DEVELOPMENT
 	ExecuteRenderPass("LineDraw");
-#endif
 
 	// コマンドリスト・アロケータの取得
 	commandList_ = command_->GetCommandList();

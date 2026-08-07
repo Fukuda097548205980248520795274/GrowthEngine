@@ -197,6 +197,12 @@ private:
 
 private:
 
+	/// @brief ポストエフェクトのビネット
+	std::unique_ptr<PostEffectVignetting> vignetting_;
+
+
+private:
+
 	/// @brief タイトルBGM
 	std::unique_ptr<Bgm> titleBgm_ = nullptr;
 
