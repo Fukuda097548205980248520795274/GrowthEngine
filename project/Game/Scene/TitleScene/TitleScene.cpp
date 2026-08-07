@@ -10,6 +10,20 @@ void TitleScene::Initialize()
 	stageSelectEditor_ = std::make_unique<StageSelectEditor>();
 	stageSelectEditor_->Initialize();
 
+	// UIエディタを作成する
+	uiEditor_ = std::make_unique<UIEditor>();
+	uiEditor_->Load("Title_Scene");
+
+	// タイトルBGMを作成する
+	titleBgm_ = std::make_unique<Bgm>("TitleBGM", engine_->LoadAudio("./Assets/Sounds/bgm/title_bgm.mp3"));
+	titleBgm_->param_->volume = 0.0f;
+	titleBgm_->param_->enableLoop = true;
+	titleBgm_->Play();
+
+	// 選択SEと決定SEを作成する
+	selectSe_ = std::make_unique<Se>("SelectSE", engine_->LoadAudio("./Assets/Sounds/se/title_select.mp3"));
+	executeSe_ = std::make_unique<Se>("ExecuteSE", engine_->LoadAudio("./Assets/Sounds/se/title_execute.mp3"));
+
 	// 上下のキー入力を作成する
 	wKey_ = std::make_unique<InputKey>("TitleWKey", InputState::Trigger, DIK_W);
 	sKey_ = std::make_unique<InputKey>("TitleSKey", InputState::Trigger, DIK_S);
@@ -31,10 +45,13 @@ void TitleScene::Initialize()
 	fadeSprite_->param_->transform.scale = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
 	fadeSprite_->param_->material.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 
+
 	// フェーズマネージャを作成する
 	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
 	phaseManager_->SetOnEnter(PhaseType::Intro, [&]() { IntroInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Intro, [&]() { IntroUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Title, [&]() { TitleInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Title, [&]() { TitleUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::MainMenu, [&]() { MainMenuInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::MainMenu, [&]() { MainMenuUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::StageSelect, [&]() { StageSelectInitialize(); });
@@ -64,6 +81,8 @@ void TitleScene::Initialize()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
 
+			uiEditor_->DrawUI();
+			uiEditor_->Draw();
 		}
 	);
 

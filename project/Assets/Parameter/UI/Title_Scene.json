@@ -1,0 +1,71 @@
+[
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "pushAnyButton_BG",
+        "screenAnchor": 6,
+        "textureFilename": "bar_title.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "translate": [
+                966.0,
+                208.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "name": "New Sprite",
+        "screenAnchor": 6,
+        "textureFilename": "title_pushAnyButton.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                1012.0,
+                209.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "TitleLogo",
+        "screenAnchor": 6,
+        "textureFilename": "title_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "translate": [
+                962.0,
+                467.0
+            ]
+        }
+    }
+]

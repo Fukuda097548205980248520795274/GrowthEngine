@@ -10,13 +10,16 @@ void TitleScene::IntroInitialize()
 /// @brief タイトルシーンのイントロ更新処理
 void TitleScene::IntroUpdate()
 {
-	float t = 1.0f - (introTimer_ / kIntroDuration); // 経過時間の割合を計算
+	float t = std::clamp(1.0f - (introTimer_ / kIntroDuration), 0.0f, 1.0f); // 経過時間の割合を計算
 	fadeSprite_->param_->material.color.w = 1.0f - t; // フェードアウトのアルファ値を設定
+
+	// BGMの音量を設定
+	titleBgm_->param_->volume = t * kBgmMaxVolume;
 
 	if (introTimer_ <= 0.0f)
 	{
 		// イントロが終了したらメインメニューに遷移
-		phaseManager_->ChangePhase(PhaseType::MainMenu);
+		phaseManager_->ChangePhase(PhaseType::Title);
 	}
 	else
 	{

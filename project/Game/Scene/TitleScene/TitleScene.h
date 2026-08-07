@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 #include "PhaseManager/PhaseManager.h"
 #include "StageSelectEditor/StageSelectEditor.h"
+#include "ObjectEditor/UIEditor/UIEditor.h"
 
 class TitleScene : public Scene
 {
@@ -11,6 +12,7 @@ public:
 	enum class PhaseType
 	{
 		Intro,
+		Title,
 		MainMenu,
 		Play,
 		StageSelect,
@@ -60,6 +62,30 @@ private:
 
 	/// @brief イントロの表示時間
 	static constexpr float kIntroDuration = 1.0f;
+
+
+private:
+
+	/// @brief タイトルシーンのタイトル初期化処理
+	void TitleInitialize();
+
+	/// @brief タイトルシーンのタイトル更新処理
+	void TitleUpdate();
+
+	/// @brief タイトルシーンのタイトル描画処理
+	void TitleDraw();
+
+	/// @brief タイトルの選択肢を処理する
+	void ExecuteTitleOption();
+
+	/// @brief タイトルのタイマー
+	float titleTimer_ = 0.0f;
+
+	/// @brief タイトルの時間
+	static constexpr float kTitleDuration = 0.3f;
+
+	/// @brief タイトルの選択肢が実行されたかどうか
+	bool isTitleOptionExecuted_ = false;
 
 
 private:
@@ -171,7 +197,25 @@ private:
 
 private:
 
+	/// @brief タイトルBGM
+	std::unique_ptr<Bgm> titleBgm_ = nullptr;
+
+	/// @brief タイトルBGMの最大音量
+	static constexpr float kBgmMaxVolume = 0.2f;
+
+	/// @brief 選択SE
+	std::unique_ptr<Se> selectSe_ = nullptr;
+
+	/// @brief 決定SE
+	std::unique_ptr<Se> executeSe_ = nullptr;
+
+
+private:
+
 	/// @brief ステージセレクトエディタ
 	std::unique_ptr<StageSelectEditor> stageSelectEditor_;
+
+	/// @brief UIエディタ
+	std::unique_ptr<UIEditor> uiEditor_;
 };
 

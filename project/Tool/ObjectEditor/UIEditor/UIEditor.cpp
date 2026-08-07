@@ -8,6 +8,27 @@ UIEditor::UIEditor()
 	RefreshTextureList();
 }
 
+/// @brief 読み込む
+/// @param filename 
+void UIEditor::Load(const std::string& filename)
+{
+	// ファイルパスを生成
+	std::string filePath = kUIDir + filename + ".json";
+
+	// ファイルを読み込む前に、現在の状態を履歴に保存
+	SaveHistoryState();
+
+	selectedElementIndex_ = -1;
+	uiElements_ = FromJson(filePath, loadedTextures_);
+
+	// ファイル名から拡張子を除いた名前を取得して、保存用の入力欄にセット
+	strcpy_s(inputFilename_, filename.c_str());
+
+	// 読み込み成功時に「今開いているファイル名」として保持
+	currentFileName_ = filename;
+	isFileOpen_ = true;
+}
+
 /// @brief 描画処理
 void UIEditor::Draw()
 {

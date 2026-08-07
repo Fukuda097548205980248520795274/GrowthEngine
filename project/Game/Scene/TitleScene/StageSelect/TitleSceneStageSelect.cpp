@@ -47,6 +47,9 @@ void TitleScene::StageSelectMove()
 		static_cast<int>(stageSelectIndex_) + moveDirection < static_cast<int>(stageList.size()))
 	{
 		stageSelectIndex_ = static_cast<int>(stageSelectIndex_) + moveDirection;
+
+		// 選択SEを再生
+		selectSe_->Play();
 	}
 }
 
@@ -57,5 +60,8 @@ void TitleScene::StageSelectExecute()
 	{
 		nextStageName_ = stageSelectEditor_->GetStageList()[stageSelectIndex_].fileName;
 		phaseManager_->ChangePhase(PhaseType::Play);
+
+		// 決定SEを再生
+		executeSe_->Play();
 	}
 }

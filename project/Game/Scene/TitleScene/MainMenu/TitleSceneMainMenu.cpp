@@ -46,6 +46,9 @@ void TitleScene::SelectMainMenuOption()
 		static_cast<int>(mainManuOption_) + moveDirection < static_cast<int>(MainMenuOption::MaxOption))
 	{
 		mainManuOption_ = static_cast<MainMenuOption>(static_cast<int>(mainManuOption_) + moveDirection);
+
+		// 選択SEを再生
+		selectSe_->Play();
 	}
 }
 
@@ -80,5 +83,8 @@ void TitleScene::ExecuteMainMenuOption()
 
 			break;
 		}
+
+		// 決定SEを再生
+		executeSe_->Play();
 	}
 }
