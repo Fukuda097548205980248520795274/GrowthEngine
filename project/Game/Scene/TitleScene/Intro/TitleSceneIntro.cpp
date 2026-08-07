@@ -16,6 +16,18 @@ void TitleScene::IntroUpdate()
 	// BGMの音量を設定
 	titleBgm_->param_->volume = t * kBgmMaxVolume;
 
+	// タイトルバーのスプライトのアルファ値を更新
+	auto pushAnyButtonBG = uiEditor_->GetSprite("pushAnyButton_BG");
+	pushAnyButtonBG->param_->material.color.w = t;
+
+	// タイトルのスプライトのアルファ値を更新
+	auto pushAnyButton = uiEditor_->GetSprite("pushAnyButton");
+	pushAnyButton->param_->material.color.w = t;
+
+	// タイトルロゴのスプライトのアルファ値を更新
+	auto titleLogo = uiEditor_->GetSprite("TitleLogo");
+	titleLogo->param_->material.color.w = t;
+
 	if (introTimer_ <= 0.0f)
 	{
 		// イントロが終了したらメインメニューに遷移

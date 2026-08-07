@@ -27,6 +27,9 @@ void TitleScene::Initialize()
 	// ポストエフェクトのビネットを作成する
 	vignetting_ = std::make_unique<PostEffectVignetting>("TitleVignetting");
 
+	// ポストエフェクトのブルームを作成する
+	bloom_ = std::make_unique<PostEffectBloom>("TitleBloom");
+
 	// 上下のキー入力を作成する
 	wKey_ = std::make_unique<InputKey>("TitleWKey", InputState::Trigger, DIK_W);
 	sKey_ = std::make_unique<InputKey>("TitleSKey", InputState::Trigger, DIK_S);
@@ -47,6 +50,24 @@ void TitleScene::Initialize()
 	fadeSprite_->param_->screenAnchor = Engine::Render2D::ScreenAnchor::LeftBottom;
 	fadeSprite_->param_->transform.scale = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
 	fadeSprite_->param_->material.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+
+	// フェーズビューのスプライトを取得する
+	auto phaseView = uiEditor_->GetSprite("Phase_View");
+	phaseView->param_->material.color = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
+
+	// メインメニューのスプライトを取得する
+	mainMenuSprite_[static_cast<int>(MainMenuOption::StartGame)] = uiEditor_->GetSprite("mainMenu_GameStart");
+	mainMenuSprite_[static_cast<int>(MainMenuOption::QuitGame)] = uiEditor_->GetSprite("mainMenu_Quit");
+
+	// メインメニューの背景スプライトを取得する
+	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::StartGame)] = uiEditor_->GetSprite("mainMenuBG_GameStart");
+	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::QuitGame)] = uiEditor_->GetSprite("mainMenuBG_Quit");
+
+	// メインメニューのスプライトのアルファ値を初期化する
+	mainMenuSprite_[static_cast<int>(MainMenuOption::StartGame)]->param_->material.color.w = 0.0f;
+	mainMenuSprite_[static_cast<int>(MainMenuOption::QuitGame)]->param_->material.color.w = 0.0f;
+	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::StartGame)]->param_->material.color.w = 0.0f;
+	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::QuitGame)]->param_->material.color.w = 0.0f;
 
 
 	// フェーズマネージャを作成する
@@ -92,6 +113,9 @@ void TitleScene::Initialize()
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			// ポストエフェクトのブルーム描画
+			bloom_->Draw();
 
 			// ポストエフェクトのビネット描画
 			vignetting_->Draw();

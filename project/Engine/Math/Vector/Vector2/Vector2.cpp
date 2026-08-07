@@ -70,3 +70,13 @@ Vector2 Reflect(const Vector2& input, const Vector2& normal)
 	Vector2 normal2 = normal.Normalize();
 	return input - (2.0f * (Dot(input, normal2) * normal2));
 }
+
+/// @brief 線形補間
+/// @param v1 
+/// @param v2 
+/// @param t 
+/// @return 
+Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t)
+{
+	return v1 + (v2 - v1) * t;
+}

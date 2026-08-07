@@ -109,8 +109,32 @@ private:
 	/// @brief メインメニューの選択肢を実行する
 	void ExecuteMainMenuOption();
 
+	/// @brief メインメニューの選択肢のスプライトを更新する
+	void UpdateMainMenuOptionSprite();
+
+	/// @brief メインメニューの選択肢が実行されたかどうか
+	bool isMainMenuOptionExecuted_ = false;
+
+	/// @brief ゲーム終了が実行されたかどうか
+	bool isQuitExecuted_ = false;
+
+	/// @brief メインメニューのタイマー
+	float mainMenuTimer_ = 0.0f;
+
+	/// @brief メインメニューの表示時間
+	static constexpr float kMainMenuDuration = 0.2f;
+
+	/// @brief メインメニューのスプライトのアルファ値
+	float mainMenuSpriteParamAlpha_ = 0.0f;
+
 	/// @brief メインメニューの選択肢
 	MainMenuOption mainManuOption_ = MainMenuOption::StartGame;
+
+	/// @brief メインメニューのスプライト
+	Sprite* mainMenuSprite_[static_cast<int>(MainMenuOption::MaxOption)] = { nullptr };
+
+	/// @brief メインメニューの背景スプライト
+	Sprite* mainMenuSpriteBG_[static_cast<int>(MainMenuOption::MaxOption)] = { nullptr };
 
 
 private:
@@ -200,6 +224,9 @@ private:
 
 
 private:
+
+	/// @brief ポストエフェクトのブルーム
+	std::unique_ptr<PostEffectBloom> bloom_;
 
 	/// @brief ポストエフェクトのビネット
 	std::unique_ptr<PostEffectVignetting> vignetting_;

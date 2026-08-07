@@ -166,3 +166,10 @@ Vector2 Project(const Vector2& line, const Vector2& point);
 /// @param normal 法線
 /// @return 
 Vector2 Reflect(const Vector2& input, const Vector2& normal);
+
+/// @brief 線形補間
+/// @param v1 
+/// @param v2 
+/// @param t 
+/// @return 
+Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);

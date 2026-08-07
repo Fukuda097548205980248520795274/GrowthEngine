@@ -5,7 +5,7 @@
             1.0,
             1.0,
             1.0,
-            1.0
+            0.7828781604766846
         ],
         "name": "pushAnyButton_BG",
         "screenAnchor": 6,
@@ -17,7 +17,7 @@
                 1.0
             ],
             "translate": [
-                966.0,
+                1034.0,
                 208.0
             ]
         }
@@ -40,7 +40,7 @@
                 0.75
             ],
             "translate": [
-                1012.0,
+                1078.0,
                 209.0
             ]
         }
@@ -65,6 +65,121 @@
             "translate": [
                 962.0,
                 467.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "mainMenuBG_GameStart",
+        "screenAnchor": 6,
+        "textureFilename": "mainMenuBG.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                969.0,
+                462.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "mainMenuBG_Quit",
+        "screenAnchor": 6,
+        "textureFilename": "mainMenuBG.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                969.0,
+                391.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.5099999904632568,
+            0.5099999904632568,
+            0.5099999904632568,
+            0.0
+        ],
+        "name": "mainMenu_GameStart",
+        "screenAnchor": 6,
+        "textureFilename": "title_gameStart.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                960.0,
+                462.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.4899999499320984,
+            0.4899999499320984,
+            0.4899999499320984,
+            0.0
+        ],
+        "name": "mainMenu_Quit",
+        "screenAnchor": 6,
+        "textureFilename": "title_quit.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                960.0,
+                390.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Phase_View",
+        "screenAnchor": 6,
+        "textureFilename": "bar_title.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                1089.0,
+                614.0
             ]
         }
     }
