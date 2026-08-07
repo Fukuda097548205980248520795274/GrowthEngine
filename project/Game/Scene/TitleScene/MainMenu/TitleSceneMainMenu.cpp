@@ -10,8 +10,18 @@ void TitleScene::MainMenuInitialize()
 	// メインメニューの選択肢が実行されたかどうかを初期化
 	isMainMenuOptionExecuted_ = false;
 
+	// ゲーム終了が実行されたかどうかを初期化
+	isBackToTitle_ = false;
+
 	// メインメニューのタイマーを初期化
 	mainMenuSpriteParamAlpha_ = 0.0f;
+
+
+	// メインメニューのスプライトの拡縮を初期化
+	for (int i = 0; i < static_cast<int>(MainMenuOption::MaxOption); ++i)
+	{
+		mainMenuSpriteBG_[i]->param_->transform.scale = Vector2(0.75f, 0.75f);
+	}
 }
 
 /// @brief タイトルシーンのメインメニュー更新処理
@@ -60,6 +70,17 @@ void TitleScene::MainMenuUpdate()
 			}
 		}
 	}
+	else if (isBackToTitle_)
+	{
+		// メインメニューのタイマーを更新
+		mainMenuTimer_ -= dt;
+
+		// メインメニューのタイマーが0以下になったらタイトルに戻る
+		if (mainMenuTimer_ <= 0.0f)
+		{
+			phaseManager_->ChangePhase(PhaseType::Title);
+		}
+	}
 	else
 	{
 		// 上下のキー入力を処理する
@@ -67,6 +88,9 @@ void TitleScene::MainMenuUpdate()
 
 		// 決定キー入力を処理する
 		ExecuteMainMenuOption();
+
+		// タイトルに戻るキー入力を処理する
+		BackToTitle();
 	}
 
 	// メインメニューの選択肢のスプライトを更新する
@@ -124,6 +148,22 @@ void TitleScene::ExecuteMainMenuOption()
 	}
 }
 
+/// @brief タイトルに戻る
+void TitleScene::BackToTitle()
+{
+	if (escapeKey_->IsInput() || bButton_->IsInput())
+	{
+		// メインメニューのタイマーをリセット
+		mainMenuTimer_ = kMainMenuDuration;
+
+		// タイトルに戻ることをフラグに設定
+		isBackToTitle_ = true;
+
+		// 戻るSEを再生
+		backSe_->Play();
+	}
+}
+
 /// @brief メインメニューの選択肢のスプライトを更新する
 void TitleScene::UpdateMainMenuOptionSprite()
 {
@@ -150,6 +190,29 @@ void TitleScene::UpdateMainMenuOptionSprite()
 			}
 		}
 	}
+	else if (isBackToTitle_)
+	{
+		float t = 1.0f - (mainMenuTimer_ / kMainMenuDuration);
+
+		// メインメニューのスプライトのアルファ値を更新
+		for (int i = 0; i < static_cast<int>(MainMenuOption::MaxOption); ++i)
+		{
+			mainMenuSpriteBG_[i]->param_->material.color.w = Lerp(mainMenuSpriteBG_[i]->param_->material.color.w, 0.0f, t);
+			mainMenuSprite_[i]->param_->material.color = Lerp(mainMenuSprite_[i]->param_->material.color, Vector4(1.0f, 1.0f, 1.0f, 0.0f), t);
+		}
+
+		// タイトルバーのスプライトのアルファ値を更新
+		auto pushAnyButtonBG = uiEditor_->GetSprite("pushAnyButton_BG");
+		pushAnyButtonBG->param_->material.color.w = t;
+
+		// タイトルのスプライトのアルファ値を更新
+		auto pushAnyButton = uiEditor_->GetSprite("pushAnyButton");
+		pushAnyButton->param_->material.color.w = t;
+
+		// タイトルロゴのスプライトのアルファ値を更新
+		auto titleLogo = uiEditor_->GetSprite("TitleLogo");
+		titleLogo->param_->material.color.w = t;
+	}
 	else
 	{
 		for (int i = 0; i < static_cast<int>(MainMenuOption::MaxOption); ++i)
@@ -168,7 +231,7 @@ void TitleScene::UpdateMainMenuOptionSprite()
 	}
 
 	// フェーズビューのスプライトのアルファ値を更新
-	if (!isQuitExecuted_)
+	if (!isQuitExecuted_ && !isBackToTitle_)
 	{
 		auto phaseView = uiEditor_->GetSprite("Phase_View");
 		phaseView->param_->material.color.w = Lerp(phaseView->param_->material.color.w, 1.0f, 0.3f);

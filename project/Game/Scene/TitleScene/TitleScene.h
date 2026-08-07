@@ -109,6 +109,9 @@ private:
 	/// @brief メインメニューの選択肢を実行する
 	void ExecuteMainMenuOption();
 
+	/// @brief タイトルに戻る
+	void BackToTitle();
+
 	/// @brief メインメニューの選択肢のスプライトを更新する
 	void UpdateMainMenuOptionSprite();
 
@@ -117,6 +120,9 @@ private:
 
 	/// @brief ゲーム終了が実行されたかどうか
 	bool isQuitExecuted_ = false;
+
+	/// @brief タイトルに戻るかどうか
+	bool isBackToTitle_ = false;
 
 	/// @brief メインメニューのタイマー
 	float mainMenuTimer_ = 0.0f;
@@ -154,8 +160,23 @@ private:
 	/// @brief ステージセレクトの選択肢を実行する
 	void StageSelectExecute();
 
+	/// @brief タイトルに戻る
+	void BackToMainMenu();
+
+	/// @brief ステージセレクトのタイマー
+	float stageSelectTimer_ = 0.0f;
+
+	/// @brief ステージセレクトの表示時間
+	static constexpr float kStageSelectDuration = 0.2f;
+
 	/// @brief ステージセレクトの選択中のインデックス
 	int stageSelectIndex_ = 0;
+
+	/// @brief ステージセレクトの選択肢が実行されたかどうか
+	bool isStageSelectExecuted_ = false;
+
+	/// @brief ステージセレクトの選択肢が実行されたかどうか
+	bool isBackToMainMenu_ = false;
 
 
 private:
@@ -215,12 +236,18 @@ private:
 	// 決定キー入力
 	std::unique_ptr<InputKey> spaceKey_;
 
+	/// @brief キャンセルキー入力
+	std::unique_ptr<InputKey> escapeKey_;
+
 	// 上下の左スティック入力
 	std::unique_ptr<InputGamepadLeftStick> upLeftStick_;
 	std::unique_ptr<InputGamepadLeftStick> downLeftStick_;
 
 	// Aボタン
 	std::unique_ptr<InputGamepadButton> aButton_;
+
+	/// @brief Bボタン
+	std::unique_ptr<InputGamepadButton> bButton_;
 
 
 private:
@@ -245,6 +272,9 @@ private:
 
 	/// @brief 決定SE
 	std::unique_ptr<Se> executeSe_ = nullptr;
+
+	/// @brief 戻るSE
+	std::unique_ptr<Se> backSe_ = nullptr;
 
 
 private:

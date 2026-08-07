@@ -23,6 +23,7 @@ void TitleScene::Initialize()
 	// 選択SEと決定SEを作成する
 	selectSe_ = std::make_unique<Se>("SelectSE", engine_->LoadAudio("./Assets/Sounds/se/title_select.mp3"));
 	executeSe_ = std::make_unique<Se>("ExecuteSE", engine_->LoadAudio("./Assets/Sounds/se/title_execute.mp3"));
+	backSe_ = std::make_unique<Se>("BackSE", engine_->LoadAudio("./Assets/Sounds/se/title_back.mp3"));
 
 	// ポストエフェクトのビネットを作成する
 	vignetting_ = std::make_unique<PostEffectVignetting>("TitleVignetting");
@@ -37,12 +38,18 @@ void TitleScene::Initialize()
 	// 決定キー入力を作成する
 	spaceKey_ = std::make_unique<InputKey>("TitleSpaceKey", InputState::Trigger, DIK_SPACE);
 
+	// キャンセルキー入力を作成する
+	escapeKey_ = std::make_unique<InputKey>("TitleEscapeKey", InputState::Trigger, DIK_ESCAPE);
+
 	// 上下の左スティック入力を作成する
-	upLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleUpLeftStick", InputState::Trigger, 0, Vector2(0.0f, -1.0f), 0.5f);
-	downLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleDownLeftStick", InputState::Trigger, 0, Vector2(0.0f, 1.0f), 0.5f);
+	upLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleUpLeftStick", InputState::Trigger, 0, Vector2(0.0f, 1.0f), 0.5f);
+	downLeftStick_ = std::make_unique<InputGamepadLeftStick>("TitleDownLeftStick", InputState::Trigger, 0, Vector2(0.0f, -1.0f), 0.5f);
 
 	// Aボタン入力を作成する
 	aButton_ = std::make_unique<InputGamepadButton>("TitleAButton", InputState::Trigger, 0, XINPUT_GAMEPAD_A);
+
+	// Bボタン入力を作成する
+	bButton_ = std::make_unique<InputGamepadButton>("TitleBButton", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
 
 	// フェード用スプライトを作成する
 	fadeSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), "Fade");
