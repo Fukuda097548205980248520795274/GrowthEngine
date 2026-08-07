@@ -88,6 +88,10 @@ private:
 	bool isTitleOptionExecuted_ = false;
 
 
+	/// @brief タイトルのスプライトのアルファ値
+	float titleSpriteParamAlpha_ = 0.0f;
+
+
 private:
 
 	/// @brief タイトルシーンのメインメニュー初期化処理

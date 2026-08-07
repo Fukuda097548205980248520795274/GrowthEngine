@@ -1,4 +1,5 @@
 #include "../TitleScene.h"
+#include <numbers>
 
 /// @brief タイトルシーンのタイトル初期化処理
 void TitleScene::TitleInitialize()
@@ -14,6 +15,19 @@ void TitleScene::TitleUpdate()
 	{
 		// タイトルのタイマーを更新
 		titleTimer_ -= engine_->GetDeltaTime();
+		titleTimer_ = std::max(titleTimer_, 0.0f);
+
+		// タイトルバーのスプライトのアルファ値を更新
+		auto pushAnyButtonBG = uiEditor_->GetSprite("pushAnyButton_BG");
+		pushAnyButtonBG->param_->material.color.w = titleTimer_ / kTitleDuration;
+
+		// タイトルのスプライトのアルファ値を更新
+		auto pushAnyButton = uiEditor_->GetSprite("pushAnyButton");
+		pushAnyButton->param_->material.color.w = titleTimer_ / kTitleDuration;
+
+		// タイトルロゴのスプライトのアルファ値を更新
+		auto titleLogo = uiEditor_->GetSprite("TitleLogo");
+		titleLogo->param_->material.color.w = titleTimer_ / kTitleDuration;
 
 		// タイトルのタイマーが0以下になったらメインメニューに遷移
 		if (titleTimer_ <= 0.0f)
@@ -23,6 +37,12 @@ void TitleScene::TitleUpdate()
 	}
 	else
 	{
+		// タイトルバーのスプライトのアルファ値を更新
+		titleSpriteParamAlpha_ += 0.05f;
+		titleSpriteParamAlpha_ = std::fmod(titleSpriteParamAlpha_, std::numbers::pi_v<float>);
+		auto pushAnyButtonBG = uiEditor_->GetSprite("pushAnyButton_BG");
+		pushAnyButtonBG->param_->material.color.w = 1.0f - std::sin(titleSpriteParamAlpha_) * 0.6f;
+
 		// タイトルの選択肢を処理する
 		ExecuteTitleOption();
 	}
@@ -46,5 +66,17 @@ void TitleScene::ExecuteTitleOption()
 
 		// タイトルのタイマーをリセット
 		titleTimer_ = kTitleDuration;
+
+		// タイトルバーのスプライトのアルファ値をリセット
+		auto pushAnyButtonBG = uiEditor_->GetSprite("pushAnyButton_BG");
+		pushAnyButtonBG->param_->material.color.w = 1.0f;
+
+		// タイトルのスプライトのアルファ値をリセット
+		auto pushAnyButton = uiEditor_->GetSprite("pushAnyButton");
+		pushAnyButton->param_->material.color.w = 1.0f;
+
+		// タイトルロゴ
+		auto titleLogo = uiEditor_->GetSprite("TitleLogo");
+		titleLogo->param_->material.color.w = 1.0f;
 	}
 }

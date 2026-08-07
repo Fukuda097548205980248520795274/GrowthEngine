@@ -30,7 +30,7 @@
             0.0,
             1.0
         ],
-        "name": "New Sprite",
+        "name": "pushAnyButton",
         "screenAnchor": 6,
         "textureFilename": "title_pushAnyButton.png",
         "transform": {
