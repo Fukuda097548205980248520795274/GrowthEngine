@@ -143,6 +143,9 @@ void BattleDirector::Update(float dt)
 			it = targetTokenCooldowns_.erase(it);
 		}
 	}
+
+	// 戦闘スロットを最適化する
+	OptimizeSlots();
 }
 
 /// @brief 指定されたNPCが最も攻撃に適しているかどうかを判定する
@@ -230,6 +233,15 @@ void BattleDirector::AssignSlot(Character* npc, Character* target)
 			float sz = targetPos.z + std::cos(finalAngle) * slots[i].distance;
 			Vector3 slotPos = { sx, npcPos.y, sz };
 
+			// NavMeshがある場合は、スロットの座標をNavMesh上の最も近い点に修正する
+			if (const NavMesh* navMesh = npc->GetNavMesh())
+			{
+				if (auto nearest = navMesh->GetNearestPoint(slotPos, 5.0f))
+				{
+					slotPos = nearest.value();
+				}
+			}
+
 			Vector3 diff = slotPos - npcPos;
 			float distSq = diff.LengthSq();
 
@@ -299,7 +311,54 @@ std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Char
 	slotWorldPos.y = targetPos.y; // 高さはターゲットまたは地形に合わせる
 	slotWorldPos.z = targetPos.z + std::cos(slot.angleOffset) * slot.distance;
 
+	// NavMeshがある場合は、スロットの座標をNavMesh上の最も近い点に修正する
+	if (const NavMesh* navMesh = npc->GetNavMesh())
+	{
+		if (auto nearest = navMesh->GetNearestPoint(slotWorldPos, 5.0f))
+		{
+			slotWorldPos = nearest.value();
+		}
+	}
+
 	return slotWorldPos;
+}
+
+/// @brief 戦闘スロットを最適化する
+void BattleDirector::OptimizeSlots()
+{
+	// ターゲットごとにスロットを最適化する
+	for (auto& [target, slots] : targetSlots_)
+	{
+		if (!target || slots.empty()) continue;
+
+		// ターゲットが死んでいる場合はスキップ
+		if (target->IsDead()) continue;
+
+		// 実際に占有されているスロットへのポインタ（またはインデックス）を収集
+		std::vector<CombatSlot*> activeSlots;
+		for (auto& slot : slots)
+		{
+			if (slot.isOccupied && slot.occupant)
+			{
+				activeSlots.push_back(&slot);
+			}
+		}
+
+		int numAttackers = static_cast<int32_t>(activeSlots.size());
+		if (numAttackers == 0) continue;
+
+		// 360度を実際の攻撃者の数で分割し、均等な角度を計算する
+		float angleStep = (2.0f * std::numbers::pi_v<float>) / numAttackers;
+
+		// 各攻撃者のスロットの目標角度を更新する
+		for (int i = 0; i < numAttackers; ++i)
+		{
+			Character* attacker = activeSlots[i]->occupant;
+
+			// スロットの目標角度を更新する
+			activeSlots[i]->angleOffset = i * angleStep;
+		}
+	}
 }
 
 /// @brief 攻撃トークンのユーティリティスコアを計算する

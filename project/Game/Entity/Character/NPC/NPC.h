@@ -107,6 +107,9 @@ private:
 	// @brief ターゲットの更新間隔（秒）
 	float targetUpdateInterval = 3.0f;
 
+	/// @brief スロットに到達したかどうか
+	bool isArrivedAtSlot_ = false;
+
 
 private:
 

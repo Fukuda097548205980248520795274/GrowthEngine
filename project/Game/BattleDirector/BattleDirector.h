@@ -5,6 +5,7 @@
 
 class Character;
 class Player;
+class NavMesh;
 
 // @brief トークンの種類
 enum class ActionTokenType

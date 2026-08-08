@@ -234,39 +234,64 @@ void NPC::UpdateStanceMovement()
 	toSlot.y = 0.0f; // 高さは無視して平面で考える
 
 	float distanceToSlot = toSlot.Length();
+
+	// スロットに到達したかどうかの判定
+	constexpr float kStopDistance = 0.2f;
+	constexpr float kResumeDistance = 0.5f;
+
+	// スロットに近づきすぎた場合は到達状態にする
+	if (distanceToSlot < kStopDistance)
+	{
+		isArrivedAtSlot_ = true;
+	}
+	else if (distanceToSlot > kResumeDistance)
+	{
+		isArrivedAtSlot_ = false;
+	}
+
+	// すでに到着している状態なら完全に停止して処理を終える
+	if (isArrivedAtSlot_)
+	{
+		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
+		return;
+	}
+
+
+	// スロットに近づくにつれて速度を落とす
 	float currentSpeed = stanceWalkSpeed_;
+	constexpr float kSlowDownRadius = 1.0f;
 
 	// 目標地点に近づくにつれて速度を落とす
-	constexpr float kSlowDownRadius = 1.0f;
 	if (distanceToSlot < kSlowDownRadius)
 	{
-		// 距離に応じて減速（0.0 ~ 1.0 の割合でスケール）
 		currentSpeed = stanceWalkSpeed_ * (distanceToSlot / kSlowDownRadius);
 	}
 
-	// デッドゾーンを設定して、スロットに近づきすぎた場合は移動入力を0にする
-	constexpr float kDeadZone = 0.1f;
-	if (distanceToSlot > kDeadZone)
-	{
-		toSlot = toSlot.Normalize();
-		moveDir = Vector2(toSlot.x, toSlot.z);
-	}
+	toSlot = toSlot.Normalize();
+	moveDir = Vector2(toSlot.x, toSlot.z);
 
-	// 仲間同士の分離ベクトルを取得して合成する
+	// 仲間同士の分離ベクトルを取得
 	Vector2 separation = CalculateSeparationVector();
 
-	// 分離ベクトルの強さを調整する
-	moveDir = moveDir + (separation * GetSeparationWeight());
+	// 分離ベクトルの強さを距離に応じて調整する
+	float separationMultiplier = 1.0f;
+	if (distanceToSlot < kSlowDownRadius)
+	{
+		separationMultiplier = distanceToSlot / kSlowDownRadius;
+	}
+
+	// 分離ベクトルを合成する
+	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier);
 
 	// 移動入力の決定
-	if (moveDir.LengthSq() > 0.01f && distanceToSlot > kDeadZone)
+	if (moveDir.LengthSq() > 0.01f)
 	{
 		moveDir = moveDir.Normalize();
 		SetMoveInputXZ(moveDir, currentSpeed);
 	}
 	else
 	{
-		// デッドゾーン内にいて、かつ押し出しも弱い場合は完全に停止
+		// 移動入力がほとんどない場合は停止する
 		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
 	}
 }
