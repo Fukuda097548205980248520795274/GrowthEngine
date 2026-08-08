@@ -360,6 +360,11 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// 攻撃シーケンス終了ノードの生成
 			runtimeNode = std::make_unique<OutAttackSequenceNode>(std::make_unique<OutAttackSequence>(character));
 		}
+		else if (editorNode.actionType == ActionType::Telegraph)
+		{
+			// 予備動作ノードの生成
+			runtimeNode = std::make_unique<ActionNode>(std::make_unique<Telegraph>(character, editorNode.telegraphInitData));
+		}
 		else
 		{
 			// 何も設定されていない、または該当しない場合（何もしないノードにする等）

@@ -19,7 +19,8 @@ enum class MotionType
 	Guard,
 	StyleChange,
 	GrabStrikeAttacker,
-	GrabStrikeTarget
+	GrabStrikeTarget,
+	Telegraph
 };
 
 enum class JointType
@@ -188,6 +189,10 @@ private:
 	/// @brief 掴み攻撃（被攻撃側）モーション読み込み
 	/// @param dir 
 	void LoadGrabStrikeTarget(const std::string& dir);
+
+	/// @brief 予備動作モーション読み込み
+	/// @param dir 
+	void LoadTelegraph(const std::string& dir);
 
 
 private:

@@ -1525,6 +1525,9 @@
     <Filter Include="Game\Scene\TitleScene\Title">
       <UniqueIdentifier>{a3b084bc-84a3-4110-86b2-79592fb7879b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Action\Telegraph">
+      <UniqueIdentifier>{a080c5f1-10fe-434b-a38e-5c07cf491a64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2762,6 +2765,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene\Title\TitleSceneTitle.cpp">
       <Filter>Game\Scene\TitleScene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Action\Telegraph\Telegraph.cpp">
+      <Filter>Game\Action\Telegraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4126,6 +4132,9 @@
     </ClInclude>
     <ClInclude Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.h">
       <Filter>Game\Node\CompositeNode\WeightedRandomSelectorNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Action\Telegraph\Telegraph.h">
+      <Filter>Game\Action\Telegraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

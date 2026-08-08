@@ -135,6 +135,13 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["nav_mesh_leader_move_data"]["stopDistance"] = node.navMeshLeaderMoveInitData.stopDistance;
 				n["nav_mesh_leader_move_data"]["isDash"] = node.navMeshLeaderMoveInitData.isDash;
 			}
+			else if (node.actionType == ActionType::Telegraph)
+			{
+				n["telegraph_data"]["telegraphTime"] = node.telegraphInitData.time;
+
+				n["motionType"] = static_cast<int>(node.motionType);
+				n["motionName"] = node.motionName;
+			}
 		}
 		else if (node.type == EditorNodeType::Condition)
 		{
@@ -356,17 +363,15 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					if (n.contains("avoid_data") && n["avoid_data"].is_object())
 					{
 						// avoid_dataの内容をavoidInitDataにコピーする
-						const auto& avoid_data = n["avoid_data"];
+						const auto& avoidData = n["avoid_data"];
 
-						node.avoidInitData.time = avoid_data.value("Duration", 0.0f);
-						node.avoidInitData.distance = avoid_data.value("Distance", 0.0f);
+						node.avoidInitData.time = avoidData.value("Duration", 0.0f);
+						node.avoidInitData.distance = avoidData.value("Distance", 0.0f);
 
-						if (avoid_data.contains("LocalDirection") &&
-							avoid_data["LocalDirection"].is_array() &&
-							avoid_data["LocalDirection"].size() == 2)
+						if (avoidData.contains("LocalDirection") && avoidData["LocalDirection"].is_array() && avoidData["LocalDirection"].size() == 2)
 						{
-							node.avoidInitData.localDirection.x = avoid_data["LocalDirection"][0].get<float>();
-							node.avoidInitData.localDirection.y = avoid_data["LocalDirection"][1].get<float>();
+							node.avoidInitData.localDirection.x = avoidData["LocalDirection"][0].get<float>();
+							node.avoidInitData.localDirection.y = avoidData["LocalDirection"][1].get<float>();
 						}
 					}
 				}
@@ -374,20 +379,32 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 				{
 					if (n.contains("nav_mesh_leader_move_data") && n["nav_mesh_leader_move_data"].is_object())
 					{
-						const auto& move_data = n["nav_mesh_leader_move_data"];
-						node.navMeshLeaderMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
-						node.navMeshLeaderMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
-						node.navMeshLeaderMoveInitData.isDash = move_data.value("isDash", false);
+						const auto& moveData = n["nav_mesh_leader_move_data"];
+						node.navMeshLeaderMoveInitData.moveSpeed = moveData.value("moveSpeed", 0.0f);
+						node.navMeshLeaderMoveInitData.stopDistance = moveData.value("stopDistance", 0.0f);
+						node.navMeshLeaderMoveInitData.isDash = moveData.value("isDash", false);
 					}
 				}
 				else if (node.actionType == ActionType::NavMeshMove)
 				{
 					if (n.contains("nav_mesh_move_data") && n["nav_mesh_move_data"].is_object())
 					{
-						const auto& move_data = n["nav_mesh_move_data"];
-						node.navMeshMoveInitData.moveSpeed = move_data.value("moveSpeed", 0.0f);
-						node.navMeshMoveInitData.stopDistance = move_data.value("stopDistance", 0.0f);
-						node.navMeshMoveInitData.isDash = move_data.value("isDash", false);
+						const auto& moveData = n["nav_mesh_move_data"];
+						node.navMeshMoveInitData.moveSpeed = moveData.value("moveSpeed", 0.0f);
+						node.navMeshMoveInitData.stopDistance = moveData.value("stopDistance", 0.0f);
+						node.navMeshMoveInitData.isDash = moveData.value("isDash", false);
+					}
+				}
+				else if (node.actionType == ActionType::Telegraph)
+				{
+					if (n.contains("telegraph_data") && n["telegraph_data"].is_object())
+					{
+						const auto& telegraphData = n["telegraph_data"];
+						node.telegraphInitData.time = telegraphData.value("telegraphTime", 0.0f);
+						node.telegraphInitData.hAnimation = MotionManager::GetInstance()->GetMotion(static_cast<MotionType>(n.value("motionType", 0)), n.value("motionName", ""));
+
+						node.motionType = static_cast<MotionType>(n.value("motionType", 0));
+						node.motionName = n.value("motionName", "");
 					}
 				}
 			}

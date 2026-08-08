@@ -407,7 +407,166 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
 	float slowMotionDuration = 0.0f; // スローモーションの持続時間
 
-	if (IsDownLying() || IsDownStagger())
+	if (!GetCurrentTelegraph())
+	{
+		if (IsDownLying() || IsDownStagger())
+		{
+			// 軽い怯みのSEを再生する
+			soundManager_->SeLightDamage();
+
+			// 軽い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.1f;
+
+			if (!IsDownStagger() && IsDownLying())
+			{
+				auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetState("DownStagger"));
+				if (auto lyingState = static_cast<CharacterStateDownLying*>(stateMachine_->GetCurrentState()))
+				{
+					// ダウン状態のリアクションを取得する
+					CharacterStateDownStagger::DamageReactionType staggerReaction = CharacterStateDownStagger::DamageReactionType::None;
+
+					// ダウン状態のリアクションに応じて、ダウン怯み状態のリアクションを設定する
+					if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Front)
+						staggerReaction = CharacterStateDownStagger::DamageReactionType::Front;
+					else if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Back)
+						staggerReaction = CharacterStateDownStagger::DamageReactionType::Back;
+
+					// ダウン怯み状態に遷移する
+					stateMachine_->ChangeState("DownStagger");
+					staggerState->DamageReaction(staggerReaction);
+				}
+			}
+			else if (IsDownStagger())
+			{
+				// すでにダウン怯み状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+				if (auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetCurrentState()))
+				{
+					staggerState->Enter();
+					staggerState->DamageReaction(staggerState->GetDamageReaction());
+				}
+			}
+		}
+		else if (IsBlownAway() || IsBlownFalling())
+		{
+			// 落下速度をリセットする
+			movement_->SetVelocityY(0.0f);
+
+			// 重い怯みのSEを再生する
+			soundManager_->SeHeavyDamage();
+
+			// 軽い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.1f;
+
+			// 落下中の状態に遷移する
+			if (!IsBlownAway())
+			{
+				stateMachine_->ChangeState("BlownFalling");
+				if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction();
+			}
+			else
+			{
+				// すでに落下中の状態の場合は、再度Enterを呼び出して、落下の時間をリセットする
+				stateMachine_->GetCurrentState()->Enter();
+				if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+					state->DamageReaction();
+			}
+		}
+		else
+		{
+			// リアクションごとの処理
+			if (damageReaction == DamageReaction::LightStagger)
+			{
+				if (!isThrow)
+				{
+					// 軽い怯みのSEを再生する
+					soundManager_->SeLightDamage();
+
+					// 軽い怯みのスローモーションを設定する
+					slowMotionTimeScale = 0.0f;
+					slowMotionDuration = 0.1f;
+				}
+
+				if (!IsLightDamage())
+				{
+					// 軽い怯みの状態に遷移する
+					stateMachine_->ChangeState("LightDamage");
+					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
+				else
+				{
+					// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+					stateMachine_->GetCurrentState()->Enter();
+					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
+			}
+			else if (damageReaction == DamageReaction::HeavyStagger)
+			{
+				if (!isThrow)
+				{
+					// 重い怯みのSEを再生する
+					soundManager_->SeHeavyDamage();
+
+					// 重い怯みのスローモーションを設定する
+					slowMotionTimeScale = 0.0f;
+					slowMotionTimeScale = 0.125f;
+				}
+
+				if (!IsHeavyDamage())
+				{
+					// 重い怯みの状態に遷移する
+					stateMachine_->ChangeState("HeavyDamage");
+					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
+				else
+				{
+					// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
+					stateMachine_->GetCurrentState()->Enter();
+					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+						state->DamageReaction(hitPosition);
+				}
+			}
+			else if (damageReaction == DamageReaction::Down)
+			{
+				if (!isThrow)
+				{
+					// 重い怯みのSEを再生する
+					soundManager_->SeHeavyDamage();
+
+					// ダウンのスローモーションを設定する
+					slowMotionTimeScale = 0.0f;
+					slowMotionDuration = 0.15f;
+				}
+
+				// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
+				if (knockDirection.y * knockback > 0.0f)
+				{
+					if (!IsBlownAway())
+					{
+						stateMachine_->ChangeState("BlownAway");
+						if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
+							state->DamageReaction(hitPosition);
+					}
+				}
+				else
+				{
+					if (!IsDownFalling() || !IsDownLying())
+					{
+						// ダウンの状態に遷移する
+						stateMachine_->ChangeState("DownFalling");
+						if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
+							state->DamageReaction(hitPosition);
+					}
+				}
+			}
+		}
+	}
+	else
 	{
 		// 軽い怯みのSEを再生する
 		soundManager_->SeLightDamage();
@@ -415,153 +574,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 軽い怯みのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.1f;
-
-		if (!IsDownStagger() && IsDownLying())
-		{
-			auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetState("DownStagger"));
-			if (auto lyingState = static_cast<CharacterStateDownLying*>(stateMachine_->GetCurrentState()))
-			{
-				// ダウン状態のリアクションを取得する
-				CharacterStateDownStagger::DamageReactionType staggerReaction = CharacterStateDownStagger::DamageReactionType::None;
-
-				// ダウン状態のリアクションに応じて、ダウン怯み状態のリアクションを設定する
-				if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Front)
-					staggerReaction = CharacterStateDownStagger::DamageReactionType::Front;
-				else if (lyingState->GetDamageReaction() == CharacterStateDownLying::DamageReactionType::Back)
-					staggerReaction = CharacterStateDownStagger::DamageReactionType::Back;
-
-				// ダウン怯み状態に遷移する
-				stateMachine_->ChangeState("DownStagger");
-				staggerState->DamageReaction(staggerReaction);
-			}
-		}
-		else if(IsDownStagger())
-		{
-			// すでにダウン怯み状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
-			if (auto staggerState = static_cast<CharacterStateDownStagger*>(stateMachine_->GetCurrentState()))
-			{
-				staggerState->Enter();
-				staggerState->DamageReaction(staggerState->GetDamageReaction());
-			}
-		}
-	}
-	else if (IsBlownAway() || IsBlownFalling())
-	{
-		// 落下速度をリセットする
-		movement_->SetVelocityY(0.0f);
-
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
-
-		// 軽い怯みのスローモーションを設定する
-		slowMotionTimeScale = 0.0f;
-		slowMotionDuration = 0.1f;
-
-		// 落下中の状態に遷移する
-		if (!IsBlownAway())
-		{
-			stateMachine_->ChangeState("BlownFalling");
-			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
-				state->DamageReaction();
-		}
-		else
-		{
-			// すでに落下中の状態の場合は、再度Enterを呼び出して、落下の時間をリセットする
-			stateMachine_->GetCurrentState()->Enter();
-			if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
-				state->DamageReaction();
-		}
-	}
-	else
-	{
-		// リアクションごとの処理
-		if (damageReaction == DamageReaction::LightStagger)
-		{
-			if (!isThrow)
-			{
-				// 軽い怯みのSEを再生する
-				soundManager_->SeLightDamage();
-
-				// 軽い怯みのスローモーションを設定する
-				slowMotionTimeScale = 0.0f;
-				slowMotionDuration = 0.1f;
-			}
-
-			if (!IsLightDamage())
-			{
-				// 軽い怯みの状態に遷移する
-				stateMachine_->ChangeState("LightDamage");
-				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
-					state->DamageReaction(hitPosition);
-			}
-			else
-			{
-				// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
-				stateMachine_->GetCurrentState()->Enter();
-				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
-					state->DamageReaction(hitPosition);
-			}
-		}
-		else if (damageReaction == DamageReaction::HeavyStagger)
-		{
-			if (!isThrow)
-			{
-				// 重い怯みのSEを再生する
-				soundManager_->SeHeavyDamage();
-
-				// 重い怯みのスローモーションを設定する
-				slowMotionTimeScale = 0.0f;
-				slowMotionTimeScale = 0.125f;
-			}
-
-			if (!IsHeavyDamage())
-			{
-				// 重い怯みの状態に遷移する
-				stateMachine_->ChangeState("HeavyDamage");
-				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
-					state->DamageReaction(hitPosition);
-			}
-			else
-			{
-				// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
-				stateMachine_->GetCurrentState()->Enter();
-				if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
-					state->DamageReaction(hitPosition);
-			}
-		}
-		else if (damageReaction == DamageReaction::Down)
-		{
-			if (!isThrow)
-			{
-				// 重い怯みのSEを再生する
-				soundManager_->SeHeavyDamage();
-
-				// ダウンのスローモーションを設定する
-				slowMotionTimeScale = 0.0f;
-				slowMotionDuration = 0.15f;
-			}
-
-			// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
-			if (knockDirection.y * knockback > 0.0f)
-			{
-				if (!IsBlownAway())
-				{
-					stateMachine_->ChangeState("BlownAway");
-					if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
-						state->DamageReaction(hitPosition);
-				}
-			}
-			else
-			{
-				if (!IsDownFalling() || !IsDownLying())
-				{
-					// ダウンの状態に遷移する
-					stateMachine_->ChangeState("DownFalling");
-					if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
-						state->DamageReaction(hitPosition);
-				}
-			}
-		}
 	}
 
 	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -972,6 +984,10 @@ void Character::ActionUpdate()
 	// 現在の回避がる場合は更新する
 	if (currentAvoid_)
 		currentAvoid_->Update();
+
+	// 現在の予備動作がある場合は更新する
+	if (currentTelegraph_)
+		currentTelegraph_->Update();
 }
 
 /// @brief 回避を開始する
@@ -1013,7 +1029,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash() && !IsTelegraph())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);

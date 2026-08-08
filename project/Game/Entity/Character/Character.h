@@ -8,6 +8,7 @@
 #include "SoundManager/SoundManager.h"
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
+#include "Action/Telegraph/Telegraph.h"
 #include "AppCollider/AppCollider.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Shake/Shake.h"
@@ -171,6 +172,10 @@ public:
 	/// @return 
 	bool IsDead() const { return stateMachine_->GetCurrentStateName() == "Dead"; }
 
+	/// @brief 予備動作中かどうか
+	/// @return 
+	bool IsTelegraph() const { return currentTelegraph_ != nullptr; }
+
 	/// @brief 現在の攻撃を設定する
 	/// @param attack 
 	virtual void SetCurrentAttack(Attack* attack) { currentAttack_ = attack; }
@@ -202,6 +207,14 @@ public:
 	/// @brief 現在の回避を取得する
 	/// @return 
 	Avoid* GetCurrentAvoid() const { return currentAvoid_; }
+
+	/// @brief 現在の予備動作を設定する
+	/// @param telegraph 
+	void SetCurrentTelegraph(Telegraph* telegraph) { currentTelegraph_ = telegraph; }
+
+	/// @brief 現在の予備動作を取得する
+	/// @return 
+	Telegraph* GetCurrentTelegraph() const { return currentTelegraph_; }
 
 	/// @brief アニメーションを設定する
 	/// @param hAnimation 
@@ -745,6 +758,9 @@ protected:
 
 	/// @brief 今の回避
 	Avoid* currentAvoid_ = nullptr;
+
+	/// @brief 今の予備動作
+	Telegraph* currentTelegraph_ = nullptr;
 
 
 protected:

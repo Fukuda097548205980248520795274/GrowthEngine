@@ -7,6 +7,7 @@
 #include "Action/Avoid/Avoid.h"
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
+#include "Action/Telegraph/Telegraph.h"
 #include "MotionManager/MotionManager.h"
 #include "BattleDirector/BattleDirector.h"
 
@@ -49,6 +50,9 @@ enum class ActionType
 	ReleaseToken,
 
 	NavMeshLeaderMove = 12,
+
+	// 予備動作
+	Telegraph
 };
 
 /// @brief アクションの種類を文字列で表す配列
@@ -67,7 +71,8 @@ constexpr inline const char* actionTypeNames[] =
 	"ReleaseToken",
 
 	"",
-	"NavMeshLeaderMove"
+	"NavMeshLeaderMove",
+	"Telegraph"
 };
 
 // 条件の種類
@@ -209,6 +214,7 @@ struct EditorNode
 	AvoidInitData avoidInitData;
 	NavMeshMoveInitData navMeshMoveInitData;
 	NavMeshLeaderMoveInitData navMeshLeaderMoveInitData;
+	TelegraphInitData telegraphInitData;
 
 	// 条件ノードのパラメータ
 	ConditionNodeParam conditionParam;

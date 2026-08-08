@@ -146,6 +146,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Action\Telegraph\Telegraph.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp" />
@@ -1231,6 +1232,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Action\Telegraph\Telegraph.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h" />
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h" />
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h" />

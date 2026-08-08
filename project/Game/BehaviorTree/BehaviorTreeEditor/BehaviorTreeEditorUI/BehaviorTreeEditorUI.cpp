@@ -1734,6 +1734,45 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	{
 		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), tokenTypeNames, IM_ARRAYSIZE(tokenTypeNames));
 	}
+	else if(node.actionType == ActionType::Telegraph)
+	{
+		ImGui::DragFloat("時間", &node.telegraphInitData.time, 0.01f);
+
+		
+		// 選択されたモーションタイプに応じたモーション名のリストをMotionManagerから取得
+		node.motionType = MotionType::Telegraph;
+		std::vector<std::string> telegraphMotions = MotionManager::GetInstance()->GetMotionNames(node.motionType);
+
+		// モーション名のリストが空の場合はエラーメッセージを表示
+		if (telegraphMotions.empty())
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "モーションがロードされていません");
+		}
+		else
+		{
+			// 現在選択されているモーション名をプレビュー用の文字列として設定
+			const char* previewValue = node.motionName.empty() ? "モーションを選択..." : node.motionName.c_str();
+
+			// モーション名選択用のコンボボックスを描画
+			if (ImGui::BeginCombo("予備動作モーション", previewValue))
+			{
+				for (const auto& name : telegraphMotions)
+				{
+					// 現在のモーション名と同じものが選択されている状態にする
+					bool isSelected = (node.motionName == name);
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						history_->SaveHistory(nodes_, links_, currentId_);
+						isDirty_ = true;
+
+						node.motionName = name;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		}
+	}
 
 	ImGui::PopItemWidth();
 }

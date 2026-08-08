@@ -81,6 +81,7 @@ void MotionManager::Initialize()
 	LoadStyleChange(dir);
 	LoadGrabStrikeAttacker(dir);
 	LoadGrabStrikeTarget(dir);
+	LoadTelegraph(dir);
 
 	// 初期化完了
 	isInit_ = true;
@@ -243,4 +244,11 @@ void MotionManager::LoadGrabStrikeAttacker(const std::string& dir)
 void MotionManager::LoadGrabStrikeTarget(const std::string& dir)
 {
 	table_[MotionType::GrabStrikeTarget]["000"] = engine_->LoadAnimation(dir + "/grabStrike/grabStrike_00/target", "target.gltf");
+}
+
+/// @brief 予備動作モーション読み込み
+/// @param dir 
+void MotionManager::LoadTelegraph(const std::string& dir)
+{
+	table_[MotionType::Telegraph]["000"] = engine_->LoadAnimation(dir + "/telegraph/telegraph_000", "telegraph_000.gltf");
 }
