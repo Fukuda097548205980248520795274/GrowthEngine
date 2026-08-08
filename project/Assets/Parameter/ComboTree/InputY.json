@@ -1,41 +1,13 @@
 {
-    "currentId": 94,
+    "currentId": 100,
     "links": [
         {
-            "endPinId": 84,
-            "id": 93,
+            "endPinId": 95,
+            "id": 99,
             "startPinId": 91
         }
     ],
     "nodes": [
-        {
-            "animationName": "Player_Combo_4",
-            "comboParams": {
-                "attackTime": 0.5,
-                "cancelEndTime": 1.0,
-                "cancelStartTime": 0.5,
-                "grabWeaponEndTime": 0.0,
-                "grabWeaponStartTime": 0.0,
-                "groups": [],
-                "hitboxes": [],
-                "isGrabWeapon": false,
-                "moveEndTime": 0.10000000149011612,
-                "moveSpeed": 5.0,
-                "moveStartTime": 0.0
-            },
-            "id": 83,
-            "inputPinId": 84,
-            "name": "Combo Attack",
-            "nodeType": 0,
-            "outputInputBPinId": 87,
-            "outputInputXPinId": 85,
-            "outputInputYPinId": 86,
-            "pos": [
-                736.0,
-                678.0
-            ],
-            "targetAnimationName": ""
-        },
         {
             "animationName": "Player_Combo_4",
             "comboParams": {
@@ -86,6 +58,59 @@
             "pos": [
                 614.0,
                 679.0
+            ],
+            "targetAnimationName": ""
+        },
+        {
+            "animationName": "Player_Combo_4",
+            "comboParams": {
+                "attackTime": 0.5,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 0.5,
+                        "groupId": 0,
+                        "knockback": 1.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.0
+                    }
+                ],
+                "hitboxes": [
+                    {
+                        "groupId": 0,
+                        "jointType": 11,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 0,
+                        "jointType": 15,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "moveEndTime": 0.10000000149011612,
+                "moveSpeed": 5.0,
+                "moveStartTime": 0.0
+            },
+            "id": 94,
+            "inputPinId": 95,
+            "name": "Combo Attack",
+            "nodeType": 0,
+            "outputInputBPinId": 98,
+            "outputInputXPinId": 96,
+            "outputInputYPinId": 97,
+            "pos": [
+                753.0,
+                675.0
             ],
             "targetAnimationName": ""
         }

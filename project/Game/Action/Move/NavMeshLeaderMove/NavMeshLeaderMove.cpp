@@ -352,6 +352,18 @@ void NavMeshLeaderMove::Update()
             // 合成した「目標となるベクトル」を正規化する
             finalDirection = finalDirection.Normalize();
 
+            // 予測位置を計算する（現在位置 + 目標ベクトル * 予測距離）
+            Vector3 currentPos = owner_->GetWorldPosition();
+            float predictDistance = 2.0f;
+            Vector3 predictPos = currentPos + Vector3(finalDirection.x, 0.0f, finalDirection.y) * predictDistance;
+
+            // 予測位置がNavMesh内にあるかチェックする
+            if (navMesh->FindPolygonAt(predictPos) == -1)
+            {
+                // 予測位置がNavMesh外にある場合は、目標ベクトルをそのまま使用する
+                finalDirection = moveDirection;
+            }
+
             // 前回のベクトルから目標ベクトルへLerp（補間）する
             float lerpFactor = 0.15f;
             currentMoveDirection_.x = currentMoveDirection_.x + (finalDirection.x - currentMoveDirection_.x) * lerpFactor;
