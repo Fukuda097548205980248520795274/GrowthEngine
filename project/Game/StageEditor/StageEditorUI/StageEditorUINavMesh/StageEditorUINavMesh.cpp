@@ -1,13 +1,14 @@
 #include "StageEditorUINavMesh.h"
 #include "GrowthEngine.h"
 #include "NavMesh/NavMesh.h"
+#include "StageEditor/StageEditorNavMeshController/StageEditorNavMeshController.h"
 
 /// @brief コンストラクタ
 /// @param navMesh 
 /// @param canExtrude 
 /// @param canBridge 
 /// @param isDirty 
-void StageEditorUINavMesh::DrawUI(NavMesh* navMesh, bool canExtrude, bool canBridge, bool& isDirty)
+void StageEditorUINavMesh::DrawUI(NavMesh* navMesh, bool canExtrude, bool canBridge, StageEditorNavMeshController* navMeshController, bool& isDirty)
 {
 	// ナビメッシュ編集モードのUIを描画
 	ImGui::Text("--- ナビゲーションメッシュ ---");
@@ -35,4 +36,28 @@ void StageEditorUINavMesh::DrawUI(NavMesh* navMesh, bool canExtrude, bool canBri
 	}
 
 	ImGui::Separator();
+
+	// 選択中のポリゴンを取得
+	auto selectedItems = navMeshController->GetSelectedItems();
+
+	if (!selectedItems.empty())
+	{
+		ImGui::Text("--- 選択中ポリゴン設定 ---");
+
+		for (auto& item : selectedItems)
+		{
+			NavPolygon* selectedPoly = navMesh->GetMutablePolygon(item.polygonId);
+			if (selectedPoly)
+			{
+				ImGui::Text("ポリゴンID: %d", selectedPoly->id);
+				ImGui::Text("有効: %s", selectedPoly->isActive ? "true" : "false");
+				ImGui::Text("隣接ID: [%d, %d, %d, %d]", selectedPoly->neighborIds[0], selectedPoly->neighborIds[1], selectedPoly->neighborIds[2], selectedPoly->neighborIds[3]);
+
+				if (ImGui::InputInt("グループID", &selectedPoly->groupId))
+				{
+					isDirty = true; // 値が変更されたら保存用のフラグを立てる
+				}
+			}
+		}
+	}
 }

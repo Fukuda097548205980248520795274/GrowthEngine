@@ -1,6 +1,7 @@
 #pragma once
 
 class NavMesh;
+class StageEditorNavMeshController;
 
 class StageEditorUINavMesh
 {
@@ -11,6 +12,6 @@ public:
 	/// @param canExtrude 
 	/// @param canBridge 
 	/// @param isDirty 
-	void DrawUI(NavMesh* navMesh, bool canExtrude, bool canBridge, bool& isDirty);
+	void DrawUI(NavMesh* navMesh, bool canExtrude, bool canBridge, StageEditorNavMeshController* navMeshController, bool& isDirty);
 };
 

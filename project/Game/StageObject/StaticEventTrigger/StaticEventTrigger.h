@@ -29,8 +29,14 @@ public:
 		/// @brief ゲームクリアフラグ
 		bool isGameClear = false;
 
+		/// @brief ナビメッシュのグループID
+		int navMeshGroupId = 0;
+
+		/// @brief ナビメッシュの状態
+		bool isNavMeshEnabled = true;
+
 		// イベントが発生したときのコールバック関数
-		std::function<bool(int, const char*, bool, bool)> onTriggerCallback = nullptr;
+		std::function<bool(int, const char*, bool, bool, int, bool)> onTriggerCallback = nullptr;
 	};
 
 	/// @brief イベントの種類
@@ -39,6 +45,7 @@ public:
 		None,
 		ObjectSpawn,
 		PlayCutscene, // カットシーン再生
+		NavMeshStateChange, // ナビメッシュの状態変更
 		StickTutorial, // スティック操作チュートリアル
 		DashTutorial, // ダッシュ操作チュートリアル
 		AttackTutorial, // 攻撃操作チュートリアル
@@ -92,8 +99,14 @@ private:
 	/// @brief ゲームクリアフラグ
 	bool isGameClear_ = false;
 
+	/// @brief ナビメッシュのグループID
+	int navMeshGroupId_ = 0;
+
+	/// @brief ナビメッシュの状態
+	bool isNavMeshEnabled_ = true;
+
 	// イベントが発生したときのコールバック関数
-	std::function<bool(int, const char*, bool, bool)> onTriggerCallback_ = nullptr;
+	std::function<bool(int, const char*, bool, bool, int, bool)> onTriggerCallback_ = nullptr;
 
 
 public:

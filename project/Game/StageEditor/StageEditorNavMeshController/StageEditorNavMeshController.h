@@ -102,15 +102,26 @@ private:
 	void SelectNavMeshItem();
 
 	/// @brief 選択されている辺を押し出す
+	/// @param placementList 
+	/// @param isDirty 
 	void ExtrudeSelectedEdge(std::vector<PlacementData>& placementList, bool& isDirty);
 
-	/// @brief 選択された辺を繋ぐ（ブリッジ）する
+	/// @brief 選択されている辺を繋ぐ（ブリッジ）する
+	/// @param placementList 
+	/// @param isDirty 
 	void BridgeSelectedEdges(std::vector<PlacementData>& placementList, bool& isDirty);
 
-	/// @brief 選択された辺を削除する
+	/// @brief 選択されているポリゴンを有効化する
+	/// @param placementList 
+	/// @param isDirty 
+	void ActivePolygon(std::vector<PlacementData>& placementList, bool& isDirty);
+
+	/// @brief 選択された要素を削除する
+	/// @param placementList 
+	/// @param isDirty 
 	void DeleteSelectedNavMeshElements(std::vector<PlacementData>& placementList, bool& isDirty);
 
-	/// @brief 選択された辺をハイライト表示する
+	/// @brief 選択された要素をハイライト表示する
 	void DrawSelectedHighlight();
 };
 

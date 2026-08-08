@@ -1,7 +1,9 @@
 {
     "navMesh": [
         {
+            "groupId": 0,
             "id": 0,
+            "isActive": true,
             "neighborIds": [
                 -1,
                 -1,
@@ -32,7 +34,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 1,
+            "isActive": true,
             "neighborIds": [
                 0,
                 2,
@@ -63,7 +67,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 2,
+            "isActive": true,
             "neighborIds": [
                 1,
                 -1,
@@ -83,7 +89,7 @@
                 ],
                 [
                     -2.90276837348938,
-                    -1.4901161193847656e-08,
+                    0.0,
                     43.0657958984375
                 ],
                 [
@@ -94,7 +100,9 @@
             ]
         },
         {
+            "groupId": 1,
             "id": 3,
+            "isActive": false,
             "neighborIds": [
                 2,
                 4,
@@ -109,12 +117,12 @@
                 ],
                 [
                     -2.90276837348938,
-                    -1.4901161193847656e-08,
+                    0.0,
                     43.0657958984375
                 ],
                 [
                     -3.209138870239258,
-                    -1.4901161193847656e-08,
+                    0.0,
                     61.61528015136719
                 ],
                 [
@@ -125,7 +133,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 4,
+            "isActive": true,
             "neighborIds": [
                 3,
                 -1,
@@ -135,28 +145,30 @@
             "vertices": [
                 [
                     -3.209138870239258,
-                    -1.4901161193847656e-08,
+                    0.0,
                     61.61528015136719
                 ],
                 [
                     -2.90276837348938,
-                    -1.4901161193847656e-08,
+                    0.0,
                     43.0657958984375
                 ],
                 [
                     -30.77700424194336,
-                    -1.4901161193847656e-08,
+                    3.725290298461914e-09,
                     43.14067077636719
                 ],
                 [
                     -31.068483352661133,
-                    -2.2351741790771484e-08,
+                    -3.725290298461914e-09,
                     61.61528015136719
                 ]
             ]
         },
         {
+            "groupId": 0,
             "id": 5,
+            "isActive": true,
             "neighborIds": [
                 4,
                 -1,
@@ -166,12 +178,12 @@
             "vertices": [
                 [
                     -31.068483352661133,
-                    -2.2351741790771484e-08,
+                    -3.725290298461914e-09,
                     61.61528015136719
                 ],
                 [
                     -30.77700424194336,
-                    -1.4901161193847656e-08,
+                    3.725290298461914e-09,
                     43.14067077636719
                 ],
                 [
@@ -187,7 +199,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 6,
+            "isActive": true,
             "neighborIds": [
                 5,
                 -1,
@@ -197,7 +211,7 @@
             "vertices": [
                 [
                     -31.068483352661133,
-                    -2.2351741790771484e-08,
+                    -3.725290298461914e-09,
                     61.61528015136719
                 ],
                 [
@@ -218,7 +232,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 7,
+            "isActive": true,
             "neighborIds": [
                 6,
                 8,
@@ -249,7 +265,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 8,
+            "isActive": true,
             "neighborIds": [
                 7,
                 -1,
@@ -280,7 +298,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 9,
+            "isActive": true,
             "neighborIds": [
                 7,
                 -1,
@@ -311,7 +331,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 10,
+            "isActive": true,
             "neighborIds": [
                 9,
                 12,
@@ -342,7 +364,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 11,
+            "isActive": true,
             "neighborIds": [
                 10,
                 -1,
@@ -373,7 +397,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 12,
+            "isActive": true,
             "neighborIds": [
                 10,
                 -1,
@@ -404,7 +430,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 13,
+            "isActive": true,
             "neighborIds": [
                 12,
                 14,
@@ -435,7 +463,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 14,
+            "isActive": true,
             "neighborIds": [
                 13,
                 -1,
@@ -466,7 +496,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 15,
+            "isActive": true,
             "neighborIds": [
                 14,
                 -1,
@@ -497,7 +529,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 16,
+            "isActive": true,
             "neighborIds": [
                 15,
                 -1,
@@ -528,7 +562,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 17,
+            "isActive": true,
             "neighborIds": [
                 15,
                 -1,
@@ -559,7 +595,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 18,
+            "isActive": true,
             "neighborIds": [
                 17,
                 20,
@@ -590,7 +628,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 19,
+            "isActive": true,
             "neighborIds": [
                 18,
                 -1,
@@ -621,7 +661,9 @@
             ]
         },
         {
+            "groupId": 0,
             "id": 20,
+            "isActive": true,
             "neighborIds": [
                 18,
                 -1,
@@ -990,7 +1032,9 @@
             "scaleX": 4.311415195465088,
             "scaleY": 2.190000057220459,
             "scaleZ": 1.0,
-            "subType": 3
+            "subType": 3,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true
         },
         {
             "attackPower": 1.0,
@@ -1008,6 +1052,27 @@
             "scaleY": 1.0,
             "scaleZ": 1.0,
             "subType": 1
+        },
+        {
+            "battleAreaStart": true,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "Area_3",
+            "eventType": 3,
+            "gameClear": true,
+            "name": "",
+            "posX": -1.1699621677398682,
+            "posY": 0.7992453575134277,
+            "posZ": 44.29526138305664,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.311415195465088,
+            "scaleY": 2.190000057220459,
+            "scaleZ": 1.0,
+            "subType": 3,
+            "targetNavMeshGroupId": 1,
+            "targetNavMeshState": true
         }
     ]
 }

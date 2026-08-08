@@ -54,8 +54,8 @@ public:
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying 
-	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, 
-		NavMesh* navMesh,StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge);
+	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
+		NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge);
 
 	/// @brief アセットウィンドウの描画
 	/// @param placementList 

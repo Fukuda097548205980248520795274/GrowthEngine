@@ -26,6 +26,8 @@ void NavMesh::DrawDebug() const
 
 	for (auto& poly : polygons_)
 	{
+		Vector4 color = poly.isActive ? Vector4{ 1.0f, 1.0f, 0.5f, 0.1f } : Vector4{ 0.5f, 0.5f, 1.0f, 0.1f };
+
 		// ポリゴンの頂点を線で結んで描画する
 		for (int i = 0; i < 4; ++i)
 		{
@@ -35,8 +37,8 @@ void NavMesh::DrawDebug() const
 		}
 
 		// ポリゴンの内部を半透明の色で塗りつぶす
-		engine_->DrawDebugTriangle3D(poly.vertices[0], poly.vertices[1], poly.vertices[2], { 0.5f, 0.5f, 1.0f, 0.2f });
-		engine_->DrawDebugTriangle3D(poly.vertices[0], poly.vertices[2], poly.vertices[3], { 0.5f, 0.5f, 1.0f, 0.2f });
+		engine_->DrawDebugTriangle3D(poly.vertices[0], poly.vertices[1], poly.vertices[2], color);
+		engine_->DrawDebugTriangle3D(poly.vertices[0], poly.vertices[2], poly.vertices[3], color);
 	}
 
 #endif
@@ -116,8 +118,15 @@ std::vector<Vector3> NavMesh::FindPath(const Vector3& start, const Vector3& end)
 		// 隣接するポリゴンを調べる
 		for (int neighborId : currentPoly->neighborIds)
 		{
-			if (neighborId == -1) continue; // 壁
-			if (closedList.count(neighborId)) continue; // 探索済み
+			// 隣接ポリゴンが有効かどうかを確認
+			const NavPolygon* neighbor = GetPolygon(neighborId);
+			if (!neighbor || !neighbor->isActive) continue;
+
+			// 壁
+			if (neighborId == -1) continue;
+
+			// 探索済み
+			if (closedList.count(neighborId)) continue;
 
 			Vector3 neighborCenter = GetPolygonCenter(neighborId);
 
@@ -268,6 +277,27 @@ std::optional<Vector3> NavMesh::GetNearestPoint(const Vector3& position, float s
 		// 見つからなかったことを明示
 		return std::nullopt;
 	}
+}
+
+/// @brief 指定したグループIDのポリゴンを有効/無効にする
+/// @param targetGroupId 
+/// @param isActive 
+void NavMesh::SetGroupActive(int targetGroupId, bool isActive)
+{
+	for (auto& poly : polygons_) 
+	{
+		if (poly.groupId == targetGroupId) 
+			poly.isActive = isActive;
+	}
+}
+
+/// @brief 指定したグループIDのポリゴンにロックする（他のグループのポリゴンは無効化する）
+/// @param combatAreaGroupId 
+void NavMesh::LockToCombatArea(int combatAreaGroupId)
+{
+	// グループIDが0（デフォルト）または指定された戦闘エリアのグループIDのポリゴンのみを有効化し、それ以外は無効化する
+	for (auto& poly : polygons_)
+		poly.isActive = (poly.groupId == 0 || poly.groupId == combatAreaGroupId);
 }
 
 /// @brief IDからポリゴンを取得する

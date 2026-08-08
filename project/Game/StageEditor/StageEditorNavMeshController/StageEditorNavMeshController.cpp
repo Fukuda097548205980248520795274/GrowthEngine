@@ -37,7 +37,7 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 	}
 
 	// 左クリックが押された瞬間（選択 ＆ ドラッグ開始）
-	if (engine_->GetMouseButtonTrigger(MouseButton::Left) && !ImGuizmo::IsOver())
+	if (engine_->IsCursorWindowHover() && engine_->GetMouseButtonTrigger(MouseButton::Left) && !ImGuizmo::IsOver())
 	{
 		// Shiftキーが押されているかどうかをチェック（複数選択のため）
 		bool isShiftPressed = engine_->GetKeyPress(DIK_LSHIFT) || engine_->GetKeyPress(DIK_RSHIFT);
@@ -57,6 +57,12 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 	{
 		if (engine_->GetKeyTrigger(DIK_E)) ExtrudeSelectedEdge(placementList, isDirty);
 		if (engine_->GetKeyTrigger(DIK_B)) BridgeSelectedEdges(placementList, isDirty);
+	}
+
+	// 選択された面を有効・無効化する（面選択モードのときのみ）
+	if (selectionMode_ == SelectionMode::Polygon)
+	{
+		if (engine_->GetKeyTrigger(DIK_A)) ActivePolygon(placementList, isDirty);
 	}
 
 	// DeleteキーまたはBackspaceキーが押された瞬間
@@ -494,6 +500,22 @@ void StageEditorNavMeshController::BridgeSelectedEdges(std::vector<PlacementData
 	selectedItems_.clear();
 }
 
+/// @brief 選択されているポリゴンを有効化する
+/// @param placementList 
+/// @param isDirty 
+void StageEditorNavMeshController::ActivePolygon(std::vector<PlacementData>& placementList, bool& isDirty)
+{
+	for (auto& item : selectedItems_)
+	{
+		NavPolygon* poly = navMesh_->GetMutablePolygon(item.polygonId);
+		if (poly)
+		{
+			poly->isActive = !poly->isActive;
+			isDirty = true;
+		}
+	}
+}
+
 /// @brief 選択された辺を削除する
 void StageEditorNavMeshController::DeleteSelectedNavMeshElements(std::vector<PlacementData>& placementList, bool& isDirty)
 {
@@ -588,13 +610,16 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 		NavPolygon* poly = navMesh_->GetMutablePolygon(item.polygonId);
 		if (!poly) continue;
 
+		Vector4 highlightColor = Vector4(1.0f, 1.0f, 0.0f, 0.5f); // 半透明の黄色
+		if (!poly->isActive) highlightColor = Vector4(0.0f, 1.0f, 1.0f, 0.5f); // 非アクティブなポリゴンは半透明の緑色
+
 		if (selectionMode_ == SelectionMode::Vertex)
 		{
 			Vector3 v = poly->vertices[item.itemIndex];
 			Vector3 renderV = Vector3(v.x, v.y + 0.05f, v.z);
 
 			// 頂点の強調表示
-			engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+			engine_->DrawDebugLine3D(renderV, renderV + Vector3(0, 0.5f, 0), highlightColor);
 		}
 		else if (selectionMode_ == SelectionMode::Edge)
 		{
@@ -604,7 +629,7 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 			Vector3 renderV1 = Vector3(v1.x, v1.y + 0.01f, v1.z);
 
 			// 辺の強調表示
-			engine_->DrawDebugLine3D(renderV0, renderV1, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+			engine_->DrawDebugLine3D(renderV0, renderV1, highlightColor);
 		}
 		else if (selectionMode_ == SelectionMode::Polygon)
 		{
@@ -614,8 +639,8 @@ void StageEditorNavMeshController::DrawSelectedHighlight()
 			v0.y += 0.01f; v1.y += 0.01f; v2.y += 0.01f; v3.y += 0.01f;
 
 			// 半透明の黄色で塗りつぶす
-			engine_->DrawDebugTriangle3D(v0, v1, v2, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
-			engine_->DrawDebugTriangle3D(v0, v2, v3, Vector4(1.0f, 1.0f, 0.0f, 0.5f));
+			engine_->DrawDebugTriangle3D(v0, v1, v2, highlightColor);
+			engine_->DrawDebugTriangle3D(v0, v2, v3, highlightColor);
 		}
 	}
 }

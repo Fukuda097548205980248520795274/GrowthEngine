@@ -99,6 +99,10 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 					poly.neighborIds[i] = polyJson["neighborIds"][i].get<int>();
 				}
 
+				// isActiveとgroupIdの復元
+				poly.isActive = polyJson.value("isActive", true);
+				poly.groupId = polyJson.value("groupId", 0);
+
 				navMesh->AddPolygon(poly);
 			}
 		}

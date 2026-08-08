@@ -38,6 +38,12 @@ struct NavPolygon
 	// 隣接するポリゴンのID
 	std::array<int, 4> neighborIds;
 
+	/// @brief このポリゴンが有効かどうか（無効なポリゴンは経路探索に使用されない）
+	bool isActive = true;
+
+	/// @brief グループID（同じグループのポリゴンは同じエリアに属する）
+	int groupId = 0;
+
 	/// @brief 点がポリゴンの内側にあるか確認する
 	/// @param point 
 	/// @return 
@@ -121,6 +127,15 @@ public:
 	/// @param searchRadius 
 	/// @return 
 	std::optional<Vector3> GetNearestPoint(const Vector3& position, float searchRadius) const;
+
+	/// @brief 指定したグループIDのポリゴンを有効/無効にする
+	/// @param targetGroupId 
+	/// @param isActive 
+	void SetGroupActive(int targetGroupId, bool isActive);
+
+	/// @brief 指定したグループIDのポリゴンにロックする（他のグループのポリゴンは無効化する）
+	/// @param combatAreaGroupId 
+	void LockToCombatArea(int combatAreaGroupId);
 
 
 private:

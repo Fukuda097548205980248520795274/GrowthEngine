@@ -47,6 +47,12 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 	// ゲームクリアフラグ
 	isGameClear_ = initData.isGameClear;
 
+	// ナビメッシュのグループID
+	navMeshGroupId_ = initData.navMeshGroupId;
+
+	// ナビメッシュの状態
+	isNavMeshEnabled_ = initData.isNavMeshEnabled;
+
 	// イベントの整数パラメータ
 	strcpy_s(eventStageDataFileName_, sizeof(eventStageDataFileName_), initData.eventStageDataFileName);
 
@@ -86,7 +92,7 @@ void StaticEventTrigger::Update()
 			if (onTriggerCallback_)
 			{
 				bool shouldDelete =
-					onTriggerCallback_(eventType_, eventStageDataFileName_, isStartBattleArea_, isGameClear_);
+					onTriggerCallback_(eventType_, eventStageDataFileName_, isStartBattleArea_, isGameClear_, navMeshGroupId_, isNavMeshEnabled_);
 
 				// イベントが発生したときのコールバック関数がtrueを返した場合は削除する
 				if (shouldDelete)Delete();

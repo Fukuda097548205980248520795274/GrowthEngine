@@ -159,7 +159,9 @@ private:
 	/// @param param 
 	/// @param isStartBattleArea 
 	/// @param isGameClear 
-	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear);
+	/// @param navMeshGroupId 
+	/// @param isNavMeshEnabled 
+	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear, int navMeshGroupId, bool isNavMeshEnabled);
 
 
 private:

@@ -82,6 +82,8 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			initData.eventType = data.eventType;
 			initData.isStartBattleArea = data.isBattleAreaStart;
 			initData.isGameClear = data.isGameClear;
+			initData.navMeshGroupId = data.targetNavMeshGroupId;
+			initData.isNavMeshEnabled = data.targetNavMeshState;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
 			if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
@@ -206,6 +208,8 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 			initData.eventType = data.eventType;
 			initData.isStartBattleArea = data.isBattleAreaStart;
 			initData.isGameClear = data.isGameClear;
+			initData.navMeshGroupId = data.targetNavMeshGroupId;
+			initData.isNavMeshEnabled = data.targetNavMeshState;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
 			if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))

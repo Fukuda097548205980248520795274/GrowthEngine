@@ -765,9 +765,9 @@ StaticEventTrigger* GameScene::CreateStaticEventTrigger(const StaticEventTrigger
 {
 	StaticEventTrigger::InitData triggerInitData = initData;
 	triggerInitData.collision = eventTriggerAABBCollision_->CreateInstance();
-	triggerInitData.onTriggerCallback = [this](int eventType, const char* param, bool isStartBattleArea, bool isGameClear) -> bool
+	triggerInitData.onTriggerCallback = [this](int eventType, const char* param, bool isStartBattleArea, bool isGameClear, int navMeshGroupId, bool isNavMeshEnabled) -> bool
 		{
-			return HandleTriggerEvent(eventType, param, isStartBattleArea, isGameClear); 
+			return HandleTriggerEvent(eventType, param, isStartBattleArea, isGameClear, navMeshGroupId, isNavMeshEnabled); 
 		};
 
 	std::unique_ptr<StaticEventTrigger> newTrigger = std::make_unique<StaticEventTrigger>();
@@ -1069,7 +1069,9 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 /// @param param 
 /// @param isStartBattleArea 
 /// @param isGameClear 
-bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear)
+/// @param navMeshGroupId 
+/// @param isNavMeshEnabled 
+bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear, int navMeshGroupId, bool isNavMeshEnabled)
 {
 	// イベントタイプを列挙型に変換する
 	StaticEventTrigger::EventType type = static_cast<StaticEventTrigger::EventType>(eventType);
@@ -1169,6 +1171,15 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 				Character::SetIsCutsceneActive(false);
 			}
 		);
+
+		return true; // トリガーを削除
+	}
+	else if (type == StaticEventTrigger::EventType::NavMeshStateChange)
+	{
+		if (navMesh_ != nullptr)
+		{
+			navMesh_->SetGroupActive(navMeshGroupId, isNavMeshEnabled);
+		}
 
 		return true; // トリガーを削除
 	}

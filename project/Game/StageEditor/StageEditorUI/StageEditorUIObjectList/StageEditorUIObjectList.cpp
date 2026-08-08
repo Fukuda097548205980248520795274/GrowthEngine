@@ -489,6 +489,25 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 							engine->DrawDebugCube(previewData.position, previewData.rotate_, previewData.scale, cubeColor);
 						}
 					}
+					else if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::NavMeshStateChange))
+					{
+						ImGui::Separator();
+						ImGui::Text("--- ナビメッシュ切り替え設定 ---");
+
+						// グループIDの入力
+						if (ImGui::InputInt("対象グループID", &target.targetNavMeshGroupId))
+						{
+							isDirty = true;
+							history_->SaveHistory(placementList);
+						}
+
+						// 有効/無効の切り替え
+						if (ImGui::Checkbox("切り替え後の状態 (チェックで有効)", &target.targetNavMeshState))
+						{
+							isDirty = true;
+							history_->SaveHistory(placementList);
+						}
+					}
 				}
 			}
 			else if (target.subType == static_cast<int>(StageObject::StageObjectTag::CameraGuard))

@@ -30,6 +30,7 @@ inline const char* eventTypeNames[] =
 	"None", 
 	"オブジェクト生成",
 	"カットシーン再生",
+	"ナビゲーションメッシュ切り替え",
 	"スティック操作チュートリアル", 
 	"ダッシュ操作チュートリアル",
 	"攻撃操作チュートリアル", 
@@ -117,6 +118,13 @@ struct PlacementData
 
 	// 生成された実体へのポインタ
 	void* instancePtr = nullptr;
+
+
+	// ターゲットのナビメッシュグループID（イベントトリガーの場合）
+	int32_t targetNavMeshGroupId = 0;
+
+	// ターゲットのナビメッシュ状態（イベントトリガーの場合）
+	bool targetNavMeshState = true;
 };
 
 /// @brief 戦闘エリアのデータ構造
@@ -321,6 +329,8 @@ inline void toJson(json& j, const PlacementData& s)
 			j["eventCutsceneName"] = s.eventCutsceneName;
 			j["battleAreaStart"] = s.isBattleAreaStart;
 			j["gameClear"] = s.isGameClear;
+			j["targetNavMeshGroupId"] = s.targetNavMeshGroupId;
+			j["targetNavMeshState"] = s.targetNavMeshState;
 		}
 	}
 	else if (s.category == EditCategory::Weapon)
@@ -357,6 +367,8 @@ inline void toJson(json& j, const NavMesh& navMesh)
 	{
 		json polyJson;
 		polyJson["id"] = poly.id;
+		polyJson["isActive"] = poly.isActive;
+		polyJson["groupId"] = poly.groupId;
 
 		// 頂点配列の保存
 		json vertsJson = json::array();
@@ -402,6 +414,8 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.isUnbreakable = j.value("isUnbreakable", false);
 	s.isBattleAreaStart = j.value("battleAreaStart", false);
 	s.isGameClear = j.value("gameClear", false);
+	s.targetNavMeshGroupId = j.value("targetNavMeshGroupId", 0);
+	s.targetNavMeshState = j.value("targetNavMeshState", true);
 
 
 	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む

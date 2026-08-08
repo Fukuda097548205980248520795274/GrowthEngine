@@ -58,6 +58,7 @@ void StageEditorUI::Update()
 /// @param navMesh 
 /// @param canExtrude 
 /// @param canBridge 
+/// @param selectedPolygonId 
 void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
 	NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge)
 {
@@ -251,7 +252,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{
 		guizmo_->UpdateNavMesh(navMesh, navMeshController, isDirty, history_, isPlaying);
-		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, isDirty);
+		navMeshUI_->DrawUI(navMesh, canExtrude, canBridge, navMeshController, isDirty);
 		navMeshInfoUI_->DrawWindow(navMesh, navMeshController);
 	}
 
