@@ -1,4 +1,5 @@
 #include "NPC.h"
+#include <numbers>
 #include "BattleDirector/BattleDirector.h"
 #include "Action/Move/Move.h"
 #include "HUD/HP/HP.h"
@@ -216,6 +217,16 @@ void NPC::Draw()
 
 	// 攻撃トレイルを描画する
 	if (attackTrail_)attackTrail_->Draw();
+
+	// キャラクターの周りに線の円を描画する（デバッグ用）
+	for(int i = 0 ; i < 8 ; ++i)
+	{
+		float radian = (360.0f / 8.0f) * i * (std::numbers::pi_v<float> / 180.0f);
+		Vector3 start = GetWorldPosition() + Vector3(0.0f, 0.3f , 0.0f) + Vector3(std::cos(radian), 0.0f, std::sin(radian)) * 1.0f;
+		Vector3 end = GetWorldPosition() + Vector3(0.0f, 0.3f , 0.0f) + 
+			Vector3(std::cos(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f)), 0.0f, std::sin(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f))) * 1.0f;
+		engine_->DrawDebugLine3D(start, end, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	}
 }
 
 /// @brief 死亡処理
