@@ -142,31 +142,9 @@ void NPC::Update()
 
 		// 攻撃トークンを返却する
 		battleDirector.ReleaseAttackToken(this);
-		battleDirector.ReleaseSlot(this);
 
 		Character::Update();
 		return;
-	}
-
-	/// @brief 構え状態の移動処理を更新する
-	UpdateStanceMovement();
-
-
-	// ダメージを受けた場合は、ターゲットの更新タイマーをリセットする
-	if(IsHitDamage())targetUpdateTimer_ = targetUpdateInterval;
-
-	// ターゲットの更新タイマーの更新
-	if (lockOnTarget_ && (currentAttack_ == nullptr && currentMove_ == nullptr && currentAvoid_ == nullptr))
-	{
-		// ターゲットの更新タイマーを更新する
-		targetUpdateTimer_ -= dt;
-
-		// ターゲットの更新タイマーが0以下になった場合は、ターゲットを解除する
-		if (targetUpdateTimer_ <= 0.0f)
-		{
-			lockOnTarget_ = nullptr;
-			targetUpdateTimer_ = targetUpdateInterval;
-		}
 	}
 
 	// 基底クラスの更新
@@ -208,91 +186,8 @@ void NPC::UpdateStanceStateByTargetDistance()
 		if (kDistanceSq <= kNpcStanceEnterDistanceSq)
 		{
 			isStance_ = true;
-			BattleDirector::GetInstance().AssignSlot(this, lockOnTarget_);
+			
 		}
-	}
-}
-
-/// @brief 構え状態の移動処理を更新する
-void NPC::UpdateStanceMovement()
-{
-	// 構え状態でない、またはターゲットがいない、または動けない状態、または何らかのアクション中の場合は移動処理を行わない
-	if (!lockOnTarget_ || !isStance_ || IsIncapacitated() ||
-		GetCurrentAttack() || GetCurrentMove() || GetCurrentAvoid())
-		return;
-
-	// スロットのワールド座標を取得
-	auto optSlotPos = BattleDirector::GetInstance().GetSlotWorldPosition(this, lockOnTarget_);
-	if (!optSlotPos) return;
-
-	Vector3 slotWorldPos = optSlotPos.value();
-	Vector3 myPos = GetWorldPosition();
-
-	// スロットへ向かうベクトルを計算
-	Vector2 moveDir(0.0f, 0.0f);
-	Vector3 toSlot = slotWorldPos - myPos;
-	toSlot.y = 0.0f; // 高さは無視して平面で考える
-
-	float distanceToSlot = toSlot.Length();
-
-	// スロットに到達したかどうかの判定
-	constexpr float kStopDistance = 0.2f;
-	constexpr float kResumeDistance = 0.5f;
-
-	// スロットに近づきすぎた場合は到達状態にする
-	if (distanceToSlot < kStopDistance)
-	{
-		isArrivedAtSlot_ = true;
-	}
-	else if (distanceToSlot > kResumeDistance)
-	{
-		isArrivedAtSlot_ = false;
-	}
-
-	// すでに到着している状態なら完全に停止して処理を終える
-	if (isArrivedAtSlot_)
-	{
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
-		return;
-	}
-
-
-	// スロットに近づくにつれて速度を落とす
-	float currentSpeed = stanceWalkSpeed_;
-	constexpr float kSlowDownRadius = 1.0f;
-
-	// 目標地点に近づくにつれて速度を落とす
-	if (distanceToSlot < kSlowDownRadius)
-	{
-		currentSpeed = stanceWalkSpeed_ * (distanceToSlot / kSlowDownRadius);
-	}
-
-	toSlot = toSlot.Normalize();
-	moveDir = Vector2(toSlot.x, toSlot.z);
-
-	// 仲間同士の分離ベクトルを取得
-	Vector2 separation = CalculateSeparationVector();
-
-	// 分離ベクトルの強さを距離に応じて調整する
-	float separationMultiplier = 1.0f;
-	if (distanceToSlot < kSlowDownRadius)
-	{
-		separationMultiplier = distanceToSlot / kSlowDownRadius;
-	}
-
-	// 分離ベクトルを合成する
-	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier);
-
-	// 移動入力の決定
-	if (moveDir.LengthSq() > 0.01f)
-	{
-		moveDir = moveDir.Normalize();
-		SetMoveInputXZ(moveDir, currentSpeed);
-	}
-	else
-	{
-		// 移動入力がほとんどない場合は停止する
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
 	}
 }
 
@@ -391,53 +286,6 @@ void NPC::InitBehaviorTree(const BehaviorTreeConfig& behaviorTreeConfig, Behavio
 	stateMachine_->GetState("Deflected")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deflectedStateBT, this));
 	stateMachine_->GetState("Avoid")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.avoidStateBT, this));
 	stateMachine_->GetState("Dead")->SetBehaviorTree(behaviorTreeEditor->CreateTree(behaviorTreeConfig.deadStateBT, this));
-}
-
-/// @brief 分離ベクトルを計算する
-/// @return 
-Vector2 NPC::CalculateSeparationVector()
-{
-	Vector2 separationMove = Vector2(0.0f, 0.0f);
-	int neighborCount = 0;
-
-	// すべてのキャラクターを取得する
-	auto characters = Character::GetCharacters();
-
-	for(const auto& other : characters)
-	{
-		// 自分自身、または死んでいるキャラなどは除外
-		if (other == this || other->IsDead()) continue;
-
-		// ターゲットが自分をターゲットしている場合は除外
-		if (other->GetLockOnTarget() == this) continue;
-
-		Vector2 diff = Vector2(GetWorldPosition().x, GetWorldPosition().z) - Vector2(other->GetWorldPosition().x, other->GetWorldPosition().z);
-		float distance = diff.Length();
-
-		// 設定した半径内に他のキャラクターがいる場合
-		if (distance > 0 && distance < separationRadius)
-		{
-			// 滑らかな減衰（外側ほど弱く、中心ほど強い 0.0 ～ 1.0 の値）
-			float pushStrength = 1.0f - (distance / separationRadius);
-
-			// 正規化した方向ベクトルに、強さを掛ける
-			separationMove.x += (diff.x / distance) * pushStrength;
-			separationMove.y += (diff.y / distance) * pushStrength;
-			neighborCount++;
-		}
-	}
-
-	// 周囲にキャラがいた場合は平均化して正規化
-	if (neighborCount > 0)
-	{
-		separationMove.x /= static_cast<float>(neighborCount);
-		separationMove.y /= static_cast<float>(neighborCount);
-
-		// 正規化
-		separationMove = separationMove.Normalize();
-	}
-
-	return separationMove;
 }
 
 /// @brief ロックオンしているターゲットを検索する

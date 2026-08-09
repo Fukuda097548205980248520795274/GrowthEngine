@@ -71,14 +71,6 @@ public:
 	/// @param aggressiveness 
 	void SetAggressiveness(float aggressiveness) override { aggressiveness_ = std::max(0.1f, aggressiveness); }
 
-	/// @brief 分離ベクトルを計算する
-	/// @return 
-	Vector2 CalculateSeparationVector();
-
-	/// @brief 分離の重みを取得する
-	/// @return 
-	float GetSeparationWeight() const { return separationWeight; }
-
 	/// @brief ロックオンしているターゲットを検索する
 	void SearchLockOnTarget() override;
 
@@ -88,9 +80,6 @@ private:
 	/// @brief ターゲットとの距離で構え状態を更新する
 	void UpdateStanceStateByTargetDistance();
 
-	/// @brief 構え状態の移動処理を更新する
-	void UpdateStanceMovement();
-
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
@@ -99,16 +88,6 @@ private:
 
 	/// @brief 構え状態の移動速度
 	float stanceWalkSpeed_ = 2.0f;
-
-
-	// @brief ターゲットの更新タイマー
-	float targetUpdateTimer_ = 0.0f;
-
-	// @brief ターゲットの更新間隔（秒）
-	float targetUpdateInterval = 3.0f;
-
-	/// @brief スロットに到達したかどうか
-	bool isArrivedAtSlot_ = false;
 
 
 private:
@@ -134,15 +113,6 @@ private:
 
 	/// @brief 攻撃性の値
 	float aggressiveness_ = 1.0f;
-
-
-private:
-
-	// 分離を意識する半径
-	float separationRadius = 3.0f;
-
-	// 分離ベクトルの強さ（重み）
-	float separationWeight = 1.5f;
 
 
 private:
