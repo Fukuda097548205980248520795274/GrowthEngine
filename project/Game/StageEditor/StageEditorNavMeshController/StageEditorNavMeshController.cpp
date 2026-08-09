@@ -52,11 +52,25 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 		}
 	}
 
+	// Ctrl + A で全選択
+	if ((engine_->GetKeyPress(DIK_LCONTROL) || engine_->GetKeyPress(DIK_RCONTROL)) &&
+		engine_->GetKeyTrigger(DIK_A))
+	{
+		SelectAll();
+	}
+
 	// 押し出しとブリッジの操作（辺選択モードのときのみ）
 	if (selectionMode_ == SelectionMode::Edge)
 	{
 		if (engine_->GetKeyTrigger(DIK_E)) ExtrudeSelectedEdge(placementList, isDirty);
 		if (engine_->GetKeyTrigger(DIK_B)) BridgeSelectedEdges(placementList, isDirty);
+
+		// ループカット (Ctrl + R) 
+		if ((engine_->GetKeyPress(DIK_LCONTROL) || engine_->GetKeyPress(DIK_RCONTROL)) &&
+			engine_->GetKeyTrigger(DIK_R))
+		{
+			LoopCutSelectedEdge(placementList, isDirty);
+		}
 	}
 
 	// 選択された面を有効・無効化する（面選択モードのときのみ）
@@ -598,6 +612,231 @@ void StageEditorNavMeshController::DeleteSelectedNavMeshElements(std::vector<Pla
 
 	// 選択状態を安全にリセット
 	selectedItems_.clear();
+}
+
+/// @brief 選択されている辺を基準にループカット（2等分）を行う
+/// @param placementList 
+/// @param isDirty 
+void StageEditorNavMeshController::LoopCutSelectedEdge(std::vector<PlacementData>& placementList, bool& isDirty)
+{
+	if (selectedItems_.empty() || navMesh_ == nullptr) return;
+
+	// 現在選択しているポリゴンと辺のインデックス
+	int startPolyId = selectedItems_[0].polygonId;
+	int startEdgeIdx = selectedItems_[0].itemIndex;
+
+	NavPolygon* startPoly = navMesh_->GetMutablePolygon(startPolyId);
+	if (!startPoly) return;
+
+	// 履歴保存
+	history_->SaveHistory(placementList);
+	isDirty = true;
+
+	// カット対象を記録する構造体 (対象ポリゴンIDと、進入した辺のインデックス)
+	struct CutTarget {
+		int polyId;
+		int enterIdx;
+	};
+	std::vector<CutTarget> targets;
+	std::set<int> visited;
+
+	// 指定方向にポリゴンを辿るラムダ関数
+	auto Traverse = [&](int currentPolyId, int enterEdgeIdx, bool forward) {
+		int currId = currentPolyId;
+		int enterIdx = enterEdgeIdx;
+
+		while (currId != -1 && visited.find(currId) == visited.end()) {
+			visited.insert(currId);
+
+			if (forward) {
+				targets.push_back({ currId, enterIdx });
+			}
+			else {
+				// 逆方向の探索時はリストの先頭に追加して順序を保つ
+				targets.insert(targets.begin(), { currId, enterIdx });
+			}
+
+			NavPolygon* poly = navMesh_->GetMutablePolygon(currId);
+			if (!poly) break;
+
+			// 対向する辺のインデックス
+			int exitIdx = (enterIdx + 2) % 4;
+			int nextPolyId = poly->neighborIds[exitIdx];
+			if (nextPolyId == -1) break;
+
+			// 次のポリゴンにおける進入辺のインデックスを見つける
+			NavPolygon* nextPoly = navMesh_->GetMutablePolygon(nextPolyId);
+			if (!nextPoly) break;
+
+			int nextEnterIdx = -1;
+			for (int i = 0; i < 4; ++i) {
+				if (nextPoly->neighborIds[i] == currId) {
+					nextEnterIdx = i;
+					break;
+				}
+			}
+			if (nextEnterIdx == -1) break;
+
+			currId = nextPolyId;
+			enterIdx = nextEnterIdx;
+		}
+		};
+
+	// 1. まず進行方向（対向辺に向かって）探索
+	Traverse(startPolyId, startEdgeIdx, true);
+
+	// 2. 次に逆方向（選択された辺に向かって隣接するポリゴンから）探索
+	visited.clear();
+	int prevPolyId = startPoly->neighborIds[startEdgeIdx];
+	if (prevPolyId != -1) {
+		NavPolygon* prevPoly = navMesh_->GetMutablePolygon(prevPolyId);
+		if (prevPoly) {
+			int enterIdxForPrev = -1;
+			for (int i = 0; i < 4; ++i) {
+				if (prevPoly->neighborIds[i] == startPolyId) {
+					// 前のポリゴンから見て、startPolyへ向かう辺の対向辺が進入辺となる
+					enterIdxForPrev = (i + 2) % 4;
+					break;
+				}
+			}
+			if (enterIdxForPrev != -1) {
+				Traverse(prevPolyId, enterIdxForPrev, false);
+			}
+		}
+	}
+
+	// 3. 取得した対象ポリゴンをすべて分割する
+	// 新しく作成されたポリゴンのIDと元のIDをペアで記録して、あとで辺同士を繋ぐ
+	struct SplitResult {
+		int polyA_Id; // 元のポリゴン (左側)
+		int polyB_Id; // 新しいポリゴン (右側)
+		int enterIdx;
+	};
+	std::vector<SplitResult> results;
+
+	for (const auto& target : targets)
+	{
+		NavPolygon* poly = navMesh_->GetMutablePolygon(target.polyId);
+		if (!poly) continue;
+
+		int E = target.enterIdx;
+		Vector3 v0 = poly->vertices[E];
+		Vector3 v1 = poly->vertices[(E + 1) % 4];
+		Vector3 v2 = poly->vertices[(E + 2) % 4];
+		Vector3 v3 = poly->vertices[(E + 3) % 4];
+
+		// 辺の中点を計算
+		Vector3 m0 = (v0 + v1) * 0.5f;
+		Vector3 m2 = (v2 + v3) * 0.5f;
+
+		// 元の隣接情報をバックアップ
+		std::array<int, 4> oldNeighbors = poly->neighborIds;
+
+		// 新しいポリゴン (PolyB) の作成
+		NavPolygon newPoly;
+		newPoly.id = navMesh_->GenerateNewPolygonId();
+		newPoly.groupId = poly->groupId;
+		newPoly.isActive = poly->isActive;
+
+		// 頂点の再設定 (進行方向に向かって PolyA が左、PolyB が右になるようにする)
+		// PolyA (既存ポリゴンを上書き)
+		poly->vertices[E] = v0;
+		poly->vertices[(E + 1) % 4] = m0;
+		poly->vertices[(E + 2) % 4] = m2;
+		poly->vertices[(E + 3) % 4] = v3;
+
+		// PolyB (新規追加ポリゴン)
+		newPoly.vertices[E] = m0;
+		newPoly.vertices[(E + 1) % 4] = v1;
+		newPoly.vertices[(E + 2) % 4] = v2;
+		newPoly.vertices[(E + 3) % 4] = m2;
+
+		// 外部の隣接ポリゴンの接続先を更新 (PolyB側になった辺 E+1)
+		int neighborE1 = oldNeighbors[(E + 1) % 4];
+		if (neighborE1 != -1) {
+			NavPolygon* nPoly = navMesh_->GetMutablePolygon(neighborE1);
+			if (nPoly) {
+				for (int i = 0; i < 4; ++i) {
+					if (nPoly->neighborIds[i] == poly->id) {
+						nPoly->neighborIds[i] = newPoly.id;
+						break;
+					}
+				}
+			}
+		}
+
+		// PolyAとPolyBの隣接情報を設定
+		// PolyAの E+1 側は PolyB。E+3 側は元のまま。E と E+2 は後で繋ぐ。
+		poly->neighborIds[(E + 1) % 4] = newPoly.id;
+		poly->neighborIds[(E + 3) % 4] = oldNeighbors[(E + 3) % 4];
+		poly->neighborIds[E] = -1;
+		poly->neighborIds[(E + 2) % 4] = -1;
+
+		// PolyBの E+3 側は PolyA。E+1 側は元の E+1。E と E+2 は後で繋ぐ。
+		newPoly.neighborIds[(E + 3) % 4] = poly->id;
+		newPoly.neighborIds[(E + 1) % 4] = neighborE1;
+		newPoly.neighborIds[E] = -1;
+		newPoly.neighborIds[(E + 2) % 4] = -1;
+
+		navMesh_->AddPolygon(newPoly);
+		results.push_back({ poly->id, newPoly.id, E });
+	}
+
+	// 4. 分割されたポリゴン同士を進行方向に沿って再接続する
+	for (size_t i = 0; i < results.size(); ++i)
+	{
+		NavPolygon* polyA = navMesh_->GetMutablePolygon(results[i].polyA_Id);
+		NavPolygon* polyB = navMesh_->GetMutablePolygon(results[i].polyB_Id);
+		int E = results[i].enterIdx;
+
+		// 前方のポリゴンと繋ぐ (i - 1)
+		if (i > 0) {
+			polyA->neighborIds[E] = results[i - 1].polyA_Id;
+			polyB->neighborIds[E] = results[i - 1].polyB_Id;
+		}
+		else {
+			// ループの端の場合は、元々繋がっていた外部があればそれと繋ぐ（今回の設計だと端は -1 のはず）
+			polyA->neighborIds[E] = -1;
+			polyB->neighborIds[E] = -1;
+		}
+
+		// 後方のポリゴンと繋ぐ (i + 1)
+		if (i < results.size() - 1) {
+			polyA->neighborIds[(E + 2) % 4] = results[i + 1].polyA_Id;
+			polyB->neighborIds[(E + 2) % 4] = results[i + 1].polyB_Id;
+		}
+		else {
+			polyA->neighborIds[(E + 2) % 4] = -1;
+			polyB->neighborIds[(E + 2) % 4] = -1;
+		}
+	}
+
+	// 選択状態を解除（またはカットされた新しい辺を選択状態にする）
+	selectedItems_.clear();
+}
+
+/// @brief 全選択する
+void StageEditorNavMeshController::SelectAll()
+{
+	selectedItems_.clear();
+	if (!navMesh_) return;
+
+	for (const auto& poly : navMesh_->GetPolygons())
+	{
+		if (selectionMode_ == SelectionMode::Polygon)
+		{
+			// 面選択モード
+			selectedItems_.push_back({ poly.id, 0 });
+		}
+		else if (selectionMode_ == SelectionMode::Edge || selectionMode_ == SelectionMode::Vertex)
+		{
+			// 辺・頂点選択モードの場合は4つすべてをリストに追加
+			for (int i = 0; i < 4; ++i)
+			{
+				selectedItems_.push_back({ poly.id, i });
+			}
+		}
+	}
 }
 
 /// @brief 選択された辺をハイライト表示する

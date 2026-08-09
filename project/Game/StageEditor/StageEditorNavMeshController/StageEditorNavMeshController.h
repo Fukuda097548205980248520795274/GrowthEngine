@@ -121,6 +121,14 @@ private:
 	/// @param isDirty 
 	void DeleteSelectedNavMeshElements(std::vector<PlacementData>& placementList, bool& isDirty);
 
+	/// @brief 選択されている辺を基準にループカット（2等分）を行う
+	/// @param placementList 
+	/// @param isDirty 
+	void LoopCutSelectedEdge(std::vector<PlacementData>& placementList, bool& isDirty);
+
+	/// @brief 全選択する
+	void SelectAll();
+
 	/// @brief 選択された要素をハイライト表示する
 	void DrawSelectedHighlight();
 };
