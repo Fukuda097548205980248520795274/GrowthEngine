@@ -101,12 +101,6 @@ private:
 	float stanceWalkSpeed_ = 2.0f;
 
 
-	// @brief ターゲットの更新タイマー
-	float targetUpdateTimer_ = 0.0f;
-
-	// @brief ターゲットの更新間隔（秒）
-	float targetUpdateInterval = 3.0f;
-
 	/// @brief スロットに到達したかどうか
 	bool isArrivedAtSlot_ = false;
 
