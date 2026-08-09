@@ -222,9 +222,9 @@ void NPC::Draw()
 	for(int i = 0 ; i < 8 ; ++i)
 	{
 		float radian = (360.0f / 8.0f) * i * (std::numbers::pi_v<float> / 180.0f);
-		Vector3 start = GetWorldPosition() + Vector3(0.0f, 0.3f , 0.0f) + Vector3(std::cos(radian), 0.0f, std::sin(radian)) * 1.0f;
+		Vector3 start = GetWorldPosition() + Vector3(0.0f, 0.3f , 0.0f) + Vector3(std::cos(radian), 0.0f, std::sin(radian)) * 0.5f;
 		Vector3 end = GetWorldPosition() + Vector3(0.0f, 0.3f , 0.0f) + 
-			Vector3(std::cos(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f)), 0.0f, std::sin(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f))) * 1.0f;
+			Vector3(std::cos(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f)), 0.0f, std::sin(radian + (360.0f / 8.0f) * (std::numbers::pi_v<float> / 180.0f))) * 0.5f;
 		engine_->DrawDebugLine3D(start, end, Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 }

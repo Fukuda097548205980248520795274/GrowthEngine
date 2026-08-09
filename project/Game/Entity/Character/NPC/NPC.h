@@ -133,7 +133,7 @@ private:
 private:
 
 	// 分離を意識する半径
-	float separationRadius = 9.0f;
+	float separationRadius = 3.0f;
 
 	// 分離ベクトルの強さ（重み）
 	float separationWeight = 1.5f;
