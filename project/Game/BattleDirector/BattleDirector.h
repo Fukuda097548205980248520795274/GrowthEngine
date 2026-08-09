@@ -76,10 +76,6 @@ public:
 	/// @return 
 	bool IsBestAttacker(Character* NPC);
 
-	/// @brief カメラの前方向を設定する
-	/// @param forward 
-	void SetCameraForward(const Vector3& forward) { cameraForward_ = forward; }
-
 	/// @brief NPCにスロットを割り当てる
 	/// @param npc 
 	/// @param target 
@@ -123,39 +119,5 @@ private:
 
 	/// @brief 最大スロット数
 	static constexpr int kMaxSlots = 8;
-
-
-private:
-
-	/// @brief 攻撃トークンのユーティリティスコアを計算する
-	/// @param attacker 
-	/// @param target 
-	/// @return 
-	float CalculateUtilityScore(Character* attacker, Character* target);
-
-	/// @brief ターゲットごとの攻撃トークンのクールダウン時間
-	std::unordered_map<Character*, float> targetTokenCooldowns_;
-
-
-private:
-
-	/// @brief 戦況のテンションを更新する
-	/// @param player 
-	void UpdateTension(Player* player);
-
-	/// @brief 戦況のテンション
-	float globalTension_ = 1.0f;
-
-	/// @brief プレイヤーの体力が少ないときのテンションの減少率
-	float lowHpTensionMultiplier_ = 0.5f;
-
-	/// @brief プレイヤーの体力が中程度のときのテンションの増加率
-	float mediumHpTensionMultiplier_ = 0.8f;
-
-	/// @brief プレイヤーの体力が多いときのテンションの増加率
-	float highHpTensionMultiplier_ = 1.0f;
-
-	/// @brief カメラの前方向
-	Vector3 cameraForward_ = { 0.0f, 0.0f, 1.0f };
 };
 

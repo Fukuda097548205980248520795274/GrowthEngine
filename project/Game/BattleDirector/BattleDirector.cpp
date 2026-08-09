@@ -25,11 +25,7 @@ bool BattleDirector::RequestAttackToken(Character* npc, ActionTokenType type)
 	if (!target)return true;
 
 	// NPCが最も攻撃に適していない場合は、攻撃トークンの要求を拒否する
-	if(!IsBestAttacker(npc))return false;
-
-	// ターゲットのクールタイムが残っている場合は、攻撃トークンの要求を拒否する
-	if (type == ActionTokenType::Attack && targetTokenCooldowns_[target] > 0.0f)
-		return false;
+	//if(!IsBestAttacker(npc))return false;
 
 	// 現在の攻撃トークン保持者を取得
 	auto it = npcToTargetMap_.find(npc);
@@ -72,22 +68,8 @@ void BattleDirector::ReleaseAttackToken(Character* npc)
 	Character* target = it->second.target;
 	ActionTokenType type = it->second.type;
 
-	float aggressiveness = std::max(0.1f, npc->GetAggressiveness());
-
-	// 攻撃トークンのクールタイムを計算する
-	float bestInterval = 1.5f;
-	float finalInterval = bestInterval / (std::max(0.01f, globalTension_) * aggressiveness);
-
-	// ターゲットのクールタイムを設定する
-	targetTokenCooldowns_[target] = finalInterval;
-
-
-	// 攻撃クールタイムを計算する
-	float bestCooltime = 5.0f;
-	float finalCooltime = bestCooltime /aggressiveness;
-
 	// NPCの攻撃クールタイムを設定する
-	npc->SetAttackCooltime(finalCooltime);
+	npc->SetAttackCooltime(0.1f);
 
 
 	// NPCとそのターゲットのマッピングを削除する
@@ -118,74 +100,9 @@ void BattleDirector::Clear()
 /// @param dt 
 void BattleDirector::Update(float dt)
 {
-	auto& characters = Character::GetCharacters();
-	for (auto& character : characters)
-	{
-		// プレイヤーキャラクターを見つけたら、戦況のテンションを更新する
-		if (character->IsPlayer())
-		{
-			UpdateTension(static_cast<Player*>(character));
-			break;
-		}
-	}
-
-	for (auto it = targetTokenCooldowns_.begin(); it != targetTokenCooldowns_.end(); )
-	{
-		// クールダウン時間を減算する
-		if (it->second > 0.0f)
-		{
-			it->second -= dt;
-			++it;
-		} 
-		else
-		{
-			// クールダウンが終了したターゲットを削除する
-			it = targetTokenCooldowns_.erase(it);
-		}
-	}
 
 	// 戦闘スロットを最適化する
 	OptimizeSlots();
-}
-
-/// @brief 指定されたNPCが最も攻撃に適しているかどうかを判定する
-/// @param npc 
-/// @return 
-bool BattleDirector::IsBestAttacker(Character* npc)
-{
-	// NPCが現在狙っているターゲットを取得
-	Character* target = npc->GetLockOnTarget();
-	if (!target)return false;
-
-	// クールタイムが残っている場合は、最も近い攻撃者ではないと判断する
-	if (npc->GetAttackCooltime() > 0.0f)
-		return false;
-
-	// スコアを計算する
-	float myScore = CalculateUtilityScore(npc, target);
-
-	// スコアが0以下の場合は、最も近い攻撃者ではないと判断する
-	if (myScore <= 0.0f)return false;
-
-	for (auto& other : Character::GetCharacters())
-	{
-		// 自分以外のキャラクターを確認する
-		if (other == npc)
-			continue;
-
-		// 他のキャラクターが同じターゲットを狙っている場合は、スコアを計算する
-		if (other->GetLockOnTarget() == target)
-		{
-			// 他のキャラクターの攻撃クールタイムが0以下の場合は、スコアを比較する
-			if (other->GetAttackCooltime() <= 0.0f)
-			{
-				float otherScore = CalculateUtilityScore(other, target);
-				if (otherScore > myScore)return false;
-			}
-		}
-	}
-
-	return true;
 }
 
 /// @brief NPCにスロットを割り当てる
@@ -359,103 +276,4 @@ void BattleDirector::OptimizeSlots()
 			activeSlots[i]->angleOffset = i * angleStep;
 		}
 	}
-}
-
-/// @brief 攻撃トークンのユーティリティスコアを計算する
-/// @param attacker 
-/// @param target 
-/// @return 
-float BattleDirector::CalculateUtilityScore(Character* attacker, Character* target)
-{
-	// 攻撃者がダウンしている場合はスコアを0にする
-	if (attacker->IsDownLying())
-		return 0.0f;
-
-	// ターゲットがプレイヤーで、コンボ中はスコアを0にする
-	if (target->IsPlayer())
-	{
-		Player* player = static_cast<Player*>(target);
-		if(player->IsCombo())
-			return 0.0f;
-	}
-
-	// 基礎スコアを設定する
-	float score = 1000.0f;
-
-	// 距離に基づくスコアの減算
-	Vector3 toTarget = target->GetWorldPosition() - attacker->GetWorldPosition();
-	toTarget.y = 0.0f;
-	float distanceSq = toTarget.LengthSq();
-	score -= distanceSq * 2.0f; // 重みをかけて距離の二乗を減算する
-
-	// プレイヤーがターゲットの場合、カメラの前方にいるかどうかを考慮してスコアを調整する
-	if (target->IsPlayer())
-	{
-		// プレイヤーから攻撃者へのベクトルを求める
-		Vector3 toAttacker = attacker->GetWorldPosition() - target->GetWorldPosition();
-		toAttacker.y = 0.0f;
-
-		if (toAttacker.LengthSq() > 0.0f)
-		{
-			toAttacker = toAttacker.Normalize();
-
-			// カメラの前方向と攻撃者へのベクトルの内積を計算する
-			float dot = (cameraForward_.x * toAttacker.x) + (cameraForward_.z * toAttacker.z);
-
-			// カメラ前方にいる場合はスコアを大きく加算
-			if (dot > 0.0f)
-			{
-				score += dot * 500.0f;
-			}
-			else
-			{
-				// カメラ後方にいる場合はスコアを減算して優先度を下げる
-				score += dot * 300.0f;
-			}
-		}
-	}
-
-	// スコアが1.0未満にならないようにする
-	score = std::max(1.0f, score);
-
-	// 攻撃者の攻撃力に基づくスコアの加算
-	float finalAggressiveness = attacker->GetAggressiveness() * globalTension_;
-	score *= finalAggressiveness;
-
-	return score;
-}
-
-/// @brief 戦況のテンションを更新する
-/// @param player 
-void BattleDirector::UpdateTension(Player* player)
-{
-	// プレイヤーでない場合は更新しない
-	if (!player)return;
-
-	// 通常のテンション値を設定する
-	float newTension = 1.0f;
-
-	// プレイヤーの体力比率を計算する
-	float hpRatio = static_cast<float>(player->GetHp()) / static_cast<float>(player->GetMaxHp());
-
-	// 体力が35%未満の場合
-	if (hpRatio <= 0.35f)
-	{
-		newTension *= lowHpTensionMultiplier_;
-
-	}
-	else if (hpRatio >= 0.65f)
-	{
-		// 体力が65%以上の場合
-		newTension *= highHpTensionMultiplier_;
-	}
-	else
-	{
-		// 体力が中程度の場合
-		newTension *= mediumHpTensionMultiplier_;
-	}
-
-	// 補間で徐々にテンションを変化させる
-	float dt = GrowthEngine::GetInstance()->GetDeltaTime();
-	globalTension_ = Lerp(globalTension_, newTension, dt * 2.0f);
 }

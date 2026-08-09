@@ -90,6 +90,20 @@
             "id": 180,
             "start": 129,
             "start_node": 127
+        },
+        {
+            "end": 182,
+            "end_node": 181,
+            "id": 183,
+            "start": 129,
+            "start_node": 127
+        },
+        {
+            "end": 185,
+            "end_node": 184,
+            "id": 187,
+            "start": 129,
+            "start_node": 127
         }
     ],
     "nodes": [
@@ -163,7 +177,7 @@
             "output_pin": 72,
             "pos": [
                 150.0,
-                840.0
+                1080.0
             ],
             "type": 3
         },
@@ -176,7 +190,7 @@
             "output_pin": 75,
             "pos": [
                 300.0,
-                840.0
+                1080.0
             ],
             "type": 4
         },
@@ -189,7 +203,7 @@
             "output_pin": 112,
             "pos": [
                 150.0,
-                720.0
+                960.0
             ],
             "type": 4
         },
@@ -207,7 +221,7 @@
             "output_pin": 124,
             "pos": [
                 300.0,
-                960.0
+                1200.0
             ],
             "type": 5
         },
@@ -264,8 +278,8 @@
             "name": "パンチ",
             "output_pin": 167,
             "pos": [
-                451.0,
-                480.0
+                450.0,
+                600.0
             ],
             "type": 5
         },
@@ -283,7 +297,7 @@
             "output_pin": 170,
             "pos": [
                 450.0,
-                360.0
+                480.0
             ],
             "type": 5
         },
@@ -296,7 +310,7 @@
             "output_pin": 173,
             "pos": [
                 450.0,
-                600.0
+                720.0
             ],
             "type": 5
         },
@@ -309,7 +323,33 @@
             "output_pin": 176,
             "pos": [
                 450.0,
+                360.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 9,
+            "id": 181,
+            "input_pin": 182,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": -1,
+            "pos": [
+                450.0,
                 240.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 10,
+            "id": 184,
+            "input_pin": 185,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 186,
+            "pos": [
+                450.0,
+                840.0
             ],
             "type": 5
         }

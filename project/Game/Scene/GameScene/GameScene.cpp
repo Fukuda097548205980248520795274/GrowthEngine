@@ -1059,9 +1059,6 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 	cameraForward.y = 0.0f; // 高さの影響をなくすためにYを0にする
 	if (cameraForward.LengthSq() > 0.0f)
 		cameraForward = cameraForward.Normalize();
-
-	// バトル制御にカメラの前方向を通知する
-	BattleDirector::GetInstance().SetCameraForward(cameraForward);
 }
 
 /// @brief イベントトリガーに触れたときの処理
