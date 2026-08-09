@@ -443,17 +443,11 @@ Vector2 NPC::CalculateSeparationVector()
 /// @brief ロックオンしているターゲットを検索する
 void NPC::SearchLockOnTarget()
 {
-	// 最も視線方向に近い相手を探す
-	float bestDistance = std::numeric_limits<float>::max();
-	float bestDot = -1.0f;
-
-	// 最小の被ターゲット数
-	int minTargetedCount = std::numeric_limits<int>::max();
-
-	// 攻撃中の相手を見つけたかどうかのフラグ
-	bool hasFoundAttackingTarget = false;
+	Character* bestTarget = nullptr;
+	float maxScore = -std::numeric_limits<float>::max();
 
 	const Vector3 kSelfPosition = GetWorldPosition();
+	const Vector3 kSelfDirection = GetDirection(); // 自分が向いている方向
 
 	// ロックオン対象の側を決定する
 	const bool kIsSelfPlayerSide = IsPlayerSide();
@@ -461,23 +455,21 @@ void NPC::SearchLockOnTarget()
 	for (Character* character : characters_)
 	{
 		// 無効または自分自身は除外する
-		if (!character || character == this)continue;
+		if (!character || character == this) continue;
 
 		// 自分と同じ側の相手は除外する
 		if (kIsSelfPlayerSide == character->IsPlayerSide()) continue;
 
 		// 死んでいる相手は除外する
-		if (character->IsDead())continue;
+		if (character->IsDead()) continue;
 
 		// 自分から相手へのベクトルを計算する
 		Vector3 toTarget = character->GetWorldPosition() - kSelfPosition;
 		toTarget.y = 0.0f;
 
-		// 距離の二乗を計算する
-		const float kDistanceSq = toTarget.x * toTarget.x + toTarget.z * toTarget.z;
-		if (kDistanceSq <= 0.0f)
-			continue;
-
+		// 距離を計算する
+		const float kDistance = toTarget.Length();
+		if (kDistance <= 0.0f) continue;
 
 		// 自分と同勢力のキャラクターから何人にターゲットされているかをカウント
 		int targetedCount = 0;
@@ -492,23 +484,37 @@ void NPC::SearchLockOnTarget()
 			}
 		}
 
-		// 距離を登録する
-		const float kDistance = std::sqrt(kDistanceSq);
+		// 相手が自分の目の前にいるか（内積：真正面=1.0、真横=0.0、真後ろ=-1.0）
+		Vector3 toTargetDir = toTarget.Normalize();
+		float dot = kSelfDirection.x * toTargetDir.x + kSelfDirection.z * toTargetDir.z;
 
-		// 優先度1: 被ターゲット数が少ない相手を選ぶ
-		if (targetedCount < minTargetedCount)
+		// ----------------------------------------------------
+		// 評価値（スコア）の計算
+		// ----------------------------------------------------
+		float score = 0.0f;
+
+		// 1. 狙われている人数が少ないほうほど得点が高い（最優先なので最も大きな重み）
+		// ※人数が多いほどマイナスになる
+		score -= targetedCount * 10000.0f;
+
+		// 2. どのくらい近くにいるかが高い（次に優先なので中くらいの重み）
+		// ※距離が遠いほどマイナスになる
+		score -= kDistance * 100.0f;
+
+		// 3. 相手が自分の視線の目の前にいるかどうかが高い（さらに次なので小さな重み）
+		// ※正面（1.0）に近いほどプラスになる
+		score += dot * 10.0f;
+
+		// 最大スコアを更新
+		if (score > maxScore)
 		{
-			minTargetedCount = targetedCount;
-			bestDistance = kDistance;
-			lockOnTarget_ = character;
-		}
-		else if (targetedCount == minTargetedCount && kDistance < bestDistance)
-		{
-			// 優先度2: 被ターゲット数が同じ場合は、距離が近い相手を選ぶ
-			bestDistance = kDistance;
-			lockOnTarget_ = character;
+			maxScore = score;
+			bestTarget = character;
 		}
 	}
+
+	// 最も評価値が高かった相手をロックオンターゲットに設定する
+	lockOnTarget_ = bestTarget;
 }
 
 /// @brief デバッグUIを描画する
