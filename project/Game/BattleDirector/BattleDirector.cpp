@@ -110,8 +110,6 @@ void BattleDirector::Clear()
 {
 	targetTokenHolders_.clear();
 	npcToTargetMap_.clear();
-	targetSlots_.clear();
-	npcCurrentSlots_.clear();
 }
 
 /// @brief 更新処理
@@ -143,9 +141,6 @@ void BattleDirector::Update(float dt)
 			it = targetTokenCooldowns_.erase(it);
 		}
 	}
-
-	// 戦闘スロットを最適化する
-	OptimizeSlots();
 }
 
 /// @brief 指定されたNPCが最も攻撃に適しているかどうかを判定する
@@ -186,179 +181,6 @@ bool BattleDirector::IsBestAttacker(Character* npc)
 	}
 
 	return true;
-}
-
-/// @brief NPCにスロットを割り当てる
-/// @param npc 
-/// @param target 
-void BattleDirector::AssignSlot(Character* npc, Character* target)
-{
-	if (!npc || !target) return;
-
-	// 既にスロットを持っている場合は何もしない
-	if (npcCurrentSlots_.find(npc) != npcCurrentSlots_.end()) return;
-
-	// ターゲット用のスロット配列が未作成なら初期化する
-	if (targetSlots_.find(target) == targetSlots_.end())
-	{
-		std::vector<CombatSlot> slots(kMaxSlots);
-		for (int i = 0; i < kMaxSlots; ++i)
-		{
-			// 45度（2π / 8）ずつずらして設定
-			slots[i].angleOffset = (2.0f * std::numbers::pi_v<float> / kMaxSlots) * i;
-			slots[i].distance = npc->GetSlotDistance();
-		}
-
-		// ターゲットに対するスロットを初期化して保存
-		targetSlots_[target] = slots;
-	}
-
-	auto& slots = targetSlots_[target];
-	int bestSlotIndex = -1;
-	float minDistanceSq = std::numeric_limits<float>::max();
-
-	Vector3 npcPos = npc->GetWorldPosition();
-	Vector3 targetPos = target->GetWorldPosition();
-
-	// 空いているスロットの中で、現在のNPCの座標に最も近いスロットを探す
-	for (int i = 0; i < kMaxSlots; ++i)
-	{
-		if (!slots[i].isOccupied)
-		{
-			// スロットの角度オフセットを取得
-			float finalAngle = slots[i].angleOffset;
-
-			// ターゲットの回転を考慮してスロットのワールド座標を計算する
-			float sx = targetPos.x + std::sin(finalAngle) * slots[i].distance;
-			float sz = targetPos.z + std::cos(finalAngle) * slots[i].distance;
-			Vector3 slotPos = { sx, npcPos.y, sz };
-
-			// NavMeshがある場合は、スロットの座標をNavMesh上の最も近い点に修正する
-			if (const NavMesh* navMesh = npc->GetNavMesh())
-			{
-				if (auto nearest = navMesh->GetNearestPoint(slotPos, 5.0f))
-				{
-					slotPos = nearest.value();
-				}
-			}
-
-			Vector3 diff = slotPos - npcPos;
-			float distSq = diff.LengthSq();
-
-			// 最も近いスロットを更新
-			if (distSq < minDistanceSq)
-			{
-				minDistanceSq = distSq;
-				bestSlotIndex = i;
-			}
-		}
-	}
-
-	// スロットの割り当て
-	if (bestSlotIndex != -1)
-	{
-		slots[bestSlotIndex].isOccupied = true;
-		slots[bestSlotIndex].occupant = npc;
-		npcCurrentSlots_[npc] = bestSlotIndex;
-	}
-}
-
-/// @brief NPCのスロットを解放する
-/// @param npc 
-void BattleDirector::ReleaseSlot(Character* npc)
-{
-	auto it = npcCurrentSlots_.find(npc);
-	if (it == npcCurrentSlots_.end()) return;
-
-	int slotIndex = it->second;
-
-	// ターゲットを特定してスロットを空ける（O(N)検索になりますが、Nが小さいので許容）
-	for (auto& pair : targetSlots_)
-	{
-		auto& slots = pair.second;
-		if (slotIndex < slots.size() && slots[slotIndex].occupant == npc)
-		{
-			slots[slotIndex].isOccupied = false;
-			slots[slotIndex].occupant = nullptr;
-			break;
-		}
-	}
-
-	npcCurrentSlots_.erase(it);
-}
-
-/// @brief NPCのスロットのワールド座標を取得する
-/// @param npc 
-/// @param target 
-/// @return 
-std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Character* target)
-{
-	// NPCがスロットを持っていない場合は、std::nulloptを返す
-	auto it = npcCurrentSlots_.find(npc);
-	if (it == npcCurrentSlots_.end()) return std::nullopt;
-
-	// ターゲットのスロット情報を取得
-	int slotIndex = it->second;
-	auto targetIt = targetSlots_.find(target);
-	if (targetIt == targetSlots_.end()) return std::nullopt;
-
-	// スロットのワールド座標を計算する
-	const auto& slot = targetIt->second[slotIndex];
-	Vector3 targetPos = target->GetWorldPosition();
-
-	Vector3 slotWorldPos;
-	slotWorldPos.x = targetPos.x + std::sin(slot.angleOffset) * slot.distance;
-	slotWorldPos.y = targetPos.y; // 高さはターゲットまたは地形に合わせる
-	slotWorldPos.z = targetPos.z + std::cos(slot.angleOffset) * slot.distance;
-
-	// NavMeshがある場合は、スロットの座標をNavMesh上の最も近い点に修正する
-	if (const NavMesh* navMesh = npc->GetNavMesh())
-	{
-		if (auto nearest = navMesh->GetNearestPoint(slotWorldPos, 5.0f))
-		{
-			slotWorldPos = nearest.value();
-		}
-	}
-
-	return slotWorldPos;
-}
-
-/// @brief 戦闘スロットを最適化する
-void BattleDirector::OptimizeSlots()
-{
-	// ターゲットごとにスロットを最適化する
-	for (auto& [target, slots] : targetSlots_)
-	{
-		if (!target || slots.empty()) continue;
-
-		// ターゲットが死んでいる場合はスキップ
-		if (target->IsDead()) continue;
-
-		// 実際に占有されているスロットへのポインタ（またはインデックス）を収集
-		std::vector<CombatSlot*> activeSlots;
-		for (auto& slot : slots)
-		{
-			if (slot.isOccupied && slot.occupant)
-			{
-				activeSlots.push_back(&slot);
-			}
-		}
-
-		int numAttackers = static_cast<int32_t>(activeSlots.size());
-		if (numAttackers == 0) continue;
-
-		// 360度を実際の攻撃者の数で分割し、均等な角度を計算する
-		float angleStep = (2.0f * std::numbers::pi_v<float>) / numAttackers;
-
-		// 各攻撃者のスロットの目標角度を更新する
-		for (int i = 0; i < numAttackers; ++i)
-		{
-			Character* attacker = activeSlots[i]->occupant;
-
-			// スロットの目標角度を更新する
-			activeSlots[i]->angleOffset = i * angleStep;
-		}
-	}
 }
 
 /// @brief 攻撃トークンのユーティリティスコアを計算する

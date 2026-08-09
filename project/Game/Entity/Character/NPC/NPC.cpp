@@ -142,14 +142,10 @@ void NPC::Update()
 
 		// 攻撃トークンを返却する
 		battleDirector.ReleaseAttackToken(this);
-		battleDirector.ReleaseSlot(this);
 
 		Character::Update();
 		return;
 	}
-
-	/// @brief 構え状態の移動処理を更新する
-	UpdateStanceMovement();
 
 
 	// ダメージを受けた場合は、ターゲットの更新タイマーをリセットする
@@ -208,91 +204,7 @@ void NPC::UpdateStanceStateByTargetDistance()
 		if (kDistanceSq <= kNpcStanceEnterDistanceSq)
 		{
 			isStance_ = true;
-			BattleDirector::GetInstance().AssignSlot(this, lockOnTarget_);
 		}
-	}
-}
-
-/// @brief 構え状態の移動処理を更新する
-void NPC::UpdateStanceMovement()
-{
-	// 構え状態でない、またはターゲットがいない、または動けない状態、または何らかのアクション中の場合は移動処理を行わない
-	if (!lockOnTarget_ || !isStance_ || IsIncapacitated() ||
-		GetCurrentAttack() || GetCurrentMove() || GetCurrentAvoid())
-		return;
-
-	// スロットのワールド座標を取得
-	auto optSlotPos = BattleDirector::GetInstance().GetSlotWorldPosition(this, lockOnTarget_);
-	if (!optSlotPos) return;
-
-	Vector3 slotWorldPos = optSlotPos.value();
-	Vector3 myPos = GetWorldPosition();
-
-	// スロットへ向かうベクトルを計算
-	Vector2 moveDir(0.0f, 0.0f);
-	Vector3 toSlot = slotWorldPos - myPos;
-	toSlot.y = 0.0f; // 高さは無視して平面で考える
-
-	float distanceToSlot = toSlot.Length();
-
-	// スロットに到達したかどうかの判定
-	constexpr float kStopDistance = 0.2f;
-	constexpr float kResumeDistance = 0.5f;
-
-	// スロットに近づきすぎた場合は到達状態にする
-	if (distanceToSlot < kStopDistance)
-	{
-		isArrivedAtSlot_ = true;
-	}
-	else if (distanceToSlot > kResumeDistance)
-	{
-		isArrivedAtSlot_ = false;
-	}
-
-	// すでに到着している状態なら完全に停止して処理を終える
-	if (isArrivedAtSlot_)
-	{
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
-		return;
-	}
-
-
-	// スロットに近づくにつれて速度を落とす
-	float currentSpeed = stanceWalkSpeed_;
-	constexpr float kSlowDownRadius = 1.0f;
-
-	// 目標地点に近づくにつれて速度を落とす
-	if (distanceToSlot < kSlowDownRadius)
-	{
-		currentSpeed = stanceWalkSpeed_ * (distanceToSlot / kSlowDownRadius);
-	}
-
-	toSlot = toSlot.Normalize();
-	moveDir = Vector2(toSlot.x, toSlot.z);
-
-	// 仲間同士の分離ベクトルを取得
-	Vector2 separation = CalculateSeparationVector();
-
-	// 分離ベクトルの強さを距離に応じて調整する
-	float separationMultiplier = 1.0f;
-	if (distanceToSlot < kSlowDownRadius)
-	{
-		separationMultiplier = distanceToSlot / kSlowDownRadius;
-	}
-
-	// 分離ベクトルを合成する
-	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier);
-
-	// 移動入力の決定
-	if (moveDir.LengthSq() > 0.01f)
-	{
-		moveDir = moveDir.Normalize();
-		SetMoveInputXZ(moveDir, currentSpeed);
-	}
-	else
-	{
-		// 移動入力がほとんどない場合は停止する
-		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
 	}
 }
 

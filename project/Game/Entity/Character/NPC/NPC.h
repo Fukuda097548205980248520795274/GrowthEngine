@@ -88,9 +88,6 @@ private:
 	/// @brief ターゲットとの距離で構え状態を更新する
 	void UpdateStanceStateByTargetDistance();
 
-	/// @brief 構え状態の移動処理を更新する
-	void UpdateStanceMovement();
-
 	/// @brief 戦闘中かどうか
 	bool isFighting_ = false;
 
@@ -106,9 +103,6 @@ private:
 
 	// @brief ターゲットの更新間隔（秒）
 	float targetUpdateInterval = 3.0f;
-
-	/// @brief スロットに到達したかどうか
-	bool isArrivedAtSlot_ = false;
 
 
 private:
