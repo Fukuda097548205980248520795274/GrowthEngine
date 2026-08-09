@@ -78,13 +78,6 @@
             "start_node": 127
         },
         {
-            "end": 131,
-            "end_node": 130,
-            "id": 153,
-            "start": 129,
-            "start_node": 127
-        },
-        {
             "end": 128,
             "end_node": 127,
             "id": 163,
@@ -97,6 +90,20 @@
             "id": 164,
             "start": 72,
             "start_node": 70
+        },
+        {
+            "end": 169,
+            "end_node": 168,
+            "id": 171,
+            "start": 129,
+            "start_node": 127
+        },
+        {
+            "end": 166,
+            "end_node": 165,
+            "id": 172,
+            "start": 129,
+            "start_node": 127
         }
     ],
     "nodes": [
@@ -144,8 +151,8 @@
             "name": "ターゲットが立っているとき",
             "output_pin": -1,
             "pos": [
-                450.0,
-                120.0
+                449.9999694824219,
+                119.99999237060547
             ],
             "type": 4
         },
@@ -157,7 +164,7 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": -1,
             "pos": [
-                450.0,
+                449.9999694824219,
                 0.0
             ],
             "type": 4
@@ -170,7 +177,7 @@
             "output_pin": 72,
             "pos": [
                 150.0,
-                960.0
+                1080.0
             ],
             "type": 3
         },
@@ -183,7 +190,7 @@
             "output_pin": 75,
             "pos": [
                 300.0,
-                960.0
+                1080.0
             ],
             "type": 4
         },
@@ -196,7 +203,7 @@
             "output_pin": 112,
             "pos": [
                 150.0,
-                840.0
+                959.9999389648438
             ],
             "type": 4
         },
@@ -214,7 +221,7 @@
             "output_pin": 124,
             "pos": [
                 300.0,
-                1080.0
+                1200.0
             ],
             "type": 5
         },
@@ -226,41 +233,9 @@
             "output_pin": 129,
             "pos": [
                 300.0,
-                240.0
+                239.99998474121094
             ],
             "type": 1
-        },
-        {
-            "action_type": 0,
-            "combo_data": {
-                "attackTime": 0.800000011920929,
-                "grabWeaponEndTime": 0.0,
-                "grabWeaponStartTime": 0.0,
-                "groups": [],
-                "hitDefinitions": [
-                    {
-                        "groupId": 0,
-                        "hitJoint": 0,
-                        "radius": 0.25
-                    }
-                ],
-                "isGrabWeapon": false,
-                "moveEndTime": 0.20000000298023224,
-                "moveSpeed": 4.0,
-                "moveStartTime": 0.0
-            },
-            "id": 130,
-            "input_pin": 131,
-            "is_collapsed": false,
-            "motionName": "Player_Combo_4",
-            "motionType": 4,
-            "name": "パンチ",
-            "output_pin": 132,
-            "pos": [
-                450.0,
-                480.0
-            ],
-            "type": 5
         },
         {
             "action_type": 8,
@@ -270,8 +245,8 @@
             "name": "攻撃終了",
             "output_pin": 138,
             "pos": [
-                450.0,
-                600.0
+                449.9999694824219,
+                720.0
             ],
             "type": 5
         },
@@ -283,7 +258,7 @@
             "name": "攻撃開始",
             "output_pin": 141,
             "pos": [
-                450.0,
+                449.9999694824219,
                 360.0
             ],
             "type": 5
@@ -296,8 +271,8 @@
             "name": "トークン開放",
             "output_pin": 144,
             "pos": [
-                450.0,
-                720.0
+                449.9999694824219,
+                840.0000610351563
             ],
             "type": 5
         },
@@ -309,8 +284,72 @@
             "name": "リクエスト",
             "output_pin": 147,
             "pos": [
-                450.0,
-                240.0
+                449.9999694824219,
+                239.99998474121094
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 0,
+            "combo_data": {
+                "attackTime": 0.800000011920929,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 5,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "groupId": 0,
+                        "knockback": 1.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "hitDefinitions": [
+                    {
+                        "groupId": 0,
+                        "hitJoint": 9,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 4.0,
+                "moveStartTime": 0.0
+            },
+            "id": 165,
+            "input_pin": 166,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "name": "パンチ",
+            "output_pin": 167,
+            "pos": [
+                449.9999694824219,
+                600.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 5,
+            "id": 168,
+            "input_pin": 169,
+            "is_collapsed": false,
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 2.0
+            },
+            "output_pin": 170,
+            "pos": [
+                449.9999694824219,
+                479.9999694824219
             ],
             "type": 5
         }
