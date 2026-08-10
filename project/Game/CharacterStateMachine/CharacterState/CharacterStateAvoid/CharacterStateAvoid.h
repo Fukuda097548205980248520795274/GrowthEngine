@@ -42,11 +42,8 @@ public:
 
 private:
 
-    /// @brief 回避開始位置
-    Vector3 avoidStartPosition_ = Vector3(0.0f, 0.0f, 0.0f);
-
-    /// @brief 回避終了位置
-    Vector3 avoidEndPosition_ = Vector3(0.0f, 0.0f, 0.0f);
+	/// @brief  イージングの前回の値
+    float prevEaseT_ = 0.0f;
 
 	/// @brief 回避のタイマー
     float avoidTimer_ = 0.0f;

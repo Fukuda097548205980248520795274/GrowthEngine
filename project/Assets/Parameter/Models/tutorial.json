@@ -20,7 +20,7 @@
                 "enableLighting": true,
                 "enableShadow": true,
                 "enableSpecular": true,
-                "environment": 1.0,
+                "environment": 0.0,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -71,7 +71,7 @@
                 "enableLighting": true,
                 "enableShadow": true,
                 "enableSpecular": true,
-                "environment": 0.6549999713897705,
+                "environment": 1.0,
                 "outlineColor": [
                     0.0,
                     0.0,
