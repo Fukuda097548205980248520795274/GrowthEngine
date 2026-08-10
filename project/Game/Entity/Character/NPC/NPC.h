@@ -82,6 +82,10 @@ public:
 	/// @brief ロックオンしているターゲットを検索する
 	void SearchLockOnTarget() override;
 
+	/// @brief 間合いを取ろうとしているかどうかを取得する
+	/// @return 
+	bool IsTakingDistance() const override { return isTakingDistance_; }
+
 
 private:
 
@@ -109,6 +113,24 @@ private:
 
 	/// @brief スロットに到達したかどうか
 	bool isArrivedAtSlot_ = false;
+
+
+private:
+
+	/// @brief 待機タイマー
+	float idleTimer_ = 2.0f;
+
+	/// @brief 待機の更新間隔（秒）
+	float idleInterval_ = 3.0f;
+
+	/// @brief 移動時間のタイマー
+	float moveTimer_ = 0.0f;
+
+	/// @brief 移動時間の間隔（秒）
+	float moveInterval_ = 1.0f;
+
+	// 間合いを取ろうとしているかどうか
+	bool isTakingDistance_ = false;
 
 
 private:

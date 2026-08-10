@@ -1,6 +1,7 @@
 #include "BattleDirector.h"
 #include "Entity/Character/Character.h"
 #include "Entity/Character/Player/Player.h"
+#include "Entity/Character/NPC/NPC.h"
 #include "NavMesh/NavMesh.h"
 #include <numbers>
 
@@ -303,23 +304,27 @@ std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Char
 	if (targetIt == targetSlots_.end()) return std::nullopt;
 
 
-	// お互いに狙い合っているかを確認
-	bool isMutualTargeting = (target->GetLockOnTarget() == npc);
-
-	// 自分とターゲットの攻撃者数を取得
-	int myAttackersCount = GetTargetingCount(npc);
-	int targetAttackersCount = GetTargetingCount(target);
-
-	// 自分がターゲットよりも多く狙われている場合は、スロットの座標を返さない
-	if (myAttackersCount > targetAttackersCount)
+	// 間合いを取ろうとしていないときのみ、自分とターゲットの攻撃者数を比較して、スロットの座標を返すかどうかを判断する
+	if (!npc->IsTakingDistance())
 	{
-		return std::nullopt;
-	}
+		// お互いに狙い合っているかを確認
+		bool isMutualTargeting = (target->GetLockOnTarget() == npc);
 
-	// お互いに狙い合っていて、かつ自分とターゲットがそれぞれ1人ずつしか狙われていない場合は、スロットの座標を返さない
-	if (isMutualTargeting && myAttackersCount == 1 && targetAttackersCount == 1)
-	{
-		return std::nullopt;
+		// 自分とターゲットの攻撃者数を取得
+		int myAttackersCount = GetTargetingCount(npc);
+		int targetAttackersCount = GetTargetingCount(target);
+
+		// 自分がターゲットよりも多く狙われている場合は、スロットの座標を返さない
+		if (myAttackersCount > targetAttackersCount)
+		{
+			return std::nullopt;
+		}
+
+		// お互いに狙い合っていて、かつ自分とターゲットがそれぞれ1人ずつしか狙われていない場合は、スロットの座標を返さない
+		if (isMutualTargeting && myAttackersCount == 1 && targetAttackersCount == 1)
+		{
+			return std::nullopt;
+		}
 	}
 
 

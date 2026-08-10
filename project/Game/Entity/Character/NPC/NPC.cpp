@@ -62,8 +62,40 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 	navMesh_ = navMesh;
 }
 
+/// @brief 更新処理
 void NPC::Update()
 {
+	// デルタタイムを取得する
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+	// 移動中かどうかで処理を分岐する
+	if (isTakingDistance_)
+	{
+		// 移動タイマーを更新する
+		moveTimer_ -= dt;
+
+		// 移動タイマーが0以下になった場合は、移動を停止して待機状態に戻す
+		if (moveTimer_ <= 0.0f)
+		{
+			isTakingDistance_ = false;
+			idleTimer_ = GetRandomRange(1.0f, 2.0f);
+		}
+	}
+	else
+	{
+		// 待機中
+
+		// 待機タイマーを更新する
+		idleTimer_ -= dt;
+
+		// 待機タイマーが0以下になった場合は、移動状態に切り替える
+		if (idleTimer_ <= 0.0f)
+		{
+			isTakingDistance_ = true;
+			moveTimer_ = GetRandomRange(1.0f, 2.0f);
+		}
+	}
+
 	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
 	if (Character::IsCutsceneActive() || !updateEnabled_)
 	{
@@ -82,9 +114,6 @@ void NPC::Update()
 		Character::Update();
 		return;
 	}
-
-	// デルタタイムを取得する
-	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
 
 	// 動けない状態かどうか
 	bool isIncapacitated = IsIncapacitated();
@@ -273,6 +302,33 @@ void NPC::UpdateStanceMovement()
 	// 仲間同士の分離ベクトルを取得
 	Vector2 separation = CalculateSeparationVector();
 
+
+	// ターゲットとの距離が近すぎる場合の分離ベクトルを計算
+	Vector2 targetSeparation(0.0f, 0.0f);
+	Vector3 toTarget = lockOnTarget_->GetWorldPosition() - myPos;
+	toTarget.y = 0.0f;
+	float distanceToTarget = toTarget.Length();
+
+	// ターゲットとの距離を保つための距離を取得
+	float keepDistance = GetSlotDistance();
+
+	// ターゲットに近づきすぎている場合、反発力を発生させる
+	if (distanceToTarget > 0.0f && distanceToTarget < keepDistance)
+	{
+		// ターゲットから遠ざかる方向
+		Vector3 awayFromTarget = -toTarget.Normalize();
+
+		// ターゲットとの距離に応じて反発の強さを調整する
+		float pushStrength = 1.0f - (distanceToTarget / keepDistance);
+
+		// ターゲットとの分離ベクトルの重み
+		constexpr float kTargetSeparationWeight = 2.0f;
+
+		// ターゲットとの分離ベクトルを計算
+		targetSeparation = Vector2(awayFromTarget.x, awayFromTarget.z) * (pushStrength * kTargetSeparationWeight);
+	}
+
+
 	// 分離ベクトルの強さを距離に応じて調整する
 	float separationMultiplier = 1.0f;
 	if (distanceToSlot < kSlowDownRadius)
@@ -281,7 +337,7 @@ void NPC::UpdateStanceMovement()
 	}
 
 	// 分離ベクトルを合成する
-	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier);
+	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier) + (targetSeparation * separationMultiplier);
 
 	// 移動入力の決定
 	if (moveDir.LengthSq() > 0.01f)

@@ -580,6 +580,10 @@ public:
 	/// @return 
 	float GetPersonalSlotDegreeOffset() const { return personalSlotDegreeOffset_; }
 
+	/// @brief 間合いを取っているかどうかを取得する
+	/// @return 
+	virtual bool IsTakingDistance() const { return false; }
+
 
 
 
