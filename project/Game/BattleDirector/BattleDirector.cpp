@@ -302,14 +302,38 @@ std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Char
 	auto targetIt = targetSlots_.find(target);
 	if (targetIt == targetSlots_.end()) return std::nullopt;
 
+
+	// お互いに狙い合っているかを確認
+	bool isMutualTargeting = (target->GetLockOnTarget() == npc);
+
+	// 自分とターゲットの攻撃者数を取得
+	int myAttackersCount = GetTargetingCount(npc);
+	int targetAttackersCount = GetTargetingCount(target);
+
+	// 自分がターゲットよりも多く狙われている場合は、スロットの座標を返さない
+	if (myAttackersCount > targetAttackersCount)
+	{
+		return std::nullopt;
+	}
+
+	// お互いに狙い合っていて、かつ自分とターゲットがそれぞれ1人ずつしか狙われていない場合は、スロットの座標を返さない
+	if (isMutualTargeting && myAttackersCount == 1 && targetAttackersCount == 1)
+	{
+		return std::nullopt;
+	}
+
+
 	// スロットのワールド座標を計算する
 	const auto& slot = targetIt->second[slotIndex];
 	Vector3 targetPos = target->GetWorldPosition();
 
+	// ターゲットの回転を考慮してスロットのワールド座標を計算する
+	float radianOffset = slot.angleOffset + target->GetPersonalSlotDegreeOffset() * (std::numbers::pi_v<float> / 180.0f);
+
 	Vector3 slotWorldPos;
-	slotWorldPos.x = targetPos.x + std::sin(slot.angleOffset) * slot.distance;
+	slotWorldPos.x = targetPos.x + std::sin(radianOffset) * slot.distance;
 	slotWorldPos.y = targetPos.y; // 高さはターゲットまたは地形に合わせる
-	slotWorldPos.z = targetPos.z + std::cos(slot.angleOffset) * slot.distance;
+	slotWorldPos.z = targetPos.z + std::cos(radianOffset) * slot.distance;
 
 	// NavMeshがある場合は、スロットの座標をNavMesh上の最も近い点に修正する
 	if (const NavMesh* navMesh = npc->GetNavMesh())
@@ -321,6 +345,35 @@ std::optional<Vector3> BattleDirector::GetSlotWorldPosition(Character* npc, Char
 	}
 
 	return slotWorldPos;
+}
+
+/// @brief ターゲットされているNPCの数を取得する
+/// @param target 
+/// @return 
+int BattleDirector::GetTargetingCount(Character* target)
+{
+	// 全キャラクターのリストを取得
+	auto characters = Character::GetCharacters();
+	
+	// ターゲットされているキャラクターの数をカウントする
+	int targetedCount = 0;
+
+	// 自分がプレイヤー側かどうかを判定する
+	const bool kIsSelfPlayerSide = target->IsPlayerSide();
+
+	for (Character* other : characters)
+	{
+		// 自分自身、死亡しているキャラクター、または同じ側のキャラクターはスキップする
+		if (other == target || other->IsDead() || other->IsPlayerSide() == kIsSelfPlayerSide) continue;
+
+		// 他のキャラクターがターゲットを狙っているかどうかを確認する
+		if (other->GetLockOnTarget() == target)
+		{
+			targetedCount++;
+		}
+	}
+
+	return targetedCount;
 }
 
 /// @brief 戦闘スロットを最適化する

@@ -576,6 +576,10 @@ public:
 	/// @return 
 	float GetSlotDistance() const { return slotDistance_; }
 
+	/// @brief スロットの角度オフセットを取得する
+	/// @return 
+	float GetPersonalSlotDegreeOffset() const { return personalSlotDegreeOffset_; }
+
 
 
 
@@ -837,6 +841,18 @@ protected:
 
 	/// @brief 前フレームでレイジモード開始に成功したかどうか
 	bool isPrevSuccessRageModeStart_ = false;
+
+
+protected:
+
+	/// @brief スロットシステムによる度数のオフセット
+	float personalSlotDegreeOffset_ = 0.0f;
+
+	// スロットシステムのシフトタイマー
+	float slotShiftTimer_ = 0.0f;
+
+	// スロットシステムのシフト間隔
+	float currentShiftInterval_ = 3.0f;
 
 
 protected:

@@ -161,6 +161,37 @@ void Character::Update()
 	// 最後のまとめた処理
 	auto FinalizeUpdate = [&]()
 		{
+			// スロットの横移動の更新
+			slotShiftTimer_ += kDt;
+
+			// スロットの横移動のタイマーがシフト間隔を超えた場合、横移動の目標角度をランダムに決定する
+			if (slotShiftTimer_ >= currentShiftInterval_) 
+			{
+				slotShiftTimer_ = 0.0f;
+
+				// 次回動くまでの時間をランダムに再設定
+				currentShiftInterval_ = GetRandomRange(3.0f, 6.0f);
+
+				// 45度〜90度の範囲でランダムに横移動の目標角度を決定
+				float shiftAngle = GetRandomRange(45.0f, 90.0f);
+
+				// 右に回り込むかどうか
+				bool isRightShift = GetRandomRange(0, 1) == 0;
+
+				// 左右どちらに回り込むかもランダム
+				if (isRightShift)
+				{
+					personalSlotDegreeOffset_ += shiftAngle;
+				}
+				else
+				{
+					personalSlotDegreeOffset_ -= shiftAngle;
+				}
+
+				// 角度を0〜360度の範囲に収める
+				personalSlotDegreeOffset_ = std::fmod(personalSlotDegreeOffset_, 360.0f);
+			}
+
 			// 壁接触の処理
 			WallTouchUpdate();
 

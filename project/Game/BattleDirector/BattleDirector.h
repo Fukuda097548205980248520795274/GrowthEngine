@@ -95,6 +95,11 @@ public:
 	/// @return 
 	std::optional<Vector3> GetSlotWorldPosition(Character* npc, Character* target);
 
+	/// @brief ターゲットされているNPCの数を取得する
+	/// @param target 
+	/// @return 
+	int GetTargetingCount(Character* target);
+
 private:
 
 	// シングルトンのためコンストラクタはprivate

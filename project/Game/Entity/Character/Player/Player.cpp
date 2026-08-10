@@ -74,6 +74,9 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 /// @brief 更新処理
 void Player::Update()
 {
+
+	ImGui::Text("PersonalDegreeOffset: %.2f", personalSlotDegreeOffset_);
+
 	// 更新処理開始前のリセット
 	StartUpdate();
 
