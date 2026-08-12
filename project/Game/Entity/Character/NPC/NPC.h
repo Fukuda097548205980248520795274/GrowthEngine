@@ -86,6 +86,18 @@ public:
 	/// @return 
 	bool IsTakingDistance() const override { return isTakingDistance_; }
 
+	/// @brief ターゲットを変更したかどうかを取得する
+	/// @return 
+	bool IsChangedTarget() const { return isChangedTarget_; }
+
+	/// @brief 迂回中かどうかを取得する
+	/// @return 
+	bool IsDetouring() const { return isDetouring_; }
+
+	/// @brief 迂回中かどうかを設定する
+	/// @param isDetouring 
+	void SetIsDetouring(bool isDetouring) { isDetouring_ = isDetouring; }
+
 
 private:
 
@@ -110,6 +122,10 @@ private:
 
 	// @brief ターゲットの更新間隔（秒）
 	float targetUpdateInterval = 3.0f;
+
+	/// @brief ターゲットを変更したかどうか
+	bool isChangedTarget_ = false;
+
 
 	/// @brief スロットに到達したかどうか
 	bool isArrivedAtSlot_ = false;
@@ -165,6 +181,9 @@ private:
 
 	// 分離ベクトルの強さ（重み）
 	float separationWeight = 1.5f;
+
+	// 迂回中かどうか
+	bool isDetouring_ = false;
 
 
 private:

@@ -1516,6 +1516,8 @@ void Character::WallTouchCheck()
 
 	// 壁に接触しているかどうかのフラグを更新する
 	isWallTouch_ = wallTouchCollision_->isCollision_;
+
+	isWallTouching_ = false;
 }
 
 /// @brief 壁接触の更新
@@ -1571,6 +1573,9 @@ void Character::WallTouchUpdate()
 			// めり込んでいる場合（距離がカプセルの半径未満）
 			if (distSq > 0.0f && distSq < (capsule->radius * capsule->radius))
 			{
+				// 壁に接触しているフラグを立てる
+				isWallTouching_ = true;
+
 				float dist = std::sqrt(distSq);
 				float penetration = capsule->radius - dist; // めり込み量
 

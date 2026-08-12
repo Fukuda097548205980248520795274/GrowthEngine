@@ -294,6 +294,9 @@ void NavMeshMove::Update()
                     float rightDot = rightDir.x * separationDirection.x + rightDir.y * separationDirection.y;
                     avoidanceSide_ = (rightDot >= 0.0f) ? 1.0f : -1.0f;
                     avoidanceTimer_ = 0.4f; // 0.4秒間はこの避ける向きを維持する
+
+					// 迂回中フラグを立てる
+                    npc->SetIsDetouring(true);
                 }
 
                 // 真横ではなく「斜め前」に滑らかにコースをずらすベクトルを作成

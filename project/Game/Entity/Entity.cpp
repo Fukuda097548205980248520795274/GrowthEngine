@@ -22,6 +22,13 @@ void Entity::Update()
 	worldTransform_->Update();
 }
 
+/// @brief ビューポート内に存在するかどうかを取得する
+/// @return 
+bool Entity::IsInViewport() const
+{
+	return false;
+}
+
 /// @brief デバッグUIを描画する
 /// @param placementData 
 /// @param placementList 

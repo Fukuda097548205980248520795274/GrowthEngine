@@ -121,6 +121,10 @@ void NPC::Update()
 	// 更新処理開始前のリセット
 	StartUpdate();
 
+	// ターゲットが変更されたかどうかをリセットする
+	isChangedTarget_ = false;
+	isDetouring_ = false;
+
 	// 攻撃のクールタイムの更新
 	UpdateAttackCooltime(dt);
 
@@ -195,6 +199,7 @@ void NPC::Update()
 		{
 			lockOnTarget_ = nullptr;
 			targetUpdateTimer_ = targetUpdateInterval;
+			isChangedTarget_ = true;
 		}
 	}
 

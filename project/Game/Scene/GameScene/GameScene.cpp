@@ -50,6 +50,10 @@ void GameScene::Initialize()
 	mainCamera_ = std::make_unique<MainCamera3D>("MainCamera");
 	mainCamera_->Switch();
 
+	// AI計測用エディタの生成
+	aiMetricsEditor_ = std::make_unique<AIMetricsEditor>();
+	aiMetricsEditor_->Initialize(mainCamera_.get());
+
 	// 太陽光の生成と初期化
 	sunLight_ = std::make_unique<LightDirectional>("SunLight");
 	sunLight_->param_->intensity = 1.0f;
@@ -372,6 +376,9 @@ void GameScene::Initialize()
 
 			// エディタ内のUI描画
 			uiEditor_->Draw();
+
+			// AI計測用エディタの更新
+			aiMetricsEditor_->Draw();
 		}
 	);
 
@@ -415,6 +422,9 @@ void GameScene::Update()
 
 	// ステージエディタの更新
 	stageEditor_->Update(kDt);
+
+	// AI計測用エディタの更新
+	aiMetricsEditor_->Update(kDt);
 }
 
 /// @brief 描画処理

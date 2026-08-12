@@ -1528,6 +1528,9 @@
     <Filter Include="Game\Action\Telegraph">
       <UniqueIdentifier>{a080c5f1-10fe-434b-a38e-5c07cf491a64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\AIMetricsEditor">
+      <UniqueIdentifier>{c3db7932-b227-4f0d-89f4-11840415473a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2768,6 +2771,9 @@
     </ClCompile>
     <ClCompile Include="Game\Action\Telegraph\Telegraph.cpp">
       <Filter>Game\Action\Telegraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\AIMetricsEditor\AIMetricsEditor.cpp">
+      <Filter>Game\AIMetricsEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4135,6 +4141,9 @@
     </ClInclude>
     <ClInclude Include="Game\Action\Telegraph\Telegraph.h">
       <Filter>Game\Action\Telegraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h">
+      <Filter>Game\AIMetricsEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

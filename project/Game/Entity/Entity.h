@@ -83,6 +83,10 @@ public:
 	/// @return 
 	std::string GetEditorName()const { return editorName_; }
 
+	/// @brief ビューポート内に存在するかどうかを取得する
+	/// @return 
+	bool IsInViewport() const;
+
 
 protected:
 

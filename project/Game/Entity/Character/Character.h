@@ -584,6 +584,14 @@ public:
 	/// @return 
 	virtual bool IsTakingDistance() const { return false; }
 
+	/// @brief 現在の速度を取得する
+	/// @return 
+	Vector3 GetVelocity() const { return movement_->GetCurrentVelocity(); }
+
+	/// @brief 壁に接触しているかどうかを取得する
+	/// @return 
+	bool IsWallTouch() const { return isWallTouching_; }
+
 
 
 
@@ -911,6 +919,9 @@ protected:
 
 	/// @brief 壁に接触しているかどうか
 	bool isWallTouch_ = false;
+
+	/// @brief 壁に接触していたかどうか
+	bool isWallTouching_ = false;
 
 	/// @brief 壁接触判定
 	Collision3DInstanceCapsule* wallTouchCollision_ = nullptr;

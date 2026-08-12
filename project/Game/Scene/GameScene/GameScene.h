@@ -27,6 +27,7 @@
 #include "CutsceneManager/CutsceneEditor/CutsceneEditor.h"
 #include "CutsceneManager/CutsceneManager.h"
 
+#include "AIMetricsEditor/AIMetricsEditor.h"
 #include "EditorWorkspaceManager/EditorWorkspaceManager.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
@@ -256,7 +257,10 @@ private:
 	std::unique_ptr<LightEditor> lightEditor_ = nullptr;
 
 	/// @brief エディタワークスペースマネージャ
-	std::unique_ptr< EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;
+	std::unique_ptr<EditorWorkspaceManager> editorWorkspaceManager_ = nullptr;
+
+	/// @brief AI計測用エディタ
+	std::unique_ptr<AIMetricsEditor> aiMetricsEditor_ = nullptr;
 
 
 	/// @brief プレイヤーの当たり判定グループ

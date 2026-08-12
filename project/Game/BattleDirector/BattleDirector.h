@@ -100,6 +100,18 @@ public:
 	/// @return 
 	int GetTargetingCount(Character* target);
 
+	/// @brief ターゲットごとの使用中スロット数を取得する
+	/// @param target 
+	/// @return 
+	int GetUsedSlotCount(Character* target);
+
+	/// @brief スロットの占有者を取得する
+	/// @param target 
+	/// @param slotIndex 
+	/// @return 
+	Character* GetSlotOccupant(Character* target, int slotIndex);
+
+
 private:
 
 	// シングルトンのためコンストラクタはprivate

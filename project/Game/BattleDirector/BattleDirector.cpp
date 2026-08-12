@@ -381,6 +381,37 @@ int BattleDirector::GetTargetingCount(Character* target)
 	return targetedCount;
 }
 
+/// @brief ターゲットごとの使用中スロット数を取得する
+/// @param target 
+/// @return 
+int BattleDirector::GetUsedSlotCount(Character* target)
+{
+	auto it = targetSlots_.find(target);
+	if (it == targetSlots_.end()) return 0;
+
+	const auto& slots = it->second;
+	int count = 0;
+	for (const auto& slot : slots)
+		if (slot.isOccupied) count++;
+
+	return count;
+}
+
+/// @brief スロットの占有者を取得する
+/// @param target 
+/// @param slotIndex 
+/// @return 
+Character* BattleDirector::GetSlotOccupant(Character* target, int slotIndex)
+{
+	auto it = targetSlots_.find(target);
+	if (it == targetSlots_.end()) return nullptr;
+
+	const auto& slots = it->second;
+	if (slotIndex < 0 || slotIndex >= static_cast<int>(slots.size())) return nullptr;
+
+	return slots[slotIndex].occupant;
+}
+
 /// @brief 戦闘スロットを最適化する
 void BattleDirector::OptimizeSlots()
 {
