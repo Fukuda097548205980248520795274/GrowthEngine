@@ -108,7 +108,7 @@ void NPC::Update()
 	}
 
 	// ゲーム終了時は移動を停止して、基底クラスの更新処理のみ行う
-	if (Character::IsGameFinished())
+	if (Character::IsGameFinished() || Character::IsGameIntro())
 	{
 		MoveStop();
 		Character::Update();

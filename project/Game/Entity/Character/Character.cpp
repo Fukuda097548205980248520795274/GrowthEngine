@@ -36,6 +36,7 @@
 std::vector<Character*> Character::characters_{};
 bool Character::isCutsceneActive_ = false;
 bool Character::isGameFinished_ = false;
+bool Character::isGameIntro_ = false;
 
 /// @brief 
 /// @param position 

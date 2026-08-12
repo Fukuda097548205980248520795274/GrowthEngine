@@ -1531,6 +1531,9 @@
     <Filter Include="Game\AIMetricsEditor">
       <UniqueIdentifier>{c3db7932-b227-4f0d-89f4-11840415473a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\GameScene\Intro">
+      <UniqueIdentifier>{fb5e4563-484a-440a-8ccc-67a83ab241d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2774,6 +2777,9 @@
     </ClCompile>
     <ClCompile Include="Game\AIMetricsEditor\AIMetricsEditor.cpp">
       <Filter>Game\AIMetricsEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Intro\GameSceneIntro.cpp">
+      <Filter>Game\Scene\GameScene\Intro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

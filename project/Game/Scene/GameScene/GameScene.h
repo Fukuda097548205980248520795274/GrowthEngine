@@ -51,6 +51,7 @@ public:
 	// @brief ゲームのフェーズ
 	enum class PhaseType
 	{
+		Intro, // イントロ
 		Battle, // 戦闘中
 		Pose, // ポーズ中
 		Finish, // 終了
@@ -163,6 +164,21 @@ private:
 	/// @param navMeshGroupId 
 	/// @param isNavMeshEnabled 
 	bool HandleTriggerEvent(int eventType, const char* param, bool isStartBattleArea, bool isGameClear, int navMeshGroupId, bool isNavMeshEnabled);
+
+
+private:
+
+	/// @brief イントロフェーズの初期化処理
+	void IntroPhaseInitialize();
+
+	/// @brief イントロフェーズの更新処理
+	void IntroPhaseUpdate();
+
+	/// @brief イントロフェーズのタイマー
+	float introTimer_ = kIntroTime;
+
+	/// @brief イントロフェーズの時間
+	static constexpr float kIntroTime = 2.0f;
 
 
 private:

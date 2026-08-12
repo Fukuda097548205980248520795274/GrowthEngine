@@ -563,6 +563,13 @@ public:
 	/// @return 
 	static bool IsGameFinished() { return isGameFinished_; }
 
+	/// @brief ゲーム開始時のイントロ中かどうかを設定する
+	/// @param isIntro 
+	static void SetIsGameIntro(bool isIntro) { isGameIntro_ = isIntro; }
+
+	/// @brief ゲーム開始時のイントロ中かどうかを取得する
+	/// @return 
+	static bool IsGameIntro() { return isGameIntro_; }
 
 	/// @brief 攻撃性の値を取得する
 	/// @return 
@@ -946,6 +953,9 @@ protected:
 
 	/// @brief カットシーン中かどうか
 	static bool isCutsceneActive_;
+
+	/// @brief ゲーム開始時のイントロ中かどうか
+	static bool isGameIntro_;
 
 	/// @brief ゲーム終了フラグ
 	static bool isGameFinished_;

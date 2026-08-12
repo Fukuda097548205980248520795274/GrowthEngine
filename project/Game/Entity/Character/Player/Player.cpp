@@ -89,7 +89,7 @@ void Player::Update()
 	}
 
 	// ゲームが終了している場合は、基底クラスの更新処理のみ行う
-	if (Character::IsGameFinished())
+	if (Character::IsGameFinished() || Character::IsGameIntro())
 	{
 		Character::Update();
 		return;
