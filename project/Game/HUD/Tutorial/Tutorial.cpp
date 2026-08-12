@@ -40,7 +40,13 @@ void Tutorial::Update()
 void Tutorial::Draw()
 {
 	// 透明度が0以下なら描画しない
-	if (t_ <= 0.0f)return;
+	if (t_ <= 0.0f)
+	{
+		for (auto& sprite : sprites_)
+			sprite->param_->material.color.w = 0.0f;
+
+		return;
+	}
 
 	for (auto& sprite : sprites_)
 	{

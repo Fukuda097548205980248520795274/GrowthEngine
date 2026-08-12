@@ -1,0 +1,416 @@
+[
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Move",
+        "screenAnchor": 6,
+        "textureFilename": "move_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                932.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Camera",
+        "screenAnchor": 6,
+        "textureFilename": "perspective_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                450.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "StickR",
+        "screenAnchor": 6,
+        "textureFilename": "r_stick.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                807.0,
+                124.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "StickL",
+        "screenAnchor": 6,
+        "textureFilename": "l_stick.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                314.0,
+                123.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Dash",
+        "screenAnchor": 6,
+        "textureFilename": "dash_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                864.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Grab",
+        "screenAnchor": 6,
+        "textureFilename": "grab_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                834.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Combo",
+        "screenAnchor": 6,
+        "textureFilename": "combo_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                868.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Attack",
+        "screenAnchor": 6,
+        "textureFilename": "attack_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                443.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Guard",
+        "screenAnchor": 6,
+        "textureFilename": "guard_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                835.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Avoid",
+        "screenAnchor": 6,
+        "textureFilename": "avoid_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                816.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "StrongAttack",
+        "screenAnchor": 6,
+        "textureFilename": "strongAttack_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.4000000059604645,
+                0.4000000059604645
+            ],
+            "translate": [
+                955.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "ButtonA",
+        "screenAnchor": 6,
+        "textureFilename": "a_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                511.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "ButtonB",
+        "screenAnchor": 6,
+        "textureFilename": "b_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                506.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "ButtonX",
+        "screenAnchor": 6,
+        "textureFilename": "x_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                319.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "ButtonY",
+        "screenAnchor": 6,
+        "textureFilename": "y_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                800.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "ButtonRT",
+        "screenAnchor": 6,
+        "textureFilename": "rt_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                500.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "ButtonLT",
+        "screenAnchor": 6,
+        "textureFilename": "lt_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                515.0,
+                120.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "ButtonCombo",
+        "screenAnchor": 6,
+        "textureFilename": "combo_button.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.5,
+                0.5
+            ],
+            "translate": [
+                361.0,
+                115.0
+            ]
+        }
+    }
+]

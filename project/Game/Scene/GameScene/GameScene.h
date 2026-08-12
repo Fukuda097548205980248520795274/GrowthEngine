@@ -465,30 +465,8 @@ private:
 
 
 	/// @brief チュートリアルのテキストスプライト
-	std::unique_ptr<Sprite> tutorialMoveText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialPerspectiveText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialDashText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialAttackText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialStrongAttackText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialGrabText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialGuardText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialComboText_ = nullptr;
-	std::unique_ptr<Sprite> tutorialAvoidText_ = nullptr;
-	
-	std::unique_ptr<Sprite> xButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> yButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> aButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> bButtonSprite_ = nullptr;
 	std::unique_ptr<Sprite> rbButtonSprite_ = nullptr;
 	std::unique_ptr<Sprite> lbButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> rtButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> ltButtonSprite_ = nullptr;
-	std::unique_ptr<Sprite> comboButtonSprite_ = nullptr;
-
-	/// @brief スティックのスプライト
-	std::unique_ptr<Sprite> lStickSprite_ = nullptr;
-	std::unique_ptr<Sprite> rStickSprite_ = nullptr;
-
 
 	// チュートリアル
 	std::unique_ptr<Tutorial> stickTutorial_ = nullptr;
