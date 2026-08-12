@@ -195,6 +195,7 @@ void AIMetricsEditor::DrawSelectCharacterUI()
 	isBlindSpotAttackAttempted_ = false;
 	minDistanceBetweenNPCs_ = 999.0f;
 	surroundingCount_ = 0;
+	surroundingNPCCount_ = 0;
 
 	ImGui::Begin("キャラクター選択UI");
 
