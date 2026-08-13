@@ -127,9 +127,6 @@ void Player::Update()
 	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
 	if (!isIncapacitatedState)
 	{
-		// スタイルチェンジ入力があればスタイルチェンジ処理を行う
-		StyleChange();
-
 		// レイジモードを開始する
 		if (inputController_->IsRageModeRequested())
 			RageModeInput();
