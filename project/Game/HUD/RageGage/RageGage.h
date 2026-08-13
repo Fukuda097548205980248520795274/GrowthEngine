@@ -69,6 +69,7 @@ public:
 	void Death();
 
 
+
 protected:
 
 	// 横幅

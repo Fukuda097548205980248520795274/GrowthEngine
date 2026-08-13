@@ -20,17 +20,17 @@
 /// @param editor_nodes 
 /// @param editor_links 
 /// @return 
-std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<EditorNode>& editorModes, const std::vector<EditorLink>& editorLinks, 
+std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<EditorNode>& editorNodes, const std::vector<EditorLink>& editorLinks, 
 	Character* character, const std::string& name)
 {
 	// ルートノードを見つける
-	const EditorNode* rootEditorNode = FindRootNode(editorModes, editorLinks);
+	const EditorNode* rootEditorNode = FindRootNode(editorNodes, editorLinks);
 
 	// ルートノードが見つからない場合は nullptr を返す
 	if (!rootEditorNode) return nullptr;
 
 	// ルートノードから再帰的にランタイムノードを構築する
-	std::unique_ptr<Node> rootRuntimeNode = BuildNodeRecursive(*rootEditorNode, editorModes, editorLinks, character);
+	std::unique_ptr<Node> rootRuntimeNode = BuildNodeRecursive(*rootEditorNode, editorNodes, editorLinks, character);
 
 	// ルートノードが構築できなかった場合は nullptr を返す
 	return std::make_unique<BehaviorTree>(std::move(rootRuntimeNode), name);
@@ -69,6 +69,21 @@ const EditorNode* BehaviorTreeFactory::FindRootNode(const std::vector<EditorNode
 /// @return 
 std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& editorNode, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links, Character* character)
 {
+	// サブツリーノードの場合は、サブツリーのファイルを読み込んで再帰的にツリーを生成する
+	if (editorNode.type == EditorNodeType::SubTree)
+	{
+		// サブツリーのファイルを読み込んで再帰的にツリーを生成する
+		std::vector<EditorNode> subNodes;
+		std::vector<EditorLink> subLinks;
+
+		BehaviorTreeSetting setting("BehaviorTree");
+		setting.LoadTree(editorNode.subTreeFileName, subNodes, subLinks);
+
+		// ロードしたサブツリーのルートノードからツリーインスタンスを構築して返す
+		return BuildNodeRecursive(*FindRootNode(subNodes, subLinks), subNodes, subLinks, character);
+	}
+
+
 	// editor_node の種類に応じて対応するランタイムノードを生成する
 	std::unique_ptr<Node> runtimeNode = nullptr;
 

@@ -168,6 +168,10 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["child_weight_map"][std::to_string(childId)] = weight;
 			}
 		}
+		else if (node.type == EditorNodeType::SubTree)
+		{
+			n["sub_tree_file_name"] = node.subTreeFileName;
+		}
 
 		root["nodes"].push_back(n);
 	}
@@ -445,6 +449,12 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						node.childWeightMap[childId] = weight;
 					}
 				}
+			}
+			else if (node.type == EditorNodeType::SubTree)
+			{
+				// サブツリーノードの場合はサブツリーファイル名を読み込む
+				std::string subFileName = n.value("sub_tree_file_name", "");
+				strncpy_s(node.subTreeFileName, subFileName.c_str(), sizeof(node.subTreeFileName) - 1);
 			}
 
 			outNodes.push_back(node);

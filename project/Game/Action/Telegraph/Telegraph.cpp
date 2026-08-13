@@ -1,5 +1,6 @@
 #include "Telegraph.h"
 #include "Entity/Character/Character.h"
+#include "EffectManager/EffectManager.h"
 
 /// @brief コンストラクタ
 /// @param character 
@@ -41,6 +42,9 @@ void Telegraph::Exec()
 
 	// 基底クラスのExecを呼び出す
 	Action::Exec();
+
+	// 予備動作エフェクトを生成する
+	EffectManager::GetInstance()->TelegraphEffect000(owner_->GetPosition());
 }
 
 /// @brief 更新処理

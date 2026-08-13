@@ -75,6 +75,9 @@ void EffectManager::Initialize()
 	impactGround005_ = std::make_unique<Particle3D>("impactGround_005", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impactGround006_ = std::make_unique<Particle3D>("impactGround_006", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
+	// 予備動作エフェクトを生成
+	telegraphEffect000_ = std::make_unique<Particle3D>("telegraphEffect_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
 	// 走りスモークを生成
 	dashSmoke000_ = std::make_unique<Particle3D>("dashSmoke_000", 1000, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
@@ -153,6 +156,9 @@ void EffectManager::Draw()
 	impactGround003_->Draw();
 	impactGround005_->Draw();
 	impactGround006_->Draw();
+
+	// 予備動作エフェクトを描画
+	telegraphEffect000_->Draw();
 
 	// スパーク000を描画
 	spark000_->Draw();
@@ -349,6 +355,15 @@ void EffectManager::ImpactGround006(const Vector3& position)
 {
 	Emitter3D emitter("impactGround_006");
 	emitter.param_->position = position + Vector3(0.0f, -0.4f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief 予備動作エフェクトを放出する
+/// @param position 
+void EffectManager::TelegraphEffect000(const Vector3& position)
+{
+	Emitter3D emitter("telegraphEffect_000");
+	emitter.param_->position = position;
 	emitter.Emit();
 }
 

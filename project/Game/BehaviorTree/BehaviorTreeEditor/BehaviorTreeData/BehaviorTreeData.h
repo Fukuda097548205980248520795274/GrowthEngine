@@ -22,6 +22,7 @@ enum class EditorNodeType
 	WeightedRandomSelector,
 	Condition = 4,
 	Action,
+	SubTree = 8,
 };
 
 // アクションの種類
@@ -182,6 +183,9 @@ struct EditorNode
 
 	// 出力ピンのID（子とつなげる）
 	int outputPinId;
+
+	// サブツリーノードの場合のサブツリーファイル名
+	char subTreeFileName[64] = "";
 
 	char name[128]; // ノードの名前
 	Vector2 pos; // ノードの位置

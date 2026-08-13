@@ -35,6 +35,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 		ImGui::SeparatorText("子なし");
 		if (ImGui::MenuItem("条件")) AddConditionNode();
 		if (ImGui::MenuItem("アクション")) AddActionNode();
+		if (ImGui::MenuItem("サブツリー")) AddSubTreeNode();
 
 		ImGui::EndPopup();
 	}
@@ -102,6 +103,7 @@ void BehaviorTreeEditor::DrawNodeTable()
 		{
 			if (ImGui::MenuItem("条件")) AddConditionNode();
 			if (ImGui::MenuItem("アクション")) AddActionNode();
+			if (ImGui::MenuItem("サブツリー")) AddSubTreeNode();
 			ImGui::EndMenu();
 		}
 
@@ -345,6 +347,10 @@ void BehaviorTreeEditor::DrawPropertyWindow()
 			else if (node.type == EditorNodeType::WeightedRandomSelector)
 			{
 				DrawWeightedRandomSelectorNodeSettings(node);
+			}
+			else if (node.type == EditorNodeType::SubTree)
+			{
+				DrawSubTreeNodeSettings(node);
 			}
 			else
 			{
@@ -865,6 +871,7 @@ void BehaviorTreeEditor::DrawNodeEditorCanvas()
 			if (node.type == EditorNodeType::WeightedRandomSelector) ImGui::TextUnformatted("重み付きランダムセレクタ");
 			if (node.type == EditorNodeType::Condition) ImGui::TextUnformatted("条件");
 			if (node.type == EditorNodeType::Action)ImGui::TextUnformatted("アクション");
+			if (node.type == EditorNodeType::SubTree) ImGui::TextUnformatted("サブツリー");
 		}
 		else
 		{
@@ -1059,6 +1066,19 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	if (node.type == EditorNodeType::Action)
 	{
 		ImGui::Text("%s", actionTypeNames[static_cast<int32_t>(node.actionType)]);
+	}
+
+	// サブツリーノードの場合はサブツリーのファイル名を表示
+	if (node.type == EditorNodeType::SubTree)
+	{
+		if (node.subTreeFileName[0] != '\0')
+		{
+			ImGui::Text("サブツリー: %s", node.subTreeFileName);
+		}
+		else
+		{
+			ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f), "未設定のサブツリー");
+		}
 	}
 }
 
@@ -1775,4 +1795,69 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 
 	ImGui::PopItemWidth();
+}
+
+/// @brief サブツリーノードの設定UIを描画する
+/// @param node 
+void BehaviorTreeEditor::DrawSubTreeNodeSettings(EditorNode& node)
+{
+	ImGui::Text("参照サブツリー :");
+
+	// すべてのサブツリーファイル名を取得する
+	std::vector<std::string> files = GetBehaviorTreeFileList();
+
+	// 現在編集中のファイル名はリストから除外する
+	files.erase(std::remove(files.begin(), files.end(), currentFileName_), files.end());
+
+	if (files.empty())
+	{
+		ImGui::TextDisabled("※選択できるサブツリーがありません");
+		return;
+	}
+
+	// 現在選択されているサブツリーファイル名のインデックスを取得する
+	int currentItem = -1;
+	for (int i = 0; i < static_cast<int>(files.size()); ++i)
+	{
+		if (files[i] == node.subTreeFileName)
+		{
+			currentItem = i;
+			break;
+		}
+	}
+
+	// コンボボックスの描画
+	const char* previewValue = (currentItem >= 0) ? files[currentItem].c_str() : "サブツリーを選択...";
+
+	// ImGuiでは同じラベルのUIが複数あるとバグるため、ラベル名にIDを混ぜて一意にする
+	if (ImGui::BeginCombo("##SubTreeCombo", previewValue))
+	{
+		for (int i = 0; i < static_cast<int>(files.size()); ++i)
+		{
+			const bool isSelected = (currentItem == i);
+
+			// 選択肢をクリックした時の処理
+			if (ImGui::Selectable(files[i].c_str(), isSelected))
+			{
+				// アンドゥ用履歴保存
+				history_->SaveHistory(nodes_, links_, currentId_);
+
+				// 選択されたファイル名をノードに保存
+				strncpy_s(node.subTreeFileName, files[i].c_str(), sizeof(node.subTreeFileName) - 1);
+
+				// サブツリーノードの名前が空の場合は、ファイル名をノード名として設定する
+				if (node.name[0] == '\0')
+					strncpy_s(node.name, files[i].c_str(), sizeof(node.name) - 1);
+
+				// 変更フラグを立てる
+				isDirty_ = true;
+			}
+
+			// コンボボックスを開いた時に、現在選択中のアイテムにフォーカスを当てる
+			if (isSelected)
+				ImGui::SetItemDefaultFocus();
+		}
+
+		ImGui::EndCombo();
+	}
 }

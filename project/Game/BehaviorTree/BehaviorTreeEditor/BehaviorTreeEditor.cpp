@@ -181,6 +181,24 @@ void BehaviorTreeEditor::AddActionNode()
 	isDirty_ = true;
 }
 
+/// @brief サブツリーノードを追加する
+void BehaviorTreeEditor::AddSubTreeNode()
+{
+	history_->SaveHistory(nodes_, links_, currentId_);
+
+	EditorNode node;
+	node.id = GetNextId();
+	node.type = EditorNodeType::SubTree;
+	node.name[0] = '\0';
+	node.inputPinId = GetNextId();
+	node.outputPinId = -1; // 子を持たない（または入力ピンのみ）タスク扱いにする場合
+	nodes_.push_back(node);
+
+	SetNodeWindowCenter(node);
+
+	isDirty_ = true;
+}
+
 /// @brief エディタを初期状態にリセットする
 void BehaviorTreeEditor::ClearEditor()
 {
@@ -271,6 +289,30 @@ int BehaviorTreeEditor::FindRootNodeId() const
 
 	// 複雑な循環参照などで見つからなかった場合は、先頭のノードを暫定ルートとする
 	return nodes_.front().id;
+}
+
+/// @brief 保存されているビヘイビアツリーファイルの一覧を取得する
+/// @return 
+std::vector<std::string> BehaviorTreeEditor::GetBehaviorTreeFileList()
+{
+	std::vector<std::string> fileList;
+
+	// ビヘイビアツリーファイルが保存されているディレクトリのパス
+	std::string directoryPath = "./Assets/Parameter/BehaviorTree/";
+
+	// フォルダが存在しない場合は空のリストを返す
+	if (!std::filesystem::exists(directoryPath))
+		return fileList;
+
+	// ディレクトリ内のファイルを走査
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath))
+	{
+		// 拡張子が.jsonのファイルのみをリストに追加
+		if (entry.is_regular_file() && entry.path().extension() == ".json")
+			fileList.push_back(entry.path().stem().string());
+	}
+
+	return fileList;
 }
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する

@@ -41,6 +41,9 @@ public:
 	/// @brief アクションノードを追加する
 	void AddActionNode();
 
+	/// @brief サブツリーノードを追加する
+	void AddSubTreeNode();
+
 
 
 	/// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
@@ -179,6 +182,10 @@ private:
 	/// @return 
 	int FindRootNodeId() const;
 
+	/// @brief 保存されているビヘイビアツリーファイルの一覧を取得する
+	/// @return 
+	std::vector<std::string> GetBehaviorTreeFileList();
+
 
 private:
 
@@ -204,5 +211,9 @@ private:
 	/// @brief アクションノードの設定UIを描画する
 	/// @param node 
 	void DrawActionNodeSettings(EditorNode& node);
+
+	/// @brief サブツリーノードの設定UIを描画する
+	/// @param node 
+	void DrawSubTreeNodeSettings(EditorNode& node);
 };
 
