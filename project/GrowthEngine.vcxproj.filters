@@ -1534,6 +1534,9 @@
     <Filter Include="Game\Scene\GameScene\Intro">
       <UniqueIdentifier>{fb5e4563-484a-440a-8ccc-67a83ab241d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\RageGage">
+      <UniqueIdentifier>{d0b421dc-ef04-42af-a589-8c2826fe8396}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2780,6 +2783,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene\Intro\GameSceneIntro.cpp">
       <Filter>Game\Scene\GameScene\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\RageGage\RageGage.cpp">
+      <Filter>Game\HUD\RageGage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4150,6 +4156,9 @@
     </ClInclude>
     <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h">
       <Filter>Game\AIMetricsEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\RageGage\RageGage.h">
+      <Filter>Game\HUD\RageGage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

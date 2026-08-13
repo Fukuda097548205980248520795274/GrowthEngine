@@ -5,6 +5,7 @@
 
 class ComboTreeEditor;
 class Weapon;
+class RageGage;
 
 class Player : public Character
 {
@@ -83,6 +84,10 @@ public:
 	/// @brief コンボ中かどうかを取得する
 	/// @return 
 	bool IsCombo() const { return isCombo_; }
+
+	/// @brief レイジゲージHUDを設定する
+	/// @param rageGageHud 
+	void SetRageGageHud(RageGage* rageGageHud);
 
 
 private:
@@ -165,6 +170,15 @@ private:
 
 	/// @brief コンボ中かどうか
 	bool isCombo_ = false;
+
+
+private:
+
+	/// @brief レイジゲージを更新する
+	void RageGageUpdate();
+
+	/// @brief レイジゲージHUD
+	RageGage* rageGageHud_ = nullptr;
 
 
 private:

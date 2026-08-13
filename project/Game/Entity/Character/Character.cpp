@@ -887,11 +887,14 @@ void Character::RageGageUpdate(float dt)
 void Character::ChargeRageGage(DamageReaction damageReaction)
 {
 	// レイジモード中はゲージをチャージしない
-	if (isRageMode_)return; 
+	if (isRageMode_ || rageGageThresholds_.empty())return; 
 
 	if (damageReaction == DamageReaction::LightStagger) rageGage_ += 0.5f;
 	else if (damageReaction == DamageReaction::HeavyStagger) rageGage_ += 1.0f;
 	else if (damageReaction == DamageReaction::Down) rageGage_ += 1.5f;
+
+	// レイジゲージの最大値を超えないようにする
+	rageGage_ = std::min(rageGage_, rageGageThresholds_[static_cast<int32_t>(rageGageThresholds_.size() - 1)]);
 }
 
 /// @brief レイジモード中の入力処理

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Entity/Weapon/Weapon.h"
 #include "HUD/HP/HP.h"
+#include "HUD/RageGage/RageGage.h"
 
 #include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
 #include "comboTree/ComboTreeEditor/ComboTreeEditor.h"
@@ -76,6 +77,9 @@ void Player::Update()
 {
 	// 更新処理開始前のリセット
 	StartUpdate();
+
+	// レイジゲージの更新
+	RageGageUpdate();
 
 	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
 	if (Character::IsCutsceneActive() || !updateEnabled_)
@@ -370,6 +374,19 @@ float Player::GetCameraYaw() const
 	}
 
 	return 0.0f;
+}
+
+/// @brief レイジゲージHUDを設定する
+/// @param rageGageHud 
+void Player::SetRageGageHud(RageGage* rageGageHud)
+{
+	if (!rageGageHud || rageGageThresholds_.empty())return;
+
+	rageGageHud_ = rageGageHud;
+
+	// レイジゲージHUDの最大値と現在値を設定する
+	rageGageHud_->SetMaxGage(static_cast<int>(rageGageThresholds_[static_cast<int32_t>(rageGageThresholds_.size() - 1)]));
+	rageGageHud_->SetCurrentGage(static_cast<int>(rageGage_));
 }
 
 /// @brief コンボツリーの変更をリクエストする
@@ -777,6 +794,22 @@ Weapon* Player::FindClosestWeapon()
 	}
 
 	return closestWeapon;
+}
+
+/// @brief レイジゲージを更新する
+void Player::RageGageUpdate()
+{
+	if (rageGageHud_)
+	{
+		// レイジゲージHUDの現在値を設定する
+		rageGageHud_->SetCurrentGage(static_cast<int>(rageGage_));
+
+		rageGageHud_->SetPosition(Vector2(200.0f, 650.0f));
+		rageGageHud_->SetVisible(true);
+
+		// レイジゲージHUDを更新する
+		rageGageHud_->Update();
+	}
 }
 
 /// @brief 防御状態を更新する

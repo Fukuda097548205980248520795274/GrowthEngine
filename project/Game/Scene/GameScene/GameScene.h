@@ -15,6 +15,7 @@
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
+#include "HUD/RageGage/RageGage.h"
 #include "HUD/Tutorial/Tutorial.h"
 
 #include "PivotPoint/PivotPoint.h"
@@ -336,6 +337,10 @@ private:
 
 	/// @brief プレイヤーの体力バー
 	std::unique_ptr<HP> playerHP_ = nullptr;
+
+	/// @brief プレイヤーのレイジゲージ
+	std::unique_ptr<RageGage> playerRageGage_ = nullptr;
+
 
 
 	// キャラクターのモデル用ハンドル

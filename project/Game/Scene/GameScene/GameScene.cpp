@@ -312,6 +312,9 @@ void GameScene::Initialize()
 			// プレイヤーの体力バーの描画
 			if (playerHP_)playerHP_->Draw();
 
+			// プレイヤーのレイジゲージの描画
+			if (playerRageGage_)playerRageGage_->Draw();
+
 			// アウトラインの描画
 			engine_->DrawOutline();
 		}
@@ -501,6 +504,13 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 			playerHP_ = nullptr;
 		}
 
+		// すでにプレイヤーのレイジゲージが存在する場合は削除する
+		if (playerRageGage_)
+		{
+			playerRageGage_.reset();
+			playerRageGage_ = nullptr;
+		}
+
 		// プレイヤーの武器の生成と初期化
 		Weapon::InitData playerWeaponInitData;
 		playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
@@ -532,6 +542,24 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerHP_ = std::make_unique<HP>();
 		playerHP_->Initialize(hpInitData);
 
+		// レイジゲージの生成と初期化
+		RageGage::InitData rageGageInitData;
+		rageGageInitData.position = Vector2(0.0f, 0.0f);
+		rageGageInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+		rageGageInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+		rageGageInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+		rageGageInitData.hpLeftSprite = hpLeftSprite_->CreateInstance();
+		rageGageInitData.hpMiddleSprite = hpMiddleSprite_->CreateInstance();
+		rageGageInitData.hpRightSprite = hpRightSprite_->CreateInstance();
+		rageGageInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
+		rageGageInitData.alpha = 1.0f;
+		rageGageInitData.scale = Vector2(0.35f, 0.35f);
+		rageGageInitData.width = 800;
+		rageGageInitData.color = Vector3(0.25f, 0.25f, 1.0f);
+		playerRageGage_ = std::make_unique<RageGage>();
+		playerRageGage_->Initialize(rageGageInitData);
+
+
 		// プレイヤーの生成処理
 		CharacterInitData playerInitData = initData;
 		playerInitData.hurtboxGroup = playerHurtboxGroup_.get();
@@ -542,11 +570,12 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.model_ = playerModel_.get();
 		playerInitData.attackTrail = playerTrail_.get();
 		playerInitData.hpHUD = playerHP_.get();
-		playerInitData.rageGageThresholds = { 0.1f, 0.2f, 0.3f, 0.4f };
+		playerInitData.rageGageThresholds = { 20.0f };
 		player_ = std::make_unique<Player>();
 		player_->InitComboTree(comboTreeConfig);
 		player_->SetEditorName(editorName);
 		player_->Initialize(playerInitData, playerWeapon_.get());
+		player_->SetRageGageHud(playerRageGage_.get());
 
 		character = player_.get();
 
