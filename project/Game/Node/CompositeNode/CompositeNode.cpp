@@ -74,11 +74,58 @@ void CompositeNode::DrawDebuggerRecursive(float zoom)
 
 		// リンクの色を設定して描画
 		ImNodes::PushColorStyle(ImNodesCol_Link, linkColor);
-		ImNodes::Link(child->GetInputPinId(), this->outputPinId_, child->GetInputPinId());
+		ImNodes::Link(child->GetRuntimeInputPinId(), this->runtimeOutputPinId_, child->GetRuntimeInputPinId());
 
 		ImNodes::PopColorStyle();
 		ImNodes::PopStyleVar(); // 太さのスタイルをポップ
     }
+}
+
+/// @brief デバッグ情報を設定する
+/// @param idCounter 
+void CompositeNode::AssignRuntimeIDs(int& idCounter)
+{
+	Node::AssignRuntimeIDs(idCounter);
+	for (auto& child : children_)
+	{
+		if (child) child->AssignRuntimeIDs(idCounter);
+	}
+}
+
+/// @brief レイアウト計算
+/// @param depth 
+/// @param currentX 
+/// @param offsetX 
+/// @param offsetY 
+/// @return 
+float CompositeNode::CalculateLayout(int depth, float& currentY, float offsetX, float offsetY)
+{
+	// 自身のX座標は深さで固定
+	layoutX_ = depth * offsetX;
+
+	if (children_.empty())
+	{
+		layoutY_ = currentY;
+		currentY += offsetY;
+		return layoutY_;
+	}
+
+	float firstY = currentY;
+	float lastY = currentY;
+
+	for (size_t i = 0; i < children_.size(); ++i)
+	{
+		if (children_[i])
+		{
+			// 子ノードは深さを +1 して再帰呼び出し
+			lastY = children_[i]->CalculateLayout(depth + 1, currentY, offsetX, offsetY);
+		}
+	}
+
+	// 子ノード群のY座標の中央を、自身のY座標として設定する
+	layoutY_ = (firstY + lastY) / 2.0f;
+
+	return layoutY_;
 }
 
 #endif

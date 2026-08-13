@@ -121,6 +121,16 @@ void BehaviorTreeViewer::DrawUI()
 		BehaviorTree* bt = selectedNpc_->GetBehaviorTree();
 		if (bt && bt->GetRoot())
 		{
+			// ビヘイビアツリーのノードにランタイムIDを割り当てる
+			int idCounter = 1;
+			bt->GetRoot()->AssignRuntimeIDs(idCounter);
+
+			// レイアウト計算
+			float currentY = 0.0f;
+			float offsetX = 300.0f;
+			float offsetY = 120.0f;
+			bt->GetRoot()->CalculateLayout(0, currentY, offsetX, offsetY);
+
 			// ビビューアー専用のImNodesキャンバスを開始
 			ImNodes::BeginNodeEditor();
 

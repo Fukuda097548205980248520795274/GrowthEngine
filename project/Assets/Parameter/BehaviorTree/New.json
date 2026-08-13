@@ -57,11 +57,25 @@
             "start_node": 70
         },
         {
-            "end": 166,
-            "end_node": 165,
-            "id": 167,
+            "end": 172,
+            "end_node": 171,
+            "id": 174,
             "start": 51,
             "start_node": 49
+        },
+        {
+            "end": 166,
+            "end_node": 165,
+            "id": 175,
+            "start": 173,
+            "start_node": 171
+        },
+        {
+            "end": 169,
+            "end_node": 168,
+            "id": 176,
+            "start": 173,
+            "start_node": 171
         }
     ],
     "nodes": [
@@ -109,7 +123,7 @@
             "name": "ターゲットが立っているとき",
             "output_pin": -1,
             "pos": [
-                449.99993896484375,
+                450.0,
                 120.0
             ],
             "type": 4
@@ -122,7 +136,7 @@
             "name": "ターゲットがいるかどうか",
             "output_pin": -1,
             "pos": [
-                449.99993896484375,
+                450.0,
                 0.0
             ],
             "type": 4
@@ -135,7 +149,7 @@
             "output_pin": 72,
             "pos": [
                 150.0,
-                480.0
+                600.0
             ],
             "type": 3
         },
@@ -148,7 +162,7 @@
             "output_pin": 75,
             "pos": [
                 300.0,
-                480.0
+                600.0
             ],
             "type": 4
         },
@@ -161,7 +175,7 @@
             "output_pin": 112,
             "pos": [
                 150.0,
-                360.0000305175781
+                480.0
             ],
             "type": 4
         },
@@ -179,7 +193,7 @@
             "output_pin": 124,
             "pos": [
                 300.0,
-                600.0
+                720.0
             ],
             "type": 5
         },
@@ -190,11 +204,40 @@
             "name": "Attack_000",
             "output_pin": -1,
             "pos": [
-                300.0,
+                450.0,
                 240.0
             ],
             "sub_tree_file_name": "Attack_000",
             "type": 8
+        },
+        {
+            "id": 168,
+            "input_pin": 169,
+            "is_collapsed": false,
+            "name": "Attack_000",
+            "output_pin": 170,
+            "pos": [
+                450.0,
+                360.0
+            ],
+            "sub_tree_file_name": "Attack_001",
+            "type": 8
+        },
+        {
+            "child_weight_map": {
+                "165": 1.0,
+                "168": 1.0
+            },
+            "id": 171,
+            "input_pin": 172,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 173,
+            "pos": [
+                300.0,
+                240.0
+            ],
+            "type": 7
         }
     ]
 }

@@ -39,7 +39,7 @@ Node::State Node::UpdateNode()
 /// @brief デバッグ用の再帰描画処理
 void Node::DrawDebuggerRecursive(float zoom)
 {
-	if (editorNodeId_ < 0) return;
+	if (runtimeNodeId_ < 0) return;
 
 	// デルタタイムを取得
 	float dt = ImGui::GetIO().DeltaTime;
@@ -100,10 +100,10 @@ void Node::DrawDebuggerRecursive(float zoom)
 	ImNodes::PushColorStyle(ImNodesCol_NodeBackgroundSelected, color);
 
 	// ノードの位置を設定（ズーム率を考慮）
-	ImNodes::SetNodeGridSpacePos(editorNodeId_, ImVec2(pos_.x * zoom, pos_.y * zoom));
+	ImNodes::SetNodeGridSpacePos(runtimeNodeId_, ImVec2(layoutX_ * zoom, layoutY_ * zoom));
 
 	// ノードの描画開始
-	ImNodes::BeginNode(editorNodeId_);
+	ImNodes::BeginNode(runtimeNodeId_);
 
 
 	ImNodes::BeginNodeTitleBar();
@@ -133,7 +133,7 @@ void Node::DrawDebuggerRecursive(float zoom)
 
 
 	// ImGuiのID衝突を避けるため、ノードIDをプッシュする
-	ImGui::PushID(editorNodeId_);
+	ImGui::PushID(runtimeNodeId_);
 
 	// ズーム率に合わせて余白やチェックボックスのスケールを調整
 	ImGui::Dummy(ImVec2(0.0f, 2.0f * zoom));
@@ -149,18 +149,15 @@ void Node::DrawDebuggerRecursive(float zoom)
 
 	ImGui::Dummy(ImVec2(50.0f * zoom, 0.0f));
 
-	// 入力ピンの描画（ピンIDが有効な場合のみ）
-	if (inputPinId_ > 0)
-	{
-		ImNodes::BeginInputAttribute(inputPinId_);
-		ImGui::Text("In");
-		ImNodes::EndInputAttribute();
-	}
+	// 入力ピンの描画
+	ImNodes::BeginInputAttribute(runtimeInputPinId_);
+	ImGui::Text("In");
+	ImNodes::EndInputAttribute();
 
-	// 出力ピンの描画（アクション以外、かつピンIDが有効な場合のみ）
-	if (type_ != EditorNodeType::Action && outputPinId_ > 0)
+	// 出力ピンの描画（アクションノード以外は出力ピンを描画）
+	if (type_ != EditorNodeType::Action)
 	{
-		ImNodes::BeginOutputAttribute(outputPinId_);
+		ImNodes::BeginOutputAttribute(runtimeOutputPinId_);
 		ImGui::Text("Out");
 		ImNodes::EndOutputAttribute();
 	}
@@ -186,6 +183,33 @@ void Node::SetDebugInfo(int id, int inPin, int outPin, const Vector2& pos, const
 	pos_ = pos;
 	nodeName_ = name;
 	type_ = type;
+}
+
+/// @brief ランタイム用のユニークIDを割り当てる
+/// @param idCounter 
+void Node::AssignRuntimeIDs(int& idCounter)
+{
+	runtimeNodeId_ = idCounter++;
+	runtimeInputPinId_ = idCounter++;
+	runtimeOutputPinId_ = idCounter++;
+}
+
+/// @brief レイアウト計算
+/// @param depth 
+/// @param currentX 
+/// @param offsetX 
+/// @param offsetY 
+/// @return 
+float Node::CalculateLayout(int depth, float& currentY, float offsetX, float offsetY)
+{
+	// 左から右へのレイアウト：Xは深さに依存、Yは並び順に依存
+	layoutX_ = depth * offsetX;
+	layoutY_ = currentY;
+
+	// 次のノード（または兄弟ノード）のためにY座標を下へ進める
+	currentY += offsetY;
+
+	return layoutY_;
 }
 
 #endif

@@ -1,0 +1,257 @@
+{
+    "links": [
+        {
+            "end": 2,
+            "end_node": 1,
+            "id": 22,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 5,
+            "end_node": 4,
+            "id": 23,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 8,
+            "end_node": 7,
+            "id": 24,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 11,
+            "end_node": 10,
+            "id": 25,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 14,
+            "end_node": 13,
+            "id": 26,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 29,
+            "end_node": 28,
+            "id": 30,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 32,
+            "end_node": 31,
+            "id": 34,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 36,
+            "end_node": 35,
+            "id": 38,
+            "start": 21,
+            "start_node": 19
+        }
+    ],
+    "nodes": [
+        {
+            "action_type": 9,
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "name": "リクエスト",
+            "output_pin": 3,
+            "pos": [
+                510.8183288574219,
+                595.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 10,
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "name": "トークン開放",
+            "output_pin": 6,
+            "pos": [
+                497.8183288574219,
+                1266.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 7,
+            "id": 7,
+            "input_pin": 8,
+            "is_collapsed": false,
+            "name": "攻撃開始",
+            "output_pin": 9,
+            "pos": [
+                510.8183288574219,
+                715.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 8,
+            "id": 10,
+            "input_pin": 11,
+            "is_collapsed": false,
+            "name": "攻撃終了",
+            "output_pin": 12,
+            "pos": [
+                490.8183288574219,
+                1183.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 5,
+            "id": 13,
+            "input_pin": 14,
+            "is_collapsed": false,
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 2.0
+            },
+            "output_pin": 15,
+            "pos": [
+                510.8183288574219,
+                835.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "id": 19,
+            "input_pin": 20,
+            "is_collapsed": false,
+            "name": "一連の攻撃",
+            "output_pin": 21,
+            "pos": [
+                347.8183288574219,
+                666.6143798828125
+            ],
+            "type": 1
+        },
+        {
+            "action_type": 3,
+            "avoid_data": {
+                "Distance": 1.0,
+                "Duration": 0.30000001192092896,
+                "LocalDirection": [
+                    1.0,
+                    0.0
+                ]
+            },
+            "id": 28,
+            "input_pin": 29,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": -1,
+            "pos": [
+                524.818359375,
+                927.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 0,
+            "combo_data": {
+                "attackTime": 0.4000000059604645,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 5,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "groupId": 0,
+                        "knockback": 1.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "hitDefinitions": [
+                    {
+                        "groupId": 0,
+                        "hitJoint": 9,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 4.0,
+                "moveStartTime": 0.0
+            },
+            "id": 31,
+            "input_pin": 32,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_1",
+            "motionType": 4,
+            "name": "パンチ",
+            "output_pin": 33,
+            "pos": [
+                530.818359375,
+                1006.6143798828125
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 0,
+            "combo_data": {
+                "attackTime": 0.800000011920929,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 5,
+                        "damageReaction": 1,
+                        "endTime": 0.20000000298023224,
+                        "groupId": 0,
+                        "knockback": 1.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.05000000074505806
+                    }
+                ],
+                "hitDefinitions": [
+                    {
+                        "groupId": 0,
+                        "hitJoint": 8,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "moveEndTime": 0.20000000298023224,
+                "moveSpeed": 4.0,
+                "moveStartTime": 0.0
+            },
+            "id": 35,
+            "input_pin": 36,
+            "is_collapsed": false,
+            "motionName": "Player_Combo_2",
+            "motionType": 4,
+            "name": "パンチ",
+            "output_pin": 37,
+            "pos": [
+                537.818359375,
+                1096.6143798828125
+            ],
+            "type": 5
+        }
+    ]
+}

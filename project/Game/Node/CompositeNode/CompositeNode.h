@@ -34,6 +34,18 @@ public:
 	/// @brief デバッグ用の再帰描画処理
 	void DrawDebuggerRecursive(float zoom = 1.0f) override;
 
+	/// @brief デバッグ情報を設定する
+	/// @param idCounter 
+	void AssignRuntimeIDs(int& idCounter) override;
+
+	/// @brief レイアウト計算
+	/// @param depth 
+	/// @param currentX 
+	/// @param offsetX 
+	/// @param offsetY 
+	/// @return 
+	float CalculateLayout(int depth, float& currentY, float offsetX, float offsetY) override;
+
 #endif
 
 

@@ -374,6 +374,13 @@ void NPC::Dead()
 	currentBehaviorTree_ = nullptr;
 	nextBehaviorTree_ = nullptr;
 
+	// バトル制御クラスのインスタンスを取得する
+	BattleDirector battleDirector = BattleDirector::GetInstance();
+
+	// 攻撃トークンを返却する
+	battleDirector.ReleaseAttackToken(this);
+	battleDirector.ReleaseSlot(this);
+
 	// 基底クラスの死亡処理
 	Character::Dead();
 }

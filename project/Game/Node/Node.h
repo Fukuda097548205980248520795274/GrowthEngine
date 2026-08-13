@@ -94,6 +94,22 @@ public:
 	/// @return 
 	const Vector2& GetPos() const { return pos_; }
 
+	/// @brief ノードの名前を取得する
+	/// @param idCounter 
+	virtual void AssignRuntimeIDs(int& idCounter);
+
+	/// @brief レイアウト計算
+	/// @param depth 
+	/// @param currentX 
+	/// @param offsetX 
+	/// @param offsetY 
+	/// @return 
+	virtual float CalculateLayout(int depth, float& currentY, float offsetX, float offsetY);
+
+	/// @brief ランタイム入力ピンIDを取得する
+	/// @return 
+	int GetRuntimeInputPinId() const { return runtimeInputPinId_; }
+
 
 protected:
 
@@ -147,6 +163,16 @@ protected:
 
 	// フェード時間
 	const float kFadeDuration = 0.5f;
+
+
+	// ランタイム用のユニークID
+	int runtimeNodeId_ = -1;
+	int runtimeInputPinId_ = -1;
+	int runtimeOutputPinId_ = -1;
+
+	// ランタイム用のレイアウト座標
+	float layoutX_ = 0.0f;
+	float layoutY_ = 0.0f;
 
 #endif
 };
