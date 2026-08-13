@@ -601,7 +601,6 @@ public:
 
 
 
-
 protected:
 
 	/// @brief 初期化用データを設定する
@@ -615,7 +614,8 @@ protected:
 
 	/// @brief 当たり判定の位置を更新する
 	/// @param collision 
-	void UpdateCollisionPosition(Collision3DInstanceCapsule* collision);
+	/// @param newPosition 
+	void UpdateCollisionPosition(Collision3DInstanceCapsule* collision, const Vector3& newPosition = Vector3(0.0f, 0.0f, 0.0f));
 
 	/// @brief カメラのローカル方向をワールド座標系の移動方向に変換する
 	/// @param cameraLocalDirection 

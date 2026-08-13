@@ -243,11 +243,11 @@ void Character::Update()
 				HpHudUpdate();
 			}
 
-
+			Vector3 wallPosition = GetBonePosition(JointType::Root) - GetWorldPosition();
 
 			// 当たり判定の更新
 			UpdateCollisionPosition(landingCollision_);
-			UpdateCollisionPosition(wallTouchCollision_);
+			UpdateCollisionPosition(wallTouchCollision_, Vector3(wallPosition.x, 0.0f, wallPosition.z));
 			UpdateCollisionPosition(eventTriggerCollision_);
 			UpdateHurtbox(hurtboxHead_, JointType::Head);
 			UpdateHurtbox(hurtboxChest_, JointType::Chest);
@@ -1922,13 +1922,13 @@ void Character::UpdateHurtbox(AppCollider& hurtbox, JointType jointType)
 
 /// @brief 当たり判定の位置を更新する
 /// @param collision 
-void Character::UpdateCollisionPosition(Collision3DInstanceCapsule* collision)
+void Character::UpdateCollisionPosition(Collision3DInstanceCapsule* collision, const Vector3& newPosition)
 {
 	// コリジョンがない場合は処理しない
 	if (!collision)return;
 
 	collision->param_->diff = GetWorldPosition() - collision->param_->start;
-	collision->param_->start = GetWorldPosition();
+	collision->param_->start = GetWorldPosition() + newPosition;
 }
 
 /// @brief カメラのローカル方向をワールド座標系の移動方向に変換する

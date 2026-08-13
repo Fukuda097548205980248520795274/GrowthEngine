@@ -4,43 +4,43 @@
             "end": 2,
             "end_node": 1,
             "id": 22,
-            "start": 21,
-            "start_node": 19
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 5,
             "end_node": 4,
             "id": 23,
-            "start": 21,
-            "start_node": 19
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 8,
             "end_node": 7,
             "id": 24,
-            "start": 21,
-            "start_node": 19
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 11,
             "end_node": 10,
             "id": 25,
-            "start": 21,
-            "start_node": 19
+            "start": 18,
+            "start_node": 16
         },
         {
             "end": 14,
             "end_node": 13,
             "id": 26,
-            "start": 21,
-            "start_node": 19
+            "start": 18,
+            "start_node": 16
         },
         {
-            "end": 32,
-            "end_node": 31,
-            "id": 34,
-            "start": 21,
-            "start_node": 19
+            "end": 20,
+            "end_node": 19,
+            "id": 27,
+            "start": 18,
+            "start_node": 16
         }
     ],
     "nodes": [
@@ -52,8 +52,8 @@
             "name": "リクエスト",
             "output_pin": 3,
             "pos": [
-                150.0,
-                0.0
+                438.36883544921875,
+                1137.7125244140625
             ],
             "type": 5
         },
@@ -65,8 +65,8 @@
             "name": "トークン開放",
             "output_pin": 6,
             "pos": [
-                150.0,
-                600.0
+                438.36883544921875,
+                1769.29150390625
             ],
             "type": 5
         },
@@ -78,8 +78,8 @@
             "name": "攻撃開始",
             "output_pin": 9,
             "pos": [
-                150.0,
-                119.99998474121094
+                438.36883544921875,
+                1264.0283203125
             ],
             "type": 5
         },
@@ -91,8 +91,8 @@
             "name": "攻撃終了",
             "output_pin": 12,
             "pos": [
-                150.0,
-                479.99993896484375
+                438.36883544921875,
+                1642.9757080078125
             ],
             "type": 5
         },
@@ -109,66 +109,71 @@
             },
             "output_pin": 15,
             "pos": [
-                150.0,
-                239.99996948242188
+                438.36883544921875,
+                1390.3441162109375
             ],
             "type": 5
         },
         {
-            "id": 19,
-            "input_pin": 20,
+            "id": 16,
+            "input_pin": 17,
             "is_collapsed": false,
             "name": "一連の攻撃",
-            "output_pin": 21,
+            "output_pin": 18,
             "pos": [
-                0.0,
-                0.0
+                280.4740905761719,
+                1137.7125244140625
             ],
             "type": 1
         },
         {
             "action_type": 0,
             "combo_data": {
-                "attackTime": 2.0,
+                "attackTime": 3.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
                     {
-                        "damage": 5,
-                        "damageReaction": 1,
-                        "endTime": 1.2000000476837158,
+                        "damage": 15,
+                        "damageReaction": 3,
+                        "endTime": 1.600000023841858,
                         "groupId": 0,
-                        "knockback": 1.0,
+                        "knockback": 3.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "startTime": 0.800000011920929
+                        "startTime": 1.2000000476837158
                     }
                 ],
                 "hitDefinitions": [
                     {
                         "groupId": 0,
-                        "hitJoint": 9,
+                        "hitJoint": 15,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 0,
+                        "hitJoint": 14,
                         "radius": 0.25
                     }
                 ],
                 "isGrabWeapon": false,
-                "moveEndTime": 1.2000000476837158,
-                "moveSpeed": 2.0,
-                "moveStartTime": 0.800000011920929
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0
             },
-            "id": 31,
-            "input_pin": 32,
+            "id": 19,
+            "input_pin": 20,
             "is_collapsed": false,
-            "motionName": "Hook_000",
+            "motionName": "Drop_Kick_000",
             "motionType": 4,
             "name": "パンチ",
-            "output_pin": 33,
+            "output_pin": 21,
             "pos": [
-                150.0,
-                359.9999694824219
+                438.36883544921875,
+                1516.659912109375
             ],
             "type": 5
         }

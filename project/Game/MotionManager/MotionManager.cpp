@@ -168,6 +168,21 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack]["Player_Combo_2"] = engine_->LoadAnimation(dir + "/attack/attack_001", "attack_001.gltf");
 	table_[MotionType::Attack]["Player_Combo_3"] = engine_->LoadAnimation(dir + "/attack/attack_002", "attack_002.gltf");
 	table_[MotionType::Attack]["Player_Combo_4"] = engine_->LoadAnimation(dir + "/attack/attack_003", "attack_003.gltf");
+	table_[MotionType::Attack]["MMA_Kick_000"] = engine_->LoadAnimation(dir + "/attack/MMA_Kick_000", "MMA_Kick_000.gltf");
+	table_[MotionType::Attack]["MMA_Kick_001"] = engine_->LoadAnimation(dir + "/attack/MMA_Kick_001", "MMA_Kick_001.gltf");
+	table_[MotionType::Attack]["MMA_Kick_002"] = engine_->LoadAnimation(dir + "/attack/MMA_Kick_002", "MMA_Kick_002.gltf");
+	table_[MotionType::Attack]["Hook_000"] = engine_->LoadAnimation(dir + "/attack/Hook_000", "Hook_000.gltf");
+	table_[MotionType::Attack]["Hook_001"] = engine_->LoadAnimation(dir + "/attack/Hook_001", "Hook_001.gltf");
+	table_[MotionType::Attack]["Jab_000"] = engine_->LoadAnimation(dir + "/attack/Jab_000", "Jab_000.gltf");
+	table_[MotionType::Attack]["Headbutt_000"] = engine_->LoadAnimation(dir + "/attack/Headbutt_000", "Headbutt_000.gltf");
+	table_[MotionType::Attack]["Drop_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Drop_Kick_000", "Drop_Kick_000.gltf");
+	table_[MotionType::Attack]["Zombie_Punch_000"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_000", "Zombie_Punch_000.gltf");
+	table_[MotionType::Attack]["Zombie_Punch_001"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_001", "Zombie_Punch_001.gltf");
+	table_[MotionType::Attack]["Zombie_Punch_002"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_002", "Zombie_Punch_002.gltf");
+	table_[MotionType::Attack]["Zombie_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Zombie_Kick_000", "Zombie_Kick_000.gltf");
+	table_[MotionType::Attack]["Zombie_Kick_001"] = engine_->LoadAnimation(dir + "/attack/Zombie_Kick_001", "Zombie_Kick_001.gltf");
+	table_[MotionType::Attack]["Flip_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Flip_Kick_000", "Flip_Kick_000.gltf");
+	table_[MotionType::Attack]["Flip_Kick_001"] = engine_->LoadAnimation(dir + "/attack/Flip_Kick_001", "Flip_Kick_001.gltf");
 }
 
 /// @brief 怯みモーション読み込み

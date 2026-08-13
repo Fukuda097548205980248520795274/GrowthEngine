@@ -188,8 +188,6 @@ void ComboAttack::Update()
 
 			// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
 			Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
-			Vector3 boneParentPosition = owner_->GetBonePosition(MotionManager::GetInstance()->GetParentJoint(state.def.jointType));
-			owner_->SetTrailPos(bonePosition, boneParentPosition);
 
 			// 攻撃のエフェクトを再生する
 			EffectManager::GetInstance()->AttackImpact000(bonePosition);
@@ -351,6 +349,16 @@ void ComboAttack::Exit()
 
 	// 基底の終了処理
 	Attack::Exit();
+
+	// プレイヤー以外は、攻撃終了時にワールド座標のXとZを両足の中間点に設定する
+	if (!owner_->IsPlayer())
+	{
+		auto worldTransform = owner_->GetWorldTransform();
+		Vector3 toeBaseLPos = owner_->GetBonePosition(JointType::ToeBaseL);
+		Vector3 toeBaseRPos = owner_->GetBonePosition(JointType::ToeBaseR);
+		worldTransform->translate_.x = (toeBaseLPos.x + toeBaseRPos.x) * 0.5f;
+		worldTransform->translate_.z = (toeBaseLPos.z + toeBaseRPos.z) * 0.5f;
+	}
 }
 
 /// @brief 次の攻撃に移行できるかどうか

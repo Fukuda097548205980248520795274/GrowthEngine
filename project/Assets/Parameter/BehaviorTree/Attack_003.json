@@ -36,9 +36,9 @@
             "start_node": 1
         },
         {
-            "end": 29,
-            "end_node": 28,
-            "id": 31,
+            "end": 5,
+            "end_node": 4,
+            "id": 27,
             "start": 3,
             "start_node": 1
         }
@@ -51,10 +51,61 @@
             "name": "一連の攻撃",
             "output_pin": 3,
             "pos": [
-                0.0,
-                0.0
+                203.79949951171875,
+                506.88134765625
             ],
             "type": 1
+        },
+        {
+            "action_type": 0,
+            "combo_data": {
+                "attackTime": 2.799999952316284,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 1.7999999523162842,
+                        "groupId": 0,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 1.399999976158142
+                    }
+                ],
+                "hitDefinitions": [
+                    {
+                        "groupId": 0,
+                        "hitJoint": 8,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 0,
+                        "hitJoint": 9,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "moveEndTime": 1.7999999523162842,
+                "moveSpeed": 1.0,
+                "moveStartTime": 1.399999976158142
+            },
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "motionName": "Zombie_Punch_000",
+            "motionType": 4,
+            "name": "パンチ",
+            "output_pin": 6,
+            "pos": [
+                355.22808837890625,
+                866.88134765625
+            ],
+            "type": 5
         },
         {
             "action_type": 5,
@@ -69,8 +120,8 @@
             },
             "output_pin": 9,
             "pos": [
-                150.0,
-                240.0
+                353.79949951171875,
+                746.88134765625
             ],
             "type": 5
         },
@@ -82,8 +133,8 @@
             "name": "攻撃終了",
             "output_pin": 12,
             "pos": [
-                150.0,
-                480.0
+                353.79949951171875,
+                986.88134765625
             ],
             "type": 5
         },
@@ -95,8 +146,8 @@
             "name": "攻撃開始",
             "output_pin": 15,
             "pos": [
-                150.0,
-                120.0
+                353.79949951171875,
+                626.88134765625
             ],
             "type": 5
         },
@@ -108,8 +159,8 @@
             "name": "トークン開放",
             "output_pin": 18,
             "pos": [
-                150.0,
-                600.0
+                353.79949951171875,
+                1106.88134765625
             ],
             "type": 5
         },
@@ -121,59 +172,8 @@
             "name": "リクエスト",
             "output_pin": 21,
             "pos": [
-                150.0,
-                0.0
-            ],
-            "type": 5
-        },
-        {
-            "action_type": 0,
-            "combo_data": {
-                "attackTime": 1.600000023841858,
-                "grabWeaponEndTime": 0.0,
-                "grabWeaponStartTime": 0.0,
-                "groups": [
-                    {
-                        "damage": 10,
-                        "damageReaction": 1,
-                        "endTime": 0.800000011920929,
-                        "groupId": 0,
-                        "knockback": 2.0,
-                        "knockbackDirection": [
-                            0.0,
-                            0.0,
-                            1.0
-                        ],
-                        "startTime": 0.5
-                    }
-                ],
-                "hitDefinitions": [
-                    {
-                        "groupId": 0,
-                        "hitJoint": 11,
-                        "radius": 0.25
-                    },
-                    {
-                        "groupId": 0,
-                        "hitJoint": 15,
-                        "radius": 0.25
-                    }
-                ],
-                "isGrabWeapon": false,
-                "moveEndTime": 0.800000011920929,
-                "moveSpeed": 2.0,
-                "moveStartTime": 0.5
-            },
-            "id": 28,
-            "input_pin": 29,
-            "is_collapsed": false,
-            "motionName": "MMA_Kick_001",
-            "motionType": 4,
-            "name": "パンチ",
-            "output_pin": 30,
-            "pos": [
-                147.0,
-                347.0
+                353.79949951171875,
+                506.88134765625
             ],
             "type": 5
         }

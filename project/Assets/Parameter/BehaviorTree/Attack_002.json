@@ -1,76 +1,85 @@
 {
     "links": [
         {
-            "end": 20,
-            "end_node": 19,
+            "end": 5,
+            "end_node": 4,
             "id": 22,
-            "start": 3,
-            "start_node": 1
+            "start": 21,
+            "start_node": 19
         },
         {
-            "end": 17,
-            "end_node": 16,
+            "end": 2,
+            "end_node": 1,
             "id": 23,
-            "start": 3,
-            "start_node": 1
+            "start": 21,
+            "start_node": 19
         },
         {
-            "end": 14,
-            "end_node": 13,
+            "end": 8,
+            "end_node": 7,
             "id": 24,
-            "start": 3,
-            "start_node": 1
+            "start": 21,
+            "start_node": 19
         },
         {
             "end": 11,
             "end_node": 10,
             "id": 25,
-            "start": 3,
-            "start_node": 1
+            "start": 21,
+            "start_node": 19
         },
         {
-            "end": 8,
-            "end_node": 7,
+            "end": 14,
+            "end_node": 13,
             "id": 26,
-            "start": 3,
-            "start_node": 1
+            "start": 21,
+            "start_node": 19
         },
         {
-            "end": 29,
-            "end_node": 28,
-            "id": 31,
-            "start": 3,
-            "start_node": 1
+            "end": 17,
+            "end_node": 16,
+            "id": 27,
+            "start": 21,
+            "start_node": 19
         }
     ],
     "nodes": [
         {
+            "action_type": 10,
             "id": 1,
             "input_pin": 2,
             "is_collapsed": false,
-            "name": "一連の攻撃",
+            "name": "トークン開放",
             "output_pin": 3,
             "pos": [
-                0.0,
-                0.0
+                150.0,
+                600.0
             ],
-            "type": 1
+            "type": 5
         },
         {
-            "action_type": 5,
+            "action_type": 9,
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "name": "リクエスト",
+            "output_pin": 6,
+            "pos": [
+                150.0,
+                0.0
+            ],
+            "type": 5
+        },
+        {
+            "action_type": 7,
             "id": 7,
             "input_pin": 8,
             "is_collapsed": false,
-            "name": "ターゲットに走る",
-            "nav_mesh_move_data": {
-                "isDash": true,
-                "moveSpeed": 6.0,
-                "stopDistance": 2.0
-            },
+            "name": "攻撃開始",
             "output_pin": 9,
             "pos": [
                 150.0,
-                240.0
+                119.99999237060547
             ],
             "type": 5
         },
@@ -83,46 +92,25 @@
             "output_pin": 12,
             "pos": [
                 150.0,
-                480.0
+                479.9999694824219
             ],
             "type": 5
         },
         {
-            "action_type": 7,
+            "action_type": 5,
             "id": 13,
             "input_pin": 14,
             "is_collapsed": false,
-            "name": "攻撃開始",
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 2.0
+            },
             "output_pin": 15,
             "pos": [
                 150.0,
-                120.0
-            ],
-            "type": 5
-        },
-        {
-            "action_type": 10,
-            "id": 16,
-            "input_pin": 17,
-            "is_collapsed": false,
-            "name": "トークン開放",
-            "output_pin": 18,
-            "pos": [
-                150.0,
-                600.0
-            ],
-            "type": 5
-        },
-        {
-            "action_type": 9,
-            "id": 19,
-            "input_pin": 20,
-            "is_collapsed": false,
-            "name": "リクエスト",
-            "output_pin": 21,
-            "pos": [
-                150.0,
-                0.0
+                239.99998474121094
             ],
             "type": 5
         },
@@ -164,18 +152,30 @@
                 "moveSpeed": 2.0,
                 "moveStartTime": 0.5
             },
-            "id": 28,
-            "input_pin": 29,
+            "id": 16,
+            "input_pin": 17,
             "is_collapsed": false,
-            "motionName": "MMA_Kick_001",
+            "motionName": "MMA_Kick_000",
             "motionType": 4,
             "name": "パンチ",
-            "output_pin": 30,
+            "output_pin": 18,
             "pos": [
-                147.0,
-                347.0
+                151.42857360839844,
+                360.0
             ],
             "type": 5
+        },
+        {
+            "id": 19,
+            "input_pin": 20,
+            "is_collapsed": false,
+            "name": "一連の攻撃",
+            "output_pin": 21,
+            "pos": [
+                0.0,
+                0.0
+            ],
+            "type": 1
         }
     ]
 }

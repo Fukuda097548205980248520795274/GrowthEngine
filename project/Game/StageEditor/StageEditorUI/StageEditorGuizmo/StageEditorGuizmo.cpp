@@ -22,7 +22,7 @@
 void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, int selectedIndex, bool& isDirty, StageEditorHistory* history, bool isPlaying)
 {
 	// ゲームが再生中の場合はギズモの操作を無効化する
-	if (isPlaying)return;
+	if (isPlaying || !engine_->IsCursorWindowHover())return;
 
 	// 選択されているオブジェクトがあれば、そのオブジェクトをギズモで操作できるようにする
 	if (selectedIndex >= 0 && selectedIndex < placementList.size())
