@@ -9,11 +9,11 @@
 namespace
 {
 	// NPCが構え状態になる距離
-	constexpr float kNpcStanceEnterDistance = 4.5f;
+	constexpr float kNpcStanceEnterDistance = 10.5f;
 	constexpr float kNpcStanceEnterDistanceSq = kNpcStanceEnterDistance * kNpcStanceEnterDistance;
 
 	// NPCが構え状態を解除する距離
-	constexpr float kNpcStanceExitDistance = 5.5f;
+	constexpr float kNpcStanceExitDistance = 14.5f;
 	constexpr float kNpcStanceExitDistanceSq = kNpcStanceExitDistance * kNpcStanceExitDistance;
 }
 
@@ -196,7 +196,7 @@ void NPC::Update()
 	if(IsHitDamage())targetUpdateTimer_ = targetUpdateInterval;
 
 	// ターゲットの更新タイマーの更新
-	if (lockOnTarget_ && (currentAttack_ == nullptr && currentMove_ == nullptr && currentAvoid_ == nullptr))
+	if (!IsInAttackSequence() && lockOnTarget_ && (currentAttack_ == nullptr && currentMove_ == nullptr && currentAvoid_ == nullptr))
 	{
 		// ターゲットの更新タイマーを更新する
 		targetUpdateTimer_ -= dt;
@@ -267,14 +267,38 @@ void NPC::UpdateStanceMovement()
 	// スロットのワールド座標を取得
 	BattleDirector& battleDirector = BattleDirector::GetInstance();
 	auto optSlotPos = battleDirector.GetSlotWorldPosition(this, lockOnTarget_);
-	if (!optSlotPos) return;
 
-	Vector3 slotWorldPos = optSlotPos.value();
 	Vector3 myPos = GetWorldPosition();
+	Vector3 targetWorldPos = Vector3(0.0f, 0.0f, 0.0f);
+	float keepDistance = GetSlotDistance();
+	
+	// スロットのワールド座標が取得できた場合は、スロットの位置を目標地点とする
+	if (optSlotPos)
+	{
+		targetWorldPos = optSlotPos.value();
+	}
+	else
+	{
+		// スロットが取得できない場合は、ターゲットから keepDistance 離れた位置を目標地点とする
+
+		keepDistance = GetSlotDistance() + 6.0f;
+
+		// ターゲットから現在の自分の方向へ keepDistance 離れた位置を目標地点とする
+		Vector3 toMe = myPos - lockOnTarget_->GetWorldPosition();
+		toMe.y = 0.0f;
+		if (toMe.LengthSq() > 0.01f)
+		{
+			targetWorldPos = lockOnTarget_->GetWorldPosition() + toMe.Normalize() * keepDistance;
+		}
+		else
+		{
+			targetWorldPos = myPos;
+		}
+	}
 
 	// スロットへ向かうベクトルを計算
 	Vector2 moveDir(0.0f, 0.0f);
-	Vector3 toSlot = slotWorldPos - myPos;
+	Vector3 toSlot = targetWorldPos - myPos;
 	toSlot.y = 0.0f; // 高さは無視して平面で考える
 
 	float distanceToSlot = toSlot.Length();
@@ -324,9 +348,6 @@ void NPC::UpdateStanceMovement()
 	toTarget.y = 0.0f;
 	float distanceToTarget = toTarget.Length();
 
-	// ターゲットとの距離を保つための距離を取得
-	float keepDistance = GetSlotDistance();
-
 	// ターゲットに近づきすぎている場合、反発力を発生させる
 	if (distanceToTarget > 0.0f && distanceToTarget < keepDistance)
 	{
@@ -351,18 +372,44 @@ void NPC::UpdateStanceMovement()
 		separationMultiplier = distanceToSlot / kSlowDownRadius;
 	}
 
-	// 分離ベクトルを合成する
+	// 到着時でも分離ベクトルの影響を受けさせるため移動入力に加算する
 	moveDir = moveDir + (separation * GetSeparationWeight() * separationMultiplier) + (targetSeparation * separationMultiplier);
 
-	// 移動入力の決定
-	if (moveDir.LengthSq() > 0.01f)
+	// 統合された移動ベクトルの長さ（強さ）を取得
+	float moveMag = moveDir.Length();
+
+	// デッドゾーン（極めて微小なノイズレベルの入力は計算前に弾く）
+	constexpr float kDeadZone = 0.05f;
+
+	if (moveMag > kDeadZone)
 	{
-		moveDir = moveDir.Normalize();
+		if (currentSpeed == 0.0f)
+		{
+			// 【ゆらゆら防止策】
+			// スロット到着時（本来停止している状態）に分離ベクトルのみで動く場合の処理
+
+			// 1. しきい値を設け、少し触れた程度の弱い分離力では動かさない
+			constexpr float kWiggleThreshold = 0.3f; // 環境に合わせて 0.2f〜0.5f の間で調整してください
+
+			if (moveMag < kWiggleThreshold)
+			{
+				SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
+				return; // 完全に停止
+			}
+
+			// 2. 押し出される際の速度を、いきなり上げず滑らかに変化させる
+			// kWiggleThreshold を超えた分だけ徐々に速度を上げ、最大でも歩行速度の50%に制限する
+			float speedRamp = (moveMag - kWiggleThreshold) * 0.5f;
+			currentSpeed = stanceWalkSpeed_ * std::min(0.5f, speedRamp);
+		}
+
+		// ベクトルを正規化して移動入力を設定
+		moveDir = moveDir / moveMag;
 		SetMoveInputXZ(moveDir, currentSpeed);
 	}
 	else
 	{
-		// 移動入力がほとんどない場合は停止する
+		// 移動入力がない、またはデッドゾーン以下の場合は完全に停止する
 		SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);
 	}
 }

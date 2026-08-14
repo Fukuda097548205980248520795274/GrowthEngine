@@ -117,15 +117,6 @@ private:
 
 private:
 
-	/// @brief 移動ドットの履歴を保持する配列
-	std::vector<float> movementDotHistory_;
-
-	/// @brief movementDotHistory_の現在のオフセット
-	int historyOffset_ = 0;
-
-
-private:
-
 	// 壁ヒットのタイムスタンプを保持するリスト
 	std::list<float> wallHitTimestamps_;
 
@@ -164,8 +155,5 @@ private:
 
 	/// @brief ターゲット再評価が行われなかった違反カウント
 	int targetEvalViolationCount_ = 0;
-
-	/// @brief 過去3秒間にターゲット再評価が一度でも実行されたか
-	bool isTargetEvaluatedInPeriod_ = false;
 };
 
