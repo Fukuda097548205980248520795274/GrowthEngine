@@ -27,6 +27,9 @@ public:
 	/// @brief 描画処理
 	void Draw();
 
+	/// @brief 死亡処理
+	void Dead() override;
+
 	/// @brief カメラを操作しているかどうかを設定する
 	/// @param isOperationCamera 
 	void SetIsOperationCamera(bool isOperationCamera) { isOperationCamera_ = isOperationCamera; }
@@ -68,6 +71,18 @@ public:
 	/// @brief 現在のコンボツリーを取得する
 	/// @return 
 	ComboTree* GetCurrentComboTreeB() const { return currentComboTreeB_; }
+
+	/// @brief 次のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetNextComboTreeX() const { return nextComboTreeX_; }
+
+	/// @brief 次のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetNextComboTreeY() const { return nextComboTreeY_; }
+
+	/// @brief 次のコンボツリーを取得する
+	/// @return 
+	ComboTree* GetNextComboTreeB() const { return nextComboTreeB_; }
 
 	/// @brief 現在のコンボツリーを設定する
 	/// @param comboTree 

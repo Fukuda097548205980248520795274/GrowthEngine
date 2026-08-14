@@ -191,6 +191,7 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack]["Zombie_Kick_001"] = engine_->LoadAnimation(dir + "/attack/Zombie_Kick_001", "Zombie_Kick_001.gltf");
 	table_[MotionType::Attack]["Flip_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Flip_Kick_000", "Flip_Kick_000.gltf");
 	table_[MotionType::Attack]["Flip_Kick_001"] = engine_->LoadAnimation(dir + "/attack/Flip_Kick_001", "Flip_Kick_001.gltf");
+	table_[MotionType::Attack]["Blow_Weapon_Attack_000"] = engine_->LoadAnimation(dir + "/attack/Blow_Weapon_Attack_000", "Blow_Weapon_Attack_000.gltf");
 }
 
 /// @brief 怯みモーション読み込み

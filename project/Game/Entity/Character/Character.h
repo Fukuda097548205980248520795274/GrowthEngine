@@ -599,6 +599,10 @@ public:
 	/// @return 
 	bool IsWallTouch() const { return isWallTouching_; }
 
+	/// @brief ルートボーンの位置を取得する
+	/// @return 
+	Vector3 GetBoneRootPosition() const { return GetBonePosition(JointType::Root); }
+
 
 
 protected:
@@ -671,6 +675,9 @@ protected:
 
 	/// @brief 所持している武器
 	Weapon* weapon_ = nullptr;
+
+	/// @brief 武器を放した際のツリーを変更するかどうかのフラグ
+	bool isReleaseWeaponTree_ = false;
 
 
 protected:

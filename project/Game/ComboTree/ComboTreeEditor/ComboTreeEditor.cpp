@@ -143,6 +143,10 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			comboParams["isGrabWeapon"] = node.comboAttackInitData.isGrabWeapon;
 			comboParams["grabWeaponStartTime"] = node.comboAttackInitData.grabWeaponStartTime;
 			comboParams["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
+			comboParams["isThrowWeapon"] = node.comboAttackInitData.isThrowWeapon;
+			comboParams["throwWeaponTime"] = node.comboAttackInitData.throwWeaponTime;
+			comboParams["throwWeaponPower"] = node.comboAttackInitData.throwWeaponPower;
+			comboParams["throwDirection"] = { node.comboAttackInitData.throwDirection.x, node.comboAttackInitData.throwDirection.y, node.comboAttackInitData.throwDirection.z };
 
 			// ヒット判定のグループの配列データを構築
 			json groupsJson = json::array();
@@ -189,6 +193,10 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			grabParams["grabWeaponStartTime"] = node.grabAttackInitData.grabWeaponStartTime;
 			grabParams["grabWeaponEndTime"] = node.grabAttackInitData.grabWeaponEndTime;
 			grabParams["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
+			grabParams["isThrowWeapon"] = node.grabAttackInitData.isThrowWeapon;
+			grabParams["throwWeaponTime"] = node.grabAttackInitData.throwWeaponTime;
+			grabParams["throwWeaponPower"] = node.grabAttackInitData.throwWeaponPower;
+			grabParams["throwDirection"] = { node.grabAttackInitData.throwDirection.x, node.grabAttackInitData.throwDirection.y, node.grabAttackInitData.throwDirection.z };
 
 			nodeJson["grabParams"] = grabParams;
 		}
@@ -286,6 +294,17 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.comboAttackInitData.moveEndTime = comboParams.value("moveEndTime", 0.0f);
 			node.comboAttackInitData.cancelStartTime = comboParams.value("cancelStartTime", 0.0f);
 			node.comboAttackInitData.cancelEndTime = comboParams.value("cancelEndTime", 0.0f);
+			node.comboAttackInitData.isGrabWeapon = comboParams.value("isGrabWeapon", false);
+			node.comboAttackInitData.grabWeaponStartTime = comboParams.value("grabWeaponStartTime", 0.0f);
+			node.comboAttackInitData.grabWeaponEndTime = comboParams.value("grabWeaponEndTime", 0.0f);
+			node.comboAttackInitData.isThrowWeapon = comboParams.value("isThrowWeapon", false);
+			node.comboAttackInitData.throwWeaponTime = comboParams.value("throwWeaponTime", 0.0f);
+			node.comboAttackInitData.throwWeaponPower = comboParams.value("throwWeaponPower", 3.0f);
+			node.comboAttackInitData.throwDirection = Vector3(
+				comboParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				comboParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				comboParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
 
 			// ヒット判定のグループの復元
 			node.comboAttackInitData.groups.clear();
@@ -338,6 +357,17 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.grabAttackInitData.grabTime = grabParams.value("grabTime", 0.0f);
 			node.grabAttackInitData.hitboxStartTime = grabParams.value("hitboxStartTime", 0.0f);
 			node.grabAttackInitData.hitboxEndTime = grabParams.value("hitboxEndTime", 0.0f);
+			node.grabAttackInitData.isGrabWeapon = grabParams.value("isGrabWeapon", false);
+			node.grabAttackInitData.grabWeaponStartTime = grabParams.value("grabWeaponStartTime", 0.0f);
+			node.grabAttackInitData.grabWeaponEndTime = grabParams.value("grabWeaponEndTime", 0.0f);
+			node.grabAttackInitData.isThrowWeapon = grabParams.value("isThrowWeapon", false);
+			node.grabAttackInitData.throwWeaponTime = grabParams.value("throwWeaponTime", 0.0f);
+			node.grabAttackInitData.throwWeaponPower = grabParams.value("throwWeaponPower", 3.0f);
+			node.grabAttackInitData.throwDirection = Vector3(
+				grabParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				grabParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				grabParams.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
 			node.grabAttackInitData.jointType = static_cast<JointType>(grabParams.value("jointType", 0));
 		}
 		else if (node.nodeType == ComboNodeType::GrabStrike && nodeJson.contains("grabStrikeParams"))
@@ -854,10 +884,36 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::DragFloat("Cancel End Time", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
 				ImGui::Spacing();
-				ImGui::Text("Grab Weapon");
-				ImGui::Checkbox("Is Grab Weapon", &node->comboAttackInitData.isGrabWeapon);
+
+				if (!node->comboAttackInitData.isGrabWeapon)
+				{
+					ImGui::Text("Throw Weapon");
+					ImGui::Checkbox("Is Throw Weapon", &node->comboAttackInitData.isThrowWeapon);
+				}
+
+				if (!node->comboAttackInitData.isThrowWeapon)
+				{
+					ImGui::Text("Grab Weapon");
+					ImGui::Checkbox("Is Grab Weapon", &node->comboAttackInitData.isGrabWeapon);
+				}
+				
+
+				if (node->comboAttackInitData.isThrowWeapon)
+				{
+					node->comboAttackInitData.isGrabWeapon = false; // 投げ武器が有効な場合、つかみ武器は無効にする
+
+					ImGui::DragFloat("Throw Weapon Start Time", &node->comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("Throw Weapon End Time", &node->comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
+					ImGui::DragFloat3("Throw Direction", &node->comboAttackInitData.throwDirection.x, 0.05f);
+
+					// 投げ方向を正規化
+					node->comboAttackInitData.throwDirection = node->comboAttackInitData.throwDirection.Normalize();
+				}
+
 				if (node->comboAttackInitData.isGrabWeapon)
 				{
+					node->comboAttackInitData.isThrowWeapon = false; // つかみ武器が有効な場合、投げ武器は無効にする
+
 					ImGui::DragFloat("Grab Weapon Start Time", &node->comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 					ImGui::DragFloat("Grab Weapon End Time", &node->comboAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 				}

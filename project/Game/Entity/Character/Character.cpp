@@ -508,6 +508,30 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 		else
 		{
+			// 攻撃者が存在する場合は、攻撃者の方向を取得する
+			if (attacker)
+			{
+				Vector3 position = GetBoneRootPosition();
+				position.y = 0.0f;
+
+				Vector3 hitPos = attacker->GetBoneRootPosition();
+				hitPos.y = 0.0f;
+
+				Vector3 hitDir = (hitPos - position).Normalize();
+
+				// 攻撃者が正面にいる場合は、キャラクターの正面方向と攻撃者の方向の内積が負になる
+				if (Dot(GetDirection(), hitDir) < 0.0f)
+				{
+					const float kCriticalDamageThreshold = 1.5f; // クリティカルダメージの閾値
+
+					// ダメージをクリティカルダメージにする
+					damage = static_cast<int>(static_cast<float>(damage) * kCriticalDamageThreshold);
+
+					// クリティカルダメージのSEを再生する
+					soundManager_->SeCriticalDamage();
+				}
+			}
+
 			// リアクションごとの処理
 			if (damageReaction == DamageReaction::LightStagger)
 			{
@@ -1288,6 +1312,9 @@ void Character::ReleaseWeapon(const Vector3& blowVelocity)
 
 	weapon_ = nullptr;
 
+	// 武器を離したことを通知する
+	isReleaseWeaponTree_ = true;
+
 	// 今の状態のツリーをリクエストする
 	stateMachine_->TreeRequest();
 }
@@ -1619,6 +1646,10 @@ void Character::UpdatePushOut()
 	// 全キャラクターのリストを取得
 	const auto& characters = Character::GetCharacters();
 
+	// 自分の位置と頭の位置を取得する
+	Vector3 myPos = GetPosition();
+	Vector3 myHeadPos = GetBonePosition(JointType::Head);
+
 	for (auto* other : characters)
 	{
 		// 自分自身とは判定しない
@@ -1632,12 +1663,10 @@ void Character::UpdatePushOut()
 
 		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
 		if (IsGroundedDown() || other->IsGroundedDown() ||IsGrabbed() || other->IsGrabbed() ||
-			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected())
+			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected() || other->IsAttack())
 			continue;
 
 		// 自分と相手の位置を取得する
-		Vector3 myPos = GetPosition();
-		Vector3 myHeadPos = GetBonePosition(JointType::Head);
 		Vector3 otherPos = other->GetPosition();
 		Vector3 otherHeadPos = other->GetBonePosition(JointType::Head);
 

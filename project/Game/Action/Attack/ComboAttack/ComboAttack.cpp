@@ -21,6 +21,10 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	isGrabWeapon_ = initData.isGrabWeapon;
 	grabWeaponStartTime_ = initData.grabWeaponStartTime;
 	grabWeaponEndTime_ = initData.grabWeaponEndTime;
+	isThrowWeapon_ = initData.isThrowWeapon;
+	throwWeaponTime_ = initData.throwWeaponTime;
+	throwWeaponPower_ = initData.throwWeaponPower;
+	throwDirection_ = initData.throwDirection;
 
 	// ヒット判定のグループをコピーする
 	groups_ = initData.groups;
@@ -63,6 +67,9 @@ void ComboAttack::Exec()
 
 	// ヒットしたキャラクターのリストをクリアする
 	hitCharactersByGroup_.clear();
+
+	// 投げた武器かどうかをリセットする
+	hasThrownWeapon_ = false;
 
 	// アニメーションを設定する
 	owner_->SetAnimation(hAttackMotion_, true , false);
@@ -186,11 +193,9 @@ void ComboAttack::Update()
 				}
 			}
 
-			// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
-			Vector3 bonePosition = owner_->GetBonePosition(state.def.jointType);
 
-			// 攻撃のエフェクトを再生する
-			EffectManager::GetInstance()->AttackImpact000(bonePosition);
+			// 攻撃用のトレイルがある場合は、トレイルの位置も更新する
+			Vector3 bonePosition = Vector3(0.0f, 0.0f, 0.0f);
 
 			// 当たり判定の位置とサイズを攻撃者のボーンに基づいて更新する
 			auto sphere = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_);
@@ -198,12 +203,20 @@ void ComboAttack::Update()
 			{
 				// 武器の当たり判定は、武器の位置とサイズを使用する
 				sphere->param_->center = owner_->GetWeapon()->GetWorldPosition();
+
+				bonePosition = owner_->GetWeapon()->GetWorldPosition();
 			}
 			else
 			{
+				// それ以外の当たり判定は、攻撃者の指定されたボーンの位置を使用する
+				bonePosition = owner_->GetBonePosition(state.def.jointType);
+
 				// その他の当たり判定は、攻撃者の指定されたボーンの位置を使用する
 				sphere->param_->center = bonePosition;
 			}
+
+			// 攻撃のエフェクトを再生する
+			EffectManager::GetInstance()->AttackImpact000(bonePosition);
 
 			sphere->param_->radius = state.def.radius;
 
@@ -289,6 +302,35 @@ void ComboAttack::Update()
 		{
 			// 攻撃の時間帯を過ぎたら当たり判定を削除する
 			state.DeleteHitbox();
+		}
+	}
+
+	// 武器を投げる攻撃の場合、指定された時間に武器を投げる
+	if (isThrowWeapon_ && !hasThrownWeapon_ && owner_->HasWeapon())
+	{
+		if (attackTimer_ >= throwWeaponTime_)
+		{
+			Vector3 forward = owner_->GetDirection();
+
+			// もしキャラクターの向きベクトルが0になってしまっている場合の安全対策
+			if (forward.LengthSq() < 0.0001f) {
+				forward = Vector3(0.0f, 0.0f, 1.0f); // デフォルトの正面方向を設定
+			}
+
+			Vector3 right = Vector3(forward.z, 0.0f, -forward.x);
+
+			// 入力値（throwDirection_）を使ってキャラクター基準のワールドベクトルを作る
+			Vector3 throwDirWorld = (right * throwDirection_.x) + (forward * throwDirection_.y);
+
+			// ※もし入力もゼロ(0,0,0)だった場合、そのまま真正面に投げる
+			if (throwDirWorld.LengthSq() < 0.0001f) {
+				throwDirWorld = forward;
+			}
+
+			Vector3 finalThrowDirection = throwDirWorld.Normalize() * throwWeaponPower_;
+
+			owner_->ReleaseWeapon(finalThrowDirection);
+			hasThrownWeapon_ = true;
 		}
 	}
 

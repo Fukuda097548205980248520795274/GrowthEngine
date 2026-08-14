@@ -1,0 +1,42 @@
+{
+    "currentId": 6,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 0.0,
+                "cancelStartTime": 0.0,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "hitboxes": [],
+                "isGrabWeapon": false,
+                "isThrowWeapon": true,
+                "moveEndTime": 0.699999988079071,
+                "moveSpeed": 1.0,
+                "moveStartTime": 0.5,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 12.0,
+                "throwWeaponTime": 0.5
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                253.5,
+                183.0
+            ],
+            "targetAnimationName": ""
+        }
+    ]
+}

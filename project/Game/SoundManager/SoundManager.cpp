@@ -76,8 +76,11 @@ void SoundManager::Initialize()
 	seHeavyAttack_ = std::make_unique<Se>("HeavyAttack", engine_->LoadAudio("./Assets/Sounds/se/heavyAttack.mp3"));
 	seHeavyAttack_->param_->volume = 0.25f; // 音量を調整する
 
-	// 掴みのSe
+	// 掴みのSE
 	seGrab_ = std::make_unique<Se>("Grab", engine_->LoadAudio("./Assets/Sounds/se/grab.mp3"));
+
+	// クリティカルダメージのSE
+	seCriticalDamage_ = std::make_unique<Se>("CriticalDamage", engine_->LoadAudio("./Assets/Sounds/se/critical_damage.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

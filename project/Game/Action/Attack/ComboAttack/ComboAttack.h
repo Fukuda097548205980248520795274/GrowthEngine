@@ -33,6 +33,18 @@ struct CombAttackInitData
 	/// @brief 武器をつかむ終了時間
 	float grabWeaponEndTime = 0.0f;
 
+	// @brief 投げる武器かどうか
+	bool isThrowWeapon = false;
+
+	// @brief 投げる武器の開始時間
+	float throwWeaponTime = 0.0f;
+
+	// @brief 投げる武器のパワー
+	float throwWeaponPower = 3.0f;
+
+	// @brief 投げる方向（正規化されたベクトル）
+	Vector3 throwDirection = Vector3(0.0f, 0.0f, 1.0f);
+
 	// ヒット判定のグループ
 	std::vector<HitGroupDefinition> groups;
 
@@ -94,6 +106,24 @@ private:
 
 	/// @brief 掴み終了時間
 	float grabWeaponEndTime_ = 0.0f;
+
+
+private:
+
+	// @brief 投げる武器かどうか
+	bool isThrowWeapon_ = false;
+
+	// @brief 投げる武器の開始時間
+	float throwWeaponTime_ = 0.0f;
+
+	// @brief 投げる武器のパワー
+	float throwWeaponPower_ = 3.0f;
+
+	// @brief 投げる方向（正規化されたベクトル）
+	Vector3 throwDirection_ = Vector3(0.0f, 0.0f, 1.0f);
+
+	/// @brief 投げた武器かどうか
+	bool hasThrownWeapon_ = false;
 
 
 private:

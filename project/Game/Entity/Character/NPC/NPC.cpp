@@ -137,6 +137,13 @@ void NPC::Update()
 		// ツリーの実行が終了（成功 or 失敗）したら、予約されていたツリーに切り替える
 		if (state == BehaviorTree::State::Success || state == BehaviorTree::State::Failure)
 		{
+			// 武器からのツリーは、ツリーの所有者を解除する
+			if (isReleaseWeaponTree_)
+			{
+				currentBehaviorTree_->SetOwner(nullptr);
+				isReleaseWeaponTree_ = false;
+			}
+
 			if (isChangeBehaviorTree_ && !nextBehaviorTree_)
 			{
 				// 現在のツリーを中断
@@ -386,6 +393,13 @@ void NPC::Dead()
 
 	// 基底クラスの死亡処理
 	Character::Dead();
+
+	// 武器からのツリーは、ツリーの所有者を解除する
+	if (isReleaseWeaponTree_)
+	{
+		if (currentBehaviorTree_)currentBehaviorTree_->SetOwner(nullptr);
+		isReleaseWeaponTree_ = false;
+	}
 }
 
 /// @brief ビヘイビアツリーの変更をリクエストする

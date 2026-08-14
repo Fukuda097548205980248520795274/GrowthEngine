@@ -16,6 +16,10 @@ GrabAttack::GrabAttack(Character* character, const GrabAttackInitData& initData)
 	isGrabWeapon_ = initData.isGrabWeapon;
 	grabWeaponStartTime_ = initData.grabWeaponStartTime;
 	grabWeaponEndTime_ = initData.grabWeaponEndTime;
+	isThrowWeapon_ = initData.isThrowWeapon;
+	throwWeaponTime_ = initData.throwWeaponTime;
+	throwWeaponPower_ = initData.throwWeaponPower;
+	throwDirection_ = initData.throwDirection;
 
 	// 攻撃の種類を掴みに設定する
 	attackType_ = AttackType::Grab;
@@ -49,6 +53,9 @@ void GrabAttack::Exec()
 
 	// タイマーリセット
 	attackTimer_ = 0.0f;
+
+	// 武器を投げたかどうかのフラグをリセットする
+	hasThrownWeapon_ = false;
 
 	// つかみ判定は攻撃の中盤～終盤に出すのが自然なので、最初は当たり判定なしの状態にしておく
 	hasHit_ = false;
@@ -197,6 +204,29 @@ void GrabAttack::Update()
 
 	/// @brief つかみが成功していない状態で、つかまれたらアクションを終了する
 	if (owner_->GetGrabTarget())return;
+
+	// 武器を投げる攻撃の場合、指定された時間に武器を投げる
+	if (isThrowWeapon_ && !hasThrownWeapon_ && owner_->HasWeapon())
+	{
+		if (attackTimer_ >= throwWeaponTime_)
+		{
+			// キャラクターの向き（前）と右方向
+			Vector3 forward = owner_->GetDirection();
+			Vector3 right = Vector3(forward.z, 0.0f, -forward.x);
+
+			// 回避方向と各軸の内積を取り、ローカルの前後・左右の移動成分を出す
+			float localZ = Dot(Vector3(throwDirection_.x, 0.0f, throwDirection_.y), forward);
+			float localX = -Dot(Vector3(throwDirection_.x, 0.0f, throwDirection_.y), right);
+			float localY = throwDirection_.y;
+
+			// ローカルの前後・左右の移動成分を正規化して、投げる方向を決定する
+			Vector3 throwDirection = Vector3(localX, localY, localZ).Normalize() * throwWeaponPower_;
+
+			// 武器を放して吹き飛ばす
+			owner_->ReleaseWeapon(throwDirection);
+			hasThrownWeapon_ = true;
+		}
+	}
 
 	// 攻撃の特定の時間帯は移動する
 	if (attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)

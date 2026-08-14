@@ -179,25 +179,7 @@ void Weapon::SetOwner(Character* owner)
 	// 所持者がnullptrのときは、所持者を解除する
 	if (!owner)
 	{
-		if (owner_ && owner_->IsPlayer() && !stateTrees_.empty())
-		{
-			for (auto& [stateName, treeSet] : stateTrees_)
-			{
-				if (treeSet.comboTreeX) treeSet.comboTreeX->SetOwner(nullptr);
-				if (treeSet.comboTreeY) treeSet.comboTreeY->SetOwner(nullptr);
-				if (treeSet.comboTreeB) treeSet.comboTreeB->SetOwner(nullptr);
-			}
-		}
-		else if (owner_ && !stateTrees_.empty())
-		{
-			for (auto& [stateName, treeSet] : stateTrees_)
-			{
-				if (treeSet.behaviorTree) treeSet.behaviorTree->SetOwner(nullptr);
-			}
-		}
-
 		owner_ = nullptr;
-
 		return;
 	}
 

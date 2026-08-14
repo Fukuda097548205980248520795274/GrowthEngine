@@ -69,6 +69,9 @@ public:
 	/// @brief 掴みのSE
 	void SeGrab() { if (seGrab_)seGrab_->Play(); }
 
+	/// @brief クリティカルダメージのSE
+	void SeCriticalDamage() { if (seCriticalDamage_)seCriticalDamage_->Play(); }
+
 
 private:
 
@@ -127,6 +130,9 @@ private:
 
 	/// @brief 掴み攻撃のSE
 	std::unique_ptr<Se> seGrab_ = nullptr;
+
+	/// @brief クリティカルダメージのSE
+	std::unique_ptr<Se> seCriticalDamage_ = nullptr;
 
 
 private:

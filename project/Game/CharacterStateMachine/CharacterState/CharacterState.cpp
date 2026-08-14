@@ -113,15 +113,15 @@ void CharacterState::HandleBehaviorTreeNotSet()
 		}
 
 		// 現在のツリーが空、かつ適用すべきツリーが存在する場合にセットする
-		if (!player->GetCurrentComboTreeX() && targetX)
+		if (!player->GetCurrentComboTreeX() && !player->GetNextComboTreeX() && targetX)
 		{
 			player->SetCurrentComboTreeX(targetX);
 		}
-		if (!player->GetCurrentComboTreeY() && targetY)
+		if (!player->GetCurrentComboTreeY() && !player->GetNextComboTreeY() && targetY)
 		{
 			player->SetCurrentComboTreeY(targetY);
 		}
-		if (!player->GetCurrentComboTreeB() && targetB)
+		if (!player->GetCurrentComboTreeB() && !player->GetNextComboTreeB() && targetB)
 		{
 			player->SetCurrentComboTreeB(targetB);
 		}

@@ -1,0 +1,98 @@
+{
+    "currentId": 6,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "Blow_Weapon_Attack_000",
+            "comboParams": {
+                "attackTime": 3.0,
+                "cancelEndTime": 0.0,
+                "cancelStartTime": 0.0,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 1.2999999523162842,
+                        "groupId": 0,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 1.0
+                    },
+                    {
+                        "damage": 10,
+                        "damageReaction": 1,
+                        "endTime": 1.7000000476837158,
+                        "groupId": 1,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 1.399999976158142
+                    },
+                    {
+                        "damage": 10,
+                        "damageReaction": 3,
+                        "endTime": 2.299999952316284,
+                        "groupId": 2,
+                        "knockback": 4.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 2.0
+                    }
+                ],
+                "hitboxes": [
+                    {
+                        "groupId": 0,
+                        "jointType": 20,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 1,
+                        "jointType": 20,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 2,
+                        "jointType": 20,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "isThrowWeapon": false,
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 3.0,
+                "throwWeaponTime": 0.0
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                177.5,
+                169.0
+            ],
+            "targetAnimationName": ""
+        }
+    ]
+}

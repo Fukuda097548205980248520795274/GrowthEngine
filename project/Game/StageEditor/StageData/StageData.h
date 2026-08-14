@@ -104,10 +104,10 @@ struct PlacementData
 	MotionConfig avoidRightMotion;
 	MotionConfig guardMotion;
 
-	/// @brief ビヘイビアツリーの設定 (キャラクターの場合)
+	/// @brief ビヘイビアツリーの設定 (武器とキャラクターの場合)
 	BehaviorTreeConfig behaviorTrees;
 
-	/// @brief コンボツリーの設定 (キャラクターの場合)
+	/// @brief コンボツリーの設定 (武器とキャラクターの場合)
 	ComboTreeConfig comboTrees;
 
 	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
@@ -338,6 +338,103 @@ inline void toJson(json& j, const PlacementData& s)
 		j["durability"] = s.durability;
 		j["attackPower"] = s.attackPower;
 		j["isUnbreakable"] = s.isUnbreakable;
+
+
+		j["noneStateBT"] = s.behaviorTrees.noneStateBT;
+		j["dashStateBT"] = s.behaviorTrees.dashStateBT;
+		j["grabbedStateBT"] = s.behaviorTrees.grabbedStateBT;
+		j["grabbingStateBT"] = s.behaviorTrees.grabbingStateBT;
+		j["guardStateBT"] = s.behaviorTrees.guardStateBT;
+		j["lightDamageStateBT"] = s.behaviorTrees.lightDamageStateBT;
+		j["heavyDamageStateBT"] = s.behaviorTrees.heavyDamageStateBT;
+		j["downFallingStateBT"] = s.behaviorTrees.downFallingStateBT;
+		j["downLyingStateBT"] = s.behaviorTrees.downLyingStateBT;
+		j["downGettingUpStateBT"] = s.behaviorTrees.downGettingUpStateBT;
+		j["downStaggerStateBT"] = s.behaviorTrees.downStaggerStateBT;
+		j["blownAwayStateBT"] = s.behaviorTrees.blownAwayStateBT;
+		j["blownFallingStateBT"] = s.behaviorTrees.blownFallingStateBT;
+		j["repelStateBT"] = s.behaviorTrees.repelStateBT;
+		j["deflectStateBT"] = s.behaviorTrees.deflectStateBT;
+		j["repelledStateBT"] = s.behaviorTrees.repelledStateBT;
+		j["deflectedStateBT"] = s.behaviorTrees.deflectedStateBT;
+		j["avoidStateBT"] = s.behaviorTrees.avoidStateBT;
+		j["deadStateBT"] = s.behaviorTrees.deadStateBT;
+
+		j["noneStateCT_X"] = s.comboTrees.noneStateCT.xName_;
+		j["noneStateCT_Y"] = s.comboTrees.noneStateCT.yName_;
+		j["noneStateCT_B"] = s.comboTrees.noneStateCT.bName_;
+
+		j["dashStateCT_X"] = s.comboTrees.dashStateCT.xName_;
+		j["dashStateCT_Y"] = s.comboTrees.dashStateCT.yName_;
+		j["dashStateCT_B"] = s.comboTrees.dashStateCT.bName_;
+
+		j["grabbedStateCT_X"] = s.comboTrees.grabbedStateCT.xName_;
+		j["grabbedStateCT_Y"] = s.comboTrees.grabbedStateCT.yName_;
+		j["grabbedStateCT_B"] = s.comboTrees.grabbedStateCT.bName_;
+
+		j["grabbingStateCT_X"] = s.comboTrees.grabbingStateCT.xName_;
+		j["grabbingStateCT_Y"] = s.comboTrees.grabbingStateCT.yName_;
+		j["grabbingStateCT_B"] = s.comboTrees.grabbingStateCT.bName_;
+
+		j["guardStateCT_X"] = s.comboTrees.guardStateCT.xName_;
+		j["guardStateCT_Y"] = s.comboTrees.guardStateCT.yName_;
+		j["guardStateCT_B"] = s.comboTrees.guardStateCT.bName_;
+
+		j["lightDamageStateCT_X"] = s.comboTrees.lightDamageStateCT.xName_;
+		j["lightDamageStateCT_Y"] = s.comboTrees.lightDamageStateCT.yName_;
+		j["lightDamageStateCT_B"] = s.comboTrees.lightDamageStateCT.bName_;
+
+		j["heavyDamageStateCT_X"] = s.comboTrees.heavyDamageStateCT.xName_;
+		j["heavyDamageStateCT_Y"] = s.comboTrees.heavyDamageStateCT.yName_;
+		j["heavyDamageStateCT_B"] = s.comboTrees.heavyDamageStateCT.bName_;
+
+		j["downFallingStateCT_X"] = s.comboTrees.downFallingStateCT.xName_;
+		j["downFallingStateCT_Y"] = s.comboTrees.downFallingStateCT.yName_;
+		j["downFallingStateCT_B"] = s.comboTrees.downFallingStateCT.bName_;
+
+		j["downLyingStateCT_X"] = s.comboTrees.downLyingStateCT.xName_;
+		j["downLyingStateCT_Y"] = s.comboTrees.downLyingStateCT.yName_;
+		j["downLyingStateCT_B"] = s.comboTrees.downLyingStateCT.bName_;
+
+		j["downGettingUpStateCT_X"] = s.comboTrees.downGettingUpStateCT.xName_;
+		j["downGettingUpStateCT_Y"] = s.comboTrees.downGettingUpStateCT.yName_;
+		j["downGettingUpStateCT_B"] = s.comboTrees.downGettingUpStateCT.bName_;
+
+		j["downStaggerStateCT_X"] = s.comboTrees.downStaggerStateCT.xName_;
+		j["downStaggerStateCT_Y"] = s.comboTrees.downStaggerStateCT.yName_;
+		j["downStaggerStateCT_B"] = s.comboTrees.downStaggerStateCT.bName_;
+
+		j["blownAwayStateCT_X"] = s.comboTrees.blownAwayStateCT.xName_;
+		j["blownAwayStateCT_Y"] = s.comboTrees.blownAwayStateCT.yName_;
+		j["blownAwayStateCT_B"] = s.comboTrees.blownAwayStateCT.bName_;
+
+		j["blownFallingStateCT_X"] = s.comboTrees.blownFallingStateCT.xName_;
+		j["blownFallingStateCT_Y"] = s.comboTrees.blownFallingStateCT.yName_;
+		j["blownFallingStateCT_B"] = s.comboTrees.blownFallingStateCT.bName_;
+
+		j["repelStateCT_X"] = s.comboTrees.repelStateCT.xName_;
+		j["repelStateCT_Y"] = s.comboTrees.repelStateCT.yName_;
+		j["repelStateCT_B"] = s.comboTrees.repelStateCT.bName_;
+
+		j["deflectStateCT_X"] = s.comboTrees.deflectStateCT.xName_;
+		j["deflectStateCT_Y"] = s.comboTrees.deflectStateCT.yName_;
+		j["deflectStateCT_B"] = s.comboTrees.deflectStateCT.bName_;
+
+		j["repelledStateCT_X"] = s.comboTrees.repelledStateCT.xName_;
+		j["repelledStateCT_Y"] = s.comboTrees.repelledStateCT.yName_;
+		j["repelledStateCT_B"] = s.comboTrees.repelledStateCT.bName_;
+
+		j["deflectedStateCT_X"] = s.comboTrees.deflectedStateCT.xName_;
+		j["deflectedStateCT_Y"] = s.comboTrees.deflectedStateCT.yName_;
+		j["deflectedStateCT_B"] = s.comboTrees.deflectedStateCT.bName_;
+
+		j["avoidStateCT_X"] = s.comboTrees.avoidStateCT.xName_;
+		j["avoidStateCT_Y"] = s.comboTrees.avoidStateCT.yName_;
+		j["avoidStateCT_B"] = s.comboTrees.avoidStateCT.bName_;
+
+		j["deadStateCT_X"] = s.comboTrees.deadStateCT.xName_;
+		j["deadStateCT_Y"] = s.comboTrees.deadStateCT.yName_;
+		j["deadStateCT_B"] = s.comboTrees.deadStateCT.bName_;
 	}
 }
 
@@ -417,12 +514,10 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.targetNavMeshGroupId = j.value("targetNavMeshGroupId", 0);
 	s.targetNavMeshState = j.value("targetNavMeshState", true);
 
-
-	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む
-	if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
+	// 武器はビヘイビアツリーとコンボツリーの設定を読み込む
+	if (s.category == EditCategory::Weapon)
 	{
 		s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
-		s.behaviorTrees.stanceStateBT = j.value("stanceStateBT", "");
 		s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
 		s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
 		s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
@@ -441,17 +536,10 @@ inline void fromJson(const json& j, PlacementData& s)
 		s.behaviorTrees.deflectedStateBT = j.value("deflectedStateBT", "");
 		s.behaviorTrees.avoidStateBT = j.value("avoidStateBT", "");
 		s.behaviorTrees.deadStateBT = j.value("deadStateBT", "");
-	}
-	else if (s.subType == static_cast<int32_t>(CharacterTag::Player))
-	{
-		// プレイヤーキャラクターの場合はコンボツリーの入力名を読み込む
+
 		s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
 		s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
 		s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
-
-		s.comboTrees.stanceStateCT.xName_ = j.value("stanceStateCT_X", "");
-		s.comboTrees.stanceStateCT.yName_ = j.value("stanceStateCT_Y", "");
-		s.comboTrees.stanceStateCT.bName_ = j.value("stanceStateCT_B", "");
 
 		s.comboTrees.dashStateCT.xName_ = j.value("dashStateCT_X", "");
 		s.comboTrees.dashStateCT.yName_ = j.value("dashStateCT_Y", "");
@@ -524,7 +612,110 @@ inline void fromJson(const json& j, PlacementData& s)
 		s.comboTrees.deadStateCT.xName_ = j.value("deadStateCT_X", "");
 		s.comboTrees.deadStateCT.yName_ = j.value("deadStateCT_Y", "");
 		s.comboTrees.deadStateCT.bName_ = j.value("deadStateCT_B", "");
+	}
 
+
+	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む
+	if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
+	{
+		s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
+		s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
+		s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
+		s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
+		s.behaviorTrees.guardStateBT = j.value("guardStateBT", "");
+		s.behaviorTrees.lightDamageStateBT = j.value("lightDamageStateBT", "");
+		s.behaviorTrees.heavyDamageStateBT = j.value("heavyDamageStateBT", "");
+		s.behaviorTrees.downFallingStateBT = j.value("downFallingStateBT", "");
+		s.behaviorTrees.downLyingStateBT = j.value("downLyingStateBT", "");
+		s.behaviorTrees.downGettingUpStateBT = j.value("downGettingUpStateBT", "");
+		s.behaviorTrees.downStaggerStateBT = j.value("downStaggerStateBT", "");
+		s.behaviorTrees.blownAwayStateBT = j.value("blownAwayStateBT", "");
+		s.behaviorTrees.blownFallingStateBT = j.value("blownFallingStateBT", "");
+		s.behaviorTrees.repelStateBT = j.value("repelStateBT", "");
+		s.behaviorTrees.deflectStateBT = j.value("deflectStateBT", "");
+		s.behaviorTrees.repelledStateBT = j.value("repelledStateBT", "");
+		s.behaviorTrees.deflectedStateBT = j.value("deflectedStateBT", "");
+		s.behaviorTrees.avoidStateBT = j.value("avoidStateBT", "");
+		s.behaviorTrees.deadStateBT = j.value("deadStateBT", "");
+	}
+	else if (s.subType == static_cast<int32_t>(CharacterTag::Player))
+	{
+		// プレイヤーキャラクターの場合はコンボツリーの入力名を読み込む
+		s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
+		s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
+		s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
+
+		s.comboTrees.dashStateCT.xName_ = j.value("dashStateCT_X", "");
+		s.comboTrees.dashStateCT.yName_ = j.value("dashStateCT_Y", "");
+		s.comboTrees.dashStateCT.bName_ = j.value("dashStateCT_B", "");
+
+		s.comboTrees.grabbedStateCT.xName_ = j.value("grabbedStateCT_X", "");
+		s.comboTrees.grabbedStateCT.yName_ = j.value("grabbedStateCT_Y", "");
+		s.comboTrees.grabbedStateCT.bName_ = j.value("grabbedStateCT_B", "");
+
+		s.comboTrees.grabbingStateCT.xName_ = j.value("grabbingStateCT_X", "");
+		s.comboTrees.grabbingStateCT.yName_ = j.value("grabbingStateCT_Y", "");
+		s.comboTrees.grabbingStateCT.bName_ = j.value("grabbingStateCT_B", "");
+
+		s.comboTrees.guardStateCT.xName_ = j.value("guardStateCT_X", "");
+		s.comboTrees.guardStateCT.yName_ = j.value("guardStateCT_Y", "");
+		s.comboTrees.guardStateCT.bName_ = j.value("guardStateCT_B", "");
+
+		s.comboTrees.lightDamageStateCT.xName_ = j.value("lightDamageStateCT_X", "");
+		s.comboTrees.lightDamageStateCT.yName_ = j.value("lightDamageStateCT_Y", "");
+		s.comboTrees.lightDamageStateCT.bName_ = j.value("lightDamageStateCT_B", "");
+
+		s.comboTrees.heavyDamageStateCT.xName_ = j.value("heavyDamageStateCT_X", "");
+		s.comboTrees.heavyDamageStateCT.yName_ = j.value("heavyDamageStateCT_Y", "");
+		s.comboTrees.heavyDamageStateCT.bName_ = j.value("heavyDamageStateCT_B", "");
+
+		s.comboTrees.downFallingStateCT.xName_ = j.value("downFallingStateCT_X", "");
+		s.comboTrees.downFallingStateCT.yName_ = j.value("downFallingStateCT_Y", "");
+		s.comboTrees.downFallingStateCT.bName_ = j.value("downFallingStateCT_B", "");
+
+		s.comboTrees.downLyingStateCT.xName_ = j.value("downLyingStateCT_X", "");
+		s.comboTrees.downLyingStateCT.yName_ = j.value("downLyingStateCT_Y", "");
+		s.comboTrees.downLyingStateCT.bName_ = j.value("downLyingStateCT_B", "");
+
+		s.comboTrees.downGettingUpStateCT.xName_ = j.value("downGettingUpStateCT_X", "");
+		s.comboTrees.downGettingUpStateCT.yName_ = j.value("downGettingUpStateCT_Y", "");
+		s.comboTrees.downGettingUpStateCT.bName_ = j.value("downGettingUpStateCT_B", "");
+
+		s.comboTrees.downStaggerStateCT.xName_ = j.value("downStaggerStateCT_X", "");
+		s.comboTrees.downStaggerStateCT.yName_ = j.value("downStaggerStateCT_Y", "");
+		s.comboTrees.downStaggerStateCT.bName_ = j.value("downStaggerStateCT_B", "");
+
+		s.comboTrees.blownAwayStateCT.xName_ = j.value("blownAwayStateCT_X", "");
+		s.comboTrees.blownAwayStateCT.yName_ = j.value("blownAwayStateCT_Y", "");
+		s.comboTrees.blownAwayStateCT.bName_ = j.value("blownAwayStateCT_B", "");
+
+		s.comboTrees.blownFallingStateCT.xName_ = j.value("blownFallingStateCT_X", "");
+		s.comboTrees.blownFallingStateCT.yName_ = j.value("blownFallingStateCT_Y", "");
+		s.comboTrees.blownFallingStateCT.bName_ = j.value("blownFallingStateCT_B", "");
+
+		s.comboTrees.repelStateCT.xName_ = j.value("repelStateCT_X", "");
+		s.comboTrees.repelStateCT.yName_ = j.value("repelStateCT_Y", "");
+		s.comboTrees.repelStateCT.bName_ = j.value("repelStateCT_B", "");
+
+		s.comboTrees.deflectStateCT.xName_ = j.value("deflectStateCT_X", "");
+		s.comboTrees.deflectStateCT.yName_ = j.value("deflectStateCT_Y", "");
+		s.comboTrees.deflectStateCT.bName_ = j.value("deflectStateCT_B", "");
+
+		s.comboTrees.repelledStateCT.xName_ = j.value("repelledStateCT_X", "");
+		s.comboTrees.repelledStateCT.yName_ = j.value("repelledStateCT_Y", "");
+		s.comboTrees.repelledStateCT.bName_ = j.value("repelledStateCT_B", "");
+
+		s.comboTrees.deflectedStateCT.xName_ = j.value("deflectedStateCT_X", "");
+		s.comboTrees.deflectedStateCT.yName_ = j.value("deflectedStateCT_Y", "");
+		s.comboTrees.deflectedStateCT.bName_ = j.value("deflectedStateCT_B", "");
+
+		s.comboTrees.avoidStateCT.xName_ = j.value("avoidStateCT_X", "");
+		s.comboTrees.avoidStateCT.yName_ = j.value("avoidStateCT_Y", "");
+		s.comboTrees.avoidStateCT.bName_ = j.value("avoidStateCT_B", "");
+
+		s.comboTrees.deadStateCT.xName_ = j.value("deadStateCT_X", "");
+		s.comboTrees.deadStateCT.yName_ = j.value("deadStateCT_Y", "");
+		s.comboTrees.deadStateCT.bName_ = j.value("deadStateCT_B", "");
 	}
 
 

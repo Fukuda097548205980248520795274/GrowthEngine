@@ -36,6 +36,10 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["combo_data"]["grabWeaponStartTime"] = node.comboAttackInitData.grabWeaponStartTime;
 				n["combo_data"]["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
 				n["combo_data"]["isGrabWeapon"] = node.comboAttackInitData.isGrabWeapon;
+				n["combo_data"]["isThrowWeapon"] = node.comboAttackInitData.isThrowWeapon;
+				n["combo_data"]["throwWeaponTime"] = node.comboAttackInitData.throwWeaponTime;
+				n["combo_data"]["throwWeaponPower"] = node.comboAttackInitData.throwWeaponPower;
+				n["combo_data"]["throwDirection"] = { node.comboAttackInitData.throwDirection.x, node.comboAttackInitData.throwDirection.y, node.comboAttackInitData.throwDirection.z };
 
 				// ヒットグループの配列データを構築
 				json hitGroupsJson = json::array();
@@ -82,6 +86,10 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["grab_data"]["grabWeaponEndTime"] = node.grabAttackInitData.grabWeaponEndTime;
 				n["grab_data"]["isGrabWeapon"] = node.grabAttackInitData.isGrabWeapon;
 				n["grab_data"]["jointType"] = static_cast<int>(node.grabAttackInitData.jointType);
+				n["grab_data"]["isThrowWeapon"] = node.grabAttackInitData.isThrowWeapon;
+				n["grab_data"]["throwWeaponTime"] = node.grabAttackInitData.throwWeaponTime;
+				n["grab_data"]["throwWeaponPower"] = node.grabAttackInitData.throwWeaponPower;
+				n["grab_data"]["throwDirection"] = { node.grabAttackInitData.throwDirection.x, node.grabAttackInitData.throwDirection.y, node.grabAttackInitData.throwDirection.z };
 
 				n["motionType"] = static_cast<int>(node.motionType);
 				n["motionName"] = node.motionName;
@@ -249,6 +257,12 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.comboAttackInitData.grabWeaponStartTime = n["combo_data"].value("grabWeaponStartTime", 0.0f);
 					node.comboAttackInitData.grabWeaponEndTime = n["combo_data"].value("grabWeaponEndTime", 0.0f);
 					node.comboAttackInitData.isGrabWeapon = n["combo_data"].value("isGrabWeapon", false);
+					node.comboAttackInitData.isThrowWeapon = n["combo_data"].value("isThrowWeapon", false);
+					node.comboAttackInitData.throwWeaponTime = n["combo_data"].value("throwWeaponTime", 0.0f);
+					node.comboAttackInitData.throwWeaponPower = n["combo_data"].value("throwWeaponPower", 3.0f);
+					node.comboAttackInitData.throwDirection.x = n["combo_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0];
+					node.comboAttackInitData.throwDirection.y = n["combo_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1];
+					node.comboAttackInitData.throwDirection.z = n["combo_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2];
 					node.comboAttackInitData.cancelStartTime = 0.0f;
 					node.comboAttackInitData.cancelEndTime = 0.0f;
 					node.comboAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
@@ -268,9 +282,9 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 							groupDef.damage = g.value("damage", 1);
 							if (g.contains("knockbackDirection") && g["knockbackDirection"].is_array() && g["knockbackDirection"].size() == 3)
 							{
-								groupDef.knockbackDirection.x = g["knockbackDirection"][0];
-								groupDef.knockbackDirection.y = g["knockbackDirection"][1];
-								groupDef.knockbackDirection.z = g["knockbackDirection"][2];
+								groupDef.knockbackDirection.x = g.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0];
+								groupDef.knockbackDirection.y = g.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1];
+								groupDef.knockbackDirection.z = g.value("knockbackDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2];
 							}
 							else
 							{
@@ -309,6 +323,12 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					node.grabAttackInitData.grabWeaponStartTime = n["grab_data"].value("grabWeaponStartTime", 0.0f);
 					node.grabAttackInitData.grabWeaponEndTime = n["grab_data"].value("grabWeaponEndTime", 0.0f);
 					node.grabAttackInitData.isGrabWeapon = n["grab_data"].value("isGrabWeapon", false);
+					node.grabAttackInitData.isThrowWeapon = n["grab_data"].value("isThrowWeapon", false);
+					node.grabAttackInitData.throwWeaponTime = n["grab_data"].value("throwWeaponTime", 0.0f);
+					node.grabAttackInitData.throwWeaponPower = n["grab_data"].value("throwWeaponPower", 3.0f);
+					node.grabAttackInitData.throwDirection.x = n["grab_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0];
+					node.grabAttackInitData.throwDirection.y = n["grab_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1];
+					node.grabAttackInitData.throwDirection.z = n["grab_data"].value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2];
 					node.grabAttackInitData.jointType = static_cast<JointType>(n["grab_data"].value("jointType", 0));
 					node.grabAttackInitData.hAttackMotion = MotionManager::GetInstance()->GetMotion(n["motionType"], n["motionName"]);
 

@@ -66,6 +66,14 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 			initData.isGrabWeapon = paramsJson.value("isGrabWeapon", false);
 			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
 			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);
+			initData.isThrowWeapon = paramsJson.value("isThrowWeapon", false);
+			initData.throwWeaponTime = paramsJson.value("throwWeaponTime", 0.0f);
+			initData.throwWeaponPower = paramsJson.value("throwWeaponPower", 3.0f);
+			initData.throwDirection = Vector3(
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
 
             initData.groups.clear();
 			if (paramsJson.contains("groups") && paramsJson["groups"].is_array())
@@ -127,6 +135,14 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
 			initData.isGrabWeapon = paramsJson.value("isGrabWeapon", false);
 			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
 			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);
+			initData.isThrowWeapon = paramsJson.value("isThrowWeapon", false);
+			initData.throwWeaponTime = paramsJson.value("throwWeaponTime", 0.0f);
+			initData.throwWeaponPower = paramsJson.value("throwWeaponPower", 3.0f);
+			initData.throwDirection = Vector3(
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[0],
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[1],
+				paramsJson.value("throwDirection", std::vector<float>{0.0f, 0.0f, 1.0f})[2]
+			);
 
 			initData.hitboxStartTime = paramsJson.value("hitboxStartTime", 0.0f);
 			initData.hitboxEndTime = paramsJson.value("hitboxEndTime", 0.0f);

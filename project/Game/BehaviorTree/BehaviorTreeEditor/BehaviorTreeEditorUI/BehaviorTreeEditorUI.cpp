@@ -1270,16 +1270,46 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			HistorySaveIfChanged();
 			ImGui::DragFloat("移動終了時間", &node.comboAttackInitData.moveEndTime, 0.01f);
 
-			HistorySaveIfChanged();
-			ImGui::Checkbox("武器をつかむ", &node.comboAttackInitData.isGrabWeapon);
+			if (!node.comboAttackInitData.isThrowWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::Checkbox("武器をつかむ", &node.comboAttackInitData.isGrabWeapon);
+			}
+
+			if (!node.comboAttackInitData.isGrabWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::Checkbox("武器を投げる", &node.comboAttackInitData.isThrowWeapon);
+			}
 
 			if (node.comboAttackInitData.isGrabWeapon)
 			{
+				// 武器を掴む場合は、投げる設定を無効化する
+				node.comboAttackInitData.isThrowWeapon = false;
+
 				HistorySaveIfChanged();
 				ImGui::DragFloat("武器をつかむ開始時間", &node.comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node.comboAttackInitData.grabWeaponEndTime);
 
 				HistorySaveIfChanged();
 				ImGui::DragFloat("武器をつかむ終了時間", &node.comboAttackInitData.grabWeaponEndTime, 0.01f, node.comboAttackInitData.grabWeaponStartTime, node.comboAttackInitData.attackTime);
+			}
+
+			if (node.comboAttackInitData.isThrowWeapon)
+			{
+				// 武器を投げる場合は、掴む設定を無効化する
+				node.comboAttackInitData.isGrabWeapon = false;
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器を投げる時間", &node.comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, 100000.0f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器を投げる速度", &node.comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat3("武器を投げる方向", &node.comboAttackInitData.throwDirection.x, 0.05f);
+
+				// 投げる方向ベクトルを正規化する
+				node.comboAttackInitData.throwDirection = node.comboAttackInitData.throwDirection.Normalize();
 			}
 
 
@@ -1465,13 +1495,46 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			HistorySaveIfChanged();
 			ImGui::Checkbox("武器をつかむ", &node.grabAttackInitData.isGrabWeapon);
 
+			if (!node.grabAttackInitData.isThrowWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::Checkbox("武器をつかむ", &node.grabAttackInitData.isGrabWeapon);
+			}
+
+			if (!node.grabAttackInitData.isGrabWeapon)
+			{
+				HistorySaveIfChanged();
+				ImGui::Checkbox("武器を投げる", &node.grabAttackInitData.isThrowWeapon);
+			}
+
 			if (node.grabAttackInitData.isGrabWeapon)
 			{
+				// 武器を掴む場合は、投げる設定を無効化する
+				node.grabAttackInitData.isThrowWeapon = false;
+
 				HistorySaveIfChanged();
 				ImGui::DragFloat("武器をつかむ開始時間", &node.grabAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node.grabAttackInitData.grabWeaponEndTime);
 
 				HistorySaveIfChanged();
 				ImGui::DragFloat("武器をつかむ終了時間", &node.grabAttackInitData.grabWeaponEndTime, 0.01f, node.grabAttackInitData.grabWeaponStartTime, node.grabAttackInitData.attackTime);
+			}
+
+			if (node.grabAttackInitData.isThrowWeapon)
+			{
+				// 武器を投げる場合は、掴む設定を無効化する
+				node.grabAttackInitData.isGrabWeapon = false;
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器を投げる時間", &node.grabAttackInitData.throwWeaponTime, 0.01f, 0.0f, 100000.0f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat("武器を投げる速度", &node.grabAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
+
+				HistorySaveIfChanged();
+				ImGui::DragFloat3("武器を投げる方向", &node.grabAttackInitData.throwDirection.x, 0.05f);
+
+				// 投げる方向ベクトルを正規化する
+				node.grabAttackInitData.throwDirection = node.grabAttackInitData.throwDirection.Normalize();
 			}
 
 

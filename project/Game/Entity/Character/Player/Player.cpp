@@ -112,6 +112,16 @@ void Player::Update()
 		// 攻撃が完全に終了している状態
 		if (!currentAttack_)
 		{
+			// 武器からのツリーは、ツリーの所有者を解除する
+			if (isReleaseWeaponTree_)
+			{
+				if (currentComboTreeX_)currentComboTreeX_->SetOwner(nullptr);
+				if (currentComboTreeY_)currentComboTreeY_->SetOwner(nullptr);
+				if (currentComboTreeB_)currentComboTreeB_->SetOwner(nullptr);
+
+				isReleaseWeaponTree_ = false;
+			}
+
 			currentComboTreeX_ = nextComboTreeX_;
 			currentComboTreeY_ = nextComboTreeY_;
 			currentComboTreeB_ = nextComboTreeB_;
@@ -217,6 +227,20 @@ void Player::Draw()
 
 	// 攻撃エフェクトの描画
 	if (attackTrail_)attackTrail_->Draw();
+}
+
+/// @brief 死亡処理
+void Player::Dead()
+{
+	Character::Dead();
+
+	if(isReleaseWeaponTree_)
+	{
+		if (currentComboTreeX_)currentComboTreeX_->SetOwner(nullptr);
+		if (currentComboTreeY_)currentComboTreeY_->SetOwner(nullptr);
+		if (currentComboTreeB_)currentComboTreeB_->SetOwner(nullptr);
+		isReleaseWeaponTree_ = false;
+	}
 }
 
 /// @brief 更新処理開始前のリセット
