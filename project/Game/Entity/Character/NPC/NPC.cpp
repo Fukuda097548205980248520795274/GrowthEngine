@@ -171,7 +171,7 @@ void NPC::Update()
 	// 動けない状態なら、攻撃トークンを返却して、基底クラスの更新処理を行って終了する
 	if (isIncapacitated)
 	{
-		BattleDirector battleDirector = BattleDirector::GetInstance();
+		BattleDirector& battleDirector = BattleDirector::GetInstance();
 
 		// 攻撃トークンを返却する
 		battleDirector.ReleaseAttackToken(this);
@@ -242,7 +242,9 @@ void NPC::UpdateStanceStateByTargetDistance()
 		if (kDistanceSq <= kNpcStanceEnterDistanceSq)
 		{
 			isStance_ = true;
-			BattleDirector::GetInstance().AssignSlot(this, lockOnTarget_);
+
+			BattleDirector& battleDirector = BattleDirector::GetInstance();
+			battleDirector.AssignSlot(this, lockOnTarget_);
 		}
 	}
 }
@@ -256,7 +258,8 @@ void NPC::UpdateStanceMovement()
 		return;
 
 	// スロットのワールド座標を取得
-	auto optSlotPos = BattleDirector::GetInstance().GetSlotWorldPosition(this, lockOnTarget_);
+	BattleDirector& battleDirector = BattleDirector::GetInstance();
+	auto optSlotPos = battleDirector.GetSlotWorldPosition(this, lockOnTarget_);
 	if (!optSlotPos) return;
 
 	Vector3 slotWorldPos = optSlotPos.value();
@@ -375,7 +378,7 @@ void NPC::Dead()
 	nextBehaviorTree_ = nullptr;
 
 	// バトル制御クラスのインスタンスを取得する
-	BattleDirector battleDirector = BattleDirector::GetInstance();
+	BattleDirector& battleDirector = BattleDirector::GetInstance();
 
 	// 攻撃トークンを返却する
 	battleDirector.ReleaseAttackToken(this);

@@ -116,9 +116,7 @@ void CharacterMovement::TargetDirection(float dt)
 		owner_->IsStance() && !owner_->IsGrabbing() && !owner_->IsIncapacitated() && !owner_->IsAttack())
 	{
 		// ターゲットの方向を向く
-		Vector3 toTarget = target->GetWorldPosition() - worldTransform->GetWorldPosition();
-		if (target->IsBlownAway() || target->IsBlownFalling())
-			toTarget = target->GetBonePosition(JointType::Root) - worldTransform->GetWorldPosition();
+		Vector3 toTarget = target->GetBonePosition(JointType::Root) - worldTransform->GetWorldPosition();
 
 		// Y軸の回転のみを考慮するため、Y成分を0にする
 		toTarget.y = 0.0f;
@@ -133,9 +131,7 @@ void CharacterMovement::TargetDirection(float dt)
 	else if(target && worldTransform && owner_->IsPlayer() && owner_->IsStance() && !owner_->IsGrabbing() && !owner_->IsIncapacitated())
 	{
 		// ターゲットの方向を向く
-		Vector3 toTarget = target->GetWorldPosition() - worldTransform->GetWorldPosition();
-		if (target->IsBlownAway() || target->IsBlownFalling())
-			toTarget = target->GetBonePosition(JointType::Root) - worldTransform->GetWorldPosition();
+		Vector3 toTarget = target->GetBonePosition(JointType::Root) - worldTransform->GetWorldPosition();
 
 		// Y軸の回転のみを考慮するため、Y成分を0にする
 		toTarget.y = 0.0f;
