@@ -47,7 +47,7 @@
         {
             "action_type": 0,
             "combo_data": {
-                "attackTime": 2.0,
+                "attackTime": 3.5,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -63,11 +63,29 @@
                             1.0
                         ],
                         "startTime": 0.800000011920929
+                    },
+                    {
+                        "damage": 15,
+                        "damageReaction": 2,
+                        "endTime": 2.799999952316284,
+                        "groupId": 1,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 2.4000000953674316
                     }
                 ],
                 "hitDefinitions": [
                     {
                         "groupId": 0,
+                        "hitJoint": 20,
+                        "radius": 0.25
+                    },
+                    {
+                        "groupId": 1,
                         "hitJoint": 20,
                         "radius": 0.25
                     }
@@ -150,7 +168,7 @@
             "output_pin": 15,
             "pos": [
                 372.268798828125,
-                758.1483154296875
+                758.1483764648438
             ],
             "type": 5
         },

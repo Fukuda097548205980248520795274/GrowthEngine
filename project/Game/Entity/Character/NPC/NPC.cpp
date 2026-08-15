@@ -43,6 +43,10 @@ void NPC::PoolRelease()
 /// @brief 初期化
 void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTag, const NavMesh* navMesh)
 {
+	currentBehaviorTree_ = nullptr;
+	nextBehaviorTree_ = nullptr;
+	isReleaseWeaponTree_ = false;
+
 	// インスタンスリストに登録する
 	characters_.push_back(this);
 
