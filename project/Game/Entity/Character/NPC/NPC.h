@@ -125,7 +125,7 @@ private:
 	float targetUpdateTimer_ = 0.0f;
 
 	// @brief ターゲットの更新間隔（秒）
-	float targetUpdateInterval = 3.0f;
+	float targetUpdateInterval = 2.0f;
 
 	/// @brief ターゲットを変更したかどうか
 	bool isChangedTarget_ = false;

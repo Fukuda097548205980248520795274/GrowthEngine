@@ -382,18 +382,15 @@ void NPC::UpdateStanceMovement()
 	// 統合された移動ベクトルの長さ（強さ）を取得
 	float moveMag = moveDir.Length();
 
-	// デッドゾーン（極めて微小なノイズレベルの入力は計算前に弾く）
+	// デッドゾーン
 	constexpr float kDeadZone = 0.05f;
 
 	if (moveMag > kDeadZone)
 	{
 		if (currentSpeed == 0.0f)
 		{
-			// 【ゆらゆら防止策】
-			// スロット到着時（本来停止している状態）に分離ベクトルのみで動く場合の処理
-
-			// 1. しきい値を設け、少し触れた程度の弱い分離力では動かさない
-			constexpr float kWiggleThreshold = 0.3f; // 環境に合わせて 0.2f〜0.5f の間で調整してください
+			// 移動入力がデッドゾーンを超えているが、速度が0の場合は、移動入力を完全に停止する
+			constexpr float kWiggleThreshold = 0.3f;
 
 			if (moveMag < kWiggleThreshold)
 			{
@@ -401,8 +398,7 @@ void NPC::UpdateStanceMovement()
 				return; // 完全に停止
 			}
 
-			// 2. 押し出される際の速度を、いきなり上げず滑らかに変化させる
-			// kWiggleThreshold を超えた分だけ徐々に速度を上げ、最大でも歩行速度の50%に制限する
+			// 移動入力がデッドゾーンを超えている場合は、速度を徐々に上げる
 			float speedRamp = (moveMag - kWiggleThreshold) * 0.5f;
 			currentSpeed = stanceWalkSpeed_ * std::min(0.5f, speedRamp);
 		}
@@ -622,14 +618,14 @@ void NPC::SearchLockOnTarget()
 		{
 			if (other == this || other->IsDead()) continue;
 
-			// 自分と同じ側の勢力で、かつ現在の評価対象(character)をロックオンしているか
+			// 自分と同じ側の勢力で、かつ現在の評価対象をロックオンしているか
 			if (other->IsPlayerSide() == kIsSelfPlayerSide && other->GetLockOnTarget() == character)
 			{
 				targetedCount++;
 			}
 		}
 
-		// 相手が自分の目の前にいるか（内積：真正面=1.0、真横=0.0、真後ろ=-1.0）
+		// 自分の向きとターゲットへの方向の内積を計算する
 		Vector3 toTargetDir = toTarget.Normalize();
 		float dot = kSelfDirection.x * toTargetDir.x + kSelfDirection.z * toTargetDir.z;
 
