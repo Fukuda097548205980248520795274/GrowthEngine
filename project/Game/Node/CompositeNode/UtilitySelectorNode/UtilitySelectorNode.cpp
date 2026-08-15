@@ -22,7 +22,7 @@ Node::State UtilitySelectorNode::Exec()
 		{
 			if (!utilityFunctions_[i]) continue;
 
-			float score = utilityFunctions_[i]();
+			float score = utilityFunctions_[i](owner_);
 			if (score > highestScore)
 			{
 				highestScore = score;
@@ -64,7 +64,7 @@ void UtilitySelectorNode::Abort()
 /// @brief 子ノードを追加する（ユーティリティ関数付き）
 /// @param child 
 /// @param utilityFunc 
-void UtilitySelectorNode::AddChildWithUtility(std::unique_ptr<Node> child, std::function<float()> utilityFunc)
+void UtilitySelectorNode::AddChildWithUtility(std::unique_ptr<Node> child, std::function<float(Character*)> utilityFunc)
 {
 	// 子ノードを追加
 	AddChild(std::move(child));

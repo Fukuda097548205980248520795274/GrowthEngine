@@ -36,12 +36,12 @@ public:
 
 	/// @brief オブジェクトを配置する
 	/// @param data 
-	void SpawnObject(PlacementData& data, PlacementData& weaponData) { spawner_->SpawnActualEntity(data, weaponData); }
+	void SpawnObject(PlacementData& data, PlacementData& weaponData) { spawner_->SpawnActualEntity(data, weaponData, true); }
 
 	/// @brief オブジェクトを配置する（戦闘エリアの情報も渡す）
 	/// @param data 
 	/// @param battleAreas 
-	void SpawnObject(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData) { spawner_->SpawnActualEntity(data, battleAreas, weaponData); }
+	void SpawnObject(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData) { spawner_->SpawnActualEntity(data, battleAreas, weaponData, true); }
 
 	/// @brief オブジェクトを削除する
 	/// @param data 

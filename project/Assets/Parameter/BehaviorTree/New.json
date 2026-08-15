@@ -217,8 +217,8 @@
             "name": "Attack_000",
             "output_pin": 170,
             "pos": [
-                463.0,
-                359.0
+                450.0,
+                360.0
             ],
             "sub_tree_file_name": "Kick_001",
             "type": 8

@@ -1155,7 +1155,7 @@
             "downGettingUpStateBT": "",
             "downLyingStateBT": "",
             "downStaggerStateBT": "",
-            "equipWeaponPrefabName": "",
+            "equipWeaponPrefabName": "baton",
             "grabbedStateBT": "",
             "grabbingStateBT": "",
             "guardMotionName": "BothHands",

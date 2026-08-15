@@ -427,6 +427,13 @@ void NPC::Draw()
 /// @brief 死亡処理
 void NPC::Dead()
 {
+	// 武器からのツリーは、ツリーの所有者を解除する
+	if (isReleaseWeaponTree_)
+	{
+		if (currentBehaviorTree_)currentBehaviorTree_->SetOwner(nullptr);
+		isReleaseWeaponTree_ = false;
+	}
+
 	// ビヘイビアツリーをクリアする
 	currentBehaviorTree_ = nullptr;
 	nextBehaviorTree_ = nullptr;
@@ -440,13 +447,6 @@ void NPC::Dead()
 
 	// 基底クラスの死亡処理
 	Character::Dead();
-
-	// 武器からのツリーは、ツリーの所有者を解除する
-	if (isReleaseWeaponTree_)
-	{
-		if (currentBehaviorTree_)currentBehaviorTree_->SetOwner(nullptr);
-		isReleaseWeaponTree_ = false;
-	}
 }
 
 /// @brief ビヘイビアツリーの変更をリクエストする
@@ -454,17 +454,26 @@ void NPC::Dead()
 void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 {
 	// 新しいビヘイビアツリーが現在のビヘイビアツリーと同じ名前の場合は、何もしない
-	if (newTree && currentBehaviorTree_ && (newTree->GetName() == currentBehaviorTree_->GetName()))
+	if (newTree && currentBehaviorTree_ && (newTree == currentBehaviorTree_) && !isReleaseWeaponTree_)
 		return;
 
 	// 現在のビヘイビアツリーが存在しない、または現在のビヘイビアツリーが成功または失敗状態の場合は、すぐに新しいビヘイビアツリーに切り替える
 	if (!currentBehaviorTree_ ||
 		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Success ||
-		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Failure)
+		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::Failure ||
+		currentBehaviorTree_->GetCurrentState() == BehaviorTree::State::None)
 	{
 		// 現在のビヘイビアツリーが存在する場合は中断する
 		if (currentBehaviorTree_)
 			currentBehaviorTree_->Abort();
+
+		// 現在のビヘイビアツリーが存在し、実行中の場合は、武器からのツリーであれば所有者を解除する
+		if (isReleaseWeaponTree_)
+		{
+			if (currentBehaviorTree_ && currentBehaviorTree_ != newTree) currentBehaviorTree_->SetOwner(nullptr);
+
+			isReleaseWeaponTree_ = false;
+		}
 
 		// 新しいビヘイビアツリーに切り替える
 		currentBehaviorTree_ = newTree;
@@ -476,14 +485,6 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 	}
 	else
 	{
-		// 現在のビヘイビアツリーが存在し、実行中の場合は、武器からのツリーであれば所有者を解除するs
-		if (isReleaseWeaponTree_)
-		{
-			if(currentBehaviorTree_ && currentBehaviorTree_ != newTree) currentBehaviorTree_->SetOwner(nullptr);
-
-			isReleaseWeaponTree_ = false;
-		}
-
 		// 現在のビヘイビアツリーが実行中の場合は、次のビヘイビアツリーとして設定する
 		nextBehaviorTree_ = newTree;
 

@@ -1284,6 +1284,9 @@ void Character::GrabWeapon(Weapon* weapon)
 	// 武器を持っている状態にする
 	weapon_ = weapon;
 
+	// 武器を掴んだことを通知する
+	isReleaseWeaponTree_ = false;
+
 	// 今の状態のツリーをリクエストする
 	stateMachine_->TreeRequest();
 }

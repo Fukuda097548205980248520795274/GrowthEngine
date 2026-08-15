@@ -184,6 +184,15 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack]["Jab_000"] = engine_->LoadAnimation(dir + "/attack/Jab_000", "Jab_000.gltf");
 	table_[MotionType::Attack]["Headbutt_000"] = engine_->LoadAnimation(dir + "/attack/Headbutt_000", "Headbutt_000.gltf");
 	table_[MotionType::Attack]["Drop_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Drop_Kick_000", "Drop_Kick_000.gltf");
+	table_[MotionType::Attack]["Sword_Attack_000"] = engine_->LoadAnimation(dir + "/attack/Sword_Attack_000", "Sword_Attack_000.gltf");
+	table_[MotionType::Attack]["Sword_Attack_001"] = engine_->LoadAnimation(dir + "/attack/Sword_Attack_001", "Sword_Attack_001.gltf");
+	table_[MotionType::Attack]["Sword_Slash_000"] = engine_->LoadAnimation(dir + "/attack/Sword_Slash_000", "Sword_Slash_000.gltf");
+	table_[MotionType::Attack]["Sword_Slash_001"] = engine_->LoadAnimation(dir + "/attack/Sword_Slash_001", "Sword_Slash_001.gltf");
+	table_[MotionType::Attack]["Sword_Slash_002"] = engine_->LoadAnimation(dir + "/attack/Sword_Slash_002", "Sword_Slash_002.gltf");
+	table_[MotionType::Attack]["Sword_Slash_003"] = engine_->LoadAnimation(dir + "/attack/Sword_Slash_003", "Sword_Slash_003.gltf");
+	table_[MotionType::Attack]["Sword_Combo_000"] = engine_->LoadAnimation(dir + "/attack/Sword_Combo_000", "Sword_Combo_000.gltf");
+	table_[MotionType::Attack]["Sword_Combo_001"] = engine_->LoadAnimation(dir + "/attack/Sword_Combo_001", "Sword_Combo_001.gltf");
+	table_[MotionType::Attack]["Sword_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Sword_Kick_000", "Sword_Kick_000.gltf");
 	table_[MotionType::Attack]["Zombie_Punch_000"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_000", "Zombie_Punch_000.gltf");
 	table_[MotionType::Attack]["Zombie_Punch_001"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_001", "Zombie_Punch_001.gltf");
 	table_[MotionType::Attack]["Zombie_Punch_002"] = engine_->LoadAnimation(dir + "/attack/Zombie_Punch_002", "Zombie_Punch_002.gltf");

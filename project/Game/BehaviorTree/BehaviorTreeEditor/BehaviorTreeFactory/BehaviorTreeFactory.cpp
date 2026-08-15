@@ -88,10 +88,10 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	std::unique_ptr<Node> runtimeNode = nullptr;
 
 	// 条件関数の宣言（条件ノードの場合に使用）
-	std::function<bool()> conditionFunc{};
+	std::function<bool(Character*)> conditionFunc{};
 
 	// ユーティリティ関数の宣言（ユーティリティノードの場合に使用）
-	std::function<float()> utilityFunc{};
+	std::function<float(Character*)> utilityFunc{};
 
 	// ノードの種類に応じて対応するランタイムノードを生成
 	if (editorNode.type == EditorNodeType::RestartingSelector)
@@ -113,7 +113,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	else if (editorNode.type == EditorNodeType::UtilitySelector)
 	{
 		// UtilitySelectorNode本体の生成
-		auto utilitySelector = std::make_unique<UtilitySelectorNode>();
+		auto utilitySelector = std::make_unique<UtilitySelectorNode>(character);
 
 		// 子ノードのIDを取得
 		std::vector<int> childIds = GetChildNodeIds(nodes, links, editorNode.id);
@@ -132,18 +132,18 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			}
 
 			// 評価タイプに応じてラムダ式（評価関数）を生成
-			std::function<float()> utilityFunc;
+			std::function<float(Character*)> utilityFunc;
 			switch (uType)
 			{
 				// 体力比率を評価する関数
 			case UtilityType::HpRatio:
-				utilityFunc = [character]() ->float { return static_cast<float>(character->GetHp()) / static_cast<float>(character->GetMaxHp()); };
+				utilityFunc = [character](Character* owner) ->float { return static_cast<float>(owner->GetHp()) / static_cast<float>(owner->GetMaxHp()); };
 				break;
 
 				// 固定値を返す関数（デフォルト）
 			case UtilityType::FixedDefault:
 			default:
-				utilityFunc = []() ->float { return 0.5f; };
+				utilityFunc = [character](Character* owner) ->float { return 0.5f; };
 				break;
 			}
 
@@ -190,37 +190,37 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			// 関数なし、常に true を返す条件
 		case ConditionType::None:
 		default:
-			conditionFunc = []() { return true; };
+			conditionFunc = [](Character* character) { return true; };
 			break;
 
 			// ターゲットがいるかどうかをチェックする条件
 		case ConditionType::HasTarget:
-			conditionFunc = [character]() { return character->HasTarget(); };
+			conditionFunc = [](Character* character) { return character->HasTarget(); };
 			break;
 
 			// ターゲットがダウンしているかどうかをチェックする条件
 		case ConditionType::IsTargetDown:
-			conditionFunc = [character]() { return character->HasTarget() && character->GetLockOnTarget()->IsDown(); };
+			conditionFunc = [](Character* character) { return character->HasTarget() && character->GetLockOnTarget()->IsDown(); };
 			break;
 
 			// ターゲットがダウンしていないかどうかをチェックする条件
 		case ConditionType::IsNotTargetDown:
-			conditionFunc = [character]() { return !character->HasTarget() || !character->GetLockOnTarget()->IsDown(); };
+			conditionFunc = [](Character* character) { return !character->HasTarget() || !character->GetLockOnTarget()->IsDown(); };
 			break;
 
 			// 掴んでいるかどうかをチェックする条件
 		case ConditionType::IsGrabbing:
-			conditionFunc = [character]() { return character->IsGrabbing(); };
+			conditionFunc = [](Character* character) { return character->IsGrabbing(); };
 			break;
 
 			// 掴んでいないかどうかをチェックする条件
 		case ConditionType::IsNotGrabbing:
-			conditionFunc = [character]() { return !character->IsGrabbing(); };
+			conditionFunc = [](Character* character) { return !character->IsGrabbing(); };
 			break;
 
 			// ターゲットが一定距離内にいるかどうかをチェックする条件
 		case ConditionType::IsTargetInRange:
-			conditionFunc = [character, editorNode]()
+			conditionFunc = [editorNode](Character* character)
 				{
 					if (!character->HasTarget()) return false;
 					float distance = (character->GetLockOnTarget()->GetWorldPosition() - character->GetWorldPosition()).Length();
@@ -230,7 +230,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが一定距離外にいるかどうかをチェックする条件
 		case ConditionType::IsTargetOutOfRange:
-			conditionFunc = [character, editorNode]()
+			conditionFunc = [editorNode](Character* character)
 				{
 					if (!character->HasTarget()) return true;
 					float distance = (character->GetLockOnTarget()->GetWorldPosition() - character->GetWorldPosition()).Length();
@@ -240,7 +240,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが攻撃しているかどうかをチェックする条件
 		case ConditionType::IsTargetAttacking:
-			conditionFunc = [character]()
+			conditionFunc = [](Character* character)
 				{
 					if (!character->HasTarget()) return false;
 					return character->GetLockOnTarget()->IsAttack();
@@ -249,7 +249,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが攻撃していないかどうかをチェックする条件
 		case ConditionType::IsTargetNotAttacking:
-			conditionFunc = [character]()
+			conditionFunc = [](Character* character)
 				{
 					if (!character->HasTarget()) return true;
 					return !character->GetLockOnTarget()->IsAttack();
@@ -258,7 +258,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが攻撃動作中かどうかをチェックする条件
 		case ConditionType::IsTargetInAttackSequence:
-			conditionFunc = [character]()
+			conditionFunc = [](Character* character)
 				{
 					if (!character->HasTarget()) return false;
 					return character->GetLockOnTarget()->IsInAttackSequence();
@@ -267,7 +267,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// ターゲットが攻撃動作中でないかどうかをチェックする条件
 		case ConditionType::IsTargetNotInAttackSequence:
-			conditionFunc = [character]()
+			conditionFunc = [](Character* character)
 				{
 					if (!character->HasTarget()) return true;
 					return !character->GetLockOnTarget()->IsInAttackSequence();
@@ -276,43 +276,43 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 
 			// 攻撃動作中かどうかをチェックする条件
 		case ConditionType::IsInAttackSequence:
-			conditionFunc = [character]() {return character->IsInAttackSequence();};
+			conditionFunc = [](Character* character) { return character->IsInAttackSequence(); };
 			break;
 
 			// 攻撃動作中でないかどうかをチェックする条件
 		case ConditionType::IsNotInAttackSequence:
-			conditionFunc = [character]() {return !character->IsInAttackSequence();};
+			conditionFunc = [](Character* character) { return !character->IsInAttackSequence(); };
 			break;
 
 			// 回避動作中かどうかをチェックする条件
 		case ConditionType::IsAvoiding:
-			conditionFunc = [character]() {return character->IsAvoid();};
+			conditionFunc = [](Character* character) { return character->IsAvoid(); };
 			break;
 
 			// 回避動作中でないかどうかをチェックする条件
 		case ConditionType::IsNotAvoiding:
-			conditionFunc = [character]() {return !character->IsAvoid();};
+			conditionFunc = [](Character* character) { return !character->IsAvoid(); };
 			break;
 
 		case ConditionType::IsDamageReaction:
-			conditionFunc = [character]() {return character->IsDamageReaction(); };
+			conditionFunc = [](Character* character) { return character->IsDamageReaction(); };
 			break;
 
 		case ConditionType::IsNotDamageReaction:
-			conditionFunc = [character]() {return !character->IsDamageReaction(); };
+			conditionFunc = [](Character* character) { return !character->IsDamageReaction(); };
 			break;
 
 		case ConditionType::IsChangeState:
-			conditionFunc = [character]() {return character->GetStateMachine()->IsChangeState(); };
+			conditionFunc = [](Character* character) { return character->GetStateMachine()->IsChangeState(); };
 			break;
 
 		case ConditionType::IsNotChangeState:
-			conditionFunc = [character]() {return !character->GetStateMachine()->IsChangeState(); };
+			conditionFunc = [](Character* character) { return !character->GetStateMachine()->IsChangeState(); };
 			break;
 		}
 
 		// 条件関数を使用して条件ノードを生成
-		runtimeNode = std::make_unique<ConditionNode>(conditionFunc);
+		runtimeNode = std::make_unique<ConditionNode>(character, conditionFunc);
 	}
 	else if(editorNode.type == EditorNodeType::Action)
 	{

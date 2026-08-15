@@ -12,7 +12,7 @@ void StageSpawner::Initialize()
 /// @brief 実体を生成する
 /// @param data 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponData)
+void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponData, bool isRuntime)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -45,7 +45,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;
-		if (strlen(data.equipWeaponPrefabName) > 0)
+		if (isRuntime && strlen(data.equipWeaponPrefabName) > 0)
 		{
 			// 武器プレハブのデータを読み込む
 			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
@@ -158,7 +158,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 /// @param data 
 /// @param battleAreas 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData)
+void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData, bool isRuntime)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -194,7 +194,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;
-		if (strlen(data.equipWeaponPrefabName) > 0)
+		if (isRuntime && strlen(data.equipWeaponPrefabName) > 0)
 		{
 			// 武器プレハブのデータを読み込む
 			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
