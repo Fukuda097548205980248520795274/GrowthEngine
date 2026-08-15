@@ -44,6 +44,14 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	// 初期化データを設定する
 	SetInitData(initData);
 
+	currentComboTreeX_ = nullptr;
+	currentComboTreeY_ = nullptr;
+	currentComboTreeB_ = nullptr;
+	nextComboTreeX_ = nullptr;
+	nextComboTreeY_ = nullptr;
+	nextComboTreeB_ = nullptr;
+	isReleaseWeaponTree_ = false;
+
 	// ステートを初期化する
 	stateMachine_->ChangeState("None");
 
