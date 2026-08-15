@@ -81,6 +81,15 @@ void Player::Update()
 	// レイジゲージの更新
 	RageGageUpdate();
 
+	auto weapons = Weapon::GetWeapons();
+	for (auto& weapon : weapons)
+	{
+		if ((GetWorldPosition() - weapon->GetWorldPosition()).LengthSq() < 9.0f)
+		{
+			weapon->SetIsPlayerInRange(true);
+		}
+	}
+
 	// カットシーン中は移動を停止して、基底クラスの更新処理のみ行う
 	if (Character::IsCutsceneActive() || !updateEnabled_)
 	{

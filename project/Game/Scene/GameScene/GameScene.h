@@ -503,6 +503,9 @@ private:
 	std::unique_ptr<Sprite> navigationArrowSprite_ = nullptr;
 	std::unique_ptr<NavigationArrow> navigationArrow_ = nullptr;
 
+	/// @brief 武器取得ボタンのプレハブ
+	std::unique_ptr<PrefabBaseSprite> weaponGetButtonSpritePrefab_ = nullptr;
+
 
 private:
 

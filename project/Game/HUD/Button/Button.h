@@ -18,7 +18,7 @@ public:
 protected:
 
 	/// @brief ボタンのスプライト
-	PrefabInstanceSprite* buttonSprite_;
+	PrefabInstanceSprite* buttonSprite_ = nullptr;
 
 	/// @brief α値の割合
 	float alphaRate_ = 0.0f;

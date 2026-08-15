@@ -9,6 +9,8 @@ PrefabInstanceSprite::PrefabInstanceSprite(std::function<void(const Engine::Pref
 	param_.transform.scale = param->transform.scale;
 	param_.transform.rotate = param->transform.rotate;
 	param_.transform.translate = param->transform.translate;
+	
+	param_.parent = nullptr;
 
 	param_.material.color = param->material.color;
 	param_.material.uv.scale = param->material.uv.scale;

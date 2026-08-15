@@ -4,6 +4,7 @@
 #include "ComboTree/ComboTree.h"
 
 class Character;
+class WeaponGetButton;
 
 enum class WeaponCategory
 {
@@ -49,6 +50,9 @@ public:
 
 		/// @brief 着地判定グループ
 		Collision3DInstanceCapsule* landingCollision = nullptr;
+
+		/// @brief 武器取得ボタン
+		WeaponGetButton* button = nullptr;
 	};
 
 public:
@@ -120,6 +124,10 @@ public:
 	/// @return 
 	WeaponStateTreeSet* GetStateTreeSet(const std::string& stateName);
 
+	/// @brief プレイヤーが入手できる範囲にいるかどうかを設定する
+	/// @param isInRange 
+	void SetIsPlayerInRange(bool isInRange) { isPlayerInRange_ = isInRange; }
+
 
 protected:
 
@@ -132,8 +140,14 @@ protected:
 	/// @brief 武器のリスト
 	static std::vector<Weapon*> weapons_;
 
+	// 入手できる範囲にプレイヤーがいるかどうか
+	bool isPlayerInRange_ = false;
+
 	// 武器が壊れたかどうか
 	bool isBreak_ = false;
+
+	/// @brief 壊れた後の待機時間
+	float finishedBreakTimer_ = 1.0f;
 
 	// 武器のカテゴリ
 	WeaponCategory category_ = WeaponCategory::None;
@@ -155,6 +169,15 @@ protected:
 
 	/// @brief 武器の状態ツリーセット
 	std::unordered_map<std::string, WeaponStateTreeSet> stateTrees_;
+
+
+protected:
+
+	/// @brief 武器取得ボタンの更新
+	void UpdateButton();
+
+	/// @brief 武器取得ボタン
+	WeaponGetButton* button_ = nullptr;
 
 
 protected:

@@ -1537,6 +1537,9 @@
     <Filter Include="Game\HUD\RageGage">
       <UniqueIdentifier>{d0b421dc-ef04-42af-a589-8c2826fe8396}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\Button\WeaponGetButton">
+      <UniqueIdentifier>{4782e28e-51dc-47b2-a07c-6fd14439eb5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2786,6 +2789,9 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\RageGage\RageGage.cpp">
       <Filter>Game\HUD\RageGage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp">
+      <Filter>Game\HUD\Button\WeaponGetButton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4159,6 +4165,9 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\RageGage\RageGage.h">
       <Filter>Game\HUD\RageGage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h">
+      <Filter>Game\HUD\Button\WeaponGetButton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

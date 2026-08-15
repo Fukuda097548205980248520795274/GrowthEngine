@@ -6,6 +6,8 @@
 #include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
 
+#include "HUD/Button/WeaponGetButton/WeaponGetButton.h"
+
 #include <numbers>
 
 // 武器インスタンスの共有リスト
@@ -58,6 +60,9 @@ Weapon::Weapon(const InitData& initData) : Entity()
 		landingCollision_->param_->radius = 0.05f;
 		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
 	}
+
+	// 武器取得ボタン
+	button_ = initData.button;
 }
 
 /// @brief デストラクタ
@@ -83,16 +88,38 @@ Weapon::~Weapon()
 	{
 		weapons_.erase(it);
 	}
+
+	// 武器取得ボタンを削除する
+	if (button_)
+		button_->Break();
 }
 
 /// @brief 更新処理
 void Weapon::Update()
 {
+	// 有効でないときは更新しない
+	if (!isActive_)return;
+
+	// 武器取得ボタンの更新
+	UpdateButton();
+
 	// 更新が無効なら何もしない
 	if (!updateEnabled_)return;
 
-	// 有効でないときは更新しない
-	if (!isActive_)return;
+	// 武器が壊れた後の待機時間があるときは、待機時間を減らす
+	if (isBreak_)
+	{
+		// 壊れた後の待機時間を減らす
+		finishedBreakTimer_ -= engine_->GetDeltaTime() * engine_->GetTimeScale();
+
+		// タイマーが0以下になったら削除する
+		if (finishedBreakTimer_ <= 0.0f)
+		{
+			Delete();
+		}
+
+		return;
+	}
 
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();
@@ -149,7 +176,7 @@ void Weapon::Update()
 		if (landingCollision_)
 		{
 			landingCollision_->param_->diff = GetWorldPosition() - landingCollision_->param_->start;
-			landingCollision_->param_->start = GetWorldPosition();
+			landingCollision_->param_->start = GetWorldPosition() + Vector3(0.0f, -0.05f, 0.0f);
 		}
 	}
 }
@@ -238,6 +265,37 @@ WeaponStateTreeSet* Weapon::GetStateTreeSet(const std::string& stateName)
 	return nullptr;
 }
 
+/// @brief 武器取得ボタンの更新
+void Weapon::UpdateButton()
+{
+	// 武器取得ボタンがないときは何もしない
+	if (!button_)return;
+
+	if (isBreak_)
+	{
+		button_->SetEnable(false);
+	}
+	else
+	{
+		// 所持者がいるときはボタンを非表示にする
+		if (owner_ || !isPlayerInRange_)
+		{
+			button_->SetEnable(false);
+
+		}
+		else
+		{
+			// 所持者がいないときはボタンを表示する
+			button_->SetEnable(true);
+		}
+	}
+
+	isPlayerInRange_ = false;
+
+	// ボタンの位置を武器の上に設定する
+	button_->SetPosition(GetWorldPosition() + Vector3(0.0f, 0.5f, 0.0f));
+}
+
 /// @brief 落下の更新
 /// @param deltaTime 
 void Weapon::FallUpdate(float deltaTime)
@@ -288,7 +346,7 @@ void Weapon::LandingCheck()
 
 			// 着地したときの位置を計算する
 			auto floorCollision = static_cast<Collision3DInstanceAABB*>(hitOpponent);
-			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y;
+			worldTransform_->translate_.y = floorCollision->param_->center.y + floorCollision->param_->radius.y + 0.05f;
 		}
 
 		// 着地したので接地フラグを立てる

@@ -6,6 +6,7 @@
 #include <numbers>
 
 #include "HUD/HP/BossHP/BossHP.h"
+#include "HUD/Button/WeaponGetButton/WeaponGetButton.h"
 
 namespace
 {
@@ -334,6 +335,9 @@ void GameScene::Initialize()
 	engine_->LoadRenderPass("HUD", [&]()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
+
+			// 武器入手ボタンの描画
+			weaponGetButtonSpritePrefab_->Draw();
 
 			// 体力バーの描画
 			hpFrameMiddleSprite_->Draw();
@@ -727,9 +731,14 @@ Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData, const Behavior
 {
 	Weapon* weapon = nullptr;
 
+	WeaponGetButton::InitData buttonInitData;
+	buttonInitData.buttonSprite = weaponGetButtonSpritePrefab_->CreateInstance();
+	std::unique_ptr<WeaponGetButton> button = std::make_unique<WeaponGetButton>(buttonInitData);
+
 	Weapon::InitData weaponInitData = initData;
 	weaponInitData.landingCollision = landingCollision_->CreateInstance();
 	weaponInitData.model = oneHandedWeaponModel_->CreateInstance();
+	weaponInitData.button = button.get();
 
 	// 武器の生成処理
 	std::unique_ptr<Weapon> newWeapon = std::make_unique<Weapon>(weaponInitData);
@@ -890,6 +899,9 @@ Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData, const Behavior
 
 	// 武器のリストに追加する
 	weapons_.push_back(std::move(newWeapon));
+
+	// HUDのリストに追加する
+	huds_.push_back(std::move(button));
 
 	return weapon;
 }
@@ -1523,6 +1535,10 @@ void GameScene::LoadHUDs()
 	// ボタンの画像
 	rbButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/rb_button.png"), "RB_Button_Sprite");
 	lbButtonSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/lb_button.png"), "LB_Button_Sprite");
+
+	weaponGetButtonSpritePrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/button_get_weapon.png"), 100, "Weapon_Get_Button_Sprite");
+	weaponGetButtonSpritePrefab_->param_->transform.scale = Vector2(0.3f, 0.3f);
+
 
 
 	// スティック操作のチュートリアルを生成する

@@ -149,6 +149,7 @@
     <ClCompile Include="Game\Action\Telegraph\Telegraph.cpp" />
     <ClCompile Include="Game\AIMetricsEditor\AIMetricsEditor.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
+    <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp" />
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp" />
     <ClCompile Include="Game\HUD\RageGage\RageGage.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp" />
@@ -1238,6 +1239,7 @@
     <ClInclude Include="Game\Action\Telegraph\Telegraph.h" />
     <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h" />
+    <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h" />
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h" />
     <ClInclude Include="Game\HUD\RageGage\RageGage.h" />
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h" />
