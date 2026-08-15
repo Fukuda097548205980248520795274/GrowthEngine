@@ -431,6 +431,15 @@ void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY
 	}
 	else
 	{
+		// 武器からのツリーは、ツリーの所有者を解除する
+		if (isReleaseWeaponTree_)
+		{
+			if (currentComboTreeX_ && currentComboTreeX_ != comboTreeX) currentComboTreeX_->SetOwner(nullptr);
+			if (currentComboTreeY_ && currentComboTreeY_ != comboTreeY) currentComboTreeY_->SetOwner(nullptr);
+			if (currentComboTreeB_ && currentComboTreeB_ != comboTreeB) currentComboTreeB_->SetOwner(nullptr);
+			isReleaseWeaponTree_ = false;
+		}
+
 		// 攻撃中でない場合は現在のコンボツリーとして保存する
 		currentComboTreeX_ = comboTreeX;
 		currentComboTreeY_ = comboTreeY;

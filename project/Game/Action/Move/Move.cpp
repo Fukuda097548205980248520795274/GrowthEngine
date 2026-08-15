@@ -5,7 +5,7 @@
 Move::~Move()
 {
 	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
-	if (owner_->GetCurrentMove() == this)
+	if (owner_ && owner_->GetCurrentMove() == this)
 		owner_->SetCurrentMove(nullptr);
 }
 
@@ -13,7 +13,10 @@ Move::~Move()
 void Move::Exec()
 {
 	// 移動ポインタを渡す
-	owner_->SetCurrentMove(this);
+	if (owner_)
+	{
+		owner_->SetCurrentMove(this);
+	}
 
 	// 基底クラスのExecを呼び出す
 	Action::Exec();
@@ -33,7 +36,7 @@ void Move::Exit()
 	BreakpointOnExit();
 
 	// 自分が現在の移動処理として登録されている場合のみ、停止とクリアを行う
-	if (owner_->GetCurrentMove() == this)
+	if (owner_ && owner_->GetCurrentMove() == this)
 	{
 		// 移動入力をリセットする
 		if(owner_->IsStance())owner_->SetMoveInputXZ(Vector2(0.0f, 0.0f), 0.0f);

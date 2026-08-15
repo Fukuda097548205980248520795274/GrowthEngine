@@ -1182,12 +1182,6 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 
 	// 掴まれた相手の処理を呼び出す
 	target->OnGrabbed(this);
-
-	//// 掴みエフェクトを発生させる
-	//if (hitPosition)
-	//{
-	//	effectManager_->GrabImpact000(*hitPosition);
-	//}
 	
 	// 掴みSEを再生する
 	soundManager_->SeGrab();

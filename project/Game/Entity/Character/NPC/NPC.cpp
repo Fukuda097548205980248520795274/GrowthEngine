@@ -476,6 +476,14 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 	}
 	else
 	{
+		// 現在のビヘイビアツリーが存在し、実行中の場合は、武器からのツリーであれば所有者を解除するs
+		if (isReleaseWeaponTree_)
+		{
+			if(currentBehaviorTree_ && currentBehaviorTree_ != newTree) currentBehaviorTree_->SetOwner(nullptr);
+
+			isReleaseWeaponTree_ = false;
+		}
+
 		// 現在のビヘイビアツリーが実行中の場合は、次のビヘイビアツリーとして設定する
 		nextBehaviorTree_ = newTree;
 

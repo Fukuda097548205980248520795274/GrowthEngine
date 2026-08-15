@@ -71,6 +71,12 @@ Weapon::~Weapon()
 	if (model_)model_->isDelete_ = true;
 	model_ = nullptr;
 
+	if (owner_)
+	{
+		owner_->ReleaseWeapon();
+		owner_ = nullptr;
+	}
+
 	// インスタンスリストから自分を除外する
 	auto it = std::find(weapons_.begin(), weapons_.end(), this);
 	if (it != weapons_.end())

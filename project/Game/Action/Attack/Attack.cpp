@@ -5,7 +5,10 @@
 void Attack::Exec()
 {
 	// 攻撃ポインタを渡す
-	owner_->SetCurrentAttack(this);
+	if (owner_)
+	{
+		owner_->SetCurrentAttack(this);
+	}
 
 	// 基底クラスのExecを呼び出す
 	Action::Exec();
@@ -14,7 +17,7 @@ void Attack::Exec()
 /// @brief 中断・終了
 void Attack::Exit()
 {
-	if (owner_->GetCurrentAttack() == this)
+	if (owner_ && owner_->GetCurrentAttack() == this)
 	{
 		// 攻撃ポインタをnullptrにする
 		owner_->SetCurrentAttack(nullptr);
@@ -27,7 +30,10 @@ void Attack::Exit()
 void Attack::Reset()
 {
 	// もし現在の攻撃が自分自身であれば、攻撃ポインタをnullptrにする
-	owner_->SetCurrentAttack(nullptr);
+	if (owner_)
+	{
+		owner_->SetCurrentAttack(nullptr);
+	}
 
 	Action::Reset();
 }
