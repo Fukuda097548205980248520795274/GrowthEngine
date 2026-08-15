@@ -76,7 +76,6 @@ void CharacterState::HandleBehaviorTreeNotSet()
 	if (!owner_->IsPlayer())
 	{
 		NPC* npc = static_cast<NPC*>(owner_);
-		BehaviorTree* currentTree = npc->GetBehaviorTree();
 
 		// 適用すべきツリーを決定する
 		BehaviorTree* targetTree = behaviorTree_.get();
@@ -87,7 +86,7 @@ void CharacterState::HandleBehaviorTreeNotSet()
 		}
 
 		// 現在のツリーが空、かつ適用すべきツリーが存在する場合にセットする
-		if (!currentTree && targetTree)
+		if (!npc->GetBehaviorTree() && !npc->GetNextBehaviorTree() && targetTree)
 		{
 			npc->SetBehaviorTree(targetTree);
 		}

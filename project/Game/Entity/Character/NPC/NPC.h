@@ -55,6 +55,10 @@ public:
 	/// @return 
 	BehaviorTree* GetBehaviorTree() const override { return currentBehaviorTree_; }
 
+	/// @brief 次のビヘイビアツリーの取得
+	/// @return 
+	BehaviorTree* GetNextBehaviorTree() const { return nextBehaviorTree_; }
+
 	/// @brief ビヘイビアツリーの変更がリクエストされているかどうかを取得する
 	/// @return 
 	bool IsChangeBehaviorTree()const { return isChangeBehaviorTree_; }

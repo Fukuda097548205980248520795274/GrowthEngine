@@ -117,6 +117,35 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		// キャラクターの基本設定UIを描画
 		StageEditorUIHelper::DrawCharacterBaseSettings(currentData, placementList, isDirty, history_, false);
 
+		ImGui::Separator();
+		ImGui::Text("初期装備武器");
+
+		// プレハブ一覧を取得
+		std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
+		std::string currentWeapon = currentData.equipWeaponPrefabName;
+
+		if (ImGui::BeginCombo("武器プレハブ", currentWeapon.empty() ? "なし" : currentWeapon.c_str()))
+		{
+			// 「なし」を選択できるようにする
+			if (ImGui::Selectable("なし", currentWeapon.empty()))
+			{
+				memset(currentData.equipWeaponPrefabName, 0, sizeof(currentData.equipWeaponPrefabName));
+				isDirty = true;
+			}
+
+			for (const auto& prefabName : prefabNames)
+			{
+				bool isSelected = (currentWeapon == prefabName);
+				if (ImGui::Selectable(prefabName.c_str(), isSelected))
+				{
+					strncpy_s(currentData.equipWeaponPrefabName, prefabName.c_str(), sizeof(currentData.equipWeaponPrefabName) - 1);
+					isDirty = true;
+				}
+				if (isSelected) ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+
 		// モーションの設定UIを描画
 		StageEditorUIHelper::DrawCharacterMotionSettings(currentData, placementList, isDirty, history_, motionManager_, false);
 
@@ -238,8 +267,16 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.guardMotion = currentData.guardMotion;
 
 		// 実際のゲーム画面に生成してリストに追加
-		spawner_->SpawnActualEntity(newData);
-		placementList.push_back(newData);
+		PlacementData weaponData = {};
+		spawner_->SpawnActualEntity(newData, weaponData);
+		if (weaponData.instancePtr)
+		{
+			placementList.push_back(weaponData);
+		}
+		else
+		{
+			placementList.push_back(newData);
+		}
 		selectedIndex = static_cast<int>(placementList.size()) - 1;
 	}
 

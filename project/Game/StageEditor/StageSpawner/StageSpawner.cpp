@@ -1,5 +1,6 @@
 #include "StageSpawner.h"
 #include "Scene/GameScene/GameScene.h"
+#include "../StageEditorUI/StageEditorUIHelper/StageEditorUIHelper.h"
 
 /// @brief 初期化
 void StageSpawner::Initialize()
@@ -10,7 +11,8 @@ void StageSpawner::Initialize()
 
 /// @brief 実体を生成する
 /// @param data 
-void StageSpawner::SpawnActualEntity(PlacementData& data)
+/// @param weaponData 
+void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponData)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -41,8 +43,40 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
 		initData.hGuardMotion = data.guardMotion.handle;
 
+		// 武器の生成
+		Weapon* newWeapon = nullptr;
+		if (strlen(data.equipWeaponPrefabName) > 0)
+		{
+			// 武器プレハブのデータを読み込む
+			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
+
+			if (weaponData.category == EditCategory::Weapon)
+			{
+				Weapon::InitData weaponInitData;
+				weaponInitData.position = data.position;
+				weaponInitData.durability = weaponData.durability;
+				weaponInitData.attackPower = weaponData.attackPower;
+				weaponInitData.isUnbreakable = weaponData.isUnbreakable;
+				weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
+				weaponInitData.model = nullptr;
+
+				// 武器の実体を生成
+				newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
+
+				// ポインタを保存しておく
+				weaponData.instancePtr = newWeapon;
+			}
+		}
+
+		// キャラクターの初期化データに武器を渡す
+		initData.weapon = newWeapon;
+
 		// タグに応じて、NPCの初期化データを設定する
 		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees, data.name);
+
+		// 武器の所有者を設定
+		if (newWeapon)
+			newCharacter->GrabWeapon(newWeapon);
 
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;
@@ -123,7 +157,8 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 /// @brief 実体を生成する（戦闘エリアの情報も渡す）
 /// @param data 
 /// @param battleAreas 
-void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas)
+/// @param weaponData 
+void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -157,8 +192,42 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
 		initData.hGuardMotion = data.guardMotion.handle;
 
+		// 武器の生成
+		Weapon* newWeapon = nullptr;
+		if (strlen(data.equipWeaponPrefabName) > 0)
+		{
+			// 武器プレハブのデータを読み込む
+			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
+
+			if (weaponData.category == EditCategory::Weapon)
+			{
+				Weapon::InitData weaponInitData;
+				weaponInitData.position = data.position;
+				weaponInitData.durability = weaponData.durability;
+				weaponInitData.attackPower = weaponData.attackPower;
+				weaponInitData.isUnbreakable = weaponData.isUnbreakable;
+				weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
+				weaponInitData.model = nullptr;
+
+				// 武器の実体を生成
+				newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
+
+				// ポインタを保存しておく
+				weaponData.instancePtr = newWeapon;
+			}
+		}
+
+		// キャラクターの初期化データに武器を渡す
+		initData.weapon = newWeapon;
+
 		// タグに応じて、NPCの初期化データを設定する
 		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees, data.name);
+
+		// 武器の所有者を設定
+		if (newWeapon)
+			newCharacter->GrabWeapon(newWeapon);
+
+
 
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;

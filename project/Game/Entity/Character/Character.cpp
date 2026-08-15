@@ -1854,9 +1854,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 		model_->SetParent(worldTransform_.get());
 	}
 
-	// 武器
-	GrabWeapon(initData.weapon);
-
 	// 攻撃用トレイル
 	if (initData.attackTrail)
 	{

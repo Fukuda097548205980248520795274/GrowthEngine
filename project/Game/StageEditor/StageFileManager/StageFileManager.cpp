@@ -62,14 +62,23 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 		{
 			PlacementData data;
 
+			// キャラクターが装備している武器のデータを復元するための一時的な変数
+			PlacementData weaponData = {};
+
 			// JSONから配置データを復元
 			fromJson(itemJson, data);
 
 			// 実際のゲーム内エンティティを生成
-			spawner->SpawnActualEntity(data);
+			spawner->SpawnActualEntity(data, weaponData);
 
 			// リストに追加
 			outDataList.push_back(data);
+
+			// 武器のデータもリストに追加
+			if (weaponData.instancePtr != nullptr)
+			{
+				outDataList.push_back(weaponData);
+			}
 		}
 	}
 

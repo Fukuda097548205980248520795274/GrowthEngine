@@ -548,7 +548,8 @@ namespace StageEditorUIHelper
 				eventTriggerPtr->SetEventType(currentType);
 
 				// 配置されている実体を再生成して反映する
-				spawner->SpawnActualEntity(target);
+				PlacementData weaponData = {};
+				spawner->SpawnActualEntity(target, weaponData);
 			}
 			else
 			{

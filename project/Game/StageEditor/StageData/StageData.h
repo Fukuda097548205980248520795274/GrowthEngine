@@ -93,6 +93,9 @@ struct PlacementData
 	/// @brief イベントトリガーのカットシーン名 (イベントトリガーの場合)
 	char eventCutsceneName[256] = "";
 
+	/// @brief 装備する武器のプレハブ名 (キャラクターの場合)
+	char equipWeaponPrefabName[256] = "";
+
 	// モーション設定 (キャラクターの場合)
 	MotionConfig standMotion;
 	MotionConfig stanceMotion;
@@ -217,6 +220,7 @@ inline void toJson(json& j, const PlacementData& s)
 		j["avoidLeftMotionName"] = s.avoidLeftMotion.name;
 		j["avoidRightMotionName"] = s.avoidRightMotion.name;
 		j["guardMotionName"] = s.guardMotion.name;
+		j["equipWeaponPrefabName"] = s.equipWeaponPrefabName;
 
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
 		if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
@@ -739,6 +743,9 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.avoidLeftMotion.name = j.value("avoidLeftMotionName", "Front");
 	s.avoidRightMotion.name = j.value("avoidRightMotionName", "Back");
 	s.guardMotion.name = j.value("guardMotionName", "BothHands");
+	
+	std::string weaponNameStr = j.value("equipWeaponPrefabName", "");
+	strncpy_s(s.equipWeaponPrefabName, weaponNameStr.c_str(), sizeof(s.equipWeaponPrefabName) - 1);
 
 	s.standMotion.handle = motionManager->GetMotion(MotionType::Stand, s.standMotion.name);
 	s.stanceMotion.handle = motionManager->GetMotion(MotionType::Stance, s.stanceMotion.name);

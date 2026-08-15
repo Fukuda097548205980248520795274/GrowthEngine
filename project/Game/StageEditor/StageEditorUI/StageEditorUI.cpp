@@ -775,8 +775,13 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
 
 					// 実体をシーンに生成してリストに追加
-					spawner_->SpawnActualEntity(newData);
+					PlacementData weaponData = {};
+					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
+					if (weaponData.instancePtr)
+					{
+						placementList.push_back(weaponData);
+					}
 
 					// ペーストしたオブジェクトを自動的に選択状態にする
 					selectedIndex_ = static_cast<int>(placementList.size()) - 1;
@@ -806,8 +811,13 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					newData.instancePtr = nullptr;
 
 					// 実体をシーンに生成してリストに追加
-					spawner_->SpawnActualEntity(newData);
+					PlacementData weaponData = {};
+					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
+					if (weaponData.instancePtr)
+					{
+						placementList.push_back(weaponData);
+					}
 
 					// 複製したオブジェクトを自動的に選択状態にする
 					selectedIndex_ = static_cast<int>(placementList.size()) - 1;

@@ -177,8 +177,13 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					newData.instancePtr = nullptr; // 新しい実体を作るため初期化
 
 					// 実体を生成して追加
-					spawner_->SpawnActualEntity(newData);
+					PlacementData weaponData = {};
+					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
+					if (weaponData.instancePtr)
+					{
+						placementList.push_back(weaponData);
+					}
 
 					// 複製したオブジェクトを選択状態にする
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
@@ -238,8 +243,13 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
 					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
 
-					spawner_->SpawnActualEntity(newData);
+					PlacementData weaponData = {};
+					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
+					if (weaponData.instancePtr)
+					{
+						placementList.push_back(weaponData);
+					}
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
 					listChanged = true;
 				}
@@ -314,6 +324,37 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 
 			// 共通ヘルパーからキャラクターの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawCharacterBaseSettings(target, placementList, isDirty, history_, true);
+
+
+			ImGui::Separator();
+			ImGui::Text("初期装備武器");
+
+			// プレハブ一覧を取得
+			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
+			std::string currentWeapon = target.equipWeaponPrefabName;
+
+			if (ImGui::BeginCombo("武器プレハブ", currentWeapon.empty() ? "なし" : currentWeapon.c_str()))
+			{
+				// 「なし」を選択できるようにする
+				if (ImGui::Selectable("なし", currentWeapon.empty()))
+				{
+					memset(target.equipWeaponPrefabName, 0, sizeof(target.equipWeaponPrefabName));
+					isDirty = true;
+				}
+
+				for (const auto& prefabName : prefabNames)
+				{
+					bool isSelected = (currentWeapon == prefabName);
+					if (ImGui::Selectable(prefabName.c_str(), isSelected))
+					{
+						strncpy_s(target.equipWeaponPrefabName, prefabName.c_str(), sizeof(target.equipWeaponPrefabName) - 1);
+						isDirty = true;
+					}
+					if (isSelected) ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
 
 			// モーション設定UIを描画し、変更があったかどうかを取得
 			bool motionChanged = 
@@ -596,7 +637,8 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					if (backupPtr != nullptr && spawner_ != nullptr)
 					{
 						spawner_->DeleteActualEntity(placementList[idx]);
-						spawner_->SpawnActualEntity(placementList[idx]);
+						PlacementData weaponData = {};
+						spawner_->SpawnActualEntity(placementList[idx], weaponData);
 					}
 				}
 				isDirty = true;
