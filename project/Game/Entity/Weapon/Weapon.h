@@ -102,6 +102,22 @@ public:
 	/// @param isActive 
 	void SetActive(bool isActive) { isActive_ = isActive; }
 
+	/// @brief 耐久力を設定する
+	/// @param durability 
+	void SetDurability(int durability) { durability_ = durability; maxDurability_ = std::max(maxDurability_, durability); }
+
+	/// @brief 最大耐久力を取得する
+	/// @return 
+	int GetMaxDurability() const { return maxDurability_; }
+
+	/// @brief 攻撃力を設定する
+	/// @param attackPower 
+	void SetAttackPower(float attackPower) { attackPower_ = attackPower; }
+
+	/// @brief 壊れない武器かどうかを設定する
+	/// @param isUnbreakable 
+	void SetIsUnbreakable(bool isUnbreakable) { isUnbreakable_ = isUnbreakable; }
+
 	/// @brief 有効かどうかを取得する
 	/// @return 
 	bool IsActive() const { return isActive_; }
@@ -154,6 +170,9 @@ protected:
 
 	// 耐久力
 	int durability_ = 0;
+
+	/// @brief 最大耐久力
+	int maxDurability_ = 0;
 
 	// 攻撃力
 	float attackPower_ = 1.0f;

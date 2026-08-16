@@ -93,67 +93,8 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 		{
 			ImGui::Combo("キャラクター", &currentData_.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
 
-			// キャラクターのインスタンスに変換
-			Character* charPtr = static_cast<Character*>(currentData_.instancePtr);
-
+			// キャラクターの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawCharacterBaseSettings(currentData_, placementList, isDirty, history_, true);
-
-
-			ImGui::Separator();
-			ImGui::Text("初期装備武器");
-
-			// プレハブ一覧を取得
-			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
-			std::string currentWeapon = currentData_.equipWeaponPrefabName;
-
-			if (ImGui::BeginCombo("武器プレハブ", currentWeapon.empty() ? "なし" : currentWeapon.c_str()))
-			{
-				// 「なし」を選択できるようにする
-				if (ImGui::Selectable("なし", currentWeapon.empty()))
-				{
-					memset(currentData_.equipWeaponPrefabName, 0, sizeof(currentData_.equipWeaponPrefabName));
-					isDirty = true;
-				}
-
-				// プレハブ名のリストをループして選択肢を作成
-				for (const auto& prefabName : prefabNames)
-				{
-					bool isSelected = (currentWeapon == prefabName);
-					if (ImGui::Selectable(prefabName.c_str(), isSelected))
-					{
-						strncpy_s(currentData_.equipWeaponPrefabName, prefabName.c_str(), sizeof(currentData_.equipWeaponPrefabName) - 1);
-						isDirty = true;
-					}
-					if (isSelected) ImGui::SetItemDefaultFocus();
-				}
-
-				ImGui::EndCombo();
-			}
-
-
-			if (charPtr)
-			{
-				// モーション設定UIを描画し、変更があったかどうかを取得
-				bool motionChanged =
-					StageEditorUIHelper::DrawCharacterMotionSettings(currentData_, placementList, isDirty, history_, motionManager_, true);
-
-				// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
-				if (motionChanged)
-				{
-					AnimationHandleData animationData;
-					animationData.hStandMotion = motionManager_->GetMotion(MotionType::Stand, currentData_.standMotion.name);
-					animationData.hStanceMotion = motionManager_->GetMotion(MotionType::Stance, currentData_.stanceMotion.name);
-					animationData.hWalkMotion = motionManager_->GetMotion(MotionType::Walk, currentData_.walkMotion.name);
-					animationData.hDashMotion = motionManager_->GetMotion(MotionType::Dash, currentData_.dashMotion.name);
-					animationData.hAvoidFrontMotion = motionManager_->GetMotion(MotionType::Avoid, currentData_.avoidFrontMotion.name);
-					animationData.hAvoidBackMotion = motionManager_->GetMotion(MotionType::Avoid, currentData_.avoidBackMotion.name);
-					animationData.hAvoidLeftMotion = motionManager_->GetMotion(MotionType::Avoid, currentData_.avoidLeftMotion.name);
-					animationData.hAvoidRightMotion = motionManager_->GetMotion(MotionType::Avoid, currentData_.avoidRightMotion.name);
-					animationData.hGuardMotion = motionManager_->GetMotion(MotionType::Guard, currentData_.guardMotion.name);
-
-					charPtr->SetAnimationHandle(animationData);
-				}
-			}
 
 			// プレイヤーと未選択以外　ビヘイビアツリーデータ
 			if (currentData_.subType != static_cast<int32_t>(CharacterTag::None) && currentData_.subType != static_cast<int32_t>(CharacterTag::Player))
@@ -171,35 +112,11 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 		{
 			ImGui::Combo("オブジェクト", &currentData_.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
-			if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::Floor))
-			{
-				// フロアオブジェクトの場合、特定のUIを表示する
-				Floor* floorPtr = static_cast<Floor*>(currentData_.instancePtr);
-				if (floorPtr)
-				{
-					floorPtr->DrawDebugUI(&currentData_, placementList, history_, &isDirty);
-				}
-			}
-			else if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::Wall))
-			{
-				// 壁オブジェクトの場合、特定のUIを表示する
-				Wall* wallPtr = static_cast<Wall*>(currentData_.instancePtr);
-				if (wallPtr)
-				{
-					wallPtr->DrawDebugUI(&currentData_, placementList, history_, &isDirty);
-				}
-			}
-			else if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
-			{
-				// イベントトリガーオブジェクトの場合、特定のUIを表示する
-				StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(currentData_.instancePtr);
+			// オブジェクトの基本設定UIを描画し、変更があったかどうかを取得
+			StageEditorUIHelper::DrawStageObjectBaseSettings(currentData_, placementList, isDirty, history_, true);
 
-				// イベントトリガーオブジェクトの場合、特定のUIを表示する
-				if (eventTriggerPtr)
-				{
-					eventTriggerPtr->DrawDebugUI(&currentData_, placementList, history_, &isDirty);
-				}
-
+			if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
+			{
 				// 共通ヘルパーからイベントトリガー設定UIを描画
 				StageEditorUIHelper::DrawEventTriggerSettings(currentData_, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
 
@@ -339,36 +256,19 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 			{
 				// カメラガードオブジェクトの場合、特定のUIを表示する
 				CameraGuard* cameraGuardPtr = static_cast<CameraGuard*>(currentData_.instancePtr);
-
-				if (cameraGuardPtr)
-				{
-					cameraGuardPtr->DrawDebugUI(&currentData_, placementList, history_, &isDirty);
-				}
 			}
 		}
 		else if (currentData_.category == EditCategory::Weapon)
 		{
 			ImGui::Combo("武器", &currentData_.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
 
-			Weapon* weaponPtr = static_cast<Weapon*>(currentData_.instancePtr);
-			if (weaponPtr)
-			{
-				// インスタンスが存在する場合のみ呼び出す
-				weaponPtr->DrawDebugUI(&currentData_, placementList, history_, &isDirty);
-			}
-			else
-			{
-				// プレハブ編集時（インスタンスがない場合）の代替UI
-				ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "※ プレハブ編集中のため一部の専用UIは表示されません");
+			// 共通ヘルパーから武器の基本設定UIを描画
+			StageEditorUIHelper::DrawWeaponBaseSettings(currentData_, placementList, isDirty, history_, true);
 
-				// 武器のスケールや位置など、最低限編集したいパラメータがあればここに ImGui::DragFloat などを追加します
-				if (ImGui::DragFloat3("スケール (Scale)", &currentData_.scale.x, 0.1f)) { isDirty = true; }
-			}
-
-			ImGui::Text("コンボツリー");
+			// 共通ヘルパーからコンボツリーUIを描画
 			StageEditorUIHelper::DrawComboTreeSettings(currentData_.comboTrees, comboTreeNames, isDirty);
 
-			ImGui::Text("ビヘイビアツリー");
+			// 共通ヘルパーからビヘイビアツリーUIを描画
 			StageEditorUIHelper::DrawBehaviorTreeSettings(currentData_.behaviorTrees, behaviorTreeNames, isDirty);
 		}
 	}

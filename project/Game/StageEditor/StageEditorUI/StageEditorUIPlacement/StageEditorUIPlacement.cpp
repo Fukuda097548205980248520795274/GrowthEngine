@@ -117,38 +117,6 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		// キャラクターの基本設定UIを描画
 		StageEditorUIHelper::DrawCharacterBaseSettings(currentData, placementList, isDirty, history_, false);
 
-		ImGui::Separator();
-		ImGui::Text("初期装備武器");
-
-		// プレハブ一覧を取得
-		std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
-		std::string currentWeapon = currentData.equipWeaponPrefabName;
-
-		if (ImGui::BeginCombo("武器プレハブ", currentWeapon.empty() ? "なし" : currentWeapon.c_str()))
-		{
-			// 「なし」を選択できるようにする
-			if (ImGui::Selectable("なし", currentWeapon.empty()))
-			{
-				memset(currentData.equipWeaponPrefabName, 0, sizeof(currentData.equipWeaponPrefabName));
-				isDirty = true;
-			}
-
-			for (const auto& prefabName : prefabNames)
-			{
-				bool isSelected = (currentWeapon == prefabName);
-				if (ImGui::Selectable(prefabName.c_str(), isSelected))
-				{
-					strncpy_s(currentData.equipWeaponPrefabName, prefabName.c_str(), sizeof(currentData.equipWeaponPrefabName) - 1);
-					isDirty = true;
-				}
-				if (isSelected) ImGui::SetItemDefaultFocus();
-			}
-			ImGui::EndCombo();
-		}
-
-		// モーションの設定UIを描画
-		StageEditorUIHelper::DrawCharacterMotionSettings(currentData, placementList, isDirty, history_, motionManager_, false);
-
 		// プレイヤーと未選択以外　ビヘイビアツリーデータ
 		if (currentData.subType != static_cast<int32_t>(CharacterTag::None) && currentData.subType != static_cast<int32_t>(CharacterTag::Player))
 		{
@@ -165,69 +133,26 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 	{
 		ImGui::Combo("オブジェクトの種類", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
-		// 床
-		if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::Floor)
+		// 共通ヘルパーからステージオブジェクトの基本設定UIを描画
+		StageEditorUIHelper::DrawStageObjectBaseSettings(currentData, placementList, isDirty, history_, true);
+
+		if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::StaticEventTrigger)
 		{
-			// 位置
-			ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
-
-			// 拡縮
-			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
-		} 
-		else if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::Wall)
-		{
-			// 位置
-			ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
-
-			// 回転
-			ImGui::DragFloat("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
-
-			// 拡縮
-			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
-		}
-		else if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::StaticEventTrigger)
-		{
-			// 位置
-			ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
-
-			// 拡縮
-			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
-
 			// 共通ヘルパーからトリガー設定UIを呼び出し
 			StageEditorUIHelper::DrawEventTriggerSettings(currentData, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
-		}
-		else if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::CameraGuard)
-		{
-			// 位置
-			ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
-
-			// 回転
-			ImGui::DragFloat("回転Y", &currentData.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>);
-
-			// 拡縮
-			ImGui::DragFloat3("大きさ", &currentData.scale.x, 0.1f, 0.0f, 10000.0f);
 		}
 	} 
 	else if (currentData.category == EditCategory::Weapon)
 	{
 		ImGui::Combo("武器の種類", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
 
-		// 位置
-		ImGui::DragFloat3("生成位置", &currentData.position.x, 0.1f);
+		// 共通ヘルパーから武器の基本設定UIを描画
+		StageEditorUIHelper::DrawWeaponBaseSettings(currentData, placementList, isDirty, history_, true);
 
-		// 耐久力
-		ImGui::DragInt("耐久力", &currentData.durability, 1, 1, 10000);
-
-		// 攻撃力
-		ImGui::DragFloat("攻撃力", &currentData.attackPower, 0.1f, 0.0f, 10000.0f);
-
-		// 壊れない武器かどうか
-		ImGui::Checkbox("壊れるかどうか", &currentData.isUnbreakable);
-
-		ImGui::Text("コンボツリー");
+		// 共通ヘルパーからコンボツリーUIを描画
 		StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);
 
-		ImGui::Text("ビヘイビアツリー");
+		// 共通ヘルパーからビヘイビアツリーUIを描画
 		StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
 	}
 

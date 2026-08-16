@@ -28,6 +28,7 @@ Weapon::Weapon(const InitData& initData) : Entity()
 
 	// 耐久力
 	durability_ = initData.durability;
+	maxDurability_ = initData.durability;
 
 	// 攻撃力
 	attackPower_ = initData.attackPower;

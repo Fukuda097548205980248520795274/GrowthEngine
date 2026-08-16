@@ -104,6 +104,24 @@ namespace StageEditorUIHelper
 	void DrawCharacterBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
 		bool& isDirty, StageEditorHistory* history, bool useHistory);
 
+	/// @brief 武器の基本設定を描画する
+	/// @param target 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param useHistory 
+	void DrawWeaponBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
+		bool& isDirty, StageEditorHistory* history, bool useHistory);
+
+	/// @brief ステージオブジェクトの基本設定を描画する
+	/// @param target 
+	/// @param placementList 
+	/// @param isDirty 
+	/// @param history 
+	/// @param useHistory 
+	void DrawStageObjectBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
+		bool& isDirty, StageEditorHistory* history, bool useHistory);
+
 	/// @brief イベントトリガーの設定を描画する
 	/// @param target 
 	/// @param placementList 
