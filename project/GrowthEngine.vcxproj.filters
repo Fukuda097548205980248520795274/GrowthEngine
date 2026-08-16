@@ -4193,9 +4193,6 @@
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUITemplate</Filter>
     </ClInclude>
-    <ClInclude Include="Game\StageEditor\StageEditorContext.h">
-      <Filter>Game\StageEditor</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\Fullscreen\Fullscreen.hlsli">

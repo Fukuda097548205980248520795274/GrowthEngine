@@ -1248,7 +1248,6 @@
     <ClInclude Include="Game\HUD\RageGage\RageGage.h" />
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.h" />
-    <ClInclude Include="Game\StageEditor\StageEditorContext.h" />
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.h" />
     <ClInclude Include="Game\StageSelectEditor\StageSelectEditor.h" />
     <ClInclude Include="Tool\EngineObject\Collision3DBase\Collision3DBaseCapsule\Collision3DBaseCapsule.h" />
