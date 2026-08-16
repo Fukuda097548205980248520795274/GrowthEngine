@@ -43,7 +43,7 @@ struct CombatSlot
 	float angleOffset = 0.0f;
 
 	// @brief ターゲットとの距離
-	float distance = 4.0f;
+	float distance = 6.0f;
 };
 
 class BattleDirector

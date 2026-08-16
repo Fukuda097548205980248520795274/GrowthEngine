@@ -263,10 +263,18 @@ void NPC::UpdateStanceStateByTargetDistance()
 /// @brief 構え状態の移動処理を更新する
 void NPC::UpdateStanceMovement()
 {
-	// 構え状態でない、またはターゲットがいない、または動けない状態、または何らかのアクション中の場合は移動処理を行わない
-	if (!lockOnTarget_ || !isStance_ || IsIncapacitated() ||
-		GetCurrentAttack() || GetCurrentMove() || GetCurrentAvoid())
+	if (!lockOnTarget_)
 		return;
+
+	// 構え状態でない場合は、スロットの割り当てを解除する
+	if (!isStance_ || IsIncapacitated() || IsInAttackSequence() ||
+		GetCurrentMove() || GetCurrentAvoid())
+	{
+		BattleDirector& battleDirector = BattleDirector::GetInstance();
+		battleDirector.ReleaseSlot(this);
+
+		return;
+	}
 
 	// スロットのワールド座標を取得
 	BattleDirector& battleDirector = BattleDirector::GetInstance();
@@ -296,7 +304,8 @@ void NPC::UpdateStanceMovement()
 		}
 		else
 		{
-			targetWorldPos = myPos;
+			// ターゲットと自分の位置がほぼ同じ場合は、ターゲットの正面方向に keepDistance 離れた位置を目標地点とする
+			targetWorldPos = myPos - GetDirection() * keepDistance;
 		}
 	}
 

@@ -56,6 +56,7 @@ public:
 		Battle, // 戦闘中
 		Pose, // ポーズ中
 		Finish, // 終了
+		Out, // フェーズ終了
 	};
 
 
@@ -179,7 +180,7 @@ private:
 	float introTimer_ = kIntroTime;
 
 	/// @brief イントロフェーズの時間
-	static constexpr float kIntroTime = 2.0f;
+	static constexpr float kIntroTime = 1.0f;
 
 
 private:
@@ -213,6 +214,21 @@ private:
 
 	/// @brief 終了フェーズの時間
 	static constexpr float kFinishTime = 2.0f;
+
+
+private:
+
+	/// @brief フェーズ終了時の初期化処理
+	void OutPhaseInitialize();
+
+	/// @brief フェーズ終了時の更新処理
+	void OutPhaseUpdate();
+
+	/// @brief イントロフェーズのタイマー
+	float outTimer_ = kOutTime;
+
+	/// @brief イントロフェーズの時間
+	static constexpr float kOutTime = 1.0f;
 
 
 private:
@@ -505,6 +521,14 @@ private:
 
 	/// @brief 武器取得ボタンのプレハブ
 	std::unique_ptr<PrefabBaseSprite> weaponGetButtonSpritePrefab_ = nullptr;
+
+
+	// テキストスプライト
+	Sprite* bossTextSprite_ = nullptr;
+	Sprite* startTextSprite_ = nullptr;
+
+	// フェード用スプライト
+	std::unique_ptr<Sprite> fadeSprite_ = nullptr;
 
 
 private:

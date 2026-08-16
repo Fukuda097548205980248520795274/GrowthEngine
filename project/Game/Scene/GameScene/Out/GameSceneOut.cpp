@@ -1,20 +1,14 @@
 #include "../GameScene.h"
-#include "HUD/IntroText/IntroText.h"
 
 /// @brief イントロフェーズの初期化処理
-void GameScene::IntroPhaseInitialize()
+void GameScene::OutPhaseInitialize()
 {
 	// イントロフェーズのタイマーをリセット
-	introTimer_ = kIntroTime;
-
-	Character::SetIsGameIntro(true);
-
-	// チュートリアルの道中のBGMを再生する
-	SoundManager::GetInstance()->BgmTutorialRoadPlay(true);
+	outTimer_ = kOutTime;
 }
 
 /// @brief イントロフェーズの更新処理
-void GameScene::IntroPhaseUpdate()
+void GameScene::OutPhaseUpdate()
 {
 	// デルタタイムを取得する
 	const float kDt = engine_->GetDeltaTime() * engine_->GetTimeScale();
@@ -160,26 +154,25 @@ void GameScene::IntroPhaseUpdate()
 	cameraShake_->Update(kDt);
 
 
-	// イントロフェーズのタイマーを減算
-	introTimer_ -= 1.0f / 60.0f;
-	introTimer_ = std::max(introTimer_, 0.0f);
+	// アウトフェーズのタイマーを減算
+	outTimer_ -= 1.0f / 60.0f;
+	outTimer_ = std::max(outTimer_, 0.0f);
 
-	float t = 1.0f - (introTimer_ / kIntroTime);
+	float t = 1.0f - (outTimer_ / kOutTime);
 	auto roadBgm = SoundManager::GetInstance()->GetTutorialRoadBgm();
 	auto bossBgm = SoundManager::GetInstance()->GetTutorialBossBgm();
-	roadBgm->param_->volume = Lerp(0.0f, 0.2f, t);
-	bossBgm->param_->volume = Lerp(0.0f, 0.2f, t);
+	roadBgm->param_->volume = Lerp(0.2f, 0.0f, t);
+	bossBgm->param_->volume = Lerp(0.2f, 0.0f, t);
 
 	// フェードスプライトのアルファ値を更新
 	if (fadeSprite_)
 	{
-		fadeSprite_->param_->material.color.w = introTimer_ / kIntroTime;
+		fadeSprite_->param_->material.color.w = 1.0f - (outTimer_ / kOutTime);
 	}
 
-	// イントロフェーズが終了したら戦闘フェーズに遷移
-	if (introTimer_ <= 0.0f)
+	// アウトフェーズが終了したら戦闘フェーズに遷移
+	if (outTimer_ <= 0.0f)
 	{
-		Character::SetIsGameIntro(false);
-		phaseManager_->ChangePhase(PhaseType::Battle);
+		Transition("Title");
 	}
 }

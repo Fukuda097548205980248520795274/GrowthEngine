@@ -1540,6 +1540,12 @@
     <Filter Include="Game\HUD\Button\WeaponGetButton">
       <UniqueIdentifier>{4782e28e-51dc-47b2-a07c-6fd14439eb5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\IntroText">
+      <UniqueIdentifier>{abd237c3-feb8-4aed-a488-90bb18e25832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene\GameScene\Out">
+      <UniqueIdentifier>{1db87690-9418-4d41-b694-17ac18906433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2792,6 +2798,12 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp">
       <Filter>Game\HUD\Button\WeaponGetButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\IntroText\IntroText.cpp">
+      <Filter>Game\HUD\IntroText</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Out\GameSceneOut.cpp">
+      <Filter>Game\Scene\GameScene\Out</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4168,6 +4180,9 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h">
       <Filter>Game\HUD\Button\WeaponGetButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\IntroText\IntroText.h">
+      <Filter>Game\HUD\IntroText</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

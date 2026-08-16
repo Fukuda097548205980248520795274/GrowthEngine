@@ -1,9 +1,16 @@
 #include "../GameScene.h"
+#include "HUD/IntroText/IntroText.h"
 
 /// @brief 戦闘フェーズの初期化処理
 void GameScene::BattlePhaseInitialize()
 {
-	
+	// イントロテキストの生成
+	IntroText::InitData introTextInitData;
+	introTextInitData.buttonSprite = startTextSprite_;
+	std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
+	introText->Initialize(introTextInitData);
+
+	huds_.push_back(std::move(introText));
 }
 
 /// @brief 戦闘フェーズの更新処理
@@ -14,6 +21,12 @@ void GameScene::BattlePhaseUpdate()
 
 	// ゲームクリア時の処理
 	if (isGameClear_)
+	{
+		phaseManager_->ChangePhase(PhaseType::Finish);
+	}
+
+	// プレイヤーが死亡した場合の処理
+	if (player_ && player_->IsDead())
 	{
 		phaseManager_->ChangePhase(PhaseType::Finish);
 	}

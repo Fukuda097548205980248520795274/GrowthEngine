@@ -97,7 +97,7 @@
             1.0,
             1.0,
             1.0,
-            1.0
+            0.0
         ],
         "name": "Dash",
         "screenAnchor": 6,
@@ -350,7 +350,7 @@
             1.0,
             1.0,
             1.0,
-            1.0
+            0.0
         ],
         "name": "ButtonRT",
         "screenAnchor": 6,
@@ -396,7 +396,7 @@
             1.0,
             1.0,
             1.0,
-            1.0
+            0.0
         ],
         "name": "ButtonCombo",
         "screenAnchor": 6,
@@ -410,6 +410,52 @@
             "translate": [
                 361.0,
                 115.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Start_Text",
+        "screenAnchor": 4,
+        "textureFilename": "start_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Boss_Text",
+        "screenAnchor": 4,
+        "textureFilename": "boss_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0
             ]
         }
     }

@@ -1,0 +1,243 @@
+{
+    "links": [
+        {
+            "end": 17,
+            "end_node": 16,
+            "id": 37,
+            "start": 3,
+            "start_node": 1
+        },
+        {
+            "end": 29,
+            "end_node": 28,
+            "id": 38,
+            "start": 18,
+            "start_node": 16
+        },
+        {
+            "end": 35,
+            "end_node": 34,
+            "id": 39,
+            "start": 30,
+            "start_node": 28
+        },
+        {
+            "end": 32,
+            "end_node": 31,
+            "id": 40,
+            "start": 30,
+            "start_node": 28
+        },
+        {
+            "end": 14,
+            "end_node": 13,
+            "id": 41,
+            "start": 9,
+            "start_node": 7
+        },
+        {
+            "end": 8,
+            "end_node": 7,
+            "id": 42,
+            "start": 3,
+            "start_node": 1
+        },
+        {
+            "end": 5,
+            "end_node": 4,
+            "id": 43,
+            "start": 3,
+            "start_node": 1
+        },
+        {
+            "end": 11,
+            "end_node": 10,
+            "id": 44,
+            "start": 9,
+            "start_node": 7
+        },
+        {
+            "end": 20,
+            "end_node": 19,
+            "id": 45,
+            "start": 18,
+            "start_node": 16
+        },
+        {
+            "end": 26,
+            "end_node": 25,
+            "id": 46,
+            "start": 21,
+            "start_node": 19
+        },
+        {
+            "end": 23,
+            "end_node": 22,
+            "id": 47,
+            "start": 21,
+            "start_node": 19
+        }
+    ],
+    "nodes": [
+        {
+            "id": 1,
+            "input_pin": 2,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 3,
+            "pos": [
+                551.034912109375,
+                533.4074096679688
+            ],
+            "type": 2
+        },
+        {
+            "condition_type": 20,
+            "id": 4,
+            "input_pin": 5,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 6,
+            "pos": [
+                701.034912109375,
+                1013.4074096679688
+            ],
+            "type": 4
+        },
+        {
+            "id": 7,
+            "input_pin": 8,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 9,
+            "pos": [
+                701.034912109375,
+                1133.407470703125
+            ],
+            "type": 3
+        },
+        {
+            "action_type": 5,
+            "id": 10,
+            "input_pin": 11,
+            "is_collapsed": false,
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 4.0
+            },
+            "output_pin": 12,
+            "pos": [
+                851.034912109375,
+                1253.407470703125
+            ],
+            "type": 5
+        },
+        {
+            "condition_type": 15,
+            "id": 13,
+            "input_pin": 14,
+            "is_collapsed": false,
+            "name": "攻撃状態でないとき",
+            "output_pin": 15,
+            "pos": [
+                851.034912109375,
+                1133.407470703125
+            ],
+            "type": 4
+        },
+        {
+            "id": 16,
+            "input_pin": 17,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 18,
+            "pos": [
+                701.034912109375,
+                533.4074096679688
+            ],
+            "type": 1
+        },
+        {
+            "child_weight_map": {
+                "165": 1.0,
+                "168": 1.0
+            },
+            "id": 19,
+            "input_pin": 20,
+            "is_collapsed": false,
+            "name": "",
+            "output_pin": 21,
+            "pos": [
+                851.034912109375,
+                773.4074096679688
+            ],
+            "type": 7
+        },
+        {
+            "id": 22,
+            "input_pin": 23,
+            "is_collapsed": false,
+            "name": "Attack_000",
+            "output_pin": 24,
+            "pos": [
+                1001.034912109375,
+                893.4074096679688
+            ],
+            "sub_tree_file_name": "Jab_000",
+            "type": 8
+        },
+        {
+            "id": 25,
+            "input_pin": 26,
+            "is_collapsed": false,
+            "name": "Attack_000",
+            "output_pin": 27,
+            "pos": [
+                1001.034912109375,
+                773.4074096679688
+            ],
+            "sub_tree_file_name": "Headbutt_000",
+            "type": 8
+        },
+        {
+            "id": 28,
+            "input_pin": 29,
+            "is_collapsed": false,
+            "name": "攻撃前の判定",
+            "output_pin": 30,
+            "pos": [
+                851.034912109375,
+                533.4074096679688
+            ],
+            "type": 3
+        },
+        {
+            "condition_type": 1,
+            "id": 31,
+            "input_pin": 32,
+            "is_collapsed": false,
+            "name": "ターゲットがいるかどうか",
+            "output_pin": 33,
+            "pos": [
+                1001.034912109375,
+                533.4074096679688
+            ],
+            "type": 4
+        },
+        {
+            "condition_type": 3,
+            "id": 34,
+            "input_pin": 35,
+            "is_collapsed": false,
+            "name": "ターゲットが立っているとき",
+            "output_pin": 36,
+            "pos": [
+                1001.034912109375,
+                653.4074096679688
+            ],
+            "type": 4
+        }
+    ]
+}

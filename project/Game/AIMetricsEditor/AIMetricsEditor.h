@@ -6,6 +6,33 @@ class NPC;
 
 class AIMetricsEditor
 {
+private:
+
+	// @brief 表示設定
+	struct DisplaySettings
+	{
+		// 戦闘・攻撃タブ用
+		bool showAttackingNPCs = false;
+		bool showAttackCooldown = false;
+		bool showWallHits = false;
+		bool showComboProtection = false;
+		bool showBlindSpotAttack = false;
+		bool showTargetEvaluation = false;
+
+		// 位置・陣形タブ用
+		bool showMinDistance = false;
+		bool showSmoothness = false;
+		bool showFormation = false;
+		bool showTargetDispersion = false;
+		bool showStuckStatic = false;
+		bool showAttackDirectionBias = false;
+
+		// AIタスク管理タブ用
+		bool show1v1Static = false;
+		bool showDetour = false;
+	};
+
+
 public:
 
 	/// @brief コンストラクタ
@@ -77,6 +104,12 @@ private:
 
 	/// @brief プレイヤーの死角攻撃が試みられたかどうか
 	bool isBlindSpotAttackAttempted_ = false;
+
+	/// @brief 前フレームで攻撃中のNPCが存在したか（エッジ検出用）
+	bool wasAttackingNPCExists_ = false;
+
+	/// @brief クールタイム1秒未満で攻撃を仕掛けた違反回数
+	int attackCooldownViolationCount_ = 0;
 
 
 private:
@@ -155,5 +188,26 @@ private:
 
 	/// @brief ターゲット再評価が行われなかった違反カウント
 	int targetEvalViolationCount_ = 0;
+
+
+private:
+	
+	// @brief 前回の攻撃状態を保持するマップ (Character* -> 攻撃中かどうか)
+	std::unordered_map<const Character*, bool> prevAttackStates_;
+
+	// @brief 連続して同じ方向に攻撃した回数
+	int consecutiveSameDirectionAttacks_ = 0;
+
+	// @brief 攻撃方向の偏り違反回数
+	int attackDirectionBiasViolationCount_ = 0;
+
+	// @brief 最後に攻撃したセクターのインデックス (-1は未設定)
+	int lastAttackSector_ = -1;
+
+
+private:
+
+	// @brief 表示設定
+	DisplaySettings displaySettings_ = {};
 };
 

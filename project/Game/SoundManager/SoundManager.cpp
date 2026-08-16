@@ -22,6 +22,12 @@ void SoundManager::Initialize()
 	// エンジンのインスタンスを取得する
 	engine_ = GrowthEngine::GetInstance();
 
+	tutorialRoadBgm_ = std::make_unique<Bgm>("TutorialRoadBgm", engine_->LoadAudio("./Assets/Sounds/bgm/tutorial_road.mp3"));
+	tutorialRoadBgm_->param_->enableLoop = true; // ループを有効化する
+
+	tutorialBossBgm_ = std::make_unique<Bgm>("TutorialBossBgm", engine_->LoadAudio("./Assets/Sounds/bgm/tutorial_boss.mp3"));
+	tutorialBossBgm_->param_->enableLoop = true; // ループを有効化する
+
 	// 旋嵐スタイルチェンジのSE
 	seStyleSenran0_ = std::make_unique<Se>("Style_Senran0", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran0.mp3"));
 	seStyleSenran1_ = std::make_unique<Se>("Style_Senran1", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran1.mp3"));

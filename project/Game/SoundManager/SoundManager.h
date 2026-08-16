@@ -72,6 +72,31 @@ public:
 	/// @brief クリティカルダメージのSE
 	void SeCriticalDamage() { if (seCriticalDamage_)seCriticalDamage_->Play(); }
 
+	/// @brief チュートリアルの道中のBGMを再生する
+	/// @param isPlay 
+	void BgmTutorialRoadPlay(bool isPlay) { if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
+
+	/// @brief チュートリアルのボス戦のBGMを再生する
+	/// @param isPlay 
+	void BgmTutorialBossPlay(bool isPlay) { if (tutorialBossBgm_) isPlay ? tutorialBossBgm_->Play() : tutorialBossBgm_->Stop(); }
+
+	/// @brief チュートリアルの道中のBGMを取得する
+	/// @return 
+	Bgm* GetTutorialRoadBgm() { return tutorialRoadBgm_.get(); }
+
+	/// @brief チュートリアルのボス戦のBGMを取得する
+	/// @return 
+	Bgm* GetTutorialBossBgm() { return tutorialBossBgm_.get(); }
+
+
+private:
+
+	/// @brief チュートリアルの道中のBGM
+	std::unique_ptr<Bgm> tutorialRoadBgm_ = nullptr;
+
+	/// @brief チュートリアルのボス戦のBGM
+	std::unique_ptr<Bgm> tutorialBossBgm_ = nullptr;
+
 
 private:
 

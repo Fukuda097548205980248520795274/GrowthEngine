@@ -165,6 +165,6 @@ void GameScene::FinishPhaseUpdate()
 	if (finishTimer_ <= 0.0f)
 	{
 		// タイトル画面に遷移する
-		Transition("Title");
+		phaseManager_->ChangePhase(PhaseType::Out);
 	}
 }

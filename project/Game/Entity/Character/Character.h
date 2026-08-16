@@ -708,7 +708,7 @@ protected:
 	static std::vector<Character*> characters_;
 
 	/// @brief スロットシステムによる距離
-	float slotDistance_ = 4.0f;
+	float slotDistance_ = 6.0f;
 
 
 protected:

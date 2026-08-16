@@ -7,6 +7,7 @@
 
 #include "HUD/HP/BossHP/BossHP.h"
 #include "HUD/Button/WeaponGetButton/WeaponGetButton.h"
+#include "HUD/IntroText/IntroText.h"
 
 namespace
 {
@@ -380,7 +381,7 @@ void GameScene::Initialize()
 			avoidTutorial_->Draw();
 
 			// ナビゲーション矢印の描画
-			navigationArrow_->Draw();
+			//navigationArrow_->Draw();
 
 			// エディタ内のUI描画
 			uiEditor_->Draw();
@@ -394,6 +395,9 @@ void GameScene::Initialize()
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			// フェードスプライトの描画
+			fadeSprite_->Draw();
 		}
 	);
 
@@ -408,6 +412,8 @@ void GameScene::Initialize()
 	phaseManager_->SetOnUpdate(PhaseType::Pose, [&]() { PosePhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Finish, [&]() { FinishPhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Finish, [&]() { FinishPhaseUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Out, [&]() { OutPhaseInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Out, [&]() { OutPhaseUpdate(); });
 	phaseManager_->ChangePhase(PhaseType::Intro);
 }
 
@@ -1029,15 +1035,48 @@ void GameScene::InitializeCameraControl()
 
 	// カメラ用のピボットポイントを生成する
 	pivotPoint_ = std::make_unique<PivotPoint>();
-	pivotPoint_->GetData()->center = player_->GetPosition();
+
+	// ピボットポイントの初期化
+	Vector3 targetPivotPos = player_->GetWorldPosition();
+	targetPivotPos += kPivotCenterOffset;
+
+	pivotPoint_->GetData()->center = targetPivotPos;
 	pivotPoint_->GetData()->radius = 8.0f;
 	pivotPoint_->GetData()->phi = -std::numbers::pi_v<float> / 2.0f;
+	pivotPoint_->GetData()->theta = 0.0f;
 
 	// カメラ回転入力の生成
 	inputCameraRotate_ = std::make_unique<InputGamepadRightStick>("Camera_Rotate", InputState::Press, 0, Vector2(0.0f, 0.0f), 0.5f);
 
 	// 補間係数を初期化する
 	cameraCurrentT_ = 1.0f;
+
+	pivotPoint_->Update();
+
+	PivotPoint::Data* pivotData = pivotPoint_->GetData();
+
+	// カメラ座標の即時適用
+	mainCamera_->param_->transform.translate = pivotData->sphericalCoordinates;
+
+	// カメラ回転（オイラー角）の即時適用
+	const Vector3 kLookDirection = pivotData->toCenter;
+	const float kYaw = std::atan2(kLookDirection.x, kLookDirection.z);
+	const float kHorizontal = std::sqrt(kLookDirection.x * kLookDirection.x + kLookDirection.z * kLookDirection.z);
+	const float kPitch = std::atan2(-kLookDirection.y, kHorizontal);
+	mainCamera_->param_->transform.rotate = Vector3(kPitch, kYaw, 0.0f);
+
+	// 次フレームの当たり判定（カメラセグメント）用に初期値をセット
+	cameraSegmentInstance_->param_->start = pivotData->center;
+	cameraSegmentInstance_->param_->diff = pivotData->sphericalCoordinates - pivotData->center;
+
+	// バトル制御用（カメラの前方向）の即時適用
+	Vector3 cameraForward = kLookDirection;
+	cameraForward.y = 0.0f;
+	if (cameraForward.LengthSq() > 0.0f)
+		cameraForward = cameraForward.Normalize();
+
+	// バトル制御用（カメラの前方向）の即時適用
+	BattleDirector::GetInstance().SetCameraForward(cameraForward);
 }
 
 /// @brief カメラ制御の更新
@@ -1050,6 +1089,10 @@ void GameScene::UpdateCameraControl(float deltaTime)
 	// ピボットポイントがない場合は更新しない
 	if (!pivotPoint_)
 		return;
+
+	if (deltaTime > 0.1f) {
+		deltaTime = 0.1f;
+	}
 
 	// ピボット中心の追従更新
 	UpdatePivotFollow(deltaTime);
@@ -1315,6 +1358,21 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 				{
 					std::unique_ptr<BattleArea> battleArea = std::make_unique<BattleArea>();
 					battleArea->isGameClear = isGameClear;
+
+					// 最後のバトルエリアであれば、BGMを切り替える
+					if (isGameClear)
+					{
+						soundManager_->BgmTutorialRoadPlay(false);
+						soundManager_->BgmTutorialBossPlay(true);
+
+						// イントロテキストの生成
+						IntroText::InitData introTextInitData;
+						introTextInitData.buttonSprite = bossTextSprite_;
+						std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
+						introText->Initialize(introTextInitData);
+
+						huds_.push_back(std::move(introText));
+					}
 
 					for (const auto& objectDataJson : j["objects"])
 					{
@@ -1586,4 +1644,25 @@ void GameScene::LoadHUDs()
 	navigationArrowSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/arrow.png"), "Arrow_Sprite");
 	navigationArrow_ = std::make_unique<NavigationArrow>();
 	navigationArrow_->Initialize(navigationArrowSprite_.get());
+
+	
+	startTextSprite_ = uiEditor_->GetSprite("Start_Text");
+	if (startTextSprite_)
+	{
+		startTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
+
+	bossTextSprite_ = uiEditor_->GetSprite("Boss_Text");
+	if (bossTextSprite_)
+	{
+		bossTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
+
+
+	// フェード用スプライトを作成する
+	fadeSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), "Fade");
+	fadeSprite_->param_->texture.anchor = Vector2(0.0f, 1.0f);
+	fadeSprite_->param_->screenAnchor = Engine::Render2D::ScreenAnchor::LeftBottom;
+	fadeSprite_->param_->transform.scale = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
+	fadeSprite_->param_->material.color = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
 }

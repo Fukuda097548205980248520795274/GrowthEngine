@@ -2,6 +2,7 @@
 #include "Entity/Character/NPC/NPC.h"
 #include "Entity/Character/Player/Player.h"
 #include "BattleDirector/BattleDirector.h"
+#include <numbers>
 
 AIMetricsEditor::AIMetricsEditor()
 {
@@ -68,14 +69,32 @@ void AIMetricsEditor::Update(float deltaTime)
 	if (characters.size() <= 1) minDistanceBetweenNPCs_ = 0.0f;
 
 	// 攻撃中のNPCが存在する場合、次の攻撃までの最短クールダウン時間を計測
-	if (hasNPC && !isAttackingNPCExists)
+	if (hasNPC)
 	{
-		minNextAttackCooldown_ += deltaTime;
+		// 誰も攻撃していなかった状態から、誰かが攻撃を始めた瞬間
+		if (isAttackingNPCExists && !wasAttackingNPCExists_)
+		{
+			// クールタイムが1秒未満だった場合は違反としてカウント
+			if (minNextAttackCooldown_ < 1.0f)
+			{
+				attackCooldownViolationCount_++;
+			}
+			// 攻撃が始まったのでタイマーをリセット
+			minNextAttackCooldown_ = 0.0f;
+		}
+		else if (!isAttackingNPCExists)
+		{
+			// 誰も攻撃していない場合はタイマーを進行
+			minNextAttackCooldown_ += deltaTime;
+		}
 	}
 	else
 	{
 		minNextAttackCooldown_ = 0.0f;
 	}
+
+	// 現在の攻撃状態を次フレームの比較用に保存
+	wasAttackingNPCExists_ = isAttackingNPCExists;
 
 
 	// 狙われていないキャラクターの数を計算
@@ -290,6 +309,13 @@ void AIMetricsEditor::DrawSelectCharacterUI()
 				frequentDetourCount_ = 0;
 				lastDetourTime_ = -999.0f;
 				isPrevDetouring_ = false;
+
+				attackCooldownViolationCount_ = 0;
+
+				prevAttackStates_.clear();
+				consecutiveSameDirectionAttacks_ = 0;
+				attackDirectionBiasViolationCount_ = 0;
+				lastAttackSector_ = -1;
 			}
 
 			// 選択されたアイテムにフォーカスを設定
@@ -387,8 +413,52 @@ void AIMetricsEditor::DrawSelectCharacterUI()
 			// NPCのみを対象
 			if (selectedChar != character->GetLockOnTarget())continue;
 
+			bool isCurrentlyAttacking = character->IsInAttackSequence();
+			bool wasAttacking = prevAttackStates_[character];
+
+			// 攻撃開始の瞬間を検知
+			if (isCurrentlyAttacking && !wasAttacking)
+			{
+				// ターゲットから見たNPCへの方向ベクトル
+				Vector3 toNPC = (character->GetWorldPosition() - selectedChar->GetWorldPosition());
+				toNPC.y = 0.0f; // 水平方向のみで計算
+				toNPC = toNPC.Normalize();
+
+				// ターゲットの正面方向と右方向
+				Vector3 worldForward = Vector3(0.0f, 0.0f, 1.0f); // ワールドのZ軸
+				Vector3 worldRight = Vector3(1.0f, 0.0f, 0.0f); // ワールドのX軸
+
+				// ターゲットを基準としたNPCの角度を計算 (-π 〜 π)
+				float angle = std::atan2(Dot(worldRight, toNPC), Dot(worldForward, toNPC));
+
+				// 8方向（45度ごと）のセクターに分割 (0〜7)
+				int sector = static_cast<int>(std::round((angle + std::numbers::pi) / (std::numbers::pi / 4.0f))) % 8;
+
+				// 前回と同じセクターからの攻撃かチェック
+				if (sector == lastAttackSector_)
+				{
+					consecutiveSameDirectionAttacks_++;
+
+					// 3回以上連続したら違反としてカウント
+					if (consecutiveSameDirectionAttacks_ >= 3)
+					{
+						attackDirectionBiasViolationCount_++;
+					}
+				}
+				else
+				{
+					// 違う方向からの攻撃ならリセット
+					consecutiveSameDirectionAttacks_ = 1;
+					lastAttackSector_ = sector;
+				}
+			}
+
+			// 状態を更新
+			prevAttackStates_[character] = isCurrentlyAttacking;
+
+
 			// 攻撃中のNPCのみをカウント
-			if (!character->IsInAttackSequence()) continue;
+			if (!isCurrentlyAttacking) continue;
 
 			currentAttackingNPCs_++;
 		}
@@ -404,7 +474,7 @@ void AIMetricsEditor::DrawSelectCharacterUI()
 
 	if (selectedChar)
 	{
-		// 包囲状態で3m以内にいるNPCの数
+		// 包囲状態で3m以上にいるNPCの数
 		for (int i = 0; i < surroundingCount_; i++)
 		{
 			Character* occupant = BattleDirector::GetInstance().GetSlotOccupant(selectedChar, i);
@@ -416,8 +486,8 @@ void AIMetricsEditor::DrawSelectCharacterUI()
 				totalDist += dist;
 				targetCount++;
 
-				// 3m以内のNPCをカウント
-				if (dist <= 3.0f)
+				// 3m以上のNPCをカウント
+				if (dist >= 3.0f)
 				{
 					surroundingNPCCount_++;
 				}
@@ -532,48 +602,99 @@ void AIMetricsEditor::DrawMeasurementEditorUI()
 
 	ImGui::Begin("AI評価メトリクス (自動監視)");
 
+	// 表示フィルターのON/OFF設定
+	if (ImGui::CollapsingHeader("表示フィルター (ON/OFF)"))
+	{
+		ImGui::Text("【戦闘・攻撃】");
+		ImGui::Checkbox("同時攻撃NPC数", &displaySettings_.showAttackingNPCs); ImGui::SameLine();
+		ImGui::Checkbox("最短攻撃クールダウン", &displaySettings_.showAttackCooldown); ImGui::SameLine();
+		ImGui::Checkbox("壁衝突回数", &displaySettings_.showWallHits);
+		ImGui::Checkbox("コンボ保護", &displaySettings_.showComboProtection); ImGui::SameLine();
+		ImGui::Checkbox("死角攻撃", &displaySettings_.showBlindSpotAttack); ImGui::SameLine();
+		ImGui::Checkbox("ターゲット評価", &displaySettings_.showTargetEvaluation);
+
+		ImGui::Text("【位置・陣形】");
+		ImGui::Checkbox("NPC間の最小距離", &displaySettings_.showMinDistance); ImGui::SameLine();
+		ImGui::Checkbox("陣形・距離", &displaySettings_.showFormation); ImGui::SameLine();
+		ImGui::Checkbox("スタック & 静止", &displaySettings_.showStuckStatic);
+		ImGui::Checkbox("移動のスムーズさ", &displaySettings_.showSmoothness); ImGui::SameLine();
+		ImGui::Checkbox("ターゲット分散", &displaySettings_.showTargetDispersion);
+		ImGui::Checkbox("攻撃方向の偏り (スロット回転)", &displaySettings_.showAttackDirectionBias);
+
+		ImGui::Text("【AIタスク管理】");
+		ImGui::Checkbox("1v1交戦時の静止時間", &displaySettings_.show1v1Static); ImGui::SameLine();
+		ImGui::Checkbox("迂回行動の頻度", &displaySettings_.showDetour);
+
+		ImGui::Separator();
+	}
+
+	// タブバーの開始
 	if (ImGui::BeginTabBar("MetricsTabs"))
 	{
 		// 戦闘・攻撃
 		if (ImGui::BeginTabItem("戦闘・攻撃"))
 		{
-			ImGui::Text("・ 同時攻撃NPC数 (目標: 1体のみ)");
-			if (currentAttackingNPCs_ > 1)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "現在の攻撃人数 : %d人 (違反!)", currentAttackingNPCs_);
-			else
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "現在の攻撃人数 : %d人 (正常)", currentAttackingNPCs_);
+			if (displaySettings_.showAttackingNPCs)
+			{
+				ImGui::Text("・ 同時攻撃NPC数 (目標: 1体のみ)");
+				if (currentAttackingNPCs_ > 1)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "現在の攻撃人数 : %d人 (違反!)", currentAttackingNPCs_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "現在の攻撃人数 : %d人 (正常)", currentAttackingNPCs_);
+				ImGui::Separator();
+			}
 
-			ImGui::Separator();
+			if (displaySettings_.showAttackCooldown)
+			{
+				ImGui::Text("・ 攻撃クールダウン (目標: 1秒以上の間隔を空ける)");
+				ImGui::Text("現在の非攻撃時間: %.2f秒", minNextAttackCooldown_);
 
-			ImGui::Text("・ 最短攻撃クールダウン (目標: 1秒以上)");
-			if (minNextAttackCooldown_ > 1.0f)
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "残り時間: %.2f秒 (正常)", minNextAttackCooldown_);
-			else
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "残り時間: %.2f秒 (未達成)", minNextAttackCooldown_);
+				// 未達成と正常が行き来しないよう、違反回数で評価
+				if (attackCooldownViolationCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "違反回数: %d回 (未達成!)", attackCooldownViolationCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "違反なし (正常)");
+				ImGui::Separator();
+			}
 
-			ImGui::Separator();
+			if (displaySettings_.showWallHits)
+			{
+				ImGui::Text("・ 直近10秒間の壁衝突回数 (目標: 0回)");
+				// 色付きの成否表示を追加
+				if (wallHitCountIn10s_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "衝突回数: %d回 (未達成!)", wallHitCountIn10s_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "衝突回数: 0回 (正常)");
+				ImGui::Separator();
+			}
 
-			ImGui::Text("・ 直近10秒間の壁衝突回数");
-			ImGui::Text("衝突回数: %d回", wallHitCountIn10s_);
+			if (displaySettings_.showComboProtection)
+			{
+				ImGui::Text("・ コンボ保護状態");
+				ImGui::Text("保護中: %s", isPlayerInCombo_ ? "はい" : "いいえ");
+				ImGui::Separator();
+			}
 
-			ImGui::Text("・ コンボ保護状態");
-			ImGui::Text("保護中: %s", isPlayerInCombo_ ? "はい" : "いいえ");
+			if (displaySettings_.showBlindSpotAttack)
+			{
+				ImGui::Text("・ 死角からの攻撃判定");
+				if (isBlindSpotAttackAttempted_)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "警告: 死角からの攻撃を検知!");
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "死角からの攻撃なし");
+				ImGui::Separator();
+			}
 
-			ImGui::Separator();
-
-			ImGui::Text("・ 死角からの攻撃判定");
-			if (isBlindSpotAttackAttempted_)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "警告: 死角からの攻撃を検知!");
-			else
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "死角からの攻撃なし");
-
-			ImGui::Text("・ ターゲット再評価頻度 (3秒毎)");
-			ImGui::Text("評価タイマー: %.1f / 3.0秒", targetEvaluationTimer_);
-
-			if (targetEvalViolationCount_ > 0)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "違反回数: %d回 (違反!)", targetEvalViolationCount_);
-			else
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "評価状態: 正常 (違反なし)");
+			if (displaySettings_.showTargetEvaluation)
+			{
+				ImGui::Text("・ ターゲット再評価頻度 (3秒毎)");
+				ImGui::Text("評価タイマー: %.1f / 3.0秒", targetEvaluationTimer_);
+				if (targetEvalViolationCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "違反回数: %d回 (違反!)", targetEvalViolationCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "違反なし");
+				ImGui::Separator();
+			}
 
 			ImGui::EndTabItem();
 		}
@@ -581,61 +702,143 @@ void AIMetricsEditor::DrawMeasurementEditorUI()
 		// 位置・陣形
 		if (ImGui::BeginTabItem("位置・陣形"))
 		{
-			ImGui::Text("・ NPC間の最小距離 (目標: 1m以上)");
-			if (minDistanceBetweenNPCs_ < 1.0f && minDistanceBetweenNPCs_ > 0.0f)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最小距離: %.2f m (近すぎます!)", minDistanceBetweenNPCs_);
-			else
-				ImGui::Text("最小距離: %.2f m", minDistanceBetweenNPCs_);
+			if (displaySettings_.showMinDistance)
+			{
+				ImGui::Text("・ NPC間の分離行動 (目標: 最小距離1m以上)");
 
-			ImGui::Separator();
+				if (minDistanceBetweenNPCs_ == 0.0f)
+				{
+					// キャラクターが2体以上いない場合
+					ImGui::Text("最小距離: -- m (比較対象なし)");
+				}
+				else if (minDistanceBetweenNPCs_ < 1.0f)
+				{
+					// 1m未満の場合は未達成（赤）
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最小距離: %.2f m (未達成: 密集しすぎています!)", minDistanceBetweenNPCs_);
+				}
+				else
+				{
+					// 1m以上の場合は正常（緑）
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "最小距離: %.2f m (正常: 分離できています)", minDistanceBetweenNPCs_);
+				}
+				ImGui::Separator();
+			}
 
-			ImGui::Text("・ 移動軌跡の滑らかさ");
-			ImGui::Text("急旋回回数 : %d回", abruptTurnCount_);
+			if (displaySettings_.showFormation)
+			{
+				ImGui::Text("・ 陣形維持 (目標: 平均距離3m以上 / 適切な待機距離)");
 
-			ImGui::Separator();
+				if (surroundingCount_ > 0)
+				{
+					// 平均距離の評価
+					if (avgDistanceToTarget_ >= 3.0f)
+					{
+						ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "平均ターゲット距離: %.2f m (正常)", avgDistanceToTarget_);
+					}
+					else
+					{
+						ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "平均ターゲット距離: %.2f m (未達成: 全体的に近すぎます!)", avgDistanceToTarget_);
+					}
 
-			ImGui::Text("・ 陣形・距離");
-			ImGui::Text("平均ターゲット距離: %.2f m", avgDistanceToTarget_);
-			ImGui::Text("包囲人数 (3m以内): %d / 8人", surroundingNPCCount_);
+					// 包囲人数の評価（3m以上の距離を保っているか）
+					if (surroundingNPCCount_ == surroundingCount_)
+					{
+						// 全員が3m以上離れて陣形を組んでいる（緑）
+						ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "適切な距離(3m以上)の包囲人数: %d / %d人 (正常)", surroundingNPCCount_, surroundingCount_);
+					}
+					else if (surroundingNPCCount_ > 0)
+					{
+						// 一部が攻撃等で接近している（黄色で警告寄りの表示）
+						ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "適切な距離(3m以上)の包囲人数: %d / %d人 (一部接近中)", surroundingNPCCount_, surroundingCount_);
+					}
+					else
+					{
+						// 全員が3m未満にいる（赤）
+						ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "適切な距離(3m以上)の包囲人数: %d / %d人 (未達成: 密集陣形!)", surroundingNPCCount_, surroundingCount_);
+					}
+				}
+				else
+				{
+					ImGui::Text("現在ターゲットを包囲しているNPCはいません");
+				}
 
-			ImGui::Separator();
+				ImGui::Separator();
+			}
 
-			ImGui::Text("・ ターゲット分散");
-			if (untargetedCharacterCount_ > 0)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "非ターゲット状態のプレイヤー数: %d人", untargetedCharacterCount_);
-			else
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "正常: ターゲット漏れなし");
+			if (displaySettings_.showStuckStatic)
+			{
+				ImGui::Text("・ スタック & 静止チェック");
+				if (maxStuckTime_ > 1.0f)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最大スタック時間: %.2f秒 (スタック中!)", maxStuckTime_);
+				else
+					ImGui::Text("最大スタック時間: %.2f秒", maxStuckTime_);
 
-			ImGui::Separator();
+				if (maxStaticPositionTime_ > 5.0f)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最大静止時間: %.2f秒 (静止しすぎ!)", maxStaticPositionTime_);
+				else
+					ImGui::Text("最大静止時間: %.2f秒", maxStaticPositionTime_);
+				ImGui::Separator();
+			}
 
-			ImGui::Text("■ スタック & 静止チェック");
-			if (maxStuckTime_ > 1.0f)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最大スタック時間: %.2f秒 (スタック中!)", maxStuckTime_);
-			else
-				ImGui::Text("最大スタック時間: %.2f秒", maxStuckTime_);
+			if (displaySettings_.showSmoothness)
+			{
+				ImGui::Text("・ 移動のスムーズさ (目標: 急旋回0回)");
+				// 色付きの成否表示を追加
+				if (abruptTurnCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "急旋回回数 (0.4秒以内): %d回 (未達成!)", abruptTurnCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "急旋回なし (正常)");
+				ImGui::Separator();
+			}
 
-			if (maxStaticPositionTime_ > 5.0f)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "最大静止時間: %.2f秒 (静止しすぎ!)", maxStaticPositionTime_);
-			else
-				ImGui::Text("最大静止時間: %.2f秒", maxStaticPositionTime_);
+			if (displaySettings_.showTargetDispersion)
+			{
+				ImGui::Text("・ ターゲット分散");
+				if (untargetedCharacterCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "非ターゲット状態のプレイヤー数: %d人", untargetedCharacterCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "正常: ターゲット漏れなし");
+				ImGui::Separator();
+			}
+
+			if (displaySettings_.showAttackDirectionBias)
+			{
+				ImGui::Text("・ 攻撃方向の偏り (目標: 同一方向から3回以上連続しない)");
+				ImGui::Text("現在の連続回数: %d回", consecutiveSameDirectionAttacks_);
+
+				if (attackDirectionBiasViolationCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "違反回数: %d回 (偏り発生!)", attackDirectionBiasViolationCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "違反なし (適切に分散)");
+
+				ImGui::Separator();
+			}
 
 			ImGui::EndTabItem();
 		}
 
-		// AIタスク・1v1状況
+		// AIタスク管理
 		if (ImGui::BeginTabItem("AIタスク管理"))
 		{
-			ImGui::Text("■ 1v1交戦時の静止監視 (目標: 2秒以上静止しない)");
-			if (staticTime1v1_ > 2.0f)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "1v1静止時間: %.2f秒 (違反!)", staticTime1v1_);
-			else
-				ImGui::Text("1v1静止時間: %.2f秒", staticTime1v1_);
+			if (displaySettings_.show1v1Static)
+			{
+				ImGui::Text("■ 1v1交戦時の静止監視 (目標: 2秒以上静止しない)");
+				if (staticTime1v1_ > 2.0f)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "1v1静止時間: %.2f秒 (違反!)", staticTime1v1_);
+				else
+					ImGui::Text("1v1静止時間: %.2f秒", staticTime1v1_);
+				ImGui::Separator();
+			}
 
-			ImGui::Text("■ 迂回行動の連続発生 (目標: 1秒以内に連発しない)");
-			if (frequentDetourCount_ > 0)
-				ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "頻回な迂回 (1秒以内): %d回 (違反!)", frequentDetourCount_);
-			else
-				ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "頻回な迂回: 0回 (正常)");
+			if (displaySettings_.showDetour)
+			{
+				ImGui::Text("■ 迂回行動の連続発生 (目標: 1秒以内に連発しない)");
+				if (frequentDetourCount_ > 0)
+					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "違反回数: %d回 (違反!)", frequentDetourCount_);
+				else
+					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "違反なし");
+				ImGui::Separator();
+			}
 
 			ImGui::EndTabItem();
 		}
