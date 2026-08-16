@@ -720,12 +720,12 @@ protected:
 	bool isPrevGuardHit_ = false;
 
 
-private:
+protected:
 
 	/// @brief 受け流しが可能かどうか
 	bool canDeflect_ = false;
 
-private:
+protected:
 
 	/// @brief 弾きが可能かどうか
 	bool canRepel_ = false;

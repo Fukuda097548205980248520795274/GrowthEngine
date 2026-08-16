@@ -22,6 +22,7 @@ void StageEditorUI::Initialize()
 	navMeshUI_ = std::make_unique<StageEditorUINavMesh>();
 	navMeshInfoUI_ = std::make_unique<StageEditorUINavMeshInfo>();
 	objectListUI_ = std::make_unique<StageEditorUIObjectList>(spawner_, history_, scene_, scene_->GetBehaviorTreeEditor());
+	templateUI_ = std::make_unique<StageEditorUITemplate>(spawner_, history_, scene_);
 	guizmo_ = std::make_unique<StageEditorGuizmo>();
 
 	// 入力キーの初期化
@@ -248,6 +249,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 		guizmo_->UpdateObject(placementList, selectedIndex_, isDirty, history_, isPlaying);
 		objectListUI_->DrawWindow(placementList, selectedIndex_, isDirty, hasCopiedData_, copiedData_, navMesh, behaviorTreeNames_, comboTreeNames_, stageDataNames_, cutsceneNames_);
 		placementUI_->DrawUI(placementList, selectedIndex_, isDirty, behaviorTreeNames_, comboTreeNames_, stageDataNames_, cutsceneNames_);
+		templateUI_->DrawUI(placementList, isDirty, behaviorTreeNames_, comboTreeNames_, stageDataNames_, cutsceneNames_);
 	}
 	else if (currentMode_ == EditorMode::NavMeshEdit)
 	{

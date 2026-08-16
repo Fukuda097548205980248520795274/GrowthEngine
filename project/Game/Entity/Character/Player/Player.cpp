@@ -78,6 +78,10 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 
 	// スタイルチェンジ開始時の処理
 	OnStyleChanged(currentStyle_);
+
+	// 受け流しを無効にする
+	canRepel_ = false;
+	canDeflect_ = false;
 }
 
 /// @brief 更新処理

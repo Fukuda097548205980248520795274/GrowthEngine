@@ -1,0 +1,42 @@
+{
+    "currentId": 6,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "Player_Combo_2",
+            "grabStrikeParams": {
+                "attackTime": 0.30000001192092896,
+                "damageReaction": 3,
+                "hits": [
+                    {
+                        "damage": 10,
+                        "hitJoint": 9,
+                        "hitTime": 0.20000000298023224
+                    }
+                ],
+                "isRelease": true,
+                "knockback": 6.0,
+                "knockbackDirection": [
+                    0.0,
+                    1.0,
+                    0.30000001192092896
+                ],
+                "moveEndTime": 0.0,
+                "moveSpeed": 0.0,
+                "moveStartTime": 0.0
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 2,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                -40.7528076171875,
+                811.7103271484375
+            ],
+            "targetAnimationName": "Front"
+        }
+    ]
+}

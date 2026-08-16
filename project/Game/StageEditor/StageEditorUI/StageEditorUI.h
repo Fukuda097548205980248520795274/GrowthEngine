@@ -6,6 +6,7 @@
 #include "StageEditorUINavMesh/StageEditorUINavMesh.h"
 #include "StageEditorUINavMeshInfo/StageEditorUINavMeshInfo.h"
 #include "StageEditorUIObjectList/StageEditorUIObjectList.h"
+#include "StageEditorUITemplate/StageEditorUITemplate.h"
 #include "StageEditorGuizmo/StageEditorGuizmo.h"
 
 class StageFileManager;
@@ -91,6 +92,9 @@ private:
 
 	/// @brief オブジェクトリストUI
 	std::unique_ptr<StageEditorUIObjectList> objectListUI_ = nullptr;
+
+	/// @brief テンプレートUI
+	std::unique_ptr<StageEditorUITemplate> templateUI_ = nullptr;
 
 	/// @brief ギズモUI
 	std::unique_ptr<StageEditorGuizmo> guizmo_ = nullptr;

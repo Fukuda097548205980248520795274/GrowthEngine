@@ -1546,6 +1546,9 @@
     <Filter Include="Game\Scene\GameScene\Out">
       <UniqueIdentifier>{1db87690-9418-4d41-b694-17ac18906433}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate">
+      <UniqueIdentifier>{cb9e7cc0-899b-446a-8de1-d4da8e3a8f92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2804,6 +2807,9 @@
     </ClCompile>
     <ClCompile Include="Game\Scene\GameScene\Out\GameSceneOut.cpp">
       <Filter>Game\Scene\GameScene\Out</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.cpp">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUITemplate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4183,6 +4189,12 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\IntroText\IntroText.h">
       <Filter>Game\HUD\IntroText</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.h">
+      <Filter>Game\StageEditor\StageEditorUI\StageEditorUITemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StageEditor\StageEditorContext.h">
+      <Filter>Game\StageEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
