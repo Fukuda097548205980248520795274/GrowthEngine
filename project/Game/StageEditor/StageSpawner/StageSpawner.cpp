@@ -80,6 +80,10 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;
+
+		// 自動生成された武器をマップに追加
+		if (newWeapon)
+			autoSpawnedWeaponsMap_[newCharacter] = weaponData;
 	}
 	else if (data.category == EditCategory::Object)
 	{
@@ -227,10 +231,12 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		if (newWeapon)
 			newCharacter->GrabWeapon(newWeapon);
 
-
-
 		// ポインタを保存しておく
 		data.instancePtr = newCharacter;
+
+		// 自動生成された武器をマップに追加
+		if (newWeapon)
+			autoSpawnedWeaponsMap_[newCharacter] = weaponData;
 
 		// 敵キャラクターの場合、戦闘エリアの敵リストに追加する
 		if (newCharacter->IsEnemySide())
@@ -326,6 +332,18 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 	if (data.category == EditCategory::Character)
 	{
 		Character* character = static_cast<Character*>(data.instancePtr);
+
+		// 自動生成された武器がある場合は削除する
+		auto it = autoSpawnedWeaponsMap_.find(character);
+		if (it != autoSpawnedWeaponsMap_.end())
+		{
+			Weapon* weapon = static_cast<Weapon*>(it->second.instancePtr);
+			if (weapon) {
+				weapon->Delete();
+			}
+			autoSpawnedWeaponsMap_.erase(it);
+		}
+
 		character->Delete();
 	}
 	else if (data.category == EditCategory::Object)
@@ -341,4 +359,16 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 
 	// HUDは削除の概念がないため、ここでは何もしない
 	data.instancePtr = nullptr;
+}
+
+/// @brief 自動生成された武器をすべて削除する
+void StageSpawner::DeleteAllAutoSpawnedWeapons()
+{
+	for (const auto& pair : autoSpawnedWeaponsMap_)
+	{
+		Weapon* weapon = static_cast<Weapon*>(pair.first);
+		weapon->Delete();
+	}
+
+	autoSpawnedWeaponsMap_.clear();
 }

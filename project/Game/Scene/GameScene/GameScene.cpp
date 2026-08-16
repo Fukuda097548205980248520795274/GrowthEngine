@@ -1384,10 +1384,6 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						// 解析したデータをもとにオブジェクトを生成する
 						stageEditor_->SpawnObject(initData, battleArea.get(), weaponData);
 						stageEditor_->SetPlacementList(initData);
-
-						// 武器のインスタンスが生成された場合は、武器の配置リストに追加する
-						if(weaponData.instancePtr)
-							stageEditor_->SetPlacementList(weaponData);
 					}
 
 					battleAreas_.push_back(std::move(battleArea));
@@ -1404,10 +1400,6 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						// 解析したデータをもとにオブジェクトを生成する
 						stageEditor_->SpawnObject(initData, weaponData);
 						stageEditor_->SetPlacementList(initData);
-
-						// 武器のインスタンスが生成された場合は、武器の配置リストに追加する
-						if (weaponData.instancePtr)
-							stageEditor_->SetPlacementList(weaponData);
 					}
 				}
 			

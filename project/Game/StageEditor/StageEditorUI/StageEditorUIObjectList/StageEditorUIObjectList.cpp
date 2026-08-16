@@ -180,10 +180,6 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					PlacementData weaponData = {};
 					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
-					if (weaponData.instancePtr)
-					{
-						placementList.push_back(weaponData);
-					}
 
 					// 複製したオブジェクトを選択状態にする
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
@@ -246,10 +242,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					PlacementData weaponData = {};
 					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
-					if (weaponData.instancePtr)
-					{
-						placementList.push_back(weaponData);
-					}
+
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
 					listChanged = true;
 				}

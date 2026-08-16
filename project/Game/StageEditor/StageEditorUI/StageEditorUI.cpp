@@ -218,6 +218,9 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			for (auto& data : placementList)spawner_->DeleteActualEntity(data);
 			placementList.clear();
 
+			// プレイモードを終了したら、まずはシーン上のすべての自動生成された武器を削除する
+			spawner_->DeleteAllAutoSpawnedWeapons();
+
 			// プレイモードを終了したら、ゲームシーンをリセットして初期状態に戻す
 			scene_->Reset();
 
@@ -780,10 +783,6 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					PlacementData weaponData = {};
 					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
-					if (weaponData.instancePtr)
-					{
-						placementList.push_back(weaponData);
-					}
 
 					// ペーストしたオブジェクトを自動的に選択状態にする
 					selectedIndex_ = static_cast<int>(placementList.size()) - 1;
@@ -816,10 +815,6 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					PlacementData weaponData = {};
 					spawner_->SpawnActualEntity(newData, weaponData);
 					placementList.push_back(newData);
-					if (weaponData.instancePtr)
-					{
-						placementList.push_back(weaponData);
-					}
 
 					// 複製したオブジェクトを自動的に選択状態にする
 					selectedIndex_ = static_cast<int>(placementList.size()) - 1;

@@ -73,12 +73,6 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 
 			// リストに追加
 			outDataList.push_back(data);
-
-			// 武器のデータもリストに追加
-			if (weaponData.instancePtr != nullptr)
-			{
-				outDataList.push_back(weaponData);
-			}
 		}
 	}
 

@@ -31,6 +31,9 @@ public:
 	/// @param data 
 	void DeleteActualEntity(PlacementData& data);
 
+	/// @brief 自動生成された武器をすべて削除する
+	void DeleteAllAutoSpawnedWeapons();
+
 
 private:
 
@@ -43,5 +46,8 @@ private:
 
 	/// @brief 戦闘エリアのリスト
 	std::vector<std::unique_ptr<BattleArea>> battleAreas_;
+
+	/// @brief 自動生成された武器のマップ（武器のポインタをキーにして、配置データを保持する）
+	std::unordered_map<void*, PlacementData> autoSpawnedWeaponsMap_;
 };
 
