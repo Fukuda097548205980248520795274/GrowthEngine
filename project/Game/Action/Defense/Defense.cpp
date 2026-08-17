@@ -9,6 +9,7 @@ Defense::Defense(Character* character, const DefenseInitData& initData) : Action
 {
 	// 初期化データをメンバ変数にコピーする
 	defenseTime_ = initData.defenseTime;
+	parryType_ = initData.parryType;
 }
 
 /// @brief 実行
@@ -40,7 +41,10 @@ void Defense::Exec()
 		{
 			// ガードステートが取得できた場合は、防御時間を設定する
 			if (guardState)
+			{
 				guardState->SetGuardDuration(defenseTime_);
+				guardState->SetParryType(parryType_);
+			}
 		}
 		else
 		{

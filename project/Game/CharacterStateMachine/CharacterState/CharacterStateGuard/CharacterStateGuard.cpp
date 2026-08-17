@@ -96,6 +96,13 @@ void CharacterStateGuard::Exit()
 
 	// 防御しているタイマーをリセットする
 	guardActiveTimer_ = 0.0f;
+
+	// NPCの場合は、受け流しと弾きのフラグをリセットする
+	if (!owner_->IsPlayer())
+	{
+		owner_->SetCanDeflect(false);
+		owner_->SetCanRepel(false);
+	}
 }
 
 /// @brief ガードがヒットしたときの処理
@@ -107,4 +114,24 @@ void CharacterStateGuard::HitGuard()
 
 	// ガードヒットモーションを再生する
 	owner_->SetAnimation(hHitGuard_, true, false);
+}
+
+/// @brief パリィの種類を設定する
+/// @param parryType 
+void CharacterStateGuard::SetParryType(ParryType parryType)
+{
+	owner_->SetCanDeflect(false);
+	owner_->SetCanRepel(false);
+
+	// パリィの種類に応じて、受け流しと弾きのフラグを設定する
+	switch (parryType)
+	{
+	case ParryType::Deflect:
+		owner_->SetCanDeflect(true);
+		break;
+
+	case  ParryType::Repel:
+		owner_->SetCanRepel(true);
+		break;
+	}
 }

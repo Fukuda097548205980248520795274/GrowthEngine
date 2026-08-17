@@ -1859,6 +1859,23 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	else if (node.actionType == ActionType::Defense)
 	{
 		ImGui::DragFloat("防御時間", &node.defenseInitData.defenseTime, 0.01f, 0.0f, 100000.0f);
+
+		if(ImGui::BeginCombo("パリィの種類", ParryTypeNames[static_cast<int>(node.defenseInitData.parryType)]))
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				bool isSelected = (node.defenseInitData.parryType == static_cast<ParryType>(i));
+				if (ImGui::Selectable(ParryTypeNames[i], isSelected))
+				{
+					history_->SaveHistory(nodes_, links_, currentId_);
+					isDirty_ = true;
+
+					node.defenseInitData.parryType = static_cast<ParryType>(i);
+				}
+				if (isSelected) ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
 	}
 
 	ImGui::PopItemWidth();

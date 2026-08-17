@@ -1,5 +1,6 @@
 #pragma once
 #include "../CharacterState.h"
+#include "Action/Defense/Defense.h"
 
 class Character;
 
@@ -33,6 +34,10 @@ public:
 	/// @brief ガードする時間を設定する
 	/// @param duration 
 	void SetGuardDuration(float duration) { guardDuration_ = duration; }
+
+	/// @brief パリィの種類を設定する
+	/// @param parryType 
+	void SetParryType(ParryType parryType);
 
 
 private:

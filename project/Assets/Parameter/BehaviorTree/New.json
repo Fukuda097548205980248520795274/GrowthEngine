@@ -224,7 +224,8 @@
         {
             "action_type": 14,
             "defense_data": {
-                "defenseTime": 1.0
+                "defenseTime": 1.0,
+                "parryType": 2
             },
             "id": 177,
             "input_pin": 178,

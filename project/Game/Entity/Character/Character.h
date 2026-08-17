@@ -426,6 +426,14 @@ public:
 	/// @return 
 	bool CanRepel() const { return canRepel_; }
 
+	/// @brief 受け流しが可能かどうかを設定する
+	/// @param canDeflect 
+	void SetCanDeflect(bool canDeflect) { canDeflect_ = canDeflect; }
+
+	/// @brief 弾きが可能かどうかを設定する
+	/// @param canRepel 
+	void SetCanRepel(bool canRepel) { canRepel_ = canRepel; }
+
 	/// @brief プレイヤーかどうかを取得する
 	bool IsPlayer() const { return characterTag_ == CharacterTag::Player; }
 
@@ -725,10 +733,9 @@ protected:
 	/// @brief 受け流しが可能かどうか
 	bool canDeflect_ = false;
 
-protected:
-
 	/// @brief 弾きが可能かどうか
 	bool canRepel_ = false;
+
 
 	/// @brief 弾きが成功したかどうか
 	bool isHitRepel_ = false;

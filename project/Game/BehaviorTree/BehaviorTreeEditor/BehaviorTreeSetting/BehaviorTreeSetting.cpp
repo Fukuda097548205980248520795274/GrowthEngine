@@ -153,6 +153,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 			else if (node.actionType == ActionType::Defense)
 			{
 				n["defense_data"]["defenseTime"] = node.defenseInitData.defenseTime;
+				n["defense_data"]["parryType"] = static_cast<int>(node.defenseInitData.parryType);
 
 				n["motionType"] = static_cast<int>(node.motionType);
 				n["motionName"] = node.motionName;
@@ -444,6 +445,7 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 					{
 						const auto& defenseData = n["defense_data"];
 						node.defenseInitData.defenseTime = defenseData.value("defenseTime", 0.0f);
+						node.defenseInitData.parryType = static_cast<ParryType>(defenseData.value("parryType", 0));
 						node.motionType = static_cast<MotionType>(n.value("motionType", 0));
 						node.motionName = n.value("motionName", "");
 					}
