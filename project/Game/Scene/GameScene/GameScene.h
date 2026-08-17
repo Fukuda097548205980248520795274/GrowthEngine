@@ -15,7 +15,7 @@
 
 #include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
-#include "HUD/RageGage/RageGage.h"
+#include "HUD/Gage/Gage.h"
 #include "HUD/Tutorial/Tutorial.h"
 
 #include "PivotPoint/PivotPoint.h"
@@ -355,7 +355,10 @@ private:
 	std::unique_ptr<HP> playerHP_ = nullptr;
 
 	/// @brief プレイヤーのレイジゲージ
-	std::unique_ptr<RageGage> playerRageGage_ = nullptr;
+	std::unique_ptr<Gage> playerRageGage_ = nullptr;
+
+	/// @brief 武器の耐久力ゲージ
+	std::unique_ptr<Gage> weaponDurabilityGage_ = nullptr;
 
 
 
@@ -526,6 +529,10 @@ private:
 	// テキストスプライト
 	Sprite* bossTextSprite_ = nullptr;
 	Sprite* startTextSprite_ = nullptr;
+
+	// 武器スプライト
+	Sprite* weaponKnifeSprite_ = nullptr;
+	Sprite* weaponGunSprite_ = nullptr;
 
 	// フェード用スプライト
 	std::unique_ptr<Sprite> fadeSprite_ = nullptr;

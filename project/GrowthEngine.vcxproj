@@ -152,7 +152,7 @@
     <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp" />
     <ClCompile Include="Game\HUD\IntroText\IntroText.cpp" />
     <ClCompile Include="Game\HUD\NavigationArrow\NavigationArrow.cpp" />
-    <ClCompile Include="Game\HUD\RageGage\RageGage.cpp" />
+    <ClCompile Include="Game\HUD\Gage\Gage.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.cpp" />
     <ClCompile Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.cpp" />
     <ClCompile Include="Game\Scene\GameScene\Battle\GameSceneBattle.cpp" />
@@ -1239,7 +1239,7 @@
     <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h" />
     <ClInclude Include="Game\HUD\IntroText\IntroText.h" />
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h" />
-    <ClInclude Include="Game\HUD\RageGage\RageGage.h" />
+    <ClInclude Include="Game\HUD\Gage\Gage.h" />
     <ClInclude Include="Game\Node\CompositeNode\UtilitySelectorNode\UtilitySelectorNode.h" />
     <ClInclude Include="Game\Node\CompositeNode\WeightedRandomSelectorNode\WeightedRandomSelectorNode.h" />
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.h" />

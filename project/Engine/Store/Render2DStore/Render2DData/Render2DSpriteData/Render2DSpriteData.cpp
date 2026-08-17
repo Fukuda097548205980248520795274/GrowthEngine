@@ -80,7 +80,7 @@ void Engine::Render2DSpriteData::Reset()
 /// @param commandList 
 void Engine::Render2DSpriteData::Register(const Matrix4x4& viewProjection, ID3D12GraphicsCommandList* commandList, BasePSOModel* pso)
 {
-	Vector2 screenSize = Vector2(static_cast<float>(engine_->GetScreenWidth()), static_cast<float>(engine_->GetScreenHeight()));
+	Vector2 screenSize = Vector2(1280.0f, 720.0f);
 
 	switch (param_->screenAnchor)
 	{

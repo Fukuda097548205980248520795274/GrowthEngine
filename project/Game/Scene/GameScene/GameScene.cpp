@@ -317,6 +317,9 @@ void GameScene::Initialize()
 			// プレイヤーのレイジゲージの描画
 			if (playerRageGage_)playerRageGage_->Draw();
 
+			// 武器の耐久ゲージの描画
+			if (weaponDurabilityGage_)weaponDurabilityGage_->Draw();
+
 			// アウトラインの描画
 			engine_->DrawOutline();
 		}
@@ -521,6 +524,13 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 			playerRageGage_ = nullptr;
 		}
 
+		// すでに武器の耐久力ゲージが存在する場合は削除する
+		if (weaponDurabilityGage_)
+		{
+			weaponDurabilityGage_.reset();
+			weaponDurabilityGage_ = nullptr;
+		}
+
 		// プレイヤーの武器の生成と初期化
 		Weapon::InitData playerWeaponInitData;
 		playerWeaponInitData.position = Vector3(0.0f, 0.0f, 0.0f);
@@ -553,7 +563,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerHP_->Initialize(hpInitData);
 
 		// レイジゲージの生成と初期化
-		RageGage::InitData rageGageInitData;
+		Gage::InitData rageGageInitData;
 		rageGageInitData.position = Vector2(0.0f, 0.0f);
 		rageGageInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
 		rageGageInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
@@ -566,8 +576,25 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		rageGageInitData.scale = Vector2(0.35f, 0.35f);
 		rageGageInitData.width = 800;
 		rageGageInitData.color = Vector3(0.25f, 0.25f, 1.0f);
-		playerRageGage_ = std::make_unique<RageGage>();
+		playerRageGage_ = std::make_unique<Gage>();
 		playerRageGage_->Initialize(rageGageInitData);
+
+		// 武器耐久ゲージの生成と初期化
+		Gage::InitData weaponDurabilityGageInitData;
+		weaponDurabilityGageInitData.position = Vector2(0.0f, 0.0f);
+		weaponDurabilityGageInitData.hpFrameLeftSprite = hpFrameLeftSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpFrameMiddleSprite = hpFrameMiddleSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpFrameRightSprite = hpFrameRightSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpLeftSprite = hpLeftSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpMiddleSprite = hpMiddleSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpRightSprite = hpRightSprite_->CreateInstance();
+		weaponDurabilityGageInitData.hpSeparatorSprite = hpSeparatorSprite_->CreateInstance();
+		weaponDurabilityGageInitData.alpha = 0.0f;
+		weaponDurabilityGageInitData.scale = Vector2(0.3f, 0.3f);
+		weaponDurabilityGageInitData.width = 300;
+		weaponDurabilityGageInitData.color = Vector3(1.0f, 1.0f, 1.0f);
+		weaponDurabilityGage_ = std::make_unique<Gage>();
+		weaponDurabilityGage_->Initialize(weaponDurabilityGageInitData);
 
 
 		// プレイヤーの生成処理
@@ -586,6 +613,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		player_->SetEditorName(editorName);
 		player_->Initialize(playerInitData, playerWeapon_.get());
 		player_->SetRageGageHud(playerRageGage_.get());
+		player_->SetWeaponHpGageHud(weaponDurabilityGage_.get(), weaponKnifeSprite_, weaponGunSprite_);
 
 		character = player_.get();
 
@@ -1601,7 +1629,7 @@ void GameScene::LoadHUDs()
 	// ダッシュ操作のチュートリアルを生成する
 	dashTutorial_ = std::make_unique<Tutorial>();
 	dashTutorial_->AddSprite(uiEditor_->GetSprite("Dash"));
-	dashTutorial_->AddSprite(uiEditor_->GetSprite("ButtonRT"));
+	dashTutorial_->AddSprite(uiEditor_->GetSprite("ButtonRB"));
 
 	// 攻撃操作のチュートリアルを生成する
 	attackTutorial_ = std::make_unique<Tutorial>();
@@ -1623,7 +1651,7 @@ void GameScene::LoadHUDs()
 	// ガード操作のチュートリアルを生成する
 	guardTutorial_ = std::make_unique<Tutorial>();
 	guardTutorial_->AddSprite(uiEditor_->GetSprite("Guard"));
-	guardTutorial_->AddSprite(uiEditor_->GetSprite("ButtonLT"));
+	guardTutorial_->AddSprite(uiEditor_->GetSprite("ButtonLB"));
 
 	// 回避操作のチュートリアルを生成する
 	avoidTutorial_ = std::make_unique<Tutorial>();
@@ -1650,6 +1678,17 @@ void GameScene::LoadHUDs()
 		bossTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
 	}
 
+	weaponKnifeSprite_ = uiEditor_->GetSprite("WeaponKnife");
+	if(weaponKnifeSprite_)
+	{
+		weaponKnifeSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
+
+	weaponGunSprite_ = uiEditor_->GetSprite("WeaponGun");
+	if (weaponGunSprite_)
+	{
+		weaponGunSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
 
 	// フェード用スプライトを作成する
 	fadeSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), "Fade");

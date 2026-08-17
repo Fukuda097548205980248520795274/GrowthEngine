@@ -1522,9 +1522,6 @@
     <Filter Include="Game\Scene\GameScene\Intro">
       <UniqueIdentifier>{fb5e4563-484a-440a-8ccc-67a83ab241d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\HUD\RageGage">
-      <UniqueIdentifier>{d0b421dc-ef04-42af-a589-8c2826fe8396}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\HUD\Button\WeaponGetButton">
       <UniqueIdentifier>{4782e28e-51dc-47b2-a07c-6fd14439eb5a}</UniqueIdentifier>
     </Filter>
@@ -1536,6 +1533,9 @@
     </Filter>
     <Filter Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate">
       <UniqueIdentifier>{cb9e7cc0-899b-446a-8de1-d4da8e3a8f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\HUD\Gage">
+      <UniqueIdentifier>{d0b421dc-ef04-42af-a589-8c2826fe8396}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2766,8 +2766,8 @@
     <ClCompile Include="Game\Scene\GameScene\Intro\GameSceneIntro.cpp">
       <Filter>Game\Scene\GameScene\Intro</Filter>
     </ClCompile>
-    <ClCompile Include="Game\HUD\RageGage\RageGage.cpp">
-      <Filter>Game\HUD\RageGage</Filter>
+    <ClCompile Include="Game\HUD\Gage\Gage.cpp">
+      <Filter>Game\HUD\Gage</Filter>
     </ClCompile>
     <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp">
       <Filter>Game\HUD\Button\WeaponGetButton</Filter>
@@ -4133,8 +4133,8 @@
     <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h">
       <Filter>Game\AIMetricsEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Game\HUD\RageGage\RageGage.h">
-      <Filter>Game\HUD\RageGage</Filter>
+    <ClInclude Include="Game\HUD\Gage\Gage.h">
+      <Filter>Game\HUD\Gage</Filter>
     </ClInclude>
     <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h">
       <Filter>Game\HUD\Button\WeaponGetButton</Filter>

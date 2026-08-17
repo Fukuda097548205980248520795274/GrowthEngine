@@ -5,7 +5,7 @@
             1.0,
             1.0,
             1.0,
-            0.0
+            1.0
         ],
         "name": "Move",
         "screenAnchor": 6,
@@ -28,7 +28,7 @@
             1.0,
             1.0,
             1.0,
-            0.0
+            1.0
         ],
         "name": "Camera",
         "screenAnchor": 6,
@@ -51,7 +51,7 @@
             1.0,
             1.0,
             1.0,
-            0.0
+            1.0
         ],
         "name": "StickR",
         "screenAnchor": 6,
@@ -74,7 +74,7 @@
             1.0,
             1.0,
             1.0,
-            0.0
+            1.0
         ],
         "name": "StickL",
         "screenAnchor": 6,
@@ -352,9 +352,9 @@
             1.0,
             0.0
         ],
-        "name": "ButtonRT",
+        "name": "ButtonRB",
         "screenAnchor": 6,
-        "textureFilename": "rt_button.png",
+        "textureFilename": "rb_button.png",
         "transform": {
             "rotate": 0.0,
             "scale": [
@@ -375,9 +375,9 @@
             1.0,
             0.0
         ],
-        "name": "ButtonLT",
+        "name": "ButtonLB",
         "screenAnchor": 6,
-        "textureFilename": "lt_button.png",
+        "textureFilename": "lb_button.png",
         "transform": {
             "rotate": 0.0,
             "scale": [
@@ -419,11 +419,34 @@
             1.0,
             1.0,
             1.0,
-            1.0
+            0.0
         ],
         "name": "Start_Text",
         "screenAnchor": 4,
         "textureFilename": "start_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.2999999523162842,
+                1.2999999523162842
+            ],
+            "translate": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "name": "Boss_Text",
+        "screenAnchor": 4,
+        "textureFilename": "boss_text.png",
         "transform": {
             "rotate": 0.0,
             "scale": [
@@ -444,18 +467,41 @@
             1.0,
             1.0
         ],
-        "name": "Boss_Text",
-        "screenAnchor": 4,
-        "textureFilename": "boss_text.png",
+        "name": "WeaponGun",
+        "screenAnchor": 6,
+        "textureFilename": "weapon_gun.png",
         "transform": {
             "rotate": 0.0,
             "scale": [
-                1.0,
-                1.0
+                0.20000000298023224,
+                0.20000000298023224
             ],
             "translate": [
-                0.0,
-                0.0
+                79.0,
+                617.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "WeaponKnife",
+        "screenAnchor": 6,
+        "textureFilename": "weapon_knife.png",
+        "transform": {
+            "rotate": -0.800000011920929,
+            "scale": [
+                0.20000000298023224,
+                0.20000000298023224
+            ],
+            "translate": [
+                80.0,
+                618.0
             ]
         }
     }

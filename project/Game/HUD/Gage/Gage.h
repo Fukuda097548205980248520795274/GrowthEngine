@@ -1,7 +1,7 @@
 #pragma once
 #include "../HUD.h"
 
-class RageGage : public HUD
+class Gage : public HUD
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 public:
 
 	/// @brief 仮想デストラクタ
-	~RageGage();
+	~Gage();
 
 	/// @brief 初期化
 	/// @param initData 
@@ -67,6 +67,10 @@ public:
 
 	/// @brief 体力バーを持つキャラクターが死亡したときの処理
 	void Death();
+
+	/// @brief 不透明度を設定する
+	/// @param alpha 
+	void SetAlpha(float alpha) { alpha_ = std::clamp(alpha, 0.0f, 1.0f); }
 
 
 

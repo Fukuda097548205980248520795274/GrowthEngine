@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Entity/Weapon/Weapon.h"
 #include "HUD/HP/HP.h"
-#include "HUD/RageGage/RageGage.h"
+#include "HUD/Gage/Gage.h"
 
 #include "ComboTree/ComboTreeEditor/ComboTreeFactory/ComboTreeFactory.h"
 #include "comboTree/ComboTreeEditor/ComboTreeEditor.h"
@@ -92,6 +92,9 @@ void Player::Update()
 
 	// レイジゲージの更新
 	RageGageUpdate();
+
+	// 武器の耐久力ゲージの更新
+	WeaponHpGageUpdate();
 
 	auto weapons = Weapon::GetWeapons();
 	for (auto& weapon : weapons)
@@ -423,7 +426,7 @@ float Player::GetCameraYaw() const
 
 /// @brief レイジゲージHUDを設定する
 /// @param rageGageHud 
-void Player::SetRageGageHud(RageGage* rageGageHud)
+void Player::SetRageGageHud(Gage* rageGageHud)
 {
 	if (!rageGageHud || rageGageThresholds_.empty())return;
 
@@ -432,6 +435,31 @@ void Player::SetRageGageHud(RageGage* rageGageHud)
 	// レイジゲージHUDの最大値と現在値を設定する
 	rageGageHud_->SetMaxGage(static_cast<int>(rageGageThresholds_[static_cast<int32_t>(rageGageThresholds_.size() - 1)]));
 	rageGageHud_->SetCurrentGage(static_cast<int>(rageGage_));
+}
+
+/// @brief 武器の耐久力ゲージHUDを設定する
+/// @param weaponHpGageHud 
+void Player::SetWeaponHpGageHud(Gage* weaponHpGageHud, Sprite* weaponKnife, Sprite* weaponGun)
+{
+	assert(weaponHpGageHud);
+	assert(weaponKnife);
+	assert(weaponGun);
+
+	weaponHpGageHud_ = weaponHpGageHud;
+	weaponKnife_ = weaponKnife;
+	weaponGun_ = weaponGun;
+
+	// 武器の耐久力ゲージHUDの最大値と現在値を設定する
+	if (weapon_)
+	{
+		weaponHpGageHud_->SetMaxGage(static_cast<int>(weapon_->GetMaxDurability()));
+		weaponHpGageHud_->SetCurrentGage(static_cast<int>(weapon_->GetDurability()));
+	}
+	else
+	{
+		weaponHpGageHud_->SetMaxGage(0);
+		weaponHpGageHud_->SetCurrentGage(0);
+	}
 }
 
 /// @brief コンボツリーの変更をリクエストする
@@ -863,6 +891,80 @@ void Player::RageGageUpdate()
 
 		// レイジゲージHUDを更新する
 		rageGageHud_->Update();
+	}
+}
+
+/// @brief 武器の耐久力ゲージを更新する
+void Player::WeaponHpGageUpdate()
+{
+	// デルタタイム
+	float dt = engine_->GetDeltaTime();
+
+	if (weapon_)
+	{
+		weaponHpGageAlphaTimer_ += dt;
+		weaponHpGageAlphaTimer_ = std::min(weaponHpGageAlphaTimer_, kWeaponHpGageAlphaTime);
+	}
+	else
+	{
+		weaponHpGageAlphaTimer_ -= dt;
+		weaponHpGageAlphaTimer_ = std::max(weaponHpGageAlphaTimer_, 0.0f);
+	}
+
+	// 武器の耐久力ゲージHUDのアルファ値を計算する
+	float alpha = weaponHpGageAlphaTimer_ / kWeaponHpGageAlphaTime;
+
+	// 武器の耐久力ゲージHUDが存在する場合は更新する
+	if (weaponHpGageHud_)
+	{
+		// 武器が装備されている場合は耐久力ゲージを更新する
+		if (weapon_)
+		{
+			weaponHpGageHud_->SetMaxGage(static_cast<int>(weapon_->GetMaxDurability()));
+			weaponHpGageHud_->SetCurrentGage(static_cast<int>(weapon_->GetDurability()));
+		}
+
+		// アルファ値を設定する
+		weaponHpGageHud_->SetAlpha(alpha);
+
+		// 武器の耐久力ゲージHUDの位置を設定する
+		weaponHpGageHud_->SetPosition(Vector2(140.0f, 603.0f));
+		weaponHpGageHud_->SetVisible(true);
+
+		// 武器の耐久力ゲージHUDを更新する
+		weaponHpGageHud_->Update();
+	}
+
+	// 武器の種類に応じて、武器のHUDを切り替える
+	if (weaponGun_ && weaponKnife_)
+	{
+		if (weapon_)
+		{
+			// 武器を持っている場合は、持っている武器のHUDを表示する
+			if (weapon_->IsCategoryKnife())
+			{
+				weaponGun_->param_->material.color.w = 0.0f;
+				weaponKnife_->param_->material.color.w = alpha;
+			}
+			else if (weapon_->IsCategoryGun())
+			{
+				weaponKnife_->param_->material.color.w = 0.0f;
+				weaponGun_->param_->material.color.w = alpha;
+			}
+		}
+		else
+		{
+			// 武器を持っていない場合は、両方のHUDを半透明にする
+			if (weaponKnife_->param_->material.color.w > 0.0f)
+			{
+				weaponKnife_->param_->material.color.w = alpha;
+			}
+
+			if (weaponGun_->param_->material.color.w > 0.0f)
+			{
+				weaponGun_->param_->material.color.w = alpha;
+			}
+		}
 	}
 }
 

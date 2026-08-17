@@ -5,7 +5,7 @@
 
 class ComboTreeEditor;
 class Weapon;
-class RageGage;
+class Gage;
 
 class Player : public Character
 {
@@ -102,7 +102,11 @@ public:
 
 	/// @brief レイジゲージHUDを設定する
 	/// @param rageGageHud 
-	void SetRageGageHud(RageGage* rageGageHud);
+	void SetRageGageHud(Gage* rageGageHud);
+
+	/// @brief 武器の耐久力ゲージHUDを設定する
+	/// @param weaponHpGageHud 
+	void SetWeaponHpGageHud(Gage* weaponHpGageHud, Sprite* weaponKnife, Sprite* weaponGun);
 
 
 private:
@@ -193,7 +197,29 @@ private:
 	void RageGageUpdate();
 
 	/// @brief レイジゲージHUD
-	RageGage* rageGageHud_ = nullptr;
+	Gage* rageGageHud_ = nullptr;
+
+
+private:
+
+
+	/// @brief 武器の耐久力ゲージを更新する
+	void WeaponHpGageUpdate();
+
+	/// @brief 武器の耐久力ゲージHUD
+	Gage* weaponHpGageHud_ = nullptr;
+
+	/// @brief ナイフのスプライト
+	Sprite* weaponKnife_ = nullptr;
+
+	/// @brief 銃のスプライト
+	Sprite* weaponGun_ = nullptr;
+
+	/// @brief 武器の耐久力ゲージの不透明度
+	float weaponHpGageAlphaTimer_ = 0.0f;
+
+	/// @brief 武器の耐久力ゲージの不透明度が変化する時間
+	static constexpr float kWeaponHpGageAlphaTime = 0.5f;
 
 
 private:

@@ -1,8 +1,8 @@
-#include "RageGage.h"
+#include "Gage.h"
 #include "Entity/Character/Character.h"
 
 /// @brief デストラクタ
-RageGage::~RageGage()
+Gage::~Gage()
 {
 	// hp枠のスプライトを削除する
 	if (hpFrameLeftSprite_)hpFrameLeftSprite_->isDelete_ = true;
@@ -31,7 +31,7 @@ RageGage::~RageGage()
 
 /// @brief 初期化
 /// @param initData 
-void RageGage::Initialize(const InitData& initData)
+void Gage::Initialize(const InitData& initData)
 {
 	// nullptrチェック
 	assert(initData.hpFrameLeftSprite && "hp枠の左のスプライトが設定されていません。");
@@ -97,7 +97,7 @@ void RageGage::Initialize(const InitData& initData)
 }
 
 /// @brief 更新処理
-void RageGage::Update()
+void Gage::Update()
 {
 	// スケールと位置を設定する
 	hpFrameMiddleSprite_->param_.transform.scale.x = static_cast<float>(width_ / 2);
@@ -151,7 +151,7 @@ void RageGage::Update()
 }
 
 /// @brief 描画処理
-void RageGage::Draw()
+void Gage::Draw()
 {
 	// 表示されていない場合は描画しない
 	if (!isVisible_)return;
@@ -178,7 +178,7 @@ void RageGage::Draw()
 
 /// @brief 現在のゲージを設定する
 /// @param gage 
-void RageGage::SetCurrentGage(int gage)
+void Gage::SetCurrentGage(int gage)
 {
 	// ゲージが変化したかどうかを判定する
 	if (currentGage_ > gage)
@@ -198,7 +198,7 @@ void RageGage::SetCurrentGage(int gage)
 }
 
 /// @brief ゲージバーを持つキャラクターが死亡したときの処理
-void RageGage::Death()
+void Gage::Death()
 {
 	// 既に死亡している場合は処理しない
 	if (isDeath_)return;

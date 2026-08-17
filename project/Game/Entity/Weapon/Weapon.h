@@ -11,6 +11,7 @@ enum class WeaponCategory
 	None,
 	OneHanded, // 片手武器
 	TwoHanded, // 両手武器
+	Gun, // 銃
 };
 
 // @brief 武器の状態ツリーセット
@@ -143,6 +144,14 @@ public:
 	/// @brief プレイヤーが入手できる範囲にいるかどうかを設定する
 	/// @param isInRange 
 	void SetIsPlayerInRange(bool isInRange) { isPlayerInRange_ = isInRange; }
+
+	/// @brief ナイフカテゴリかどうかを取得する
+	/// @return 
+	bool IsCategoryKnife() const { return category_ == WeaponCategory::OneHanded || category_ == WeaponCategory::TwoHanded; }
+
+	/// @brief 銃カテゴリかどうかを取得する
+	/// @return 
+	bool IsCategoryGun() const { return category_ == WeaponCategory::Gun; }
 
 
 protected:
