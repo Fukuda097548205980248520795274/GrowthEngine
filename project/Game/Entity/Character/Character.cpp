@@ -354,8 +354,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
-		if (canDeflect_ && IsPlayer() && !IsDeflected() && guardState->CanJustGuard() && attacker ||
-			canDeflect_ && !IsPlayer() && !IsDeflected() && attacker)
+		if ((canDeflect_ && IsPlayer() && !IsDeflected() && guardState->CanJustGuard() && attacker) ||
+			(canDeflect_ && !IsPlayer() && !IsDeflected() && attacker))
 		{
 			// 受け流す
 			ExecuteDeflect(attacker);
@@ -365,8 +365,8 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 
 		// 弾き可能で、ガードが有効なタイミングで攻撃を受けた場合は、弾き成功の処理を行う
-		if (canRepel_ && IsPlayer() && !IsRepelled() && guardState->CanJustGuard() && attacker ||
-			canRepel_ && !IsPlayer() && !IsRepelled() && attacker)
+		if ((canRepel_ && IsPlayer() && !IsRepelled() && guardState->CanJustGuard() && attacker) ||
+			(canRepel_ && !IsPlayer() && !IsRepelled() && attacker))
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
@@ -827,8 +827,9 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 	}
 
 	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
-	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
-		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+	if (((attacker && attacker->IsPlayer()) || IsPlayer()))
+		if (IsHitDamage())
+			GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
 
 
 	// 最終的な攻撃力を計算する

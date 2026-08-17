@@ -7,16 +7,48 @@ void RequestToken::Exec()
 	// ブレークポイントのチェック
 	BreakpointOnExec();
 
-	// トークン要求フラグをリセット
-	isRequested_ = false;
+	// 基底クラスの実行
+	Action::Exec();
 
-	// 攻撃のクールタイムが残っている場合は、トークンを要求せずに終了する
+	// 攻撃クールタイム中なら終了する
 	if (owner_->GetAttackCooltime() > 0.0f)
+	{
+		Exit();
 		return;
+	}
 
 	// 攻撃トークンを要求する
-	isRequested_ = BattleDirector::GetInstance().RequestAttackToken(owner_, tokenType_);
+	if (BattleDirector::GetInstance().RequestAttackToken(owner_, tokenType_))
+	{
+		// スロットを解放する
+		BattleDirector::GetInstance().ReleaseSlot(owner_);
+	}
+	else
+	{
+		// トークン要求に失敗した場合は終了する
+		Exit();
+		return;
+	}
 
-	// 攻撃トークンを要求できたら、スロットを開放する
-	if (isRequested_)BattleDirector::GetInstance().ReleaseSlot(owner_);
+	// ここまで来たら成功
+	Action::Update();
+}
+
+/// @brief 終了、中断
+void RequestToken::Exit()
+{
+	BreakpointOnExit();
+
+	// 終了する
+	Action::Exit();
+}
+
+/// @brief リセット
+void RequestToken::Reset()
+{
+	// ブレークポイントのチェック
+	BreakpointOnReset();
+
+	// 基底クラスのリセット
+	Action::Reset();
 }

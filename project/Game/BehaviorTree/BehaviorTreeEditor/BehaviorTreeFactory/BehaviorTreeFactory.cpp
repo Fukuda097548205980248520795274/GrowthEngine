@@ -11,10 +11,6 @@
 #include "Node/ActionNode/ComboAttackNode/ComboAttackNode.h"
 #include "Node/ActionNode/GrabAttackNode/GrabAttackNode.h"
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
-#include "Node/ActionNode/RequestTokenNode/RequestTokenNode.h"
-#include "Node/ActionNode/ReleaseTokenNode/ReleaseTokenNode.h"
-#include "Node/ActionNode/InAttackSequenceNode/InAttackSequenceNode.h"
-#include "Node/ActionNode/OutAttackSequenceNode/OutAttackSequenceNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
 /// @param editor_nodes 
@@ -343,12 +339,12 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		else if (editorNode.actionType == ActionType::RequestToken)
 		{
 			// トークン要求ノードの生成
-			runtimeNode = std::make_unique<RequestTokenNode>(std::make_unique<RequestToken>(character, editorNode.tokenType));
+			runtimeNode = std::make_unique<ActionNode>(std::make_unique<RequestToken>(character, editorNode.tokenType));
 		}
 		else if (editorNode.actionType == ActionType::ReleaseToken)
 		{
 			// トークン解放ノードの生成
-			runtimeNode = std::make_unique<ReleaseTokenNode>(std::make_unique<ReleaseToken>(character));
+			runtimeNode = std::make_unique<ActionNode>(std::make_unique<ReleaseToken>(character));
 		}
 		else if (editorNode.actionType == ActionType::Avoid)
 		{
@@ -368,12 +364,12 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		else if (editorNode.actionType == ActionType::InAttackSequence)
 		{
 			// 攻撃シーケンス開始ノードの生成
-			runtimeNode = std::make_unique<InAttackSequenceNode>(std::make_unique<InAttackSequence>(character));
+			runtimeNode = std::make_unique<ActionNode>(std::make_unique<InAttackSequence>(character));
 		}
 		else if (editorNode.actionType == ActionType::OutAttackSequence)
 		{
 			// 攻撃シーケンス終了ノードの生成
-			runtimeNode = std::make_unique<OutAttackSequenceNode>(std::make_unique<OutAttackSequence>(character));
+			runtimeNode = std::make_unique<ActionNode>(std::make_unique<OutAttackSequence>(character));
 		}
 		else if (editorNode.actionType == ActionType::Telegraph)
 		{

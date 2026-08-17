@@ -886,12 +886,6 @@
     <Filter Include="Game\Action\ReleaseToken">
       <UniqueIdentifier>{b21642b8-ea0b-4bd8-9c92-6cac5f4ffd4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Node\ActionNode\RequestTokenNode">
-      <UniqueIdentifier>{9e4c99de-3988-4a53-8ae1-1a554f015e03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Node\ActionNode\ReleaseTokenNode">
-      <UniqueIdentifier>{a2c00318-d793-4090-adea-1e8bc34ac2ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory">
       <UniqueIdentifier>{91eebf13-34e9-421e-813f-8a6ed1b4cade}</UniqueIdentifier>
     </Filter>
@@ -954,12 +948,6 @@
     </Filter>
     <Filter Include="Game\Action\OutAttackSequence">
       <UniqueIdentifier>{0d744175-bf75-4c70-9cb1-412b85e086b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Node\ActionNode\InAttackSequenceNode">
-      <UniqueIdentifier>{ceae76f6-dc9b-4af6-bdd0-bf3a51f711be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Node\ActionNode\OutAttackSequenceNode">
-      <UniqueIdentifier>{cf738ecf-da31-4fc9-ac33-4a18b1655426}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeViewer">
       <UniqueIdentifier>{e4236ab9-eba8-4ed3-9cbb-726a3c856b03}</UniqueIdentifier>
@@ -2406,12 +2394,6 @@
     <ClCompile Include="Game\Action\ReleaseToken\ReleaseToken.cpp">
       <Filter>Game\Action\ReleaseToken</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.cpp">
-      <Filter>Game\Node\ActionNode\ReleaseTokenNode</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.cpp">
-      <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
-    </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI\BehaviorTreeEditorUI.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI</Filter>
     </ClCompile>
@@ -2468,12 +2450,6 @@
     </ClCompile>
     <ClCompile Include="Game\Action\OutAttackSequence\OutAttackSequence.cpp">
       <Filter>Game\Action\OutAttackSequence</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.cpp">
-      <Filter>Game\Node\ActionNode\InAttackSequenceNode</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.cpp">
-      <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
@@ -2540,12 +2516,6 @@
     </ClCompile>
     <ClCompile Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.cpp">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Action\Defense\Guard\Guard.cpp">
-      <Filter>Game\Action\Defence\Guard</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Action\Defense\Parry\Parry.cpp">
-      <Filter>Game\Action\Defence\Parry</Filter>
     </ClCompile>
     <ClCompile Include="Game\HUD\Button\Button.cpp">
       <Filter>Game\HUD\Button</Filter>
@@ -3785,12 +3755,6 @@
     <ClInclude Include="Game\Action\ReleaseToken\ReleaseToken.h">
       <Filter>Game\Action\ReleaseToken</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Node\ActionNode\ReleaseTokenNode\ReleaseTokenNode.h">
-      <Filter>Game\Node\ActionNode\ReleaseTokenNode</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Node\ActionNode\RequestTokenNode\RequestTokenNode.h">
-      <Filter>Game\Node\ActionNode\RequestTokenNode</Filter>
-    </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory</Filter>
     </ClInclude>
@@ -3847,12 +3811,6 @@
     </ClInclude>
     <ClInclude Include="Game\Action\OutAttackSequence\OutAttackSequence.h">
       <Filter>Game\Action\OutAttackSequence</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Node\ActionNode\InAttackSequenceNode\InAttackSequenceNode.h">
-      <Filter>Game\Node\ActionNode\InAttackSequenceNode</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Node\ActionNode\OutAttackSequenceNode\OutAttackSequenceNode.h">
-      <Filter>Game\Node\ActionNode\OutAttackSequenceNode</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h">
       <Filter>Game\BehaviorTree\BehaviorTreeViewer</Filter>
@@ -3919,12 +3877,6 @@
     </ClInclude>
     <ClInclude Include="Game\EffectManager\Effect\RepelEffect\RepelEffect.h">
       <Filter>Game\EffectManager\Effect\DeflectEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Action\Defense\Guard\Guard.h">
-      <Filter>Game\Action\Defence\Guard</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Action\Defense\Parry\Parry.h">
-      <Filter>Game\Action\Defence\Parry</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData\BehaviorTreeData.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData</Filter>

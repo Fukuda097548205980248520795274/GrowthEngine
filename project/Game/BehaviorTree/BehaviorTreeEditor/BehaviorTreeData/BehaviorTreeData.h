@@ -9,6 +9,10 @@
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
 #include "Action/Telegraph/Telegraph.h"
+#include "Action/RequestToken/RequestToken.h"
+#include "Action/ReleaseToken/ReleaseToken.h"
+#include "Action/InAttackSequence/InAttackSequence.h"
+#include "Action/OutAttackSequence/OutAttackSequence.h"
 #include "MotionManager/MotionManager.h"
 #include "BattleDirector/BattleDirector.h"
 
