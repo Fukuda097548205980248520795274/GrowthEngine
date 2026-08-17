@@ -632,13 +632,17 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		slowMotionDuration = 0.1f;
 	}
 
-	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
-	if (attacker && attacker->IsPlayer() || IsPlayer())if (IsHitDamage())
-		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
-
-
 	// ダメージを受けたことを通知する
 	isHitDamage_ = true;
+
+	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
+	if (IsPlayer())if (IsHitDamage())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+
+	// 攻撃者がプレイヤーの場合は、スローモーションを開始する
+	if (attacker && attacker->IsPlayer())
+		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+
 
 	// プレイヤーが攻撃中の場合は、軽い怯みを無効化する
 	if (!((!IsPlayer() && !IsBoss()) || !IsAttack()))
