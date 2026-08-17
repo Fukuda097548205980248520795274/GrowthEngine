@@ -1,0 +1,140 @@
+{
+    "Particle3D_rageImpact_002": {
+        "AlignToDirection": false,
+        "AttractDirection": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "AttractLength": 1.0,
+        "AttractPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "AttractPositionType": 0,
+        "BlendMode": 2,
+        "Count": 1,
+        "EmitTime": 0.10000000149011612,
+        "Emitter0_IsStart": false,
+        "Emitter0_Name": "Emitter0",
+        "Emitter0_Position": [
+            0.0,
+            0.30000001192092896,
+            0.0
+        ],
+        "Emitter0_Timer": 0.11662929505109787,
+        "Emitter1_IsStart": false,
+        "Emitter1_Name": "Emitter1",
+        "Emitter1_Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Emitter1_Timer": 0.0,
+        "Emitter2_IsStart": false,
+        "Emitter2_Name": "Emitter2",
+        "Emitter2_Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Emitter2_Timer": 0.0,
+        "Emitter3_IsStart": false,
+        "Emitter3_Name": "Emitter3",
+        "Emitter3_Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Emitter3_Timer": 0.0,
+        "Emitter4_IsStart": false,
+        "Emitter4_Name": "Emitter4",
+        "Emitter4_Position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Emitter4_Timer": 0.0,
+        "EnableAttract": false,
+        "EnableBillboard": false,
+        "EnableSoftParticle": false,
+        "EndAlpha": 1.0,
+        "EndColor": [
+            0.5233160257339478,
+            0.5628339648246765,
+            1.0,
+            1.0
+        ],
+        "EndRotate": 0.0,
+        "EndScale": [
+            5.0,
+            2.0,
+            5.0
+        ],
+        "EndScaleA": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EndScaleB": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EndSpeed": 0.0,
+        "Frequency": 0.10000000149011612,
+        "GravityDirection": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "GravityVelocity": 0.0,
+        "IsLoop": false,
+        "IsRandomEndScale": false,
+        "IsRandomRotate": false,
+        "IsRandomStartScale": false,
+        "MaxLifeTime": 0.20000000298023224,
+        "MinLifeTime": 0.10000000149011612,
+        "PauseTime": 0.0,
+        "Radius1": 1.0,
+        "Radius3": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "RandomColor": false,
+        "RotateAxis": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "Shape": 0,
+        "StartAlpha": 1.0,
+        "StartColor": [
+            0.1709844470024109,
+            0.21393853425979614,
+            1.0,
+            1.0
+        ],
+        "StartRotate": 0.0,
+        "StartScale": [
+            0.5,
+            2.0,
+            0.5
+        ],
+        "StartScaleA": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StartScaleB": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StartSpeed": 0.0,
+        "SwapEmitterAttract": false,
+        "TextureFilePath": "./Assets/Textures/damage_effect.png"
+    }
+}

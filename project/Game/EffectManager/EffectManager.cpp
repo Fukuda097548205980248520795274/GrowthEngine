@@ -86,6 +86,11 @@ void EffectManager::Initialize()
 
 	// 攻撃インパクトを生成
 	attackImpact000_ = std::make_unique<Particle3D>("attackImpact_000", 500, 30, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// レイジインパクトを生成
+	rageImpact000_ = std::make_unique<Particle3D>("rageImpact_000", 1000, 5, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	rageImpact001_ = std::make_unique<Particle3D>("rageImpact_001", 1000, 5, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	rageImpact002_ = std::make_unique<Particle3D>("rageImpact_002", 100, 5, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 }
 
 /// @brief 更新処理
@@ -156,6 +161,11 @@ void EffectManager::Draw()
 	impactGround003_->Draw();
 	impactGround005_->Draw();
 	impactGround006_->Draw();
+
+	// レイジインパクトを描画
+	rageImpact000_->Draw();
+	rageImpact001_->Draw();
+	rageImpact002_->Draw();
 
 	// 予備動作エフェクトを描画
 	telegraphEffect000_->Draw();
@@ -391,5 +401,32 @@ void EffectManager::AttackImpact000(const Vector3& position)
 {
 	Emitter3D emitter("attackImpact_000");
 	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief レイジモードを放出する
+/// @param position 
+void EffectManager::RageImpact000(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief レイジインパクトを放出する
+/// @param position 
+void EffectManager::RageImpact001(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_001");
+	emitter.param_->position = position + Vector3(0.0f, 0.8f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief レイジインパクトを放出する
+/// @param position 
+void EffectManager::RageImpact002(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_002");
+	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
 	emitter.Emit();
 }

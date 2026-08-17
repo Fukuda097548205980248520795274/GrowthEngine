@@ -199,6 +199,24 @@ private:
 	/// @brief レイジゲージHUD
 	Gage* rageGageHud_ = nullptr;
 
+	/// @brief レイジゲージの通常カラー
+	Vector3 rageNormalColor_ = Vector3(0.25f, 0.25f, 1.0f);
+
+	/// @brief レイジゲージのレイジモードの暗い色
+	Vector3 rageModeDarkColor_ = Vector3(0.3f, 0.3f, 1.0f);
+
+	/// @brief レイジゲージのレイジモードの明るい色
+	Vector3 rageModelLightColor_ = Vector3(0.8f, 0.8f, 1.0f);
+
+	/// @brief レイジゲージカラー用タイマー
+	float rageGageColorTimer_ = 0.0f;
+
+	/// @brief レイジゲーカラー用タイマー加算パラメータ
+	float rageGageAddParam_ = 1.0f;
+
+	/// @brief レイジゲージカラー用の時間
+	static constexpr float kRageGageColorTime = 0.5f;
+
 
 private:
 

@@ -957,6 +957,11 @@ void Character::RageModeInput()
 
 		// レイジモード開始のSEを再生する
 		soundManager_->SeRageModeStart();
+
+		Vector3 center = GetWorldPosition();
+		effectManager_->RageImpact000(center);
+		effectManager_->RageImpact001(center);
+		effectManager_->RageImpact002(center);
 	}
 }
 

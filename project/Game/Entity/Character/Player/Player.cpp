@@ -883,11 +883,30 @@ void Player::RageGageUpdate()
 {
 	if (rageGageHud_)
 	{
+		const float kDt = engine_->GetDeltaTime();
+
+		rageGageColorTimer_ += kDt * rageGageAddParam_;
+		rageGageColorTimer_ = std::clamp(rageGageColorTimer_, 0.0f, kRageGageColorTime);
+
+		// パラメータを反転させる
+		if (rageGageColorTimer_ <= 0.0f && rageGageColorTimer_ >= kRageGageColorTime)
+		{
+			rageGageAddParam_ *= -1.0f;
+		}
+
+		// 補間係数
+		float t = rageGageColorTimer_ / kRageGageColorTime;
+
+
 		// レイジゲージHUDの現在値を設定する
 		rageGageHud_->SetCurrentGage(static_cast<int>(rageGage_));
 
 		rageGageHud_->SetPosition(Vector2(200.0f, 650.0f));
 		rageGageHud_->SetVisible(true);
+
+		// 色を適用する
+		if (isRageMode_)rageGageHud_->SetColor(Lerp(rageModeDarkColor_, rageModelLightColor_, t));
+		else rageGageHud_->SetColor(rageNormalColor_);
 
 		// レイジゲージHUDを更新する
 		rageGageHud_->Update();
