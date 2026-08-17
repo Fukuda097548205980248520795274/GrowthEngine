@@ -569,7 +569,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 					// 重い怯みのスローモーションを設定する
 					slowMotionTimeScale = 0.0f;
-					slowMotionTimeScale = 0.125f;
+					slowMotionDuration = 0.1f;
 				}
 
 				if (!IsHeavyDamage())
@@ -596,7 +596,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 
 					// ダウンのスローモーションを設定する
 					slowMotionTimeScale = 0.0f;
-					slowMotionDuration = 0.15f;
+					slowMotionDuration = 0.125f;
 				}
 
 				// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
@@ -632,16 +632,16 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		slowMotionDuration = 0.1f;
 	}
 
-	// ダメージを受けたことを通知する
-	isHitDamage_ = true;
-
 	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
-	if (IsPlayer())if (IsHitDamage())
+	if (IsPlayer())
 		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
 
 	// 攻撃者がプレイヤーの場合は、スローモーションを開始する
 	if (attacker && attacker->IsPlayer())
 		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
+
+	// ダメージを受けたことを通知する
+	isHitDamage_ = true;
 
 
 	// プレイヤーが攻撃中の場合は、軽い怯みを無効化する

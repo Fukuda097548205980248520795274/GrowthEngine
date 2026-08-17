@@ -269,12 +269,12 @@ void GrowthEngine::UpdateTimeScale()
 	if (slowDuration_ > 0.0f)
 	{
 		slowDuration_ -= GetDeltaTime();
+	}
 
-		// スローモーションの時間が0以下になったらタイムスケールを元に戻す
-		if (slowDuration_ <= 0.0f)
-		{
-			timeScale_ = 1.0f;
-		}
+	// スローモーションの時間が0以下になったらタイムスケールを元に戻す
+	if (slowDuration_ <= 0.0f)
+	{
+		timeScale_ = 1.0f;
 	}
 }
 
