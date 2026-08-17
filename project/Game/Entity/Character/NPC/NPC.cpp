@@ -267,7 +267,7 @@ void NPC::UpdateStanceMovement()
 		return;
 
 	// 構え状態でない場合は、スロットの割り当てを解除する
-	if (!isStance_ || IsIncapacitated() || IsInAttackSequence() ||
+	if (!isStance_ || IsIncapacitated() || IsInAttackSequence() || IsGuard() || 
 		GetCurrentMove() || GetCurrentAvoid())
 	{
 		BattleDirector& battleDirector = BattleDirector::GetInstance();

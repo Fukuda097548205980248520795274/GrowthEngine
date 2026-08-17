@@ -9,29 +9,38 @@ enum class GuardType
 	Repel, // 弾き
 };
 
+/// @brief 防御アクションの初期化データ
+struct DefenseInitData
+{
+	// @brief 防御する時間
+	float defenseTime = 1.0f;
+};
+
 class Defense : public Action
 {
 public:
 
 	/// @brief コンストラクタ
 	/// @param character 
-	/// @param duration 
-	Defense(Character* character , float duration) : Action(character), guardDuration_(duration) {}
+	/// @param initData 
+	Defense(Character* character, const DefenseInitData& initData);
 
 	/// @brief 実行
 	virtual void Exec() override;
 
+	/// @brief 更新処理
+	virtual void Update() override {}
+
+	/// @brief リセット
+	virtual void Reset() override;
+
 	/// @brief 終了、中断
 	virtual void Exit() override;
-
-	/// @brief 使用中かどうか
-	/// @return 
-	virtual bool IsUse() const override { return IsExec(); }
 
 
 private:
 
-	// ガードの持続時間
-	float guardDuration_ = 0.5f;
+	/// @brief 防御を継続する時間
+	float defenseTime_ = 1.0f;
 };
 

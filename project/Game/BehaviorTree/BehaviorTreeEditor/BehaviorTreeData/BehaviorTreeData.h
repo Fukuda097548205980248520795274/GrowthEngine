@@ -5,6 +5,7 @@
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 #include "Action/Attack/GrabStrikeAttack/GrabStrikeAttack.h"
 #include "Action/Avoid/Avoid.h"
+#include "Action/Defense/Defense.h"
 #include "Action/Move/NavMeshMove/NavMeshMove.h"
 #include "Action/Move/NavMeshLeaderMove/NavMeshLeaderMove.h"
 #include "Action/Telegraph/Telegraph.h"
@@ -53,7 +54,10 @@ enum class ActionType
 	NavMeshLeaderMove = 12,
 
 	// 予備動作
-	Telegraph
+	Telegraph,
+
+	// 防御
+	Defense,
 };
 
 /// @brief アクションの種類を文字列で表す配列
@@ -73,7 +77,8 @@ constexpr inline const char* actionTypeNames[] =
 
 	"",
 	"NavMeshLeaderMove",
-	"Telegraph"
+	"Telegraph",
+	"Defense"
 };
 
 // 条件の種類
@@ -219,6 +224,7 @@ struct EditorNode
 	NavMeshMoveInitData navMeshMoveInitData;
 	NavMeshLeaderMoveInitData navMeshLeaderMoveInitData;
 	TelegraphInitData telegraphInitData;
+	DefenseInitData defenseInitData;
 
 	// 条件ノードのパラメータ
 	ConditionNodeParam conditionParam;

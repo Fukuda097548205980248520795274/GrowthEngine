@@ -150,6 +150,13 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 				n["motionType"] = static_cast<int>(node.motionType);
 				n["motionName"] = node.motionName;
 			}
+			else if (node.actionType == ActionType::Defense)
+			{
+				n["defense_data"]["defenseTime"] = node.defenseInitData.defenseTime;
+
+				n["motionType"] = static_cast<int>(node.motionType);
+				n["motionName"] = node.motionName;
+			}
 		}
 		else if (node.type == EditorNodeType::Condition)
 		{
@@ -427,6 +434,16 @@ void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<Edit
 						node.telegraphInitData.time = telegraphData.value("telegraphTime", 0.0f);
 						node.telegraphInitData.hAnimation = MotionManager::GetInstance()->GetMotion(static_cast<MotionType>(n.value("motionType", 0)), n.value("motionName", ""));
 
+						node.motionType = static_cast<MotionType>(n.value("motionType", 0));
+						node.motionName = n.value("motionName", "");
+					}
+				}
+				else if (node.actionType == ActionType::Defense)
+				{
+					if (n.contains("defense_data") && n["defense_data"].is_object())
+					{
+						const auto& defenseData = n["defense_data"];
+						node.defenseInitData.defenseTime = defenseData.value("defenseTime", 0.0f);
 						node.motionType = static_cast<MotionType>(n.value("motionType", 0));
 						node.motionName = n.value("motionName", "");
 					}

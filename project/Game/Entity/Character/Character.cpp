@@ -495,14 +495,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			if (!IsBlownAway())
 			{
 				stateMachine_->ChangeState("BlownFalling");
-				if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				if (auto state = static_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction();
 			}
 			else
 			{
 				// すでに落下中の状態の場合は、再度Enterを呼び出して、落下の時間をリセットする
 				stateMachine_->GetCurrentState()->Enter();
-				if (auto state = dynamic_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
+				if (auto state = static_cast<CharacterStateBlownFalling*>(stateMachine_->GetCurrentState()))
 					state->DamageReaction();
 			}
 		}
@@ -549,14 +549,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				{
 					// 軽い怯みの状態に遷移する
 					stateMachine_->ChangeState("LightDamage");
-					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					if (auto state = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 						state->DamageReaction(hitPosition);
 				}
 				else
 				{
 					// すでに軽い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 					stateMachine_->GetCurrentState()->Enter();
-					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					if (auto state = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 						state->DamageReaction(hitPosition);
 				}
 			}
@@ -576,14 +576,14 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				{
 					// 重い怯みの状態に遷移する
 					stateMachine_->ChangeState("HeavyDamage");
-					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					if (auto state = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 						state->DamageReaction(hitPosition);
 				}
 				else
 				{
 					// すでに重い怯みの状態の場合は、再度Enterを呼び出して、怯みの時間をリセットする
 					stateMachine_->GetCurrentState()->Enter();
-					if (auto state = dynamic_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					if (auto state = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
 						state->DamageReaction(hitPosition);
 				}
 			}
@@ -605,7 +605,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 					if (!IsBlownAway())
 					{
 						stateMachine_->ChangeState("BlownAway");
-						if (auto state = dynamic_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
+						if (auto state = static_cast<CharacterStateBlownAway*>(stateMachine_->GetCurrentState()))
 							state->DamageReaction(hitPosition);
 					}
 				}
@@ -615,7 +615,7 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 					{
 						// ダウンの状態に遷移する
 						stateMachine_->ChangeState("DownFalling");
-						if (auto state = dynamic_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
+						if (auto state = static_cast<CharacterStateDownFalling*>(stateMachine_->GetCurrentState()))
 							state->DamageReaction(hitPosition);
 					}
 				}
@@ -1179,7 +1179,7 @@ void Character::ExecuteGrab(Character* target, float duration,const std::optiona
 {
 	// 掴み状態に遷移する
 	stateMachine_->ChangeState("Grabbing");
-	if (auto state = dynamic_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState()))
+	if (auto state = static_cast<CharacterStateGrabbing*>(stateMachine_->GetCurrentState()))
 	{
 		state->SetGrabTarget(target);
 	}
@@ -1199,7 +1199,7 @@ void Character::OnGrabbed(Character* grabber)
 
 	// 掴まれた状態のキャラクターに掴んだキャラクターを設定する
 	auto currentState = stateMachine_->GetCurrentState();
-	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
+	if (auto grabbedState = static_cast<CharacterStateGrabbed*>(currentState))
 	{
 		grabbedState->SetGrabber(grabber);
 	}
@@ -1258,7 +1258,7 @@ bool Character::IsGrabbedDamage()const
 	if (!IsGrabbed())return false;
 
 	auto currentState = stateMachine_->GetCurrentState();
-	if (auto grabbedState = dynamic_cast<CharacterStateGrabbed*>(currentState))
+	if (auto grabbedState = static_cast<CharacterStateGrabbed*>(currentState))
 	{
 		// 自分を掴む相手を取得する
 		if (auto grabber = grabbedState->GetGrabber())

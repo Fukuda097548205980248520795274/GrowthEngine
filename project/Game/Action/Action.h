@@ -52,7 +52,7 @@ public:
 
 	/// @brief 使用中かどうか
 	/// @return 
-	virtual bool IsUse() const = 0;
+	virtual bool IsUse() const { return false; }
 
 	/// @brief ブレークポイントを取得する
 	/// @return 

@@ -1856,6 +1856,10 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 			}
 		}
 	}
+	else if (node.actionType == ActionType::Defense)
+	{
+		ImGui::DragFloat("防御時間", &node.defenseInitData.defenseTime, 0.01f, 0.0f, 100000.0f);
+	}
 
 	ImGui::PopItemWidth();
 }

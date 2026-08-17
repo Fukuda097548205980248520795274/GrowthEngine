@@ -16,6 +16,9 @@ void CharacterStateGuard::Enter()
 	// 防御しているタイマーをリセットする
 	guardActiveTimer_ = 0.0f;
 
+	// 移動を停止する
+	owner_->MoveStop();
+
 	// 防御モーションを再生する
 	owner_->SetAnimation(hGuard_, true, true);
 }
