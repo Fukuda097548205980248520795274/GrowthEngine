@@ -54,9 +54,6 @@ private:
 	/// @brief タイトルシーンのイントロ更新処理
 	void IntroUpdate();
 
-	/// @brief タイトルシーンのイントロ描画処理
-	void IntroDraw();
-
 	/// @brief イントロの経過時間
 	float introTimer_ = 0.0f;
 
@@ -71,9 +68,6 @@ private:
 
 	/// @brief タイトルシーンのタイトル更新処理
 	void TitleUpdate();
-
-	/// @brief タイトルシーンのタイトル描画処理
-	void TitleDraw();
 
 	/// @brief タイトルの選択肢を処理する
 	void ExecuteTitleOption();
@@ -99,9 +93,6 @@ private:
 
 	/// @brief タイトルシーンのメインメニュー更新処理
 	void MainMenuUpdate();
-
-	/// @brief タイトルシーンのメインメニュー描画処理
-	void MainMenuDraw();
 
 	/// @brief メインメニューの選択肢を処理する
 	void SelectMainMenuOption();
@@ -151,9 +142,6 @@ private:
 	/// @brief タイトルシーンのステージセレクト更新処理
 	void StageSelectUpdate();
 
-	/// @brief タイトルシーンのステージセレクト描画処理
-	void StageSelectDraw();
-
 	/// @brief ステージセレクトの選択肢を処理する
 	void StageSelectMove();
 
@@ -162,6 +150,10 @@ private:
 
 	/// @brief タイトルに戻る
 	void BackToMainMenu();
+
+	/// @brief ステージセレクトの背景スプライトを更新する
+	void StageSelectBgSpriteUpdate();
+
 
 	/// @brief ステージセレクトのタイマー
 	float stageSelectTimer_ = 0.0f;
@@ -179,6 +171,19 @@ private:
 	bool isBackToMainMenu_ = false;
 
 
+	/// @brief ステージセレクトの背景スプライト
+	std::unique_ptr<PrefabBaseSprite> stageSelectBGSprite_ = nullptr;
+
+	/// @brief ステージセレクトの選択肢のスプライト
+	std::vector<PrefabInstanceSprite*> stageSelectOptionSprites_;
+
+	/// @brief ステージセレクトの選択肢のスプライトの位置
+	static constexpr Vector2 kStageSelectOptionSpritePosition = Vector2(969.0f, 280.0f);
+
+	/// @brief ステージセレクトの選択肢のスプライトの間隔
+	static constexpr float kStageSelectOptionSpriteSpacing = 100.0f;
+
+
 private:
 
 	/// @brief タイトルシーンのプレイ初期化処理
@@ -186,9 +191,6 @@ private:
 	
 	/// @brief タイトルシーンのプレイ更新処理
 	void PlayUpdate();
-
-	/// @brief タイトルシーンのプレイ描画処理
-	void PlayDraw();
 
 	/// @brief プレイの経過時間
 	float playTimer_ = 0.0f;
@@ -204,9 +206,6 @@ private:
 
 	/// @brief タイトルシーンの終了更新処理
 	void QuitUpdate();
-
-	/// @brief タイトルシーンの終了描画処理
-	void QuitDraw();
 
 	/// @brief 終了の経過時間
 	float quitTimer_ = 0.0f;

@@ -97,12 +97,6 @@ void TitleScene::MainMenuUpdate()
 	UpdateMainMenuOptionSprite();
 }
 
-/// @brief タイトルシーンのメインメニュー描画処理
-void TitleScene::MainMenuDraw()
-{
-
-}
-
 /// @brief メインメニューの選択肢を処理する
 void TitleScene::SelectMainMenuOption()
 {

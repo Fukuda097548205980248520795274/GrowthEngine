@@ -30,6 +30,8 @@ void StageSelectEditor::DrawUI()
 {
 #ifdef DEVELOPMENT
 
+	isStageListChanged_ = false; // フレームごとにリセット
+
 	ImGui::Begin("Stage Select Editor");
 
 	//　チュートリアルステージの設定UI
@@ -103,6 +105,9 @@ void StageSelectEditor::DrawUI()
 
 		// 入力欄をクリア
 		inputDisplayName_[0] = '\0';
+
+		isStageListChanged_ = true; // ステージリストが変更されたことを記録
+
 		Save();
 	}
 
@@ -135,6 +140,8 @@ void StageSelectEditor::DrawUI()
 				stageList_.erase(stageList_.begin() + i);
 				Save();
 				--i; // インデックスを調整
+
+				isStageListChanged_ = true; // ステージリストが変更されたことを記録
 			}
 			ImGui::PopID();
 		}

@@ -48,12 +48,6 @@ void TitleScene::TitleUpdate()
 	}
 }
 
-/// @brief タイトルシーンのタイトル描画処理
-void TitleScene::TitleDraw()
-{
-
-}
-
 /// @brief タイトルの選択肢を処理する
 void TitleScene::ExecuteTitleOption()
 {

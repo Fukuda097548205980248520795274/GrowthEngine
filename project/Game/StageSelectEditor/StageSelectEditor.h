@@ -26,6 +26,11 @@ public:
 	/// @return 
 	const std::string& GetTutorialStageName() const { return tutorialStageName_; }
 
+	/// @brief ステージリストが変更されたかどうかを取得する
+	/// @return 
+	bool IsStageListChanged() const { return isStageListChanged_; }
+
+
 private:
 
 	/// @brief フォルダからステージファイル名一覧を取得する
@@ -53,5 +58,11 @@ private:
 
 	/// @brief チュートリアルステージのファイル名
 	std::string tutorialStageName_ = "Tutorial";
+
+
+private:
+
+	/// @brief ステージリストが変更されたかどうか
+	bool isStageListChanged_ = false;
 };
 

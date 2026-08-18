@@ -28,9 +28,3 @@ void TitleScene::QuitUpdate()
 		quitTimer_ = std::max(quitTimer_, 0.0f); // 0未満にならないようにする
 	}
 }
-
-/// @brief タイトルシーンの終了描画処理
-void TitleScene::QuitDraw()
-{
-
-}

@@ -20,6 +20,9 @@ void TitleScene::Initialize()
 	titleBgm_->param_->enableLoop = true;
 	titleBgm_->Play();
 
+	// ステージセレクトの背景スプライトを作成する
+	stageSelectBGSprite_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/mainMenuBG.png"),32, "StageSelectBG");
+
 	// 選択SEと決定SEを作成する
 	selectSe_ = std::make_unique<Se>("SelectSE", engine_->LoadAudio("./Assets/Sounds/se/title_select.mp3"));
 	executeSe_ = std::make_unique<Se>("ExecuteSE", engine_->LoadAudio("./Assets/Sounds/se/title_execute.mp3"));
@@ -114,6 +117,9 @@ void TitleScene::Initialize()
 
 			uiEditor_->DrawUI();
 			uiEditor_->Draw();
+
+			// ステージセレクトの背景スプライトの描画
+			stageSelectBGSprite_->Draw();
 		}
 	);
 
@@ -140,6 +146,31 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 	float dt = engine_->GetDeltaTime();
+
+	if (stageSelectEditor_)
+	{
+		auto stageList = stageSelectEditor_->GetStageList();
+
+		// ステージセレクトの選択肢の数が変更された場合、ステージセレクトのスプライトを再作成する
+		if (stageList.size() != stageSelectOptionSprites_.size())
+		{
+			for (auto& sprite : stageSelectOptionSprites_)
+			{
+				sprite->isDelete_ = true;
+			}
+
+			stageSelectOptionSprites_.clear();
+			stageSelectOptionSprites_.resize(stageList.size());
+
+			for (auto& sprite : stageSelectOptionSprites_)
+			{
+				sprite = stageSelectBGSprite_->CreateInstance();
+				sprite->param_.transform.scale = Vector2(0.75f, 0.75f);
+				sprite->param_.material.color.w = 0.0f;
+				sprite->param_.transform.translate = kStageSelectOptionSpritePosition;
+			}
+		}
+	}
 
 	// フェーズマネージャの更新処理を呼び出す
 	phaseManager_->Update();

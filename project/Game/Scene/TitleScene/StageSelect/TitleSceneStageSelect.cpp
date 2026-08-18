@@ -8,12 +8,34 @@ void TitleScene::StageSelectInitialize()
 
 	// メインメニューに戻る処理が実行されたかどうかを初期化
 	isBackToMainMenu_ = false;
+
+	for (int i = 0; i < stageSelectOptionSprites_.size(); ++i)
+	{
+		// ステージセレクトの選択肢のスプライトの目標位置を計算
+		Vector2 targetPosition = kStageSelectOptionSpritePosition;
+
+		// 選択肢のインデックスに応じてY座標を調整
+		targetPosition.y -= static_cast<float>(i - stageSelectIndex_) * kStageSelectOptionSpriteSpacing;
+
+		// ステージセレクトの選択肢のスプライトの現在位置を取得
+		auto& currentPos = stageSelectOptionSprites_[i]->param_.transform.translate;
+		currentPos = targetPosition;
+
+		// ステージセレクトの選択肢のスプライトのアルファ値を更新
+		stageSelectOptionSprites_[i]->param_.material.color.w = 0.0f;
+
+		// ステージセレクトの選択肢のスプライトを描画
+		stageSelectOptionSprites_[i]->Draw();
+	}
 }
 
 /// @brief タイトルシーンのメインメニュー更新処理
 void TitleScene::StageSelectUpdate()
 {
 	float dt = engine_->GetDeltaTime();
+
+	// ステージセレクトの背景スプライトを更新
+	StageSelectBgSpriteUpdate();
 
 	if (isStageSelectExecuted_)
 	{
@@ -47,12 +69,6 @@ void TitleScene::StageSelectUpdate()
 		// タイトルに戻るキー入力を処理する
 		BackToMainMenu();
 	}
-}
-
-/// @brief タイトルシーンのメインメニュー描画処理
-void TitleScene::StageSelectDraw()
-{
-
 }
 
 /// @brief ステージセレクトの選択肢を処理する
@@ -115,5 +131,85 @@ void TitleScene::BackToMainMenu()
 
 		// 戻るSEを再生
 		backSe_->Play();
+	}
+}
+
+/// @brief ステージセレクトの背景スプライトを更新する
+void TitleScene::StageSelectBgSpriteUpdate()
+{
+	float dt = engine_->GetDeltaTime();
+
+	for (int i = 0; i < stageSelectOptionSprites_.size(); ++i)
+	{
+		// ステージセレクトの選択肢のスプライトの目標位置を計算
+		Vector2 targetPosition = kStageSelectOptionSpritePosition;
+
+		// 選択肢のインデックスに応じてY座標を調整
+		targetPosition.y -= static_cast<float>(i - stageSelectIndex_) * kStageSelectOptionSpriteSpacing;
+
+		// ステージセレクトの選択肢のスプライトの現在位置を取得
+		auto& currentPos = stageSelectOptionSprites_[i]->param_.transform.translate;
+		currentPos.x = Lerp(currentPos.x, targetPosition.x, dt * 15.0f);
+		currentPos.y = Lerp(currentPos.y, targetPosition.y, dt * 15.0f);
+
+		// 現在のアルファ値とスケールの参照を取得
+		auto& currentAlpha = stageSelectOptionSprites_[i]->param_.material.color.w;
+		auto& currentScale = stageSelectOptionSprites_[i]->param_.transform.scale;
+
+		// 決定時の演出
+		if (isStageSelectExecuted_)
+		{
+			// タイマーから進行度(0.0 ~ 1.0)とイージングを計算
+			float t = 1.0f - (stageSelectTimer_ / kStageSelectDuration);
+			float easing = 1.0f - std::pow(1.0f - t, 3.0f);
+
+			if (i == stageSelectIndex_)
+			{
+				// 選択された項目は大きくしながらフェードアウト
+				currentAlpha = Lerp(1.0f, 0.0f, easing);
+				currentScale = Lerp(Vector2(0.75f, 0.75f), Vector2(1.5f, 1.5f), easing);
+			}
+			else
+			{
+				// 選択されていない項目はそのままフェードアウト
+				currentAlpha = Lerp(currentAlpha, 0.0f, t);
+			}
+		}
+		// メインメニューに戻る時の演出
+		else if (isBackToMainMenu_)
+		{
+			float t = 1.0f - (stageSelectTimer_ / kStageSelectDuration);
+			currentAlpha = Lerp(currentAlpha, 0.0f, t);
+		}
+		// 通常時（選択中）の演出
+		else
+		{
+			// 目標アルファ値の決定
+			float targetAlpha = 0.0f;
+
+			if (i == stageSelectIndex_)
+			{
+				targetAlpha = 1.0f;
+			}
+			else if (i >= stageSelectIndex_ - 1 && i <= stageSelectIndex_ + 1)
+			{
+				targetAlpha = 0.25f;
+			}
+			else if (i >= stageSelectIndex_ - 2 && i <= stageSelectIndex_ + 2)
+			{
+				targetAlpha = 0.1f;
+			}
+
+			targetAlpha = std::clamp(targetAlpha, 0.0f, 1.0f);
+
+			// アルファ値をLerpで滑らかに補間（フェードイン/フェードアウト）
+			currentAlpha = Lerp(currentAlpha, targetAlpha, dt * 10.0f);
+
+			// スケールは通常のサイズに維持・補間
+			currentScale = Lerp(currentScale, Vector2(0.75f, 0.75f), dt * 15.0f);
+		}
+
+		// ステージセレクトの選択肢のスプライトを描画
+		stageSelectOptionSprites_[i]->Draw();
 	}
 }

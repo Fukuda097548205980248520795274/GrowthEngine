@@ -40,9 +40,3 @@ void TitleScene::IntroUpdate()
 		introTimer_ = std::max(introTimer_, 0.0f); // 0未満にならないようにする
 	}
 }
-
-/// @brief タイトルシーンのイントロ描画処理
-void TitleScene::IntroDraw()
-{
-
-}

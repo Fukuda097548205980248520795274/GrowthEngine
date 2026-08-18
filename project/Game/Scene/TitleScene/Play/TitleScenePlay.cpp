@@ -28,9 +28,3 @@ void TitleScene::PlayUpdate()
 		playTimer_ = std::max(playTimer_, 0.0f); // 0未満にならないようにする
 	}
 }
-
-/// @brief タイトルシーンのプレイ描画処理
-void TitleScene::PlayDraw()
-{
-
-}

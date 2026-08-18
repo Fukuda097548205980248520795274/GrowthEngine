@@ -3,6 +3,14 @@
         {
             "displayName": "Stage1",
             "fileName": "bambooGroveStage"
+        },
+        {
+            "displayName": "bambooGroveStage",
+            "fileName": "bambooGroveStage"
+        },
+        {
+            "displayName": "bambooGroveStage",
+            "fileName": "bambooGroveStage"
         }
     ],
     "tutorialStageName": "tutorialStage"
