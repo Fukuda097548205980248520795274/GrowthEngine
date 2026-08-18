@@ -25,12 +25,14 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 		// int から CharacterTag にキャスト
 		CharacterTag tag = static_cast<CharacterTag>(data.subType);
 
-		// NPCの初期化データの作成
+		// 初期化データの作成
 		CharacterInitData initData;
 		initData.position = data.position;
 		initData.aggressiveness = data.aggressiveness;
 		initData.hp = data.hp;
 		initData.rotateY = data.rotate_.y;
+		initData.guardGage_ = data.guardGage;
+		initData.guardRecoveryTime = data.guardRecoveryTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
 		initData.hStandMotion = data.standMotion.handle;
@@ -184,6 +186,8 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		initData.aggressiveness = data.aggressiveness;
 		initData.hp = data.hp;
 		initData.rotateY = data.rotate_.y;
+		initData.guardGage_ = data.guardGage;
+		initData.guardRecoveryTime = data.guardRecoveryTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
 		initData.hStandMotion = data.standMotion.handle;

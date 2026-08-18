@@ -75,6 +75,12 @@ struct PlacementData
 	// 耐久力 (武器の場合)
 	int32_t durability = 100;
 
+	/// @brief ガードゲージ量
+	float guardGage = 10.0f;
+
+	/// @brief ガード復活時間
+	float guardRecoveryTime = 5.0f;
+
 	// 攻撃性（NPCの場合）
 	float aggressiveness = 1.0f;
 
@@ -210,6 +216,8 @@ inline void toJson(json& j, const PlacementData& s)
 	if (s.category == EditCategory::Character)
 	{
 		j["hp"] = s.hp;
+		j["guardGage"] = s.guardGage;
+		j["guardRecoveryTime"] = s.guardRecoveryTime;
 		j["aggressiveness"] = s.aggressiveness;
 		j["standMotionName"] = s.standMotion.name;
 		j["stanceMotionName"] = s.stanceMotion.name;
@@ -509,6 +517,8 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
 
 	s.hp = j.value("hp", 100);
+	s.guardGage = j.value("guardGage", 10.0f);
+	s.guardRecoveryTime = j.value("guardRecoveryTime", 5.0f);
 	s.aggressiveness = j.value("aggressiveness", 1.0f);
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);

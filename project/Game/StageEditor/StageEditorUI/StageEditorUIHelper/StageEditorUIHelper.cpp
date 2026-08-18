@@ -511,6 +511,33 @@ namespace StageEditorUIHelper
 					}
 				}
 
+				// ガードゲージ量
+				PropertyLabel("ガードゲージ量");
+				if (charPtr)
+				{
+					if (ImGui::DragFloat("##ガードゲージ量", &target.guardGage, 0.01f, 0.0f, charPtr->GetMaxGuardGage()))
+					{
+						isDirty = true;
+						charPtr->SetGuardGage(target.guardGage);
+					}
+				}
+				else
+				{
+					if (ImGui::DragFloat("##ガードゲージ量", &target.guardGage, 0.01f, 0.0f, 100000.0f))
+					{
+						isDirty = true;
+					}
+				}
+
+				// ガード回復時間
+				PropertyLabel("ガード回復時間");
+				if (ImGui::DragFloat("##ガード回復時間", &target.guardRecoveryTime, 0.01f, 0.0f, 100000.0f))
+				{
+					isDirty = true;
+					if (charPtr)
+						charPtr->SetGuardRecoveryTime(target.guardRecoveryTime);
+				}
+
 				// NPCの場合は攻撃性を設定できるようにする
 				if (target.subType != static_cast<int32_t>(CharacterTag::Player))
 				{

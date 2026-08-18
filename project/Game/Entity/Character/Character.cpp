@@ -1942,6 +1942,13 @@ void Character::SetInitData(const CharacterInitData& initData)
 	hp_ = initData.hp;
 	maxHp_ = hp_;
 
+	// ガードゲージ量
+	guardGage_ = initData.guardGage_;
+	maxGuardGage_ = guardGage_;
+
+	// ガード復活時間
+	guardRecoveryTime_ = initData.guardRecoveryTime;
+
 	// レイジゲージの閾値 昇順
 	rageGageThresholds_ = initData.rageGageThresholds;
 	std::sort(rageGageThresholds_.begin(), rageGageThresholds_.end());

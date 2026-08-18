@@ -623,6 +623,20 @@ public:
 	/// @param isGuardBreaking 
 	void SetIsGuardBreaking(bool isGuardBreaking) { isGuardBreaking_ = isGuardBreaking; }
 
+	/// @brief ガードゲージ量の設定
+	/// @param guardGage 
+	void SetGuardGage(float guardGage) { guardGage_ = guardGage; maxGuardGage_ = std::max(maxGuardGage_, guardGage); }
+
+	/// @brief 最大ガードゲージ量を取得する
+	/// @return 
+	float GetMaxGuardGage()const { return maxGuardGage_; }
+
+	/// @brief ガード復活時間の設定
+	/// @param guardRecoveryTime 
+	void SetGuardRecoveryTime(float guardRecoveryTime) { guardRecoveryTimer_ = guardRecoveryTime; }
+
+
+
 
 
 protected:

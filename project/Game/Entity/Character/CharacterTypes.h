@@ -90,6 +90,12 @@ struct CharacterInitData
 	/// @brief 体力
 	int hp = 0;
 
+	/// @brief ガードゲージ量
+	float guardGage_ = 10.0f;
+
+	/// @brief ガード復活時間
+	float guardRecoveryTime = 5.0f;
+
 	/// @brief 攻撃性
 	float aggressiveness = 1.0f;
 
