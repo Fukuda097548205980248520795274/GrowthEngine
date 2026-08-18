@@ -64,7 +64,7 @@ public:
 	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
 		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
-		bool isGuardBreak = false, bool isThrow = false);
+		bool isGuardBreak = false, bool isThrow = false, Weapon* weapon = nullptr);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
@@ -607,6 +607,22 @@ public:
 	/// @return 
 	bool IsWallTouch() const { return isWallTouching_; }
 
+	/// @brief ガードブレイクが発生したかどうかを取得する
+	/// @return 
+	bool IsGuardBreak() const { return isGuardBreak_; }
+
+	/// @brief ガードブレイクさせたかどうか
+	/// @return 
+	bool IsGuardBreaking() const { return isGuardBreaking_ || isPrevGuardBreaking_; }
+
+	/// @brief ガードブレイクされたかどうか
+	/// @return 
+	bool IsGuardBroke() const { return isGuardBroke_ || isPrevGuardBroke_; }
+
+	/// @brief ガードブレイクさせたかどうかの設定
+	/// @param isGuardBreaking 
+	void SetIsGuardBreaking(bool isGuardBreaking) { isGuardBreaking_ = isGuardBreaking; }
+
 
 
 protected:
@@ -717,11 +733,47 @@ protected:
 
 protected:
 
+	/// @brief ガードゲージの更新
+	void UpdateGuardGage();
+
 	// ガードに成功したかどうか
 	bool isGuardHit_ = false;
 
 	// 前フレームでガードに成功したかどうか
 	bool isPrevGuardHit_ = false;
+
+
+	/// @brief ガードゲージ
+	float guardGage_ = 0.0f;
+
+	/// @brief ガードゲージの最大値
+	float maxGuardGage_ = 0.0f;
+
+	// ガードゲージ復活量
+	float guardGageRecoveryAmount_ = 0.1f;
+
+	/// @brief ガードブレイクが発生したかどうか
+	bool isGuardBreak_ = false;
+
+
+	/// @brief ガードブレイクした瞬間
+	bool isGuardBreaking_ = false;
+
+	/// @brief 前フレームのガードブレイクした瞬間
+	bool isPrevGuardBreaking_ = false;
+
+	/// @brief ガードブレイクされたかどうか
+	bool isGuardBroke_ = false;
+
+	/// @brief 前のフレームでガードブレイクされたかどうか
+	bool isPrevGuardBroke_ = false;
+
+
+	// ガード復活タイマー
+	float guardRecoveryTimer_ = 0.0f;
+
+	/// @brief ガード復活までの時間
+	float guardRecoveryTime_ = 5.0f;
 
 
 protected:

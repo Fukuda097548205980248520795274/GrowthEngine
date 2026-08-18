@@ -158,6 +158,14 @@ void GameScene::BattlePhaseUpdate()
 		if (player_->IsHitDamage())
 			cameraShake_->StartShake(0.3f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 
+		// ガードブレイクしたとき
+		if(player_->IsGuardBreaking())
+			cameraShake_->StartShake(0.4f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
+
+		// ガードブレイクされたとき
+		if(player_->IsGuardBroke())
+			cameraShake_->StartShake(0.4f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
+
 		// 弾いたとき
 		if (player_->IsHitRepel())
 			cameraShake_->StartShake(0.1f, 0.025f, Vector3(1.0f, 1.0f, 1.0f));

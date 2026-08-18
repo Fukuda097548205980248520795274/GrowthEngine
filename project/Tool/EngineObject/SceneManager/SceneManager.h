@@ -64,5 +64,5 @@ private:
 	std::string nextStageName_{};
 
 	/// @brief チュートリアルクリアフラグ
-	bool isTutorialCleared_ = true;
+	bool isTutorialCleared_ = false;
 };

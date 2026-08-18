@@ -56,6 +56,9 @@ void EffectManager::Initialize()
 	impact004_ = std::make_unique<Particle3D>("impact_004", 100, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impact005_ = std::make_unique<Particle3D>("impact_005", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
+	// 武器破壊000を生成
+	weaponBreak000_ = std::make_unique<Particle3D>("weaponBreak_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
 	// インパクトドロップ000を生成
 	impactDrop000_ = std::make_unique<Particle3D>("impactDrop_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
@@ -155,6 +158,9 @@ void EffectManager::Draw()
 	impact002_->Draw();
 	impact003_->Draw();
 	impact000_->Draw();
+
+	// 武器破壊000を描画
+	weaponBreak000_->Draw();
 
 	// インパクト地面000を描画
 	impactGround001_->Draw();
@@ -461,5 +467,14 @@ void EffectManager::RageImpact005(const Vector3& position)
 {
 	Emitter3D emitter("rageImpact_005");
 	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief 武器破壊を放出する
+/// @param position 
+void EffectManager::WeaponBreak000(const Vector3& position)
+{
+	Emitter3D emitter("weaponBreak_000");
+	emitter.param_->position = position;
 	emitter.Emit();
 }

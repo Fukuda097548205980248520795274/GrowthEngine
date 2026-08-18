@@ -161,6 +161,9 @@ private:
 	/// @brief ステージセレクトの表示時間
 	static constexpr float kStageSelectDuration = 0.2f;
 
+	/// @brief ステージセレクトのスプライトのアルファ値
+	float stageSelectSpriteParamAlpha_ = 0.0f;
+
 	/// @brief ステージセレクトの選択中のインデックス
 	int stageSelectIndex_ = 0;
 

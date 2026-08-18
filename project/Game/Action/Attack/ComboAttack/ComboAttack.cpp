@@ -283,9 +283,13 @@ void ComboAttack::Update()
 					// 当たり判定の中心点を取得する
 					Vector3 hitPosition = static_cast<Collision3DInstanceSphere*>(state.hitbox.collider_)->param_->center;
 
+					// 攻撃者が武器を持っている場合は、武器のポインタを取得する
+					Weapon* weapon = nullptr;
+					if(state.def.jointType == JointType::Weapon)weapon = owner_->GetWeapon();
+
 					// ターゲットにダメージを与える
 					bool isHit = target->OnDamage(groupDef->damage, groupDef->damageReaction, groupDef->knockback, knockBackDirection, owner_->GetWorldPosition(), owner_,
-						std::make_optional(hitPosition));
+						std::make_optional(hitPosition), false, false, weapon);
 
 					// 攻撃が何かしら敵に触れたら、攻撃の移動速度を遅くする
 					if (moveSpeed_ > 0.2f)currentMoveSpeed_ = 0.2f;

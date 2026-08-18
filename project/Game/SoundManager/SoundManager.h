@@ -72,6 +72,12 @@ public:
 	/// @brief クリティカルダメージのSE
 	void SeCriticalDamage() { if (seCriticalDamage_)seCriticalDamage_->Play(); }
 
+	/// @brief 武器ダメージのSE
+	void SeWeaponDamage() { if (seWeaponDamage_)seWeaponDamage_->Play(); }
+
+	/// @brief 武器破壊のSE
+	void SeWeaponBreak() { if (seWeaponBreak_)seWeaponBreak_->Play(); }
+
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
 	void BgmTutorialRoadPlay(bool isPlay) { if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
@@ -158,6 +164,12 @@ private:
 
 	/// @brief クリティカルダメージのSE
 	std::unique_ptr<Se> seCriticalDamage_ = nullptr;
+
+	/// @brief 武器ダメージのSE
+	std::unique_ptr<Se> seWeaponDamage_ = nullptr;
+
+	/// @brief 武器破壊のSE
+	std::unique_ptr<Se> seWeaponBreak_ = nullptr;
 
 
 private:

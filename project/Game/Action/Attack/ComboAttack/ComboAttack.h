@@ -89,6 +89,10 @@ public:
 	/// @return 
 	bool IsGrabWeapon() const override;
 
+	/// @brief 投げる武器かどうか
+	/// @return 
+	bool IsThrowWeapon() const override { return isThrowWeapon_; }
+
 
 private:
 

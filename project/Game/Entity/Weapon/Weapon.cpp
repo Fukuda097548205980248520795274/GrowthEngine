@@ -166,6 +166,9 @@ void Weapon::Update()
 		{
 			isBreak_ = true;
 
+			// 壊れたときのSEを再生する
+			SoundManager::GetInstance()->SeWeaponBreak();
+
 			// 当たり判定を削除する
 			if (landingCollision_)landingCollision_->Delete();
 			landingCollision_ = nullptr;

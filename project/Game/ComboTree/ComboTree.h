@@ -32,7 +32,7 @@ public:
 
 	/// @brief 所有者を設定する
 	/// @param owner 
-	void SetOwner(Character* owner) { for (auto& attack : allAttacks) { attack->SetOwner(owner); } }
+	void SetOwner(Character* owner){for (auto& attack : allAttacks)attack->SetOwner(owner);}
 
 
 private:

@@ -143,6 +143,10 @@ public:
 	/// @param position 
 	void RageImpact005(const Vector3& position);
 
+	/// @brief 武器破壊を放出する
+	/// @param position 
+	void WeaponBreak000(const Vector3& position);
+
 
 private:
 
@@ -253,6 +257,12 @@ private:
 	
 	/// @brief インパクト地面006
 	std::unique_ptr<Particle3D> impactGround006_ = nullptr;
+
+
+private:
+
+	/// @brief 武器破壊000
+	std::unique_ptr<Particle3D> weaponBreak000_ = nullptr;
 
 
 private:

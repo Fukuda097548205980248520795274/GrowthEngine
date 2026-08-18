@@ -152,6 +152,8 @@ void Character::Update()
 	const float kDt = std::max(engine_->GetDeltaTime() * engine_->GetTimeScale(), 0.0f);
 	const float kUnscaledDt = std::max(engine_->GetDeltaTime(), 0.0f);
 
+	// ガードゲージの更新
+	UpdateGuardGage();
 
 	// 着地判定をチェックする
 	LandingCheck();
@@ -320,6 +322,12 @@ void Character::StartUpdate()
 	// レイジモード開始成功のフラグを更新する
 	isPrevSuccessRageModeStart_ = isSuccessRageModeStart_;
 	isSuccessRageModeStart_ = false;
+
+	isPrevGuardBreaking_ = isGuardBreaking_;
+	isGuardBreaking_ = false;
+
+	isPrevGuardBroke_ = isGuardBroke_;
+	isGuardBroke_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -328,7 +336,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow, Weapon* weapon)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -389,15 +397,56 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// ガード成功の処理を行う
 		guardState->HitGuard();
 
-		// ガードse
-		soundManager_->SeGuard();
+		// ガードゲージを減少させる
+		if (damageReaction == DamageReaction::LightStagger)
+		{
+			guardGage_ -= 1.0f;
+		}
+		else if (damageReaction == DamageReaction::HeavyStagger)
+		{
+			guardGage_ -= 2.0f;
+		}
+		else if (damageReaction == DamageReaction::Down)
+		{
+			guardGage_ -= 3.0f;
+		}
 
-		// ガードエフェクト
-		effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
+		// ガードゲージが0以下になった場合は、ガードブレイク状態に遷移する
+		if (guardGage_ <= 0.0f)
+		{
+			isGuardBreak_ = true;
 
-		// ガードしたのがプレイヤーの場合は、スローモーションを開始する
-		if (IsPlayer())
-			GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+			// ガードブレイク状態の時間を設定する
+			guardRecoveryTimer_ = guardRecoveryTime_;
+
+			// ガードブレイク状態に遷移する
+			stateMachine_->ChangeState("HeavyDamage");
+			if (auto damageState = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+				damageState->DamageReaction(hitPosition);
+
+			// ガードブレイクのSEを再生する
+			soundManager_->SeGuardBreak();
+
+			// ガードブレイクされたのがプレイヤーのとき
+			if (attacker && attacker->IsPlayer() || IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 0.5f);
+
+			// ガードブレイクの通知
+			isGuardBroke_ = true;
+			if (attacker)attacker->SetIsGuardBreaking(true);
+		}
+		else
+		{
+			// ガードse
+			soundManager_->SeGuard();
+
+			// ガードエフェクト
+			effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
+
+			// ガードしたのがプレイヤーの場合は、スローモーションを開始する
+			if (IsPlayer())
+				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+		}
 
 		return false; // ガード成功によりダメージ無効
 	}
@@ -630,6 +679,25 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 軽い怯みのスローモーションを設定する
 		slowMotionTimeScale = 0.0f;
 		slowMotionDuration = 0.1f;
+	}
+
+	if (weapon)
+	{
+		// 武器の種類に応じて、ダメージSEを再生する
+		if (weapon->IsCategoryKnife())
+		{
+			soundManager_->SeWeaponDamage();
+
+			// 武器の種類に応じて、ヒットエフェクトを生成する
+			if (hitPosition)
+			{
+				effectManager_->EmitSpark000(*hitPosition);
+			}
+		}
+		else if(weapon->IsCategoryGun())
+		{
+
+		}
 	}
 
 	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
@@ -1443,6 +1511,33 @@ void Character::StartStyleChange(FightStyle style)
 
 	// スタイルチェンジ開始のイベントを発生させる
 	StyleChangeStart();
+}
+
+/// @brief ガードゲージの更新
+void Character::UpdateGuardGage()
+{
+	if (isGuardBreak_)
+	{
+		// ガードブレイク状態の時間を減少させる
+		guardRecoveryTimer_ -= engine_->GetDeltaTime() * engine_->GetTimeScale();
+		guardRecoveryTimer_ = std::max(0.0f, guardRecoveryTimer_);
+
+		// ガードブレイク状態が終了した場合は、ガードゲージを回復する
+		if (guardRecoveryTimer_ <= 0.0f)
+		{
+			isGuardBreak_ = false;
+			guardGage_ = maxGuardGage_;
+		}
+	}
+	else
+	{
+		// ガードゲージが回復する条件を満たしている場合は、ガードゲージを回復する
+		if (!IsAttack() && !IsIncapacitated() && !IsGuard())
+		{
+			guardGage_ += guardGageRecoveryAmount_ * engine_->GetDeltaTime() * engine_->GetTimeScale();
+			guardGage_ = std::min(guardGage_, maxGuardGage_);
+		}
+	}
 }
 
 /// @brief スタイルチェンジ開始のイベント

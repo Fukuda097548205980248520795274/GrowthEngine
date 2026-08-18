@@ -1,4 +1,5 @@
 #include "../TitleScene.h"
+#include <numbers>
 
 /// @brief タイトルシーンのメインメニュー初期化処理
 void TitleScene::StageSelectInitialize()
@@ -8,6 +9,8 @@ void TitleScene::StageSelectInitialize()
 
 	// メインメニューに戻る処理が実行されたかどうかを初期化
 	isBackToMainMenu_ = false;
+
+	stageSelectSpriteParamAlpha_ = 0.0f;
 
 	for (int i = 0; i < stageSelectOptionSprites_.size(); ++i)
 	{
@@ -33,6 +36,10 @@ void TitleScene::StageSelectInitialize()
 void TitleScene::StageSelectUpdate()
 {
 	float dt = engine_->GetDeltaTime();
+
+	// ステージセレクトのスプライトのアルファ値を更新
+	stageSelectSpriteParamAlpha_ += 0.05f;
+	stageSelectSpriteParamAlpha_ = std::fmod(stageSelectSpriteParamAlpha_, std::numbers::pi_v<float>);
 
 	// ステージセレクトの背景スプライトを更新
 	StageSelectBgSpriteUpdate();
@@ -184,18 +191,17 @@ void TitleScene::StageSelectBgSpriteUpdate()
 		// 通常時（選択中）の演出
 		else
 		{
+			// 選択中の項目は点滅させる
+			float blinkingAlpha = 1.0f - std::sin(stageSelectSpriteParamAlpha_) * 0.6f;
+
 			// 目標アルファ値の決定
 			float targetAlpha = 0.0f;
 
 			if (i == stageSelectIndex_)
 			{
-				targetAlpha = 1.0f;
+				targetAlpha = blinkingAlpha;
 			}
 			else if (i >= stageSelectIndex_ - 1 && i <= stageSelectIndex_ + 1)
-			{
-				targetAlpha = 0.25f;
-			}
-			else if (i >= stageSelectIndex_ - 2 && i <= stageSelectIndex_ + 2)
 			{
 				targetAlpha = 0.1f;
 			}

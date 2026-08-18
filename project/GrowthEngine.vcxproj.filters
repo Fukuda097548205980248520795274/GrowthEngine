@@ -1009,12 +1009,6 @@
     <Filter Include="Game\Action\Defence">
       <UniqueIdentifier>{692545a8-a3bb-4e28-a252-eb76e2a29e9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Action\Defence\Guard">
-      <UniqueIdentifier>{7e83fb75-283e-48b2-9512-ed55c15ff934}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Action\Defence\Parry">
-      <UniqueIdentifier>{354b9aaf-2d11-4911-ae58-8e5951e3d613}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeData">
       <UniqueIdentifier>{d97b07d0-a8ae-4906-8d6a-43fbd54460c2}</UniqueIdentifier>
     </Filter>

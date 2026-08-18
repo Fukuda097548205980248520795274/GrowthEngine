@@ -108,6 +108,10 @@ public:
 	/// @return 
 	virtual bool IsGrabWeapon()const { return false; }
 
+	/// @brief 武器を投げるかどうか
+	/// @return 
+	virtual bool IsThrowWeapon()const { return false; }
+
 
 protected:
 

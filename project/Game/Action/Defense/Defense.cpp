@@ -22,7 +22,7 @@ void Defense::Exec()
 	Action::Exec();
 
 	// 所有者が存在しない場合、または回避、掴み、気絶などの状態であれば終了する
-	if (!owner_ || owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash())
+	if (!owner_ || owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash() || owner_->IsGuardBreak())
 	{
 		// 失敗
 		Exit();

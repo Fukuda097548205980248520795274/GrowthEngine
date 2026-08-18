@@ -991,7 +991,7 @@ void Player::WeaponHpGageUpdate()
 void Player::UpdateGuardState()
 {
 	// 既に防御中なら何もしない
-	if (IsGuard() || IsGrabbing() || IsAttack() || IsIncapacitated())return;
+	if (IsGuard() || IsGrabbing() || IsAttack() || IsIncapacitated() || IsGuardBreak())return;
 
 	// 防御入力中は防御フラグを立て、離したらフラグを下ろす
 	if(inputController_->IsGuardRequested())

@@ -87,6 +87,12 @@ void SoundManager::Initialize()
 
 	// クリティカルダメージのSE
 	seCriticalDamage_ = std::make_unique<Se>("CriticalDamage", engine_->LoadAudio("./Assets/Sounds/se/critical_damage.mp3"));
+
+	// 武器ダメージのSE
+	seWeaponDamage_ = std::make_unique<Se>("WeaponDamage", engine_->LoadAudio("./Assets/Sounds/se/weaponDamage.mp3"));
+
+	// 武器破壊のSE
+	seWeaponBreak_ = std::make_unique<Se>("WeaponBreak", engine_->LoadAudio("./Assets/Sounds/se/weaponBreak.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE
