@@ -607,10 +607,6 @@ public:
 	/// @return 
 	bool IsWallTouch() const { return isWallTouching_; }
 
-	/// @brief ルートボーンの位置を取得する
-	/// @return 
-	Vector3 GetBoneRootPosition() const { return GetBonePosition(JointType::Root); }
-
 
 
 protected:

@@ -168,6 +168,10 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack]["Player_Combo_2"] = engine_->LoadAnimation(dir + "/attack/attack_001", "attack_001.gltf");
 	table_[MotionType::Attack]["Player_Combo_3"] = engine_->LoadAnimation(dir + "/attack/attack_002", "attack_002.gltf");
 	table_[MotionType::Attack]["Player_Combo_4"] = engine_->LoadAnimation(dir + "/attack/attack_003", "attack_003.gltf");
+	table_[MotionType::Attack]["Player_Sword_Attack_000"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_000", "Player_Sword_Attack_000.gltf");
+	table_[MotionType::Attack]["Player_Sword_Attack_001"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_001", "Player_Sword_Attack_001.gltf");
+	table_[MotionType::Attack]["Player_Sword_Attack_002"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_002", "Player_Sword_Attack_002.gltf");
+	table_[MotionType::Attack]["Player_Throw_000"] = engine_->LoadAnimation(dir + "/attack/Player_Throw_000", "Player_Throw_000.gltf");
 	table_[MotionType::Attack]["Kick_000"] = engine_->LoadAnimation(dir + "/attack/Kick_000", "Kick_000.gltf");
 	table_[MotionType::Attack]["Kick_001"] = engine_->LoadAnimation(dir + "/attack/Kick_001", "Kick_001.gltf");
 	table_[MotionType::Attack]["Kick_002"] = engine_->LoadAnimation(dir + "/attack/Kick_002", "Kick_002.gltf");

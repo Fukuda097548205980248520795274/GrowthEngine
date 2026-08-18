@@ -1,0 +1,42 @@
+{
+    "currentId": 18,
+    "links": [],
+    "nodes": [
+        {
+            "animationName": "Player_Throw_000",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 0.0,
+                "cancelStartTime": 0.0,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [],
+                "hitboxes": [],
+                "isGrabWeapon": false,
+                "isThrowWeapon": true,
+                "moveEndTime": 0.699999988079071,
+                "moveSpeed": 2.0,
+                "moveStartTime": 0.30000001192092896,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 8.0,
+                "throwWeaponTime": 0.5
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                254.5,
+                168.0
+            ],
+            "targetAnimationName": ""
+        }
+    ]
+}

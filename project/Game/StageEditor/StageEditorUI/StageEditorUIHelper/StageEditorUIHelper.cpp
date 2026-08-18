@@ -61,11 +61,19 @@ namespace StageEditorUIHelper
 			json j;
 			file >> j;
 
-			// 既存の実体ポインタなどを退避
-			void* backupPtr = data.instancePtr;
+			// 既存の実体ポインタがある場合は、退避してからロードする
+			if (data.instancePtr)
+			{
+				// 既存の実体ポインタなどを退避
+				void* backupPtr = data.instancePtr;
+				fromJson(j, data);
+				data.instancePtr = backupPtr;
 
-			fromJson(j, data);
-			data.instancePtr = backupPtr; // ポインタを復元
+			}
+			else
+			{
+				fromJson(j, data);
+			}
 
 			file.close();
 		}
@@ -615,15 +623,15 @@ namespace StageEditorUIHelper
 				PropertyLabel("耐久力");
 				if (weaponPtr)
 				{
-					if (ImGui::DragInt("##Durability", &target.hp, 1, 0, weaponPtr->GetMaxDurability()))
+					if (ImGui::DragInt("##Durability", &target.durability, 1, 0, weaponPtr->GetMaxDurability()))
 					{
 						isDirty = true;
-						weaponPtr->SetDurability(target.hp);
+						weaponPtr->SetDurability(target.durability);
 					}
 				}
 				else
 				{
-					if (ImGui::DragInt("##Durability", &target.hp, 1, 0, 1000000))
+					if (ImGui::DragInt("##Durability", &target.durability, 1, 0, 1000000))
 					{
 						isDirty = true;
 					}

@@ -243,11 +243,9 @@ void Character::Update()
 				HpHudUpdate();
 			}
 
-			Vector3 wallPosition = GetBonePosition(JointType::Root) - GetWorldPosition();
-
 			// 当たり判定の更新
 			UpdateCollisionPosition(landingCollision_);
-			UpdateCollisionPosition(wallTouchCollision_, Vector3(wallPosition.x, 0.0f, wallPosition.z));
+			UpdateCollisionPosition(wallTouchCollision_);
 			UpdateCollisionPosition(eventTriggerCollision_);
 			UpdateHurtbox(hurtboxHead_, JointType::Head);
 			UpdateHurtbox(hurtboxChest_, JointType::Chest);
@@ -513,10 +511,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 攻撃者が存在する場合は、攻撃者の方向を取得する
 			if (attacker)
 			{
-				Vector3 position = GetBoneRootPosition();
+				Vector3 position = GetWorldPosition();
 				position.y = 0.0f;
 
-				Vector3 hitPos = attacker->GetBoneRootPosition();
+				Vector3 hitPos = attacker->GetWorldPosition();
 				hitPos.y = 0.0f;
 
 				Vector3 hitDir = (hitPos - position).Normalize();
@@ -962,6 +960,9 @@ void Character::RageModeInput()
 		effectManager_->RageImpact000(center);
 		effectManager_->RageImpact001(center);
 		effectManager_->RageImpact002(center);
+		effectManager_->RageImpact003(center);
+		effectManager_->RageImpact004(center);
+		effectManager_->RageImpact005(center);
 	}
 }
 
@@ -1672,7 +1673,7 @@ void Character::UpdatePushOut()
 
 		// 地面に倒れている、掴まれている、掴んでいる、受け流し中のキャラクターは押し出し判定を行わない
 		if (IsGroundedDown() || other->IsGroundedDown() ||IsGrabbed() || other->IsGrabbed() ||
-			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected() || other->IsAttack())
+			IsGrabbing() || other->IsGrabbing() ||IsDeflected() || other->IsDeflected())
 			continue;
 
 		// 自分と相手の位置を取得する

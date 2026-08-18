@@ -64,7 +64,25 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 
 	// 新規作成・保存UI
 	ImGui::InputText("テンプレート名", templateNameBuffer_, sizeof(templateNameBuffer_));
-	if (ImGui::Button("保存 / 上書き"))
+
+	// ボタンによる保存要求
+	bool isSaveRequested = ImGui::Button("保存 / 上書き");
+
+	// 操作が分かりやすいようにツールチップを追加
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::SetTooltip("ショートカット: Ctrl + S");
+	}
+
+	// ウィンドウにフォーカスがある時のみ、Ctrl + S での保存を受け付ける
+	ImGuiIO& io = ImGui::GetIO();
+	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
+	{
+		isSaveRequested = true;
+	}
+
+	// 保存処理の実行
+	if (isSaveRequested)
 	{
 		if (strlen(templateNameBuffer_) > 0)
 		{

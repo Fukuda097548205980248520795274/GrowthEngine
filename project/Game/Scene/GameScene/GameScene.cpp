@@ -1220,9 +1220,8 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 	{
 		// ロックオン中はターゲットの方向にピボットを回転させる
 		Character* target = player_->GetLockOnTarget();
-		Vector3 targetPos = target->GetBonePosition(JointType::Root);
-		targetPos.y = target->GetWorldPosition().y; // ターゲットの高さを1.0fに設定する
-		targetPos.y = 1.0f; // ターゲットの高さを1.0fに設定する
+		Vector3 targetPos = target->GetPosition();
+		targetPos.y += 1.0f;
 
 		// ターゲットの方向ベクトルを計算する
 		Vector3 dir = targetPos - pivotData->center;

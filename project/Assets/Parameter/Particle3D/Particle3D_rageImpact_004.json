@@ -1,5 +1,5 @@
 {
-    "Particle3D_rageImpact_002": {
+    "Particle3D_rageImpact_004": {
         "AlignToDirection": false,
         "AttractDirection": [
             0.0,
@@ -13,7 +13,7 @@
             0.0
         ],
         "AttractPositionType": 0,
-        "BlendMode": 2,
+        "BlendMode": 1,
         "Count": 1,
         "EmitTime": 0.0,
         "Emitter0_IsStart": false,
@@ -23,7 +23,7 @@
             0.30000001192092896,
             0.0
         ],
-        "Emitter0_Timer": 0.11659909784793854,
+        "Emitter0_Timer": 0.11663589626550674,
         "Emitter1_IsStart": false,
         "Emitter1_Name": "Emitter1",
         "Emitter1_Position": [
@@ -61,16 +61,16 @@
         "EnableSoftParticle": false,
         "EndAlpha": 1.0,
         "EndColor": [
-            1.0,
-            1.0,
+            0.5215686559677124,
+            0.5647059082984924,
             1.0,
             0.0
         ],
         "EndRotate": 0.0,
         "EndScale": [
-            5.0,
+            4.0,
             2.0,
-            5.0
+            4.0
         ],
         "EndScaleA": [
             1.0,
@@ -112,16 +112,16 @@
         "Shape": 0,
         "StartAlpha": 1.0,
         "StartColor": [
-            1.0,
-            1.0,
+            0.6113989353179932,
+            0.6315338611602783,
             1.0,
             1.0
         ],
         "StartRotate": 0.0,
         "StartScale": [
-            0.5,
+            0.25,
             2.0,
-            0.5
+            0.25
         ],
         "StartScaleA": [
             1.0,

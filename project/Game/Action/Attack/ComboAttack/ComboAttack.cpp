@@ -391,16 +391,6 @@ void ComboAttack::Exit()
 
 	// 基底の終了処理
 	Attack::Exit();
-
-	// プレイヤー以外は、攻撃終了時にワールド座標のXとZを両足の中間点に設定する
-	if (!owner_->IsPlayer())
-	{
-		auto worldTransform = owner_->GetWorldTransform();
-		Vector3 toeBaseLPos = owner_->GetBonePosition(JointType::ToeBaseL);
-		Vector3 toeBaseRPos = owner_->GetBonePosition(JointType::ToeBaseR);
-		worldTransform->translate_.x = (toeBaseLPos.x + toeBaseRPos.x) * 0.5f;
-		worldTransform->translate_.z = (toeBaseLPos.z + toeBaseRPos.z) * 0.5f;
-	}
 }
 
 /// @brief 次の攻撃に移行できるかどうか

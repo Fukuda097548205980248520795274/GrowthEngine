@@ -902,8 +902,8 @@ void ComboTreeEditor::DrawPropertyPanel()
 				{
 					node->comboAttackInitData.isGrabWeapon = false; // 投げ武器が有効な場合、つかみ武器は無効にする
 
-					ImGui::DragFloat("Throw Weapon Start Time", &node->comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-					ImGui::DragFloat("Throw Weapon End Time", &node->comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
+					ImGui::DragFloat("Throw Weapon Time", &node->comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("Throw Weapon Power", &node->comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
 					ImGui::DragFloat3("Throw Direction", &node->comboAttackInitData.throwDirection.x, 0.05f);
 
 					// 投げ方向を正規化

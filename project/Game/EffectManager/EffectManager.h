@@ -131,6 +131,18 @@ public:
 	/// @param position 
 	void RageImpact002(const Vector3& position);
 
+	/// @brief レイジインパクトを放出する
+	/// @param position 
+	void RageImpact003(const Vector3& position);
+
+	/// @brief レイジインパクトを放出する
+	/// @param position 
+	void RageImpact004(const Vector3& position);
+
+	/// @brief レイジインパクトを放出する
+	/// @param position 
+	void RageImpact005(const Vector3& position);
+
 
 private:
 
@@ -278,5 +290,13 @@ private:
 	/// @brief レイジインパクト002パーティクル
 	std::unique_ptr<Particle3D> rageImpact002_ = nullptr;
 
+	/// @brief レイジインパクト003パーティクル
+	std::unique_ptr<Particle3D> rageImpact003_ = nullptr;
+
+	/// @brief レイジインパクト004パーティクル
+	std::unique_ptr<Particle3D> rageImpact004_ = nullptr;
+
+	/// @brief レイジインパクト005パーティクル
+	std::unique_ptr<Particle3D> rageImpact005_ = nullptr;
 };
 

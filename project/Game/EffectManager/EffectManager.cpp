@@ -91,6 +91,9 @@ void EffectManager::Initialize()
 	rageImpact000_ = std::make_unique<Particle3D>("rageImpact_000", 1000, 5, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	rageImpact001_ = std::make_unique<Particle3D>("rageImpact_001", 1000, 5, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	rageImpact002_ = std::make_unique<Particle3D>("rageImpact_002", 100, 5, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	rageImpact003_ = std::make_unique<Particle3D>("rageImpact_003", 100, 5, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	rageImpact004_ = std::make_unique<Particle3D>("rageImpact_004", 100, 5, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
+	rageImpact005_ = std::make_unique<Particle3D>("rageImpact_005", 100, 5, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 }
 
 /// @brief 更新処理
@@ -166,6 +169,9 @@ void EffectManager::Draw()
 	rageImpact000_->Draw();
 	rageImpact001_->Draw();
 	rageImpact002_->Draw();
+	rageImpact003_->Draw();
+	rageImpact004_->Draw();
+	rageImpact005_->Draw();
 
 	// 予備動作エフェクトを描画
 	telegraphEffect000_->Draw();
@@ -427,6 +433,33 @@ void EffectManager::RageImpact001(const Vector3& position)
 void EffectManager::RageImpact002(const Vector3& position)
 {
 	Emitter3D emitter("rageImpact_002");
+	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief レイジモードを放出する
+/// @param position 
+void EffectManager::RageImpact003(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_003");
+	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief レイジインパクトを放出する
+/// @param position 
+void EffectManager::RageImpact004(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_004");
+	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
+	emitter.Emit();
+}
+
+/// @brief レイジインパクトを放出する
+/// @param position 
+void EffectManager::RageImpact005(const Vector3& position)
+{
+	Emitter3D emitter("rageImpact_005");
 	emitter.param_->position = position + Vector3(0.0f, 0.3f, 0.0f);
 	emitter.Emit();
 }

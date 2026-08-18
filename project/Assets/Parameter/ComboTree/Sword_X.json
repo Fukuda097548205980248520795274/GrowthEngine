@@ -1,0 +1,185 @@
+{
+    "currentId": 18,
+    "links": [
+        {
+            "endPinId": 7,
+            "id": 16,
+            "startPinId": 3
+        },
+        {
+            "endPinId": 12,
+            "id": 17,
+            "startPinId": 8
+        }
+    ],
+    "nodes": [
+        {
+            "animationName": "Player_Sword_Attack_000",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 0.800000011920929,
+                        "groupId": 0,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.20000000298023224
+                    }
+                ],
+                "hitboxes": [
+                    {
+                        "groupId": 0,
+                        "jointType": 20,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "isThrowWeapon": false,
+                "moveEndTime": 0.800000011920929,
+                "moveSpeed": 2.0,
+                "moveStartTime": 0.0,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 3.0,
+                "throwWeaponTime": 0.0
+            },
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
+            "pos": [
+                99.5,
+                168.0
+            ],
+            "targetAnimationName": ""
+        },
+        {
+            "animationName": "Player_Sword_Attack_001",
+            "comboParams": {
+                "attackTime": 1.0,
+                "cancelEndTime": 1.0,
+                "cancelStartTime": 0.5,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 0.800000011920929,
+                        "groupId": 0,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.20000000298023224
+                    }
+                ],
+                "hitboxes": [
+                    {
+                        "groupId": 0,
+                        "jointType": 20,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "isThrowWeapon": false,
+                "moveEndTime": 0.800000011920929,
+                "moveSpeed": 2.0,
+                "moveStartTime": 0.0,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 3.0,
+                "throwWeaponTime": 0.0
+            },
+            "id": 6,
+            "inputPinId": 7,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 10,
+            "outputInputXPinId": 8,
+            "outputInputYPinId": 9,
+            "pos": [
+                259.71209716796875,
+                178.525146484375
+            ],
+            "targetAnimationName": ""
+        },
+        {
+            "animationName": "Player_Sword_Attack_002",
+            "comboParams": {
+                "attackTime": 0.699999988079071,
+                "cancelEndTime": 0.0,
+                "cancelStartTime": 0.0,
+                "grabWeaponEndTime": 0.0,
+                "grabWeaponStartTime": 0.0,
+                "groups": [
+                    {
+                        "damage": 10,
+                        "damageReaction": 2,
+                        "endTime": 0.800000011920929,
+                        "groupId": 0,
+                        "knockback": 2.0,
+                        "knockbackDirection": [
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "startTime": 0.20000000298023224
+                    }
+                ],
+                "hitboxes": [
+                    {
+                        "groupId": 0,
+                        "jointType": 20,
+                        "radius": 0.25
+                    }
+                ],
+                "isGrabWeapon": false,
+                "isThrowWeapon": false,
+                "moveEndTime": 0.800000011920929,
+                "moveSpeed": 2.0,
+                "moveStartTime": 0.0,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 3.0,
+                "throwWeaponTime": 0.0
+            },
+            "id": 11,
+            "inputPinId": 12,
+            "name": "",
+            "nodeType": 0,
+            "outputInputBPinId": 15,
+            "outputInputXPinId": 13,
+            "outputInputYPinId": 14,
+            "pos": [
+                394.599609375,
+                195.40487670898438
+            ],
+            "targetAnimationName": ""
+        }
+    ]
+}
