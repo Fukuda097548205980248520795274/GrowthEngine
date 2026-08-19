@@ -278,9 +278,13 @@ void Character::Update()
 	// ステートマシンの更新
 	stateMachine_->Update(kDt);
 
+	// プレイヤーが回避中かどうかを判定
+	bool isPlayerAvoiding = (IsPlayer() && stateMachine_->GetCurrentStateName() == "Avoid");
+
 	// 現在のステートがNoneまたはDash以外の場合は、まとめた処理を行って終了する
 	if (stateMachine_->GetCurrentStateName() != "None" &&
-		stateMachine_->GetCurrentStateName() != "Dash")
+		stateMachine_->GetCurrentStateName() != "Dash" &&
+		!isPlayerAvoiding)
 	{
 		FinalizeUpdate();
 		return;
@@ -356,8 +360,6 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		// 攻撃者をロックオンターゲットに設定する
 		if (attacker)lockOnTarget_ = attacker;
 
-		// ガード成功のフラグを立てる
-		isGuardHit_ = true;
 
 		// 受け流し可能で、ガードが有効なタイミングで攻撃を受けた場合は、受け流し成功の処理を行う
 		if ((canDeflect_ && IsPlayer() && !IsDeflected() && guardState->CanJustGuard() && attacker) ||
@@ -365,6 +367,9 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		{
 			// 受け流す
 			ExecuteDeflect(attacker);
+
+			// ガード成功のフラグを立てる
+			isGuardHit_ = true;
 
 			// ダメージ無効
 			return false;
@@ -376,89 +381,108 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		{
 			// 受け流す
 			ExecuteRepel(attacker, hitPosition);
+
+			// ガード成功のフラグを立てる
+			isGuardHit_ = true;
 			
 			// ダメージ無効
 			return false;
 		}
 
 
+		// 攻撃者の位置からキャラクターの位置への方向ベクトルを計算する
 		Vector3 dirToAttacker = enemyPosition - GetWorldPosition();
-		dirToAttacker.y = 0.0f; // 水平方向のみ
+		dirToAttacker.y = 0.0f;
 
+		// 攻撃者が背後にいるかどうかを判定する
+		bool isAttackFromBehind = false;
 		if (dirToAttacker.Length() > 0.0f)
 		{
 			dirToAttacker = dirToAttacker.Normalize();
-			movement_->SetTargetRotationY(std::atan2(dirToAttacker.x, dirToAttacker.z));
+
+			// 攻撃者の方向とキャラクターの正面方向の内積を計算し、負の値であれば背後からの攻撃と判定する
+			if (Dot(GetDirection(), dirToAttacker) < 0.0f)
+				isAttackFromBehind = true;
 		}
 
-		// 攻撃者の方向と逆方向にノックバックを加える
-		movement_->AddKnockback(-dirToAttacker * 2.0f);
-
-		// ガード成功の処理を行う
-		guardState->HitGuard();
-
-		// ガードゲージを減少させる
-		if (damageReaction == DamageReaction::LightStagger)
+		if (!isAttackFromBehind)
 		{
-			guardGage_ -= 1.0f;
-		}
-		else if (damageReaction == DamageReaction::HeavyStagger)
-		{
-			guardGage_ -= 2.0f;
-		}
-		else if (damageReaction == DamageReaction::Down)
-		{
-			guardGage_ -= 3.0f;
-		}
+			// ガード成功のフラグを立てる
+			isGuardHit_ = true;
 
-		// ガードゲージが0以下になった場合は、ガードブレイク状態に遷移する
-		if (guardGage_ <= 0.0f)
-		{
-			isGuardBreak_ = true;
+			// 攻撃者の方向を向く
+			if (dirToAttacker.Length() > 0.0f)
+				movement_->SetTargetRotationY(std::atan2(dirToAttacker.x, dirToAttacker.z));
 
-			// ガードブレイク状態の時間を設定する
-			guardRecoveryTimer_ = guardRecoveryTime_;
+			// 攻撃者の方向と逆方向にノックバックを加える
+			movement_->AddKnockback(-dirToAttacker * 2.0f);
 
-			// ガードブレイク状態に遷移する
-			stateMachine_->ChangeState("HeavyDamage");
-			if (auto damageState = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
-				damageState->DamageReaction(hitPosition);
+			// ガード成功の処理を行う
+			guardState->HitGuard();
 
-			// ガードブレイクのSEを再生する
-			soundManager_->SeGuardBreak();
-
-			if (hitPosition)
+			// ガードゲージを減少させる
+			if (damageReaction == DamageReaction::LightStagger)
 			{
-				effectManager_->ImpactDrop000(*hitPosition);
-				if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
-				effectManager_->ImpactSmoke000(*hitPosition);
-				effectManager_->ImpactSmoke001(*hitPosition);
-				effectManager_->GuardBreakImpact000(*hitPosition);
-				effectManager_->GuardBreakImpact001(*hitPosition);
+				guardGage_ -= 1.0f;
+			}
+			else if (damageReaction == DamageReaction::HeavyStagger)
+			{
+				guardGage_ -= 2.0f;
+			}
+			else if (damageReaction == DamageReaction::Down)
+			{
+				guardGage_ -= 3.0f;
 			}
 
-			// ガードブレイクされたのがプレイヤーのとき
-			if (attacker && attacker->IsPlayer() || IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 0.5f);
+			// ガードゲージが0以下になった場合は、ガードブレイク状態に遷移する
+			if (guardGage_ <= 0.0f)
+			{
+				isGuardBreak_ = true;
 
-			// ガードブレイクの通知
-			isGuardBroke_ = true;
-			if (attacker)attacker->SetIsGuardBreaking(true);
+				// ガードブレイク状態の時間を設定する
+				guardRecoveryTimer_ = guardRecoveryTime_;
+
+				// ガードブレイク状態に遷移する
+				stateMachine_->ChangeState("HeavyDamage");
+				if (auto damageState = static_cast<CharacterStateDamage*>(stateMachine_->GetCurrentState()))
+					damageState->DamageReaction(hitPosition);
+
+				// ガードブレイクのSEを再生する
+				soundManager_->SeGuardBreak();
+
+				if (hitPosition)
+				{
+					effectManager_->ImpactDrop000(*hitPosition);
+					if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+					effectManager_->ImpactSmoke000(*hitPosition);
+					effectManager_->ImpactSmoke001(*hitPosition);
+					effectManager_->GuardBreakImpact000(*hitPosition);
+					effectManager_->GuardBreakImpact001(*hitPosition);
+				}
+
+				// ガードブレイクされたのがプレイヤーのとき
+				if (attacker && attacker->IsPlayer() || IsPlayer())
+					GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 0.5f);
+
+				// ガードブレイクの通知
+				isGuardBroke_ = true;
+				if (attacker)attacker->SetIsGuardBreaking(true);
+			}
+			else
+			{
+				// ガードse
+				soundManager_->SeGuard();
+
+				// ガードエフェクト
+				effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
+
+				// ガードしたのがプレイヤーの場合は、スローモーションを開始する
+				if (IsPlayer())
+					GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
+			}
+
+			return false; // ガード成功によりダメージ無効
 		}
-		else
-		{
-			// ガードse
-			soundManager_->SeGuard();
-
-			// ガードエフェクト
-			effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
-
-			// ガードしたのがプレイヤーの場合は、スローモーションを開始する
-			if (IsPlayer())
-				GrowthEngine::GetInstance()->StartSlowMotion(0.0f, 0.1f);
-		}
-
-		return false; // ガード成功によりダメージ無効
 	}
 
 
