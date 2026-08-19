@@ -1531,6 +1531,9 @@
     <Filter Include="Game\HUD\Gage">
       <UniqueIdentifier>{d0b421dc-ef04-42af-a589-8c2826fe8396}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\HUD\Reticle">
+      <UniqueIdentifier>{8f699277-e490-4bf8-9b32-cdb27b7690c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2774,6 +2777,9 @@
     </ClCompile>
     <ClCompile Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.cpp">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUITemplate</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\HUD\Reticle\Reticle.cpp">
+      <Filter>Game\HUD\Reticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4138,6 +4144,9 @@
     </ClInclude>
     <ClInclude Include="Game\StageEditor\StageEditorUI\StageEditorUITemplate\StageEditorUITemplate.h">
       <Filter>Game\StageEditor\StageEditorUI\StageEditorUITemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\HUD\Reticle\Reticle.h">
+      <Filter>Game\HUD\Reticle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -96,6 +96,9 @@ void SoundManager::Initialize()
 
 	// 武器破壊のSE
 	seWeaponBreak_ = std::make_unique<Se>("WeaponBreak", engine_->LoadAudio("./Assets/Sounds/se/weaponBreak.mp3"));
+
+	// ロックオンのSE
+	seLockOn_ = std::make_unique<Se>("LockOn", engine_->LoadAudio("./Assets/Sounds/se/lockOn.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

@@ -41,6 +41,8 @@
 
 #include "HUD/NavigationArrow/NavigationArrow.h"
 
+#include "HUD/Reticle/Reticle.h"
+
 #include "Pool/Pool.h"
 
 #include "NavMesh/NavMesh.h"
@@ -534,6 +536,16 @@ private:
 
 	/// @brief 武器取得ボタンのプレハブ
 	std::unique_ptr<PrefabBaseSprite> weaponGetButtonSpritePrefab_ = nullptr;
+
+
+	/// @brief レティクル
+	std::unique_ptr<Reticle> reticle_ = nullptr;
+
+	/// @brief レティクルの枠のプレハブ
+	std::unique_ptr<PrefabBaseSprite> reticleFrameSpritePrefab_ = nullptr;
+
+	/// @brief レティクルの枠のスプライト
+	Sprite* reticleSprite_ = nullptr;
 
 
 	// テキストスプライト

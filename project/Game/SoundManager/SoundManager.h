@@ -81,6 +81,9 @@ public:
 	/// @brief 武器破壊のSE
 	void SeWeaponBreak() { if (seWeaponBreak_)seWeaponBreak_->Play(); }
 
+	/// @brief ロックオンのSE
+	void SeLockOn() { if (seLockOn_)seLockOn_->Play(); }
+
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
 	void BgmTutorialRoadPlay(bool isPlay) { if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
@@ -176,6 +179,9 @@ private:
 
 	/// @brief 武器破壊のSE
 	std::unique_ptr<Se> seWeaponBreak_ = nullptr;
+
+	/// @brief ロックオンのSE
+	std::unique_ptr<Se> seLockOn_ = nullptr;
 
 
 private:

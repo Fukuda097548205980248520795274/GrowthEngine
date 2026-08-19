@@ -376,7 +376,7 @@ public:
 
 	/// @brief 弾き中かどうか
 	/// @return 
-	bool IsRepeling() const { return stateMachine_->GetCurrentStateName() == "Repel"; }
+	bool IsRepelling() const { return stateMachine_->GetCurrentStateName() == "Repel"; }
 
 	/// @brief 弾かれたかどうか
 	/// @return 
@@ -448,7 +448,7 @@ public:
 	/// @brief 無力化されているかどうか（スタイルチェンジ中、地面にいない、ダメージリアクション中、掴まれているのいずれか）
 	/// @return 
 	bool IsIncapacitated() const { return IsStyleChanging() || !IsGrounded() || IsDamageReaction() || 
-		IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart() || IsDeflecting() || IsRepeling(); }
+		IsGrabbed() || IsDead() || IsFinished() || IsRageModeStart() || IsDeflecting() || IsRepelling(); }
 
 	/// @brief プレイヤー側かどうか
 	/// @return 

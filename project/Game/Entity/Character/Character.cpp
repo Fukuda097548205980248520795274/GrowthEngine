@@ -1202,7 +1202,7 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepeling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash() && !IsTelegraph())
+			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepelling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash() && !IsTelegraph())
 			{
 				// 立ちモーションを再生する
 				SetAnimation(hStandMotion_, false, true);

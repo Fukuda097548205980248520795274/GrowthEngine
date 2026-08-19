@@ -353,6 +353,9 @@ void GameScene::Initialize()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
 
+			// レティクルの描画
+			reticle_->Draw();
+
 			// 武器入手ボタンの描画
 			weaponGetButtonSpritePrefab_->Draw();
 
@@ -387,14 +390,7 @@ void GameScene::Initialize()
 			lbButtonPrefab_->Draw();
 			ltButtonPrefab_->Draw();
 
-			// チュートリアルの描画
-			stickTutorial_->Draw();
-			dashTutorial_->Draw();
-			attackTutorial_->Draw();
-			comboTutorial_->Draw();
-			grabTutorial_->Draw();
-			guardTutorial_->Draw();
-			avoidTutorial_->Draw();
+			reticleFrameSpritePrefab_->Draw();
 
 			// ナビゲーション矢印の描画
 			//navigationArrow_->Draw();
@@ -471,7 +467,17 @@ void GameScene::Update()
 	// ステージエディタの更新
 	stageEditor_->Update(kDt);
 
-	
+	// レティクルの更新
+	reticle_->Update();
+
+	// ロックオンターゲットの位置をレティクルに反映する
+	if (player_)
+	{
+		if (auto target = player_->GetLockOnTarget())
+		{
+			reticle_->LockOn(target);
+		}
+	}
 
 	// 攻撃者の方向を示す矢印の回転を更新する
 	std::optional<Vector2> toAttacker = GetToAttacker();
@@ -1747,6 +1753,16 @@ void GameScene::LoadHUDs()
 	avoidTutorial_->AddSprite(uiEditor_->GetSprite("ButtonA"));
 
 	rageTutorial_ = std::make_unique<Tutorial>();
+
+	// 照準枠スプライトを生成する
+	reticleFrameSpritePrefab_ = std::make_unique<PrefabBaseSprite>(engine_->LoadTexture("./Assets/Textures/reticle_frame.png"), 100, "Reticle_Frame_Sprite");
+	reticleFrameSpritePrefab_->param_->transform.scale = Vector2(0.25f, 0.25f);
+	reticleSprite_ = uiEditor_->GetSprite("Reticle");
+	reticleSprite_->param_->material.color.w = 1.0f; // 初期状態では透明にする
+	reticle_ = std::make_unique<Reticle>();
+	reticle_->Initialize(reticleFrameSpritePrefab_->CreateInstance(), reticleFrameSpritePrefab_->CreateInstance(),
+		reticleFrameSpritePrefab_->CreateInstance(), reticleFrameSpritePrefab_->CreateInstance(), reticleSprite_);
+
 
 	// 矢印スプライトを生成する
 	navigationArrowSprite_ = std::make_unique<Sprite>(engine_->LoadTexture("./Assets/Textures/arrow.png"), "Arrow_Sprite");
