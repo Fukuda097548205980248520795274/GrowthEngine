@@ -145,6 +145,7 @@ void Gage::Update()
 	hpLeftSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpMiddleSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
 	hpRightSprite_->param_.material.color = Vector4(color_.x, color_.y, color_.z, alpha);
+	hpSeparatorSprite_->param_.material.color.w = alpha;
 
 	// 基底クラスの更新処理を呼び出す
 	HUD::Update();

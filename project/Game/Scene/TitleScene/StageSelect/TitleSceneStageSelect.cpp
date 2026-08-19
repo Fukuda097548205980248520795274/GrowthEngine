@@ -218,4 +218,36 @@ void TitleScene::StageSelectBgSpriteUpdate()
 		// ステージセレクトの選択肢のスプライトを描画
 		stageSelectOptionSprites_[i]->Draw();
 	}
+
+	if (isStageSelectExecuted_)
+	{
+		float t = 1.0f - (stageSelectTimer_ / kStageSelectDuration);
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		auto phaseView = uiEditor_->GetSprite("Phase_View");
+		if (phaseView)
+		{
+			phaseView->param_->material.color.w = Lerp(1.0f, 0.0f, t);
+		}
+	}
+
+	if (isStageSelectExecuted_ || isBackToMainMenu_)
+	{
+		float t = 1.0f - (stageSelectTimer_ / kStageSelectDuration);
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		auto stageSelectText = uiEditor_->GetSprite("stageSelect");
+		if (stageSelectText)
+		{
+			stageSelectText->param_->material.color.w = Lerp(stageSelectText->param_->material.color.w, 0.0f, t);
+		}
+	}
+	else
+	{
+		auto stageSelectText = uiEditor_->GetSprite("stageSelect");
+		if (stageSelectText)
+		{
+			stageSelectText->param_->material.color.w = Lerp(stageSelectText->param_->material.color.w, 1.0f, dt * 10.0f);
+		}
+	}
 }

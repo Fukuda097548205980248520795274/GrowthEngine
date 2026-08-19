@@ -37,6 +37,7 @@ void TitleScene::MainMenuUpdate()
 	{
 		// メインメニューのタイマーを更新
 		mainMenuTimer_ -= dt;
+		mainMenuTimer_ = std::max(mainMenuTimer_, 0.0f);
 
 		// メインメニューのタイマーが0以下になったら選択肢の処理を実行
 		if (mainMenuTimer_ <= 0.0f)
@@ -74,6 +75,7 @@ void TitleScene::MainMenuUpdate()
 	{
 		// メインメニューのタイマーを更新
 		mainMenuTimer_ -= dt;
+		mainMenuTimer_ = std::max(mainMenuTimer_, 0.0f);
 
 		// メインメニューのタイマーが0以下になったらタイトルに戻る
 		if (mainMenuTimer_ <= 0.0f)
@@ -164,9 +166,20 @@ void TitleScene::UpdateMainMenuOptionSprite()
 	// メインメニューのスプライトのアルファ値を更新
 	float alpha = 1.0f - std::sin(mainMenuSpriteParamAlpha_) * 0.6f;
 
+	// フェーズビューのスプライトのアルファ値を更新
+	if (!isQuitExecuted_ || !isBackToTitle_ || !isMainMenuOptionExecuted_)
+	{
+		auto phaseView = uiEditor_->GetSprite("Phase_View");
+		phaseView->param_->material.color.w = Lerp(phaseView->param_->material.color.w, 1.0f, 0.3f);
+
+		auto mainMenuText = uiEditor_->GetSprite("mainMenu");
+		mainMenuText->param_->material.color.w = Lerp(mainMenuText->param_->material.color.w, 1.0f, 0.3f);
+	}
+
 	if (isMainMenuOptionExecuted_)
 	{
 		float t = 1.0f - (mainMenuTimer_ / kMainMenuDuration);
+		t = std::clamp(t, 0.0f, 1.0f);
 		float easing = 1.0f - std::pow(1.0f - t, 3.0f);
 
 		for (int i = 0; i < static_cast<int>(MainMenuOption::MaxOption); ++i)
@@ -183,10 +196,17 @@ void TitleScene::UpdateMainMenuOptionSprite()
 				mainMenuSprite_[i]->param_->material.color = Lerp(mainMenuSprite_[i]->param_->material.color, Vector4(1.0f, 1.0f, 1.0f, 0.0f), t);
 			}
 		}
+
+		auto mainMenuText = uiEditor_->GetSprite("mainMenu");
+		if (mainMenuText)
+		{
+			mainMenuText->param_->material.color.w = Lerp(1.0f, 0.0f, t);
+		}
 	}
 	else if (isBackToTitle_)
 	{
 		float t = 1.0f - (mainMenuTimer_ / kMainMenuDuration);
+		t = std::clamp(t, 0.0f, 1.0f);
 
 		// メインメニューのスプライトのアルファ値を更新
 		for (int i = 0; i < static_cast<int>(MainMenuOption::MaxOption); ++i)
@@ -206,6 +226,18 @@ void TitleScene::UpdateMainMenuOptionSprite()
 		// タイトルロゴのスプライトのアルファ値を更新
 		auto titleLogo = uiEditor_->GetSprite("TitleLogo");
 		titleLogo->param_->material.color.w = t;
+
+		auto mainMenuText = uiEditor_->GetSprite("mainMenu");
+		if (mainMenuText)
+		{
+			mainMenuText->param_->material.color.w = Lerp(1.0f, 0.0f, t);
+		}
+
+		auto phaseView = uiEditor_->GetSprite("Phase_View");
+		if (phaseView)
+		{
+			phaseView->param_->material.color.w = Lerp(1.0f, 0.0f, t);
+		}
 	}
 	else
 	{
@@ -224,15 +256,15 @@ void TitleScene::UpdateMainMenuOptionSprite()
 		}
 	}
 
-	// フェーズビューのスプライトのアルファ値を更新
-	if (!isQuitExecuted_ && !isBackToTitle_)
+	if (isQuitExecuted_)
 	{
+		float t = 1.0f - (mainMenuTimer_ / kMainMenuDuration);
+		t = std::clamp(t, 0.0f, 1.0f);
+
 		auto phaseView = uiEditor_->GetSprite("Phase_View");
-		phaseView->param_->material.color.w = Lerp(phaseView->param_->material.color.w, 1.0f, 0.3f);
-	}
-	else
-	{
-		auto phaseView = uiEditor_->GetSprite("Phase_View");
-		phaseView->param_->material.color.w = Lerp(phaseView->param_->material.color.w, 0.0f, 0.3f);
+		if (phaseView)
+		{
+			phaseView->param_->material.color.w = Lerp(1.0f, 0.0f, t);
+		}
 	}
 }

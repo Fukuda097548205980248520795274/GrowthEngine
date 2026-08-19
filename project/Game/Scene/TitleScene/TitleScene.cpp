@@ -65,6 +65,18 @@ void TitleScene::Initialize()
 	auto phaseView = uiEditor_->GetSprite("Phase_View");
 	phaseView->param_->material.color = Vector4(1.0f, 1.0f, 1.0f, 0.0f);
 
+	auto mainMenuText = uiEditor_->GetSprite("mainMenu");
+	if (mainMenuText)
+	{
+		mainMenuText->param_->material.color.w = 0.0f;
+	}
+
+	auto stageSelectText = uiEditor_->GetSprite("stageSelect");
+	if (stageSelectText)
+	{
+		stageSelectText->param_->material.color.w = 0.0f;
+	}
+
 	// メインメニューのスプライトを取得する
 	mainMenuSprite_[static_cast<int>(MainMenuOption::StartGame)] = uiEditor_->GetSprite("mainMenu_GameStart");
 	mainMenuSprite_[static_cast<int>(MainMenuOption::QuitGame)] = uiEditor_->GetSprite("mainMenu_Quit");

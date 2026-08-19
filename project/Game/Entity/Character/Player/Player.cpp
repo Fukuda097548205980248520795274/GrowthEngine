@@ -963,8 +963,21 @@ void Player::WeaponHpGageUpdate()
 		// 武器が装備されている場合は耐久力ゲージを更新する
 		if (weapon_)
 		{
-			weaponHpGageHud_->SetMaxGage(static_cast<int>(weapon_->GetMaxDurability()));
-			weaponHpGageHud_->SetCurrentGage(static_cast<int>(weapon_->GetDurability()));
+			int durability = weapon_->GetDurability();
+			int maxDurability = weapon_->GetMaxDurability();
+
+			weaponHpGageHud_->SetMaxGage(maxDurability);
+			weaponHpGageHud_->SetCurrentGage(durability);
+
+			// 耐久力が3以下、または耐久力の割合が25%以下の場合は赤色にする
+			if(durability <= 3 || static_cast<float>(durability) / static_cast<float>(maxDurability) <= 0.25f)
+			{
+				weaponHpGageHud_->SetColor(Vector3(0.8f, 0.0f, 0.0f));
+			}
+			else
+			{
+				weaponHpGageHud_->SetColor(Vector3(1.0f, 1.0f, 1.0f));
+			}
 		}
 
 		// アルファ値を設定する

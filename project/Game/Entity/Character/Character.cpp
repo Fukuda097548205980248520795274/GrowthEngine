@@ -973,6 +973,9 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 /// @brief レイジゲージの更新
 void Character::RageGageUpdate(float dt)
 {
+	// インデックスを初期化
+	rageGageThresholdIndex_ = 0;
+
 	// レイジゲージの閾値が空の場合は、インデックスを0にリセットする
 	if (rageGageThresholds_.empty())
 	{
@@ -2165,7 +2168,7 @@ void Character::HpHudUpdate()
 	case CharacterTag::Ally:
 	case CharacterTag::EnemyNormal:
 	default:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.4f, 0.0f));
 		break;
 
 		// プレイヤーは画面左上の固定位置に体力HUDを表示する
@@ -2176,7 +2179,7 @@ void Character::HpHudUpdate()
 
 		// ボスは頭の上に体力HUDを表示する
 	case CharacterTag::EnemyBoss:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.6f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.4f, 0.0f));
 		break;
 	}
 }
