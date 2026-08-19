@@ -427,6 +427,16 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// ガードブレイクのSEを再生する
 			soundManager_->SeGuardBreak();
 
+			if (hitPosition)
+			{
+				effectManager_->ImpactDrop000(*hitPosition);
+				if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
+				effectManager_->ImpactSmoke000(*hitPosition);
+				effectManager_->ImpactSmoke001(*hitPosition);
+				effectManager_->GuardBreakImpact000(*hitPosition);
+				effectManager_->GuardBreakImpact001(*hitPosition);
+			}
+
 			// ガードブレイクされたのがプレイヤーのとき
 			if (attacker && attacker->IsPlayer() || IsPlayer())
 				GrowthEngine::GetInstance()->StartSlowMotion(0.3f, 0.5f);
@@ -1082,6 +1092,29 @@ void Character::UpdateLockOnTargets()
 
 	// ロックオン対象を検索する
 	SearchLockOnTarget();
+}
+
+/// @brief 自分を攻撃してきた相手を取得する
+/// @return 
+Character* Character::GetAttacker() const
+{
+	Character* attacker = nullptr;
+
+	for (auto& character : characters_)
+	{
+		// 自分自身は無視する
+		if (character == this)
+			continue;
+
+		// 攻撃者が自分をロックオンしていて、かつ攻撃中の場合は、そのキャラクターを攻撃者として返す
+		if (character->GetLockOnTarget() == this && character->IsInAttackSequence())
+		{
+			attacker = character;
+			break;
+		}
+	}
+
+	return attacker;
 }
 
 /// @brief アニメーションを設定する

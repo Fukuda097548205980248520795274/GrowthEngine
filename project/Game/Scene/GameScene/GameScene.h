@@ -158,6 +158,16 @@ private:
 	void ApplyCameraFromPivot(float deltaTime);
 
 
+private:
+
+	// 自分を狙う相手の方向を取得する
+	std::optional<Vector2> GetToAttacker() const;
+
+
+
+private:
+
+
 	/// @brief イベントトリガーに触れたときの処理
 	/// @param eventType 
 	/// @param param 
@@ -536,6 +546,15 @@ private:
 
 	// フェード用スプライト
 	std::unique_ptr<Sprite> fadeSprite_ = nullptr;
+
+
+private:
+
+	/// @brief 攻撃者の方向を示す矢印カメラ
+	std::unique_ptr<MainCamera3D> attackerArrowCamera_ = nullptr;
+
+	/// @brief 攻撃者の方向を示す矢印のモデル
+	std::unique_ptr<Render3DStaticModel> attackerArrowModel_ = nullptr;
 
 
 private:

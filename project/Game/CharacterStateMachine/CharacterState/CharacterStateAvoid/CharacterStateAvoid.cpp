@@ -113,6 +113,9 @@ void CharacterStateAvoid::SetAvoidDirection(const Vector3& dir)
 	// 移動を停止する
 	owner_->MoveStop();
 
+	// 回避SEを再生する
+	SoundManager::GetInstance()->SeAvoid();
+
 	// 回避方向を正規化して設定する
 	avoidDirection_ = dir.Normalize();
 

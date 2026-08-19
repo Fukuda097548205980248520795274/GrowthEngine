@@ -52,19 +52,19 @@ namespace Engine
 
 		/// @brief 3Dカメラ切り替え
 		/// @param hCamera 
-		void Camera3DSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera); }
+		void Camera3DSwitch(Camera3DHandle hCamera) { camera3DStore_->Switch(hCamera);camera3DStore_->Update(false); }
 
 		/// @brief 3Dカメラ切り替え
 		/// @param name 
-		void Camera3DSwitch(const std::string& name) { camera3DStore_->Switch(name); }
+		void Camera3DSwitch(const std::string& name) { camera3DStore_->Switch(name);camera3DStore_->Update(false); }
 
 		/// @brief 2Dカメラ切り替え
 		/// @param hCamera 
-		void Camera2DSwitch(Camera2DHandle hCamera) { camera2DStore_->Switch(hCamera); }
+		void Camera2DSwitch(Camera2DHandle hCamera) { camera2DStore_->Switch(hCamera);camera2DStore_->Update(false); }
 
 		/// @brief 2Dカメラ切り替え
 		/// @param name 
-		void Camera2DSwitch(const std::string& name) { camera2DStore_->Switch(name); }
+		void Camera2DSwitch(const std::string& name) { camera2DStore_->Switch(name);camera2DStore_->Update(false); }
 
 		/// @brief 3Dカメラを読み込む
 		/// @param name 

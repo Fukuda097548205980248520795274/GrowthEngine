@@ -147,6 +147,14 @@ public:
 	/// @param position 
 	void WeaponBreak000(const Vector3& position);
 
+	/// @brief ガードブレイクインパクトを放出する
+	/// @param position 
+	void GuardBreakImpact000(const Vector3& position);
+
+	/// @brief ガードブレイクインパクトを放出する
+	/// @param position 
+	void GuardBreakImpact001(const Vector3& position);
+
 
 private:
 
@@ -227,6 +235,15 @@ private:
 
 	/// @brief インパクトスモーク001
 	std::unique_ptr<Particle3D> impactSmoke001_ = nullptr;
+
+
+private:
+
+	/// @brief ガードブレイクインパクト000s
+	std::unique_ptr<Particle3D> guardBreakImpact000_ = nullptr;
+
+	/// @brief ガードブレイクインパクト001
+	std::unique_ptr<Particle3D> guardBreakImpact001_ = nullptr;
 
 
 private:

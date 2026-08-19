@@ -20,17 +20,6 @@ EffectManager* EffectManager::GetInstance()
 /// @brief 初期化処理
 void EffectManager::Initialize()
 {
-	// テクスチャを読み込む
-	engine_->LoadTexture("./Assets/Textures/smoke_000.png");
-	engine_->LoadTexture("./Assets/Textures/smoke_001.png");
-	engine_->LoadTexture("./Assets/Textures/impact_000.png");
-	engine_->LoadTexture("./Assets/Textures/color_effect.png");
-	engine_->LoadTexture("./Assets/Textures/damage_effect.png");
-	engine_->LoadTexture("./Assets/Textures/thunder_effect.png");
-	engine_->LoadTexture("./Assets/Textures/color_effect_bloom.png");
-	engine_->LoadTexture("./Assets/Textures/chip.png");
-	engine_->LoadTexture("./Assets/Textures/chip_bloom.png");
-
 	// ガードエフェクトのモデルを生成
 	guardEffectModel_ = std::make_unique<PrefabBaseTube>(engine_->LoadTexture("./Assets/Textures/white2x2.png"), 100, "guardEffect");
 	guardEffectModel_->param_->blendMode = BlendMode::kNormal;
@@ -77,6 +66,10 @@ void EffectManager::Initialize()
 	impactGround004_ = std::make_unique<Particle3D>("impactGround_004", 100, 20, engine_->LoadModel("./Assets/Models/particleCylinder", "particleCylinder.obj"));
 	impactGround005_ = std::make_unique<Particle3D>("impactGround_005", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 	impactGround006_ = std::make_unique<Particle3D>("impactGround_006", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+
+	// ガードブレイクインパクトを生成
+	guardBreakImpact000_ = std::make_unique<Particle3D>("guardBreakImpact_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
+	guardBreakImpact001_ = std::make_unique<Particle3D>("guardBreakImpact_001", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
 
 	// 予備動作エフェクトを生成
 	telegraphEffect000_ = std::make_unique<Particle3D>("telegraphEffect_000", 1000, 20, engine_->LoadModel("./Assets/Models/particle", "particle.obj"));
@@ -140,6 +133,10 @@ void EffectManager::Draw()
 
 	// インパクトドロップ000を描画
 	impactDrop000_->Draw();
+
+	// ガードブレイクインパクトを描画
+	guardBreakImpact000_->Draw();
+	guardBreakImpact001_->Draw();
 
 	// インパクトスモーク001を描画
 	impactSmoke000_->Draw();
@@ -475,6 +472,24 @@ void EffectManager::RageImpact005(const Vector3& position)
 void EffectManager::WeaponBreak000(const Vector3& position)
 {
 	Emitter3D emitter("weaponBreak_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief ガードブレイクインパクトを放出する
+/// @param position 
+void EffectManager::GuardBreakImpact000(const Vector3& position)
+{
+	Emitter3D emitter("guardBreakImpact_000");
+	emitter.param_->position = position;
+	emitter.Emit();
+}
+
+/// @brief ガードブレイクインパクトを放出する
+/// @param position 
+void EffectManager::GuardBreakImpact001(const Vector3& position)
+{
+	Emitter3D emitter("guardBreakImpact_001");
 	emitter.param_->position = position;
 	emitter.Emit();
 }

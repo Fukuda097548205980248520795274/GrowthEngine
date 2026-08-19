@@ -125,6 +125,10 @@ public:
 	/// @param direction 
 	void SetDirection(const Vector3& direction) { movement_->SetDirection(direction.Normalize()); }
 
+	/// @brief 自分を攻撃してきた相手を取得する
+	/// @return 
+	Character* GetAttacker() const;
+
 	/// @brief ロックオンしているターゲットを取得する
 	/// @return
 	Character* GetLockOnTarget() const { return lockOnTarget_; }

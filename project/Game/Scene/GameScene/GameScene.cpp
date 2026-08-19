@@ -52,6 +52,19 @@ void GameScene::Initialize()
 	mainCamera_ = std::make_unique<MainCamera3D>("MainCamera");
 	mainCamera_->Switch();
 
+	// 攻撃者の方向を示す矢印カメラの生成
+	attackerArrowCamera_ = std::make_unique<MainCamera3D>("AttackerArrowCamera");
+	attackerArrowCamera_->param_->transform.rotate.x = 0.6f;
+	attackerArrowCamera_->param_->transform.translate = Vector3(0.0f, 35.0f, -16.0f);
+
+	// 攻撃者の方向を示す矢印モデルの生成
+	attackerArrowModel_ = std::make_unique<Render3DStaticModel>(engine_->LoadModel("./Assets/Models/attackerArrow" , "attackerArrow.obj"), "AttackerArrowModel");
+	attackerArrowModel_->param_->meshMaterial[0].enableLighting = false;
+	attackerArrowModel_->param_->modelTransform.rotate = Vector3(0.0f, 0.0f, 0.0f);
+	attackerArrowModel_->param_->modelTransform.translate = Vector3(0.0f, 0.0f, 20.0f);
+	attackerArrowModel_->param_->blendMode = BlendMode::kNormal;
+	attackerArrowModel_->param_->meshMaterial[0].color.w = 0.0f;
+
 	// AI計測用エディタの生成
 	aiMetricsEditor_ = std::make_unique<AIMetricsEditor>();
 	aiMetricsEditor_->Initialize(mainCamera_.get());
@@ -394,10 +407,26 @@ void GameScene::Initialize()
 		}
 	);
 
+	engine_->LoadRenderPass("AttackerArrow", [&]()
+		{
+			// 攻撃者の方向を示す矢印カメラに切り替える
+			attackerArrowCamera_->Switch();
+
+			// 攻撃者の方向を示す矢印の描画
+			attackerArrowModel_->Draw();
+
+			// メインカメラに切り替える
+			mainCamera_->Switch();
+		}
+	);
+	engine_->GetRenderPassParam("AttackerArrow")->blendMode = BlendMode::kAdd;
+
 	// レンダーパスの読み込み
 	engine_->LoadRenderPass("MainPass", [&]()
 		{
 			engine_->DrawToRenderPass("MainPass", "HUD");
+
+			engine_->DrawToRenderPass("MainPass", "AttackerArrow");
 
 			// フェードスプライトの描画
 			fadeSprite_->Draw();
@@ -442,6 +471,28 @@ void GameScene::Update()
 	// ステージエディタの更新
 	stageEditor_->Update(kDt);
 
+	
+
+	// 攻撃者の方向を示す矢印の回転を更新する
+	std::optional<Vector2> toAttacker = GetToAttacker();
+	if (toAttacker)
+	{
+		Vector2 direction = toAttacker.value().Normalize();
+
+		// 角度をラジアンに変換する
+		float radian = std::atan2(direction.x, direction.y);
+		attackerArrowModel_->param_->modelTransform.rotate.y = Lerp(attackerArrowModel_->param_->modelTransform.rotate.y, radian, 10.0f * kDt);
+
+		// 攻撃者が一定距離以上離れている場合は矢印を白色にする
+		attackerArrowModel_->param_->meshMaterial[0].color = Lerp(attackerArrowModel_->param_->meshMaterial[0].color, Vector4(1.0f, 1.0f, 1.0f, 1.0f), 10.0f * kDt);
+	}
+	else
+	{
+		// 攻撃者がいない場合は矢印を非表示にする
+		attackerArrowModel_->param_->meshMaterial[0].color = Lerp(attackerArrowModel_->param_->meshMaterial[0].color, Vector4(1.0f, 1.0f, 1.0f, 0.0f), 10.0f * kDt);
+	}
+
+
 	// AI計測用エディタの更新
 	aiMetricsEditor_->Update(kDt);
 }
@@ -449,6 +500,9 @@ void GameScene::Update()
 /// @brief 描画処理
 void GameScene::Draw()
 {
+	// 攻撃者の方向を示す矢印の描画レンダーパスを呼び出す
+	engine_->ExecuteRenderPass("AttackerArrow");
+
 	// オブジェクトの描画レンダーパスを呼び出す
 	engine_->ExecuteRenderPass("Object");
 
@@ -1340,6 +1394,41 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 
 	// バトル制御にカメラの前方向を通知する
 	BattleDirector::GetInstance().SetCameraForward(cameraForward);
+}
+
+/// @brief ターゲットへの方向を取得する
+/// @param character 
+/// @return 
+std::optional<Vector2> GameScene::GetToAttacker() const
+{
+	std::optional<Vector2> toAttacker;
+
+	if (!player_) return toAttacker;
+
+	// プレイヤーを攻撃しているキャラクターを取得する
+	Character* attacker = player_->GetAttacker();
+	if (!attacker) return toAttacker;
+
+	// カメラの前方向と右方向を取得する（高さを無視）
+	Vector3 forward = mainCamera_->GetDirection();
+	forward = Vector3(forward.x, 0.0f, forward.z).Normalize();
+
+	Vector3 right = Vector3(forward.z, 0.0f, -forward.x).Normalize();
+
+	// プレイヤーから攻撃者へのベクトル（高さを無視）
+	Vector3 toAttackerDirection = attacker->GetPosition() - player_->GetPosition();
+	toAttackerDirection.y = 0.0f;
+	float length = toAttackerDirection.Length();
+	toAttackerDirection = toAttackerDirection.Normalize();
+
+	// カメラの前方向と右方向に対する攻撃者の位置を計算する
+	float dotRight = (toAttackerDirection.x * right.x) + (toAttackerDirection.z * right.z);   // X成分（左右）
+	float dotForward = (toAttackerDirection.x * forward.x) + (toAttackerDirection.z * forward.z); // Y成分（前後）
+
+	// ベクトルを作成する
+	toAttacker = Vector2(dotRight, dotForward) * length;
+
+	return toAttacker;
 }
 
 /// @brief イベントトリガーに触れたときの処理

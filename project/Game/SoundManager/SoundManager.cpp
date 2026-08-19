@@ -65,6 +65,9 @@ void SoundManager::Initialize()
 	// 着地のSE
 	seLanding_ = std::make_unique<Se>("Landing", engine_->LoadAudio("./Assets/Sounds/se/landing.mp3"));
 
+	// 武器の着地のSE
+	seLandingWeapon_ = std::make_unique<Se>("LandingWeapon", engine_->LoadAudio("./Assets/Sounds/se/landingWeapon.mp3"));
+
 	// ダウン中着地のSE
 	seDownLanding_ = std::make_unique<Se>("DownLanding", engine_->LoadAudio("./Assets/Sounds/se/downLanding.mp3"));
 

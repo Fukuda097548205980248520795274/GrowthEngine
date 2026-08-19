@@ -51,6 +51,9 @@ public:
 	/// @brief 着地のSE
 	void SeLanding() { if (seLanding_)seLanding_->Play(); }
 
+	/// @brief 武器の着地のSE
+	void SeLandingWeapon() { if (seLandingWeapon_)seLandingWeapon_->Play(); }
+
 	/// @brief ダウン中着地のSE
 	void SeDownLanding() { if (seDownLanding_)seDownLanding_->Play(); }
 
@@ -143,6 +146,9 @@ private:
 
 	/// @brief 着地のSE
 	std::unique_ptr<Se> seLanding_ = nullptr;
+
+	/// @brief 武器の着地のSE
+	std::unique_ptr<Se> seLandingWeapon_ = nullptr;
 
 	/// @brief ダウン中着地のSE
 	std::unique_ptr<Se> seDownLanding_ = nullptr;
