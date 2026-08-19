@@ -109,7 +109,7 @@
         ],
         "modelDirectory": "./Assets/Models/tutorialStage",
         "modelFileName": "tutorialStage.obj",
-        "modelName": "stage",
+        "modelName": "tutorialStage",
         "rotate": [
             0.0,
             0.0,

@@ -58,7 +58,7 @@
         ],
         "modelDirectory": "./Assets/Models/bambooGroveRoad",
         "modelFileName": "bambooGroveRoad.obj",
-        "modelName": "stage",
+        "modelName": "bambooGroveRoad",
         "rotate": [
             0.0,
             -1.5700000524520874,

@@ -1,13 +1,13 @@
 #include "../GameScene.h"
 
 /// @brief ポーズフェーズの初期化処理
-void GameScene::PosePhaseInitialize()
+void GameScene::PausePhaseInitialize()
 {
-
+	isPause_ = true;
 }
 
 /// @brief ポーズフェーズの更新処理
-void GameScene::PosePhaseUpdate()
+void GameScene::PausePhaseUpdate()
 {
 	// ポーズ画面の切り替え
 	if (engine_->GetKeyTrigger(DIK_ESCAPE) ||

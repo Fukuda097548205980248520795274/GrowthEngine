@@ -137,7 +137,9 @@ inline std::vector<LightElementData> FromJson(const std::string& filePath)
 	{
 		json j;
 		file >> j;
-		return FromJsonData(j);
+		auto elements = FromJsonData(j);
+		file.close();
+		return elements;
 	}
 	return{};
 }

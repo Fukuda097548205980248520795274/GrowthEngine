@@ -4,13 +4,17 @@
 /// @brief 戦闘フェーズの初期化処理
 void GameScene::BattlePhaseInitialize()
 {
-	// イントロテキストの生成
-	IntroText::InitData introTextInitData;
-	introTextInitData.buttonSprite = startTextSprite_;
-	std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
-	introText->Initialize(introTextInitData);
+	if (!isPause_)
+	{
+		// イントロテキストの生成
+		IntroText::InitData introTextInitData;
+		introTextInitData.buttonSprite = startTextSprite_;
+		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
+		introText->Initialize(introTextInitData);
+		huds_.push_back(std::move(introText));
+	}
 
-	huds_.push_back(std::move(introText));
+	isPause_ = false;
 }
 
 /// @brief 戦闘フェーズの更新処理
@@ -190,6 +194,6 @@ void GameScene::BattlePhaseUpdate()
 	if (engine_->GetKeyTrigger(DIK_ESCAPE) || 
 		engine_->GetGamepadButtonTrigger(0, XINPUT_GAMEPAD_START))
 	{
-		phaseManager_->ChangePhase(PhaseType::Pose);
+		phaseManager_->ChangePhase(PhaseType::Pause);
 	}
 }

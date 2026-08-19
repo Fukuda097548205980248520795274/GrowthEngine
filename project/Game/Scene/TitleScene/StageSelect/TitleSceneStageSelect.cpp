@@ -146,6 +146,13 @@ void TitleScene::StageSelectBgSpriteUpdate()
 {
 	float dt = engine_->GetDeltaTime();
 
+	// フェーズビューのスプライトのアルファ値を更新
+	if (!isStageSelectExecuted_ && !isBackToMainMenu_)
+	{
+		auto phaseView = uiEditor_->GetSprite("Phase_View");
+		phaseView->param_->material.color.w = Lerp(phaseView->param_->material.color.w, 1.0f, 0.3f);
+	}
+
 	for (int i = 0; i < stageSelectOptionSprites_.size(); ++i)
 	{
 		// ステージセレクトの選択肢のスプライトの目標位置を計算

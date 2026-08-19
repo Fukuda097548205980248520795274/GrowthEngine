@@ -54,6 +54,9 @@ public:
 	/// @return 
 	static BattleDirector& GetInstance();
 
+	/// @brief インスタンスを削除する
+	static void Delete();
+
 	/// @brief 攻撃トークンを要求する
 	/// @param npc 
 	/// @param type 

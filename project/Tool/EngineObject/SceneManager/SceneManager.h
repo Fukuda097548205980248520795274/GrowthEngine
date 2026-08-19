@@ -22,12 +22,16 @@ public:
 	/// @brief シーン遷移する
 	/// @param sceneName 
 	/// @param stageName 
-	void Transition(const std::string& sceneName, const std::string& stageName = "") { sceneName_ = sceneName; nextStageName_ = stageName; isTransition_ = true; }
+	void Transition(const std::string& sceneName, const std::string& stageName = "") { prevSceneName_ = sceneName_; sceneName_ = sceneName; nextStageName_ = stageName; isTransition_ = true; }
 
 
 	/// @brief 次のステージ名を取得する
 	/// @return 
 	std::string GetNextStageName() const { return nextStageName_; }
+
+	/// @brief 前のシーン名を取得する
+	/// @return 
+	std::string GetPrevSceneName() const { return prevSceneName_; }
 
 	/// @brief チュートリアルクリアフラグを取得する
 	/// @return 
@@ -54,6 +58,9 @@ private:
 	// 現在のシーン名
 	std::string currentSceneName_{};
 
+	/// @brief 前のシーン名
+	std::string prevSceneName_{};
+
 	// 遷移フラグ
 	bool isTransition_ = true;
 
@@ -64,5 +71,5 @@ private:
 	std::string nextStageName_{};
 
 	/// @brief チュートリアルクリアフラグ
-	bool isTutorialCleared_ = true;
+	bool isTutorialCleared_ = false;
 };

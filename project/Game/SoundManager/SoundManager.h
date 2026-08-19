@@ -86,11 +86,11 @@ public:
 
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
-	void BgmTutorialRoadPlay(bool isPlay) { if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
+	void BgmTutorialRoadPlay(bool isPlay) { tutorialRoadBgm_->param_->volume = 0.25f; if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
 
 	/// @brief チュートリアルのボス戦のBGMを再生する
 	/// @param isPlay 
-	void BgmTutorialBossPlay(bool isPlay) { if (tutorialBossBgm_) isPlay ? tutorialBossBgm_->Play() : tutorialBossBgm_->Stop(); }
+	void BgmTutorialBossPlay(bool isPlay) { tutorialBossBgm_->param_->volume = 0.25f; if (tutorialBossBgm_) isPlay ? tutorialBossBgm_->Play() : tutorialBossBgm_->Stop(); }
 
 	/// @brief チュートリアルの道中のBGMを取得する
 	/// @return 

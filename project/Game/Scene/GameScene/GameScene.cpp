@@ -24,10 +24,19 @@ namespace
 	const Vector3 kPivotCenterOffset = Vector3(0.0f, 1.5f, 0.0f);
 }
 
+/// @brief デストラクタ
+GameScene::~GameScene()
+{
+	// クリア処理
+	BattleDirector::GetInstance().Clear();
+}
+
 /// @brief 初期化
 void GameScene::Initialize()
 {
 	// リストをクリアする
+	npcs_.clear();
+	battleAreas_.clear();
 	npcModels_.clear();
 	npcTrails_.clear();
 	npcParticles_.clear();
@@ -78,6 +87,9 @@ void GameScene::Initialize()
 	motionManager_ = MotionManager::GetInstance();
 	soundManager_ = SoundManager::GetInstance();
 	effectManager_ = EffectManager::GetInstance();
+
+	soundManager_->BgmTutorialBossPlay(false);
+	soundManager_->BgmTutorialRoadPlay(false);
 
 	// ポストエフェクトマネージャの生成と初期化
 	postEffectManager_ = std::make_unique<PostEffectManager>();
@@ -436,8 +448,8 @@ void GameScene::Initialize()
 	phaseManager_->SetOnUpdate(PhaseType::Intro, [&]() { IntroPhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Battle, [&]() { BattlePhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Battle, [&]() { BattlePhaseUpdate(); });
-	phaseManager_->SetOnEnter(PhaseType::Pose, [&]() { PosePhaseInitialize(); });
-	phaseManager_->SetOnUpdate(PhaseType::Pose, [&]() { PosePhaseUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Pause, [&]() { PausePhaseInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Pause, [&]() { PausePhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Finish, [&]() { FinishPhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Finish, [&]() { FinishPhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Out, [&]() { OutPhaseInitialize(); });

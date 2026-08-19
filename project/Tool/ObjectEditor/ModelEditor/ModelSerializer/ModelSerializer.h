@@ -597,40 +597,39 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 			staticModel->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
 
 			// トランスフォームを復元
-			staticModel->param_->modelTransform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
-			};
-			staticModel->param_->modelTransform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
-			};
-			staticModel->param_->modelTransform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
-			};
+			staticModel->param_->modelTransform.translate.x = elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
+			staticModel->param_->modelTransform.translate.y = elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
+			staticModel->param_->modelTransform.translate.z = elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2];
 
+			staticModel->param_->modelTransform.scale.x = elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0];
+			staticModel->param_->modelTransform.scale.y = elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1];
+			staticModel->param_->modelTransform.scale.z = elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2];
+
+			staticModel->param_->modelTransform.rotate.x = elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
+			staticModel->param_->modelTransform.rotate.y = elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
+			staticModel->param_->modelTransform.rotate.z = elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2];
+
+			// メッシュデータを復元
+			size_t meshCount = elemJson["meshData"].size();
+			staticModel->param_->meshTransforms.resize(meshCount);
+			staticModel->param_->meshMaterial.resize(meshCount);
+			staticModel->param_->meshBlur.resize(meshCount);
+			staticModel->param_->meshOutline.resize(meshCount);
+
+			
 			for (int i = 0; i < static_cast<int>(staticModel->param_->meshTransforms.size()); ++i)
 			{
-				// メッシュトランスフォームを復元
-				staticModel->param_->meshTransforms[i].translate = {
-					elemJson["meshData"][i]["translate"][0].get<float>(),
-					elemJson["meshData"][i]["translate"][1].get<float>(),
-					elemJson["meshData"][i]["translate"][2].get<float>()
-				};
-				staticModel->param_->meshTransforms[i].scale = {
-					elemJson["meshData"][i]["scale"][0].get<float>(),
-					elemJson["meshData"][i]["scale"][1].get<float>(),
-					elemJson["meshData"][i]["scale"][2].get<float>()
-				};
-				staticModel->param_->meshTransforms[i].rotate = {
-					elemJson["meshData"][i]["rotate"][0].get<float>(),
-					elemJson["meshData"][i]["rotate"][1].get<float>(),
-					elemJson["meshData"][i]["rotate"][2].get<float>()
-				};
+				staticModel->param_->meshTransforms[i].translate.x = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
+				staticModel->param_->meshTransforms[i].translate.y = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
+				staticModel->param_->meshTransforms[i].translate.z = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2];
+
+				staticModel->param_->meshTransforms[i].scale.x = elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0];
+				staticModel->param_->meshTransforms[i].scale.y = elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1];
+				staticModel->param_->meshTransforms[i].scale.z = elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2];
+
+				staticModel->param_->meshTransforms[i].rotate.x = elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
+				staticModel->param_->meshTransforms[i].rotate.y = elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
+				staticModel->param_->meshTransforms[i].rotate.z = elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2];
 
 				// テクスチャパスを取得
 				std::string texturePath = elemJson["meshData"][i].value("texturePath", "");
@@ -645,42 +644,42 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 				}
 
 				// マテリアルを復元
-				staticModel->param_->meshMaterial[i].color = {
-					elemJson["meshData"][i]["color"][0].get<float>(),
-					elemJson["meshData"][i]["color"][1].get<float>(),
-					elemJson["meshData"][i]["color"][2].get<float>(),
-					elemJson["meshData"][i]["color"][3].get<float>()
-				};
-				staticModel->param_->meshMaterial[i].uv.translate = {
-					elemJson["meshData"][i]["uvTranslate"][0].get<float>(),
-					elemJson["meshData"][i]["uvTranslate"][1].get<float>()
-				};
+				staticModel->param_->meshMaterial[i].color.x = elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0];
+				staticModel->param_->meshMaterial[i].color.y = elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1];
+				staticModel->param_->meshMaterial[i].color.z = elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2];
+				staticModel->param_->meshMaterial[i].color.w = elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3];
+
+				staticModel->param_->meshMaterial[i].uv.translate.x = elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0];
+				staticModel->param_->meshMaterial[i].uv.translate.y = elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1];
+
+
 				staticModel->param_->meshMaterial[i].uv.scale = {
-					elemJson["meshData"][i]["uvScale"][0].get<float>(),
-					elemJson["meshData"][i]["uvScale"][1].get<float>()
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 				};
-				staticModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i]["uvRotate"].get<float>();
-				staticModel->param_->meshMaterial[i].environment = elemJson["meshData"][i]["environment"].get<float>();
-				staticModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i]["shininess"].get<float>();
-				staticModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i]["enableLighting"].get<bool>();
-				staticModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i]["enableDiffuse"].get<bool>();
-				staticModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i]["enableHalfLambert"].get<bool>();
-				staticModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i]["enableSpecular"].get<bool>();
-				staticModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i]["enableBlinnPhong"].get<bool>();
-				staticModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i]["drawShadowMap"].get<bool>();
-				staticModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i]["enableShadow"].get<bool>();
+
+				staticModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i].value("uvRotate", 0.0f);
+				staticModel->param_->meshMaterial[i].environment = elemJson["meshData"][i].value("environment", 0.0f);
+				staticModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i].value("shininess", 0.0f);
+				staticModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i].value("enableLighting", false);
+				staticModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i].value("enableDiffuse", false);
+				staticModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i].value("enableHalfLambert", false);
+				staticModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i].value("enableSpecular", false);
+				staticModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i].value("enableBlinnPhong", false);
+				staticModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i].value("drawShadowMap", false);
+				staticModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i].value("enableShadow", false);
 
 				// ブラーを復元
-				staticModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i]["blurAfterImageMask"].get<float>();
-				staticModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i]["blurMotionBlurMask"].get<float>();
+				staticModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i].value("blurAfterImageMask", 0.0f);
+				staticModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i].value("blurMotionBlurMask", 0.0f);
 
 				// アウトラインを復元
-				staticModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i]["outlineEnable"].get<bool>();
+				staticModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i].value("outlineEnable", false);
 				staticModel->param_->meshOutline[i].color = {
-					elemJson["meshData"][i]["outlineColor"][0].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][1].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][2].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][3].get<float>()
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[2],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[3]
 				};
 			}
 		}
@@ -704,38 +703,45 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// トランスフォームを復元
 			animationModel->param_->modelTransform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 			animationModel->param_->modelTransform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 			};
 			animationModel->param_->modelTransform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
+
+			// メッシュデータを復元
+			size_t meshCount = elemJson["meshData"].size();
+			animationModel->param_->meshTransforms.resize(meshCount);
+			animationModel->param_->meshMaterial.resize(meshCount);
+			animationModel->param_->meshBlur.resize(meshCount);
+			animationModel->param_->meshOutline.resize(meshCount);
 
 			for (int i = 0; i < static_cast<int>(animationModel->param_->meshTransforms.size()); ++i)
 			{
 				// メッシュトランスフォームを復元
 				animationModel->param_->meshTransforms[i].translate = {
-					elemJson["meshData"][i]["translate"][0].get<float>(),
-					elemJson["meshData"][i]["translate"][1].get<float>(),
-					elemJson["meshData"][i]["translate"][2].get<float>()
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 				};
 				animationModel->param_->meshTransforms[i].scale = {
-					elemJson["meshData"][i]["scale"][0].get<float>(),
-					elemJson["meshData"][i]["scale"][1].get<float>(),
-					elemJson["meshData"][i]["scale"][2].get<float>()
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 				};
 				animationModel->param_->meshTransforms[i].rotate = {
-					elemJson["meshData"][i]["rotate"][0].get<float>(),
-					elemJson["meshData"][i]["rotate"][1].get<float>(),
-					elemJson["meshData"][i]["rotate"][2].get<float>()
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 				};
 
 				// テクスチャパスを取得
@@ -752,41 +758,41 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 				// マテリアルを復元
 				animationModel->param_->meshMaterial[i].color = {
-					elemJson["meshData"][i]["color"][0].get<float>(),
-					elemJson["meshData"][i]["color"][1].get<float>(),
-					elemJson["meshData"][i]["color"][2].get<float>(),
-					elemJson["meshData"][i]["color"][3].get<float>()
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3]
 				};
 				animationModel->param_->meshMaterial[i].uv.translate = {
-					elemJson["meshData"][i]["uvTranslate"][0].get<float>(),
-					elemJson["meshData"][i]["uvTranslate"][1].get<float>()
+					elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1]
 				};
 				animationModel->param_->meshMaterial[i].uv.scale = {
-					elemJson["meshData"][i]["uvScale"][0].get<float>(),
-					elemJson["meshData"][i]["uvScale"][1].get<float>()
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 				};
-				animationModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i]["uvRotate"].get<float>();
-				animationModel->param_->meshMaterial[i].environment = elemJson["meshData"][i]["environment"].get<float>();
-				animationModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i]["shininess"].get<float>();
-				animationModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i]["enableLighting"].get<bool>();
-				animationModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i]["enableDiffuse"].get<bool>();
-				animationModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i]["enableHalfLambert"].get<bool>();
-				animationModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i]["enableSpecular"].get<bool>();
-				animationModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i]["enableBlinnPhong"].get<bool>();
-				animationModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i]["drawShadowMap"].get<bool>();
-				animationModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i]["enableShadow"].get<bool>();
+				animationModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i].value("uvRotate", 0.0f);
+				animationModel->param_->meshMaterial[i].environment = elemJson["meshData"][i].value("environment", 0.0f);
+				animationModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i].value("shininess", 0.0f);
+				animationModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i].value("enableLighting", false);
+				animationModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i].value("enableDiffuse", false);
+				animationModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i].value("enableHalfLambert", false);
+				animationModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i].value("enableSpecular", false);
+				animationModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i].value("enableBlinnPhong", false);
+				animationModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i].value("drawShadowMap", false);
+				animationModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i].value("enableShadow", false);
 
 				// ブラーを復元
-				animationModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i]["blurAfterImageMask"].get<float>();
-				animationModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i]["blurMotionBlurMask"].get<float>();
+				animationModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i].value("blurAfterImageMask", 0.0f);
+				animationModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i].value("blurMotionBlurMask", 0.0f);
 
 				// アウトラインを復元
-				animationModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i]["outlineEnable"].get<bool>();
+				animationModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i].value("outlineEnable", false);
 				animationModel->param_->meshOutline[i].color = {
-					elemJson["meshData"][i]["outlineColor"][0].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][1].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][2].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][3].get<float>()
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[2],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[3]
 				};
 			}
 		}
@@ -815,38 +821,45 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// トランスフォームを復元
 			skinningModel->param_->modelTransform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 			skinningModel->param_->modelTransform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 			};
 			skinningModel->param_->modelTransform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
+
+			// メッシュデータを復元
+			size_t meshCount = elemJson["meshData"].size();
+			skinningModel->param_->meshTransforms.resize(meshCount);
+			skinningModel->param_->meshMaterial.resize(meshCount);
+			skinningModel->param_->meshBlur.resize(meshCount);
+			skinningModel->param_->meshOutline.resize(meshCount);
 
 			for (int i = 0; i < static_cast<int>(skinningModel->param_->meshTransforms.size()); ++i)
 			{
 				// メッシュトランスフォームを復元
 				skinningModel->param_->meshTransforms[i].translate = {
-					elemJson["meshData"][i]["translate"][0].get<float>(),
-					elemJson["meshData"][i]["translate"][1].get<float>(),
-					elemJson["meshData"][i]["translate"][2].get<float>()
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 				};
 				skinningModel->param_->meshTransforms[i].scale = {
-					elemJson["meshData"][i]["scale"][0].get<float>(),
-					elemJson["meshData"][i]["scale"][1].get<float>(),
-					elemJson["meshData"][i]["scale"][2].get<float>()
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 				};
 				skinningModel->param_->meshTransforms[i].rotate = {
-					elemJson["meshData"][i]["rotate"][0].get<float>(),
-					elemJson["meshData"][i]["rotate"][1].get<float>(),
-					elemJson["meshData"][i]["rotate"][2].get<float>()
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+					elemJson["meshData"][i].value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 				};
 
 				// テクスチャパスを取得
@@ -863,41 +876,41 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 				// マテリアルを復元
 				skinningModel->param_->meshMaterial[i].color = {
-					elemJson["meshData"][i]["color"][0].get<float>(),
-					elemJson["meshData"][i]["color"][1].get<float>(),
-					elemJson["meshData"][i]["color"][2].get<float>(),
-					elemJson["meshData"][i]["color"][3].get<float>()
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2],
+					elemJson["meshData"][i].value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3]
 				};
 				skinningModel->param_->meshMaterial[i].uv.translate = {
-					elemJson["meshData"][i]["uvTranslate"][0].get<float>(),
-					elemJson["meshData"][i]["uvTranslate"][1].get<float>()
+					elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0],
+					elemJson["meshData"][i].value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1]
 				};
 				skinningModel->param_->meshMaterial[i].uv.scale = {
-					elemJson["meshData"][i]["uvScale"][0].get<float>(),
-					elemJson["meshData"][i]["uvScale"][1].get<float>()
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 				};
-				skinningModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i]["uvRotate"].get<float>();
-				skinningModel->param_->meshMaterial[i].environment = elemJson["meshData"][i]["environment"].get<float>();
-				skinningModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i]["shininess"].get<float>();
-				skinningModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i]["enableLighting"].get<bool>();
-				skinningModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i]["enableDiffuse"].get<bool>();
-				skinningModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i]["enableHalfLambert"].get<bool>();
-				skinningModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i]["enableSpecular"].get<bool>();
-				skinningModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i]["enableBlinnPhong"].get<bool>();
-				skinningModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i]["drawShadowMap"].get<bool>();
-				skinningModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i]["enableShadow"].get<bool>();
-				
+				skinningModel->param_->meshMaterial[i].uv.radius = elemJson["meshData"][i].value("uvRotate", 0.0f);
+				skinningModel->param_->meshMaterial[i].environment = elemJson["meshData"][i].value("environment", 0.0f);
+				skinningModel->param_->meshMaterial[i].shininess = elemJson["meshData"][i].value("shininess", 0.0f);
+				skinningModel->param_->meshMaterial[i].enableLighting = elemJson["meshData"][i].value("enableLighting", false);
+				skinningModel->param_->meshMaterial[i].enableDiffuse = elemJson["meshData"][i].value("enableDiffuse", false);
+				skinningModel->param_->meshMaterial[i].enableHalfLambert = elemJson["meshData"][i].value("enableHalfLambert", false);
+				skinningModel->param_->meshMaterial[i].enableSpecular = elemJson["meshData"][i].value("enableSpecular", false);
+				skinningModel->param_->meshMaterial[i].enableBlinnPhong = elemJson["meshData"][i].value("enableBlinnPhong", false);
+				skinningModel->param_->meshMaterial[i].drawShadowMap = elemJson["meshData"][i].value("drawShadowMap", false);
+				skinningModel->param_->meshMaterial[i].enableShadow = elemJson["meshData"][i].value("enableShadow", false);
+
 				// ブラーを復元
-				skinningModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i]["blurAfterImageMask"].get<float>();
-				skinningModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i]["blurMotionBlurMask"].get<float>();
+				skinningModel->param_->meshBlur[i].afterImageMask = elemJson["meshData"][i].value("blurAfterImageMask", 0.0f);
+				skinningModel->param_->meshBlur[i].motionBlurMask = elemJson["meshData"][i].value("blurMotionBlurMask", 0.0f);
 
 				// アウトラインを復元
-				skinningModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i]["outlineEnable"].get<bool>();
+				skinningModel->param_->meshOutline[i].enableOutline = elemJson["meshData"][i].value("outlineEnable", false);
 				skinningModel->param_->meshOutline[i].color = {
-					elemJson["meshData"][i]["outlineColor"][0].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][1].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][2].get<float>(),
-					elemJson["meshData"][i]["outlineColor"][3].get<float>()
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[0],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[1],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[2],
+					elemJson["meshData"][i].value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[3]
 				};
 			}
 		}
@@ -911,19 +924,19 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// トランスフォームを復元
 			uvSphere->param_->transform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 			uvSphere->param_->transform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 			};
 			uvSphere->param_->transform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 
 			// テクスチャパスを取得
@@ -940,45 +953,45 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// マテリアルを復元
 			uvSphere->param_->material.color = {
-				elemJson["color"][0].get<float>(),
-				elemJson["color"][1].get<float>(),
-				elemJson["color"][2].get<float>(),
-				elemJson["color"][3].get<float>()
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3]
 			};
 			uvSphere->param_->material.uv.translate = {
-				elemJson["uvTranslate"][0].get<float>(),
-				elemJson["uvTranslate"][1].get<float>()
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0],
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1]
 			};
 			uvSphere->param_->material.uv.scale = {
-				elemJson["uvScale"][0].get<float>(),
-				elemJson["uvScale"][1].get<float>()
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 			};
-			uvSphere->param_->material.uv.radius = elemJson["uvRotate"].get<float>();
-			uvSphere->param_->material.environment = elemJson["environment"].get<float>();
-			uvSphere->param_->material.shininess = elemJson["shininess"].get<float>();
-			uvSphere->param_->material.enableLighting = elemJson["enableLighting"].get<bool>();
-			uvSphere->param_->material.enableDiffuse = elemJson["enableDiffuse"].get<bool>();
-			uvSphere->param_->material.enableHalfLambert = elemJson["enableHalfLambert"].get<bool>();
-			uvSphere->param_->material.enableSpecular = elemJson["enableSpecular"].get<bool>();
-			uvSphere->param_->material.enableBlinnPhong = elemJson["enableBlinnPhong"].get<bool>();
-			uvSphere->param_->material.drawShadowMap = elemJson["drawShadowMap"].get<bool>();
-			uvSphere->param_->material.enableShadow = elemJson["enableShadow"].get<bool>();
+			uvSphere->param_->material.uv.radius = elemJson.value("uvRotate", 0.0f);
+			uvSphere->param_->material.environment = elemJson.value("environment", 0.0f);
+			uvSphere->param_->material.shininess = elemJson.value("shininess", 0.0f);
+			uvSphere->param_->material.enableLighting = elemJson.value("enableLighting", false);
+			uvSphere->param_->material.enableDiffuse = elemJson.value("enableDiffuse", false);
+			uvSphere->param_->material.enableHalfLambert = elemJson.value("enableHalfLambert", false);
+			uvSphere->param_->material.enableSpecular = elemJson.value("enableSpecular", false);
+			uvSphere->param_->material.enableBlinnPhong = elemJson.value("enableBlinnPhong", false);
+			uvSphere->param_->material.drawShadowMap = elemJson.value("drawShadowMap", false);
+			uvSphere->param_->material.enableShadow = elemJson.value("enableShadow", false);
 
 			// 分割を復元
-			uvSphere->param_->division.rings = elemJson["rings"].get<int>();
-			uvSphere->param_->division.slices = elemJson["slices"].get<int>();
+			uvSphere->param_->division.rings = elemJson.value("rings", 0);
+			uvSphere->param_->division.slices = elemJson.value("slices", 0);
 
 			// ブラーを復元
-			uvSphere->param_->blur.afterImageMask = elemJson["blurAfterImageMask"].get<float>();
-			uvSphere->param_->blur.motionBlurMask = elemJson["blurMotionBlurMask"].get<float>();
+			uvSphere->param_->blur.afterImageMask = elemJson.value("blurAfterImageMask", 0.0f);
+			uvSphere->param_->blur.motionBlurMask = elemJson.value("blurMotionBlurMask", 0.0f);
 
 			// アウトラインを復元
-			uvSphere->param_->outline.enableOutline = elemJson["outlineEnable"].get<bool>();
+			uvSphere->param_->outline.enableOutline = elemJson.value("outlineEnable", false);
 			uvSphere->param_->outline.color = {
-				elemJson["outlineColor"][0].get<float>(),
-				elemJson["outlineColor"][1].get<float>(),
-				elemJson["outlineColor"][2].get<float>(),
-				elemJson["outlineColor"][3].get<float>()
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[0],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[1],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[2],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[3]
 			};
 		}
 		else if (elem.type == Engine::Render3D::Type::Ring)
@@ -991,19 +1004,19 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// トランスフォームを復元
 			ring->param_->transform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 			ring->param_->transform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 			};
 			ring->param_->transform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 
 			// テクスチャパスを取得
@@ -1020,52 +1033,52 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// マテリアルを復元
 			ring->param_->material.color = {
-				elemJson["color"][0].get<float>(),
-				elemJson["color"][1].get<float>(),
-				elemJson["color"][2].get<float>(),
-				elemJson["color"][3].get<float>()
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3]
 			};
 			ring->param_->material.uv.translate = {
-				elemJson["uvTranslate"][0].get<float>(),
-				elemJson["uvTranslate"][1].get<float>()
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0],
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1]
 			};
 			ring->param_->material.uv.scale = {
-				elemJson["uvScale"][0].get<float>(),
-				elemJson["uvScale"][1].get<float>()
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 			};
-			ring->param_->material.uv.radius = elemJson["uvRotate"].get<float>();
-			ring->param_->material.environment = elemJson["environment"].get<float>();
-			ring->param_->material.shininess = elemJson["shininess"].get<float>();
-			ring->param_->material.enableLighting = elemJson["enableLighting"].get<bool>();
-			ring->param_->material.enableDiffuse = elemJson["enableDiffuse"].get<bool>();
-			ring->param_->material.enableHalfLambert = elemJson["enableHalfLambert"].get<bool>();
-			ring->param_->material.enableSpecular = elemJson["enableSpecular"].get<bool>();
-			ring->param_->material.enableBlinnPhong = elemJson["enableBlinnPhong"].get<bool>();
-			ring->param_->material.drawShadowMap = elemJson["drawShadowMap"].get<bool>();
-			ring->param_->material.enableShadow = elemJson["enableShadow"].get<bool>();
+			ring->param_->material.uv.radius = elemJson.value("uvRotate", 0.0f);
+			ring->param_->material.environment = elemJson.value("environment", 0.0f);
+			ring->param_->material.shininess = elemJson.value("shininess", 0.0f);
+			ring->param_->material.enableLighting = elemJson.value("enableLighting", false);
+			ring->param_->material.enableDiffuse = elemJson.value("enableDiffuse", false);
+			ring->param_->material.enableHalfLambert = elemJson.value("enableHalfLambert", false);
+			ring->param_->material.enableSpecular = elemJson.value("enableSpecular", false);
+			ring->param_->material.enableBlinnPhong = elemJson.value("enableBlinnPhong", false);
+			ring->param_->material.drawShadowMap = elemJson.value("drawShadowMap", false);
+			ring->param_->material.enableShadow = elemJson.value("enableShadow", false);
 
 			// 分割を復元
-			ring->param_->division.slices = elemJson["slices"].get<int>();
+			ring->param_->division.slices = elemJson.value("slices", 0);
 
 			// サイズを復元
-			ring->param_->size.startAngle = elemJson["startAngle"].get<float>();
-			ring->param_->size.endAngle = elemJson["endAngle"].get<float>();
-			ring->param_->size.startInRadius = elemJson["startInRadius"].get<float>();
-			ring->param_->size.startOutRadius = elemJson["startOutRadius"].get<float>();
-			ring->param_->size.endInRadius = elemJson["endInRadius"].get<float>();
-			ring->param_->size.endOutRadius = elemJson["endOutRadius"].get<float>();
+			ring->param_->size.startAngle = elemJson.value("startAngle", 0.0f);
+			ring->param_->size.endAngle = elemJson.value("endAngle", 0.0f);
+			ring->param_->size.startInRadius = elemJson.value("startInRadius", 0.0f);
+			ring->param_->size.startOutRadius = elemJson.value("startOutRadius", 0.0f);
+			ring->param_->size.endInRadius = elemJson.value("endInRadius", 0.0f);
+			ring->param_->size.endOutRadius = elemJson.value("endOutRadius", 0.0f);
 
 			// ブラーを復元
-			ring->param_->blur.afterImageMask = elemJson["blurAfterImageMask"].get<float>();
-			ring->param_->blur.motionBlurMask = elemJson["blurMotionBlurMask"].get<float>();
+			ring->param_->blur.afterImageMask = elemJson.value("blurAfterImageMask", 0.0f);
+			ring->param_->blur.motionBlurMask = elemJson.value("blurMotionBlurMask", 0.0f);
 
 			// アウトラインを復元
-			ring->param_->outline.enableOutline = elemJson["outlineEnable"].get<bool>();
+			ring->param_->outline.enableOutline = elemJson.value("outlineEnable", false);
 			ring->param_->outline.color = {
-				elemJson["outlineColor"][0].get<float>(),
-				elemJson["outlineColor"][1].get<float>(),
-				elemJson["outlineColor"][2].get<float>(),
-				elemJson["outlineColor"][3].get<float>()
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[0],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[1],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[2],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 1.0f})[3]
 			};
 		}
 		else if (elem.type == Engine::Render3D::Type::Cylinder)
@@ -1078,19 +1091,19 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// トランスフォームを復元
 			cylinder->param_->transform.translate = {
-				elemJson["translate"][0].get<float>(),
-				elemJson["translate"][1].get<float>(),
-				elemJson["translate"][2].get<float>()
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 			cylinder->param_->transform.scale = {
-				elemJson["scale"][0].get<float>(),
-				elemJson["scale"][1].get<float>(),
-				elemJson["scale"][2].get<float>()
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("scale", std::vector<float>{1.0f, 1.0f, 1.0f})[2]
 			};
 			cylinder->param_->transform.rotate = {
-				elemJson["rotate"][0].get<float>(),
-				elemJson["rotate"][1].get<float>(),
-				elemJson["rotate"][2].get<float>()
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("rotate", std::vector<float>{0.0f, 0.0f, 0.0f})[2]
 			};
 
 			// テクスチャパスを取得
@@ -1107,49 +1120,49 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// マテリアルを復元
 			cylinder->param_->material.color = {
-				elemJson["color"][0].get<float>(),
-				elemJson["color"][1].get<float>(),
-				elemJson["color"][2].get<float>(),
-				elemJson["color"][3].get<float>()
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[0],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[1],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[2],
+				elemJson.value("color", std::vector<float>{1.0f, 1.0f, 1.0f, 1.0f})[3]
 			};
 			cylinder->param_->material.uv.translate = {
-				elemJson["uvTranslate"][0].get<float>(),
-				elemJson["uvTranslate"][1].get<float>()
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[0],
+				elemJson.value("uvTranslate", std::vector<float>{0.0f, 0.0f})[1]
 			};
 			cylinder->param_->material.uv.scale = {
-				elemJson["uvScale"][0].get<float>(),
-				elemJson["uvScale"][1].get<float>()
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[0],
+				elemJson.value("uvScale", std::vector<float>{1.0f, 1.0f})[1]
 			};
-			cylinder->param_->material.uv.radius = elemJson["uvRotate"].get<float>();
-			cylinder->param_->material.environment = elemJson["environment"].get<float>();
-			cylinder->param_->material.shininess = elemJson["shininess"].get<float>();
-			cylinder->param_->material.enableLighting = elemJson["enableLighting"].get<bool>();
-			cylinder->param_->material.enableDiffuse = elemJson["enableDiffuse"].get<bool>();
-			cylinder->param_->material.enableHalfLambert = elemJson["enableHalfLambert"].get<bool>();
-			cylinder->param_->material.enableSpecular = elemJson["enableSpecular"].get<bool>();
-			cylinder->param_->material.enableBlinnPhong = elemJson["enableBlinnPhong"].get<bool>();
-			cylinder->param_->material.drawShadowMap = elemJson["drawShadowMap"].get<bool>();
-			cylinder->param_->material.enableShadow = elemJson["enableShadow"].get<bool>();
+			cylinder->param_->material.uv.radius = elemJson.value("uvRotate", 0.0f);
+			cylinder->param_->material.environment = elemJson.value("environment", 0.0f);
+			cylinder->param_->material.shininess = elemJson.value("shininess", 0.0f);
+			cylinder->param_->material.enableLighting = elemJson.value("enableLighting", false);
+			cylinder->param_->material.enableDiffuse = elemJson.value("enableDiffuse", false);
+			cylinder->param_->material.enableHalfLambert = elemJson.value("enableHalfLambert", false);
+			cylinder->param_->material.enableSpecular = elemJson.value("enableSpecular", false);
+			cylinder->param_->material.enableBlinnPhong = elemJson.value("enableBlinnPhong", false);
+			cylinder->param_->material.drawShadowMap = elemJson.value("drawShadowMap", false);
+			cylinder->param_->material.enableShadow = elemJson.value("enableShadow", false);
 
 			// 分割を復元
-			cylinder->param_->division.slices = elemJson["slices"].get<int>();
+			cylinder->param_->division.slices = elemJson.value("slices", 0);
 
 			// サイズを復元
-			cylinder->param_->size.topRadius = elemJson["topRadius"].get<float>();
-			cylinder->param_->size.bottomRadius = elemJson["bottomRadius"].get<float>();
-			cylinder->param_->size.height = elemJson["height"].get<float>();
+			cylinder->param_->size.topRadius = elemJson.value("topRadius", 0.0f);
+			cylinder->param_->size.bottomRadius = elemJson.value("bottomRadius", 0.0f);
+			cylinder->param_->size.height = elemJson.value("height", 0.0f);
 
 			// ブラーを復元
-			cylinder->param_->blur.afterImageMask = elemJson["blurAfterImageMask"].get<float>();
-			cylinder->param_->blur.motionBlurMask = elemJson["blurMotionBlurMask"].get<float>();
+			cylinder->param_->blur.afterImageMask = elemJson.value("blurAfterImageMask", 0.0f);
+			cylinder->param_->blur.motionBlurMask = elemJson.value("blurMotionBlurMask", 0.0f);
 
 			// アウトラインを復元
-			cylinder->param_->outline.enableOutline = elemJson["outlineEnable"].get<bool>();
+			cylinder->param_->outline.enableOutline = elemJson.value("outlineEnable", false);
 			cylinder->param_->outline.color = {
-				elemJson["outlineColor"][0].get<float>(),
-				elemJson["outlineColor"][1].get<float>(),
-				elemJson["outlineColor"][2].get<float>(),
-				elemJson["outlineColor"][3].get<float>()
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f})[0],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f})[1],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f})[2],
+				elemJson.value("outlineColor", std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f})[3]
 			};
 		}
 
@@ -1181,7 +1194,11 @@ inline std::vector<ModelElementData> FromJson(const std::string& filePath,
 	{
 		json j;
 		file >> j;
-		return FromJsonData(j, loadedModels, loadedAnimations, loadedSkeletons);
+		auto elements = FromJsonData(j, loadedModels, loadedAnimations, loadedSkeletons);
+
+		file.close();
+
+		return elements;
 	}
 	return {};
 }

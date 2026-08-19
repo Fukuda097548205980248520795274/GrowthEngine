@@ -56,7 +56,7 @@ public:
 	{
 		Intro, // イントロ
 		Battle, // 戦闘中
-		Pose, // ポーズ中
+		Pause, // ポーズ中
 		Finish, // 終了
 		Out, // フェーズ終了
 	};
@@ -67,6 +67,9 @@ public:
 	/// @brief コンストラクタ
 	/// @param sceneManager 
 	GameScene(SceneManager* sceneManager) : Scene(sceneManager) {}
+
+	/// @brief デストラクタ
+	~GameScene();
 
 	/// @brief 初期化
 	void Initialize() override;
@@ -207,10 +210,13 @@ private:
 private:
 
 	/// @brief ポーズフェーズの初期化処理
-	void PosePhaseInitialize();
+	void PausePhaseInitialize();
 
 	/// @brief ポーズフェーズの更新処理
-	void PosePhaseUpdate();
+	void PausePhaseUpdate();
+
+	/// @brief ポーズ中かどうか
+	bool isPause_ = false;
 
 
 private:

@@ -102,7 +102,9 @@ inline std::vector<UIElementData> FromJson(const std::string& filePath, const st
 	{
 		json j;
 		file >> j;
-		return FromJsonData(j, loadedTextures);
+		auto elements = FromJsonData(j, loadedTextures);
+		file.close();
+		return elements;
 	}
 	return {};
 }
