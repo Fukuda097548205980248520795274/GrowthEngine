@@ -1378,14 +1378,25 @@ void Character::ReleaseWeapon(const Vector3& blowVelocity)
 	// 武器を持っていないときは処理しない
 	if (!HasWeapon())return;
 
+	// 武器が壊れているかどうかを取得する
+	bool isWeaponBroken = weapon_->IsBreak();
+
 	// 武器の所有者をクリアする
 	weapon_->SetOwner(nullptr);
 	weapon_->SetPosition(weapon_->GetWorldPosition());
 
-	// 吹き飛び速度が指定されている場合は武器を飛ばす
-	if (blowVelocity.Length() > 0.001f) 
+	// 武器が壊れている場合は、破壊するために保持する
+	if (isWeaponBroken)
 	{
-		weapon_->BlowAway(blowVelocity);
+		brokenWeaponToDestroy_ = weapon_;
+	}
+	else
+	{
+		// 武器を吹き飛ばす
+		if (blowVelocity.Length() > 0.001f)
+		{
+			weapon_->BlowAway(blowVelocity);
+		}
 	}
 
 	weapon_ = nullptr;

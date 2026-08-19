@@ -171,9 +171,6 @@ protected:
 	// 武器が壊れたかどうか
 	bool isBreak_ = false;
 
-	/// @brief 壊れた後の待機時間
-	float finishedBreakTimer_ = 1.0f;
-
 	// 武器のカテゴリ
 	WeaponCategory category_ = WeaponCategory::None;
 

@@ -105,22 +105,7 @@ void Weapon::Update()
 	UpdateButton();
 
 	// 更新が無効なら何もしない
-	if (!updateEnabled_)return;
-
-	// 武器が壊れた後の待機時間があるときは、待機時間を減らす
-	if (isBreak_)
-	{
-		// 壊れた後の待機時間を減らす
-		finishedBreakTimer_ -= engine_->GetDeltaTime() * engine_->GetTimeScale();
-
-		// タイマーが0以下になったら削除する
-		if (finishedBreakTimer_ <= 0.0f)
-		{
-			Delete();
-		}
-
-		return;
-	}
+	if (!updateEnabled_ || isBreak_)return;
 
 	// デルタタイムを取得する
 	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale();

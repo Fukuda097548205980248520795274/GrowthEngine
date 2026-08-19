@@ -50,6 +50,7 @@ void Player::Initialize(const CharacterInitData& initData, Weapon* baton)
 	nextComboTreeX_ = nullptr;
 	nextComboTreeY_ = nullptr;
 	nextComboTreeB_ = nullptr;
+	brokenWeaponToDestroy_ = nullptr;
 	isReleaseWeaponTree_ = false;
 
 	// ステートを初期化する
@@ -144,6 +145,13 @@ void Player::Update()
 				if (currentComboTreeB_)currentComboTreeB_->SetOwner(nullptr);
 
 				isReleaseWeaponTree_ = false;
+
+				// 壊れた武器を破壊する
+				if (brokenWeaponToDestroy_)
+				{
+					brokenWeaponToDestroy_->Delete();
+					brokenWeaponToDestroy_ = nullptr;
+				}
 			}
 
 			currentComboTreeX_ = nextComboTreeX_;
@@ -263,7 +271,15 @@ void Player::Dead()
 		if (currentComboTreeX_)currentComboTreeX_->SetOwner(nullptr);
 		if (currentComboTreeY_)currentComboTreeY_->SetOwner(nullptr);
 		if (currentComboTreeB_)currentComboTreeB_->SetOwner(nullptr);
+
 		isReleaseWeaponTree_ = false;
+
+		// 壊れた武器を破壊する
+		if (brokenWeaponToDestroy_)
+		{
+			brokenWeaponToDestroy_->Delete();
+			brokenWeaponToDestroy_ = nullptr;
+		}
 	}
 }
 
@@ -486,7 +502,15 @@ void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY
 			if (currentComboTreeX_ && currentComboTreeX_ != comboTreeX) currentComboTreeX_->SetOwner(nullptr);
 			if (currentComboTreeY_ && currentComboTreeY_ != comboTreeY) currentComboTreeY_->SetOwner(nullptr);
 			if (currentComboTreeB_ && currentComboTreeB_ != comboTreeB) currentComboTreeB_->SetOwner(nullptr);
+
 			isReleaseWeaponTree_ = false;
+
+			// 壊れた武器を破壊する
+			if (brokenWeaponToDestroy_)
+			{
+				brokenWeaponToDestroy_->Delete();
+				brokenWeaponToDestroy_ = nullptr;
+			}
 		}
 
 		// 攻撃中でない場合は現在のコンボツリーとして保存する

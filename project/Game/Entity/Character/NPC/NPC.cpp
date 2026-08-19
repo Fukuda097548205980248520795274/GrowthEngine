@@ -45,6 +45,7 @@ void NPC::Initialize(const CharacterInitData& initData, CharacterTag characterTa
 {
 	currentBehaviorTree_ = nullptr;
 	nextBehaviorTree_ = nullptr;
+	brokenWeaponToDestroy_ = nullptr;
 	isReleaseWeaponTree_ = false;
 
 	// インスタンスリストに登録する
@@ -145,7 +146,15 @@ void NPC::Update()
 			if (isReleaseWeaponTree_)
 			{
 				currentBehaviorTree_->SetOwner(nullptr);
+
 				isReleaseWeaponTree_ = false;
+
+				// 壊れた武器を破壊する
+				if (brokenWeaponToDestroy_)
+				{
+					brokenWeaponToDestroy_->Delete();
+					brokenWeaponToDestroy_ = nullptr;
+				}
 			}
 
 			if (isChangeBehaviorTree_ && !nextBehaviorTree_)
@@ -440,7 +449,15 @@ void NPC::Dead()
 	if (isReleaseWeaponTree_)
 	{
 		if (currentBehaviorTree_)currentBehaviorTree_->SetOwner(nullptr);
+
 		isReleaseWeaponTree_ = false;
+
+		// 壊れた武器を破壊する
+		if (brokenWeaponToDestroy_)
+		{
+			brokenWeaponToDestroy_->Delete();
+			brokenWeaponToDestroy_ = nullptr;
+		}
 	}
 
 	// ビヘイビアツリーをクリアする
@@ -482,6 +499,13 @@ void NPC::RequestBehaviorTreeChange(BehaviorTree* newTree)
 			if (currentBehaviorTree_ && currentBehaviorTree_ != newTree) currentBehaviorTree_->SetOwner(nullptr);
 
 			isReleaseWeaponTree_ = false;
+
+			// 壊れた武器を破壊する
+			if (brokenWeaponToDestroy_)
+			{
+				brokenWeaponToDestroy_->Delete();
+				brokenWeaponToDestroy_ = nullptr;
+			}
 		}
 
 		// 新しいビヘイビアツリーに切り替える

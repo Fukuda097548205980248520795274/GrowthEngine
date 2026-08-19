@@ -710,6 +710,9 @@ protected:
 	/// @brief 所持している武器
 	Weapon* weapon_ = nullptr;
 
+	/// @brief 壊れた武器を破壊するための参照
+	Weapon* brokenWeaponToDestroy_ = nullptr;
+
 	/// @brief 武器を放した際のツリーを変更するかどうかのフラグ
 	bool isReleaseWeaponTree_ = false;
 
