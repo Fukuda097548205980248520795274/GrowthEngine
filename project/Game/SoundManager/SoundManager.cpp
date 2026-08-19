@@ -99,6 +99,12 @@ void SoundManager::Initialize()
 
 	// ロックオンのSE
 	seLockOn_ = std::make_unique<Se>("LockOn", engine_->LoadAudio("./Assets/Sounds/se/lockOn.mp3"));
+
+	// 勝利のSE
+	seWin_ = std::make_unique<Se>("Win", engine_->LoadAudio("./Assets/Sounds/se/win.mp3"));
+
+	// 敗北のSE
+	seLose_ = std::make_unique<Se>("Lose", engine_->LoadAudio("./Assets/Sounds/se/lose.mp3"));
 }
 
 /// @brief 旋嵐スタイルチェンジのSE

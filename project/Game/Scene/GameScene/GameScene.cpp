@@ -1794,6 +1794,18 @@ void GameScene::LoadHUDs()
 		bossTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
 	}
 
+	winTextSprite_ = uiEditor_->GetSprite("Win_Text");
+	if (winTextSprite_)
+	{
+		winTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
+
+	loseTextSprite_ = uiEditor_->GetSprite("Lose_Text");
+	if (loseTextSprite_)
+	{
+		loseTextSprite_->param_->material.color.w = 0.0f; // 初期状態では透明にする
+	}
+
 	weaponKnifeSprite_ = uiEditor_->GetSprite("WeaponKnife");
 	if(weaponKnifeSprite_)
 	{

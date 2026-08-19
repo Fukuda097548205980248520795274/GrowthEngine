@@ -27,12 +27,28 @@ void GameScene::BattlePhaseUpdate()
 	if (isGameClear_)
 	{
 		phaseManager_->ChangePhase(PhaseType::Finish);
+		soundManager_->SeWin();
+
+		// 勝利演出
+		IntroText::InitData winTextInitData;
+		winTextInitData.buttonSprite = winTextSprite_;
+		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
+		introText->Initialize(winTextInitData);
+		huds_.push_back(std::move(introText));
 	}
 
 	// プレイヤーが死亡した場合の処理
 	if (player_ && player_->IsDead())
 	{
 		phaseManager_->ChangePhase(PhaseType::Finish);
+		soundManager_->SeLose();
+
+		// 敗北演出
+		IntroText::InitData loseTextInitData;
+		loseTextInitData.buttonSprite = loseTextSprite_;
+		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
+		introText->Initialize(loseTextInitData);
+		huds_.push_back(std::move(introText));
 	}
 
 	// バトルディレクターの更新

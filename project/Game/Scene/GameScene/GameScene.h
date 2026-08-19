@@ -558,6 +558,9 @@ private:
 	Sprite* bossTextSprite_ = nullptr;
 	Sprite* startTextSprite_ = nullptr;
 
+	Sprite* winTextSprite_ = nullptr;
+	Sprite* loseTextSprite_ = nullptr;
+
 	// 武器スプライト
 	Sprite* weaponKnifeSprite_ = nullptr;
 	Sprite* weaponGunSprite_ = nullptr;

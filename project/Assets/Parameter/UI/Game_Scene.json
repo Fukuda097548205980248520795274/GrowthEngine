@@ -519,6 +519,52 @@
         "transform": {
             "rotate": 0.0,
             "scale": [
+                0.0,
+                0.0
+            ],
+            "translate": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Win_Text",
+        "screenAnchor": 4,
+        "textureFilename": "win_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                1.0,
+                1.0
+            ],
+            "translate": [
+                0.0,
+                0.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "name": "Lose_Text",
+        "screenAnchor": 4,
+        "textureFilename": "lose_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
                 1.0,
                 1.0
             ],

@@ -84,6 +84,12 @@ public:
 	/// @brief ロックオンのSE
 	void SeLockOn() { if (seLockOn_)seLockOn_->Play(); }
 
+	/// @brief 勝利のSE
+	void SeWin() { if (seWin_)seWin_->Play(); }
+
+	/// @brief 敗北のSE
+	void SeLose() { if (seLose_)seLose_->Play(); }
+
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
 	void BgmTutorialRoadPlay(bool isPlay) { tutorialRoadBgm_->param_->volume = 0.25f; if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
@@ -182,6 +188,12 @@ private:
 
 	/// @brief ロックオンのSE
 	std::unique_ptr<Se> seLockOn_ = nullptr;
+
+	/// @brief 勝利のSE
+	std::unique_ptr<Se> seWin_ = nullptr;
+
+	/// @brief 敗北のSE
+	std::unique_ptr<Se> seLose_ = nullptr;
 
 
 private:
