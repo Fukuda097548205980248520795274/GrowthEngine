@@ -545,11 +545,6 @@ void GameScene::OnStageLoaded(const std::string& fileName)
 	if (extPos != std::string::npos)
 		baseName.erase(extPos, 5);
 
-	// "Stage"という文字列を削除する
-	size_t stagePos = baseName.find("Stage");
-	if (stagePos != std::string::npos) 
-		baseName.erase(stagePos, 5);
-
 	// 他のエディタのロードを呼び出す
 	if (modelEditor_) 
 		modelEditor_->Load(baseName);

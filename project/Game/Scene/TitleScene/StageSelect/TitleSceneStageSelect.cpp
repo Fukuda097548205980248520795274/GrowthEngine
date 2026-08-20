@@ -23,9 +23,11 @@ void TitleScene::StageSelectInitialize()
 		// ステージセレクトの選択肢のスプライトの現在位置を取得
 		auto& currentPos = stageSelectOptionSprites_[i]->param_.transform.translate;
 		currentPos = targetPosition;
+		stageSelectOptionTextSprites_[i]->param_->transform.translate = currentPos;
 
 		// ステージセレクトの選択肢のスプライトのアルファ値を更新
 		stageSelectOptionSprites_[i]->param_.material.color.w = 0.0f;
+		stageSelectOptionTextSprites_[i]->param_->material.color.w = 0.0f;
 
 		// ステージセレクトの選択肢のスプライトを描画
 		stageSelectOptionSprites_[i]->Draw();
@@ -165,6 +167,7 @@ void TitleScene::StageSelectBgSpriteUpdate()
 		auto& currentPos = stageSelectOptionSprites_[i]->param_.transform.translate;
 		currentPos.x = Lerp(currentPos.x, targetPosition.x, dt * 15.0f);
 		currentPos.y = Lerp(currentPos.y, targetPosition.y, dt * 15.0f);
+		stageSelectOptionTextSprites_[i]->param_->transform.translate = currentPos;
 
 		// 現在のアルファ値とスケールの参照を取得
 		auto& currentAlpha = stageSelectOptionSprites_[i]->param_.material.color.w;
@@ -182,11 +185,15 @@ void TitleScene::StageSelectBgSpriteUpdate()
 				// 選択された項目は大きくしながらフェードアウト
 				currentAlpha = Lerp(1.0f, 0.0f, easing);
 				currentScale = Lerp(Vector2(0.75f, 0.75f), Vector2(1.5f, 1.5f), easing);
+
+				stageSelectOptionTextSprites_[i]->param_->material.color.w = Lerp(1.0f, 0.0f, t);
 			}
 			else
 			{
 				// 選択されていない項目はそのままフェードアウト
 				currentAlpha = Lerp(currentAlpha, 0.0f, t);
+
+				stageSelectOptionTextSprites_[i]->param_->material.color.w = Lerp(stageSelectOptionTextSprites_[i]->param_->material.color.w, 0.0f, t);
 			}
 		}
 		// メインメニューに戻る時の演出
@@ -194,6 +201,8 @@ void TitleScene::StageSelectBgSpriteUpdate()
 		{
 			float t = 1.0f - (stageSelectTimer_ / kStageSelectDuration);
 			currentAlpha = Lerp(currentAlpha, 0.0f, t);
+
+			stageSelectOptionTextSprites_[i]->param_->material.color.w = Lerp(stageSelectOptionTextSprites_[i]->param_->material.color.w, 0.0f, t);
 		}
 		// 通常時（選択中）の演出
 		else
@@ -220,7 +229,12 @@ void TitleScene::StageSelectBgSpriteUpdate()
 
 			// スケールは通常のサイズに維持・補間
 			currentScale = Lerp(currentScale, Vector2(0.75f, 0.75f), dt * 15.0f);
+
+			stageSelectOptionTextSprites_[i]->param_->material.color.w = Lerp(stageSelectOptionTextSprites_[i]->param_->material.color.w, 1.0f, dt * 15.0f);
 		}
+
+		
+		stageSelectOptionTextSprites_[i]->param_->transform.scale = currentScale;
 
 		// ステージセレクトの選択肢のスプライトを描画
 		stageSelectOptionSprites_[i]->Draw();

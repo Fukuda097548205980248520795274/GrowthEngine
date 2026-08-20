@@ -84,7 +84,7 @@ namespace Engine
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
 
 		// SRV用ディスクリプタ数
-		UINT srvDescriptorNum_ = 512;
+		UINT srvDescriptorNum_ = 1024;
 
 		// SRV用CPUディスクリプタ使用数
 		int32_t useSrvCPUDescriptor_ = 1;

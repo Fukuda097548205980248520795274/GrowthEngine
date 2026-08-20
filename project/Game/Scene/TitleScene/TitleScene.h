@@ -180,6 +180,9 @@ private:
 	/// @brief ステージセレクトの選択肢のスプライト
 	std::vector<PrefabInstanceSprite*> stageSelectOptionSprites_;
 
+	/// @brief ステージセレクトの選択肢のテキストスプライト
+	std::vector<Sprite*> stageSelectOptionTextSprites_;
+
 	/// @brief ステージセレクトの選択肢のスプライトの位置
 	static constexpr Vector2 kStageSelectOptionSpritePosition = Vector2(969.0f, 280.0f);
 

@@ -91,6 +91,20 @@ void TitleScene::Initialize()
 	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::StartGame)]->param_->material.color.w = 0.0f;
 	mainMenuSpriteBG_[static_cast<int>(MainMenuOption::QuitGame)]->param_->material.color.w = 0.0f;
 
+	Sprite* stage1Text = uiEditor_->GetSprite("Stage1_Text");
+	Sprite* stage2Text = uiEditor_->GetSprite("Stage2_Text");
+	Sprite* stage3Text = uiEditor_->GetSprite("Stage3_Text");
+
+	stageSelectOptionTextSprites_.push_back(stage1Text);
+	stageSelectOptionTextSprites_.push_back(stage2Text);
+	stageSelectOptionTextSprites_.push_back(stage3Text);
+
+	for (auto& sprite : stageSelectOptionTextSprites_)
+	{
+		sprite->param_->material.color = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+		sprite->param_->transform.scale = Vector2(0.75f, 0.75f);
+		sprite->param_->transform.translate = kStageSelectOptionSpritePosition;
+	}
 
 	// フェーズマネージャを作成する
 	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
@@ -127,11 +141,11 @@ void TitleScene::Initialize()
 		{
 			engine_->DrawToRenderPass("HUD", "PostEffect");
 
-			uiEditor_->DrawUI();
-			uiEditor_->Draw();
-
 			// ステージセレクトの背景スプライトの描画
 			stageSelectBGSprite_->Draw();
+
+			uiEditor_->DrawUI();
+			uiEditor_->Draw();
 		}
 	);
 

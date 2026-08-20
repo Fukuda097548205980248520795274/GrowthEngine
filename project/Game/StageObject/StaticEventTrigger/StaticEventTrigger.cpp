@@ -73,9 +73,6 @@ void StaticEventTrigger::Initialize(const InitData& initData)
 /// @brief 更新処理
 void StaticEventTrigger::Update()
 {
-	// 更新が有効でないときは処理しない（誤操作防止のため）
-	if (!updateEnabled_)return;
-
 	// 基底クラスの更新処理
 	StageObject::Update();
 
@@ -84,7 +81,16 @@ void StaticEventTrigger::Update()
 	{
 		collision_->param_->center = GetWorldPosition();
 		collision_->param_->radius = worldTransform_->scale_;
+	}
 
+	if (!updateEnabled_)
+	{
+		return;
+	}
+
+	// 衝突判定のパラメータを更新
+	if (collision_)
+	{
 		// 衝突しているかどうか
 		if (collision_->isCollision_)
 		{

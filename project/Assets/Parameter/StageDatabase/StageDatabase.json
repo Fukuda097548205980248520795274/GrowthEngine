@@ -1,16 +1,16 @@
 {
     "stages": [
         {
+            "displayName": "Tutorial1",
+            "fileName": "Tutorial1"
+        },
+        {
+            "displayName": "Tutorial2",
+            "fileName": "Tutorial2"
+        },
+        {
             "displayName": "Stage1",
-            "fileName": "bambooGroveStage"
-        },
-        {
-            "displayName": "bambooGroveStage",
-            "fileName": "bambooGroveStage"
-        },
-        {
-            "displayName": "bambooGroveStage",
-            "fileName": "bambooGroveStage"
+            "fileName": "Stage1"
         }
     ],
     "tutorialStageName": "tutorialStage"

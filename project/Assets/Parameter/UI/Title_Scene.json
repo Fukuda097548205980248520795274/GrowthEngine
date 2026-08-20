@@ -212,7 +212,7 @@
             0.0,
             0.0,
             0.0,
-            1.0
+            0.9999998807907104
         ],
         "name": "stageSelect",
         "screenAnchor": 6,
@@ -226,6 +226,75 @@
             "translate": [
                 1113.0,
                 614.0
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "name": "Stage1_Text",
+        "screenAnchor": 6,
+        "textureFilename": "stage1_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                968.9999389648438,
+                305.03363037109375
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "name": "Stage2_Text",
+        "screenAnchor": 6,
+        "textureFilename": "stage2_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                968.9999389648438,
+                205.03366088867188
+            ]
+        }
+    },
+    {
+        "blendMode": 1,
+        "color": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "name": "Stage3_Text",
+        "screenAnchor": 6,
+        "textureFilename": "stage3_text.png",
+        "transform": {
+            "rotate": 0.0,
+            "scale": [
+                0.75,
+                0.75
+            ],
+            "translate": [
+                968.9999389648438,
+                105.03364562988281
             ]
         }
     }

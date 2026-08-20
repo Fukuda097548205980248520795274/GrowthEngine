@@ -13,9 +13,6 @@ StageObject::StageObject()
 /// @brief 更新処理
 void StageObject::Update()
 {
-	// 更新が有効でないときは処理しない
-	if (!updateEnabled_)return;
-
 	// ワールドトランスフォームの更新
 	worldTransform_->Update();
 }

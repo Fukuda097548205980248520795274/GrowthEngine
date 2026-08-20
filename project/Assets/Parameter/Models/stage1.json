@@ -1,0 +1,132 @@
+[
+    {
+        "animationDirectory": "",
+        "animationFileName": "",
+        "blendMode": 0,
+        "meshData": [
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.621761679649353,
+                    0.621761679649353,
+                    0.621761679649353,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.0,
+                    0.0033289645798504353,
+                    0.1606217622756958,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 1.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            }
+        ],
+        "modelDirectory": "./Assets/Models/stage_1",
+        "modelFileName": "stage_1.obj",
+        "modelName": "Stage1_Stage",
+        "rotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "skeletonDirectory": "",
+        "skeletonFileName": "",
+        "translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "type": 1
+    }
+]
