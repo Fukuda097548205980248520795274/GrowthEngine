@@ -413,7 +413,7 @@
             "subType": 2
         },
         {
-            "aggressiveness": 3.0,
+            "aggressiveness": 1.0,
             "avoidBackMotionName": "Back",
             "avoidFrontMotionName": "Front",
             "avoidLeftMotionName": "Front",
@@ -431,7 +431,7 @@
             "downGettingUpStateBT": "NoMove",
             "downLyingStateBT": "GetUpAttack",
             "downStaggerStateBT": "GetUpAttack",
-            "equipWeaponPrefabName": "baton",
+            "equipWeaponPrefabName": "boss_baton",
             "grabbedStateBT": "NoMove",
             "grabbingStateBT": "NoMove",
             "guardGage": 10.0,
@@ -439,7 +439,7 @@
             "guardRecoveryTime": 5.0,
             "guardStateBT": "NoMove",
             "heavyDamageStateBT": "NoMove",
-            "hp": 300,
+            "hp": 200,
             "lightDamageStateBT": "NoMove",
             "name": "",
             "noneStateBT": "New",
