@@ -2,6 +2,6 @@
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
-	std::unique_ptr<Game> game = std::make_unique<Game>(1280, 720, "LE3A_12_フクダ_ソウワ");
+	std::unique_ptr<Game> game = std::make_unique<Game>(1280, 720, "LE3A_12_フクダ_ソウワ_月龍");
 	return game->Run();
 }

@@ -27,7 +27,7 @@ DockId=0x00000025,1
 
 [Window][Texture]
 Pos=0,482
-Size=221,238
+Size=195,238
 Collapsed=0
 DockId=0x00000023,0
 
@@ -38,7 +38,7 @@ Collapsed=0
 DockId=0x00000023,2
 
 [Window][Stage Editor]
-Pos=658,18
+Pos=592,18
 Size=302,462
 Collapsed=0
 DockId=0x00000008,0
@@ -50,8 +50,8 @@ Collapsed=0
 DockId=0x00000023,1
 
 [Window][Camera3D]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,2
 
@@ -62,14 +62,14 @@ Collapsed=0
 DockId=0x00000002,3
 
 [Window][Prefab]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,1
 
 [Window][PostEffect]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,0
 
@@ -81,25 +81,25 @@ DockId=0x00000002,0
 
 [Window][View]
 Pos=0,18
-Size=679,462
+Size=590,462
 Collapsed=0
 DockId=0x00000025,0
 
 [Window][Particle]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,3
 
 [Window][Sound]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,4
 
 [Window][Behavior Tree Editor]
-Pos=422,18
-Size=538,462
+Pos=252,18
+Size=642,462
 Collapsed=0
 DockId=0x00000006,0
 
@@ -110,15 +110,15 @@ DockId=0x00000025,2
 
 [Window][FPS Overlay]
 Pos=0,482
-Size=221,238
+Size=195,238
 Collapsed=0
 DockId=0x00000023,1
 
 [Window][Node Properties]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,7
 
 [Window][Tree Project Assets]
 Pos=226,482
@@ -144,12 +144,12 @@ DockId=0x0000000A,0
 
 [Window][Delete Confirmation]
 Pos=508,312
-Size=264,72
+Size=264,80
 Collapsed=0
 
 [Window][Object List]
-Pos=1010,18
-Size=270,462
+Pos=896,18
+Size=384,462
 Collapsed=0
 DockId=0x00000002,7
 
@@ -160,20 +160,20 @@ Collapsed=0
 DockId=0x00000010,0
 
 [Window][UI - ヒエラルキー]
-Pos=962,18
-Size=318,462
+Pos=896,0
+Size=384,480
 Collapsed=0
 DockId=0x00000002,5
 
 [Window][UI - インスペクター]
-Pos=693,18
-Size=267,462
+Pos=626,0
+Size=268,480
 Collapsed=0
 DockId=0x00000012,0
 
 [Window][UI - アセットブラウザ]
 Pos=244,482
-Size=445,238
+Size=1036,238
 Collapsed=0
 DockId=0x0000000F,0
 
@@ -184,20 +184,20 @@ Collapsed=0
 DockId=0x00000016,0
 
 [Window][モデル - ヒエラルキー]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,7
 
 [Window][モデル - インスペクター]
-Pos=681,18
-Size=279,462
+Pos=614,18
+Size=280,462
 Collapsed=0
 DockId=0x00000018,0
 
 [Window][モデル - アセットブラウザ]
 Pos=223,482
-Size=434,238
+Size=1057,238
 Collapsed=0
 DockId=0x00000015,0
 
@@ -214,22 +214,22 @@ Collapsed=0
 DockId=0x00000023,2
 
 [Window][ライト - ヒエラルキー]
-Pos=962,18
-Size=318,462
+Pos=1585,18
+Size=335,751
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,6
 
 [Window][ライト - インスペクター]
-Pos=714,18
-Size=246,462
+Pos=1337,18
+Size=246,751
 Collapsed=0
 DockId=0x0000001C,0
 
 [Window][カットシーンエディタ]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,7
 
 [Window][タイムライン]
 Pos=223,482
@@ -244,54 +244,125 @@ Collapsed=0
 DockId=0x00000024,0
 
 [Window][Combo Tree]
-Pos=437,18
-Size=523,462
+Pos=439,18
+Size=455,462
 Collapsed=0
 DockId=0x00000022,0
 
 [Window][Combo Properties]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,7
 
 [Window][NPC選択]
-Pos=962,18
-Size=318,462
+Pos=896,18
+Size=384,462
 Collapsed=0
-DockId=0x00000002,5
+DockId=0x00000002,7
 
 [Window][ランタイムビヘイビアツリービュー]
-Pos=390,18
+Pos=324,18
 Size=570,462
 Collapsed=0
 DockId=0x00000026,0
 
 [Window][ライト - アセット]
-Pos=296,482
-Size=984,238
+Pos=443,771
+Size=1477,238
 Collapsed=0
 DockId=0x0000001E,0
 
+[Window][新規モデル作成]
+Pos=501,312
+Size=278,122
+Collapsed=0
+
+[Window][新規ファイル作成ポップアップ]
+Pos=506,321
+Size=267,78
+Collapsed=0
+
+[Window][NavMesh インフォメーション]
+Pos=1535,18
+Size=385,751
+Collapsed=0
+DockId=0x00000002,6
+
+[Window][Stage Select Editor]
+Pos=896,0
+Size=384,480
+Collapsed=0
+DockId=0x00000002,6
+
+[Window][Save Confirmation Popup]
+Pos=424,306
+Size=432,108
+Collapsed=0
+
+[Window][新規スプライト作成]
+Pos=506,310
+Size=267,100
+Collapsed=0
+
+[Window][AI Evaluation Metrics (Live Auto-Monitor)]
+Pos=1585,18
+Size=335,751
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][計測用エディタ (Metrics Editor)]
+Pos=60,60
+Size=312,261
+Collapsed=0
+
+[Window][キャラクター選択UI]
+Pos=896,18
+Size=384,462
+Collapsed=0
+DockId=0x00000002,5
+
+[Window][Create New File Popup]
+Pos=508,309
+Size=264,102
+Collapsed=0
+
+[Window][AI評価メトリクス (自動監視)]
+Pos=896,18
+Size=384,462
+Collapsed=0
+DockId=0x00000002,6
+
+[Window][Template]
+Pos=896,18
+Size=384,462
+Collapsed=0
+DockId=0x00000002,8
+
+[Window][Camera]
+Pos=60,60
+Size=482,73
+Collapsed=0
+
 [Docking][Data]
 DockSpace                   ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,702 Split=Y Selected=0x5E5F7166
-  DockNode                  ID=0x00000003 Parent=0x14621557 SizeRef=1280,462 Split=X
-    DockNode                ID=0x00000001 Parent=0x00000003 SizeRef=960,702 Split=X Selected=0xCD8A0BD6
-      DockNode              ID=0x00000007 Parent=0x00000001 SizeRef=704,462 Split=X Selected=0xCD8A0BD6
-        DockNode            ID=0x00000005 Parent=0x00000007 SizeRef=468,462 Split=X Selected=0xCD8A0BD6
-          DockNode          ID=0x00000011 Parent=0x00000005 SizeRef=756,462 Split=X Selected=0xCD8A0BD6
-            DockNode        ID=0x00000017 Parent=0x00000011 SizeRef=744,462 Split=X Selected=0xCD8A0BD6
+  DockNode                  ID=0x00000003 Parent=0x14621557 SizeRef=1280,480 Split=X
+    DockNode                ID=0x00000001 Parent=0x00000003 SizeRef=894,702 Split=X Selected=0xCD8A0BD6
+      DockNode              ID=0x00000007 Parent=0x00000001 SizeRef=590,462 Split=X Selected=0xCD8A0BD6
+        DockNode            ID=0x00000005 Parent=0x00000007 SizeRef=939,462 Split=X Selected=0xCD8A0BD6
+          DockNode          ID=0x00000011 Parent=0x00000005 SizeRef=691,462 Split=X Selected=0xCD8A0BD6
+            DockNode        ID=0x00000017 Parent=0x00000011 SizeRef=612,462 Split=X Selected=0xCD8A0BD6
               DockNode      ID=0x0000001B Parent=0x00000017 SizeRef=712,462 Split=X Selected=0xCD8A0BD6
-                DockNode    ID=0x00000021 Parent=0x0000001B SizeRef=435,462 Split=X Selected=0xCD8A0BD6
+                DockNode    ID=0x00000021 Parent=0x0000001B SizeRef=436,462 Split=X Selected=0xCD8A0BD6
                   DockNode  ID=0x00000025 Parent=0x00000021 SizeRef=388,462 CentralNode=1 Selected=0xCD8A0BD6
                   DockNode  ID=0x00000026 Parent=0x00000021 SizeRef=570,462 Selected=0x1DC949F7
-                DockNode    ID=0x00000022 Parent=0x0000001B SizeRef=523,462 Selected=0xA12B48AF
+                DockNode    ID=0x00000022 Parent=0x0000001B SizeRef=455,462 Selected=0xA12B48AF
               DockNode      ID=0x0000001C Parent=0x00000017 SizeRef=246,462 Selected=0x49094915
-            DockNode        ID=0x00000018 Parent=0x00000011 SizeRef=279,462 Selected=0x1A2396DC
-          DockNode          ID=0x00000012 Parent=0x00000005 SizeRef=267,462 Selected=0xB96B4D63
-        DockNode            ID=0x00000006 Parent=0x00000007 SizeRef=538,462 Selected=0xFCC94F6D
+            DockNode        ID=0x00000018 Parent=0x00000011 SizeRef=280,462 Selected=0x1A2396DC
+          DockNode          ID=0x00000012 Parent=0x00000005 SizeRef=268,462 Selected=0xB96B4D63
+        DockNode            ID=0x00000006 Parent=0x00000007 SizeRef=642,462 Selected=0xFCC94F6D
       DockNode              ID=0x00000008 Parent=0x00000001 SizeRef=302,462 Selected=0xBE78FE5F
-    DockNode                ID=0x00000002 Parent=0x00000003 SizeRef=318,702 Selected=0x17D0B0E3
+    DockNode                ID=0x00000002 Parent=0x00000003 SizeRef=384,702 Selected=0xDFF955E3
   DockNode                  ID=0x00000004 Parent=0x14621557 SizeRef=1280,238 Split=X Selected=0xB4599F82
     DockNode                ID=0x00000009 Parent=0x00000004 SizeRef=195,238 Split=X Selected=0xFDB80A1C
       DockNode              ID=0x0000000B Parent=0x00000009 SizeRef=224,238 Split=X Selected=0xFDB80A1C
@@ -313,6 +384,8 @@ DockSpace                   ID=0x14621557 Window=0x3DA2F1DE Pos=0,18 Size=1280,7
           DockNode          ID=0x00000010 Parent=0x0000000E SizeRef=589,238 Selected=0x2B0B66C9
       DockNode              ID=0x0000000C Parent=0x00000009 SizeRef=1054,238 Selected=0xB4599F82
     DockNode                ID=0x0000000A Parent=0x00000004 SizeRef=1083,238 Selected=0x801F0B42
+
+
 
 
 )";
