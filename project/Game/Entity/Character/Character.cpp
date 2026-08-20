@@ -93,8 +93,8 @@ Character::Character() : Entity()
 		motionManager_->GetMotion(MotionType::DowoGetUp, "Front"),
 		motionManager_->GetMotion(MotionType::DowoGetUp, "Front")));
 	stateMachine_->AddState("DownStagger", std::make_unique<CharacterStateDownStagger>(this,
-		motionManager_->GetMotion(MotionType::Stagger, "Standing"),
-		motionManager_->GetMotion(MotionType::Stagger, "Standing")));
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
 	stateMachine_->AddState("BlownAway", std::make_unique<CharacterStateBlownAway>(this,
 		motionManager_->GetMotion(MotionType::DownFall, "Front"),
 		motionManager_->GetMotion(MotionType::DownFall, "Front")));

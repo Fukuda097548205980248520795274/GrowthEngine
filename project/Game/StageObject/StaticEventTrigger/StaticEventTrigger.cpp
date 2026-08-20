@@ -83,10 +83,7 @@ void StaticEventTrigger::Update()
 		collision_->param_->radius = worldTransform_->scale_;
 	}
 
-	if (!updateEnabled_)
-	{
-		return;
-	}
+	if (!updateEnabled_)return;
 
 	// 衝突判定のパラメータを更新
 	if (collision_)

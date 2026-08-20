@@ -410,6 +410,15 @@ void GameScene::Initialize()
 			// エディタ内のUI描画
 			uiEditor_->Draw();
 
+			stickTutorial_->Draw();
+			dashTutorial_->Draw();
+			attackTutorial_->Draw();
+			comboTutorial_->Draw();
+			grabTutorial_->Draw();
+			guardTutorial_->Draw();
+			avoidTutorial_->Draw();
+			rageTutorial_->Draw();
+
 			// AI計測用エディタの更新
 			aiMetricsEditor_->Draw();
 		}

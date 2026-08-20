@@ -171,6 +171,14 @@ void MotionManager::LoadAttack(const std::string& dir)
 	table_[MotionType::Attack]["Player_Sword_Attack_000"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_000", "Player_Sword_Attack_000.gltf");
 	table_[MotionType::Attack]["Player_Sword_Attack_001"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_001", "Player_Sword_Attack_001.gltf");
 	table_[MotionType::Attack]["Player_Sword_Attack_002"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_002", "Player_Sword_Attack_002.gltf");
+	table_[MotionType::Attack]["Player_Sword_Attack_003"] = engine_->LoadAnimation(dir + "/attack/Player_Sword_Attack_003", "Player_Sword_Attack_003.gltf");
+	table_[MotionType::Attack]["Player_Kick_000"] = engine_->LoadAnimation(dir + "/attack/Player_Kick_000", "Player_Kick_000.gltf");
+	table_[MotionType::Attack]["Player_Kick_001"] = engine_->LoadAnimation(dir + "/attack/Player_Kick_001", "Player_Kick_001.gltf");
+	table_[MotionType::Attack]["Player_Kick_002"] = engine_->LoadAnimation(dir + "/attack/Player_Kick_002", "Player_Kick_002.gltf");
+	table_[MotionType::Attack]["Player_Punch_000"] = engine_->LoadAnimation(dir + "/attack/Player_Punch_000", "Player_Punch_000.gltf");
+	table_[MotionType::Attack]["Player_Punch_001"] = engine_->LoadAnimation(dir + "/attack/Player_Punch_001", "Player_Punch_001.gltf");
+	table_[MotionType::Attack]["Player_Punch_002"] = engine_->LoadAnimation(dir + "/attack/Player_Punch_002", "Player_Punch_002.gltf");
+	table_[MotionType::Attack]["Player_Elbow_000"] = engine_->LoadAnimation(dir + "/attack/Player_Elbow_000", "Player_Elbow_000.gltf");
 	table_[MotionType::Attack]["Player_Throw_000"] = engine_->LoadAnimation(dir + "/attack/Player_Throw_000", "Player_Throw_000.gltf");
 	table_[MotionType::Attack]["Kick_000"] = engine_->LoadAnimation(dir + "/attack/Kick_000", "Kick_000.gltf");
 	table_[MotionType::Attack]["Kick_001"] = engine_->LoadAnimation(dir + "/attack/Kick_001", "Kick_001.gltf");

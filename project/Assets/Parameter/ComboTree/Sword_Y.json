@@ -1,41 +1,41 @@
 {
-    "currentId": 100,
+    "currentId": 6,
     "links": [],
     "nodes": [
         {
-            "animationName": "Player_Kick_001",
+            "animationName": "Player_Sword_Attack_003",
             "comboParams": {
-                "attackTime": 0.75,
+                "attackTime": 1.0,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
                     {
-                        "damage": 10,
-                        "damageReaction": 2,
-                        "endTime": 0.5,
+                        "damage": 15,
+                        "damageReaction": 3,
+                        "endTime": 0.800000011920929,
                         "groupId": 0,
-                        "knockback": 1.0,
+                        "knockback": 2.0,
                         "knockbackDirection": [
                             0.0,
                             0.0,
                             1.0
                         ],
-                        "startTime": 0.0
+                        "startTime": 0.20000000298023224
                     }
                 ],
                 "hitboxes": [
                     {
                         "groupId": 0,
-                        "jointType": 15,
+                        "jointType": 20,
                         "radius": 0.25
                     }
                 ],
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
-                "moveEndTime": 0.10000000149011612,
-                "moveSpeed": 5.0,
+                "moveEndTime": 0.800000011920929,
+                "moveSpeed": 0.0,
                 "moveStartTime": 0.0,
                 "throwDirection": [
                     0.0,
@@ -45,16 +45,16 @@
                 "throwWeaponPower": 3.0,
                 "throwWeaponTime": 0.0
             },
-            "id": 88,
-            "inputPinId": 89,
-            "name": "Combo Attack",
+            "id": 1,
+            "inputPinId": 2,
+            "name": "",
             "nodeType": 0,
-            "outputInputBPinId": 92,
-            "outputInputXPinId": 90,
-            "outputInputYPinId": 91,
+            "outputInputBPinId": 5,
+            "outputInputXPinId": 3,
+            "outputInputYPinId": 4,
             "pos": [
-                614.0,
-                679.0
+                -187.0,
+                194.0
             ],
             "targetAnimationName": ""
         }

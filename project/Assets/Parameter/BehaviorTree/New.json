@@ -71,9 +71,9 @@
             "start_node": 171
         },
         {
-            "end": 178,
-            "end_node": 177,
-            "id": 179,
+            "end": 181,
+            "end_node": 180,
+            "id": 183,
             "start": 72,
             "start_node": 70
         }
@@ -186,7 +186,7 @@
             "name": "Attack_000",
             "output_pin": -1,
             "pos": [
-                450.0,
+                452.0,
                 240.0
             ],
             "sub_tree_file_name": "Hook_000",
@@ -202,7 +202,7 @@
                 450.0,
                 360.0
             ],
-            "sub_tree_file_name": "Kick_001",
+            "sub_tree_file_name": "Jab_000",
             "type": 8
         },
         {
@@ -222,21 +222,20 @@
             "type": 7
         },
         {
-            "action_type": 14,
-            "defense_data": {
-                "defenseTime": 1.0,
-                "parryType": 0
-            },
-            "id": 177,
-            "input_pin": 178,
+            "action_type": 5,
+            "id": 180,
+            "input_pin": 181,
             "is_collapsed": false,
-            "motionName": "",
-            "motionType": 0,
-            "name": "",
-            "output_pin": -1,
+            "name": "ターゲットに走る",
+            "nav_mesh_move_data": {
+                "isDash": true,
+                "moveSpeed": 6.0,
+                "stopDistance": 4.0
+            },
+            "output_pin": 182,
             "pos": [
-                346.0,
-                681.0
+                320.0,
+                769.0
             ],
             "type": 5
         }

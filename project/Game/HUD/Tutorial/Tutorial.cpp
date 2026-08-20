@@ -51,6 +51,5 @@ void Tutorial::Draw()
 	for (auto& sprite : sprites_)
 	{
 		sprite->param_->material.color.w = t_;
-		sprite->Draw();
 	}
 }
