@@ -71,13 +71,6 @@
             "start_node": 13
         },
         {
-            "end": 17,
-            "end_node": 16,
-            "id": 47,
-            "start": 15,
-            "start_node": 13
-        },
-        {
             "end": 55,
             "end_node": 54,
             "id": 57,
@@ -102,6 +95,13 @@
             "end": 61,
             "end_node": 60,
             "id": 63,
+            "start": 15,
+            "start_node": 13
+        },
+        {
+            "end": 65,
+            "end_node": 64,
+            "id": 67,
             "start": 15,
             "start_node": 13
         }
@@ -172,19 +172,6 @@
                 239.99998474121094
             ],
             "type": 7
-        },
-        {
-            "id": 16,
-            "input_pin": 17,
-            "is_collapsed": false,
-            "name": "Attack_000",
-            "output_pin": 18,
-            "pos": [
-                538.0952758789063,
-                360.0
-            ],
-            "sub_tree_file_name": "Kick_001",
-            "type": 8
         },
         {
             "id": 19,
@@ -322,6 +309,19 @@
                 462.8571472167969
             ],
             "sub_tree_file_name": "DropKick_000",
+            "type": 8
+        },
+        {
+            "id": 64,
+            "input_pin": 65,
+            "is_collapsed": false,
+            "name": "Attack_000",
+            "output_pin": 66,
+            "pos": [
+                572.0,
+                349.0
+            ],
+            "sub_tree_file_name": "Attack_000",
             "type": 8
         }
     ]

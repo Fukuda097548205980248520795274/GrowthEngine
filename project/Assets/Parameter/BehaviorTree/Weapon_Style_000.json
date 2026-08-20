@@ -71,9 +71,9 @@
             "start_node": 1
         },
         {
-            "end": 5,
-            "end_node": 4,
-            "id": 47,
+            "end": 49,
+            "end_node": 48,
+            "id": 51,
             "start": 3,
             "start_node": 1
         }
@@ -96,26 +96,13 @@
             "type": 7
         },
         {
-            "id": 4,
-            "input_pin": 5,
-            "is_collapsed": false,
-            "name": "Attack_000",
-            "output_pin": 6,
-            "pos": [
-                1025.572509765625,
-                1108.892578125
-            ],
-            "sub_tree_file_name": "Kick_001",
-            "type": 8
-        },
-        {
             "id": 7,
             "input_pin": 8,
             "is_collapsed": false,
             "name": "Attack_000",
             "output_pin": 9,
             "pos": [
-                1025.572509765625,
+                1114.572509765625,
                 988.8925170898438
             ],
             "sub_tree_file_name": "Sword_Slash_000",
@@ -238,6 +225,19 @@
                 868.8925170898438
             ],
             "type": 4
+        },
+        {
+            "id": 48,
+            "input_pin": 49,
+            "is_collapsed": false,
+            "name": "Attack_000",
+            "output_pin": 50,
+            "pos": [
+                1114.572509765625,
+                1164.892578125
+            ],
+            "sub_tree_file_name": "Attack_000",
+            "type": 8
         }
     ]
 }

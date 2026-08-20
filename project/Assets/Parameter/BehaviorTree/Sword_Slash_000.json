@@ -92,9 +92,9 @@
                 ],
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
-                "moveEndTime": 0.0,
-                "moveSpeed": 0.0,
-                "moveStartTime": 0.0,
+                "moveEndTime": 3.0,
+                "moveSpeed": 2.0,
+                "moveStartTime": 1.0,
                 "throwDirection": [
                     0.0,
                     0.0,
