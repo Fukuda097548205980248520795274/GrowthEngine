@@ -204,12 +204,4 @@ void GameScene::BattlePhaseUpdate()
 
 	// カメラシェイクの更新
 	cameraShake_->Update(kDt);
-
-
-	// ポーズ画面の切り替え
-	if (engine_->GetKeyTrigger(DIK_ESCAPE) || 
-		engine_->GetGamepadButtonTrigger(0, XINPUT_GAMEPAD_START))
-	{
-		phaseManager_->ChangePhase(PhaseType::Pause);
-	}
 }

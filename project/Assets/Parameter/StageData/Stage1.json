@@ -1205,7 +1205,7 @@
             "eventCutsceneName": "",
             "eventStageDataFileName": "Stage1_Boss",
             "eventType": 1,
-            "gameClear": false,
+            "gameClear": true,
             "name": "",
             "posX": 26.820148468017578,
             "posY": 1.9200001955032349,

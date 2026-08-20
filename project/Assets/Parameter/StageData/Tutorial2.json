@@ -755,7 +755,7 @@
             "eventCutsceneName": "",
             "eventStageDataFileName": "Tutorial2_Boss",
             "eventType": 1,
-            "gameClear": false,
+            "gameClear": true,
             "name": "",
             "posX": 22.6943359375,
             "posY": 1.9200000762939453,
