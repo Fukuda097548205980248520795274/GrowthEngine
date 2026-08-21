@@ -46,27 +46,15 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.position = Vector3(0.0f, 0.0f, 0.0f);
 		currentData.rotate_ = Vector3(0.0f, 0.0f, 0.0f);
 		currentData.scale = Vector3(1.0f, 1.0f, 1.0f);
-		currentData.hp = 100;
-		currentData.durability = 100;
-		currentData.attackPower = 1.0f;
-		currentData.isUnbreakable = false;
-		currentData.eventType = 0;
-		currentData.eventStageDataFileName[0] = '\0';
-		currentData.standMotion.name = "Standing";
-		currentData.stanceMotion.name = "Fighter";
-		currentData.walkMotion.name = "Walk";
-		currentData.dashMotion.name = "Dash";
-		currentData.avoidFrontMotion.name = "Front";
-		currentData.avoidBackMotion.name = "Back";
-		currentData.avoidLeftMotion.name = "Front";
-		currentData.avoidRightMotion.name = "Back";
-		currentData.guardMotion.name = "BothHands";
+		currentData.instancePtr = nullptr;
+		currentData.name[0] = '\0';
+		currentData.templateName[0] = '\0';
 
 		isInitialized = true;
 	}
 
 
-	// プレハブの選択UI
+	// プレハブ (テンプレート) の選択
 	if (ImGui::CollapsingHeader("プレハブ (テンプレート)", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		// 毎フレーム最新のプレハブ一覧を取得
@@ -86,76 +74,18 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 					selectedPrefabIdx_ = i;
 
 					// 選択されたプレハブを currentData に適用
-					StageEditorUIHelper::LoadPrefab(prefabNames[i], currentData);
+					strcpy_s(currentData.templateName, sizeof(currentData.templateName), prefabNames[i].c_str());
 					currentData.instancePtr = nullptr;
 				}
-				if (isSelected) ImGui::SetItemDefaultFocus();
+
+				// 選択されたアイテムにフォーカスを設定
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
 			}
+
 			ImGui::EndCombo();
 		}
 	}
-	ImGui::Separator();
-
-
-
-	// 大分類の選択
-	int intCat = static_cast<int>(currentData.category);
-	if (ImGui::Combo("大分類", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
-	{
-		currentData.category = static_cast<EditCategory>(intCat);
-		currentData.subType = 0; // 大分類が変わったら小分類のリセット
-	}
-
-	ImGui::Separator();
-
-	// 大分類に応じて、小分類のコンボボックスの中身を切り替える
-	if (currentData.category == EditCategory::Character)
-	{
-		ImGui::Combo("キャラクターの種類", &currentData.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
-		ImGui::Separator();
-
-		// キャラクターの基本設定UIを描画
-		StageEditorUIHelper::DrawCharacterBaseSettings(currentData, placementList, isDirty, history_, false);
-
-		// プレイヤーと未選択以外　ビヘイビアツリーデータ
-		if (currentData.subType != static_cast<int32_t>(CharacterTag::None) && currentData.subType != static_cast<int32_t>(CharacterTag::Player))
-		{
-			// 共通ヘルパーからビヘイビアツリーUIを描画
-			StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
-		}
-		else if (currentData.subType == static_cast<int32_t>(CharacterTag::Player)) 
-		{
-			// プレイヤーの場合はコンボツリーUIを描画
-			StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);
-		}
-	}
-	else if (currentData.category == EditCategory::Object)
-	{
-		ImGui::Combo("オブジェクトの種類", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
-
-		// 共通ヘルパーからステージオブジェクトの基本設定UIを描画
-		StageEditorUIHelper::DrawStageObjectBaseSettings(currentData, placementList, isDirty, history_, true);
-
-		if (static_cast<StageObject::StageObjectTag>(currentData.subType) == StageObject::StageObjectTag::StaticEventTrigger)
-		{
-			// 共通ヘルパーからトリガー設定UIを呼び出し
-			StageEditorUIHelper::DrawEventTriggerSettings(currentData, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
-		}
-	} 
-	else if (currentData.category == EditCategory::Weapon)
-	{
-		ImGui::Combo("武器の種類", &currentData.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
-
-		// 共通ヘルパーから武器の基本設定UIを描画
-		StageEditorUIHelper::DrawWeaponBaseSettings(currentData, placementList, isDirty, history_, true);
-
-		// 共通ヘルパーからコンボツリーUIを描画
-		StageEditorUIHelper::DrawComboTreeSettings(currentData.comboTrees, comboTreeNames, isDirty);
-
-		// 共通ヘルパーからビヘイビアツリーUIを描画
-		StageEditorUIHelper::DrawBehaviorTreeSettings(currentData.behaviorTrees, behaviorTreeNames, isDirty);
-	}
-
 	ImGui::Separator();
 
 	// 生成ボタン
@@ -172,24 +102,8 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.position = currentData.position;
 		newData.rotate_ = currentData.rotate_;
 		newData.scale = currentData.scale;
-		newData.hp = currentData.hp;
 		strcpy_s(newData.name, sizeof(newData.name), currentData.name);
-		newData.eventType = currentData.eventType;
-		strcpy_s(newData.eventStageDataFileName, sizeof(newData.eventStageDataFileName), currentData.eventStageDataFileName);
-		strcpy_s(newData.eventCutsceneName, sizeof(newData.eventCutsceneName), currentData.eventCutsceneName);
-		newData.behaviorTrees = currentData.behaviorTrees;
-		newData.durability = currentData.durability;
-		newData.attackPower = currentData.attackPower;
-		newData.isUnbreakable = currentData.isUnbreakable;
-		newData.standMotion = currentData.standMotion;
-		newData.stanceMotion = currentData.stanceMotion;
-		newData.walkMotion = currentData.walkMotion;
-		newData.dashMotion = currentData.dashMotion;
-		newData.avoidFrontMotion = currentData.avoidFrontMotion;
-		newData.avoidBackMotion = currentData.avoidBackMotion;
-		newData.avoidLeftMotion = currentData.avoidLeftMotion;
-		newData.avoidRightMotion = currentData.avoidRightMotion;
-		newData.guardMotion = currentData.guardMotion;
+		strcpy_s(newData.templateName, sizeof(newData.templateName), currentData.templateName);
 
 		// 実際のゲーム画面に生成してリストに追加
 		spawner_->SpawnActualEntity(newData);

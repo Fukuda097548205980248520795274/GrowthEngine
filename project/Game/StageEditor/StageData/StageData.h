@@ -47,27 +47,16 @@ struct MotionConfig
 	AnimationHandle handle = 0;
 };
 
-
-// ステージエディターで配置するオブジェクトのデータ構造
-struct PlacementData
+struct TemplateData
 {
+	// テンプレート名
+	char templateName[256] = "";
+
 	// 配置するオブジェクトの種類
 	EditCategory category = EditCategory::Character;
 
-	// キャラクターならCharacterTag、オブジェクトならStageObjectTag、武器ならWeaponCategoryを格納
+	// カテゴリーごとの小分類
 	int subType = 0;
-
-	// オブジェクトの名前（任意）
-	char name[256] = "";
-
-	// 位置
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 回転
-	Vector3 rotate_ = Vector3(0.0f, 0.0f, 0.0f);
-
-	// 拡縮
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 
 	// HP (キャラクターの場合)
 	int32_t hp = 100;
@@ -125,15 +114,41 @@ struct PlacementData
 	/// @brief ゲームクリアフラグ（イベントトリガーの場合）
 	bool isGameClear = false;
 
-	// 生成された実体へのポインタ
-	void* instancePtr = nullptr;
-
-
 	// ターゲットのナビメッシュグループID（イベントトリガーの場合）
 	int32_t targetNavMeshGroupId = 0;
 
 	// ターゲットのナビメッシュ状態（イベントトリガーの場合）
 	bool targetNavMeshState = true;
+};
+
+
+// ステージエディターで配置するオブジェクトのデータ構造
+struct PlacementData
+{
+	// オブジェクトの名前（任意）
+	char name[256] = "";
+
+	/// @brief テンプレート名
+	char templateName[256] = "";
+
+	// 配置するオブジェクトの種類
+	EditCategory category = EditCategory::Character;
+
+	// カテゴリーごとの小分類
+	int subType = 0;
+
+	// 位置
+	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+
+	// 回転
+	Vector3 rotate_ = Vector3(0.0f, 0.0f, 0.0f);
+
+	// 拡縮
+	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+
+	// 生成された実体へのポインタ
+	void* instancePtr = nullptr;
 };
 
 /// @brief 戦闘エリアのデータ構造
@@ -200,18 +215,14 @@ struct ChainEventData
 	std::vector<ChainEventData> childEvents;
 };
 
-/// @brief PlacementDataをJSONに変換（シリアライズ）
+/// @brief TemplateDataをJSONに変換（シリアライズ）
 /// @param j 
 /// @param s 
-inline void toJson(json& j, const PlacementData& s)
+inline void toJson(json& j, const TemplateData& s)
 {
+	j["templateName"] = s.templateName;
 	j["category"] = static_cast<int>(s.category);
 	j["subType"] = s.subType;
-	j["name"] = s.name;
-	j["posX"] = s.position.x;j["posY"] = s.position.y;j["posZ"] = s.position.z;
-	j["rotX"] = s.rotate_.x; j["rotY"] = s.rotate_.y; j["rotZ"] = s.rotate_.z;
-	j["scaleX"] = s.scale.x; j["scaleY"] = s.scale.y; j["scaleZ"] = s.scale.z;
-
 
 	if (s.category == EditCategory::Character)
 	{
@@ -450,6 +461,18 @@ inline void toJson(json& j, const PlacementData& s)
 	}
 }
 
+/// @brief PlacementDataをJSONに変換（シリアライズ）
+/// @param j 
+/// @param s 
+inline void toJson(json& j, const PlacementData& s)
+{
+	j["name"] = s.name;
+	j["templateName"] = s.templateName;
+	j["posX"] = s.position.x;j["posY"] = s.position.y;j["posZ"] = s.position.z;
+	j["rotX"] = s.rotate_.x; j["rotY"] = s.rotate_.y; j["rotZ"] = s.rotate_.z;
+	j["scaleX"] = s.scale.x; j["scaleY"] = s.scale.y; j["scaleZ"] = s.scale.z;
+}
+
 /// @brief PlacementDataのリストをJSONに変換（シリアライズ）
 /// @param j 
 /// @param v 
@@ -500,21 +523,16 @@ inline void toJson(json& j, const NavMesh& navMesh)
 	j["navMesh"] = navMeshJson;
 }
 
-
-
-/// @brief JSONからPlacementDataに変換（デシリアライズ）
+/// @brief JSONからTemplateDataに変換（デシリアライズ）
 /// @param j 
 /// @param s 
-inline void fromJson(const json& j, PlacementData& s)
+inline void fromJson(const json& j, TemplateData& s)
 {
+	std::string templateName = j.value("templateName", "");
+	strcpy_s(s.templateName, sizeof(s.templateName), templateName.c_str());
+
 	s.category = static_cast<EditCategory>(j.value("category", 0));
 	s.subType = j.value("subType", 0);
-	std::string nameStr = j.value("name", "");
-	strncpy_s(s.name, nameStr.c_str(), sizeof(s.name) - 1);
-
-	s.position = Vector3(j.value("posX", 0.0f), j.value("posY", 0.0f), j.value("posZ", 0.0f));
-	s.rotate_ = Vector3(j.value("rotX", 0.0f), j.value("rotY", 0.0f), j.value("rotZ", 0.0f));
-	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
 
 	s.hp = j.value("hp", 100);
 	s.guardGage = j.value("guardGage", 10.0f);
@@ -753,7 +771,7 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.avoidLeftMotion.name = j.value("avoidLeftMotionName", "Front");
 	s.avoidRightMotion.name = j.value("avoidRightMotionName", "Back");
 	s.guardMotion.name = j.value("guardMotionName", "BothHands");
-	
+
 	std::string weaponNameStr = j.value("equipWeaponPrefabName", "");
 	strncpy_s(s.equipWeaponPrefabName, weaponNameStr.c_str(), sizeof(s.equipWeaponPrefabName) - 1);
 
@@ -766,4 +784,20 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidLeftMotion.name);
 	s.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidRightMotion.name);
 	s.guardMotion.handle = motionManager->GetMotion(MotionType::Guard, s.guardMotion.name);
+}
+
+/// @brief JSONからPlacementDataに変換（デシリアライズ）
+/// @param j 
+/// @param s 
+inline void fromJson(const json& j, PlacementData& s)
+{
+	std::string nameStr = j.value("name", "");
+	strncpy_s(s.name, nameStr.c_str(), sizeof(s.name) - 1);
+
+	std::string templateNameStr = j.value("templateName", "");
+	strncpy_s(s.templateName, templateNameStr.c_str(), sizeof(s.templateName) - 1);
+
+	s.position = Vector3(j.value("posX", 0.0f), j.value("posY", 0.0f), j.value("posZ", 0.0f));
+	s.rotate_ = Vector3(j.value("rotX", 0.0f), j.value("rotY", 0.0f), j.value("rotZ", 0.0f));
+	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
 }

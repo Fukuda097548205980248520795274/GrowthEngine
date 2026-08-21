@@ -34,7 +34,7 @@ namespace StageEditorUIHelper
 	/// @brief Prefabを保存する
 	/// @param name 
 	/// @param data 
-	void SavePrefab(const std::string& name, const PlacementData& data)
+	void SavePrefab(const std::string& name, const TemplateData& data)
 	{
 		std::filesystem::create_directories(PREFAB_DIR);
 		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
@@ -52,7 +52,7 @@ namespace StageEditorUIHelper
 	/// @brief Prefabをロードする
 	/// @param name 
 	/// @param data 
-	void LoadPrefab(const std::string& name, PlacementData& data)
+	bool LoadPrefab(const std::string& name, TemplateData& data)
 	{
 		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
 		std::ifstream file(filePath);
@@ -60,23 +60,13 @@ namespace StageEditorUIHelper
 		{
 			json j;
 			file >> j;
-
-			// 既存の実体ポインタがある場合は、退避してからロードする
-			if (data.instancePtr)
-			{
-				// 既存の実体ポインタなどを退避
-				void* backupPtr = data.instancePtr;
-				fromJson(j, data);
-				data.instancePtr = backupPtr;
-
-			}
-			else
-			{
-				fromJson(j, data);
-			}
-
+			fromJson(j, data);
 			file.close();
+
+			return true;
 		}
+
+		return false;
 	}
 
 	/// @brief テーブルレイアウトの開始
@@ -415,14 +405,9 @@ namespace StageEditorUIHelper
 
 	/// @brief キャラクターのモーション設定を描画する
 	/// @param target 
-	/// @param placementList 
-	/// @param isDirty 
-	/// @param history 
 	/// @param motionManager 
-	/// @param useHistory 
 	/// @return 
-	bool DrawCharacterMotionSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, MotionManager* motionManager, bool useHistory)
+	bool DrawCharacterMotionSettings(TemplateData& target,MotionManager* motionManager)
 	{
 		bool anyChanged = false;
 
@@ -430,16 +415,11 @@ namespace StageEditorUIHelper
 		{
 			if (BeginPropertyTable("MotionTable"))
 			{
-				// ラベルとモーションセレクターを描画するラムダ関数
+				// ラベル付きで一行ずつ描画するラムダ関数を定義
 				auto DrawRow = [&](const char* label, MotionType type, MotionConfig& config)
 					{
 						PropertyLabel(label);
-						if (useHistory) {
-							return DrawMotionSelectorWithHistory(label, type, config, placementList, isDirty, history, motionManager);
-						}
-						else {
-							return DrawMotionSelector(label, type, config, motionManager);
-						}
+						return DrawMotionSelector(label, type, config, motionManager);
 					};
 
 				// ラベル付きで一行ずつ描画 (Combo内のラベルは空文字にして、PropertyLabelに任せる)
@@ -465,8 +445,7 @@ namespace StageEditorUIHelper
 	/// @param isDirty 
 	/// @param history 
 	/// @param useHistory 
-	void DrawCharacterBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory)
+	void DrawCharacterPlacementSettings(PlacementData& target, bool& isDirty)
 	{
 		// キャラクターの実体ポインタを取得
 		Character* charPtr = static_cast<Character*>(target.instancePtr);
@@ -493,40 +472,32 @@ namespace StageEditorUIHelper
 						charPtr->SetRotation(target.rotate_);
 				}
 
+				EndPropertyTable();
+			}
+		}
+	}
+
+	/// @brief キャラクターのテンプレート設定を描画する
+	/// @param target 
+	/// @param isDirty 
+	void DrawCharacterTemplateSettings(TemplateData& target, bool& isDirty)
+	{
+		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			if (BeginPropertyTable("CharBaseTable"))
+			{
 				// HP
 				PropertyLabel("HP");
-				if (charPtr)
+				if (ImGui::DragInt("##HP", &target.hp, 1, 0, 1000000))
 				{
-					if (ImGui::DragInt("##HP", &target.hp, 1, 0, charPtr->GetMaxHp()))
-					{
-						isDirty = true;
-						charPtr->SetHp(target.hp);
-					}
-				}
-				else
-				{
-					if (ImGui::DragInt("##HP", &target.hp, 1, 0, 1000000))
-					{
-						isDirty = true;
-					}
+					isDirty = true;
 				}
 
 				// ガードゲージ量
 				PropertyLabel("ガードゲージ量");
-				if (charPtr)
+				if (ImGui::DragFloat("##ガードゲージ量", &target.guardGage, 0.01f, 0.0f, 100000.0f))
 				{
-					if (ImGui::DragFloat("##ガードゲージ量", &target.guardGage, 0.01f, 0.0f, charPtr->GetMaxGuardGage()))
-					{
-						isDirty = true;
-						charPtr->SetGuardGage(target.guardGage);
-					}
-				}
-				else
-				{
-					if (ImGui::DragFloat("##ガードゲージ量", &target.guardGage, 0.01f, 0.0f, 100000.0f))
-					{
-						isDirty = true;
-					}
+					isDirty = true;
 				}
 
 				// ガード回復時間
@@ -534,31 +505,16 @@ namespace StageEditorUIHelper
 				if (ImGui::DragFloat("##ガード回復時間", &target.guardRecoveryTime, 0.01f, 0.0f, 100000.0f))
 				{
 					isDirty = true;
-					if (charPtr)
-						charPtr->SetGuardRecoveryTime(target.guardRecoveryTime);
 				}
 
 				// NPCの場合は攻撃性を設定できるようにする
 				if (target.subType != static_cast<int32_t>(CharacterTag::Player))
 				{
-					NPC* npcPtr = static_cast<NPC*>(target.instancePtr);
-
 					// 攻撃性
 					PropertyLabel("攻撃性");
-					if (npcPtr)
+					if (ImGui::DragFloat("##Aggressiveness", &target.aggressiveness, 0.1f, 0.0f, 100.0f))
 					{
-						if (ImGui::DragFloat("##Aggressiveness", &target.aggressiveness, 0.1f, 0.0f, 100.0f))
-						{
-							isDirty = true;
-							npcPtr->SetAggressiveness(target.aggressiveness);
-						}
-					}
-					else
-					{
-						if (ImGui::DragFloat("##Aggressiveness", &target.aggressiveness, 0.1f, 0.0f, 100.0f))
-						{
-							isDirty = true;
-						}
+						isDirty = true;
 					}
 				}
 
@@ -600,7 +556,7 @@ namespace StageEditorUIHelper
 
 		// モーション設定UIを描画し、変更があったかどうかを取得
 		bool motionChanged =
-			StageEditorUIHelper::DrawCharacterMotionSettings(target, placementList, isDirty, history, motionManager, true);
+			StageEditorUIHelper::DrawCharacterMotionSettings(target, motionManager);
 
 		// もしモーションのどれかが変更されたら、実際のキャラクターオブジェクトにアニメーションハンドルを更新する
 		if (motionChanged)
@@ -615,20 +571,13 @@ namespace StageEditorUIHelper
 			animationData.hAvoidLeftMotion = motionManager->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
 			animationData.hAvoidRightMotion = motionManager->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
 			animationData.hGuardMotion = motionManager->GetMotion(MotionType::Guard, target.guardMotion.name);
-
-			if(charPtr)
-				charPtr->SetAnimationHandle(animationData);
 		}
 	}
 
 	/// @brief 武器の基本設定を描画する
 	/// @param target 
-	/// @param placementList 
 	/// @param isDirty 
-	/// @param history 
-	/// @param useHistory 
-	void DrawWeaponBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory)
+	void DrawWeaponPlacementSettings(PlacementData& target, bool& isDirty)
 	{
 		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -646,22 +595,25 @@ namespace StageEditorUIHelper
 						weaponPtr->SetPosition(target.position);
 				}
 
+				EndPropertyTable();
+			}
+		}
+	}
+
+	/// @brief 武器のテンプレート設定を描画する
+	/// @param target 
+	/// @param isDirty 
+	void DrawWeaponTemplateSettings(TemplateData& target, bool& isDirty)
+	{
+		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			if (BeginPropertyTable("CharBaseTable"))
+			{
 				// 耐久力
 				PropertyLabel("耐久力");
-				if (weaponPtr)
+				if (ImGui::DragInt("##Durability", &target.durability, 1, 0, 1000000))
 				{
-					if (ImGui::DragInt("##Durability", &target.durability, 1, 0, weaponPtr->GetMaxDurability()))
-					{
-						isDirty = true;
-						weaponPtr->SetDurability(target.durability);
-					}
-				}
-				else
-				{
-					if (ImGui::DragInt("##Durability", &target.durability, 1, 0, 1000000))
-					{
-						isDirty = true;
-					}
+					isDirty = true;
 				}
 
 				// 攻撃力
@@ -669,9 +621,6 @@ namespace StageEditorUIHelper
 				if (ImGui::DragFloat("##Attack", &target.attackPower, 0.01f, 0.0f, 100000.0f))
 				{
 					isDirty = true;
-
-					if(weaponPtr)
-						weaponPtr->SetAttackPower(target.attackPower);
 				}
 
 				// 壊れない武器かどうか
@@ -679,8 +628,6 @@ namespace StageEditorUIHelper
 				if (ImGui::Checkbox("##Unbreakable", &target.isUnbreakable))
 				{
 					isDirty = true;
-					if (weaponPtr)
-						weaponPtr->SetIsUnbreakable(target.isUnbreakable);
 				}
 
 				EndPropertyTable();
@@ -694,8 +641,7 @@ namespace StageEditorUIHelper
 	/// @param isDirty 
 	/// @param history 
 	/// @param useHistory 
-	void DrawStageObjectBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory)
+	void DrawStageObjectPlacementSettings(PlacementData& target, bool& isDirty)
 	{
 		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -748,12 +694,9 @@ namespace StageEditorUIHelper
 	/// @param scene 
 	/// @param eventStageDataFileNames 
 	/// @param cutsceneNames 
-	void DrawEventTriggerSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, StageSpawner* spawner, GameScene* scene,
+	void DrawEventTriggerSettings(TemplateData& target, bool& isDirty, GameScene* scene,
 		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames)
 	{
-		StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(target.instancePtr);
-
 		ImGui::Unindent();
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "--- イベントトリガー設定 ---");
@@ -763,21 +706,8 @@ namespace StageEditorUIHelper
 
 		if (ImGui::Combo("イベントタイプ", &currentType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames)))
 		{
-			if (eventTriggerPtr != nullptr)
-			{
-				history->SaveHistory(placementList);
-				isDirty = true;
-
-				target.eventType = currentType;
-				eventTriggerPtr->SetEventType(currentType);
-
-				// 配置されている実体を再生成して反映する
-				spawner->SpawnActualEntity(target);
-			}
-			else
-			{
-				target.eventType = currentType;
-			}
+			isDirty = true;
+			target.eventType = currentType;
 		}
 
 		if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
@@ -794,39 +724,32 @@ namespace StageEditorUIHelper
 					bool isSelected = (currentSdName == name);
 					if (ImGui::Selectable(name.c_str(), isSelected))
 					{
-						history->SaveHistory(placementList);
 						isDirty = true;
-
 						strcpy_s(target.eventStageDataFileName, sizeof(target.eventStageDataFileName), name.c_str());
 					}
-
 					if (isSelected)
 						ImGui::SetItemDefaultFocus();
 				}
-
 				ImGui::EndCombo();
 			}
 		}
 		else if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
 		{
-			std::vector<std::string> cutsceneNames = scene->GetCutsceneManager()->GetCutsceneNames();
+			std::vector<std::string> cutsceneNamesList = scene->GetCutsceneManager()->GetCutsceneNames();
 
 			std::string currentCutsceneName = target.eventCutsceneName;
 			const char* previewCutsceneValue = currentCutsceneName.empty() ? "カットシーンを選択..." : currentCutsceneName.c_str();
 
 			if (ImGui::BeginCombo("カットシーン", previewCutsceneValue))
 			{
-				for (const auto& name : cutsceneNames)
+				for (const auto& name : cutsceneNamesList)
 				{
 					bool isSelected = (currentCutsceneName == name);
 					if (ImGui::Selectable(name.c_str(), isSelected))
 					{
-						history->SaveHistory(placementList);
 						isDirty = true;
-
 						strcpy_s(target.eventCutsceneName, sizeof(target.eventCutsceneName), name.c_str());
 					}
-
 					if (isSelected)
 						ImGui::SetItemDefaultFocus();
 				}
@@ -842,14 +765,12 @@ namespace StageEditorUIHelper
 			if (ImGui::InputInt("対象グループID", &target.targetNavMeshGroupId))
 			{
 				isDirty = true;
-				history->SaveHistory(placementList);
 			}
 
 			// 有効/無効の切り替え
 			if (ImGui::Checkbox("切り替え後の状態 (チェックで有効)", &target.targetNavMeshState))
 			{
 				isDirty = true;
-				history->SaveHistory(placementList);
 			}
 		}
 	}

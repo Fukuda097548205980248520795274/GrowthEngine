@@ -112,7 +112,7 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 			ImGui::Combo("キャラクター", &currentData_.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
 
 			// キャラクターの基本設定UIを描画し、変更があったかどうかを取得
-			StageEditorUIHelper::DrawCharacterBaseSettings(currentData_, placementList, isDirty, history_, true);
+			StageEditorUIHelper::DrawCharacterTemplateSettings(currentData_, isDirty);
 
 			// プレイヤーと未選択以外　ビヘイビアツリーデータ
 			if (currentData_.subType != static_cast<int32_t>(CharacterTag::None) && currentData_.subType != static_cast<int32_t>(CharacterTag::Player))
@@ -130,13 +130,10 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 		{
 			ImGui::Combo("オブジェクト", &currentData_.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
 
-			// オブジェクトの基本設定UIを描画し、変更があったかどうかを取得
-			StageEditorUIHelper::DrawStageObjectBaseSettings(currentData_, placementList, isDirty, history_, true);
-
 			if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
 			{
 				// 共通ヘルパーからイベントトリガー設定UIを描画
-				StageEditorUIHelper::DrawEventTriggerSettings(currentData_, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
+				StageEditorUIHelper::DrawEventTriggerSettings(currentData_, isDirty, scene_, eventStageDataFileNames, cutsceneNames);
 
 				// イベントトリガーの種類が「生成イベント」の場合、生成ファイル編集UIを表示する
 				if (currentData_.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
@@ -161,7 +158,6 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 						if (ImGui::Button("オブジェクト追加"))
 						{
 							PlacementData newData;
-							newData.position = currentData_.position; // 初期位置をトリガーと同じ位置に
 							cachedPreviewData_.push_back(newData);
 							selectedPreviewIndex_ = static_cast<int32_t>(cachedPreviewData_.size()) - 1;
 						}
@@ -192,7 +188,7 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 							ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
 
 							// オブジェクト名の編集
-							ImGui::InputText("オブジェクト名", editTarget.name, sizeof(editTarget.name));
+							ImGui::InputText("オブジェクト名", editTarget.templateName, sizeof(editTarget.templateName));
 
 							int currentCategory = static_cast<int>(editTarget.category);
 							// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
@@ -218,11 +214,6 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 
 							ImGui::Separator();
 
-							// 位置・回転・スケールの調整
-							ImGui::DragFloat3("位置 (Position)", &editTarget.position.x, 0.1f);
-							ImGui::DragFloat3("回転 (Rotation)", &editTarget.rotate_.x, 0.1f);
-							ImGui::DragFloat3("スケール (Scale)", &editTarget.scale.x, 0.1f); // スケールも調整可能にしておくと便利です
-
 							// 削除ボタン
 							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 							if (ImGui::Button("このオブジェクトを削除"))
@@ -246,8 +237,8 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 						Vector4 cubeColor = color;
 						cubeColor.w = 0.5f; // 半透明
 
-						engine->DrawDebugLine3D(currentData_.position, previewData.position, color);
-						engine->DrawDebugCube(previewData.position, previewData.rotate_, previewData.scale, cubeColor);
+						//engine->DrawDebugLine3D(currentData_.position, previewData.position, color);
+						//engine->DrawDebugCube(previewData.position, previewData.rotate_, previewData.scale, cubeColor);
 					}
 				}
 				else if (currentData_.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::NavMeshStateChange))
@@ -270,18 +261,13 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 					}
 				}
 			}
-			else if (currentData_.subType == static_cast<int>(StageObject::StageObjectTag::CameraGuard))
-			{
-				// カメラガードオブジェクトの場合、特定のUIを表示する
-				CameraGuard* cameraGuardPtr = static_cast<CameraGuard*>(currentData_.instancePtr);
-			}
 		}
 		else if (currentData_.category == EditCategory::Weapon)
 		{
 			ImGui::Combo("武器", &currentData_.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
 
 			// 共通ヘルパーから武器の基本設定UIを描画
-			StageEditorUIHelper::DrawWeaponBaseSettings(currentData_, placementList, isDirty, history_, true);
+			StageEditorUIHelper::DrawWeaponTemplateSettings(currentData_, isDirty);
 
 			// 共通ヘルパーからコンボツリーUIを描画
 			StageEditorUIHelper::DrawComboTreeSettings(currentData_.comboTrees, comboTreeNames, isDirty);

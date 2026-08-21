@@ -274,39 +274,6 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		ImGui::Text("--- 編集中のオブジェクト ---");
 		ImGui::Separator();
 
-		// プレハブとして保存するためのUI
-		static char newPrefabName[64] = "";
-
-		// 既存のプレハブ名を選択できるコンボボックスを表示する
-		std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
-		if (ImGui::BeginCombo("上書き対象の選択", "既存のテンプレートから選択..."))
-		{
-			for (const auto& prefabName : prefabNames)
-			{
-				if (ImGui::Selectable(prefabName.c_str()))
-				{
-					// 選択した既存のプレハブ名を入力欄に反映させる（自動入力）
-					strncpy_s(newPrefabName, prefabName.c_str(), sizeof(newPrefabName) - 1);
-				}
-			}
-			ImGui::EndCombo();
-		}
-
-		// 新しいプレハブ名を入力するテキストボックス
-		ImGui::InputText("プレハブ保存名", newPrefabName, sizeof(newPrefabName));
-		if (ImGui::Button("プレハブとして保存"))
-		{
-			if (strlen(newPrefabName) > 0)
-			{
-				// StageEditorUIHelper を使って保存（同名ファイルがある場合は上書き保存される）
-				StageEditorUIHelper::SavePrefab(newPrefabName, target);
-
-				// 保存完了したら入力欄をリセット
-				memset(newPrefabName, 0, sizeof(newPrefabName));
-			}
-		}
-		ImGui::Separator();
-
 
 
 		// 入力が完了した（エンターを押すか別の場所をクリックした）タイミングで重複チェック
@@ -335,186 +302,18 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		// カテゴリごとの編集項目
 		if (target.category == EditCategory::Character)
 		{
-			ImGui::Combo("キャラクター", &target.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
-
-			// キャラクターの場合、キャラクター固有のUIを描画する
-			Character* charPtr = static_cast<Character*>(target.instancePtr);
-
 			// 共通ヘルパーからキャラクターの基本設定UIを描画し、変更があったかどうかを取得
-			StageEditorUIHelper::DrawCharacterBaseSettings(target, placementList, isDirty, history_, true);
-
-			// プレイヤーと未選択以外　ビヘイビアツリーデータ
-			if (target.subType != static_cast<int32_t>(CharacterTag::None) && target.subType != static_cast<int32_t>(CharacterTag::Player))
-			{
-				// 共通ヘルパーからビヘイビアツリーUIを描画
-				StageEditorUIHelper::DrawBehaviorTreeSettings(target.behaviorTrees, behaviorTreeNames, isDirty);
-			}
-			else if (target.subType == static_cast<int32_t>(CharacterTag::Player))
-			{
-				// 共通ヘルパーからコンボツリーUIを描画
-				StageEditorUIHelper::DrawComboTreeSettings(target.comboTrees, comboTreeNames, isDirty);
-			}
+			StageEditorUIHelper::DrawCharacterPlacementSettings(target, isDirty);
 		} 
 		else if (target.category == EditCategory::Object)
 		{
-			ImGui::Combo("オブジェクト", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
-
 			// 共通ヘルパーからオブジェクトの基本設定UIを描画し、変更があったかどうかを取得
-			StageEditorUIHelper::DrawStageObjectBaseSettings(target, placementList, isDirty, history_, true);
-
-			if (target.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
-			{
-				// イベントトリガーオブジェクトの場合、特定のUIを表示する
-				StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(target.instancePtr);
-
-				// 共通ヘルパーからイベントトリガー設定UIを描画
-				StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
-
-				// イベントトリガーの種類が「生成イベント」の場合、生成ファイル編集UIを表示する
-				if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
-				{
-					std::string fileName = target.eventStageDataFileName;
-					LoadPreviewData(fileName);
-
-					// バトルエリア開始のチェックボックス
-					ImGui::Checkbox("バトルエリア開始", &target.isBattleAreaStart);
-
-					if (target.isBattleAreaStart)
-					{
-						// ゲームクリアのチェックボックス
-						ImGui::Checkbox("ゲームクリアにつなげるか", &target.isGameClear);
-					}
-
-					// 生成ファイル編集のUI
-					ImGui::Separator();
-					if (ImGui::TreeNode(("生成ファイル編集: " + fileName + ".json").c_str()))
-					{
-						// 追加・保存ボタン
-						if (ImGui::Button("オブジェクト追加"))
-						{
-							PlacementData newData;
-							newData.position = target.position; // 初期位置をトリガーと同じ位置に
-							cachedPreviewData_.push_back(newData);
-							selectedPreviewIndex_ = static_cast<int32_t>(cachedPreviewData_.size()) - 1;
-						}
-						ImGui::SameLine();
-						if (ImGui::Button("変更を保存 (上書き)"))
-						{
-							SavePreviewData();
-						}
-
-						// プレビューデータの一覧リスト
-						if (ImGui::BeginListBox("生成オブジェクト一覧"))
-						{
-							for (int i = 0; i < cachedPreviewData_.size(); ++i)
-							{
-								std::string label = "Item " + std::to_string(i) + " (Cat:" + std::to_string(static_cast<int>(cachedPreviewData_[i].category)) + ")";
-								if (ImGui::Selectable(label.c_str(), selectedPreviewIndex_ == i))
-								{
-									selectedPreviewIndex_ = i;
-								}
-							}
-							ImGui::EndListBox();
-						}
-
-						// 選択されたプレビューデータの詳細編集
-						if (selectedPreviewIndex_ >= 0 && selectedPreviewIndex_ < cachedPreviewData_.size())
-						{
-							auto& editTarget = cachedPreviewData_[selectedPreviewIndex_];
-							ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
-
-							// オブジェクト名の編集
-							ImGui::InputText("オブジェクト名", editTarget.name, sizeof(editTarget.name));
-
-							int currentCategory = static_cast<int>(editTarget.category);
-							// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
-							if (ImGui::Combo("カテゴリ", &currentCategory, categoryNames, 3))
-							{
-								editTarget.category = static_cast<EditCategory>(currentCategory);
-								editTarget.subType = 0; // カテゴリが変わったらタイプをリセットする
-							}
-
-							// カテゴリに応じたサブタイプのコンボボックスを表示
-							if (editTarget.category == EditCategory::Character)
-							{
-								ImGui::Combo("タイプ", &editTarget.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
-							}
-							else if (editTarget.category == EditCategory::Object)
-							{
-								ImGui::Combo("タイプ", &editTarget.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
-							}
-							else if (editTarget.category == EditCategory::Weapon)
-							{
-								ImGui::Combo("タイプ", &editTarget.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
-							}
-
-							ImGui::Separator();
-
-							// 位置・回転・スケールの調整
-							ImGui::DragFloat3("位置 (Position)", &editTarget.position.x, 0.1f);
-							ImGui::DragFloat3("回転 (Rotation)", &editTarget.rotate_.x, 0.1f);
-							ImGui::DragFloat3("スケール (Scale)", &editTarget.scale.x, 0.1f); // スケールも調整可能にしておくと便利です
-
-							// 削除ボタン
-							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-							if (ImGui::Button("このオブジェクトを削除"))
-							{
-								cachedPreviewData_.erase(cachedPreviewData_.begin() + selectedPreviewIndex_);
-								selectedPreviewIndex_ = -1;
-							}
-							ImGui::PopStyleColor();
-						}
-						ImGui::TreePop();
-					}
-
-					// プレビュー表示
-					GrowthEngine* engine = GrowthEngine::GetInstance();
-					for (int i = 0; i < cachedPreviewData_.size(); ++i)
-					{
-						const auto& previewData = cachedPreviewData_[i];
-
-						// 選択中のプレビューオブジェクトは色を変える
-						Vector4 color = (i == selectedPreviewIndex_) ? Vector4(1.0f, 0.0f, 0.0f, 1.0f) : Vector4(1.0f, 1.0f, 0.0f, 1.0f);
-						Vector4 cubeColor = color;
-						cubeColor.w = 0.5f; // 半透明
-
-						engine->DrawDebugLine3D(target.position, previewData.position, color);
-						engine->DrawDebugCube(previewData.position, previewData.rotate_, previewData.scale, cubeColor);
-					}
-				}
-				else if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::NavMeshStateChange))
-				{
-					ImGui::Separator();
-					ImGui::Text("--- ナビメッシュ切り替え設定 ---");
-
-					// グループIDの入力
-					if (ImGui::InputInt("対象グループID", &target.targetNavMeshGroupId))
-					{
-						isDirty = true;
-						history_->SaveHistory(placementList);
-					}
-
-					// 有効/無効の切り替え
-					if (ImGui::Checkbox("切り替え後の状態 (チェックで有効)", &target.targetNavMeshState))
-					{
-						isDirty = true;
-						history_->SaveHistory(placementList);
-					}
-				}
-			}
+			StageEditorUIHelper::DrawStageObjectPlacementSettings(target, isDirty);
 		}
 		else if (target.category == EditCategory::Weapon)
 		{
-			ImGui::Combo("武器", &target.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
-
 			// 共通ヘルパーから武器の基本設定UIを描画
-			StageEditorUIHelper::DrawWeaponBaseSettings(target, placementList, isDirty, history_, true);
-
-			// 共通ヘルパーからコンボツリーUIを描画
-			StageEditorUIHelper::DrawComboTreeSettings(target.comboTrees, comboTreeNames, isDirty);
-
-			// 共通ヘルパーからビヘイビアツリーUIを描画
-			StageEditorUIHelper::DrawBehaviorTreeSettings(target.behaviorTrees, behaviorTreeNames, isDirty);
+			StageEditorUIHelper::DrawWeaponPlacementSettings(target, isDirty);
 		}
 	}
 	else if (multiSelectedIndices_.size() > 1)
@@ -540,54 +339,6 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 				}
 				isDirty = true;
 				bulkOffset[0] = bulkOffset[1] = bulkOffset[2] = 0.0f; // リセット
-			}
-		}
-
-		// プレハブの一括適用
-		if (ImGui::CollapsingHeader("プレハブ (テンプレート) の一括適用", ImGuiTreeNodeFlags_DefaultOpen))
-		{
-			ImGui::TextWrapped("選択中のすべてのオブジェクトに対して、座標を維持したままプレハブのパラメータを上書きします。");
-
-			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
-			static int bulkPrefabIdx = -1;
-			const char* previewPrefab = (bulkPrefabIdx >= 0 && bulkPrefabIdx < prefabNames.size())
-				? prefabNames[bulkPrefabIdx].c_str() : "テンプレートを選択...";
-
-			if (ImGui::BeginCombo("適用するプレハブ", previewPrefab))
-			{
-				for (int i = 0; i < prefabNames.size(); ++i)
-				{
-					if (ImGui::Selectable(prefabNames[i].c_str(), bulkPrefabIdx == i)) bulkPrefabIdx = i;
-				}
-				ImGui::EndCombo();
-			}
-
-			if (ImGui::Button("選択中の全オブジェクトに適用") && bulkPrefabIdx >= 0)
-			{
-				history_->SaveHistory(placementList);
-				for (int idx : multiSelectedIndices_)
-				{
-					// 座標と実体ポインタを退避
-					auto originalPos = placementList[idx].position;
-					auto originalRot = placementList[idx].rotate_;
-					void* backupPtr = placementList[idx].instancePtr;
-
-					// プレハブのデータをロード
-					StageEditorUIHelper::LoadPrefab(prefabNames[bulkPrefabIdx], placementList[idx]);
-
-					// 座標とポインタを復元（パラメータとカテゴリだけが書き換わる）
-					placementList[idx].position = originalPos;
-					placementList[idx].rotate_ = originalRot;
-					placementList[idx].instancePtr = backupPtr;
-
-					// もし実体が配置済みなら再生成（StageSpawnerの仕様に合わせて更新）
-					if (backupPtr != nullptr && spawner_ != nullptr)
-					{
-						spawner_->DeleteActualEntity(placementList[idx]);
-						spawner_->SpawnActualEntity(placementList[idx]);
-					}
-				}
-				isDirty = true;
 			}
 		}
 

@@ -17,12 +17,12 @@ namespace StageEditorUIHelper
 	/// @brief プレハブとして配置データを保存する
 	/// @param name 
 	/// @param data 
-	void SavePrefab(const std::string& name, const PlacementData& data);
+	void SavePrefab(const std::string& name, const TemplateData& data);
 
 	/// @brief プレハブから配置データを読み込む
 	/// @param name 
 	/// @param data 
-	void LoadPrefab(const std::string& name, PlacementData& data);
+	bool LoadPrefab(const std::string& name, TemplateData& data);
 
 	/// @brief テーブルレイアウトの開始
 	/// @param str_id 
@@ -84,16 +84,11 @@ namespace StageEditorUIHelper
 	bool DrawMotionSelectorWithHistory(const char* label, MotionType motionType, MotionConfig& motionConfig,
 		std::vector<PlacementData>& placementList, bool& isDirty, StageEditorHistory* history, MotionManager* motionManager);
 
-	/// @brief キャラクターモーションの設定を描画する
+	/// @brief キャラクターのモーション設定を描画する
 	/// @param target 
-	/// @param placementList 
-	/// @param isDirty 
-	/// @param history 
 	/// @param motionManager 
-	/// @param useHistory 
 	/// @return 
-	bool DrawCharacterMotionSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, MotionManager* motionManager, bool useHistory);
+	bool DrawCharacterMotionSettings(TemplateData& target, MotionManager* motionManager);
 
 	/// @brief キャラクターの基本設定を描画する
 	/// @param target 
@@ -101,17 +96,22 @@ namespace StageEditorUIHelper
 	/// @param isDirty 
 	/// @param history 
 	/// @param useHistory 
-	void DrawCharacterBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory);
+	void DrawCharacterPlacementSettings(PlacementData& target, bool& isDirty);
+
+	/// @brief キャラクターのテンプレート設定を描画する
+	/// @param target 
+	/// @param isDirty 
+	void DrawCharacterTemplateSettings(TemplateData& target, bool& isDirty);
 
 	/// @brief 武器の基本設定を描画する
 	/// @param target 
-	/// @param placementList 
 	/// @param isDirty 
-	/// @param history 
-	/// @param useHistory 
-	void DrawWeaponBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory);
+	void DrawWeaponPlacementSettings(PlacementData& target, bool& isDirty);
+
+	/// @brief 武器のテンプレート設定を描画する
+	/// @param target 
+	/// @param isDirty 
+	void DrawWeaponTemplateSettings(TemplateData& target, bool& isDirty);
 
 	/// @brief ステージオブジェクトの基本設定を描画する
 	/// @param target 
@@ -119,8 +119,7 @@ namespace StageEditorUIHelper
 	/// @param isDirty 
 	/// @param history 
 	/// @param useHistory 
-	void DrawStageObjectBaseSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, bool useHistory);
+	void DrawStageObjectPlacementSettings(PlacementData& target, bool& isDirty);
 
 	/// @brief イベントトリガーの設定を描画する
 	/// @param target 
@@ -131,7 +130,6 @@ namespace StageEditorUIHelper
 	/// @param scene 
 	/// @param eventStageDataFileNames 
 	/// @param cutsceneNames 
-	void DrawEventTriggerSettings(PlacementData& target, std::vector<PlacementData>& placementList,
-		bool& isDirty, StageEditorHistory* history, StageSpawner* spawner, GameScene* scene,
+	void DrawEventTriggerSettings(TemplateData& target, bool& isDirty, GameScene* scene,
 		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames);
 }

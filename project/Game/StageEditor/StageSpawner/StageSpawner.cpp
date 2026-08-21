@@ -19,6 +19,13 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 		DeleteActualEntity(data);
 	}
 
+	TemplateData tData;
+	if (!StageEditorUIHelper::LoadPrefab(data.templateName, tData))
+		return;
+
+	data.category = tData.category;
+	data.subType = tData.subType;
+
 	// キャラクター
 	if (data.category == EditCategory::Character)
 	{
@@ -28,49 +35,46 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 		// 初期化データの作成
 		CharacterInitData initData;
 		initData.position = data.position;
-		initData.aggressiveness = data.aggressiveness;
-		initData.hp = data.hp;
+		initData.aggressiveness = tData.aggressiveness;
+		initData.hp = tData.hp;
 		initData.rotateY = data.rotate_.y;
-		initData.guardGage_ = data.guardGage;
-		initData.guardRecoveryTime = data.guardRecoveryTime;
+		initData.guardGage_ = tData.guardGage;
+		initData.guardRecoveryTime = tData.guardRecoveryTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
-		initData.hStandMotion = data.standMotion.handle;
-		initData.hStanceMotion = data.stanceMotion.handle;
-		initData.hWalkMotion = data.walkMotion.handle;
-		initData.hDashMotion = data.dashMotion.handle;
-		initData.hAvoidFrontMotion = data.avoidFrontMotion.handle;
-		initData.hAvoidBackMotion = data.avoidBackMotion.handle;
-		initData.hAvoidLeftMotion = data.avoidLeftMotion.handle;
-		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
-		initData.hGuardMotion = data.guardMotion.handle;
+		initData.hStandMotion = tData.standMotion.handle;
+		initData.hStanceMotion = tData.stanceMotion.handle;
+		initData.hWalkMotion = tData.walkMotion.handle;
+		initData.hDashMotion = tData.dashMotion.handle;
+		initData.hAvoidFrontMotion = tData.avoidFrontMotion.handle;
+		initData.hAvoidBackMotion = tData.avoidBackMotion.handle;
+		initData.hAvoidLeftMotion = tData.avoidLeftMotion.handle;
+		initData.hAvoidRightMotion = tData.avoidRightMotion.handle;
+		initData.hGuardMotion = tData.guardMotion.handle;
 
-
-		// 武器の生成に必要なデータを保持する構造体
-		PlacementData weaponData;
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;
-		if (isRuntime && strlen(data.equipWeaponPrefabName) > 0)
+		if (isRuntime && strlen(tData.equipWeaponPrefabName) > 0)
 		{
+			TemplateData weaponData;
+
 			// 武器プレハブのデータを読み込む
-			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
-
-			if (weaponData.category == EditCategory::Weapon)
+			if (StageEditorUIHelper::LoadPrefab(tData.equipWeaponPrefabName, weaponData))
 			{
-				Weapon::InitData weaponInitData;
-				weaponInitData.position = data.position;
-				weaponInitData.durability = weaponData.durability;
-				weaponInitData.attackPower = weaponData.attackPower;
-				weaponInitData.isUnbreakable = weaponData.isUnbreakable;
-				weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
-				weaponInitData.model = nullptr;
+				if (weaponData.category == EditCategory::Weapon)
+				{
+					Weapon::InitData weaponInitData;
+					weaponInitData.position = data.position;
+					weaponInitData.durability = weaponData.durability;
+					weaponInitData.attackPower = weaponData.attackPower;
+					weaponInitData.isUnbreakable = weaponData.isUnbreakable;
+					weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
+					weaponInitData.model = nullptr;
 
-				// 武器の実体を生成
-				newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
-
-				// ポインタを保存しておく
-				weaponData.instancePtr = newWeapon;
+					// 武器の実体を生成
+					newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
+				}
 			}
 		}
 
@@ -78,7 +82,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 		initData.weapon = newWeapon;
 
 		// タグに応じて、NPCの初期化データを設定する
-		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees, data.name);
+		Character* newCharacter = scene_->CreateCharacter(initData, tag, tData.behaviorTrees, tData.comboTrees, data.name);
 
 		// 武器の所有者を設定
 		if (newWeapon)
@@ -89,7 +93,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 
 		// 自動生成された武器をマップに追加
 		if (newWeapon)
-			autoSpawnedWeaponsMap_[newCharacter] = weaponData;
+			autoSpawnedWeaponsMap_[newCharacter] = newWeapon;
 	}
 	else if (data.category == EditCategory::Object)
 	{
@@ -123,17 +127,17 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
 			initData.scale = data.scale;
-			initData.eventType = data.eventType;
-			initData.isStartBattleArea = data.isBattleAreaStart;
-			initData.isGameClear = data.isGameClear;
-			initData.navMeshGroupId = data.targetNavMeshGroupId;
-			initData.isNavMeshEnabled = data.targetNavMeshState;
+			initData.eventType = tData.eventType;
+			initData.isStartBattleArea = tData.isBattleAreaStart;
+			initData.isGameClear = tData.isGameClear;
+			initData.navMeshGroupId = tData.targetNavMeshGroupId;
+			initData.isNavMeshEnabled = tData.targetNavMeshState;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
-			if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
-			else if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
+			if(tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventStageDataFileName);
+			else if(tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventCutsceneName);
 
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
@@ -153,13 +157,13 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 		// 武器
 		Weapon::InitData initData;
 		initData.position = data.position;
-		initData.durability = data.durability;
-		initData.attackPower = data.attackPower;
-		initData.isUnbreakable = data.isUnbreakable;
-		initData.category = static_cast<WeaponCategory>(data.subType);
+		initData.durability = tData.durability;
+		initData.attackPower = tData.attackPower;
+		initData.isUnbreakable = tData.isUnbreakable;
+		initData.category = static_cast<WeaponCategory>(tData.subType);
 		initData.model = nullptr; // モデルは後で設定する
 
-		Weapon* newWeapon = scene_->CreateWeapon(initData, data.behaviorTrees, data.comboTrees);
+		Weapon* newWeapon = scene_->CreateWeapon(initData, tData.behaviorTrees, tData.comboTrees);
 		data.instancePtr = newWeapon;
 	}
 }
@@ -175,8 +179,12 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		DeleteActualEntity(data);
 	}
 
-	NPC* enemyNpc = nullptr;
-	StageObject* stageObject = nullptr;
+	TemplateData tData;
+	if (!StageEditorUIHelper::LoadPrefab(data.templateName, tData))
+		return;
+
+	data.category = tData.category;
+	data.subType = tData.subType;
 
 	// キャラクター
 	if (data.category == EditCategory::Character)
@@ -187,48 +195,43 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		// NPCの初期化データの作成
 		CharacterInitData initData;
 		initData.position = data.position;
-		initData.aggressiveness = data.aggressiveness;
-		initData.hp = data.hp;
+		initData.aggressiveness = tData.aggressiveness;
+		initData.hp = tData.hp;
 		initData.rotateY = data.rotate_.y;
-		initData.guardGage_ = data.guardGage;
-		initData.guardRecoveryTime = data.guardRecoveryTime;
+		initData.guardGage_ = tData.guardGage;
+		initData.guardRecoveryTime = tData.guardRecoveryTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
-		initData.hStandMotion = data.standMotion.handle;
-		initData.hStanceMotion = data.stanceMotion.handle;
-		initData.hWalkMotion = data.walkMotion.handle;
-		initData.hDashMotion = data.dashMotion.handle;
-		initData.hAvoidFrontMotion = data.avoidFrontMotion.handle;
-		initData.hAvoidBackMotion = data.avoidBackMotion.handle;
-		initData.hAvoidLeftMotion = data.avoidLeftMotion.handle;
-		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
-		initData.hGuardMotion = data.guardMotion.handle;
-
-		// 武器の生成に必要なデータを保持する構造体
-		PlacementData weaponData;
+		initData.hStandMotion = tData.standMotion.handle;
+		initData.hStanceMotion = tData.stanceMotion.handle;
+		initData.hWalkMotion = tData.walkMotion.handle;
+		initData.hDashMotion = tData.dashMotion.handle;
+		initData.hAvoidFrontMotion = tData.avoidFrontMotion.handle;
+		initData.hAvoidBackMotion = tData.avoidBackMotion.handle;
+		initData.hAvoidLeftMotion = tData.avoidLeftMotion.handle;
+		initData.hAvoidRightMotion = tData.avoidRightMotion.handle;
+		initData.hGuardMotion = tData.guardMotion.handle;
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;
-		if (isRuntime && strlen(data.equipWeaponPrefabName) > 0)
+		if (isRuntime && strlen(tData.equipWeaponPrefabName) > 0)
 		{
-			// 武器プレハブのデータを読み込む
-			StageEditorUIHelper::LoadPrefab(data.equipWeaponPrefabName, weaponData);
-
-			if (weaponData.category == EditCategory::Weapon)
+			TemplateData weaponData;
+			if (!StageEditorUIHelper::LoadPrefab(tData.equipWeaponPrefabName, weaponData))
 			{
-				Weapon::InitData weaponInitData;
-				weaponInitData.position = data.position;
-				weaponInitData.durability = weaponData.durability;
-				weaponInitData.attackPower = weaponData.attackPower;
-				weaponInitData.isUnbreakable = weaponData.isUnbreakable;
-				weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
-				weaponInitData.model = nullptr;
+				if (weaponData.category == EditCategory::Weapon)
+				{
+					Weapon::InitData weaponInitData;
+					weaponInitData.position = data.position;
+					weaponInitData.durability = weaponData.durability;
+					weaponInitData.attackPower = weaponData.attackPower;
+					weaponInitData.isUnbreakable = weaponData.isUnbreakable;
+					weaponInitData.category = static_cast<WeaponCategory>(weaponData.subType);
+					weaponInitData.model = nullptr;
 
-				// 武器の実体を生成
-				newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
-
-				// ポインタを保存しておく
-				weaponData.instancePtr = newWeapon;
+					// 武器の実体を生成
+					newWeapon = scene_->CreateWeapon(weaponInitData, weaponData.behaviorTrees, weaponData.comboTrees);
+				}
 			}
 		}
 
@@ -236,7 +239,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		initData.weapon = newWeapon;
 
 		// タグに応じて、NPCの初期化データを設定する
-		Character* newCharacter = scene_->CreateCharacter(initData, tag, data.behaviorTrees, data.comboTrees, data.name);
+		Character* newCharacter = scene_->CreateCharacter(initData, tag, tData.behaviorTrees, tData.comboTrees, data.name);
 
 		// 武器の所有者を設定
 		if (newWeapon)
@@ -247,7 +250,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 
 		// 自動生成された武器をマップに追加
 		if (newWeapon)
-			autoSpawnedWeaponsMap_[newCharacter] = weaponData;
+			autoSpawnedWeaponsMap_[newCharacter] = newWeapon;
 
 		// 敵キャラクターの場合、戦闘エリアの敵リストに追加する
 		if (newCharacter->IsEnemySide())
@@ -291,17 +294,17 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
 			initData.scale = data.scale;
-			initData.eventType = data.eventType;
-			initData.isStartBattleArea = data.isBattleAreaStart;
-			initData.isGameClear = data.isGameClear;
-			initData.navMeshGroupId = data.targetNavMeshGroupId;
-			initData.isNavMeshEnabled = data.targetNavMeshState;
+			initData.eventType = tData.eventType;
+			initData.isStartBattleArea = tData.isBattleAreaStart;
+			initData.isGameClear = tData.isGameClear;
+			initData.navMeshGroupId = tData.targetNavMeshGroupId;
+			initData.isNavMeshEnabled = tData.targetNavMeshState;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
-			if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
-			else if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
+			if (tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventStageDataFileName);
+			else if (tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventCutsceneName);
 
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
@@ -325,13 +328,13 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		// 武器
 		Weapon::InitData initData;
 		initData.position = data.position;
-		initData.durability = data.durability;
-		initData.attackPower = data.attackPower;
-		initData.isUnbreakable = data.isUnbreakable;
-		initData.category = static_cast<WeaponCategory>(data.subType);
+		initData.durability = tData.durability;
+		initData.attackPower = tData.attackPower;
+		initData.isUnbreakable = tData.isUnbreakable;
+		initData.category = static_cast<WeaponCategory>(tData.subType);
 		initData.model = nullptr; // モデルは後で設定する
 
-		Weapon* newWeapon = scene_->CreateWeapon(initData, data.behaviorTrees, data.comboTrees);
+		Weapon* newWeapon = scene_->CreateWeapon(initData, tData.behaviorTrees, tData.comboTrees);
 		data.instancePtr = newWeapon;
 	}
 }
@@ -340,6 +343,9 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 /// @param data 
 void StageSpawner::DeleteActualEntity(PlacementData& data)
 {
+	// 既に実体がない場合は何もしない
+	if (data.instancePtr == nullptr) return;
+
 	if (data.category == EditCategory::Character)
 	{
 		Character* character = static_cast<Character*>(data.instancePtr);
@@ -348,10 +354,9 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 		auto it = autoSpawnedWeaponsMap_.find(character);
 		if (it != autoSpawnedWeaponsMap_.end())
 		{
-			Weapon* weapon = static_cast<Weapon*>(it->second.instancePtr);
-			if (weapon) {
+			Weapon* weapon = static_cast<Weapon*>(it->second);
+			if (weapon)
 				weapon->Delete();
-			}
 			autoSpawnedWeaponsMap_.erase(it);
 		}
 
@@ -368,7 +373,7 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 		weapon->Delete();
 	}
 
-	// HUDは削除の概念がないため、ここでは何もしない
+	// ポインタをクリア
 	data.instancePtr = nullptr;
 }
 
@@ -377,9 +382,9 @@ void StageSpawner::DeleteAllAutoSpawnedWeapons()
 {
 	for (const auto& pair : autoSpawnedWeaponsMap_)
 	{
-		Weapon* weapon = static_cast<Weapon*>(pair.first);
-		weapon->Delete();
+		Weapon* weapon = static_cast<Weapon*>(pair.second);
+		if (weapon)
+			weapon->Delete();
 	}
-
 	autoSpawnedWeaponsMap_.clear();
 }

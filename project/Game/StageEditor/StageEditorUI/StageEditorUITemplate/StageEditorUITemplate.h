@@ -60,7 +60,7 @@ private:
 private:
 
 	// 編集中のテンプレートデータ
-	PlacementData currentData_;
+	TemplateData currentData_;
 
 	// 選択中のテンプレートインデックス
 	int selectedTemplateIdx_ = -1;
