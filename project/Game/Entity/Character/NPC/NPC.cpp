@@ -686,21 +686,3 @@ void NPC::SearchLockOnTarget()
 	// 最も評価値が高かった相手をロックオンターゲットに設定する
 	lockOnTarget_ = bestTarget;
 }
-
-/// @brief デバッグUIを描画する
-/// @param placementData 
-/// @param placementList 
-/// @param history 
-/// @param isDirty 
-void NPC::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
-{
-	// キャラクターの状態を表示する
-	Entity::DrawDebugUI(placementData, placementList, history, isDirty);
-
-	ImGui::Separator();
-
-	// 攻撃性を表示・編集する
-	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
-	ImGui::DragFloat("攻撃性", &aggressiveness_, 1, 0, 1000000);
-	if (ImGui::IsItemDeactivatedAfterEdit())placementData->aggressiveness = aggressiveness_;
-}

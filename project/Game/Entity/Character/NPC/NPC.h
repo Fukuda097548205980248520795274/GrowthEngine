@@ -188,15 +188,5 @@ private:
 
 	// 迂回中かどうか
 	bool isDetouring_ = false;
-
-
-private:
-
-	/// @brief デバッグUIを描画する
-	/// @param placementData 
-	/// @param placementList 
-	/// @param history 
-	/// @param isDirty 
-	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

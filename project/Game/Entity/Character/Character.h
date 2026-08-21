@@ -1051,15 +1051,5 @@ protected:
 
 	/// @brief 体力HUDの位置を更新する
 	void HpHudUpdate();
-
-
-public:
-
-	/// @brief デバッグUIを描画する
-	/// @param placementData 
-	/// @param placementList 
-	/// @param history 
-	/// @param isDirty 
-	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

@@ -85,9 +85,7 @@ void StageEditorHistory::Undo(std::vector<PlacementData>& currentList, StageSpaw
 	{
 		data.instancePtr = nullptr;
 
-		PlacementData weaponData = {};
-
-		spawner->SpawnActualEntity(data, weaponData);
+		spawner->SpawnActualEntity(data);
 	}
 }
 
@@ -135,9 +133,7 @@ void StageEditorHistory::Redo(std::vector<PlacementData>& currentList, StageSpaw
 	{
 		data.instancePtr = nullptr;
 
-		PlacementData weaponData = {};
-
-		spawner->SpawnActualEntity(data, weaponData);
+		spawner->SpawnActualEntity(data);
 	}
 }
 

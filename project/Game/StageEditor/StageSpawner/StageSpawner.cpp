@@ -12,7 +12,7 @@ void StageSpawner::Initialize()
 /// @brief 実体を生成する
 /// @param data 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponData, bool isRuntime)
+void StageSpawner::SpawnActualEntity(PlacementData& data, bool isRuntime)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -44,6 +44,10 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 		initData.hAvoidLeftMotion = data.avoidLeftMotion.handle;
 		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
 		initData.hGuardMotion = data.guardMotion.handle;
+
+
+		// 武器の生成に必要なデータを保持する構造体
+		PlacementData weaponData;
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;
@@ -164,7 +168,7 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, PlacementData& weaponD
 /// @param data 
 /// @param battleAreas 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas, PlacementData& weaponData, bool isRuntime)
+void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas, bool isRuntime)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -199,6 +203,9 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		initData.hAvoidLeftMotion = data.avoidLeftMotion.handle;
 		initData.hAvoidRightMotion = data.avoidRightMotion.handle;
 		initData.hGuardMotion = data.guardMotion.handle;
+
+		// 武器の生成に必要なデータを保持する構造体
+		PlacementData weaponData;
 
 		// 武器の生成
 		Weapon* newWeapon = nullptr;

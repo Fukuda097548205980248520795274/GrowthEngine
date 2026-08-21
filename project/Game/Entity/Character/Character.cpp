@@ -2183,25 +2183,3 @@ void Character::HpHudUpdate()
 		break;
 	}
 }
-
-/// @brief デバッグ用のUIを描画する
-/// @param placementData 
-/// @param placementList 
-/// @param history 
-/// @param isDirty 
-void Character::DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty)
-{
-#ifdef DEVELOPMENT
-
-	// キャラクターの状態を表示する
-	Entity::DrawDebugUI(placementData, placementList, history, isDirty);
-
-	ImGui::Separator();
-
-	// 体力を表示・編集する
-	if (ImGui::IsItemActivated()) { history->SaveHistory(placementList); *isDirty = true; }
-	ImGui::DragInt("HP", &hp_, 1, 0, 1000000);
-	if(ImGui::IsItemDeactivatedAfterEdit())placementData->hp = hp_;
-
-#endif
-}

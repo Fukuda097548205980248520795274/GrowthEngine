@@ -108,14 +108,5 @@ private:
 	// イベントが発生したときのコールバック関数
 	std::function<bool(int, const char*, bool, bool, int, bool)> onTriggerCallback_ = nullptr;
 
-
-public:
-
-	/// @brief デバッグUIを描画する
-	/// @param placementData 
-	/// @param placementList 
-	/// @param history 
-	/// @param isDirty 
-	void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty) override;
 };
 

@@ -1517,10 +1517,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						PlacementData initData;
 						fromJson(objectDataJson, initData);
 
-						PlacementData weaponData{};
-
 						// 解析したデータをもとにオブジェクトを生成する
-						stageEditor_->SpawnObject(initData, battleArea.get(), weaponData);
+						stageEditor_->SpawnObject(initData, battleArea.get());
 						stageEditor_->SetPlacementList(initData);
 					}
 
@@ -1533,10 +1531,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						PlacementData initData;
 						fromJson(objectDataJson, initData);
 
-						PlacementData weaponData{};
-
 						// 解析したデータをもとにオブジェクトを生成する
-						stageEditor_->SpawnObject(initData, weaponData);
+						stageEditor_->SpawnObject(initData);
 						stageEditor_->SetPlacementList(initData);
 					}
 				}

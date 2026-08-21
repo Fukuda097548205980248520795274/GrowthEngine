@@ -192,8 +192,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		newData.guardMotion = currentData.guardMotion;
 
 		// 実際のゲーム画面に生成してリストに追加
-		PlacementData weaponData = {};
-		spawner_->SpawnActualEntity(newData, weaponData);
+		spawner_->SpawnActualEntity(newData);
 		placementList.push_back(newData);
 
 		selectedIndex = static_cast<int>(placementList.size()) - 1;

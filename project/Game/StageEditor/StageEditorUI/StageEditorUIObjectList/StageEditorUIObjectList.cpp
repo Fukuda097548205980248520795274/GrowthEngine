@@ -177,8 +177,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					newData.instancePtr = nullptr; // 新しい実体を作るため初期化
 
 					// 実体を生成して追加
-					PlacementData weaponData = {};
-					spawner_->SpawnActualEntity(newData, weaponData);
+					spawner_->SpawnActualEntity(newData);
 					placementList.push_back(newData);
 
 					// 複製したオブジェクトを選択状態にする
@@ -239,8 +238,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
 					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
 
-					PlacementData weaponData = {};
-					spawner_->SpawnActualEntity(newData, weaponData);
+					spawner_->SpawnActualEntity(newData);
 					placementList.push_back(newData);
 
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
@@ -368,12 +366,6 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			{
 				// イベントトリガーオブジェクトの場合、特定のUIを表示する
 				StaticEventTrigger* eventTriggerPtr = static_cast<StaticEventTrigger*>(target.instancePtr);
-
-				// イベントトリガーオブジェクトの場合、特定のUIを表示する
-				if (eventTriggerPtr != nullptr)
-				{
-					eventTriggerPtr->DrawDebugUI(&target, placementList, history_, &isDirty);
-				}
 
 				// 共通ヘルパーからイベントトリガー設定UIを描画
 				StageEditorUIHelper::DrawEventTriggerSettings(target, placementList, isDirty, history_, spawner_, scene_, eventStageDataFileNames, cutsceneNames);
@@ -592,8 +584,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					if (backupPtr != nullptr && spawner_ != nullptr)
 					{
 						spawner_->DeleteActualEntity(placementList[idx]);
-						PlacementData weaponData = {};
-						spawner_->SpawnActualEntity(placementList[idx], weaponData);
+						spawner_->SpawnActualEntity(placementList[idx]);
 					}
 				}
 				isDirty = true;

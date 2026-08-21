@@ -105,13 +105,6 @@ protected:
 
 public:
 
-	/// @brief デバッグUIを描画する
-	/// @param placementData 
-	/// @param placementList 
-	/// @param history 
-	/// @param isDirty 
-	virtual void DrawDebugUI(PlacementData* placementData, std::vector<PlacementData>& placementList, StageEditorHistory* history, bool* isDirty);
-
 	/// @brief 更新処理が有効かどうかを設定する
 	/// @param enabled 
 	static void SetUpdateEnabled(bool enabled) { updateEnabled_ = enabled; }
