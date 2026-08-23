@@ -18,8 +18,8 @@ public:
 
 	/// @brief ファイルからツリー構造を読み込む
 	/// @param fileName 
-	/// @param out_nodes 
-	/// @param out_links 
+	/// @param outNodes 
+	/// @param outLinks 
 	void LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks);
 
 

@@ -171,10 +171,10 @@ void BehaviorTreeEditor::DrawNodeTable()
 
 
 	// リンクの作成と削除の処理
-	int start_pin, end_pin;
+	int startPin, endPin;
 
 	// リンクが作成された場合
-	if (ImNodes::IsLinkCreated(&start_pin, &end_pin))
+	if (ImNodes::IsLinkCreated(&startPin, &endPin))
 	{
 		// ノード追加前の状態を履歴に保存する
 		history_->SaveHistory(nodes_, links_, currentId_);
@@ -182,10 +182,10 @@ void BehaviorTreeEditor::DrawNodeTable()
 		// 新しいリンクを追加
 		EditorLink newLink;
 		newLink.id = GetNextId();
-		newLink.startPinId = start_pin;
-		newLink.endPinId = end_pin;
-		newLink.startNodeId = GetNodeIdFromPinId(start_pin);
-		newLink.endNodeId = GetNodeIdFromPinId(end_pin);
+		newLink.startPinId = startPin;
+		newLink.endPinId = endPin;
+		newLink.startNodeId = GetNodeIdFromPinId(startPin);
+		newLink.endNodeId = GetNodeIdFromPinId(endPin);
 		links_.push_back(newLink);
 
 		// 変更があったのでフラグを立てる
@@ -1065,7 +1065,7 @@ void BehaviorTreeEditor::DrawNodeContent(EditorNode& node)
 	// アクションノードの場合はアクション選択UIを描画
 	if (node.type == EditorNodeType::Action)
 	{
-		ImGui::Text("%s", actionTypeNames[static_cast<int32_t>(node.actionType)]);
+		ImGui::Text("%s", kActionTypeNames[static_cast<int32_t>(node.actionType)]);
 	}
 
 	// サブツリーノードの場合はサブツリーのファイル名を表示
@@ -1123,7 +1123,7 @@ void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
 			std::string comboLabel = "##UtilityCombo_" + std::to_string(childId);
 
 			ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
-			if (ImGui::Combo(comboLabel.c_str(), &currentItem, utilityTypeNames, IM_ARRAYSIZE(utilityTypeNames)))
+			if (ImGui::Combo(comboLabel.c_str(), &currentItem, kUtilityTypeNames, IM_ARRAYSIZE(kUtilityTypeNames)))
 			{
 				// 変更があったら履歴保存＆フラグ立て
 				history_->SaveHistory(nodes_, links_, currentId_);
@@ -1207,7 +1207,7 @@ void BehaviorTreeEditor::DrawConditionNodeSettings(EditorNode& node)
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
 	int currentItem = static_cast<int>(node.conditionType);
 	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
-	if (ImGui::Combo("条件", &currentItem, conditionTypeNames, IM_ARRAYSIZE(conditionTypeNames)))
+	if (ImGui::Combo("条件", &currentItem, kConditionTypeNames, IM_ARRAYSIZE(kConditionTypeNames)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -1234,9 +1234,9 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 
 	// コンボボックスに表示する文字列の配列
 	int currentItem = 0;
-	for (int i = 0; i < IM_ARRAYSIZE(actionTypeNames); ++i)
+	for (int i = 0; i < IM_ARRAYSIZE(kActionTypeNames); ++i)
 	{
-		if (actionTypeNames[static_cast<int32_t>(node.actionType)] == actionTypeNames[i])
+		if (kActionTypeNames[static_cast<int32_t>(node.actionType)] == kActionTypeNames[i])
 		{
 			currentItem = i;
 			break;
@@ -1244,7 +1244,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 
 	// コンボボックスを描画し、変更があったら選択された文字列をノードに保存
-	if (ImGui::Combo("アクションの種類", &currentItem, actionTypeNames, IM_ARRAYSIZE(actionTypeNames)))
+	if (ImGui::Combo("アクションの種類", &currentItem, kActionTypeNames, IM_ARRAYSIZE(kActionTypeNames)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -1815,7 +1815,7 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 	else if (node.actionType == ActionType::RequestToken)
 	{
-		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), tokenTypeNames, IM_ARRAYSIZE(tokenTypeNames));
+		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), kTokenTypeNames, IM_ARRAYSIZE(kTokenTypeNames));
 	}
 	else if(node.actionType == ActionType::Telegraph)
 	{

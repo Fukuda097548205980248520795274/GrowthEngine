@@ -1,5 +1,6 @@
 #include "StageFileManager.h"
 #include "../StageSpawner/StageSpawner.h"
+#include "../StageEditor.h"
 #include "NavMesh/NavMesh.h"
 
 /// @brief ファイルにステージデータを保存する
@@ -111,6 +112,35 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 
 	// 読み込み成功
 	return true;
+}
+
+/// @brief ステージファイルをコピーする
+/// @param srcFileName 
+/// @param destFileName 
+/// @return 
+bool StageFileManager::CopyStageFile(const std::string& srcFileName, const std::string& destFileName)
+{
+	try
+	{
+		// コピー元のパスを作成
+		std::filesystem::path srcPath = kStageDataDir + srcFileName;
+
+		// コピー先のパスを作成
+		std::filesystem::path destPath = kStageDataDir + destFileName;
+
+		// コピー元のファイルが存在するか確認
+		if (!std::filesystem::exists(srcPath))
+			return false;
+
+		std::filesystem::copy_file(srcPath, destPath, std::filesystem::copy_options::overwrite_existing);
+		return true;
+	}
+	catch (const std::exception& e)
+	{
+		// エラー時の処理
+		(void)e;
+		return false;
+	}
 }
 
 /// @brief 保存されているステージファイルのリストを取得する

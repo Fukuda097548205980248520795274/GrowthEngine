@@ -30,6 +30,12 @@ public:
 	/// @return 
 	bool LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh);
 
+	/// @brief ステージファイルをコピーする
+	/// @param srcFileName 
+	/// @param destFileName 
+	/// @return 
+	bool CopyStageFile(const std::string& srcFileName, const std::string& destFileName);
+
 	/// @brief 保存されているステージファイルのリストを取得する
 	/// @return 
 	std::vector<std::string> GetSavedStageFiles() const;

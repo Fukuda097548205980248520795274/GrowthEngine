@@ -13,8 +13,8 @@
 #include "Node/ActionNode/GrabStrikeAttackNode/GrabStrikeAttackNode.h"
 
 /// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
-/// @param editor_nodes 
-/// @param editor_links 
+/// @param editorNodes 
+/// @param editorLinks 
 /// @return 
 std::unique_ptr<BehaviorTree> BehaviorTreeFactory::CreateTree(const std::vector<EditorNode>& editorNodes, const std::vector<EditorLink>& editorLinks, 
 	Character* character, const std::string& name)
@@ -41,25 +41,25 @@ const EditorNode* BehaviorTreeFactory::FindRootNode(const std::vector<EditorNode
 	// すべてのノードをチェックして、入力ピンにリンクがつながっていないノードを探す
 	for (const auto& node : nodes)
 	{
-		bool has_input_link = false;
+		bool hasInputLink = false;
 		for (const auto& link : links)
 		{
 			// ノードの入力ピンにリンクがつながっているかをチェック
 			if (link.endPinId == node.inputPinId)
 			{
-				has_input_link = true;
+				hasInputLink = true;
 				break;
 			}
 		}
 		
 		// 入力ピンにリンクがつながっていないノードがルートノード
-		if (!has_input_link) return &node;
+		if (!hasInputLink) return &node;
 	}
 	return nullptr;
 }
 
 /// @brief エディタ上のノードとリンクから再帰的にランタイムノードを構築する
-/// @param editor_node 
+/// @param editorNode 
 /// @param nodes 
 /// @param links 
 /// @return 
@@ -80,7 +80,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	}
 
 
-	// editor_node の種類に応じて対応するランタイムノードを生成する
+	// editorNode の種類に応じて対応するランタイムノードを生成する
 	std::unique_ptr<Node> runtimeNode = nullptr;
 
 	// 条件関数の宣言（条件ノードの場合に使用）
@@ -389,12 +389,12 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 	}
 
 	// ランタイムノードが生成できなかった場合は nullptr を返す
-	if (auto composite_node = dynamic_cast<CompositeNode*>(runtimeNode.get()))
+	if (auto compositeNode = dynamic_cast<CompositeNode*>(runtimeNode.get()))
 	{
 		if (editorNode.type != EditorNodeType::UtilitySelector &&
 			editorNode.type != EditorNodeType::WeightedRandomSelector)
 		{
-			std::vector<const EditorNode*> child_editor_nodes;
+			std::vector<const EditorNode*> childEditorNodes;
 
 			// editorNode の出力ピンに接続されているリンクを探す
 			for (const auto& link : links)
@@ -406,7 +406,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 					{
 						if (n.inputPinId == link.endPinId)
 						{
-							child_editor_nodes.push_back(&n);
+							childEditorNodes.push_back(&n);
 							break;
 						}
 					}
@@ -414,7 +414,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			}
 
 			// 子ノードをY座標でソートして、エディタ上の見た目の順番で実行されるようにする
-			std::sort(child_editor_nodes.begin(), child_editor_nodes.end(),
+			std::sort(childEditorNodes.begin(), childEditorNodes.end(),
 				[](const EditorNode* a, const EditorNode* b)
 				{
 					// ImNodesの関数を使わず、ロード済みの EditorNode のデータ(pos)を直接比較する
@@ -423,13 +423,11 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 			);
 
 			// 子ノードを再帰的に構築してコンポジットノードに追加する
-			for (const auto* child_node : child_editor_nodes)
+			for (const auto* childNode : childEditorNodes)
 			{
-				auto child_runtime = BuildNodeRecursive(*child_node, nodes, links, character);
-				if (child_runtime)
-				{
-					composite_node->AddChild(std::move(child_runtime));
-				}
+				auto childRuntime = BuildNodeRecursive(*childNode, nodes, links, character);
+				if (childRuntime)
+					compositeNode->AddChild(std::move(childRuntime));
 			}
 		}
 	}

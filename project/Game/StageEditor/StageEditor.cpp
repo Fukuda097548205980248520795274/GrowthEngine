@@ -4,14 +4,11 @@
 #include <set>
 #include "Scene/GameScene/GameScene.h"
 
-// ステージデータの保存先ディレクトリ
-constexpr const char* STAGE_DATA_DIR = "./Assets/Parameter/StageData/";
-
 /// @brief 初期化
 void StageEditor::Initialize()
 {
 	// ファイルマネージャの初期化
-	fileManager_ = std::make_unique<StageFileManager>(STAGE_DATA_DIR);
+	fileManager_ = std::make_unique<StageFileManager>(kStageDataDir);
 
 	// 履歴管理の初期化
 	history_ = std::make_unique<StageEditorHistory>(scene_->GetNavMesh());

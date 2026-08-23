@@ -3,6 +3,7 @@
 #include "../StageFileManager/StageFileManager.h"
 #include "../StageSpawner/StageSpawner.h"
 #include "../StageEditorHistory/StageEditorHistory.h"
+#include "../StageEditor.h"
 
 #include "Scene/GameScene/GameScene.h"
 
@@ -548,26 +549,18 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 
 		ImGui::InputText("新規ファイル名", copyFileName, 64);
 
+		// コピー ボタン
 		if (ImGui::Button("Copy", ImVec2(120, 0)))
 		{
 			std::string newFileNameStr = copyFileName;
 			if (!newFileNameStr.empty())
 			{
-				if (newFileNameStr.find(".json") == std::string::npos) newFileNameStr += ".json";
+				// 入力されたファイル名に ".json" 拡張子を付加する
+				if (newFileNameStr.find(".json") == std::string::npos) 
+					newFileNameStr += ".json";
 
-				// std::filesystem を使ってファイルを直接コピー
-				try 
-				{
-					// コピー元とコピー先のパスを作成
-					std::filesystem::path srcPath = "./Assets/Parameter/StageData/" + fileToCopy;
-					std::filesystem::path destPath = "./Assets/Parameter/StageData/" + newFileNameStr;
-					std::filesystem::copy_file(srcPath, destPath, std::filesystem::copy_options::overwrite_existing);
-				}
-				catch (const std::exception& e) 
-				{
-					// エラー時の処理
-					(void)e;
-				}
+				// コピー元のファイルをコピーして新しいファイルを作成する
+				fileManager_->CopyStageFile(fileToCopy, newFileNameStr);
 			}
 
 			fileToCopy = ""; // 対象をクリア
@@ -668,7 +661,6 @@ void StageEditorUI::Stop(bool& isPlaying)
 	StageObject::SetUpdateEnabled(false); // すべてのステージオブジェクトの更新を停止する
 	HUD::SetUpdateEnabled(false); // HUDの更新も停止する
 }
-
 
 /// @brief 保留中のアクションを実行する
 /// @param placementList 

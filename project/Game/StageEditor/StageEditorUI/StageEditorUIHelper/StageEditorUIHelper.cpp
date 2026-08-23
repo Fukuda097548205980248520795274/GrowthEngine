@@ -6,7 +6,7 @@
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
 // プレハブデータの保存先フォルダ
-constexpr const char* PREFAB_DIR = "./Assets/Parameter/EditorPrefab/";
+constexpr const char* kPrefabDir = "./Assets/Parameter/EditorPrefab/";
 
 namespace StageEditorUIHelper
 {
@@ -15,13 +15,13 @@ namespace StageEditorUIHelper
 	std::vector<std::string> GetPrefabNames()
 	{
 		std::vector<std::string> names;
-		if (!std::filesystem::exists(PREFAB_DIR))
+		if (!std::filesystem::exists(kPrefabDir))
 		{
-			std::filesystem::create_directories(PREFAB_DIR);
+			std::filesystem::create_directories(kPrefabDir);
 			return names;
 		}
 
-		for (const auto& entry : std::filesystem::directory_iterator(PREFAB_DIR))
+		for (const auto& entry : std::filesystem::directory_iterator(kPrefabDir))
 		{
 			if (entry.is_regular_file() && entry.path().extension() == ".json")
 			{
@@ -36,8 +36,8 @@ namespace StageEditorUIHelper
 	/// @param data 
 	void SavePrefab(const std::string& name, const TemplateData& data)
 	{
-		std::filesystem::create_directories(PREFAB_DIR);
-		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
+		std::filesystem::create_directories(kPrefabDir);
+		std::string filePath = std::string(kPrefabDir) + name + ".json";
 
 		std::ofstream file(filePath);
 		if (file.is_open())
@@ -54,7 +54,7 @@ namespace StageEditorUIHelper
 	/// @param data 
 	bool LoadPrefab(const std::string& name, TemplateData& data)
 	{
-		std::string filePath = std::string(PREFAB_DIR) + name + ".json";
+		std::string filePath = std::string(kPrefabDir) + name + ".json";
 		std::ifstream file(filePath);
 		if (file.is_open())
 		{
@@ -70,12 +70,12 @@ namespace StageEditorUIHelper
 	}
 
 	/// @brief テーブルレイアウトの開始
-	/// @param str_id 
+	/// @param strId 
 	/// @return 
-	bool BeginPropertyTable(const char* str_id)
+	bool BeginPropertyTable(const char* strId)
 	{
 		// 2列のテーブルを作成（1列目はラベル用に幅固定、2列目は自動ストレッチ）
-		if (ImGui::BeginTable(str_id, 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg))
+		if (ImGui::BeginTable(strId, 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 130.0f);
 			ImGui::TableSetupColumn("Property", ImGuiTableColumnFlags_WidthStretch);

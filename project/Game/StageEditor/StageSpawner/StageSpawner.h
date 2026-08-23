@@ -20,12 +20,12 @@ public:
 
 	/// @brief 実体を生成する
 	/// @param data 
-	void SpawnActualEntity(PlacementData& data, bool isRuntime = true);
+	void SpawnActualEntity(PlacementData& data);
 
 	/// @brief 実体を生成する（戦闘エリアの情報も渡す）
 	/// @param data 
 	/// @param battleAreas 
-	void SpawnActualEntity(PlacementData& data,BattleArea* battleAreas, bool isRuntime = true);
+	void SpawnActualEntity(PlacementData& data,BattleArea* battleAreas);
 
 	/// @brief 実体を削除する
 	/// @param data 

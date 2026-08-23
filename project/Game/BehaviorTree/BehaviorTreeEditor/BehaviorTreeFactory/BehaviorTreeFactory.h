@@ -9,11 +9,11 @@ class BehaviorTreeFactory
 public:
 
 	/// @brief エディタ上のノードとリンクからビヘイビアツリーを構築する
-	/// @param editor_nodes 
-	/// @param editor_links 
+	/// @param editorNodes 
+	/// @param editorLinks 
 	/// @param character 
 	/// @return 
-	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editorModes, const std::vector<EditorLink>& editorLinks,
+	static std::unique_ptr<BehaviorTree> CreateTree(const std::vector<EditorNode>& editorNodes, const std::vector<EditorLink>& editorLinks,
 		Character* character, const std::string& name);
 
 private:
@@ -25,7 +25,7 @@ private:
 	static const EditorNode* FindRootNode(const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links);
 
 	/// @brief エディタ上のノードとリンクからノードを再帰的に構築する
-	/// @param editor_node 
+	/// @param editorNode 
 	/// @param nodes 
 	/// @param links 
 	/// @param character 

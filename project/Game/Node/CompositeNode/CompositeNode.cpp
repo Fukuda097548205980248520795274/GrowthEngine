@@ -56,7 +56,7 @@ void CompositeNode::DrawDebuggerRecursive(float zoom)
 		else if (child->GetFadeTimer() > 0.0f)
 		{
 			// リンクも残像フェードさせる
-			float t = child->GetFadeTimer() / 1.0f; // Node.hのFADE_DURATIONに合わせる
+			float t = child->GetFadeTimer() / 1.0f;
 			Node::State fadeState = child->GetFadeState();
 
 			int targetR = (fadeState == Node::State::Success) ? 30 : 180;

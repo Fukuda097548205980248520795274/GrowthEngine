@@ -25,9 +25,9 @@ namespace StageEditorUIHelper
 	bool LoadPrefab(const std::string& name, TemplateData& data);
 
 	/// @brief テーブルレイアウトの開始
-	/// @param str_id 
+	/// @param strId 
 	/// @return 
-	bool BeginPropertyTable(const char* str_id);
+	bool BeginPropertyTable(const char* strId);
 
 	/// @brief テーブルレイアウトの終了
 	void EndPropertyTable();

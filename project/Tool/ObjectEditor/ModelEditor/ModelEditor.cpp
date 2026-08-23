@@ -660,7 +660,8 @@ void ModelEditor::DrawAssetsWindow()
 
 							newData.type = Engine::Render3D::Type::StaticModel;
 							newData.render3D = std::make_unique<Render3DStaticModel>(hModel, newData.modelName);
-						} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel))
+						}
+						else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::AnimationModel))
 						{
 							ModelHandle hModel = 0;
 							AnimationHandle hAnimation = 0;
@@ -693,7 +694,8 @@ void ModelEditor::DrawAssetsWindow()
 
 							newData.type = Engine::Render3D::Type::AnimationModel;
 							newData.render3D = std::make_unique<Render3DAnimationModel>(hModel, hAnimation, newData.modelName);
-						} else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
+						}
+						else if (newModelTypeIndex == static_cast<int>(Engine::Render3D::Type::SkinningModel))
 						{
 							ModelHandle hModel = 0;
 							AnimationHandle hAnimation = 0;

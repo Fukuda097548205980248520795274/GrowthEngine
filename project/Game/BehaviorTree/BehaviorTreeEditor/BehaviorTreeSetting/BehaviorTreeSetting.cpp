@@ -216,8 +216,8 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 
 /// @brief ファイルからツリー構造を読み込む
 /// @param fileName 
-/// @param out_nodes 
-/// @param out_links 
+/// @param outNodes 
+/// @param outLinks 
 void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks)
 {
 	// ファイルパスの構築
