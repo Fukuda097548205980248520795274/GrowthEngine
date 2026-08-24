@@ -67,10 +67,11 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 			fromJson(itemJson, data);
 
 			// 実際のゲーム内エンティティを生成
-			spawner->SpawnActualEntity(data);
-
-			// リストに追加
-			outDataList.push_back(data);
+			if (spawner->SpawnActualEntity(data))
+			{
+				// リストに追加
+				outDataList.push_back(data);
+			}
 		}
 	}
 

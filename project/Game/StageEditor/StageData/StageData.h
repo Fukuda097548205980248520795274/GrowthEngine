@@ -79,15 +79,6 @@ struct TemplateData
 	// 壊れない武器かどうか (武器の場合)
 	bool isUnbreakable = false;
 
-	// イベントトリガーの種類 (イベントトリガーの場合)
-	int eventType = 0;
-
-	// イベントトリガーのステージデータファイル名 (イベントトリガーの場合)
-	char eventStageDataFileName[256] = "";
-
-	/// @brief イベントトリガーのカットシーン名 (イベントトリガーの場合)
-	char eventCutsceneName[256] = "";
-
 	/// @brief 装備する武器のプレハブ名 (キャラクターの場合)
 	char equipWeaponPrefabName[256] = "";
 
@@ -107,18 +98,6 @@ struct TemplateData
 
 	/// @brief コンボツリーの設定 (武器とキャラクターの場合)
 	ComboTreeConfig comboTrees;
-
-	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
-	bool isBattleAreaStart = false;
-
-	/// @brief ゲームクリアフラグ（イベントトリガーの場合）
-	bool isGameClear = false;
-
-	// ターゲットのナビメッシュグループID（イベントトリガーの場合）
-	int32_t targetNavMeshGroupId = 0;
-
-	// ターゲットのナビメッシュ状態（イベントトリガーの場合）
-	bool targetNavMeshState = true;
 };
 
 
@@ -145,6 +124,28 @@ struct PlacementData
 
 	// 拡縮
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+
+
+	// イベントトリガーの種類 (イベントトリガーの場合)
+	int eventType = 0;
+
+	/// @brief 戦闘エリア開始フラグ（イベントトリガーの場合）
+	bool isBattleAreaStart = false;
+
+	/// @brief ゲームクリアフラグ（イベントトリガーの場合）
+	bool isGameClear = false;
+
+	// イベントトリガーのステージデータファイル名 (イベントトリガーの場合)
+	char eventStageDataFileName[256] = "";
+
+	/// @brief イベントトリガーのカットシーン名 (イベントトリガーの場合)
+	char eventCutsceneName[256] = "";
+
+	// ターゲットのナビメッシュグループID（イベントトリガーの場合）
+	int32_t targetNavMeshGroupId = 0;
+
+	// ターゲットのナビメッシュ状態（イベントトリガーの場合）
+	bool targetNavMeshState = true;
 
 
 	// 生成された実体へのポインタ
@@ -345,16 +346,7 @@ inline void toJson(json& j, const TemplateData& s)
 	}
 	else if (s.category == EditCategory::Object)
 	{
-		if (s.subType == static_cast<int32_t>(StageObject::StageObjectTag::StaticEventTrigger))
-		{
-			j["eventType"] = s.eventType;
-			j["eventStageDataFileName"] = s.eventStageDataFileName;
-			j["eventCutsceneName"] = s.eventCutsceneName;
-			j["battleAreaStart"] = s.isBattleAreaStart;
-			j["gameClear"] = s.isGameClear;
-			j["targetNavMeshGroupId"] = s.targetNavMeshGroupId;
-			j["targetNavMeshState"] = s.targetNavMeshState;
-		}
+		
 	}
 	else if (s.category == EditCategory::Weapon)
 	{
@@ -466,11 +458,22 @@ inline void toJson(json& j, const TemplateData& s)
 /// @param s 
 inline void toJson(json& j, const PlacementData& s)
 {
+	j["category"] = static_cast<int>(s.category);
+	j["subType"] = s.subType;
+
 	j["name"] = s.name;
 	j["templateName"] = s.templateName;
 	j["posX"] = s.position.x;j["posY"] = s.position.y;j["posZ"] = s.position.z;
 	j["rotX"] = s.rotate_.x; j["rotY"] = s.rotate_.y; j["rotZ"] = s.rotate_.z;
 	j["scaleX"] = s.scale.x; j["scaleY"] = s.scale.y; j["scaleZ"] = s.scale.z;
+
+	j["eventType"] = s.eventType;
+	j["battleAreaStart"] = s.isBattleAreaStart;
+	j["gameClear"] = s.isGameClear;
+	j["eventStageDataFileName"] = s.eventStageDataFileName;
+	j["eventCutsceneName"] = s.eventCutsceneName;
+	j["targetNavMeshGroupId"] = s.targetNavMeshGroupId;
+	j["targetNavMeshState"] = s.targetNavMeshState;
 }
 
 /// @brief PlacementDataのリストをJSONに変換（シリアライズ）
@@ -541,10 +544,6 @@ inline void fromJson(const json& j, TemplateData& s)
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
-	s.isBattleAreaStart = j.value("battleAreaStart", false);
-	s.isGameClear = j.value("gameClear", false);
-	s.targetNavMeshGroupId = j.value("targetNavMeshGroupId", 0);
-	s.targetNavMeshState = j.value("targetNavMeshState", true);
 
 	// 武器はビヘイビアツリーとコンボツリーの設定を読み込む
 	if (s.category == EditCategory::Weapon)
@@ -646,118 +645,111 @@ inline void fromJson(const json& j, TemplateData& s)
 		s.comboTrees.deadStateCT.bName_ = j.value("deadStateCT_B", "");
 	}
 
-
-	// プレイヤー以外のキャラクターはビヘイビアスクリプトを読み込む
-	if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
+	
+	if (s.category == EditCategory::Character)
 	{
-		s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
-		s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
-		s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
-		s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
-		s.behaviorTrees.guardStateBT = j.value("guardStateBT", "");
-		s.behaviorTrees.lightDamageStateBT = j.value("lightDamageStateBT", "");
-		s.behaviorTrees.heavyDamageStateBT = j.value("heavyDamageStateBT", "");
-		s.behaviorTrees.downFallingStateBT = j.value("downFallingStateBT", "");
-		s.behaviorTrees.downLyingStateBT = j.value("downLyingStateBT", "");
-		s.behaviorTrees.downGettingUpStateBT = j.value("downGettingUpStateBT", "");
-		s.behaviorTrees.downStaggerStateBT = j.value("downStaggerStateBT", "");
-		s.behaviorTrees.blownAwayStateBT = j.value("blownAwayStateBT", "");
-		s.behaviorTrees.blownFallingStateBT = j.value("blownFallingStateBT", "");
-		s.behaviorTrees.repelStateBT = j.value("repelStateBT", "");
-		s.behaviorTrees.deflectStateBT = j.value("deflectStateBT", "");
-		s.behaviorTrees.repelledStateBT = j.value("repelledStateBT", "");
-		s.behaviorTrees.deflectedStateBT = j.value("deflectedStateBT", "");
-		s.behaviorTrees.avoidStateBT = j.value("avoidStateBT", "");
-		s.behaviorTrees.deadStateBT = j.value("deadStateBT", "");
+		// キャラクターのツリーを読み込む
+		if (s.subType == static_cast<int32_t>(CharacterTag::Player))
+		{
+			s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
+			s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
+			s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
+
+			s.comboTrees.dashStateCT.xName_ = j.value("dashStateCT_X", "");
+			s.comboTrees.dashStateCT.yName_ = j.value("dashStateCT_Y", "");
+			s.comboTrees.dashStateCT.bName_ = j.value("dashStateCT_B", "");
+
+			s.comboTrees.grabbedStateCT.xName_ = j.value("grabbedStateCT_X", "");
+			s.comboTrees.grabbedStateCT.yName_ = j.value("grabbedStateCT_Y", "");
+			s.comboTrees.grabbedStateCT.bName_ = j.value("grabbedStateCT_B", "");
+
+			s.comboTrees.grabbingStateCT.xName_ = j.value("grabbingStateCT_X", "");
+			s.comboTrees.grabbingStateCT.yName_ = j.value("grabbingStateCT_Y", "");
+			s.comboTrees.grabbingStateCT.bName_ = j.value("grabbingStateCT_B", "");
+
+			s.comboTrees.guardStateCT.xName_ = j.value("guardStateCT_X", "");
+			s.comboTrees.guardStateCT.yName_ = j.value("guardStateCT_Y", "");
+			s.comboTrees.guardStateCT.bName_ = j.value("guardStateCT_B", "");
+
+			s.comboTrees.lightDamageStateCT.xName_ = j.value("lightDamageStateCT_X", "");
+			s.comboTrees.lightDamageStateCT.yName_ = j.value("lightDamageStateCT_Y", "");
+			s.comboTrees.lightDamageStateCT.bName_ = j.value("lightDamageStateCT_B", "");
+
+			s.comboTrees.heavyDamageStateCT.xName_ = j.value("heavyDamageStateCT_X", "");
+			s.comboTrees.heavyDamageStateCT.yName_ = j.value("heavyDamageStateCT_Y", "");
+			s.comboTrees.heavyDamageStateCT.bName_ = j.value("heavyDamageStateCT_B", "");
+
+			s.comboTrees.downFallingStateCT.xName_ = j.value("downFallingStateCT_X", "");
+			s.comboTrees.downFallingStateCT.yName_ = j.value("downFallingStateCT_Y", "");
+			s.comboTrees.downFallingStateCT.bName_ = j.value("downFallingStateCT_B", "");
+
+			s.comboTrees.downLyingStateCT.xName_ = j.value("downLyingStateCT_X", "");
+			s.comboTrees.downLyingStateCT.yName_ = j.value("downLyingStateCT_Y", "");
+			s.comboTrees.downLyingStateCT.bName_ = j.value("downLyingStateCT_B", "");
+
+			s.comboTrees.downGettingUpStateCT.xName_ = j.value("downGettingUpStateCT_X", "");
+			s.comboTrees.downGettingUpStateCT.yName_ = j.value("downGettingUpStateCT_Y", "");
+			s.comboTrees.downGettingUpStateCT.bName_ = j.value("downGettingUpStateCT_B", "");
+
+			s.comboTrees.downStaggerStateCT.xName_ = j.value("downStaggerStateCT_X", "");
+			s.comboTrees.downStaggerStateCT.yName_ = j.value("downStaggerStateCT_Y", "");
+			s.comboTrees.downStaggerStateCT.bName_ = j.value("downStaggerStateCT_B", "");
+
+			s.comboTrees.blownAwayStateCT.xName_ = j.value("blownAwayStateCT_X", "");
+			s.comboTrees.blownAwayStateCT.yName_ = j.value("blownAwayStateCT_Y", "");
+			s.comboTrees.blownAwayStateCT.bName_ = j.value("blownAwayStateCT_B", "");
+
+			s.comboTrees.blownFallingStateCT.xName_ = j.value("blownFallingStateCT_X", "");
+			s.comboTrees.blownFallingStateCT.yName_ = j.value("blownFallingStateCT_Y", "");
+			s.comboTrees.blownFallingStateCT.bName_ = j.value("blownFallingStateCT_B", "");
+
+			s.comboTrees.repelStateCT.xName_ = j.value("repelStateCT_X", "");
+			s.comboTrees.repelStateCT.yName_ = j.value("repelStateCT_Y", "");
+			s.comboTrees.repelStateCT.bName_ = j.value("repelStateCT_B", "");
+
+			s.comboTrees.deflectStateCT.xName_ = j.value("deflectStateCT_X", "");
+			s.comboTrees.deflectStateCT.yName_ = j.value("deflectStateCT_Y", "");
+			s.comboTrees.deflectStateCT.bName_ = j.value("deflectStateCT_B", "");
+
+			s.comboTrees.repelledStateCT.xName_ = j.value("repelledStateCT_X", "");
+			s.comboTrees.repelledStateCT.yName_ = j.value("repelledStateCT_Y", "");
+			s.comboTrees.repelledStateCT.bName_ = j.value("repelledStateCT_B", "");
+
+			s.comboTrees.deflectedStateCT.xName_ = j.value("deflectedStateCT_X", "");
+			s.comboTrees.deflectedStateCT.yName_ = j.value("deflectedStateCT_Y", "");
+			s.comboTrees.deflectedStateCT.bName_ = j.value("deflectedStateCT_B", "");
+
+			s.comboTrees.avoidStateCT.xName_ = j.value("avoidStateCT_X", "");
+			s.comboTrees.avoidStateCT.yName_ = j.value("avoidStateCT_Y", "");
+			s.comboTrees.avoidStateCT.bName_ = j.value("avoidStateCT_B", "");
+
+			s.comboTrees.deadStateCT.xName_ = j.value("deadStateCT_X", "");
+			s.comboTrees.deadStateCT.yName_ = j.value("deadStateCT_Y", "");
+			s.comboTrees.deadStateCT.bName_ = j.value("deadStateCT_B", "");
+		}
+		else if (s.subType != static_cast<int32_t>(CharacterTag::None))
+		{
+			s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
+			s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
+			s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");
+			s.behaviorTrees.grabbingStateBT = j.value("grabbingStateBT", "");
+			s.behaviorTrees.guardStateBT = j.value("guardStateBT", "");
+			s.behaviorTrees.lightDamageStateBT = j.value("lightDamageStateBT", "");
+			s.behaviorTrees.heavyDamageStateBT = j.value("heavyDamageStateBT", "");
+			s.behaviorTrees.downFallingStateBT = j.value("downFallingStateBT", "");
+			s.behaviorTrees.downLyingStateBT = j.value("downLyingStateBT", "");
+			s.behaviorTrees.downGettingUpStateBT = j.value("downGettingUpStateBT", "");
+			s.behaviorTrees.downStaggerStateBT = j.value("downStaggerStateBT", "");
+			s.behaviorTrees.blownAwayStateBT = j.value("blownAwayStateBT", "");
+			s.behaviorTrees.blownFallingStateBT = j.value("blownFallingStateBT", "");
+			s.behaviorTrees.repelStateBT = j.value("repelStateBT", "");
+			s.behaviorTrees.deflectStateBT = j.value("deflectStateBT", "");
+			s.behaviorTrees.repelledStateBT = j.value("repelledStateBT", "");
+			s.behaviorTrees.deflectedStateBT = j.value("deflectedStateBT", "");
+			s.behaviorTrees.avoidStateBT = j.value("avoidStateBT", "");
+			s.behaviorTrees.deadStateBT = j.value("deadStateBT", "");
+		}
 	}
-	else if (s.subType == static_cast<int32_t>(CharacterTag::Player))
-	{
-		// プレイヤーキャラクターの場合はコンボツリーの入力名を読み込む
-		s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
-		s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
-		s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
-
-		s.comboTrees.dashStateCT.xName_ = j.value("dashStateCT_X", "");
-		s.comboTrees.dashStateCT.yName_ = j.value("dashStateCT_Y", "");
-		s.comboTrees.dashStateCT.bName_ = j.value("dashStateCT_B", "");
-
-		s.comboTrees.grabbedStateCT.xName_ = j.value("grabbedStateCT_X", "");
-		s.comboTrees.grabbedStateCT.yName_ = j.value("grabbedStateCT_Y", "");
-		s.comboTrees.grabbedStateCT.bName_ = j.value("grabbedStateCT_B", "");
-
-		s.comboTrees.grabbingStateCT.xName_ = j.value("grabbingStateCT_X", "");
-		s.comboTrees.grabbingStateCT.yName_ = j.value("grabbingStateCT_Y", "");
-		s.comboTrees.grabbingStateCT.bName_ = j.value("grabbingStateCT_B", "");
-
-		s.comboTrees.guardStateCT.xName_ = j.value("guardStateCT_X", "");
-		s.comboTrees.guardStateCT.yName_ = j.value("guardStateCT_Y", "");
-		s.comboTrees.guardStateCT.bName_ = j.value("guardStateCT_B", "");
-
-		s.comboTrees.lightDamageStateCT.xName_ = j.value("lightDamageStateCT_X", "");
-		s.comboTrees.lightDamageStateCT.yName_ = j.value("lightDamageStateCT_Y", "");
-		s.comboTrees.lightDamageStateCT.bName_ = j.value("lightDamageStateCT_B", "");
-
-		s.comboTrees.heavyDamageStateCT.xName_ = j.value("heavyDamageStateCT_X", "");
-		s.comboTrees.heavyDamageStateCT.yName_ = j.value("heavyDamageStateCT_Y", "");
-		s.comboTrees.heavyDamageStateCT.bName_ = j.value("heavyDamageStateCT_B", "");
-
-		s.comboTrees.downFallingStateCT.xName_ = j.value("downFallingStateCT_X", "");
-		s.comboTrees.downFallingStateCT.yName_ = j.value("downFallingStateCT_Y", "");
-		s.comboTrees.downFallingStateCT.bName_ = j.value("downFallingStateCT_B", "");
-
-		s.comboTrees.downLyingStateCT.xName_ = j.value("downLyingStateCT_X", "");
-		s.comboTrees.downLyingStateCT.yName_ = j.value("downLyingStateCT_Y", "");
-		s.comboTrees.downLyingStateCT.bName_ = j.value("downLyingStateCT_B", "");
-
-		s.comboTrees.downGettingUpStateCT.xName_ = j.value("downGettingUpStateCT_X", "");
-		s.comboTrees.downGettingUpStateCT.yName_ = j.value("downGettingUpStateCT_Y", "");
-		s.comboTrees.downGettingUpStateCT.bName_ = j.value("downGettingUpStateCT_B", "");
-
-		s.comboTrees.downStaggerStateCT.xName_ = j.value("downStaggerStateCT_X", "");
-		s.comboTrees.downStaggerStateCT.yName_ = j.value("downStaggerStateCT_Y", "");
-		s.comboTrees.downStaggerStateCT.bName_ = j.value("downStaggerStateCT_B", "");
-
-		s.comboTrees.blownAwayStateCT.xName_ = j.value("blownAwayStateCT_X", "");
-		s.comboTrees.blownAwayStateCT.yName_ = j.value("blownAwayStateCT_Y", "");
-		s.comboTrees.blownAwayStateCT.bName_ = j.value("blownAwayStateCT_B", "");
-
-		s.comboTrees.blownFallingStateCT.xName_ = j.value("blownFallingStateCT_X", "");
-		s.comboTrees.blownFallingStateCT.yName_ = j.value("blownFallingStateCT_Y", "");
-		s.comboTrees.blownFallingStateCT.bName_ = j.value("blownFallingStateCT_B", "");
-
-		s.comboTrees.repelStateCT.xName_ = j.value("repelStateCT_X", "");
-		s.comboTrees.repelStateCT.yName_ = j.value("repelStateCT_Y", "");
-		s.comboTrees.repelStateCT.bName_ = j.value("repelStateCT_B", "");
-
-		s.comboTrees.deflectStateCT.xName_ = j.value("deflectStateCT_X", "");
-		s.comboTrees.deflectStateCT.yName_ = j.value("deflectStateCT_Y", "");
-		s.comboTrees.deflectStateCT.bName_ = j.value("deflectStateCT_B", "");
-
-		s.comboTrees.repelledStateCT.xName_ = j.value("repelledStateCT_X", "");
-		s.comboTrees.repelledStateCT.yName_ = j.value("repelledStateCT_Y", "");
-		s.comboTrees.repelledStateCT.bName_ = j.value("repelledStateCT_B", "");
-
-		s.comboTrees.deflectedStateCT.xName_ = j.value("deflectedStateCT_X", "");
-		s.comboTrees.deflectedStateCT.yName_ = j.value("deflectedStateCT_Y", "");
-		s.comboTrees.deflectedStateCT.bName_ = j.value("deflectedStateCT_B", "");
-
-		s.comboTrees.avoidStateCT.xName_ = j.value("avoidStateCT_X", "");
-		s.comboTrees.avoidStateCT.yName_ = j.value("avoidStateCT_Y", "");
-		s.comboTrees.avoidStateCT.bName_ = j.value("avoidStateCT_B", "");
-
-		s.comboTrees.deadStateCT.xName_ = j.value("deadStateCT_X", "");
-		s.comboTrees.deadStateCT.yName_ = j.value("deadStateCT_Y", "");
-		s.comboTrees.deadStateCT.bName_ = j.value("deadStateCT_B", "");
-	}
-
-
-	s.eventType = j.value("eventType", 0);
-
-	std::string eventStageDataFileNameStr = j.value("eventStageDataFileName", "");
-	strncpy_s(s.eventStageDataFileName, eventStageDataFileNameStr.c_str(), sizeof(s.eventStageDataFileName) - 1);
-
-	std::string eventCutsceneNameStr = j.value("eventCutsceneName", "");
-	strncpy_s(s.eventCutsceneName, eventCutsceneNameStr.c_str(), sizeof(s.eventCutsceneName) - 1);
 
 
 	MotionManager* motionManager = MotionManager::GetInstance();
@@ -791,6 +783,9 @@ inline void fromJson(const json& j, TemplateData& s)
 /// @param s 
 inline void fromJson(const json& j, PlacementData& s)
 {
+	s.category = static_cast<EditCategory>(j.value("category", 0));
+	s.subType = j.value("subType", 0);
+
 	std::string nameStr = j.value("name", "");
 	strncpy_s(s.name, nameStr.c_str(), sizeof(s.name) - 1);
 
@@ -800,4 +795,17 @@ inline void fromJson(const json& j, PlacementData& s)
 	s.position = Vector3(j.value("posX", 0.0f), j.value("posY", 0.0f), j.value("posZ", 0.0f));
 	s.rotate_ = Vector3(j.value("rotX", 0.0f), j.value("rotY", 0.0f), j.value("rotZ", 0.0f));
 	s.scale = Vector3(j.value("scaleX", 1.0f), j.value("scaleY", 1.0f), j.value("scaleZ", 1.0f));
+
+
+	s.eventType = j.value("eventType", 0);
+	s.isBattleAreaStart = j.value("battleAreaStart", false);
+	s.isGameClear = j.value("gameClear", false);
+	s.targetNavMeshGroupId = j.value("targetNavMeshGroupId", 0);
+	s.targetNavMeshState = j.value("targetNavMeshState", true);
+
+	std::string eventStageDataFileNameStr = j.value("eventStageDataFileName", "");
+	strncpy_s(s.eventStageDataFileName, eventStageDataFileNameStr.c_str(), sizeof(s.eventStageDataFileName) - 1);
+
+	std::string eventCutsceneNameStr = j.value("eventCutsceneName", "");
+	strncpy_s(s.eventCutsceneName, eventCutsceneNameStr.c_str(), sizeof(s.eventCutsceneName) - 1);
 }

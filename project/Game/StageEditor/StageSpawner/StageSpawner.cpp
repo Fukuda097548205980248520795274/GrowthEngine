@@ -12,7 +12,7 @@ void StageSpawner::Initialize()
 /// @brief 実体を生成する
 /// @param data 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data)
+bool StageSpawner::SpawnActualEntity(PlacementData& data)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -20,11 +20,19 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 	}
 
 	TemplateData tData;
-	if (!StageEditorUIHelper::LoadPrefab(data.templateName, tData))
-		return;
+	bool hasTemplate = StageEditorUIHelper::LoadPrefab(data.templateName, tData);
 
-	data.category = tData.category;
-	data.subType = tData.subType;
+	if (hasTemplate)
+	{
+		// テンプレートが存在する場合はテンプレートの情報を適用
+		data.category = tData.category;
+		data.subType = tData.subType;
+	}
+	else if (data.category != EditCategory::Object)
+	{
+		// テンプレートがなく、かつObjectカテゴリでない場合は生成を中断
+		return false;
+	}
 
 	// キャラクター
 	if (data.category == EditCategory::Character)
@@ -127,17 +135,13 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
 			initData.scale = data.scale;
-			initData.eventType = tData.eventType;
-			initData.isStartBattleArea = tData.isBattleAreaStart;
-			initData.isGameClear = tData.isGameClear;
-			initData.navMeshGroupId = tData.targetNavMeshGroupId;
-			initData.isNavMeshEnabled = tData.targetNavMeshState;
+
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
-			if(tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventStageDataFileName);
-			else if(tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventCutsceneName);
+			if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
+			else if(data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
 
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
@@ -166,13 +170,15 @@ void StageSpawner::SpawnActualEntity(PlacementData& data)
 		Weapon* newWeapon = scene_->CreateWeapon(initData, tData.behaviorTrees, tData.comboTrees);
 		data.instancePtr = newWeapon;
 	}
+
+	return true;
 }
 
 /// @brief 実体を生成する（戦闘エリアの情報も渡す）
 /// @param data 
 /// @param battleAreas 
 /// @param weaponData 
-void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas)
+bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas)
 {
 	if (data.instancePtr != nullptr)
 	{
@@ -180,8 +186,19 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 	}
 
 	TemplateData tData;
-	if (!StageEditorUIHelper::LoadPrefab(data.templateName, tData))
-		return;
+	bool hasTemplate = StageEditorUIHelper::LoadPrefab(data.templateName, tData);
+
+	if (hasTemplate)
+	{
+		// テンプレートが存在する場合はテンプレートの情報を適用
+		data.category = tData.category;
+		data.subType = tData.subType;
+	}
+	else if (data.category != EditCategory::Object)
+	{
+		// テンプレートがなく、かつObjectカテゴリでない場合は生成を中断
+		return false;
+	}
 
 	data.category = tData.category;
 	data.subType = tData.subType;
@@ -294,17 +311,17 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
 			initData.scale = data.scale;
-			initData.eventType = tData.eventType;
-			initData.isStartBattleArea = tData.isBattleAreaStart;
-			initData.isGameClear = tData.isGameClear;
-			initData.navMeshGroupId = tData.targetNavMeshGroupId;
-			initData.isNavMeshEnabled = tData.targetNavMeshState;
+			initData.eventType = data.eventType;
+			initData.isStartBattleArea = data.isBattleAreaStart;
+			initData.isGameClear = data.isGameClear;
+			initData.navMeshGroupId = data.targetNavMeshGroupId;
+			initData.isNavMeshEnabled = data.targetNavMeshState;
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定
-			if (tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventStageDataFileName);
-			else if (tData.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
-				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), tData.eventCutsceneName);
+			if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventStageDataFileName);
+			else if (data.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::PlayCutscene))
+				strcpy_s(initData.eventStageDataFileName, sizeof(initData.eventStageDataFileName), data.eventCutsceneName);
 
 			StaticEventTrigger* newTrigger = scene_->CreateStaticEventTrigger(initData);
 			data.instancePtr = newTrigger;
@@ -337,6 +354,8 @@ void StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		Weapon* newWeapon = scene_->CreateWeapon(initData, tData.behaviorTrees, tData.comboTrees);
 		data.instancePtr = newWeapon;
 	}
+
+	return true;
 }
 
 /// @brief 実体を削除する

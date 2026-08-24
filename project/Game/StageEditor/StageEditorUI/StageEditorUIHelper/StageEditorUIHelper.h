@@ -130,6 +130,6 @@ namespace StageEditorUIHelper
 	/// @param scene 
 	/// @param eventStageDataFileNames 
 	/// @param cutsceneNames 
-	void DrawEventTriggerSettings(TemplateData& target, bool& isDirty, GameScene* scene,
+	void DrawEventTriggerSettings(PlacementData& target, bool& isDirty, GameScene* scene,
 		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames);
 }

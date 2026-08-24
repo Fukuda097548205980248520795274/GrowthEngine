@@ -15,6 +15,7 @@
 #include "Scene/GameScene/GameScene.h"
 
 #include "../StageEditorUIHelper/StageEditorUIHelper.h"
+#include "../../StageEditor.h"
 
 /// @brief コンストラクタ
 /// @param spawner 
@@ -177,8 +178,10 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					newData.instancePtr = nullptr; // 新しい実体を作るため初期化
 
 					// 実体を生成して追加
-					spawner_->SpawnActualEntity(newData);
-					placementList.push_back(newData);
+					if (spawner_->SpawnActualEntity(newData))
+					{
+						placementList.push_back(newData);
+					}
 
 					// 複製したオブジェクトを選択状態にする
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
@@ -238,8 +241,10 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					std::string uniqueName = GenerateUniqueName(newData.name, -1, placementList);
 					strncpy_s(newData.name, uniqueName.c_str(), sizeof(newData.name) - 1);
 
-					spawner_->SpawnActualEntity(newData);
-					placementList.push_back(newData);
+					if (spawner_->SpawnActualEntity(newData))
+					{
+						placementList.push_back(newData);
+					}
 
 					selectedIndex = static_cast<int>(placementList.size()) - 1;
 					listChanged = true;
@@ -307,8 +312,138 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		} 
 		else if (target.category == EditCategory::Object)
 		{
+			ImGui::Combo("オブジェクト", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+
 			// 共通ヘルパーからオブジェクトの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawStageObjectPlacementSettings(target, isDirty);
+
+			if (target.subType == static_cast<int>((StageObject::StageObjectTag::StaticEventTrigger)))
+			{
+				// 共通ヘルパーからイベントトリガー設定UIを描画
+				StageEditorUIHelper::DrawEventTriggerSettings(target, isDirty, scene_, eventStageDataFileNames, cutsceneNames);
+
+				// イベントトリガーの種類が「生成イベント」の場合、生成ファイル編集UIを表示する
+				if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
+				{
+					std::string fileName = target.eventStageDataFileName;
+					LoadPreviewData(fileName);
+
+					// バトルエリア開始のチェックボックス
+					ImGui::Checkbox("バトルエリア開始", &target.isBattleAreaStart);
+
+					if (target.isBattleAreaStart)
+					{
+						// ゲームクリアのチェックボックス
+						ImGui::Checkbox("ゲームクリアにつなげるか", &target.isGameClear);
+					}
+
+					// 生成ファイル編集のUI
+					ImGui::Separator();
+					if (ImGui::TreeNode(("生成ファイル編集: " + fileName + ".json").c_str()))
+					{
+						// 追加・保存ボタン
+						if (ImGui::Button("オブジェクト追加"))
+						{
+							PlacementData newData;
+							cachedPreviewData_.push_back(newData);
+							selectedPreviewIndex_ = static_cast<int32_t>(cachedPreviewData_.size()) - 1;
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("変更を保存 (上書き)"))
+						{
+							SavePreviewData();
+						}
+
+						// プレビューデータの一覧リスト
+						if (ImGui::BeginListBox("生成オブジェクト一覧"))
+						{
+							for (int i = 0; i < cachedPreviewData_.size(); ++i)
+							{
+								std::string label = "Item " + std::to_string(i) + " (Cat:" + std::to_string(static_cast<int>(cachedPreviewData_[i].category)) + ")";
+								if (ImGui::Selectable(label.c_str(), selectedPreviewIndex_ == i))
+								{
+									selectedPreviewIndex_ = i;
+								}
+							}
+							ImGui::EndListBox();
+						}
+
+						// 選択されたプレビューデータの詳細編集
+						if (selectedPreviewIndex_ >= 0 && selectedPreviewIndex_ < cachedPreviewData_.size())
+						{
+							auto& editTarget = cachedPreviewData_[selectedPreviewIndex_];
+							ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
+
+							// オブジェクト名の編集
+							ImGui::InputText("オブジェクト名", editTarget.templateName, sizeof(editTarget.templateName));
+
+							int currentCategory = static_cast<int>(editTarget.category);
+							// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
+							if (ImGui::Combo("カテゴリ", &currentCategory, categoryNames, 3))
+							{
+								editTarget.category = static_cast<EditCategory>(currentCategory);
+								editTarget.subType = 0; // カテゴリが変わったらタイプをリセットする
+							}
+
+							// カテゴリに応じたサブタイプのコンボボックスを表示
+							if (editTarget.category == EditCategory::Character)
+							{
+								ImGui::Combo("タイプ", &editTarget.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+							}
+							else if (editTarget.category == EditCategory::Object)
+							{
+								ImGui::Combo("タイプ", &editTarget.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+							}
+							else if (editTarget.category == EditCategory::Weapon)
+							{
+								ImGui::Combo("タイプ", &editTarget.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+							}
+
+							ImGui::Separator();
+
+							// 削除ボタン
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+							if (ImGui::Button("このオブジェクトを削除"))
+							{
+								cachedPreviewData_.erase(cachedPreviewData_.begin() + selectedPreviewIndex_);
+								selectedPreviewIndex_ = -1;
+							}
+							ImGui::PopStyleColor();
+						}
+						ImGui::TreePop();
+					}
+
+					// プレビュー表示
+					GrowthEngine* engine = GrowthEngine::GetInstance();
+					for (int i = 0; i < cachedPreviewData_.size(); ++i)
+					{
+						const auto& previewData = cachedPreviewData_[i];
+
+						// 選択中のプレビューオブジェクトは色を変える
+						Vector4 color = (i == selectedPreviewIndex_) ? Vector4(1.0f, 0.0f, 0.0f, 1.0f) : Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+						engine->DrawDebugLine3D(target.position, previewData.position, color);
+					}
+				}
+				else if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::NavMeshStateChange))
+				{
+					ImGui::Separator();
+					ImGui::Text("--- ナビメッシュ切り替え設定 ---");
+
+					// グループIDの入力
+					if (ImGui::InputInt("対象グループID", &target.targetNavMeshGroupId))
+					{
+						isDirty = true;
+						history_->SaveHistory(placementList);
+					}
+
+					// 有効/無効の切り替え
+					if (ImGui::Checkbox("切り替え後の状態 (チェックで有効)", &target.targetNavMeshState))
+					{
+						isDirty = true;
+						history_->SaveHistory(placementList);
+					}
+				}
+			}
 		}
 		else if (target.category == EditCategory::Weapon)
 		{

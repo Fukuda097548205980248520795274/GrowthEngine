@@ -1518,8 +1518,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						fromJson(objectDataJson, initData);
 
 						// 解析したデータをもとにオブジェクトを生成する
-						stageEditor_->SpawnObject(initData, battleArea.get());
-						stageEditor_->SetPlacementList(initData);
+						if (stageEditor_->SpawnObject(initData, battleArea.get()))
+							stageEditor_->SetPlacementList(initData);
 					}
 
 					battleAreas_.push_back(std::move(battleArea));
@@ -1532,8 +1532,8 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 						fromJson(objectDataJson, initData);
 
 						// 解析したデータをもとにオブジェクトを生成する
-						stageEditor_->SpawnObject(initData);
-						stageEditor_->SetPlacementList(initData);
+						if (stageEditor_->SpawnObject(initData))
+							stageEditor_->SetPlacementList(initData);
 					}
 				}
 			

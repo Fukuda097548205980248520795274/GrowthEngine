@@ -89,11 +89,15 @@ void StageEditor::Update(float dt)
 void StageEditor::LoadStage(const std::string& fileName)
 {
 	// ファイルを読み込む
-	fileManager_->LoadFromFile(fileName + ".json", placementList_, spawner_.get(), scene_->GetNavMesh());
-	editorUI_->Play(isPlaying_);
+	if (fileManager_->LoadFromFile(fileName + ".json", placementList_, spawner_.get(), scene_->GetNavMesh()))
+	{
+		currentFileName_ = fileName + ".json";
 
-	// ステージをロードしたことをシーンに通知する
-	scene_->OnStageLoaded(fileName);
+		editorUI_->Play(isPlaying_);
+
+		// ステージをロードしたことをシーンに通知する
+		scene_->OnStageLoaded(fileName);
+	}
 }
 
 /// @brief 描画処理（デバッグ用）

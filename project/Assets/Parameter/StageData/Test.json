@@ -2,9 +2,15 @@
     "navMesh": [],
     "objects": [
         {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
             "name": "",
             "posX": 0.0,
-            "posY": 0.0,
+            "posY": 3.299999952316284,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,
@@ -12,7 +18,32 @@
             "scaleX": 1.0,
             "scaleY": 1.0,
             "scaleZ": 1.0,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
             "templateName": "baton"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.0,
+            "posY": -1.600000023841858,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 1,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
         }
     ]
 }

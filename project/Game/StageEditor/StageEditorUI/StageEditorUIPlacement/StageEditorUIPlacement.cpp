@@ -49,43 +49,79 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.instancePtr = nullptr;
 		currentData.name[0] = '\0';
 		currentData.templateName[0] = '\0';
+		currentData.eventType = 0;
+		currentData.isBattleAreaStart = false;
+		currentData.isGameClear = false;
+		currentData.eventStageDataFileName[0] = '\0';
+		currentData.eventCutsceneName[0] = '\0';
+		currentData.targetNavMeshGroupId = 0;
+		currentData.targetNavMeshState = true;
 
 		isInitialized = true;
 	}
 
+	// 配置モードの選択
+	static int placementMode = 0;
+	ImGui::RadioButton("テンプレートから配置", &placementMode, 0); ImGui::SameLine();
+	ImGui::RadioButton("ステージオブジェクト直配置", &placementMode, 1);
+	ImGui::Separator();
 
-	// プレハブ (テンプレート) の選択
-	if (ImGui::CollapsingHeader("プレハブ (テンプレート)", ImGuiTreeNodeFlags_DefaultOpen))
+	if (placementMode == 0)
 	{
-		// 毎フレーム最新のプレハブ一覧を取得
-		std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
-
-		// 選択中のプレハブ名プレビュー
-		const char* previewPrefab = (selectedPrefabIdx_ >= 0 && selectedPrefabIdx_ < prefabNames.size())
-			? prefabNames[selectedPrefabIdx_].c_str() : "テンプレートを選択...";
-
-		if (ImGui::BeginCombo("プレハブ一覧", previewPrefab))
+		// プレハブ (テンプレート) の選択
+		if (ImGui::CollapsingHeader("プレハブ (テンプレート)", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			for (int i = 0; i < static_cast<int>(prefabNames.size()); ++i)
-			{
-				bool isSelected = (selectedPrefabIdx_ == i);
-				if (ImGui::Selectable(prefabNames[i].c_str(), isSelected))
-				{
-					selectedPrefabIdx_ = i;
+			// 毎フレーム最新のプレハブ一覧を取得
+			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
 
-					// 選択されたプレハブを currentData に適用
-					strcpy_s(currentData.templateName, sizeof(currentData.templateName), prefabNames[i].c_str());
-					currentData.instancePtr = nullptr;
+			// 選択中のプレハブ名プレビュー
+			const char* previewPrefab = (selectedPrefabIdx_ >= 0 && selectedPrefabIdx_ < prefabNames.size())
+				? prefabNames[selectedPrefabIdx_].c_str() : "テンプレートを選択...";
+
+			if (ImGui::BeginCombo("プレハブ一覧", previewPrefab))
+			{
+				for (int i = 0; i < static_cast<int>(prefabNames.size()); ++i)
+				{
+					bool isSelected = (selectedPrefabIdx_ == i);
+					if (ImGui::Selectable(prefabNames[i].c_str(), isSelected))
+					{
+						selectedPrefabIdx_ = i;
+
+						// 選択されたプレハブを currentData に適用
+						strcpy_s(currentData.templateName, sizeof(currentData.templateName), prefabNames[i].c_str());
+						currentData.instancePtr = nullptr;
+					}
+
+					// 選択されたアイテムにフォーカスを設定
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
 				}
 
-				// 選択されたアイテムにフォーカスを設定
-				if (isSelected)
-					ImGui::SetItemDefaultFocus();
+				ImGui::EndCombo();
 			}
-
-			ImGui::EndCombo();
 		}
 	}
+	else
+	{
+		// --- テンプレートなしの直配置パラメータ ---
+		currentData.templateName[0] = '\0'; // テンプレート名をクリア
+		currentData.category = EditCategory::Object;
+
+		if (ImGui::CollapsingHeader("ステージオブジェクト設定", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			// stageObjectTagNames[] ("None", "床", "壁", "イベントトリガー", "カメラガード") を利用
+			ImGui::Combo("オブジェクト種別", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+
+			// イベントトリガー選択時のみ個別の基本パラメータを設定
+			if (currentData.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
+			{
+				ImGui::Combo("イベントタイプ", &currentData.eventType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames));
+				ImGui::Checkbox("戦闘エリア開始", &currentData.isBattleAreaStart);
+				ImGui::Checkbox("ゲームクリア", &currentData.isGameClear);
+			}
+		}
+	}
+
 	ImGui::Separator();
 
 	// 生成ボタン
@@ -96,20 +132,15 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		isDirty = true;
 
 		// 新しい配置データを初期化
-		PlacementData newData;
-		newData.category = currentData.category;
-		newData.subType = currentData.subType;
-		newData.position = currentData.position;
-		newData.rotate_ = currentData.rotate_;
-		newData.scale = currentData.scale;
-		strcpy_s(newData.name, sizeof(newData.name), currentData.name);
-		strcpy_s(newData.templateName, sizeof(newData.templateName), currentData.templateName);
+		PlacementData newData = currentData;
+		newData.instancePtr = nullptr;
 
 		// 実際のゲーム画面に生成してリストに追加
-		spawner_->SpawnActualEntity(newData);
-		placementList.push_back(newData);
-
-		selectedIndex = static_cast<int>(placementList.size()) - 1;
+		if (spawner_->SpawnActualEntity(newData))
+		{
+			placementList.push_back(newData);
+			selectedIndex = static_cast<int>(placementList.size()) - 1;
+		}
 	}
 
 	ImGui::Separator();

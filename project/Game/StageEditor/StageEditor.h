@@ -9,6 +9,9 @@
 class GameScene;
 class NavMesh;
 
+/// @brief ファイル名の最大長（拡張子を含む）を定義
+constexpr size_t kMaxFileNameLength = 256;
+
 // ステージデータの保存先ディレクトリ
 constexpr const char* kStageDataDir = "./Assets/Parameter/StageData/";
 
@@ -39,12 +42,12 @@ public:
 
 	/// @brief オブジェクトを配置する
 	/// @param data 
-	void SpawnObject(PlacementData& data) { spawner_->SpawnActualEntity(data); }
+	bool SpawnObject(PlacementData& data) { return spawner_->SpawnActualEntity(data); }
 
 	/// @brief オブジェクトを配置する（戦闘エリアの情報も渡す）
 	/// @param data 
 	/// @param battleAreas 
-	void SpawnObject(PlacementData& data, BattleArea* battleAreas) { spawner_->SpawnActualEntity(data, battleAreas); }
+	bool SpawnObject(PlacementData& data, BattleArea* battleAreas) { return spawner_->SpawnActualEntity(data, battleAreas); }
 
 	/// @brief オブジェクトを削除する
 	/// @param data 
