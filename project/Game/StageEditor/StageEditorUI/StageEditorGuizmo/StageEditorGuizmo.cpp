@@ -28,7 +28,9 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 	if (selectedIndex >= 0 && selectedIndex < placementList.size())
 	{
 		auto& data = placementList[selectedIndex];
-		if (data.instancePtr == nullptr)return;
+
+		// 選択されているオブジェクトの実体が存在しない場合はギズモの操作を無効化する
+		if (!data.instancePtr.has_value())return;
 
 		// カメラのビュー行列とプロジェクション行列を取得
 		Matrix4x4 viewMatrix = engine_->GetCamera3DView();
@@ -89,7 +91,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			// ギズモで操作した結果をゲーム内の実体に反映させる
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				if (auto entityPtr = static_cast<Entity*>(data.instancePtr))
+				if (auto entityPtr = static_cast<Entity*>(data.instancePtr.type() == typeid(Entity*) ? std::any_cast<Entity*>(data.instancePtr) : nullptr))
 				{
 					entityPtr->SetPosition(data.position);
 					entityPtr->SetRotation(data.rotate_);
@@ -98,7 +100,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			}
 			else if (data.category == EditCategory::Object)
 			{
-				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr))
+				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr.type() == typeid(StageObject*) ? std::any_cast<StageObject*>(data.instancePtr) : nullptr))
 				{
 					stageObjectPtr->SetPosition(data.position);
 					stageObjectPtr->SetRotation(data.rotate_);
@@ -111,7 +113,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			// ギズモを操作していないときは、ゲーム内の実体の位置を配置データに反映させる
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				if (auto entityPtr = static_cast<Entity*>(data.instancePtr))
+				if (auto entityPtr = static_cast<Entity*>(data.instancePtr.type() == typeid(Entity*) ? std::any_cast<Entity*>(data.instancePtr) : nullptr))
 				{
 					data.position = entityPtr->GetWorldTransform()->translate_;
 					data.rotate_ = entityPtr->GetWorldTransform()->rotate_;
@@ -120,7 +122,7 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			}
 			else if (data.category == EditCategory::Object)
 			{
-				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr))
+				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr.type() == typeid(StageObject*) ? std::any_cast<StageObject*>(data.instancePtr) : nullptr))
 				{
 					data.position = stageObjectPtr->GetWorldTransform()->translate_;
 					data.rotate_ = stageObjectPtr->GetWorldTransform()->rotate_;

@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 #include "MotionManager/MotionManager.h"
 #include "NavMesh/NavMesh.h"
+#include <any>
 
 #include "Entity/Character/Character.h"
 #include "Entity/Character/NPC/NPC.h"
@@ -149,7 +150,7 @@ struct PlacementData
 
 
 	// 生成された実体へのポインタ
-	void* instancePtr = nullptr;
+	std::any instancePtr = nullptr;
 };
 
 /// @brief 戦闘エリアのデータ構造

@@ -14,10 +14,9 @@ void StageSpawner::Initialize()
 /// @param weaponData 
 bool StageSpawner::SpawnActualEntity(PlacementData& data)
 {
-	if (data.instancePtr != nullptr)
-	{
+	// 実態が存在しない場合は削除してから生成する
+	if (!data.instancePtr.has_value())
 		DeleteActualEntity(data);
-	}
 
 	TemplateData tData;
 	bool hasTemplate = StageEditorUIHelper::LoadPrefab(data.templateName, tData);
@@ -180,10 +179,9 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data)
 /// @param weaponData 
 bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleAreas)
 {
-	if (data.instancePtr != nullptr)
-	{
+	// 実態が存在しない場合は削除処理を行う
+	if (!data.instancePtr.has_value())
 		DeleteActualEntity(data);
-	}
 
 	TemplateData tData;
 	bool hasTemplate = StageEditorUIHelper::LoadPrefab(data.templateName, tData);
@@ -363,37 +361,40 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 void StageSpawner::DeleteActualEntity(PlacementData& data)
 {
 	// 既に実体がない場合は何もしない
-	if (data.instancePtr == nullptr) return;
+	if (!data.instancePtr.has_value()) return;
 
 	if (data.category == EditCategory::Character)
 	{
-		Character* character = static_cast<Character*>(data.instancePtr);
+		Character* character = static_cast<Character*>(data.instancePtr.type() == typeid(Character*) ? std::any_cast<Character*>(data.instancePtr) : nullptr);
 
-		// 自動生成された武器がある場合は削除する
-		auto it = autoSpawnedWeaponsMap_.find(character);
-		if (it != autoSpawnedWeaponsMap_.end())
+		if (character)
 		{
-			Weapon* weapon = static_cast<Weapon*>(it->second);
-			if (weapon)
-				weapon->Delete();
-			autoSpawnedWeaponsMap_.erase(it);
-		}
+			// 自動生成された武器がある場合は削除する
+			auto it = autoSpawnedWeaponsMap_.find(character);
+			if (it != autoSpawnedWeaponsMap_.end())
+			{
+				Weapon* weapon = static_cast<Weapon*>(it->second);
+				if (weapon)
+					weapon->Delete();
+				autoSpawnedWeaponsMap_.erase(it);
+			}
 
-		character->Delete();
+			character->Delete();
+		}
 	}
 	else if (data.category == EditCategory::Object)
 	{
-		StageObject* stageObject = static_cast<StageObject*>(data.instancePtr);
-		stageObject->Delete();
+		StageObject* stageObject = static_cast<StageObject*>(data.instancePtr.type() == typeid(StageObject*) ? std::any_cast<StageObject*>(data.instancePtr) : nullptr);
+		if(stageObject)stageObject->Delete();
 	}
 	else if (data.category == EditCategory::Weapon)
 	{
-		Weapon* weapon = static_cast<Weapon*>(data.instancePtr);
-		weapon->Delete();
+		Weapon* weapon = static_cast<Weapon*>(data.instancePtr.type() == typeid(Weapon*) ? std::any_cast<Weapon*>(data.instancePtr) : nullptr);
+		if (weapon)weapon->Delete();
 	}
 
 	// ポインタをクリア
-	data.instancePtr = nullptr;
+	data.instancePtr.reset();
 }
 
 /// @brief 自動生成された武器をすべて削除する

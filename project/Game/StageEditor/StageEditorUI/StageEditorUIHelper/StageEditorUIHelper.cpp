@@ -448,7 +448,7 @@ namespace StageEditorUIHelper
 	void DrawCharacterPlacementSettings(PlacementData& target, bool& isDirty)
 	{
 		// キャラクターの実体ポインタを取得
-		Character* charPtr = static_cast<Character*>(target.instancePtr);
+		Character* charPtr = target.instancePtr.type() == typeid(Character*) ? std::any_cast<Character*>(target.instancePtr) : nullptr;
 
 		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -584,7 +584,7 @@ namespace StageEditorUIHelper
 			if (BeginPropertyTable("CharBaseTable"))
 			{
 				// キャラクターの実体ポインタを取得
-				Weapon* weaponPtr = static_cast<Weapon*>(target.instancePtr);
+				Weapon* weaponPtr = target.instancePtr.type() == typeid(Weapon*) ? std::any_cast<Weapon*>(target.instancePtr) : nullptr;
 
 				// 位置情報
 				PropertyLabel("位置");
@@ -648,7 +648,7 @@ namespace StageEditorUIHelper
 			if (BeginPropertyTable("CharBaseTable"))
 			{
 				// キャラクターの実体ポインタを取得
-				StageObject* stageObjectPtr = static_cast<StageObject*>(target.instancePtr);
+				StageObject* stageObjectPtr = target.instancePtr.type() == typeid(StageObject*) ? std::any_cast<StageObject*>(target.instancePtr) : nullptr;
 
 				// 位置情報
 				PropertyLabel("位置");
