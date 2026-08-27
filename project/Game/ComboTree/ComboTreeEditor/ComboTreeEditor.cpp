@@ -140,6 +140,9 @@ void ComboTreeEditor::SaveToFile(const std::string& filePath)
 			comboParams["moveEndTime"] = node.comboAttackInitData.moveEndTime;
 			comboParams["cancelStartTime"] = node.comboAttackInitData.cancelStartTime;
 			comboParams["cancelEndTime"] = node.comboAttackInitData.cancelEndTime;
+			comboParams["chargeCompleteTime"] = node.comboAttackInitData.chargeCompleteTime;
+			comboParams["chargeFinishTime"] = node.comboAttackInitData.chargeFinishTime;
+			comboParams["isChargeAttack"] = node.comboAttackInitData.isChargeAttack;
 			comboParams["isGrabWeapon"] = node.comboAttackInitData.isGrabWeapon;
 			comboParams["grabWeaponStartTime"] = node.comboAttackInitData.grabWeaponStartTime;
 			comboParams["grabWeaponEndTime"] = node.comboAttackInitData.grabWeaponEndTime;
@@ -295,6 +298,9 @@ void ComboTreeEditor::LoadFromFile(const std::string& filePath)
 			node.comboAttackInitData.cancelStartTime = comboParams.value("cancelStartTime", 0.0f);
 			node.comboAttackInitData.cancelEndTime = comboParams.value("cancelEndTime", 0.0f);
 			node.comboAttackInitData.isGrabWeapon = comboParams.value("isGrabWeapon", false);
+			node.comboAttackInitData.chargeCompleteTime = comboParams.value("chargeCompleteTime", 0.0f);
+			node.comboAttackInitData.chargeFinishTime = comboParams.value("chargeFinishTime", 0.0f);
+			node.comboAttackInitData.isChargeAttack = comboParams.value("isChargeAttack", false);
 			node.comboAttackInitData.grabWeaponStartTime = comboParams.value("grabWeaponStartTime", 0.0f);
 			node.comboAttackInitData.grabWeaponEndTime = comboParams.value("grabWeaponEndTime", 0.0f);
 			node.comboAttackInitData.isThrowWeapon = comboParams.value("isThrowWeapon", false);
@@ -882,6 +888,15 @@ void ComboTreeEditor::DrawPropertyPanel()
 				ImGui::Text("Cancel");
 				ImGui::DragFloat("Cancel Start Time", &node->comboAttackInitData.cancelStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 				ImGui::DragFloat("Cancel End Time", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+
+				ImGui::Spacing();
+				ImGui::Text("Charge Attack");
+				ImGui::Checkbox("Is Charge Attack", &node->comboAttackInitData.isChargeAttack);
+				if (node->comboAttackInitData.isChargeAttack)
+				{
+					ImGui::DragFloat("Charge Complete Time", &node->comboAttackInitData.chargeCompleteTime, 0.01f, 0.0f, node->comboAttackInitData.chargeFinishTime);
+					ImGui::DragFloat("Charge Finish Time", &node->comboAttackInitData.chargeFinishTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				}
 
 				ImGui::Spacing();
 

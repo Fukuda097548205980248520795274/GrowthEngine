@@ -48,6 +48,7 @@
             "action_type": 0,
             "combo_data": {
                 "attackTime": 2.0,
+                "chargeFinishTime": 1.2000000476837158,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -72,10 +73,19 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": true,
                 "isGrabWeapon": false,
+                "isThrowWeapon": false,
                 "moveEndTime": 1.600000023841858,
                 "moveSpeed": 2.0,
-                "moveStartTime": 1.2000000476837158
+                "moveStartTime": 1.2000000476837158,
+                "throwDirection": [
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "throwWeaponPower": 3.0,
+                "throwWeaponTime": 0.0
             },
             "id": 1,
             "input_pin": 2,

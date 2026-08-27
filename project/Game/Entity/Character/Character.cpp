@@ -340,7 +340,7 @@ void Character::StartUpdate()
 /// @param knockback
 /// @param knockDirection
 bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockback, 
-	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow, Weapon* weapon)
+	const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker, std::optional<Vector3> hitPosition, bool isGuardBreak, bool isThrow, Weapon* weapon, bool isChargeAttack)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return false;
@@ -1216,8 +1216,7 @@ void Character::UpdateAnimation()
 
 	// レイジモード中は、攻撃速度を上げる
 	float rageModeAttackSpeed = RageModeAttackSpeed();
-
-	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeAttackSpeed;
+	float dt = (engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeAttackSpeed);
 
 	// プレイヤーのスタイルチェンジモーションはtimeScaleの影響を受けないようにする
 	if (isStyleChanging_ && IsPlayer())
@@ -1268,7 +1267,6 @@ void Character::UpdateAnimation()
 		}
 	}
 
-
 	if (isAnimationLoop_)
 	{
 		// それ以外のモーションはtimeScaleの影響を受けるようにする
@@ -1288,6 +1286,12 @@ void Character::UpdateAnimation()
 
 		// アニメーションの時間を超えないようにする
 		model_->param_->animation.timer = std::min(model_->param_->animation.timer, animationTime_);
+	}
+
+	// 現在の攻撃がある場合は、攻撃のアニメーションタイマーを更新する
+	if (currentAttack_)
+	{
+		model_->param_->animation.timer = currentAttack_->GetAttackTimer();
 	}
 }
 
@@ -1619,13 +1623,13 @@ void Character::StyleChangeStart()
 		// 旋嵐
 	case FightStyle::Tempest:
 		SetAnimation(motionManager_->GetMotion(MotionType::StyleChange, "Senran"), true, false);
-		soundManager_->SeStyleChangeSenran();
+
 		break;
 
 		// 撃鉄
 	case FightStyle::Hammer:
 		SetAnimation(motionManager_->GetMotion(MotionType::StyleChange, "Gekitetu"), true, false);
-		soundManager_->SeStyleChangeGekitetu();
+
 		break;
 	}
 }
@@ -2019,6 +2023,9 @@ void Character::SetInitData(const CharacterInitData& initData)
 
 	// ガード復活時間
 	guardRecoveryTime_ = initData.guardRecoveryTime;
+
+	// ほどき時間
+	unravelingTime_ = initData.unravelingTime;
 
 	// レイジゲージの閾値 昇順
 	rageGageThresholds_ = initData.rageGageThresholds;

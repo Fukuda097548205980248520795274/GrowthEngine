@@ -96,6 +96,9 @@ struct CharacterInitData
 	/// @brief ガード復活時間
 	float guardRecoveryTime = 5.0f;
 
+	/// @brief ほどき時間
+	float unravelingTime = 0.0f;
+
 	/// @brief 攻撃性
 	float aggressiveness = 1.0f;
 

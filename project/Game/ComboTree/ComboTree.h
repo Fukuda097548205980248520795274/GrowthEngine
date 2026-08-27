@@ -34,6 +34,10 @@ public:
 	/// @param owner 
 	void SetOwner(Character* owner){for (auto& attack : allAttacks)attack->SetOwner(owner);}
 
+	/// @brief チャージ入力タイプを設定する
+	/// @param type 
+	void SetChargeInputType(AttackInputType type) { rootAttack->SetChargeInputType(type); }
+
 
 private:
 

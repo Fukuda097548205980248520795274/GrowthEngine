@@ -64,6 +64,8 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -88,6 +90,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -120,6 +123,8 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -144,6 +149,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -176,6 +182,8 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -200,6 +208,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -232,6 +241,8 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.07999999821186066,
+                "chargeFinishTime": 0.10000000149011612,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -246,7 +257,7 @@
                             0.0,
                             1.0
                         ],
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "hitboxes": [
@@ -261,11 +272,12 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": true,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
-                "moveEndTime": 0.10000000149011612,
+                "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
-                "moveStartTime": 0.0,
+                "moveStartTime": 0.10000000149011612,
                 "throwDirection": [
                     0.0,
                     0.0,
@@ -293,6 +305,8 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -322,6 +336,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -354,6 +369,8 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 0.800000011920929,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -378,6 +395,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.30000001192092896,
@@ -410,6 +428,8 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 0.0,
                 "cancelStartTime": 0.0,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -434,6 +454,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.30000001192092896,
@@ -466,6 +487,8 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.07999999821186066,
+                "chargeFinishTime": 0.10000000149011612,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -480,7 +503,7 @@
                             0.0,
                             1.0
                         ],
-                        "startTime": 0.0
+                        "startTime": 0.10000000149011612
                     }
                 ],
                 "hitboxes": [
@@ -495,11 +518,12 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": true,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
-                "moveEndTime": 0.10000000149011612,
+                "moveEndTime": 0.20000000298023224,
                 "moveSpeed": 5.0,
-                "moveStartTime": 0.0,
+                "moveStartTime": 0.10000000149011612,
                 "throwDirection": [
                     0.0,
                     0.0,
@@ -517,7 +541,7 @@
             "outputInputYPinId": 161,
             "pos": [
                 474.0,
-                616.0
+                617.0
             ],
             "targetAnimationName": ""
         },
@@ -527,6 +551,8 @@
                 "attackTime": 1.0,
                 "cancelEndTime": 0.0,
                 "cancelStartTime": 0.0,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -551,6 +577,7 @@
                         "radius": 0.5
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.30000001192092896,
@@ -583,6 +610,8 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -612,6 +641,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -644,6 +674,8 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -673,6 +705,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,
@@ -705,6 +738,8 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.0,
+                "chargeFinishTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -734,6 +769,7 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": false,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
                 "moveEndTime": 0.10000000149011612,

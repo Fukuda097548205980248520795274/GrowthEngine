@@ -112,6 +112,18 @@ public:
 	/// @return 
 	virtual bool IsThrowWeapon()const { return false; }
 
+	/// @brief チャージ入力タイプを設定する
+	/// @param type 
+	virtual void SetChargeInputType(AttackInputType type) {}
+
+	/// @brief チャージタイマーの割合を取得する
+	/// @return 
+	virtual float GetChargeTimeRate()const { return 1.0f; }
+
+	/// @brief 攻撃タイマーを取得する
+	/// @return 
+	float GetAttackTimer() const { return attackTimer_; }
+
 
 protected:
 

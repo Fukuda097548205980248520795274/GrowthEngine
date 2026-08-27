@@ -63,6 +63,9 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::string& jsonF
             initData.moveEndTime = paramsJson.value("moveEndTime", 0.0f);
             initData.cancelStartTime = paramsJson.value("cancelStartTime", 0.0f);
             initData.cancelEndTime = paramsJson.value("cancelEndTime", 0.0f);
+			initData.chargeCompleteTime = paramsJson.value("chargeCompleteTime", 0.0f);
+			initData.chargeFinishTime = paramsJson.value("chargeFinishTime", 0.0f);
+			initData.isChargeAttack = paramsJson.value("isChargeAttack", false);
 			initData.isGrabWeapon = paramsJson.value("isGrabWeapon", false);
 			initData.grabWeaponStartTime = paramsJson.value("grabWeaponStartTime", 0.0f);
 			initData.grabWeaponEndTime = paramsJson.value("grabWeaponEndTime", 0.0f);

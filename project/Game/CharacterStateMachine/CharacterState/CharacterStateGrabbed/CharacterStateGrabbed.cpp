@@ -8,9 +8,6 @@ void CharacterStateGrabbed::Enter()
 {
 	// ツリーのリクエストを行う
 	TreeRequest();
-
-	// タイマーをリセットする
-	grabbedTimer_ = 0.0f;
 }
 
 /// @brief 更新処理
@@ -27,6 +24,10 @@ void CharacterStateGrabbed::Update(float dt)
 		return;
 	}
 
+	// 掴まれ状態の間は、ガードゲージを減少させる
+	float guardGageT = std::clamp(owner_->GetGuardGage() / owner_->GetMaxGuardGage(), 0.0f, 1.0f);
+	float unraveling = guardGageT * 2.0f;
+
 	if (owner_->GetCharacterTag() == CharacterTag::Player)
 	{
 		// プレイヤーの場合は、掴まれ解き入力を受け付ける
@@ -36,20 +37,21 @@ void CharacterStateGrabbed::Update(float dt)
 		bool isStruggleInput = false;
 		if (inputController_->IsEscapeMashRequested()) isStruggleInput = true;
 
+		// 掴まれ解き入力があった場合は、掴まれタイマーを更新する
 		if (isStruggleInput)
 		{
-			grabbedTimer_ += 0.2f;
+			grabbedTimer_ += ((1.0f / 60.0f) * 2.0f) * unraveling;
 		}
 	}
 	else
 	{
 		// NPCの場合は、掴まれタイマーを更新する
 		NPC* npc = static_cast<NPC*>(owner_);
-		grabbedTimer_ += dt;
+		grabbedTimer_ += dt * unraveling;
 	}
 
 	// 掴まれタイマーが過ぎたら、掴まれ状態を解除する
-	if (grabbedTimer_ >= 3.0f)
+	if (grabbedTimer_ >= owner_->GetUnravelingTime())
 	{
 		Vector3 ownerPosition = owner_->GetWorldPosition();
 		WorldTransform3D* ownerTransform = owner_->GetWorldTransform();

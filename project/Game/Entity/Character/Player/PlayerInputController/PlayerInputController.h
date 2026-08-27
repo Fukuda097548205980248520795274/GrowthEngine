@@ -36,6 +36,18 @@ public:
 	/// @return 
 	bool IsInputBAttackRequested() const;
 
+	/// @brief Xチャージ攻撃入力があったかどうかを取得する
+	/// @return 
+	bool IsInputXChargeAttackRequested() const;
+
+	/// @brief Yチャージ攻撃入力があったかどうかを取得する
+	/// @return 
+	bool IsInputYChargeAttackRequested() const;
+
+	/// @brief Bチャージ攻撃入力があったかどうかを取得する
+	/// @return 
+	bool IsInputBChargeAttackRequested() const;
+
 	/// @brief 防御入力があったかどうかを取得する
 	/// @return 
 	bool IsGuardRequested() const;
@@ -78,6 +90,15 @@ private:
 
 	/// @brief B攻撃入力
 	std::unique_ptr<InputGamepadButton> inputBAttack_ = nullptr;
+
+	/// @brief Xチャージ攻撃入力
+	std::unique_ptr<InputGamepadButton> inputXChargeAttack_ = nullptr;
+
+	/// @brief Yチャージ攻撃入力
+	std::unique_ptr<InputGamepadButton> inputYChargeAttack_ = nullptr;
+
+	/// @brief Bチャージ攻撃入力
+	std::unique_ptr<InputGamepadButton> inputBChargeAttack_ = nullptr;
 
 	/// @brief 防御入力
 	std::unique_ptr<InputGamepadButton> inputGuard_ = nullptr;

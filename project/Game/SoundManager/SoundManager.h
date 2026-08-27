@@ -21,12 +21,6 @@ private:
 
 public:
 
-	/// @brief 旋嵐スタイルチェンジのSE
-	void SeStyleChangeSenran()const;
-
-	/// @brief 撃鉄スタイルチェンジのSE
-	void SeStyleChangeGekitetu()const;
-
 	/// @brief 受け流しのSE
 	void SeDeflect() { if (seDeflect_)seDeflect_->Play(); }
 
@@ -90,6 +84,12 @@ public:
 	/// @brief 敗北のSE
 	void SeLose() { if (seLose_)seLose_->Play(); }
 
+	/// @brief チャージ開始のSE
+	void SeChargeStart() { if (seChargeStart_)seChargeStart_->Play(); }
+
+	/// @brief チャージ完了のSE
+	void SeChargeComplete() { if (seChargeComplete_)seChargeComplete_->Play(); }
+
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
 	void BgmTutorialRoadPlay(bool isPlay) { tutorialRoadBgm_->param_->volume = 0.25f; if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
@@ -115,22 +115,6 @@ private:
 	/// @brief チュートリアルのボス戦のBGM
 	std::unique_ptr<Bgm> tutorialBossBgm_ = nullptr;
 
-
-private:
-
-
-	/// @brief 旋嵐スタイルチェンジのSE
-	std::unique_ptr<Se> seStyleSenran0_ = nullptr;
-	std::unique_ptr<Se> seStyleSenran1_ = nullptr;
-	std::unique_ptr<Se> seStyleSenran2_ = nullptr;
-	std::unique_ptr<Se> seStyleSenran3_ = nullptr;
-	std::unique_ptr<Se> seStyleSenran4_ = nullptr;
-
-	/// @brief 撃鉄スタイルチェンジのSE
-	std::unique_ptr<Se> seStyleGekitetu0_ = nullptr;
-	std::unique_ptr<Se> seStyleGekitetu1_ = nullptr;
-	std::unique_ptr<Se> seStyleGekitetu2_ = nullptr;
-	std::unique_ptr<Se> seStyleGekitetu3_ = nullptr;
 
 	/// @brief 受け流しのSE
 	std::unique_ptr<Se> seDeflect_ = nullptr;
@@ -194,6 +178,12 @@ private:
 
 	/// @brief 敗北のSE
 	std::unique_ptr<Se> seLose_ = nullptr;
+
+	/// @brief チャージ開始のSE
+	std::unique_ptr<Se> seChargeStart_ = nullptr;
+
+	/// @brief チャージ完了のSE
+	std::unique_ptr<Se> seChargeComplete_ = nullptr;
 
 
 private:

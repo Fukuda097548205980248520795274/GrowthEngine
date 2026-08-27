@@ -47,6 +47,7 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data)
 		initData.rotateY = data.rotate_.y;
 		initData.guardGage_ = tData.guardGage;
 		initData.guardRecoveryTime = tData.guardRecoveryTime;
+		initData.unravelingTime = tData.unravellingTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
 		initData.hStandMotion = tData.standMotion.handle;
@@ -215,6 +216,7 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		initData.rotateY = data.rotate_.y;
 		initData.guardGage_ = tData.guardGage;
 		initData.guardRecoveryTime = tData.guardRecoveryTime;
+		initData.unravelingTime = tData.unravellingTime;
 		initData.model_ = nullptr; // モデルは後で設定する
 		initData.weapon = nullptr; // 武器は後で設定する
 		initData.hStandMotion = tData.standMotion.handle;

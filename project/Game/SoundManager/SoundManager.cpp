@@ -28,19 +28,6 @@ void SoundManager::Initialize()
 	tutorialBossBgm_ = std::make_unique<Bgm>("TutorialBossBgm", engine_->LoadAudio("./Assets/Sounds/bgm/tutorial_boss.mp3"));
 	tutorialBossBgm_->param_->enableLoop = true; // ループを有効化する
 
-	// 旋嵐スタイルチェンジのSE
-	seStyleSenran0_ = std::make_unique<Se>("Style_Senran0", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran0.mp3"));
-	seStyleSenran1_ = std::make_unique<Se>("Style_Senran1", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran1.mp3"));
-	seStyleSenran2_ = std::make_unique<Se>("Style_Senran2", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran2.mp3"));
-	seStyleSenran3_ = std::make_unique<Se>("Style_Senran3", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran3.mp3"));
-	seStyleSenran4_ = std::make_unique<Se>("Style_Senran4", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Senran/Senran4.mp3"));
-
-	// 撃鉄スタイルチェンジのSE
-	seStyleGekitetu0_ = std::make_unique<Se>("Style_Gekitetu0", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu0.mp3"));
-	seStyleGekitetu1_ = std::make_unique<Se>("Style_Gekitetu1", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu1.mp3"));
-	seStyleGekitetu2_ = std::make_unique<Se>("Style_Gekitetu2", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu2.mp3"));
-	seStyleGekitetu3_ = std::make_unique<Se>("Style_Gekitetu3", engine_->LoadAudio("./Assets/Sounds/se/styleChange/Gekitetu/Gekitetu3.mp3"));
-
 	// 受け流しのSE
 	seDeflect_ = std::make_unique<Se>("Deflect", engine_->LoadAudio("./Assets/Sounds/se/deflect.mp3"));
 
@@ -105,23 +92,10 @@ void SoundManager::Initialize()
 
 	// 敗北のSE
 	seLose_ = std::make_unique<Se>("Lose", engine_->LoadAudio("./Assets/Sounds/se/lose.mp3"));
-}
 
-/// @brief 旋嵐スタイルチェンジのSE
-void SoundManager::SeStyleChangeSenran()const
-{
-	seStyleSenran0_->Play();
-	seStyleSenran1_->Play();
-	seStyleSenran2_->Play();
-	seStyleSenran3_->Play();
-	seStyleSenran4_->Play();
-}
+	// チャージ開始のSE
+	seChargeStart_ = std::make_unique<Se>("ChargeStart", engine_->LoadAudio("./Assets/Sounds/se/chargeStart.mp3"));
 
-/// @brief 撃鉄スタイルチェンジのSE
-void SoundManager::SeStyleChangeGekitetu()const
-{
-	seStyleGekitetu0_->Play();
-	seStyleGekitetu1_->Play();
-	seStyleGekitetu2_->Play();
-	seStyleGekitetu3_->Play();
+	// チャージ完了のSE
+	seChargeComplete_ = std::make_unique<Se>("ChargeComplete", engine_->LoadAudio("./Assets/Sounds/se/chargeComplete.mp3"));
 }

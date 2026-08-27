@@ -83,6 +83,13 @@ void GameScene::Initialize()
 	sunLight_->param_->intensity = 1.0f;
 	sunLight_->param_->color = Vector3(0.5f, 0.5f, 1.0f);
 
+	// UIエディタの生成と初期化
+	uiEditor_ = std::make_unique<UIEditor>();
+	uiEditor_->Load("Game_Scene");
+
+	// モデルエディタの生成と初期化
+	modelEditor_ = std::make_unique<ModelEditor>();
+
 	// マネージャの生成と初期化
 	motionManager_ = MotionManager::GetInstance();
 	soundManager_ = SoundManager::GetInstance();
@@ -116,13 +123,6 @@ void GameScene::Initialize()
 	// カットシーンエディタの生成と初期化
 	cutsceneEditor_ = std::make_unique<CutsceneEditor>();
 	cutsceneEditor_->Initialize(cutsceneCamera_.get(), mainCamera_.get());
-
-	// UIエディタの生成と初期化
-	uiEditor_ = std::make_unique<UIEditor>();
-	uiEditor_->Load("Game_Scene");
-
-	// モデルエディタの生成と初期化
-	modelEditor_ = std::make_unique<ModelEditor>();
 
 	// ライトエディタの生成と初期化
 	lightEditor_ = std::make_unique<LightEditor>();

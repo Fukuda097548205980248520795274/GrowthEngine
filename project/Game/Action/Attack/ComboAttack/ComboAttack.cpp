@@ -25,6 +25,9 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	throwWeaponTime_ = initData.throwWeaponTime;
 	throwWeaponPower_ = initData.throwWeaponPower;
 	throwDirection_ = initData.throwDirection;
+	chargeCompleteTime_ = initData.chargeCompleteTime;
+	chargeFinishTime_ = initData.chargeFinishTime;
+	isChargeAttack_ = initData.isChargeAttack;
 
 	// ヒット判定のグループをコピーする
 	groups_ = initData.groups;
@@ -80,9 +83,15 @@ void ComboAttack::Exec()
 
 	// 攻撃タイマーを初期化する
 	attackTimer_ = 0.0f;
+	chargeTimer_ = 0.0f;
 
 	// 移動速度を初期化する
 	currentMoveSpeed_ = moveSpeed_;
+
+	// チャージ攻撃の状態を初期化する
+	isCharging_ = false;
+	isChargeFinished_ = false;
+	canChargeAttack_ = isChargeAttack_;
 
 	// すべての判定をリセット・削除する
 	for (auto& state : hitStates_)
@@ -101,10 +110,10 @@ void ComboAttack::Update()
 	// ブレイクポイントのチェック
 	BreakpointOnUpdate();
 
-	// コンボキャンセル受付時間内であれば、次の攻撃への入力をチェックする
-	if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
+	// プレイヤーが所有者の場合、コンボキャンセル受付時間内であれば、次の攻撃への入力をチェックする
+	if (owner_ && owner_->IsPlayer())
 	{
-		if (owner_)
+		if (attackTimer_ >= cancelStartTime_ && attackTimer_ <= cancelEndTime_)
 		{
 			// バッファされた攻撃入力を取得する
 			AttackInputType bufferedInput = owner_->GetBufferedAttackInput();
@@ -115,6 +124,7 @@ void ComboAttack::Update()
 				owner_->ConsumeBufferedAttackInput();
 				this->Exit();
 				nextInputXAttack_->Exec();
+				nextInputXAttack_->SetChargeInputType(bufferedInput);
 				return;
 			}
 			else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
@@ -123,6 +133,7 @@ void ComboAttack::Update()
 				owner_->ConsumeBufferedAttackInput();
 				this->Exit();
 				nextInputYAttack_->Exec();
+				nextInputYAttack_->SetChargeInputType(bufferedInput);
 				return;
 			}
 			else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
@@ -131,14 +142,27 @@ void ComboAttack::Update()
 				owner_->ConsumeBufferedAttackInput();
 				this->Exit();
 				nextInputBAttack_->Exec();
+				nextInputBAttack_->SetChargeInputType(bufferedInput);
 				return;
+			}
+		}
+
+		// チャージ攻撃が可能な場合、チャージ攻撃の入力タイプが一致するかどうかを確認する
+		if (canChargeAttack_)
+		{
+			AttackInputType bufferedChargeInput = owner_->GetBufferedChargeAttackInput();
+
+			// チャージ攻撃の入力タイプが一致する場合は、チャージ攻撃を継続する
+			if (bufferedChargeInput != chargeInputType_)
+			{
+				canChargeAttack_ = false;
 			}
 		}
 	}
 
 
 	// 攻撃の特定の時間帯は、攻撃者が回避、掴み、または無力化されているかどうかを確認する
-	if (owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash())
+	if (!owner_ || owner_->IsJustAvoided() || owner_->IsGrabbing() || owner_->IsIncapacitated() || owner_->IsDash())
 	{
 		this->Exit();
 		return;
@@ -148,8 +172,34 @@ void ComboAttack::Update()
 	// レイジモードの攻撃速度を取得する
 	float rageModeSpeed = owner_->RageModeAttackSpeed();
 
-	// 攻撃タイマーを更新する
-	attackTimer_ += engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeSpeed;
+	// デルタタイムを取得する（レイジモードの攻撃速度を考慮する）
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeSpeed;
+
+	// チャージ攻撃が可能であれば、チャージタイマーを更新する
+	if (canChargeAttack_)
+	{
+		chargeTimer_ += dt;
+
+		// チャージ攻撃の割合を計算する（0.0fから1.0fの範囲で正規化）
+		float t = GetChargeTimeRate();
+
+		float easing = 1.0f - std::pow(1.0f - t, 3.0f); // イージング関数を使用して、チャージ攻撃の割合を補間する
+
+		// チャージ攻撃の割合に応じて、攻撃タイマーを補間する
+		attackTimer_ = std::lerp(0.0f, chargeFinishTime_, easing);
+
+		// チャージタイマーがチャージ時間を超えた場合、チャージが完了したことを示すフラグを立てる
+		if (chargeTimer_ >= chargeTime_)
+		{
+			isChargeFinished_ = true;
+			canChargeAttack_ = false;
+		}
+	}
+	else
+	{
+		// 攻撃タイマーを更新する
+		attackTimer_ += dt;
+	}
 
 	// 各当たり判定の状態を更新する
 	for (auto& state : hitStates_)
@@ -326,7 +376,7 @@ void ComboAttack::Update()
 			// 入力値（throwDirection_）を使ってキャラクター基準のワールドベクトルを作る
 			Vector3 throwDirWorld = (right * throwDirection_.x) + (forward * throwDirection_.y);
 
-			// ※もし入力もゼロ(0,0,0)だった場合、そのまま真正面に投げる
+			// もし投げる方向ベクトルが0になってしまっている場合の安全対策
 			if (throwDirWorld.LengthSq() < 0.0001f) {
 				throwDirWorld = forward;
 			}
@@ -341,9 +391,13 @@ void ComboAttack::Update()
 	// 攻撃の特定の時間帯は移動する
 	if(attackTimer_ >= moveStartTime_ && attackTimer_ <= moveEndTime_)
 	{
+		// チャージ攻撃の割合を取得する
+		float t = 1.0f - GetChargeTimeRate();
+		float easing = 1.0f - std::pow(1.0f - t, 3.0f); // イージング関数を使用して、移動速度を補間する
+
 		Vector3 direction = owner_->GetDirection();
 		Vector3 position = owner_->GetPosition();
-		position += (currentMoveSpeed_ * owner_->RageModeAttackSpeed()) * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale());
+		position += (currentMoveSpeed_ * owner_->RageModeAttackSpeed()) * (direction * engine_->GetDeltaTime() * engine_->GetTimeScale()) * easing;
 		owner_->SetPosition(position);
 	}
 

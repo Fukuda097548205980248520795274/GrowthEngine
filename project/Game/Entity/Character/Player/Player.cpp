@@ -310,6 +310,24 @@ void Player::UpdateAttack()
 		GrabWeapon(FindClosestWeapon());
 	}
 
+	// チャージ攻撃入力のバッファを更新する
+	if (inputController_->IsInputXChargeAttackRequested())
+	{
+		bufferedChargeAttackInput_ = AttackInputType::InputX;
+	}
+	else if (inputController_->IsInputYChargeAttackRequested())
+	{
+		bufferedChargeAttackInput_ = AttackInputType::InputY;
+	}
+	else if (inputController_->IsInputBChargeAttackRequested())
+	{
+		bufferedChargeAttackInput_ = AttackInputType::InputB;
+	}
+	else
+	{
+		bufferedChargeAttackInput_ = AttackInputType::None;
+	}
+
 	// 攻撃入力のバッファ時間を減らす
 	if (attackInputBufferTime_ > 0.0f)
 	{
@@ -359,14 +377,17 @@ void Player::UpdateAttack()
 		if (bufferedAttackInput_ == AttackInputType::InputX && currentComboTreeX_)
 		{
 			currentComboTreeX_->Exec();
+			currentComboTreeX_->SetChargeInputType(AttackInputType::InputX);
 		}
 		else if (bufferedAttackInput_ == AttackInputType::InputY && currentComboTreeY_)
 		{
 			currentComboTreeY_->Exec();
+			currentComboTreeY_->SetChargeInputType(AttackInputType::InputY);
 		}
 		else if (bufferedAttackInput_ == AttackInputType::InputB && currentComboTreeB_)
 		{
 			currentComboTreeB_->Exec();
+			currentComboTreeB_->SetChargeInputType(AttackInputType::InputB);
 		}
 
 		// バッファされた攻撃入力を消す

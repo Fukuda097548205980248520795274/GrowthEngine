@@ -24,6 +24,17 @@ struct CombAttackInitData
 	// コンボキャンセル終了時間
 	float cancelEndTime = 0.0f;
 
+
+	// チャージ完了の時間
+	float chargeCompleteTime = 0.0f;
+
+	// @brief チャージ終了時間
+	float chargeFinishTime = 0.0f;
+
+	// チャージ攻撃するかどうか
+	bool isChargeAttack = false;
+
+
 	// 武器をつかむかどうか
 	bool isGrabWeapon = false;
 
@@ -32,6 +43,7 @@ struct CombAttackInitData
 
 	/// @brief 武器をつかむ終了時間
 	float grabWeaponEndTime = 0.0f;
+
 
 	// @brief 投げる武器かどうか
 	bool isThrowWeapon = false;
@@ -93,6 +105,14 @@ public:
 	/// @return 
 	bool IsThrowWeapon() const override { return isThrowWeapon_; }
 
+	/// @brief チャージ攻撃可能かどうか
+	/// @param type 
+	void SetChargeInputType(AttackInputType type) override { chargeInputType_ = type; }
+
+	/// @brief チャージタイマーの割合を取得する
+	/// @return 
+	float GetChargeTimeRate()const override { return canChargeAttack_ && chargeTime_ > 0.0f ? std::clamp(chargeTimer_ / chargeTime_, 0.0f, 1.0f) : 0.0f; }
+
 
 private:
 
@@ -110,6 +130,36 @@ private:
 
 	/// @brief 掴み終了時間
 	float grabWeaponEndTime_ = 0.0f;
+
+
+private:
+
+	/// @brief チャージ攻撃のタイマー
+	float chargeTimer_ = 0.0f;
+
+	/// @brief チャージする時間
+	float chargeTime_ = 1.0f;
+
+	// @brief チャージ終了時間
+	float chargeFinishTime_ = 0.0f;
+
+	// チャージ完了時間
+	float chargeCompleteTime_ = 0.0f;
+
+	// @brief チャージ攻撃の入力タイプ
+	AttackInputType chargeInputType_ = AttackInputType::InputX;
+
+	// チャージ攻撃するかどうか
+	bool isChargeAttack_ = false;
+
+	/// @brief チャージ攻撃可能かどうか
+	bool canChargeAttack_ = false;
+
+	// @brief チャージ中かどうか
+	bool isCharging_ = false;
+
+	// @brief チャージが完了したかどうか
+	bool isChargeFinished_ = false;
 
 
 private:

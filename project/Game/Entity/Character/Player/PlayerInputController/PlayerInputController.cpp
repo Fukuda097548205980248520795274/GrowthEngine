@@ -27,6 +27,15 @@ void PlayerInputController::Initialize()
 	// B攻撃入力の生成
 	inputBAttack_ = std::make_unique<InputGamepadButton>("Player_BAttack", InputState::Trigger, 0, XINPUT_GAMEPAD_B);
 
+	// Xチャージ攻撃入力の生成
+	inputXChargeAttack_ = std::make_unique<InputGamepadButton>("Player_XChargeAttack", InputState::Press, 0, XINPUT_GAMEPAD_X);
+
+	// Yチャージ攻撃入力の生成
+	inputYChargeAttack_ = std::make_unique<InputGamepadButton>("Player_YChargeAttack", InputState::Press, 0, XINPUT_GAMEPAD_Y);
+
+	// Bチャージ攻撃入力の生成
+	inputBChargeAttack_ = std::make_unique<InputGamepadButton>("Player_BChargeAttack", InputState::Press, 0, XINPUT_GAMEPAD_B);
+
 	// 防御入力の生成
 	inputGuard_ = std::make_unique<InputGamepadButton>("Player_Guard", InputState::Press, 0, XINPUT_GAMEPAD_LEFT_SHOULDER);
 
@@ -87,6 +96,27 @@ bool PlayerInputController::IsInputYAttackRequested() const
 bool PlayerInputController::IsInputBAttackRequested() const
 {
 	return inputBAttack_ && inputBAttack_->IsInput();
+}
+
+/// @brief Xチャージ攻撃入力があったかどうかを取得する
+/// @return 
+bool PlayerInputController::IsInputXChargeAttackRequested() const
+{
+	return inputXChargeAttack_ && inputXChargeAttack_->IsInput();
+}
+
+/// @brief Yチャージ攻撃入力があったかどうかを取得する
+/// @return 
+bool PlayerInputController::IsInputYChargeAttackRequested() const
+{
+	return inputYChargeAttack_ && inputYChargeAttack_->IsInput();
+}
+
+/// @brief Bチャージ攻撃入力があったかどうかを取得する
+/// @return 
+bool PlayerInputController::IsInputBChargeAttackRequested() const
+{
+	return inputBChargeAttack_ && inputBChargeAttack_->IsInput();
 }
 
 /// @brief 防御入力があったかどうかを取得する

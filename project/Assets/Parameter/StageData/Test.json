@@ -1,28 +1,40 @@
 {
-    "navMesh": [],
-    "objects": [
+    "navMesh": [
         {
-            "battleAreaStart": false,
-            "category": 0,
-            "eventCutsceneName": "",
-            "eventStageDataFileName": "",
-            "eventType": 0,
-            "gameClear": false,
-            "name": "",
-            "posX": 0.0,
-            "posY": 3.299999952316284,
-            "posZ": 0.0,
-            "rotX": 0.0,
-            "rotY": 0.0,
-            "rotZ": 0.0,
-            "scaleX": 1.0,
-            "scaleY": 1.0,
-            "scaleZ": 1.0,
-            "subType": 2,
-            "targetNavMeshGroupId": 0,
-            "targetNavMeshState": true,
-            "templateName": "baton"
-        },
+            "groupId": 0,
+            "id": 0,
+            "isActive": true,
+            "neighborIds": [
+                -1,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -9.84447956085205,
+                    -0.679471492767334,
+                    -9.766119003295898
+                ],
+                [
+                    -9.84447956085205,
+                    -0.679471492767334,
+                    9.719335556030273
+                ],
+                [
+                    9.844476699829102,
+                    -0.679471492767334,
+                    9.719335556030273
+                ],
+                [
+                    9.844476699829102,
+                    -0.679471492767334,
+                    -9.766119003295898
+                ]
+            ]
+        }
+    ],
+    "objects": [
         {
             "battleAreaStart": false,
             "category": 1,
@@ -37,13 +49,57 @@
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,
+            "scaleX": 10.0,
+            "scaleY": 1.0,
+            "scaleZ": 10.0,
+            "subType": 1,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
             "scaleX": 1.0,
             "scaleY": 1.0,
             "scaleZ": 1.0,
             "subType": 1,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": ""
+            "templateName": "Player"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 6.099999904632568,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 4,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": "Enemy_1"
         }
     ]
 }

@@ -507,6 +507,13 @@ namespace StageEditorUIHelper
 					isDirty = true;
 				}
 
+				// ほどき時間
+				PropertyLabel("ほどき時間");
+				if (ImGui::DragFloat("##ほどき時間", &target.unravellingTime, 0.01f, 0.0f, 100000.0f))
+				{
+					isDirty = true;
+				}
+
 				// NPCの場合は攻撃性を設定できるようにする
 				if (target.subType != static_cast<int32_t>(CharacterTag::Player))
 				{

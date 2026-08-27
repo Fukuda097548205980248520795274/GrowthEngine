@@ -71,6 +71,9 @@ struct TemplateData
 	/// @brief ガード復活時間
 	float guardRecoveryTime = 5.0f;
 
+	/// @brief ほどき時間
+	float unravellingTime = 3.0f;
+
 	// 攻撃性（NPCの場合）
 	float aggressiveness = 1.0f;
 
@@ -231,6 +234,7 @@ inline void toJson(json& j, const TemplateData& s)
 		j["hp"] = s.hp;
 		j["guardGage"] = s.guardGage;
 		j["guardRecoveryTime"] = s.guardRecoveryTime;
+		j["unravellingTime"] = s.unravellingTime;
 		j["aggressiveness"] = s.aggressiveness;
 		j["standMotionName"] = s.standMotion.name;
 		j["stanceMotionName"] = s.stanceMotion.name;
@@ -541,6 +545,7 @@ inline void fromJson(const json& j, TemplateData& s)
 	s.hp = j.value("hp", 100);
 	s.guardGage = j.value("guardGage", 10.0f);
 	s.guardRecoveryTime = j.value("guardRecoveryTime", 5.0f);
+	s.unravellingTime = j.value("unravellingTime", 3.0f);
 	s.aggressiveness = j.value("aggressiveness", 1.0f);
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);

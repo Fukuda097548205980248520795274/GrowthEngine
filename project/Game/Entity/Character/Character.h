@@ -64,7 +64,7 @@ public:
 	/// @param hitPosition 
 	virtual bool OnDamage(int damage, DamageReaction damageReaction, float knockback,
 		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
-		bool isGuardBreak = false, bool isThrow = false, Weapon* weapon = nullptr);
+		bool isGuardBreak = false, bool isThrow = false, Weapon* weapon = nullptr, bool isChargeAttack = false);
 
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
@@ -232,6 +232,10 @@ public:
 	/// @brief バッファされた攻撃入力を取得する
 	/// @return 
 	AttackInputType GetBufferedAttackInput() const { return bufferedAttackInput_; }
+
+	/// @brief バッファされたチャージ攻撃入力を取得する
+	/// @return 
+	AttackInputType GetBufferedChargeAttackInput() const { return bufferedChargeAttackInput_; }
 
 	/// @brief バッファされた攻撃入力を消化する
 	void ConsumeBufferedAttackInput() { bufferedAttackInput_ = AttackInputType::None; }
@@ -631,6 +635,10 @@ public:
 	/// @param guardGage 
 	void SetGuardGage(float guardGage) { guardGage_ = guardGage; maxGuardGage_ = std::max(maxGuardGage_, guardGage); }
 
+	/// @brief ガードゲージ量を取得する
+	/// @return 
+	float GetGuardGage()const { return guardGage_; }
+
 	/// @brief 最大ガードゲージ量を取得する
 	/// @return 
 	float GetMaxGuardGage()const { return maxGuardGage_; }
@@ -638,6 +646,14 @@ public:
 	/// @brief ガード復活時間の設定
 	/// @param guardRecoveryTime 
 	void SetGuardRecoveryTime(float guardRecoveryTime) { guardRecoveryTimer_ = guardRecoveryTime; }
+
+	/// @brief ほどき時間を取得する
+	/// @return 
+	float GetUnravelingTime() const { return unravelingTime_; }
+
+	/// @brief ほどき時間を設定する
+	/// @param unravelingTime 
+	void SetUnravelingTime(float unravelingTime) { unravelingTime_ = unravelingTime; }
 
 
 
@@ -818,6 +834,9 @@ protected:
 	// バッファされた攻撃入力
 	AttackInputType bufferedAttackInput_ = AttackInputType::None;
 
+	/// @brief バッファされたチャージ攻撃入力
+	AttackInputType bufferedChargeAttackInput_ = AttackInputType::None;
+
 
 protected:
 
@@ -943,6 +962,12 @@ protected:
 
 	/// @brief 前フレームでレイジモード開始に成功したかどうか
 	bool isPrevSuccessRageModeStart_ = false;
+
+
+protected:
+
+	/// @brief ほどきの時間
+	float unravelingTime_ = 3.0f;
 
 
 protected:
