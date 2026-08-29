@@ -5,6 +5,8 @@
 #include <cmath>
 #include <numbers>
 
+#include "SharedTreeEditorClipboard/SharedTreeEditorClipboard.h"
+
 #include "HUD/HP/BossHP/BossHP.h"
 #include "HUD/Button/WeaponGetButton/WeaponGetButton.h"
 #include "HUD/IntroText/IntroText.h"
@@ -29,6 +31,7 @@ GameScene::~GameScene()
 {
 	// クリア処理
 	BattleDirector::GetInstance().Clear();
+	SharedTreeEditorClipboard::GetInstance().Clear();
 }
 
 /// @brief 初期化

@@ -1,6 +1,7 @@
 #include "ComboTreeEditorClipboard.h"
 #include "../ComboTreeEditor.h"
 #include <unordered_set>
+#include "SharedTreeEditorClipboard/SharedTreeEditorClipboard.h"
 
 /// @brief コピーしたノードとリンクの情報をクリップボードに保存する
 /// @param sourceNodes 
@@ -51,12 +52,85 @@ void ComboTreeEditorClipboard::HandleCopy(const std::vector<ComboEditorNode>& so
 			clipboardLinks_.push_back(link);
 		}
 	}
+
+
+	// 共有クリップボードへも保存
+	auto& shared = SharedTreeEditorClipboard::GetInstance();
+	shared.Clear();
+	shared.currentDataType = SharedTreeEditorClipboard::DataType::ComboTree;
+	shared.comboNodes = clipboardNodes_;
 }
 
 /// @brief コピーしたノードとリンクの情報をエディタにペーストする
 /// @param editor 
 void ComboTreeEditorClipboard::HandlePaste(ComboTreeEditor& editor)
 {
+	auto& shared = SharedTreeEditorClipboard::GetInstance();
+
+	// もしビヘイビアツリーからのコピペだった場合の処理
+	if (shared.currentDataType == SharedTreeEditorClipboard::DataType::BehaviorTree)
+	{
+		editor.HandleChange(); // 履歴保存
+		ImNodes::ClearNodeSelection();
+
+		// 現在のマウス位置や画面中央を取得（配置用）
+		ImVec2 windowPos = ImGui::GetWindowPos();
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 centerPos = ImVec2(windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f);
+
+		for (const auto& bNode : shared.behaviorNodes)
+		{
+			// ビヘイビアツリーのアクションノード以外はコンボツリーには不要なのでスキップ
+			if (bNode.type != EditorNodeType::Action) continue;
+
+			ComboEditorNode cNode;
+
+			// 新しいIDを発行（リンクを復元しないのでマップの記録は不要）
+			cNode.id = editor.GetNextId();
+			cNode.inputPinId = editor.GetNextId();
+			cNode.outputInputXPinId = editor.GetNextId();
+			cNode.outputInputYPinId = editor.GetNextId();
+			cNode.outputInputBPinId = editor.GetNextId();
+
+			// 座標を大まかに引き継ぐ
+			cNode.pos = ImVec2(bNode.pos.x, bNode.pos.y);
+
+			// ノードの種類とパラメータを変換
+			if (bNode.actionType == ActionType::ComboAttack)
+			{
+				cNode.nodeType = ComboNodeType::Combo;
+				cNode.comboAttackInitData = bNode.comboAttackInitData;
+			}
+			else if (bNode.actionType == ActionType::GrabAttack)
+			{
+				cNode.nodeType = ComboNodeType::Grab;
+				cNode.grabAttackInitData = bNode.grabAttackInitData;
+			}
+			else if (bNode.actionType == ActionType::GrabStrikeAttack)
+			{
+				cNode.nodeType = ComboNodeType::GrabStrike;
+				cNode.grabStrikeAttackInitData = bNode.grabStrikeAttackInitData;
+			}
+			else
+			{
+				continue; // 該当しないアクションはスキップ
+			}
+
+			cNode.motionName = bNode.motionName;
+			cNode.targetMotionName = bNode.targetMotionName;
+
+			// エディタへ追加
+			editor.nodes_.push_back(cNode);
+
+			// 座標を反映し、選択状態にする
+			ImNodes::SetNodeScreenSpacePos(cNode.id, centerPos); // または計算した相対座標
+			ImNodes::SelectNode(cNode.id);
+		}
+
+		return; // 別エディタからのペースト処理完了
+	}
+
+
 	if (clipboardNodes_.empty()) return;
 
 	/// @brief 変更があったことを通知する関数

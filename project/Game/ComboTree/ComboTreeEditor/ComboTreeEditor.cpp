@@ -63,7 +63,6 @@ void ComboTreeEditor::ClearEditor()
 	nodes_.clear();
 	links_.clear();
 	currentId_ = 1;
-	currentFileName_.clear();
 
 	// 履歴もクリア
 	history_->Clear();
@@ -85,9 +84,6 @@ void ComboTreeEditor::LoadFromFile(const std::string& fileName)
 {
 	// エディタを初期状態にリセット
 	ClearEditor();
-
-	// 現在のファイル名を更新
-	currentFileName_ = fileName;
 
 	saver_.LoadTree(currentFileName_, nodes_, links_);
 }
@@ -248,7 +244,7 @@ void ComboTreeEditor::DrawProjectPanel()
 			if (ImGui::Button(fileName.c_str(), ImVec2(kThumbnailSize, kThumbnailSize)))
 			{
 				currentFileName_ = fileName;
-				LoadFromFile("./Assets/Parameter/ComboTree/" + currentFileName_ + ".json");
+				LoadFromFile(currentFileName_);
 			}
 
 			if (isSelected)

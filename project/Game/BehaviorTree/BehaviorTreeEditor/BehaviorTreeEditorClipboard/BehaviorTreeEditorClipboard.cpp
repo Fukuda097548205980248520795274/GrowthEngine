@@ -1,5 +1,6 @@
 #include "BehaviorTreeEditorClipboard.h"
 #include "../BehaviorTreeEditor.h"
+#include "SharedTreeEditorClipboard/SharedTreeEditorClipboard.h"
 
 /// @brief コピーしたノードとリンクの情報をクリップボードに保存する
 /// @param sourceNodes 
@@ -87,6 +88,12 @@ void BehaviorTreeEditorClipboard::HandleCopy(const std::vector<EditorNode>& sour
 				}
 			}
 		}
+
+		// 共有クリップボードへも保存
+		auto& shared = SharedTreeEditorClipboard::GetInstance();
+		shared.Clear();
+		shared.currentDataType = SharedTreeEditorClipboard::DataType::BehaviorTree;
+		shared.behaviorNodes = clipboardNodes_;
 	}
 }
 
@@ -97,6 +104,98 @@ void BehaviorTreeEditorClipboard::HandlePaste(BehaviorTreeEditor& editor)
 	// Ctrl + V が押されたか判定
 	if (ImGui::GetIO().KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_V))
 	{
+		auto& shared = SharedTreeEditorClipboard::GetInstance();
+
+		// 共有クリップボードにコンボツリーのデータがある場合は、そちらを優先してペーストする
+		if (shared.currentDataType == SharedTreeEditorClipboard::DataType::ComboTree)
+		{
+			if (shared.comboNodes.empty()) return;
+
+			// ノード追加前の状態を履歴に保存する
+			editor.history_->SaveHistory(editor.nodes_, editor.links_, editor.currentId_);
+
+			// ペースト時に既存の選択状態を解除する
+			ImNodes::ClearNodeSelection();
+			ImNodes::ClearLinkSelection();
+
+			std::vector<int> newlyAddedNodeIds;
+			ImVec2 mouseScreenPos = ImGui::GetMousePos();
+
+			// 配置用にクリップボード内の左上座標を計算
+			float minX = 999999.0f;
+			float minY = 999999.0f;
+			for (const auto& cNode : shared.comboNodes)
+			{
+				if (cNode.pos.x < minX) minX = cNode.pos.x;
+				if (cNode.pos.y < minY) minY = cNode.pos.y;
+			}
+
+			// コンボツリーのノードをビヘイビアツリーのアクションノードに変換
+			for (const auto& cNode : shared.comboNodes)
+			{
+				EditorNode bNode;
+				
+				bNode.name[0] = '\0';
+				bNode.isCollapsed = false;
+				bNode.needSetPos = true;
+
+				// リンクは繋がないので、新しくIDを発行するだけ
+				bNode.id = editor.GetNextId();
+				bNode.inputPinId = editor.GetNextId();
+				bNode.outputPinId = editor.GetNextId();
+
+				// ノードタイプはすべてアクションノードにする
+				bNode.type = EditorNodeType::Action;
+
+				// ノードの種類に応じてActionTypeとパラメータをマッピング
+				if (cNode.nodeType == ComboNodeType::Combo)
+				{
+					bNode.actionType = ActionType::ComboAttack;
+					bNode.comboAttackInitData = cNode.comboAttackInitData;
+				}
+				else if (cNode.nodeType == ComboNodeType::Grab)
+				{
+					bNode.actionType = ActionType::GrabAttack;
+					bNode.grabAttackInitData = cNode.grabAttackInitData;
+				}
+				else if (cNode.nodeType == ComboNodeType::GrabStrike)
+				{
+					bNode.actionType = ActionType::GrabStrikeAttack;
+					bNode.grabStrikeAttackInitData = cNode.grabStrikeAttackInitData;
+				}
+				else
+				{
+					// 万が一未知のタイプが来たらスキップ
+					continue;
+				}
+
+				bNode.motionName = cNode.motionName;
+				bNode.targetMotionName = cNode.targetMotionName;
+
+				// ノードの位置をマウス位置に合わせて相対配置
+				float offsetX = cNode.pos.x - minX;
+				float offsetY = cNode.pos.y - minY;
+				bNode.pos = Vector2(mouseScreenPos.x + offsetX, mouseScreenPos.y + offsetY);
+
+				editor.nodes_.push_back(bNode);
+				newlyAddedNodeIds.push_back(bNode.id);
+
+				// ImNodesに座標をセット
+				ImNodes::SetNodeScreenSpacePos(bNode.id, ImVec2(bNode.pos.x, bNode.pos.y));
+			}
+
+			// ペーストしたノードを選択状態にする
+			for (int id : newlyAddedNodeIds)
+			{
+				ImNodes::SelectNode(id);
+			}
+
+			editor.isDirty_ = true; // 変更フラグを立てる
+
+			return; // コンボツリーからのペーストが完了したらここで終了
+		}
+
+
 		if (clipboardNodes_.empty()) return;
 
 		// ノード追加前の状態を履歴に保存する
