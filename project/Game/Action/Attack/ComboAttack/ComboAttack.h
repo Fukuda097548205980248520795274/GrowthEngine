@@ -25,11 +25,14 @@ struct CombAttackInitData
 	float cancelEndTime = 0.0f;
 
 
+	// チャージ時間
+	float chargeTime = 0.0f;
+
 	// チャージ完了の時間
 	float chargeCompleteTime = 0.0f;
 
-	// @brief チャージ終了時間
-	float chargeFinishTime = 0.0f;
+	// @brief チャージ攻撃終了の攻撃時間
+	float chargeFinishAttackTime = 0.0f;
 
 	// チャージ攻撃するかどうか
 	bool isChargeAttack = false;
@@ -138,10 +141,10 @@ private:
 	float chargeTimer_ = 0.0f;
 
 	/// @brief チャージする時間
-	float chargeTime_ = 1.0f;
+	float chargeTime_ = 0.0f;
 
-	// @brief チャージ終了時間
-	float chargeFinishTime_ = 0.0f;
+	// @brief チャージ攻撃終了の攻撃時間
+	float chargeFinishAttackTime_ = 0.0f;
 
 	// チャージ完了時間
 	float chargeCompleteTime_ = 0.0f;
@@ -154,9 +157,6 @@ private:
 
 	/// @brief チャージ攻撃可能かどうか
 	bool canChargeAttack_ = false;
-
-	// @brief チャージ中かどうか
-	bool isCharging_ = false;
 
 	// @brief チャージが完了したかどうか
 	bool isChargeFinished_ = false;

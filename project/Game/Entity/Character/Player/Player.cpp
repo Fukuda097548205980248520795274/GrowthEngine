@@ -550,102 +550,102 @@ void Player::RequestComboTreeChange(ComboTree* comboTreeX, ComboTree* comboTreeY
 /// @brief コンボツリーを初期化する
 /// @param comboTreeConfig 
 /// @param comboTreeEditor 
-void Player::InitComboTree(const ComboTreeConfig& comboTreeConfig)
+void Player::InitComboTree(const ComboTreeConfig& comboTreeConfig, ComboTreeEditor* comboTreeEditor)
 {
 	stateMachine_->GetState("None")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.noneStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.noneStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.noneStateCT.bName_, this));
 
 	stateMachine_->GetState("Dash")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.dashStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.dashStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.dashStateCT.bName_, this));
 
 	stateMachine_->GetState("Grabbed")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbedStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbedStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbedStateCT.bName_, this));
 
 	stateMachine_->GetState("Grabbing")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbingStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbingStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.grabbingStateCT.bName_, this));
 
 	stateMachine_->GetState("Guard")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.guardStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.guardStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.guardStateCT.bName_, this));
 
 	stateMachine_->GetState("LightDamage")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.lightDamageStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.lightDamageStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.lightDamageStateCT.bName_, this));
 
 	stateMachine_->GetState("HeavyDamage")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.heavyDamageStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.heavyDamageStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.heavyDamageStateCT.bName_, this));
 
 	stateMachine_->GetState("DownFalling")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.downFallingStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downFallingStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downFallingStateCT.bName_, this));
 
 	stateMachine_->GetState("DownLying")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.downLyingStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downLyingStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downLyingStateCT.bName_, this));
 
 	stateMachine_->GetState("DownGettingUp")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.downGettingUpStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downGettingUpStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downGettingUpStateCT.bName_, this));
 
 	stateMachine_->GetState("DownStagger")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.downStaggerStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downStaggerStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.downStaggerStateCT.bName_, this));
 
 	stateMachine_->GetState("BlownAway")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.blownAwayStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.blownAwayStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.blownAwayStateCT.bName_, this));
 
 	stateMachine_->GetState("BlownFalling")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.blownFallingStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.blownFallingStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.blownFallingStateCT.bName_, this));
 
 	stateMachine_->GetState("Repel")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.repelStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.repelStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.repelStateCT.bName_, this));
 
 	stateMachine_->GetState("Deflect")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectStateCT.bName_, this));
 
 	stateMachine_->GetState("Repelled")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.repelledStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.repelledStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.repelledStateCT.bName_, this));
 
 	stateMachine_->GetState("Deflected")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectedStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectedStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deflectedStateCT.bName_, this));
 
 	stateMachine_->GetState("Avoid")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.avoidStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.avoidStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.avoidStateCT.bName_, this));
 
 	stateMachine_->GetState("Dead")->SetComboTree(
-		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.xName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.yName_, this),
-		ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.bName_, this));
+		comboTreeEditor->CreateTree(comboTreeConfig.deadStateCT.xName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deadStateCT.yName_, this),
+		comboTreeEditor->CreateTree(comboTreeConfig.deadStateCT.bName_, this));
 }
 
 

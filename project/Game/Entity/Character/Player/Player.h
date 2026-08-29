@@ -58,7 +58,7 @@ public:
 
 	/// @brief コンボツリーを初期化する
 	/// @param comboTreeConfig 
-	void InitComboTree(const ComboTreeConfig& comboTreeConfig);
+	void InitComboTree(const ComboTreeConfig& comboTreeConfig, ComboTreeEditor* comboTreeEditor);
 
 	/// @brief 現在のコンボツリーを取得する
 	/// @return 

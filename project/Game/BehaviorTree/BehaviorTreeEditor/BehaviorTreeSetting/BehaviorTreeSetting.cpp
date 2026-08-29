@@ -6,7 +6,6 @@
 /// @param links 
 void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links)
 {
-
 	json root;
 
 	// ノードの保存

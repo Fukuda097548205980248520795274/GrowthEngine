@@ -22,6 +22,9 @@
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
                 "attackTime": 0.30000001192092896,
+                "chargeCompleteTime": 0.800000011920929,
+                "chargeFinishAttackTime": 0.09000000357627869,
+                "chargeTime": 1.0,
                 "damageReaction": 3,
                 "hits": [
                     {
@@ -30,6 +33,7 @@
                         "hitTime": 0.10000000149011612
                     }
                 ],
+                "isChargeAttack": true,
                 "isRelease": false,
                 "knockback": 6.0,
                 "knockbackDirection": [
@@ -49,8 +53,8 @@
             "outputInputXPinId": 3,
             "outputInputYPinId": 4,
             "pos": [
-                442.25836181640625,
-                690.7384033203125
+                441.25836181640625,
+                689.7384033203125
             ],
             "targetAnimationName": "Front"
         },
@@ -58,6 +62,9 @@
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
                 "attackTime": 0.30000001192092896,
+                "chargeCompleteTime": 0.800000011920929,
+                "chargeFinishAttackTime": 0.09000000357627869,
+                "chargeTime": 1.0,
                 "damageReaction": 3,
                 "hits": [
                     {
@@ -66,6 +73,7 @@
                         "hitTime": 0.10000000149011612
                     }
                 ],
+                "isChargeAttack": true,
                 "isRelease": false,
                 "knockback": 6.0,
                 "knockbackDirection": [
@@ -94,6 +102,9 @@
             "animationName": "Player_Combo_2",
             "grabStrikeParams": {
                 "attackTime": 0.30000001192092896,
+                "chargeCompleteTime": 0.800000011920929,
+                "chargeFinishAttackTime": 0.09000000357627869,
+                "chargeTime": 1.0,
                 "damageReaction": 3,
                 "hits": [
                     {
@@ -102,6 +113,7 @@
                         "hitTime": 0.10000000149011612
                     }
                 ],
+                "isChargeAttack": true,
                 "isRelease": false,
                 "knockback": 6.0,
                 "knockbackDirection": [

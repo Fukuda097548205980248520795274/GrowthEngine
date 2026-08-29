@@ -685,7 +685,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.hpHUD = playerHP_.get();
 		playerInitData.rageGageThresholds = { 20.0f };
 		player_ = std::make_unique<Player>();
-		player_->InitComboTree(comboTreeConfig);
+		player_->InitComboTree(comboTreeConfig, comboTreeEditor_.get());
 		player_->SetEditorName(editorName);
 		player_->Initialize(playerInitData, playerWeapon_.get());
 		player_->SetRageGageHud(playerRageGage_.get());
@@ -857,154 +857,154 @@ Weapon* GameScene::CreateWeapon(const Weapon::InitData& initData, const Behavior
 	// 通常状態のステートツリーを設定する
 	WeaponStateTreeSet noneStateTreeSet;
 	noneStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.noneStateBT.c_str(), nullptr);
-	noneStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.xName_.c_str(), nullptr);
-	noneStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.yName_.c_str(), nullptr);
-	noneStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.noneStateCT.bName_.c_str(), nullptr);
+	noneStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.noneStateCT.xName_.c_str(), nullptr);
+	noneStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.noneStateCT.yName_.c_str(), nullptr);
+	noneStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.noneStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("None", noneStateTreeSet);
 
 
 	// ダッシュ状態のステートツリーを設定する
 	WeaponStateTreeSet dashStateTreeSet;
 	dashStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.dashStateBT.c_str(), nullptr);
-	dashStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.xName_.c_str(), nullptr);
-	dashStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.yName_.c_str(), nullptr);
-	dashStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.dashStateCT.bName_.c_str(), nullptr);
+	dashStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.dashStateCT.xName_.c_str(), nullptr);
+	dashStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.dashStateCT.yName_.c_str(), nullptr);
+	dashStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.dashStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Dash", dashStateTreeSet);
 
 	// 掴まれ状態のステートツリーを設定する
 	WeaponStateTreeSet grabbedStateTreeSet;
 	grabbedStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.grabbedStateBT.c_str(), nullptr);
-	grabbedStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.xName_.c_str(), nullptr);
-	grabbedStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.yName_.c_str(), nullptr);
-	grabbedStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.grabbedStateCT.bName_.c_str(), nullptr);
+	grabbedStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.grabbedStateCT.xName_.c_str(), nullptr);
+	grabbedStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.grabbedStateCT.yName_.c_str(), nullptr);
+	grabbedStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.grabbedStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Grabbed", grabbedStateTreeSet);
 
 	// 掴み状態のステートツリーを設定する
 	WeaponStateTreeSet grabbingStateTreeSet;
 	grabbingStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.grabbingStateBT.c_str(), nullptr);
-	grabbingStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.xName_.c_str(), nullptr);
-	grabbingStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.yName_.c_str(), nullptr);
-	grabbingStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.grabbingStateCT.bName_.c_str(), nullptr);
+	grabbingStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.grabbingStateCT.xName_.c_str(), nullptr);
+	grabbingStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.grabbingStateCT.yName_.c_str(), nullptr);
+	grabbingStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.grabbingStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Grabbing", grabbingStateTreeSet);
 
 	// ガード状態のステートツリーを設定する
 	WeaponStateTreeSet guardStateTreeSet;
 	guardStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.guardStateBT.c_str(), nullptr);
-	guardStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.xName_.c_str(), nullptr);
-	guardStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.yName_.c_str(), nullptr);
-	guardStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.guardStateCT.bName_.c_str(), nullptr);
+	guardStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.guardStateCT.xName_.c_str(), nullptr);
+	guardStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.guardStateCT.yName_.c_str(), nullptr);
+	guardStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.guardStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Guard", guardStateTreeSet);
 
 	// 軽ダメージ状態のステートツリーを設定する
 	WeaponStateTreeSet lightDamageStateTreeSet;
 	lightDamageStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.lightDamageStateBT.c_str(), nullptr);
-	lightDamageStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.xName_.c_str(), nullptr);
-	lightDamageStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.yName_.c_str(), nullptr);
-	lightDamageStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.lightDamageStateCT.bName_.c_str(), nullptr);
+	lightDamageStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.lightDamageStateCT.xName_.c_str(), nullptr);
+	lightDamageStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.lightDamageStateCT.yName_.c_str(), nullptr);
+	lightDamageStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.lightDamageStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("LightDamage", lightDamageStateTreeSet);
 
 	// 重ダメージ状態のステートツリーを設定する
 	WeaponStateTreeSet heavyDamageStateTreeSet;
 	heavyDamageStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.heavyDamageStateBT.c_str(), nullptr);
-	heavyDamageStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.xName_.c_str(), nullptr);
-	heavyDamageStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.yName_.c_str(), nullptr);
-	heavyDamageStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.heavyDamageStateCT.bName_.c_str(), nullptr);
+	heavyDamageStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.heavyDamageStateCT.xName_.c_str(), nullptr);
+	heavyDamageStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.heavyDamageStateCT.yName_.c_str(), nullptr);
+	heavyDamageStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.heavyDamageStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("HeavyDamage", heavyDamageStateTreeSet);
 
 	// 倒れこみ状態のステートツリーを設定する
 	WeaponStateTreeSet downFallingStateTreeSet;
 	downFallingStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.downFallingStateBT.c_str(), nullptr);
-	downFallingStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.xName_.c_str(), nullptr);
-	downFallingStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.yName_.c_str(), nullptr);
-	downFallingStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.downFallingStateCT.bName_.c_str(), nullptr);
+	downFallingStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.downFallingStateCT.xName_.c_str(), nullptr);
+	downFallingStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.downFallingStateCT.yName_.c_str(), nullptr);
+	downFallingStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.downFallingStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("DownFalling", downFallingStateTreeSet);
 
 	// ダウン状態のステートツリーを設定する
 	WeaponStateTreeSet downLyingStateTreeSet;
 	downLyingStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.downLyingStateBT.c_str(), nullptr);
-	downLyingStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.xName_.c_str(), nullptr);
-	downLyingStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.yName_.c_str(), nullptr);
-	downLyingStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.downLyingStateCT.bName_.c_str(), nullptr);
+	downLyingStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.downLyingStateCT.xName_.c_str(), nullptr);
+	downLyingStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.downLyingStateCT.yName_.c_str(), nullptr);
+	downLyingStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.downLyingStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("DownLying", downLyingStateTreeSet);
 
 	// 起き上がり状態のステートツリーを設定する
 	WeaponStateTreeSet downGettingUpStateTreeSet;
 	downGettingUpStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.downGettingUpStateBT.c_str(), nullptr);
-	downGettingUpStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.xName_.c_str(), nullptr);
-	downGettingUpStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.yName_.c_str(), nullptr);
-	downGettingUpStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.downGettingUpStateCT.bName_.c_str(), nullptr);
+	downGettingUpStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.downGettingUpStateCT.xName_.c_str(), nullptr);
+	downGettingUpStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.downGettingUpStateCT.yName_.c_str(), nullptr);
+	downGettingUpStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.downGettingUpStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("DownGettingUp", downGettingUpStateTreeSet);
 
 	// ダウン怯み状態のステートツリーを設定する
 	WeaponStateTreeSet downStaggerStateTreeSet;
 	downStaggerStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.downStaggerStateBT.c_str(), nullptr);
-	downStaggerStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.xName_.c_str(), nullptr);
-	downStaggerStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.yName_.c_str(), nullptr);
-	downStaggerStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.downStaggerStateCT.bName_.c_str(), nullptr);
+	downStaggerStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.downStaggerStateCT.xName_.c_str(), nullptr);
+	downStaggerStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.downStaggerStateCT.yName_.c_str(), nullptr);
+	downStaggerStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.downStaggerStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("DownStagger", downStaggerStateTreeSet);
 
 	// 吹き飛び状態のステートツリーを設定する
 	WeaponStateTreeSet blownAwayStateTreeSet;
 	blownAwayStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.blownAwayStateBT.c_str(), nullptr);
-	blownAwayStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.xName_.c_str(), nullptr);
-	blownAwayStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.yName_.c_str(), nullptr);
-	blownAwayStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.blownAwayStateCT.bName_.c_str(), nullptr);
+	blownAwayStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.blownAwayStateCT.xName_.c_str(), nullptr);
+	blownAwayStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.blownAwayStateCT.yName_.c_str(), nullptr);
+	blownAwayStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.blownAwayStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("BlownAway", blownAwayStateTreeSet);
 
 	// 吹き飛び落下状態のステートツリーを設定する
 	WeaponStateTreeSet blownFallingStateTreeSet;
 	blownFallingStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.blownFallingStateBT.c_str(), nullptr);
-	blownFallingStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.xName_.c_str(), nullptr);
-	blownFallingStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.yName_.c_str(), nullptr);
-	blownFallingStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.blownFallingStateCT.bName_.c_str(), nullptr);
+	blownFallingStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.blownFallingStateCT.xName_.c_str(), nullptr);
+	blownFallingStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.blownFallingStateCT.yName_.c_str(), nullptr);
+	blownFallingStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.blownFallingStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("BlownFalling", blownFallingStateTreeSet);
 
 	// 弾き状態のステートツリーを設定する
 	WeaponStateTreeSet repelStateTreeSet;
 	repelStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.repelStateBT.c_str(), nullptr);
-	repelStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.xName_.c_str(), nullptr);
-	repelStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.yName_.c_str(), nullptr);
-	repelStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.repelStateCT.bName_.c_str(), nullptr);
+	repelStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.repelStateCT.xName_.c_str(), nullptr);
+	repelStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.repelStateCT.yName_.c_str(), nullptr);
+	repelStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.repelStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Repel", repelStateTreeSet);
 
 	// 受け流し状態のステートツリーを設定する
 	WeaponStateTreeSet deflectStateTreeSet;
 	deflectStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.deflectStateBT.c_str(), nullptr);
-	deflectStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.xName_.c_str(), nullptr);
-	deflectStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.yName_.c_str(), nullptr);
-	deflectStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.deflectStateCT.bName_.c_str(), nullptr);
+	deflectStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.deflectStateCT.xName_.c_str(), nullptr);
+	deflectStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.deflectStateCT.yName_.c_str(), nullptr);
+	deflectStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.deflectStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Deflect", deflectStateTreeSet);
 
 	// 弾かれ状態のステートツリーを設定する
 	WeaponStateTreeSet repelledStateTreeSet;
 	repelledStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.repelledStateBT.c_str(), nullptr);
-	repelledStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.xName_.c_str(), nullptr);
-	repelledStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.yName_.c_str(), nullptr);
-	repelledStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.repelledStateCT.bName_.c_str(), nullptr);
+	repelledStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.repelledStateCT.xName_.c_str(), nullptr);
+	repelledStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.repelledStateCT.yName_.c_str(), nullptr);
+	repelledStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.repelledStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Repelled", repelledStateTreeSet);
 
 	// 受け流され状態のステートツリーを設定する
 	WeaponStateTreeSet deflectedStateTreeSet;
 	deflectedStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.deflectedStateBT.c_str(), nullptr);
-	deflectedStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.xName_.c_str(), nullptr);
-	deflectedStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.yName_.c_str(), nullptr);
-	deflectedStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.deflectedStateCT.bName_.c_str(), nullptr);
+	deflectedStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.deflectedStateCT.xName_.c_str(), nullptr);
+	deflectedStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.deflectedStateCT.yName_.c_str(), nullptr);
+	deflectedStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.deflectedStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Deflected", deflectedStateTreeSet);
 
 	// 回避状態のステートツリーを設定する
 	WeaponStateTreeSet avoidStateTreeSet;
 	avoidStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.avoidStateBT.c_str(), nullptr);
-	avoidStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.xName_.c_str(), nullptr);
-	avoidStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.yName_.c_str(), nullptr);
-	avoidStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.avoidStateCT.bName_.c_str(), nullptr);
+	avoidStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.avoidStateCT.xName_.c_str(), nullptr);
+	avoidStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.avoidStateCT.yName_.c_str(), nullptr);
+	avoidStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.avoidStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Avoid", avoidStateTreeSet);
 
 	// 死亡状態のステートツリーを設定する
 	WeaponStateTreeSet deadStateTreeSet;
 	deadStateTreeSet.behaviorTree = behaviorTreeEditor_->CreateTree(behaviorTreeConfig.deadStateBT.c_str(), nullptr);
-	deadStateTreeSet.comboTreeX = ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.xName_.c_str(), nullptr);
-	deadStateTreeSet.comboTreeY = ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.yName_.c_str(), nullptr);
-	deadStateTreeSet.comboTreeB = ComboTreeFactory::CreateTree(comboTreeConfig.deadStateCT.bName_.c_str(), nullptr);
+	deadStateTreeSet.comboTreeX = comboTreeEditor_->CreateTree(comboTreeConfig.deadStateCT.xName_.c_str(), nullptr);
+	deadStateTreeSet.comboTreeY = comboTreeEditor_->CreateTree(comboTreeConfig.deadStateCT.yName_.c_str(), nullptr);
+	deadStateTreeSet.comboTreeB = comboTreeEditor_->CreateTree(comboTreeConfig.deadStateCT.bName_.c_str(), nullptr);
 	newWeapon->SetStateTreeSet("Dead", deadStateTreeSet);
 
 	// 武器のリストに追加する

@@ -655,8 +655,9 @@ public:
 	/// @param unravelingTime 
 	void SetUnravelingTime(float unravelingTime) { unravelingTime_ = unravelingTime; }
 
-
-
+	/// @brief チャージ攻撃のチャージ時間の割合を取得する
+	/// @return 
+	float GetChargeTimeRate() const { return currentAttack_ ? currentAttack_->GetChargeTimeRate() : 0.0f; }
 
 
 protected:

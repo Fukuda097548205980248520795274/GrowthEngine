@@ -26,7 +26,8 @@ ComboAttack::ComboAttack(Character* character, const CombAttackInitData& initDat
 	throwWeaponPower_ = initData.throwWeaponPower;
 	throwDirection_ = initData.throwDirection;
 	chargeCompleteTime_ = initData.chargeCompleteTime;
-	chargeFinishTime_ = initData.chargeFinishTime;
+	chargeTime_ = initData.chargeTime;
+	chargeFinishAttackTime_ = initData.chargeFinishAttackTime;
 	isChargeAttack_ = initData.isChargeAttack;
 
 	// ヒット判定のグループをコピーする
@@ -89,7 +90,6 @@ void ComboAttack::Exec()
 	currentMoveSpeed_ = moveSpeed_;
 
 	// チャージ攻撃の状態を初期化する
-	isCharging_ = false;
 	isChargeFinished_ = false;
 	canChargeAttack_ = isChargeAttack_;
 
@@ -186,12 +186,18 @@ void ComboAttack::Update()
 		float easing = 1.0f - std::pow(1.0f - t, 3.0f); // イージング関数を使用して、チャージ攻撃の割合を補間する
 
 		// チャージ攻撃の割合に応じて、攻撃タイマーを補間する
-		attackTimer_ = std::lerp(0.0f, chargeFinishTime_, easing);
+		attackTimer_ = std::lerp(0.0f, chargeFinishAttackTime_, easing);
 
-		// チャージタイマーがチャージ時間を超えた場合、チャージが完了したことを示すフラグを立てる
-		if (chargeTimer_ >= chargeTime_)
+		// チャージ攻撃が完了したかどうかを判定する
+		if (t > chargeCompleteTime_ && !isChargeFinished_)
 		{
 			isChargeFinished_ = true;
+			SoundManager::GetInstance()->SeChargeComplete();
+		}
+
+		// チャージタイマーがチャージ時間を超えた場合、チャージ攻撃を終了する
+		if (chargeTimer_ >= chargeTime_)
+		{
 			canChargeAttack_ = false;
 		}
 	}

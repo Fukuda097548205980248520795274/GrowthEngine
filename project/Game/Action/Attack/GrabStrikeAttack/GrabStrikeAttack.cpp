@@ -16,6 +16,10 @@ GrabStrikeAttack::GrabStrikeAttack(Character* character, const GrabStrikeAttackI
 	isRelease_ = initData.isRelease;
 	knockback_ = initData.knockback;
 	knockbackDirection_ = initData.knockbackDirection;
+	chargeTime_ = initData.chargeTime;
+	chargeCompleteTime_ = initData.chargeCompleteTime;
+	chargeFinishAttackTime_ = initData.chargeFinishAttackTime;
+	isChargeAttack_ = initData.isChargeAttack;
 
 	// 攻撃の種類を掴み打撃に設定
 	attackType_ = AttackType::GrabStrike;
@@ -51,6 +55,11 @@ void GrabStrikeAttack::Exec()
 		Exit();
 		return;
 	}
+
+	// チャージ攻撃の状態を初期化する
+	isChargeFinished_ = false;
+	canChargeAttack_ = isChargeAttack_;
+	chargeTimer_ = 0.0f;
 
 	// タイマーとフラグをリセット
 	attackTimer_ = 0.0f;
@@ -95,6 +104,7 @@ void GrabStrikeAttack::Update()
 			owner_->ConsumeBufferedAttackInput();
 			this->Exit();
 			nextInputXAttack_->Exec();
+			nextInputXAttack_->SetChargeInputType(bufferedInput);
 			return;
 		}
 		else if (bufferedInput == AttackInputType::InputY && nextInputYAttack_)
@@ -103,6 +113,7 @@ void GrabStrikeAttack::Update()
 			owner_->ConsumeBufferedAttackInput();
 			this->Exit();
 			nextInputYAttack_->Exec();
+			nextInputYAttack_->SetChargeInputType(bufferedInput);
 			return;
 		}
 		else if (bufferedInput == AttackInputType::InputB && nextInputBAttack_)
@@ -111,7 +122,20 @@ void GrabStrikeAttack::Update()
 			owner_->ConsumeBufferedAttackInput();
 			this->Exit();
 			nextInputBAttack_->Exec();
+			nextInputBAttack_->SetChargeInputType(bufferedInput);
 			return;
+		}
+	}
+
+	// チャージ攻撃が可能な場合、チャージ攻撃の入力タイプが一致するかどうかを確認する
+	if (canChargeAttack_)
+	{
+		AttackInputType bufferedChargeInput = owner_->GetBufferedChargeAttackInput();
+
+		// チャージ攻撃の入力タイプが一致する場合は、チャージ攻撃を継続する
+		if (bufferedChargeInput != chargeInputType_)
+		{
+			canChargeAttack_ = false;
 		}
 	}
 
@@ -119,8 +143,45 @@ void GrabStrikeAttack::Update()
 	// タイマーを記録する
 	prevTimer_ = attackTimer_;
 
-	// 攻撃タイマーを更新
-	attackTimer_ += engine_->GetDeltaTime();
+
+	// レイジモードの攻撃速度を取得する
+	float rageModeSpeed = owner_->RageModeAttackSpeed();
+
+	// デルタタイムを取得する（レイジモードの攻撃速度を考慮する）
+	float dt = engine_->GetDeltaTime() * engine_->GetTimeScale() * rageModeSpeed;
+
+	// チャージ攻撃が可能であれば、チャージタイマーを更新する
+	if (canChargeAttack_)
+	{
+		chargeTimer_ += dt;
+
+		// チャージ攻撃の割合を計算する（0.0fから1.0fの範囲で正規化）
+		float t = GetChargeTimeRate();
+
+		float easing = 1.0f - std::pow(1.0f - t, 3.0f); // イージング関数を使用して、チャージ攻撃の割合を補間する
+
+		// チャージ攻撃の割合に応じて、攻撃タイマーを補間する
+		attackTimer_ = std::lerp(0.0f, chargeFinishAttackTime_, easing);
+
+		// チャージ攻撃が完了したかどうかを判定する
+		if (t > chargeCompleteTime_ && !isChargeFinished_)
+		{
+			isChargeFinished_ = true;
+			SoundManager::GetInstance()->SeChargeComplete();
+		}
+
+		// チャージタイマーがチャージ時間を超えた場合、チャージ攻撃を終了する
+		if (chargeTimer_ >= chargeTime_)
+		{
+			canChargeAttack_ = false;
+		}
+	}
+	else
+	{
+		// 攻撃タイマーを更新する
+		attackTimer_ += dt;
+	}
+
 
 	// ヒットのタイミングになったら、掴んでいる相手にダメージを与える
 	for (auto& state : hits_)

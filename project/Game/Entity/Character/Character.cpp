@@ -474,7 +474,11 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 				soundManager_->SeGuard();
 
 				// ガードエフェクト
+				effectManager_->ImpactDrop000(*hitPosition);
+				if (attacker)effectManager_->Impact000(*hitPosition, attacker->GetWorldTransform()->rotate_);
 				effectManager_->CreateGuardEffect(hitPosition.value(), worldTransform_->rotate_);
+				effectManager_->ImpactSmoke000(*hitPosition);
+				effectManager_->ImpactSmoke001(*hitPosition);
 
 				// ガードしたのがプレイヤーの場合は、スローモーションを開始する
 				if (IsPlayer())

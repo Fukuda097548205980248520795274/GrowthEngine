@@ -1534,6 +1534,9 @@
     <Filter Include="Game\HUD\Reticle">
       <UniqueIdentifier>{8f699277-e490-4bf8-9b32-cdb27b7690c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting">
+      <UniqueIdentifier>{c3ceceb1-12eb-4b0b-ac31-0037e30d98cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2780,6 +2783,9 @@
     </ClCompile>
     <ClCompile Include="Game\HUD\Reticle\Reticle.cpp">
       <Filter>Game\HUD\Reticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.cpp">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeSetting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4147,6 +4153,9 @@
     </ClInclude>
     <ClInclude Include="Game\HUD\Reticle\Reticle.h">
       <Filter>Game\HUD\Reticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.h">
+      <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeSetting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

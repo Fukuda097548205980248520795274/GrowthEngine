@@ -193,6 +193,13 @@ void GameScene::BattlePhaseUpdate()
 		// レイジモード開始時
 		if (player_->IsSuccessRageModeStart())
 			cameraShake_->StartShake(0.1f, 0.15f, Vector3(1.0f, 1.0f, 1.0f));
+
+		// チャージ中
+		float chargeRate = player_->GetChargeTimeRate();
+		if (chargeRate > 0.0f)
+		{
+			cameraShake_->StartShake(0.1f, chargeRate * 0.1f, Vector3(1.0f, 1.0f, 1.0f));
+		}
 	}
 
 	// 攻撃ボタンの更新

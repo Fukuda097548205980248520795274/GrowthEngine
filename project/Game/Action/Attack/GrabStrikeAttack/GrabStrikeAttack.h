@@ -32,6 +32,18 @@ struct GrabStrikeAttackInitData
 
 	// ヒット
 	std::vector<HitDefinition> hits;
+
+	// チャージ時間
+	float chargeTime = 0.0f;
+
+	// チャージ完了の時間
+	float chargeCompleteTime = 0.0f;
+
+	// @brief チャージ攻撃終了の攻撃時間
+	float chargeFinishAttackTime = 0.0f;
+
+	// チャージ攻撃するかどうか
+	bool isChargeAttack = false;
 };
 
 class GrabStrikeAttack : public Attack
@@ -57,6 +69,14 @@ public:
 
 	/// @brief 終了、中断
 	virtual void Exit() override;
+
+	/// @brief チャージ攻撃可能かどうか
+	/// @param type 
+	void SetChargeInputType(AttackInputType type) override { chargeInputType_ = type; }
+
+	/// @brief チャージタイマーの割合を取得する
+	/// @return 
+	float GetChargeTimeRate()const override { return canChargeAttack_ && chargeTime_ > 0.0f ? std::clamp(chargeTimer_ / chargeTime_, 0.0f, 1.0f) : 0.0f; }
 
 
 private:
@@ -87,5 +107,32 @@ private:
 
 	// 既に相手を手放したかどうか
 	bool isReleased_ = false;
+
+
+private:
+
+	/// @brief チャージ攻撃のタイマー
+	float chargeTimer_ = 0.0f;
+
+	/// @brief チャージする時間
+	float chargeTime_ = 0.0f;
+
+	// @brief チャージ攻撃終了の攻撃時間
+	float chargeFinishAttackTime_ = 0.0f;
+
+	// チャージ完了時間
+	float chargeCompleteTime_ = 0.0f;
+
+	// @brief チャージ攻撃の入力タイプ
+	AttackInputType chargeInputType_ = AttackInputType::InputX;
+
+	// チャージ攻撃するかどうか
+	bool isChargeAttack_ = false;
+
+	/// @brief チャージ攻撃可能かどうか
+	bool canChargeAttack_ = false;
+
+	// @brief チャージが完了したかどうか
+	bool isChargeFinished_ = false;
 };
 

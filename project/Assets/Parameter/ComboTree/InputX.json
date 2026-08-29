@@ -65,7 +65,8 @@
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -124,7 +125,8 @@
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -183,7 +185,8 @@
                 "cancelEndTime": 0.5,
                 "cancelStartTime": 0.20000000298023224,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -241,8 +244,9 @@
                 "attackTime": 0.5,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
-                "chargeCompleteTime": 0.07999999821186066,
-                "chargeFinishTime": 0.10000000149011612,
+                "chargeCompleteTime": 0.800000011920929,
+                "chargeFinishAttackTime": 0.10000000149011612,
+                "chargeTime": 1.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -294,8 +298,8 @@
             "outputInputXPinId": 91,
             "outputInputYPinId": 92,
             "pos": [
-                589.5908203125,
-                622.4750366210938
+                590.5908203125,
+                623.4750366210938
             ],
             "targetAnimationName": ""
         },
@@ -306,7 +310,8 @@
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -370,7 +375,8 @@
                 "cancelEndTime": 0.800000011920929,
                 "cancelStartTime": 0.5,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -429,7 +435,8 @@
                 "cancelEndTime": 0.0,
                 "cancelStartTime": 0.0,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -487,8 +494,9 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
-                "chargeCompleteTime": 0.07999999821186066,
-                "chargeFinishTime": 0.10000000149011612,
+                "chargeCompleteTime": 0.800000011920929,
+                "chargeFinishAttackTime": 0.10000000149011612,
+                "chargeTime": 1.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -552,7 +560,8 @@
                 "cancelEndTime": 0.0,
                 "cancelStartTime": 0.0,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -611,7 +620,8 @@
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -675,7 +685,8 @@
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
@@ -739,7 +750,8 @@
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
                 "chargeCompleteTime": 0.0,
-                "chargeFinishTime": 0.0,
+                "chargeFinishAttackTime": 0.0,
+                "chargeTime": 0.0,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [

@@ -4,6 +4,7 @@
 #include "ComboTreeProjectManager/ComboTreeProjectManager.h"
 #include "ComboTreeEditorClipboard/ComboTreeEditorClipboard.h"
 #include "ComboTreeEditorHistory/ComboTreeEditorHistory.h"
+#include "ComboTreeSetting/ComboTreeSetting.h"
 
 class ComboTreeEditor
 {
@@ -17,21 +18,13 @@ public:
 	ComboTreeEditor();
 
 	/// @brief ノードを追加する
-	void AddComboAttackNode();
+	/// @param type 
+	void AddNode(ComboNodeType type);
 
-	/// @brief ノードを追加する
-	void AddGrabAttackNode();
-
-	/// @brief ノードを追加する
-	void AddGrabStrikeAttackNode();
-
-	/// @brief ファイルにコンボツリーを保存する
-	/// @param filePath 
-	void SaveToFile(const std::string& filePath);
-
-	/// @brief ファイルからコンボツリーを読み込む
-	/// @param filePath 
-	void LoadFromFile(const std::string& filePath);
+	/// @brief エディタ上のノードとリンクからビヘイビアツリーを生成する
+	/// @param fileName 
+	/// @return 
+	std::unique_ptr<ComboTree> CreateTree(const std::string& fileName, Character* character);
 
 	/// @brief UI描画処理
 	void DrawUI();
@@ -46,6 +39,20 @@ private:
 
 	/// @brief プロパティパネルを描画する
 	void DrawPropertyPanel();
+
+
+private:
+
+	/// @brief エディタを初期状態にリセットする
+	void ClearEditor();
+
+	/// @brief ファイルにコンボツリーを保存する
+	/// @param filePath 
+	void SaveToFile();
+
+	/// @brief ファイルからコンボツリーを読み込む
+	/// @param filePath 
+	void LoadFromFile(const std::string& filePath);
 
 
 private:
@@ -83,6 +90,9 @@ private:
 
 	/// @brief 履歴管理クラス
 	std::unique_ptr<ComboTreeEditorHistory> history_;
+
+	/// @brief ツリー構造の保存と読み込みを担当するクラス
+	ComboTreeSetting saver_{ "ComboTree" };
 
 	// ノード情報を保持する配列
 	std::vector<ComboEditorNode> nodes_;
