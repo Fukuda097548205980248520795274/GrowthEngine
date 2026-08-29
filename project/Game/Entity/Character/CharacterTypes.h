@@ -3,6 +3,7 @@
 
 class HP;
 class Weapon;
+class Gage;
 
 enum class FightStyle
 {
@@ -116,6 +117,9 @@ struct CharacterInitData
 
 	/// @brief 体力HUD
 	HP* hpHUD = nullptr;
+
+	/// @brief ガードゲージHUD
+	Gage* guardGageHUD = nullptr;
 
 
 	/// @brief 立ちモーション

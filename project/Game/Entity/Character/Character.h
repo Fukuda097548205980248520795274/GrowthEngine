@@ -20,6 +20,7 @@ class Move;
 class Avoid;
 class NavMesh;
 class EffectManager;
+class Gage;
 
 class Character : public Entity
 {
@@ -1077,5 +1078,14 @@ protected:
 
 	/// @brief 体力HUDの位置を更新する
 	void HpHudUpdate();
+
+
+protected:
+
+	/// @brief ガードゲージHUD
+	Gage* guardGageHUD_ = nullptr;
+
+	/// @brief ガードゲージHUDの位置を更新する
+	void GuardGageHudUpdate();
 };
 

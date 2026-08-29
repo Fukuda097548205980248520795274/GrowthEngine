@@ -10,6 +10,10 @@
 std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::vector<ComboEditorNode>& editorNodes, const std::vector<ComboEditorLink>& editorLinks,
 	Character* character)
 {
+	// ノードが何もない場合は作成しない
+	if (editorNodes.empty())
+		return nullptr;
+
 	// コンボツリーのインスタンスを生成
 	std::unique_ptr<ComboTree> tree = std::make_unique<ComboTree>();
 
@@ -130,5 +134,5 @@ std::unique_ptr<ComboTree> ComboTreeFactory::CreateTree(const std::vector<ComboE
 		}
 	}
 
-	return std::move(tree);
+	return tree;
 }

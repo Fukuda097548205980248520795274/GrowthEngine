@@ -14,6 +14,7 @@
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
 #include "HUD/HP/HP.h"
+#include "HUD/Gage/Gage.h"
 
 #include "CharacterStateMachine/CharacterState/CharacterStateNone/CharacterStateNone.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateDash/CharacterStateDash.h"
@@ -236,14 +237,11 @@ void Character::Update()
 			if (model_)model_->param_->modelTransform.translate = shake_->GetShakeOffset();
 			shake_->Update(kDt);
 
-			// 現在の体力をHUDに反映する
-			if (hpHUD_)
-			{
-				hpHUD_->SetCurrentHP(hp_);
+			// 体力HUDの位置を更新する
+			HpHudUpdate();
 
-				// 体力HUDの位置を更新する
-				HpHudUpdate();
-			}
+			// ガードゲージHUDの位置を更新する
+			GuardGageHudUpdate();
 
 			// 当たり判定の更新
 			UpdateCollisionPosition(landingCollision_);
@@ -2125,6 +2123,14 @@ void Character::SetInitData(const CharacterInitData& initData)
 		// 体力HUDの位置を更新する
 		HpHudUpdate();
 	}
+
+	// ガードゲージHUD
+	if (initData.guardGageHUD)
+	{
+		guardGageHUD_ = initData.guardGageHUD;
+		guardGageHUD_->SetMaxGage(static_cast<int>(guardGage_ * 100.0f));
+		guardGageHUD_->SetCurrentGage(static_cast<int>(guardGage_ * 100.0f));
+	}
 }
 
 /// @brief 当たり判定の更新
@@ -2173,13 +2179,15 @@ void Character::HpHudUpdate()
 	// 体力HUDがない場合は処理しない
 	if (!hpHUD_)return;
 
+	hpHUD_->SetCurrentHP(hp_);
+
 	switch (characterTag_)
 	{
 		// 味方と敵は頭の上に体力HUDを表示する
 	case CharacterTag::Ally:
 	case CharacterTag::EnemyNormal:
 	default:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.4f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
 		break;
 
 		// プレイヤーは画面左上の固定位置に体力HUDを表示する
@@ -2190,7 +2198,40 @@ void Character::HpHudUpdate()
 
 		// ボスは頭の上に体力HUDを表示する
 	case CharacterTag::EnemyBoss:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.4f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+		break;
+	}
+}
+
+/// @brief ガードゲージHUDの位置を更新する
+void Character::GuardGageHudUpdate()
+{
+	// ガードゲージHUDがない場合は処理しない
+	if (!guardGageHUD_)return;
+
+	// ゲージ量を更新する
+	guardGageHUD_->SetCurrentGage(static_cast<int>(guardGage_ * 100.0f));
+
+	switch (characterTag_)
+	{
+	case CharacterTag::Ally:
+	default:
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
+		break;
+
+	case CharacterTag::EnemyNormal:
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
+		break;
+
+		// プレイヤーは画面左上の固定位置に体力HUDを表示する
+	case CharacterTag::Player:
+		guardGageHUD_->SetPosition(Vector2(360.0f, 670.0f));
+		guardGageHUD_->SetVisible(true);
+		break;
+
+		// ボスは頭の上に体力HUDを表示する
+	case CharacterTag::EnemyBoss:
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
 		break;
 	}
 }
