@@ -532,42 +532,42 @@ void ComboTreeEditor::DrawPropertyPanel()
 			if (node->nodeType == ComboNodeType::Combo)
 			{
 				ImGui::Separator();
-				ImGui::DragFloat("Attack Time", &node->comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+				ImGui::DragFloat("攻撃時間", &node->comboAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
 
 				ImGui::Spacing();
-				ImGui::Text("Movement");
-				ImGui::DragFloat("Move Speed", &node->comboAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
-				ImGui::DragFloat("Move Start Time", &node->comboAttackInitData.moveStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-				ImGui::DragFloat("Move End Time", &node->comboAttackInitData.moveEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				ImGui::Text("移動");
+				ImGui::DragFloat("移動速度", &node->comboAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+				ImGui::DragFloat("移動開始時間", &node->comboAttackInitData.moveStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				ImGui::DragFloat("移動終了時間", &node->comboAttackInitData.moveEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
 				ImGui::Spacing();
-				ImGui::Text("Cancel");
-				ImGui::DragFloat("Cancel Start Time", &node->comboAttackInitData.cancelStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-				ImGui::DragFloat("Cancel End Time", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				ImGui::Text("キャンセル");
+				ImGui::DragFloat("キャンセル開始時間", &node->comboAttackInitData.cancelStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+				ImGui::DragFloat("キャンセル終了時間", &node->comboAttackInitData.cancelEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
 				ImGui::Spacing();
-				ImGui::Text("Charge Attack");
-				ImGui::Checkbox("Is Charge Attack", &node->comboAttackInitData.isChargeAttack);
+				ImGui::Text("チャージ攻撃");
+				ImGui::Checkbox("チャージ攻撃有効化", &node->comboAttackInitData.isChargeAttack);
 				if (node->comboAttackInitData.isChargeAttack)
 				{
-					ImGui::DragFloat("Charge Time", &node->comboAttackInitData.chargeTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("チャージする時間", &node->comboAttackInitData.chargeTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 
-					ImGui::DragFloat("Charge Complete Time", &node->comboAttackInitData.chargeCompleteTime, 0.01f, 0.0f, node->comboAttackInitData.chargeFinishAttackTime);
-					ImGui::DragFloat("Charge Finish Time", &node->comboAttackInitData.chargeFinishAttackTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("チャージ完了時間", &node->comboAttackInitData.chargeCompleteTime, 0.01f, 0.0f, node->comboAttackInitData.chargeFinishAttackTime);
+					ImGui::DragFloat("攻撃時間内でのチャージ終了時間", &node->comboAttackInitData.chargeFinishAttackTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 				}
 
 				ImGui::Spacing();
 
 				if (!node->comboAttackInitData.isGrabWeapon)
 				{
-					ImGui::Text("Throw Weapon");
-					ImGui::Checkbox("Is Throw Weapon", &node->comboAttackInitData.isThrowWeapon);
+					ImGui::Text("武器を投げる");
+					ImGui::Checkbox("武器を投げるかどうか", &node->comboAttackInitData.isThrowWeapon);
 				}
 
 				if (!node->comboAttackInitData.isThrowWeapon)
 				{
-					ImGui::Text("Grab Weapon");
-					ImGui::Checkbox("Is Grab Weapon", &node->comboAttackInitData.isGrabWeapon);
+					ImGui::Text("武器をつかむ");
+					ImGui::Checkbox("武器をつかむかどうか", &node->comboAttackInitData.isGrabWeapon);
 				}
 				
 
@@ -575,9 +575,9 @@ void ComboTreeEditor::DrawPropertyPanel()
 				{
 					node->comboAttackInitData.isGrabWeapon = false; // 投げ武器が有効な場合、つかみ武器は無効にする
 
-					ImGui::DragFloat("Throw Weapon Time", &node->comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-					ImGui::DragFloat("Throw Weapon Power", &node->comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
-					ImGui::DragFloat3("Throw Direction", &node->comboAttackInitData.throwDirection.x, 0.05f);
+					ImGui::DragFloat("武器を投げる時間", &node->comboAttackInitData.throwWeaponTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("投げ武器の力", &node->comboAttackInitData.throwWeaponPower, 0.01f, 0.0f, 100000.0f);
+					ImGui::DragFloat3("投げ方向", &node->comboAttackInitData.throwDirection.x, 0.05f);
 
 					// 投げ方向を正規化
 					node->comboAttackInitData.throwDirection = node->comboAttackInitData.throwDirection.Normalize();
@@ -587,13 +587,13 @@ void ComboTreeEditor::DrawPropertyPanel()
 				{
 					node->comboAttackInitData.isThrowWeapon = false; // つかみ武器が有効な場合、投げ武器は無効にする
 
-					ImGui::DragFloat("Grab Weapon Start Time", &node->comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
-					ImGui::DragFloat("Grab Weapon End Time", &node->comboAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("つかみ武器の開始時間", &node->comboAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
+					ImGui::DragFloat("つかみ武器の終了時間", &node->comboAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->comboAttackInitData.attackTime);
 				}
 
 				ImGui::Spacing();
 				ImGui::Separator();
-				ImGui::Text("Hitboxes (当たり判定)");
+				ImGui::Text("当たり判定");
 
 				// ヒットグループ設定
 				if (ImGui::TreeNode("ヒットグループ設定（ダメージ・属性）"))
@@ -697,33 +697,33 @@ void ComboTreeEditor::DrawPropertyPanel()
 			else if (node->nodeType == ComboNodeType::Grab)
 			{
 				ImGui::Separator();
-				ImGui::DragFloat("Attack Time", &node->grabAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+				ImGui::DragFloat("攻撃時間", &node->grabAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
 
 				ImGui::Spacing();
-				ImGui::Text("Movement");
-				ImGui::DragFloat("Move Speed", &node->grabAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
-				ImGui::DragFloat("Move Start Time", &node->grabAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
-				ImGui::DragFloat("Move End Time", &node->grabAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				ImGui::Text("移動");
+				ImGui::DragFloat("移動速度", &node->grabAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+				ImGui::DragFloat("移動開始時間", &node->grabAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				ImGui::DragFloat("移動終了時間", &node->grabAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 
 				ImGui::Spacing();
-				ImGui::Text("Grab Weapon");
-				ImGui::Checkbox("Is Grab Weapon", &node->grabAttackInitData.isGrabWeapon);
+				ImGui::Text("武器をつかむ");
+				ImGui::Checkbox("武器をつかむかどうか", &node->grabAttackInitData.isGrabWeapon);
 				if (node->grabAttackInitData.isGrabWeapon)
 				{
-					ImGui::DragFloat("Grab Weapon Start Time", &node->grabAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
-					ImGui::DragFloat("Grab Weapon End Time", &node->grabAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+					ImGui::DragFloat("武器をつかむ開始時間", &node->grabAttackInitData.grabWeaponStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+					ImGui::DragFloat("武器をつかむ終了時間", &node->grabAttackInitData.grabWeaponEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 				}
 
 
 				ImGui::Spacing();
 				ImGui::Separator();
-				ImGui::Text("Hitboxes (当たり判定)");
-				ImGui::DragFloat("Hitbox Start Time", &node->grabAttackInitData.hitboxStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
-				ImGui::DragFloat("Hitbox End Time", &node->grabAttackInitData.hitboxEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				ImGui::Text("当たり判定");
+				ImGui::DragFloat("当たり判定開始時間", &node->grabAttackInitData.hitboxStartTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
+				ImGui::DragFloat("当たり判定終了時間", &node->grabAttackInitData.hitboxEndTime, 0.01f, 0.0f, node->grabAttackInitData.attackTime);
 
 				// ジョイントタイプ
 				int currentJoint = static_cast<int>(node->grabAttackInitData.jointType);
-				if (ImGui::Combo("Joint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
+				if (ImGui::Combo("当たり判定ジョイント", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 				{
 					node->grabAttackInitData.jointType = static_cast<JointType>(currentJoint);
 				}
@@ -731,35 +731,35 @@ void ComboTreeEditor::DrawPropertyPanel()
 			else if (node->nodeType == ComboNodeType::GrabStrike)
 			{
 				ImGui::Separator();
-				ImGui::DragFloat("Attack Time", &node->grabStrikeAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
+				ImGui::DragFloat("攻撃時間", &node->grabStrikeAttackInitData.attackTime, 0.01f, 0.0f, 10.0f);
 
 				ImGui::Spacing();
-				ImGui::Text("Charge Attack");
-				ImGui::Checkbox("Is Charge Attack", &node->grabStrikeAttackInitData.isChargeAttack);
+				ImGui::Text("チャージ攻撃");
+				ImGui::Checkbox("チャージ攻撃有効化", &node->grabStrikeAttackInitData.isChargeAttack);
 				if (node->grabStrikeAttackInitData.isChargeAttack)
 				{
-					ImGui::DragFloat("Charge Time", &node->grabStrikeAttackInitData.chargeTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+					ImGui::DragFloat("チャージ時間", &node->grabStrikeAttackInitData.chargeTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 
-					ImGui::DragFloat("Charge Complete Time", &node->grabStrikeAttackInitData.chargeCompleteTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.chargeFinishAttackTime);
-					ImGui::DragFloat("Charge Finish Time", &node->grabStrikeAttackInitData.chargeFinishAttackTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+					ImGui::DragFloat("チャージ完了時間", &node->grabStrikeAttackInitData.chargeCompleteTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.chargeFinishAttackTime);
+					ImGui::DragFloat("攻撃時間内でのチャージ終了時間", &node->grabStrikeAttackInitData.chargeFinishAttackTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 				}
 
 				ImGui::Spacing();
-				ImGui::Text("Release");
-				ImGui::Checkbox("Is Release", &node->grabStrikeAttackInitData.isRelease);
+				ImGui::Text("離す");
+				ImGui::Checkbox("相手を手放すかどうか", &node->grabStrikeAttackInitData.isRelease);
 				
 				if (node->grabStrikeAttackInitData.isRelease)
 				{
 					ImGui::Spacing();
-					ImGui::Text("Movement");
-					ImGui::DragFloat("Move Speed", &node->grabStrikeAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
-					ImGui::DragFloat("Move Start Time", &node->grabStrikeAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
-					ImGui::DragFloat("Move End Time", &node->grabStrikeAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+					ImGui::Text("移動");
+					ImGui::DragFloat("移動速度", &node->grabStrikeAttackInitData.moveSpeed, 0.1f, 0.0f, 100.0f);
+					ImGui::DragFloat("移動開始時間", &node->grabStrikeAttackInitData.moveStartTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+					ImGui::DragFloat("移動終了時間", &node->grabStrikeAttackInitData.moveEndTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 
 					ImGui::Spacing();
-					ImGui::Text("Knockback");
-					ImGui::DragFloat("Knockback", &node->grabStrikeAttackInitData.knockback, 0.1f, 0.0f, 100.0f);
-					ImGui::DragFloat3("Knockback Dir", &node->grabStrikeAttackInitData.knockbackDirection.x, 0.01f);
+					ImGui::Text("ノックバック");
+					ImGui::DragFloat("ノックバック", &node->grabStrikeAttackInitData.knockback, 0.1f, 0.0f, 100.0f);
+					ImGui::DragFloat3("ノックバック方向", &node->grabStrikeAttackInitData.knockbackDirection.x, 0.01f);
 				}
 
 
@@ -807,7 +807,7 @@ void ComboTreeEditor::DrawPropertyPanel()
 
 
 				// 新しい当たり判定を追加するボタン
-				if (ImGui::Button("Add Hitbox"))
+				if (ImGui::Button("当たり判定 追加"))
 				{
 					node->grabStrikeAttackInitData.hits.push_back(HitDefinition());
 				}
@@ -820,17 +820,17 @@ void ComboTreeEditor::DrawPropertyPanel()
 
 					// 折りたたみ可能なツリーノードでまとめる
 					char hitboxName[32];
-					sprintf_s(hitboxName, "Hitbox [%d]", i);
+					sprintf_s(hitboxName, "当たり判定 [%d]", i);
 					if (ImGui::TreeNode(hitboxName))
 					{
 						HitDefinition& def = node->grabStrikeAttackInitData.hits[i];
 
-						ImGui::DragInt("damage", &def.damage, 1, 0, 9999);
-						ImGui::DragFloat("hitTime", &def.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
+						ImGui::DragInt("ダメージ", &def.damage, 1, 0, 9999);
+						ImGui::DragFloat("当たる時間", &def.hitTime, 0.01f, 0.0f, node->grabStrikeAttackInitData.attackTime);
 
 						// ジョイントタイプ
 						int currentJoint = static_cast<int>(def.hitJoint);
-						if (ImGui::Combo("hitJoint", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
+						if (ImGui::Combo("当たり判定ジョイント", &currentJoint, jointTypeNames, IM_ARRAYSIZE(jointTypeNames)))
 						{
 							def.hitJoint = static_cast<JointType>(currentJoint);
 						}
@@ -839,7 +839,7 @@ void ComboTreeEditor::DrawPropertyPanel()
 
 						// 削除ボタン
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-						if (ImGui::Button("Delete Hitbox"))
+						if (ImGui::Button("当たり判定を削除"))
 						{
 							node->grabStrikeAttackInitData.hits.erase(node->grabStrikeAttackInitData.hits.begin() + i);
 							ImGui::PopStyleColor();
