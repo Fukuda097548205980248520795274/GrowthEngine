@@ -11,6 +11,9 @@ void PostEffectManager::Initialize()
 	damageGaussianFilter_ = std::make_unique<PostEffectGaussianFilter>("Damage_GaussianFilter");
 	damageWhiteNoise_ = std::make_unique<PostEffectWhiteNoise>("Damage_WhiteNoise");
 
+	// チャージ攻撃中のグレースケールの生成と初期化
+	chargeAttackGrayscale_ = std::make_unique<PostEffectGrayscale>("ChargeAttack_Grayscale");
+
 	// スタイルチェンジ中のグレースケールの生成と初期化
 	styleChangeGrayscale_ = std::make_unique<PostEffectGrayscale>("StyleChange_Grayscale");
 
@@ -42,7 +45,7 @@ void PostEffectManager::Draw(Player* player)
 		}
 
 		// ダメージを受けた場合のポストエフェクト
-		if (damageGaussianFilterTimer_ >= 0.0f)
+		if (damageGaussianFilterTimer_ > 0.0f)
 		{
 			float dt = engine_->GetDeltaTime();
 			damageGaussianFilterTimer_ -= dt;
@@ -57,7 +60,7 @@ void PostEffectManager::Draw(Player* player)
 		}
 
 		// ダメージを受けた場合のポストエフェクト
-		if (damageWhiteNoiseTimer_ >= 0.0f)
+		if (damageWhiteNoiseTimer_ > 0.0f)
 		{
 			float dt = engine_->GetDeltaTime();
 			damageWhiteNoiseTimer_ -= dt;
@@ -70,6 +73,28 @@ void PostEffectManager::Draw(Player* player)
 
 			// エフェクトを描画する
 			damageWhiteNoise_->Draw();
+		}
+
+		// チャージ攻撃のポストエフェクト
+		if (player->IsChargeAttackHit())
+		{
+			chargeAttackTimer_ = kChargeAttackDuration;
+		}
+
+		// チャージ攻撃のポストエフェクト
+		if (chargeAttackTimer_ > 0.0f)
+		{
+			float dt = engine_->GetDeltaTime();
+			chargeAttackTimer_ -= dt;
+
+			// 補間係数
+			float t = std::clamp(1.0f - (chargeAttackTimer_ / kChargeAttackDuration), 0.0f, 1.0f);
+
+			// グレースケールの強さを補間する
+			chargeAttackGrayscale_->param_->intensity = Lerp(1.0f, 0.0f, t);
+
+			// エフェクトを描画する
+			chargeAttackGrayscale_->Draw();
 		}
 
 		// スタイルチェンジ中のポストエフェクト

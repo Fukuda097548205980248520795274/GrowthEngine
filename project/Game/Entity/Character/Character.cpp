@@ -330,6 +330,9 @@ void Character::StartUpdate()
 
 	isPrevGuardBroke_ = isGuardBroke_;
 	isGuardBroke_ = false;
+
+	isPrevChargeAttackHit_ = isChargeAttackHit_;
+	isChargeAttackHit_ = false;
 }
 
 /// @brief ダメージを受ける
@@ -769,6 +772,10 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 		}
 	}
 
+	// 攻撃者がチャージ攻撃をヒットさせたことを通知する
+	if (attacker && !attacker->IsChargeAttackHit())
+		attacker->SetChargeAttackHit(isChargeAttack);
+
 	// プレイヤーがダメージを受けた場合は、スローモーションを開始する
 	if (IsPlayer())
 		GrowthEngine::GetInstance()->StartSlowMotion(slowMotionTimeScale, slowMotionDuration);
@@ -798,13 +805,19 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	// 弱攻撃を受けたプレイヤーとボス以外は、攻撃者をロックオンターゲットに設定する
 	if (!isLightAttackHit)if (attacker)lockOnTarget_ = attacker;
 
+	
 
 	// 最終的な攻撃力を計算する
 	int finalDamage = damage;
-	finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * attackPower_);
 
 	if (attacker)
 	{
+		// 攻撃者の攻撃力を考慮して最終的なダメージを計算する
+		finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * attacker->GetAttackPower());
+
+		// チャージ攻撃の場合は、最終的なダメージを1.5倍にする
+		finalDamage = static_cast<int32_t>(static_cast<float>(finalDamage) * (isChargeAttack ? 1.5f : 1.0f));
+
 		// レイジモード中の攻撃力を考慮して最終的なダメージを計算する
 		finalDamage = static_cast<int>(static_cast<float>(finalDamage) * attacker->RageModeAttackPower());
 
@@ -1055,6 +1068,10 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 			slowMotionDuration = 0.15f;
 		}
 	}
+
+	// 攻撃者がチャージ攻撃をヒットさせたことを通知する
+	if (attacker && !attacker->IsChargeAttackHit())
+		attacker->SetChargeAttackHit(isChargeAttack);
 
 	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
 	if (((attacker && attacker->IsPlayer()) || IsPlayer()))

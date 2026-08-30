@@ -1,5 +1,4 @@
 {
-    "currentId": 100,
     "links": [],
     "nodes": [
         {
@@ -8,13 +7,16 @@
                 "attackTime": 0.75,
                 "cancelEndTime": 1.0,
                 "cancelStartTime": 0.5,
+                "chargeCompleteTime": 0.4000000059604645,
+                "chargeFinishAttackTime": 0.029999999329447746,
+                "chargeTime": 0.5,
                 "grabWeaponEndTime": 0.0,
                 "grabWeaponStartTime": 0.0,
                 "groups": [
                     {
                         "damage": 10,
                         "damageReaction": 2,
-                        "endTime": 0.5,
+                        "endTime": 0.4000000059604645,
                         "groupId": 0,
                         "knockback": 1.0,
                         "knockbackDirection": [
@@ -22,7 +24,7 @@
                             0.0,
                             1.0
                         ],
-                        "startTime": 0.0
+                        "startTime": 0.05000000074505806
                     }
                 ],
                 "hitboxes": [
@@ -32,11 +34,12 @@
                         "radius": 0.25
                     }
                 ],
+                "isChargeAttack": true,
                 "isGrabWeapon": false,
                 "isThrowWeapon": false,
-                "moveEndTime": 0.10000000149011612,
+                "moveEndTime": 0.05000000074505806,
                 "moveSpeed": 5.0,
-                "moveStartTime": 0.0,
+                "moveStartTime": 0.10000000149011612,
                 "throwDirection": [
                     0.0,
                     0.0,
@@ -53,8 +56,8 @@
             "outputInputXPinId": 90,
             "outputInputYPinId": 91,
             "pos": [
-                614.0,
-                679.0
+                615.0,
+                678.0
             ],
             "targetAnimationName": ""
         }

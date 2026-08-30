@@ -182,6 +182,14 @@ public:
 	/// @return 
 	bool IsJustAvoided() const { return isJustAvoided_ || isJustAvoidedPrev_; }
 
+	/// @brief チャージ攻撃がヒットしたかどうか
+	/// @return 
+	bool IsChargeAttackHit() const { return isChargeAttackHit_ || isPrevChargeAttackHit_; }
+
+	/// @brief チャージ攻撃がヒットしたかどうかを設定する
+	/// @param isHit 
+	void SetChargeAttackHit(bool isHit) { isChargeAttackHit_ = isHit; }
+
 	/// @brief 構えているかどうか
 	/// @return 
 	bool IsStance() const { return isStance_; }
@@ -681,6 +689,10 @@ public:
 	/// @return 
 	bool IsCharging()const { return currentAttack_ ? currentAttack_->IsCharging() : false; }
 
+	/// @brief 攻撃力を取得する
+	/// @return 
+	float GetAttackPower() const { return attackPower_; }
+
 
 protected:
 
@@ -765,6 +777,10 @@ protected:
 	/// @brief 回避した瞬間かどうか
 	bool isJustAvoided_ = false;
 	bool isJustAvoidedPrev_ = false;
+
+	/// @brief チャージ攻撃がヒットしたかどうか
+	bool isChargeAttackHit_ = false;
+	bool isPrevChargeAttackHit_ = false;
 
 
 protected:

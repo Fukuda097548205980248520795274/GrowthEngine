@@ -61,6 +61,20 @@ private:
 	float damageGaussianFilterTimer_ = 0.0f;
 
 
+	/*----------------
+	    チャージ攻撃
+	----------------*/
+
+	// チャージ攻撃エフェクトのグレースケール
+	std::unique_ptr<PostEffectGrayscale> chargeAttackGrayscale_ = nullptr;
+
+	// チャージ攻撃エフェクトのタイマー
+	float chargeAttackTimer_ = 0.0f;
+
+	// チャージ攻撃エフェクトの持続時間
+	static constexpr float kChargeAttackDuration = 0.5f;
+
+
 	/*--------------------
 	    スタイルチェンジ
 	---------------------*/
