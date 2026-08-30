@@ -96,7 +96,7 @@ public:
 
 	/// @brief 掴みダメージを受けた時の処理
 	/// @param damage 
-	virtual void OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt);
+	virtual void OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt, bool isChargeAttack = false);
 
 	/// @brief 全キャラクターのリストを取得
 	static const std::vector<Character*>& GetCharacters() { return characters_; }
@@ -676,6 +676,10 @@ public:
 	/// @brief チャージ攻撃のチャージ時間の割合を取得する
 	/// @return 
 	float GetChargeTimeRate() const { return currentAttack_ ? currentAttack_->GetChargeTimeRate() : 0.0f; }
+
+	/// @brief チャージ攻撃中かどうかを取得する
+	/// @return 
+	bool IsCharging()const { return currentAttack_ ? currentAttack_->IsCharging() : false; }
 
 
 protected:

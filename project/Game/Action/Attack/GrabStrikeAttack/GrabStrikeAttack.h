@@ -78,6 +78,10 @@ public:
 	/// @return 
 	float GetChargeTimeRate()const override { return canChargeAttack_ && chargeTime_ > 0.0f ? std::clamp(chargeTimer_ / chargeTime_, 0.0f, 1.0f) : 0.0f; }
 
+	/// @brief チャージしているかどうか
+	/// @return 
+	bool IsCharging()const override { return canChargeAttack_; }
+
 
 private:
 

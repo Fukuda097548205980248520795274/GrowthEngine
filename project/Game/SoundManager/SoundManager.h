@@ -90,6 +90,9 @@ public:
 	/// @brief チャージ完了のSE
 	void SeChargeComplete() { if (seChargeComplete_)seChargeComplete_->Play(); }
 
+	/// @brief チャージ攻撃のダメージSE
+	void SeChargeAttackDamage() { if (seChargeAttackDamage_)seChargeAttackDamage_->Play(); }
+
 	/// @brief チュートリアルの道中のBGMを再生する
 	/// @param isPlay 
 	void BgmTutorialRoadPlay(bool isPlay) { tutorialRoadBgm_->param_->volume = 0.25f; if (tutorialRoadBgm_) isPlay ? tutorialRoadBgm_->Play() : tutorialRoadBgm_->Stop(); }
@@ -184,6 +187,9 @@ private:
 
 	/// @brief チャージ完了のSE
 	std::unique_ptr<Se> seChargeComplete_ = nullptr;
+
+	/// @brief チャージ攻撃のダメージSE
+	std::unique_ptr<Se> seChargeAttackDamage_ = nullptr;
 
 
 private:

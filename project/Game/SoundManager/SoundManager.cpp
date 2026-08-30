@@ -98,4 +98,7 @@ void SoundManager::Initialize()
 
 	// チャージ完了のSE
 	seChargeComplete_ = std::make_unique<Se>("ChargeComplete", engine_->LoadAudio("./Assets/Sounds/se/chargeComplete.mp3"));
+
+	// チャージ攻撃のダメージSE
+	seChargeAttackDamage_ = std::make_unique<Se>("ChargeAttackDamage", engine_->LoadAudio("./Assets/Sounds/se/chargeAttackDamage.mp3"));
 }

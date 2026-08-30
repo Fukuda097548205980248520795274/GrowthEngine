@@ -189,7 +189,7 @@ void GrabStrikeAttack::Update()
 		if (attackTimer_ >= state.hitTime && prevTimer_ <= state.hitTime)
 		{
 			std::optional<Vector3> hitPosition = owner_->GetBonePosition(state.hitJoint);
-			grabbedTarget_->OnGrabDamage(state.damage, damageReaction_, owner_, hitPosition);
+			grabbedTarget_->OnGrabDamage(state.damage, damageReaction_, owner_, hitPosition, isChargeFinished_);
 		}
 	}
 
@@ -228,7 +228,7 @@ void GrabStrikeAttack::Update()
 
 			// 相手を飛ばす用のダメージ処理を呼ぶ
 			grabbedTarget_->OnDamage(0, damageReaction_, knockback_, knockBackDirection, owner_->GetWorldPosition(),
-				nullptr, std::nullopt, false, true);
+				nullptr, std::nullopt, false, true, nullptr, false);
 
 			// Character側の掴み状態を解除する処理を呼ぶ
 			owner_->SetGrabTarget(nullptr);

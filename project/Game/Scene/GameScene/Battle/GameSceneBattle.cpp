@@ -195,9 +195,9 @@ void GameScene::BattlePhaseUpdate()
 			cameraShake_->StartShake(0.1f, 0.15f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// チャージ中
-		float chargeRate = player_->GetChargeTimeRate();
-		if (chargeRate > 0.0f)
+		if (player_->IsCharging())
 		{
+			float chargeRate = player_->GetChargeTimeRate();
 			cameraShake_->StartShake(0.1f, chargeRate * 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 		}
 	}

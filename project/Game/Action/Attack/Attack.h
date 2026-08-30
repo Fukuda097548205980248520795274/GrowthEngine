@@ -124,6 +124,10 @@ public:
 	/// @return 
 	float GetAttackTimer() const { return attackTimer_; }
 
+	/// @brief チャージしているかどうか
+	/// @return 
+	virtual bool IsCharging()const { return false; }
+
 
 protected:
 

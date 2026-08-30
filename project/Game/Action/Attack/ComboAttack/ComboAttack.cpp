@@ -345,7 +345,7 @@ void ComboAttack::Update()
 
 					// ターゲットにダメージを与える
 					bool isHit = target->OnDamage(groupDef->damage, groupDef->damageReaction, groupDef->knockback, knockBackDirection, owner_->GetWorldPosition(), owner_,
-						std::make_optional(hitPosition), false, false, weapon);
+						std::make_optional(hitPosition), false, false, weapon, isChargeFinished_);
 
 					// 攻撃が何かしら敵に触れたら、攻撃の移動速度を遅くする
 					if (moveSpeed_ > 0.2f)currentMoveSpeed_ = 0.2f;

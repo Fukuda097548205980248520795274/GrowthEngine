@@ -486,12 +486,25 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	{
 		if (IsDownLying() || IsDownStagger())
 		{
-			// 軽い怯みのSEを再生する
-			soundManager_->SeLightDamage();
+			if (isChargeAttack)
+			{
+				// チャージ攻撃の怯みSEを再生する
+				soundManager_->SeChargeAttackDamage();
 
-			// 軽い怯みのスローモーションを設定する
-			slowMotionTimeScale = 0.0f;
-			slowMotionDuration = 0.1f;
+				// チャージ攻撃の怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.1f;
+				slowMotionDuration = 0.5f;
+			}
+			else
+			{
+				// 軽い怯みのSEを再生する
+				soundManager_->SeLightDamage();
+
+				// 軽い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.1f;
+			
+			}
 
 			if (!IsDownStagger() && IsDownLying())
 			{
@@ -527,12 +540,25 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			// 落下速度をリセットする
 			movement_->SetVelocityY(0.0f);
 
-			// 重い怯みのSEを再生する
-			soundManager_->SeHeavyDamage();
+			if (isChargeAttack)
+			{
+				// チャージ攻撃の怯みSEを再生する
+				soundManager_->SeChargeAttackDamage();
 
-			// 軽い怯みのスローモーションを設定する
-			slowMotionTimeScale = 0.0f;
-			slowMotionDuration = 0.1f;
+				// チャージ攻撃の怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.1f;
+				slowMotionDuration = 0.5f;
+			}
+			else
+			{
+				// 重い怯みのSEを再生する
+				soundManager_->SeHeavyDamage();
+
+				// 軽い怯みのスローモーションを設定する
+				slowMotionTimeScale = 0.0f;
+				slowMotionDuration = 0.1f;
+
+			}
 
 			// 落下中の状態に遷移する
 			if (!IsBlownAway())
@@ -580,12 +606,24 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				if (!isThrow)
 				{
-					// 軽い怯みのSEを再生する
-					soundManager_->SeLightDamage();
+					if (isChargeAttack)
+					{
+						// チャージ攻撃の怯みSEを再生する
+						soundManager_->SeChargeAttackDamage();
 
-					// 軽い怯みのスローモーションを設定する
-					slowMotionTimeScale = 0.0f;
-					slowMotionDuration = 0.1f;
+						// チャージ攻撃の怯みのスローモーションを設定する
+						slowMotionTimeScale = 0.1f;
+						slowMotionDuration = 0.5f;
+					}
+					else
+					{
+						// 軽い怯みのSEを再生する
+						soundManager_->SeLightDamage();
+
+						// 軽い怯みのスローモーションを設定する
+						slowMotionTimeScale = 0.0f;
+						slowMotionDuration = 0.1f;
+					}
 				}
 
 				if (!IsLightDamage())
@@ -607,12 +645,24 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				if (!isThrow)
 				{
-					// 重い怯みのSEを再生する
-					soundManager_->SeHeavyDamage();
+					if (isChargeAttack)
+					{
+						// チャージ攻撃の怯みSEを再生する
+						soundManager_->SeChargeAttackDamage();
 
-					// 重い怯みのスローモーションを設定する
-					slowMotionTimeScale = 0.0f;
-					slowMotionDuration = 0.1f;
+						// チャージ攻撃の怯みのスローモーションを設定する
+						slowMotionTimeScale = 0.1f;
+						slowMotionDuration = 0.5f;
+					}
+					else
+					{
+						// 重い怯みのSEを再生する
+						soundManager_->SeHeavyDamage();
+
+						// 重い怯みのスローモーションを設定する
+						slowMotionTimeScale = 0.0f;
+						slowMotionDuration = 0.1f;
+					}
 				}
 
 				if (!IsHeavyDamage())
@@ -634,12 +684,24 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 			{
 				if (!isThrow)
 				{
-					// 重い怯みのSEを再生する
-					soundManager_->SeHeavyDamage();
+					if (isChargeAttack)
+					{
+						// チャージ攻撃の怯みSEを再生する
+						soundManager_->SeChargeAttackDamage();
 
-					// ダウンのスローモーションを設定する
-					slowMotionTimeScale = 0.0f;
-					slowMotionDuration = 0.125f;
+						// チャージ攻撃の怯みのスローモーションを設定する
+						slowMotionTimeScale = 0.1f;
+						slowMotionDuration = 0.5f;
+					}
+					else
+					{
+						// 重い怯みのSEを再生する
+						soundManager_->SeHeavyDamage();
+
+						// ダウンのスローモーションを設定する
+						slowMotionTimeScale = 0.0f;
+						slowMotionDuration = 0.125f;
+					}
 				}
 
 				// ノックバックが上方向の場合は、吹き飛ばしの状態に遷移する
@@ -667,12 +729,24 @@ bool Character::OnDamage(int damage, DamageReaction damageReaction, float knockb
 	}
 	else
 	{
-		// 軽い怯みのSEを再生する
-		soundManager_->SeLightDamage();
+		if (isChargeAttack)
+		{
+			// チャージ攻撃の怯みSEを再生する
+			soundManager_->SeChargeAttackDamage();
 
-		// 軽い怯みのスローモーションを設定する
-		slowMotionTimeScale = 0.0f;
-		slowMotionDuration = 0.1f;
+			// チャージ攻撃の怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.1f;
+			slowMotionDuration = 0.5f;
+		}
+		else
+		{
+			// 軽い怯みのSEを再生する
+			soundManager_->SeLightDamage();
+
+			// 軽い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.1f;
+		}
 	}
 
 	// 武器が存在する場合は、武器の種類に応じてダメージSEを再生する
@@ -794,18 +868,22 @@ bool Character::OnGuardDamage(int damage, DamageReaction damageReaction, float k
 	if (IsGuardBreak())
 		return false;
 
+	float guardRate = 1.0f;
+	if (IsGuard())guardRate = 1.0f; // ガード中はガード率を1.0にする
+	else guardRate = 0.25f; // ガードしていない場合はガード率を0.25にする
+
 	// ガードゲージを減少させる
 	if (damageReaction == DamageReaction::LightStagger)
 	{
-		guardGage_ -= 1.0f;
+		guardGage_ -= 1.0f * guardRate;
 	}
 	else if (damageReaction == DamageReaction::HeavyStagger)
 	{
-		guardGage_ -= 2.0f;
+		guardGage_ -= 2.0f * guardRate;
 	}
 	else if (damageReaction == DamageReaction::Down)
 	{
-		guardGage_ -= 3.0f;
+		guardGage_ -= 3.0f * guardRate;
 	}
 
 	// ガードゲージが0以下になった場合は、ガードブレイク状態に遷移する
@@ -899,7 +977,7 @@ void Character::OnRepelled(const Vector3& pushDirection, float knockBackPower)
 
 /// @brief 掴みダメージを受けた時の処理
 /// @param damage 
-void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker, std::optional<Vector3> hitPosition)
+void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Character* attacker, std::optional<Vector3> hitPosition, bool isChargeAttack)
 {
 	// すでに死亡している場合は、ダメージを受けない
 	if (IsDead())return;
@@ -937,33 +1015,45 @@ void Character::OnGrabDamage(int damage, DamageReaction damageReaction, Characte
 	float slowMotionTimeScale = 0.0f; // スローモーションの時間倍率
 	float slowMotionDuration = 0.0f; // スローモーションの持続時間
 
-	// リアクションごとの処理
-	if (damageReaction == DamageReaction::LightStagger)
+	if (isChargeAttack)
 	{
-		// 軽い怯みのSEを再生する
-		soundManager_->SeLightDamage();
+		// チャージ攻撃の怯みSEを再生する
+		soundManager_->SeChargeAttackDamage();
 
-		// 軽い怯みのスローモーションを設定する
-		slowMotionTimeScale = 0.0f;
-		slowMotionDuration = 0.1f;
+		// チャージ攻撃の怯みのスローモーションを設定する
+		slowMotionTimeScale = 0.1f;
+		slowMotionDuration = 0.5f;
 	}
-	else if (damageReaction == DamageReaction::HeavyStagger)
+	else
 	{
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
+		// リアクションごとの処理
+		if (damageReaction == DamageReaction::LightStagger)
+		{
+			// 軽い怯みのSEを再生する
+			soundManager_->SeLightDamage();
 
-		// 重い怯みのスローモーションを設定する
-		slowMotionTimeScale = 0.0f;
-		slowMotionTimeScale = 0.125f;
-	}
-	else if (damageReaction == DamageReaction::Down)
-	{
-		// 重い怯みのSEを再生する
-		soundManager_->SeHeavyDamage();
+			// 軽い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.1f;
+		}
+		else if (damageReaction == DamageReaction::HeavyStagger)
+		{
+			// 重い怯みのSEを再生する
+			soundManager_->SeHeavyDamage();
 
-		// ダウンのスローモーションを設定する
-		slowMotionTimeScale = 0.0f;
-		slowMotionDuration = 0.15f;
+			// 重い怯みのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionTimeScale = 0.125f;
+		}
+		else if (damageReaction == DamageReaction::Down)
+		{
+			// 重い怯みのSEを再生する
+			soundManager_->SeHeavyDamage();
+
+			// ダウンのスローモーションを設定する
+			slowMotionTimeScale = 0.0f;
+			slowMotionDuration = 0.15f;
+		}
 	}
 
 	// プレイヤーが攻撃した場合、またはプレイヤーがダメージを受けた場合は、スローモーションを開始する
