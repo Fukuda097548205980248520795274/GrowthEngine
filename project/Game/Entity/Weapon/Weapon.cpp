@@ -190,6 +190,10 @@ void Weapon::TakeDamage(int damage)
 	// 壊れない武器なら、耐久力を減らさない
 	if (isUnbreakable_) return;
 
+	// 所持者がいるときは、プレイヤーが所持している場合のみ耐久力を減らす
+	if (owner_ && !owner_->IsPlayer())
+		return;
+
 	// 耐久力を減らす
 	durability_ -= damage;
 }

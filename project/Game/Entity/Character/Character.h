@@ -67,6 +67,23 @@ public:
 		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
 		bool isGuardBreak = false, bool isThrow = false, Weapon* weapon = nullptr, bool isChargeAttack = false);
 
+	/// @brief ガードダメージを受けたときの処理
+	/// @param damage 
+	/// @param damageReaction 
+	/// @param knockback 
+	/// @param knockDirection 
+	/// @param enemyPosition 
+	/// @param attacker 
+	/// @param hitPosition 
+	/// @param isGuardBreak 
+	/// @param isThrow 
+	/// @param weapon 
+	/// @param isChargeAttack 
+	/// @return 
+	virtual bool OnGuardDamage(int damage, DamageReaction damageReaction, float knockback,
+		const Vector3& knockDirection, const Vector3& enemyPosition, Character* attacker = nullptr, std::optional<Vector3> hitPosition = std::nullopt,
+		bool isGuardBreak = false, bool isThrow = false, Weapon* weapon = nullptr, bool isChargeAttack = false);
+
 	/// @brief 受け流されたときの処理
 	/// @param pullPosition 
 	/// @param pushDirection 
