@@ -781,4 +781,30 @@ namespace StageEditorUIHelper
 			}
 		}
 	}
+
+	/// @brief 配置データのテンプレートを変更する
+	/// @param target 
+	/// @param newTemplateName 
+	/// @param spawner 
+	/// @param isDirty 
+	void ChangePlacementTemplate(PlacementData& target, const std::string& newTemplateName, StageSpawner* spawner)
+	{
+		// 画面上に存在する既存のオブジェクト実体を削除
+		spawner->DeleteActualEntity(target);
+
+		// テンプレート名を更新
+		strncpy_s(target.templateName, newTemplateName.c_str(), sizeof(target.templateName) - 1);
+
+		// 該当するテンプレートファイル（.json）をロード
+		TemplateData tempData;
+		if (StageEditorUIHelper::LoadPrefab(newTemplateName, tempData))
+		{
+			// テンプレートの情報（カテゴリやサブタイプなど）を配置データに反映
+			target.category = tempData.category;
+			target.subType = tempData.subType;
+
+			// 新しいテンプレート情報で実体を再生成
+			spawner->SpawnActualEntity(target);
+		}
+	}
 }

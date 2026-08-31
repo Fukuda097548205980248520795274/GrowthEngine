@@ -295,18 +295,41 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		ImGui::Separator();
 
 
-		// 大分類の選択
-		int intCat = static_cast<int>(target.category);
-		if (ImGui::Combo("大分類", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
-		{
-			target.category = static_cast<EditCategory>(intCat);
-			target.subType = 0;
-		}
-
-
 		// カテゴリごとの編集項目
 		if (target.category == EditCategory::Character)
 		{
+			// キャラクターと武器はプレハブ (テンプレート) の選択のみを行う
+			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
+
+			// 選択中のプレハブ名プレビュー
+			const char* previewPrefab = (target.templateName[0] != '\0') ? target.templateName : "テンプレートを選択...";
+
+			if (ImGui::BeginCombo("プレハブ (テンプレート)", previewPrefab))
+			{
+				for (const auto& prefab : prefabNames)
+				{
+					bool isSelected = (strcmp(target.templateName, prefab.c_str()) == 0);
+					if (ImGui::Selectable(prefab.c_str(), isSelected))
+					{
+						history_->SaveHistory(placementList);
+						isDirty = true;
+
+						// 選択されたプレハブ名を適用
+						strcpy_s(target.templateName, sizeof(target.templateName), prefab.c_str());
+
+						// プレハブの変更に応じて、配置データのパラメータを更新する
+						StageEditorUIHelper::ChangePlacementTemplate(target, prefab, spawner_);
+					}
+
+					// 選択されたアイテムにフォーカスを設定
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+
 			// 共通ヘルパーからキャラクターの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawCharacterPlacementSettings(target, isDirty);
 		} 
@@ -374,8 +397,40 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 							auto& editTarget = cachedPreviewData_[selectedPreviewIndex_];
 							ImGui::Text("--- 選択中の生成オブジェクト設定 ---");
 
-							// オブジェクト名の編集
-							ImGui::InputText("オブジェクト名", editTarget.templateName, sizeof(editTarget.templateName));
+							// プレビュー用のオブジェクト名（テンプレート名）の編集
+							if (editTarget.category == EditCategory::Character || editTarget.category == EditCategory::Weapon)
+							{
+								// プレビュー側も手入力ではなくコンボボックスにする場合
+								std::vector<std::string> previewPrefabNames = StageEditorUIHelper::GetPrefabNames();
+								const char* previewCombo = (editTarget.templateName[0] != '\0') ? editTarget.templateName : "テンプレートを選択...";
+								if (ImGui::BeginCombo("プレハブ (テンプレート)", previewCombo))
+								{
+									for (const auto& prefab : previewPrefabNames)
+									{
+										// 選択中のプレハブ名と比較して選択状態を判定
+										bool isSelected = (strcmp(editTarget.templateName, prefab.c_str()) == 0);
+										if (ImGui::Selectable(prefab.c_str(), isSelected))
+										{
+											history_->SaveHistory(placementList);
+											isDirty = true;
+
+											strcpy_s(editTarget.templateName, sizeof(editTarget.templateName), prefab.c_str());
+
+											// プレハブの変更に応じて、配置データのパラメータを更新する
+											StageEditorUIHelper::ChangePlacementTemplate(target, prefab, spawner_);
+										}
+
+										if (isSelected) 
+											ImGui::SetItemDefaultFocus();
+									}
+									ImGui::EndCombo();
+								}
+							}
+							else
+							{
+								// オブジェクトの場合は自由入力もしくは設定なし
+								ImGui::InputText("オブジェクト名", editTarget.templateName, sizeof(editTarget.templateName));
+							}
 
 							int currentCategory = static_cast<int>(editTarget.category);
 							// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
@@ -447,6 +502,38 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		}
 		else if (target.category == EditCategory::Weapon)
 		{
+			// キャラクターと武器はプレハブ (テンプレート) の選択のみを行う
+			std::vector<std::string> prefabNames = StageEditorUIHelper::GetPrefabNames();
+
+			// 選択中のプレハブ名プレビュー
+			const char* previewPrefab = (target.templateName[0] != '\0') ? target.templateName : "テンプレートを選択...";
+
+			if (ImGui::BeginCombo("プレハブ (テンプレート)", previewPrefab))
+			{
+				for (const auto& prefab : prefabNames)
+				{
+					// 選択中のプレハブ名と比較して選択状態を判定
+					bool isSelected = (strcmp(target.templateName, prefab.c_str()) == 0);
+					if (ImGui::Selectable(prefab.c_str(), isSelected))
+					{
+						history_->SaveHistory(placementList);
+						isDirty = true;
+
+						// 選択されたプレハブ名を適用
+						strcpy_s(target.templateName, sizeof(target.templateName), prefab.c_str());
+
+						// プレハブの変更に応じて、配置データのパラメータを更新する
+						StageEditorUIHelper::ChangePlacementTemplate(target, prefab, spawner_);
+					}
+
+					// 選択されたアイテムにフォーカスを設定
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
 			// 共通ヘルパーから武器の基本設定UIを描画
 			StageEditorUIHelper::DrawWeaponPlacementSettings(target, isDirty);
 		}

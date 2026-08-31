@@ -132,4 +132,11 @@ namespace StageEditorUIHelper
 	/// @param cutsceneNames 
 	void DrawEventTriggerSettings(PlacementData& target, bool& isDirty, GameScene* scene,
 		const std::vector<std::string>& eventStageDataFileNames, const std::vector<std::string>& cutsceneNames);
+
+	/// @brief 配置データのテンプレートを変更する
+	/// @param target 
+	/// @param newTemplateName 
+	/// @param spawner 
+	/// @param isDirty 
+	void ChangePlacementTemplate(PlacementData& target, const std::string& newTemplateName, StageSpawner* spawner);
 }
