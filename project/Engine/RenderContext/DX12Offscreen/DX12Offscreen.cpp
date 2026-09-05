@@ -86,7 +86,7 @@ void Engine::DX12Offscreen::Resize(ID3D12Device* device, ID3D12GraphicsCommandLi
 	int height = static_cast<int32_t>(buffering->GetSwapChainDesc().Height);
 
 	// レンダーターゲットプールのリサイズ
-	renderTargetPool_->Resize(width, height);
+	renderTargetPool_->Resize(width, height, commandList);
 
 	depthResource_->Resize(device, width, height);
 

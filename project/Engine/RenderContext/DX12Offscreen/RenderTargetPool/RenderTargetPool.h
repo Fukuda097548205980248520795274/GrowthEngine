@@ -36,7 +36,7 @@ namespace Engine
 		/// @brief サイズを作り直す
 		/// @param width 
 		/// @param height 
-		void Resize(int width, int height);
+		void Resize(int width, int height, ID3D12GraphicsCommandList* commandList);
 
 
 	private:

@@ -73,11 +73,14 @@ void Engine::RenderTargetPool::CheckMemoryLeaks()
 /// @param device 
 /// @param width 
 /// @param height 
-void Engine::RenderTargetPool::Resize(int width, int height)
+void Engine::RenderTargetPool::Resize(int width, int height, ID3D12GraphicsCommandList* commandList)
 {
 	for (auto& resource : resources_)
 	{
 		resource->Resize(device_, width, height);
+
+		// バリアを張る
+		resource->Barrier(commandList, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	}
 }
 
