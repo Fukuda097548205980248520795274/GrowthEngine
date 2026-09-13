@@ -153,7 +153,7 @@ struct PlacementData
 
 
 	// 生成された実体へのポインタ
-	std::any instancePtr = nullptr;
+	void* instancePtr;
 };
 
 /// @brief 戦闘エリアのデータ構造

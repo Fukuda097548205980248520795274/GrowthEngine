@@ -42,12 +42,12 @@ void StageEditor::Update(float dt)
 
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				Entity* entity = static_cast<Entity*>(data.instancePtr.type() == typeid(Entity*) ? std::any_cast<Entity*>(data.instancePtr) : nullptr);
+				Entity* entity = static_cast<Entity*>(data.instancePtr);
 				if (entity && entity->IsFinished()) shouldDelete = true;
 			}
 			else if (data.category == EditCategory::Object)
 			{
-				StageObject* obj = static_cast<StageObject*>(data.instancePtr.type() == typeid(StageObject*) ? std::any_cast<StageObject*>(data.instancePtr) : nullptr);
+				StageObject* obj = static_cast<StageObject*>(data.instancePtr);
 				if (obj && obj->IsFinished()) shouldDelete = true;
 			}
 
