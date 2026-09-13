@@ -1,4 +1,853 @@
 {
-    "navMesh": [],
-    "objects": []
+    "navMesh": [
+        {
+            "groupId": 0,
+            "id": 0,
+            "isActive": true,
+            "neighborIds": [
+                -1,
+                1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.0,
+                    0.0,
+                    -5.7056732177734375
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    2.0,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    2.0,
+                    0.0,
+                    -5.7056732177734375
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 1,
+            "isActive": true,
+            "neighborIds": [
+                0,
+                2,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    2.0,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    39.929996490478516
+                ],
+                [
+                    2.0,
+                    0.0,
+                    39.929996490478516
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 2,
+            "isActive": true,
+            "neighborIds": [
+                1,
+                -1,
+                3,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.0,
+                    0.0,
+                    39.929996490478516
+                ],
+                [
+                    -2.0,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    39.929996490478516
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 3,
+            "isActive": true,
+            "neighborIds": [
+                2,
+                -1,
+                -1,
+                4
+            ],
+            "vertices": [
+                [
+                    -29.965438842773438,
+                    0.0,
+                    39.929996490478516
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    21.11258888244629
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    39.929996490478516
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 4,
+            "isActive": true,
+            "neighborIds": [
+                3,
+                -1,
+                5,
+                -1
+            ],
+            "vertices": [
+                [
+                    -29.965438842773438,
+                    0.0,
+                    39.929996490478516
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    39.929996490478516
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    45.82484817504883
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    45.82484817504883
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 5,
+            "isActive": true,
+            "neighborIds": [
+                4,
+                -1,
+                -1,
+                6
+            ],
+            "vertices": [
+                [
+                    -29.965438842773438,
+                    0.0,
+                    45.82484817504883
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    45.82484817504883
+                ],
+                [
+                    -33.94728469848633,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    54.988590240478516
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 6,
+            "isActive": true,
+            "neighborIds": [
+                5,
+                -1,
+                7,
+                -1
+            ],
+            "vertices": [
+                [
+                    -29.965438842773438,
+                    0.0,
+                    45.82484817504883
+                ],
+                [
+                    -29.965438842773438,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    45.82484817504883
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 7,
+            "isActive": true,
+            "neighborIds": [
+                6,
+                8,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    45.82484817504883
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    1.942854404449463,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    1.942854404449463,
+                    0.0,
+                    45.82484817504883
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 8,
+            "isActive": true,
+            "neighborIds": [
+                7,
+                -1,
+                9,
+                -1
+            ],
+            "vertices": [
+                [
+                    1.942854404449463,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    54.988590240478516
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    1.942854404449463,
+                    0.0,
+                    69.9598388671875
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 9,
+            "isActive": true,
+            "neighborIds": [
+                8,
+                10,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    1.942854404449463,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    1.942854404449463,
+                    0.0,
+                    99.97343444824219
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 10,
+            "isActive": true,
+            "neighborIds": [
+                9,
+                -1,
+                11,
+                -1
+            ],
+            "vertices": [
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    -1.9415245056152344,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    99.97343444824219
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 11,
+            "isActive": true,
+            "neighborIds": [
+                10,
+                -1,
+                12,
+                13
+            ],
+            "vertices": [
+                [
+                    -20.316123962402344,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    99.97343444824219
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 12,
+            "isActive": true,
+            "neighborIds": [
+                11,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -24.730205535888672,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -34.22705078125,
+                    0.0,
+                    69.9598388671875
+                ],
+                [
+                    -34.22705078125,
+                    0.0,
+                    99.97343444824219
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 13,
+            "isActive": true,
+            "neighborIds": [
+                11,
+                -1,
+                14,
+                -1
+            ],
+            "vertices": [
+                [
+                    -20.316123962402344,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    99.97343444824219
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    105.8682861328125
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 14,
+            "isActive": true,
+            "neighborIds": [
+                13,
+                15,
+                -1,
+                16
+            ],
+            "vertices": [
+                [
+                    -20.316123962402344,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    129.90200805664063
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    129.90200805664063
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 15,
+            "isActive": true,
+            "neighborIds": [
+                14,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -24.730205535888672,
+                    0.0,
+                    129.90200805664063
+                ],
+                [
+                    -24.730205535888672,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -34.05978775024414,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -34.05978775024414,
+                    0.0,
+                    129.90200805664063
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 16,
+            "isActive": true,
+            "neighborIds": [
+                14,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -20.316123962402344,
+                    0.0,
+                    105.8682861328125
+                ],
+                [
+                    -20.316123962402344,
+                    0.0,
+                    129.90200805664063
+                ],
+                [
+                    -9.97287368774414,
+                    0.0,
+                    129.90200805664063
+                ],
+                [
+                    -9.97287368774414,
+                    0.0,
+                    105.8682861328125
+                ]
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 6.101007461547852,
+            "posY": 0.0,
+            "posZ": 16.100048065185547,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 26.76308822631836,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -19.582809448242188,
+            "posY": 0.0,
+            "posZ": 5.198139667510986,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 17.581369400024414,
+            "scaleY": 10.0,
+            "scaleZ": 15.892999649047852,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.5622236728668213,
+            "posY": 0.0,
+            "posZ": -21.64612579345703,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 17.581369400024414,
+            "scaleY": 10.0,
+            "scaleZ": 15.892999649047852,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 6.047903537750244,
+            "posY": 0.0,
+            "posZ": 77.05350494384766,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 33.6751823425293,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -20.91133689880371,
+            "posY": 0.0,
+            "posZ": 62.4416389465332,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.961929321289063,
+            "scaleY": 10.0,
+            "scaleZ": 7.466958522796631,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -1.3832651376724243,
+            "posY": 0.0,
+            "posZ": 102.9419174194336,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.961929321289063,
+            "scaleY": 10.0,
+            "scaleZ": 2.9522483348846436,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -33.07401657104492,
+            "posY": 0.0,
+            "posZ": 102.9419174194336,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 8.366414070129395,
+            "scaleY": 10.0,
+            "scaleZ": 2.9522483348846436,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -38.30622863769531,
+            "posY": 0.0,
+            "posZ": 82.53620910644531,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 22.095691680908203,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -38.07339859008789,
+            "posY": 0.0,
+            "posZ": 38.17619323730469,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 22.095691680908203,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -11.297952651977539,
+            "posY": 0.0,
+            "posZ": 42.886077880859375,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.688570022583008,
+            "scaleY": 10.0,
+            "scaleZ": 2.9590001106262207,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -38.193946838378906,
+            "posY": 0.0,
+            "posZ": 123.3378677368164,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 22.095691680908203,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -5.888774871826172,
+            "posY": 0.0,
+            "posZ": 123.3378677368164,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 22.095691680908203,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -22.570796966552734,
+            "posY": 0.0,
+            "posZ": 132.8719940185547,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.961929321289063,
+            "scaleY": 10.0,
+            "scaleZ": 2.9522483348846436,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        }
+    ]
 }

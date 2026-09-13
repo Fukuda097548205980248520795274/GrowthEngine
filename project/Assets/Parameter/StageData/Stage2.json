@@ -1,4 +1,303 @@
 {
-    "navMesh": [],
-    "objects": []
+    "navMesh": [
+        {
+            "groupId": 0,
+            "id": 0,
+            "isActive": true,
+            "neighborIds": [
+                -1,
+                1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    -5.220818519592285
+                ],
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    2.6091737747192383,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    2.6091737747192383,
+                    0.0,
+                    -5.220818519592285
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 1,
+            "isActive": true,
+            "neighborIds": [
+                0,
+                2,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    2.6091737747192383,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    29.138484954833984
+                ],
+                [
+                    2.6091737747192383,
+                    0.0,
+                    29.138484954833984
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 2,
+            "isActive": true,
+            "neighborIds": [
+                1,
+                -1,
+                3,
+                -1
+            ],
+            "vertices": [
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    29.138484954833984
+                ],
+                [
+                    -2.8347930908203125,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -31.801210403442383,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -31.801210403442383,
+                    0.0,
+                    29.138484954833984
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 3,
+            "isActive": true,
+            "neighborIds": [
+                2,
+                -1,
+                -1,
+                4
+            ],
+            "vertices": [
+                [
+                    -31.801210403442383,
+                    0.0,
+                    29.138484954833984
+                ],
+                [
+                    -31.801210403442383,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -37.27630615234375,
+                    0.0,
+                    23.674850463867188
+                ],
+                [
+                    -37.27630615234375,
+                    0.0,
+                    29.138484954833984
+                ]
+            ]
+        },
+        {
+            "groupId": 0,
+            "id": 4,
+            "isActive": true,
+            "neighborIds": [
+                3,
+                -1,
+                -1,
+                -1
+            ],
+            "vertices": [
+                [
+                    -31.801210403442383,
+                    0.0,
+                    29.138484954833984
+                ],
+                [
+                    -37.27630615234375,
+                    0.0,
+                    29.138484954833984
+                ],
+                [
+                    -37.27630615234375,
+                    0.0,
+                    83.7640380859375
+                ],
+                [
+                    -31.801210403442383,
+                    0.0,
+                    83.7640380859375
+                ]
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 6.71151876449585,
+            "posY": 0.0,
+            "posZ": 7.974533557891846,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 26.76308822631836,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -3.049999952316284,
+            "posY": 0.0,
+            "posZ": 59.016990661621094,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 28.743404388427734,
+            "scaleY": 10.0,
+            "scaleZ": 29.86520004272461,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -31.601545333862305,
+            "posY": 0.0,
+            "posZ": -3.092092514038086,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 28.743404388427734,
+            "scaleY": 10.0,
+            "scaleZ": 26.76308822631836,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -41.377235412597656,
+            "posY": 0.0,
+            "posZ": 49.24429702758789,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 4.087177753448486,
+            "scaleY": 10.0,
+            "scaleZ": 40.72905731201172,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -32.70149612426758,
+            "posY": 0.0,
+            "posZ": 87.6781234741211,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 8.089298248291016,
+            "scaleY": 10.0,
+            "scaleZ": 3.870371103286743,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.1525707244873047,
+            "posY": 0.0,
+            "posZ": -9.074966430664063,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 8.089298248291016,
+            "scaleY": 10.0,
+            "scaleZ": 3.870371103286743,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        }
+    ]
 }
