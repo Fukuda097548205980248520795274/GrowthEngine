@@ -8,9 +8,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.621761679649353,
-                    0.621761679649353,
-                    0.621761679649353,
+                    0.4300518035888672,
+                    0.4300518035888672,
+                    0.4300518035888672,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -59,9 +59,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.0,
-                    0.0033289645798504353,
-                    0.1606217622756958,
+                    0.005020267330110073,
+                    0.011906301602721214,
+                    0.08808290958404541,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -107,9 +107,9 @@
                 ]
             }
         ],
-        "modelDirectory": "./Assets/Models/stage_1",
-        "modelFileName": "stage_1.obj",
-        "modelName": "Stage1_Stage",
+        "modelDirectory": "./Assets/Models/tutorial_1",
+        "modelFileName": "tutorial_1.obj",
+        "modelName": "stage1_model",
         "rotate": [
             0.0,
             0.0,
@@ -124,7 +124,7 @@
         "skeletonFileName": "",
         "translate": [
             0.0,
-            0.11999999731779099,
+            0.0,
             0.0
         ],
         "type": 1

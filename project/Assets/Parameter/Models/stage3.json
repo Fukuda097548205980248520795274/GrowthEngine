@@ -58,7 +58,7 @@
         ],
         "modelDirectory": "./Assets/Models/bambooGroveRoad",
         "modelFileName": "bambooGroveRoad.obj",
-        "modelName": "bambooGroveRoad",
+        "modelName": "stage3_model",
         "rotate": [
             0.0,
             -1.5700000524520874,
@@ -72,9 +72,9 @@
         "skeletonDirectory": "",
         "skeletonFileName": "",
         "translate": [
-            -0.9700000286102295,
-            0.12999999523162842,
-            21.8799991607666
+            0.0,
+            0.0,
+            0.0
         ],
         "type": 1
     }
