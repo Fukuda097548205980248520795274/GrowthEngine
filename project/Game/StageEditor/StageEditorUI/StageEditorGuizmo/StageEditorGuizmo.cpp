@@ -91,13 +91,22 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			// ギズモで操作した結果をゲーム内の実体に反映させる
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				if (auto entityPtr = std::get_if<Entity*>(&data.instancePtr))
+				if (auto characterPtr = std::get_if<Character*>(&data.instancePtr))
 				{
-					if (*entityPtr)
+					if (*characterPtr)
 					{
-						(*entityPtr)->SetPosition(data.position);
-						(*entityPtr)->SetRotation(data.rotate_);
-						(*entityPtr)->SetScale(data.scale);
+						(*characterPtr)->SetPosition(data.position);
+						(*characterPtr)->SetRotation(data.rotate_);
+						(*characterPtr)->SetScale(data.scale);
+					}
+				}
+				else if (auto weaponPtr = std::get_if<Weapon*>(&data.instancePtr))
+				{
+					if (*weaponPtr)
+					{
+						(*weaponPtr)->SetPosition(data.position);
+						(*weaponPtr)->SetRotation(data.rotate_);
+						(*weaponPtr)->SetScale(data.scale);
 					}
 				}
 			}
@@ -126,6 +135,15 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 						data.position = (*entityPtr)->GetWorldTransform()->translate_;
 						data.rotate_ = (*entityPtr)->GetWorldTransform()->rotate_;
 						data.scale = (*entityPtr)->GetWorldTransform()->scale_;
+					}
+				}
+				else if (auto weaponPtr = std::get_if<Weapon*>(&data.instancePtr))
+				{
+					if (*weaponPtr)
+					{
+						data.position = (*weaponPtr)->GetWorldTransform()->translate_;
+						data.rotate_ = (*weaponPtr)->GetWorldTransform()->rotate_;
+						data.scale = (*weaponPtr)->GetWorldTransform()->scale_;
 					}
 				}
 			}

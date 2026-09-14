@@ -47,7 +47,7 @@ inline const char* eventTypeNames[] =
 };
 
 // 配置するオブジェクトの実体を保持するための型
-using InstancePtr = std::variant<std::monostate, Entity*, Character*, Player*, NPC*, Weapon*, StageObject*, Floor*, Wall*, StaticEventTrigger*, CameraGuard*>;
+using InstancePtr = std::variant<std::monostate,Character*, Weapon*, StageObject*>;
 
 struct MotionConfig
 {

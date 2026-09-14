@@ -396,7 +396,7 @@ void StageSpawner::DeleteActualEntity(PlacementData& data)
 	}
 	else if (data.category == EditCategory::Weapon)
 	{
-		if (auto  weapon = std::get_if<Weapon*>(&data.instancePtr))
+		if (auto weapon = std::get_if<Weapon*>(&data.instancePtr))
 		{
 			if (*weapon)
 				(*weapon)->Delete();
