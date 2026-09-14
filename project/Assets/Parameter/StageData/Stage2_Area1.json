@@ -166,5 +166,28 @@
             ]
         }
     ],
-    "objects": []
+    "objects": [
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -4.979844093322754,
+            "posY": 0.0,
+            "posZ": 27.036598205566406,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.5932494401931763,
+            "scaleY": 10.0,
+            "scaleZ": 4.584327697753906,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        }
+    ]
 }

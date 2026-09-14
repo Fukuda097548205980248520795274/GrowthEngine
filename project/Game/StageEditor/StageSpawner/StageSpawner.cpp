@@ -203,9 +203,6 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		return false;
 	}
 
-	data.category = tData.category;
-	data.subType = tData.subType;
-
 	// キャラクター
 	if (data.category == EditCategory::Character)
 	{

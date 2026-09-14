@@ -19,6 +19,12 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 	Engine::Collision3D::Ray ray = RaycastFromMouse();
 	Vector3 currentHitPoint = GetRayIntersectionWithPlane(ray, baseHeight);
 
+	// 選択された面を有効・無効化する（面選択モードのときのみ）
+	if (selectionMode_ == SelectionMode::Polygon)
+	{
+		if (engine_->GetKeyTrigger(DIK_A)) ActivePolygon(placementList, isDirty);
+	}
+
 	// モード切り替え (1: 点, 2: 辺, 3: 面)
 	if (engine_->GetKeyTrigger(DIK_1))
 	{
@@ -71,12 +77,6 @@ void StageEditorNavMeshController::Update(std::vector<PlacementData>& placementL
 		{
 			LoopCutSelectedEdge(placementList, isDirty);
 		}
-	}
-
-	// 選択された面を有効・無効化する（面選択モードのときのみ）
-	if (selectionMode_ == SelectionMode::Polygon)
-	{
-		if (engine_->GetKeyTrigger(DIK_A)) ActivePolygon(placementList, isDirty);
 	}
 
 	// DeleteキーまたはBackspaceキーが押された瞬間

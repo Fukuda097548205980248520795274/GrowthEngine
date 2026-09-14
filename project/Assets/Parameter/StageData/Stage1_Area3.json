@@ -727,5 +727,50 @@
             ]
         }
     ],
-    "objects": []
+    "objects": [
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 24.3769588470459,
+            "posY": 0.0,
+            "posZ": 24.759525299072266,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 7.098599910736084,
+            "scaleY": 10.0,
+            "scaleZ": 1.360046148300171,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 24.3769588470459,
+            "posY": 0.0,
+            "posZ": 56.81887435913086,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 7.098599910736084,
+            "scaleY": 10.0,
+            "scaleZ": 1.360046148300171,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        }
+    ]
 }
