@@ -135,6 +135,10 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data)
 			StaticEventTrigger::InitData initData;
 			initData.position = data.position;
 			initData.scale = data.scale;
+			initData.eventType = data.eventType;
+			initData.isStartBattleArea = data.isBattleAreaStart;
+			initData.isGameClear = data.isGameClear;
+			initData.navMeshGroupId = data.targetNavMeshGroupId;
 
 
 			// イベントトリガーの種類に応じて、ステージデータファイル名またはカットシーン名を設定

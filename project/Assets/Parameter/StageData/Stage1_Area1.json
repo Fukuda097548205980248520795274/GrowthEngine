@@ -727,5 +727,72 @@
             ]
         }
     ],
-    "objects": []
+    "objects": [
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.0,
+            "posY": 0.0,
+            "posZ": 21.899999618530273,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": "Enemy_1"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -3.5999999046325684,
+            "posY": 0.0,
+            "posZ": 21.899999618530273,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": "Enemy_1"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 3.799999952316284,
+            "posY": 0.0,
+            "posZ": 21.899999618530273,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 2,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": "Enemy_1"
+        }
+    ]
 }
