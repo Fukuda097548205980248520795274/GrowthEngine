@@ -750,7 +750,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					copiedData_ = placementList[selectedIndex_];
 
 					// 別ファイルへのペーストに対応するため、実体へのポインタはリセットする
-					copiedData_.instancePtr = nullptr;
+					copiedData_.instancePtr = std::monostate{};
 					hasCopiedData_ = true;
 				}
 			}
@@ -802,7 +802,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 					// 複製したオブジェクトは少し位置をずらして生成する
 					newData.position.x += 0.5f;
 					newData.position.z += 0.5f;
-					newData.instancePtr = nullptr;
+					newData.instancePtr = std::monostate{};
 
 					// 実体をシーンに生成してリストに追加
 					if (spawner_->SpawnActualEntity(newData))

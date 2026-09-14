@@ -46,7 +46,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 		currentData.position = Vector3(0.0f, 0.0f, 0.0f);
 		currentData.rotate_ = Vector3(0.0f, 0.0f, 0.0f);
 		currentData.scale = Vector3(1.0f, 1.0f, 1.0f);
-		currentData.instancePtr = nullptr;
+		currentData.instancePtr = std::monostate{};
 		currentData.name[0] = '\0';
 		currentData.templateName[0] = '\0';
 		currentData.eventType = 0;
@@ -89,7 +89,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 
 						// 選択されたプレハブを currentData に適用
 						strcpy_s(currentData.templateName, sizeof(currentData.templateName), prefabNames[i].c_str());
-						currentData.instancePtr = nullptr;
+						currentData.instancePtr = std::monostate{};
 					}
 
 					// 選択されたアイテムにフォーカスを設定
@@ -133,7 +133,7 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 
 		// 新しい配置データを初期化
 		PlacementData newData = currentData;
-		newData.instancePtr = nullptr;
+		newData.instancePtr = std::monostate{};
 
 		// 実際のゲーム画面に生成してリストに追加
 		if (spawner_->SpawnActualEntity(newData))

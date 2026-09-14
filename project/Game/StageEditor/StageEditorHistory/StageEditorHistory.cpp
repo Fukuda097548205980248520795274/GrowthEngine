@@ -83,7 +83,7 @@ void StageEditorHistory::Undo(std::vector<PlacementData>& currentList, StageSpaw
 	// 復元したデータをもとに、実体をシーンに再生成する
 	for (auto& data : currentList)
 	{
-		data.instancePtr = nullptr;
+		data.instancePtr = std::monostate{};
 
 		spawner->SpawnActualEntity(data);
 	}
@@ -131,7 +131,7 @@ void StageEditorHistory::Redo(std::vector<PlacementData>& currentList, StageSpaw
 	// 復元したデータをもとに、実体をシーンに再生成する
 	for (auto& data : currentList)
 	{
-		data.instancePtr = nullptr;
+		data.instancePtr = std::monostate{};
 
 		spawner->SpawnActualEntity(data);
 	}

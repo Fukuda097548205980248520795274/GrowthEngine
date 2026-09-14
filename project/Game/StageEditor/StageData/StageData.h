@@ -5,9 +5,13 @@
 #include <any>
 
 #include "Entity/Character/Character.h"
+#include "Entity/Character/Player/Player.h"
 #include "Entity/Character/NPC/NPC.h"
 #include "Entity/Weapon/Weapon.h"
-#include "StageObject/StageObject.h"
+#include "StageObject/Floor/Floor.h"
+#include "StageObject/Wall/Wall.h"
+#include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
+#include "StageObject/CameraGuard/CameraGuard.h"
 #include "HUD/HUD.h"
 
 // JSONライブラリ
@@ -41,6 +45,9 @@ inline const char* eventTypeNames[] =
 	"回避操作チュートリアル", 
 	"レイジモードチュートリアル" 
 };
+
+// 配置するオブジェクトの実体を保持するための型
+using InstancePtr = std::variant<std::monostate, Entity*, Character*, Player*, NPC*, Weapon*, StageObject*, Floor*, Wall*, StaticEventTrigger*, CameraGuard*>;
 
 struct MotionConfig
 {
@@ -153,7 +160,7 @@ struct PlacementData
 
 
 	// 生成された実体へのポインタ
-	void* instancePtr;
+	InstancePtr instancePtr = std::monostate{};
 };
 
 /// @brief 戦闘エリアのデータ構造

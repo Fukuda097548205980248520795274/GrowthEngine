@@ -29,8 +29,8 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 	{
 		auto& data = placementList[selectedIndex];
 
-		// 選択されているオブジェクトの実体が存在しない場合はギズモの操作を無効化する
-		if (!data.instancePtr)return;
+		// 実体へのポインタが有効でない場合は操作を無効化する
+		if (std::holds_alternative<std::monostate>(data.instancePtr))return;
 
 		// カメラのビュー行列とプロジェクション行列を取得
 		Matrix4x4 viewMatrix = engine_->GetCamera3DView();
@@ -91,20 +91,26 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			// ギズモで操作した結果をゲーム内の実体に反映させる
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				if (auto entityPtr = static_cast<Entity*>(data.instancePtr))
+				if (auto entityPtr = std::get_if<Entity*>(&data.instancePtr))
 				{
-					entityPtr->SetPosition(data.position);
-					entityPtr->SetRotation(data.rotate_);
-					entityPtr->SetScale(data.scale);
+					if (*entityPtr)
+					{
+						(*entityPtr)->SetPosition(data.position);
+						(*entityPtr)->SetRotation(data.rotate_);
+						(*entityPtr)->SetScale(data.scale);
+					}
 				}
 			}
 			else if (data.category == EditCategory::Object)
 			{
-				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr))
+				if (auto stageObjectPtr = std::get_if<StageObject*>(&data.instancePtr))
 				{
-					stageObjectPtr->SetPosition(data.position);
-					stageObjectPtr->SetRotation(data.rotate_);
-					stageObjectPtr->SetScale(data.scale);
+					if (*stageObjectPtr)
+					{
+						(*stageObjectPtr)->SetPosition(data.position);
+						(*stageObjectPtr)->SetRotation(data.rotate_);
+						(*stageObjectPtr)->SetScale(data.scale);
+					}
 				}
 			}
 		}
@@ -113,20 +119,26 @@ void StageEditorGuizmo::UpdateObject(std::vector<PlacementData>& placementList, 
 			// ギズモを操作していないときは、ゲーム内の実体の位置を配置データに反映させる
 			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
 			{
-				if (auto entityPtr = static_cast<Entity*>(data.instancePtr))
+				if (auto entityPtr = std::get_if<Character*>(&data.instancePtr))
 				{
-					data.position = entityPtr->GetWorldTransform()->translate_;
-					data.rotate_ = entityPtr->GetWorldTransform()->rotate_;
-					data.scale = entityPtr->GetWorldTransform()->scale_;
+					if (*entityPtr)
+					{
+						data.position = (*entityPtr)->GetWorldTransform()->translate_;
+						data.rotate_ = (*entityPtr)->GetWorldTransform()->rotate_;
+						data.scale = (*entityPtr)->GetWorldTransform()->scale_;
+					}
 				}
 			}
 			else if (data.category == EditCategory::Object)
 			{
-				if (auto stageObjectPtr = static_cast<StageObject*>(data.instancePtr))
+				if (auto stageObjectPtr = std::get_if<StageObject*>(&data.instancePtr))
 				{
-					data.position = stageObjectPtr->GetWorldTransform()->translate_;
-					data.rotate_ = stageObjectPtr->GetWorldTransform()->rotate_;
-					data.scale = stageObjectPtr->GetWorldTransform()->scale_;
+					if (*stageObjectPtr)
+					{
+						data.position = (*stageObjectPtr)->GetWorldTransform()->translate_;
+						data.rotate_ = (*stageObjectPtr)->GetWorldTransform()->rotate_;
+						data.scale = (*stageObjectPtr)->GetWorldTransform()->scale_;
+					}
 				}
 			}
 		}

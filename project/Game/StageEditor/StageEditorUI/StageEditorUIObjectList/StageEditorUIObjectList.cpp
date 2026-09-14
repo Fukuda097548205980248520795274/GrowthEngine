@@ -155,7 +155,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					copiedData = placementList[i];
 
 					// 新しいファイルで生成し直すため、実体へのポインタはリセットする
-					copiedData.instancePtr = nullptr;
+					copiedData.instancePtr = std::monostate{};
 					hasCopiedData = true;
 				}
 
@@ -175,7 +175,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 					// 完全に重ならないように位置を少しずらす
 					newData.position.x += 0.5f;
 					newData.position.z += 0.5f;
-					newData.instancePtr = nullptr; // 新しい実体を作るため初期化
+					newData.instancePtr = std::monostate{}; // 新しい実体を作るため初期化
 
 					// 実体を生成して追加
 					if (spawner_->SpawnActualEntity(newData))

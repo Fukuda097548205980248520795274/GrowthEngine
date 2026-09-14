@@ -34,38 +34,38 @@ void StageEditor::Update(float dt)
 	// 実行中に消えたエンティティを配置リストから削除する
 	if (isPlaying_)
 	{
-		// 逆順にループして、消えたエンティティを削除する
 		for (int i = static_cast<int>(placementList_.size()) - 1; i >= 0; --i)
 		{
 			auto& data = placementList_[i];
-			bool shouldDelete = false;
 
-			if (data.category == EditCategory::Character || data.category == EditCategory::Weapon)
-			{
-				Entity* entity = static_cast<Entity*>(data.instancePtr);
-				if (entity && entity->IsFinished()) shouldDelete = true;
-			}
-			else if (data.category == EditCategory::Object)
-			{
-				StageObject* obj = static_cast<StageObject*>(data.instancePtr);
-				if (obj && obj->IsFinished()) shouldDelete = true;
-			}
+			// std::variantを使っているため、std::visitを使って型ごとに処理する
+			bool shouldDelete = std::visit([](auto&& ptr) -> bool 
+				{
+					using T = std::decay_t<decltype(ptr)>;
+					if constexpr (std::is_same_v<T, std::monostate>)
+					{
+						return false;
+					}
+					else
+					{
+						return ptr && ptr->IsFinished();
+					}
+				}, 
+				data.instancePtr);
 
+			// 配置リストから削除する
 			if (shouldDelete)
 			{
-				// 配置リストから要素を削除
 				placementList_.erase(placementList_.begin() + i);
 
-				// UI側の選択状態を安全に調整する
+				// 選択中のインデックスを更新する
 				int currentSelected = editorUI_->GetSelectedIndex();
 				if (currentSelected == i)
 				{
-					// 選択していたオブジェクトそのものが消滅した場合、選択を解除する
 					editorUI_->SetSelectedIndex(-1);
 				}
 				else if (currentSelected > i)
 				{
-					// 選択していたオブジェクトのインデックスが削除された要素より後ろにある場合、インデックスを1つ前にずらす
 					editorUI_->SetSelectedIndex(currentSelected - 1);
 				}
 			}

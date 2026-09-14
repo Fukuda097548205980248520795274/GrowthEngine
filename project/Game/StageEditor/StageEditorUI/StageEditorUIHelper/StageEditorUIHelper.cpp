@@ -447,32 +447,35 @@ namespace StageEditorUIHelper
 	/// @param useHistory 
 	void DrawCharacterPlacementSettings(PlacementData& target, bool& isDirty)
 	{
-		// キャラクターの実体ポインタを取得
-		Character* charPtr = target.instancePtr ? static_cast<Character*>(target.instancePtr) : nullptr;
-
-		if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
+		if (auto charPtr = std::get_if<Character*>(&target.instancePtr))
 		{
-			if (BeginPropertyTable("CharBaseTable"))
+			if (*charPtr == nullptr)
+				return;
+
+			if (ImGui::CollapsingHeader("基本ステータス", ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				// 位置情報
-				PropertyLabel("生成位置");
-				if (ImGui::DragFloat3("##Pos", &target.position.x, 0.1f))
+				if (BeginPropertyTable("CharBaseTable"))
 				{
-					isDirty = true;
-					if (charPtr)
-						charPtr->SetPosition(target.position);
-				}
+					// 位置情報
+					PropertyLabel("生成位置");
+					if (ImGui::DragFloat3("##Pos", &target.position.x, 0.1f))
+					{
+						isDirty = true;
+						if (charPtr)
+							(*charPtr)->SetPosition(target.position);
+					}
 
-				// 回転情報
-				PropertyLabel("回転 (Y軸)");
-				if (ImGui::DragFloat("##RotY", &target.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>))
-				{
-					isDirty = true;
-					if (charPtr)
-						charPtr->SetRotation(target.rotate_);
-				}
+					// 回転情報
+					PropertyLabel("回転 (Y軸)");
+					if (ImGui::DragFloat("##RotY", &target.rotate_.y, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>))
+					{
+						isDirty = true;
+						if (charPtr)
+							(*charPtr)->SetRotation(target.rotate_);
+					}
 
-				EndPropertyTable();
+					EndPropertyTable();
+				}
 			}
 		}
 	}
@@ -590,16 +593,19 @@ namespace StageEditorUIHelper
 		{
 			if (BeginPropertyTable("CharBaseTable"))
 			{
-				// キャラクターの実体ポインタを取得
-				Weapon* weaponPtr = target.instancePtr ? static_cast<Weapon*>(target.instancePtr) : nullptr;
-
-				// 位置情報
-				PropertyLabel("位置");
-				if (ImGui::DragFloat3("##位置", &target.position.x, 0.1f))
+				if (auto weaponPtr = std::get_if<Weapon*>(&target.instancePtr))
 				{
-					isDirty = true;
-					if (weaponPtr)
-						weaponPtr->SetPosition(target.position);
+					if (*weaponPtr)
+					{
+						// 位置情報
+						PropertyLabel("位置");
+						if (ImGui::DragFloat3("##Pos", &target.position.x, 0.1f))
+						{
+							isDirty = true;
+							if (weaponPtr)
+								(*weaponPtr)->SetPosition(target.position);
+						}	
+					}
 				}
 
 				EndPropertyTable();
@@ -654,37 +660,41 @@ namespace StageEditorUIHelper
 		{
 			if (BeginPropertyTable("CharBaseTable"))
 			{
-				// キャラクターの実体ポインタを取得
-				StageObject* stageObjectPtr = target.instancePtr ? static_cast<StageObject*>(target.instancePtr) : nullptr;
-
-				// 位置情報
-				PropertyLabel("位置");
-				if (ImGui::DragFloat3("##位置", &target.position.x, 0.1f))
+				// ステージオブジェクトの実体ポインタを取得
+				if (auto stageObjectPtr = std::get_if<StageObject*>(&target.instancePtr))
 				{
-					isDirty = true;
-					if(stageObjectPtr)
-						stageObjectPtr->SetPosition(target.position);
-				}
-
-				// 回転情報
-				if (target.subType != static_cast<int>(StageObject::StageObjectTag::Floor) && target.subType != static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
-				{
-					PropertyLabel("回転");
-					if (ImGui::DragFloat3("##回転", &target.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>))
+					if (*stageObjectPtr)
 					{
-						isDirty = true;
-						if (stageObjectPtr)
-							stageObjectPtr->SetRotation(target.rotate_);
-					}
-				}
+						// 位置情報
+						PropertyLabel("位置");
+						if (ImGui::DragFloat3("##位置", &target.position.x, 0.1f))
+						{
+							isDirty = true;
+							if (stageObjectPtr)
+								(*stageObjectPtr)->SetPosition(target.position);
+						}
 
-				// 拡縮
-				PropertyLabel("拡縮");
-				if (ImGui::DragFloat3("##Scale", &target.scale.x, 0.01f, 0.0f, 100.0f))
-				{
-					isDirty = true;
-					if (stageObjectPtr)
-						stageObjectPtr->SetScale(target.scale);
+						// 回転情報
+						if (target.subType != static_cast<int>(StageObject::StageObjectTag::Floor) && target.subType != static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
+						{
+							PropertyLabel("回転");
+							if (ImGui::DragFloat3("##回転", &target.rotate_.x, 0.01f, -std::numbers::pi_v<float>, std::numbers::pi_v<float>))
+							{
+								isDirty = true;
+								if (stageObjectPtr)
+									(*stageObjectPtr)->SetRotation(target.rotate_);
+							}
+						}
+
+						// 拡縮
+						PropertyLabel("拡縮");
+						if (ImGui::DragFloat3("##Scale", &target.scale.x, 0.01f, 0.0f, 100.0f))
+						{
+							isDirty = true;
+							if (stageObjectPtr)
+								(*stageObjectPtr)->SetScale(target.scale);
+						}
+					}
 				}
 
 				EndPropertyTable();
