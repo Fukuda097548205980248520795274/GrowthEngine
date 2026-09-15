@@ -103,6 +103,7 @@ struct TemplateData
 	MotionConfig avoidLeftMotion;
 	MotionConfig avoidRightMotion;
 	MotionConfig guardMotion;
+	MotionConfig guardHitMotion;
 
 	/// @brief ビヘイビアツリーの設定 (武器とキャラクターの場合)
 	BehaviorTreeConfig behaviorTrees;
@@ -252,6 +253,7 @@ inline void toJson(json& j, const TemplateData& s)
 		j["avoidLeftMotionName"] = s.avoidLeftMotion.name;
 		j["avoidRightMotionName"] = s.avoidRightMotion.name;
 		j["guardMotionName"] = s.guardMotion.name;
+		j["guardHitMotionName"] = s.guardHitMotion.name;
 		j["equipWeaponPrefabName"] = s.equipWeaponPrefabName;
 
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
@@ -776,6 +778,7 @@ inline void fromJson(const json& j, TemplateData& s)
 	s.avoidLeftMotion.name = j.value("avoidLeftMotionName", "Front");
 	s.avoidRightMotion.name = j.value("avoidRightMotionName", "Back");
 	s.guardMotion.name = j.value("guardMotionName", "BothHands");
+	s.guardHitMotion.name = j.value("guardHitMotionName", "BothHands");
 
 	std::string weaponNameStr = j.value("equipWeaponPrefabName", "");
 	strncpy_s(s.equipWeaponPrefabName, weaponNameStr.c_str(), sizeof(s.equipWeaponPrefabName) - 1);
@@ -789,6 +792,7 @@ inline void fromJson(const json& j, TemplateData& s)
 	s.avoidLeftMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidLeftMotion.name);
 	s.avoidRightMotion.handle = motionManager->GetMotion(MotionType::Avoid, s.avoidRightMotion.name);
 	s.guardMotion.handle = motionManager->GetMotion(MotionType::Guard, s.guardMotion.name);
+	s.guardHitMotion.handle = motionManager->GetMotion(MotionType::Guard, s.guardHitMotion.name);
 }
 
 /// @brief JSONからPlacementDataに変換（デシリアライズ）

@@ -65,54 +65,6 @@ Character::Character() : Entity()
 
 	// ステートマシンの生成
 	stateMachine_ = std::make_unique<CharacterStateMachine>();
-	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this));
-	stateMachine_->AddState("Dash", std::make_unique<CharacterStateDash>(this, motionManager_->GetMotion(MotionType::Dash, "Dash")));
-	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
-	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
-	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, 
-		motionManager_->GetMotion(MotionType::Guard, "BothHands"),
-		motionManager_->GetMotion(MotionType::Stand, "Standing")));
-	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateDamage>(this,
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front")));
-	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateDamage>(this,
-		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
-		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"), 1.5f));
-	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
-		motionManager_->GetMotion(MotionType::DownFall, "Front"),
-		motionManager_->GetMotion(MotionType::DownFall, "Front"),
-		motionManager_->GetMotion(MotionType::DownFall, "Front"),
-		motionManager_->GetMotion(MotionType::DownFall, "Front")));
-	stateMachine_->AddState("DownLying", std::make_unique<CharacterStateDownLying>(this,
-		motionManager_->GetMotion(MotionType::DownLying, "Front"),
-		motionManager_->GetMotion(MotionType::DownLying, "Front")));
-	stateMachine_->AddState("DownGettingUp", std::make_unique<CharacterStateDownGettingUp>(this,
-		motionManager_->GetMotion(MotionType::DowoGetUp, "Front"),
-		motionManager_->GetMotion(MotionType::DowoGetUp, "Front")));
-	stateMachine_->AddState("DownStagger", std::make_unique<CharacterStateDownStagger>(this,
-		motionManager_->GetMotion(MotionType::DownLying, "Front"),
-		motionManager_->GetMotion(MotionType::DownLying, "Front")));
-	stateMachine_->AddState("BlownAway", std::make_unique<CharacterStateBlownAway>(this,
-		motionManager_->GetMotion(MotionType::DownFall, "Front"),
-		motionManager_->GetMotion(MotionType::DownFall, "Front")));
-	stateMachine_->AddState("BlownFalling", std::make_unique<CharacterStateBlownFalling>(this,
-		motionManager_->GetMotion(MotionType::DownLying, "Front"),
-		motionManager_->GetMotion(MotionType::DownLying, "Front")));
-	stateMachine_->AddState("Repel", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
-	stateMachine_->AddState("Deflect", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
-	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
-	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
-	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
-		motionManager_->GetMotion(MotionType::Avoid, "Front"),
-		motionManager_->GetMotion(MotionType::Avoid, "Back"),
-		motionManager_->GetMotion(MotionType::Avoid, "Back"),
-		motionManager_->GetMotion(MotionType::Avoid, "Back")));
-	stateMachine_->AddState("Dead", std::make_unique<CharacterStateDead>(this, motionManager_->GetMotion(MotionType::DownFall, "Front")));
-	stateMachine_->ChangeState("None");
 }
 
 /// @brief デストラクタ
@@ -127,15 +79,6 @@ Character::~Character()
 
 	// 死亡状態になっていない場合は、死亡処理を呼び出す
 	if (!IsDead())Dead();
-}
-
-/// @brief アニメーションの初期化
-/// @param animationData 
-void Character::SetAnimationHandle(const AnimationHandleData& animationData)
-{
-	hStandMotion_ = animationData.hStandMotion;
-	hStanceMotion_ = animationData.hStanceMotion;
-	hWalkMotion_ = animationData.hWalkMotion;
 }
 
 /// @brief 更新処理
@@ -1375,20 +1318,6 @@ void Character::UpdateAnimation()
 		// スタイルチェンジ中でない場合は、通常のモーションを再生する
 		if (!IsStyleChanging())
 		{
-			if (!currentAttack_ && !IsDamageReaction() && !IsGrabbed() && !IsGuard() && !IsRepelling() && !IsDeflecting() && !IsAvoid() && !IsDown() && !IsDash() && !IsTelegraph())
-			{
-				// 立ちモーションを再生する
-				SetAnimation(hStandMotion_, false, true);
-
-				//　移動している場合は歩きモーションを再生する
-				if (movement_->GetTargetVelocity().Length() > 0.0f)
-					SetAnimation(hWalkMotion_, false, true);
-
-				// 構え中は構えモーションを優先して再生する
-				if (isStance_)
-					SetAnimation(hStanceMotion_, false, true);
-			}
-
 			// 掴み攻撃や掴まれダメージの状態でない場合は、掴みや掴まれのモーションを再生する
 			if (!IsGrabStrikeAttack())
 			{
@@ -2198,11 +2127,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 		attackTrail_->param_->easing_ = 0.5f * 0.5f * 0.5f;
 	}
 
-	// モーション
-	hStandMotion_ = initData.hStandMotion;
-	hStanceMotion_ = initData.hStanceMotion;
-	hWalkMotion_ = initData.hWalkMotion;
-
 	hGrabMotion_ = motionManager_->GetMotion(MotionType::Grab, "Front");
 	hGrabbedMotion_ = motionManager_->GetMotion(MotionType::Grabbed, "Front");
 
@@ -2276,6 +2200,52 @@ void Character::SetInitData(const CharacterInitData& initData)
 		guardGageHUD_->SetMaxGage(static_cast<int>(guardGage_ * 100.0f));
 		guardGageHUD_->SetCurrentGage(static_cast<int>(guardGage_ * 100.0f));
 	}
+
+
+
+	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this, initData.hStandMotion, initData.hStanceMotion, initData.hWalkMotion));
+	stateMachine_->AddState("Dash", std::make_unique<CharacterStateDash>(this, initData.hDashMotion));
+	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
+	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
+	stateMachine_->AddState("Guard", std::make_unique<CharacterStateGuard>(this, initData.hGuardMotion, initData.hGuardHitMotion));
+	stateMachine_->AddState("LightDamage", std::make_unique<CharacterStateDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("HeavyDamage", std::make_unique<CharacterStateDamage>(this,
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"),
+		motionManager_->GetMotion(MotionType::Stagger, "Front_Heavy"), 1.5f));
+	stateMachine_->AddState("DownFalling", std::make_unique<CharacterStateDownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("DownLying", std::make_unique<CharacterStateDownLying>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("DownGettingUp", std::make_unique<CharacterStateDownGettingUp>(this,
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front"),
+		motionManager_->GetMotion(MotionType::DowoGetUp, "Front")));
+	stateMachine_->AddState("DownStagger", std::make_unique<CharacterStateDownStagger>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("BlownAway", std::make_unique<CharacterStateBlownAway>(this,
+		motionManager_->GetMotion(MotionType::DownFall, "Front"),
+		motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->AddState("BlownFalling", std::make_unique<CharacterStateBlownFalling>(this,
+		motionManager_->GetMotion(MotionType::DownLying, "Front"),
+		motionManager_->GetMotion(MotionType::DownLying, "Front")));
+	stateMachine_->AddState("Repel", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Deflect", std::make_unique<CharacterStateParry>(this, motionManager_->GetMotion(MotionType::Attack, "Player_Combo_1")));
+	stateMachine_->AddState("Repelled", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Deflected", std::make_unique<CharacterStateParried>(this, motionManager_->GetMotion(MotionType::Stagger, "Front")));
+	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
+		initData.hAvoidFrontMotion, initData.hAvoidBackMotion, initData.hAvoidLeftMotion, initData.hAvoidRightMotion));
+	stateMachine_->AddState("Dead", std::make_unique<CharacterStateDead>(this, motionManager_->GetMotion(MotionType::DownFall, "Front")));
+	stateMachine_->ChangeState("None");
 }
 
 /// @brief 当たり判定の更新

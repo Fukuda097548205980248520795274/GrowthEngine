@@ -33,10 +33,6 @@ public:
 	/// @brief デストラクタ
 	virtual ~Character() override;
 
-	/// @brief アニメーションの初期化
-	/// @param animationData 
-	void SetAnimationHandle(const AnimationHandleData& animationData);
-
 	/// @brief ビヘイビアツリーの設定
 	/// @param behaviorTreeName 
 	virtual void SetBehaviorTree(BehaviorTree* behaviorTree) { (void)behaviorTree; }
@@ -1022,19 +1018,6 @@ protected:
 
 
 protected:
-
-	/// @brief 立ちモーション
-	AnimationHandle hStandMotion_ = 0;
-
-	/// @brief 構えモーション
-	AnimationHandle hStanceMotion_ = 0;
-
-	/// @brief 歩きモーション
-	AnimationHandle hWalkMotion_ = 0;
-
-	/// @brief スタイルチェンジモーション
-	AnimationHandle hStyleChangeMotion_ = 0;
-
 
 	/// @brief つかみモーション
 	AnimationHandle hGrabMotion_ = 0;

@@ -688,9 +688,9 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.hpHUD = playerHP_.get();
 		playerInitData.rageGageThresholds = { 20.0f };
 		player_ = std::make_unique<Player>();
+		player_->Initialize(playerInitData, playerWeapon_.get());
 		player_->InitComboTree(comboTreeConfig, comboTreeEditor_.get());
 		player_->SetEditorName(editorName);
-		player_->Initialize(playerInitData, playerWeapon_.get());
 		player_->SetRageGageHud(playerRageGage_.get());
 		player_->SetWeaponHpGageHud(weaponDurabilityGage_.get(), weaponKnifeSprite_, weaponGunSprite_);
 
@@ -823,8 +823,8 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 
 		// NPCの生成処理
 		std::unique_ptr<NPC> npc = npcPool_->Acquire();
-		npc->InitBehaviorTree(behaviorTreeConfig, behaviorTreeEditor_.get());
 		npc->Initialize(npcInitData, tag, navMesh_.get());
+		npc->InitBehaviorTree(behaviorTreeConfig, behaviorTreeEditor_.get());
 		npc->SetEditorName(editorName);
 		character = npc.get();
 

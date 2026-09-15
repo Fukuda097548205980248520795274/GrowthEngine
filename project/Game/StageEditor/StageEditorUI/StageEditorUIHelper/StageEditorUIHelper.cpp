@@ -432,6 +432,7 @@ namespace StageEditorUIHelper
 				if (DrawRow("左回避モーション", MotionType::Avoid, target.avoidLeftMotion)) anyChanged = true;
 				if (DrawRow("右回避モーション", MotionType::Avoid, target.avoidRightMotion)) anyChanged = true;
 				if (DrawRow("防御モーション", MotionType::Guard, target.guardMotion)) anyChanged = true;
+				if (DrawRow("防御成功モーション", MotionType::Guard, target.guardHitMotion)) anyChanged = true;
 
 				EndPropertyTable();
 			}
@@ -581,6 +582,7 @@ namespace StageEditorUIHelper
 			animationData.hAvoidLeftMotion = motionManager->GetMotion(MotionType::Avoid, target.avoidLeftMotion.name);
 			animationData.hAvoidRightMotion = motionManager->GetMotion(MotionType::Avoid, target.avoidRightMotion.name);
 			animationData.hGuardMotion = motionManager->GetMotion(MotionType::Guard, target.guardMotion.name);
+			animationData.hGuardHitMotion = motionManager->GetMotion(MotionType::Guard, target.guardHitMotion.name);
 		}
 	}
 
