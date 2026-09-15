@@ -21,6 +21,7 @@ class Avoid;
 class NavMesh;
 class EffectManager;
 class Gage;
+class GameScene;
 
 class Character : public Entity
 {
@@ -717,6 +718,9 @@ protected:
 
 	/// @brief エンジン
 	const GrowthEngine* engine_ = nullptr;
+
+	/// @brief シーン
+	GameScene* scene_ = nullptr;
 
 	/// @brief モーションマネージャ
 	MotionManager* motionManager_ = nullptr;

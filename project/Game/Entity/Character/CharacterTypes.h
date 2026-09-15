@@ -4,6 +4,7 @@
 class HP;
 class Weapon;
 class Gage;
+class GameScene;
 
 enum class FightStyle
 {
@@ -105,6 +106,9 @@ struct CharacterInitData
 
 	/// @brief レイジゲージの閾値
 	std::vector<float> rageGageThresholds;
+
+	/// @brief ゲームシーン
+	GameScene* scene = nullptr;
 
 	/// @brief モデル
 	Render3DSkinningModel* model_ = nullptr;

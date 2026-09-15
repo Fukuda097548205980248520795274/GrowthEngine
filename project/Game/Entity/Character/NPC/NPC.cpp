@@ -1,4 +1,5 @@
 #include "NPC.h"
+#include "Scene/GameScene/GameScene.h"
 #include "BattleDirector/BattleDirector.h"
 #include "Action/Move/Move.h"
 #include "HUD/HP/HP.h"

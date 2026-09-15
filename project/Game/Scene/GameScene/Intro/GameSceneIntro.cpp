@@ -176,10 +176,10 @@ void GameScene::IntroPhaseUpdate()
 		fadeSprite_->param_->material.color.w = introTimer_ / kIntroTime;
 	}
 
-	// イントロフェーズが終了したら戦闘フェーズに遷移
+	// イントロフェーズが終了したら探索フェーズに遷移
 	if (introTimer_ <= 0.0f)
 	{
 		Character::SetIsGameIntro(false);
-		phaseManager_->ChangePhase(PhaseType::Battle);
+		phaseManager_->ChangePhase(PhaseType::Exploration);
 	}
 }

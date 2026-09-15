@@ -1540,6 +1540,9 @@
     <Filter Include="Game\SharedTreeEditorClipboard">
       <UniqueIdentifier>{0096c3c2-ba1f-43ee-b914-8f7be4f469a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Scene\GameScene\Exploration">
+      <UniqueIdentifier>{3282a9d0-7f84-4ef4-af9e-665a563e4a22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2792,6 +2795,9 @@
     </ClCompile>
     <ClCompile Include="Game\SharedTreeEditorClipboard\SharedTreeEditorClipboard.cpp">
       <Filter>Game\SharedTreeEditorClipboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scene\GameScene\Exploration\GameSceneExploration.cpp">
+      <Filter>Game\Scene\GameScene\Exploration</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -458,6 +458,8 @@ void GameScene::Initialize()
 	phaseManager_ = std::make_unique<PhaseManager<PhaseType>>();
 	phaseManager_->SetOnEnter(PhaseType::Intro, [&]() { IntroPhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Intro, [&]() { IntroPhaseUpdate(); });
+	phaseManager_->SetOnEnter(PhaseType::Exploration, [&]() { ExplorationPhaseInitialize(); });
+	phaseManager_->SetOnUpdate(PhaseType::Exploration, [&]() { ExplorationPhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Battle, [&]() { BattlePhaseInitialize(); });
 	phaseManager_->SetOnUpdate(PhaseType::Battle, [&]() { BattlePhaseUpdate(); });
 	phaseManager_->SetOnEnter(PhaseType::Pause, [&]() { PausePhaseInitialize(); });
@@ -687,6 +689,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 		playerInitData.attackTrail = playerTrail_.get();
 		playerInitData.hpHUD = playerHP_.get();
 		playerInitData.rageGageThresholds = { 20.0f };
+		playerInitData.scene = this;
 		player_ = std::make_unique<Player>();
 		player_->Initialize(playerInitData, playerWeapon_.get());
 		player_->InitComboTree(comboTreeConfig, comboTreeEditor_.get());
@@ -703,6 +706,7 @@ Character* GameScene::CreateCharacter(const CharacterInitData& initData, Charact
 	else
 	{
 		CharacterInitData npcInitData = initData;
+		npcInitData.scene = this;
 
 		// NPCのモデルの生成と初期化
 		std::unique_ptr<Render3DSkinningModel> npcModel = npcModelPool_->Acquire();
@@ -1543,13 +1547,19 @@ bool GameScene::HandleTriggerEvent(int eventType, const char* param, bool isStar
 				j.erase("objects");
 			}
 
+			// 探索中にバトルエリアが生成された場合は、フェーズを探索からバトルに切り替える
+			if (phaseManager_->GetCurrentPhase() == PhaseType::Exploration)
+			{
+				phaseManager_->ChangePhase(PhaseType::Battle);
+			}
+
 			// 生成が終わったイベントトリガーを削除する場合は true を返す
 			return true;
 		}
 		catch (const std::exception& e)
 		{
 			// JSONの解析に失敗した場合はエラーを出力してイベントトリガーを削除しない
-			(void)e; // 未使用変数の警告を消すため
+			(void)e;
 			return false;
 		}
 	}

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Scene/GameScene/GameScene.h"
 #include "Entity/Weapon/Weapon.h"
 #include "HUD/HP/HP.h"
 #include "HUD/Gage/Gage.h"

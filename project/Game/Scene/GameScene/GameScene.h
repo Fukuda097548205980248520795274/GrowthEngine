@@ -55,6 +55,7 @@ public:
 	enum class PhaseType
 	{
 		Intro, // イントロ
+		Exploration, // 探索中
 		Battle, // 戦闘中
 		Pause, // ポーズ中
 		Finish, // 終了
@@ -196,6 +197,15 @@ private:
 
 	/// @brief イントロフェーズの時間
 	static constexpr float kIntroTime = 1.0f;
+
+
+private:
+
+	/// @brief 探索フェーズの初期化処理
+	void ExplorationPhaseInitialize();
+
+	/// @brief 探索フェーズの更新処理
+	void ExplorationPhaseUpdate();
 
 
 private:

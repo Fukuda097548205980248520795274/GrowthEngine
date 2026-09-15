@@ -2054,6 +2054,10 @@ void Character::Dead()
 /// @param initData 
 void Character::SetInitData(const CharacterInitData& initData)
 {
+	// シーンが設定されていることを確認する
+	assert(initData.scene);
+	scene_ = initData.scene;
+
 	// フラグをリセットする
 	isFinished_ = false;
 	isInAttackSequence_ = false;

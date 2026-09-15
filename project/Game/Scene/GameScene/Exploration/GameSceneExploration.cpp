@@ -1,64 +1,19 @@
 #include "../GameScene.h"
-#include "HUD/IntroText/IntroText.h"
 
-/// @brief 戦闘フェーズの初期化処理
-void GameScene::BattlePhaseInitialize()
+
+/// @brief 探索フェーズの初期化処理
+void GameScene::ExplorationPhaseInitialize()
 {
-	// ゲームクリアフラグをリセットする
-	isGameClear_ = false;
-
 	// バトルディレクターをクリアする
 	BattleDirector::GetInstance().Clear();
-
-	if (!isPause_)
-	{
-		// イントロテキストの生成
-		IntroText::InitData introTextInitData;
-		introTextInitData.buttonSprite = startTextSprite_;
-		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
-		introText->Initialize(introTextInitData);
-		huds_.push_back(std::move(introText));
-	}
-
-	isPause_ = false;
 }
 
-/// @brief 戦闘フェーズの更新処理
-void GameScene::BattlePhaseUpdate()
+
+/// @brief 探索フェーズの更新処理
+void GameScene::ExplorationPhaseUpdate()
 {
 	// デルタタイムを取得する
 	const float kDt = engine_->GetDeltaTime() * engine_->GetTimeScale();
-
-	// ゲームクリア時の処理
-	if (isGameClear_)
-	{
-		phaseManager_->ChangePhase(PhaseType::Exploration);
-		soundManager_->SeWin();
-
-		// 勝利演出
-		IntroText::InitData winTextInitData;
-		winTextInitData.buttonSprite = winTextSprite_;
-		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
-		introText->Initialize(winTextInitData);
-		huds_.push_back(std::move(introText));
-	}
-
-	// プレイヤーが死亡した場合の処理
-	if (player_ && player_->IsDead())
-	{
-		phaseManager_->ChangePhase(PhaseType::Finish);
-		soundManager_->SeLose();
-
-		// 敗北演出
-		IntroText::InitData loseTextInitData;
-		loseTextInitData.buttonSprite = loseTextSprite_;
-		std::unique_ptr<IntroText> introText = std::make_unique<IntroText>();
-		introText->Initialize(loseTextInitData);
-		huds_.push_back(std::move(introText));
-	}
-
-	// バトルディレクターの更新
-	BattleDirector::GetInstance().Update(kDt);
 
 	// プレイヤーの更新
 	if (player_)
@@ -185,11 +140,11 @@ void GameScene::BattlePhaseUpdate()
 			cameraShake_->StartShake(0.3f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// ガードブレイクしたとき
-		if(player_->IsGuardBreaking())
+		if (player_->IsGuardBreaking())
 			cameraShake_->StartShake(0.4f, 0.05f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// ガードブレイクされたとき
-		if(player_->IsGuardBroke())
+		if (player_->IsGuardBroke())
 			cameraShake_->StartShake(0.4f, 0.1f, Vector3(1.0f, 1.0f, 1.0f));
 
 		// 弾いたとき
