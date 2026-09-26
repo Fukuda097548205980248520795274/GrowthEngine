@@ -2799,6 +2799,15 @@
     <ClCompile Include="Game\Scene\GameScene\Exploration\GameSceneExploration.cpp">
       <Filter>Game\Scene\GameScene\Exploration</Filter>
     </ClCompile>
+    <ClCompile Include="Game\StageObject\StaticEventTrigger\Event.cpp">
+      <Filter>Game\StageObject\StaticEventTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StageObject\StaticEventTrigger\SceneSpawn.cpp">
+      <Filter>Game\StageEditor\StageSpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity\Character\Player\PlayerCamera.cpp">
+      <Filter>Game\Entity\Character\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\GrowthEngine.h">
