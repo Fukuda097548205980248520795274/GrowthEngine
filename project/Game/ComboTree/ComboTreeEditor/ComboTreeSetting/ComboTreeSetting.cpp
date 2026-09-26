@@ -22,8 +22,10 @@ void ComboTreeSetting::SaveTree(const std::string& fileName, const std::vector<C
 		nodeJson["nodeType"] = static_cast<int>(node.nodeType);
 
 		// エディタ上の最新のノード座標を取得して保存
+#ifdef DEVELOPMENT
 		ImVec2 pos = ImNodes::GetNodeGridSpacePos(node.id);
 		nodeJson["pos"] = { pos.x, pos.y };
+#endif
 
 		nodeJson["animationName"] = node.motionName.c_str();
 		nodeJson["targetAnimationName"] = node.targetMotionName.c_str();
@@ -319,8 +321,10 @@ void ComboTreeSetting::LoadTree(const std::string& fileName, std::vector<ComboEd
 
 		outNodes.push_back(node);
 
-		// ImNodesに座標を即座に反映させる（重要）
+#ifdef DEVELOPMENT
+		// ImNodesに座標を即座に反映させる
 		ImNodes::SetNodeGridSpacePos(node.id, ImVec2(node.pos.x, node.pos.y));
+#endif
 	}
 
 	// リンクの復元

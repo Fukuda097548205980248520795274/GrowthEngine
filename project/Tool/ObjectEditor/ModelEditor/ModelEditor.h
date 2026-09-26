@@ -18,6 +18,16 @@ public:
 	/// @brief UIを描画する
 	void DrawUI();
 
+
+	/// @brief 履歴付きのドラッグ可能なFloat入力欄を描画する
+	/// @param label 
+	/// @param v 
+	/// @param vSpeed 
+	/// @param vMin 
+	/// @param vMax 
+	/// @return 
+	bool DragFloatWithHistory(const char* label, float* v, float vSpeed = 1.0f, float vMin = 0.0f, float vMax = 0.0f);
+
 	/// @brief モデルを取得する
 	/// @tparam T 
 	/// @param name 
@@ -34,6 +44,30 @@ public:
 		}
 
 		return nullptr;
+	}
+
+
+	/// @brief 共通のモデルパラメータのインスペクターUIを描画する
+	/// @tparam TParam 
+	/// @param param 
+	template<typename TParam>
+	void CommonModelParamInspectorUI(TParam* param)
+	{
+		TransformInspectorUI(&param->modelTransform);
+
+		for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
+		{
+			if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
+			{
+				BlenderInspectorUI(&param->blendMode);
+				TransformInspectorUI(&param->meshTransforms[i]);
+				MaterialInspectorUI(&param->meshMaterial[i]);
+				BlurInspectorUI(&param->meshBlur[i]);
+				OutlineInspectorUI(&param->meshOutline[i]);
+
+				ImGui::TreePop();
+			}
+		}
 	}
 
 private:

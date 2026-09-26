@@ -33,6 +33,23 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownAway/CharacterStateBlownAway.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownFalling/CharacterStateBlownFalling.h"
 
+namespace
+{
+	// プレイヤーの体力HUDの位置
+	constexpr float kPlayerHpHudPosX = 360.0f;
+	constexpr float kPlayerHpHudPosY = 670.0f;
+
+	// プレイヤーのガードゲージHUDの位置
+	constexpr float kPlayerGuardGageHudPosX = 360.0f;
+	constexpr float kPlayerGuardGageHudPosY = 700.0f;
+
+	// NPCの体力HUDのオフセット値
+	constexpr float kNpcHpHudOffsetY = 0.5f;
+
+	// NPCのガードゲージHUDのオフセット値
+	constexpr float kNpcGuardGageHudOffsetY = 0.5f;
+}
+
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 bool Character::isCutsceneActive_ = false;
@@ -2306,18 +2323,18 @@ void Character::HpHudUpdate()
 	case CharacterTag::Ally:
 	case CharacterTag::EnemyNormal:
 	default:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, kNpcHpHudOffsetY, 0.0f));
 		break;
 
 		// プレイヤーは画面左上の固定位置に体力HUDを表示する
 	case CharacterTag::Player:
-		hpHUD_->SetPosition(Vector2(360.0f, 670.0f));
+		hpHUD_->SetPosition(Vector2(kPlayerHpHudPosX, kPlayerHpHudPosY));
 		hpHUD_->SetVisible(true);
 		break;
 
 		// ボスは頭の上に体力HUDを表示する
 	case CharacterTag::EnemyBoss:
-		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.5f, 0.0f));
+		hpHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, kNpcHpHudOffsetY, 0.0f));
 		break;
 	}
 }
@@ -2335,22 +2352,22 @@ void Character::GuardGageHudUpdate()
 	{
 	case CharacterTag::Ally:
 	default:
-		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, kNpcGuardGageHudOffsetY, 0.0f));
 		break;
 
 	case CharacterTag::EnemyNormal:
-		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, kNpcGuardGageHudOffsetY, 0.0f));
 		break;
 
-		// プレイヤーは画面左上の固定位置に体力HUDを表示する
+		// プレイヤーは画面左上の固定位置にガードゲージHUDを表示する
 	case CharacterTag::Player:
-		guardGageHUD_->SetPosition(Vector2(360.0f, 670.0f));
+		guardGageHUD_->SetPosition(Vector2(kPlayerGuardGageHudPosX, kPlayerGuardGageHudPosY));
 		guardGageHUD_->SetVisible(true);
 		break;
 
 		// ボスは頭の上に体力HUDを表示する
 	case CharacterTag::EnemyBoss:
-		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, 0.3f, 0.0f));
+		guardGageHUD_->SetPosition(GetBonePosition(JointType::Head) + Vector3(0.0f, kNpcGuardGageHudOffsetY, 0.0f));
 		break;
 	}
 }

@@ -83,6 +83,23 @@ void ModelEditor::DrawUI()
 #endif
 }
 
+/// @brief 履歴付きのドラッグ可能なFloat入力欄を描画する
+/// @param label 
+/// @param v 
+/// @param vSpeed 
+/// @param vMin 
+/// @param vMax 
+/// @return 
+bool ModelEditor::DragFloatWithHistory(const char* label, float* v, float vSpeed, float vMin, float vMax)
+{
+	bool isChanged = ImGui::DragFloat(label, v, vSpeed, vMin, vMax);
+	if (ImGui::IsItemActivated())
+	{
+		SaveHistoryState();
+	}
+	return isChanged;
+}
+
 /// @brief モデルフォルダを走査してロードする
 void ModelEditor::RefreshModelList()
 {
@@ -196,20 +213,60 @@ void ModelEditor::RefreshAnimationList()
 void ModelEditor::DrawHierarchyWindow()
 {
 #ifdef DEVELOPMENT
-
 	if (ImGui::Begin("モデル - ヒエラルキー"))
 	{
 		for (int i = 0; i < modelElements_.size(); ++i)
 		{
+			// IDをPushして同名モデルの衝突を防ぐ
+			ImGui::PushID(i);
+
 			bool isSelected = (selectedElementIndex_ == i);
 			if (ImGui::Selectable(modelElements_[i].modelName.c_str(), isSelected))
 			{
 				selectedElementIndex_ = i;
 			}
+
+			// ドラッグ（移動元）の処理
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+			{
+				ImGui::SetDragDropPayload("HIERARCHY_ITEM", &i, sizeof(int));
+				ImGui::Text("%s を移動", modelElements_[i].modelName.c_str());
+				ImGui::EndDragDropSource();
+			}
+
+			// ドロップ（移動先）の処理
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ITEM"))
+				{
+					int payload_n = *(const int*)payload->Data;
+					if (payload_n != i)
+					{
+						SaveHistoryState();
+						// 要素の入れ替え
+						std::swap(modelElements_[payload_n], modelElements_[i]);
+						// 選択状態も追従させる
+						selectedElementIndex_ = i;
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			// 右クリックでコンテキストメニューを表示（ショートカットとして削除機能などを配置）
+			if (ImGui::BeginPopupContextItem("Context_Menu"))
+			{
+				if (ImGui::MenuItem("この要素を削除"))
+				{
+					selectedElementIndex_ = i;
+					DeleteSelectedElement();
+				}
+				ImGui::EndPopup();
+			}
+
+			ImGui::PopID();
 		}
 	}
 	ImGui::End();
-
 #endif
 }
 
@@ -257,21 +314,7 @@ void ModelEditor::DrawInspectorWindow()
 				auto staticModel = static_cast<Render3DStaticModel*>(selectedData.render3D.get());
 				auto param = staticModel->param_;
 
-				TransformInspectorUI(&param->modelTransform);
-
-				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
-				{
-					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
-					{
-						BlenderInspectorUI(&param->blendMode);
-						TransformInspectorUI(&param->meshTransforms[i]);
-						MaterialInspectorUI(&param->meshMaterial[i]);
-						BlurInspectorUI(&param->meshBlur[i]);
-						OutlineInspectorUI(&param->meshOutline[i]);
-
-						ImGui::TreePop();
-					}
-				}
+				CommonModelParamInspectorUI(param);
 			}
 			else if (selectedData.render3D->GetType() == Engine::Render3D::Type::AnimationModel)
 			{
@@ -279,25 +322,13 @@ void ModelEditor::DrawInspectorWindow()
 				auto animationModel = static_cast<Render3DAnimationModel*>(selectedData.render3D.get());
 				auto param = animationModel->param_;
 
-				TransformInspectorUI(&param->modelTransform);
-
-				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
-				{
-					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
-					{
-						BlenderInspectorUI(&param->blendMode);
-						TransformInspectorUI(&param->meshTransforms[i]);
-						MaterialInspectorUI(&param->meshMaterial[i]);
-						BlurInspectorUI(&param->meshBlur[i]);
-						OutlineInspectorUI(&param->meshOutline[i]);
-
-						ImGui::TreePop();
-					}
-				}
+				CommonModelParamInspectorUI(param);
 
 				// アニメーションの編集
-				ImGui::DragFloat("アニメーションタイマー", &param->animation.timer, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
+				if (DragFloatWithHistory("アニメーションタイマー", &param->animation.timer, 0.01f))
+				{
+					SaveHistoryState();
+				}
 			}
 			else if (selectedData.render3D->GetType() == Engine::Render3D::Type::SkinningModel)
 			{
@@ -305,25 +336,13 @@ void ModelEditor::DrawInspectorWindow()
 				auto skinningModel = static_cast<Render3DSkinningModel*>(selectedData.render3D.get());
 				auto param = skinningModel->param_;
 
-				TransformInspectorUI(&param->modelTransform);
-
-				for (int i = 0; i < static_cast<int>(param->meshTransforms.size()); ++i)
-				{
-					if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
-					{
-						BlenderInspectorUI(&param->blendMode);
-						TransformInspectorUI(&param->meshTransforms[i]);
-						MaterialInspectorUI(&param->meshMaterial[i]);
-						BlurInspectorUI(&param->meshBlur[i]);
-						OutlineInspectorUI(&param->meshOutline[i]);
-
-						ImGui::TreePop();
-					}
-				}
+				CommonModelParamInspectorUI(param);
 
 				// アニメーションの編集
-				ImGui::DragFloat("アニメーションタイマー", &param->animation.timer, 0.01f);
-				if (ImGui::IsItemActivated()) SaveHistoryState();
+				if (DragFloatWithHistory("アニメーションタイマー", &param->animation.timer, 0.01f))
+				{
+					SaveHistoryState();
+				}
 			}
 			else if (selectedData.render3D->GetType() == Engine::Render3D::Type::UVSphere)
 			{
@@ -369,23 +388,35 @@ void ModelEditor::DrawInspectorWindow()
 
 				if (ImGui::TreeNode("サイズ"))
 				{
-					ImGui::DragFloat("最初の内半径", &param->size.startInRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最初の内半径", &param->size.startInRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("最初の外半径", &param->size.startOutRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最初の外半径", &param->size.startOutRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("最初の角度", &param->size.startAngle, 0.01f, 0.0f, 360.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最初の角度", &param->size.startAngle, 0.01f, 0.0f, 360.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("最後の内半径", &param->size.endInRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最後の内半径", &param->size.endInRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("最後の外半径", &param->size.endOutRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最後の外半径", &param->size.endOutRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("最後の角度", &param->size.endAngle, 0.01f, 0.0f, 360.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("最後の角度", &param->size.endAngle, 0.01f, 0.0f, 360.0f))
+					{
+						SaveHistoryState();
+					}
 
 					ImGui::TreePop();
 				}
@@ -414,14 +445,20 @@ void ModelEditor::DrawInspectorWindow()
 
 				if (ImGui::TreeNode("サイズ"))
 				{
-					ImGui::DragFloat("上半径", &param->size.topRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("上半径", &param->size.topRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("下半径", &param->size.bottomRadius, 0.01f, 0.0f, 1000.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("下半径", &param->size.bottomRadius, 0.01f, 0.0f, 1000.0f))
+					{
+						SaveHistoryState();
+					}
 
-					ImGui::DragFloat("高さ", &param->size.height, 0.01f, 0.0f, 360.0f);
-					if (ImGui::IsItemActivated()) SaveHistoryState();
+					if (DragFloatWithHistory("高さ", &param->size.height, 0.01f, 0.0f, 360.0f))
+					{
+						SaveHistoryState();
+					}
 
 					ImGui::TreePop();
 				}
