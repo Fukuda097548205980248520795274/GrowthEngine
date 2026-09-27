@@ -63,6 +63,9 @@ void CameraGuard::Initialize(const InitData& initData)
 /// @brief 更新処理
 void CameraGuard::Update()
 {
+	// 基底クラスの更新処理
+	StageObject::Update();
+
 	// 衝突判定のパラメータを更新
 	if (collision_)
 	{

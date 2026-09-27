@@ -1,4 +1,6 @@
 {
+    "lightFileName": "",
+    "modelFileName": "stage3",
     "navMesh": [
         {
             "groupId": 0,
@@ -977,6 +979,28 @@
             "scaleY": 10.0,
             "scaleZ": 1.455727219581604,
             "subType": 3,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": 0.0,
+            "posY": -1.0,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 100.0,
+            "scaleY": 1.0,
+            "scaleZ": 100.0,
+            "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
             "templateName": ""

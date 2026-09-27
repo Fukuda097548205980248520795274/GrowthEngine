@@ -32,7 +32,7 @@ void GameScene::BattlePhaseUpdate()
 	// ゲームクリア時の処理
 	if (isGameClear_)
 	{
-		phaseManager_->ChangePhase(PhaseType::Exploration);
+		phaseManager_->ChangePhase(PhaseType::Finish);
 		soundManager_->SeWin();
 
 		// 勝利演出

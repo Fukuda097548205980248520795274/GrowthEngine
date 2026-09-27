@@ -180,6 +180,6 @@ void GameScene::IntroPhaseUpdate()
 	if (introTimer_ <= 0.0f)
 	{
 		Character::SetIsGameIntro(false);
-		phaseManager_->ChangePhase(PhaseType::Exploration);
+		phaseManager_->ChangePhase(PhaseType::Battle);
 	}
 }
