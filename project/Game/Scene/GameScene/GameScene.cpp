@@ -543,13 +543,6 @@ void GameScene::OnStageLoaded(const std::string& fileName)
 	size_t extPos = baseName.find(".json");
 	if (extPos != std::string::npos)
 		baseName.erase(extPos, 5);
-
-	// 他のエディタのロードを呼び出す
-	if (modelEditor_) 
-		modelEditor_->Load(baseName);
-
-	if (lightEditor_)
-		lightEditor_->Load(baseName);
 }
 
 /// @brief リセットする

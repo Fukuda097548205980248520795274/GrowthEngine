@@ -34,6 +34,9 @@ void StageEditorUI::Initialize()
 	LoadComboTreeNames();
 	LoadStageDataNames();
 	LoadCutsceneNames();
+
+	// 外部ファイル名リストを更新
+	RefreshExternalFileNames();
 }
 
 /// @brief 更新処理
@@ -60,9 +63,9 @@ void StageEditorUI::Update()
 /// @param navMesh 
 /// @param canExtrude 
 /// @param canBridge 
-/// @param selectedPolygonId 
+/// @param stageSettings 
 void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
-	NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge)
+	NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge, StageSettings& stageSettings)
 {
 #ifdef DEVELOPMENT
 
@@ -226,7 +229,7 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 			scene_->Reset();
 
 			// プレイモードを終了したら、ファイルからステージデータを再読み込みして初期状態に戻す
-			assert(fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh) && "実行停止時のファイル読み込みに失敗しました");
+			assert(fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh, stageSettings) && "実行停止時のファイル読み込みに失敗しました");
 
 			Stop(isPlaying);
 		}
@@ -243,9 +246,100 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 	}
 
 	ImGui::Separator();
+	ImGui::Text("外部エディタデータの読み込み");
+
+	// ファイルリストを手動更新するボタン
+	if (ImGui::Button("ファイルリスト更新"))
+	{
+		RefreshExternalFileNames();
+	}
+
+	// ======================================
+	// モデルファイルのロードUI (プルダウン)
+	// ======================================
+	if (!modelFileNames_.empty())
+	{
+		std::vector<const char*> modelItems;
+		for (const auto& name : modelFileNames_)
+		{
+			modelItems.push_back(name.c_str());
+		}
+
+		ImGui::Combo("Model File", &selectedModelFileIndex_, modelItems.data(), static_cast<int>(modelItems.size()));
+
+		// 選択されたモデルファイルを保存 (0番目はNone)
+		if (selectedModelFileIndex_ == 0)
+		{
+			stageSettings.modelFileName = "";
+		}
+		else
+		{
+			stageSettings.modelFileName = modelFileNames_[selectedModelFileIndex_];
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Load Model"))
+		{
+			// None以外が選択されている場合のみロードする
+			if (selectedModelFileIndex_ > 0)
+			{
+				if (auto modelEditor = scene_->GetModelEditor())
+				{
+					modelEditor->Load(modelFileNames_[selectedModelFileIndex_]);
+				}
+			}
+		}
+	}
+	else
+	{
+		ImGui::TextDisabled("※モデルファイルが見つかりません");
+	}
+
+	// ======================================
+	// ライトファイルのロードUI (プルダウン)
+	// ======================================
+	if (!lightFileNames_.empty())
+	{
+		std::vector<const char*> lightItems;
+		for (const auto& name : lightFileNames_)
+		{
+			lightItems.push_back(name.c_str());
+		}
+
+		ImGui::Combo("Light File", &selectedLightFileIndex_, lightItems.data(), static_cast<int>(lightItems.size()));
+
+		// 選択されたライトファイルを保存 (0番目はNone)
+		if (selectedLightFileIndex_ == 0)
+		{
+			stageSettings.lightFileName = "";
+		}
+		else
+		{
+			stageSettings.lightFileName = lightFileNames_[selectedLightFileIndex_];
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Load Light"))
+		{
+			// None以外が選択されている場合のみロードする
+			if (selectedLightFileIndex_ > 0)
+			{
+				if (auto lightEditor = scene_->GetLightEditor())
+				{
+					lightEditor->Load(lightFileNames_[selectedLightFileIndex_]);
+				}
+			}
+		}
+	}
+	else
+	{
+		ImGui::TextDisabled("※ライトファイルが見つかりません");
+	}
+
+	ImGui::Separator();
 
 	// ショートカットキーの処理
-	HandleShortcuts(placementList, currentFileName, isPlaying, navMesh, isDirty);
+	HandleShortcuts(placementList, currentFileName, isPlaying, navMesh, isDirty, stageSettings);
 
 	// モード切替の表示
 	if (currentMode_ == EditorMode::ObjectPlacement)
@@ -276,7 +370,8 @@ void StageEditorUI::DrawUI(std::vector<PlacementData>& placementList, std::strin
 /// @param isPlaying 
 /// @param isDirty 
 /// @param navMesh 
-void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty)
+/// @param stageSettings 
+void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, StageSettings& stageSettings)
 {
 #ifdef DEVELOPMENT
 
@@ -337,7 +432,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 				for (auto& data : placementList) spawner_->DeleteActualEntity(data);
 				placementList.clear();
 				currentFileName = fileName;
-				fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+				fileManager_->SaveToFile(currentFileName, placementList, navMesh, stageSettings);
 			}
 
 			ImGui::CloseCurrentPopup();
@@ -407,7 +502,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 					for (auto& data : placementList) spawner_->DeleteActualEntity(data);
 					placementList.clear();
 					currentFileName = file;
-					fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
+					fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh, stageSettings);
 				}
 			}
 
@@ -443,7 +538,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 						for (auto& data : placementList) spawner_->DeleteActualEntity(data);
 						placementList.clear();
 						currentFileName = file;
-						fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
+						fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh, stageSettings);
 					}
 				}
 
@@ -452,7 +547,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 				{
 					// 右クリックした対象を現在のファイルとして設定し、上書き保存する
 					currentFileName = file;
-					fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+					fileManager_->SaveToFile(currentFileName, placementList, navMesh, stageSettings);
 					isDirty = false;
 				}
 
@@ -503,10 +598,10 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 		{
 			if (!currentFileName.empty())
 			{
-				fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+				fileManager_->SaveToFile(currentFileName, placementList, navMesh, stageSettings);
 			}
 			isDirty = false;
-			ExecutePendingAction(placementList, currentFileName, navMesh);
+			ExecutePendingAction(placementList, currentFileName, navMesh, stageSettings);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -516,7 +611,7 @@ void StageEditorUI::DrawAssetWindow(std::vector<PlacementData>& placementList, s
 		if (ImGui::Button("キャンセル", ImVec2(140, 0)))
 		{
 			isDirty = false; // 変更を破棄したとみなす
-			ExecutePendingAction(placementList, currentFileName, navMesh);
+			ExecutePendingAction(placementList, currentFileName, navMesh, stageSettings);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -666,7 +761,8 @@ void StageEditorUI::Stop(bool& isPlaying)
 /// @param placementList 
 /// @param currentFileName 
 /// @param navMesh 
-void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh)
+/// @param stageSettings 
+void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh, StageSettings& stageSettings)
 {
 	if (pendingAction_ == PendingAction::Load)
 	{
@@ -677,7 +773,7 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
 		for (auto& data : placementList) spawner_->DeleteActualEntity(data);
 		placementList.clear();
 		currentFileName = pendingFileName_;
-		fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh);
+		fileManager_->LoadFromFile(currentFileName, placementList, spawner_, navMesh, stageSettings);
 
 		// ファイルを切り替えた後に、シーンにロード完了の通知を送る
 		scene_->OnStageLoaded(currentFileName);
@@ -691,7 +787,7 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
 		for (auto& data : placementList) spawner_->DeleteActualEntity(data);
 		placementList.clear();
 		currentFileName = pendingFileName_;
-		fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+		fileManager_->SaveToFile(currentFileName, placementList, navMesh, stageSettings);
 	}
 
 	// 実行後はリセット
@@ -706,7 +802,8 @@ void StageEditorUI::ExecutePendingAction(std::vector<PlacementData>& placementLi
 /// @param isPlaying 
 /// @param navMesh 
 /// @param isDirty 
-void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty)
+/// @param stageSettings 
+void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, StageSettings& stageSettings)
 {
 	// プレイ中はショートカットキーを無効化する
 	if (isPlaying)return;
@@ -720,7 +817,7 @@ void StageEditorUI::HandleShortcuts(std::vector<PlacementData>& placementList, s
 		// Ctrl + S で上書き保存
 		if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S))
 		{
-			fileManager_->SaveToFile(currentFileName, placementList, navMesh);
+			fileManager_->SaveToFile(currentFileName, placementList, navMesh, stageSettings);
 			isDirty = false;
 		}
 
@@ -913,4 +1010,45 @@ void StageEditorUI::LoadCutsceneNames()
 		if (entry.is_regular_file())
 			cutsceneNames_.push_back(entry.path().stem().string());
 	}
+}
+
+/// @brief 外部エディタのファイルリストを更新する
+void StageEditorUI::RefreshExternalFileNames()
+{
+	modelFileNames_.clear();
+	lightFileNames_.clear();
+
+	// "None" を先頭に追加
+	modelFileNames_.push_back("None");
+	lightFileNames_.push_back("None");
+
+	// モデルファイルリストの取得
+	if (std::filesystem::exists("./Assets/Parameter/Models/"))
+	{
+		for (const auto& entry : std::filesystem::directory_iterator("./Assets/Parameter/Models/"))
+		{
+			if (entry.path().extension() == ".json")
+			{
+				// 拡張子(.json)を除いたファイル名を取得
+				modelFileNames_.push_back(entry.path().stem().string());
+			}
+		}
+	}
+
+	// ライトファイルリストの取得
+	if (std::filesystem::exists("./Assets/Parameter/Light/"))
+	{
+		for (const auto& entry : std::filesystem::directory_iterator("./Assets/Parameter/Light/"))
+		{
+			if (entry.path().extension() == ".json")
+			{
+				// 拡張子(.json)を除いたファイル名を取得
+				lightFileNames_.push_back(entry.path().stem().string());
+			}
+		}
+	}
+
+	// インデックスのリセット
+	selectedModelFileIndex_ = 0;
+	selectedLightFileIndex_ = 0;
 }

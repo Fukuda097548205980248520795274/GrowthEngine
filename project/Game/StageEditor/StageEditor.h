@@ -66,6 +66,9 @@ private:
 	// 配置するオブジェクトのリスト
 	std::vector<PlacementData> placementList_;
 
+	// ステージ設定
+	StageSettings stageSettings_;
+
 
 private:
 

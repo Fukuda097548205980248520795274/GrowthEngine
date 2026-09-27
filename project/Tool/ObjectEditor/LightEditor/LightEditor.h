@@ -12,6 +12,9 @@ public:
 	/// @param filename 
 	void Load(const std::string& filename);
 
+	/// @brief リセットする
+	void Reset();
+
 	/// @brief UIを描画する
 	void DrawUI();
 

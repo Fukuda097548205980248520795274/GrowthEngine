@@ -84,6 +84,17 @@ public:
 
 public:
 
+	/// @brief モデルエディタを取得する
+	/// @return 
+	ModelEditor* GetModelEditor() const { return modelEditor_.get(); }
+
+	/// @brief ステージエディタを取得する
+	/// @return 
+	LightEditor* GetLightEditor() const { return lightEditor_.get(); }
+
+
+public:
+
 	/// @brief ステージがロードされたときの処理
 	/// @param fileName 
 	void OnStageLoaded(const std::string& fileName);

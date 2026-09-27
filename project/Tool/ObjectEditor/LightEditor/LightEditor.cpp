@@ -19,6 +19,13 @@ void LightEditor::Load(const std::string& filename)
 	isFileOpen_ = true;
 }
 
+/// @brief リセットする
+void LightEditor::Reset()
+{
+	selectedElementIndex_ = -1;
+	lightElements_.clear();
+}
+
 /// @brief UIを描画する
 void LightEditor::DrawUI()
 {

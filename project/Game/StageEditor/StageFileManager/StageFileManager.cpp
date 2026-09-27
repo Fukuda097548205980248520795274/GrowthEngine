@@ -2,17 +2,23 @@
 #include "../StageSpawner/StageSpawner.h"
 #include "../StageEditor.h"
 #include "NavMesh/NavMesh.h"
+#include "Scene/GameScene/GameScene.h"
 
 /// @brief ファイルにステージデータを保存する
 /// @param filename 
 /// @param dataList 
+/// @param navMesh 
+/// @param stageSettings 
 /// @return 
-bool StageFileManager::SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList, const NavMesh* navMesh)
+bool StageFileManager::SaveToFile(const std::string& filename, const std::vector<PlacementData>& dataList, const NavMesh* navMesh, const StageSettings& stageSettings)
 {
 	json rootJson;
 
 	// 配置データをJSONに変換して保存する
 	toJson(rootJson, dataList);
+
+	// ステージ設定をJSONに変換して保存する
+	toJson(rootJson, stageSettings);
 
 	// NavMeshのデータも保存する
 	toJson(rootJson, *navMesh);
@@ -39,8 +45,11 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 /// @brief ファイルからステージデータを読み込む
 /// @param filename 
 /// @param outDataList 
+/// @param spawner 
+/// @param navMesh 
+/// @param stageSettings 
 /// @return 
-bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh)
+bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh, StageSettings& stageSettings)
 {
 	// 既存の配置データをクリア
 	outDataList.clear();
@@ -75,6 +84,8 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 		}
 	}
 
+	// ステージ設定を復元
+	fromJson(rootJson, stageSettings);
 
 	// NavMeshのデータも復元する
 	if (navMesh)
@@ -108,6 +119,17 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 				navMesh->AddPolygon(poly);
 			}
 		}
+	}
+
+	if (auto modelEditor = scene_->GetModelEditor())
+	{
+		modelEditor->Reset(); // モデルエディタの状態をリセットする
+		modelEditor->Load(stageSettings.modelFileName); // モデルエディタにモデルを読み込む
+	}
+	if (auto lightEditor = scene_->GetLightEditor())
+	{
+		lightEditor->Reset(); // ライトエディタの状態をリセットする
+		lightEditor->Load(stageSettings.lightFileName); // ライトエディタにライトを読み込む
 	}
 
 

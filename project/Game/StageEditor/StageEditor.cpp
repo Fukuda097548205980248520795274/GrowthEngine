@@ -8,7 +8,7 @@
 void StageEditor::Initialize()
 {
 	// ファイルマネージャの初期化
-	fileManager_ = std::make_unique<StageFileManager>(kStageDataDir);
+	fileManager_ = std::make_unique<StageFileManager>(kStageDataDir, scene_);
 
 	// 履歴管理の初期化
 	history_ = std::make_unique<StageEditorHistory>(scene_->GetNavMesh());
@@ -89,7 +89,7 @@ void StageEditor::Update(float dt)
 void StageEditor::LoadStage(const std::string& fileName)
 {
 	// ファイルを読み込む
-	if (fileManager_->LoadFromFile(fileName + ".json", placementList_, spawner_.get(), scene_->GetNavMesh()))
+	if (fileManager_->LoadFromFile(fileName + ".json", placementList_, spawner_.get(), scene_->GetNavMesh(), stageSettings_))
 	{
 		currentFileName_ = fileName + ".json";
 
@@ -107,9 +107,9 @@ void StageEditor::DrawUI()
 
 	navMeshController_->DrawDebug();
 
-	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), isDirty_);
+	editorUI_->DrawAssetWindow(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), isDirty_, stageSettings_);
 	editorUI_->DrawUI(placementList_, currentFileName_, isPlaying_, scene_->GetNavMesh(), navMeshController_.get(),
-		isDirty_, navMeshController_->CanExtrudeSelectedEdge(), navMeshController_->CanBridgeSelectedEdges());
+		isDirty_, navMeshController_->CanExtrudeSelectedEdge(), navMeshController_->CanBridgeSelectedEdges(), stageSettings_);
 
 #endif
 }

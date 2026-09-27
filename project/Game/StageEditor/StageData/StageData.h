@@ -164,6 +164,13 @@ struct PlacementData
 	InstancePtr instancePtr = std::monostate{};
 };
 
+// ステージ全体の設定データ
+struct StageSettings
+{
+	std::string modelFileName = "";
+	std::string lightFileName = "";
+};
+
 /// @brief 戦闘エリアのデータ構造
 struct BattleArea
 {
@@ -227,6 +234,15 @@ struct ChainEventData
 	// イベントが発生したときに生成されるオブジェクトの配置データ
 	std::vector<ChainEventData> childEvents;
 };
+
+/// @brief StageSettingsをJSONに変換（シリアライズ）
+/// @param j 
+/// @param s 
+inline void toJson(json& j, const StageSettings& s)
+{
+	j["modelFileName"] = s.modelFileName;
+	j["lightFileName"] = s.lightFileName;
+}
 
 /// @brief TemplateDataをJSONに変換（シリアライズ）
 /// @param j 
@@ -538,6 +554,15 @@ inline void toJson(json& j, const NavMesh& navMesh)
 		navMeshJson.push_back(polyJson);
 	}
 	j["navMesh"] = navMeshJson;
+}
+
+/// @brief JSONからStageSettingsに変換（デシリアライズ）
+/// @param j 
+/// @param s 
+inline void fromJson(const json& j, StageSettings& s)
+{
+	s.modelFileName = j.value("modelFileName", "");
+	s.lightFileName = j.value("lightFileName", "");
 }
 
 /// @brief JSONからTemplateDataに変換（デシリアライズ）

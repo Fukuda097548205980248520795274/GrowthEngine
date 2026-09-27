@@ -12,12 +12,14 @@ public:
 	/// @param fileName 
 	void Load(const std::string& fileName);
 
+	/// @brief リセットする
+	void Reset();
+
 	/// @brief 描画処理
 	void Draw();
 
 	/// @brief UIを描画する
 	void DrawUI();
-
 
 	/// @brief 履歴付きのドラッグ可能なFloat入力欄を描画する
 	/// @param label 

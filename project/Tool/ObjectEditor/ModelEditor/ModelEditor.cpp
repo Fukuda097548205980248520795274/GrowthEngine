@@ -27,6 +27,13 @@ void ModelEditor::Load(const std::string& fileName)
 	isFileOpen_ = true;
 }
 
+/// @brief リセットする
+void ModelEditor::Reset()
+{
+	selectedElementIndex_ = -1;
+	modelElements_.clear();
+}
+
 /// @brief 描画処理
 void ModelEditor::Draw()
 {

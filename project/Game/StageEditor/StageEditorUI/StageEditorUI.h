@@ -56,13 +56,14 @@ public:
 	/// @param currentFileName 
 	/// @param isPlaying 
 	void DrawUI(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying,
-		NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge);
+		NavMesh* navMesh, StageEditorNavMeshController* navMeshController, bool& isDirty, bool canExtrude, bool canBridge, StageSettings& stageSettings);
 
 	/// @brief アセットウィンドウの描画
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying
-	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
+	/// @param stageSettings
+	void DrawAssetWindow(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, StageSettings& stageSettings);
 
 	/// @brief プレイモードを開始する
 	/// @param isPlaying
@@ -175,18 +176,36 @@ private:
 
 private:
 
+	/// @brief モデルファイルの名前リスト
+	std::vector<std::string> modelFileNames_;
+
+	/// @brief ライトファイルの名前リスト
+	std::vector<std::string> lightFileNames_;
+
+	/// @brief 選択中のモデルファイルのインデックス
+	int selectedModelFileIndex_ = 0;
+
+	/// @brief 選択中のライトファイルのインデックス
+	int selectedLightFileIndex_ = 0;
+
+
+private:
+
 	/// @brief 保留中のアクションを実行する
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param navMesh 
-	void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh);
+	/// @param stageSettings 
+	void ExecutePendingAction(std::vector<PlacementData>& placementList, std::string& currentFileName, NavMesh* navMesh, StageSettings& stageSettings);
 
 	/// @brief ショートカットキーの処理
 	/// @param placementList 
 	/// @param currentFileName 
 	/// @param isPlaying 
 	/// @param navMesh 
-	void HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty);
+	/// @param isDirty 
+	/// @param stageSettings 
+	void HandleShortcuts(std::vector<PlacementData>& placementList, std::string& currentFileName, bool& isPlaying, NavMesh* navMesh, bool& isDirty, StageSettings& stageSettings);
 
 	/// @brief ビヘイビアツリーデータの名前を読み込む
 	void LoadBehaviorTreeNames();
@@ -199,5 +218,8 @@ private:
 
 	/// @brief カットシーンの名前を読み込む
 	void LoadCutsceneNames();
+
+	/// @brief 外部エディタのファイルリストを更新する
+	void RefreshExternalFileNames();
 };
 
