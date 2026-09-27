@@ -6,6 +6,9 @@
 /// @brief ツリーのリクエスト
 void CharacterState::TreeRequest()
 {
+	// 所有者が存在しない場合は処理を行わない
+	if (owner_ == nullptr)return;
+
 	const WeaponStateTreeSet* weaponTrees = nullptr;
 	if (owner_->HasWeapon())
 	{
