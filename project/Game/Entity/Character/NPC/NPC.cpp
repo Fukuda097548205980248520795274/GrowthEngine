@@ -106,7 +106,7 @@ void NPC::Update()
 	if (Character::IsCutsceneActive() || !updateEnabled_)
 	{
 		// ステートをNoneに変更する
-		stateMachine_->ChangeState("None");
+		if(stateMachine_->GetCurrentStateName() != "None")stateMachine_->ChangeState("None");
 		MoveStop();
 
 		Character::Update();
