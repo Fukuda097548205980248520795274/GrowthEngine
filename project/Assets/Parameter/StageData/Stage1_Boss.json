@@ -1,4 +1,6 @@
 {
+    "lightFileName": "",
+    "modelFileName": "",
     "navMesh": [
         {
             "groupId": 0,
@@ -736,9 +738,9 @@
             "eventType": 0,
             "gameClear": false,
             "name": "",
-            "posX": 24.3769588470459,
+            "posX": 8.228549003601074,
             "posY": 0.0,
-            "posZ": 56.81887435913086,
+            "posZ": 31.29014015197754,
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,
@@ -758,9 +760,9 @@
             "eventType": 0,
             "gameClear": false,
             "name": "",
-            "posX": 4.861541271209717,
+            "posX": 15.073036193847656,
             "posY": 0.0,
-            "posZ": 74.25962829589844,
+            "posZ": 35.3134651184082,
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,

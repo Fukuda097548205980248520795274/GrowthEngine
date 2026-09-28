@@ -2225,6 +2225,8 @@ void Character::SetInitData(const CharacterInitData& initData)
 
 
 	stateMachine_->AddState("None", std::make_unique<CharacterStateNone>(this, initData.hStandMotion, initData.hStanceMotion, initData.hWalkMotion));
+	stateMachine_->ChangeState("None");
+
 	stateMachine_->AddState("Dash", std::make_unique<CharacterStateDash>(this, initData.hDashMotion));
 	stateMachine_->AddState("Grabbed", std::make_unique<CharacterStateGrabbed>(this));
 	stateMachine_->AddState("Grabbing", std::make_unique<CharacterStateGrabbing>(this));
@@ -2266,7 +2268,6 @@ void Character::SetInitData(const CharacterInitData& initData)
 	stateMachine_->AddState("Avoid", std::make_unique<CharacterStateAvoid>(this,
 		initData.hAvoidFrontMotion, initData.hAvoidBackMotion, initData.hAvoidLeftMotion, initData.hAvoidRightMotion));
 	stateMachine_->AddState("Dead", std::make_unique<CharacterStateDead>(this, motionManager_->GetMotion(MotionType::DownFall, "Front")));
-	stateMachine_->ChangeState("None");
 }
 
 /// @brief 当たり判定の更新

@@ -8,9 +8,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.4300518035888672,
-                    0.4300518035888672,
-                    0.4300518035888672,
+                    0.0762825757265091,
+                    0.41450774669647217,
+                    0.023624785244464874,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -59,9 +59,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.005020267330110073,
-                    0.011906301602721214,
-                    0.08808290958404541,
+                    0.23834198713302612,
+                    0.23834198713302612,
+                    0.23834198713302612,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -71,7 +71,160 @@
                 "enableLighting": true,
                 "enableShadow": true,
                 "enableSpecular": true,
-                "environment": 1.0,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.559585452079773,
+                    0.559585452079773,
+                    0.559585452079773,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.3834196925163269,
+                    0.3834196925163269,
+                    0.3834196925163269,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Textures/white2x2.png",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    1.0,
+                    1.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -107,9 +260,9 @@
                 ]
             }
         ],
-        "modelDirectory": "./Assets/Models/tutorial_1",
-        "modelFileName": "tutorial_1.obj",
-        "modelName": "stage1_model",
+        "modelDirectory": "./Assets/Models/backAlley",
+        "modelFileName": "backAlley.obj",
+        "modelName": "backAlley",
         "rotate": [
             0.0,
             0.0,
