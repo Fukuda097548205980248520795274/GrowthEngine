@@ -1,6 +1,6 @@
 {
     "lightFileName": "",
-    "modelFileName": "stage1",
+    "modelFileName": "",
     "navMesh": [
         {
             "groupId": 0,
@@ -772,7 +772,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_2"
         },
         {
             "battleAreaStart": false,

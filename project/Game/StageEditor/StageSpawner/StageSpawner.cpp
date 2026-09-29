@@ -235,7 +235,7 @@ bool StageSpawner::SpawnActualEntity(PlacementData& data, BattleArea* battleArea
 		if (strlen(tData.equipWeaponPrefabName) > 0)
 		{
 			TemplateData weaponData;
-			if (!StageEditorUIHelper::LoadPrefab(tData.equipWeaponPrefabName, weaponData))
+			if (StageEditorUIHelper::LoadPrefab(tData.equipWeaponPrefabName, weaponData))
 			{
 				if (weaponData.category == EditCategory::Weapon)
 				{

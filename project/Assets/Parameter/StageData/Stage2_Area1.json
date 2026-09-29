@@ -211,7 +211,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_2"
         },
         {
             "battleAreaStart": false,
@@ -233,7 +233,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_2"
         }
     ]
 }

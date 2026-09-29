@@ -1,6 +1,6 @@
 {
     "lightFileName": "",
-    "modelFileName": "stage2",
+    "modelFileName": "",
     "navMesh": [
         {
             "groupId": 0,
@@ -607,7 +607,7 @@
             "subType": 5,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Boss_1"
+            "templateName": "Boss_2"
         }
     ]
 }

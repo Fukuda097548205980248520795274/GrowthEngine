@@ -1,4 +1,6 @@
 {
+    "lightFileName": "",
+    "modelFileName": "",
     "navMesh": [
         {
             "groupId": 0,
@@ -627,7 +629,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_3"
         },
         {
             "battleAreaStart": false,
@@ -649,7 +651,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_3"
         },
         {
             "battleAreaStart": false,
@@ -671,7 +673,7 @@
             "subType": 4,
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
-            "templateName": "Enemy_1"
+            "templateName": "Enemy_3"
         },
         {
             "battleAreaStart": false,
@@ -694,6 +696,50 @@
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
             "templateName": "Enemy_1"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 10,
+            "gameClear": false,
+            "name": "",
+            "posX": -16.204971313476563,
+            "posY": 0.0,
+            "posZ": 30.653268814086914,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.751014709472656,
+            "scaleY": 1.0,
+            "scaleZ": 9.221590995788574,
+            "subType": 3,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 9,
+            "gameClear": false,
+            "name": "",
+            "posX": -16.06528091430664,
+            "posY": 0.0,
+            "posZ": 50.39097595214844,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.751014709472656,
+            "scaleY": 1.0,
+            "scaleZ": 4.749396324157715,
+            "subType": 3,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
         }
     ]
 }
