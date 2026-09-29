@@ -30,6 +30,9 @@ void Engine::Render3DRingData::Initialize(TextureStore* textureStore, LightStore
 	// ブレンドモード
 	param_->blendMode = BlendMode::kNone;
 
+	// 描画
+	param_->draw.isDraw = true;
+
 	// トランスフォーム
 	param_->transform.scale = Vector3(1.0f, 1.0f, 1.0f);
 	param_->transform.rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -137,6 +140,9 @@ void Engine::Render3DRingData::Register(Camera3DStore* cameraStore, SkyboxStore*
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
+
+	// 描画しないときは処理しない
+	if (!param_->draw.isDraw)return;
 
 	// 頂点の再計算
 	if (preSlices_ != param_->division.slices || preStartInRadius_ != param_->size.startInRadius ||
@@ -277,6 +283,9 @@ void Engine::Render3DRingData::Register(const Matrix4x4& viewProjection, ID3D12G
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// 描画しないときは処理しない
+	if (!param_->draw.isDraw)return;
+
 	// シャドウマップを描画しないときは処理しない
 	if (!param_->material.drawShadowMap)return;
 
@@ -336,6 +345,9 @@ void Engine::Render3DRingData::RegisterMotionVector(ID3D12GraphicsCommandList* c
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
 
+	// 描画しないときは処理しない
+	if (!param_->draw.isDraw)return;
+
 	// 今フレーム描画していないと処理しない
 	if (!isDrew_)return;
 
@@ -367,6 +379,9 @@ void Engine::Render3DRingData::RegisterOutline(ID3D12GraphicsCommandList* comman
 {
 	// 読み込まれていないときは処理しない
 	if (!isLoad_)return;
+
+	// 描画しないときは処理しない
+	if (!param_->draw.isDraw)return;
 
 	// アウトラインを描画しないときは処理しない
 	if (!param_->outline.enableOutline)return;

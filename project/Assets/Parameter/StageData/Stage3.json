@@ -1,6 +1,6 @@
 {
     "lightFileName": "",
-    "modelFileName": "stage3",
+    "modelFileName": "stage2",
     "navMesh": [
         {
             "groupId": 0,
@@ -861,7 +861,7 @@
             "name": "",
             "posX": 0.0,
             "posY": -1.0,
-            "posZ": 0.0,
+            "posZ": 47.28296661376953,
             "rotX": 0.0,
             "rotY": 0.0,
             "rotZ": 0.0,

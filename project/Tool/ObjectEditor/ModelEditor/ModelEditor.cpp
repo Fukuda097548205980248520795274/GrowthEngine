@@ -358,6 +358,7 @@ void ModelEditor::DrawInspectorWindow()
 				auto param = uvSphereModel->param_;
 
 				BlenderInspectorUI(&param->blendMode);
+				DrawOptionInspectorUI(&param->draw.isDraw);
 				TransformInspectorUI(&param->transform);
 				MaterialInspectorUI(&param->material);
 
@@ -382,6 +383,7 @@ void ModelEditor::DrawInspectorWindow()
 				auto param = ringModel->param_;
 
 				BlenderInspectorUI(&param->blendMode);
+				DrawOptionInspectorUI(&param->draw.isDraw);
 				TransformInspectorUI(&param->transform);
 				MaterialInspectorUI(&param->material);
 
@@ -439,6 +441,7 @@ void ModelEditor::DrawInspectorWindow()
 				auto param = cylinderModel->param_;
 
 				BlenderInspectorUI(&param->blendMode);
+				DrawOptionInspectorUI(&param->draw.isDraw);
 				TransformInspectorUI(&param->transform);
 				MaterialInspectorUI(&param->material);
 
@@ -1001,6 +1004,16 @@ void ModelEditor::BlenderInspectorUI(BlendMode* blendMode)
 	ImGui::Combo("ブレンドモード", reinterpret_cast<int*>(blendMode), blendModeNames, IM_ARRAYSIZE(blendModeNames));
 }
 
+/// @brief 描画設定のインスペクターウィンドウ描画
+/// @param isDraw 
+void ModelEditor::DrawOptionInspectorUI(bool* isDraw)
+{
+	if (isDraw == nullptr)return;
+
+	ImGui::Checkbox("描画", isDraw);
+	if (ImGui::IsItemActivated()) SaveHistoryState();
+}
+
 /// @brief トランスフォームのインスペクターウィンドウ描画
 /// @param transform 
 void ModelEditor::TransformInspectorUI(Engine::Render3D::Transform* transform)
@@ -1050,6 +1063,24 @@ void ModelEditor::MaterialInspectorUI(Engine::Render3D::Material* material)
 				SaveHistoryState();
 			}
 			ImGui::EndDragDropTarget();
+		}
+
+
+		if (ImGui::TreeNode("UVトランスフォーム"))
+		{
+			// UVトランスフォームの編集
+			ImGui::DragFloat2("UVオフセット", &material->uv.translate.x, 0.01f);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			// UVスケールの編集
+			ImGui::DragFloat2("UVスケール", &material->uv.scale.x, 0.01f);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			// UV回転の編集
+			ImGui::DragFloat("UV回転", &material->uv.radius, 0.01f);
+			if (ImGui::IsItemActivated()) SaveHistoryState();
+
+			ImGui::TreePop();
 		}
 		
 

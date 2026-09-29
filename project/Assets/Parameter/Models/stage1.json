@@ -8,9 +8,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.0762825757265091,
-                    0.41450774669647217,
-                    0.023624785244464874,
+                    0.2331606149673462,
+                    0.12604156136512756,
+                    0.043491099029779434,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -21,6 +21,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -39,7 +40,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/backAlley/rocks_ground_03_diff.png",
                 "translate": [
                     0.0,
                     0.0,
@@ -47,8 +48,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    40.0,
+                    40.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -72,6 +73,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -90,7 +92,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/backAlley/aerial_asphalt_01_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -98,8 +100,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -123,6 +125,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -141,7 +144,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/backAlley/aerial_asphalt_01_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -149,8 +152,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -174,6 +177,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -192,7 +196,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/backAlley/aerial_asphalt_01_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -200,8 +204,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -225,6 +229,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -243,7 +248,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/backAlley/rusty_metal_02_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -251,8 +256,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,

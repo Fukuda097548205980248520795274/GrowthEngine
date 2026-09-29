@@ -62,6 +62,7 @@ public:
 			if (ImGui::TreeNode(std::format("メッシュ {}", i).c_str()))
 			{
 				BlenderInspectorUI(&param->blendMode);
+				DrawOptionInspectorUI(&param->meshDraw[i].isDraw);
 				TransformInspectorUI(&param->meshTransforms[i]);
 				MaterialInspectorUI(&param->meshMaterial[i]);
 				BlurInspectorUI(&param->meshBlur[i]);
@@ -122,6 +123,10 @@ private:
 	/// @brief ブレンドモードのインスペクターウィンドウ描画
 	/// @param blendMode 
 	void BlenderInspectorUI(BlendMode* blendMode);
+
+	/// @brief 描画設定のインスペクターウィンドウ描画
+	/// @param isDraw 
+	void DrawOptionInspectorUI(bool* isDraw);
 
 	/// @brief トランスフォームのインスペクターウィンドウ描画
 	/// @param transform 

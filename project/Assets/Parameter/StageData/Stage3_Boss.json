@@ -1,4 +1,6 @@
 {
+    "lightFileName": "",
+    "modelFileName": "stage2",
     "navMesh": [
         {
             "groupId": 0,
@@ -584,6 +586,28 @@
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
             "templateName": ""
+        },
+        {
+            "battleAreaStart": false,
+            "category": 0,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 0,
+            "gameClear": false,
+            "name": "",
+            "posX": -22.564863204956055,
+            "posY": 0.0,
+            "posZ": 118.36912536621094,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0,
+            "subType": 5,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": "Boss_1"
         }
     ]
 }

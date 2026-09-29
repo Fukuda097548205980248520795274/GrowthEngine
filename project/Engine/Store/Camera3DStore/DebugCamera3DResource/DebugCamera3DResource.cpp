@@ -72,13 +72,15 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 	Camera3DData::Param* param = camera3d_->GetParam();
 
 	// テンキー5: 透視投影(パース) / 平行投影(オルト) の切り替え
-	if (engine_->GetKeyTrigger(DIK_NUMPAD5))
+	if (engine_->GetKeyTrigger(DIK_NUMPAD5) || 
+		engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_5))
 	{
 		camera3d_->SetOrthographic(!camera3d_->GetOrthographic());
 	}
 
 	// テンキー1: 正面ビュー (Front)
-	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD1))
+	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD1) ||
+		engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_1))
 	{
 		camera3d_->SetOrthographic(true);
 
@@ -86,7 +88,8 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 		param->transform.rotate.x = std::numbers::pi_v<float>;
 		param->transform.rotate.y = 0.0f;
 	}
-	else if (engine_->GetKeyTrigger(DIK_NUMPAD1))
+	else if (engine_->GetKeyTrigger(DIK_NUMPAD1) ||
+		engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_1))
 	{
 		camera3d_->SetOrthographic(true);
 		param->transform.rotate.x = 0.0f;
@@ -94,7 +97,8 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 	}
 
 	// テンキー3: 右面ビュー (Right)
-	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD3))
+	if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD3) ||
+		engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_3))
 	{
 		camera3d_->SetOrthographic(true);
 		param->transform.rotate.x = 0.0f;
@@ -102,7 +106,8 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 		// -90度回転させる
 		param->transform.rotate.y = -(std::numbers::pi_v<float> / 2.0f);
 	}
-	else if (engine_->GetKeyTrigger(DIK_NUMPAD3))
+	else if (engine_->GetKeyTrigger(DIK_NUMPAD3) ||
+		engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_3))
 	{
 		camera3d_->SetOrthographic(true);
 		param->transform.rotate.x = 0.0f;
@@ -112,7 +117,8 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 	}
 
 	// テンキー7: 上面ビュー (Top)
-	if (engine_->GetKeyTrigger(DIK_NUMPAD7))
+	if (engine_->GetKeyTrigger(DIK_NUMPAD7) ||
+		engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_7))
 	{
 		camera3d_->SetOrthographic(true);
 
@@ -120,7 +126,8 @@ void Engine::DebugCamera3DResource::PivotPointUpdate()
 		param->transform.rotate.x = std::numbers::pi_v<float> / 2.0f;
 		param->transform.rotate.y = 0.0f;
 	}
-	else if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD7))
+	else if (engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyTrigger(DIK_NUMPAD7) ||
+		engine_->GetKeyTrigger(DIK_LCONTROL) && engine_->GetKeyPress(DIK_LALT) && engine_->GetKeyTrigger(DIK_7))
 	{
 		camera3d_->SetOrthographic(true);
 

@@ -60,6 +60,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 					meshJsonItem["texturePath"] = texturePath;
 				}
 
+				// 描画
+				meshJsonItem["isDraw"] = staticModel->param_->meshDraw[i].isDraw;
+
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
 					staticModel->param_->meshTransforms[i].translate.x,
@@ -157,6 +160,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 				{
 					meshJsonItem["texturePath"] = texturePath;
 				}
+
+				// 描画
+				meshJsonItem["isDraw"] = animationModel->param_->meshDraw[i].isDraw;
 
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
@@ -256,6 +262,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 					meshJsonItem["texturePath"] = texturePath;
 				}
 
+				// 描画
+				meshJsonItem["isDraw"] = skinningModel->param_->meshDraw[i].isDraw;
+
 				// メッシュトランスフォーム
 				meshJsonItem["translate"] = {
 					skinningModel->param_->meshTransforms[i].translate.x,
@@ -333,6 +342,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 				elemJson["texturePath"] = texturePath;
 			}
 
+			// 描画
+			elemJson["isDraw"] = uvSphere->param_->draw.isDraw;
+
 			// トランスフォーム
 			elemJson["translate"] = {
 				uvSphere->param_->transform.translate.x,
@@ -406,6 +418,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 			{
 				elemJson["texturePath"] = texturePath;
 			}
+
+			// 描画
+			elemJson["isDraw"] = ring->param_->draw.isDraw;
 
 			// トランスフォーム
 			elemJson["translate"] = {
@@ -487,6 +502,9 @@ inline json ToJsonData(const std::vector<ModelElementData>& elements)
 			{
 				elemJson["texturePath"] = texturePath;
 			}
+
+			// 描画
+			elemJson["isDraw"] = cylinder->param_->draw.isDraw;
 
 			// トランスフォーム
 			elemJson["translate"] = {
@@ -619,6 +637,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 			
 			for (int i = 0; i < static_cast<int>(staticModel->param_->meshTransforms.size()); ++i)
 			{
+				// 描画
+				staticModel->param_->meshDraw[i].isDraw = elemJson["meshData"][i].value("isDraw", true);
+
 				staticModel->param_->meshTransforms[i].translate.x = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0];
 				staticModel->param_->meshTransforms[i].translate.y = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[1];
 				staticModel->param_->meshTransforms[i].translate.z = elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[2];
@@ -727,6 +748,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			for (int i = 0; i < static_cast<int>(animationModel->param_->meshTransforms.size()); ++i)
 			{
+				// 描画
+				animationModel->param_->meshDraw[i].isDraw = elemJson["meshData"][i].value("isDraw", true);
+
 				// メッシュトランスフォームを復元
 				animationModel->param_->meshTransforms[i].translate = {
 					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
@@ -845,6 +869,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			for (int i = 0; i < static_cast<int>(skinningModel->param_->meshTransforms.size()); ++i)
 			{
+				// 描画
+				skinningModel->param_->meshDraw[i].isDraw = elemJson["meshData"][i].value("isDraw", true);
+
 				// メッシュトランスフォームを復元
 				skinningModel->param_->meshTransforms[i].translate = {
 					elemJson["meshData"][i].value("translate", std::vector<float>{0.0f, 0.0f, 0.0f})[0],
@@ -921,6 +948,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// ブレンドモードを復元
 			uvSphere->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
+
+			// 描画
+			uvSphere->param_->draw.isDraw = elemJson.value("isDraw", true);
 
 			// トランスフォームを復元
 			uvSphere->param_->transform.translate = {
@@ -1001,6 +1031,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// ブレンドモードを復元
 			ring->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
+
+			// 描画
+			ring->param_->draw.isDraw = elemJson.value("isDraw", true);
 
 			// トランスフォームを復元
 			ring->param_->transform.translate = {
@@ -1088,6 +1121,9 @@ inline std::vector<ModelElementData> FromJsonData(const json& j,
 
 			// ブレンドモードを復元
 			cylinder->param_->blendMode = static_cast<BlendMode>(elemJson.value("blendMode", 0));
+
+			// 描画
+			cylinder->param_->draw.isDraw = elemJson.value("isDraw", true);
 
 			// トランスフォームを復元
 			cylinder->param_->transform.translate = {

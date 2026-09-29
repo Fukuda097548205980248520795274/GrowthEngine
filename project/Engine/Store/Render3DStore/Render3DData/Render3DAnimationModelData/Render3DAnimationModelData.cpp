@@ -60,6 +60,7 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 	const ModelData& modelData = modelStore_->GetModelData(hModel_);
 
 	// パラメータ領域確保
+	param_->meshDraw.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -78,6 +79,9 @@ void Engine::Render3DAnimationModelData::Initialize(ModelStore* modelStore, Text
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
+		// 描画するかどうか
+		param_->meshDraw[meshIndex].isDraw = true;
+
 		// メッシュトランスフォーム
 		param_->meshTransforms[meshIndex].scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->meshTransforms[meshIndex].rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -202,6 +206,10 @@ void Engine::Render3DAnimationModelData::Register(Camera3DStore* cameraStore, Sk
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		/*----------------
 		    データを渡す
 		----------------*/
@@ -349,6 +357,10 @@ void Engine::Render3DAnimationModelData::Register(const Matrix4x4& viewProjectio
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// シャドウマップに描画するかどうか
 		if (!param_->meshMaterial[meshIndex].drawShadowMap)
 			continue;
@@ -408,6 +420,10 @@ void Engine::Render3DAnimationModelData::RegisterMotionVector(ID3D12GraphicsComm
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// 頂点の設定
 		modelStore_->Register(commandList, hModel_, meshIndex);
 
@@ -439,6 +455,10 @@ void Engine::Render3DAnimationModelData::RegisterOutline(ID3D12GraphicsCommandLi
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// アウトラインを描画しないときは処理しない
 		if (!param_->meshOutline[meshIndex].enableOutline)continue;
 

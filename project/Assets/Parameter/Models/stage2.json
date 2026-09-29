@@ -8,9 +8,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.11398965120315552,
-                    0.11398965120315552,
-                    0.11398965120315552,
+                    0.8497409224510193,
+                    0.8497409224510193,
+                    0.8497409224510193,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -21,6 +21,7 @@
                 "enableShadow": true,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -39,7 +40,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/indoor/gravel_concrete_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -47,8 +48,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -59,19 +60,20 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.3056994676589966,
-                    0.3056994676589966,
-                    0.3056994676589966,
+                    0.834196925163269,
+                    0.834196925163269,
+                    0.834196925163269,
                     1.0
                 ],
-                "drawShadowMap": true,
+                "drawShadowMap": false,
                 "enableBlinnPhong": true,
                 "enableDiffuse": true,
                 "enableHalfLambert": true,
                 "enableLighting": true,
-                "enableShadow": true,
+                "enableShadow": false,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -90,7 +92,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/indoor/concrete_wall_009_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -98,8 +100,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    10.0,
+                    10.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -110,19 +112,20 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.621761679649353,
-                    0.5605519413948059,
-                    0.0,
+                    1.0,
+                    1.0,
+                    1.0,
                     1.0
                 ],
-                "drawShadowMap": true,
+                "drawShadowMap": false,
                 "enableBlinnPhong": true,
                 "enableDiffuse": true,
                 "enableHalfLambert": true,
                 "enableLighting": true,
-                "enableShadow": true,
+                "enableShadow": false,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -141,7 +144,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Textures/white2x2.png",
+                "texturePath": "./Assets/Models/indoor/coated_pine_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -149,8 +152,8 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
-                    1.0,
-                    1.0
+                    5.0,
+                    5.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -161,19 +164,280 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    0.6735751628875732,
-                    0.6735751628875732,
-                    0.6735751628875732,
+                    1.0,
+                    1.0,
+                    1.0,
                     1.0
                 ],
-                "drawShadowMap": true,
+                "drawShadowMap": false,
                 "enableBlinnPhong": true,
                 "enableDiffuse": true,
                 "enableHalfLambert": true,
                 "enableLighting": true,
-                "enableShadow": true,
+                "enableShadow": false,
                 "enableSpecular": true,
                 "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/indoor/concrete_wall_009_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    10.0,
+                    10.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": false,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": false,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/indoor/coated_pine_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    5.0,
+                    5.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.7668393850326538,
+                    0.7668393850326538,
+                    0.7668393850326538,
+                    1.0
+                ],
+                "drawShadowMap": false,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": false,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/indoor/concrete_wall_007_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    5.0,
+                    5.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.7979274392127991,
+                    0.7979274392127991,
+                    0.7979274392127991,
+                    1.0
+                ],
+                "drawShadowMap": false,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": false,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/indoor/concrete_wall_007_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    5.0,
+                    5.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.7564767003059387,
+                    0.7564767003059387,
+                    0.7564767003059387,
+                    1.0
+                ],
+                "drawShadowMap": false,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": false,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/indoor/concrete_wall_007_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    5.0,
+                    5.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": false,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": false,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -209,9 +473,9 @@
                 ]
             }
         ],
-        "modelDirectory": "./Assets/Models/town",
-        "modelFileName": "town.obj",
-        "modelName": "stage2_model",
+        "modelDirectory": "./Assets/Models/indoor",
+        "modelFileName": "indoor.obj",
+        "modelName": "indoor",
         "rotate": [
             0.0,
             0.0,
@@ -225,9 +489,9 @@
         "skeletonDirectory": "",
         "skeletonFileName": "",
         "translate": [
-            -17.329999923706055,
             0.0,
-            9.180000305175781
+            0.0,
+            0.0
         ],
         "type": 1
     }

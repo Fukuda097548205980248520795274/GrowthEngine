@@ -8,9 +8,9 @@
                 "blurAfterImageMask": 0.0,
                 "blurMotionBlurMask": 0.0,
                 "color": [
-                    1.0,
-                    1.0,
-                    1.0,
+                    0.7305699586868286,
+                    0.7305699586868286,
+                    0.7305699586868286,
                     1.0
                 ],
                 "drawShadowMap": true,
@@ -19,8 +19,9 @@
                 "enableHalfLambert": true,
                 "enableLighting": true,
                 "enableShadow": true,
-                "enableSpecular": true,
+                "enableSpecular": false,
                 "environment": 0.0,
+                "isDraw": true,
                 "outlineColor": [
                     0.0,
                     0.0,
@@ -39,7 +40,7 @@
                     1.0
                 ],
                 "shininess": 10.0,
-                "texturePath": "./Assets/Models/bambooGroveRoad/bambooGroveRoad_uv.png",
+                "texturePath": "./Assets/Models/bambooGroveRoad/forest_floor_diff_1k.jpg",
                 "translate": [
                     0.0,
                     0.0,
@@ -47,8 +48,164 @@
                 ],
                 "uvRotate": 0.0,
                 "uvScale": [
+                    20.0,
+                    20.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.559585452079773,
+                    0.559585452079773,
+                    0.559585452079773,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": false,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
                     1.0,
                     1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/bambooGroveRoad/dry_decay_leaves_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    20.0,
+                    20.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    0.5958548784255981,
+                    0.5958548784255981,
+                    0.5958548784255981,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": false,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/bambooGroveRoad/dry_decay_leaves_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    20.0,
+                    20.0
+                ],
+                "uvTranslate": [
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "blurAfterImageMask": 0.0,
+                "blurMotionBlurMask": 0.0,
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "drawShadowMap": true,
+                "enableBlinnPhong": true,
+                "enableDiffuse": true,
+                "enableHalfLambert": true,
+                "enableLighting": true,
+                "enableShadow": true,
+                "enableSpecular": true,
+                "environment": 0.0,
+                "isDraw": true,
+                "outlineColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "outlineEnable": false,
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "shininess": 10.0,
+                "texturePath": "./Assets/Models/bambooGroveRoad/japanese_stone_wall_diff_1k.jpg",
+                "translate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "uvRotate": 0.0,
+                "uvScale": [
+                    10.0,
+                    10.0
                 ],
                 "uvTranslate": [
                     0.0,
@@ -58,7 +215,7 @@
         ],
         "modelDirectory": "./Assets/Models/bambooGroveRoad",
         "modelFileName": "bambooGroveRoad.obj",
-        "modelName": "stage3_model",
+        "modelName": "grove",
         "rotate": [
             0.0,
             -1.5700000524520874,
@@ -72,7 +229,7 @@
         "skeletonDirectory": "",
         "skeletonFileName": "",
         "translate": [
-            0.0,
+            0.07000000029802322,
             0.0,
             0.0
         ],

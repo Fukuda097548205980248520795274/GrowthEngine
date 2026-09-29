@@ -22,6 +22,13 @@ namespace Engine
 			Cylinder,
 		};
 
+		/// @brief 描画
+		struct Draw
+		{
+			// 描画するかどうか
+			bool isDraw = true;
+		};
+
 		/// @brief トランスフォーム
 		struct Transform
 		{
@@ -121,6 +128,9 @@ namespace Engine
 				Transform modelTransform;
 
 
+				/// @brief メッシュ描画
+				std::vector<Draw> meshDraw;
+
 				/// @brief メッシュトランスフォーム
 				std::vector<Transform> meshTransforms;
 
@@ -160,6 +170,9 @@ namespace Engine
 				/// @brief アニメーション
 				Animation animation;
 
+
+				/// @brief メッシュ描画
+				std::vector<Draw> meshDraw;
 
 				/// @brief メッシュトランスフォーム
 				std::vector<Transform> meshTransforms;
@@ -207,6 +220,9 @@ namespace Engine
 				Animation animation;
 
 
+				/// @brief メッシュ描画
+				std::vector<Draw> meshDraw;
+
 				/// @brief メッシュトランスフォーム
 				std::vector<Transform> meshTransforms;
 
@@ -239,6 +255,9 @@ namespace Engine
 			{
 				/// @brief ブレンドモード
 				BlendMode blendMode;
+
+				/// @brief 描画
+				Draw draw;
 
 				/// @brief トランスフォーム
 				Transform transform;
@@ -296,6 +315,9 @@ namespace Engine
 				/// @brief ブレンドモード
 				BlendMode blendMode;
 
+				/// @brief 描画
+				Draw draw;
+
 				/// @brief トランスフォーム
 				Transform transform;
 
@@ -344,6 +366,9 @@ namespace Engine
 			{
 				/// @brief ブレンドモード
 				BlendMode blendMode;
+
+				/// @brief 描画
+				Draw draw;
 
 				/// @brief トランスフォーム
 				Transform transform;

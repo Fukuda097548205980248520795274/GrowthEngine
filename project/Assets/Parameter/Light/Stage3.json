@@ -1,0 +1,218 @@
+[
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.600000381469727,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "New Light",
+        "position": [
+            0.0,
+            4.0,
+            6.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light2",
+        "position": [
+            21.0,
+            4.0,
+            10.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light3",
+        "position": [
+            21.0,
+            4.0,
+            16.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light4",
+        "position": [
+            21.0,
+            4.0,
+            22.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light5",
+        "position": [
+            10.5,
+            4.0,
+            23.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light6",
+        "position": [
+            10.5,
+            4.0,
+            31.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light7",
+        "position": [
+            10.5,
+            4.0,
+            38.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.7300000190734863,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light8",
+        "position": [
+            17.0,
+            4.0,
+            31.0
+        ]
+    },
+    {
+        "color": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "cosAngle": 0.30000001192092896,
+        "cosFalloffStart": 1.0,
+        "decay": 4.0,
+        "direction": [
+            0.0,
+            -1.0,
+            0.0
+        ],
+        "distance": 8.0,
+        "intensity": 12.0,
+        "lightType": 3,
+        "name": "Light9",
+        "position": [
+            34.0,
+            4.0,
+            31.0
+        ]
+    }
+]

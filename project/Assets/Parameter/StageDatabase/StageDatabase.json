@@ -5,12 +5,12 @@
             "fileName": "Stage1"
         },
         {
-            "displayName": "Stage2",
-            "fileName": "Stage2"
-        },
-        {
             "displayName": "Stage3",
             "fileName": "Stage3"
+        },
+        {
+            "displayName": "indoor",
+            "fileName": "Stage2"
         }
     ],
     "tutorialStageName": "tutorialStage"

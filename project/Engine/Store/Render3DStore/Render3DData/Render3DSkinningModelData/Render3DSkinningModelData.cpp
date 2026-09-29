@@ -72,6 +72,7 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 	skeleton_ = skeletonStore_->GetSkeleton(hSkeleton_);
 
 	// パラメータ領域確保
+	param_->meshDraw.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshTransforms.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshMaterial.resize(static_cast<int32_t>(modelData.meshes.size()));
 	param_->meshBlur.resize(static_cast<int32_t>(modelData.meshes.size()));
@@ -95,6 +96,9 @@ void Engine::Render3DSkinningModelData::Initialize(ModelStore* modelStore, Textu
 
 	for (int32_t meshIndex = 0; meshIndex < modelData.meshes.size(); ++meshIndex)
 	{
+		// 描画フラグ
+		param_->meshDraw[meshIndex].isDraw = true;
+		
 		// メッシュトランスフォーム
 		param_->meshTransforms[meshIndex].scale = Vector3(1.0f, 1.0f, 1.0f);
 		param_->meshTransforms[meshIndex].rotate = Vector3(0.0f, 0.0f, 0.0f);
@@ -296,6 +300,10 @@ void Engine::Render3DSkinningModelData::Register(Camera3DStore* cameraStore, Sky
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		/*-----------------
 		    データを渡す
 		-----------------*/
@@ -448,6 +456,10 @@ void Engine::Render3DSkinningModelData::Register(const Matrix4x4& viewProjection
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// シャドウマップを描画しないときは処理しない
 		if (!param_->meshMaterial[meshIndex].drawShadowMap)
 			continue;
@@ -516,6 +528,10 @@ void Engine::Render3DSkinningModelData::RegisterMotionVector(ID3D12GraphicsComma
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// スキニング出力頂点を描画用に遷移
 		outputVertexResource_[meshIndex]->Barrier(commandList, D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
 
@@ -563,6 +579,10 @@ void Engine::Render3DSkinningModelData::RegisterOutline(ID3D12GraphicsCommandLis
 
 	for (int32_t meshIndex = 0; meshIndex < static_cast<int32_t>(modelStore_->GetModelData(hModel_).meshes.size()); meshIndex++)
 	{
+		// 描画フラグがfalseのときは処理しない
+		if (!param_->meshDraw[meshIndex].isDraw)
+			continue;
+
 		// アウトラインを描画しないときは処理しない
 		if (!param_->meshOutline[meshIndex].enableOutline)continue;
 
