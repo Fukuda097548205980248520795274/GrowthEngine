@@ -122,9 +122,12 @@ void GameScene::Initialize()
 	stageEditor_ = std::make_unique<StageEditor>(this);
 	stageEditor_->Initialize();
 
+	// 設定エディタの生成と初期化
+	configEditor_ = std::make_unique<ConfigEditor>(this);
+
 	// エディタワークスペースマネージャの生成と初期化
 	editorWorkspaceManager_ = std::make_unique<EditorWorkspaceManager>();
-	editorWorkspaceManager_->Initialize(stageEditor_.get(), behaviorTreeEditor_.get(), behaviorTreeViewer_.get(), comboTreeEditor_.get(),
+	editorWorkspaceManager_->Initialize(stageEditor_.get(), configEditor_.get(), behaviorTreeEditor_.get(), behaviorTreeViewer_.get(), comboTreeEditor_.get(),
 		cutsceneEditor_.get(), uiEditor_.get(), modelEditor_.get(), lightEditor_.get());
 
 	// キャラクターモデルの読み込み
@@ -553,6 +556,20 @@ void GameScene::Reset()
 
 	// バトル制御をリセットする
 	BattleDirector::GetInstance().Clear();
+}
+
+/// @brief 設定を反映させる
+void GameScene::ApplyConfig(const GameConfig& config)
+{
+	// 設定を反映させる
+	pivotFollowSpeed_ = config.pivotFollowSpeed;
+	pivotRotateSpeed_ = config.pivotRotateSpeed;
+	pivotMaxPitch_ = config.pivotMaxPitch;
+	pivotCenterOffset_ = config.pivotCenterOffset;
+	lockOnMaxPitch_ = config.lockOnMaxPitch;
+	lockOnCameraFollowSpeed_ = config.lockOnCameraFollowSpeed;
+	cameraShrinkSpeed_ = config.cameraShrinkSpeed;
+	cameraExpandSpeed_ = config.cameraExpandSpeed;
 }
 
 /// @brief ターゲットへの方向を取得する

@@ -35,6 +35,7 @@
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
 #include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
+#include "ConfigEditor/ConfigEditor.h"
 
 #include "HUD/Button/TriggerButton/TriggerButton.h"
 #include "HUD/Button/MashButton/MashButton.h"
@@ -153,6 +154,9 @@ public:
 	/// @brief リセットする
 	void Reset();
 
+	/// @brief 設定を反映させる
+	void ApplyConfig(const GameConfig& config);
+
 
 private:
 
@@ -173,6 +177,31 @@ private:
 
 	/// @brief ピボットからカメラ姿勢へ反映する
 	void ApplyCameraFromPivot(float deltaTime);
+
+
+	// ピボット中心の追従補間速度
+	float pivotFollowSpeed_ = 10.0f;
+
+	// ピボット回転速度[rad/s]
+	float pivotRotateSpeed_ = 1.5f;
+
+	// ピボットX軸回転の最大角度
+	float pivotMaxPitch_ = 70.0f * (std::numbers::pi_v<float> / 180.0f);
+
+	// ピボット中心の高さオフセット
+	Vector3 pivotCenterOffset_ = Vector3(0.0f, 1.5f, 0.0f);
+
+	/// @brief ロックオン時のピッチ角度の最大値[rad]
+	float lockOnMaxPitch_ = 20.0f * (std::numbers::pi_v<float> / 180.0f);
+
+	/// @brief ロックオン時のカメラ追従速度
+	float lockOnCameraFollowSpeed_ = 3.0f;
+
+	// カメラの縮小速度
+	float cameraShrinkSpeed_ = 25.0f;
+
+	// カメラの拡大速度
+	float cameraExpandSpeed_ = 5.0f;
 
 
 private:
@@ -312,6 +341,9 @@ private:
 
 	// ステージエディタ
 	std::unique_ptr<StageEditor> stageEditor_ = nullptr;
+
+	/// @brief 設定エディタ
+	std::unique_ptr<ConfigEditor> configEditor_ = nullptr;
 
 	/// @brief コンボツリーエディタ
 	std::unique_ptr<ComboTreeEditor> comboTreeEditor_ = nullptr;

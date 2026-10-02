@@ -3,6 +3,7 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "BehaviorTree/BehaviorTreeViewer/BehaviorTreeViewer.h"
 #include "StageEditor/StageEditor.h"
+#include "ConfigEditor/ConfigEditor.h"
 #include "ComboTree/ComboTreeEditor/ComboTreeEditor.h"
 #include "MotionManager/MotionManagerEditor/MotionManagerEditor.h"
 #include "CutsceneManager/CutsceneEditor/CutsceneEditor.h"
@@ -14,6 +15,7 @@ enum class WorkspaceType
 {
 	None,
 	StageEditor,
+	ConfigEditor,
 	BehaviorTreeEditor,
 	BehaviorTreeViewer,
 	ComboTreeEditor,
@@ -30,8 +32,8 @@ public:
 	/// @brief 初期化
 	/// @param stageEditor 
 	/// @param behaviorTreeEditor 
-	/// @param motionManagerEditor 
-	void Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
+	/// @param configEditor
+	void Initialize(StageEditor* stageEditor, ConfigEditor* configEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
 		ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, UIEditor* uiEditor, ModelEditor* modelEditor, LightEditor* lightEditor);
 
 	/// @brief UIを描画する
@@ -53,6 +55,7 @@ private:
 
 	// マネージャー側は指し示すポインタ（生ポインタ）だけを持つ
 	StageEditor* stageEditor_ = nullptr;
+	ConfigEditor* configEditor_ = nullptr;
 	BehaviorTreeEditor* behaviorTreeEditor_ = nullptr;
 	BehaviorTreeViewer* behaviorTreeViewer_ = nullptr;
 	ComboTreeEditor* comboTreeEditor_ = nullptr;

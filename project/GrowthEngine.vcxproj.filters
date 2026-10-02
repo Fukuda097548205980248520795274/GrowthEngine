@@ -1543,6 +1543,9 @@
     <Filter Include="Game\Scene\GameScene\Exploration">
       <UniqueIdentifier>{3282a9d0-7f84-4ef4-af9e-665a563e4a22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\ConfigEditor">
+      <UniqueIdentifier>{e11e61e5-c0fe-4e17-9a28-438e4e4cdd5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -2807,6 +2810,9 @@
     </ClCompile>
     <ClCompile Include="Game\Entity\Character\Player\PlayerCamera.cpp">
       <Filter>Game\Entity\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\ConfigEditor\ConfigEditor.cpp">
+      <Filter>Game\ConfigEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4180,6 +4186,9 @@
     </ClInclude>
     <ClInclude Include="Game\SharedTreeEditorClipboard\SharedTreeEditorClipboard.h">
       <Filter>Game\SharedTreeEditorClipboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\ConfigEditor\ConfigEditor.h">
+      <Filter>Game\ConfigEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

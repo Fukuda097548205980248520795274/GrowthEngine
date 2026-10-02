@@ -150,6 +150,7 @@
     <ClCompile Include="Game\AIMetricsEditor\AIMetricsEditor.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
     <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.cpp" />
+    <ClCompile Include="Game\ConfigEditor\ConfigEditor.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\PlayerCamera.cpp" />
     <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp" />
     <ClCompile Include="Game\HUD\IntroText\IntroText.cpp" />
@@ -1244,6 +1245,7 @@
     <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h" />
     <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.h" />
+    <ClInclude Include="Game\ConfigEditor\ConfigEditor.h" />
     <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h" />
     <ClInclude Include="Game\HUD\IntroText\IntroText.h" />
     <ClInclude Include="Game\HUD\NavigationArrow\NavigationArrow.h" />

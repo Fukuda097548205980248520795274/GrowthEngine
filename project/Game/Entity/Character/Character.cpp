@@ -33,23 +33,6 @@
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownAway/CharacterStateBlownAway.h"
 #include "CharacterStateMachine/CharacterState/CharacterStateBlownFalling/CharacterStateBlownFalling.h"
 
-namespace
-{
-	// プレイヤーの体力HUDの位置
-	constexpr float kPlayerHpHudPosX = 360.0f;
-	constexpr float kPlayerHpHudPosY = 670.0f;
-
-	// プレイヤーのガードゲージHUDの位置
-	constexpr float kPlayerGuardGageHudPosX = 360.0f;
-	constexpr float kPlayerGuardGageHudPosY = 700.0f;
-
-	// NPCの体力HUDのオフセット値
-	constexpr float kNpcHpHudOffsetY = 0.5f;
-
-	// NPCのガードゲージHUDのオフセット値
-	constexpr float kNpcGuardGageHudOffsetY = 0.5f;
-}
-
 // 静的メンバの定義
 std::vector<Character*> Character::characters_{};
 bool Character::isCutsceneActive_ = false;

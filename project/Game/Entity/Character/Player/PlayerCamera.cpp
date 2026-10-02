@@ -1,21 +1,6 @@
 #include "Scene/GameScene/GameScene.h"
 #include <algorithm>
 
-namespace
-{
-	// ピボット中心の追従補間速度
-	constexpr float kPivotFollowSpeed = 10.0f;
-
-	// ピボット回転速度[rad/s]
-	constexpr float kPivotRotateSpeed = 1.5f;
-
-	// ピボットX軸回転の最大角度
-	constexpr float kPivotMaxPitch = 70.0f * (std::numbers::pi_v<float> / 180.0f);
-
-	// ピボット中心の高さオフセット
-	const Vector3 kPivotCenterOffset = Vector3(0.0f, 1.5f, 0.0f);
-}
-
 /// @brief カメラ制御の初期化
 void GameScene::InitializeCameraControl()
 {
@@ -34,7 +19,7 @@ void GameScene::InitializeCameraControl()
 
 	// ピボットポイントの初期化
 	Vector3 targetPivotPos = player_->GetWorldPosition();
-	targetPivotPos += kPivotCenterOffset;
+	targetPivotPos += pivotCenterOffset_;
 
 	pivotPoint_->GetData()->center = targetPivotPos;
 	pivotPoint_->GetData()->radius = 8.0f;
@@ -143,7 +128,7 @@ void GameScene::UpdatePivotFollow(float deltaTime)
 
 	// ピボット中心をターゲット位置に向かって補間移動させる
 	Vector3 diff = targetPivotPos - pivotData->center;
-	pivotData->center += diff * kPivotFollowSpeed * deltaTime;
+	pivotData->center += diff * pivotFollowSpeed_ * deltaTime;
 }
 
 /// @brief ピボット回転入力を反映する
@@ -180,8 +165,8 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 		// 手動でカメラ回転入力がある場合はピボットを回転させる
 		if (!kIsKeyCameraRotate)
 		{
-			pivotData->phi += -rightStick.x * kPivotRotateSpeed * deltaTime;
-			pivotData->theta += -rightStick.y * kPivotRotateSpeed * deltaTime;
+			pivotData->phi += -rightStick.x * pivotRotateSpeed_ * deltaTime;
+			pivotData->theta += -rightStick.y * pivotRotateSpeed_ * deltaTime;
 		}
 	}
 	else if (player_->GetLockOnTarget() != nullptr)
@@ -201,8 +186,7 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 		float targetTheta = std::atan2(-dir.y, std::sqrt(dir.x * dir.x + dir.z * dir.z));
 
 		// ターゲットの高さに合わせてピボットのX軸回転を制限する
-		constexpr float kLockOnMaxPitch = 20.0f * (std::numbers::pi_v<float> / 180.0f);
-		targetTheta = std::clamp(targetTheta, -kLockOnMaxPitch, kLockOnMaxPitch);
+		targetTheta = std::clamp(targetTheta, -lockOnMaxPitch_, lockOnMaxPitch_);
 
 		// ピボットのY軸回転とターゲットの方向の差を計算する
 		float diffPhi = targetPhi - pivotData->phi;
@@ -212,16 +196,15 @@ void GameScene::UpdatePivotRotateInput(float deltaTime)
 		while (diffPhi < -std::numbers::pi_v<float>) diffPhi += 2.0f * std::numbers::pi_v<float>;
 
 		// ピボットのY軸回転はターゲットの方向に合わせて補間する
-		constexpr float kLockOnCameraFollowSpeed = 3.0f;
-		pivotData->phi += diffPhi * kLockOnCameraFollowSpeed * deltaTime;
+		pivotData->phi += diffPhi * lockOnCameraFollowSpeed_ * deltaTime;
 
 		// ピボットのX軸回転はターゲットの高さに合わせて補間する
 		float diffTheta = targetTheta - pivotData->theta;
-		pivotData->theta += diffTheta * kLockOnCameraFollowSpeed * deltaTime;
+		pivotData->theta += diffTheta * lockOnCameraFollowSpeed_ * deltaTime;
 	}
 
 	// ピボットのX軸回転は最大角度で制限する
-	pivotData->theta = std::clamp(pivotData->theta, -kPivotMaxPitch, kPivotMaxPitch);
+	pivotData->theta = std::clamp(pivotData->theta, -pivotMaxPitch_, pivotMaxPitch_);
 }
 
 /// @brief ピボットからカメラ姿勢へ反映する
@@ -260,12 +243,9 @@ void GameScene::ApplyCameraFromPivot(float deltaTime)
 		}
 	}
 
-	// カメラの位置を補間する速度を設定する
-	constexpr float kCameraShrinkSpeed = 25.0f; // 壁に近づくときの速度
-	constexpr float kCameraExpandSpeed = 5.0f;  // 元の位置に戻るときの速度
 
 	// 現在よりターゲットが近い（縮む）か、遠い（戻る）かで速度を分岐
-	float lerpSpeed = (targetT < cameraCurrentT_) ? kCameraShrinkSpeed : kCameraExpandSpeed;
+	float lerpSpeed = (targetT < cameraCurrentT_) ? cameraShrinkSpeed_ : cameraExpandSpeed_;
 
 	// 線形補間（Lerp）で現在のTを目標のTへ近づける
 	cameraCurrentT_ += (targetT - cameraCurrentT_) * lerpSpeed * deltaTime;

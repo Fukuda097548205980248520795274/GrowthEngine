@@ -2,12 +2,14 @@
 
 /// @brief 初期化
 /// @param stageEditor 
+/// @param configEditor
 /// @param behaviorTreeEditor 
-void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
+void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, ConfigEditor* configEditor, BehaviorTreeEditor* behaviorTreeEditor, BehaviorTreeViewer* behaviorTreeViewer,
 	ComboTreeEditor* comboTreeEditor, CutsceneEditor* cutsceneEditor, UIEditor* uiEditor, ModelEditor* modelEditor, LightEditor* lightEditor)
 {
 	// nullptrチェック
 	assert(stageEditor);
+	assert(configEditor);
 	assert(behaviorTreeEditor);
 	assert(behaviorTreeViewer);
 	assert(comboTreeEditor);
@@ -18,6 +20,7 @@ void EditorWorkspaceManager::Initialize(StageEditor* stageEditor, BehaviorTreeEd
 
 	// 引数を受け取る
 	stageEditor_ = stageEditor;
+	configEditor_ = configEditor;
 	behaviorTreeEditor_ = behaviorTreeEditor;
 	behaviorTreeViewer_ = behaviorTreeViewer;
 	comboTreeEditor_ = comboTreeEditor;
@@ -40,6 +43,13 @@ void EditorWorkspaceManager::DrawUI()
 		if (stageEditor_)
 		{
 			stageEditor_->DrawUI();
+		}
+		break;
+
+	case WorkspaceType::ConfigEditor:
+		if (configEditor_)
+		{
+			configEditor_->DrawUI();
 		}
 		break;
 
@@ -106,55 +116,61 @@ void EditorWorkspaceManager::DrawWorkspaceTabBar()
 		// メニューバー内にタブバーを作成
 		if (ImGui::BeginTabBar("WorkspaceTabs", ImGuiTabBarFlags_None))
 		{
-			if (ImGui::BeginTabItem("None"))
+			if (ImGui::BeginTabItem("なし"))
 			{
 				currentWorkspace_ = WorkspaceType::None;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Stage Editor"))
+			if (ImGui::BeginTabItem("ステージエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::StageEditor;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Behavior Tree Editor"))
+			if (ImGui::BeginTabItem("設定エディタ"))
+			{
+				currentWorkspace_ = WorkspaceType::ConfigEditor;
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("ビヘイビアツリーエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::BehaviorTreeEditor;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Behavior Tree Viewer"))
+			if (ImGui::BeginTabItem("ビヘイビアツリービュー"))
 			{
 				currentWorkspace_ = WorkspaceType::BehaviorTreeViewer;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Combo Tree Editor"))
+			if (ImGui::BeginTabItem("コンボツリーエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::ComboTreeEditor;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Cutscene Editor"))
+			if (ImGui::BeginTabItem("カットシーンエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::CutsceneEditor;
 				ImGui::EndTabItem();
 			}
 			
-			if (ImGui::BeginTabItem("UI Editor"))
+			if (ImGui::BeginTabItem("UIエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::UIEditor;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Model Editor"))
+			if (ImGui::BeginTabItem("モデルエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::ModelEditor;
 				ImGui::EndTabItem();
 			}
 
-			if (ImGui::BeginTabItem("Light Editor"))
+			if (ImGui::BeginTabItem("ライトエディタ"))
 			{
 				currentWorkspace_ = WorkspaceType::LightEditor;
 				ImGui::EndTabItem();

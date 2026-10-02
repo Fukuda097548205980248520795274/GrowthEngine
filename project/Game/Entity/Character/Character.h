@@ -1111,5 +1111,22 @@ protected:
 
 	/// @brief ガードゲージHUDの位置を更新する
 	void GuardGageHudUpdate();
+
+
+private:
+
+	// プレイヤーの体力HUDの位置
+	static constexpr float kPlayerHpHudPosX = 360.0f;
+	static constexpr float kPlayerHpHudPosY = 670.0f;
+
+	// プレイヤーのガードゲージHUDの位置
+	static constexpr float kPlayerGuardGageHudPosX = 360.0f;
+	static constexpr float kPlayerGuardGageHudPosY = 700.0f;
+
+	// NPCの体力HUDのオフセット値
+	static constexpr float kNpcHpHudOffsetY = 0.5f;
+
+	// NPCのガードゲージHUDのオフセット値
+	static constexpr float kNpcGuardGageHudOffsetY = 0.5f;
 };
 
