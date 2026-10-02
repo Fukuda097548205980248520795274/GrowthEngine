@@ -3,18 +3,6 @@
 
 using json = nlohmann::json;
 
-namespace
-{
-	/// @brief ステージデータのディレクトリ
-	const std::string kStageDataDir = "./Assets/Parameter/StageData/";
-
-	/// @brief ステージデータベースのJSONファイルのパス
-	const std::string kDatabaseDir = "./Assets/Parameter/StageDatabase/";
-
-	/// @brief ステージデータベースのJSONファイル名
-	const std::string kDatabaseFilename = "StageDatabase.json";
-}
-
 /// @brief 初期化
 void StageSelectEditor::Initialize()
 {

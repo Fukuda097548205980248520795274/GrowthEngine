@@ -64,5 +64,17 @@ private:
 
 	/// @brief ステージリストが変更されたかどうか
 	bool isStageListChanged_ = false;
+
+
+private:
+
+	/// @brief ステージデータのディレクトリ
+	const std::string kStageDataDir = "./Assets/Parameter/StageData/";
+
+	/// @brief ステージデータベースのJSONファイルのパス
+	const std::string kDatabaseDir = "./Assets/Parameter/StageDatabase/";
+
+	/// @brief ステージデータベースのJSONファイル名
+	const std::string kDatabaseFilename = "StageDatabase.json";
 };
 

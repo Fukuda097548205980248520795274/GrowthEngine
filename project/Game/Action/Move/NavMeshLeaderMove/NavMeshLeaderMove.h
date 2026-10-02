@@ -56,6 +56,15 @@ private:
 
 private:
 
+    // 再計算するターゲットの移動距離の二乗
+    static constexpr float kReDistanceSq = 1.0f * 1.0f;
+
+    // 移動入力を行う最小距離
+    static constexpr float kMinMoveDistance = 0.001f;
+
+
+private:
+
     /// @brief 現在の左右の回避方向
     float avoidanceSide_ = 0;
 

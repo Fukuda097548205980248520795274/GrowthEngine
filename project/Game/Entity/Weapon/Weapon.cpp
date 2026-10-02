@@ -58,7 +58,7 @@ Weapon::Weapon(const InitData& initData) : Entity()
 
 		// コリジョンの位置を武器の位置に設定する
 		landingCollision_->param_->start = GetWorldPosition();
-		landingCollision_->param_->radius = landingCollisionRadius;
+		landingCollision_->param_->radius = kLandingCollisionRadius;
 		landingCollision_->param_->diff = Vector3(0.0f, 0.0f, 0.0f);
 	}
 
@@ -165,7 +165,7 @@ void Weapon::Update()
 		if (landingCollision_)
 		{
 			landingCollision_->param_->diff = GetWorldPosition() - landingCollision_->param_->start;
-			landingCollision_->param_->start = GetWorldPosition() + Vector3(0.0f, landingCheckOffsetY, 0.0f);
+			landingCollision_->param_->start = GetWorldPosition() + Vector3(0.0f, kLandingCheckOffsetY, 0.0f);
 		}
 	}
 }
@@ -286,7 +286,7 @@ void Weapon::UpdateButton()
 	isPlayerInRange_ = false;
 
 	// ボタンの位置を武器の上に設定する
-	button_->SetPosition(GetWorldPosition() + Vector3(0.0f, buttonOffsetY, 0.0f));
+	button_->SetPosition(GetWorldPosition() + Vector3(0.0f, kButtonOffsetY, 0.0f));
 }
 
 /// @brief 落下の更新

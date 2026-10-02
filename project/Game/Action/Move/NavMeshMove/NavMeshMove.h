@@ -58,5 +58,14 @@ private:
 
     /// @brief 回避方向を維持するタイマー
     float avoidanceTimer_ = 0.0f;
+
+
+private:
+
+    // 再計算するターゲットの移動距離の二乗
+    static constexpr float kReDistanceSq = 1.0f * 1.0f;
+
+    // 移動入力を行う最小距離
+    static constexpr float kMinMoveDistance = 0.001f;
 };
 
