@@ -11,18 +11,6 @@
 
 #include <cmath>
 
-namespace
-{
-	// 通常時の移動速度[m/s]
-	constexpr float kNormalMoveSpeed = 3.0f;
-
-	// 構え時の移動速度倍率
-	constexpr float kStanceMoveSpeedMultiplier = 1.0f;
-
-	// ダッシュ時の移動速度倍率
-	constexpr float kDashSpeedMultiplier = 3.0f;
-}
-
 /// @brief コンストラクタ
 /// @param initData 
 Player::Player() : Character()
@@ -437,12 +425,12 @@ float Player::GetCurrentMoveSpeed() const
 
 	// 構え中は移動速度を半分にする
 	// Character側で速度補間しているため、通常速度↔構え速度の切り替えも補間される
-	float moveSpeed = isStance_ ? (kNormalMoveSpeed * kStanceMoveSpeedMultiplier) : kNormalMoveSpeed;
+	float moveSpeed = isStance_ ? (normalMoveSpeed * stanceMoveSpeedMultiplier) : normalMoveSpeed;
 
 	// ダッシュ中は移動速度を2倍にする
 	if (IsDash())
 	{
-		moveSpeed *= kDashSpeedMultiplier;
+		moveSpeed *= dashSpeedMultiplier;
 	}
 
 	return moveSpeed;

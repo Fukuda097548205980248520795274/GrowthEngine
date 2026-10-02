@@ -527,6 +527,45 @@ namespace StageEditorUIHelper
 					{
 						isDirty = true;
 					}
+
+					// NPCが構え状態になる距離
+					PropertyLabel("構え状態になる距離");
+					if (ImGui::DragFloat("##StanceEnterDistance", &target.npcStanceEnterDistance, 0.1f, 0.0f, 100.0f))
+					{
+						isDirty = true;
+					}
+
+					// NPCが構え状態を解除する距離
+					PropertyLabel("構え状態を解除する距離");
+					if (ImGui::DragFloat("##StanceExitDistance", &target.npcStanceExitDistance, 0.1f, 0.0f, 100.0f))
+					{
+						isDirty = true;
+					}
+				}
+				else
+				{
+					// プレイヤーの場合
+
+					// 通常時の移動速度
+					PropertyLabel("通常時の移動速度");
+					if (ImGui::DragFloat("##NormalMoveSpeed", &target.playerNormalMoveSpeed, 0.01f, 0.0f, 100.0f))
+					{
+						isDirty = true;
+					}
+
+					// 構え時の移動速度
+					PropertyLabel("構え時の移動速度");
+					if (ImGui::DragFloat("##StanceMoveSpeed", &target.playerStanceMoveSpeedMultiplier, 0.01f, 0.0f, 100.0f))
+					{
+						isDirty = true;
+					}
+
+					// ダッシュ時の移動速度
+					PropertyLabel("ダッシュ時の移動速度");
+					if (ImGui::DragFloat("##DashMoveSpeed", &target.playerDashSpeedMultiplier, 0.01f, 0.0f, 100.0f))
+					{
+						isDirty = true;
+					}
 				}
 
 				EndPropertyTable();

@@ -198,6 +198,18 @@ protected:
 
 protected:
 
+	// 落下の重力加速度
+	float landingCollisionRadius = 0.05f;
+
+	// 落下の重力加速度
+	float landingCheckOffsetY = -0.05f;
+
+	// ボタンの表示位置のオフセット
+	float buttonOffsetY = 0.5f;
+
+
+protected:
+
 	/// @brief 武器取得ボタンの更新
 	void UpdateButton();
 

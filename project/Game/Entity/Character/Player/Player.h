@@ -163,6 +163,18 @@ private:
 
 private:
 
+	// 通常時の移動速度[m/s]
+	float normalMoveSpeed = 3.0f;
+
+	// 構え時の移動速度倍率
+	float stanceMoveSpeedMultiplier = 1.0f;
+
+	// ダッシュ時の移動速度倍率
+	float dashSpeedMultiplier = 3.0f;
+
+
+private:
+
 	// 攻撃入力のバッファ時間
 	float attackInputBufferTime_ = 0.2f;
 

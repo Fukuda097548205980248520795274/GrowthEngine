@@ -135,6 +135,13 @@ private:
 	bool isArrivedAtSlot_ = false;
 
 
+	// NPCが構え状態になる距離
+	float stanceEnterDistance = 10.5f;
+
+	// NPCが構え状態を解除する距離
+	float stanceExitDistance = 14.5f;
+
+
 private:
 
 	/// @brief 待機タイマー

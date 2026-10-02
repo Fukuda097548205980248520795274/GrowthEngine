@@ -81,8 +81,26 @@ struct TemplateData
 	/// @brief ほどき時間
 	float unravellingTime = 3.0f;
 
+
+	// 通常時の移動速度[m/s]（プレイヤーの場合）
+	float playerNormalMoveSpeed = 3.0f;
+
+	// 構え時の移動速度倍率（プレイヤーの場合）
+	float playerStanceMoveSpeedMultiplier = 1.0f;
+
+	// ダッシュ時の移動速度倍率（プレイヤーの場合）
+	float playerDashSpeedMultiplier = 3.0f;
+
+
 	// 攻撃性（NPCの場合）
 	float aggressiveness = 1.0f;
+
+	// NPCが構え状態になる距離（NPCの場合）
+	float npcStanceEnterDistance = 10.5f;
+
+	// NPCが構え状態を解除する距離（NPCの場合）
+	float npcStanceExitDistance = 14.5f;
+
 
 	// 攻撃力 (武器の場合)
 	float attackPower = 1.0f;
@@ -259,7 +277,6 @@ inline void toJson(json& j, const TemplateData& s)
 		j["guardGage"] = s.guardGage;
 		j["guardRecoveryTime"] = s.guardRecoveryTime;
 		j["unravellingTime"] = s.unravellingTime;
-		j["aggressiveness"] = s.aggressiveness;
 		j["standMotionName"] = s.standMotion.name;
 		j["stanceMotionName"] = s.stanceMotion.name;
 		j["walkMotionName"] = s.walkMotion.name;
@@ -275,6 +292,10 @@ inline void toJson(json& j, const TemplateData& s)
 		// プレイヤーとNone以外はビヘイビアスクリプトを保存する
 		if (s.subType != static_cast<int32_t>(CharacterTag::Player) && s.subType != static_cast<int32_t>(CharacterTag::None))
 		{
+			j["aggressiveness"] = s.aggressiveness;
+			j["npcStanceEnterDistance"] = s.npcStanceEnterDistance;
+			j["npcStanceExitDistance"] = s.npcStanceExitDistance;
+
 			j["noneStateBT"] = s.behaviorTrees.noneStateBT;
 			j["dashStateBT"] = s.behaviorTrees.dashStateBT;
 			j["grabbedStateBT"] = s.behaviorTrees.grabbedStateBT;
@@ -297,6 +318,10 @@ inline void toJson(json& j, const TemplateData& s)
 		}
 		else if (s.subType == static_cast<int32_t>(CharacterTag::Player))
 		{
+			j["playerNormalMoveSpeed"] = s.playerNormalMoveSpeed;
+			j["playerStanceMoveSpeedMultiplier"] = s.playerStanceMoveSpeedMultiplier;
+			j["playerDashSpeedMultiplier"] = s.playerDashSpeedMultiplier;
+
 			j["noneStateCT_X"] = s.comboTrees.noneStateCT.xName_;
 			j["noneStateCT_Y"] = s.comboTrees.noneStateCT.yName_;
 			j["noneStateCT_B"] = s.comboTrees.noneStateCT.bName_;
@@ -580,7 +605,6 @@ inline void fromJson(const json& j, TemplateData& s)
 	s.guardGage = j.value("guardGage", 10.0f);
 	s.guardRecoveryTime = j.value("guardRecoveryTime", 5.0f);
 	s.unravellingTime = j.value("unravellingTime", 3.0f);
-	s.aggressiveness = j.value("aggressiveness", 1.0f);
 	s.durability = j.value("durability", 100);
 	s.attackPower = j.value("attackPower", 1.0f);
 	s.isUnbreakable = j.value("isUnbreakable", false);
@@ -691,6 +715,10 @@ inline void fromJson(const json& j, TemplateData& s)
 		// キャラクターのツリーを読み込む
 		if (s.subType == static_cast<int32_t>(CharacterTag::Player))
 		{
+			s.playerNormalMoveSpeed = j.value("playerNormalMoveSpeed", 3.0f);
+			s.playerStanceMoveSpeedMultiplier = j.value("playerStanceMoveSpeedMultiplier", 1.0f);
+			s.playerDashSpeedMultiplier = j.value("playerDashSpeedMultiplier", 3.0f);
+
 			s.comboTrees.noneStateCT.xName_ = j.value("noneStateCT_X", "");
 			s.comboTrees.noneStateCT.yName_ = j.value("noneStateCT_Y", "");
 			s.comboTrees.noneStateCT.bName_ = j.value("noneStateCT_B", "");
@@ -769,6 +797,10 @@ inline void fromJson(const json& j, TemplateData& s)
 		}
 		else if (s.subType != static_cast<int32_t>(CharacterTag::None))
 		{
+			s.aggressiveness = j.value("aggressiveness", 1.0f);
+			s.npcStanceEnterDistance = j.value("npcStanceEnterDistance", 10.5f);
+			s.npcStanceExitDistance = j.value("npcStanceExitDistance", 14.5f);
+
 			s.behaviorTrees.noneStateBT = j.value("noneStateBT", "");
 			s.behaviorTrees.dashStateBT = j.value("dashStateBT", "");
 			s.behaviorTrees.grabbedStateBT = j.value("grabbedStateBT", "");

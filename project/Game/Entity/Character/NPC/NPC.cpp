@@ -7,17 +7,6 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 
-namespace
-{
-	// NPCが構え状態になる距離
-	constexpr float kNpcStanceEnterDistance = 10.5f;
-	constexpr float kNpcStanceEnterDistanceSq = kNpcStanceEnterDistance * kNpcStanceEnterDistance;
-
-	// NPCが構え状態を解除する距離
-	constexpr float kNpcStanceExitDistance = 14.5f;
-	constexpr float kNpcStanceExitDistanceSq = kNpcStanceExitDistance * kNpcStanceExitDistance;
-}
-
 /// @brief コンストラクタ
 /// @param initData 
 /// @param navMesh 
@@ -252,7 +241,7 @@ void NPC::UpdateStanceStateByTargetDistance()
 	if (isStance_)
 	{
 		// すでに構え状態の場合は、少し遠ざかるまで構えを解除しない
-		if (kDistanceSq > kNpcStanceExitDistanceSq)
+		if (kDistanceSq > stanceExitDistance * stanceExitDistance)
 		{
 			isStance_ = false;
 		}
@@ -260,7 +249,7 @@ void NPC::UpdateStanceStateByTargetDistance()
 	else
 	{
 		// 構え状態でない場合は、少し近づくまで構え状態にしない
-		if (kDistanceSq <= kNpcStanceEnterDistanceSq)
+		if (kDistanceSq <= stanceEnterDistance * stanceEnterDistance)
 		{
 			isStance_ = true;
 
