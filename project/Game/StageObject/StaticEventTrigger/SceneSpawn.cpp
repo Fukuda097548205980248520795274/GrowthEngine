@@ -496,27 +496,6 @@ Wall* GameScene::CreateWallObject(const Wall::InitData& initData)
 	return wall;
 }
 
-/// @brief タイマーHUDを生成する
-/// @param initData 
-/// @return 
-Timer* GameScene::CreateTimer(const Timer::InitData& initData)
-{
-	Timer::InitData timerInitData = initData;
-	timerInitData.timerSprite[0] = numbersSprite_->CreateInstance();
-	timerInitData.timerSprite[1] = numbersSprite_->CreateInstance();
-	timerInitData.timerSprite[2] = numbersSprite_->CreateInstance();
-	timerInitData.timerSprite[3] = numbersSprite_->CreateInstance();
-	timerInitData.commaSprite = commaSprite_->CreateInstance();
-
-	std::unique_ptr<Timer> newTimer = std::make_unique<Timer>();
-	newTimer->Initialize(timerInitData);
-	Timer* timer = newTimer.get();
-
-	huds_.push_back(std::move(newTimer));
-
-	return timer;
-}
-
 /// @brief 静的イベントトリガーオブジェクトを生成する
 /// @param initData 
 /// @return 

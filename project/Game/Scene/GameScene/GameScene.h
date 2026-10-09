@@ -13,7 +13,6 @@
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 #include "StageObject/CameraGuard/CameraGuard.h"
 
-#include "HUD/Timer/Timer.h"
 #include "HUD/HP/HP.h"
 #include "HUD/Gage/Gage.h"
 #include "HUD/Tutorial/Tutorial.h"
@@ -133,11 +132,6 @@ public:
 	/// @param initData 
 	/// @return 
 	CameraGuard* CreateCameraGuard(const CameraGuard::InitData& initData);
-
-	/// @brief タイマーHUDを生成する
-	/// @param initData 
-	/// @return 
-	Timer* CreateTimer(const Timer::InitData& initData);
 
 	/// @brief ナビゲーションメッシュを取得する
 	/// @return 

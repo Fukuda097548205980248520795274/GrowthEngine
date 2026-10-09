@@ -1188,7 +1188,6 @@
     <ClCompile Include="Game\HUD\HP\BossHP\BossHP.cpp" />
     <ClCompile Include="Game\HUD\HP\HP.cpp" />
     <ClCompile Include="Game\HUD\HUD.cpp" />
-    <ClCompile Include="Game\HUD\Timer\Timer.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.cpp" />
     <ClCompile Include="Game\MotionManager\MotionManager.cpp" />
     <ClCompile Include="Game\NavMesh\NavMesh.cpp" />
@@ -1224,7 +1223,6 @@
     <ClCompile Include="Game\StageObject\CameraGuard\CameraGuard.cpp" />
     <ClCompile Include="Game\StageObject\Floor\Floor.cpp" />
     <ClCompile Include="Game\StageObject\StageObject.cpp" />
-    <ClCompile Include="Game\StageObject\Stairs\Stairs.cpp" />
     <ClCompile Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.cpp" />
     <ClCompile Include="Game\StageObject\Wall\Wall.cpp" />
     <ClCompile Include="Tool\ObjectEditor\LightEditor\LightEditor.cpp" />
@@ -1649,7 +1647,6 @@
     <ClInclude Include="Game\HUD\HP\BossHP\BossHP.h" />
     <ClInclude Include="Game\HUD\HP\HP.h" />
     <ClInclude Include="Game\HUD\HUD.h" />
-    <ClInclude Include="Game\HUD\Timer\Timer.h" />
     <ClInclude Include="Game\MotionManager\MotionManagerEditor\MotionManagerEditor.h" />
     <ClInclude Include="Game\MotionManager\MotionManager.h" />
     <ClInclude Include="Game\NavMesh\NavMesh.h" />
@@ -1686,7 +1683,6 @@
     <ClInclude Include="Game\StageObject\CameraGuard\CameraGuard.h" />
     <ClInclude Include="Game\StageObject\Floor\Floor.h" />
     <ClInclude Include="Game\StageObject\StageObject.h" />
-    <ClInclude Include="Game\StageObject\Stairs\Stairs.h" />
     <ClInclude Include="Game\StageObject\StaticEventTrigger\StaticEventTrigger.h" />
     <ClInclude Include="Game\StageObject\Wall\Wall.h" />
     <ClInclude Include="Tool\ObjectEditor\LightEditor\LightData\LightData.h" />

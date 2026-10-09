@@ -208,10 +208,12 @@ struct EditorNode
 	// アクションノードの場合のトークンの種類
 	ActionTokenType tokenType = ActionTokenType::Attack;
 
-	MotionType motionType = MotionType::Stand; // 条件ノードでモーションを条件にする場合のモーションの種類
+	// 条件ノードでモーションを条件にする場合のモーションの種類
+	MotionType motionType = MotionType::Stand;
 	std::string motionName{};
 
-	MotionType targetMotionType = MotionType::Stand; // 条件ノードでターゲットのモーションを条件にする場合のモーションの種類
+	// 条件ノードでターゲットのモーションを条件にする場合のモーションの種類
+	MotionType targetMotionType = MotionType::Stand;
 	std::string targetMotionName{};
 
 	// Utilityセレクタノードの場合の子ノードごとの評価関数の種類を保持するマップ

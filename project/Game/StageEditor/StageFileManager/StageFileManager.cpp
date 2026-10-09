@@ -146,10 +146,10 @@ bool StageFileManager::CopyStageFile(const std::string& srcFileName, const std::
 	try
 	{
 		// コピー元のパスを作成
-		std::filesystem::path srcPath = kStageDataDir + srcFileName;
+		std::filesystem::path srcPath = stageDataDir_ + srcFileName;
 
 		// コピー先のパスを作成
-		std::filesystem::path destPath = kStageDataDir + destFileName;
+		std::filesystem::path destPath = stageDataDir_ + destFileName;
 
 		// コピー元のファイルが存在するか確認
 		if (!std::filesystem::exists(srcPath))

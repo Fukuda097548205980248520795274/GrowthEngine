@@ -9,12 +9,6 @@
 class GameScene;
 class NavMesh;
 
-/// @brief ファイル名の最大長（拡張子を含む）を定義
-constexpr size_t kMaxFileNameLength = 256;
-
-// ステージデータの保存先ディレクトリ
-constexpr const char* kStageDataDir = "./Assets/Parameter/StageData/";
-
 class StageEditor
 {
 public:
@@ -96,7 +90,16 @@ private:
 	/// @brief 実行中かどうか
 	bool isPlaying_ = false;
 
-	// 変更があったかどうか
+	/// @brief 変更があったかどうか
 	bool isDirty_ = false;
+
+
+private:
+
+	/// @brief ファイル名の最大長（拡張子を含む）を定義
+	static constexpr size_t kMaxFileNameLength = 256;
+
+	/// @brief ステージデータの保存先ディレクトリ
+	static constexpr const char* kStageDataDir = "./Assets/Parameter/StageData/";
 };
 

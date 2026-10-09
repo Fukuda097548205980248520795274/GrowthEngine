@@ -5,15 +5,15 @@
 #include "Scene/GameScene/GameScene.h"
 #include "StageObject/StaticEventTrigger/StaticEventTrigger.h"
 
-// プレハブデータの保存先フォルダ
-constexpr const char* kPrefabDir = "./Assets/Parameter/EditorPrefab/";
-
 namespace StageEditorUIHelper
 {
 	/// @brief Prefabの名前を取得する
 	/// @return 
 	std::vector<std::string> GetPrefabNames()
 	{
+		// プレハブデータの保存先フォルダ
+		constexpr const char* kPrefabDir = "./Assets/Parameter/EditorPrefab/";
+
 		std::vector<std::string> names;
 		if (!std::filesystem::exists(kPrefabDir))
 		{
@@ -36,6 +36,9 @@ namespace StageEditorUIHelper
 	/// @param data 
 	void SavePrefab(const std::string& name, const TemplateData& data)
 	{
+		// プレハブデータの保存先フォルダ
+		constexpr const char* kPrefabDir = "./Assets/Parameter/EditorPrefab/";
+
 		std::filesystem::create_directories(kPrefabDir);
 		std::string filePath = std::string(kPrefabDir) + name + ".json";
 
@@ -54,6 +57,9 @@ namespace StageEditorUIHelper
 	/// @param data 
 	bool LoadPrefab(const std::string& name, TemplateData& data)
 	{
+		// プレハブデータの保存先フォルダ
+		constexpr const char* kPrefabDir = "./Assets/Parameter/EditorPrefab/";
+
 		std::string filePath = std::string(kPrefabDir) + name + ".json";
 		std::ifstream file(filePath);
 		if (file.is_open())
