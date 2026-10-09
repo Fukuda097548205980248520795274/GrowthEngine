@@ -103,19 +103,19 @@ void StageEditorUIPlacement::DrawUI(std::vector<PlacementData>& placementList, i
 	}
 	else
 	{
-		// --- テンプレートなしの直配置パラメータ ---
+		// テンプレートなしの直配置パラメータ
 		currentData.templateName[0] = '\0'; // テンプレート名をクリア
 		currentData.category = EditCategory::Object;
 
 		if (ImGui::CollapsingHeader("ステージオブジェクト設定", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			// stageObjectTagNames[] ("None", "床", "壁", "イベントトリガー", "カメラガード") を利用
-			ImGui::Combo("オブジェクト種別", &currentData.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+			// ステージオブジェクトの小分類を選択するプルダウンメニューを描画
+			StageEditorUIHelper::StageObjectSubTypePullDown(currentData.subType, isDirty);
 
 			// イベントトリガー選択時のみ個別の基本パラメータを設定
 			if (currentData.subType == static_cast<int>(StageObject::StageObjectTag::StaticEventTrigger))
 			{
-				ImGui::Combo("イベントタイプ", &currentData.eventType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames));
+				StageEditorUIHelper::EventTypePullDown(currentData, isDirty);
 				ImGui::Checkbox("戦闘エリア開始", &currentData.isBattleAreaStart);
 				ImGui::Checkbox("ゲームクリア", &currentData.isGameClear);
 			}

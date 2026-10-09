@@ -1089,6 +1089,12 @@ void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
 	ImGui::Text("子ノードの評価関数設定 :");
 	ImGui::Separator();
 
+	/// @brief ユーティリティの種類を文字列で表す配列
+	const char* utilityTypeNames[] = {
+		"FixedDefault",
+		"HpRatio",
+	};
+
 	bool hasChildren = false;
 
 	// エディタ上のすべての接続線（リンク）から、このノードが出発点（親）になっているものを探す
@@ -1123,7 +1129,7 @@ void BehaviorTreeEditor::DrawUtilitySelectorNodeSettings(EditorNode& node)
 			std::string comboLabel = "##UtilityCombo_" + std::to_string(childId);
 
 			ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
-			if (ImGui::Combo(comboLabel.c_str(), &currentItem, kUtilityTypeNames, IM_ARRAYSIZE(kUtilityTypeNames)))
+			if (ImGui::Combo(comboLabel.c_str(), &currentItem, utilityTypeNames, IM_ARRAYSIZE(utilityTypeNames)))
 			{
 				// 変更があったら履歴保存＆フラグ立て
 				history_->SaveHistory(nodes_, links_, currentId_);
@@ -1199,6 +1205,33 @@ void BehaviorTreeEditor::DrawWeightedRandomSelectorNodeSettings(EditorNode& node
 /// @param node 
 void BehaviorTreeEditor::DrawConditionNodeSettings(EditorNode& node)
 {
+	// コンディションの種類を文字列で表す配列
+	 const char* conditionTypeNames[] = {
+		"None",
+		"HasTarget",
+		"IsTargetDown",
+		"IsNotTargetDown",
+		"IsGrabbing",
+		"IsNotGrabbing",
+		"IsTargetInRange",
+		"IsTargetOutOfRange",
+		"IsTargetAttacking",
+		"IsTargetNotAttacking",
+		"IsTargetInAttackSequence",
+		"IsTargetNotInAttackSequence",
+		"IsClosestToTarget",
+		"IsNotClosestToTarget",
+		"IsInAttackSequence",
+		"IsNotInAttackSequence",
+		"IsAvoiding",
+		"IsNotAvoiding",
+		"IsDamageReaction",
+		"IsNotDamageReaction",
+		"IsChangeState",
+		"IsNotChangeState",
+	};
+
+
 	ImGui::Text("関数 :");
 
 	// 履歴と変更フラグをまとめて処理するラムダ関数
@@ -1207,7 +1240,7 @@ void BehaviorTreeEditor::DrawConditionNodeSettings(EditorNode& node)
 	// コンボボックスを描画し、変更があったらEnumにキャストして戻す
 	int currentItem = static_cast<int>(node.conditionType);
 	ImGui::PushItemWidth(static_cast<float>(120.0f * zoom_));
-	if (ImGui::Combo("条件", &currentItem, kConditionTypeNames, IM_ARRAYSIZE(kConditionTypeNames)))
+	if (ImGui::Combo("条件", &currentItem, conditionTypeNames, IM_ARRAYSIZE(conditionTypeNames)))
 	{
 		history_->SaveHistory(nodes_, links_, currentId_);
 		isDirty_ = true;
@@ -1815,7 +1848,14 @@ void BehaviorTreeEditor::DrawActionNodeSettings(EditorNode& node)
 	}
 	else if (node.actionType == ActionType::RequestToken)
 	{
-		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), kTokenTypeNames, IM_ARRAYSIZE(kTokenTypeNames));
+		/// @brief トークンの種類を文字列で表す配列
+		const char* tokenTypeNames[] = {
+			"攻撃",
+			"挑発",
+			"フェイント"
+		};
+
+		ImGui::Combo("トークンの種類", reinterpret_cast<int*>(&node.tokenType), tokenTypeNames, IM_ARRAYSIZE(tokenTypeNames));
 	}
 	else if(node.actionType == ActionType::Telegraph)
 	{

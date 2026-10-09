@@ -139,4 +139,46 @@ namespace StageEditorUIHelper
 	/// @param spawner 
 	/// @param isDirty 
 	void ChangePlacementTemplate(PlacementData& target, const std::string& newTemplateName, StageSpawner* spawner);
+
+
+	/// @brief 武器のサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetWeaponSubTypeName(int subType);
+
+	/// @brief キャラクターのサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetCharacterSubTypeName(int subType);
+
+	/// @brief ステージオブジェクトのサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetStageObjectSubTypeName(int subType);
+
+	/// @brief カテゴリーのプルダウンを描画する
+	/// @param target 
+	/// @param isDirty 
+	void CategoryPullDown(EditCategory& category, int& subType, bool& isDirty);
+
+	/// @brief キャラクターのサブタイプのプルダウンを描画する
+	/// @param subType 
+	/// @param isDirty 
+	void CharacterSubTypePullDown(int& subType, bool& isDirty);
+
+	/// @brief 武器のサブタイプをプルダウンで描画する
+	/// @param subType 
+	/// @param isDirty 
+	void WeaponSubTypePullDown(int& subType, bool& isDirty);
+
+	/// @brief ステージオブジェクトのサブタイプをプルダウンで描画する
+	/// @param subType 
+	/// @param isDirty 
+	void StageObjectSubTypePullDown(int& subType, bool& isDirty);
+
+	/// @brief イベントタイプのプルダウンを描画する
+	/// @param target 
+	/// @param eventTypes 
+	/// @param isDirty 
+	void EventTypePullDown(PlacementData& target, bool& isDirty);
 }

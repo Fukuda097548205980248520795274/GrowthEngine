@@ -768,11 +768,8 @@ namespace StageEditorUIHelper
 
 		int currentType = target.eventType;
 
-		if (ImGui::Combo("イベントタイプ", &currentType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames)))
-		{
-			isDirty = true;
-			target.eventType = currentType;
-		}
+		// イベントタイプのプルダウンを描画
+		StageEditorUIHelper::EventTypePullDown(target, isDirty);
 
 		if (target.eventType == static_cast<int32_t>(StaticEventTrigger::EventType::ObjectSpawn))
 		{
@@ -862,6 +859,124 @@ namespace StageEditorUIHelper
 
 			// 新しいテンプレート情報で実体を再生成
 			spawner->SpawnActualEntity(target);
+		}
+	}
+
+	/// @brief 武器のサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetWeaponSubTypeName(int subType)
+	{
+		const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
+		return weaponCategoryNames[subType];
+	}
+
+	/// @brief キャラクターのサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetCharacterSubTypeName(int subType)
+	{
+		const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
+		return characterTagNames[subType];
+	}
+
+	/// @brief ステージオブジェクトのサブタイプ名を取得する
+	/// @param subType 
+	/// @return 
+	const char* GetStageObjectSubTypeName(int subType)
+	{
+		const char* stageObjectCategoryNames[] = { "None", "床", "壁", "トリガー", "カメラガード" };
+		return stageObjectCategoryNames[subType];
+	}
+
+	/// @brief カテゴリーのプルダウンを描画する
+	/// @param target 
+	/// @param isDirty 
+	void CategoryPullDown(EditCategory& category, int& subType, bool& isDirty)
+	{
+		const char* categoryNames[] = { "キャラクター", "オブジェクト", "武器","HUD" };
+
+		int currentCategory = static_cast<int>(category);
+
+		// カテゴリのプルダウンを描画
+		if (ImGui::Combo("カテゴリ", &currentCategory, categoryNames, 3))
+		{
+			category = static_cast<EditCategory>(currentCategory);
+			subType = 0; 
+		}
+	}
+
+	/// @brief キャラクターのサブタイプのプルダウンを描画する
+	/// @param subType 
+	/// @param isDirty 
+	void CharacterSubTypePullDown(int& subType, bool& isDirty)
+	{
+		const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
+		int currentSubType = subType;
+		if (ImGui::Combo("キャラクタータイプ", &subType, characterTagNames, IM_ARRAYSIZE(characterTagNames)))
+		{
+			subType = currentSubType;
+			isDirty = true;
+		}
+	}
+
+	/// @brief 武器のサブタイプをインデックスに変換する
+	/// @param subType 
+	/// @param isDirty 
+	void WeaponSubTypePullDown(int& subType, bool& isDirty)
+	{
+		const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
+
+		int currentSubType = subType;
+		if (ImGui::Combo("武器タイプ", &subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames)))
+		{
+			subType = currentSubType;
+			isDirty = true;
+		}
+	}
+
+	/// @brief ステージオブジェクトのサブタイプをプルダウンで描画する
+	/// @param subType 
+	/// @param isDirty 
+	void StageObjectSubTypePullDown(int& subType, bool& isDirty)
+	{
+		const char* stageObjectCategoryNames[] = { "None", "床", "壁", "トリガー", "カメラガード" };
+		int currentSubType = subType;
+		if (ImGui::Combo("ステージオブジェクトタイプ", &subType, stageObjectCategoryNames, IM_ARRAYSIZE(stageObjectCategoryNames)))
+		{
+			subType = currentSubType;
+			isDirty = true;
+		}
+	}
+
+	/// @brief イベントタイプのプルダウンを描画する
+	/// @param target 
+	/// @param eventTypes 
+	/// @param isDirty 
+	void EventTypePullDown(PlacementData& target, bool& isDirty)
+	{
+		const char* eventTypeNames[] =
+		{
+			"None",
+			"オブジェクト生成",
+			"カットシーン再生",
+			"ナビゲーションメッシュ切り替え",
+			"スティック操作チュートリアル",
+			"ダッシュ操作チュートリアル",
+			"攻撃操作チュートリアル",
+			"コンボ操作チュートリアル",
+			"掴み操作チュートリアル",
+			"防御操作チュートリアル",
+			"回避操作チュートリアル",
+			"レイジモードチュートリアル"
+		};
+
+		int currentType = target.eventType;
+
+		if (ImGui::Combo("イベントタイプ", &currentType, eventTypeNames, IM_ARRAYSIZE(eventTypeNames)))
+		{
+			isDirty = true;
+			target.eventType = currentType;
 		}
 	}
 }

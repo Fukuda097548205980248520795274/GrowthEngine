@@ -100,16 +100,11 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 		ImGui::Text("詳細設定");
 
 		// 大分類の選択
-		int intCat = static_cast<int>(currentData_.category);
-		if (ImGui::Combo("大分類", &intCat, categoryNames, IM_ARRAYSIZE(categoryNames)))
-		{
-			currentData_.category = static_cast<EditCategory>(intCat);
-			currentData_.subType = 0;
-		}
+		StageEditorUIHelper::CategoryPullDown(currentData_.category, currentData_.subType, isDirty);
 
 		if (currentData_.category == EditCategory::Character)
 		{
-			ImGui::Combo("キャラクター", &currentData_.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+			StageEditorUIHelper::CharacterSubTypePullDown(currentData_.subType, isDirty);
 
 			// キャラクターの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawCharacterTemplateSettings(currentData_, isDirty);
@@ -128,11 +123,11 @@ void StageEditorUITemplate::DrawUI(std::vector<PlacementData>& placementList, bo
 		}
 		else if (currentData_.category == EditCategory::Object)
 		{
-			ImGui::Combo("オブジェクト", &currentData_.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+			StageEditorUIHelper::StageObjectSubTypePullDown(currentData_.subType, isDirty);
 		}
 		else if (currentData_.category == EditCategory::Weapon)
 		{
-			ImGui::Combo("武器", &currentData_.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+			StageEditorUIHelper::WeaponSubTypePullDown(currentData_.subType, isDirty);
 
 			// 共通ヘルパーから武器の基本設定UIを描画
 			StageEditorUIHelper::DrawWeaponTemplateSettings(currentData_, isDirty);

@@ -25,27 +25,6 @@ enum class EditCategory
 	Weapon
 };
 
-// 大分類と小分類の表示用文字列
-inline const char* categoryNames[] = { "キャラクター", "オブジェクト", "武器","HUD"};
-inline const char* characterTagNames[] = { "None", "プレイヤー", "味方", "重要参考人", "敵", "ボス" };
-inline const char* stageObjectTagNames[] = { "None", "床", "壁", "イベントトリガー", "カメラガード"};
-inline const char* weaponCategoryNames[] = { "None", "片手武器", "両手武器" };
-inline const char* eventTypeNames[] = 
-{
-	"None", 
-	"オブジェクト生成",
-	"カットシーン再生",
-	"ナビゲーションメッシュ切り替え",
-	"スティック操作チュートリアル", 
-	"ダッシュ操作チュートリアル",
-	"攻撃操作チュートリアル", 
-	"コンボ操作チュートリアル",
-	"掴み操作チュートリアル",
-	"防御操作チュートリアル", 
-	"回避操作チュートリアル", 
-	"レイジモードチュートリアル" 
-};
-
 // 配置するオブジェクトの実体を保持するための型
 using InstancePtr = std::variant<std::monostate,Character*, Weapon*, StageObject*>;
 

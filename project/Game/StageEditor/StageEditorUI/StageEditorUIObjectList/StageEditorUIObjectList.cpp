@@ -97,9 +97,10 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 			std::string label = "ID:" + std::to_string(i) + " ";
 			if (data.name[0] == '\0')
 			{
-				if (data.category == EditCategory::Character) label += characterTagNames[data.subType];
-				else if (data.category == EditCategory::Object) label += stageObjectTagNames[data.subType];
-				else if (data.category == EditCategory::Weapon) label += weaponCategoryNames[data.subType];
+				if (data.category == EditCategory::Character) label += StageEditorUIHelper::GetCharacterSubTypeName(data.subType);
+				else if (data.category == EditCategory::Object) label += StageEditorUIHelper::GetStageObjectSubTypeName(data.subType);
+				else if (data.category == EditCategory::Weapon) label += StageEditorUIHelper::GetWeaponSubTypeName(data.subType);
+				else label += "Unknown";
 			}
 			else
 			{
@@ -335,7 +336,7 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 		} 
 		else if (target.category == EditCategory::Object)
 		{
-			ImGui::Combo("オブジェクト", &target.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+			StageEditorUIHelper::StageObjectSubTypePullDown(target.subType, isDirty);
 
 			// 共通ヘルパーからオブジェクトの基本設定UIを描画し、変更があったかどうかを取得
 			StageEditorUIHelper::DrawStageObjectPlacementSettings(target, isDirty);
@@ -432,26 +433,21 @@ void StageEditorUIObjectList::DrawWindow(std::vector<PlacementData>& placementLi
 								ImGui::InputText("オブジェクト名", editTarget.templateName, sizeof(editTarget.templateName));
 							}
 
-							int currentCategory = static_cast<int>(editTarget.category);
-							// categoryNamesは4要素(HUD含む)ですが、配置可能な3要素のみ表示します
-							if (ImGui::Combo("カテゴリ", &currentCategory, categoryNames, 3))
-							{
-								editTarget.category = static_cast<EditCategory>(currentCategory);
-								editTarget.subType = 0; // カテゴリが変わったらタイプをリセットする
-							}
+							// カテゴリのプルダウンメニュー
+							StageEditorUIHelper::CategoryPullDown(editTarget.category, editTarget.subType, isDirty);
 
 							// カテゴリに応じたサブタイプのコンボボックスを表示
 							if (editTarget.category == EditCategory::Character)
 							{
-								ImGui::Combo("タイプ", &editTarget.subType, characterTagNames, IM_ARRAYSIZE(characterTagNames));
+								StageEditorUIHelper::CharacterSubTypePullDown(editTarget.subType, isDirty);
 							}
 							else if (editTarget.category == EditCategory::Object)
 							{
-								ImGui::Combo("タイプ", &editTarget.subType, stageObjectTagNames, IM_ARRAYSIZE(stageObjectTagNames));
+								StageEditorUIHelper::StageObjectSubTypePullDown(editTarget.subType, isDirty);
 							}
 							else if (editTarget.category == EditCategory::Weapon)
 							{
-								ImGui::Combo("タイプ", &editTarget.subType, weaponCategoryNames, IM_ARRAYSIZE(weaponCategoryNames));
+								StageEditorUIHelper::WeaponSubTypePullDown(editTarget.subType, isDirty);
 							}
 
 							ImGui::Separator();

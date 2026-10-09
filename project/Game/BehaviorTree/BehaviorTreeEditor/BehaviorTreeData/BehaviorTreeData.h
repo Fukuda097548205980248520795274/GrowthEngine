@@ -129,50 +129,11 @@ enum class ConditionType
 	IsNotChangeState, // 状態遷移中でないかどうか
 };
 
-// コンディションの種類を文字列で表す配列
-constexpr inline const char* kConditionTypeNames[] = {
-	"None",
-	"HasTarget",
-	"IsTargetDown",
-	"IsNotTargetDown",
-	"IsGrabbing",
-	"IsNotGrabbing",
-	"IsTargetInRange",
-	"IsTargetOutOfRange",
-	"IsTargetAttacking",
-	"IsTargetNotAttacking",
-	"IsTargetInAttackSequence",
-	"IsTargetNotInAttackSequence",
-	"IsClosestToTarget",
-	"IsNotClosestToTarget",
-	"IsInAttackSequence",
-	"IsNotInAttackSequence",
-	"IsAvoiding",
-	"IsNotAvoiding",
-	"IsDamageReaction",
-	"IsNotDamageReaction",
-	"IsChangeState",
-	"IsNotChangeState",
-};
-
 /// @brief ユーティリティの種類
 enum class UtilityType
 {
 	FixedDefault,
 	HpRatio,
-};
-
-/// @brief ユーティリティの種類を文字列で表す配列
-constexpr inline const char* kUtilityTypeNames[] = {
-	"FixedDefault",
-	"HpRatio",
-};
-
-/// @brief トークンの種類を文字列で表す配列
-constexpr inline const char* kTokenTypeNames[] = {
-	"攻撃",
-	"挑発",
-	"フェイント"
 };
 
 /// @brief 条件ノードパラメータ
