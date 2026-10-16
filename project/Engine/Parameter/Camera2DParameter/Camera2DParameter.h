@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 2Dカメラのパラメータ
 	class Camera2DParameter : public Parameter
 	{
 	public:

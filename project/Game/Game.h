@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief ゲーム
 class Game : public Framework
 {
 public:

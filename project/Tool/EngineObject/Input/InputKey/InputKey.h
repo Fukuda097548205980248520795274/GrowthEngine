@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseInput.h"
 
+/// @brief キー入力
 class InputKey : public Engine::BaseInput
 {
 public:

@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 基底3D衝突
 	class BaseCollision3DBase
 	{
 	public:

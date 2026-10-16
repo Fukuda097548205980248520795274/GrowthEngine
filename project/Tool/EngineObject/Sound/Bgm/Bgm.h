@@ -2,7 +2,7 @@
 #include "../Sound.h"
 #include "Store/SoundStore/SoundData/BgmData/BgmData.h"
 
-
+/// @brief BGM
 class Bgm : public Engine::Sound
 {
 public:

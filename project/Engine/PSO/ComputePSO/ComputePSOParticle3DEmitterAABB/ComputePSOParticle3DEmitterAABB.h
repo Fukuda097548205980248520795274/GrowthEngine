@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3DパーティクルAABBエミッター
 	class ComputePSOParticle3DEmitterAABB : public BaseComputePSO
 	{
 	public:

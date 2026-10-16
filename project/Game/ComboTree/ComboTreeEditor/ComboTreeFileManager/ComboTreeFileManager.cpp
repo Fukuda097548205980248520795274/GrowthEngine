@@ -1,10 +1,10 @@
-#include "ComboTreeSetting.h"
+#include "ComboTreeFileManager.h"
 
 /// @brief ツリー構造をファイルに保存する
 /// @param fileName 
 /// @param nodes 
 /// @param links 
-void ComboTreeSetting::SaveTree(const std::string& fileName, const std::vector<ComboEditorNode>& nodes, const std::vector<ComboEditorLink>& links)
+void ComboTreeFileManager::SaveTree(const std::string& fileName, const std::vector<ComboEditorNode>& nodes, const std::vector<ComboEditorLink>& links)
 {
 	json rootJson;
 
@@ -165,7 +165,7 @@ void ComboTreeSetting::SaveTree(const std::string& fileName, const std::vector<C
 /// @param fileName 
 /// @param outNodes 
 /// @param outLinks 
-void ComboTreeSetting::LoadTree(const std::string& fileName, std::vector<ComboEditorNode>& outNodes, std::vector<ComboEditorLink>& outLinks)
+void ComboTreeFileManager::LoadTree(const std::string& fileName, std::vector<ComboEditorNode>& outNodes, std::vector<ComboEditorLink>& outLinks)
 {
 	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";
 	std::ifstream file(filePath);

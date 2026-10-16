@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief ブルーム
 class PostEffectBloom : public Engine::BasePostEffect
 {
 public:

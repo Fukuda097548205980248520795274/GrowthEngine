@@ -10,24 +10,49 @@
 
 #include "Parameter/Render3DParameter/Render3DParameter.h"
 
+/// @brief 静的モデル
 class PrimitiveStaticModel;
 
 namespace Engine
 {
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief 基底シャドウマップPSO
 	class BasePSOShadowMap;
 
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief アニメーションストア
 	class AnimationStore;
+
+	/// @brief スケルトンストア
 	class SkeletonStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+
+	/// @brief 3D描画ストア
 	class Render3DStore
 	{
 	public:

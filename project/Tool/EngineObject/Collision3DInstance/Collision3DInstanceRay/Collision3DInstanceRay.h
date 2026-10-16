@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseCollision3DInstance.h"
 
+/// @brief 3D衝突半直線判定インスタンス
 class Collision3DInstanceRay : public Engine::BaseCollision3DInstance
 {
 public:

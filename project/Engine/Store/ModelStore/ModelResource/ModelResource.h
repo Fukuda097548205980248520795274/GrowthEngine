@@ -11,10 +11,16 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief DXヒープ
 	class DX12Heap;
 
+	/// @brief モデルリソース
 	class ModelResource
 	{
 	public:

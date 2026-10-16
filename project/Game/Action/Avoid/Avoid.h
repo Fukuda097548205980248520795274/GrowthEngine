@@ -1,6 +1,7 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief 回避の初期化用データ
 struct AvoidInitData
 {
 	// 回避方向
@@ -16,6 +17,7 @@ struct AvoidInitData
 	bool isTargetDirection = false;
 };
 
+/// @brief 回避
 class Avoid : public Action
 {
 public:

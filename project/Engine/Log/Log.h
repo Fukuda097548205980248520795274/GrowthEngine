@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log
 	{
 	public:

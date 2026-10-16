@@ -1,8 +1,10 @@
 #pragma once
 #include "../BasePrefabBase.h"
 
+/// @brief 静的モデルプレハブインスタンス
 class PrefabInstanceStaticModel;
 
+/// @brief 静的モデルプレハブ
 class PrefabBaseStaticModel : public Engine::BasePrefabBase
 {
 public:

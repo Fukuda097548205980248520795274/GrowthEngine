@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief レンダー用アウトラインPSO
 	class PSOOutlineRender : public BasePSOOutline
 	{
 	public:

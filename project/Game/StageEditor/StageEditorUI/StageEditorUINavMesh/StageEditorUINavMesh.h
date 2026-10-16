@@ -1,8 +1,12 @@
 #pragma once
 
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ステージエディタナビゲーションメッシュ操作
 class StageEditorNavMeshController;
 
+/// @brief ステージエディタナビゲーションメッシュUI
 class StageEditorUINavMesh
 {
 public:

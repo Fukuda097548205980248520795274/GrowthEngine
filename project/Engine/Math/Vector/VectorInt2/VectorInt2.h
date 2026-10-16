@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief 2次元整数ベクトル
 struct VectorInt2
 {
 	int x;

@@ -3,8 +3,10 @@
 #include "../StageData/StageData.h"
 #include "NavMesh/NavMesh.h"
 
+/// @brief ステージ生成
 class StageSpawner;
 
+/// @brief ステージエディタの記録
 class StageEditorHistory
 {
 public:

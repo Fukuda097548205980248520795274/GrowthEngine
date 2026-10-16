@@ -2,10 +2,16 @@
 #include "GrowthEngine.h"
 #include "StageEditor/StageData/StageData.h"
 
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ステージエディタナビゲーションメッシュ操作
 class StageEditorNavMeshController;
 
+/// @brief ステージエディタGuizmo
 class StageEditorGuizmo
 {
 public:

@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief デバッグ用2Dデータ
 	class DebugCamera2DResource
 	{
 	public:

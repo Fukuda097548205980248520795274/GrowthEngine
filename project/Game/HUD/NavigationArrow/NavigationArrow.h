@@ -1,8 +1,10 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief プレイヤー
 class Player;
 
+/// @brief ナビゲーション矢印HUD
 class NavigationArrow : public HUD
 {
 public:

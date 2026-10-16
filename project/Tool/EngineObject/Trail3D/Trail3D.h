@@ -1,8 +1,10 @@
 #pragma once
 #include "Store/TrailStore/TrailData/TrailData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief 3Dトレイル
 class Trail3D
 {
 public:

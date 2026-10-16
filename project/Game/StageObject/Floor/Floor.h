@@ -6,6 +6,7 @@ class Floor : public StageObject
 {
 public:
 
+	/// @brief 初期化用データ
 	struct InitData
 	{
 		/// @brief 床の位置

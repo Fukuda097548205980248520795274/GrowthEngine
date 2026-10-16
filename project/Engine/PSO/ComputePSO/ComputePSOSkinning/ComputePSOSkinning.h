@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief スキニングPSO
 	class ComputePSOSkinning : public BaseComputePSO
 	{
 	public:

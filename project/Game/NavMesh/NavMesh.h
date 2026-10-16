@@ -79,7 +79,7 @@ struct NavPolygon
 	}
 };
 
-/// @brief ナビゲーションメッシュクラス
+/// @brief ナビゲーションメッシュ
 class NavMesh
 {
 public:

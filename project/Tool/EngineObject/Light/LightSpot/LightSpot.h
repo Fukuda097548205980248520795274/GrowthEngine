@@ -1,8 +1,10 @@
 #pragma once
 #include "../BaseLight.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief スポットライト
 class LightSpot : public Engine::BaseLight
 {
 public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief キーの入力データ
 	class InputKeyResource : public InputBaseResource
 	{
 	public:

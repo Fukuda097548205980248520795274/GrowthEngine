@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief レンダー用シャドウマップPSO
 	class PSOShadowMapRender : public BasePSOShadowMap
 	{
 	public:

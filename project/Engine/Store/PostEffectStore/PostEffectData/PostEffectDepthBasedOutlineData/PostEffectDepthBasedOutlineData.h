@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 深度ベースアウトラインのデータ
 	class PostEffectDepthBasedOutlineData : public PostEffectBaseData
 	{
 	public:

@@ -8,9 +8,13 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief トレイルPSO
 	class PSOTrail
 	{
 	public:

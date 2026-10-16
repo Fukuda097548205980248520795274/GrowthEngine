@@ -3,10 +3,12 @@
 #include <string>
 #include "Data/LightData/LightData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 基底ライト
 	class BaseLight
 	{
 	public:

@@ -4,7 +4,7 @@
 /// @brief 初期化
 /// @param device 
 /// @param log 
-void Engine::ModelStore::Initilaize(ID3D12Device* device, Log* log)
+void Engine::ModelStore::Initialize(ID3D12Device* device, Log* log)
 {
 	// nullptrチェック
 	assert(device);

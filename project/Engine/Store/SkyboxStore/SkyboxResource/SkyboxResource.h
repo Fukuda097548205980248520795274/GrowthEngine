@@ -11,11 +11,20 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底スカイボックスPSO
 	class BasePSOSkybox;
+
+	/// @brief インデックスバッファリソース
 	class IndexBufferResource;
 
+
+	/// @brief スカイボックスリソース
 	class SkyboxResource
 	{
 	public:

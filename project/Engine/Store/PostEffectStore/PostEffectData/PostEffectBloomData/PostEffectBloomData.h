@@ -4,9 +4,13 @@
 
 namespace Engine
 {
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// DXヒープ
 	class DX12Heap;
 
+	/// @brief ブルームのデータ
 	class PostEffectBloomData : public PostEffectBaseData
 	{
 	public:

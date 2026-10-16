@@ -1,9 +1,13 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief キャラクター
 class Character;
+
+/// @brief NPC
 class NPC;
 
+/// @brief 計測用エディタ
 class AIMetricsEditor
 {
 private:

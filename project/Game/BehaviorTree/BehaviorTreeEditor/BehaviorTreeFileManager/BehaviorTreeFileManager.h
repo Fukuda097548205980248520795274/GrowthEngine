@@ -2,13 +2,13 @@
 #include "Parameter/Parameter.h"
 #include "../BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
-class BehaviorTreeSetting : public Engine::Parameter
+class BehaviorTreeFileManager : public Engine::Parameter
 {
 public:
 
 	/// @brief コンストラクタ
     /// @param folderName 
-    BehaviorTreeSetting(const std::string& folderName) : Parameter(folderName) {}
+    BehaviorTreeFileManager(const std::string& folderName) : Parameter(folderName) {}
 
 	/// @brief ツリー構造をファイルに保存する
     /// @param fileName 

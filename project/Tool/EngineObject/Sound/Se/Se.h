@@ -2,6 +2,7 @@
 #include "../Sound.h"
 #include "Store/SoundStore/SoundData/SeData/SeData.h"
 
+/// @brief SE
 class Se : public Engine::Sound
 {
 public:

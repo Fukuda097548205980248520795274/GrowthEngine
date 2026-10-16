@@ -2,6 +2,7 @@
 #include "GrowthEngine.h"
 #include <numbers>
 
+/// @brief ゲームシーン
 class GameScene;
 
 // @brief ゲームの設定
@@ -32,6 +33,7 @@ struct GameConfig
 	float cameraExpandSpeed = 5.0f;
 };
 
+/// @brief 設定エディタ
 class ConfigEditor
 {
 public:

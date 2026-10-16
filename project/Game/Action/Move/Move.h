@@ -1,6 +1,7 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief 移動
 class Move : public Action
 {
 public:

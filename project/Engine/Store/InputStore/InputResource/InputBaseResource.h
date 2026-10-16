@@ -28,6 +28,7 @@ enum class TriggerType
 
 namespace Engine
 {
+	/// @brief 入力の基底データ
 	class InputBaseResource
 	{
 	public:

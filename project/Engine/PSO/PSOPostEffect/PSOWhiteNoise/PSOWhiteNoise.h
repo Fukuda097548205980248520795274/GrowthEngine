@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ホワイトノイズPSO
 	class PSOWhiteNoise : public BasePSOPostEffect
 	{
 	public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 残像PSO
 	class ComputePSOAfterImage : public BaseComputePSO
 	{
 	public:

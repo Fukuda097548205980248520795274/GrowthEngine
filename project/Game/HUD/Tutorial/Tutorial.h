@@ -1,6 +1,7 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief チュートリアルHUD
 class Tutorial : public HUD
 {
 public:

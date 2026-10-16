@@ -9,7 +9,7 @@ SoundManager* SoundManager::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_.reset(new SoundManager());
+		instance_ = std::make_unique<SoundManager>(PassKey{});
 		instance_->Initialize();
 	}
 

@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief 基底ゲームカメラ
 	class BaseGameCamera
 	{
 	public:

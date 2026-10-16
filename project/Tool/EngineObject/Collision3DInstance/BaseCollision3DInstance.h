@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 基底3D衝突インスタンス
 	class BaseCollision3DInstance
 	{
 	public:

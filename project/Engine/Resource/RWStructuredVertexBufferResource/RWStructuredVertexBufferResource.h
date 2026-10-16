@@ -11,6 +11,8 @@
 
 namespace Engine
 {
+	/// @brief 頂点用RWストラクチャードバッファリソース
+	/// @tparam T 
 	template<typename T>
 	class RWStructuredVertexBufferResource
 	{

@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief 立方体頂点データ
 	class CubeVertexResource
 	{
 	public:

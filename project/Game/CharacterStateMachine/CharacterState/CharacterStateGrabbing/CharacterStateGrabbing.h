@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの掴み状態
 class CharacterStateGrabbing : public CharacterState
 {
 public:

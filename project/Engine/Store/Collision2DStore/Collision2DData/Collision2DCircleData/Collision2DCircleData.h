@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 2D衝突の円判定データ
 	class Collision2DCircleData : public Collision2DBaseData
 	{
 	public:

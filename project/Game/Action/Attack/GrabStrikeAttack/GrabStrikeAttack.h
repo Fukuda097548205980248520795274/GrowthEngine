@@ -46,6 +46,7 @@ struct GrabStrikeAttackInitData
 	bool isChargeAttack = false;
 };
 
+/// @brief 掴み攻撃
 class GrabStrikeAttack : public Attack
 {
 public:

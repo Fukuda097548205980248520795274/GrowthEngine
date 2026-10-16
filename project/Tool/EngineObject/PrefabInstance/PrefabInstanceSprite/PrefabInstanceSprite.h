@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePrefabInstance.h"
 
+/// @brief スプライトプレハブインスタンス
 class PrefabInstanceSprite : public Engine::BasePrefabInstance
 {
 public:

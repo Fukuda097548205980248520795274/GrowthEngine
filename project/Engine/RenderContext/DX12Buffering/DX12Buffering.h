@@ -6,10 +6,16 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief ウィンドウアプリケーション
 	class WinApp;
+
+	/// @brief DXヒープ
 	class DX12Heap;
 
+	/// @brief DXバッファリング
 	class DX12Buffering
 	{
 	public:

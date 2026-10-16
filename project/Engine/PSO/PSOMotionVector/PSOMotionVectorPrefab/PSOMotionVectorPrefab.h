@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief プレハブ用モーションベクトルPSO
 	class PSOMotionVectorPrefab : public BasePSOMotionVector
 	{
 	public:

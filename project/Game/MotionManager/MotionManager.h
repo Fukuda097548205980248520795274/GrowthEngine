@@ -23,6 +23,7 @@ enum class MotionType
 	Telegraph
 };
 
+/// @brief ジョイントの種類
 enum class JointType
 {
 	None,
@@ -48,6 +49,7 @@ enum class JointType
 	Weapon,
 };
 
+/// @brief ジョイントの種類の名前
 inline const char* jointTypeNames[] =
 {
 	"None",
@@ -73,8 +75,24 @@ inline const char* jointTypeNames[] =
 	"Weapon" 
 };
 
+/// @brief モーションマネージャ
 class MotionManager
 {
+public:
+
+	/// @brief パスキー
+	class PassKey
+	{
+	private:
+
+		PassKey() = default;
+		friend class MotionManager;
+	};
+
+	// パスキーを受け取るコンストラクタ
+	explicit MotionManager(PassKey) {}
+
+
 public:
 
 	/// @brief デストラクタ

@@ -1,16 +1,17 @@
 #pragma once
 #include "GrowthEngine.h"
 
-// 前方宣言
+/// @brief 配置データ
 struct PlacementData;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
 
 class Entity
 {
 public:
 
-	/// @brief タグ
-	/// @note プレイヤーや敵などの識別に使用する
+	/// @brief エンティティタグ
 	enum class EntityTag
 	{
 		None,

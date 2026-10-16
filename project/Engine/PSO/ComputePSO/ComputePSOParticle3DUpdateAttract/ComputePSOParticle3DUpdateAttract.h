@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief パーティクル吸引更新PSO
 	class ComputePSOParticle3DUpdateAttract : public BaseComputePSO
 	{
 	public:

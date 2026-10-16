@@ -820,9 +820,6 @@
     <Filter Include="Game\StageObject\Wall">
       <UniqueIdentifier>{ad13a1a5-9256-42e0-a3a8-9e40d9707917}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\StageObject\Stairs">
-      <UniqueIdentifier>{c41f22ec-2c79-456d-9e80-cdec9b98a281}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Action\Attack\GrabStrikeAttack">
       <UniqueIdentifier>{4e85c7fe-b069-4287-8795-fa7ec6ca3b40}</UniqueIdentifier>
     </Filter>
@@ -990,9 +987,6 @@
     </Filter>
     <Filter Include="Game\HUD\HP\BossHP">
       <UniqueIdentifier>{3976fcc1-c980-4f88-a72d-b3b312871f93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\HUD\Timer">
-      <UniqueIdentifier>{e127f022-ff89-403e-a9fa-240a0eb57dd4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Include\Store\SoundStore\SoundData\BgmData">
       <UniqueIdentifier>{0795d898-e02a-439c-96bf-648702eb47c2}</UniqueIdentifier>
@@ -1470,9 +1464,6 @@
     </Filter>
     <Filter Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter">
       <UniqueIdentifier>{a64ef0a8-414b-4312-87db-e939201c69ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter">
-      <UniqueIdentifier>{2030dcf0-a263-41e3-95ba-2966951cf9b6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise">
       <UniqueIdentifier>{7e560b5a-4bbb-490c-beaf-387cfe9e187a}</UniqueIdentifier>
@@ -2313,7 +2304,7 @@
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory\BehaviorTreeFactory.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory</Filter>
     </ClCompile>
-    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.cpp">
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting</Filter>
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
@@ -2721,9 +2712,6 @@
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
     </ClCompile>
-    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.cpp">
-      <Filter>Tool\EngineObject\PostEffect\PostEffectBoxFilter</Filter>
-    </ClCompile>
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.cpp">
       <Filter>Tool\EngineObject\PostEffect\PostEffectGaussianFilter</Filter>
     </ClCompile>
@@ -2787,7 +2775,7 @@
     <ClCompile Include="Game\HUD\Reticle\Reticle.cpp">
       <Filter>Game\HUD\Reticle</Filter>
     </ClCompile>
-    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.cpp">
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFileManager\ComboTreeFileManager.cpp">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeSetting</Filter>
     </ClCompile>
     <ClCompile Include="Game\SharedTreeEditorClipboard\SharedTreeEditorClipboard.cpp">
@@ -3689,7 +3677,7 @@
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory\BehaviorTreeFactory.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory</Filter>
     </ClInclude>
-    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.h">
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
@@ -4124,9 +4112,6 @@
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h">
       <Filter>Game\CharacterStateMachine\CharacterState\CharacterStateStance</Filter>
     </ClInclude>
-    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.h">
-      <Filter>Tool\EngineObject\PostEffect\PostEffectBoxFilter</Filter>
-    </ClInclude>
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.h">
       <Filter>Tool\EngineObject\PostEffect\PostEffectGaussianFilter</Filter>
     </ClInclude>
@@ -4169,7 +4154,7 @@
     <ClInclude Include="Game\HUD\Reticle\Reticle.h">
       <Filter>Game\HUD\Reticle</Filter>
     </ClInclude>
-    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.h">
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFileManager\ComboTreeFileManager.h">
       <Filter>Game\ComboTree\ComboTreeEditor\ComboTreeSetting</Filter>
     </ClInclude>
     <ClInclude Include="Game\SharedTreeEditorClipboard\SharedTreeEditorClipboard.h">

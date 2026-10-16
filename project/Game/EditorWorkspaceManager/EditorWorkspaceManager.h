@@ -11,6 +11,7 @@
 #include "ObjectEditor/ModelEditor/ModelEditor.h"
 #include "ObjectEditor/LightEditor/LightEditor.h"
 
+/// @brief ワークスペースの種類
 enum class WorkspaceType
 {
 	None,
@@ -25,6 +26,7 @@ enum class WorkspaceType
 	LightEditor,
 };
 
+/// @brief エディタ用ワークスペース
 class EditorWorkspaceManager
 {
 public:

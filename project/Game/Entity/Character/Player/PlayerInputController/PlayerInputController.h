@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief プレイヤー入力操作
 class PlayerInputController
 {
 public:

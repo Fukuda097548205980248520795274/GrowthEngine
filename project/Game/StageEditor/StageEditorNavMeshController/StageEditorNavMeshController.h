@@ -5,6 +5,7 @@
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 #include "StageEditor/StageData/StageData.h"
 
+/// @brief ステージエディタナビゲーションメッシュ操作
 class StageEditorNavMeshController
 {
 public:

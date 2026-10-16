@@ -1,9 +1,13 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief エディタ用ノードの種類
 enum class EditorNodeType;
+
+/// @brief キャラクター
 class Character;
 
+/// @brief ノード
 class Node
 {
 public:

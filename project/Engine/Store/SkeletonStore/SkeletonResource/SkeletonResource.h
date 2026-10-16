@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief スケルトンリソース
 	class SkeletonResource
 	{
 	public:

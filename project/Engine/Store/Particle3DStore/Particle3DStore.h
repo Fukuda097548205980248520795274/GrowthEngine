@@ -23,15 +23,31 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief オフスクリーンリソース
 	class OffscreenResource;
+
+	/// @brief 深度リソース
 	class DepthResource;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 3Dパーティクルストア
 	class Particle3DStore
 	{
 	public:

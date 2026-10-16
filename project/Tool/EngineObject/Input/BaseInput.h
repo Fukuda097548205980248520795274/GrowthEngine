@@ -4,10 +4,12 @@
 #include "Handle/Handle.h"
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 基底入力
 	class BaseInput
 	{
 	public:

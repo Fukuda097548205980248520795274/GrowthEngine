@@ -1,9 +1,13 @@
 #pragma once
 #include <string>
 
+/// @brief シーンマネージャ
 class SceneManager;
+
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief シーン
 class Scene
 {
 public:

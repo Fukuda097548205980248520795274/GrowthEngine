@@ -5,9 +5,13 @@
 
 namespace Engine
 {
+	/// @brief オーディオストア
 	class AudioStore;
+
+	/// @brief サウンドパラメータ
 	class SoundParameter;
 
+	/// @brief サウンドの種類
 	enum class SoundType
 	{
 		Bgm,
@@ -23,9 +27,7 @@ namespace Engine
 		/// @param name 
 		/// @param hSound 
 		/// @param hAudio 
-		SoundData(const std::string& name, SoundHandle hSound)
-			: name_(name), hSound_(hSound){
-		}
+		SoundData(const std::string& name, SoundHandle hSound) : name_(name), hSound_(hSound) {}
 
 		/// @brief デストラクタ
 		virtual ~SoundData() = default;

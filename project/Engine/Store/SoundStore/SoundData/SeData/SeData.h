@@ -16,6 +16,7 @@ namespace Engine
 		AudioHandle hAudio = 0;
 	};
 
+	/// @brief SEデータ
 	class SeData : public SoundData
 	{
 	public:

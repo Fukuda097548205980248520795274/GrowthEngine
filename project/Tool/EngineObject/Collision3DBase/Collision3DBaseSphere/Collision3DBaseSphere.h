@@ -1,8 +1,10 @@
 #pragma once
 #include "../BaseCollision3DBase.h"
 
+/// @brief 3D衝突球判定インスタンス
 class Collision3DInstanceSphere;
 
+/// @brief 3D衝突球判定
 class Collision3DBaseSphere : public Engine::BaseCollision3DBase
 {
 public:

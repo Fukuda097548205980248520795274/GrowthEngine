@@ -3,12 +3,22 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief インデックスバッファリソース
 	class IndexBufferResource;
+
+	/// @brief 2D描画のパラメータ
 	class Render2DParameter;
 
+	/// @brief 2D描画のスプライト
 	class Render2DSpriteData : public Render2DBaseData
 	{
 	public:

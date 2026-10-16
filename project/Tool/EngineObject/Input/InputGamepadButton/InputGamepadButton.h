@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseInput.h"
 
+/// @brief ゲームパッドボタン入力
 class InputGamepadButton : public Engine::BaseInput
 {
 public:

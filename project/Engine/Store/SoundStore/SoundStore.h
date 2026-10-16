@@ -6,8 +6,10 @@
 
 namespace Engine
 {
+	/// @brief オーディオストア
 	class AudioStore;
 
+	/// @brief サウンドストア
 	class SoundStore
 	{
 	public:

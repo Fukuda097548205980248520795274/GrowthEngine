@@ -6,8 +6,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief DXヒープ
 	class DX12Heap
 	{
 	public:

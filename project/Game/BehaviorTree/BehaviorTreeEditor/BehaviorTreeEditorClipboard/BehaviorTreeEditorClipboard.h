@@ -2,8 +2,10 @@
 #include <vector>
 #include "../BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
+/// @brief ビヘイビアツリーエディタ
 class BehaviorTreeEditor;
 
+/// @brief ビヘイビアツリーエディタのコピー用ボード
 class BehaviorTreeEditorClipboard
 {
 public:

@@ -25,15 +25,24 @@
 #include "DataForGPU/VertexDataForGPU/VertexDataForGPU.h"
 #include "DataForGPU/MotionVectorDataForGPU/MotionVectorDataForGPU.h"
 
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief ワールドトランスフォーム3D
 class WorldTransform3D;
 
 namespace Engine
 {
+	/// @brief 3D描画パラメータ
 	class Render3DParameter;
+
+	/// @brief カメラ3Dストア
 	class Camera3DStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief 3D描画の基底データ
 	class Render3DBaseData
 	{
 	public:

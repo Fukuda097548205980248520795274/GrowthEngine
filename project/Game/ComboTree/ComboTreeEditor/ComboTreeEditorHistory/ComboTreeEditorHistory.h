@@ -1,8 +1,10 @@
 #pragma once
 #include "../ComboTreeData/ComboTreeData.h"
 
+/// @brief コンボツリーエディタ
 class ComboTreeEditor;
 
+/// @brief コンボツリーエディタの記録
 class ComboTreeEditorHistory
 {
 public:

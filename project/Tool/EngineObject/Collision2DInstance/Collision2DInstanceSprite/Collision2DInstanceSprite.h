@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseCollision2DInstance.h"
 
+/// @brief 2D衝突スプライト衝突インスタンス
 class Collision2DInstanceSprite : public Engine::BaseCollision2DInstance
 {
 public:

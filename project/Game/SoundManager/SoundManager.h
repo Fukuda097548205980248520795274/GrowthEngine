@@ -1,8 +1,24 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief サウンドマネージャ
 class SoundManager
 {
+public:
+
+	/// @brief パスキー
+	struct PassKey
+	{
+	private:
+
+		PassKey() = default;
+		friend class SoundManager;
+	};
+
+	// @brief パスキーを受け取るコンストラクタ
+	explicit SoundManager(PassKey) {}
+
+
 public:
 
 	/// @brief デストラクタ

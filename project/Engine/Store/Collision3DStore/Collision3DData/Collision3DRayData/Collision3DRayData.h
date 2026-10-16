@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3D衝突の半直線データ
 	class Collision3DRayData : public Collision3DBaseData
 	{
 	public:

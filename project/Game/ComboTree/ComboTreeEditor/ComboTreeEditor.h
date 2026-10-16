@@ -4,8 +4,9 @@
 #include "ComboTreeProjectManager/ComboTreeProjectManager.h"
 #include "ComboTreeEditorClipboard/ComboTreeEditorClipboard.h"
 #include "ComboTreeEditorHistory/ComboTreeEditorHistory.h"
-#include "ComboTreeSetting/ComboTreeSetting.h"
+#include "ComboTreeFileManager/ComboTreeFileManager.h"
 
+/// @brief コンボツリーエディタ
 class ComboTreeEditor
 {
 	// privateメンバにアクセスできるようにするためのフレンドクラス宣言
@@ -92,7 +93,7 @@ private:
 	std::unique_ptr<ComboTreeEditorHistory> history_;
 
 	/// @brief ツリー構造の保存と読み込みを担当するクラス
-	ComboTreeSetting saver_{ "ComboTree" };
+	ComboTreeFileManager saver_{ "ComboTree" };
 
 	// ノード情報を保持する配列
 	std::vector<ComboEditorNode> nodes_;

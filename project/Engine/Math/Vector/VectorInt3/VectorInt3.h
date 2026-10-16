@@ -1,6 +1,6 @@
 #pragma once
 
-/// @brief 3次元ベクトル
+/// @brief 3次元整数ベクトル
 struct VectorInt3
 {
 	int x;

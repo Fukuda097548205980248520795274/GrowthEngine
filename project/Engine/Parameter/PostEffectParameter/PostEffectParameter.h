@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief ポストエフェクトのパラメータ
 	class PostEffectParameter : public Parameter
 	{
 	public:

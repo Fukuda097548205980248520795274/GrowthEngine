@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 平滑化のデータ
 	class PostEffectSmoothingData : public PostEffectBaseData
 	{
 	public:
@@ -24,7 +25,7 @@ namespace Engine
 		void Reset() override;
 
 		/// @brief コマンドリストに登録する
-     /// @param context
+		/// @param context
 		void Register(const PostEffectRenderContext& context) override;
 
 		/// @brief パラメータを取得する

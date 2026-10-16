@@ -3,6 +3,8 @@
 #include <memory>
 #include <functional>
 
+/// @brief オブジェクトプール
+/// @tparam T 
 template <typename T>
 class Pool
 {

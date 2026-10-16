@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ヴィネットPSO
 	class PSOVignetting : public BasePSOPostEffect
 	{
 	public:

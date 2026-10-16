@@ -1,6 +1,7 @@
 #pragma once
 #include "../HP.h"
 
+/// @brief ボス用HP
 class BossHP : public HP
 {
 public:

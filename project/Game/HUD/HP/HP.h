@@ -1,8 +1,10 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief HP
 class HP : public HUD
 {
 public:

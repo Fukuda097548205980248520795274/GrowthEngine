@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 輝度ベースアウトラインPSO
 	class PSOLuminanceBasedOutline : public BasePSOPostEffect
 	{
 	public:

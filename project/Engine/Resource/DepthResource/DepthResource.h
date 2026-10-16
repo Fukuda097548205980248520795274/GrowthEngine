@@ -7,10 +7,16 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 深度リソース
 	class DepthResource
 	{
 	public:

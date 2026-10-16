@@ -1,7 +1,9 @@
 #pragma once
 
+/// @brief NPC
 class NPC;
 
+/// @brief ビヘイビアツリーのビュー
 class BehaviorTreeViewer
 {
 public:

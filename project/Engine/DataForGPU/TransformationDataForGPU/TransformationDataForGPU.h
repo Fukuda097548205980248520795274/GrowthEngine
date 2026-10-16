@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief GPUに送るプリミティブのトランスフォーム用データ
 	struct PrimitiveModelTransformationDataForGPU
 	{
 		// ワールドビュー正射影行列
@@ -17,7 +18,7 @@ namespace Engine
 
 	namespace Sprite
 	{
-		/// @brief 座標変換
+		/// @brief GPUに送るスプライトのトランスフォーム用データ
 		struct TransformationDataForGPU
 		{
 			/// @brief ビュープロジェクション行列

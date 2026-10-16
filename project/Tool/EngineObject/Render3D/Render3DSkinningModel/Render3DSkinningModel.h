@@ -2,6 +2,7 @@
 #include "../BaseRender3D.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
+/// @brief スキニングモデル
 class Render3DSkinningModel : public Engine::BaseRender3D
 {
 public:

@@ -13,11 +13,19 @@
 
 namespace Engine
 {
+	/// @brief ウィンドウアプリケーション
 	class WinApp;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief ImGui描画
 	class ImGuiRender
 	{
 	public:

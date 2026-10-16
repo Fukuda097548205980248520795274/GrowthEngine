@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief プレハブ用シャドウマップPSO
 	class PSOShadowMapPrefab : public BasePSOShadowMap
 	{
 	public:

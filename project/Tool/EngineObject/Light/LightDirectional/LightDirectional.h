@@ -1,8 +1,10 @@
 #pragma once
 #include "../BaseLight.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief 平行光源
 class LightDirectional : public Engine::BaseLight
 {
 public:

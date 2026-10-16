@@ -2,6 +2,8 @@
 #include <functional>
 #include <unordered_map>
 
+/// @brief フェーズマネージャ
+/// @tparam PhaseType 
 template <typename PhaseType>
 class PhaseManager
 {

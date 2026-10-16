@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief フルスクリーンPSO
 	class PSOFullscreen : public BasePSOModel
 	{
 	public:

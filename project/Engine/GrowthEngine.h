@@ -108,9 +108,26 @@
 #include "Func/CollisionFunc/CollisionFunc.h"
 #include "Func/RandomFunc/RandomFunc.h"
 
-
+/// @brief エンジン
 class GrowthEngine
 {
+public:
+
+	/// @brief パスキー
+	class PassKey
+	{
+	private:
+
+		/// @brief コンストラクタ
+		PassKey() = default;
+
+		friend class GrowthEngine;
+	};
+
+	/// @brief パスキーを受け取るコンストラクタ
+	/// @param  
+	explicit GrowthEngine(PassKey) {}
+
 public:
 
 	/// @brief インスタンスを取得する

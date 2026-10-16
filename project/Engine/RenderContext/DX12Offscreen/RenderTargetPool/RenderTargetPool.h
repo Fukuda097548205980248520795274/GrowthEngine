@@ -7,9 +7,13 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
 
+	/// @brief レンダーターゲットプール
 	class RenderTargetPool
 	{
 	public:

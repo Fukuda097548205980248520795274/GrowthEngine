@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3Dパーティクル点エミッターPSO
 	class ComputePSOParticle3DEmitterPoint : public BaseComputePSO
 	{
 	public:

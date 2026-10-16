@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePrefabInstance.h"
 
+/// @brief 立方体プレハブインスタンス
 class PrefabInstanceCube : public Engine::BasePrefabInstance
 {
 public:

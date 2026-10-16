@@ -1,6 +1,7 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクターの構え状態
 class CharacterStateStance : public CharacterState
 {
 public:
@@ -23,6 +24,8 @@ public:
     void Exit() override;
 
 private:
+
+    /// @brief アニメーションハンドル
     AnimationHandle hStanceMotion_;
 };
 

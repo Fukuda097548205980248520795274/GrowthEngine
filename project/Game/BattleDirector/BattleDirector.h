@@ -3,8 +3,13 @@
 #include <set>
 #include <unordered_map>
 
+/// @brief キャラクター
 class Character;
+
+/// @brief プレイヤー
 class Player;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
 
 // @brief トークンの種類
@@ -46,6 +51,7 @@ struct CombatSlot
 	float distance = 6.0f;
 };
 
+/// @brief バトル制御
 class BattleDirector
 {
 public:

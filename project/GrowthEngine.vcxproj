@@ -149,7 +149,7 @@
     <ClCompile Include="Game\Action\Telegraph\Telegraph.cpp" />
     <ClCompile Include="Game\AIMetricsEditor\AIMetricsEditor.cpp" />
     <ClCompile Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.cpp" />
-    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.cpp" />
+    <ClCompile Include="Game\ComboTree\ComboTreeEditor\ComboTreeFileManager\ComboTreeFileManager.cpp" />
     <ClCompile Include="Game\ConfigEditor\ConfigEditor.cpp" />
     <ClCompile Include="Game\Entity\Character\Player\PlayerCamera.cpp" />
     <ClCompile Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.cpp" />
@@ -187,7 +187,6 @@
     <ClCompile Include="Tool\EngineObject\MainCamera3D\MainCamera3D.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.cpp" />
-    <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.cpp" />
     <ClCompile Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.cpp" />
     <ClCompile Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.cpp" />
@@ -1128,7 +1127,7 @@
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorUI\BehaviorTreeEditorUI.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory\BehaviorTreeFactory.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp" />
-    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.cpp" />
+    <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTree.cpp" />
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.cpp" />
     <ClCompile Include="Game\CharacterComponent\CharacterMovement\CharacterMovement.cpp" />
@@ -1242,7 +1241,7 @@
     <ClInclude Include="Game\Action\Telegraph\Telegraph.h" />
     <ClInclude Include="Game\AIMetricsEditor\AIMetricsEditor.h" />
     <ClInclude Include="Game\CharacterStateMachine\CharacterState\CharacterStateStance\CharacterStateStance.h" />
-    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeSetting\ComboTreeSetting.h" />
+    <ClInclude Include="Game\ComboTree\ComboTreeEditor\ComboTreeFileManager\ComboTreeFileManager.h" />
     <ClInclude Include="Game\ConfigEditor\ConfigEditor.h" />
     <ClInclude Include="Game\HUD\Button\WeaponGetButton\WeaponGetButton.h" />
     <ClInclude Include="Game\HUD\IntroText\IntroText.h" />
@@ -1260,7 +1259,6 @@
     <ClInclude Include="Tool\EngineObject\MainCamera3D\MainCamera3D.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBloom\PostEffectBloom.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBlurShadow2D\PostEffectBlurShadow2D.h" />
-    <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectBoxFilter\PostEffectBoxFilter.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectGaussianFilter\PostEffectGaussianFilter.h" />
     <ClInclude Include="Tool\EngineObject\PostEffect\PostEffectWhiteNoise\PostEffectWhiteNoise.h" />
     <ClInclude Include="Tool\EngineObject\Render3D\Render3DCylinder\Render3DCylinder.h" />
@@ -1588,7 +1586,7 @@
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeEditorHistory\BehaviorTreeEditorHistory.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory\BehaviorTreeFactory.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h" />
-    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting\BehaviorTreeSetting.h" />
+    <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTree.h" />
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeViewer\BehaviorTreeViewer.h" />
     <ClInclude Include="Game\Blackboard\Blackboard.h" />

@@ -7,6 +7,7 @@
 
 namespace Engine
 {
+	/// @brief 3D描画のパラメータ
 	class Render3DParameter : public Parameter
 	{
 	public:

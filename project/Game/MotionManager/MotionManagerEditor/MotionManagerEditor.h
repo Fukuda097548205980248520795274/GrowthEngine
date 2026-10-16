@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief モーションマネージャエディタ
 class MotionManagerEditor
 {
 public:

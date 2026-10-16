@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief 平面頂点データ
 	class PlaneVertexResource
 	{
 	public:

@@ -3,9 +3,13 @@
 #include <string>
 #include "Data/ParticleData/ParticleData.h"
 
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief 3Dパーティクル
 class Particle3D;
 
+/// @brief エミッター
 class Emitter3D
 {
 public:

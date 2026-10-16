@@ -21,6 +21,7 @@ enum class AttackType
 	GrabStrike
 };
 
+/// @brief ダメージリアクション
 enum class DamageReaction
 {
 	// 怯みなし
@@ -36,6 +37,7 @@ enum class DamageReaction
 	Down
 };
 
+/// @brief 攻撃
 class Attack : public Action
 {
 public:

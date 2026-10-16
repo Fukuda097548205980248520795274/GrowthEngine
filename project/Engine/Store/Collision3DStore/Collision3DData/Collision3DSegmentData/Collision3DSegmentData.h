@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3D衝突の線分判定データ
 	class Collision3DSegmentData : public Collision3DBaseData
 	{
 	public:

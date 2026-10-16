@@ -7,6 +7,7 @@
 
 namespace Engine
 {
+	/// @brief 2Dプレハブのパラメータ
 	class Prefab2DParameter : public Parameter
 	{
 	public:

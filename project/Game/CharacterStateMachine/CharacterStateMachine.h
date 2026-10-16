@@ -4,10 +4,12 @@
 #include <string>
 #include "CharacterState/CharacterState.h"
 
+/// @brief キャラクターのステートマシン
 class CharacterStateMachine
 {
 public:
 
+	/// @brief 状態マップ
 	using StateMap = std::unordered_map<std::string, std::unique_ptr<CharacterState>>;
 
 

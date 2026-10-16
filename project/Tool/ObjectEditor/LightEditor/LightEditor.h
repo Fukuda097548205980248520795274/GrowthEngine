@@ -1,6 +1,7 @@
 #pragma once
 #include "LightData/LightData.h"
 
+/// @brief ライトエディタ
 class LightEditor
 {
 public:

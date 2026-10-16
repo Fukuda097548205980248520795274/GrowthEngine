@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePrefabInstance.h"
 
+/// @brief チューブプレハブインスタンス
 class PrefabInstanceTube : public Engine::BasePrefabInstance
 {
 public:

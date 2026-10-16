@@ -5,11 +5,19 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 3D描画の円柱
 	class Render3DCylinderData : public Render3DBaseData
 	{
 	public:

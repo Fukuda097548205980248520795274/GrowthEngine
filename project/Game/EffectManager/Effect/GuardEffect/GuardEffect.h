@@ -1,6 +1,7 @@
 #pragma once
 #include "../Effect.h"
 
+/// @brief ガードエフェクト
 class GuardEffect : public Effect
 {
 public:

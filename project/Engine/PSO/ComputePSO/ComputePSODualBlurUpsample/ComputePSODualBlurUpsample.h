@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief アップサンプルPSO
 	class ComputePSODualBlurUpsample : public BaseComputePSO
 	{
 	public:

@@ -1,10 +1,12 @@
 #pragma once
 #include "../Button.h"
 
+/// @brief プレスボタンHUD
 class PressButton : public Button
 {
 public:
 
+	/// @brief 状態
 	enum class State
 	{
 		None,
@@ -13,6 +15,7 @@ public:
 		FadeOut,
 	};
 
+	/// @brief 初期化データ
 	struct InitData
 	{
 		/// @brief ボタンのスプライト

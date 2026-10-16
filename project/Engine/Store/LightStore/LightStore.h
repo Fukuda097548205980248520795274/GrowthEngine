@@ -24,12 +24,22 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief DXレンダー
 	class DX12Render;
+
+	/// @brief DXプレハブ
 	class DX12Prefab;
 
+	/// @brief ライトストア
 	class LightStore
 	{
 	public:

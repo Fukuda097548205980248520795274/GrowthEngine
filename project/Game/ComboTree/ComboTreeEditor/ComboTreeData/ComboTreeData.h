@@ -59,6 +59,7 @@ struct ComboEditorNode
 	std::string targetMotionName;
 };
 
+/// @brief コンボツリーの入力の種類
 enum class ComboTreeInputType
 {
 	None,

@@ -1,11 +1,12 @@
 #pragma once
 #include "../StageObject.h"
 
+/// @brief カメラガード
 class CameraGuard : public StageObject
 {
 public:
 
-	// 壁の初期化データ
+	/// @brief 初期化用データ
 	struct InitData
 	{
 		/// @brief 壁の位置

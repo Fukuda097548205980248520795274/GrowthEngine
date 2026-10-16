@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief パーティクル速度更新PSO
 	class ComputePSOParticle3DUpdateVelocity : public BaseComputePSO
 	{
 	public:

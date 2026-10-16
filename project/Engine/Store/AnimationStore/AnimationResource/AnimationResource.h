@@ -4,6 +4,7 @@
 
 namespace Engine
 {
+	/// @brief アニメーションデータ
 	class AnimationResource
 	{
 	public:

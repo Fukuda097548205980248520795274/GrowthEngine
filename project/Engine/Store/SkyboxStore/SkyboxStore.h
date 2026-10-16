@@ -6,9 +6,13 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief DXヒープ
 	class DX12Heap;
 
+	/// @brief スカイボックスストア
 	class SkyboxStore
 	{
 	public:

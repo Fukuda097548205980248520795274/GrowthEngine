@@ -1,8 +1,10 @@
 #pragma once
 #include "../CompositeNode.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief ユーティリティ選択ノード
 class UtilitySelectorNode : public CompositeNode
 {
 public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ラジアルブラーPSO
 	class PSORadialBlur : public BasePSOPostEffect
 	{
 	public:

@@ -2,10 +2,16 @@
 #include <vector>
 #include "StageEditor/StageData/StageData.h"
 
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ステージエディタ配置UI
 class StageEditorUIPlacement
 {
 public:

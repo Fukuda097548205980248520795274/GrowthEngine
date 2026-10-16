@@ -5,10 +5,12 @@
 
 #include "CutsceneEditor/CutsceneKeyframe/CutsceneKeyframe.h"
 
+/// @brief カットシーンマネージャ
 class CutsceneManager
 {
 public:
 
+	/// @brief 演出終了時のコールバック
 	using OnEndCallback = std::function<void()>;
 
 public:

@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 入力ストア
 	class InputStore
 	{
 	public:

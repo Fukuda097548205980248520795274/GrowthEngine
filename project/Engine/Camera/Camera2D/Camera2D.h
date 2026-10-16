@@ -3,10 +3,12 @@
 #include "Data/CameraData/CameraData.h"
 #include <memory>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 2Dカメラ
 	class Camera2D : public BaseCamera
 	{
 	public:

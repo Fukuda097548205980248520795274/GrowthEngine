@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
+/// @brief キャラクター
 class Character;
 
+/// @brief ステートマシンエディタ
 class StateMachineEditor
 {
 public:

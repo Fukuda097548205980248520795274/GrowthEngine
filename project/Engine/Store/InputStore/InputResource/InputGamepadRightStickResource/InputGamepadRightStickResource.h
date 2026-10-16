@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ゲームパッドの右スティックの入力データ
 	class InputGamepadRightStickResource : public InputBaseResource
 	{
 	public:

@@ -7,19 +7,36 @@
 #include "Resource/StructuredBufferResource/StructuredBufferResource.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief 基底コンピュートPSO
 	class BaseComputePSO;
+
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dパーティクルのパラメータ
 	class Particle3DParameter;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief 深度リソース
 	class DepthResource;
+
+	/// @brief オフスクリーンリソース
 	class OffscreenResource;
 
+	/// @brief 3Dパーティクルデータ
 	class Particle3DData
 	{
 	public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 残像のデータ
 	class PostEffectAfterImageData : public PostEffectBaseData
 	{
 	public:

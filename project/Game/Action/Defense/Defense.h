@@ -29,6 +29,7 @@ struct DefenseInitData
 	ParryType parryType = ParryType::Guard;
 };
 
+/// @brief 防御
 class Defense : public Action
 {
 public:

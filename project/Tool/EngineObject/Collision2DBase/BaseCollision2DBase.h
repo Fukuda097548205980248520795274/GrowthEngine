@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 基底2D衝突判定
 	class BaseCollision2DBase
 	{
 	public:

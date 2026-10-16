@@ -1,10 +1,12 @@
 #pragma once
 #include "../Collision2DBaseData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 2D衝突のスプライト判定データ
 	class Collision2DSpriteData : public Collision2DBaseData
 	{
 	public:

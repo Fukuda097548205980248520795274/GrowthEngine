@@ -1,6 +1,7 @@
 #pragma once
 #include "../Button.h"
 
+/// @brief 武器入手ボタンHUD
 class WeaponGetButton : public Button
 {
 public:

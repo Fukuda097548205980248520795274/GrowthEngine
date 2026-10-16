@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief GPUに送るモーションベクトルデータ
 	struct MotionVectorDataForGPU
 	{
 		// 前フレームのワールドビュー射影行列

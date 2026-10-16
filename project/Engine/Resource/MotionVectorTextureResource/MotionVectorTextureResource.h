@@ -6,10 +6,16 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief モーションベクトル用テクスチャリソース
 	class MotionVectorTextureResource
 	{
 	public:

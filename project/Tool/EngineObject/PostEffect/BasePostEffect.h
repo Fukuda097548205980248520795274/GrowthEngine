@@ -3,10 +3,12 @@
 #include "Handle/Handle.h"
 #include "Data/PostEffectData/PostEffectData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 基底ポストエフェクト
 	class BasePostEffect
 	{
 	public:

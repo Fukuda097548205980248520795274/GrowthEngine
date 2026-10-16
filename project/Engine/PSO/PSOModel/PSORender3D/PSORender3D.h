@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3D描画PSO
 	class PSORender3D : public BasePSOModel
 	{
 	public:

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Attack.h"
 
+/// @brief 掴みの初期化用データ
 struct GrabAttackInitData
 {
 	// 攻撃モーションのハンドル
@@ -52,6 +53,7 @@ struct GrabAttackInitData
 	Vector3 throwDirection = Vector3(0.0f, 0.0f, 1.0f);
 };
 
+/// @brief 掴み
 class GrabAttack : public Attack
 {
 public:

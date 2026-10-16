@@ -41,18 +41,40 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief オフスクリーンリソース
 	class OffscreenResource;
+
+	/// @brief 深度リソース
 	class DepthResource;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXレンダー
 	class DX12Render;
+
+	/// @brief DXプレハブ
 	class DX12Prefab;
+
+	/// @brief レンダーターゲットプール
 	class RenderTargetPool;
 
+	/// @brief ポストエフェクトストア
 	class PostEffectStore
 	{
 	public:

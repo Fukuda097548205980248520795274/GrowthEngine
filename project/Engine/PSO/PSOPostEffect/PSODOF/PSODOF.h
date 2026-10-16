@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 被写界深度PSO
 	class PSODOF : public BasePSOPostEffect
 	{
 	public:

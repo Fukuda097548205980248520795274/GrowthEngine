@@ -7,9 +7,13 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 線PSO
 	class PSOLine
 	{
 	public:

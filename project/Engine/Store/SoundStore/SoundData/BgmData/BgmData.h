@@ -19,6 +19,7 @@ namespace Engine
 		AudioHandle hAudio = 0;
 	};
 
+	/// @brief BGMデータ
 	class BgmData : public SoundData
 	{
 	public:

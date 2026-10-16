@@ -1,10 +1,12 @@
 #pragma once
 #include "../Collision3DBaseData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 3D衝突の球判定データ
 	class Collision3DSphereData : public Collision3DBaseData
 	{
 	public:

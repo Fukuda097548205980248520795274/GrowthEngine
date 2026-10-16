@@ -3,8 +3,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief ヴィネットのデータ
 	class PostEffectVignettingData : public PostEffectBaseData
 	{
 	public:

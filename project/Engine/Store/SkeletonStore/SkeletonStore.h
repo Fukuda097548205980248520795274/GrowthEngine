@@ -2,11 +2,15 @@
 #include <memory>
 #include "SkeletonResource/SkeletonResource.h"
 
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief ワールドトランスフォーム3D
 class WorldTransform3D;
 
 namespace Engine
 {
+	/// @brief スケルトンストア
 	class SkeletonStore
 	{
 	public:

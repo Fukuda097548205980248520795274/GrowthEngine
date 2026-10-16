@@ -4,9 +4,13 @@
 #include <memory>
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief ワールドトランスフォーム2D
 class WorldTransform2D;
 
+/// @brief スプライト
 class Sprite
 {
 public:

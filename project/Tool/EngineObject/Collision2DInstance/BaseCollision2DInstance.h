@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief 基底2D衝突判定インスタンス
 	class BaseCollision2DInstance
 	{
 	public:

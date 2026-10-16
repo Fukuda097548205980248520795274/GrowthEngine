@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief サウンドパラメータ
 	class SoundParameter : public Parameter
 	{
 	public:

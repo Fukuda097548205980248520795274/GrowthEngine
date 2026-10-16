@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseCollision3DInstance.h"
 
+/// @brief 3D衝突線分判定インスタンス
 class Collision3DInstanceSegment : public Engine::BaseCollision3DInstance
 {
 public:

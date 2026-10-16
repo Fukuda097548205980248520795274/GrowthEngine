@@ -2,8 +2,10 @@
 #include <vector>
 #include "../BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 
+/// @brief ビヘイビアツリーエディタ
 class BehaviorTreeEditor;
 
+/// @brief ビヘイビアツリーエディタの記録
 class BehaviorTreeEditorHistory
 {
 public:

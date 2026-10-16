@@ -2,6 +2,7 @@
 #include "../ActionNode.h"
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 
+/// @brief コンボ攻撃ノード
 class ComboAttackNode : public ActionNode
 {
 public:

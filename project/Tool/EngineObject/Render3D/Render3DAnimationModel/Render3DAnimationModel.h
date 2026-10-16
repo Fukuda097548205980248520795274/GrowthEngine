@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseRender3D.h"
 
+/// @brief アニメーションモデル
 class Render3DAnimationModel : public Engine::BaseRender3D
 {
 public:

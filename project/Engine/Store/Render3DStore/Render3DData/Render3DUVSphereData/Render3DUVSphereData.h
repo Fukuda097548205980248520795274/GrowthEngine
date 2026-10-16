@@ -6,12 +6,22 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 3D描画のUV球
 	class Render3DUVSphereData : public Render3DBaseData
 	{
 	public:

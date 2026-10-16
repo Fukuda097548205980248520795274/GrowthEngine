@@ -8,8 +8,10 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
 
+	/// @brief 2Dプレハブストア
 	class Prefab2DStore
 	{
 	public:

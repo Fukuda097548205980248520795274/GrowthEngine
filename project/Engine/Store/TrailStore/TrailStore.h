@@ -10,10 +10,16 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief トレイルストア
 	class TrailStore
 	{
 	public:

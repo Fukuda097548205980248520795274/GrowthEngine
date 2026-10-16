@@ -3,9 +3,16 @@
 #include <string>
 #include "StageEditor/StageData/StageData.h"
 
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ゲームシーン
 class GameScene;
+
+/// @brief モーションマネージャ
 class MotionManager;
 
 namespace StageEditorUIHelper

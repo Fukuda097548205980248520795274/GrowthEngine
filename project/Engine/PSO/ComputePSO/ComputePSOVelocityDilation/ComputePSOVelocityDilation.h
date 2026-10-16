@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 速度PSO
 	class ComputePSOVelocityDilation : public BaseComputePSO
 	{
 	public:

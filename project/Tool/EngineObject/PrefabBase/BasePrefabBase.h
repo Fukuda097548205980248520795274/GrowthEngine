@@ -4,10 +4,12 @@
 #include "Data/Prefab2DData/Prefab2DData.h"
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 基底プレハブ
 	class BasePrefabBase
 	{
 	public:

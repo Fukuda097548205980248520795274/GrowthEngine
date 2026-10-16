@@ -1,8 +1,10 @@
 #pragma once
 #include "Node/Node.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief ビヘイビアツリー
 class BehaviorTree
 {
 public:

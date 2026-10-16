@@ -20,10 +20,17 @@
 
 namespace Engine
 {
+	/// @brief トレイルPSO
 	class PSOTrail;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
 
+
+	/// @brief トレイルデータ
 	class TrailData
 	{
 	public:

@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief ライトエディタ用データ
 struct LightElementData
 {
 	// Light要素の名前（ヒエラルキー表示用）

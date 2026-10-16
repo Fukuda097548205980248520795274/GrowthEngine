@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief ピボットポイント
 class PivotPoint
 {
 public:

@@ -1,6 +1,7 @@
 #pragma once
 #include "../CompositeNode.h"
 
+/// @brief 再帰度セレクターノード
 class RestartingSelectorNode : public CompositeNode
 {
 public:

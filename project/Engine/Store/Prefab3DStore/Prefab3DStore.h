@@ -14,19 +14,43 @@
 
 namespace Engine
 {
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief アニメーションストア
 	class AnimationStore;
+
+	/// @brief スケルトンストア
 	class SkeletonStore;
+
+	/// @brief カメラ3Dストア
 	class Camera3DStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底シャドウマップPSO
 	class BasePSOShadowMap;
+
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief 3Dプレハブストア
 	class Prefab3DStore
 	{
 	public:

@@ -10,9 +10,13 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief ウィンドウアプリケーション
 	class WinApp;
 
+	/// @brief 入力
 	class Input
 	{
 	public:

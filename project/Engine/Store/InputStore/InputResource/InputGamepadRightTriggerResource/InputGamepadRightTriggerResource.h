@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ゲームパッド右トリガーの入力データ
 	class InputGamepadRightTriggerResource : public InputBaseResource
 	{
 	public:

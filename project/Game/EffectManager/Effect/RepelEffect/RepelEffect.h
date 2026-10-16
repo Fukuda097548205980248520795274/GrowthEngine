@@ -1,6 +1,7 @@
 #pragma once
 #include "../Effect.h"
 
+/// @brief 弾きエフェクト
 class RepelEffect : public Effect
 {
 public:

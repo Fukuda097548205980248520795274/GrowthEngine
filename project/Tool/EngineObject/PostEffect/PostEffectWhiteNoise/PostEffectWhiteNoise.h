@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief ホワイトノイズ
 class PostEffectWhiteNoise : public Engine::BasePostEffect
 {
 public:

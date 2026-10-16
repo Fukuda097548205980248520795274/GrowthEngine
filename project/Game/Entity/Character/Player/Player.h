@@ -3,10 +3,16 @@
 #include "PlayerInputController/PlayerInputController.h"
 #include "ComboTree/ComboTree.h"
 
+/// @brief コンボツリーエディタ
 class ComboTreeEditor;
+
+/// @brief 武器
 class Weapon;
+
+/// @brief ゲージ
 class Gage;
 
+/// @brief プレイヤー
 class Player : public Character
 {
 public:

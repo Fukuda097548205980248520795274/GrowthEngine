@@ -1,10 +1,12 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief イントロテキスト
 class IntroText : public HUD
 {
 public:
 
+	/// @brief 状態
 	enum class State
 	{
 		FadeIn,
@@ -12,6 +14,7 @@ public:
 		FadeOut,
 	};
 
+	/// @brief 初期化用データ
 	struct InitData
 	{
 		Sprite* buttonSprite = nullptr;

@@ -8,9 +8,13 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
 
+	/// @brief 基底モデルPSO
 	class BasePSOModel
 	{
 	public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3DプレハブPSO
 	class PSOPrefab3D : public BasePSOModel
 	{
 	public:

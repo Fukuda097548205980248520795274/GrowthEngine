@@ -2,13 +2,14 @@
 #include "Parameter/Parameter.h"
 #include "../ComboTreeData/ComboTreeData.h"
 
-class ComboTreeSetting : public Engine::Parameter
+/// @brief コンボツリーのファイル管理
+class ComboTreeFileManager : public Engine::Parameter
 {
 public:
 
     /// @brief コンストラクタ
     /// @param folderName 
-    ComboTreeSetting(const std::string& folderName) : Parameter(folderName) {}
+    ComboTreeFileManager(const std::string& folderName) : Parameter(folderName) {}
 
     /// @brief ツリー構造をファイルに保存する
     /// @param fileName 

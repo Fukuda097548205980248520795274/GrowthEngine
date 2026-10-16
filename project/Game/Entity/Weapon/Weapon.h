@@ -3,9 +3,13 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "ComboTree/ComboTree.h"
 
+/// @brief キャラクター
 class Character;
+
+/// @brief 武器入手ボタン
 class WeaponGetButton;
 
+/// @brief 武器カテゴリ
 enum class WeaponCategory
 {
 	None,
@@ -26,10 +30,12 @@ struct WeaponStateTreeSet
 	std::shared_ptr<BehaviorTree> behaviorTree = nullptr;
 };
 
+/// @brief 武器
 class Weapon : public Entity
 {
 public:
 
+	/// @brief 初期化用データ
 	struct InitData
 	{
 		// 位置
@@ -41,6 +47,7 @@ public:
 		/// @brief 攻撃力
 		float attackPower = 1.0f;
 
+		/// @brief 武器カテゴリ
 		WeaponCategory category = WeaponCategory::None;
 
 		/// @brief 壊れない武器かどうか

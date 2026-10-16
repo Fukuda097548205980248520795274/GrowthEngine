@@ -1,9 +1,13 @@
 #pragma once
 #include "../StageData/StageData.h"
 
+/// @brief ゲームシーン
 class GameScene;
+
+/// @brief モーションマネージャ
 class MotionManager;
 
+/// @brief ステージ生成
 class StageSpawner
 {
 public:

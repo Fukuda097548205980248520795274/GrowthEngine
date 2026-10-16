@@ -18,13 +18,25 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief DXバッファリング
 	class DX12Buffering;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief DXオフスクリーン
 	class DX12Offscreen
 	{
 	public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3Dパーティクル初期化PSO
 	class ComputePSOParticle3DInit : public BaseComputePSO
 	{
 	public:

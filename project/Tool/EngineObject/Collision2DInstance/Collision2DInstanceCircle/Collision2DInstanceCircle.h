@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseCollision2DInstance.h"
 
+/// @brief 2D衝突円判定インスタンス
 class Collision2DInstanceCircle : public Engine::BaseCollision2DInstance
 {
 public:

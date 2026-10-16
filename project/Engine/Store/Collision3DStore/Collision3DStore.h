@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 3D衝突ストア
 	class Collision3DStore
 	{
 	public:

@@ -5,6 +5,7 @@
 
 namespace Engine
 {
+	/// @brief 基底プレハブインスタンス
 	class BasePrefabInstance
 	{
 	public:

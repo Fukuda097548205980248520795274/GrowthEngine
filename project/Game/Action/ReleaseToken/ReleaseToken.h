@@ -1,6 +1,7 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief トークン解放
 class ReleaseToken : public Action
 {
 public:

@@ -4,10 +4,12 @@
 #include "Camera/Camera3D/Camera3D.h"
 #include "Parameter/DebugCameraParameter/DebugCameraParameter.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief デバッグ用3Dカメラデータ
 	class DebugCamera3DResource
 	{
 	public:

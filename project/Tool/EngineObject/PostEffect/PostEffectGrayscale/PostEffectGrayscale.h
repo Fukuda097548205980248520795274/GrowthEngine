@@ -1,8 +1,10 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief グレースケール
 class PostEffectGrayscale : public Engine::BasePostEffect
 {
 public:

@@ -2,6 +2,7 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeData/BehaviorTreeData.h"
 #include "ComboTree/ComboTreeEditor/ComboTreeData/ComboTreeData.h"
 
+/// @brief ビヘイビアツリーエディタとコンボツリーエディタの飛び越しコピー
 class SharedTreeEditorClipboard
 {
 public:

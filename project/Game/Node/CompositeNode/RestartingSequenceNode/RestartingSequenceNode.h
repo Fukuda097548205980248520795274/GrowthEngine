@@ -1,6 +1,7 @@
 #pragma once
 #include "../CompositeNode.h"
 
+/// @brief 再起動シーケンスノード
 class RestartingSequenceNode : public CompositeNode
 {
 public:

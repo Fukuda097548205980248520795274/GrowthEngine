@@ -1,6 +1,7 @@
 #pragma once
 #include "../Attack.h"
 
+/// @brief コンボ攻撃初期化用データ
 struct CombAttackInitData
 {
 	// 攻撃モーションのハンドル
@@ -67,6 +68,7 @@ struct CombAttackInitData
 	std::vector<HitboxDefinition> hitboxes;
 };
 
+/// @brief コンボ攻撃
 class ComboAttack : public Attack
 {
 public:

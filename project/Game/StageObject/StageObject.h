@@ -1,9 +1,13 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief 配置データ
 struct PlacementData;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
 
+/// @brief ステージオブジェクト
 class StageObject
 {
 public:

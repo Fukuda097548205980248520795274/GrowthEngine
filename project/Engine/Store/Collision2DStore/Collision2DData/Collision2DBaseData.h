@@ -9,8 +9,10 @@
 
 namespace Engine
 {
+	/// @brief 2D衝突ストア
 	class Collision2DStore;
 
+	/// @brief 2D衝突の基底データ
 	class Collision2DBaseData
 	{
 	public:

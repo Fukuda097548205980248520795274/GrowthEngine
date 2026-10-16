@@ -2,8 +2,10 @@
 #include "BehaviorTree/BehaviorTreeEditor/BehaviorTreeEditor.h"
 #include "BehaviorTree/BehaviorTree.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief ビヘイビアツリーのファクトリー
 class BehaviorTreeFactory
 {
 public:

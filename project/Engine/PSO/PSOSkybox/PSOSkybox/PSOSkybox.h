@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief スカイボックスPSO
 	class PSOSkybox : public BasePSOSkybox
 	{
 	public:

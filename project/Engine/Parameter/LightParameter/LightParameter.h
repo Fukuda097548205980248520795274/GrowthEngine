@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief ライトのパラメータ
 	class LightParameter : public Parameter
 	{
 	public:

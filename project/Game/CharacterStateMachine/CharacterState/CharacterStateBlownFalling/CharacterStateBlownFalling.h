@@ -1,9 +1,13 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
+
+/// @brief サウンドマネージャ
 class SoundManager;
 
+/// @brief キャラクターの吹っ飛び落下状態
 class CharacterStateBlownFalling : public CharacterState
 {
 public:

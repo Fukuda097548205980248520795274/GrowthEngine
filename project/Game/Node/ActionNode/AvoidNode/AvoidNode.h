@@ -2,6 +2,7 @@
 #include "../ActionNode.h"
 #include "Action/Avoid/Avoid.h"
 
+/// @brief 回避ノード
 class AvoidNode : public ActionNode
 {
 public:

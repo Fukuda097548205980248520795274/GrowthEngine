@@ -7,13 +7,26 @@
 
 namespace Engine
 {
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+
+	/// @brief 3D描画の静的モデル
 	class Prefab3DStaticModelData : public Prefab3DBaseData
 	{
 	public:

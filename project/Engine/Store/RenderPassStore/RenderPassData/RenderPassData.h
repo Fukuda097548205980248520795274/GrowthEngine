@@ -9,15 +9,25 @@
 
 namespace Engine
 {
+	/// @brief レンダーターゲットプール
 	class RenderTargetPool;
+
+	/// @brief オフスクリーンリソース
 	class OffscreenResource;
+
+	/// @brief DXオフスクリーン
 	class DX12Offscreen;
+
+	/// @brief フルスクリーンPSO
 	class PSOFullscreen;
 
+
+	/// @brief レンダーパスデータ
 	class RenderPassData
 	{
 	public:
 
+		/// @brief パラメータ
 		struct Param
 		{
 			/// @brief ブレンドモード

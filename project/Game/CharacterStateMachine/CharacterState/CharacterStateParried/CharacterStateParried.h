@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの弾かれ状態
 class CharacterStateParried : public CharacterState
 {
 public:

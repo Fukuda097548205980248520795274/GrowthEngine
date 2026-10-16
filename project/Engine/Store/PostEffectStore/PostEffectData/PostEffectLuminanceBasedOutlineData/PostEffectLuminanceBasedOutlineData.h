@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 輝度ベースアウトラインのデータ
 	class PostEffectLuminanceBasedOutlineData : public PostEffectBaseData
 	{
 	public:

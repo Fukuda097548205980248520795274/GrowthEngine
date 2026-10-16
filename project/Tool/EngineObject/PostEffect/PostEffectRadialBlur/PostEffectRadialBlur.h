@@ -1,8 +1,10 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief ラジアルブラー
 class PostEffectRadialBlur : public Engine::BasePostEffect
 {
 public:

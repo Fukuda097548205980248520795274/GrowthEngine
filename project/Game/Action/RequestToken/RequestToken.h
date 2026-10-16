@@ -2,6 +2,7 @@
 #include "../Action.h"
 #include "BattleDirector/BattleDirector.h"
 
+/// @brief トークン要求
 class RequestToken : public Action
 {
 public:

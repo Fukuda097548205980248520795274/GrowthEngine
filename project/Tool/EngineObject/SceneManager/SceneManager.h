@@ -3,8 +3,10 @@
 #include <memory>
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief シーンマネージャ
 class SceneManager
 {
 public:

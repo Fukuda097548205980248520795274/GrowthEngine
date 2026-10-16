@@ -2,10 +2,12 @@
 #include "Handle/Handle.h"
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief サウンド
 	class Sound
 	{
 	public:

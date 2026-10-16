@@ -32,12 +32,15 @@ namespace Engine
 
 	private:
 
+		/// @brief バインド行列の逆行列
 		std::vector<Matrix4x4> inverseBindPoseMatrices_;
 
+		// インフルエンスリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource_;
 		std::span<VertexInfluence> mappedInfluence_;
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> influenceSrvHandle_;
 
+		// パレットリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource_;
 		std::span<WellForGPU> mappedPalette_;
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle_;

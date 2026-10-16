@@ -1,6 +1,7 @@
 #pragma once
 #include "../CompositeNode.h"
 
+/// @brief 重み付きランダム選択ノード
 class WeightedRandomSelectorNode : public CompositeNode
 {
 public:

@@ -2,8 +2,10 @@
 #include "../CharacterState.h"
 #include "Action/Defense/Defense.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターのガード状態
 class CharacterStateGuard : public CharacterState
 {
 public:

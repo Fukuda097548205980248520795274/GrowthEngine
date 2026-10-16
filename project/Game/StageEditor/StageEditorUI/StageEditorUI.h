@@ -9,12 +9,22 @@
 #include "StageEditorUITemplate/StageEditorUITemplate.h"
 #include "StageEditorGuizmo/StageEditorGuizmo.h"
 
+/// @brief ステージファイルマネージャ
 class StageFileManager;
+
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ステージエディタUI
 class StageEditorUI
 {
 public:

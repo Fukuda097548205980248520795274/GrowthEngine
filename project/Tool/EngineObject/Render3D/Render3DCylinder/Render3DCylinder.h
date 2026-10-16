@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseRender3D.h"
 
+/// @brief 円柱
 class Render3DCylinder : public Engine::BaseRender3D
 {
 public:

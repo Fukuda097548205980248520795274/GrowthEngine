@@ -11,6 +11,7 @@ struct TelegraphInitData
 	AnimationHandle hAnimation = 0;
 };
 
+/// @brief 予備動作
 class Telegraph : public Action
 {
 public:

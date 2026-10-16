@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ガウスブラーPSO
 	class PSOGaussianFilter : public BasePSOPostEffect
 	{
 	public:

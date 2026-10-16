@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief マウスの入力データ
 	class InputMouseResource : public InputBaseResource
 	{
 	public:

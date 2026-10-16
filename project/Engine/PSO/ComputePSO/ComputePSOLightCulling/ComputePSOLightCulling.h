@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ライトカリングPSO
 	class ComputePSOLightCulling : public BaseComputePSO
 	{
 	public:

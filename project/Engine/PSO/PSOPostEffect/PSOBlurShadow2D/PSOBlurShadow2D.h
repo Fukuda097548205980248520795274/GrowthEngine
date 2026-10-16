@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 2DブラーシャドウPSO
 	class PSOBlurShadow2D : public BasePSOPostEffect
 	{
 	public:

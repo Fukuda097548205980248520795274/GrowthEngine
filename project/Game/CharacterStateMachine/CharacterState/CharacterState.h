@@ -3,8 +3,10 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "ComboTree/ComboTree.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの状態
 class CharacterState
 {
 public:

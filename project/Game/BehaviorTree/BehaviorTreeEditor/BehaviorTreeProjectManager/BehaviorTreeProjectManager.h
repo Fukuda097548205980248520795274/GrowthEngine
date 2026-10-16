@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+/// @brief ビヘイビアプロジェクトマネージャ
 class BehaviorTreeProjectManager
 {
 public:

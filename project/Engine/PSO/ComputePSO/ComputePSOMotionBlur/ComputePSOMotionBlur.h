@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief モーションブラーPSO
 	class ComputePSOMotionBlur : public BaseComputePSO
 	{
 	public:

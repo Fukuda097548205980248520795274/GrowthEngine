@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの回避状態
 class CharacterStateAvoid : public CharacterState
 {
 public:

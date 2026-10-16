@@ -15,10 +15,16 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief DXライン
 	class DX12Line
 	{
 	public:

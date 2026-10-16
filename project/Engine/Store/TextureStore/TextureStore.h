@@ -8,7 +8,10 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief ログ
 	class Log;
 
 	/// @brief テクスチャの種類
@@ -18,6 +21,7 @@ namespace Engine
 		Cubemap
 	};
 
+	/// @brief テクスチャストア
 	class TextureStore
 	{
 	public:

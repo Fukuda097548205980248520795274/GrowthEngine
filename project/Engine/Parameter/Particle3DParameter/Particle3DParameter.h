@@ -8,6 +8,7 @@
 
 namespace Engine
 {
+	/// @brief 3Dパーティクルのパラメータ
 	class Particle3DParameter : public Parameter
 	{
 	public:

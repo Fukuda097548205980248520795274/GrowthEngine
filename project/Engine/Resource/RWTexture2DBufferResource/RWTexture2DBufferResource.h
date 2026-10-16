@@ -6,9 +6,13 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief DXヒープ
 	class DX12Heap;
 
+	/// @brief RW2Dテクスチャリソース
 	class RWTexture2DBufferResource
 	{
 	public:

@@ -15,14 +15,28 @@
 
 #include "CharacterStateMachine/CharacterStateMachine.h"
 
+/// @brief 攻撃
 class Attack;
+
+/// @brief 移動
 class Move;
+
+/// @brief 回避
 class Avoid;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief エフェクトマネージャ
 class EffectManager;
+
+/// @brief ゲージ
 class Gage;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief キャラクター
 class Character : public Entity
 {
 public:

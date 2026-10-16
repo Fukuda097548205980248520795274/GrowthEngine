@@ -7,9 +7,13 @@
 
 namespace Engine
 {
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief シャドウマップテクスチャリソース
 	class ShadowMapTextureResource
 	{
 	public:

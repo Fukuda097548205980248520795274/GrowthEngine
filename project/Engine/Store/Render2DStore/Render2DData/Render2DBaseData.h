@@ -14,17 +14,31 @@
 
 #include "Data/DebugData/DebugData.h"
 
+
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief ワールドトランスフォーム
 class WorldTransform2D;
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief インデックスバッファリソース
 	class IndexBufferResource;
+
+	/// @brief 2D描画のパラメータ
 	class Render2DParameter;
 
+	/// @brief 2D描画の基底データ
 	class Render2DBaseData
 	{
 	public:

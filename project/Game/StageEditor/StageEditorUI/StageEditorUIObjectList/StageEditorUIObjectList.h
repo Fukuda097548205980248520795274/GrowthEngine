@@ -4,12 +4,22 @@
 #include <set>
 #include "StageEditor/StageData/StageData.h"
 
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ビヘイビアツリーエディタ
 class BehaviorTreeEditor;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ステージエディタオブジェクトリストUI
 class StageEditorUIObjectList
 {
 public:

@@ -3,8 +3,10 @@
 
 namespace Engine
 {
+	/// @brief DXバッファリング
 	class DX12Buffering;
 
+	/// @brief TAAのデータ
 	class PostEffectTAAData : public PostEffectBaseData
 	{
 	public:

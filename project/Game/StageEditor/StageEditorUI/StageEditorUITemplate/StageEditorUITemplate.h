@@ -4,10 +4,16 @@
 #include "StageEditor/StageData/StageData.h"
 #include "MotionManager/MotionManager.h"
 
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ステージエディタの記録
 class StageEditorHistory;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ステージエディタテンプレートUI
 class StageEditorUITemplate
 {
 public:

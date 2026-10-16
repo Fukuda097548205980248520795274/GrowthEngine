@@ -5,13 +5,19 @@
 
 #include "Parameter/Render2DParameter/Render2DParameter.h"
 
+/// @brief ワールドトランスフォーム2D
 class WorldTransform2D;
 
 namespace Engine
 {
+	/// @brief 2Dカメラストア
 	class Camera2DStore;
+
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
 
+
+	/// @brief 2D描画ストア
 	class Render2DStore
 	{
 	public:

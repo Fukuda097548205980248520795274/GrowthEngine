@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 深度ベースアウトラインPSO
 	class PSODepthBasedOutline : public BasePSOPostEffect
 	{
 	public:

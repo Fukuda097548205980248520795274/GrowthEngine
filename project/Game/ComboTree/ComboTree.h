@@ -3,6 +3,7 @@
 #include <memory>
 #include "Action/Attack/ComboAttack/ComboAttack.h"
 
+/// @brief コンボツリーエディタ
 class ComboTree
 {
 public:

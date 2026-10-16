@@ -1,6 +1,7 @@
 #pragma once
 #include "../Action.h"
 
+/// @brief 攻撃シーケンス開始
 class InAttackSequence : public Action
 {
 public:

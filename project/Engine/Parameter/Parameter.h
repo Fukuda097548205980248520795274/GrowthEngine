@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief パラメータ
 	class Parameter
 	{
 	public:

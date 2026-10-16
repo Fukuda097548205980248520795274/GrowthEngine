@@ -4,6 +4,7 @@
 #include "StageSelectEditor/StageSelectEditor.h"
 #include "ObjectEditor/UIEditor/UIEditor.h"
 
+/// @brief タイトルシーン
 class TitleScene : public Scene
 {
 public:

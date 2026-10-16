@@ -1,11 +1,19 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief 体力
 class HP;
+
+/// @brief 武器
 class Weapon;
+
+/// @brief ゲージ
 class Gage;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ファイトスタイル
 enum class FightStyle
 {
 	None,

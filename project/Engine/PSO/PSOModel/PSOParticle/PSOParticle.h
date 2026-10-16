@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief パーティクルPSO
 	class PSOParticle : public BasePSOModel
 	{
 	public:

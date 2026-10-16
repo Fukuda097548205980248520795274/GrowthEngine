@@ -7,13 +7,26 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
+
+	/// @brief 立方体頂点リソース
 	class CubeVertexResource;
 
+
+	/// @brief 3Dプレハブの立方体
 	class Prefab3DCubeData : public Prefab3DBaseData
 	{
 	public:

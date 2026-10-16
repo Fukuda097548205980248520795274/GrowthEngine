@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ガウスブラーのデータ
 	class PostEffectGaussianFilterData : public PostEffectBaseData
 	{
 	public:

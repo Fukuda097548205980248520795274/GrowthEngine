@@ -1,12 +1,13 @@
 #pragma once
 #include "GrowthEngine.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTreeSetting/BehaviorTreeSetting.h"
+#include "BehaviorTreeFileManager/BehaviorTreeFileManager.h"
 #include "BehaviorTreeProjectManager/BehaviorTreeProjectManager.h"
 #include "BehaviorTreeEditorClipboard/BehaviorTreeEditorClipboard.h"
 #include "BehaviorTreeEditorHistory/BehaviorTreeEditorHistory.h"
 #include <unordered_set>
 
+/// @brief キャラクター
 class Character;
 
 // ビヘイビアツリーエディタ
@@ -84,7 +85,7 @@ private:
 	BehaviorTreeProjectManager projectManager_;
 
 	/// @brief ツリー構造の保存と読み込みを担当するクラス
-	BehaviorTreeSetting saver_{ "BehaviorTree" };
+	BehaviorTreeFileManager saver_{ "BehaviorTree" };
 
 
 	/// @brief 履歴管理クラス

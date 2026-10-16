@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 基底カメラ
 	class BaseCamera
 	{
 	public:

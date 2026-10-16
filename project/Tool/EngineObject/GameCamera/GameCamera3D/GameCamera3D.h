@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseGameCamera.h"
 
+/// @brief 3Dゲームカメラ
 class GameCamera3D : public Engine::BaseGameCamera
 {
 public:

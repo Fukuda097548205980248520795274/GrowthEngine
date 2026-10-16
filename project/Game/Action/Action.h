@@ -1,8 +1,10 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief アクション
 class Action
 {
 public:

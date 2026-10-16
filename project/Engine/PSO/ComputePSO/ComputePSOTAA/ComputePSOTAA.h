@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief TAAPSO
 	class ComputePSOTAA : public BaseComputePSO
 	{
 	public:

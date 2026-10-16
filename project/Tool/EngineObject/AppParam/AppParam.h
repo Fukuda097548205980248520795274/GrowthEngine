@@ -5,6 +5,7 @@
 #include "Math/Vector/Vector3/Vector3.h"
 #include "Math/Vector/Vector4/Vector4.h"
 
+/// @brief アプリケーション用パラメータ
 class AppParam : public Engine::Parameter
 {
 public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ゲームパッドボタンの入力データ
 	class InputGamepadButtonResource : public InputBaseResource
 	{
 	public:

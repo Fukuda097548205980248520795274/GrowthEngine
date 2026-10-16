@@ -28,8 +28,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief 描画コンテキスト
 	class RenderContext
 	{
 	public:

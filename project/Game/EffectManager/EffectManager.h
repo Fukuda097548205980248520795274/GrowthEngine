@@ -4,8 +4,24 @@
 #include "Effect/GuardEffect/GuardEffect.h"
 #include "Effect/RepelEffect/RepelEffect.h"
 
+/// @brief エフェクトマネージャ
 class EffectManager
 {
+public:
+
+	/// @brief パスキー
+	struct PassKey
+	{
+	private:
+
+		PassKey() = default;
+		friend class EffectManager;
+	};
+
+	// @brief パスキーを受け取るコンストラクタ
+	explicit EffectManager(PassKey) {}
+
+
 public:
 
 	/// @brief デストラクタ

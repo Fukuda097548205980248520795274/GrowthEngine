@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 2Dブラーのシャドウのデータ
 	class PostEffectBlurShadow2DData : public PostEffectBaseData
 	{
 	public:

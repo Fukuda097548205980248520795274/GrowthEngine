@@ -1,6 +1,7 @@
 #pragma once
 #include "ModelData/ModelData.h"
 
+/// @brief モデルエディタ
 class ModelEditor
 {
 public:

@@ -1,8 +1,10 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief プレイヤー
 class Player;
 
+/// @brief ポストエフェクトマネージャ
 class PostEffectManager
 {
 public:

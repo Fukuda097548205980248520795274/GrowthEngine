@@ -1,6 +1,7 @@
 #pragma once
 #include "../StageObject.h"
 
+/// @brief 壁オブジェクト
 class Wall : public StageObject
 {
 public:

@@ -6,8 +6,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief インデックスバッファリソース
 	class IndexBufferResource
 	{
 	public:

@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseRender3D.h"
 
+/// @brief 静的モデル
 class Render3DStaticModel : public Engine::BaseRender3D
 {
 public:

@@ -4,19 +4,43 @@
 
 namespace Engine
 {
+	/// @brief モデルストア
 	class ModelStore;
+	
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief 基底シャドウマップPSO
 	class BasePSOShadowMap;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief アニメーションストア
 	class AnimationStore;
+
+	/// @brief スケルトンストア
 	class SkeletonStore;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief スキニングPSO
 	class ComputePSOSkinning;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief 3D描画のスキニングモデル
 	class Render3DSkinningModelData : public Render3DBaseData
 	{
 	public:

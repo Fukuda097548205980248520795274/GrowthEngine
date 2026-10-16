@@ -6,31 +6,27 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief DXフェンス
 	class DX12Fence
 	{
 	public:
 
-		/// <summary>
-		/// デストラクタ
-		/// </summary>
+		/// @brief デストラクタ
 		~DX12Fence();
 
-		/// <summary>
-		/// 初期化
-		/// </summary>
-		/// <param name="device"></param>
+		/// @brief 初期化
+		/// @param log 
+		/// @param device 
 		void Initialize(Log* log, ID3D12Device* device);
 
-		/// <summary>
-		/// GPUにシグナルを送る
-		/// </summary>
+		/// @brief GPUにシグナルを送る
+		/// @param commandQueue 
 		void SendSignal(ID3D12CommandQueue* commandQueue);
 
-		/// <summary>
-		/// GPUを待つ
-		/// </summary>
+		/// @brief GPUを待つ
 		void WaitGPU();
 
 		// Microsoft::WRL 省略

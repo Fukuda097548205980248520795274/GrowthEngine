@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief スポットライトのデータ
 	class SpotLightData : public BaseLightData
 	{
 	public:

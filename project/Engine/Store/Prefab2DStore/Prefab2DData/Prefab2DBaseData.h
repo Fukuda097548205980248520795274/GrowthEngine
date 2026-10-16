@@ -10,14 +10,29 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief インデックスバッファリソース
 	class IndexBufferResource;
+
+	/// @brief DXヒープ
 	class DX12Heap;
+
+	/// @brief 2Dカメラストア
 	class Camera2DStore;
+
+	/// @brief 2Dプレハブのパラメータ
 	class Prefab2DParameter;
 
+
+	/// @brief 2Dプレハブの基底データ
 	class Prefab2DBaseData
 	{
 	public:

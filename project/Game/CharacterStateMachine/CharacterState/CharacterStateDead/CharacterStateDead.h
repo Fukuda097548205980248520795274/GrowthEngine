@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの死亡状態
 class CharacterStateDead : public CharacterState
 {
 public:

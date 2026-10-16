@@ -5,10 +5,16 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief DXヒープ
 	class DX12Heap;
 
+	/// @brief モデルストア
 	class ModelStore
 	{
 	public:
@@ -16,7 +22,7 @@ namespace Engine
 		/// @brief 初期化
 		/// @param device 
 		/// @param log 
-		void Initilaize(ID3D12Device* device, Log* log);
+		void Initialize(ID3D12Device* device, Log* log);
 
 		/// @brief 読み込み
 		/// @param directory 

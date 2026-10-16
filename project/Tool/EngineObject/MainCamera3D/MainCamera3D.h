@@ -3,8 +3,10 @@
 #include "Data/CameraData/CameraData.h"
 #include <string>
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief 3Dメインカメラ
 class MainCamera3D
 {
 public:

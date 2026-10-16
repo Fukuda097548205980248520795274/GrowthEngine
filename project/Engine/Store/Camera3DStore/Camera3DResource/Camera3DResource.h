@@ -8,12 +8,15 @@
 
 #include <vector>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief 3Dカメラのパラメータ
 	class Camera3DParameter;
 
+	/// @brief 3Dカメラデータ
 	class Camera3DResource
 	{
 	public:

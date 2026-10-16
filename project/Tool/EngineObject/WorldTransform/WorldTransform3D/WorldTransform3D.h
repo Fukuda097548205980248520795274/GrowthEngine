@@ -3,6 +3,7 @@
 #include "Math/Quaternion/Quaternion.h"
 #include "Math/Matrix/Matrix4x4/Matrix4x4.h"
 
+/// @brief ワールドトランスフォーム3D
 class WorldTransform3D
 {
 public:

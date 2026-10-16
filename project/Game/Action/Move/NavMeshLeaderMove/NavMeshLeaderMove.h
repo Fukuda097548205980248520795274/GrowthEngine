@@ -2,6 +2,7 @@
 #include "../Move.h"
 #include "NavMesh/NavMesh.h"
 
+/// @brief ナビゲーションメッシュによるリーダー追いかけ移動の初期化用データ
 struct NavMeshLeaderMoveInitData
 {
 	float stopDistance = 1.0f;
@@ -9,6 +10,7 @@ struct NavMeshLeaderMoveInitData
 	bool isDash = false;
 };
 
+/// @brief ナビゲーションメッシュによるリーダー追いかけ移動
 class NavMeshLeaderMove : public Move
 {
 public:

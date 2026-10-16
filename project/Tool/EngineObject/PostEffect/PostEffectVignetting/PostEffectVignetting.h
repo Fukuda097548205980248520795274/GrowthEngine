@@ -1,8 +1,10 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief ヴィネット
 class PostEffectVignetting : public Engine::BasePostEffect
 {
 public:

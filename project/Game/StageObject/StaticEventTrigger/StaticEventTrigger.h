@@ -1,10 +1,12 @@
 #pragma once
 #include "../StageObject.h"
 
+/// @brief 静的イベントトリガーオブジェクト
 class StaticEventTrigger : public StageObject
 {
 public:
 
+	/// @brief 初期化用データ
 	struct InitData
 	{
 		/// @brief 床の位置

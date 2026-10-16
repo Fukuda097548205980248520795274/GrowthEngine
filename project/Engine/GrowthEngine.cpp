@@ -31,7 +31,7 @@ GrowthEngine* GrowthEngine::GetInstance(int32_t screenWidth, int32_t screenHeigh
 {
 	if (instance_ == nullptr)
 	{
-		instance_.reset(new GrowthEngine());
+		instance_ = std::make_unique<GrowthEngine>(PassKey{});
 		instance_->Initialize(screenWidth, screenHeight, title);
 	}
 

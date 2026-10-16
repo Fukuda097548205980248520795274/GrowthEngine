@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief プレハブ用アウトラインPSO
 	class PSOOutlinePrefab : public BasePSOOutline
 	{
 	public:

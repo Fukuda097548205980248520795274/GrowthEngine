@@ -9,12 +9,15 @@
 #include "Data/DebugData/DebugData.h"
 #include <vector>
 
+/// @brief エンジン
 class GrowthEngine;
 
 namespace Engine
 {
+	/// @brief ライトのパラメータ
 	class LightParameter;
 
+	/// @brief ライトの基底データ
 	class BaseLightData
 	{
 	public:

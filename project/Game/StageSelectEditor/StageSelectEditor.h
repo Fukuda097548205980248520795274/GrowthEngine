@@ -2,12 +2,14 @@
 #include <string>
 #include <vector>
 
+/// @brief ステージ情報
 struct StageInfo
 {
 	std::string fileName;
 	std::string displayName;
 };
 
+/// @brief ステージセレクトエディタ
 class StageSelectEditor
 {
 public:

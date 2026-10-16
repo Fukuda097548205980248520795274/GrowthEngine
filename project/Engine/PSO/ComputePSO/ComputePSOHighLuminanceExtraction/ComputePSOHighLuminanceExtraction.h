@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 高輝度抽出PSO
 	class ComputePSOHighLuminanceExtraction : public BaseComputePSO
 	{
 	public:

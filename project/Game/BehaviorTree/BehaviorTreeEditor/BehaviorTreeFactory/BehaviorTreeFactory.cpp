@@ -72,7 +72,7 @@ std::unique_ptr<Node> BehaviorTreeFactory::BuildNodeRecursive(const EditorNode& 
 		std::vector<EditorNode> subNodes;
 		std::vector<EditorLink> subLinks;
 
-		BehaviorTreeSetting setting("BehaviorTree");
+		BehaviorTreeFileManager setting("BehaviorTree");
 		setting.LoadTree(editorNode.subTreeFileName, subNodes, subLinks);
 
 		// ロードしたサブツリーのルートノードからツリーインスタンスを構築して返す

@@ -10,7 +10,7 @@ MotionManager* MotionManager::GetInstance()
 	// インスタンスがなければ生成する
 	if(instance_ == nullptr)
 	{
-		instance_.reset(new MotionManager());
+		instance_ = std::make_unique<MotionManager>(PassKey{});
 		instance_->Initialize();
 	}
 

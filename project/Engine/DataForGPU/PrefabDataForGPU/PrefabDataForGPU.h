@@ -7,6 +7,7 @@ namespace Engine
 {
 	namespace Prefab
 	{
+		/// @brief GPUに送るスプライトデータ
 		struct SpriteDataForGPU
 		{
             // WVP行列
@@ -22,6 +23,7 @@ namespace Engine
 			Vector2 anchor;
 		};
 
+		/// @brief GPUに送るプリミティブデータ
 		struct PrimitiveDataForGPU
 		{
 			// WVP行列

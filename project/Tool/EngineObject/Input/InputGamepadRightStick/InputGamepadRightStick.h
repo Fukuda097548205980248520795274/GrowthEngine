@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseInput.h"
 
+/// @brief ゲームパッド右スティック入力
 class InputGamepadRightStick : public Engine::BaseInput
 {
 public:

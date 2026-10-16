@@ -11,6 +11,8 @@
 
 namespace Engine
 {
+	/// @brief RWストラクチャードバッファリソース
+	/// @tparam T 
 	template<typename T>
 	class RWSTructuredBufferResource
 	{

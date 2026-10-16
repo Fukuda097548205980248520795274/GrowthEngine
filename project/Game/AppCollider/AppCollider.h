@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief コライダーの種類
 enum class ColliderType
 {
 	// ダメージ判定
@@ -13,8 +14,10 @@ enum class ColliderType
 	Pushbox
 };
 
+/// @brief エンティティ
 class Entity;
 
+/// @brief アプリケーションコライダー
 class AppCollider
 {
 public:

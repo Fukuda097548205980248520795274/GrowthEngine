@@ -1,6 +1,7 @@
 #pragma once
 #include "GrowthEngine.h"
 
+/// @brief モデルエディタ用データ
 struct ModelElementData
 {
 	// モデル名

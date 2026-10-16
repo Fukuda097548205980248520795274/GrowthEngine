@@ -1,6 +1,7 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief ゲージ
 class Gage : public HUD
 {
 public:

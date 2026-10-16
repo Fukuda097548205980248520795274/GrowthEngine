@@ -1,8 +1,10 @@
 #pragma once
 #include "Store/RenderPassStore/RenderPassData/RenderPassData.h"
 
+/// @brief エンジン
 class GrowthEngine;
 
+/// @brief レンダーパス
 class RenderPass
 {
 public:

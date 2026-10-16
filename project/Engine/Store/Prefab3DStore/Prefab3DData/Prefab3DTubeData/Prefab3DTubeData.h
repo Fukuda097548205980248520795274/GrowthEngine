@@ -9,13 +9,26 @@
 
 namespace Engine
 {
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
+
+	/// @brief 基底コンピュートPSO
 	class BaseComputePSO;
 
+
+	/// @brief 3D描画のチューブ
 	class Prefab3DTubeData : public Prefab3DBaseData
 	{
 	public:

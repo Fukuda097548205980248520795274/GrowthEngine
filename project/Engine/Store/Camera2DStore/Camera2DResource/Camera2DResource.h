@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 2Dカメラのデータ
 	class Camera2DResource
 	{
 	public:

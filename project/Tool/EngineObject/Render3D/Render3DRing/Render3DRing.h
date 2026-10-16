@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseRender3D.h"
 
+/// @brief リング
 class Render3DRing : public Engine::BaseRender3D
 {
 public:

@@ -1,6 +1,7 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクターの掴まれ状態
 class CharacterStateGrabbed : public CharacterState
 {
 public:

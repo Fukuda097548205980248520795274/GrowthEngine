@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief グレースケールのデータ
 	class PostEffectGrayscaleData : public PostEffectBaseData
 	{
 	public:

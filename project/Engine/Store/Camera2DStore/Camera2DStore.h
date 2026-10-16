@@ -10,6 +10,7 @@
 
 namespace Engine
 {
+	/// @brief 2Dカメラストア
 	class Camera2DStore
 	{
 	public:

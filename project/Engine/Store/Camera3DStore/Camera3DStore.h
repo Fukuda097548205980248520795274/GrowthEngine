@@ -13,8 +13,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief 3Dカメラストア
 	class Camera3DStore
 	{
 	public:

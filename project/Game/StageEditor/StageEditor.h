@@ -6,9 +6,13 @@
 #include "StageEditorHistory/StageEditorHistory.h"
 #include "StageEditorNavMeshController/StageEditorNavMeshController.h"
 
+/// @brief ゲームシーン
 class GameScene;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
 
+/// @brief ステージエディタ
 class StageEditor
 {
 public:

@@ -17,6 +17,7 @@ namespace Engine
 			float padding[2]; // 16バイトアラインメントのためのパディング
 		};
 
+		/// @brief GPUに送るチューブの分割数データ
 		struct TubeDivisionDataForGPU
 		{
 			// スライス数

@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターのダメージ状態
 class CharacterStateDamage : public CharacterState
 {
 public:

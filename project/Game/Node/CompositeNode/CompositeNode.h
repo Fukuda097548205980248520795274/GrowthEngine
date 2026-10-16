@@ -1,8 +1,10 @@
 #pragma once
 #include "../Node.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief 子ありノード
 class CompositeNode : public Node
 {
 public:

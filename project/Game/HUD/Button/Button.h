@@ -1,6 +1,7 @@
 #pragma once
 #include "../HUD.h"
 
+/// @brief ボタン
 class Button : public HUD
 {
 public:

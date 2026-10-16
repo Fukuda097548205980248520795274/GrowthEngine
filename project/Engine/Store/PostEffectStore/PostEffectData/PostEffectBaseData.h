@@ -13,18 +13,34 @@
 
 namespace Engine
 {
+    /// @brief 深度リソース
     class DepthResource;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief 基底ポストエフェクトPSO
 	class BasePSOPostEffect;
+
+	/// @brief 基底コンピュートPSO
 	class BaseComputePSO;
+
+	/// @brief ポストエフェクトのパラメータ
 	class PostEffectParameter;
+
+	/// @brief モーションベクトルテクスチャリソース
 	class MotionVectorTextureResource;
+
+	/// @brief フルスクリーンPSO
 	class PSOFullscreen;
+
+	/// @brief DXレンダー
 	class DX12Render;
+
+	/// @brief DXプレハブ
 	class DX12Prefab;
 
-	/// @brief 各ポストエフェクトが必要とする入力データの種類
-	/// @details 新しい入力が必要になった場合はここにフラグを追加する
+	/// @brief ポストエフェクトの種類
 	enum class PostEffectInput : uint32_t
 	{
 		None = 0,
@@ -33,13 +49,16 @@ namespace Engine
 		Camera3DStore = 1u << 2,
 	};
 
+	/// @brief PostEffectInputの演算子
+	/// @param lhs 
+	/// @param rhs 
+	/// @return 
 	inline PostEffectInput operator|(PostEffectInput lhs, PostEffectInput rhs)
 	{
 		return static_cast<PostEffectInput>(static_cast<uint32_t>(lhs) | static_cast<uint32_t>(rhs));
 	}
 
-	/// @brief ポストエフェクト描画時に渡す入力データ
-	/// @details 将来的に必要な入力が増えた場合はこの構造体へ項目を追加する
+	/// @brief ポストエフェクトの引数として渡す構造体
 	struct PostEffectRenderContext
 	{
 		ID3D12GraphicsCommandList* commandList = nullptr;
@@ -57,6 +76,7 @@ namespace Engine
 		DX12Prefab* dx12Prefab;
 	};
 
+	/// @brief ポストエフェクトの基底データ
 	class PostEffectBaseData
 	{
 	public:

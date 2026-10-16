@@ -2,6 +2,7 @@
 #include "../ActionNode.h"
 #include "Action/Attack/GrabAttack/GrabAttack.h"
 
+/// @brief 掴みノード
 class GrabAttackNode : public ActionNode
 {
 public:

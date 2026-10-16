@@ -3,6 +3,7 @@
 #include "StageEditor/StageData/StageData.h"
 #include "StageEditor/StageEditorHistory/StageEditorHistory.h"
 
+/// @brief HUD
 class HUD
 {
 public:

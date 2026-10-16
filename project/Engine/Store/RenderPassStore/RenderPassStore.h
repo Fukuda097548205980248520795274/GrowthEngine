@@ -5,9 +5,14 @@
 
 namespace Engine
 {
+	/// @brief レンダーターゲットプール
 	class RenderTargetPool;
+
+	/// @brief DXオフスクリーン
 	class DX12Offscreen;
 
+
+	/// @brief レンダーパスストア
 	class RenderPassStore
 	{
 	public:

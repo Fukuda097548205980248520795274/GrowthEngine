@@ -9,7 +9,7 @@ EffectManager* EffectManager::GetInstance()
 {
 	if (instance_ == nullptr)
 	{
-		instance_.reset(new EffectManager());
+		instance_ = std::make_unique<EffectManager>(PassKey{});
 		instance_->Initialize();
 	}
 

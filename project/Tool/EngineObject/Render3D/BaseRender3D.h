@@ -3,11 +3,15 @@
 #include "Handle/Handle.h"
 #include "Data/Render3DData/Render3DData.h"
 
+/// @brief エンジン
 class GrowthEngine;
+
+/// @brief ワールドトランスフォーム3D
 class WorldTransform3D;
 
 namespace Engine
 {
+	/// @brief 基底3D描画
 	class BaseRender3D
 	{
 	public:

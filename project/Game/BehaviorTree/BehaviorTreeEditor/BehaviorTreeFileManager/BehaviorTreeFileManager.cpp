@@ -1,10 +1,10 @@
-#include "BehaviorTreeSetting.h"
+#include "BehaviorTreeFileManager.h"
 
 /// @brief ツリー構造をファイルに保存する
 /// @param fileName 
 /// @param nodes 
 /// @param links 
-void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links)
+void BehaviorTreeFileManager::SaveTree(const std::string& fileName, const std::vector<EditorNode>& nodes, const std::vector<EditorLink>& links)
 {
 	json root;
 
@@ -217,7 +217,7 @@ void BehaviorTreeSetting::SaveTree(const std::string& fileName, const std::vecto
 /// @param fileName 
 /// @param outNodes 
 /// @param outLinks 
-void BehaviorTreeSetting::LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks)
+void BehaviorTreeFileManager::LoadTree(const std::string& fileName, std::vector<EditorNode>& outNodes, std::vector<EditorLink>& outLinks)
 {
 	// ファイルパスの構築
 	std::string filePath = directory_ + folderName_ + "/" + fileName + ".json";

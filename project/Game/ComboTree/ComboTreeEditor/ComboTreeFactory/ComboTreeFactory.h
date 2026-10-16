@@ -3,6 +3,7 @@
 #include "ComboTree/ComboTree.h"
 #include "../ComboTreeData/ComboTreeData.h"
 
+/// @brief コンボツリーファクトリー
 class ComboTreeFactory
 {
 public:

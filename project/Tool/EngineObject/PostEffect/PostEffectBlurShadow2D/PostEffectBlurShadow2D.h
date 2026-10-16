@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+//// @brief 2D影ぼかしポストエフェクト
 class PostEffectBlurShadow2D : public Engine::BasePostEffect
 {
 public:

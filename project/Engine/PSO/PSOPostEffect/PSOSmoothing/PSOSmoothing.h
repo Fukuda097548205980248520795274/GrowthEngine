@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief 平滑化PSO
 	class PSOSmoothing : public BasePSOPostEffect
 	{
 	public:

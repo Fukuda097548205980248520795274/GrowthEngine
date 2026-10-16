@@ -1,10 +1,16 @@
 #pragma once
 #include "../Character.h"
 
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ビヘイビアツリーエディタ
 class BehaviorTreeEditor;
+
+/// @brief ビヘイビアツリー
 class BehaviorTree;
 
+/// @brief NPC
 class NPC : public Character
 {
 public:

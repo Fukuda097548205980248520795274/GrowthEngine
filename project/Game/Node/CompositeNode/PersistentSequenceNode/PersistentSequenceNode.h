@@ -1,6 +1,7 @@
 #pragma once
 #include "../CompositeNode.h"
 
+/// @brief 継続シーケンスノード
 class PersistentSequenceNode : public CompositeNode
 {
 public:

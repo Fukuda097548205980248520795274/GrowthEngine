@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/// @brief 3Dカメラのパラメータ
 	class Camera3DParameter : public Parameter
 	{
 	public:

@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief ポイントライトのデータ
 	class PointLightData : public BaseLightData
 	{
 	public:

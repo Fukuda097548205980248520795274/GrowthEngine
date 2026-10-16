@@ -1,6 +1,7 @@
 #pragma once
 #include "../BasePostEffect.h"
 
+/// @brief ガウスブラー
 class PostEffectGaussianFilter : public Engine::BasePostEffect
 {
 public:

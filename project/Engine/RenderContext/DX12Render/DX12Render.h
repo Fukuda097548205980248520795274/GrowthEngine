@@ -7,14 +7,28 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief 基底シャドウマップPSO
 	class BasePSOShadowMap;
+
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief DXレンダー
 	class DX12Render
 	{
 	public:

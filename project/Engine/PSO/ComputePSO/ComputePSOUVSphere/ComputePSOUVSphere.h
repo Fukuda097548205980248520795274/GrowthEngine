@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief UV球PSO
 	class ComputePSOUVSphere : public BaseComputePSO
 	{
 	public:

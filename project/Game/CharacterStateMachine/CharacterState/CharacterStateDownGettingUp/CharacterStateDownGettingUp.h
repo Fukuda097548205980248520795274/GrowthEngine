@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの起き上がり状態
 class CharacterStateDownGettingUp : public CharacterState
 {
 public:

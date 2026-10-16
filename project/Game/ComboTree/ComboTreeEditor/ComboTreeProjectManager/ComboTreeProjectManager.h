@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+/// @brief コンボツリープロジェクト
 class ComboTreeProjectManager
 {
 public:

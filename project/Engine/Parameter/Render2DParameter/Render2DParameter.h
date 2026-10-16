@@ -8,6 +8,7 @@
 
 namespace Engine
 {
+	/// @brief 2D描画のパラメータ
 	class Render2DParameter : public Parameter
 	{
 	public:

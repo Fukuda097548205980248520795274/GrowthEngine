@@ -3,8 +3,10 @@
 
 namespace Engine
 {
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
 
+	/// @brief DXパーティクル
 	class DX12Particle
 	{
 	public:

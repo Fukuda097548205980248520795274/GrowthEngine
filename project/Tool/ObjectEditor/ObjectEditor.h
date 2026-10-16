@@ -1,5 +1,6 @@
 #pragma once
 
+/// @brief オブジェクトエディタ
 class ObjectEditor
 {
 public:

@@ -4,8 +4,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief 平行光源のデータ
 	class DirectionalLightData : public BaseLightData
 	{
 	public:

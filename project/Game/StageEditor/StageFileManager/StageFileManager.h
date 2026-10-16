@@ -6,10 +6,16 @@
 
 using json = nlohmann::json;
 
+/// @brief ステージ生成
 class StageSpawner;
+
+/// @brief ナビゲーションメッシュ
 class NavMesh;
+
+/// @brief ゲームシーン
 class GameScene;
 
+/// @brief ステージファイルマネージャ
 class StageFileManager
 {
 public:

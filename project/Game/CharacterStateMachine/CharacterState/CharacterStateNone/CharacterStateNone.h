@@ -1,6 +1,7 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクターの通常状態
 class CharacterStateNone : public CharacterState
 {
 public:

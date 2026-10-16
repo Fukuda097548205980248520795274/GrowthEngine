@@ -1,6 +1,7 @@
 #pragma once
 #include "../BaseRender3D.h"
 
+/// @brief UV球
 class Render3DUVSphere : public Engine::BaseRender3D
 {
 public:

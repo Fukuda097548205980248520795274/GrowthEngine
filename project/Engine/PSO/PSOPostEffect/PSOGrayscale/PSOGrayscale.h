@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief グレースケールPSO
 	class PSOGrayscale : public BasePSOPostEffect
 	{
 	public:

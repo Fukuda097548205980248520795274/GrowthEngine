@@ -4,10 +4,12 @@
 #include "Data/ModelData/ModelData.h"
 #include "EngineObject/PrefabInstance/PrefabInstanceSprite/PrefabInstanceSprite.h"
 
+/// @brief スプライトのプレハブインスタンス
 class PrefabInstanceSprite;
 
 namespace Engine
 {
+	/// @brief 2Dプレハブのスプライト
 	class Prefab2DSpriteData : public Prefab2DBaseData
 	{
 	public:

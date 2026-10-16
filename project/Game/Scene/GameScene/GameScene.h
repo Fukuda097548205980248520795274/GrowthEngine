@@ -47,6 +47,7 @@
 
 #include "NavMesh/NavMesh.h"
 
+/// @brief ゲームシーン
 class GameScene : public Scene
 {
 public:

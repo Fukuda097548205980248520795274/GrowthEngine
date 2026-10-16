@@ -13,8 +13,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief オーディオストア
 	class AudioStore
 	{
 	public:

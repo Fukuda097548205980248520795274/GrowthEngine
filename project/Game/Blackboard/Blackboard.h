@@ -4,6 +4,7 @@
 #include <any>
 #include <stdexcept>
 
+/// @brief ブラックボード
 class Blackboard
 {
 public:

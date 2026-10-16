@@ -8,9 +8,13 @@
 
 namespace Engine
 {
+	/// @brief シェーダコンパイラ
 	class ShaderCompiler;
+
+	/// @brief ログ
 	class Log;
 
+	/// @brief 三角形PSO
 	class PSOTriangle
 	{
 	public:

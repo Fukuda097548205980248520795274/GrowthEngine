@@ -5,8 +5,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief ウィンドウアプリケーション
 	class WinApp
 	{
 	public:

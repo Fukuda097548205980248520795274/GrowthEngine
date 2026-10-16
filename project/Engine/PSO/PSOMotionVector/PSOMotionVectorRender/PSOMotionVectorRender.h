@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief レンダー用モーションベクトルPSO
 	class PSOMotionVectorRender : public BasePSOMotionVector
 	{
 	public:

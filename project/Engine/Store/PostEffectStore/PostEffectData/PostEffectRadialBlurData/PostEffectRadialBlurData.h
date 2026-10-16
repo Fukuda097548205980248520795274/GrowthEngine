@@ -3,8 +3,10 @@
 
 namespace Engine
 {
+	/// @brief ログ
 	class Log;
 
+	/// @brief ラジアルブラーのデータ
 	class PostEffectRadialBlurData : public PostEffectBaseData
 	{
 	public:
@@ -26,7 +28,7 @@ namespace Engine
 		void Reset() override;
 
 		/// @brief コマンドリストに登録する
-     /// @param context
+		/// @param context
 		void Register(const PostEffectRenderContext& context) override;
 
 		/// @brief パラメータを取得する

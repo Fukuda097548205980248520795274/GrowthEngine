@@ -1,6 +1,7 @@
 #pragma once
 #include "UIData/UIData.h"
 
+/// @brief UIエディタ
 class UIEditor
 {
 public:

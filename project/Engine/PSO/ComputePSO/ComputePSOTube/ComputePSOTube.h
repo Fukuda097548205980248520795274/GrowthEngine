@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	/// @brief チューブPSO
 	class ComputePSOTube : public BaseComputePSO
 	{
 	public:

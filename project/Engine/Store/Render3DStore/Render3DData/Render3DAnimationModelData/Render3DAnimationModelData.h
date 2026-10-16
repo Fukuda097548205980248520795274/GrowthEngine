@@ -3,16 +3,34 @@
 
 namespace Engine
 {
+	/// @brief モデルストア
 	class ModelStore;
+
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief 基底シャドウマップストア
 	class BasePSOShadowMap;
+
+	/// @brief ログ
 	class Log;
+
+	/// @brief テクスチャストア
 	class TextureStore;
+
+	/// @brief ライトストア
 	class LightStore;
+
+	/// @brief アニメーションストア
 	class AnimationStore;
+
+	/// @brief 3Dカメラストア
 	class Camera3DStore;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief 3D描画のアニメーションモデル
 	class Render3DAnimationModelData : public Render3DBaseData
 	{
 	public:

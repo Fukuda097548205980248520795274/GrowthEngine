@@ -18,11 +18,19 @@
 
 namespace Engine
 {
+	/// @brief 基底モデルPSO
 	class BasePSOModel;
+
+	/// @brief 基底シャドウマップPSO
 	class BasePSOShadowMap;
+
+	/// @brief 3D描画パラメータ
 	class Prefab3DParameter;
+
+	/// @brief スカイボックスストア
 	class SkyboxStore;
 
+	/// @brief 3Dプレハブの基底データ
 	class Prefab3DBaseData
 	{
 	public:

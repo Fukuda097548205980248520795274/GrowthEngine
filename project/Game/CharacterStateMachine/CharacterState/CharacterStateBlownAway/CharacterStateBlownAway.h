@@ -1,8 +1,10 @@
 #pragma once
 #include "../CharacterState.h"
 
+/// @brief キャラクター
 class Character;
 
+/// @brief キャラクターの吹っ飛び状態
 class CharacterStateBlownAway : public CharacterState
 {
 public:
