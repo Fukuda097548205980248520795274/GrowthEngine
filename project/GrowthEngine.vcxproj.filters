@@ -949,9 +949,6 @@
     <Filter Include="Game\BehaviorTree\BehaviorTreeViewer">
       <UniqueIdentifier>{e4236ab9-eba8-4ed3-9cbb-726a3c856b03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting">
-      <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory">
       <UniqueIdentifier>{a33959bb-4e20-4db3-8214-e032e805759c}</UniqueIdentifier>
     </Filter>
@@ -1536,6 +1533,9 @@
     </Filter>
     <Filter Include="Game\ConfigEditor">
       <UniqueIdentifier>{e11e61e5-c0fe-4e17-9a28-438e4e4cdd5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager">
+      <UniqueIdentifier>{a26114a2-00c7-4ba2-95c7-f85016797109}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2305,7 +2305,7 @@
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory</Filter>
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.cpp">
-      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting</Filter>
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager</Filter>
     </ClCompile>
     <ClCompile Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.cpp">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager</Filter>
@@ -3678,7 +3678,7 @@
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFactory</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager\BehaviorTreeFileManager.h">
-      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeSetting</Filter>
+      <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeFileManager</Filter>
     </ClInclude>
     <ClInclude Include="Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager\BehaviorTreeProjectManager.h">
       <Filter>Game\BehaviorTree\BehaviorTreeEditor\BehaviorTreeProjectManager</Filter>
