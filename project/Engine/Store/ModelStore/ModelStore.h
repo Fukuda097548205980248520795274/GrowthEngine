@@ -41,7 +41,7 @@ namespace Engine
 
 		/// @brief 立方体の頂点リソースをコマンドリストに登録する
 		/// @param commandList 
-		void CubeVertexRegiseter(ID3D12GraphicsCommandList* commandList);
+		void CubeVertexRegister(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief 立方体のインデックス数を取得する
 		/// @return 
@@ -49,7 +49,7 @@ namespace Engine
 
 		/// @brief 平面の頂点リソースをコマンドリストに登録する
 		/// @param commandList 
-		void PlaneVertexRegiseter(ID3D12GraphicsCommandList* commandList);
+		void PlaneVertexRegister(ID3D12GraphicsCommandList* commandList);
 
 		/// @brief 平面のインデックス数を取得する
 		/// @return 

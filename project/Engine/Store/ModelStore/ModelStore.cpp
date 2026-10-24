@@ -59,14 +59,14 @@ void Engine::ModelStore::Register(ID3D12GraphicsCommandList* commandList, ModelH
 
 /// @brief 立方体の頂点リソースをコマンドリストに登録する
 /// @param commandList 
-void Engine::ModelStore::CubeVertexRegiseter(ID3D12GraphicsCommandList* commandList)
+void Engine::ModelStore::CubeVertexRegister(ID3D12GraphicsCommandList* commandList)
 {
 	cubeVertexResource_->Register(commandList);
 }
 
 /// @brief 平面の頂点リソースをコマンドリストに登録する
 /// @param commandList 
-void Engine::ModelStore::PlaneVertexRegiseter(ID3D12GraphicsCommandList* commandList)
+void Engine::ModelStore::PlaneVertexRegister(ID3D12GraphicsCommandList* commandList)
 {
 	planeVertexResource_->Register(commandList);
 }
