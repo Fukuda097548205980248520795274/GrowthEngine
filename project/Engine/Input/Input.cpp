@@ -70,24 +70,37 @@ void Engine::Input::CheckInputInfo()
 		キーボード
 	--------------*/
 
-	// キーボード情報の取得開始
-	keyboard_->Acquire();
+	// キーボードの入力情報を取得する
+	HRESULT hr = keyboard_->Acquire();
+	if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED)
+	{
+		keyboard_->Acquire();
+	}
 
-	// キーの入力情報を取得する
-	keyboard_->GetDeviceState(sizeof(keys_), keys_);
+	// 取得に失敗したらキー情報をゼロクリアして押しっぱなしを防ぐ
+	if (FAILED(keyboard_->GetDeviceState(sizeof(keys_), keys_)))
+	{
+		ZeroMemory(keys_, sizeof(keys_));
+	}
 
 
 	/*-----------
 		マウス
 	-----------*/
 
-	// マウス情報の取得開始
-	mouse_->Acquire();
-
 	// マウスの入力情報を取得する
-	HRESULT hr = mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_);
+	hr = mouse_->Acquire();
+	if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED) 
+	{
+		mouse_->Acquire();
+	}
 
-	// マウスの入力情報を取得できたら、移動量を求める
+	// 取得に失敗したらマウス情報をゼロクリア
+	if (FAILED(mouse_->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState_))) 
+	{
+		ZeroMemory(&mouseState_, sizeof(DIMOUSESTATE));
+	}
+
 	mouseVelocity_.x = static_cast<float>(mouseState_.lX);
 	mouseVelocity_.y = static_cast<float>(mouseState_.lY);
 	mouseVelocity_.z = static_cast<float>(mouseState_.lZ);
@@ -301,8 +314,9 @@ Vector2 Engine::Input::GetGamepadLeftStick(DWORD gamepadNumber)
 
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
 	{
-		float length = std::sqrtf(static_cast<float>(std::pow(gamepadState_[gamepadNumber].Gamepad.sThumbLX, 2)) +
-			static_cast<float>(std::pow(gamepadState_[gamepadNumber].Gamepad.sThumbLY, 2)));
+		float lx = static_cast<float>(gamepadState_[gamepadNumber].Gamepad.sThumbLX);
+		float ly = static_cast<float>(gamepadState_[gamepadNumber].Gamepad.sThumbLY);
+		float length = std::sqrtf(lx * lx + ly * ly);
 
 		if (length > static_cast<float>(XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
 		{
@@ -336,8 +350,9 @@ Vector2 Engine::Input::GetGamepadRightStick(DWORD gamepadNumber)
 
 	if (dwResult_[gamepadNumber] == ERROR_SUCCESS)
 	{
-		float length = std::sqrtf(static_cast<float>(std::pow(gamepadState_[gamepadNumber].Gamepad.sThumbRX, 2)) +
-			static_cast<float>(std::pow(gamepadState_[gamepadNumber].Gamepad.sThumbRY, 2)));
+		float rx = static_cast<float>(gamepadState_[gamepadNumber].Gamepad.sThumbRX);
+		float ry = static_cast<float>(gamepadState_[gamepadNumber].Gamepad.sThumbRY);
+		float length = std::sqrtf(rx * rx + ry * ry);
 
 		if (length > static_cast<float>(XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
 		{

@@ -1,6 +1,6 @@
 #pragma once
 #define DIRECTINPUT_VERSION 0x0800
-#define MAX_CONTROLLERS4
+#define MAX_CONTROLLERS 4
 #include <dinput.h>
 #include <Xinput.h>
 #include <wrl.h>
@@ -149,16 +149,16 @@ namespace Engine
 		ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
 
 		// キー
-		BYTE keys_[256];
+		BYTE keys_[256]{};
 
 		// 前のキー
-		BYTE preKeys_[256];
+		BYTE preKeys_[256]{};
 
 
 		/*   マウス   */
 
 		// マウスデバイス
-		LPDIRECTINPUTDEVICE8 mouse_ = nullptr;
+		ComPtr<IDirectInputDevice8> mouse_ = nullptr;
 
 		// マウスの入力情報
 		DIMOUSESTATE mouseState_;
@@ -182,6 +182,6 @@ namespace Engine
 		XINPUT_STATE prevGamepadState_[XUSER_MAX_COUNT]{};
 
 		// 接続確認
-		DWORD dwResult_[XUSER_MAX_COUNT];
+		DWORD dwResult_[XUSER_MAX_COUNT]{};
 	};
 }
