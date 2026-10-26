@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
+#include <cstdlib>
 
 #include "RenderContext/ImGuiRender/ImGuiRender.h"
 
@@ -22,22 +23,63 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	assert(device);
 	assert(commandList);
 
-
 	// テクスチャデータ
 	std::unique_ptr<TextureData> textureData = nullptr;
 	textureData = std::make_unique<TextureData>();
 
-	// 名前
+	// 名前 (元のパスを保持するか、DDSのパスにするかは仕様に応じて調整)
 	textureData->name = filePath;
 
+	std::string targetFilePath = filePath;
+	std::filesystem::path pathObj(targetFilePath);
+	std::string ext = pathObj.extension().string();
+	std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+
+	// PNG等が指定された場合、同階層のDDSファイルを確認し、無ければtexconvで変換する
+	if (ext != ".dds")
+	{
+		std::filesystem::path ddsPath = pathObj;
+		ddsPath.replace_extension(".dds");
+
+		// ddsファイルが存在しない場合のみ変換処理を実行
+		if (!std::filesystem::exists(ddsPath))
+		{
+			if (log) log->Logging(std::format("Convert to DDS : {}", targetFilePath));
+
+			// texconv.exeの相対パスを絶対パスに変換
+			std::filesystem::path texconvRelativePath = "./Externals/DirectXTex/texconv.exe";
+			std::string texconvPath = std::filesystem::absolute(texconvRelativePath).string();
+
+			// 出力先ディレクトリを絶対パスに変換
+			std::filesystem::path outDirRelative = pathObj.parent_path();
+			if (outDirRelative.empty()) outDirRelative = ".";
+			std::string outDir = std::filesystem::absolute(outDirRelative).string();
+
+			// ターゲットファイルパスも絶対パスに変換
+			std::string targetAbsPath = std::filesystem::absolute(targetFilePath).string();
+
+			// ★修正ポイント: Windowsのシステムコマンドの仕様対策として、全体をさらにダブルクォーテーションで囲む
+			std::string command = std::format("\"\"{}\" -m 0 -f BC7_UNORM -y -o \"{}\" \"{}\"\"", texconvPath, outDir, targetAbsPath);
+
+			// コマンドを実行
+			int result = std::system(command.c_str());
+			if (result != 0)
+			{
+				if (log) log->Logging("Failed to run texconv.exe");
+			}
+		}
+
+		// 読み込み対象のパスを生成したddsファイルに差し替える
+		targetFilePath = ddsPath.string();
+	}
 
 	// テクスチャファイルを読んで、プログラムで扱えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
+	std::wstring filePathW = ConvertString(targetFilePath);
 
 	HRESULT hr;
 
-	// ddsファイルかどうか
+	// パスを差し替えたため、常にddsとして読み込む処理に統一可能ですが、念のため拡張子チェックを残します
 	if (filePathW.ends_with(L".dds"))
 	{
 		// キューブマップ
@@ -49,10 +91,8 @@ TextureHandle Engine::TextureStore::Load(const std::string& filePath, DX12Heap* 
 	}
 	else
 	{
-		// 2Dテクスチャ
+		// texconvの実行に失敗した場合のフォールバックとして残す
 		textureData->type_ = TextureType::Texture2D;
-
-		// pngとか
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 		assert(SUCCEEDED(hr));
 		if (log)log->Logging("ext : .png");
@@ -192,9 +232,22 @@ std::string Engine::TextureStore::GetFilePath(TextureHandle hTexture)const
 /// @return 
 TextureHandle Engine::TextureStore::GetHandle(const std::string& filePath)
 {
+	std::string targetFilePath = filePath;
+	std::filesystem::path pathObj(targetFilePath);
+
+	// PNG等の場合、Load時にDDS化されている前提でDDSのパスを検索対象にする
+	if (pathObj.extension().string() != ".dds")
+	{
+		pathObj.replace_extension(".dds");
+		if (std::filesystem::exists(pathObj))
+		{
+			targetFilePath = pathObj.string();
+		}
+	}
+
 	// テクスチャファイルを読んで、プログラムで扱えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
+	std::wstring filePathW = ConvertString(targetFilePath);
 
 	HRESULT hr;
 
@@ -203,7 +256,8 @@ TextureHandle Engine::TextureStore::GetHandle(const std::string& filePath)
 	{
 		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
 		assert(SUCCEEDED(hr));
-	} else
+	}
+	else
 	{
 		// pngとか
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
