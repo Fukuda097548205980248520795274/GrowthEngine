@@ -23,6 +23,23 @@ void StageEditor::Initialize()
 
 	// ナビメッシュ編集コントローラーの初期化
 	navMeshController_ = std::make_unique<StageEditorNavMeshController>(scene_->GetNavMesh(), history_.get());
+
+
+	// JSONファイルをバイナリに変換する
+	auto files = fileManager_->GetSavedStageFiles();
+	for (const auto& jsonFile : files)
+	{
+		// "stage1.json" の拡張子を ".bin" に置き換える
+		std::string binFile = jsonFile;
+		size_t pos = binFile.find(".json");
+		if (pos != std::string::npos)
+		{
+			binFile.replace(pos, 5, ".bin");
+		}
+
+		// 変換を実行（念のため既存ファイルの上書きチェックを入れると安全です）
+		fileManager_->ConvertJsonToBinary(jsonFile, binFile);
+	}
 }
 
 /// @brief 更新処理
@@ -89,9 +106,9 @@ void StageEditor::Update(float dt)
 void StageEditor::LoadStage(const std::string& fileName)
 {
 	// ファイルを読み込む
-	if (fileManager_->LoadFromFile(fileName + ".json", placementList_, spawner_.get(), scene_->GetNavMesh(), stageSettings_))
+	if (fileManager_->LoadFromFile(fileName + ".bin", placementList_, spawner_.get(), scene_->GetNavMesh(), stageSettings_))
 	{
-		currentFileName_ = fileName + ".json";
+		currentFileName_ = fileName + ".bin";
 
 		editorUI_->Play(isPlaying_);
 
