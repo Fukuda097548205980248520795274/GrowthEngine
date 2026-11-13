@@ -42,13 +42,6 @@ public:
 	/// @return 
 	bool LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh, StageSettings& stageSettings);
 
-
-	/// @brief jsonをバイナリに変換する
-	/// @param jsonFileName 
-	/// @param binFileName 
-	/// @return 
-	bool ConvertJsonToBinary(const std::string& jsonFileName, const std::string& binFileName);
-
 	/// @brief ステージファイルをコピーする
 	/// @param srcFileName 
 	/// @param destFileName 

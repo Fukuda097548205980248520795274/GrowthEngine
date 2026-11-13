@@ -20,17 +20,11 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 	// ファイルに書き出し
 	std::filesystem::path dir(stageDataDir_);
 	std::filesystem::path fullPath = dir / filename;
-
-	// std::ios::binary を指定してバイナリモードで開く
-	std::ofstream ofs(fullPath.string(), std::ios::binary);
+	std::ofstream ofs(fullPath.string());
 
 	if (ofs.is_open())
 	{
-		// JSONをMessagePackバイナリに変換
-		std::vector<uint8_t> v_msgpack = json::to_msgpack(rootJson);
-
-		// バイナリデータを書き込み
-		ofs.write(reinterpret_cast<const char*>(v_msgpack.data()), v_msgpack.size());
+		ofs << rootJson.dump(4);
 		ofs.close();
 
 		return true;
@@ -48,41 +42,21 @@ bool StageFileManager::SaveToFile(const std::string& filename, const std::vector
 /// @return 
 bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<PlacementData>& outDataList, StageSpawner* spawner, NavMesh* navMesh, StageSettings& stageSettings)
 {
+	// 既存の配置データをクリア
 	outDataList.clear();
-	if (spawner == nullptr) return false;
 
-	// std::ios::binary を指定してバイナリモードで開く
-	std::ifstream ifs(stageDataDir_ + filename, std::ios::binary);
-	if (!ifs.is_open()) return false;
+	if (spawner == nullptr) return false; // スポナーがなければ何もしない
 
-	// ファイルサイズを取得
-	ifs.seekg(0, std::ios::end);
-	size_t size = ifs.tellg();
-	ifs.seekg(0, std::ios::beg);
-
-	// ファイルが空の場合は読み込み失敗とする
-	if (size == 0) {
-		ifs.close();
-		return false;
-	}
-
-	std::vector<uint8_t> v_msgpack(size);
-	ifs.read(reinterpret_cast<char*>(v_msgpack.data()), size);
-	ifs.close();
+	std::ifstream ifs(stageDataDir_ + filename);
+	if (!ifs.is_open()) return false; // ファイルがなければ何もしない
 
 	json rootJson;
-	try
-	{
-		// MessagePackバイナリからJSONオブジェクトへ復元
-		rootJson = json::from_msgpack(v_msgpack);
-	}
-	catch (const json::parse_error& e)
-	{
-		// パースに失敗した場合はエラーメッセージを出力して終了する（クラッシュを防ぐ）
-		// 例: std::string errorMsg = e.what(); 
-		// ※必要であれば OutputDebugStringA(e.what()); などでデバッガに出力してください
-		return false;
-	}
+	ifs >> rootJson;
+
+	ifs.close();
+
+	// 既存の配置データをクリア
+	outDataList.clear();
 
 	if (rootJson.contains("objects") && rootJson["objects"].is_array())
 	{
@@ -152,35 +126,6 @@ bool StageFileManager::LoadFromFile(const std::string& filename, std::vector<Pla
 
 
 	// 読み込み成功
-	return true;
-}
-
-/// @brief jsonをバイナリに変換する
-/// @param jsonFileName 
-/// @param binFileName 
-bool StageFileManager::ConvertJsonToBinary(const std::string& jsonFileName, const std::string& binFileName)
-{
-	// 1. 既存のテキストJSONを読み込む
-	std::ifstream ifs(stageDataDir_ + jsonFileName);
-	if (!ifs.is_open()) return false;
-
-	json rootJson;
-	try {
-		ifs >> rootJson; // テキストJSONからオブジェクトにパース
-	}
-	catch (...) {
-		return false; // パース失敗
-	}
-	ifs.close();
-
-	// 2. バイナリ（MessagePack）として保存する
-	std::ofstream ofs(stageDataDir_ + binFileName, std::ios::binary);
-	if (!ofs.is_open()) return false;
-
-	std::vector<uint8_t> v_msgpack = json::to_msgpack(rootJson);
-	ofs.write(reinterpret_cast<const char*>(v_msgpack.data()), v_msgpack.size());
-	ofs.close();
-
 	return true;
 }
 
