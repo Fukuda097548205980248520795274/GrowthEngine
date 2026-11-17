@@ -8,6 +8,7 @@
 #include "comboTree/ComboTreeEditor/ComboTreeEditor.h"
 
 #include "CharacterStateMachine/CharacterState/CharacterStateAvoid/CharacterStateAvoid.h"
+#include "CharacterStateMachine/CharacterState/CharacterStateGrabbing/CharacterStateGrabbing.h"
 
 #include <cmath>
 
@@ -160,9 +161,9 @@ void Player::Update()
 	// 動ける状態なら、攻撃やスタイルチェンジなどの入力を受け付けて、状態の更新や移動処理を行う
 	if (!isIncapacitatedState)
 	{
-		// レイジモードを開始する
-		if (inputController_->IsRageModeRequested())
-			RageModeInput();
+		//// レイジモードを開始する
+		//if (inputController_->IsRageModeRequested())
+		//	RageModeInput();
 
 		// プレイヤーは予備動作はないので、攻撃中が攻撃動作中と同じ扱いになる
 		isInAttackSequence_ = IsAttack();
@@ -292,7 +293,7 @@ void Player::UpdateAttack()
 	const float kDt = GrowthEngine::GetInstance()->GetDeltaTime() * GrowthEngine::GetInstance()->GetTimeScale();
 
 	// 現在の攻撃が「つかみ武器」攻撃で、かつ武器を持っていない場合は、最も近い武器を探して持つ
-	if (currentAttack_ && currentAttack_->IsGrabWeapon() && !weapon_)
+	if (currentAttack_ && currentAttack_->IsGrabWeapon()  && !weapon_)
 	{
 		GrabWeapon(FindClosestWeapon());
 	}

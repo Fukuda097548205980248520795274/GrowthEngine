@@ -718,6 +718,28 @@
             "targetNavMeshGroupId": 0,
             "targetNavMeshState": true,
             "templateName": "Enemy_2"
+        },
+        {
+            "battleAreaStart": false,
+            "category": 1,
+            "eventCutsceneName": "",
+            "eventStageDataFileName": "",
+            "eventType": 8,
+            "gameClear": false,
+            "name": "",
+            "posX": -16.06528091430664,
+            "posY": 0.0,
+            "posZ": 50.39097595214844,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "scaleX": 18.751014709472656,
+            "scaleY": 1.0,
+            "scaleZ": 4.749396324157715,
+            "subType": 3,
+            "targetNavMeshGroupId": 0,
+            "targetNavMeshState": true,
+            "templateName": ""
         }
     ]
 }

@@ -2,14 +2,14 @@
     "stages": [
         {
             "displayName": "Stage1",
+            "fileName": "Stage3"
+        },
+        {
+            "displayName": "Stage2",
             "fileName": "Stage1"
         },
         {
             "displayName": "Stage3",
-            "fileName": "Stage3"
-        },
-        {
-            "displayName": "indoor",
             "fileName": "Stage2"
         }
     ],
